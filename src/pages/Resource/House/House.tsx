@@ -61,28 +61,30 @@ function House() {
   };
   const loadData = (pagination: PaginationConfig, filters, sorter) => {
     let org = getOrg();
-    const { current: page, pageSize: rows, total } = pagination;
+    const { current: pageIndex, pageSize, total } = pagination;
     let { field: sidx, order: sord } = sorter;
     sord = sord === 'ascend' ? 'asc' : 'desc';
     sidx = sidx ? sidx : 'id';
     const queryJson = { OrganizeId: org };
 
     setLoading(true);
-    return load({ page, rows, sidx, sord, total, queryJson, records: 0 }).then(res => {
+    return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
       return res;
     });
   };
   const load = data => {
-    return GetStatistics(data).then(res => {
-      const { page: current, total } = res;
+    return GetStatistics(data).then(res => { 
+      const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
         return {
           ...pagesetting,
           current,
           total,
+          pageSize
         };
       });
-      setData(res.rows);
+
+      setData(res.data);
       setLoading(false);
       return res;
     });
@@ -92,8 +94,8 @@ function House() {
     const queryJson = { OrganizeId: org };
     const sidx = 'id';
     const sord = 'asc';
-    const { current: page, pageSize: rows, total } = pagination;
-    return load({ page, rows, sidx, sord, total, queryJson, records: 0 }).then(res => {
+    const { current: pageIndex, pageSize, total } = pagination;
+    return load({ pageIndex, pageSize, sidx, sord, total, queryJson}).then(res => {
       return res;
     });
   };
