@@ -71,20 +71,35 @@ function House() {
     setModifyVisible(true);
     setId(id);
   };
-  const loadData = (pagination: PaginationConfig, filters, sorter) => {
+  const loadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
+    setSearch(search);
     let org = getOrg();
-    const { current: pageIndex, pageSize, total } = pagination;
-    let { field: sidx, order: sord } = sorter;
-    sord = sord === 'ascend' ? 'asc' : 'desc';
-    sidx = sidx ? sidx : 'id';
-    const queryJson = { OrganizeId: org };
+    const { current: pageIndex, pageSize, total } = paginationConfig || {
+      current: 1,
+      pageSize: pagination.pageSize,
+      total: 0,
+    };
+    let searchCondition: any = {
+      pageIndex,
+      pageSize,
+      total,
+      queryJson: { OrganizeId: org, name: search },
+    };
 
-    setLoading(true);
-    return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
+    if (sorter) {
+      let { field, order } = sorter;
+      searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sidx = field ? field : 'id';
+    }
+
+    return load(searchCondition).then(res => {
       return res;
     });
   };
   const load = data => {
+    setLoading(true);
+    data.sidx = data.sidx || 'id';
+    data.sord = data.sord || 'asc';
     return GetStatistics(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
@@ -103,7 +118,7 @@ function House() {
   };
   const initLoadData = (orgId?: string) => {
     let org = orgId || getOrg();
-    const queryJson = { OrganizeId: org };
+    const queryJson = { OrganizeId: org, name: '' };
     const sidx = 'id';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
@@ -130,7 +145,7 @@ function House() {
           <Search
             className="search-input"
             placeholder="搜索楼宇名称"
-            onSearch={value => setSearch(value)}
+            onSearch={value => loadData(value, undefined, undefined)}
             style={{ width: 200 }}
           />
           <Button
@@ -145,10 +160,12 @@ function House() {
         </div>
         <General totalData={totalData} />
         <ListTable
-          onchange={loadData}
+          onchange={(paginationConfig, filters, sorter) =>
+            loadData(search, paginationConfig, sorter)
+          }
           loading={loading}
           pagination={pagination}
-          data={data.filter(item => item.name.includes(search))}
+          data={data}
           modify={showDrawer}
           reload={initLoadData}
         />
