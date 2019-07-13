@@ -33,7 +33,6 @@ class TopNavHeader extends Component<TopNavHeaderProps, TopNavHeaderState> {
 
   render() {
     const { theme, contentWidth, menuData, logo } = this.props;
-    console.log(this.props);
     const { maxWidth } = this.state;
     const flatMenuKeys = getFlatMenuKeys(menuData);
     const {

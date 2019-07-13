@@ -8,7 +8,6 @@ interface GeneralProps {
 function General(props: GeneralProps) {
   const { totalData } = props;
   const generalData = totalData.length === 1 ? totalData[0] : {};
-  console.log(generalData);
   return (
     <Page style={{ padding: '20px', marginBottom: '20px' }}>
       <Row gutter={24}>

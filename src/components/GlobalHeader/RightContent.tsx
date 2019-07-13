@@ -99,7 +99,6 @@ export default class GlobalHeaderRight extends Component<GlobalHeaderRightProps>
     if (theme === 'dark') {
       className = `${styles.right}  ${styles.dark}`;
     }
-    console.log(currentUser)
     return (
       <div className={className}>
         {currentUser && currentUser.name ? (

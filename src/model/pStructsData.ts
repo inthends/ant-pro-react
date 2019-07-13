@@ -21,11 +21,11 @@ export interface PStructsData {
     /**
      * 房产主信息
      */
-    data?: PStructEntity;
+    baseInfo?: PStructEntity;
     /**
      * 小区扩展信息
      */
-    model?: PropertyEntity;
+    pProperty?: PropertyEntity;
     /**
      * 附件信息
      */

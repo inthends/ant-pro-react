@@ -65,7 +65,6 @@ class Register extends Component<RegisterProps, RegisterStates> {
     const { form } = this.props;
     form.validateFields({ force: true }, (err, values) => {
       if (!err) {
-        console.log(values);
         register(values).then(res => {
           if (res.code === '0') {
             message.success('注册成功');

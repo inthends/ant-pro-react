@@ -19,8 +19,9 @@ function House() {
   const [totalData, setTotalData] = useState({});
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
-  const [OrganizeId, SetOrganizeId] = useState<string>('');
+  const [organizeId, SetOrganizeId] = useState<string>('');
   const [data, setData] = useState([]);
+  const [id, setId] = useState<string>();
 
   const selectTree = org => {
     initLoadData(org);
@@ -56,8 +57,9 @@ function House() {
   const closeDrawer = () => {
     setModifyVisible(false);
   };
-  const showDrawer = () => {
+  const showDrawer = (id?) => {
     setModifyVisible(true);
+    setId(id);
   };
   const loadData = (pagination: PaginationConfig, filters, sorter) => {
     let org = getOrg();
@@ -73,14 +75,14 @@ function House() {
     });
   };
   const load = data => {
-    return GetStatistics(data).then(res => { 
+    return GetStatistics(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
         return {
           ...pagesetting,
           current,
           total,
-          pageSize
+          pageSize,
         };
       });
 
@@ -95,7 +97,7 @@ function House() {
     const sidx = 'id';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
-    return load({ pageIndex, pageSize, sidx, sord, total, queryJson}).then(res => {
+    return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
       return res;
     });
   };
@@ -110,7 +112,7 @@ function House() {
   return (
     <Layout style={{ height: '100%' }}>
       <Sider theme="light" style={{ overflow: 'hidden', height: '100%' }} width="245px">
-        <LeftTree treeData={treeData} selectTree={selectTree}/>
+        <LeftTree treeData={treeData} selectTree={selectTree} />
       </Sider>
       <Content style={{ padding: '0 20px' }}>
         <div style={{ marginBottom: '20px', padding: '3px 0' }}>
@@ -120,15 +122,29 @@ function House() {
             onSearch={value => console.log(value)}
             style={{ width: 200 }}
           />
-          <Button type="primary" style={{ float: 'right' }} onClick={showDrawer}>
+          <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer()}>
             <Icon type="plus" />
             楼宇
           </Button>
         </div>
         <General totalData={totalData} />
-        <ListTable onchange={loadData} loading={loading} pagination={pagination} data={data} />
+        <ListTable
+          onchange={loadData}
+          loading={loading}
+          pagination={pagination}
+          data={data}
+          modify={showDrawer}
+        />
       </Content>
-      <Modify modifyVisible={modifyVisible} closeDrawer={closeDrawer} />
+
+      <Modify
+        modifyVisible={modifyVisible}
+        closeDrawer={closeDrawer}
+        treeData={treeData}
+        organizeId={organizeId}
+        id={id}
+        reload={initLoadData}
+      />
     </Layout>
   );
 }

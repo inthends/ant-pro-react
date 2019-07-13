@@ -5,7 +5,7 @@ export async function query(): Promise<any> {
 }
 
 export async function queryCurrent(id): Promise<any> {
-  return request(process.env.basePath + `/Login/GetUserInfo?id=${id}`);
+  return request(process.env.basePath + `/Login/GetUserInfo?userid=${id}`);
 }
 
 export async function queryNotices(): Promise<any> {
