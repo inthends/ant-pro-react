@@ -100,6 +100,9 @@ if (settings.sso) {
           description: msg,
         });
       }
+      if (code === 401) {
+        logout();
+      }
     } else {
       throw new ResponseError({
         name: status,

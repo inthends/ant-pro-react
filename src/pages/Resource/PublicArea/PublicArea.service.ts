@@ -7,9 +7,9 @@ export function GetQuickPublicAreaTree(): Promise<ResponseObject<any[]>> {
 export function GetStatisticsTotal(): Promise<ResponseObject<any>> {
   return request.post(process.env.basePath + `/PStructs/GetStatisticsTotal`, {});
 }
-export function GetStatistics(data): Promise<any> {
+export function GetPublicAreas(data): Promise<any> {
   return request
-    .post(process.env.basePath + `/PStructs/GetStatistics`, { data: objToFormdata(data) })
+    .post(process.env.basePath + `/PublicArea/GetPageListJson`, { data: objToFormdata(data) })
     .then(getResult as any);
 }
 

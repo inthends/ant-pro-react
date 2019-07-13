@@ -1,6 +1,8 @@
 import GlobalHeader, { GlobalHeaderProps } from '@/components/GlobalHeader';
 import TopNavHeader, { TopNavHeaderProps } from '@/components/TopNavHeader';
 import { ConnectProps, ConnectState, SettingModelState } from '@/models/connect';
+import { CurrentUser } from '@/models/user';
+import { logout } from '@/services/user';
 import { Layout, message } from 'antd';
 import { ClickParam } from 'antd/es/menu';
 import { connect } from 'dva';
@@ -8,9 +10,8 @@ import Animate from 'rc-animate';
 import React, { Component } from 'react';
 import { formatMessage } from 'umi-plugin-locale';
 import router from 'umi/router';
-import settings from 'config/defaultSettings';
-
 import styles from './Header.less';
+
 
 const { Header } = Layout;
 
@@ -19,6 +20,7 @@ export interface HeaderViewProps extends ConnectProps, TopNavHeaderProps, Global
   collapsed?: boolean;
   setting?: SettingModelState;
   autoHideHeader?: boolean;
+  currentUser: CurrentUser;
   handleMenuCollapse?: (collapse: boolean) => void;
 }
 
@@ -91,10 +93,10 @@ class HeaderView extends Component<HeaderViewProps, HeaderViewState> {
       return;
     }
     if (key === 'logout') {
-      // dispatch!({
-      //   type: 'login/logout',
-      // });
       
+    const { currentUser } = this.props;
+    // console.log(currentUser)
+      logout(currentUser.id);
       router.push('/login');
     }
   };

@@ -20,3 +20,6 @@ export const bindUserService = data =>
   });
 
 export const queryUserRolesService = () => request.get('/sys/user/roles');
+
+export const logout = username =>
+  request.post(process.env.basePath + `/Login/Logout?username=${username}`, {});

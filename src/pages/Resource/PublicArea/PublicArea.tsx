@@ -6,7 +6,7 @@ import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import LeftTree from '../LeftTree';
 import ListTable from './ListTable';
-import { GetQuickPublicAreaTree, GetStatistics, GetStatisticsTotal } from './PublicArea.service';
+import { GetPublicAreas, GetQuickPublicAreaTree, GetStatisticsTotal } from './PublicArea.service';
 
 const { Sider, Content } = Layout;
 const { Search } = Input;
@@ -51,15 +51,12 @@ function PublicArea() {
       .then(getResult)
       .then((res: any[]) => {
         let treeList = (res || []).map(item => {
-          console.log(item.id)
-          console.log(item.pId)
-          console.log('\n')
           return {
-            id,
-            text : item.name,
-            parentId : item.pId,
-          }
-        })
+            id: item.id,
+            text: item.name,
+            parentId: item.pId,
+          };
+        });
         setTreeData(treeList);
         return treeList;
       });
@@ -108,7 +105,7 @@ function PublicArea() {
     setLoading(true);
     data.sidx = data.sidx || 'id';
     data.sord = data.sord || 'asc';
-    return GetStatistics(data).then(res => {
+    return GetPublicAreas(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
         return {
