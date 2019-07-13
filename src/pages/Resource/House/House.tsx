@@ -23,6 +23,15 @@ function House() {
   const [data, setData] = useState([]);
   const [id, setId] = useState<string>();
 
+  const disabledCreate = (treeData: TreeEntity[], organizeId: string) => {
+    for (let item of treeData) {
+      if (item.id === organizeId && item.parentId !== '0') {
+        return false;
+      }
+    }
+    return true;
+  };
+
   const selectTree = org => {
     initLoadData(org);
     SetOrganizeId(org);
@@ -109,6 +118,7 @@ function House() {
     });
     return org;
   };
+
   return (
     <Layout style={{ height: '100%' }}>
       <Sider theme="light" style={{ overflow: 'hidden', height: '100%' }} width="245px">
@@ -122,7 +132,12 @@ function House() {
             onSearch={value => console.log(value)}
             style={{ width: 200 }}
           />
-          <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer()}>
+          <Button
+            type="primary"
+            disabled={disabledCreate(treeData, organizeId)}
+            style={{ float: 'right' }}
+            onClick={() => showDrawer()}
+          >
             <Icon type="plus" />
             楼宇
           </Button>
