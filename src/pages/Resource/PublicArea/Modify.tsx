@@ -12,6 +12,7 @@ import {
   Select,
   Tree,
   TreeSelect,
+  Checkbox,
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
@@ -63,18 +64,34 @@ const Modify = (props: ModifyProps) => {
   const save = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        const newData = data ? { ...data, ...values } : values;
-        SaveForm({ ...newData, type: 5 }).then(res => {
-          message.success('保存成功');
-          closeDrawer();
-          reload();
-        });
+        let newData = data ? { ...data, ...values } : values;
+        console.log(newData.auditMark);
+        if (newData.auditMark) {
+          Modal.confirm({
+            title: '警告',
+            content: '数据审核后将无法进行修改！',
+            onOk: () => {
+              newData.auditMark = 1;
+              doSave(newData);
+            },
+          });
+        } else {
+          newData.auditMark = 0;
+          doSave(newData);
+        }
       }
+    });
+  };
+  const doSave = dataDetail => {
+    dataDetail.keyValue = dataDetail.pCode;
+    SaveForm({ ...dataDetail, type: 5 }).then(res => {
+      message.success('保存成功');
+      closeDrawer();
+      reload();
     });
   };
   const selectOrg = orgId => {
     const type = treeData.filter(item => item.id === orgId)[0].type;
-    console.log('只能选到楼层不可以选择其他层次！');
     if (type !== '4') {
       Modal.warn({
         title: '警告',
@@ -82,7 +99,6 @@ const Modify = (props: ModifyProps) => {
       });
     }
     form.setFieldsValue({ parentId: undefined });
-    console.log(type);
   };
 
   return (
@@ -154,6 +170,22 @@ const Modify = (props: ModifyProps) => {
                 </Form.Item>
               </Col>
             </Row>
+            {data ? (
+              <Row gutter={24}>
+                <Col lg={24}>
+                  {getFieldDecorator('auditMark', {
+                    initialValue: infoDetail.auditMark === 1,
+                  })(
+                    <Checkbox
+                      disabled={infoDetail.auditMark === 1}
+                      checked={form.getFieldValue('auditMark')}
+                    >
+                      是否审核
+                    </Checkbox>,
+                  )}
+                </Col>
+              </Row>
+            ) : null}
           </Form>
         ) : null}
       </Card>
