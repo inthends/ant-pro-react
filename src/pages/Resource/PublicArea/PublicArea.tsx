@@ -1,12 +1,12 @@
 import { TreeEntity } from '@/model/models';
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { getResult } from '@/utils/networkUtils';
 import { Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import LeftTree from '../LeftTree';
 import ListTable from './ListTable';
-import { GetPublicAreas, GetQuickPublicAreaTree, GetStatisticsTotal } from './PublicArea.service';
+import Modify from './Modify';
+import { GetPublicAreas, GetQuickPublicAreaTree } from './PublicArea.service';
 
 const { Sider, Content } = Layout;
 const { Search } = Input;
@@ -14,12 +14,11 @@ const { Search } = Input;
 function PublicArea() {
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   const [treeData, setTreeData] = useState<TreeEntity[]>([]);
-  const [totalData, setTotalData] = useState({});
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [organize, SetOrganize] = useState<any>({});
   const [data, setData] = useState<any[]>([]);
-  const [id, setId] = useState<string>();
+  const [currData, setCurrData] = useState<any>();
   const [search, setSearch] = useState<string>('');
 
 
@@ -58,7 +57,7 @@ function PublicArea() {
   };
   const showDrawer = (id?) => {
     setModifyVisible(true);
-    setId(id);
+    setCurrData(id);
   };
   const loadData = (search, org, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(search);
@@ -161,14 +160,14 @@ function PublicArea() {
         />
       </Content>
 
-      {/* <Modify
+      <Modify
         modifyVisible={modifyVisible}
         closeDrawer={closeDrawer}
         treeData={treeData}
-        organizeId={organizeId}
-        id={id}
+        organizeId={organize.id}
+        data={currData}
         reload={() => initLoadData(organize, search)}
-      /> */}
+      />
     </Layout>
   );
 }

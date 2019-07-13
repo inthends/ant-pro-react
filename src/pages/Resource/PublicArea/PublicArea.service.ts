@@ -35,7 +35,7 @@ export function GetFormInfoJson(keyValue): Promise<PStructsData> {
 // 新增修改
 export function SaveForm(data): Promise<any> {
   return request
-    .post(process.env.basePath + `/PStructs/SaveForm`, { data: objToFormdata(data) })
+    .post(process.env.basePath + `/PublicArea/SaveForm`, { data: objToFormdata(data) })
     .then(getResult as any);
 }
 // 新增修改

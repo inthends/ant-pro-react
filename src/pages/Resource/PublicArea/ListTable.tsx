@@ -9,7 +9,7 @@ interface ListTableProps {
   loading: boolean;
   pagination: PaginationConfig;
   data: any[];
-  modify(id: string): void;
+  modify(data: string): void;
   reload(): void;
 }
 
@@ -108,7 +108,7 @@ function ListTable(props: ListTableProps) {
             type="primary"
             key="modify"
             style={{ marginRight: '10px' }}
-            onClick={() => modify(record.pCode)}
+            onClick={() => modify(record)}
           >
             修改
           </Button>,
