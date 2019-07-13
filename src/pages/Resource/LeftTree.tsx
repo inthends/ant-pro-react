@@ -1,14 +1,17 @@
+import Page from '@/components/Common/Page';
 import { TreeEntity } from '@/model/models';
 import { Tree } from 'antd';
 import React, { useEffect, useState } from 'react';
 
 const { TreeNode } = Tree;
-interface OrgTreeProps {
+
+interface LeftTreeProps {
   treeData: TreeEntity[];
   selectTree(treeNode): void;
 }
-function OrgTree(props: OrgTreeProps) {
+function LeftTree(props: LeftTreeProps) {
   const { treeData, selectTree } = props;
+
   const [expanded, setExpanded] = useState<string[]>([]);
 
   useEffect(() => {
@@ -44,10 +47,12 @@ function OrgTree(props: OrgTreeProps) {
   };
 
   return (
-    <Tree expandedKeys={expanded} showLine onSelect={onSelect} onExpand={clickExpend}>
-      {renderTree(treeData, '0')}
-    </Tree>
+    <Page style={{ padding: '6px', borderLeft: 'none', borderBottom: 'none', height: '100%' }}>
+      <Tree expandedKeys={expanded} showLine onSelect={onSelect} onExpand={clickExpend}>
+        {renderTree(treeData, '0')}
+      </Tree>
+    </Page>
   );
 }
 
-export default OrgTree;
+export default LeftTree;

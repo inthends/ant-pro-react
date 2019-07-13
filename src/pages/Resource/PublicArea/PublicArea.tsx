@@ -4,16 +4,14 @@ import { getResult } from '@/utils/networkUtils';
 import { Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import General from './General';
-import { GetStatistics, GetStatisticsTotal, GetTreeJsonById } from './House.service';
 import LeftTree from '../LeftTree';
 import ListTable from './ListTable';
-import Modify from './Modify';
+import { GetQuickPublicAreaTree, GetStatistics, GetStatisticsTotal } from './PublicArea.service';
 
 const { Sider, Content } = Layout;
 const { Search } = Input;
 
-function House() {
+function PublicArea() {
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   const [treeData, setTreeData] = useState<TreeEntity[]>([]);
   const [totalData, setTotalData] = useState({});
@@ -49,11 +47,18 @@ function House() {
   }, []);
   // 获取属性数据
   const getTreeData = () => {
-    return GetTreeJsonById()
+    return GetQuickPublicAreaTree()
       .then(getResult)
-      .then((res: TreeEntity[]) => {
-        setTreeData(res || []);
-        return res || [];
+      .then((res: any[]) => {
+        let treeList = (res || []).map(item => {
+          return {
+            id,
+            text : item.name,
+            parentId : item.pId,
+          }
+        })
+        setTreeData(treeList);
+        return treeList;
       });
   };
   // 获取房产统计
@@ -158,7 +163,6 @@ function House() {
             楼宇
           </Button>
         </div>
-        <General totalData={totalData} />
         <ListTable
           onchange={(paginationConfig, filters, sorter) =>
             loadData(search, paginationConfig, sorter)
@@ -171,16 +175,16 @@ function House() {
         />
       </Content>
 
-      <Modify
+      {/* <Modify
         modifyVisible={modifyVisible}
         closeDrawer={closeDrawer}
         treeData={treeData}
         organizeId={organizeId}
         id={id}
         reload={initLoadData}
-      />
+      /> */}
     </Layout>
   );
 }
 
-export default House;
+export default PublicArea;
