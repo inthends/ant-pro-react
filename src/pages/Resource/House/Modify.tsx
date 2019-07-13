@@ -87,10 +87,11 @@ const Modify = (props: ModifyProps) => {
           form.resetFields();
         });
       } else {
-        form.setFieldsValue({ organizeId });
+        setInfoDetail({ organizeId });
+        form.resetFields();
       }
     } else {
-      form.resetFields();
+      form.setFieldsValue({});
     }
   }, [modifyVisible]);
 
