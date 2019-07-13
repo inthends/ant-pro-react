@@ -20,8 +20,9 @@ function House() {
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [organizeId, SetOrganizeId] = useState<string>('');
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<any[]>([]);
   const [id, setId] = useState<string>();
+  const [search, setSearch] = useState<string>('');
 
   const disabledCreate = (treeData: TreeEntity[], organizeId: string) => {
     for (let item of treeData) {
@@ -129,7 +130,7 @@ function House() {
           <Search
             className="search-input"
             placeholder="搜索楼宇名称"
-            onSearch={value => console.log(value)}
+            onSearch={value => setSearch(value)}
             style={{ width: 200 }}
           />
           <Button
@@ -147,7 +148,7 @@ function House() {
           onchange={loadData}
           loading={loading}
           pagination={pagination}
-          data={data}
+          data={data.filter(item => item.name.includes(search))}
           modify={showDrawer}
           reload={initLoadData}
         />
