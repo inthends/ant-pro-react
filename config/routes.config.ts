@@ -48,8 +48,8 @@ export default [
           },
           {
             name: '公共区域',
-            path: '/resource/test1',
-            component: './Resource/Test1',
+            path: '/resource/publicArea',
+            component: './Resource/PublicArea/PublicArea',
             hideInMenu: true,
           },
         ],

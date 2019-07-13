@@ -74,4 +74,6 @@ export interface TreeEntity {
      * 值
      */
     value?: string;
+
+    type?: string;
 }

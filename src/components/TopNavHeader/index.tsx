@@ -10,6 +10,8 @@ import { Menu } from 'antd';
 import { connect } from 'dva';
 import { ConnectState } from '@/models/connect';
 import { MenuModel } from '@/models/menu';
+import { urlToList } from '../_utils/pathTools';
+import { getMenuMatches } from '../SiderMenu/SiderMenuUtils';
 
 export interface TopNavHeaderProps extends SiderMenuProps, GlobalHeaderRightProps {
   contentWidth?: ContentWidth;
@@ -31,13 +33,26 @@ class TopNavHeader extends Component<TopNavHeaderProps, TopNavHeaderState> {
 
   maim: HTMLDivElement | null = null;
 
+  getSelectedMenuKeys = (pathname: string): string[] => {
+    const {
+      menu: { secondMenu },
+    } = this.props;
+    const flatSecondMenuKeys = secondMenu.map(item => {
+      return item.path;
+    });
+    return urlToList(pathname)
+      .map(itemPath => getMenuMatches(flatSecondMenuKeys, itemPath).pop())
+      .filter(item => item) as string[];
+  };
+
   render() {
-    const { theme, contentWidth, menuData, logo } = this.props;
+    const { theme, contentWidth, menuData, logo, location } = this.props;
     const { maxWidth } = this.state;
     const flatMenuKeys = getFlatMenuKeys(menuData);
     const {
       menu: { secondMenu },
     } = this.props;
+    let selectedKeys = this.getSelectedMenuKeys(location!.pathname.replace('/openApi', ''));
     return (
       <div
         className={`${styles.head} ${theme === 'light' ? styles.light : ''}`}
@@ -50,9 +65,9 @@ class TopNavHeader extends Component<TopNavHeaderProps, TopNavHeaderState> {
         >
           <div className={styles.left}>
             <div className={styles.logo} key="logo" id="logo">
-                <img src={logo} alt="logo" />
+              <img src={logo} alt="logo" />
             </div>
-            <div style={{ flexGrow: 1,background: '#EBEBED'}} id="first_menu">
+            <div style={{ flexGrow: 1, background: '#EBEBED' }} id="first_menu">
               <BaseMenu
                 {...this.props}
                 flatMenuKeys={flatMenuKeys}
@@ -61,24 +76,21 @@ class TopNavHeader extends Component<TopNavHeaderProps, TopNavHeaderState> {
               />
             </div>
             <RightContent {...this.props} />
-          
           </div>
-          
-         
         </div>
         <Menu
-            mode="horizontal"
-            defaultSelectedKeys={['1']}
-            style={{ lineHeight: '40px', width: '100%' }}
-          >
-            {secondMenu.map(item => {
-              return (
-                <Menu.Item key={item.path}>
-                  <Link to={item.path}>{item.name}</Link>
-                </Menu.Item>
-              );
-            })}
-          </Menu>
+          mode="horizontal"
+          selectedKeys={selectedKeys}
+          style={{ lineHeight: '40px', width: '100%' }}
+        >
+          {secondMenu.map(item => {
+            return (
+              <Menu.Item key={item.path}>
+                <Link to={item.path}>{item.name}</Link>
+              </Menu.Item>
+            );
+          })}
+        </Menu>
       </div>
     );
   }
