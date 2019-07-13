@@ -119,7 +119,8 @@ const Modify = (props: ModifyProps) => {
       });
     } else {
       return Promise.resolve({
-        parentId:0
+        parentId: 0,
+        type: 1,
       });
     }
   };
