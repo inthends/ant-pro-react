@@ -22,14 +22,13 @@ function ListTable(props: ListTableProps) {
     Modal.confirm({
       title: '请确认',
       content: `您是否要删除${record.name}`,
-      onOk: ()=> {
+      onOk: () => {
         RemoveForm(record.id).then(() => {
           message.success('保存成功');
           reload();
         });
-      }
-    })
-   
+      },
+    });
   };
   const columns = [
     {
@@ -101,10 +100,15 @@ function ListTable(props: ListTableProps) {
       fixed: 'right',
       render: (text, record) => {
         return [
-          <Button type="primary" style={{ marginRight: '10px' }} onClick={() => modify(record.id)}>
+          <Button
+            type="primary"
+            key="modify"
+            style={{ marginRight: '10px' }}
+            onClick={() => modify(record.id)}
+          >
             修改
           </Button>,
-          <Button type="danger" onClick={() => doDelete(record)}>
+          <Button type="danger" key="delete" onClick={() => doDelete(record)}>
             删除
           </Button>,
         ];
@@ -119,7 +123,7 @@ function ListTable(props: ListTableProps) {
         size="middle"
         dataSource={data}
         columns={columns}
-        rowKey="id"
+        rowKey={record => record.id}
         pagination={pagination}
         scroll={{ x: 1850 }}
         onChange={(pagination: PaginationConfig, filters, sorter) =>

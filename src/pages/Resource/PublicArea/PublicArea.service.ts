@@ -9,7 +9,7 @@ export function GetStatisticsTotal(): Promise<ResponseObject<any>> {
 }
 export function GetPublicAreas(data): Promise<any> {
   return request
-    .post(process.env.basePath + `/PublicArea/GetPageListJson`, { data: objToFormdata(data) })
+    .post(process.env.basePath + `/PublicArea/GetPageListJson`, { data })
     .then(getResult as any);
 }
 

@@ -41,7 +41,7 @@ function PublicArea() {
       const root = res.filter(item => item.parentId === '0');
       const rootOrg = root.length === 1 ? root[0].id : '';
       SetOrganizeId(rootOrg as string);
-      // initLoadData();
+      initLoadData();
     });
     // getHouseTotal();
   }, []);
