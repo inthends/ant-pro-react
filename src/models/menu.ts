@@ -1,0 +1,183 @@
+import { MenuDataItem } from '@/components/SiderMenu';
+import Authorized from '@/utils/Authorized';
+import { Effect } from 'dva';
+import isEqual from 'lodash/isEqual';
+import memoizeOne from 'memoize-one';
+import { Reducer } from 'redux';
+import { formatMessage } from 'umi-plugin-locale';
+import { IRoute } from 'umi-types';
+import defaultSettings from '../../config/defaultSettings';
+
+// Conversion router to menu.
+function formatter(
+  data: MenuDataItem[],
+  parentAuthority?: string[] | string,
+  parentName?: string,
+): MenuDataItem[] {
+  return data
+    .filter(item => item.name && item.path)
+    .map(item => {
+      const locale = `${parentName || 'menu'}.${item.name!}`;
+      // if enableMenuLocale use item.name,
+      // close menu international
+      const name = defaultSettings.menu.disableLocal
+        ? item.name!
+        : formatMessage({ id: locale, defaultMessage: item.name! });
+      const result: MenuDataItem = {
+        ...item,
+        name,
+        locale,
+        authority: item.authority || parentAuthority,
+      };
+      if (item.routes) {
+        const children = formatter(item.routes, item.authority, locale);
+        // Reduce memory usage
+        result.children = children;
+      }
+      delete result.routes;
+      return result;
+    });
+}
+
+const memoizeOneFormatter = memoizeOne(formatter, isEqual);
+
+/**
+ * get SubMenu or Item
+ */
+const getSubMenu: (item: MenuDataItem) => MenuDataItem = item => {
+  if (
+    Array.isArray(item.children) &&
+    !item.hideChildrenInMenu &&
+    item.children.some(child => (child.name ? true : false))
+  ) {
+    const children = filterMenuData(item.children);
+    if (children.length) return { ...item, children };
+  }
+  return { ...item, children: void 0 };
+};
+
+/**
+ * filter menuData
+ */
+const filterMenuData = (menuData: MenuDataItem[] = []): MenuDataItem[] => {
+  return menuData
+    .filter(item => item.name && !item.hideInMenu)
+    .map(item => Authorized.check<any, any>(item.authority!, getSubMenu(item), null))
+    .filter(item => item);
+};
+
+/**
+ * 获取面包屑映射
+ * @param MenuDataItem[] menuData 菜单配置
+ */
+const getBreadcrumbNameMap = (menuData: MenuDataItem[]) => {
+  const routerMap: { [key: string]: MenuDataItem } = {};
+  const flattenMenuData: (data: MenuDataItem[]) => void = data => {
+    data.forEach(menuItem => {
+      if (menuItem.children) {
+        flattenMenuData(menuItem.children);
+      }
+      // Reduce memory usage
+      routerMap[menuItem.path] = menuItem;
+    });
+  };
+  flattenMenuData(menuData);
+  return routerMap;
+};
+
+/**
+ * 获取面包屑映射
+ * @param MenuDataItem[] menuData 菜单配置
+ */
+const getSecondMenuMap = (menuData: MenuDataItem[]) => {
+  const map = new Map<string, MenuDataItem[]>();
+  menuData.forEach(item => {
+    map.set(item.path, <MenuDataItem[]>item.children);
+  });
+  return map;
+};
+
+const memoizeOneGetBreadcrumbNameMap = memoizeOne(getBreadcrumbNameMap, isEqual);
+
+export interface MenuModelState {
+  menuData: MenuDataItem[];
+  routerData: IRoute[];
+  breadcrumbNameMap: object;
+  secondMenuMap: Map<string, MenuDataItem[]>;
+  secondMenu?: MenuDataItem[];
+}
+
+export interface MenuModelType {
+  namespace: 'menu';
+  state: MenuModelState;
+  effects: {
+    getMenuData: Effect;
+    setSecondMenu: Effect;
+  };
+  reducers: {
+    save: Reducer<MenuModelState>;
+    saveSecondMenu: Reducer<MenuModelState>;
+  };
+}
+
+const MenuModel: MenuModelType = {
+  namespace: 'menu',
+
+  state: {
+    menuData: [],
+    routerData: [],
+    breadcrumbNameMap: {},
+    secondMenuMap: new Map<string, MenuDataItem[]>(),
+    secondMenu: [],
+  },
+
+  effects: {
+    *getMenuData({ payload }, { put }) {
+      const { routes, authority } = payload;
+      const originalMenuData = memoizeOneFormatter(routes, authority);
+      // 设置二级菜单Map
+      const secondMenuMap = getSecondMenuMap(originalMenuData);
+      const menuData = filterMenuData(originalMenuData);
+      const breadcrumbNameMap = memoizeOneGetBreadcrumbNameMap(originalMenuData);
+      yield put({
+        type: 'save',
+        payload: { menuData, breadcrumbNameMap, routerData: routes, secondMenuMap },
+      });
+      if (originalMenuData.length > 0) {
+        yield put({
+          type: 'saveSecondMenu',
+          payload: { path: originalMenuData[0].path },
+        });
+      }
+    },
+
+    *setSecondMenu({ payload }, { put }) {
+      const { path } = payload;
+      yield put({
+        type: 'saveSecondMenu',
+        payload: { path },
+      });
+    },
+  },
+
+  reducers: {
+    save(state, action) {
+      return {
+        ...state,
+        ...action.payload,
+      };
+    },
+    saveSecondMenu(state, action) {
+      let secondMenu: MenuDataItem[] = [];
+      if (state.secondMenuMap.has(action.payload.path)) {
+        secondMenu = state.secondMenuMap.get(action.payload.path) || [];
+      }
+      return {
+        ...state,
+        secondMenu,
+      };
+    },
+  },
+};
+
+export default MenuModel;

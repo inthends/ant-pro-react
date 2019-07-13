@@ -1,0 +1,81 @@
+@import '~antd/lib/style/themes/default.less';
+
+.numberInfo {
+  .mainContent {
+    vertical-align: middle;
+  }
+  .suffix {
+    font-size: 14px;
+    font-style: normal;
+    margin-left: 4px;
+  }
+  .numberInfoTitle {
+    font-size: @font-size-lg;
+    margin-bottom: 16px;
+    transition: all 0.3s;
+  }
+  .numberInfoSubTitle {
+    color: #848fad;
+    font-size: 12px;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+    line-height: 1.5;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    white-space: nowrap;
+  }
+  .numberInfoValue {
+    color: #1f212e;
+    font-family: PingFangSC-Semibold;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 1.5;
+    font-size: 12px;
+    padding: 5px 0;
+    min-height: 40px;
+    
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    white-space: nowrap;
+    
+    & > span {
+      display: inline-block;
+      line-height: 32px;
+      font-size: 22px;
+      margin-right: 20px;
+      width: calc(100% - 20px);
+      border-bottom: 1px solid #e8e8e8;
+      padding: 5px 0;
+      height: 46px;
+    }
+    .subTotal {
+      font-size: @font-size-lg;
+      vertical-align: top;
+      margin-right: 0;
+      i {
+        font-size: 12px;
+        transform: scale(0.82);
+        margin-left: 4px;
+      }
+      :global {
+        .anticon-caret-up {
+          color: @red-6;
+        }
+        .anticon-caret-down {
+          color: @green-6;
+        }
+      }
+    }
+  }
+}
+.numberInfolight {
+  .numberInfoValue {
+    
+    & > span {
+      color: @text-color;
+    }
+  }
+}
+

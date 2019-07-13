@@ -1,0 +1,56 @@
+@import '~antd/lib/style/themes/default.less';
+
+.draggableList {
+  &:focus {
+    outline: none;
+  }
+}
+
+.draggableListHeader {
+  position: relative;
+}
+
+.draggableListTitle {
+  text-align: center;
+  height: 32px;
+  line-height: 32px;
+  font-size: 16px;
+  font-weight: bold;
+  color: @text-color;
+}
+
+.draggableListTotal {
+  margin-left: 12px;
+  color: @text-color-secondary;
+}
+
+.draggableListActions {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+}
+
+.draggableListItem {
+  margin: 12px;
+  padding: 6px 12px;
+  background-color: @component-background;
+  border-radius: @border-radius-base;
+  box-shadow: @shadow-1-down;
+  transition: margin 0.2s;
+  &:hover {
+    margin: 12px 6px;
+    box-shadow: @shadow-1-right;
+  }
+}
+
+.draggableListFooter {
+  border-radius: @border-radius-base;
+  background-color: @component-background;
+  box-shadow: @shadow-1-down;
+  margin: 6px 12px;
+}
+
+.filtered {
+  color: #1890ff;
+}
