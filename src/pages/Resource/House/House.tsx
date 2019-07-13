@@ -33,8 +33,8 @@ function House() {
     return true;
   };
 
-  const selectTree = org => {
-    initLoadData(org);
+  const selectTree = (org, search) => {
+    initLoadData(org, search);
     SetOrganizeId(org);
   };
 
@@ -43,7 +43,7 @@ function House() {
       const root = res.filter(item => item.parentId === '0');
       const rootOrg = root.length === 1 ? root[0].id : '';
       SetOrganizeId(rootOrg as string);
-      initLoadData();
+      initLoadData(rootOrg as string, '');
     });
     getHouseTotal();
   }, []);
@@ -71,9 +71,8 @@ function House() {
     setModifyVisible(true);
     setId(id);
   };
-  const loadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
+  const loadData = (search, org, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(search);
-    let org = getOrg();
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: pagination.pageSize,
@@ -116,9 +115,9 @@ function House() {
       return res;
     });
   };
-  const initLoadData = (orgId?: string) => {
-    let org = orgId || getOrg();
-    const queryJson = { OrganizeId: org, keyword: '' };
+  const initLoadData = (orgId: string, search) => {
+    setSearch(search);
+    const queryJson = { OrganizeId: orgId, keyword: search };
     const sidx = 'id';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
@@ -126,26 +125,24 @@ function House() {
       return res;
     });
   };
-  const getOrg = () => {
-    let org = '';
-    SetOrganizeId(item => {
-      org = item;
-      return item;
-    });
-    return org;
-  };
 
   return (
     <Layout style={{ height: '100%' }}>
       <Sider theme="light" style={{ overflow: 'hidden', height: '100%' }} width="245px">
-        <LeftTree treeData={treeData} selectTree={selectTree} />
+        <LeftTree
+          treeData={treeData}
+          selectTree={(id, item) => {
+            selectTree(id, search);
+          }}
+        />
       </Sider>
       <Content style={{ padding: '0 20px' }}>
         <div style={{ marginBottom: '20px', padding: '3px 0' }}>
           <Search
             className="search-input"
             placeholder="搜索楼宇名称"
-            onSearch={value => loadData(value, undefined, undefined)}
+            value={search}
+            onSearch={value => loadData(value, organizeId)}
             style={{ width: 200 }}
           />
           <Button
@@ -161,13 +158,13 @@ function House() {
         <General totalData={totalData} />
         <ListTable
           onchange={(paginationConfig, filters, sorter) =>
-            loadData(search, paginationConfig, sorter)
+            loadData(search, organizeId, paginationConfig, sorter)
           }
           loading={loading}
           pagination={pagination}
           data={data}
           modify={showDrawer}
-          reload={initLoadData}
+          reload={() => initLoadData(organizeId, search)}
         />
       </Content>
 
@@ -177,7 +174,7 @@ function House() {
         treeData={treeData}
         organizeId={organizeId}
         id={id}
-        reload={initLoadData}
+        reload={() => initLoadData(organizeId, search)}
       />
     </Layout>
   );

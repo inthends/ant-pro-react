@@ -1,5 +1,5 @@
 import Page from '@/components/Common/Page';
-import { Button, message, Table, Modal } from 'antd';
+import { Button, message, Modal, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import { RemoveForm } from './PublicArea.service';
@@ -23,7 +23,7 @@ function ListTable(props: ListTableProps) {
       title: '请确认',
       content: `您是否要删除${record.name}`,
       onOk: () => {
-        RemoveForm(record.id).then(() => {
+        RemoveForm(record.pCode).then(() => {
           message.success('保存成功');
           reload();
         });
@@ -32,7 +32,7 @@ function ListTable(props: ListTableProps) {
   };
   const columns = [
     {
-      title: '项目名称',
+      title: '公区名称',
       dataIndex: 'name',
       key: 'name',
       width: 250,
@@ -40,57 +40,61 @@ function ListTable(props: ListTableProps) {
       sorter: true,
     },
     {
-      title: '总建筑面积',
-      dataIndex: 'area',
-      key: 'area',
+      title: '公区编号',
+      dataIndex: 'enCode',
+      key: 'enCode',
+      width: 150,
+      sorter: true,
+    },
+    {
+      title: '房产全称',
+      dataIndex: 'psAllName',
+      key: 'psAllName',
+      width: 300,
+      sorter: true,
+    },
+    {
+      title: '位置描述',
+      dataIndex: 'otherCode',
+      key: 'otherCode',
       width: 200,
       sorter: true,
     },
     {
-      title: '总房屋数',
-      dataIndex: 'roomcount',
-      key: 'roomcount',
+      title: '是否审核',
+      dataIndex: 'auditMark',
+      key: 'auditMark',
       width: 200,
       sorter: true,
-    },
-    {
-      title: '入住面积',
-      dataIndex: 'checkarea',
-      key: 'checkarea',
-      width: 200,
-      sorter: true,
-    },
-    {
-      title: '空置面积',
-      dataIndex: 'area',
-      key: 'area2',
-      width: 200,
-      sorter: true,
-    },
-    {
-      title: '入住房屋数',
-      dataIndex: 'checkroom',
-      key: 'checkroom',
-      width: 200,
-      sorter: true,
-    },
-    {
-      title: '空置房屋数',
-      dataIndex: 'vacancyroom',
-      key: 'vacancyroom',
-      sorter: true,
-    },
-    {
-      title: '入驻率',
-      dataIndex: 'rate',
-      key: 'rate',
-      width: 200,
-      fixed: 'right',
-      render: (text, record) => {
-        return (
-          (record.roomcount ? (record.checkroom / record.roomcount) * 100 : 0).toFixed(2) + '%'
-        );
+      render: (text: any) => {
+        switch (text) {
+          case 1:
+            return '是';
+          case 0:
+            return '否';
+          default:
+            return null;
+        }
       },
+    },
+    {
+      title: '审核人',
+      dataIndex: 'auditman',
+      key: 'auditman',
+      width: 150,
+      sorter: true,
+    },
+    {
+      title: '审核日期',
+      dataIndex: 'auditdate',
+      key: 'auditdate',
+      width: 200,
+      sorter: true,
+    },
+    {
+      title: '备注',
+      dataIndex: 'memo',
+      key: 'memo',
     },
     {
       title: '操作',
@@ -104,7 +108,7 @@ function ListTable(props: ListTableProps) {
             type="primary"
             key="modify"
             style={{ marginRight: '10px' }}
-            onClick={() => modify(record.id)}
+            onClick={() => modify(record.pCode)}
           >
             修改
           </Button>,
@@ -123,7 +127,7 @@ function ListTable(props: ListTableProps) {
         size="middle"
         dataSource={data}
         columns={columns}
-        rowKey={record => record.id}
+        rowKey={record => record.pCode}
         pagination={pagination}
         scroll={{ x: 1850 }}
         onChange={(pagination: PaginationConfig, filters, sorter) =>

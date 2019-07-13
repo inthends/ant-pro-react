@@ -17,58 +17,42 @@ function PublicArea() {
   const [totalData, setTotalData] = useState({});
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
-  const [organizeId, SetOrganizeId] = useState<string>('');
+  const [organize, SetOrganize] = useState<any>({});
   const [data, setData] = useState<any[]>([]);
   const [id, setId] = useState<string>();
   const [search, setSearch] = useState<string>('');
 
-  const disabledCreate = (treeData: TreeEntity[], organizeId: string) => {
-    for (let item of treeData) {
-      if (item.id === organizeId && item.parentId !== '0') {
-        return false;
-      }
-    }
-    return true;
-  };
 
-  const selectTree = org => {
-    initLoadData(org);
-    SetOrganizeId(org);
+
+  const selectTree = (org, item, search) => {
+    initLoadData(item, search);
+    SetOrganize(item);
   };
 
   useEffect(() => {
     getTreeData().then(res => {
       const root = res.filter(item => item.parentId === '0');
-      const rootOrg = root.length === 1 ? root[0].id : '';
-      SetOrganizeId(rootOrg as string);
-      initLoadData();
+      const rootOrg = root.length === 1 ? root[0] : undefined;
+      SetOrganize(rootOrg);
+      initLoadData(rootOrg, '');
     });
-    // getHouseTotal();
   }, []);
   // 获取属性数据
   const getTreeData = () => {
-    return GetQuickPublicAreaTree()
-      .then(getResult)
-      .then((res: any[]) => {
-        let treeList = (res || []).map(item => {
-          return {
-            id: item.id,
-            text: item.name,
-            parentId: item.pId,
-          };
-        });
-        setTreeData(treeList);
-        return treeList;
+    return GetQuickPublicAreaTree().then((res: any[]) => {
+      let treeList = (res || []).map(item => {
+        return {
+          ...item,
+          id: item.id,
+          text: item.name,
+          parentId: item.pId,
+        };
       });
+      setTreeData(treeList);
+      return treeList;
+    });
   };
-  // 获取房产统计
-  const getHouseTotal = () => {
-    GetStatisticsTotal()
-      .then(getResult)
-      .then(res => {
-        setTotalData(res || []);
-      });
-  };
+
   const closeDrawer = () => {
     setModifyVisible(false);
   };
@@ -76,9 +60,8 @@ function PublicArea() {
     setModifyVisible(true);
     setId(id);
   };
-  const loadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
+  const loadData = (search, org, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(search);
-    let org = getOrg();
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: pagination.pageSize,
@@ -88,13 +71,18 @@ function PublicArea() {
       pageIndex,
       pageSize,
       total,
-      queryJson: { OrganizeId: org, keyword: search },
+      queryJson: {
+        keyword: search,
+        OrganizeId: org.organizeId,
+        TreeTypeId: org.id,
+        TreeType: org.type,
+      },
     };
 
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'id';
+      searchCondition.sidx = field ? field : 'pCode';
     }
 
     return load(searchCondition).then(res => {
@@ -103,7 +91,7 @@ function PublicArea() {
   };
   const load = data => {
     setLoading(true);
-    data.sidx = data.sidx || 'id';
+    data.sidx = data.sidx || 'pCode';
     data.sord = data.sord || 'asc';
     return GetPublicAreas(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -121,57 +109,55 @@ function PublicArea() {
       return res;
     });
   };
-  const initLoadData = (orgId?: string) => {
-    let org = orgId || getOrg();
-    const queryJson = { OrganizeId: org, keyword: '' };
-    const sidx = 'id';
+
+  const initLoadData = (org, search) => {
+    setSearch(search);
+    const queryJson = {
+      OrganizeId: org.organizeId,
+      keyword: search,
+      TreeTypeId: org.id,
+      TreeType: org.type,
+    };
+    const sidx = 'pCode';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
       return res;
     });
   };
-  const getOrg = () => {
-    let org = '';
-    SetOrganizeId(item => {
-      org = item;
-      return item;
-    });
-    return org;
-  };
 
   return (
     <Layout style={{ height: '100%' }}>
       <Sider theme="light" style={{ overflow: 'hidden', height: '100%' }} width="245px">
-        <LeftTree treeData={treeData} selectTree={selectTree} />
+        <LeftTree
+          treeData={treeData}
+          selectTree={(id, item) => {
+            selectTree(id, item, search);
+          }}
+        />
       </Sider>
       <Content style={{ padding: '0 20px' }}>
         <div style={{ marginBottom: '20px', padding: '3px 0' }}>
           <Search
             className="search-input"
             placeholder="搜索楼宇名称"
-            onSearch={value => loadData(value, undefined, undefined)}
+            onSearch={value => loadData(value, organize)}
             style={{ width: 200 }}
           />
-          <Button
-            type="primary"
-            disabled={disabledCreate(treeData, organizeId)}
-            style={{ float: 'right' }}
-            onClick={() => showDrawer()}
-          >
+          <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer()}>
             <Icon type="plus" />
             楼宇
           </Button>
         </div>
         <ListTable
           onchange={(paginationConfig, filters, sorter) =>
-            loadData(search, paginationConfig, sorter)
+            loadData(search, organize, paginationConfig, sorter)
           }
           loading={loading}
           pagination={pagination}
           data={data}
           modify={showDrawer}
-          reload={initLoadData}
+          reload={() => initLoadData(organize, search)}
         />
       </Content>
 
@@ -181,7 +167,7 @@ function PublicArea() {
         treeData={treeData}
         organizeId={organizeId}
         id={id}
-        reload={initLoadData}
+        reload={() => initLoadData(organize, search)}
       /> */}
     </Layout>
   );

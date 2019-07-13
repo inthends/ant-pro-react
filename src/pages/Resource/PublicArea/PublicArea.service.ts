@@ -1,15 +1,17 @@
 import { PStructsData, ResponseObject, TreeEntity } from '@/model/models';
 import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
-export function GetQuickPublicAreaTree(): Promise<ResponseObject<any[]>> {
-  return request.get(process.env.basePath + `/PublicArea/GetQuickPublicAreaTree`, {});
+export function GetQuickPublicAreaTree(): Promise<any[]> {
+  return request
+    .get(process.env.basePath + `/PublicArea/GetQuickPublicAreaTree`, {})
+    .then(getResult);
 }
 export function GetStatisticsTotal(): Promise<ResponseObject<any>> {
   return request.post(process.env.basePath + `/PStructs/GetStatisticsTotal`, {});
 }
 export function GetPublicAreas(data): Promise<any> {
   return request
-    .post(process.env.basePath + `/PublicArea/GetPageListJson`, { data })
+    .post(process.env.basePath + `/PublicArea/GetPageListJson`, { data: objToFormdata(data) })
     .then(getResult as any);
 }
 
@@ -39,6 +41,6 @@ export function SaveForm(data): Promise<any> {
 // 新增修改
 export function RemoveForm(keyValue): Promise<any> {
   return request
-    .post(process.env.basePath + `/PStructs/RemoveForm`, { data: objToFormdata({ keyValue }) })
+    .post(process.env.basePath + `/PublicArea/RemoveForm?keyValue=${keyValue}`, {})
     .then(getResult as any);
 }

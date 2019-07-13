@@ -37,7 +37,7 @@ export function deepCopy(data) {
   return JSON.parse(JSON.stringify(data));
 }
 
-export function getResult<T>(data: ResponseObject<T>): T{
+export function getResult<T = any>(data: ResponseObject<T>): T{
   if(data.code === 200) {
     return <T>data.data;
   } else {

@@ -7,7 +7,7 @@ const { TreeNode } = Tree;
 
 interface LeftTreeProps {
   treeData: TreeEntity[];
-  selectTree(treeNode): void;
+  selectTree(treeNode, item?: any): void;
 }
 function LeftTree(props: LeftTreeProps) {
   const { treeData, selectTree } = props;
@@ -20,7 +20,8 @@ function LeftTree(props: LeftTreeProps) {
 
   const onSelect = (selectedKeys, info) => {
     if (selectedKeys.length === 1) {
-      selectTree(selectedKeys[0]);
+      const item = treeData.filter(item => item.id === selectedKeys[0])[0];
+      selectTree(selectedKeys[0], item);
     }
   };
 
