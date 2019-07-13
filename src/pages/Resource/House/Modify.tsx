@@ -136,7 +136,6 @@ const Modify = (props: ModifyProps) => {
       title={title}
       placement="right"
       width={600}
-      maskClosable={false}
       onClose={close}
       visible={modifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
