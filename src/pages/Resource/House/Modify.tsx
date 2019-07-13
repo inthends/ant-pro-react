@@ -96,7 +96,6 @@ const Modify = (props: ModifyProps) => {
     form.validateFields((errors, values) => {
       if (!errors) {
         getInfo(id).then(tempInfo => {
-          console.log({ ...tempInfo, ...values, keyValue: tempInfo.pStructId });
           SaveForm({ ...tempInfo, ...values, keyValue: tempInfo.pStructId }).then(res => {
             message.success('保存成功');
             closeDrawer();
@@ -119,7 +118,9 @@ const Modify = (props: ModifyProps) => {
         return info;
       });
     } else {
-      return Promise.resolve({});
+      return Promise.resolve({
+        parentId:0
+      });
     }
   };
   return (

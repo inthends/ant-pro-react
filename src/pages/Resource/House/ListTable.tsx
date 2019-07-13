@@ -1,7 +1,8 @@
 import Page from '@/components/Common/Page';
-import { Button, Table } from 'antd';
+import { Button, message, Table, Modal } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
+import { RemoveForm } from './House.service';
 
 interface ListTableProps {
   onchange(page: any, filter: any, sort: any): any;
@@ -9,12 +10,26 @@ interface ListTableProps {
   pagination: PaginationConfig;
   data: any[];
   modify(id: string): void;
+  reload(): void;
 }
 
 function ListTable(props: ListTableProps) {
-  const { onchange, loading, pagination, data, modify } = props;
+  const { onchange, loading, pagination, data, modify, reload } = props;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
+  };
+  const doDelete = record => {
+    Modal.confirm({
+      title: '请确认',
+      content: `您是否要删除${record.name}`,
+      onOk: ()=> {
+        RemoveForm(record.id).then(() => {
+          message.success('保存成功');
+          reload();
+        });
+      }
+    })
+   
   };
   const columns = [
     {
@@ -89,7 +104,9 @@ function ListTable(props: ListTableProps) {
           <Button type="primary" style={{ marginRight: '10px' }} onClick={() => modify(record.id)}>
             修改
           </Button>,
-          <Button type="danger">删除</Button>,
+          <Button type="danger" onClick={() => doDelete(record)}>
+            删除
+          </Button>,
         ];
       },
     },

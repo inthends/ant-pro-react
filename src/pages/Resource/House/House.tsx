@@ -134,6 +134,7 @@ function House() {
           pagination={pagination}
           data={data}
           modify={showDrawer}
+          reload={initLoadData}
         />
       </Content>
 
