@@ -1,15 +1,16 @@
 import Page from '@/components/Common/Page';
+import { ParkingData } from '@/model/models';
 import { Button, message, Modal, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
-import { RemoveForm } from './PublicArea.service';
+import { GetDetailJson, RemoveForm } from './ParkingLot.service';
 
 interface ListTableProps {
   onchange(page: any, filter: any, sort: any): any;
   loading: boolean;
   pagination: PaginationConfig;
   data: any[];
-  modify(data: any): void;
+  modify(data: ParkingData): void;
   reload(): void;
 }
 
@@ -18,12 +19,17 @@ function ListTable(props: ListTableProps) {
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
   };
+  const doModify = id => {
+    GetDetailJson(id).then(res => {
+      modify(res);
+    });
+  };
   const doDelete = record => {
     Modal.confirm({
       title: '请确认',
       content: `您是否要删除${record.name}吗`,
       onOk: () => {
-        RemoveForm(record.pCode).then(() => {
+        RemoveForm(record.id).then(() => {
           message.success('保存成功');
           reload();
         });
@@ -32,7 +38,7 @@ function ListTable(props: ListTableProps) {
   };
   const columns = [
     {
-      title: '公区名称',
+      title: '车位名称',
       dataIndex: 'name',
       key: 'name',
       width: 250,
@@ -40,66 +46,50 @@ function ListTable(props: ListTableProps) {
       sorter: true,
     },
     {
-      title: '公区编号',
-      dataIndex: 'enCode',
-      key: 'enCode',
+      title: '车位编号',
+      dataIndex: 'code',
+      key: 'code',
       width: 150,
       sorter: true,
     },
     {
-      title: '房产全称',
-      dataIndex: 'psAllName',
-      key: 'psAllName',
+      title: '建筑面积(㎡)',
+      dataIndex: 'area',
+      key: 'area',
       width: 300,
       sorter: true,
     },
     {
-      title: '位置描述',
-      dataIndex: 'otherCode',
-      key: 'otherCode',
+      title: '计费面积(㎡)',
+      dataIndex: 'chargingarea',
+      key: 'chargingarea',
       width: 200,
       sorter: true,
     },
     {
-      title: '是否审核',
-      dataIndex: 'auditMark',
-      key: 'auditMark',
+      title: '车牌号',
+      dataIndex: 'carno',
+      key: 'carno',
       width: 200,
       sorter: true,
-      render: (text: any) => {
-        switch (text) {
-          case 1:
-            return '是';
-          case 0:
-            return '否';
-          default:
-            return null;
-        }
-      },
     },
     {
-      title: '审核人',
-      dataIndex: 'auditman',
-      key: 'auditman',
+      title: '车位状态',
+      dataIndex: 'state',
+      key: 'state',
       width: 150,
       sorter: true,
     },
     {
-      title: '审核日期',
+      title: '全称',
       dataIndex: 'auditdate',
       key: 'auditdate',
-      width: 200,
       sorter: true,
     },
     {
-      title: '备注',
-      dataIndex: 'memo',
-      key: 'memo',
-    },
-    {
       title: '操作',
-      dataIndex: 'operation',
-      key: 'operation',
+      dataIndex: 'allname',
+      key: 'allname',
       width: 200,
       fixed: 'right',
       render: (text, record) => {
@@ -108,7 +98,7 @@ function ListTable(props: ListTableProps) {
             type="primary"
             key="modify"
             style={{ marginRight: '10px' }}
-            onClick={() => modify(record)}
+            onClick={() => doModify(record.id)}
           >
             修改
           </Button>,
@@ -127,9 +117,9 @@ function ListTable(props: ListTableProps) {
         size="middle"
         dataSource={data}
         columns={columns}
-        rowKey={record => record.pCode}
+        rowKey={record => record.id}
         pagination={pagination}
-        scroll={{ x: 1850 }}
+        scroll={{ x: 1750 }}
         onChange={(pagination: PaginationConfig, filters, sorter) =>
           changePage(pagination, filters, sorter)
         }

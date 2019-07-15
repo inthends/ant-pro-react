@@ -1,4 +1,4 @@
-import { TreeEntity } from '@/model/models';
+import { ParkingData, TreeEntity } from '@/model/models';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
@@ -6,19 +6,18 @@ import React, { useEffect, useState } from 'react';
 import LeftTree from '../LeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
-import { GetPublicAreas, GetQuickPublicAreaTree } from './PublicArea.service';
-
+import { GetPublicAreas, GetQuickPublicAreaTree } from './ParkingLot.service';
 const { Sider, Content } = Layout;
 const { Search } = Input;
 
-function PublicArea() {
+function ParkingLot() {
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   const [treeData, setTreeData] = useState<TreeEntity[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [organize, SetOrganize] = useState<any>({});
   const [data, setData] = useState<any[]>([]);
-  const [currData, setCurrData] = useState<any>();
+  const [currData, setCurrData] = useState<ParkingData>();
   const [search, setSearch] = useState<string>('');
 
 
@@ -81,7 +80,7 @@ function PublicArea() {
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'pCode';
+      searchCondition.sidx = field ? field : 'id';
     }
 
     return load(searchCondition).then(res => {
@@ -90,7 +89,7 @@ function PublicArea() {
   };
   const load = data => {
     setLoading(true);
-    data.sidx = data.sidx || 'pCode';
+    data.sidx = data.sidx || 'id';
     data.sord = data.sord || 'asc';
     return GetPublicAreas(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -117,7 +116,7 @@ function PublicArea() {
       TreeTypeId: org.id,
       TreeType: org.type,
     };
-    const sidx = 'pCode';
+    const sidx = 'id';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
@@ -145,7 +144,7 @@ function PublicArea() {
           />
           <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer()}>
             <Icon type="plus" />
-            公区
+            车位
           </Button>
         </div>
         <ListTable
@@ -172,4 +171,4 @@ function PublicArea() {
   );
 }
 
-export default PublicArea;
+export default ParkingLot;

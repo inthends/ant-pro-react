@@ -52,6 +52,13 @@ export default [
             component: './Resource/PublicArea/PublicArea',
             hideInMenu: true,
           },
+          {
+            name: '车位资料',
+            path: '/resource/ParkingLot',
+            component: './Resource/ParkingLot/ParkingLot',
+            hideInMenu: true,
+          },
+          
         ],
       },
       {
