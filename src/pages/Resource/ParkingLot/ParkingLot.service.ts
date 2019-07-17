@@ -37,6 +37,13 @@ export function SaveGarageForm(data): Promise<any> {
     .post(process.env.basePath + `/ParkingLot/SaveGarageForm`, { data: objToFormdata(data) })
     .then(getResult as any);
 }
+// 新增修改
+export function SaveParkingForm(data): Promise<any> {
+  data.keyValue = data.id;
+  return request
+    .post(process.env.basePath + `/ParkingLot/SaveParkingForm`, { data: objToFormdata(data) })
+    .then(getResult as any);
+}
 // 删除
 export function RemoveForm(keyValue): Promise<any> {
   return request

@@ -1,22 +1,23 @@
 import { ParkingData, TreeEntity } from '@/model/models';
+import { getCommonItems } from '@/services/commonItem';
 import {
   Button,
   Card,
-  Checkbox,
   Col,
   Drawer,
   Form,
   Input,
   message,
-  Modal,
   Row,
   Select,
   Tree,
+  DatePicker,
   TreeSelect,
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
+import * as moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { SaveForm, getEstateTreeData } from './ParkingLot.service';
+import { getEstateTreeData, SaveParkingForm } from './ParkingLot.service';
 import styles from './style.less';
 
 const { Option } = Select;
@@ -38,9 +39,35 @@ const ModifyParking = (props: ModifyParkingProps) => {
   const title = data && data.baseInfo && data.baseInfo.id === undefined ? '添加车库' : '修改车库';
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [estateTree, setEstateTree] = useState<any[]>([]);
+  const [parkingLotState, setParkingLotState] = useState<any[]>([]); // 获取车位状态
+  const [vehicleBrand, setVehicleBrand] = useState<any[]>([]); // 车辆品牌
+  const [parkingLotType, setParkingLotType] = useState<any[]>([]); // 车位类型
+  const [parkingNature, setParkingNature] = useState<any[]>([]); // 车位性质
+  const [color, setColor] = useState<any[]>([]); // 颜色
 
   // 打开抽屉时初始化
-  useEffect(() => {}, []);
+  useEffect(() => {
+    // 获取车位状态
+    getCommonItems('ParkingLotState').then(res => {
+      setParkingLotState(res || []);
+    });
+    // 车位性质
+    getCommonItems('ParkingNature').then(res => {
+      setParkingNature(res || []);
+    });
+    // 车位类型
+    getCommonItems('ParkingLotType').then(res => {
+      setParkingLotType(res || []);
+    });
+    // 车辆品牌
+    getCommonItems('VehicleBrand').then(res => {
+      setVehicleBrand(res || []);
+    });
+    // 车辆品牌
+    getCommonItems('Color').then(res => {
+      setColor(res || []);
+    });
+  }, []);
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -64,14 +91,26 @@ const ModifyParking = (props: ModifyParkingProps) => {
   const save = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        let newData = data ? { ...data, ...values } : values;
+        let newData =
+          data && data.baseInfo && data.baseInfo.id
+            ? { ...data.baseInfo, ...data.parkingDetail, ...values }
+            : values;
+        newData = {
+          ...newData,
+          date: values.date ? values.date.format('YYYY-MM-DD') : undefined,
+          beginRentDate: values.beginRentDate
+            ? values.beginRentDate.format('YYYY-MM-DD')
+            : undefined,
+          endRentDate: values.endRentDate ? values.endRentDate.format('YYYY-MM-DD') : undefined,
+        };
         doSave(newData);
       }
     });
   };
   const doSave = dataDetail => {
-    dataDetail.keyValue = dataDetail.pCode;
-    SaveForm({ ...dataDetail, type: 5 }).then(res => {
+    dataDetail.keyValue = dataDetail.parkingId;
+    dataDetail.type = 9;
+    SaveParkingForm(dataDetail).then(res => {
       message.success('保存成功');
       closeDrawer();
       reload();
@@ -128,40 +167,163 @@ const ModifyParking = (props: ModifyParkingProps) => {
             <Row gutter={24}>
               <Col lg={12}>
                 <Form.Item label="车位状态">
-                  {getFieldDecorator('activeMark', {
-                    initialValue: infoDetail.activeMark,
+                  {getFieldDecorator('state', {
+                    initialValue: infoDetail.state,
                   })(
-                    <Select>
-                      <Option value="0">空置</Option>
-                      <Option value="0">空置</Option>
+                    <Select placeholder="请选择车位状态">
+                      {parkingLotState.map(item => (
+                        <Option value={item.value} key={item.value}>
+                          {item.text}
+                        </Option>
+                      ))}
                     </Select>,
                   )}
                 </Form.Item>
               </Col>
 
               <Col lg={12}>
-                <Form.Item label="车库全称">
-                  {getFieldDecorator('memo', {
-                    initialValue: infoDetail.memo,
-                  })(<Input disabled placeholder="请输入车库全称" />)}
+                <Form.Item label="车位类型">
+                  {getFieldDecorator('parkingType', {
+                    initialValue: infoDetail.parkingType,
+                  })(
+                    <Select placeholder="请选择车位类型">
+                      {parkingLotType.map(item => (
+                        <Option value={item.id} key={item.id}>
+                          {item.text}
+                        </Option>
+                      ))}
+                    </Select>,
+                  )}
                 </Form.Item>
               </Col>
             </Row>
 
             <Row gutter={24}>
               <Col lg={12}>
-                <Form.Item label="建筑面积(㎡)">
-                  {getFieldDecorator('memo', {
-                    initialValue: infoDetail.memo,
-                  })(<Input placeholder="请输入建筑面积(㎡)" />)}
+                <Form.Item label="车位性质">
+                  {getFieldDecorator('parkingNature', {
+                    initialValue: infoDetail.parkingNature,
+                  })(
+                    <Select placeholder="请选择车位性质">
+                      {parkingNature.map(item => (
+                        <Option value={item.id} key={item.id}>
+                          {item.text}
+                        </Option>
+                      ))}
+                    </Select>,
+                  )}
                 </Form.Item>
               </Col>
 
               <Col lg={12}>
-                <Form.Item label="占地面积(㎡)">
+                <Form.Item label="交付日期">
+                  {getFieldDecorator('date', {
+                    initialValue: infoDetail.date
+                      ? moment(new Date(infoDetail.date))
+                      : moment(new Date()),
+                  })(<DatePicker />)}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={24}>
+              <Col lg={12}>
+                <Form.Item label="建筑面积(㎡)">
+                  {getFieldDecorator('area', {
+                    initialValue: infoDetail.area,
+                  })(<Input placeholder="请输入建筑面积" />)}
+                </Form.Item>
+              </Col>
+              <Col lg={12}>
+                <Form.Item label="计费面积(㎡)">
+                  {getFieldDecorator('chargingArea', {
+                    initialValue: infoDetail.chargingArea,
+                  })(<Input placeholder="请输入计费面积" />)}
+                </Form.Item>
+              </Col>
+            </Row>
+
+            <Row gutter={24}>
+              <Col lg={12}>
+                <Form.Item label="业主名称">
+                  {getFieldDecorator('ownerId', {
+                    initialValue: infoDetail.ownerId,
+                  })(<TextArea rows={4} placeholder="请输入建筑面积" />)}
+                </Form.Item>
+              </Col>
+              <Col lg={12}>
+                <Form.Item label="租户名称">
+                  {getFieldDecorator('customerId', {
+                    initialValue: infoDetail.customerId,
+                  })(<TextArea rows={4} placeholder="请输计费面积" />)}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={24}>
+              <Col lg={12}>
+                <Form.Item label="起租日期">
                   {getFieldDecorator('memo', {
-                    initialValue: infoDetail.memo,
-                  })(<Input disabled placeholder="请输入占地面积(㎡)" />)}
+                    initialValue: infoDetail.beginRentDate
+                      ? moment(new Date(infoDetail.beginRentDate))
+                      : moment(new Date()),
+                  })(<DatePicker />)}
+                </Form.Item>
+              </Col>
+              <Col lg={12}>
+                <Form.Item label="终止日期">
+                  {getFieldDecorator('endRentDate', {
+                    initialValue: infoDetail.endRentDate
+                      ? moment(new Date(infoDetail.endRentDate))
+                      : moment(new Date()),
+                  })(<DatePicker />)}
+                </Form.Item>
+              </Col>
+            </Row>
+
+            <Row gutter={24}>
+              <Col lg={12}>
+                <Form.Item label="车牌号">
+                  {getFieldDecorator('carNo', {
+                    initialValue: infoDetail.carNo,
+                  })(<Input placeholder="请输入车牌号" />)}
+                </Form.Item>
+              </Col>
+              <Col lg={12}>
+                <Form.Item label="卡号">
+                  {getFieldDecorator('cardNo', {
+                    initialValue: infoDetail.cardNo,
+                  })(<Input placeholder="请输入卡号" />)}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={24}>
+              <Col lg={12}>
+                <Form.Item label="车辆品牌">
+                  {getFieldDecorator('vehicleBrand', {
+                    initialValue: infoDetail.vehicleBrand,
+                  })(
+                    <Select placeholder="请选择车辆品牌">
+                      {vehicleBrand.map(item => (
+                        <Option value={item.value} key={item.value}>
+                          {item.text}
+                        </Option>
+                      ))}
+                    </Select>,
+                  )}
+                </Form.Item>
+              </Col>
+              <Col lg={12}>
+                <Form.Item label="颜色">
+                  {getFieldDecorator('color', {
+                    initialValue: infoDetail.color,
+                  })(
+                    <Select placeholder="请选择颜色">
+                      {color.map(item => (
+                        <Option value={item.value} key={item.value}>
+                          {item.text}
+                        </Option>
+                      ))}
+                    </Select>,
+                  )}
                 </Form.Item>
               </Col>
             </Row>

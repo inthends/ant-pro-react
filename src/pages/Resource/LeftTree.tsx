@@ -48,7 +48,15 @@ function LeftTree(props: LeftTreeProps) {
   };
 
   return (
-    <Page style={{ padding: '6px', borderLeft: 'none', borderBottom: 'none', height: '100%' }}>
+    <Page
+      style={{
+        padding: '6px',
+        borderLeft: 'none',
+        borderBottom: 'none',
+        height: '100%',
+        overflowY: 'auto',
+      }}
+    >
       <Tree expandedKeys={expanded} showLine onSelect={onSelect} onExpand={clickExpend}>
         {renderTree(treeData, '0')}
       </Tree>
