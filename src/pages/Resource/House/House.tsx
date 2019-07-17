@@ -68,8 +68,8 @@ function House() {
     setModifyVisible(false);
   };
   const showDrawer = (id?) => {
-    setModifyVisible(true);
     setId(id);
+    setModifyVisible(true);
   };
   const loadData = (search, org, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(search);

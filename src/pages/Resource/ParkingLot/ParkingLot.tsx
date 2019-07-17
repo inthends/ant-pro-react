@@ -5,7 +5,8 @@ import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import LeftTree from '../LeftTree';
 import ListTable from './ListTable';
-import Modify from './Modify';
+import ModifyGarage from './ModifyGarage';
+import ModifyParking from './ModifyParking';
 import { GetPublicAreas, GetQuickPublicAreaTree } from './ParkingLot.service';
 const { Sider, Content } = Layout;
 const { Search } = Input;
@@ -19,8 +20,6 @@ function ParkingLot() {
   const [data, setData] = useState<any[]>([]);
   const [currData, setCurrData] = useState<ParkingData>();
   const [search, setSearch] = useState<string>('');
-
-
 
   const selectTree = (org, item, search) => {
     initLoadData(item, search);
@@ -54,9 +53,18 @@ function ParkingLot() {
   const closeDrawer = () => {
     setModifyVisible(false);
   };
-  const showDrawer = (item?) => {
+  const create = organize => {
+    if (organize.type === '1' || organize.type === '') {
+      setCurrData({ baseInfo: { type: 8 } });
+    }
+    if (organize.type === '8') {
+      setCurrData({ baseInfo: { type: 9 } });
+    }
     setModifyVisible(true);
+  };
+  const showDrawer = (item?) => {
     setCurrData(item);
+    setModifyVisible(true);
   };
   const loadData = (search, org, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(search);
@@ -123,7 +131,9 @@ function ParkingLot() {
       return res;
     });
   };
-
+  const disabledCreate = organize => {
+    return !(organize.type === '1' || organize.type === '8' || organize.type === '');
+  };
   return (
     <Layout style={{ height: '100%' }}>
       <Sider theme="light" style={{ overflow: 'hidden', height: '100%' }} width="245px">
@@ -142,7 +152,12 @@ function ParkingLot() {
             onSearch={value => loadData(value, organize)}
             style={{ width: 200 }}
           />
-          <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer()}>
+          <Button
+            type="primary"
+            style={{ float: 'right' }}
+            disabled={disabledCreate(organize)}
+            onClick={() => create(organize)}
+          >
             <Icon type="plus" />
             车位
           </Button>
@@ -158,15 +173,25 @@ function ParkingLot() {
           reload={() => initLoadData(organize, search)}
         />
       </Content>
-
-      <Modify
+      {currData && currData.baseInfo && currData.baseInfo.type === 9 ? (
+        <ModifyParking
         modifyVisible={modifyVisible}
         closeDrawer={closeDrawer}
         treeData={treeData}
-        organizeId={organize.id}
+        organizeId={organize.organizeId}
         data={currData}
         reload={() => initLoadData(organize, search)}
-      />
+      /> ) : null}
+      {currData && currData.baseInfo && currData.baseInfo.type === 8 ? (
+        <ModifyGarage
+          modifyVisible={modifyVisible}
+          closeDrawer={closeDrawer}
+          treeData={treeData}
+          organizeId={organize.id}
+          data={currData}
+          reload={() => initLoadData(organize, search)}
+        />
+      ) : null}
     </Layout>
   );
 }

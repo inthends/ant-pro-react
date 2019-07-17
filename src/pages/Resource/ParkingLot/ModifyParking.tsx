@@ -16,14 +16,14 @@ import {
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { SaveForm } from './ParkingLot.service';
+import { SaveForm, getEstateTreeData } from './ParkingLot.service';
 import styles from './style.less';
 
 const { Option } = Select;
 const { TextArea } = Input;
 const { TreeNode } = Tree;
 
-interface ModifyProps {
+interface ModifyParkingProps {
   modifyVisible: boolean;
   data?: ParkingData;
   closeDrawer(): void;
@@ -32,11 +32,12 @@ interface ModifyProps {
   treeData: TreeEntity[];
   reload(): void;
 }
-const Modify = (props: ModifyProps) => {
+const ModifyParking = (props: ModifyParkingProps) => {
   const { treeData, modifyVisible, data, closeDrawer, form, organizeId, reload } = props;
   const { getFieldDecorator } = form;
-  const title = data === undefined ? '添加小区' : '修改小区';
+  const title = data && data.baseInfo && data.baseInfo.id === undefined ? '添加车库' : '修改车库';
   const [infoDetail, setInfoDetail] = useState<any>({});
+  const [estateTree, setEstateTree] = useState<any[]>([]);
 
   // 打开抽屉时初始化
   useEffect(() => {}, []);
@@ -45,13 +46,12 @@ const Modify = (props: ModifyProps) => {
   useEffect(() => {
     if (modifyVisible) {
       if (data) {
-        setInfoDetail(data);
+        setInfoDetail({ ...data.baseInfo, ...data.parkingDetail });
+        getEstateTreeData(organizeId, '8').then(res => {
+          let treeList = res || [];
+          setEstateTree(treeList);
+        });
         form.resetFields();
-      } else {
-        const type = treeData.filter(item => item.id === organizeId)[0].type;
-        if (type === '4') {
-          form.setFieldsValue({ parentId: organizeId });
-        }
       }
     } else {
       form.resetFields();
@@ -65,20 +65,7 @@ const Modify = (props: ModifyProps) => {
     form.validateFields((errors, values) => {
       if (!errors) {
         let newData = data ? { ...data, ...values } : values;
-        console.log(newData.auditMark);
-        if (newData.auditMark) {
-          Modal.confirm({
-            title: '警告',
-            content: '数据审核后将无法进行修改！',
-            onOk: () => {
-              newData.auditMark = 1;
-              doSave(newData);
-            },
-          });
-        } else {
-          newData.auditMark = 0;
-          doSave(newData);
-        }
+        doSave(newData);
       }
     });
   };
@@ -89,16 +76,6 @@ const Modify = (props: ModifyProps) => {
       closeDrawer();
       reload();
     });
-  };
-  const selectOrg = orgId => {
-    const type = treeData.filter(item => item.id === orgId)[0].type;
-    if (type !== '4') {
-      Modal.warn({
-        title: '警告',
-        content: '只能选到楼层不可以选择其他层次！',
-      });
-    }
-    form.setFieldsValue({ parentId: undefined });
   };
 
   return (
@@ -115,50 +92,53 @@ const Modify = (props: ModifyProps) => {
           <Form layout="vertical" hideRequiredMark>
             <Row gutter={24}>
               <Col lg={12}>
-                <Form.Item label="车库名称" required>
+                <Form.Item label="车位名称" required>
                   {getFieldDecorator('name', {
                     initialValue: infoDetail.name,
-                    rules: [{ required: true, message: '请输入车库名称' }],
-                  })(<Input placeholder="请输入车库名称" />)}
+                    rules: [{ required: true, message: '请输入车位名称' }],
+                  })(<Input placeholder="请输入车位名称" />)}
                 </Form.Item>
               </Col>
               <Col lg={12}>
-                <Form.Item label="隶属机构" required>
-                  {getFieldDecorator('enCode', {
-                    initialValue: infoDetail.enCode,
-                    rules: [{ required: true, message: '请选择隶属机构' }],
-                  })(<Input placeholder="请输入编码" />)}
+                <Form.Item label="车位编号" required>
+                  {getFieldDecorator('code', {
+                    initialValue: infoDetail.code,
+                    rules: [{ required: true, message: '请输入车位编号' }],
+                  })(<Input placeholder="请输入车位编号" />)}
                 </Form.Item>
               </Col>
             </Row>
             <Row gutter={24}>
               <Col lg={12}>
-                <Form.Item label="车库编号" required>
+                <Form.Item label="所属上级" required>
                   {getFieldDecorator('parentId', {
-                    initialValue: infoDetail.parentId,
-                    rules: [{ required: true, message: '请输入车库编号' }],
-                  })(<Input placeholder="请输入车库编号" />)}
-                </Form.Item>
-              </Col>>
-              <Col lg={12}>
-                <Form.Item label="所属小区">
-                  {getFieldDecorator('otherCode', {
                     rules: [{ required: true, message: '请选择所属小区' }],
-                    initialValue: infoDetail.otherCode,
-                  })(<Input placeholder="请输入位置描述" />)}
+                    initialValue: infoDetail.parentId,
+                  })(
+                    <TreeSelect placeholder="请选择所属上级" allowClear treeDefaultExpandAll>
+                      {estateTree.map(item => {
+                        return <TreeNode title={item.text} key={item.id} value={item.id} />;
+                      })}
+                    </TreeSelect>,
+                  )}
                 </Form.Item>
               </Col>
             </Row>
 
             <Row gutter={24}>
               <Col lg={12}>
-                <Form.Item label="联系电话">
-                  {getFieldDecorator('memo', {
-                    initialValue: infoDetail.memo,
-                  })(<Input placeholder="请输入联系电话" />)}
+                <Form.Item label="车位状态">
+                  {getFieldDecorator('activeMark', {
+                    initialValue: infoDetail.activeMark,
+                  })(
+                    <Select>
+                      <Option value="0">空置</Option>
+                      <Option value="0">空置</Option>
+                    </Select>,
+                  )}
                 </Form.Item>
               </Col>
-              
+
               <Col lg={12}>
                 <Form.Item label="车库全称">
                   {getFieldDecorator('memo', {
@@ -167,7 +147,6 @@ const Modify = (props: ModifyProps) => {
                 </Form.Item>
               </Col>
             </Row>
-            
 
             <Row gutter={24}>
               <Col lg={12}>
@@ -177,7 +156,7 @@ const Modify = (props: ModifyProps) => {
                   })(<Input placeholder="请输入建筑面积(㎡)" />)}
                 </Form.Item>
               </Col>
-              
+
               <Col lg={12}>
                 <Form.Item label="占地面积(㎡)">
                   {getFieldDecorator('memo', {
@@ -186,7 +165,15 @@ const Modify = (props: ModifyProps) => {
                 </Form.Item>
               </Col>
             </Row>
-          
+            <Row gutter={24}>
+              <Col lg={24}>
+                <Form.Item label="附加说明">
+                  {getFieldDecorator('memo', {
+                    initialValue: infoDetail.memo,
+                  })(<TextArea rows={4} placeholder="请输入附加说明" />)}
+                </Form.Item>
+              </Col>
+            </Row>
           </Form>
         ) : null}
       </Card>
@@ -213,7 +200,7 @@ const Modify = (props: ModifyProps) => {
   );
 };
 
-export default Form.create<ModifyProps>()(Modify);
+export default Form.create<ModifyParkingProps>()(ModifyParking);
 
 const renderTree = (treeData: TreeEntity[], parentId: string) => {
   return treeData

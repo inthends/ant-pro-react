@@ -56,8 +56,8 @@ function PublicArea() {
     setModifyVisible(false);
   };
   const showDrawer = (item?) => {
-    setModifyVisible(true);
     setCurrData(item);
+    setModifyVisible(true);
   };
   const loadData = (search, org, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(search);

@@ -23,10 +23,12 @@ function ListTable(props: ListTableProps) {
       title: '请确认',
       content: `您是否要删除${record.name}吗`,
       onOk: () => {
-        RemoveForm(record.pCode).then(() => {
-          message.success('保存成功');
-          reload();
-        });
+        RemoveForm(record.pCode)
+          .then(() => {
+            message.success('删除成功');
+            reload();
+          })
+          .catch(e => {});
       },
     });
   };

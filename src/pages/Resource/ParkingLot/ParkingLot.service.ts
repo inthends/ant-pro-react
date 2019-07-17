@@ -2,9 +2,7 @@ import { ParkingData, ResponseObject, TreeEntity } from '@/model/models';
 import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
 export function GetQuickPublicAreaTree(): Promise<any[]> {
-  return request
-    .get(process.env.basePath + `/ParkingLot/GetQuickParkingTree`, {})
-    .then(getResult);
+  return request.get(process.env.basePath + `/ParkingLot/GetQuickParkingTree`, {}).then(getResult);
 }
 export function GetStatisticsTotal(): Promise<ResponseObject<any>> {
   return request.post(process.env.basePath + `/PStructs/GetStatisticsTotal`, {});
@@ -33,14 +31,24 @@ export function GetDetailJson(keyValue): Promise<ParkingData> {
     .then(getResult as any);
 }
 // 新增修改
-export function SaveForm(data): Promise<any> {
+export function SaveGarageForm(data): Promise<any> {
+  data.keyValue = data.id;
   return request
-    .post(process.env.basePath + `/PublicArea/SaveForm`, { data: objToFormdata(data) })
+    .post(process.env.basePath + `/ParkingLot/SaveGarageForm`, { data: objToFormdata(data) })
     .then(getResult as any);
 }
 // 删除
 export function RemoveForm(keyValue): Promise<any> {
   return request
     .post(process.env.basePath + `/ParkingLot/RemoveForm?keyValue=${keyValue}`, {})
+    .then(getResult as any);
+}
+export function getTreeData(): Promise<TreeEntity[]> {
+  return request.get(process.env.basePath + `/Common/GetTreeJsonById`).then(getResult as any);
+}
+export function getEstateTreeData(organizeId, type?): Promise<any[]> {
+  const typestr = type !== undefined ? `&type=${type}` : '';
+  return request
+    .get(process.env.basePath + `/Common/GetTreeJson?organizeId=${organizeId}${typestr}`)
     .then(getResult as any);
 }
