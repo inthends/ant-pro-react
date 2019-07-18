@@ -120,14 +120,12 @@ function PublicArea() {
 
   return (
     <Layout style={{ height: '100%' }}>
-      <Sider theme="light" style={{ overflow: 'hidden', height: '100%' }} width="245px">
-        <LeftTree
-          treeData={treeData}
-          selectTree={(id, item) => {
-            selectTree(id, item, search);
-          }}
-        />
-      </Sider>
+      <LeftTree
+        treeData={treeData}
+        selectTree={(id, item) => {
+          selectTree(id, item, search);
+        }}
+      />
       <Content style={{ padding: '0 20px' }}>
         <div style={{ marginBottom: '20px', padding: '3px 0' }}>
           <Search
