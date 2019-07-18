@@ -1,9 +1,11 @@
 import Page from '@/components/Common/Page';
 import { TreeEntity } from '@/model/models';
-import { Tree } from 'antd';
-import React, { useEffect, useState } from 'react';
+import { Icon, Layout, Tree } from 'antd';
+import React, { useContext, useEffect, useState } from 'react';
+import { SiderContext } from './SiderContext';
 
 const { TreeNode } = Tree;
+const { Sider, Content } = Layout;
 
 interface LeftTreeProps {
   treeData: TreeEntity[];
@@ -13,6 +15,7 @@ function LeftTree(props: LeftTreeProps) {
   const { treeData, selectTree } = props;
 
   const [expanded, setExpanded] = useState<string[]>([]);
+  const { hideSider, SetHideSider } = useContext(SiderContext);
 
   useEffect(() => {
     setExpanded(treeData.map(item => item.id as string));
@@ -48,19 +51,48 @@ function LeftTree(props: LeftTreeProps) {
   };
 
   return (
-    <Page
-      style={{
-        padding: '6px',
-        borderLeft: 'none',
-        borderBottom: 'none',
-        height: '100%',
-        overflowY: 'auto',
-      }}
+    <Sider
+      theme="light"
+      style={{ overflow: 'hidden', height: '100%' }}
+      width={hideSider ? 20 : 245}
     >
-      <Tree expandedKeys={expanded} showLine onSelect={onSelect} onExpand={clickExpend}>
-        {renderTree(treeData, '0')}
-      </Tree>
-    </Page>
+      {hideSider ? (
+        <div style={{ position: 'absolute', top: '40%', left: 5 }}>
+          <Icon
+            type="double-right"
+            onClick={() => {
+              SetHideSider(false);
+            }}
+            style={{ color: '#1890ff' }}
+          />
+        </div>
+      ) : (
+        <Page
+          style={{
+            padding: '6px',
+            borderLeft: 'none',
+            borderBottom: 'none',
+            height: '100%',
+            overflowY: 'auto',
+            position: 'relative',
+          }}
+        >
+          <div>
+            <Tree expandedKeys={expanded} showLine onSelect={onSelect} onExpand={clickExpend}>
+              {renderTree(treeData, '0')}
+            </Tree>
+            <div
+              style={{ position: 'absolute', top: '40%', right: 5 }}
+              onClick={() => {
+                SetHideSider(true);
+              }}
+            >
+              <Icon type="double-left" style={{ color: '#1890ff' }} />
+            </div>
+          </div>
+        </Page>
+      )}
+    </Sider>
   );
 }
 

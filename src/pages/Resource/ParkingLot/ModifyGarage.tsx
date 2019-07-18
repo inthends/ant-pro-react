@@ -141,7 +141,7 @@ const ModifyGarage = (props: ModifyGarageProps) => {
                     rules: [{ required: true, message: '请选择所属小区' }],
                     initialValue: infoDetail.parentId,
                   })(
-                    <TreeSelect placeholder="请选择隶属机构" allowClear treeDefaultExpandAll onChange={item => changeEstate(item, estateTree)}>
+                    <TreeSelect placeholder="请选择隶属机构" allowClear treeDefaultExpandAll>
                       {renderTree(estateTree, '0')}
                     </TreeSelect>,
                   )}

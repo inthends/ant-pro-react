@@ -50,7 +50,6 @@ function House() {
   // 获取属性数据
   const getTreeData = () => {
     return GetTreeJsonById()
-      .then(getResult)
       .then((res: TreeEntity[]) => {
         setTreeData(res || []);
         return res || [];
@@ -128,14 +127,13 @@ function House() {
 
   return (
     <Layout style={{ height: '100%' }}>
-      <Sider theme="light" style={{ overflow: 'hidden', height: '100%' }} width="245px">
+    
         <LeftTree
           treeData={treeData}
           selectTree={(id, item) => {
             selectTree(id, search);
           }}
         />
-      </Sider>
       <Content style={{ padding: '0 20px' }}>
         <div style={{ marginBottom: '20px', padding: '3px 0' }}>
           <Search

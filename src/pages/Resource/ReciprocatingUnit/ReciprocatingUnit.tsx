@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import LeftTree from '../LeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
-import { GetPublicAreas, GetQuickPublicAreaTree } from './PublicArea.service';
+import { GetPageListJson, GetTreeJsonById } from './ReciprocatingUnit.service';
 
 const { Sider, Content } = Layout;
 const { Search } = Input;
@@ -21,8 +21,10 @@ function PublicArea() {
   const [currData, setCurrData] = useState<any>();
   const [search, setSearch] = useState<string>('');
 
+
+
   const selectTree = (org, item, search) => {
-    initLoadData(item, search);
+    // initLoadData(item, search);
     SetOrganize(item);
   };
 
@@ -31,23 +33,16 @@ function PublicArea() {
       const root = res.filter(item => item.parentId === '0');
       const rootOrg = root.length === 1 ? root[0] : undefined;
       SetOrganize(rootOrg);
-      initLoadData(rootOrg, '');
+      // initLoadData(rootOrg, '');
     });
   }, []);
   // 获取属性数据
   const getTreeData = () => {
-    return GetQuickPublicAreaTree().then((res: any[]) => {
-      let treeList = (res || []).map(item => {
-        return {
-          ...item,
-          id: item.id,
-          text: item.name,
-          parentId: item.pId,
-        };
+    return GetTreeJsonById()
+      .then((res: TreeEntity[]) => {
+        setTreeData(res || []);
+        return res || [];
       });
-      setTreeData(treeList);
-      return treeList;
-    });
   };
 
   const closeDrawer = () => {
@@ -90,7 +85,7 @@ function PublicArea() {
     setLoading(true);
     data.sidx = data.sidx || 'pCode';
     data.sord = data.sord || 'asc';
-    return GetPublicAreas(data).then(res => {
+    return GetPageListJson(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
         return {
@@ -125,12 +120,14 @@ function PublicArea() {
 
   return (
     <Layout style={{ height: '100%' }}>
-      <LeftTree
-        treeData={treeData}
-        selectTree={(id, item) => {
-          selectTree(id, item, search);
-        }}
-      />
+      <Sider theme="light" style={{ overflow: 'hidden', height: '100%' }} width="245px">
+        <LeftTree
+          treeData={treeData}
+          selectTree={(id, item) => {
+            selectTree(id, item, search);
+          }}
+        />
+      </Sider>
       <Content style={{ padding: '0 20px' }}>
         <div style={{ marginBottom: '20px', padding: '3px 0' }}>
           <Search

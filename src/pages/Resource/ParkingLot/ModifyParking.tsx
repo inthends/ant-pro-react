@@ -93,7 +93,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
       if (!errors) {
         let newData =
           data && data.baseInfo && data.baseInfo.id
-            ? { ...data.baseInfo, ...data.parkingDetail, ...values }
+            ? { ...data.baseInfo, ...data.parkingDetail, ...values,id: data!.parkingDetail!.id }
             : values;
         newData = {
           ...newData,
@@ -108,7 +108,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
     });
   };
   const doSave = dataDetail => {
-    dataDetail.keyValue = dataDetail.parkingId;
+    dataDetail.keyValue = dataDetail.id;
     dataDetail.type = 9;
     SaveParkingForm(dataDetail).then(res => {
       message.success('保存成功');

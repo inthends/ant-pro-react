@@ -1,15 +1,15 @@
 import { PStructsData, ResponseObject, TreeEntity } from '@/model/models';
 import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
-export function GetTreeJsonById(): Promise<ResponseObject<TreeEntity[]>> {
-  return request.get(process.env.basePath + `/Common/GetTreeJsonById`, {}) .then(getResult);
+export function GetTreeJsonById(): Promise<TreeEntity[]> {
+  return request.get(process.env.basePath + `/Common/GetTreeJsonById`, {}).then(getResult);
 }
 export function GetStatisticsTotal(): Promise<ResponseObject<any>> {
   return request.post(process.env.basePath + `/PStructs/GetStatisticsTotal`, {});
 }
-export function GetStatistics(data): Promise<any> {
+export function GetPageListJson(data): Promise<any> {
   return request
-    .post(process.env.basePath + `/PStructs/GetStatistics`, { data: objToFormdata(data) })
+    .post(process.env.basePath + `/Vendor/GetPageListJson`, { data: objToFormdata(data) })
     .then(getResult as any);
 }
 
@@ -20,7 +20,7 @@ export function GetTreeAreaJson(id): Promise<TreeEntity[]> {
 }
 export function GetProjectType(): Promise<TreeEntity[]> {
   return request
-    .get(process.env.basePath + `/Common/GetDataItemTreeJson?EnCode=ProjectType`)
+    .get(process.env.basePath + `/PStructs/GetDataItemTreeJson?EnCode=ProjectType`)
     .then(getResult as any);
 }
 
@@ -33,12 +33,12 @@ export function GetFormInfoJson(keyValue): Promise<PStructsData> {
 // 新增修改
 export function SaveForm(data): Promise<any> {
   return request
-    .post(process.env.basePath + `/PStructs/SaveForm`, { data: objToFormdata(data) })
+    .post(process.env.basePath + `/PublicArea/SaveForm`, { data: objToFormdata(data) })
     .then(getResult as any);
 }
 // 新增修改
 export function RemoveForm(keyValue): Promise<any> {
   return request
-    .post(process.env.basePath + `/PStructs/RemoveForm`, { data: objToFormdata({keyValue}) })
+    .post(process.env.basePath + `/PublicArea/RemoveForm?keyValue=${keyValue}`, {})
     .then(getResult as any);
 }
