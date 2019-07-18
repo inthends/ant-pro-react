@@ -53,7 +53,7 @@ function LeftTree(props: LeftTreeProps) {
   return (
     <Sider
       theme="light"
-      style={{ overflow: 'hidden', height: '100%' }}
+      style={{ overflow: 'visible', position: 'relative', height: '100%' }}
       width={hideSider ? 20 : 245}
     >
       {hideSider ? (
@@ -67,30 +67,29 @@ function LeftTree(props: LeftTreeProps) {
           />
         </div>
       ) : (
-        <Page
-          style={{
-            padding: '6px',
-            borderLeft: 'none',
-            borderBottom: 'none',
-            height: '100%',
-            overflowY: 'auto',
-            position: 'relative',
-          }}
-        >
-          <div>
+        [
+          <Page
+            style={{
+              padding: '6px',
+              borderLeft: 'none',
+              borderBottom: 'none',
+              height: '100%',
+              overflowY: 'auto',
+            }}
+          >
             <Tree expandedKeys={expanded} showLine onSelect={onSelect} onExpand={clickExpend}>
               {renderTree(treeData, '0')}
             </Tree>
-            <div
-              style={{ position: 'absolute', top: '40%', right: 5 }}
-              onClick={() => {
-                SetHideSider(true);
-              }}
-            >
-              <Icon type="double-left" style={{ color: '#1890ff' }} />
-            </div>
-          </div>
-        </Page>
+          </Page>,
+          <div
+            style={{ position: 'absolute', top: '40%', right: -15 }}
+            onClick={() => {
+              SetHideSider(true);
+            }}
+          >
+            <Icon type="double-left" style={{ color: '#1890ff' }} />
+          </div>,
+        ]
       )}
     </Sider>
   );
