@@ -10,7 +10,7 @@ import LeftTree from '../LeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
 
-const { Sider, Content } = Layout;
+const { Content } = Layout;
 const { Search } = Input;
 
 function House() {

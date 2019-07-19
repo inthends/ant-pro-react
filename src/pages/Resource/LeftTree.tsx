@@ -40,10 +40,10 @@ function LeftTree(props: LeftTreeProps) {
       });
   };
 
-  const clickExpend = (expandedKeys, { expanded, node }) => {
+  const clickExpend = (expandedKeys, { isExpanded, node }) => {
     const selectNode = node.props.eventKey;
 
-    if (expanded) {
+    if (isExpanded) {
       setExpanded(expend => [...expend, selectNode]);
     } else {
       setExpanded(expend => expend.filter(item => item !== selectNode));

@@ -5,18 +5,18 @@ import React from 'react';
 import { RemoveForm } from './House.service';
 
 interface ListTableProps {
-  onchange(page: any, filter: any, sort: any): any;
   loading: boolean;
   pagination: PaginationConfig;
   data: any[];
   modify(id: string): void;
+  onchange(page: any, filter: any, sort: any): any;
   reload(): void;
 }
 
 function ListTable(props: ListTableProps) {
   const { onchange, loading, pagination, data, modify, reload } = props;
-  const changePage = (pagination: PaginationConfig, filters, sorter) => {
-    onchange(pagination, filters, sorter);
+  const changePage = (pag: PaginationConfig, filters, sorter) => {
+    onchange(pag, filters, sorter);
   };
   const doDelete = record => {
     Modal.confirm({
@@ -126,9 +126,7 @@ function ListTable(props: ListTableProps) {
         rowKey={record => record.id}
         pagination={pagination}
         scroll={{ x: 1850 }}
-        onChange={(pagination: PaginationConfig, filters, sorter) =>
-          changePage(pagination, filters, sorter)
-        }
+        onChange={(pag: PaginationConfig, filters, sorter) => changePage(pag, filters, sorter)}
         loading={loading}
       />
     </Page>

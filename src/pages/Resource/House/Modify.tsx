@@ -27,11 +27,11 @@ const { TreeNode } = Tree;
 interface ModifyProps {
   modifyVisible: boolean;
   data?: any;
-  closeDrawer(): void;
   form: WrappedFormUtils;
   organizeId: string;
   treeData: TreeEntity[];
   id?: string;
+  closeDrawer(): void;
   reload(): void;
 }
 const Modify = (props: ModifyProps) => {
@@ -55,16 +55,16 @@ const Modify = (props: ModifyProps) => {
     });
   }, []);
 
-  const getCity = (id: string, init = false) => {
-    GetTreeAreaJson(id).then(res => {
+  const getCity = (areaId: string, init = false) => {
+    GetTreeAreaJson(areaId).then(res => {
       setCity(res || []);
       if (!init) {
         form.setFieldsValue({ city: undefined });
       }
     });
   };
-  const getArea = (id: string, init = false) => {
-    GetTreeAreaJson(id).then(res => {
+  const getArea = (areaId: string, init = false) => {
+    GetTreeAreaJson(areaId).then(res => {
       setArea(res || []);
       if (!init) {
         form.setFieldsValue({ region: undefined });
@@ -102,7 +102,7 @@ const Modify = (props: ModifyProps) => {
     form.validateFields((errors, values) => {
       if (!errors) {
         getInfo(id).then(tempInfo => {
-          let newvalue = { ...values, date: values.date.format('YYYY-MM-DD') };
+          const newvalue = { ...values, date: values.date.format('YYYY-MM-DD') };
           SaveForm({ ...tempInfo, ...newvalue, keyValue: tempInfo.pStructId }).then(res => {
             message.success('保存成功');
             closeDrawer();
@@ -112,17 +112,17 @@ const Modify = (props: ModifyProps) => {
       }
     });
   };
-  const getInfo = id => {
-    if (id) {
-      return GetFormInfoJson(id).then(res => {
+  const getInfo = orgId => {
+    if (orgId) {
+      return GetFormInfoJson(orgId).then(res => {
         const { baseInfo, pProperty } = res || ({} as any);
-        let info = {
+        const info: any = {
           ...pProperty,
           ...baseInfo,
         };
         info.id = pProperty && pProperty.id;
         info.pStructId = baseInfo && baseInfo.id;
-        info.area = pProperty.area;
+        info.area = pProperty!.area;
         return info;
       });
     } else {
