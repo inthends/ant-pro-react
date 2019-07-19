@@ -15,7 +15,7 @@ function LeftTree(props: LeftTreeProps) {
   const { treeData, selectTree } = props;
 
   const [expanded, setExpanded] = useState<string[]>([]);
-  const { hideSider, SetHideSider } = useContext(SiderContext);
+  const { hideSider, setHideSider } = useContext(SiderContext);
 
   useEffect(() => {
     setExpanded(treeData.map(item => item.id as string));
@@ -23,18 +23,18 @@ function LeftTree(props: LeftTreeProps) {
 
   const onSelect = (selectedKeys, info) => {
     if (selectedKeys.length === 1) {
-      const item = treeData.filter(item => item.id === selectedKeys[0])[0];
+      const item = treeData.filter(treeItem => treeItem.id === selectedKeys[0])[0];
       selectTree(selectedKeys[0], item);
     }
   };
 
-  const renderTree = (treeData: TreeEntity[], parentId: string) => {
-    return treeData
+  const renderTree = (tree: TreeEntity[], parentId: string) => {
+    return tree
       .filter(item => item.parentId === parentId)
       .map(filteditem => {
         return (
           <TreeNode title={filteditem.text} key={filteditem.id}>
-            {renderTree(treeData, filteditem.id as string)}
+            {renderTree(tree, filteditem.id as string)}
           </TreeNode>
         );
       });
@@ -61,13 +61,13 @@ function LeftTree(props: LeftTreeProps) {
           <Icon
             type="double-right"
             onClick={() => {
-              SetHideSider(false);
+              setHideSider(false);
             }}
             style={{ color: '#1890ff' }}
           />
         </div>
       ) : (
-        [
+        <>
           <Page
             style={{
               padding: '6px',
@@ -80,16 +80,17 @@ function LeftTree(props: LeftTreeProps) {
             <Tree expandedKeys={expanded} showLine onSelect={onSelect} onExpand={clickExpend}>
               {renderTree(treeData, '0')}
             </Tree>
-          </Page>,
+          </Page>
+          ,
           <div
             style={{ position: 'absolute', top: '40%', right: -15 }}
             onClick={() => {
-              SetHideSider(true);
+              setHideSider(true);
             }}
           >
             <Icon type="double-left" style={{ color: '#1890ff' }} />
-          </div>,
-        ]
+          </div>
+        </>
       )}
     </Sider>
   );

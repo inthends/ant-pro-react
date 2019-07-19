@@ -4,13 +4,13 @@ const SiderContext = React.createContext<SiderContextStates>({});
 
 interface SiderContextStates {
   hideSider?: boolean;
-  SetHideSider?: any;
+  setHideSider?: any;
 }
 
 const SiderContextProvider = props => {
-  const [hideSider, SetHideSider] = useState(false);
+  const [hideSider, setHideSider] = useState(false);
   return (
-    <SiderContext.Provider value={{ hideSider, SetHideSider }}>
+    <SiderContext.Provider value={{ hideSider, setHideSider }}>
       {props.children}
     </SiderContext.Provider>
   );

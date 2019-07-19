@@ -34,7 +34,7 @@ export default [
       {
         name: '资源管理',
         path: '/resource',
-        component: '../layouts/PageLayout',
+        component: './Resource/Resource',
         routes: [
           {
             path: '/resource',
@@ -58,7 +58,6 @@ export default [
             component: './Resource/ParkingLot/ParkingLot',
             hideInMenu: true,
           },
-          
         ],
       },
       {
