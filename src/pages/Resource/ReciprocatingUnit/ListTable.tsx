@@ -5,18 +5,18 @@ import React from 'react';
 import { RemoveForm } from './ReciprocatingUnit.service';
 
 interface ListTableProps {
-  onchange(page: any, filter: any, sort: any): any;
   loading: boolean;
   pagination: PaginationConfig;
   data: any[];
+  onchange(page: any, filter: any, sort: any): any;
   modify(data: any): void;
   reload(): void;
 }
 
 function ListTable(props: ListTableProps) {
   const { onchange, loading, pagination, data, modify, reload } = props;
-  const changePage = (pagination: PaginationConfig, filters, sorter) => {
-    onchange(pagination, filters, sorter);
+  const changePage = (pag: PaginationConfig, filters, sorter) => {
+    onchange(pag, filters, sorter);
   };
   const doDelete = record => {
     Modal.confirm({
@@ -120,7 +120,7 @@ function ListTable(props: ListTableProps) {
         ];
       },
     },
-  ] as ColumnProps<any>;
+  ] as ColumnProps<any>[];
   return (
     <Page>
       <Table
@@ -132,9 +132,7 @@ function ListTable(props: ListTableProps) {
         rowKey={record => record.pCode}
         pagination={pagination}
         scroll={{ x: 1850 }}
-        onChange={(pagination: PaginationConfig, filters, sorter) =>
-          changePage(pagination, filters, sorter)
-        }
+        onChange={(pag: PaginationConfig, filters, sorter) => changePage(pag, filters, sorter)}
         loading={loading}
       />
     </Page>

@@ -26,10 +26,10 @@ const { TreeNode } = Tree;
 interface ModifyProps {
   modifyVisible: boolean;
   data?: any;
-  closeDrawer(): void;
   form: WrappedFormUtils;
   organizeId: string;
   treeData: TreeEntity[];
+  closeDrawer(): void;
   reload(): void;
 }
 const Modify = (props: ModifyProps) => {
@@ -64,7 +64,7 @@ const Modify = (props: ModifyProps) => {
   const save = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        let newData = data ? { ...data, ...values } : values;
+        const newData = data ? { ...data, ...values } : values;
         console.log(newData.auditMark);
         if (newData.auditMark) {
           Modal.confirm({

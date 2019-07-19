@@ -8,7 +8,7 @@ import ListTable from './ListTable';
 import Modify from './Modify';
 import { GetPageListJson, GetTreeJsonById } from './ReciprocatingUnit.service';
 
-const { Sider, Content } = Layout;
+const { Content } = Layout;
 const { Search } = Input;
 
 function PublicArea() {
@@ -21,9 +21,7 @@ function PublicArea() {
   const [currData, setCurrData] = useState<any>();
   const [search, setSearch] = useState<string>('');
 
-
-
-  const selectTree = (org, item, search) => {
+  const selectTree = (org, item, searchText) => {
     // initLoadData(item, search);
     SetOrganize(item);
   };
@@ -38,11 +36,10 @@ function PublicArea() {
   }, []);
   // 获取属性数据
   const getTreeData = () => {
-    return GetTreeJsonById()
-      .then((res: TreeEntity[]) => {
-        setTreeData(res || []);
-        return res || [];
-      });
+    return GetTreeJsonById().then((res: TreeEntity[]) => {
+      setTreeData(res || []);
+      return res || [];
+    });
   };
 
   const closeDrawer = () => {
@@ -52,19 +49,19 @@ function PublicArea() {
     setCurrData(item);
     setModifyVisible(true);
   };
-  const loadData = (search, org, paginationConfig?: PaginationConfig, sorter?) => {
-    setSearch(search);
+  const loadData = (searchText, org, paginationConfig?: PaginationConfig, sorter?) => {
+    setSearch(searchText);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: pagination.pageSize,
       total: 0,
     };
-    let searchCondition: any = {
+    const searchCondition: any = {
       pageIndex,
       pageSize,
       total,
       queryJson: {
-        keyword: search,
+        keyword: searchText,
         OrganizeId: org.organizeId,
         TreeTypeId: org.id,
         TreeType: org.type,
@@ -72,7 +69,7 @@ function PublicArea() {
     };
 
     if (sorter) {
-      let { field, order } = sorter;
+      const { field, order } = sorter;
       searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
       searchCondition.sidx = field ? field : 'pCode';
     }
@@ -81,11 +78,11 @@ function PublicArea() {
       return res;
     });
   };
-  const load = data => {
+  const load = formData => {
     setLoading(true);
-    data.sidx = data.sidx || 'pCode';
-    data.sord = data.sord || 'asc';
-    return GetPageListJson(data).then(res => {
+    formData.sidx = formData.sidx || 'pCode';
+    formData.sord = formData.sord || 'asc';
+    return GetPageListJson(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
         return {
@@ -102,8 +99,8 @@ function PublicArea() {
     });
   };
 
-  const initLoadData = (org, search) => {
-    setSearch(search);
+  const initLoadData = (org, searchText) => {
+    setSearch(searchText);
     const queryJson = {
       OrganizeId: org.organizeId,
       keyword: search,
