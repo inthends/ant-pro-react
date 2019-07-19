@@ -35,7 +35,7 @@ interface ModifyProps {
   reload(): void;
 }
 const Modify = (props: ModifyProps) => {
-  const { treeData, modifyVisible, data, closeDrawer, form, organizeId, id, reload } = props;
+  const { treeData, modifyVisible, closeDrawer, form, organizeId, id, reload } = props;
   const { getFieldDecorator } = form;
   const title = id === undefined ? '添加小区' : '修改小区';
   const [pro, setPro] = useState<TreeEntity[]>([]);
