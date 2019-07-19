@@ -1,8 +1,8 @@
 import { PStructsData, ResponseObject, TreeEntity } from '@/model/models';
 import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
-export function GetTreeJsonById(): Promise<ResponseObject<TreeEntity[]>> {
-  return request.get(process.env.basePath + `/Common/GetTreeJsonById`, {}) .then(getResult);
+export function GetTreeJsonById(): Promise<TreeEntity[]> {
+  return request.get(process.env.basePath + `/Common/GetTreeJsonById`, {}).then(getResult);
 }
 export function GetStatisticsTotal(): Promise<ResponseObject<any>> {
   return request.post(process.env.basePath + `/PStructs/GetStatisticsTotal`, {});
@@ -39,6 +39,6 @@ export function SaveForm(data): Promise<any> {
 // 新增修改
 export function RemoveForm(keyValue): Promise<any> {
   return request
-    .post(process.env.basePath + `/PStructs/RemoveForm`, { data: objToFormdata({keyValue}) })
+    .post(process.env.basePath + `/PStructs/RemoveForm`, { data: objToFormdata({ keyValue }) })
     .then(getResult as any);
 }

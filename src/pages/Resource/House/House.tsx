@@ -24,17 +24,17 @@ function House() {
   const [id, setId] = useState<string>();
   const [search, setSearch] = useState<string>('');
 
-  const disabledCreate = (treeData: TreeEntity[], organizeId: string) => {
-    for (let item of treeData) {
-      if (item.id === organizeId && item.parentId !== '0') {
+  const disabledCreate = (tree: TreeEntity[], orgId: string) => {
+    for (const item of tree) {
+      if (item.id === orgId && item.parentId !== '0') {
         return false;
       }
     }
     return true;
   };
 
-  const selectTree = (org, search) => {
-    initLoadData(org, search);
+  const selectTree = (org, searchText) => {
+    initLoadData(org, searchText);
     SetOrganizeId(org);
   };
 
@@ -49,11 +49,10 @@ function House() {
   }, []);
   // 获取属性数据
   const getTreeData = () => {
-    return GetTreeJsonById()
-      .then((res: TreeEntity[]) => {
-        setTreeData(res || []);
-        return res || [];
-      });
+    return GetTreeJsonById().then((res: TreeEntity[]) => {
+      setTreeData(res || []);
+      return res || [];
+    });
   };
   // 获取房产统计
   const getHouseTotal = () => {
@@ -66,26 +65,26 @@ function House() {
   const closeDrawer = () => {
     setModifyVisible(false);
   };
-  const showDrawer = (id?) => {
-    setId(id);
+  const showDrawer = (orgId?) => {
+    setId(orgId);
     setModifyVisible(true);
   };
-  const loadData = (search, org, paginationConfig?: PaginationConfig, sorter?) => {
-    setSearch(search);
+  const loadData = (searchText, org, paginationConfig?: PaginationConfig, sorter?) => {
+    setSearch(searchText);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: pagination.pageSize,
       total: 0,
     };
-    let searchCondition: any = {
+    const searchCondition: any = {
       pageIndex,
       pageSize,
       total,
-      queryJson: { OrganizeId: org, keyword: search },
+      queryJson: { OrganizeId: org, keyword: searchText },
     };
 
     if (sorter) {
-      let { field, order } = sorter;
+      const { field, order } = sorter;
       searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
       searchCondition.sidx = field ? field : 'id';
     }
@@ -94,11 +93,11 @@ function House() {
       return res;
     });
   };
-  const load = data => {
+  const load = formData => {
     setLoading(true);
-    data.sidx = data.sidx || 'id';
-    data.sord = data.sord || 'asc';
-    return GetStatistics(data).then(res => {
+    formData.sidx = formData.sidx || 'id';
+    formData.sord = formData.sord || 'asc';
+    return GetStatistics(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
         return {
@@ -114,9 +113,9 @@ function House() {
       return res;
     });
   };
-  const initLoadData = (orgId: string, search) => {
-    setSearch(search);
-    const queryJson = { OrganizeId: orgId, keyword: search };
+  const initLoadData = (orgId: string, searchText) => {
+    setSearch(searchText);
+    const queryJson = { OrganizeId: orgId, keyword: searchText };
     const sidx = 'id';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
@@ -127,13 +126,12 @@ function House() {
 
   return (
     <Layout style={{ height: '100%' }}>
-    
-        <LeftTree
-          treeData={treeData}
-          selectTree={(id, item) => {
-            selectTree(id, search);
-          }}
-        />
+      <LeftTree
+        treeData={treeData}
+        selectTree={(orgId, item) => {
+          selectTree(orgId, search);
+        }}
+      />
       <Content style={{ padding: '0 20px' }}>
         <div style={{ marginBottom: '20px', padding: '3px 0' }}>
           <Search

@@ -5,7 +5,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { SiderContext } from './SiderContext';
 
 const { TreeNode } = Tree;
-const { Sider, Content } = Layout;
+const { Sider } = Layout;
 
 interface LeftTreeProps {
   treeData: TreeEntity[];

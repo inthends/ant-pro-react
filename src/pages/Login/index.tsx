@@ -19,26 +19,25 @@ function Login(props: ConnectFormProps) {
     form.validateFields((errors, values) => {
       if (!errors) {
         setLoading(true);
-        loginService(values).then(({ code, msg, data }) => {
-          if (code === 200) {
-            console.log(data)
-            const { token, id } = data;
-            message.success('登陆成功');
-            localStorage.setItem('token', token);
-            localStorage.setItem('userid', id);
-            delay(() => {
-              router.push('/resource');
-            }, 500);
-            dispatch!({ type: 'user/setCurrent', payload: data });
-          }
-        }).finally(() => {
-          setLoading(false);
-        });
+        loginService(values)
+          .then(({ code, msg, data }) => {
+            if (code === 200) {
+              console.log(data);
+              const { token, id } = data;
+              message.success('登陆成功');
+              localStorage.setItem('token', token);
+              localStorage.setItem('userid', id);
+              delay(() => {
+                router.push('/resource');
+              }, 500);
+              dispatch!({ type: 'user/setCurrent', payload: data });
+            }
+          })
+          .finally(() => {
+            setLoading(false);
+          });
       }
     });
-  };
-  const label = title => {
-    return <h3 style={{ margin: 0 }}>{title}</h3>;
   };
   return (
     <div className={styles.main}>
