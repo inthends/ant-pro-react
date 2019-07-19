@@ -27,14 +27,14 @@ const { TreeNode } = Tree;
 interface ModifyParkingProps {
   modifyVisible: boolean;
   data?: ParkingData;
-  closeDrawer(): void;
   form: WrappedFormUtils;
   organizeId: string;
   treeData: TreeEntity[];
+  closeDrawer(): void;
   reload(): void;
 }
 const ModifyParking = (props: ModifyParkingProps) => {
-  const { treeData, modifyVisible, data, closeDrawer, form, organizeId, reload } = props;
+  const { modifyVisible, data, closeDrawer, form, organizeId, reload } = props;
   const { getFieldDecorator } = form;
   const title = data && data.baseInfo && data.baseInfo.id === undefined ? '添加车库' : '修改车库';
   const [infoDetail, setInfoDetail] = useState<any>({});
@@ -75,7 +75,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
       if (data) {
         setInfoDetail({ ...data.baseInfo, ...data.parkingDetail });
         getEstateTreeData(organizeId, '8').then(res => {
-          let treeList = res || [];
+          const treeList = res || [];
           setEstateTree(treeList);
         });
         form.resetFields();
@@ -93,7 +93,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
       if (!errors) {
         let newData =
           data && data.baseInfo && data.baseInfo.id
-            ? { ...data.baseInfo, ...data.parkingDetail, ...values,id: data!.parkingDetail!.id }
+            ? { ...data.baseInfo, ...data.parkingDetail, ...values, id: data!.parkingDetail!.id }
             : values;
         newData = {
           ...newData,

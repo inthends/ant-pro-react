@@ -114,7 +114,7 @@ function ListTable(props: ListTableProps) {
         ];
       },
     },
-  ] as ColumnProps<any>;
+  ] as ColumnProps<any>[];
   return (
     <Page>
       <Table

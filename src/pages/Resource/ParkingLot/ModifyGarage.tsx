@@ -1,39 +1,24 @@
 import { ParkingData, TreeEntity } from '@/model/models';
-import {
-  Button,
-  Card,
-  Checkbox,
-  Col,
-  Drawer,
-  Form,
-  Input,
-  message,
-  Modal,
-  Row,
-  Select,
-  Tree,
-  TreeSelect,
-} from 'antd';
+import { Button, Card, Col, Drawer, Form, Input, message, Row, Tree, TreeSelect } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { SaveGarageForm, getTreeData, getEstateTreeData } from './ParkingLot.service';
+import { getEstateTreeData, getTreeData, SaveGarageForm } from './ParkingLot.service';
 import styles from './style.less';
 
-const { Option } = Select;
 const { TextArea } = Input;
 const { TreeNode } = Tree;
 
 interface ModifyGarageProps {
   modifyVisible: boolean;
   data?: ParkingData;
-  closeDrawer(): void;
   form: WrappedFormUtils;
   organizeId: string;
   treeData: TreeEntity[];
+  closeDrawer(): void;
   reload(): void;
 }
 const ModifyGarage = (props: ModifyGarageProps) => {
-  const { treeData, modifyVisible, data, closeDrawer, form, organizeId, reload } = props;
+  const { modifyVisible, data, closeDrawer, form, reload } = props;
   const { getFieldDecorator } = form;
   const title = data && data.baseInfo && data.baseInfo.id === undefined ? '添加车库' : '修改车库';
   const [infoDetail, setInfoDetail] = useState<any>({});
@@ -47,15 +32,15 @@ const ModifyGarage = (props: ModifyGarageProps) => {
     });
   }, []);
   useEffect(() => {
-    if(form.getFieldValue('organizeId') ===undefined){
+    if (form.getFieldValue('organizeId') === undefined) {
       return;
     }
     getEstateTreeData(form.getFieldValue('organizeId'), '1').then(res => {
-      let treeList = res || []
-      if(!treeList.map(item => item.id).includes(form.getFieldValue('parentId'))){
-        form.setFieldsValue({parentId: undefined});
+      const treeList = res || [];
+      if (!treeList.map(item => item.id).includes(form.getFieldValue('parentId'))) {
+        form.setFieldsValue({ parentId: undefined });
       }
-     
+
       setEstateTree(treeList);
     });
   }, [form.getFieldValue('organizeId')]);
@@ -78,7 +63,7 @@ const ModifyGarage = (props: ModifyGarageProps) => {
   const save = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        let newData = data!.baseInfo ? { ...data!.baseInfo, ...values } : values;
+        const newData = data!.baseInfo ? { ...data!.baseInfo, ...values } : values;
         doSave(newData);
       }
     });

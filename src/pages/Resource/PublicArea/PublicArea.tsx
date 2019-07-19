@@ -8,7 +8,7 @@ import ListTable from './ListTable';
 import Modify from './Modify';
 import { GetPublicAreas, GetQuickPublicAreaTree } from './PublicArea.service';
 
-const { Sider, Content } = Layout;
+const { Content } = Layout;
 const { Search } = Input;
 
 function PublicArea() {

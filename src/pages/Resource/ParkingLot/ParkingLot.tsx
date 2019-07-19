@@ -8,7 +8,7 @@ import ListTable from './ListTable';
 import ModifyGarage from './ModifyGarage';
 import ModifyParking from './ModifyParking';
 import { GetPublicAreas, GetQuickPublicAreaTree } from './ParkingLot.service';
-const { Sider, Content } = Layout;
+const { Content } = Layout;
 const { Search } = Input;
 
 function ParkingLot() {
@@ -21,8 +21,8 @@ function ParkingLot() {
   const [currData, setCurrData] = useState<ParkingData>();
   const [search, setSearch] = useState<string>('');
 
-  const selectTree = (org, item, search) => {
-    initLoadData(item, search);
+  const selectTree = (org, item, searchText) => {
+    initLoadData(item, searchText);
     SetOrganize(item);
   };
 
@@ -37,7 +37,7 @@ function ParkingLot() {
   // 获取属性数据
   const getTreeData = () => {
     return GetQuickPublicAreaTree().then((res: any[]) => {
-      let treeList = (res || []).map(item => {
+      const treeList = (res || []).map(item => {
         return {
           ...item,
           id: item.id,
@@ -53,11 +53,11 @@ function ParkingLot() {
   const closeDrawer = () => {
     setModifyVisible(false);
   };
-  const create = organize => {
-    if (organize.type === '1' || organize.type === '') {
+  const create = org => {
+    if (org.type === '1' || org.type === '') {
       setCurrData({ baseInfo: { type: 8 } });
     }
-    if (organize.type === '8') {
+    if (org.type === '8') {
       setCurrData({ baseInfo: { type: 9 } });
     }
     setModifyVisible(true);
@@ -66,19 +66,19 @@ function ParkingLot() {
     setCurrData(item);
     setModifyVisible(true);
   };
-  const loadData = (search, org, paginationConfig?: PaginationConfig, sorter?) => {
-    setSearch(search);
+  const loadData = (searchText, org, paginationConfig?: PaginationConfig, sorter?) => {
+    setSearch(searchText);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: pagination.pageSize,
       total: 0,
     };
-    let searchCondition: any = {
+    const searchCondition: any = {
       pageIndex,
       pageSize,
       total,
       queryJson: {
-        keyword: search,
+        keyword: searchText,
         OrganizeId: org.organizeId,
         TreeTypeId: org.id,
         TreeType: org.type,
@@ -86,7 +86,7 @@ function ParkingLot() {
     };
 
     if (sorter) {
-      let { field, order } = sorter;
+      const { field, order } = sorter;
       searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
       searchCondition.sidx = field ? field : 'id';
     }
@@ -95,11 +95,11 @@ function ParkingLot() {
       return res;
     });
   };
-  const load = data => {
+  const load = formData => {
     setLoading(true);
-    data.sidx = data.sidx || 'id';
-    data.sord = data.sord || 'asc';
-    return GetPublicAreas(data).then(res => {
+    formData.sidx = formData.sidx || 'id';
+    formData.sord = formData.sord || 'asc';
+    return GetPublicAreas(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
         return {
@@ -116,11 +116,11 @@ function ParkingLot() {
     });
   };
 
-  const initLoadData = (org, search) => {
-    setSearch(search);
+  const initLoadData = (org, searchText) => {
+    setSearch(searchText);
     const queryJson = {
       OrganizeId: org.organizeId,
-      keyword: search,
+      keyword: searchText,
       TreeTypeId: org.id,
       TreeType: org.type,
     };
@@ -131,8 +131,8 @@ function ParkingLot() {
       return res;
     });
   };
-  const disabledCreate = organize => {
-    return !(organize.type === '1' || organize.type === '8' || organize.type === '');
+  const disabledCreate = org => {
+    return !(org.type === '1' || org.type === '8' || org.type === '');
   };
   return (
     <Layout style={{ height: '100%' }}>
@@ -173,13 +173,14 @@ function ParkingLot() {
       </Content>
       {currData && currData.baseInfo && currData.baseInfo.type === 9 ? (
         <ModifyParking
-        modifyVisible={modifyVisible}
-        closeDrawer={closeDrawer}
-        treeData={treeData}
-        organizeId={organize.organizeId}
-        data={currData}
-        reload={() => initLoadData(organize, search)}
-      /> ) : null}
+          modifyVisible={modifyVisible}
+          closeDrawer={closeDrawer}
+          treeData={treeData}
+          organizeId={organize.organizeId}
+          data={currData}
+          reload={() => initLoadData(organize, search)}
+        />
+      ) : null}
       {currData && currData.baseInfo && currData.baseInfo.type === 8 ? (
         <ModifyGarage
           modifyVisible={modifyVisible}
