@@ -58,6 +58,12 @@ export default [
             component: './Resource/ParkingLot/ParkingLot',
             hideInMenu: true,
           },
+          {
+            name: '往来单位',
+            path: '/resource/reciprocatingUnit',
+            component: './Resource/ReciprocatingUnit/ReciprocatingUnit',
+            hideInMenu: true,
+          },
         ],
       },
       {

@@ -17,6 +17,7 @@ import {
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { SaveForm } from './ReciprocatingUnit.service';
+import { getCommonItems } from '@/services/commonItem';
 import styles from './style.less';
 
 const { Option } = Select;
@@ -35,23 +36,43 @@ interface ModifyProps {
 const Modify = (props: ModifyProps) => {
   const { treeData, modifyVisible, data, closeDrawer, form, organizeId, reload } = props;
   const { getFieldDecorator } = form;
-  const title = data === undefined ? '添加小区' : '修改小区';
+  const title = data === undefined ? '添加往来单位' : '修改往来单位';
   const [infoDetail, setInfoDetail] = useState<any>({});
 
+  const [venderTypes, setVenderTypes] = useState<any[]>([]); // 所属类别
+  const [banks, setBanks] = useState<any[]>([]); // 开户银行
+  const [states, setStates] = useState<any[]>([]); // 状态
+  const [creditLevels, setCreditLevels] = useState<any[]>([]); // 信誉等级
+
   // 打开抽屉时初始化
-  useEffect(() => {}, []);
+  useEffect(() => {
+    // 获取信誉等级
+    getCommonItems('CreditLevel').then(res => {
+      setCreditLevels(res || []);
+    });
+    // 获取开户银行
+    getCommonItems('Bank').then(res => {
+      setBanks(res || []);
+    });
+    // 获取所属类别
+    getCommonItems('VenderType').then(res => {
+      setVenderTypes(res || []);
+    });
+    // 获取状态
+    getCommonItems('TypeState').then(res => {
+      setStates(res || []);
+    });
+  }, []);
 
   // 打开抽屉时初始化
   useEffect(() => {
     if (modifyVisible) {
       if (data) {
-        setInfoDetail(data);
+        setInfoDetail({ ...data.vendor });
         form.resetFields();
       } else {
-        const type = treeData.filter(item => item.id === organizeId)[0].type;
-        if (type === '4') {
-          form.setFieldsValue({ parentId: organizeId });
-        }
+        setInfoDetail({});
+        form.resetFields();
       }
     } else {
       form.resetFields();
@@ -64,41 +85,18 @@ const Modify = (props: ModifyProps) => {
   const save = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        const newData = data ? { ...data, ...values } : values;
-        console.log(newData.auditMark);
-        if (newData.auditMark) {
-          Modal.confirm({
-            title: '警告',
-            content: '数据审核后将无法进行修改！',
-            onOk: () => {
-              newData.auditMark = 1;
-              doSave(newData);
-            },
-          });
-        } else {
-          newData.auditMark = 0;
-          doSave(newData);
-        }
+        const newData = data ? { ...data.vendor, ...values } : values;
+        doSave(newData);
       }
     });
   };
   const doSave = dataDetail => {
-    dataDetail.keyValue = dataDetail.pCode;
-    SaveForm({ ...dataDetail, type: 5 }).then(res => {
+    dataDetail.keyValue = dataDetail.id;
+    SaveForm({ ...dataDetail }).then(res => {
       message.success('保存成功');
       closeDrawer();
       reload();
     });
-  };
-  const selectOrg = orgId => {
-    const type = treeData.filter(item => item.id === orgId)[0].type;
-    if (type !== '4') {
-      Modal.warn({
-        title: '警告',
-        content: '只能选到楼层不可以选择其他层次！',
-      });
-    }
-    form.setFieldsValue({ parentId: undefined });
   };
 
   return (
@@ -115,77 +113,204 @@ const Modify = (props: ModifyProps) => {
           <Form layout="vertical" hideRequiredMark>
             <Row gutter={24}>
               <Col lg={12}>
-                <Form.Item label="名称" required>
-                  {getFieldDecorator('name', {
-                    initialValue: infoDetail.name,
-                    rules: [{ required: true, message: '请输入名称' }],
-                  })(<Input placeholder="请输入名称" />)}
-                </Form.Item>
-              </Col>
-              <Col lg={12}>
-                <Form.Item label="编码" required>
-                  {getFieldDecorator('enCode', {
-                    initialValue: infoDetail.enCode,
-                    rules: [{ required: true, message: '请输入编码' }],
-                  })(<Input placeholder="请输入编码" />)}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={24}>
-              <Col lg={24}>
-                <Form.Item label="房产区域" required>
-                  {getFieldDecorator('parentId', {
-                    initialValue: infoDetail.parentId,
+                <Form.Item label="隶属机构" required>
+                  {getFieldDecorator('organizeId', {
+                    initialValue: infoDetail.organizeId,
                     rules: [{ required: true, message: '请选择隶属机构' }],
                   })(
-                    <TreeSelect
-                      placeholder="请选择隶属机构"
-                      allowClear
-                      treeDefaultExpandAll
-                      onSelect={selectOrg}
-                    >
+                    <TreeSelect placeholder="请选择隶属机构" allowClear treeDefaultExpandAll>
                       {renderTree(treeData, '0')}
                     </TreeSelect>,
                   )}
                 </Form.Item>
               </Col>
-            </Row>
-
-            <Row gutter={24}>
-              <Col lg={24}>
-                <Form.Item label="位置描述">
-                  {getFieldDecorator('otherCode', {
-                    initialValue: infoDetail.otherCode,
-                  })(<Input placeholder="请输入位置描述" />)}
-                </Form.Item>
-              </Col>
-            </Row>
-
-            <Row gutter={24}>
-              <Col lg={24}>
-                <Form.Item label="备注">
-                  {getFieldDecorator('memo', {
-                    initialValue: infoDetail.memo,
-                  })(<TextArea rows={4} placeholder="请输入附加说明" />)}
-                </Form.Item>
-              </Col>
-            </Row>
-            {data ? (
-              <Row gutter={24}>
-                <Col lg={24}>
-                  {getFieldDecorator('auditMark', {
-                    initialValue: infoDetail.auditMark === 1,
+              <Col lg={12}>
+                <Form.Item label="所属类别" required>
+                  {getFieldDecorator('parentId', {
+                    initialValue: infoDetail.parentId,
+                    rules: [{ required: true, message: '请选择所属类别' }],
                   })(
-                    <Checkbox
-                      disabled={infoDetail.auditMark === 1}
-                      checked={form.getFieldValue('auditMark')}
-                    >
-                      是否审核
-                    </Checkbox>,
+                    <Select placeholder="请选择所属类别">
+                      {venderTypes.map(item => (
+                        <Option value={item.value} key={item.value}>
+                          {item.text}
+                        </Option>
+                      ))}
+                    </Select>,
                   )}
-                </Col>
-              </Row>
-            ) : null}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={24}>
+              <Col lg={12}>
+                <Form.Item label="单位名称" required>
+                  {getFieldDecorator('fullName', {
+                    initialValue: infoDetail.fullName,
+                    rules: [{ required: true, message: '请输入单位名称' }],
+                  })(<Input placeholder="请输入单位名称" />)}
+                </Form.Item>
+              </Col>
+              <Col lg={12}>
+                <Form.Item label="编号" required>
+                  {getFieldDecorator('enCode', {
+                    initialValue: infoDetail.enCode,
+                    rules: [{ required: true, message: '请输入编号' }],
+                  })(<Input placeholder="请输入编号" />)}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={24}>
+              <Col lg={12}>
+                <Form.Item label="简称">
+                  {getFieldDecorator('shortName', {
+                    initialValue: infoDetail.shortName,
+                  })(<Input placeholder="请输入简称" />)}
+                </Form.Item>
+              </Col>
+              <Col lg={12}>
+                <Form.Item label="单位性质">
+                  {getFieldDecorator('nature', {
+                    initialValue: infoDetail.nature,
+                  })(<Input placeholder="请输入单位性质" />)}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={24}>
+              <Col lg={12}>
+                <Form.Item label="经营范围">
+                  {getFieldDecorator('businessScope', {
+                    initialValue: infoDetail.businessScope,
+                  })(<Input placeholder="请输入经营范围" />)}
+                </Form.Item>
+              </Col>
+              <Col lg={12}>
+                <Form.Item label="负责人">
+                  {getFieldDecorator('manager', {
+                    initialValue: infoDetail.manager,
+                  })(<Input placeholder="请输入负责人" />)}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={24}>
+              <Col lg={12}>
+                <Form.Item label="联系电话">
+                  {getFieldDecorator('innerPhone', {
+                    initialValue: infoDetail.innerPhone,
+                  })(<Input placeholder="请输入联系电话" />)}
+                </Form.Item>
+              </Col>
+              <Col lg={12}>
+                <Form.Item label="联系地址	">
+                  {getFieldDecorator('address', {
+                    initialValue: infoDetail.address,
+                  })(<Input placeholder="请输入联系地址	" />)}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={24}>
+              <Col lg={12}>
+                <Form.Item label="电子邮箱">
+                  {getFieldDecorator('email', {
+                    initialValue: infoDetail.email,
+                  })(<Input placeholder="请输入电子邮箱" />)}
+                </Form.Item>
+              </Col>
+              <Col lg={12}>
+                <Form.Item label="邮政编码">
+                  {getFieldDecorator('postalcode', {
+                    initialValue: infoDetail.postalcode,
+                  })(<Input placeholder="请输入邮政编码" />)}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={24}>
+              <Col lg={12}>
+                <Form.Item label="税务地址">
+                  {getFieldDecorator('taxAddress', {
+                    initialValue: infoDetail.taxAddress,
+                  })(<Input placeholder="请输入税务地址" />)}
+                </Form.Item>
+              </Col>
+              <Col lg={12}>
+                <Form.Item label="注册资金">
+                  {getFieldDecorator('registeredCapital', {
+                    initialValue: infoDetail.registeredCapital,
+                  })(<Input placeholder="请输入注册资金" />)}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={24}>
+              <Col lg={12}>
+                <Form.Item label="信用代码">
+                  {getFieldDecorator('uscCode', {
+                    initialValue: infoDetail.uscCode,
+                  })(<Input placeholder="请输入信用代码" />)}
+                </Form.Item>
+              </Col>
+              <Col lg={12}>
+                <Form.Item label="税务识别号">
+                  {getFieldDecorator('taxNumber', {
+                    initialValue: infoDetail.taxNumber,
+                  })(<Input placeholder="请输入税务识别号" />)}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={24}>
+              <Col lg={12}>
+                <Form.Item label="开户银行">
+                  {getFieldDecorator('bank', {
+                    initialValue: infoDetail.bank,
+                  })(
+                    <Select placeholder="请选择开户银行">
+                      {banks.map(item => (
+                        <Option value={item.value} key={item.value}>
+                          {item.text}
+                        </Option>
+                      ))}
+                    </Select>,
+                  )}
+                </Form.Item>
+              </Col>
+              <Col lg={12}>
+                <Form.Item label="银行账号">
+                  {getFieldDecorator('bankCcount', {
+                    initialValue: infoDetail.bankCcount,
+                  })(<Input placeholder="请输入银行账号" />)}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={24}>
+              <Col lg={12}>
+                <Form.Item label="状态">
+                  {getFieldDecorator('state', {
+                    initialValue: infoDetail.state,
+                  })(
+                    <Select placeholder="请选择状态">
+                      {states.map(item => (
+                        <Option value={item.value} key={item.value}>
+                          {item.text}
+                        </Option>
+                      ))}
+                    </Select>,
+                  )}
+                </Form.Item>
+              </Col>
+              <Col lg={12}>
+                <Form.Item label="信誉等级">
+                  {getFieldDecorator('creditLevel', {
+                    initialValue: infoDetail.creditLevel,
+                  })(
+                    <Select placeholder="请选择信誉等级">
+                      {creditLevels.map(item => (
+                        <Option value={item.value} key={item.value}>
+                          {item.text}
+                        </Option>
+                      ))}
+                    </Select>,
+                  )}
+                </Form.Item>
+              </Col>
+            </Row>
           </Form>
         ) : null}
       </Card>

@@ -33,12 +33,21 @@ export function GetFormInfoJson(keyValue): Promise<PStructsData> {
 // 新增修改
 export function SaveForm(data): Promise<any> {
   return request
-    .post(process.env.basePath + `/PublicArea/SaveForm`, { data: objToFormdata(data) })
+    .post(process.env.basePath + `/Vendor/SaveForm`, { data: objToFormdata(data) })
     .then(getResult as any);
 }
 // 新增修改
 export function RemoveForm(keyValue): Promise<any> {
   return request
-    .post(process.env.basePath + `/PublicArea/RemoveForm?keyValue=${keyValue}`, {})
+    .post(process.env.basePath + `/Vendor/RemoveForm?keyValue=${keyValue}`, {})
     .then(getResult as any);
 }
+
+// 查询详情
+export function GetDetailJson(keyValue): Promise<any> {
+  return request
+    .get(process.env.basePath + `/Vendor/GetFormJson?keyValue=${keyValue}`)
+    .then(getResult as any);
+}
+
+

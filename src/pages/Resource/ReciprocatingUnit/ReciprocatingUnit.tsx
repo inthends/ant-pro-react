@@ -22,7 +22,7 @@ function PublicArea() {
   const [search, setSearch] = useState<string>('');
 
   const selectTree = (org, item, searchText) => {
-    // initLoadData(item, search);
+    initLoadData(item, search);
     SetOrganize(item);
   };
 
@@ -31,7 +31,7 @@ function PublicArea() {
       const root = res.filter(item => item.parentId === '0');
       const rootOrg = root.length === 1 ? root[0] : undefined;
       SetOrganize(rootOrg);
-      // initLoadData(rootOrg, '');
+      initLoadData(rootOrg, '');
     });
   }, []);
   // 获取属性数据
@@ -62,16 +62,14 @@ function PublicArea() {
       total,
       queryJson: {
         keyword: searchText,
-        OrganizeId: org.organizeId,
-        TreeTypeId: org.id,
-        TreeType: org.type,
+        OrganizeId: org.id,
       },
     };
 
     if (sorter) {
       const { field, order } = sorter;
       searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'pCode';
+      searchCondition.sidx = field ? field : 'EnCode';
     }
 
     return load(searchCondition).then(res => {
@@ -80,7 +78,7 @@ function PublicArea() {
   };
   const load = formData => {
     setLoading(true);
-    formData.sidx = formData.sidx || 'pCode';
+    formData.sidx = formData.sidx || 'EnCode';
     formData.sord = formData.sord || 'asc';
     return GetPageListJson(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -102,12 +100,10 @@ function PublicArea() {
   const initLoadData = (org, searchText) => {
     setSearch(searchText);
     const queryJson = {
-      OrganizeId: org.organizeId,
+      OrganizeId: org.id,
       keyword: search,
-      TreeTypeId: org.id,
-      TreeType: org.type,
     };
-    const sidx = 'pCode';
+    const sidx = 'EnCode';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
@@ -127,13 +123,13 @@ function PublicArea() {
         <div style={{ marginBottom: '20px', padding: '3px 0' }}>
           <Search
             className="search-input"
-            placeholder="搜索楼宇名称"
+            placeholder="搜索往来单位"
             onSearch={value => loadData(value, organize)}
             style={{ width: 200 }}
           />
           <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer()}>
             <Icon type="plus" />
-            公区
+            往来单位
           </Button>
         </div>
         <ListTable

@@ -2,7 +2,7 @@ import Page from '@/components/Common/Page';
 import { Button, message, Modal, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
-import { RemoveForm } from './ReciprocatingUnit.service';
+import { RemoveForm, GetDetailJson } from './ReciprocatingUnit.service';
 
 interface ListTableProps {
   loading: boolean;
@@ -21,9 +21,9 @@ function ListTable(props: ListTableProps) {
   const doDelete = record => {
     Modal.confirm({
       title: '请确认',
-      content: `您是否要删除${record.name}吗`,
+      content: `您是否要删除${record.fullName}吗`,
       onOk: () => {
-        RemoveForm(record.pCode)
+        RemoveForm(record.id)
           .then(() => {
             message.success('删除成功');
             reload();
@@ -32,71 +32,71 @@ function ListTable(props: ListTableProps) {
       },
     });
   };
+  const doModify = id => {
+    GetDetailJson(id).then(res => {
+      modify(res);
+    });
+  };
   const columns = [
     {
-      title: '公区名称',
-      dataIndex: 'name',
-      key: 'name',
+      title: '名称',
+      dataIndex: 'fullName',
+      key: 'fullName',
       width: 250,
       fixed: 'left',
-      sorter: true,
+      // sorter: true,
     },
     {
-      title: '公区编号',
+      title: '编号',
       dataIndex: 'enCode',
       key: 'enCode',
       width: 150,
-      sorter: true,
+      // sorter: true,
     },
     {
-      title: '房产全称',
-      dataIndex: 'psAllName',
-      key: 'psAllName',
+      title: '所属机构',
+      dataIndex: 'OrganizeId',
+      key: 'OrganizeId',
       width: 300,
-      sorter: true,
+      // sorter: true,
     },
     {
-      title: '位置描述',
-      dataIndex: 'otherCode',
-      key: 'otherCode',
+      title: '简称',
+      dataIndex: 'shortName',
+      key: 'shortName',
       width: 200,
-      sorter: true,
+      // sorter: true,
     },
     {
-      title: '是否审核',
-      dataIndex: 'auditMark',
-      key: 'auditMark',
+      title: '单位性质',
+      dataIndex: 'nature',
+      key: 'nature',
       width: 200,
-      sorter: true,
-      render: (text: any) => {
-        switch (text) {
-          case 1:
-            return '是';
-          case 0:
-            return '否';
-          default:
-            return null;
-        }
-      },
+      // sorter: true,
     },
     {
-      title: '审核人',
-      dataIndex: 'auditman',
-      key: 'auditman',
+      title: '经营范围',
+      dataIndex: 'businessScope',
+      key: 'businessScope',
       width: 150,
-      sorter: true,
+      // sorter: true,
     },
     {
-      title: '审核日期',
-      dataIndex: 'auditdate',
-      key: 'auditdate',
+      title: '负责人',
+      dataIndex: 'manager',
+      key: 'manager',
       width: 200,
-      sorter: true,
+      // sorter: true,
     },
     {
-      title: '备注',
-      dataIndex: 'memo',
-      key: 'memo',
+      title: '联系电话',
+      dataIndex: 'InnerPhone',
+      key: 'InnerPhone',
+    },
+    {
+      title: '联系地址',
+      dataIndex: 'address',
+      key: 'address',
     },
     {
       title: '操作',
@@ -110,7 +110,7 @@ function ListTable(props: ListTableProps) {
             type="primary"
             key="modify"
             style={{ marginRight: '10px' }}
-            onClick={() => modify(record)}
+            onClick={() => doModify(record.id)}
           >
             修改
           </Button>,
@@ -131,7 +131,7 @@ function ListTable(props: ListTableProps) {
         columns={columns}
         rowKey={record => record.pCode}
         pagination={pagination}
-        scroll={{ x: 1850 }}
+        scroll={{ x: 1950 }}
         onChange={(pag: PaginationConfig, filters, sorter) => changePage(pag, filters, sorter)}
         loading={loading}
       />
