@@ -59,6 +59,12 @@ export default [
             hideInMenu: true,
           },
           {
+            name: '住户资料',
+            path: '/resource/PStructUser',
+            component: './Resource/PStructUser/PStructUser',
+            hideInMenu: true,
+          },
+          {
             name: '往来单位',
             path: '/resource/reciprocatingUnit',
             component: './Resource/ReciprocatingUnit/ReciprocatingUnit',

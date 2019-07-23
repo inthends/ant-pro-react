@@ -200,10 +200,10 @@ const Modify = (props: ModifyProps) => {
                 </Form.Item>
               </Col>
               <Col lg={12}>
-                <Form.Item label="联系地址	">
+                <Form.Item label="联系地址">
                   {getFieldDecorator('address', {
                     initialValue: infoDetail.address,
-                  })(<Input placeholder="请输入联系地址	" />)}
+                  })(<Input placeholder="请输入联系地址" />)}
                 </Form.Item>
               </Col>
             </Row>

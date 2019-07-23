@@ -2,7 +2,7 @@ import Page from '@/components/Common/Page';
 import { Button, message, Modal, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
-import { RemoveForm, GetDetailJson } from './ReciprocatingUnit.service';
+import { RemoveForm, GetDetailJson } from './PStructUser.service';
 
 interface ListTableProps {
   loading: boolean;
@@ -21,7 +21,7 @@ function ListTable(props: ListTableProps) {
   const doDelete = record => {
     Modal.confirm({
       title: '请确认',
-      content: `您是否要删除${record.fullName}吗`,
+      content: `您是否要删除 ${record.name} 吗`,
       onOk: () => {
         RemoveForm(record.id)
           .then(() => {
@@ -34,69 +34,83 @@ function ListTable(props: ListTableProps) {
   };
   const doModify = id => {
     GetDetailJson(id).then(res => {
-      modify(res);
+      const { customerInfo = {}, relationPC = {} } = res;
+      modify({ ...relationPC, ...customerInfo });
     });
   };
   const columns = [
     {
-      title: '名称',
-      dataIndex: 'fullName',
-      key: 'fullName',
-      width: 250,
+      title: '客户编号',
+      dataIndex: 'code',
+      key: 'code',
+      width: 200,
       fixed: 'left',
       // sorter: true,
     },
     {
-      title: '编号',
-      dataIndex: 'enCode',
-      key: 'enCode',
-      width: 150,
-      // sorter: true,
-    },
-    {
-      title: '所属机构',
-      dataIndex: 'OrganizeId',
-      key: 'OrganizeId',
-      width: 300,
+      title: '客户名称',
+      dataIndex: 'name',
+      key: 'name',
+      width: 200,
       // sorter: true,
     },
     {
       title: '简称',
-      dataIndex: 'shortName',
-      key: 'shortName',
-      width: 200,
-      // sorter: true,
-    },
-    {
-      title: '单位性质',
-      dataIndex: 'nature',
-      key: 'nature',
-      width: 200,
-      // sorter: true,
-    },
-    {
-      title: '经营范围',
-      dataIndex: 'businessScope',
-      key: 'businessScope',
+      dataIndex: 'shortname',
+      key: 'shortname',
       width: 150,
       // sorter: true,
     },
     {
-      title: '负责人',
-      dataIndex: 'manager',
-      key: 'manager',
+      title: '客户类别',
+      dataIndex: 'flag',
+      key: 'flag',
+      width: 150,
+      render: (text, record) => {
+        switch (text) {
+          case '1':
+            return '个人';
+          case '2':
+            return '单位';
+          default:
+            return null;
+        }
+      },
+    },
+    {
+      title: '联系电话',
+      dataIndex: 'telphonenum',
+      key: 'telphonenum',
       width: 200,
       // sorter: true,
     },
     {
-      title: '联系电话',
-      dataIndex: 'InnerPhone',
-      key: 'InnerPhone',
+      title: '客户证件类型',
+      dataIndex: 'certificatetype',
+      key: 'certificatetype',
+      width: 150,
+      render: (text, record) => {
+        switch (text) {
+          case '1':
+            return '身份证';
+          case '2':
+            return '护照';
+          default:
+            return null;
+        }
+      },
     },
     {
-      title: '联系地址',
-      dataIndex: 'address',
-      key: 'address',
+      title: '客户证件编号',
+      dataIndex: 'certificateno',
+      key: 'certificateno',
+      width: 200,
+      // sorter: true,
+    },
+    {
+      title: '备注',
+      dataIndex: 'memo',
+      key: 'memo',
     },
     {
       title: '操作',
@@ -131,7 +145,7 @@ function ListTable(props: ListTableProps) {
         columns={columns}
         rowKey={record => record.id}
         pagination={pagination}
-        scroll={{ x: 1950 }}
+        scroll={{ x: 1850 }}
         onChange={(pag: PaginationConfig, filters, sorter) => changePage(pag, filters, sorter)}
         loading={loading}
       />
