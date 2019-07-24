@@ -10,6 +10,9 @@ export default [
         hideInMenu: true,
       },
     ],
+
+
+
   },
   {
     path: '/register',
