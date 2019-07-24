@@ -10,7 +10,7 @@ const FooterView = () => (
     <GlobalFooter
       links={[]}
       copyright={
-        <Fragment>{/* Copyright <Icon type="copyright" /> 2019 {settings.company} */}</Fragment>
+        <Fragment>{/* Copyright <Icon type="copyright" /> 南京乐软 2019 {settings.company} */}</Fragment>
       }
     />
   </Footer>

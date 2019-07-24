@@ -8,7 +8,7 @@ export interface Proxy {
 
 export default {
   '/api': {
-    target: 'http://bs.jslesoft.com:8028',
-    // target: 'http://172.22.1.224:8080',
+    //target: 'http://bs.jslesoft.com:8028',
+    target: 'http://localhost:52520',
   },
 } as Proxy;

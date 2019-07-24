@@ -36,7 +36,7 @@ const links = [
 
 const copyright = (
   <Fragment>
-    Copyright <Icon type="copyright" /> 2019 {settings.company}
+    Copyright <Icon type="copyright" /> 南京乐软 2019 {settings.company}
   </Fragment>
 );
 

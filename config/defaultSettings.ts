@@ -55,7 +55,7 @@ export default {
   autoHideHeader: false,
   fixSiderbar: true,
   menu: {
-    disableLocal: false,
+    disableLocal: true,
   },
   pwa: true,
   collapse: true,

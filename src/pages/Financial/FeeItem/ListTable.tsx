@@ -2,29 +2,29 @@ import Page from '@/components/Common/Page';
 import { Button, message, Table, Modal } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
-import { RemoveForm } from './House.service';
+import { RemoveForm } from './Main.service';
 
 interface ListTableProps {
+  onchange(page: any, filter: any, sort: any): any;
   loading: boolean;
   pagination: PaginationConfig;
   data: any[];
   modify(id: string): void;
-  onchange(page: any, filter: any, sort: any): any;
   reload(): void;
 }
 
 function ListTable(props: ListTableProps) {
   const { onchange, loading, pagination, data, modify, reload } = props;
-  const changePage = (pag: PaginationConfig, filters, sorter) => {
-    onchange(pag, filters, sorter);
+  const changePage = (pagination: PaginationConfig, filters, sorter) => {
+    onchange(pagination, filters, sorter);
   };
   const doDelete = record => {
     Modal.confirm({
       title: '请确认',
-      content: `您是否要删除${record.name}吗`,
+      content: `您是否要删除${record.name}`,
       onOk: () => {
         RemoveForm(record.id).then(() => {
-          message.success('删除成功');
+          message.success('保存成功');
           reload();
         });
       },
@@ -32,77 +32,70 @@ function ListTable(props: ListTableProps) {
   };
   const columns = [
     {
-      title: '项目名称',
-      dataIndex: 'name',
-      key: 'name',
-      width: 180, 
+      title: '费项名称',
+      dataIndex: 'feename',
+      key: 'feename',
+      width: 140,
       sorter: true,
     },
     {
-      title: '总建筑面积',
-      dataIndex: 'area',
-      key: 'area',
-      width: 100,
+      title: '费项种类',
+      dataIndex: 'feekind',
+      key: 'feekind',
+      width: 80,
       sorter: true,
     },
     {
-      title: '总房屋数',
-      dataIndex: 'roomcount',
-      key: 'roomcount',
-      width: 100,
+      title: '费项类别',
+      dataIndex: 'feetype',
+      key: 'feetype',
+      width: 80,
       sorter: true,
     },
     {
-      title: '入住面积',
-      dataIndex: 'checkarea',
-      key: 'checkarea',
-      width: 100,
+      title: '单价',
+      dataIndex: 'feeprice',
+      key: 'feeprice',
+      width: 80,
       sorter: true,
     },
     {
-      title: '空置面积',
-      dataIndex: 'area',
-      key: 'area2',
-      width: 100,
+      title: '计费周期',
+      dataIndex: 'cyclevalue',
+      key: 'cyclevalue',
+      width: 80,
       sorter: true,
     },
     {
-      title: '入住房屋数',
-      dataIndex: 'checkroom',
-      key: 'checkroom',
-      width: 100,
+      title: '周期单位',
+      dataIndex: 'cycletype',
+      key: 'cycletype',
+      width: 80,
       sorter: true,
     },
     {
-      title: '空置房屋数',
-      dataIndex: 'vacancyroom',
-      key: 'vacancyroom',
-      width: 100,
-      sorter: true,
-    },
-    {
-      title: '入驻率',
-      dataIndex: 'rate',
-      key: 'rate',
-      width: 80, 
-      render: (text, record) => {
-        return (
-          (record.roomcount ? (record.checkroom / record.roomcount) * 100 : 0).toFixed(2) + '%'
-        );
-      },
+      title: '计费起始日期',
+      dataIndex: 'begindate',
+      key: 'begindate',
+      width: 85
+    }, {
+      title: '计费终止日期',
+      dataIndex: 'enddate',
+      key: 'enddate',
+      width: 85
     },
     {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
-      width: 145, 
+      width: 125, 
       render: (text, record) => {
         return [
           <Button
             type="primary"
             key="modify"
             style={{ marginRight: '10px' }}
-            onClick={() => modify(record.id)}
+            onClick={() => modify(record.feeitemid)}
           >
             修改
           </Button>,
@@ -112,7 +105,7 @@ function ListTable(props: ListTableProps) {
         ];
       },
     },
-  ] as ColumnProps<any>[];
+  ] as ColumnProps<any>;
   return (
     <Page>
       <Table
@@ -121,10 +114,12 @@ function ListTable(props: ListTableProps) {
         size="middle"
         dataSource={data}
         columns={columns}
-        rowKey={record => record.id}
+        rowKey={record => record.feeitemid}
         pagination={pagination}
-        
-        onChange={(pag: PaginationConfig, filters, sorter) => changePage(pag, filters, sorter)}
+        scroll={{ y: 420 }}
+        onChange={(pagination: PaginationConfig, filters, sorter) =>
+          changePage(pagination, filters, sorter)
+        }
         loading={loading}
       />
     </Page>

@@ -1,72 +1,60 @@
 import { TreeEntity } from '@/model/models';
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { getResult } from '@/utils/networkUtils';
 import { Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import General from './General';
-import { GetStatistics, GetStatisticsTotal, GetTreeJsonById } from './House.service';
 import LeftTree from '../LeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
+import { GetPageListJson, GetQuickPublicAreaTree } from './Main.service';
 
 const { Content } = Layout;
 const { Search } = Input;
 
-function House() {
+function Main() {
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   const [treeData, setTreeData] = useState<TreeEntity[]>([]);
-  const [totalData, setTotalData] = useState({});
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
-  const [organizeId, SetOrganizeId] = useState<string>('');
+  const [organize, SetOrganize] = useState<any>({});
   const [data, setData] = useState<any[]>([]);
-  const [id, setId] = useState<string>();
+  const [currData, setCurrData] = useState<any>();
   const [search, setSearch] = useState<string>('');
 
-  const disabledCreate = (tree: TreeEntity[], orgId: string) => {
-    for (const item of tree) {
-      if (item.id === orgId && item.parentId !== '0') {
-        return false;
-      }
-    }
-    return true;
-  };
-
-  const selectTree = (org, searchText) => {
-    initLoadData(org, searchText);
-    SetOrganizeId(org);
+  const selectTree = (org, item, searchText) => {
+    initLoadData(item, searchText);
+    SetOrganize(item);
   };
 
   useEffect(() => {
     getTreeData().then(res => {
       const root = res.filter(item => item.parentId === '0');
-      const rootOrg = root.length === 1 ? root[0].id : '';
-      SetOrganizeId(rootOrg as string);
-      initLoadData(rootOrg as string, '');
+      const rootOrg = root.length === 1 ? root[0] : undefined;
+      SetOrganize(rootOrg);
+      initLoadData(rootOrg, '');
     });
-    getHouseTotal();
   }, []);
   // 获取属性数据
   const getTreeData = () => {
-    return GetTreeJsonById().then((res: TreeEntity[]) => {
-      setTreeData(res || []);
-      return res || [];
+    return GetQuickPublicAreaTree().then((res: any[]) => {
+      const treeList = (res || []).map(item => {
+        return {
+          ...item,
+          id: item.id,
+          text: item.name,
+          parentId: item.pId,
+        };
+      });
+      setTreeData(treeList);
+      return treeList;
     });
   };
-  // 获取房产统计
-  const getHouseTotal = () => {
-    GetStatisticsTotal()
-      .then(getResult)
-      .then(res => {
-        setTotalData(res || []);
-      });
-  };
+
   const closeDrawer = () => {
     setModifyVisible(false);
   };
-  const showDrawer = (orgId?) => {
-    setId(orgId);
+  const showDrawer = (item?) => {
+    setCurrData(item);
     setModifyVisible(true);
   };
   const loadData = (searchText, org, paginationConfig?: PaginationConfig, sorter?) => {
@@ -80,7 +68,12 @@ function House() {
       pageIndex,
       pageSize,
       total,
-      queryJson: { OrganizeId: org, keyword: searchText },
+      queryJson: {
+        keyword: searchText,
+        OrganizeId: org.organizeId,
+        TreeTypeId: org.id,
+        TreeType: org.type,
+      },
     };
 
     if (sorter) {
@@ -97,7 +90,7 @@ function House() {
     setLoading(true);
     formData.sidx = formData.sidx || 'id';
     formData.sord = formData.sord || 'asc';
-    return GetStatistics(formData).then(res => {
+    return GetPageListJson(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
         return {
@@ -113,9 +106,15 @@ function House() {
       return res;
     });
   };
-  const initLoadData = (orgId: string, searchText) => {
+
+  const initLoadData = (org, searchText) => {
     setSearch(searchText);
-    const queryJson = { OrganizeId: orgId, keyword: searchText };
+    const queryJson = {
+      OrganizeId: org.organizeId,
+      keyword: searchText,
+      TreeTypeId: org.id,
+      TreeType: org.type,
+    };
     const sidx = 'id';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
@@ -128,39 +127,32 @@ function House() {
     <Layout style={{ height: '100%' }}>
       <LeftTree
         treeData={treeData}
-        selectTree={(orgId, item) => {
-          selectTree(orgId, search);
+        selectTree={(id, item) => {
+          selectTree(id, item, search);
         }}
       />
       <Content style={{ padding: '0 20px' }}>
         <div style={{ marginBottom: '20px', padding: '3px 0' }}>
           <Search
             className="search-input"
-            placeholder="搜索项目名称"
-            value={search}
-            onSearch={value => loadData(value, organizeId)}
+            placeholder="搜索关键字"
+            onSearch={value => loadData(value, organize)}
             style={{ width: 200 }}
           />
-          <Button
-            type="primary"
-            disabled={disabledCreate(treeData, organizeId)}
-            style={{ float: 'right' }}
-            onClick={() => showDrawer()}
-          >
+          <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer()}>
             <Icon type="plus" />
-            项目
+            服务单
           </Button>
         </div>
-        <General totalData={totalData} />
         <ListTable
           onchange={(paginationConfig, filters, sorter) =>
-            loadData(search, organizeId, paginationConfig, sorter)
+            loadData(search, organize, paginationConfig, sorter)
           }
           loading={loading}
           pagination={pagination}
           data={data}
           modify={showDrawer}
-          reload={() => initLoadData(organizeId, search)}
+          reload={() => initLoadData(organize, search)}
         />
       </Content>
 
@@ -168,12 +160,12 @@ function House() {
         modifyVisible={modifyVisible}
         closeDrawer={closeDrawer}
         treeData={treeData}
-        organizeId={organizeId}
-        id={id}
-        reload={() => initLoadData(organizeId, search)}
+        organizeId={organize.id}
+        data={currData}
+        reload={() => initLoadData(organize, search)}
       />
     </Layout>
   );
 }
 
-export default House;
+export default Main;

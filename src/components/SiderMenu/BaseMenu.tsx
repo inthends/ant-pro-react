@@ -125,7 +125,7 @@ class BaseMenu extends Component<BaseMenuProps> {
       <Menu.Item
         key={item.path}
         onClick={() => {
-          console.log(item);
+          //console.log(item);
         }}
       >
         {this.getMenuItemPath(item)}
