@@ -39,6 +39,8 @@ const Modify = (props: ModifyProps) => {
 
   const [treeData, setTreeData] = useState<TreeEntity[]>([]); //所属机构
   const [banks, setBanks] = useState<any[]>([]); // 开户银行
+  // const [banks, setBanks] = useState<any[]>([]); // 证件类别
+  // const [banks, setBanks] = useState<any[]>([]); // 企业性质
   // 打开抽屉时初始化
   useEffect(() => {
     GetTreeJsonById().then((res: TreeEntity[]) => {
@@ -48,6 +50,16 @@ const Modify = (props: ModifyProps) => {
     getCommonItems('Bank').then(res => {
       setBanks(res || []);
     });
+
+    // // 获取证件类别
+    // getCommonItems('Bank').then(res => {
+    //   setBanks(res || []);
+    // });
+
+    // // 获取企业性质
+    // getCommonItems('Bank').then(res => {
+    //   setBanks(res || []);
+    // });
   }, []);
 
   // 打开抽屉时初始化
@@ -162,41 +174,41 @@ const Modify = (props: ModifyProps) => {
                 </Form.Item>
               </Col>
             </Row>
-            {form.getFieldValue('flag') === '1' ? (
+            {/* {form.getFieldValue('flag') === '1' ? (
               <>
-              <Row gutter={24}>
-                <Col lg={12}>
-                  <Form.Item label="证件类别">
-                    {getFieldDecorator('certificateType', {
-                      initialValue: infoDetail.certificateType,
-                    })(<Input placeholder="请输入证件类别" />)}
-                  </Form.Item>
-                </Col>
-                <Col lg={12}>
-                  <Form.Item label="证件号码">
-                    {getFieldDecorator('certificateNO', {
-                      initialValue: infoDetail.certificateNO,
-                    })(<Input placeholder="请输入证件号码" />)}
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={24}>
-                <Col lg={12}>
-                  <Form.Item label="发证机关">
-                    {getFieldDecorator('issuingOrgan', {
-                      initialValue: infoDetail.issuingOrgan,
-                    })(<Input placeholder="请输入发证机关" />)}
-                  </Form.Item>
-                </Col>
-                <Col lg={12}>
-                  <Form.Item label="证件地址">
-                    {getFieldDecorator('documentAddress', {
-                      initialValue: infoDetail.documentAddress,
-                    })(<Input placeholder="请输入证件地址" />)}
-                  </Form.Item>
-                </Col>
-              </Row>
-            </>
+                <Row gutter={24}>
+                  <Col lg={12}>
+                    <Form.Item label="证件类别">
+                      {getFieldDecorator('certificateType', {
+                        initialValue: infoDetail.certificateType,
+                      })(<Input placeholder="请输入证件类别" />)}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={12}>
+                    <Form.Item label="证件号码">
+                      {getFieldDecorator('certificateNO', {
+                        initialValue: infoDetail.certificateNO,
+                      })(<Input placeholder="请输入证件号码" />)}
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={24}>
+                  <Col lg={12}>
+                    <Form.Item label="发证机关">
+                      {getFieldDecorator('issuingOrgan', {
+                        initialValue: infoDetail.issuingOrgan,
+                      })(<Input placeholder="请输入发证机关" />)}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={12}>
+                    <Form.Item label="证件地址">
+                      {getFieldDecorator('documentAddress', {
+                        initialValue: infoDetail.documentAddress,
+                      })(<Input placeholder="请输入证件地址" />)}
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </>
             ) : (
               <>
                 <Row gutter={24}>
@@ -232,7 +244,7 @@ const Modify = (props: ModifyProps) => {
                   </Col>
                 </Row>
               </>
-            )}
+            )} */}
 
             <Row gutter={24}>
               <Col lg={12}>
