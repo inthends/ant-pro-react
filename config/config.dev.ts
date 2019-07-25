@@ -67,7 +67,7 @@ export default {
   plugins,
   define: {
     APP_TYPE: APP_TYPE || '',
-    'process.env.basePath':'http://localhost:52520/api', //'http://bs.jslesoft.com:8028/api',
+    'process.env.basePath':'http://bs.jslesoft.com:8028/api',
   },
   treeShaking: true,
   targets: {
