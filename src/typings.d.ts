@@ -1,3 +1,6 @@
+declare module 'slash2';
+declare module 'antd-theme-webpack-plugin';
+
 declare module '*.css';
 declare module '*.less';
 declare module '*.scss';
@@ -9,33 +12,32 @@ declare module '*.jpeg';
 declare module '*.gif';
 declare module '*.bmp';
 declare module '*.tiff';
-declare module 'rc-animate';
 declare module 'omit.js';
 declare module 'react-copy-to-clipboard';
-declare var APP_TYPE: string;
-declare module 'ant-design-pro' {
-  import React from 'react';
-  import { NoticeIconProps } from 'ant-design-pro/lib/NoticeIcon';
-  import { NoticeIconTabProps } from 'ant-design-pro/lib/NoticeIcon/NoticeIconTab';
+declare module 'react-fittext';
+declare module '@antv/data-set';
+declare module 'nzh/cn';
+declare module 'webpack-theme-color-replacer';
+declare module 'webpack-theme-color-replacer/client';
 
-  type PartialNoticeIconProps = {
-    [K in Exclude<keyof NoticeIconProps, 'locale'>]?: NoticeIconProps[K]
-  };
-  interface MixinNoticeIconProps extends PartialNoticeIconProps {
-    locale?: {
-      emptyText: string;
-      clear: string;
-      viewMore: string;
-      [key: string]: string;
-    };
-    onViewMore?: (tabProps: NoticeIconProps) => void;
-  }
-  interface MixinNoticeIconTabProps extends Partial<NoticeIconTabProps> {
-    showViewMore?: boolean;
-  }
-  class NoticeIconTab extends React.Component<MixinNoticeIconTabProps, any> {}
-  export class NoticeIcon extends React.Component<MixinNoticeIconProps, any> {
-    public static Tab: typeof NoticeIconTab;
-  }
-  export * from 'ant-design-pro/lib';
+// google analytics interface
+interface GAFieldsObject {
+  eventCategory: string;
+  eventAction: string;
+  eventLabel?: string;
+  eventValue?: number;
+  nonInteraction?: boolean;
 }
+interface Window {
+  ga: (
+    command: 'send',
+    hitType: 'event' | 'pageview',
+    fieldsObject: GAFieldsObject | string,
+  ) => void;
+}
+
+declare let ga: Function;
+
+// preview.pro.ant.design only do not use in your production ;
+// preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。
+declare let ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION: 'site' | undefined;

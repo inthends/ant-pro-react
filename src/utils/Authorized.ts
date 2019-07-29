@@ -1,11 +1,12 @@
-import { Authorized as RenderAuthorized } from 'ant-design-pro';
+import RenderAuthorize from '@/components/Authorized';
 import { getAuthority } from './authority';
-
-let Authorized = RenderAuthorized(getAuthority()); // eslint-disable-line
+/* eslint-disable eslint-comments/disable-enable-pair */
+/* eslint-disable import/no-mutable-exports */
+let Authorized = RenderAuthorize(getAuthority());
 
 // Reload the rights component
-const reloadAuthorized = () => {
-  Authorized = RenderAuthorized(getAuthority());
+const reloadAuthorized = (): void => {
+  Authorized = RenderAuthorize(getAuthority());
 };
 
 export { reloadAuthorized };

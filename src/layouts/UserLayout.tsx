@@ -1,96 +1,65 @@
-import { MenuDataItem } from '@/components/SiderMenu';
-import { ConnectProps, ConnectState } from '@/models/connect';
-import getPageTitle from '@/utils/getPageTitle';
-import { GlobalFooter } from 'ant-design-pro';
-import classnames from 'classnames';
-import { Icon } from 'antd';
-import { connect } from 'dva';
-import React, { Component, Fragment } from 'react';
+import { DefaultFooter, MenuDataItem, getMenuData, getPageTitle } from '@ant-design/pro-layout';
 import DocumentTitle from 'react-document-title';
-import { formatMessage } from 'umi-plugin-locale';
 import Link from 'umi/link';
-import logo from '../assets/logo.jpg';
-import background from '../assets/background.jpg';
+import React from 'react';
+import { connect } from 'dva';
+import { formatMessage } from 'umi-plugin-react/locale';
+
+import SelectLang from '@/components/SelectLang';
+import { ConnectProps, ConnectState } from '@/models/connect';
+import logo from '../assets/logo.svg';
 import styles from './UserLayout.less';
-import settings from 'config/defaultSettings';
-import { Button, Col, Layout, Row, Table, Tree } from 'antd';
-const { Sider, Content } = Layout;
-
-const links = [
-  {
-    key: 'help',
-    title: formatMessage({ id: 'layout.user.link.help' }),
-    href: '',
-  },
-  {
-    key: 'privacy',
-    title: formatMessage({ id: 'layout.user.link.privacy' }),
-    href: '',
-  },
-  {
-    key: 'terms',
-    title: formatMessage({ id: 'layout.user.link.terms' }),
-    href: '',
-  },
-];
-
-const copyright = (
-  <Fragment>
-    Copyright <Icon type="copyright" /> 南京乐软 2019 {settings.company}
-  </Fragment>
-);
 
 export interface UserLayoutProps extends ConnectProps {
-  route: MenuDataItem;
   breadcrumbNameMap: { [path: string]: MenuDataItem };
-  navTheme: string;
 }
 
-class UserLayout extends Component<UserLayoutProps> {
-  componentDidMount() {
-    const {
-      dispatch,
-      route: { routes, authority },
-    } = this.props;
-    dispatch!({
-      type: 'menu/getMenuData',
-      payload: { routes, authority },
-    });
-  }
+const UserLayout: React.SFC<UserLayoutProps> = props => {
+  const {
+    route = {
+      routes: [],
+    },
+  } = props;
+  const { routes = [] } = route;
+  const {
+    children,
+    location = {
+      pathname: '',
+    },
+  } = props;
+  const { breadcrumb } = getMenuData(routes);
 
-  render() {
-    const { children, location, breadcrumbNameMap } = this.props;
-    return (
-      <DocumentTitle title={getPageTitle(location!.pathname, breadcrumbNameMap)}>
-        <Layout style={{ height: '100%' }}>
-          <Sider theme="light" width="40%">
-            <div className={classnames(styles.container)} style={{ background: '#ffffff' }}>
-              <div style={{ height: '20%' }} />
-              <div className={styles.content}>
-                <div className={styles.top}>
-                  <div className={styles.header}>
-                    <Link to="/">
-                      <img alt="logo" className={styles.logo} src={logo} />
-                      <span className={styles.title}>{settings.title}</span>
-                    </Link>
-                  </div>
-                  <div className={styles.desc}>{settings.description}</div>
-                </div>
-                {children}
-              </div>
-              <GlobalFooter links={links} copyright={copyright} />
+  return (
+    <DocumentTitle
+      title={getPageTitle({
+        pathname: location.pathname,
+        breadcrumb,
+        formatMessage,
+        ...props,
+      })}
+    >
+      <div className={styles.container}>
+        <div className={styles.lang}>
+          <SelectLang />
+        </div>
+        <div className={styles.content}>
+          <div className={styles.top}>
+            <div className={styles.header}>
+              <Link to="/">
+                <img alt="logo" className={styles.logo} src={logo} />
+                <span className={styles.title}>Ant Design</span>
+              </Link>
             </div>
-          </Sider>
-          <Content>
-            <img src={background} />
-          </Content>
-        </Layout>
-      </DocumentTitle>
-    );
-  }
-}
+            <div className={styles.desc}>Ant Design 是西湖区最具影响力的 Web 设计规范</div>
+          </div>
+          {children}
+        </div>
+        {/* <DefaultFooter /> */}
+      </div>
+    </DocumentTitle>
+  );
+};
 
-export default connect(({ menu: menuModel }: ConnectState) => ({
-  menuData: menuModel.menuData,
-  breadcrumbNameMap: menuModel.breadcrumbNameMap,
+export default connect(({ settings }: ConnectState) => ({
+  ...settings,
 }))(UserLayout);

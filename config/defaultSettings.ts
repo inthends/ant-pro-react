@@ -31,38 +31,30 @@ export interface DefaultSettings {
    * sticky siderbar
    */
   fixSiderbar: boolean;
-  menu: { disableLocal: boolean };
+  menu: { locale: boolean };
   title: string;
-  description: string;
-  company: string;
   pwa: boolean;
-  /**
-   * your iconfont Symbol Scrip Url
-   * eg：`//at.alicdn.com/t/font_1039637_btcrd5co4w.js`
-   * 注意：如果需要图标多色，Iconfont图标项目里要进行批量去色处理
-   */
+  // Your custom iconfont Symbol script Url
+  // eg：//at.alicdn.com/t/font_1039637_btcrd5co4w.js
+  // 注意：如果需要图标多色，Iconfont 图标项目里要进行批量去色处理
+  // Usage: https://github.com/ant-design/ant-design-pro/pull/3517
   iconfontUrl: string;
   colorWeak: boolean;
-  sso: boolean;
 }
 
 export default {
   navTheme: 'light',
-  primaryColor: '',
+  primaryColor: '#1890FF',
   layout: 'topmenu',
   contentWidth: 'Fluid',
-  fixedHeader: true,
+  fixedHeader: false,
   autoHideHeader: false,
-  fixSiderbar: true,
-  menu: {
-    disableLocal: true,
-  },
-  pwa: true,
-  collapse: true,
+  fixSiderbar: false,
   colorWeak: false,
-  iconfontUrl: '//at.alicdn.com/t/font_1087809_g3gond0sy9f.js',
-  title: '',
-  description: '',
-  company: '',
-  sso: true,
+  menu: {
+    locale: true,
+  },
+  title: 'Ant Design Pro',
+  pwa: false,
+  iconfontUrl: '',
 } as DefaultSettings;

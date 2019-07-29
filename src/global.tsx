@@ -1,9 +1,8 @@
-import React from 'react';
-import { notification, Button, message } from 'antd';
-import { formatMessage } from 'umi-plugin-locale';
-import defaultSettings from '../config/defaultSettings';
+import { Button, message, notification } from 'antd';
 
-(window as any).React = React;
+import React from 'react';
+import { formatMessage } from 'umi-plugin-react/locale';
+import defaultSettings from '../config/defaultSettings';
 
 const { pwa } = defaultSettings;
 // if pwa is true
@@ -21,7 +20,7 @@ if (pwa) {
       // https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration
       const worker = e.detail && e.detail.waiting;
       if (!worker) {
-        return Promise.resolve();
+        return true;
       }
       // Send skip-waiting event to waiting SW with MessageChannel
       await new Promise((resolve, reject) => {
@@ -59,4 +58,14 @@ if (pwa) {
       onClose: async () => {},
     });
   });
+} else if ('serviceWorker' in navigator) {
+  // eslint-disable-next-line compat/compat
+  navigator.serviceWorker.ready
+    .then(registration => {
+      registration.unregister();
+      return true;
+    })
+    .catch(() => {
+      console.log('serviceWorker unregister error');
+    });
 }

@@ -4,7 +4,6 @@ import { GlobalModelState } from './global';
 import { MenuModelState } from './menu';
 import { UserModelState } from './user';
 import { AppModelState } from './app';
-import { EnvModelState } from './env';
 import { DefaultSettings as SettingModelState } from '../../config/defaultSettings';
 import { LoginState } from './login';
 import { WrappedFormUtils } from 'antd/es/form/Form';
@@ -41,7 +40,6 @@ export interface Loading {
 
 export interface ConnectState {
   app: AppModelState;
-  env: EnvModelState;
   global: GlobalModelState;
   loading: Loading;
   menu: MenuModelState;

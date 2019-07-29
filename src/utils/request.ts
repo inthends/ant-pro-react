@@ -4,23 +4,6 @@
  */
 import { extend } from 'umi-request';
 import { notification } from 'antd';
-import settings from 'config/defaultSettings';
-import { getToken, logout } from './login';
-import { EPROTONOSUPPORT } from 'constants';
-import router from 'umi/router';
-
-class ResponseError<D = any> extends Error {
-  name: string;
-  data: D;
-  response: Response;
-  constructor(res) {
-    super();
-    const { name, data, response } = res;
-    this.name = name;
-    this.data = data;
-    this.response = response;
-  }
-}
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -43,16 +26,18 @@ const codeMessage = {
 /**
  * 异常处理程序
  */
-const errorHandler = (error: ResponseError) => {
-  const { response = {} as Response } = error;
-  const errortext = codeMessage[response.status] || response.statusText;
-  const { status, url } = response;
-  notification.error({
-    message: `请求错误 ${status}: ${url}`,
-    description: errortext,
-  });
-  // 请求非200时取消后续处理
-  return false;
+const errorHandler = (error: { response: Response }): Response => {
+  const { response } = error;
+  if (response && response.status) {
+    const errorText = codeMessage[response.status] || response.statusText;
+    const { status, url } = response;
+
+    notification.error({
+      message: `请求错误 ${status}: ${url}`,
+      description: errorText,
+    });
+  }
+  return response;
 };
 
 /**
@@ -63,92 +48,21 @@ const request = extend({
   credentials: 'include', // 默认请求是否带上cookie
 });
 
-/**
- * 判断是否开启 sso 登录
- * 需要后端接口配合
- */
-if (settings.sso) {
-  request.interceptors.request.use((url, options) => {
-    const { headers = {} } = options;
-    let newHeaders = headers;
-    if (!url.includes('/login/signIn')) {
-      const accessToken = localStorage.getItem('access_token');
-      const Authorization = `bearer ${accessToken}`;
-      newHeaders = { ...headers, Authorization };
-    }
-    headers['x-requested-with'] = 'XMLHttpRequest';
-    return {
-      url,
-      options: {
-        ...options,
-        headers: newHeaders,
-      },
-    };
-  });
-
-  // @ts-ignore
-  request.interceptors.response.use(async (response) => {
-    const { status, headers } = response;
-    if (status === 403) {
-      const redirect = headers.get('redirect') || '';
-      window.location.href = redirect;
-    } else if (status === 200) {
-      const { code, msg } = await response.clone().json();
-      if (code !== 200) {
-        notification.error({
-          message: `请求错误`,
-          description: msg,
-        });
-      }
-      if (code === 401) {
-        logout();
-      }
-    } else {
-      throw new ResponseError({
-        name: status,
-        data: '',
-        response: response,
+// @ts-ignore
+request.interceptors.response.use(async response => {
+  const { status, headers } = response;
+  if (status === 403) {
+    const redirect = headers.get('redirect') || '';
+    window.location.href = redirect;
+  } else if (status === 200) {
+    const { code, msg } = await response.clone().json();
+    if (code !== 200) {
+      notification.error({
+        message: `请求错误`,
+        description: msg,
       });
     }
-    return response;
-  });
-} else {
-  request.interceptors.request.use((url, options) => {
-    const { headers, ...restOpts } = options;
-    return {
-      url,
-      options: {
-        ...restOpts,
-        headers: {
-          ...headers,
-          TOKEN: getToken(),
-        } as any,
-      },
-    };
-  });
-
-  // @ts-ignore
-  request.interceptors.response.use(async response => {
-    const { code } = await response.clone().json();
-    if (code === 401) {
-      logout();
-    }
-    return response;
-  });
-}
-
+  }
+  return response;
+});
 export default request;
-
-// const refreshToken = () => {
-//   return request.post(process.env.basePath + '/api/inter/queryInterList', {
-//     data: {
-//       clientId: 'apiDoc',
-//       clientSecret: 'apiDoc',
-//       refreshToken: localStorage.getItem('refresh_token'),
-//     },
-//   }).then(({ tokenInfo: { access_token, refresh_token } }) => {
-//     localStorage.setItem('access_token', access_token);
-//     localStorage.setItem('refresh_token', refresh_token);
-//     return Promise.resolve();
-//   });
-// };
