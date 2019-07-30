@@ -1,80 +1,79 @@
 import { TreeEntity } from '@/model/models';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { getResult } from '@/utils/networkUtils';
-import {  Button, Icon, Input, Layout } from 'antd';
+import { Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
-import React, { useEffect, useState } from 'react'; 
-import { GetTreeListExpand, GetPageListJson } from './Main.service'; 
+import React, { useEffect, useState } from 'react';
+import { GetQuickPStructsTreeJsonAll, GetPageListJson } from './Main.service';
 import ListTable from './ListTable';
 import Modify from './Modify';
 
-const {  Content } = Layout;
-const { Search } = Input; 
+const { Content } = Layout;
+const { Search } = Input;
 
 function Main() {
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
-  const [treeData, setTreeData] = useState<TreeEntity[]>([]); 
+  const [treeData, setTreeData] = useState<TreeEntity[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
- 
+
   const [data, setData] = useState<any[]>([]);
   const [id, setId] = useState<string>();
 
   const [FeeKind, SetFeeKind] = useState<string>('');
   const [FeeType, SetFeeType] = useState<string>('');
-
   const [search, setSearch] = useState<string>('');
 
 
-  const selectTree = (item, search) => {    
-    
+  const selectTree = (item, search) => {
+
     var feeKind = "", feeType = "";
     switch (item.value) {
       case "All":
-          feeKind = "";
-          feeType = ""; 
-          break;
+        feeKind = "";
+        feeType = "";
+        break;
       case "FeeType":
-          feeType = item.text;
-          feeKind = item.AttributeValue;
-          break;
-      case "PaymentItem": 
-          feeKind = item.text;
-          feeType = "";
-          break;
-      case "ReceivablesItem": 
-          feeKind = item.text;
-          feeType = "";
-          break;
+        feeType = item.text;
+        feeKind = item.AttributeValue;
+        break;
+      case "PaymentItem":
+        feeKind = item.text;
+        feeType = "";
+        break;
+      case "ReceivablesItem":
+        feeKind = item.text;
+        feeType = "";
+        break;
       default:
-          feeKind = item.text;
-          feeType = "";
-          break;
-  }
- 
-    SetFeeKind(feeKind);
-    SetFeeType(feeType); 
-    initLoadData(feeKind, feeType,search); 
+        feeKind = item.text;
+        feeType = "";
+        break;
+    }
 
-};
+    SetFeeKind(feeKind);
+    SetFeeType(feeType);
+    initLoadData(feeKind, feeType, search);
+
+  };
 
   useEffect(() => {
-    getTreeData().then(res => { 
+    getTreeData().then(res => {
       SetFeeKind('');
       SetFeeType('');
-      initLoadData('','','');
-    }); 
+      initLoadData('', '', '');
+    });
   }, []);
   // 获取属性数据
   const getTreeData = () => {
-    return GetTreeListExpand()
+    return GetQuickPStructsTreeJsonAll()
       .then(getResult)
       .then((res: TreeEntity[]) => {
         setTreeData(res || []);
         return res || [];
       });
   };
- 
+
   const closeDrawer = () => {
     setModifyVisible(false);
   };
@@ -93,7 +92,7 @@ function Main() {
       pageIndex,
       pageSize,
       total,
-      queryJson: { FeeKind: FeeKind,FeeType:FeeType, keyword: search },
+      queryJson: { FeeKind: FeeKind, FeeType: FeeType, keyword: search },
     };
 
     if (sorter) {
@@ -128,7 +127,7 @@ function Main() {
   };
   const initLoadData = (FeeKind, FeeType, search) => {
     setSearch(search);
-    const queryJson = { FeeKind: FeeKind,FeeType:FeeType, keyword: search };
+    const queryJson = { FeeKind: FeeKind, FeeType: FeeType, keyword: search };
     const sidx = 'BillingDate';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
@@ -139,45 +138,45 @@ function Main() {
 
   return (
     <Layout style={{ height: '100%' }}>
-     
+
       <Content style={{ padding: '0 20px' }}>
 
- 
 
-<div style={{ marginBottom: '20px', padding: '3px 2px' }}>
-  <Search
-    className="search-input"
-    placeholder="搜索合同名称或编号" 
-    style={{ width: 200 }}
-    onSearch={value => loadData(value)}
-  />
-  <Button type="primary" style={{ float: 'right' }}  
-  onClick={() => showDrawer()}
-  >
-    <Icon type="plus" />
-    合同
+
+        <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
+          <Search
+            className="search-input"
+            placeholder="搜索合同名称或编号"
+            style={{ width: 200 }}
+            onSearch={value => loadData(value)}
+          />
+          <Button type="primary" style={{ float: 'right' }}
+            onClick={() => showDrawer()}
+          >
+            <Icon type="plus" />
+            合同
   </Button>
-</div>
+        </div>
 
-    <ListTable
-      onchange={(paginationConfig, filters, sorter) =>
-        loadData(search, paginationConfig, sorter)
-      }
-      loading={loading}
-      pagination={pagination}
-      data={data}
-      modify={showDrawer}
-      reload={() => initLoadData(FeeKind, FeeType,search)}
-    />
+        <ListTable
+          onchange={(paginationConfig, filters, sorter) =>
+            loadData(search, paginationConfig, sorter)
+          }
+          loading={loading}
+          pagination={pagination}
+          data={data}
+          modify={showDrawer}
+          reload={() => initLoadData(FeeKind, FeeType, search)}
+        />
 
- 
-  </Content> 
+
+      </Content>
 
 
       <Modify
         modifyVisible={modifyVisible}
         closeDrawer={closeDrawer}
-        treeData={treeData} 
+        treeData={treeData}
         id={id}
         reload={() => initLoadData(FeeKind, FeeType, search)}
       />
