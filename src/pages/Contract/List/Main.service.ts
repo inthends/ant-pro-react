@@ -2,8 +2,8 @@ import { ResponseObject, TreeEntity } from '@/model/models';
 import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
 import { FeeItemData } from '@/model/feeItemData';
-export function GetTreeListExpand(): Promise<ResponseObject<TreeEntity[]>> {
-  return request.get(process.env.basePath + `/FeeItems/GetTreeListExpand`, {});
+export function GetQuickPStructsTreeJsonAll(): Promise<ResponseObject<any[]>> {
+  return request.get(process.env.basePath + `/Common/GetQuickPStructsTreeJsonAll`, {});
 } 
 export function GetPageListJson(data): Promise<any> {
   return request.post(process.env.basePath + `/Contract/GetPageListJson`, {data:objToFormdata(data)}).then(getResult as any);

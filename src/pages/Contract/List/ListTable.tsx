@@ -3,7 +3,8 @@ import { Button, message, Table, Modal } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import { RemoveForm } from './Main.service';
-import * as moment from 'moment';
+//import * as moment from 'moment';
+import moment from 'moment'; 
 
 interface ListTableProps {
   onchange(page: any, filter: any, sort: any): any;
@@ -66,7 +67,7 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'billingDate',
       key: 'billingDate', 
       width: 100,
-      render: val => <span> {moment(val).format('YYYY-MM-DD')} </span>
+      render: val =>  moment(val).format('YYYY-MM-DD')
     },
     {
       title: '合同状态',
@@ -79,7 +80,7 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'contractEndDate',
       key: 'contractEndDate', 
       width: 100,
-      render: val => <span> {moment(val).format('YYYY-MM-DD')} </span>
+      render: val =>  moment(val).format('YYYY-MM-DD')
     },
 
     {
@@ -94,7 +95,7 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'contractStartDate',
       key: 'contractStartDate', 
       width: 100,
-      render: val => <span> {moment(val).format('YYYY-MM-DD')} </span>
+      render: val =>  moment(val).format('YYYY-MM-DD')
     },
 
 
