@@ -85,18 +85,6 @@ const getBreadcrumbNameMap = (menuData: MenuDataItem[]) => {
   return routerMap;
 };
 
-/**
- * 获取面包屑映射
- * @param MenuDataItem[] menuData 菜单配置
- */
-const getSecondMenuMap = (menuData: MenuDataItem[]) => {
-  const map = new Map<string, MenuDataItem[]>();
-  menuData.forEach(item => {
-    map.set(item.path, <MenuDataItem[]>item.children);
-  });
-  return map;
-};
-
 const memoizeOneGetBreadcrumbNameMap = memoizeOne(getBreadcrumbNameMap, isEqual);
 
 export interface MenuModelState {
@@ -104,7 +92,6 @@ export interface MenuModelState {
   routerData: IRoute[];
   breadcrumbNameMap: object;
   secondMenuMap: Map<string, MenuDataItem[]>;
-  secondMenu?: MenuDataItem[];
 }
 
 export interface MenuModelType {
@@ -112,11 +99,9 @@ export interface MenuModelType {
   state: MenuModelState;
   effects: {
     getMenuData: Effect;
-    setSecondMenu: Effect;
   };
   reducers: {
     save: Reducer<MenuModelState>;
-    saveSecondMenu: Reducer<MenuModelState>;
   };
 }
 
@@ -128,35 +113,19 @@ const MenuModel: MenuModelType = {
     routerData: [],
     breadcrumbNameMap: {},
     secondMenuMap: new Map<string, MenuDataItem[]>(),
-    secondMenu: [],
   },
 
   effects: {
     *getMenuData({ payload }, { put }) {
       const { routes, authority } = payload;
       const originalMenuData = memoizeOneFormatter(routes, authority);
-      // 设置二级菜单Map
-      const secondMenuMap = getSecondMenuMap(originalMenuData);
       const menuData = filterMenuData(originalMenuData);
       const breadcrumbNameMap = memoizeOneGetBreadcrumbNameMap(originalMenuData);
       yield put({
         type: 'save',
         payload: { menuData, breadcrumbNameMap, routerData: routes, secondMenuMap },
       });
-      if (originalMenuData.length > 0) {
-        yield put({
-          type: 'saveSecondMenu',
-          payload: { path: originalMenuData[0].path },
-        });
-      }
-    },
-
-    *setSecondMenu({ payload }, { put }) {
-      const { path } = payload;
-      yield put({
-        type: 'saveSecondMenu',
-        payload: { path },
-      });
+      
     },
   },
 
@@ -165,16 +134,6 @@ const MenuModel: MenuModelType = {
       return {
         ...state,
         ...action.payload,
-      };
-    },
-    saveSecondMenu(state, action) {
-      let secondMenu: MenuDataItem[] = [];
-      if (state.secondMenuMap.has(action.payload.path)) {
-        secondMenu = state.secondMenuMap.get(action.payload.path) || [];
-      }
-      return {
-        ...state,
-        secondMenu,
       };
     },
   },
