@@ -1,13 +1,14 @@
+import { WrappedFormUtils } from 'antd/es/form/Form';
 import { EffectsCommandMap } from 'dva';
+import { History } from 'history';
 import { AnyAction } from 'redux';
+import { DefaultSettings as SettingModelState } from '../../config/defaultSettings';
+import { AppModelState } from './app';
+import { AuthModelState } from './auth';
 import { GlobalModelState } from './global';
+import { LoginState } from './login';
 import { MenuModelState } from './menu';
 import { UserModelState } from './user';
-import { AppModelState } from './app';
-import { DefaultSettings as SettingModelState } from '../../config/defaultSettings';
-import { LoginState } from './login';
-import { WrappedFormUtils } from 'antd/es/form/Form';
-import { History } from 'history';
 
 export { GlobalModelState, MenuModelState, SettingModelState, UserModelState };
 
@@ -40,6 +41,7 @@ export interface Loading {
 
 export interface ConnectState {
   app: AppModelState;
+  auth: AuthModelState;
   global: GlobalModelState;
   loading: Loading;
   menu: MenuModelState;
