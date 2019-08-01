@@ -18,7 +18,7 @@ import React, { useEffect, useState } from 'react';
 import { GetFormInfoJson, GetProjectType, GetTreeAreaJson, SaveForm } from './House.service';
 import styles from './style.less';
 
-import * as moment from 'moment';
+import moment from 'moment';
 
 const { Option } = Select;
 const { TextArea } = Input;

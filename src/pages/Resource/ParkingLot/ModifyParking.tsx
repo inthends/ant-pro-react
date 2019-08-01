@@ -15,7 +15,7 @@ import {
   TreeSelect,
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import * as moment from 'moment';
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { getEstateTreeData, SaveParkingForm } from './ParkingLot.service';
 import styles from './style.less';
