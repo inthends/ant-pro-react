@@ -4,7 +4,7 @@ import { Reducer } from 'redux';
 
 export interface CurrentUser {
   avatar?: string;
-  username?: string;
+  name?: string;
   title?: string;
   group?: string;
   signature?: string;
