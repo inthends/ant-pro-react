@@ -141,7 +141,7 @@ function PublicArea() {
           />
           <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer()}>
             <Icon type="plus" />
-            公区
+            区域
           </Button>
         </div>
         <ListTable

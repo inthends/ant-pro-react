@@ -8,6 +8,6 @@ export interface Proxy {
 
 export default {
   '/api': {
-    target: 'http://bs.jslesoft.com:8028', 
+    target: 'http://bs.jslesoft.com:8028',  
   },
 } as Proxy;

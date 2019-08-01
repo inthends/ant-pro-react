@@ -1,10 +1,9 @@
-import { TreeEntity } from '@/model/models';
+
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { getResult } from '@/utils/networkUtils';
 import { Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { GetQuickPStructsTreeJsonAll, GetPageListJson } from './Main.service';
+import { GetPageListJson } from './Main.service';
 import ListTable from './ListTable';
 import Modify from './Modify';
 
@@ -13,66 +12,11 @@ const { Search } = Input;
 
 function Main() {
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
-  const [treeData, setTreeData] = useState<TreeEntity[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
-
   const [data, setData] = useState<any[]>([]);
   const [id, setId] = useState<string>();
-
-  const [FeeKind, SetFeeKind] = useState<string>('');
-  const [FeeType, SetFeeType] = useState<string>('');
   const [search, setSearch] = useState<string>('');
-
-
-  const selectTree = (item, search) => {
-
-    var feeKind = "", feeType = "";
-    switch (item.value) {
-      case "All":
-        feeKind = "";
-        feeType = "";
-        break;
-      case "FeeType":
-        feeType = item.text;
-        feeKind = item.AttributeValue;
-        break;
-      case "PaymentItem":
-        feeKind = item.text;
-        feeType = "";
-        break;
-      case "ReceivablesItem":
-        feeKind = item.text;
-        feeType = "";
-        break;
-      default:
-        feeKind = item.text;
-        feeType = "";
-        break;
-    }
-
-    SetFeeKind(feeKind);
-    SetFeeType(feeType);
-    initLoadData(feeKind, feeType, search);
-
-  };
-
-  useEffect(() => {
-    getTreeData().then(res => {
-      SetFeeKind('');
-      SetFeeType('');
-      initLoadData('', '', '');
-    });
-  }, []);
-  // 获取属性数据
-  const getTreeData = () => {
-    return GetQuickPStructsTreeJsonAll()
-      .then(getResult)
-      .then((res: TreeEntity[]) => {
-        setTreeData(res || []);
-        return res || [];
-      });
-  };
 
   const closeDrawer = () => {
     setModifyVisible(false);
@@ -92,7 +36,7 @@ function Main() {
       pageIndex,
       pageSize,
       total,
-      queryJson: { FeeKind: FeeKind, FeeType: FeeType, keyword: search },
+      queryJson: { keyword: search },
     };
 
     if (sorter) {
@@ -125,9 +69,9 @@ function Main() {
       return res;
     });
   };
-  const initLoadData = (FeeKind, FeeType, search) => {
+  const initLoadData = (search) => {
     setSearch(search);
-    const queryJson = { FeeKind: FeeKind, FeeType: FeeType, keyword: search };
+    const queryJson = { keyword: search };
     const sidx = 'BillingDate';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
@@ -136,13 +80,13 @@ function Main() {
     });
   };
 
+  useEffect(() => {
+    initLoadData('');
+  }, []);
+
   return (
     <Layout style={{ height: '100%' }}>
-
       <Content style={{ padding: '0 20px' }}>
-
-
-
         <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
           <Search
             className="search-input"
@@ -166,19 +110,15 @@ function Main() {
           pagination={pagination}
           data={data}
           modify={showDrawer}
-          reload={() => initLoadData(FeeKind, FeeType, search)}
-        />
-
-
+          reload={() => initLoadData(search)} />
       </Content>
 
 
       <Modify
         modifyVisible={modifyVisible}
         closeDrawer={closeDrawer}
-        treeData={treeData}
         id={id}
-        reload={() => initLoadData(FeeKind, FeeType, search)}
+        reload={() => initLoadData(search)}
       />
     </Layout>
   );

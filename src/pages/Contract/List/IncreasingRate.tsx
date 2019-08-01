@@ -40,7 +40,7 @@ function IncreasingRate(props: IncreasingRateProps) {
       <Row gutter={24}>
         <Col lg={4}>
           <Form.Item label="递增时间点" required >
-            {getFieldDecorator(`increDate${k}`, {
+            {getFieldDecorator(`increDate[${k}]`, {
               rules: [{ required: true, message: '请选择递增时间点' }],
             })(<DatePicker />)}
           </Form.Item>
@@ -48,14 +48,14 @@ function IncreasingRate(props: IncreasingRateProps) {
 
         <Col lg={4}>
           <Form.Item label="单价递增" required>
-            {getFieldDecorator(`increPrice${k}`, {
+            {getFieldDecorator(`increPrice[${k}]`, {
               rules: [{ required: true, message: '请输入递增率' }],
             })(<Input placeholder="请输入递增率" />)}
           </Form.Item>
         </Col>
         <Col lg={4}>
           <Form.Item label="&nbsp;">
-            {getFieldDecorator(`priceUnit${k}`, {
+            {getFieldDecorator(`increPriceUnit[${k}]`, {
               initialValue: '%'
             })(
               <Select>
@@ -63,18 +63,17 @@ function IncreasingRate(props: IncreasingRateProps) {
                 <Option value="2" >元</Option>
               </Select>)}
           </Form.Item>
-        </Col>
-
+        </Col> 
         <Col lg={4}>
           <Form.Item label="保证金递增" required>
-            {getFieldDecorator(`increDeposit${k}`, {
+            {getFieldDecorator(`increDeposit[${k}]`, {
               rules: [{ required: true, message: '请输入递增率' }],
             })(<Input placeholder="请输入递增率" />)}
           </Form.Item>
         </Col>
         <Col lg={4}>
           <Form.Item label="&nbsp;">
-            {getFieldDecorator(`depositUnit${k}`, {
+            {getFieldDecorator(`increDepositUnit[${k}]`, {
               initialValue: '%'
             })(
               <Select>
@@ -84,13 +83,11 @@ function IncreasingRate(props: IncreasingRateProps) {
           </Form.Item>
         </Col>
       </Row>
-    </Card>
-
+    </Card> 
   ));
   return (
     <div style={{ marginBottom: '10px' }}>
-      {formItems}
-     
+      {formItems} 
             <Button type="dashed"  onClick={add}>
               <Icon type="plus" />添加递增率
             </Button>

@@ -40,7 +40,7 @@ function Rebate(props: RebateProps) {
       <Row gutter={24}>
         <Col lg={4}>
           <Form.Item label="优惠类型" >
-            {getFieldDecorator(`type${k}`, {
+            {getFieldDecorator(`rebateType[${k}]`, {
               initialValue: '免租期'
             })(<Select>
               <Option value="1">免租期</Option>
@@ -54,7 +54,7 @@ function Rebate(props: RebateProps) {
 
         <Col lg={4}>
           <Form.Item label="开始时间" required>
-            {getFieldDecorator(`startDate${k}`, {
+            {getFieldDecorator(`rebateStartDate[${k}]`, {
               rules: [{ required: true, message: '请选择开始时间' }],
             })(<DatePicker />)}
           </Form.Item>
@@ -62,7 +62,7 @@ function Rebate(props: RebateProps) {
 
         <Col lg={4}>
           <Form.Item label="结束时间" required>
-            {getFieldDecorator(`endDate${k}`, {
+            {getFieldDecorator(`rebateEndDate[${k}]`, {
               rules: [{ required: true, message: '请选择结束时间' }],
             })(<DatePicker />)}
           </Form.Item>
@@ -70,7 +70,7 @@ function Rebate(props: RebateProps) {
 
         <Col lg={4}>
           <Form.Item label="开始期数" required>
-            {getFieldDecorator(`startPeriod${k}`, {
+            {getFieldDecorator(`startPeriod[${k}]`, {
               rules: [{ required: true, message: '请输入开始期数' }],
             })(<Input placeholder="请输入开始期数" />)}
           </Form.Item>
@@ -78,7 +78,7 @@ function Rebate(props: RebateProps) {
 
         <Col lg={4}>
           <Form.Item label="期长" required>
-            {getFieldDecorator(`periodLength${k}`, {
+            {getFieldDecorator(`periodLength[${k}]`, {
               rules: [{ required: true, message: '请输入期长' }],
             })(<Input placeholder="请输入期长" />)}
           </Form.Item>
@@ -86,7 +86,7 @@ function Rebate(props: RebateProps) {
 
         <Col lg={4}>
           <Form.Item label="折扣" required>
-            {getFieldDecorator(`discount${k}`, {
+            {getFieldDecorator(`discount[${k}]`, {
               rules: [{ required: true, message: '请输入折扣' }],
             })(<Input placeholder="请输入折扣" />)}
           </Form.Item>
@@ -94,7 +94,7 @@ function Rebate(props: RebateProps) {
 
         <Col lg={4}>
           <Form.Item label="备注" required>
-            {getFieldDecorator(`remark${k}`, {
+            {getFieldDecorator(`remark[${k}]`, {
               rules: [{ required: true, message: '请输入备注' }],
             })(<Input placeholder="请输入备注" />)}
           </Form.Item>
@@ -106,11 +106,9 @@ function Rebate(props: RebateProps) {
   return (
     <div style={{ marginBottom: '10px' }}>
       {formItems}
-
       <Button type="dashed"   onClick={add}>
         <Icon type="plus" />添加优惠
-            </Button>
-
+            </Button> 
     </div>
   );
 }

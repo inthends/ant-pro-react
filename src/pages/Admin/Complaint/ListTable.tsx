@@ -2,7 +2,7 @@ import Page from '@/components/Common/Page';
 import { Button, message, Modal, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
-import * as moment from 'moment';
+import moment from 'moment';
 import { RemoveForm } from './Main.service';
 
 interface ListTableProps {

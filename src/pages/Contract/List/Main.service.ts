@@ -31,3 +31,17 @@ export function GetAllFeeItems(): Promise<TreeEntity[]> {
 }
 
 
+// 计算费用明细
+export function GetChargeDetail(data): Promise<any> { 
+  return request
+    .post(process.env.basePath + `/Contract/GetChargeDetail`, { data:objToFormdata(data) })
+    .then(getResult as any);
+}
+
+
+// 保存合同
+export function SaveForm(data): Promise<any> { 
+  return request
+    .post(process.env.basePath + `/Contract/SaveForm`, { data:objToFormdata(data) })
+    .then(getResult as any);
+}
