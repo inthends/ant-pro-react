@@ -38,22 +38,23 @@ export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
 /**
  * use Authorized check all menu item
  */
-const menuDataRender = (menuList: MenuDataItem[], auth: any[]): MenuDataItem[] =>{
-  if(auth === undefined || auth && auth.length ===0 ) {
+const menuDataRender = (menuList: MenuDataItem[], auth: any[]): MenuDataItem[] => {
+  if (auth === undefined || (auth && auth.length === 0)) {
     return [];
   }
-  const authlist = auth.map(item => item.urlAddress)
-
-  return menuList.filter(item => {
-    return authlist.includes(item.path);
-  }).map(item => {
-    const localItem = {
-      ...item,
-      children: item.children ? menuDataRender(item.children) : [],
-    };
-    return Authorized.check(item.authority, localItem, null) as MenuDataItem;
-  });
-}
+  const authlist = auth.map(item => item.urlAddress);
+  return menuList
+    .filter(item => {
+      return authlist.includes(item.path);
+    })
+    .map(item => {
+      const localItem = {
+        ...item,
+        children: item.children ? menuDataRender(item.children, auth) : [],
+      };
+      return Authorized.check(item.authority, localItem, null) as MenuDataItem;
+    });
+};
 const footerRender: BasicLayoutProps['footerRender'] = (_, defaultDom) => {
   // if (!isAntDesignPro()) {
   //   return defaultDom;
@@ -80,7 +81,12 @@ const footerRender: BasicLayoutProps['footerRender'] = (_, defaultDom) => {
 };
 
 const BasicLayout: React.FC<BasicLayoutProps> = props => {
-  const { dispatch, children, settings, auth:{authlist}} = props;
+  const {
+    dispatch,
+    children,
+    settings,
+    auth: { authlist },
+  } = props;
   // const [settings, setSettings] = useState<Partial<Settings>>(defaultSettings as Partial<Settings>);
   /**
    * constructor
@@ -94,7 +100,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
       dispatch({
         type: 'settings/getSetting',
       });
-      
+
       dispatch({
         type: 'auth/fetch',
       });
@@ -147,7 +153,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
         //   );
         // }}
         footerRender={footerRender}
-        menuDataRender={(menuList) => menuDataRender(menuList, authlist)}
+        menuDataRender={menuList => menuDataRender(menuList, authlist)}
         formatMessage={formatMessage}
         rightContentRender={rightProps => <RightContent {...rightProps} />}
         {...props}
@@ -164,5 +170,5 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
 export default connect(({ global, settings, auth }: ConnectState) => ({
   collapsed: global.collapsed,
   settings,
-  auth
+  auth,
 }))(BasicLayout);
