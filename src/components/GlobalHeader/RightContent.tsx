@@ -7,6 +7,7 @@ import Avatar from './AvatarDropdown';
 import styles from './index.less';
 import { Menu, Icon } from 'antd';
 import { FormattedMessage } from 'umi-plugin-locale';
+import { router } from 'umi';
 
 export type SiderTheme = 'light' | 'dark';
 export interface GlobalHeaderRightProps extends ConnectProps {
@@ -29,7 +30,7 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
         <FormattedMessage id="menu.account.settings" defaultMessage="account settings" />
       </Menu.Item>
       <Menu.Divider /> */}
-      <Menu.Item key="logout">
+      <Menu.Item key="logout"  onClick={() => {router.replace('/')}}>
         <Icon type="logout" />
         <FormattedMessage id="menu.account.logout" defaultMessage="logout" />
       </Menu.Item>

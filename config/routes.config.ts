@@ -10,6 +10,12 @@ export default [
       },
     ],
   },
+  {
+    path: '/exception/403',
+    component: './403',
+  },
+
+  
   // {
   //   path: '/register',
   //   component: '../layouts/UserLayout',

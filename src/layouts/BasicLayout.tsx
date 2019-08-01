@@ -4,23 +4,18 @@
  * https://github.com/ant-design/ant-design-pro-layout
  */
 
-import ProLayout, {
-  MenuDataItem,
-  BasicLayoutProps as ProLayoutProps,
-  Settings,
-} from '@ant-design/pro-layout';
-import React, { useEffect, useState } from 'react';
-import Link from 'umi/link';
-import { connect } from 'dva';
-import { formatMessage } from 'umi-plugin-react/locale';
-
-import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
-import { ConnectState, Dispatch } from '@/models/connect';
-import { isAntDesignPro } from '@/utils/utils';
-import logo from '../assets/logo.svg';
 import SettingDrawer from '@/components/SettingDrawer';
-import defaultSettings from '../../config/defaultSettings';
+import { ConnectState, Dispatch } from '@/models/connect';
+import  AuthPage from '@/pages/Authorized';
+import Authorized from '@/utils/Authorized';
+import ProLayout, { BasicLayoutProps as ProLayoutProps, MenuDataItem, Settings } from '@ant-design/pro-layout';
+import { connect } from 'dva';
+import React, { useEffect } from 'react';
+import { formatMessage } from 'umi-plugin-react/locale';
+import Link from 'umi/link';
+import logo from '../assets/logo.svg';
+
 
 export interface BasicLayoutProps extends ProLayoutProps {
   breadcrumbNameMap: {
@@ -28,6 +23,7 @@ export interface BasicLayoutProps extends ProLayoutProps {
   };
   settings: Settings;
   dispatch: Dispatch;
+  auth: any;
 }
 export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
   breadcrumbNameMap: {
@@ -42,10 +38,9 @@ const menuDataRender = (menuList: MenuDataItem[], auth: any[]): MenuDataItem[] =
   if (auth === undefined || (auth && auth.length === 0)) {
     return [];
   }
-  const authlist = auth.map(item => item.urlAddress);
   return menuList
     .filter(item => {
-      return authlist.includes(item.path);
+      return auth.includes(item.path);
     })
     .map(item => {
       const localItem = {
@@ -87,6 +82,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
     settings,
     auth: { authlist },
   } = props;
+  const auths =  (authlist && authlist.map(item => item.urlAddress)) || [];
   // const [settings, setSettings] = useState<Partial<Settings>>(defaultSettings as Partial<Settings>);
   /**
    * constructor
@@ -100,7 +96,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
       dispatch({
         type: 'settings/getSetting',
       });
-
       dispatch({
         type: 'auth/fetch',
       });
@@ -153,13 +148,15 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
         //   );
         // }}
         footerRender={footerRender}
-        menuDataRender={menuList => menuDataRender(menuList, authlist)}
+        menuDataRender={menuList => menuDataRender(menuList, auths)}
         formatMessage={formatMessage}
         rightContentRender={rightProps => <RightContent {...rightProps} />}
         {...props}
         {...settings}
       >
-        {children}
+        <AuthPage>
+          {children}
+        </AuthPage>
       </ProLayout>
 
       <SettingDrawer settings={settings} onSettingChange={config => setSettings(config)} />

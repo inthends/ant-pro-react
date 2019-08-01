@@ -42,6 +42,7 @@ export interface Loading {
 export interface ConnectState {
   app: AppModelState;
   auth: AuthModelState;
+  settings: SettingModelState;
   global: GlobalModelState;
   loading: Loading;
   menu: MenuModelState;

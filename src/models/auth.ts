@@ -14,13 +14,13 @@ export interface AuthModelType {
 }
 
 export interface AuthModelState {
-  authlist: any[];
+  authlist?: any[];
 }
 
 const AuthModel: AuthModelType = {
   namespace: 'auth',
   state: {
-    authlist: [],
+    authlist: undefined,
   },
 
   effects: {
