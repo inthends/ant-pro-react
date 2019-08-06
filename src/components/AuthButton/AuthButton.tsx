@@ -12,7 +12,6 @@ interface AuthButtonProps extends ButtonProps {
 
 const AuthButton = (props: AuthButtonProps) => {
   const { authbtnlist = [], pathname = '', encode, disabled = false } = props;
-  console.log(authbtnlist);
   const authDisabled =
   !authbtnlist.some(item => (item.actionAddress = pathname && item.enCode === encode)) || disabled;
   return <Button {...props} disabled={authDisabled}></Button>;
