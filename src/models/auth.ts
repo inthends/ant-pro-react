@@ -1,5 +1,5 @@
 import { Reducer } from 'redux';
-import { query } from '@/services/auth';
+import { query, queryBtn } from '@/services/auth';
 import { Effect } from 'dva';
 
 export interface AuthModelType {
@@ -7,7 +7,7 @@ export interface AuthModelType {
   state: AuthModelState;
   effects: {
     fetch: Effect;
-  };
+    };
   reducers: {
     save: Reducer<any>;
   };
@@ -15,20 +15,27 @@ export interface AuthModelType {
 
 export interface AuthModelState {
   authlist?: any[];
+  authbtnlist?: any[];
 }
 
 const AuthModel: AuthModelType = {
   namespace: 'auth',
   state: {
     authlist: undefined,
+    authbtnlist: undefined,
   },
 
   effects: {
     *fetch(_, { call, put }) {
-      const response = yield call(query);
+      let response = yield call(query);
       yield put({
         type: 'save',
-        payload: response,
+        payload: { authlist: response },
+      });
+      response = yield call(queryBtn);
+      yield put({
+        type: 'save',
+        payload: { authbtnlist: response },
       });
     },
   },
@@ -37,7 +44,7 @@ const AuthModel: AuthModelType = {
     save(state, action) {
       return {
         ...state,
-        authlist: action.payload,
+        ...action.payload,
       };
     },
   },

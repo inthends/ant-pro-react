@@ -9,6 +9,7 @@ import { GetStatistics, GetStatisticsTotal, GetTreeJsonById } from './House.serv
 import LeftTree from '../LeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
+import AuthButton from '@/components/AuthButton/AuthButton';
 
 const { Content } = Layout;
 const { Search } = Input;
@@ -141,7 +142,7 @@ function House() {
             onSearch={value => loadData(value, organizeId)}
             style={{ width: 200 }}
           />
-          <Button
+          <AuthButton
             type="primary"
             disabled={disabledCreate(treeData, organizeId)}
             style={{ float: 'right' }}
@@ -149,7 +150,7 @@ function House() {
           >
             <Icon type="plus" />
             项目
-          </Button>
+          </AuthButton>
         </div>
         <General totalData={totalData} />
         <ListTable
