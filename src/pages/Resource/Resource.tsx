@@ -1,6 +1,6 @@
-import PageLayout from '@/layouts/PageLayout';
+// import PageLayout from '@/layouts/PageLayout';
 import React from 'react';
-import { SiderContextProvider } from './SiderContext';
+import { SiderContextProvider } from '../SiderContext';
 
 const Resource = props => {
   return (

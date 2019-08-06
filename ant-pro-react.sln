@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.705
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "ant-pro-react", ".", "{8FBA62AA-31AF-4647-8EB3-2CAC48EF0FAE}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_54876"
+		Debug.AspNetCompiler.PhysicalPath = "F:\ant-pro-react\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_54876\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_54876"
+		Release.AspNetCompiler.PhysicalPath = "F:\ant-pro-react\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_54876\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "54876"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8FBA62AA-31AF-4647-8EB3-2CAC48EF0FAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FBA62AA-31AF-4647-8EB3-2CAC48EF0FAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {901A0A25-77B2-47A9-AFAC-F8211E0E4328}
+	EndGlobalSection
+EndGlobal

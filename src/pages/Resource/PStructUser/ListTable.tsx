@@ -55,6 +55,13 @@ function ListTable(props: ListTableProps) {
       // sorter: true,
     },
     {
+      title: '联系电话',
+      dataIndex: 'telphonenum',
+      key: 'telphonenum',
+      width: 100,
+      // sorter: true,
+    },
+    {
       title: '简称',
       dataIndex: 'shortname',
       key: 'shortname',
@@ -77,13 +84,7 @@ function ListTable(props: ListTableProps) {
         }
       },
     },
-    {
-      title: '联系电话',
-      dataIndex: 'telphonenum',
-      key: 'telphonenum',
-      width: 200,
-      // sorter: true,
-    },
+   
     {
       title: '客户证件类型',
       dataIndex: 'certificatetype',
@@ -116,7 +117,7 @@ function ListTable(props: ListTableProps) {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
-      width: 200,
+      width: 155,
       fixed: 'right',
       render: (text, record) => {
         return [

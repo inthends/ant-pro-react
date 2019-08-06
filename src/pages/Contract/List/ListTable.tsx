@@ -2,22 +2,21 @@ import Page from '@/components/Common/Page';
 import { Button, message, Table, Modal } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
-import { RemoveForm } from './Main.service';
-//import * as moment from 'moment';
-import moment from 'moment'; 
+import { RemoveForm } from './Main.service'; 
+import moment from 'moment';
 
 interface ListTableProps {
   onchange(page: any, filter: any, sort: any): any;
   loading: boolean;
-  pagination: PaginationConfig;
+  pagination:  PaginationConfig;
   data: any[];
-  modify(id: string): void;
+  detail(id: string,chargeID:string ): void;
   reload(): void;
 }
 
 function ListTable(props: ListTableProps) {
-  const { onchange, loading, pagination, data, modify, reload } = props;
-  const changePage = (pagination: PaginationConfig, filters, sorter) => {
+  const { onchange, loading, pagination, data, detail, reload } = props;
+  const changePage = (pagination:  PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
   };
   const doDelete = record => {
@@ -32,20 +31,23 @@ function ListTable(props: ListTableProps) {
       },
     });
   };
-  const columns = [
-
+  const columns = [ 
     {
       title: '房号',
       dataIndex: 'no',
       key: 'no',
-      width: 180,  
+      width: 200,  
       render: (text, row, index) => {  
         var house=""; 
-        for (var i = 0; i < row.houseList.length; i++) {
-          house = house + row.houseList[i].structure + "，";
+          if(row.houseList)
+          {
+          for (var i = 0; i < row.houseList.length; i++) {
+            house = house + row.houseList[i].allName + "，";
+          }
+          return house.slice(0, house.length - 1); 
         }
-        return house.slice(0, house.length - 1); 
-      }
+        return "";
+      } 
     },
  
     {
@@ -59,7 +61,7 @@ function ListTable(props: ListTableProps) {
       title: '租客',
       dataIndex: 'customer',
       key: 'customer', 
-      width: 150,
+      width: 120,
     },
 
     {
@@ -121,16 +123,14 @@ function ListTable(props: ListTableProps) {
     },
 
     {
-      title: '是否续租',
-      dataIndex: 'leaseSize',
-      key: 'leaseSize', 
+      title: '是否续租', 
       width: 100,
     },
 
     {
       title: '签订人',
-      dataIndex: 'leaseSize',
-      key: 'leaseSize', 
+      dataIndex: 'signer',
+      key: 'signer', 
       width: 100,
     },
 
@@ -144,15 +144,15 @@ function ListTable(props: ListTableProps) {
 
     {
       title: '法人',
-      dataIndex: 'follower',
-      key: 'follower',
+      dataIndex: 'legalPerson',
+      key: 'legalPerson',
       width: 100,
     },
 
     {
       title: '行业',
-      dataIndex: 'follower',
-      key: 'follower',
+      dataIndex: 'industry',
+      key: 'industry',
       width: 120,
     },
  
@@ -166,11 +166,11 @@ function ListTable(props: ListTableProps) {
         return [
           <Button
             type="primary"
-            key="modify"
+            key="detail"
             style={{ marginRight: '10px' }}
-            onClick={() => modify(record.id)}
+            onClick={() => detail(record.id,record.chargeID)}
           >
-            修改
+            查看
           </Button>,
           <Button type="danger" key="delete" onClick={() => doDelete(record)}>
             删除
@@ -178,7 +178,7 @@ function ListTable(props: ListTableProps) {
         ];
       },
     },
-  ] as ColumnProps<any>;
+  ] as ColumnProps<any>[];
   return (
     <Page>
       <Table
@@ -190,7 +190,7 @@ function ListTable(props: ListTableProps) {
         rowKey={record => record.id}
         pagination={pagination}
         scroll={{ y: 500,x:1900 }}
-        onChange={(pagination: PaginationConfig, filters, sorter) =>
+        onChange={(pagination:  PaginationConfig, filters, sorter) =>
           changePage(pagination, filters, sorter)
         }
         loading={loading}

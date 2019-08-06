@@ -1,6 +1,7 @@
 import Page from '@/components/Common/Page';
 import { Button, message, Table, Modal } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
+import Link from 'umi/link';
 import React from 'react';
 import { RemoveForm } from './House.service';
 
@@ -30,19 +31,25 @@ function ListTable(props: ListTableProps) {
       },
     });
   };
+
   const columns = [
     {
       title: '项目名称',
       dataIndex: 'name',
       key: 'name',
-      width: 180, 
+      width: 200,
+      fixed: 'left',
       sorter: true,
+      render: (text, record) => {
+        //return <Link to={`housemore?pstructid=${record.id}&type=2`}>{record.name}</Link>   
+        return <Link to={{ pathname: 'housemore', state: { pstructid: record.id } }}>{record.name}</Link>
+      }
     },
     {
       title: '总建筑面积',
       dataIndex: 'area',
       key: 'area',
-      width: 100,
+      width: 120,
       sorter: true,
     },
     {
@@ -61,30 +68,33 @@ function ListTable(props: ListTableProps) {
     },
     {
       title: '空置面积',
-      dataIndex: 'area',
+      dataIndex: 'area2',
       key: 'area2',
       width: 100,
+      render: (text, record) => {
+        return record.area - record.checkarea;
+      },
       sorter: true,
     },
     {
       title: '入住房屋数',
       dataIndex: 'checkroom',
       key: 'checkroom',
-      width: 100,
+      width: 120,
       sorter: true,
     },
     {
       title: '空置房屋数',
       dataIndex: 'vacancyroom',
       key: 'vacancyroom',
-      width: 100,
+      width: 120,
       sorter: true,
     },
     {
       title: '入驻率',
       dataIndex: 'rate',
+      sorter: true,
       key: 'rate',
-      width: 80, 
       render: (text, record) => {
         return (
           (record.roomcount ? (record.checkroom / record.roomcount) * 100 : 0).toFixed(2) + '%'
@@ -95,15 +105,15 @@ function ListTable(props: ListTableProps) {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
-      width: 145, 
+      width: 155,
+      fixed: 'right',
       render: (text, record) => {
         return [
           <Button
             type="primary"
             key="modify"
             style={{ marginRight: '10px' }}
-            onClick={() => modify(record.id)}
-          >
+            onClick={() => modify(record.id)} >
             修改
           </Button>,
           <Button type="danger" key="delete" onClick={() => doDelete(record)}>
@@ -113,6 +123,7 @@ function ListTable(props: ListTableProps) {
       },
     },
   ] as ColumnProps<any>[];
+
   return (
     <Page>
       <Table
@@ -123,7 +134,7 @@ function ListTable(props: ListTableProps) {
         columns={columns}
         rowKey={record => record.id}
         pagination={pagination}
-        
+        scroll={{ x: 1100 }}
         onChange={(pag: PaginationConfig, filters, sorter) => changePage(pag, filters, sorter)}
         loading={loading}
       />

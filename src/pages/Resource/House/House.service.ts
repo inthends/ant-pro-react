@@ -1,8 +1,9 @@
 import { PStructsData, ResponseObject, TreeEntity } from '@/model/models';
 import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
-export function GetTreeJsonById(): Promise<TreeEntity[]> {
-  return request.get(process.env.basePath + `/Common/GetTreeJsonById`, {}).then(getResult);
+
+export function GetOrgTree(): Promise<any[]> {
+  return request.get(process.env.basePath + `/Common/GetOrgTree`, {}).then(getResult);
 }
 export function GetStatisticsTotal(): Promise<ResponseObject<any>> {
   return request.post(process.env.basePath + `/PStructs/GetStatisticsTotal`, {});
@@ -36,9 +37,21 @@ export function SaveForm(data): Promise<any> {
     .post(process.env.basePath + `/PStructs/SaveForm`, { data: objToFormdata(data) })
     .then(getResult as any);
 }
-// 新增修改
+// 删除
 export function RemoveForm(keyValue): Promise<any> {
   return request
     .post(process.env.basePath + `/PStructs/RemoveForm`, { data: objToFormdata({ keyValue }) })
+    .then(getResult as any);
+}
+
+//获取房产列表
+export function GetPageListJson(data): Promise<any> {
+  return request.post(process.env.basePath + `/PStructs/GetPageListJson`, {data:objToFormdata(data)}).then(getResult as any);
+}
+
+//获取小区房间
+export function GetBuildings(pstructid): Promise<any[]> {
+  return request
+    .get(process.env.basePath + `/Common/GetBuildings?parentId=${pstructid}`)
     .then(getResult as any);
 }

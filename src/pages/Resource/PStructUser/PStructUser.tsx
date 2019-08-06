@@ -1,5 +1,5 @@
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { Button, Icon, Input, Layout, Select } from 'antd';
+import { Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import ListTable from './ListTable';
@@ -8,19 +8,10 @@ import Modify from './Modify';
 
 const { Content } = Layout;
 const { Search } = Input;
-const { Option } = Select;
 
 function PublicArea() {
-  const searchDefault = {
-    Code: '',
-    Name: '',
-    CertificateNO: '',
-    PhoneNum: '',
-  };
-  const [CustCate, setCustCate] = useState<string>('1');
-  const [Type, setType] = useState<string>('Code');
+   
   const [search, setSearch] = useState<string>('');
-
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
@@ -28,7 +19,7 @@ function PublicArea() {
   const [currData, setCurrData] = useState<any>();
 
   useEffect(() => {
-    initLoadData({ searchCustCate: '1', searchType: 'Code', searchText: '' });
+    initLoadData('');
   }, []);
 
   const closeDrawer = () => {
@@ -39,7 +30,7 @@ function PublicArea() {
     setModifyVisible(true);
   };
   const loadData = (
-    { searchCustCate, searchType, searchText },
+    searchText,
     paginationConfig?: PaginationConfig,
     sorter?,
   ) => {
@@ -50,13 +41,11 @@ function PublicArea() {
       total: 0,
     };
 
-    let queryJson: any = { ...searchDefault, CustCate: searchCustCate };
-    queryJson[searchType] = searchText;
     const searchCondition: any = {
       pageIndex,
       pageSize,
       total,
-      queryJson,
+      queryJson: { keyword: search },
     };
 
     if (sorter) {
@@ -90,9 +79,8 @@ function PublicArea() {
     });
   };
 
-  const initLoadData = ({ searchCustCate, searchType, searchText }) => {
-    let queryJson: any = { ...searchDefault, CustCate: searchCustCate };
-    queryJson[searchType] = searchText;
+  const initLoadData = (searchText) => {
+    const queryJson = { keyword: searchText };
     const sidx = 'id';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
@@ -100,52 +88,20 @@ function PublicArea() {
       return res;
     });
   };
-  const changeCustCate = ({ searchCustCate, searchType, searchText }) => {
-    setCustCate(searchCustCate);
-    initLoadData({ searchCustCate, searchType, searchText });
-  };
+
   return (
     <Layout style={{ height: '100%' }}>
-      <Content style={{ padding: '0 20px', overflow: 'auto' }}>
+      <Content >
         <div style={{ marginBottom: '20px', padding: '3px 0' }}>
-          <Select
-            value={CustCate}
-            onChange={e => {
-              changeCustCate({ searchCustCate: e, searchType: Type, searchText: search });
-            }}
-          >
-            <Option value="1" key="1">
-              个人
-            </Option>
-            <Option value="2" key="2">
-              单位
-            </Option>
-          </Select>
-
-          <Select value={Type} onChange={setType} style={{ marginLeft: 50, width: 100 }}>
-            <Option value="Code" key="Code">
-              编码
-            </Option>
-            <Option value="Name" key="Name">
-              名称
-            </Option>
-            <Option value="CertificateNO" key="CertificateNO">
-              证件编号
-            </Option>
-            <Option value="PhoneNum" key="PhoneNum">
-              手机号码
-            </Option>
-          </Select>
-
           <Search
             className="search-input"
             placeholder="请输入要查询的关键词"
             onSearch={value =>
-              loadData({ searchCustCate: CustCate, searchType: Type, searchText: value })
+              loadData({ value })
             }
             style={{ width: 200 }}
           />
-          <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer({flag: CustCate})}>
+          <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer()}>
             <Icon type="plus" />
             住户资料
           </Button>
@@ -153,7 +109,7 @@ function PublicArea() {
         <ListTable
           onchange={(paginationConfig, filters, sorter) =>
             loadData(
-              { searchCustCate: CustCate, searchType: Type, searchText: search },
+              search,
               paginationConfig,
               sorter,
             )
@@ -163,7 +119,7 @@ function PublicArea() {
           data={data}
           modify={showDrawer}
           reload={() =>
-            initLoadData({ searchCustCate: CustCate, searchType: Type, searchText: search })
+            initLoadData(search)
           }
         />
       </Content>
@@ -172,7 +128,7 @@ function PublicArea() {
         closeDrawer={closeDrawer}
         data={currData}
         reload={() =>
-          initLoadData({ searchCustCate: CustCate, searchType: Type, searchText: search })
+          initLoadData(search)
         }
       />
     </Layout>

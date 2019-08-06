@@ -42,7 +42,7 @@ function ListTable(props: ListTableProps) {
       title: '名称',
       dataIndex: 'fullName',
       key: 'fullName',
-      width: 250,
+      width: 200,
       fixed: 'left',
       // sorter: true,
     },
@@ -50,28 +50,28 @@ function ListTable(props: ListTableProps) {
       title: '编号',
       dataIndex: 'enCode',
       key: 'enCode',
-      width: 150,
+      width: 100,
       // sorter: true,
     },
     {
       title: '所属机构',
       dataIndex: 'OrganizeId',
       key: 'OrganizeId',
-      width: 300,
+      width: 100,
       // sorter: true,
     },
     {
       title: '简称',
       dataIndex: 'shortName',
       key: 'shortName',
-      width: 200,
+      width: 80,
       // sorter: true,
     },
     {
       title: '单位性质',
       dataIndex: 'nature',
       key: 'nature',
-      width: 200,
+      width: 80,
       // sorter: true,
     },
     {
@@ -85,7 +85,7 @@ function ListTable(props: ListTableProps) {
       title: '负责人',
       dataIndex: 'manager',
       key: 'manager',
-      width: 200,
+      width: 80,
       // sorter: true,
     },
     {
@@ -102,8 +102,8 @@ function ListTable(props: ListTableProps) {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
-      width: 200,
-      fixed: 'right',
+      width: 155,
+      fixed:'right',
       render: (text, record) => {
         return [
           <Button
@@ -130,8 +130,8 @@ function ListTable(props: ListTableProps) {
         dataSource={data}
         columns={columns}
         rowKey={record => record.id}
-        pagination={pagination}
-        scroll={{ x: 1950 }}
+        pagination={pagination} 
+        scroll={{ x: 1150 }}
         onChange={(pag: PaginationConfig, filters, sorter) => changePage(pag, filters, sorter)}
         loading={loading}
       />

@@ -6,13 +6,11 @@ import {
   Drawer,
   Form,
   Input,
-  message,
-  Modal,
+  message, 
   Row,
   Select,
   Tree,
-  TreeSelect,
-  Checkbox,
+  TreeSelect
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
@@ -20,8 +18,7 @@ import { SaveForm } from './ReciprocatingUnit.service';
 import { getCommonItems } from '@/services/commonItem';
 import styles from './style.less';
 
-const { Option } = Select;
-const { TextArea } = Input;
+const { Option } = Select; 
 const { TreeNode } = Tree;
 
 interface ModifyProps {

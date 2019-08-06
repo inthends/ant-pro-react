@@ -1,8 +1,8 @@
 import Page from '@/components/Common/Page';
-import { Button, message, Modal, Table } from 'antd';
+import { Tag, Button, message, Modal, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
-import * as moment from 'moment';
+import moment from 'moment';
 import { RemoveForm } from './Main.service';
 
 interface ListTableProps {
@@ -29,7 +29,7 @@ function ListTable(props: ListTableProps) {
             message.success('删除成功');
             reload();
           })
-          .catch(e => {});
+          .catch(e => { });
       },
     });
   };
@@ -38,7 +38,7 @@ function ListTable(props: ListTableProps) {
       title: '业务类型',
       dataIndex: 'billType',
       key: 'billType',
-      width: 100, 
+      width: 100,
       sorter: true,
     },
     {
@@ -54,20 +54,20 @@ function ListTable(props: ListTableProps) {
       key: 'billStatus',
       width: 100,
       sorter: true,
-      render: (text, record) => { 
+      render: (text, record) => {
         switch (text) {
           case 1:
-            return '待处理';
+            return <Tag color="#e4aa5b">待处理</Tag>;
           case 2:
-            return '进行中';
+            return <Tag color="#19d54e">进行中</Tag>;
           case 3:
-              return '待归档';
+            return <Tag color="#5FB878">待归档</Tag>;
           case 4:
-                return '已归档';
+            return <Tag color="#009688">已归档</Tag>;
           default:
             return '';
         }
-     }
+      }
     },
     {
       title: '单据编号',
@@ -75,7 +75,7 @@ function ListTable(props: ListTableProps) {
       key: 'billCode',
       width: 150,
       sorter: true,
-    }, 
+    },
     {
       title: '单据日期',
       dataIndex: 'billDate',
@@ -110,12 +110,12 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'isApply',
       key: 'isApply',
       width: 100,
-      render: (text, record) => { 
-        if(text==0)  
-          return '未回复';
+      render: (text, record) => {
+        if (text == 0)
+          return <Tag color="#e4aa5b">未回复</Tag>;
         else
-          return '已回复';
-     } 
+          return <Tag color="#009688">已回复</Tag>;
+      }
     },
     {
       title: '关联单号',

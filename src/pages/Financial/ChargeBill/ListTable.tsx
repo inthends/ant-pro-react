@@ -3,7 +3,7 @@ import Page from '@/components/Common/Page';
 import { InputNumber, Input, Select, Col, Row, Form, DatePicker, Card, Button, message, Table, Modal } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState } from 'react';
-import * as moment from 'moment';
+import moment from 'moment';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 
 

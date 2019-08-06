@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import LeftTree from '../LeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
-import { GetPageListJson, GetQuickPublicAreaTree } from './Main.service';
+import { GetPageListJson, GetQuickPStructsTree } from './Main.service';
 
 const { Content } = Layout;
 const { Search } = Input;
@@ -31,22 +31,22 @@ function Main() {
       const root = res.filter(item => item.parentId === '0');
       const rootOrg = root.length === 1 ? root[0] : undefined;
       SetOrganize(rootOrg);
-      initLoadData(rootOrg, '');
+      initLoadData('', '');
     });
   }, []);
   // 获取属性数据
   const getTreeData = () => {
-    return GetQuickPublicAreaTree().then((res: any[]) => {
-      const treeList = (res || []).map(item => {
-        return {
-          ...item,
-          id: item.id,
-          text: item.name,
-          parentId: item.pId,
-        };
-      });
-      setTreeData(treeList);
-      return treeList;
+    return GetQuickPStructsTree().then((res: any[]) => {
+      //const treeList = (res || []).map(item => {
+      //   return {
+      //     ...item,
+      //     id: item.id,
+      //     text: item.name,
+      //     parentId: item.pId,
+      //   };
+      // });
+      setTreeData(res || []);
+      return res || [];
     });
   };
 
@@ -126,13 +126,13 @@ function Main() {
   return (
     <Layout style={{ height: '100%' }}>
       <LeftTree
-        treeData={treeData}
+        treeData={treeData} 
         selectTree={(id, item) => {
           selectTree(id, item, search);
         }}
       />
-      <Content style={{ padding: '0 20px' }}>
-        <div style={{ marginBottom: '20px', padding: '3px 0' }}>
+      <Content style={{ paddingLeft: '18px' }}>
+        <div style={{ marginBottom: '10px' }}>
           <Search
             className="search-input"
             placeholder="搜索关键字"
@@ -158,14 +158,11 @@ function Main() {
 
       <Modify
         modifyVisible={modifyVisible}
-        closeDrawer={closeDrawer}
-        treeData={treeData}
-        organizeId={organize.id}
+        closeDrawer={closeDrawer} 
         data={currData}
         reload={() => initLoadData(organize, search)}
       />
     </Layout>
   );
-}
-
+} 
 export default Main;

@@ -1,14 +1,16 @@
-import { PStructsData, ResponseObject, TreeEntity } from '@/model/models';
+import {  ResponseObject } from '@/model/models';
 import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
-export function GetQuickPublicAreaTree(): Promise<any[]> {
+export function GetQuickPStructsTree(): Promise<any[]> {
   return request
-    .get(process.env.basePath + `/PublicArea/GetQuickPublicAreaTree`, {})
+    .get(process.env.basePath + `/Common/GetQuickPStructsTree`, {})
     .then(getResult);
 }
-export function GetStatisticsTotal(): Promise<ResponseObject<any>> {
-  return request.post(process.env.basePath + `/PStructs/GetStatisticsTotal`, {});
-}
+
+export function GetQuickSimpleTreeAll(): Promise<ResponseObject<any[]>> {
+  return request.get(process.env.basePath + `/Common/GetQuickSimpleTreeAll`, {});
+} 
+ 
 
 //获取服务单
 export function GetPageListJson(data): Promise<any> {
@@ -17,32 +19,16 @@ export function GetPageListJson(data): Promise<any> {
     .then(getResult as any);
 }
 
-export function GetTreeAreaJson(id): Promise<TreeEntity[]> {
+// 提交评论
+export function SendCommunicate(data): Promise<any> {
   return request
-    .get(process.env.basePath + `/PStructs/GetTreeAreaJson?id=${id}`)
-    .then(getResult as any);
-}
-export function GetProjectType(): Promise<TreeEntity[]> {
-  return request
-    .get(process.env.basePath + `/PStructs/GetDataItemTreeJson?EnCode=ProjectType`)
+    .post(process.env.basePath + `/ServiceDesk/SendCommunicate`, { data: objToFormdata(data) })
     .then(getResult as any);
 }
 
-// 获取房产信息
-export function GetFormInfoJson(keyValue): Promise<PStructsData> {
+//获取评论
+export function GetCommunicates(keyValue): Promise<any> {
   return request
-    .get(process.env.basePath + `/PStructs/GetFormInfoJson?keyValue=${keyValue}`)
-    .then(getResult as any);
-}
-// 新增修改
-export function SaveForm(data): Promise<any> {
-  return request
-    .post(process.env.basePath + `/PublicArea/SaveForm`, { data: objToFormdata(data) })
-    .then(getResult as any);
-}
-// 新增修改
-export function RemoveForm(keyValue): Promise<any> {
-  return request
-    .post(process.env.basePath + `/PublicArea/RemoveForm?keyValue=${keyValue}`, {})
+    .get(process.env.basePath + `/ServiceDesk/GetCommunicates?keyValue=${keyValue}`)
     .then(getResult as any);
 }

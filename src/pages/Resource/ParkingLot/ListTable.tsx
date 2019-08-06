@@ -38,7 +38,7 @@ function ListTable(props: ListTableProps) {
   };
   const columns = [
     {
-      title: '车位名称',
+      title: '名称',
       dataIndex: 'name',
       key: 'name',
       width: 250,
@@ -46,7 +46,7 @@ function ListTable(props: ListTableProps) {
       sorter: true,
     },
     {
-      title: '车位编号',
+      title: '编号',
       dataIndex: 'code',
       key: 'code',
       width: 150,
@@ -56,28 +56,28 @@ function ListTable(props: ListTableProps) {
       title: '建筑面积(㎡)',
       dataIndex: 'area',
       key: 'area',
-      width: 300,
+      width: 120,
       sorter: true,
     },
     {
       title: '计费面积(㎡)',
       dataIndex: 'chargingarea',
       key: 'chargingarea',
-      width: 200,
+      width: 120,
       sorter: true,
     },
     {
       title: '车牌号',
       dataIndex: 'carno',
       key: 'carno',
-      width: 200,
+      width: 100,
       sorter: true,
     },
     {
       title: '车位状态',
       dataIndex: 'state',
       key: 'state',
-      width: 150,
+      width: 100,
       sorter: true,
     },
     {
@@ -90,7 +90,7 @@ function ListTable(props: ListTableProps) {
       title: '操作',
       dataIndex: 'allname',
       key: 'allname',
-      width: 200,
+      width: 155,
       fixed: 'right',
       render: (text, record) => {
         return [
@@ -119,7 +119,7 @@ function ListTable(props: ListTableProps) {
         columns={columns}
         rowKey={record => record.id}
         pagination={pagination}
-        scroll={{ x: 1750 }}
+        scroll={{ x: 1200 }}
         onChange={(pag: PaginationConfig, filters, sorter) => changePage(pag, filters, sorter)}
         loading={loading}
       />
