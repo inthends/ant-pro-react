@@ -1,60 +1,52 @@
-import { TreeEntity } from '@/model/models';
+//房产资料 
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { Button, Icon, Input, Layout } from 'antd';
+import { Form, Tabs, Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
+import { GetPageListJson, GetBuildings } from './House.service';
 import LeftTree from '../LeftTree';
-import ListTable from './ListTable';
+import ListTableMore from './ListTableMore';
 import Modify from './Modify';
-import { GetPageListJson, GetQuickPStructsTree } from './Main.service';
 
 const { Content } = Layout;
 const { Search } = Input;
+const { TabPane } = Tabs;
 
-function Main() {
+// interface HouseMoreProps {
+// }
+
+
+function HouseMore(props) {
+  const [pstructId, setPstructId] = useState<string>('');//小区id
+  const [organize, setOrganize] = useState<any>({});
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
-  const [treeData, setTreeData] = useState<TreeEntity[]>([]);
+  const [treeData, setTreeData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
-  const [organize, SetOrganize] = useState<any>({});
   const [data, setData] = useState<any[]>([]);
-  const [currData, setCurrData] = useState<any>();
   const [search, setSearch] = useState<string>('');
 
-  const selectTree = (org, item, searchText) => {
-    initLoadData(item, searchText);
-    SetOrganize(item);
+  const selectTree = (orgid, item, searchText) => {
+    initLoadData(item, searchText); 
+    setOrganize(item);
   };
 
   useEffect(() => {
-    getTreeData().then(res => {
-      const root = res.filter(item => item.parentId === '0');
-      const rootOrg = root.length === 1 ? root[0] : undefined;
-      SetOrganize(rootOrg);
-      initLoadData('', '');
-    });
-  }, []);
-  // 获取属性数据
-  const getTreeData = () => {
-    return GetQuickPStructsTree().then((res: any[]) => {
-      //const treeList = (res || []).map(item => {
-      //   return {
-      //     ...item,
-      //     id: item.id,
-      //     text: item.name,
-      //     parentId: item.pId,
-      //   };
-      // });
+    //页面传递过来的值  
+    const _pstructid = props.location.state ? props.location.state.pstructid : '';
+    setPstructId(_pstructid);
+    GetBuildings(_pstructid).then((res: any[]) => {
       setTreeData(res || []);
-      return res || [];
     });
-  };
+    initLoadData('', '');
+  }, []);
+
 
   const closeDrawer = () => {
     setModifyVisible(false);
   };
-  const showDrawer = (item?) => {
-    setCurrData(item);
+  const showDrawer = (orgId?) => {
+    //setId(orgId);
     setModifyVisible(true);
   };
   const loadData = (searchText, org, paginationConfig?: PaginationConfig, sorter?) => {
@@ -69,10 +61,10 @@ function Main() {
       pageSize,
       total,
       queryJson: {
+        ParentId: org.id,
         keyword: searchText,
-        OrganizeId: org.organizeId,
-        TreeTypeId: org.id,
-        TreeType: org.type,
+        PStructId: pstructId,
+        Type: org.type
       },
     };
 
@@ -100,7 +92,6 @@ function Main() {
           pageSize,
         };
       });
-
       setData(res.data);
       setLoading(false);
       return res;
@@ -109,11 +100,11 @@ function Main() {
 
   const initLoadData = (org, searchText) => {
     setSearch(searchText);
-    const queryJson = {
-      OrganizeId: org.organizeId,
-      keyword: searchText,
-      TreeTypeId: org.id,
-      TreeType: org.type,
+    const queryJson = { 
+      keyword: search,
+      PStructId: pstructId,
+      ParentId: org.id,
+      Type: org.type
     };
     const sidx = 'id';
     const sord = 'asc';
@@ -126,43 +117,63 @@ function Main() {
   return (
     <Layout style={{ height: '100%' }}>
       <LeftTree
-        treeData={treeData} 
+        treeData={treeData}
         selectTree={(id, item) => {
           selectTree(id, item, search);
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>
-        <div style={{ marginBottom: '10px' }}>
-          <Search
-            className="search-input"
-            placeholder="搜索关键字"
-            onSearch={value => loadData(value, organize)}
-            style={{ width: 200 }}
-          />
-          <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer()}>
-            <Icon type="plus" />
-            服务单
+        <Tabs defaultActiveKey="1" >
+          <TabPane tab="房产列表" key="1">
+            <div style={{ marginBottom: '10px' }}>
+              <Search
+                className="search-input"
+                placeholder="搜索项目名称"
+                value={search}
+                onSearch={value => loadData(value, organize)}
+                style={{ width: 200 }}
+              />
+
+
+              <Button
+                type="primary"
+                style={{ float: 'right' }}
+                onClick={() => showDrawer()}
+              >
+                <Icon type="plus" />
+                新增
           </Button>
-        </div>
-        <ListTable
-          onchange={(paginationConfig, filters, sorter) =>
-            loadData(search, organize, paginationConfig, sorter)
-          }
-          loading={loading}
-          pagination={pagination}
-          data={data}
-          modify={showDrawer}
-          reload={() => initLoadData(organize, search)}
-        />
+            </div>
+
+            <ListTableMore
+              onchange={(paginationConfig, filters, sorter) =>
+                loadData(search, organize, paginationConfig, sorter)
+              }
+              loading={loading}
+              pagination={pagination}
+              data={data}
+              modify={showDrawer}
+              reload={() => initLoadData(organize, search)}
+            />
+
+          </TabPane>
+          <TabPane tab="房态图" key="2">
+
+          </TabPane>
+        </Tabs>
       </Content>
 
       <Modify
         modifyVisible={modifyVisible}
-        closeDrawer={closeDrawer} 
-        data={currData}
+        closeDrawer={closeDrawer}
+        treeData={treeData}
+        organizeId={''}
+        id={''}
         reload={() => initLoadData(organize, search)}
       />
     </Layout>
   );
-} 
-export default Main;
+}
+
+//export default HouseMore;
+export default Form.create<any>()(HouseMore);

@@ -59,8 +59,8 @@ function IncreasingRate(props: IncreasingRateProps) {
               initialValue: '%'
             })(
               <Select>
-                <Option value="1">%</Option>
-                <Option value="2" >元</Option>
+                <Option value="%">%</Option>
+                <Option value="元" >元</Option>
               </Select>)}
           </Form.Item>
         </Col> 
@@ -77,8 +77,8 @@ function IncreasingRate(props: IncreasingRateProps) {
               initialValue: '%'
             })(
               <Select>
-                <Option value="1">%</Option>
-                <Option value="2" >元</Option>
+                <Option value="%">%</Option>
+                <Option value="元" >元</Option>
               </Select>)}
           </Form.Item>
         </Col>

@@ -4,9 +4,7 @@ import request from '@/utils/request';
 export function GetQuickPublicAreaTree(): Promise<any[]> {
   return request.get(process.env.basePath + `/ParkingLot/GetQuickParkingTree`, {}).then(getResult);
 }
-export function GetStatisticsTotal(): Promise<ResponseObject<any>> {
-  return request.post(process.env.basePath + `/PStructs/GetStatisticsTotal`, {});
-}
+ 
 export function GetPublicAreas(data): Promise<any> {
   return request
     .post(process.env.basePath + `/ParkingLot/GetStatistics`, { data: objToFormdata(data) })

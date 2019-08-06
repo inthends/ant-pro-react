@@ -1,43 +1,57 @@
 import { TreeEntity } from '@/model/models';
 import {
+
+  Tabs,
+  Select,
   Button,
   Card,
-  Checkbox,
   Col,
   Drawer,
   Form,
   Input,
   message,
-  Modal,
   Row,
-  Tree,
   TreeSelect,
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { SaveForm } from './Main.service';
+import { GetQuickSimpleTreeAll, SaveForm } from './Main.service';
+import { getResult } from '@/utils/networkUtils';
 import styles from './style.less';
+import CommentBox from './CommentBox';
 
+
+const { Option } = Select;
 const { TextArea } = Input;
-const { TreeNode } = Tree;
+const { TabPane } = Tabs;
 
 interface ModifyProps {
   modifyVisible: boolean;
   data?: any;
   form: WrappedFormUtils;
-  organizeId: string;
-  treeData: TreeEntity[];
   closeDrawer(): void;
   reload(): void;
 }
+
 const Modify = (props: ModifyProps) => {
-  const { treeData, modifyVisible, data, closeDrawer, form, organizeId, reload } = props;
+  const { modifyVisible, data, closeDrawer, form, reload } = props;
   const { getFieldDecorator } = form;
-  const title = data === undefined ? '添加小区' : '修改小区';
+  const title = data === undefined ? '添加服务单' : '修改服务单';
   const [infoDetail, setInfoDetail] = useState<any>({});
+  const [treeData, setTreeData] = useState<any[]>([]);
 
   // 打开抽屉时初始化
-  useEffect(() => {}, []);
+  useEffect(() => {
+
+    // 获取房产树
+    GetQuickSimpleTreeAll()
+      .then(getResult)
+      .then((res: TreeEntity[]) => {
+        setTreeData(res || []);
+        return res || [];
+      });
+
+  }, []);
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -46,10 +60,8 @@ const Modify = (props: ModifyProps) => {
         setInfoDetail(data);
         form.resetFields();
       } else {
-        const type = treeData.filter(item => item.id === organizeId)[0].type;
-        if (type === '4') {
-          form.setFieldsValue({ parentId: organizeId });
-        }
+        setInfoDetail({});
+        form.resetFields();
       }
     } else {
       form.resetFields();
@@ -63,20 +75,7 @@ const Modify = (props: ModifyProps) => {
     form.validateFields((errors, values) => {
       if (!errors) {
         const newData = data ? { ...data, ...values } : values;
-        console.log(newData.auditMark);
-        if (newData.auditMark) {
-          Modal.confirm({
-            title: '警告',
-            content: '数据审核后将无法进行修改！',
-            onOk: () => {
-              newData.auditMark = 1;
-              doSave(newData);
-            },
-          });
-        } else {
-          newData.auditMark = 0;
-          doSave(newData);
-        }
+        doSave(newData);
       }
     });
   };
@@ -88,105 +87,155 @@ const Modify = (props: ModifyProps) => {
       reload();
     });
   };
-  const selectOrg = orgId => {
-    const type = treeData.filter(item => item.id === orgId)[0].type;
-    if (type !== '4') {
-      Modal.warn({
-        title: '警告',
-        content: '只能选到楼层不可以选择其他层次！',
-      });
-    }
-    form.setFieldsValue({ parentId: undefined });
-  };
+
+
 
   return (
     <Drawer
       title={title}
       placement="right"
-      width={600}
+      width={800}
       onClose={close}
       visible={modifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
-      <Card title="基本信息" className={styles.card} bordered={false}>
-        {modifyVisible ? (
-          <Form layout="vertical" hideRequiredMark>
-            <Row gutter={24}>
-              <Col lg={12}>
-                <Form.Item label="名称" required>
-                  {getFieldDecorator('name', {
-                    initialValue: infoDetail.name,
-                    rules: [{ required: true, message: '请输入名称' }],
-                  })(<Input placeholder="请输入名称" />)}
-                </Form.Item>
-              </Col>
-              <Col lg={12}>
-                <Form.Item label="编码" required>
-                  {getFieldDecorator('enCode', {
-                    initialValue: infoDetail.enCode,
-                    rules: [{ required: true, message: '请输入编码' }],
-                  })(<Input placeholder="请输入编码" />)}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={24}>
-              <Col lg={24}>
-                <Form.Item label="房产区域" required>
-                  {getFieldDecorator('parentId', {
-                    initialValue: infoDetail.parentId,
-                    rules: [{ required: true, message: '请选择隶属机构' }],
-                  })(
-                    <TreeSelect
-                      placeholder="请选择隶属机构"
-                      allowClear
-                      treeDefaultExpandAll
-                      onSelect={selectOrg}
-                    >
-                      {renderTree(treeData, '0')}
-                    </TreeSelect>,
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
+      {modifyVisible ? (
+        <Tabs defaultActiveKey="1" >
 
-            <Row gutter={24}>
-              <Col lg={24}>
-                <Form.Item label="位置描述">
-                  {getFieldDecorator('otherCode', {
-                    initialValue: infoDetail.otherCode,
-                  })(<Input placeholder="请输入位置描述" />)}
-                </Form.Item>
-              </Col>
-            </Row>
+          <TabPane tab="基础信息" key="1">
+            <Form layout="vertical" hideRequiredMark>
+              <Card className={styles.card}  >
+                <Row gutter={24}>
+                  <Col lg={8}>
+                    <Form.Item label="单据编号">
+                      {getFieldDecorator('name', {
+                        initialValue: infoDetail.billCode
+                      })(<Input placeholder="自动获取编号" />)}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={8}>
+                    <Form.Item label="单据时间">
+                      {getFieldDecorator('billDate', {
+                        initialValue: infoDetail.billDate
+                      })(<Input placeholder="自动获取时间" />)}
+                    </Form.Item>
+                  </Col>
 
-            <Row gutter={24}>
-              <Col lg={24}>
-                <Form.Item label="备注">
-                  {getFieldDecorator('memo', {
-                    initialValue: infoDetail.memo,
-                  })(<TextArea rows={4} placeholder="请输入附加说明" />)}
-                </Form.Item>
-              </Col>
-            </Row>
-            {data ? (
-              <Row gutter={24}>
-                <Col lg={24}>
-                  {getFieldDecorator('auditMark', {
-                    initialValue: infoDetail.auditMark === 1,
-                  })(
-                    <Checkbox
-                      disabled={infoDetail.auditMark === 1}
-                      checked={form.getFieldValue('auditMark')}
-                    >
-                      是否审核
-                    </Checkbox>,
-                  )}
-                </Col>
-              </Row>
-            ) : null}
-          </Form>
-        ) : null}
-      </Card>
+                  <Col lg={8}>
+                    <Form.Item label="单据来源">
+                      {getFieldDecorator('source', {
+                        initialValue: infoDetail.source
+                      })(
+                        <Select placeholder='请选择单据来源'>
+                          <Option value="服务总台">服务总台</Option>
+                          <Option value="社区APP">社区APP</Option>
+                          <Option value="社区APP">微信公众号</Option>
+                          <Option value="社区APP">员工APP</Option>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                </Row>
+
+                <Row gutter={24}>
+                  <Col lg={8}>
+                    <Form.Item label="业务类型">
+                      {getFieldDecorator('billType', {
+                        initialValue: infoDetail.billType
+                      })(
+                        <Select placeholder='请选择业务类型'>
+                          <Option value="报修">报修</Option>
+                          <Option value="投诉">投诉</Option>
+                          <Option value="服务">服务</Option>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={8}>
+                    <Form.Item label="紧急程度">
+                      {getFieldDecorator('emergencyLevel', {
+                        initialValue: infoDetail.emergencyLevel
+                      })(
+                        <Select placeholder='请选择紧急程度'>
+                          <Option value="一般">一般</Option>
+                          <Option value="紧急">紧急</Option>
+                          <Option value="非常紧急">非常紧急</Option>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={8}>
+                    <Form.Item label="重要程度">
+                      {getFieldDecorator('importance', {
+                        initialValue: infoDetail.importance
+                      })(
+                        <Select placeholder='请选择重要程度'>
+                          <Option value="一般">一般</Option>
+                          <Option value="重要">重要</Option>
+                          <Option value="非常重要">非常重要</Option>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                </Row>
+
+                <Row gutter={24}>
+                  <Col lg={8}>
+                    <Form.Item label="关联地址" required>
+                      {getFieldDecorator('address', {
+                        initialValue: infoDetail.address,
+                        rules: [{ required: true, message: '请选择关联地址' }],
+                      })(
+                        <TreeSelect
+                          placeholder="请选择房源"
+                          allowClear
+                          dropdownStyle={{ maxHeight: 300 }}
+                          treeData={treeData}
+                          treeDataSimpleMode={true} >
+                        </TreeSelect>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={8}>
+                    <Form.Item label="联系人">
+                      {getFieldDecorator('contactName', {
+                        initialValue: infoDetail.contactName
+                      })(<Input placeholder="请选择联系人" />)}
+                    </Form.Item>
+                  </Col>
+
+                  <Col lg={8}>
+                    <Form.Item label="联系电话">
+                      {getFieldDecorator('contactPhone', {
+                        initialValue: infoDetail.contactPhone
+                      })(<Input placeholder="请输入联系电话" />)}
+                    </Form.Item>
+                  </Col>
+                </Row>
+
+                <Row gutter={24}>
+                  <Col lg={24}>
+                    <Form.Item label="内容">
+                      {getFieldDecorator('memo', {
+                        initialValue: infoDetail.memo,
+                      })(<TextArea rows={4} placeholder="请输入内容" />)}
+                    </Form.Item>
+                  </Col>
+                </Row>
+
+
+
+              </Card>
+            </Form>
+          </TabPane>
+
+          <TabPane tab="留言动态" key="2">
+
+            <CommentBox data={data} />
+
+          </TabPane>
+        </Tabs>) : null}
+
       <div
         style={{
           position: 'absolute',
@@ -211,15 +260,3 @@ const Modify = (props: ModifyProps) => {
 };
 
 export default Form.create<ModifyProps>()(Modify);
-
-const renderTree = (treeData: TreeEntity[], parentId: string) => {
-  return treeData
-    .filter(item => item.parentId === parentId)
-    .map(filteditem => {
-      return (
-        <TreeNode title={filteditem.text} key={filteditem.id} value={filteditem.id}>
-          {renderTree(treeData, filteditem.id as string)}
-        </TreeNode>
-      );
-    });
-};

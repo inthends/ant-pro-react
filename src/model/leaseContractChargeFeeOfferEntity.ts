@@ -23,10 +23,7 @@ export interface LeaseContractChargeFeeOfferEntity {
      * 租出合同费用条款唯一键
      */
     leaseContractChargeId?: string;
-    /**
-     * 优惠类型代码
-     */
-    typeId?: string;
+   
     /**
      * 优惠类型
      */

@@ -21,7 +21,7 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
   let className = styles.right;
   const menu = (
     <Menu className={styles.menu}>
-      {/* <Menu.Item key="userCenter">
+      <Menu.Item key="userCenter">
         <Icon type="user" />
         <FormattedMessage id="menu.account.center" defaultMessage="account center" />
       </Menu.Item>
@@ -29,8 +29,8 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
         <Icon type="setting" />
         <FormattedMessage id="menu.account.settings" defaultMessage="account settings" />
       </Menu.Item>
-      <Menu.Divider /> */}
-      <Menu.Item key="logout"  onClick={() => {router.replace('/')}}>
+      <Menu.Divider />
+      <Menu.Item key="logout" onClick={() => { router.replace('/') }}>
         <Icon type="logout" />
         <FormattedMessage id="menu.account.logout" defaultMessage="logout" />
       </Menu.Item>
@@ -54,8 +54,8 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
           </span>
         </HeaderDropdown>
       ) : (
-        <div />
-      )}
+          <div />
+        )}
     </div>
   );
 };

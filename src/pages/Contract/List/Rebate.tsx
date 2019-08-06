@@ -43,11 +43,11 @@ function Rebate(props: RebateProps) {
             {getFieldDecorator(`rebateType[${k}]`, {
               initialValue: '免租期'
             })(<Select>
-              <Option value="1">免租期</Option>
-              <Option value="2" >装修期</Option>
-              <Option value="3" >单价折扣</Option>
-              <Option value="4" >减免金额</Option>
-              <Option value="5" >单价减免</Option>
+              <Option value="免租期">免租期</Option>
+              <Option value="装修期">装修期</Option>
+              <Option value="单价折扣">单价折扣</Option>
+              <Option value="减免金额">减免金额</Option>
+              <Option value="单价减免">单价减免</Option>
             </Select>)}
           </Form.Item>
         </Col>

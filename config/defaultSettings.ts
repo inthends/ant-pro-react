@@ -43,7 +43,7 @@ export interface DefaultSettings {
 }
 
 export default {
-  navTheme: 'light',
+  navTheme: 'dark',
   primaryColor: '#1890FF',
   layout: 'topmenu',
   contentWidth: 'Fluid',
@@ -54,7 +54,7 @@ export default {
   menu: {
     locale: true,
   },
-  title: 'Ant Design Pro',
+  title: '乐软A6物业管理',
   pwa: false,
   iconfontUrl: '',
 } as DefaultSettings;

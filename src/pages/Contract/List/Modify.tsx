@@ -18,7 +18,7 @@ import ResultList from './ResultList';
 import moment from 'moment';
 import { getResult } from '@/utils/networkUtils';
 import { getCommonItems } from '@/services/commonItem';
-import { SaveForm, GetQuickPStructsTreeJsonAll, GetAllFeeItems, GetChargeDetail } from './Main.service'; 
+import { SaveForm, GetQuickSimpleTreeAll, GetAllFeeItems, GetChargeDetail } from './Main.service'; 
 import styles from './style.less';
 
 const { Option } = Select;
@@ -39,17 +39,20 @@ const Modify = (props: ModifyProps) => {
   const title = '添加合同';
   const [industryType, setIndustryType] = useState<any[]>([]); //行业  
   const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
-  const [depositData, setDepositData] = useState<any[]>([]);//保证金
-  const [chargeData, setChargeData] = useState<any[]>([]);//租金
-  const [treeData, setTreeData] = useState<TreeEntity[]>([]);
+
+  //租金计算结果
+  const [depositData, setDepositData] = useState<ChargeFeeResultEntity[]>([]);//保证金
+  const [chargeData, setChargeData] = useState<ChargeFeeResultEntity[]>([]);//租金
+
+  const [treeData, setTreeData] = useState<any[]>([]);
   const [isCal, setIsCal] = useState<boolean>(false);
  
   const [TermJson, setTermJson] = useState<string>();
   const [RateJson, setRateJson] = useState<string>();
   const [RebateJson, setRebateJson] = useState<string>();
 
-  const [DepositResult, setDepositResult] = useState<ChargeFeeResultEntity[]>([]);
-  const [ChargeFeeResult, setChargeFeeResult] = useState<ChargeFeeResultEntity[]>([]);
+  // const [DepositResult, setDepositResult] = useState<ChargeFeeResultEntity[]>([]);
+  // const [ChargeFeeResult, setChargeFeeResult] = useState<ChargeFeeResultEntity[]>([]);
 
   const close = () => {
     closeDrawer();
@@ -160,9 +163,9 @@ const Modify = (props: ModifyProps) => {
         }).then(res => {
           setIsCal(true);//计算了租金
           setDepositData(res.depositFeeResultList);//保证金明细
-          setChargeData(res.chargeFeeResultList);//租金明细 
-          setDepositResult(res.depositFeeResultList);
-          setChargeFeeResult(res.chargeFeeResultList);
+          setChargeData(res.chargeFeeResultList);//租金明细  
+          // setDepositResult(res.depositFeeResultList);
+          // setChargeFeeResult(res.chargeFeeResultList);
         });
       }
     });
@@ -221,10 +224,12 @@ const Modify = (props: ModifyProps) => {
           TermJson: TermJson,
           RateJson: RateJson,
           RebateJson: RebateJson,
-          DepositResult: JSON.stringify(DepositResult),
-          ChargeFeeResult:JSON.stringify(ChargeFeeResult) 
-        }).then(res => {  
+          // DepositResult: JSON.stringify(DepositResult),
+          // ChargeFeeResult:JSON.stringify(ChargeFeeResult) 
+          DepositResult:JSON.stringify(depositData),
+          ChargeFeeResult:JSON.stringify(chargeData) 
 
+        }).then(res => {   
         }); 
       }
     });
@@ -242,7 +247,7 @@ const Modify = (props: ModifyProps) => {
     });
 
     // 获取房产树
-    GetQuickPStructsTreeJsonAll()
+    GetQuickSimpleTreeAll()
       .then(getResult)
       .then((res: TreeEntity[]) => {
         setTreeData(res || []);
@@ -263,9 +268,12 @@ const Modify = (props: ModifyProps) => {
       onClose={close}
       visible={modifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
+
+<Form layout="vertical" hideRequiredMark>
+
       <Tabs defaultActiveKey="1" >
         <TabPane tab="基本信息" key="1">
-          <Form layout="vertical" hideRequiredMark>
+         
             <Row gutter={24}>
               <Col span={12}>
                 <Card title="基本信息" className={styles.card}>
@@ -457,10 +465,10 @@ const Modify = (props: ModifyProps) => {
                 </Card>
               </Col>
             </Row>
-          </Form>
+          
         </TabPane>
         <TabPane tab="费用条款" key="2">
-          <Form layout="vertical" hideRequiredMark>
+          
             <Card title="基本条款" className={styles.card} >
               <Row gutter={24}>
                 <Col lg={4}>
@@ -520,9 +528,10 @@ const Modify = (props: ModifyProps) => {
               depositData={depositData}
               chargeData={chargeData}
             ></ResultList>
-          </Form>
+          
         </TabPane>
       </Tabs>
+      </Form>
       <div
         style={{
           position: 'absolute',

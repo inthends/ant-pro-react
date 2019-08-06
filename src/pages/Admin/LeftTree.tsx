@@ -2,7 +2,7 @@ import Page from '@/components/Common/Page';
 import { TreeEntity } from '@/model/models';
 import { Icon, Layout, Tree } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
-import { SiderContext } from './SiderContext';
+import { SiderContext } from '../SiderContext';
 
 const { TreeNode } = Tree;
 const { Sider } = Layout;
@@ -53,7 +53,7 @@ function LeftTree(props: LeftTreeProps) {
   return (
     <Sider
       theme="light"
-      style={{ overflow: 'visible', position: 'relative', height: '100%' }}
+      style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh - 60px)' }}
       width={hideSider ? 20 : 245}
     >
       {hideSider ? (

@@ -31,22 +31,23 @@ function PublicArea() {
       const root = res.filter(item => item.parentId === '0');
       const rootOrg = root.length === 1 ? root[0] : undefined;
       SetOrganize(rootOrg);
-      initLoadData(rootOrg, '');
+      initLoadData('', '');
     });
   }, []);
   // 获取属性数据
   const getTreeData = () => {
     return GetQuickPublicAreaTree().then((res: any[]) => {
-      const treeList = (res || []).map(item => {
-        return {
-          ...item,
-          id: item.id,
-          text: item.name,
-          parentId: item.pId,
-        };
-      });
-      setTreeData(treeList);
-      return treeList;
+      //const treeList = (res || []);
+      //.map(item => {
+      //   return {
+      //     ...item,
+      //     id: item.id,
+      //     text: item.name,
+      //     parentId: item.pId,
+      //   };
+      // });
+      setTreeData(res || []);
+      return res || [];
     });
   };
 

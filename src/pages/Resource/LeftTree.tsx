@@ -1,24 +1,23 @@
 import Page from '@/components/Common/Page';
-import { TreeEntity } from '@/model/models';
 import { Icon, Layout, Tree } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
-import { SiderContext } from './SiderContext';
+import { SiderContext } from '../SiderContext';
 
 const { TreeNode } = Tree;
 const { Sider } = Layout;
 
 interface LeftTreeProps {
-  treeData: TreeEntity[];
+  treeData: any[];
   selectTree(treeNode, item?: any): void;
 }
 function LeftTree(props: LeftTreeProps) {
   const { treeData, selectTree } = props;
-
-  const [expanded, setExpanded] = useState<string[]>([]);
+  const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
+  const [autoExpandParent, setAutoExpandParent] = useState<boolean>(false);
   const { hideSider, setHideSider } = useContext(SiderContext);
 
   useEffect(() => {
-    setExpanded(treeData.map(item => item.id as string));
+    setExpandedKeys(treeData.map(item => item.id as string));
   }, [treeData]);
 
   const onSelect = (selectedKeys, info) => {
@@ -28,27 +27,34 @@ function LeftTree(props: LeftTreeProps) {
     }
   };
 
-  const renderTree = (tree: TreeEntity[], parentId: string) => {
+  const renderTree = (tree: any[], parentId: string) => {
     return tree
       .filter(item => item.parentId === parentId)
       .map(filteditem => {
         return (
-          <TreeNode title={filteditem.text} key={filteditem.id}>
+          <TreeNode title={filteditem.title} key={filteditem.id}>
             {renderTree(tree, filteditem.id as string)}
           </TreeNode>
         );
       });
   };
 
-  const clickExpend = (expandedKeys, { isExpanded, node }) => {
-    const selectNode = node.props.eventKey;
+  // const clickExpend = (expandedKeys, { isExpanded, node }) => {
+  //   const selectNode = node.props.eventKey; 
+  //   if (isExpanded) {
+  //     setExpanded(expend => [...expend, selectNode]);
+  //   } else {
+  //     setExpanded(expend => expend.filter(item => item !== selectNode));
+  //   }
+  // };
 
-    if (isExpanded) {
-      setExpanded(expend => [...expend, selectNode]);
-    } else {
-      setExpanded(expend => expend.filter(item => item !== selectNode));
-    }
+  const clickExpend = expandedKeys => {
+    // if not set autoExpandParent to false, if children expanded, parent can not collapse.
+    // or, you can remove all expanded children keys.
+    setExpandedKeys(expandedKeys);
+    setAutoExpandParent(false);
   };
+
 
   return (
     <Sider
@@ -67,31 +73,36 @@ function LeftTree(props: LeftTreeProps) {
           />
         </div>
       ) : (
-        <>
-          <Page
-            style={{
-              padding: '6px',
-              borderLeft: 'none',
-              borderBottom: 'none',
-              height: '100%',
-              overflowY: 'auto',
-            }}
-          >
-            <Tree expandedKeys={expanded} showLine onSelect={onSelect} onExpand={clickExpend}>
-              {renderTree(treeData, '0')}
-            </Tree>
-          </Page>
-          ,
-          <div
-            style={{ position: 'absolute', top: '40%', right: -15 }}
-            onClick={() => {
-              setHideSider(true);
-            }}
-          >
-            <Icon type="double-left" style={{ color: '#1890ff' }} />
-          </div>
-        </>
-      )}
+          <>
+            <Page
+              style={{
+                padding: '6px',
+                borderLeft: 'none',
+                borderBottom: 'none',
+                height: '100%',
+                overflowY: 'auto',
+              }}
+            >
+              <Tree
+                expandedKeys={expandedKeys}
+                showLine
+                autoExpandParent={autoExpandParent}
+                onSelect={onSelect}
+                onExpand={clickExpend}>
+                { renderTree(treeData,'0') }
+
+              </Tree>
+            </Page>
+            <div
+              style={{ position: 'absolute', top: '40%', right: -15 }}
+              onClick={() => {
+                setHideSider(true);
+              }}
+            >
+              <Icon type="double-left" style={{ color: '#1890ff' }} />
+            </div>
+          </>
+        )}
     </Sider>
   );
 }

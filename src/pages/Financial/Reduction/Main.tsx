@@ -1,10 +1,10 @@
 import { TreeEntity } from '@/model/models';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { getResult } from '@/utils/networkUtils';
-import { Tabs ,Button, Icon, Input, Layout,Modal } from 'antd';
+import { Tabs, Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
-import React, {useContext, useEffect, useState } from 'react';
-import { GetTreeListExpand, GetPageListJson,GetDetailPageListJson } from './Main.service';
+import React, { useContext, useEffect, useState } from 'react';
+import { GetTreeListExpand, GetPageListJson, GetDetailPageListJson } from './Main.service';
 import LeftTree from '../LeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
@@ -14,7 +14,7 @@ import { SiderContext } from './SiderContext';
 
 const { Sider, Content } = Layout;
 const { Search } = Input;
-const{TabPane} = Tabs;
+const { TabPane } = Tabs;
 
 function Main() {
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
@@ -24,7 +24,7 @@ function Main() {
   const [detailloading, setDetailLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [detailpagination, setDetailPagination] = useState<PaginationConfig>(new DefaultPagination());
-  const [data, setData] = useState<any[]>([]);  const [detaildata, setDetailData] = useState<any[]>([]);
+  const [data, setData] = useState<any[]>([]); const [detaildata, setDetailData] = useState<any[]>([]);
   const [id, setId] = useState<string>();
   const { hideSider, setHideSider } = useContext(SiderContext);
 
@@ -41,8 +41,8 @@ function Main() {
       const root = res.filter(item => item.parentId === '0');
       const rootOrg = root.length === 1 ? root[0] : undefined;
       SetOrganize(rootOrg);
-      initLoadData(rootOrg,'');
-      initDetailLoadData(rootOrg,'');
+      initLoadData(rootOrg, '');
+      initDetailLoadData(rootOrg, '');
     });
   }, []);
   // 获取属性数据
@@ -50,22 +50,22 @@ function Main() {
     return GetTreeListExpand()
       .then(getResult)
       .then((res: TreeEntity[]) => {
-        const treeList = (res || []).map(item => {
-          return {
-            ...item,
-            id: item.id,
-            text: item.title,
-            parentId: item.pId,
-          };
-        });
-        setTreeData(treeList);
-        return treeList;
+        // const treeList = (res || []).map(item => {
+        //   return {
+        //     ...item,
+        //     id: item.id,
+        //     text: item.title,
+        //     parentId: item.pId,
+        //   };
+        // });
+        setTreeData(res || []);
+        return res || [];
       });
   };
 
   const closeDrawer = () => {
     setModifyVisible(false);
-    setId(null);
+    setId('');
   };
 
   const showDrawer = (id?) => {
@@ -194,58 +194,57 @@ function Main() {
 
 
   return (
-    <Layout style={{ height: '100%' }}>
-
-<Sider
-      theme="light"
-      style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh - 100px)' }}
-      width={hideSider ? 20 : 245}
-    >
-      {hideSider ? (
-        <div style={{ position: 'absolute', top: '40%', left: 5 }}>
-          <Icon
-            type="double-right"
-            onClick={() => {
-              setHideSider(false);
-            }}
-            style={{ color: '#1890ff' }}
-          />
-        </div>
-      ) : (
-        <>
-          <Page
-            style={{
-              padding: '6px',
-              borderLeft: 'none',
-              borderBottom: 'none',
-              height: '100%',
-              overflowY: 'auto',
-            }}
-          >
-            <LeftTree
-              treeData={treeData}
-              selectTree={(id, item) => {
-                selectTree(id, item, search);
+    <Layout style={{ height: '100%' }}> 
+      <Sider
+        theme="light"
+        style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh - 100px)' }}
+        width={hideSider ? 20 : 245}
+      >
+        {hideSider ? (
+          <div style={{ position: 'absolute', top: '40%', left: 5 }}>
+            <Icon
+              type="double-right"
+              onClick={() => {
+                setHideSider(false);
               }}
+              style={{ color: '#1890ff' }}
             />
-          </Page>
-          ,
-          <div
-            style={{ position: 'absolute', top: '40%', right: -15 }}
-            onClick={() => {
-              setHideSider(true);
-            }}
-          >
-            <Icon type="double-left" style={{ color: '#1890ff' }} />
           </div>
-        </>
-      )}
-    </Sider>
+        ) : (
+            <>
+              <Page
+                style={{
+                  padding: '6px',
+                  borderLeft: 'none',
+                  borderBottom: 'none',
+                  height: '100%',
+                  overflowY: 'auto',
+                }}
+              >
+                <LeftTree
+                  treeData={treeData}
+                  selectTree={(id, item) => {
+                    selectTree(id, item, search);
+                  }}
+                />
+              </Page>
+              ,
+          <div
+                style={{ position: 'absolute', top: '40%', right: -15 }}
+                onClick={() => {
+                  setHideSider(true);
+                }}
+              >
+                <Icon type="double-left" style={{ color: '#1890ff' }} />
+              </div>
+            </>
+          )}
+      </Sider>
 
-      <Content style={{ padding: '0 20px' }}>
+      <Content style={{ padding: '0 18px' }}>
         <Tabs defaultActiveKey="1" >
           <TabPane tab="减免单" key="1">
-            <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
+            <div style={{ marginBottom: '10px', padding: '3px 2px' }}>
               <Search
                 className="search-input"
                 placeholder="请输入要查询的单号"
@@ -253,7 +252,7 @@ function Main() {
                 onSearch={value => loadData(value)}
               />
               <Button type="primary" style={{ float: 'right' }}
-              onClick={() => showDrawer()}
+                onClick={() => showDrawer()}
               >
                 <Icon type="plus" />
                 添加
@@ -267,11 +266,11 @@ function Main() {
               pagination={pagination}
               data={data}
               modify={showDrawer}
-              reload={() => initLoadData('',search)}
+              reload={() => initLoadData('', search)}
             />
           </TabPane>
           <TabPane tab="明细" key="2">
-              <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
+            <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
               <Search
                 className="search-input"
                 placeholder="请输入要查询的单号"
@@ -286,7 +285,7 @@ function Main() {
               loading={detailloading}
               pagination={detailpagination}
               data={detaildata}
-              reload={() => initDetailLoadData('',detailsearch)}
+              reload={() => initDetailLoadData('', detailsearch)}
             />
           </TabPane>
         </Tabs>
@@ -297,7 +296,7 @@ function Main() {
         organizeId={organize}
         rowKey='billid'
         id={id}
-        reload={() => initLoadData('',search)}
+        reload={() => initLoadData('', search)}
       />
     </Layout>
   );

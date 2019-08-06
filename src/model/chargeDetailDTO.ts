@@ -27,7 +27,7 @@ export interface ChargeDetailDTO {
     /**
      * 条款
      */
-    chargeFeetList?: Array<LeaseContractChargeFeeEntity>;
+    chargeFeeList?: Array<LeaseContractChargeFeeEntity>;
     /**
      * 递增率
      */

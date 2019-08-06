@@ -1,9 +1,7 @@
-import { Icon, Layout } from 'antd';
+import { Layout } from 'antd';
 import React, { Fragment } from 'react';
-import { GlobalFooter } from 'ant-design-pro';
-
-import settings from 'config/defaultSettings';
-
+import { GlobalFooter } from 'ant-design-pro'; 
+// import settings from 'config/defaultSettings'; 
 const { Footer } = Layout;
 const FooterView = () => (
   <Footer style={{ padding: 0 }}>

@@ -17,9 +17,6 @@ import Link from 'umi/link';
 import logo from '../assets/logo.svg';
 
 
-
-
-
 export interface BasicLayoutProps extends ProLayoutProps {
   breadcrumbNameMap: {
     [path: string]: MenuDataItem;

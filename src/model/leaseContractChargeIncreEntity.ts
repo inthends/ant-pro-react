@@ -31,10 +31,7 @@ export interface LeaseContractChargeIncreEntity {
      * 单价递增
      */
     increPrice?: number;
-    /**
-     * 单价递增单位代码
-     */
-    increPriceUnitId?: string;
+ 
     /**
      * 单价递增单位
      */
@@ -43,10 +40,7 @@ export interface LeaseContractChargeIncreEntity {
      * 保证金递增
      */
     increDeposit?: number;
-   /**
-     * 保证金递增单位代码
-     */
-    increDepositUnitId?: string;
+
     /**
      * 保证金递增单位
      */

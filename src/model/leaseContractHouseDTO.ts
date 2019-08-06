@@ -18,15 +18,7 @@ export interface LeaseContractHouseDTO {
     /**
      * 唯一键
      */
-    id?: string;
-    /**
-     * 楼宇代码
-     */
-    structureId?: string;
-    /**
-     * 楼宇
-     */
-    structure?: string;
+    id?: string; 
     /**
      * 房屋代码
      */
@@ -34,17 +26,13 @@ export interface LeaseContractHouseDTO {
     /**
      * 房号
      */
-    room?: string;
+    name?: string;
     /**
      * 面积
      */
-    area?: number;
+    area?: number; 
     /**
-     * 面积单位代码
+     * 全称
      */
-    areaUnitId?: string;
-    /**
-     * 面积单位
-     */
-    areaUnit?: string;
+    allName?: string;
 }

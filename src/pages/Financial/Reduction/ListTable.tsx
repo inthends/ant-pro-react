@@ -121,7 +121,7 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'operation',
       key: 'operation',
       fixed: 'right',
-      width: 340,
+      width: 155,
       render: (text, record) => {
         return [
           <Button

@@ -41,34 +41,40 @@ export default [
         name: '资源管理',
         path: '/resource',
         component: './Resource/Resource',
+        icon:'bank',
         routes: [
           {
             path: '/resource',
             redirect: '/resource/house',
           },
           {
-            name: '房产资料',
+            name: '项目资料',
             path: '/resource/house',
             component: './Resource/House/House',
           },
           {
+            name: '房产资料',
+            path: '/resource/housemore',
+            component: './Resource/House/HouseMore',
+          },
+          {
             name: '公共区域',
-            path: '/resource/publicArea',
+            path: '/resource/publicarea',
             component: './Resource/PublicArea/PublicArea',
           },
           {
             name: '车位资料',
-            path: '/resource/ParkingLot',
+            path: '/resource/parkinglot',
             component: './Resource/ParkingLot/ParkingLot',
           },
           {
             name: '住户资料',
-            path: '/resource/PStructUser',
+            path: '/resource/pstructuser',
             component: './Resource/PStructUser/PStructUser',
           },
           {
             name: '往来单位',
-            path: '/resource/reciprocatingUnit',
+            path: '/resource/reciprocatingunit',
             component: './Resource/ReciprocatingUnit/ReciprocatingUnit',
           },
         ],
@@ -77,7 +83,8 @@ export default [
       {
         name: '财务管理',
         path: '/financial',
-
+        icon:'pay-circle',
+        component: './Financial/Financial',
         routes: [
           {
             path: '/financial',
@@ -120,15 +127,16 @@ export default [
           },
           {
             name: '费用减免',
-            path: '/financial/test7',
-            component: './Financial/Test1',
+            path: '/financial/reduction',
+            component: './Financial/Reduction/Main',
           },
         ],
       },
       {
         name: '物业管理',
-        path: '/admin',
-
+        path: '/admin', 
+        icon:'security-scan',
+        component: './Admin/Admin',
         routes: [
           {
             path: '/admin',
@@ -153,9 +161,10 @@ export default [
       },
 
       {
-        name: '合同管理',
+        name: '资产运营',
         path: '/contract',
-
+        icon:'transaction',
+        component: './Contract/Contract',
         routes: [
           {
             path: '/contract',

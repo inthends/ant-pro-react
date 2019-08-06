@@ -1,0 +1,27 @@
+ant-pro-react
+本地开发
+安装依赖。
+npm install
+npm start
+
+安装yarn
+npm i yarn tyarn -g
+
+安装umi
+yarn global add umi
+
+安装git
+
+git区块
+umi block add ant-design-pro/analysis
+
+1.yarn create umi
+
+前端外包
+
+
+git
+
+https://github.com/HaoxiangShen/zh
+
+git pull https://github.com/HaoxiangShen/zh master

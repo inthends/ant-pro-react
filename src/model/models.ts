@@ -30,3 +30,4 @@ export * from './leaseContractDTO';
 export * from './reductionMainEntity';
 export * from './reductionDetailEntity';
 export * from './unitReductionDetail';
+export * from './chargeDetailDTO';

@@ -2,21 +2,20 @@ import Page from '@/components/Common/Page';
 import { Button, message, Table, Modal } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
-import { RemoveForm } from './Main.service';
-//import * as moment from 'moment';
-import moment from 'moment'; 
+import { RemoveForm } from './Main.service'; 
+import moment from 'moment';
 
 interface ListTableProps {
   onchange(page: any, filter: any, sort: any): any;
   loading: boolean;
   pagination:  PaginationConfig;
   data: any[];
-  modify(id: string): void;
+  detail(id: string,chargeID:string ): void;
   reload(): void;
 }
 
 function ListTable(props: ListTableProps) {
-  const { onchange, loading, pagination, data, modify, reload } = props;
+  const { onchange, loading, pagination, data, detail, reload } = props;
   const changePage = (pagination:  PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
   };
@@ -32,8 +31,7 @@ function ListTable(props: ListTableProps) {
       },
     });
   };
-  const columns = [
-
+  const columns = [ 
     {
       title: '房号',
       dataIndex: 'no',
@@ -168,11 +166,11 @@ function ListTable(props: ListTableProps) {
         return [
           <Button
             type="primary"
-            key="modify"
+            key="detail"
             style={{ marginRight: '10px' }}
-            onClick={() => modify(record.id)}
+            onClick={() => detail(record.id,record.chargeID)}
           >
-            修改
+            查看
           </Button>,
           <Button type="danger" key="delete" onClick={() => doDelete(record)}>
             删除

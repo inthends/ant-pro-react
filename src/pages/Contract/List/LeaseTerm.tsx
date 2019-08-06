@@ -63,7 +63,7 @@ function LeaseTerm(props: LeaseTermProps) {
           </Form.Item>
         </Col> 
         <Col lg={8}>
-          <Form.Item label="费项" required>
+          <Form.Item label="关联费项" required>
             {getFieldDecorator(`feeItemID[${k}]`, {
               rules: [{ required: true, message: '请选择费项'}]
             })( 
@@ -89,13 +89,13 @@ function LeaseTerm(props: LeaseTermProps) {
         <Col lg={4}>
           <Form.Item label="&nbsp;">
             {getFieldDecorator(`priceUnit[${k}]`, {
-              initialValue: '2'
+              initialValue: '元/m²·天'
             })(
               <Select>
-                <Option value="1">元/m²·月</Option>
-                <Option value="2" >元/m²·天</Option>
-                <Option value="3" >元/月</Option>
-                <Option value="4" >元/天</Option>
+                <Option value="元/m²·月">元/m²·月</Option>
+                <Option value="元/m²·天" >元/m²·天</Option>
+                <Option value="元/月" >元/月</Option>
+                <Option value="元/天" >元/天</Option>
               </Select>)}
           </Form.Item>
         </Col>
@@ -112,34 +112,34 @@ function LeaseTerm(props: LeaseTermProps) {
         <Col lg={4}>
           <Form.Item label="&nbsp;">
             {getFieldDecorator(`advancePayTimeUnit[${k}]`, {
-              initialValue: '1'
+              initialValue: '工作日'
             })(
               <Select>
-                <Option value="1">工作日</Option>
-                <Option value="2" >自然日</Option>
-                <Option value="3" >指定日期</Option>
+                <Option value="工作日">工作日</Option>
+                <Option value="自然日" >自然日</Option>
+                <Option value="指定日期" >指定日期</Option>
               </Select>)}
           </Form.Item>
         </Col>
         <Col lg={4}>
           <Form.Item label="计费类型">
             {getFieldDecorator(`billType[${k}]`, {
-              initialValue: '2'
+              initialValue: '按月计费'
             })(
               <Select>
-                <Option value="1">按实际天数计费</Option>
-                <Option value="2" >按月计费</Option>
+                <Option value="按实际天数计费">按实际天数计费</Option>
+                <Option value="按月计费" >按月计费</Option>
               </Select>)}
           </Form.Item>
         </Col>
         <Col lg={4}>
           <Form.Item label="天单价换算规则">
             {getFieldDecorator(`dayPriceConvertRule[${k}]`, {
-              initialValue: '2',
+              initialValue: '按年换算',
             })(
               <Select>
-                <Option value="1">按自然月换算</Option>
-                <Option value="2" >按年换算</Option>
+                <Option value="按自然月换算">按自然月换算</Option>
+                <Option value="按年换算" >按年换算</Option>
               </Select>
             )}
           </Form.Item>
@@ -164,13 +164,13 @@ function LeaseTerm(props: LeaseTermProps) {
         <Col lg={8}>
           <Form.Item label="租期划分方式">
             {getFieldDecorator(`rentalPeriodDivided[${k}]`, {
-              initialValue: '1'
+              initialValue: '按起始日划分'
             })(
               <Select  >
-                <Option value="1">按起始日划分</Option>
-                <Option value="2">次月按自然月划分(仅一月一付有效)</Option>
-                <Option value="3">按自然月划分(首月非整自然月划入第一期)</Option> 
-                <Option value="4">按自然月划分(首月非整自然月算一个月)</Option>
+                <Option value="按起始日划分">按起始日划分</Option>
+                <Option value="次月按自然月划分(仅一月一付有效)">次月按自然月划分(仅一月一付有效)</Option>
+                <Option value="按自然月划分(首月非整自然月划入第一期)">按自然月划分(首月非整自然月划入第一期)</Option> 
+                <Option value="按自然月划分(首月非整自然月算一个月)">按自然月划分(首月非整自然月算一个月)</Option>
               </Select>)}
           </Form.Item>
         </Col>
@@ -226,13 +226,13 @@ function LeaseTerm(props: LeaseTermProps) {
           <Col lg={4}>
             <Form.Item label="&nbsp;">
               {getFieldDecorator(`priceUnit[0]`, {
-                initialValue: '2'
+                initialValue: '元/m²·天'
               })(
                 <Select onChange={changeUnit}>
-                  <Option value="1">元/m²·月</Option>
-                  <Option value="2">元/m²·天</Option>
-                  <Option value="3">元/月</Option>
-                  <Option value="4">元/天</Option>
+                  <Option value="元/m²·月">元/m²·月</Option>
+                  <Option value="元/m²·天">元/m²·天</Option>
+                  <Option value="元/月">元/月</Option>
+                  <Option value="元/天">元/天</Option>
                 </Select>)}
             </Form.Item>
           </Col>
@@ -249,23 +249,23 @@ function LeaseTerm(props: LeaseTermProps) {
           <Col lg={4}>
             <Form.Item label="&nbsp;">
               {getFieldDecorator(`advancePayTimeUnit[0]`, {
-                initialValue: '1'
+                initialValue: '工作日'
               })(
                 <Select>
-                  <Option value="1">工作日</Option>
-                  <Option value="2" >自然日</Option>
-                  <Option value="3" >指定日期</Option>
+                  <Option value="工作日">工作日</Option>
+                  <Option value="自然日">自然日</Option>
+                  <Option value="指定日期">指定日期</Option>
                 </Select>)}
             </Form.Item>
           </Col>
           <Col lg={4}>
             <Form.Item label="计费类型">
               {getFieldDecorator(`billType[0]`, {
-                initialValue: '2'
+                initialValue: '按月计费'
               })(
                 <Select>
-                  <Option value="1">按实际天数计费</Option>
-                  <Option value="2" >按月计费</Option>
+                  <Option value="按实际天数计费">按实际天数计费</Option>
+                  <Option value="按月计费" >按月计费</Option>
                 </Select>)}
             </Form.Item>
           </Col>
@@ -275,11 +275,11 @@ function LeaseTerm(props: LeaseTermProps) {
               <Col lg={4}>
                 <Form.Item label="天单价换算规则">
                   {getFieldDecorator(`dayPriceConvertRule[0]`, {
-                    initialValue: '2',
+                    initialValue: '按年换算',
                   })(
                     <Select>
-                      <Option value="1">按自然月换算</Option>
-                      <Option value="2" >按年换算</Option>
+                      <Option value="按自然月换算">按自然月换算</Option>
+                      <Option value="按年换算" >按年换算</Option>
                     </Select>
                   )}
                 </Form.Item>
@@ -307,13 +307,13 @@ function LeaseTerm(props: LeaseTermProps) {
           <Col lg={9}>
             <Form.Item label="租期划分方式">
               {getFieldDecorator(`rentalPeriodDivided[0]`, {
-                initialValue: '1'
+                initialValue: '按起始日划分'
               })(
                 <Select  >
-                  <Option value="1">按起始日划分</Option>
-                  <Option value="2">次月按自然月划分(仅一月一付有效)</Option>
-                  <Option value="3">按自然月划分(首月非整自然月划入第一期)</Option> 
-                  <Option value="4">按自然月划分(首月非整自然月算一个月)</Option>
+                  <Option value="按起始日划分">按起始日划分</Option>
+                  <Option value="次月按自然月划分(仅一月一付有效)">次月按自然月划分(仅一月一付有效)</Option>
+                  <Option value="按自然月划分(首月非整自然月划入第一期)">按自然月划分(首月非整自然月划入第一期)</Option> 
+                  <Option value="按自然月划分(首月非整自然月算一个月)">按自然月划分(首月非整自然月算一个月)</Option>
                 </Select>)}
             </Form.Item>
           </Col>

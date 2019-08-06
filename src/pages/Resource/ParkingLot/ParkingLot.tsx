@@ -31,7 +31,7 @@ function ParkingLot() {
       const root = res.filter(item => item.parentId === '0');
       const rootOrg = root.length === 1 ? root[0] : undefined;
       SetOrganize(rootOrg);
-      initLoadData(rootOrg, '');
+      initLoadData('', '');
     });
   }, []);
   // 获取属性数据
@@ -142,11 +142,11 @@ function ParkingLot() {
           selectTree(id, item, search);
         }}
       />
-      <Content style={{ padding: '0 20px' }}>
-        <div style={{ marginBottom: '20px', padding: '3px 0' }}>
+      <Content  style={{paddingLeft:'18px'}} >
+        <div style={{ marginBottom: '10px'  }}>
           <Search
             className="search-input"
-            placeholder="搜索楼宇名称"
+            placeholder="请输入要查询的关键词"
             onSearch={value => loadData(value, organize)}
             style={{ width: 200 }}
           />

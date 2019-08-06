@@ -6,16 +6,20 @@ import React, { useEffect, useState } from 'react';
 import { GetPageListJson } from './Main.service';
 import ListTable from './ListTable';
 import Modify from './Modify';
+import Detail from './Detail';
 
 const { Content } = Layout;
 const { Search } = Input;
 
 function Main() {
-  const [modifyVisible, setModifyVisible] = useState<boolean>(false);
+  const [modifyVisible, setModifyVisible] = useState<boolean>(false); 
+  const [detailVisible, setDetailVisible] = useState<boolean>(false);
+
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [data, setData] = useState<any[]>([]);
   const [id, setId] = useState<string>();
+  const [chargeID, setChargeID] = useState<string>();
   const [search, setSearch] = useState<string>('');
 
   const closeDrawer = () => {
@@ -25,6 +29,17 @@ function Main() {
     setModifyVisible(true);
     setId(id);
   };
+
+  const closeDetailDrawer = () => {
+    setDetailVisible(false);
+  };
+
+  const showDetailDrawer = (id?,chargeID?) => { 
+    setDetailVisible(true);
+    setId(id);
+    setChargeID(chargeID);
+  };
+
   const loadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
@@ -86,7 +101,7 @@ function Main() {
 
   return (
     <Layout style={{ height: '100%' }}>
-      <Content style={{ padding: '0 20px' }}>
+      <Content  >
         <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
           <Search
             className="search-input"
@@ -99,7 +114,7 @@ function Main() {
           >
             <Icon type="plus" />
             合同
-  </Button>
+          </Button>
         </div>
 
         <ListTable
@@ -109,7 +124,7 @@ function Main() {
           loading={loading}
           pagination={pagination}
           data={data}
-          modify={showDrawer}
+          detail={showDetailDrawer}
           reload={() => initLoadData(search)} />
       </Content>
 
@@ -120,6 +135,14 @@ function Main() {
         id={id}
         reload={() => initLoadData(search)}
       />
+
+      <Detail
+        modifyVisible={detailVisible}
+        closeDrawer={closeDetailDrawer}
+        id={id}
+        chargeID={chargeID}
+        reload={() => initLoadData(search)}
+      /> 
     </Layout>
   );
 }

@@ -1,11 +1,10 @@
 import Page from '@/components/Common/Page';
 import { Button, message, Table, Modal } from 'antd';
-import { ColumnProps, PaginationConfig } from 'antd/lib/table';
-import Link from 'umi/link';
+import { ColumnProps, PaginationConfig } from 'antd/lib/table'; 
 import React from 'react';
 import { RemoveForm } from './House.service';
 
-interface ListTableProps {
+interface ListTableMoreProps {
   loading: boolean;
   pagination: PaginationConfig;
   data: any[];
@@ -14,7 +13,7 @@ interface ListTableProps {
   reload(): void;
 }
 
-function ListTable(props: ListTableProps) {
+function ListTableMore(props: ListTableMoreProps) {
   const { onchange, loading, pagination, data, modify, reload } = props;
   const changePage = (pag: PaginationConfig, filters, sorter) => {
     onchange(pag, filters, sorter);
@@ -34,79 +33,46 @@ function ListTable(props: ListTableProps) {
 
   const columns = [
     {
-      title: '项目名称',
+      title: '名称',
       dataIndex: 'name',
       key: 'name',
       width: 200,
       fixed: 'left',
-      sorter: true,
-      render: (text, record) => {
-        //return <Link to={`housemore?pstructid=${record.id}&type=2`}>{record.name}</Link>   
-        return <Link to={{ pathname: 'housemore', state: { pstructid: record.id } }}>{record.name}</Link>
-      }
+      sorter: true
     },
     {
-      title: '总建筑面积',
+      title: '编号',
+      dataIndex: 'code',
+      key: 'code',
+      width: 150,
+      sorter: true,
+    },
+    {
+      title: '建筑面积',
       dataIndex: 'area',
       key: 'area',
       width: 120,
       sorter: true,
     },
+   
     {
-      title: '总房屋数',
-      dataIndex: 'roomcount',
-      key: 'roomcount',
+      title: '联系电话',
+      dataIndex: 'phonenum',
+      key: 'phonenum',
       width: 100,
       sorter: true,
-    },
+    }, 
     {
-      title: '入住面积',
-      dataIndex: 'checkarea',
-      key: 'checkarea',
-      width: 100,
+      title: '全称',
+      dataIndex: 'allname',
+      key: 'allname', 
       sorter: true,
-    },
-    {
-      title: '空置面积',
-      dataIndex: 'area2',
-      key: 'area2',
-      width: 100,
-      render: (text, record) => {
-        return record.area - record.checkarea;
-      },
-      sorter: true,
-    },
-    {
-      title: '入住房屋数',
-      dataIndex: 'checkroom',
-      key: 'checkroom',
-      width: 120,
-      sorter: true,
-    },
-    {
-      title: '空置房屋数',
-      dataIndex: 'vacancyroom',
-      key: 'vacancyroom',
-      width: 120,
-      sorter: true,
-    },
-    {
-      title: '入驻率',
-      dataIndex: 'rate',
-      sorter: true,
-      key: 'rate',
-      render: (text, record) => {
-        return (
-          (record.roomcount ? (record.checkroom / record.roomcount) * 100 : 0).toFixed(2) + '%'
-        );
-      },
-    },
+    }, 
     {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
-      width: 155,
-      fixed: 'right',
+      width: 155, 
       render: (text, record) => {
         return [
           <Button
@@ -133,8 +99,7 @@ function ListTable(props: ListTableProps) {
         dataSource={data}
         columns={columns}
         rowKey={record => record.id}
-        pagination={pagination}
-        scroll={{ x: 1100 }}
+        pagination={pagination} 
         onChange={(pag: PaginationConfig, filters, sorter) => changePage(pag, filters, sorter)}
         loading={loading}
       />
@@ -142,4 +107,4 @@ function ListTable(props: ListTableProps) {
   );
 }
 
-export default ListTable;
+export default ListTableMore;

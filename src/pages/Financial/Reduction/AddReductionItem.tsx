@@ -1,8 +1,8 @@
-import { Tabs ,Button, Icon, Input, Layout,Row,Col,DatePicker,Modal } from 'antd';
+import { Layout,Row,Col,DatePicker,Modal } from 'antd';
 import React, { useEffect, useState } from 'react';
 import LeftTree from '../LeftTree';
 import { TreeEntity } from '@/model/models';
-import { GetTreeListExpand,GetFeeTreeListExpand,GetUnitBillDetail } from './Main.service';
+import { GetTreeListExpand,GetFeeTreeListExpand } from './Main.service';
 import { getResult } from '@/utils/networkUtils';
 import  moment from 'moment';
 
@@ -78,16 +78,16 @@ const AddReductionItem = (props:AddReductionProps)=> {
     return GetTreeListExpand()
       .then(getResult)
       .then((res: TreeEntity[]) => {
-        const treeList = (res || []).map(item => {
-          return {
-            ...item,
-            id: item.id,
-            text: item.title,
-            parentId: item.pId,
-          };
-        });
-        setTreeData(treeList);
-        return treeList;
+        // const treeList = (res || []).map(item => {
+        //   return {
+        //     ...item,
+        //     id: item.id,
+        //     text: item.title,
+        //     parentId: item.pId,
+        //   };
+        // });
+        setTreeData(res || []);
+        return res || [];
       });
   };
 

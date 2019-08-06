@@ -1,17 +1,16 @@
 import { ResponseObject, TreeEntity } from '@/model/models';
 import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
-import { 	ReductionMainEntity } from '@/model/reductionMainEntity';
-import { 	UnitReductionDetail } from '@/model/unitReductionDetail';
+import { 	ReductionMainEntity } from '@/model/reductionMainEntity'; 
 
 //加载所有收费项
 export function GetFeeTreeListExpand(): Promise<ResponseObject<TreeEntity[]>> {
   return request.get(process.env.basePath + `/FeeItems/GetTreeListExpand`, {});
 }
 
-//加载房间数
+//加载房间树
 export function GetTreeListExpand(): Promise<ResponseObject<TreeEntity[]>> {
-  return request.get(process.env.basePath + `/Common/GetQuickPStructsTreeJsonAll`, {});
+  return request.get(process.env.basePath + `/Common/GetQuickPStructsTree`, {});
 }
 
 // 查询列表
@@ -36,7 +35,7 @@ export function GetFormJson(keyValue): Promise<ReductionMainEntity> {
     .then(getResult as any);
 }
 
-//获取费项类型
+//获取减免费项类型
 export function GetReductionItem(): Promise<TreeEntity[]> {
   return request
     .get(process.env.basePath + `/Reduction/SelectReduction`)

@@ -36,10 +36,7 @@ export interface LeaseContractDTO {
      * 租赁数量
      */
     leaseSize?: number;
-    /**
-     * 当前租赁数量单位代码
-     */
-    leaseSizeUnitId?: string;
+
     /**
      * 当前租赁数量单位
      */
@@ -60,10 +57,7 @@ export interface LeaseContractDTO {
      * 单价保留小数点位数
      */
     precision?: number;
-    /**
-     * 计算精度的方式代码  0-精确计算结果保留2位小数  1-每步计算保留2位小数
-     */
-    calcPrecisionModeId?: string;
+ 
     /**
      * 计算精度的方式  0-精确计算结果保留2位小数  1-每步计算保留2位小数
      */
@@ -76,10 +70,7 @@ export interface LeaseContractDTO {
      * 租客名称
      */
     customer?: string;
-    /**
-     * 行业代码
-     */
-    industryId?: string;
+
     /**
      * 行业
      */
@@ -96,10 +87,7 @@ export interface LeaseContractDTO {
      * 签订人
      */
     signer?: string;
-    /**
-     * 租客联系人
-     */
-    customerContactId?: string;
+ 
     /**
      * 租客联系人
      */
@@ -108,10 +96,7 @@ export interface LeaseContractDTO {
      * 滞纳金比例
      */
     lateFee?: number;
-    /**
-     * 滞纳金比例单位代码
-     */
-    lateFeeUnitId?: string;
+
     /**
      * 滞纳金比例单位
      */
@@ -120,18 +105,12 @@ export interface LeaseContractDTO {
      * 滞纳金上限
      */
     maxLateFee?: number;
-    /**
-     * 滞纳金上限单位代码
-     */
-    maxLateFeeUnitId?: string;
+
     /**
      * 滞纳金上限单位
      */
     maxLateFeeUnit?: string;
-    /**
-     * 合同状态代码
-     */
-    stateId?: string;
+
     /**
      * 合同状态
      */
@@ -144,8 +123,8 @@ export interface LeaseContractDTO {
      * 租出合同房源
      */
     houseList?: Array<LeaseContractHouseDTO>;
-    /**
-     * 合同条款ID
-     */
-    chargeID?: string;
+     /**
+      * 合同条款ID
+      */
+     chargeID?: string;
 }
