@@ -5,21 +5,16 @@ import React from 'react';
 import { AuthModelState } from '@/models/auth';
 
 interface AuthButtonProps extends ButtonProps {
-  code: string;
+  encode: string;
   authbtnlist?: any[];
   pathname?: string;
 }
 
 const AuthButton = (props: AuthButtonProps) => {
-  const { authbtnlist = {}, pathname = '', code, disabled = false } = props;
-  let authlist: any[] = [];
-  for (let key in authbtnlist) {
-    authlist = [...authlist, authbtnlist[key]];
-  }
+  const { authbtnlist = [], pathname = '', encode, disabled = false } = props;
   console.log(authbtnlist);
   const authDisabled =
-    authlist.some(item => (item.actionAddress = pathname && item.enCode === code)) || disabled;
-
+  !authbtnlist.some(item => (item.actionAddress = pathname && item.enCode === encode)) || disabled;
   return <Button {...props} disabled={authDisabled}></Button>;
 };
 

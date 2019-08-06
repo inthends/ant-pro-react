@@ -25,14 +25,14 @@ function House() {
   const [id, setId] = useState<string>();
   const [search, setSearch] = useState<string>('');
 
-  // const disabledCreate = (tree: any[], orgId: string) => {
-  //   for (const item of tree) {
-  //     if (item.id === orgId && item.parentId !== '0') {
-  //       return false;
-  //     }
-  //   }
-  //   return true;
-  // };
+  const disabledCreate = (tree: any[], orgId: string) => {
+    for (const item of tree) {
+      if (item.id === orgId && item.parentId !== '0') {
+        return false;
+      }
+    }
+    return true;
+  };
 
   const selectTree = (org, searchText) => {
     initLoadData(org, searchText);
@@ -148,6 +148,7 @@ function House() {
             // disabled={disabledCreate(treeData, organizeId)}
             style={{ float: 'right' }}
             onClick={() => showDrawer()}
+            encode="lr-replace"
           >
             <Icon type="plus" />
             项目
