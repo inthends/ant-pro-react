@@ -54,6 +54,7 @@ export default [
           },
           {
             name: '房产资料',
+            hideInMenu: true,
             path: '/resource/housemore',
             component: './Resource/House/HouseMore',
           },
@@ -122,8 +123,8 @@ export default [
           },
           {
             name: '费用冲抵',
-            path: '/financial/test6',
-            component: './Financial/Test1',
+            path: '/financial/offset',
+            component: './Financial/Offset/Offset',
           },
           {
             name: '费用减免',

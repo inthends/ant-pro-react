@@ -13,7 +13,7 @@ interface ListTableMoreProps {
   reload(): void;
 }
 
-function ListTableMore(props: ListTableMoreProps) {
+function ListTableMore(props: ListTableMoreProps) {  
   const { onchange, loading, pagination, data, modify, reload } = props;
   const changePage = (pag: PaginationConfig, filters, sorter) => {
     onchange(pag, filters, sorter);

@@ -3,8 +3,8 @@ import { DefaultPagination } from '@/utils/defaultSetting';
 import { Form, Tabs, Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { GetPageListJson, GetBuildings } from './House.service';
-import LeftTree from '../LeftTree';
+import { GetPageListJson } from './House.service';
+import AsynLeftTree from '../AsynLeftTree';
 import ListTableMore from './ListTableMore';
 import Modify from './Modify';
 
@@ -15,30 +15,31 @@ const { TabPane } = Tabs;
 // interface HouseMoreProps {
 // }
 
-
 function HouseMore(props) {
   const [pstructId, setPstructId] = useState<string>('');//小区id
-  const [organize, setOrganize] = useState<any>({});
+  const [type, setType] = useState<string>('1');
+  const [parentId, setParentId] = useState<string>('');
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
-  const [treeData, setTreeData] = useState<any[]>([]);
+  //const [treeData, setTreeData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [data, setData] = useState<any[]>([]);
   const [search, setSearch] = useState<string>('');
 
-  const selectTree = (orgid, item, searchText) => {
-    initLoadData(item, searchText); 
-    setOrganize(item);
+  const selectTree = (parentId,type, searchText) => { 
+    initLoadData(parentId, type, searchText, pstructId);
+    setType(type);
+    setParentId(parentId);
   };
 
   useEffect(() => {
     //页面传递过来的值  
-    const _pstructid = props.location.state ? props.location.state.pstructid : '';
-    setPstructId(_pstructid);
-    GetBuildings(_pstructid).then((res: any[]) => {
-      setTreeData(res || []);
-    });
-    initLoadData('', '');
+    const psid = props.location.state ? props.location.state.pstructid : '';
+    setPstructId(psid);
+    // GetBuildings(psid).then((res: any[]) => {
+    //   setTreeData(res || []);
+    // });
+    initLoadData(parentId, type, '', psid);
   }, []);
 
 
@@ -49,7 +50,7 @@ function HouseMore(props) {
     //setId(orgId);
     setModifyVisible(true);
   };
-  const loadData = (searchText, org, paginationConfig?: PaginationConfig, sorter?) => {
+  const loadData = (searchText, parentId, type, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(searchText);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
@@ -61,10 +62,10 @@ function HouseMore(props) {
       pageSize,
       total,
       queryJson: {
-        ParentId: org.id,
+        ParentId: parentId,
         keyword: searchText,
         PStructId: pstructId,
-        Type: org.type
+        Type: type
       },
     };
 
@@ -78,6 +79,7 @@ function HouseMore(props) {
       return res;
     });
   };
+
   const load = formData => {
     setLoading(true);
     formData.sidx = formData.sidx || 'id';
@@ -98,13 +100,13 @@ function HouseMore(props) {
     });
   };
 
-  const initLoadData = (org, searchText) => {
+  const initLoadData = (parentId, type, searchText, psid) => {  
     setSearch(searchText);
-    const queryJson = { 
+    const queryJson = {
       keyword: search,
-      PStructId: pstructId,
-      ParentId: org.id,
-      Type: org.type
+      PStructId: psid,
+      ParentId: parentId == null ? psid : parentId,
+      Type: type == null ? 1 : type
     };
     const sidx = 'id';
     const sord = 'asc';
@@ -116,10 +118,11 @@ function HouseMore(props) {
 
   return (
     <Layout style={{ height: '100%' }}>
-      <LeftTree
-        treeData={treeData}
-        selectTree={(id, item) => {
-          selectTree(id, item, search);
+      <AsynLeftTree
+        parentid={pstructId}
+        // treeData={treeData}
+        selectTree={(parentId, type) => {
+          selectTree(parentId, type, search);
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>
@@ -128,18 +131,15 @@ function HouseMore(props) {
             <div style={{ marginBottom: '10px' }}>
               <Search
                 className="search-input"
-                placeholder="搜索项目名称"
+                placeholder="搜索关键字"
                 value={search}
-                onSearch={value => loadData(value, organize)}
+                onSearch={value => loadData(value, parentId, type)}
                 style={{ width: 200 }}
               />
-
-
               <Button
                 type="primary"
                 style={{ float: 'right' }}
-                onClick={() => showDrawer()}
-              >
+                onClick={() => showDrawer()}  >
                 <Icon type="plus" />
                 新增
           </Button>
@@ -147,18 +147,17 @@ function HouseMore(props) {
 
             <ListTableMore
               onchange={(paginationConfig, filters, sorter) =>
-                loadData(search, organize, paginationConfig, sorter)
+                loadData(search, parentId, type, paginationConfig, sorter)
               }
               loading={loading}
               pagination={pagination}
               data={data}
               modify={showDrawer}
-              reload={() => initLoadData(organize, search)}
+              reload={() => initLoadData(parentId, type, search, pstructId)}
             />
 
           </TabPane>
           <TabPane tab="房态图" key="2">
-
           </TabPane>
         </Tabs>
       </Content>
@@ -166,10 +165,10 @@ function HouseMore(props) {
       <Modify
         modifyVisible={modifyVisible}
         closeDrawer={closeDrawer}
-        treeData={treeData}
+        treeData={[]}
         organizeId={''}
         id={''}
-        reload={() => initLoadData(organize, search)}
+        reload={() => initLoadData(parentId, type, search, pstructId)}
       />
     </Layout>
   );
