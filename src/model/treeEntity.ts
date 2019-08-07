@@ -11,68 +11,19 @@
  */
 
 export interface TreeEntity {
+   
   /**
-   * 附加属性
+   * key
    */
-  attribute?: string;
-  /**
-   * 附加属性A
-   */
-  attributeA?: string;
-  /**
-   * 附加属性值
-   */
-  attributeValue?: string;
-  /**
-   * 附加属性A值
-   */
-  attributeValueA?: string;
-  /**
-   * 选中状态
-   */
-  checkstate?: number;
-  /**
-   * 是否加载完成
-   */
-  complete?: boolean;
-  /**
-   * 是否有子节点
-   */
-  hasChildren?: boolean;
-  /**
-   * id
-   */
-  id?: string;
-  /**
-   * 图标样式
-   */
-  img?: string;
-  imgstyle?: string;
-  /**
-   * 是否展开
-   */
-  isexpand?: boolean;
-  level?: number;
+  key?: string; 
   /**
    * parentId
    */
-  parentId?: string;
-  /**
-   * 是否显示checkbox
-   */
-  showcheck?: boolean;
+  parentId?: string;  
   /**
    * 标题
    */
-  text?: string;
-  /**
-   * 提示
-   */
-  title?: string;
-  /**
-   * 值
-   */
+  title?: string; 
   value?: string;
-
   type?: string;
 }

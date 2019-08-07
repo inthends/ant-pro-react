@@ -1,24 +1,19 @@
-import { TreeEntity } from '@/model/models';
-import { DefaultPagination } from '@/utils/defaultSetting';
-import { getResult } from '@/utils/networkUtils';
+ 
+import { DefaultPagination } from '@/utils/defaultSetting'; 
 import { Tabs, Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
-import React, { useContext, useEffect, useState } from 'react';
-import { GetTreeListExpand, GetPageListJson, GetDetailPageListJson } from './Main.service';
-import LeftTree from '../LeftTree';
+import React, { useEffect, useState } from 'react';
+import { GetPageListJson, GetDetailPageListJson } from './Main.service';
+import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
 import DetailList from './DetailList';
-import Page from '@/components/Common/Page';
-import { SiderContext } from './SiderContext';
-
-const { Sider, Content } = Layout;
+const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
 
 function Main() {
-  const [modifyVisible, setModifyVisible] = useState<boolean>(false);
-  const [treeData, setTreeData] = useState<TreeEntity[]>([]);
+  const [modifyVisible, setModifyVisible] = useState<boolean>(false); 
   const [organize, SetOrganize] = useState<any>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [detailloading, setDetailLoading] = useState<boolean>(false);
@@ -26,7 +21,6 @@ function Main() {
   const [detailpagination, setDetailPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [data, setData] = useState<any[]>([]); const [detaildata, setDetailData] = useState<any[]>([]);
   const [id, setId] = useState<string>();
-  const { hideSider, setHideSider } = useContext(SiderContext);
 
   const [search, setSearch] = useState<string>('');
   const [detailsearch, setDetailSearch] = useState<string>('');
@@ -37,31 +31,36 @@ function Main() {
   };
 
   useEffect(() => {
-    getTreeData().then(res => {
-      const root = res.filter(item => item.parentId === '0');
-      const rootOrg = root.length === 1 ? root[0] : undefined;
-      SetOrganize(rootOrg);
-      initLoadData(rootOrg, '');
-      initDetailLoadData(rootOrg, '');
-    });
+    // getTreeData().then(res => {
+    //   const root = res.filter(item => item.parentId === '0');
+    //   const rootOrg = root.length === 1 ? root[0] : undefined;
+    //   SetOrganize(rootOrg);
+    //   initLoadData(rootOrg, '');
+    //   initDetailLoadData(rootOrg, '');
+    // });
+
+    initLoadData('', '');
+    initDetailLoadData('', '');
+
+
   }, []);
   // 获取属性数据
-  const getTreeData = () => {
-    return GetTreeListExpand()
-      .then(getResult)
-      .then((res: TreeEntity[]) => {
-        // const treeList = (res || []).map(item => {
-        //   return {
-        //     ...item,
-        //     id: item.id,
-        //     text: item.title,
-        //     parentId: item.pId,
-        //   };
-        // });
-        setTreeData(res || []);
-        return res || [];
-      });
-  };
+  // const getTreeData = () => {
+  //   return GetTreeListExpand()
+  //     .then(getResult)
+  //     .then((res: TreeEntity[]) => {
+  //       // const treeList = (res || []).map(item => {
+  //       //   return {
+  //       //     ...item,
+  //       //     id: item.id,
+  //       //     text: item.title,
+  //       //     parentId: item.pId,
+  //       //   };
+  //       // });
+  //       setTreeData(res || []);
+  //       return res || [];
+  //     });
+  // };
 
   const closeDrawer = () => {
     setModifyVisible(false);
@@ -194,53 +193,13 @@ function Main() {
 
 
   return (
-    <Layout style={{ height: '100%' }}> 
-      <Sider
-        theme="light"
-        style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh - 100px)' }}
-        width={hideSider ? 20 : 245}
-      >
-        {hideSider ? (
-          <div style={{ position: 'absolute', top: '40%', left: 5 }}>
-            <Icon
-              type="double-right"
-              onClick={() => {
-                setHideSider(false);
-              }}
-              style={{ color: '#1890ff' }}
-            />
-          </div>
-        ) : (
-            <>
-              <Page
-                style={{
-                  padding: '6px',
-                  borderLeft: 'none',
-                  borderBottom: 'none',
-                  height: '100%',
-                  overflowY: 'auto',
-                }}
-              >
-                <LeftTree
-                  treeData={treeData}
-                  selectTree={(id, item) => {
-                    selectTree(id, item, search);
-                  }}
-                />
-              </Page>
-              ,
-          <div
-                style={{ position: 'absolute', top: '40%', right: -15 }}
-                onClick={() => {
-                  setHideSider(true);
-                }}
-              >
-                <Icon type="double-left" style={{ color: '#1890ff' }} />
-              </div>
-            </>
-          )}
-      </Sider>
-
+    <Layout style={{ height: '100%' }}>
+      <AsynLeftTree
+        parentid={'0'}
+        selectTree={(id, item) => {
+          selectTree(id, item, search);
+        }}
+      />
       <Content style={{ padding: '0 18px' }}>
         <Tabs defaultActiveKey="1" >
           <TabPane tab="减免单" key="1">
@@ -301,5 +260,4 @@ function Main() {
     </Layout>
   );
 }
-
 export default Main;

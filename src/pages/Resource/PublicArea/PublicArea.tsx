@@ -1,25 +1,24 @@
-import { TreeEntity } from '@/model/models';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import LeftTree from '../LeftTree';
+import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
-import { GetPublicAreas, GetQuickPublicAreaTree } from './PublicArea.service';
+import { GetPublicAreas } from './PublicArea.service';
 
 const { Content } = Layout;
 const { Search } = Input;
 
 function PublicArea() {
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
-  const [treeData, setTreeData] = useState<TreeEntity[]>([]);
+  //const [treeData, setTreeData] = useState<TreeEntity[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [organize, SetOrganize] = useState<any>({});
   const [data, setData] = useState<any[]>([]);
   const [currData, setCurrData] = useState<any>();
-  const [search, setSearch] = useState<string>('');
+  const [search, setSearch] = useState<string>('');  
 
   const selectTree = (org, item, searchText) => {
     initLoadData(item, searchText);
@@ -27,29 +26,33 @@ function PublicArea() {
   };
 
   useEffect(() => {
-    getTreeData().then(res => {
-      const root = res.filter(item => item.parentId === '0');
-      const rootOrg = root.length === 1 ? root[0] : undefined;
-      SetOrganize(rootOrg);
-      initLoadData('', '');
-    });
+    // getTreeData().then(res => {
+    //   const root = res.filter(item => item.parentId === '0');
+    //   const rootOrg = root.length === 1 ? root[0] : undefined;
+    //   SetOrganize(rootOrg);
+    //   initLoadData('', '');
+    // });
+
+    initLoadData('', ''); 
+
   }, []);
+
   // 获取属性数据
-  const getTreeData = () => {
-    return GetQuickPublicAreaTree().then((res: any[]) => {
-      //const treeList = (res || []);
-      //.map(item => {
-      //   return {
-      //     ...item,
-      //     id: item.id,
-      //     text: item.name,
-      //     parentId: item.pId,
-      //   };
-      // });
-      setTreeData(res || []);
-      return res || [];
-    });
-  };
+  // const getTreeData = () => {
+  //   return GetQuickPublicAreaTree().then((res: any[]) => {
+  //     //const treeList = (res || []);
+  //     //.map(item => {
+  //     //   return {
+  //     //     ...item,
+  //     //     id: item.id,
+  //     //     text: item.name,
+  //     //     parentId: item.pId,
+  //     //   };
+  //     // });
+  //     setTreeData(res || []);
+  //     return res || [];
+  //   });
+  // };
 
   const closeDrawer = () => {
     setModifyVisible(false);
@@ -126,17 +129,18 @@ function PublicArea() {
 
   return (
     <Layout style={{ height: '100%' }}>
-      <LeftTree
-        treeData={treeData}
-        selectTree={(id, item) => {
-          selectTree(id, item, search);
+     <AsynLeftTree
+        parentid={'0'}
+        //treeData={treeData}
+        selectTree={(parentId, type) => {
+          selectTree(parentId, type, search);
         }}
       />
       <Content style={{ padding: '0 20px' }}>
         <div style={{ marginBottom: '20px', padding: '3px 0' }}>
           <Search
             className="search-input"
-            placeholder="搜索楼宇名称"
+            placeholder="搜索区域名称"
             onSearch={value => loadData(value, organize)}
             style={{ width: 200 }}
           />
@@ -159,8 +163,7 @@ function PublicArea() {
 
       <Modify
         modifyVisible={modifyVisible}
-        closeDrawer={closeDrawer}
-        treeData={treeData}
+        closeDrawer={closeDrawer} 
         organizeId={organize.id}
         data={currData}
         reload={() => initLoadData(organize, search)}

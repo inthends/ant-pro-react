@@ -1,6 +1,6 @@
 import Page from '@/components/Common/Page';
 import { Icon, Layout, Tree } from 'antd';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { SiderContext } from '../SiderContext';
 
 const { TreeNode } = Tree;
@@ -12,32 +12,40 @@ interface LeftTreeProps {
 }
 function LeftTree(props: LeftTreeProps) {
   const { treeData, selectTree } = props;
-  const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
-  const [autoExpandParent, setAutoExpandParent] = useState<boolean>(false);
+  // const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
+  // const [autoExpandParent, setAutoExpandParent] = useState<boolean>(false);
   const { hideSider, setHideSider } = useContext(SiderContext);
 
-  useEffect(() => {
-    setExpandedKeys(treeData.map(item => item.id as string));
-  }, [treeData]);
+  // useEffect(() => {
+  //   setExpandedKeys(treeData.map(item => item.key as string));
+  // }, [treeData]);
 
   const onSelect = (selectedKeys, info) => {
-    if (selectedKeys.length === 1) {
-      const item = treeData.filter(treeItem => treeItem.id === selectedKeys[0])[0];
-      selectTree(selectedKeys[0], item);
+    // if (selectedKeys.length === 1) {
+    //   const item = treeData.filter(treeItem => treeItem.key === selectedKeys[0])[0];
+    //   selectTree(selectedKeys[0], item);
+    // }
+
+debugger
+
+
+    if (selectedKeys.length === 1) { 
+      selectTree(selectedKeys[0], info.node.props.type);
     }
+
   };
 
-  const renderTree = (tree: any[], parentId: string) => {
-    return tree
-      .filter(item => item.parentId === parentId)
-      .map(filteditem => {
-        return (
-          <TreeNode title={filteditem.title} key={filteditem.id}>
-            {renderTree(tree, filteditem.id as string)}
-          </TreeNode>
-        );
-      });
-  };
+  // const renderTree = (tree: any[], parentId: string) => {
+  //   return tree
+  //     .filter(item => item.parentId === parentId)
+  //     .map(filteditem => {
+  //       return (
+  //         <TreeNode title={filteditem.title} key={filteditem.key}>
+  //           {renderTree(tree, filteditem.key)}
+  //         </TreeNode>
+  //       );
+  //     });
+  // };
 
   // const clickExpend = (expandedKeys, { isExpanded, node }) => {
   //   const selectNode = node.props.eventKey; 
@@ -48,13 +56,24 @@ function LeftTree(props: LeftTreeProps) {
   //   }
   // };
 
-  const clickExpend = expandedKeys => {
-    // if not set autoExpandParent to false, if children expanded, parent can not collapse.
-    // or, you can remove all expanded children keys.
-    setExpandedKeys(expandedKeys);
-    setAutoExpandParent(false);
-  };
+  // const clickExpend = expandedKeys => {
+  //   // if not set autoExpandParent to false, if children expanded, parent can not collapse.
+  //   // or, you can remove all expanded children keys.
+  //   setExpandedKeys(expandedKeys);
+  //   setAutoExpandParent(false);
+  // };
 
+ const renderTreeNodes = data =>
+    data.map(item => {
+      if (item.children) {
+        return ( 
+          <TreeNode {...item} dataRef={item} >
+            {renderTreeNodes(item.children)}
+          </TreeNode>
+        );
+      }
+      return <TreeNode {...item} dataRef={item} />;
+    });
 
   return (
     <Sider
@@ -83,14 +102,15 @@ function LeftTree(props: LeftTreeProps) {
                 overflowY: 'auto',
               }}
             >
-              <Tree
-                expandedKeys={expandedKeys}
-                showLine
-                autoExpandParent={autoExpandParent}
+              <Tree 
+                showLine 
                 onSelect={onSelect}
-                onExpand={clickExpend}>
-                { renderTree(treeData,'0') }
-
+                // expandedKeys={expandedKeys}
+                // autoExpandParent={autoExpandParent}
+                // onExpand={clickExpend}
+                >
+                {/* { renderTree(treeData,'0') } */}
+                {renderTreeNodes(treeData)}
               </Tree>
             </Page>
             <div

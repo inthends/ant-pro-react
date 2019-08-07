@@ -37,7 +37,7 @@ interface ModifyProps {
 const Modify = (props: ModifyProps) => {
   const { treeData, modifyVisible, closeDrawer, form, organizeId, id, reload } = props;
   const { getFieldDecorator } = form;
-  const title = id === undefined ? '添加小区' : '修改小区';
+  const title = id === undefined ? '添加项目' : '修改项目';
   const [pro, setPro] = useState<TreeEntity[]>([]);
   const [city, setCity] = useState<TreeEntity[]>([]);
   const [area, setArea] = useState<TreeEntity[]>([]);
@@ -141,17 +141,20 @@ const Modify = (props: ModifyProps) => {
       visible={modifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
-      <Card title="基本信息" className={styles.card} bordered={false}>
+      <Card className={styles.card} >
         {modifyVisible ? (
           <Form layout="vertical" hideRequiredMark>
             <Row gutter={24}>
-              <Col lg={12}>
+              <Col lg={24}>
                 <Form.Item label="隶属机构" required>
                   {getFieldDecorator('organizeId', {
                     initialValue: infoDetail.organizeId,
                     rules: [{ required: true, message: '请选择隶属机构' }],
                   })(
-                    <TreeSelect placeholder="请选择隶属机构" allowClear treeDefaultExpandAll>
+                    <TreeSelect placeholder="请选择隶属机构"
+                      dropdownStyle={{ maxHeight: 400 }}
+                      allowClear
+                      treeDefaultExpandAll>
                       {renderTree(treeData, '0')}
                     </TreeSelect>,
                   )}
@@ -195,7 +198,7 @@ const Modify = (props: ModifyProps) => {
                         >
                           {pro.map(item => (
                             <Option key={item.value} value={item.value}>
-                              {item.text}
+                              {item.title}
                             </Option>
                           ))}
                         </Select>,
@@ -216,7 +219,7 @@ const Modify = (props: ModifyProps) => {
                         >
                           {city.map(item => (
                             <Option key={item.value} value={item.value}>
-                              {item.text}
+                              {item.title}
                             </Option>
                           ))}
                         </Select>,
@@ -236,7 +239,7 @@ const Modify = (props: ModifyProps) => {
                         >
                           {area.map(item => (
                             <Option key={item.value} value={item.value}>
-                              {item.text}
+                              {item.title}
                             </Option>
                           ))}
                         </Select>,
@@ -328,8 +331,8 @@ const Modify = (props: ModifyProps) => {
                   })(
                     <Select placeholder="请选择项目类型">
                       {project.map(item => (
-                        <Option key={item.value} value={item.value}>
-                          {item.text}
+                        <Option key={item.key} >
+                          {item.title}
                         </Option>
                       ))}
                     </Select>,
@@ -416,13 +419,13 @@ const Modify = (props: ModifyProps) => {
 
 export default Form.create<ModifyProps>()(Modify);
 
-const renderTree = (treeData: TreeEntity[], parentId: string) => {
+const renderTree = (treeData: TreeEntity[], parentId) => {
   return treeData
     .filter(item => item.parentId === parentId)
     .map(filteditem => {
       return (
-        <TreeNode title={filteditem.text} key={filteditem.id} value={filteditem.id}>
-          {renderTree(treeData, filteditem.id as string)}
+        <TreeNode title={filteditem.title} key={filteditem.key} value={filteditem.value} >
+          {renderTree(treeData, filteditem.key)}
         </TreeNode>
       );
     });

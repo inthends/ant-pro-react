@@ -7,7 +7,7 @@ import LeftTree from '../LeftTree';
 import ListTable from './ListTable';
 import ModifyGarage from './ModifyGarage';
 import ModifyParking from './ModifyParking';
-import { GetPublicAreas, GetQuickPublicAreaTree } from './ParkingLot.service';
+import { GetPublicAreas, GetQuickParkingTree } from './ParkingLot.service';
 const { Content } = Layout;
 const { Search } = Input;
 
@@ -36,17 +36,19 @@ function ParkingLot() {
   }, []);
   // 获取属性数据
   const getTreeData = () => {
-    return GetQuickPublicAreaTree().then((res: any[]) => {
-      const treeList = (res || []).map(item => {
-        return {
-          ...item,
-          id: item.id,
-          text: item.name,
-          parentId: item.pId,
-        };
-      });
-      setTreeData(treeList);
-      return treeList;
+    return GetQuickParkingTree().then((res: any[]) => {
+      setTreeData(res || []);
+      return res || [];
+      // const treeList = (res || []).map(item => {
+      //   return {
+      //     ...item,
+      //     id: item.id,
+      //     text: item.name,
+      //     parentId: item.pId,
+      //   };
+      // });
+      // setTreeData(treeList);
+      // return treeList;
     });
   };
 

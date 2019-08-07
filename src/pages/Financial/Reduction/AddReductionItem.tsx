@@ -1,8 +1,9 @@
 import { Layout,Row,Col,DatePicker,Modal } from 'antd';
 import React, { useEffect, useState } from 'react';
+import AsynSelectTree from '../AsynSelectTree';
 import LeftTree from '../LeftTree';
 import { TreeEntity } from '@/model/models';
-import { GetTreeListExpand,GetFeeTreeListExpand } from './Main.service';
+import { GetFeeTreeListExpand } from './Main.service';
 import { getResult } from '@/utils/networkUtils';
 import  moment from 'moment';
 
@@ -15,8 +16,7 @@ interface AddReductionProps {
 }
 
 const AddReductionItem = (props:AddReductionProps)=> {
-  const {visible,getReducetionItem,closeModal}= props;
-  const [treeData, setTreeData] = useState<TreeEntity[]>([]);
+  const {visible,getReducetionItem,closeModal}= props; 
   const [feetreeData, setFeeTreeData] = useState<TreeEntity[]>([]);
 
   //单元选择
@@ -63,33 +63,36 @@ const AddReductionItem = (props:AddReductionProps)=> {
     getReducetionItem(data);
   }
   useEffect(() => {
-    getTreeData().then(res => {
-      const root = res.filter(item => item.parentId === '0');
-      const rootOrg = root.length === 1 ? root[0] : undefined;
-    });
+    // getTreeData().then(res => {
+    //   const root = res.filter(item => item.parentId === '0');
+    //   const rootOrg = root.length === 1 ? root[0] : undefined;
+    // });
 
     getFeeTreeData().then(res => {
-      const root = res.filter(item => item.parentId === '0');
-      const rootOrg = root.length === 1 ? root[0] : undefined;
+      // const root = res.filter(item => item.parentId === '0');
+      // const rootOrg = root.length === 1 ? root[0] : undefined;
     });
+
+
   }, []);
+
   // 获取属性数据
-  const getTreeData = () => {
-    return GetTreeListExpand()
-      .then(getResult)
-      .then((res: TreeEntity[]) => {
-        // const treeList = (res || []).map(item => {
-        //   return {
-        //     ...item,
-        //     id: item.id,
-        //     text: item.title,
-        //     parentId: item.pId,
-        //   };
-        // });
-        setTreeData(res || []);
-        return res || [];
-      });
-  };
+  // const getTreeData = () => {
+  //   return GetTreeListExpand()
+  //     .then(getResult)
+  //     .then((res: TreeEntity[]) => {
+  //       // const treeList = (res || []).map(item => {
+  //       //   return {
+  //       //     ...item,
+  //       //     id: item.id,
+  //       //     text: item.title,
+  //       //     parentId: item.pId,
+  //       //   };
+  //       // });
+  //       setTreeData(res || []);
+  //       return res || [];
+  //     });
+  // };
 
   //获取所有费项
   const getFeeTreeData = () => {
@@ -156,13 +159,14 @@ const AddReductionItem = (props:AddReductionProps)=> {
       >
       <Layout style={{height:'500px'}}>
         <Sider theme="light" style={{height: '100%' ,overflow:'auto'}} width="350px">
-          <LeftTree
+          <AsynSelectTree 
+           parentid={'0'}
             selectTree={(id,item) => {
               selectUnitTree(id);
-            }}
-            treeData={treeData}
+            }} 
           >
-          </LeftTree>
+          </AsynSelectTree>
+
         </Sider>
         <Content style={{marginLeft:'10px',border: '1px solid rgb(232, 234, 243)',padding:'15px',paddingLeft:'25px',backgroundColor: '#fff'}}>
           <Row>
@@ -175,8 +179,7 @@ const AddReductionItem = (props:AddReductionProps)=> {
                 selectTree={(id,item) => {
                   selectFeeTree(id);
                 }}
-                treeData={feetreeData}
-              >
+                treeData={feetreeData} >
               </LeftTree>
             </Col>
           </Row>

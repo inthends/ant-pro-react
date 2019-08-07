@@ -1,8 +1,8 @@
 import { PStructsData, ResponseObject, TreeEntity } from '@/model/models';
 import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
-export function GetTreeJsonById(): Promise<TreeEntity[]> {
-  return request.get(process.env.basePath + `/Common/GetTreeJsonById`, {}).then(getResult);
+export function GetOrgTree2(): Promise<TreeEntity[]> {
+  return request.get(process.env.basePath + `/Common/GetOrgTree2`, {}).then(getResult);
 }
 export function GetStatisticsTotal(): Promise<ResponseObject<any>> {
   return request.post(process.env.basePath + `/PStructs/GetStatisticsTotal`, {});

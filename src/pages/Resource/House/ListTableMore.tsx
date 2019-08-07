@@ -79,7 +79,7 @@ function ListTableMore(props: ListTableMoreProps) {
             type="primary"
             key="modify"
             style={{ marginRight: '10px' }}
-            onClick={() => modify(record.id)} >
+            onClick={() => modify(record)} >
             修改
           </Button>,
           <Button type="danger" key="delete" onClick={() => doDelete(record)}>

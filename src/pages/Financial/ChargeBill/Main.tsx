@@ -5,7 +5,7 @@ import { Checkbox, Tabs, Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import { GetTreeListExpand, GetPageListJson, ChargeFeePageData } from './Main.service';
-import LeftTree from '../LeftTree';
+import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
 import ChargeListTable from './ChargeListTable';
 import Modify from './Modify';
@@ -167,8 +167,8 @@ function Main() {
   return (
     <Layout style={{ height: '100%' }}>
       <Sider theme="light" style={{ overflow: 'hidden', height: '100%' }} width="245px">
-        <LeftTree
-          treeData={treeData}
+        <AsynLeftTree 
+          parentid={'0'}
           selectTree={(id, item) => {
             selectTree(item, search);
           }}

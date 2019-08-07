@@ -2,8 +2,8 @@ import { PStructsData, ResponseObject, TreeEntity } from '@/model/models';
 import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
 
-export function GetOrgTree(): Promise<any[]> {
-  return request.get(process.env.basePath + `/Common/GetOrgTree`, {}).then(getResult);
+export function GetOrgTree2(): Promise<any[]> {
+  return request.get(process.env.basePath + `/Common/GetOrgTree2`, {}).then(getResult);
 }
 export function GetStatisticsTotal(): Promise<ResponseObject<any>> {
   return request.post(process.env.basePath + `/PStructs/GetStatisticsTotal`, {});
@@ -49,9 +49,9 @@ export function GetPageListJson(data): Promise<any> {
   return request.post(process.env.basePath + `/PStructs/GetPageListJson`, {data:objToFormdata(data)}).then(getResult as any);
 }
 
-//获取小区房间
-export function GetBuildings(pstructid): Promise<any[]> {
-  return request
-    .get(process.env.basePath + `/Common/GetBuildings?parentId=${pstructid}`)
-    .then(getResult as any);
-}
+// //获取小区房间
+// export function GetBuildings(pstructid): Promise<any[]> {
+//   return request
+//     .get(process.env.basePath + `/Common/GetBuildings?parentId=${pstructid}`)
+//     .then(getResult as any);
+// }

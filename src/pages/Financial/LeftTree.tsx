@@ -25,17 +25,30 @@ function LeftTree(props: LeftTreeProps) {
     }
   };
 
-  const renderTree = (treeData: TreeEntity[], parentId: string) => {
-    return treeData
-      .filter(item => item.parentId === parentId)
-      .map(filteditem => {
+  // const renderTree = (treeData: TreeEntity[], parentId: string) => {
+  //   return treeData
+  //     .filter(item => item.parentId === parentId)
+  //     .map(filteditem => {
+  //       return (
+  //         <TreeNode title={filteditem.text} key={filteditem.id}>
+  //           {renderTree(treeData, filteditem.id as string)}
+  //         </TreeNode>
+  //       );
+  //     });
+  // };
+
+
+  const renderTree = data =>
+    data.map(item => {
+      if (item.children) {
         return (
-          <TreeNode title={filteditem.text} key={filteditem.id}>
-            {renderTree(treeData, filteditem.id as string)}
+          <TreeNode {...item} dataRef={item} >
+            {renderTree(item.children)}
           </TreeNode>
         );
-      });
-  };
+      }
+      return <TreeNode {...item} dataRef={item} />;
+    });
 
   const clickExpend = (expandedKeys, { expanded, node }) => {
     const selectNode = node.props.eventKey;
@@ -48,9 +61,11 @@ function LeftTree(props: LeftTreeProps) {
   };
 
   return (
-    <Page style={{ padding: '6px', borderLeft: 'none', borderBottom: 'none', height: '100%' ,overflowY: 'auto'}}>
-      <Tree expandedKeys={expanded} showLine onSelect={onSelect} onExpand={clickExpend}>
-        {renderTree(treeData, '0')}
+    <Page style={{ padding: '6px', borderLeft: 'none', borderBottom: 'none', height: '100%', overflowY: 'auto' }}>
+      <Tree expandedKeys={expanded}
+        showLine onSelect={onSelect}
+        onExpand={clickExpend}>
+        {renderTree(treeData)}
       </Tree>
     </Page>
   );

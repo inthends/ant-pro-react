@@ -6,7 +6,7 @@ import {
   Drawer,
   Form,
   Input,
-  message, 
+  message,
   Row,
   Select,
   Tree,
@@ -18,7 +18,7 @@ import { SaveForm } from './ReciprocatingUnit.service';
 import { getCommonItems } from '@/services/commonItem';
 import styles from './style.less';
 
-const { Option } = Select; 
+const { Option } = Select;
 const { TreeNode } = Tree;
 
 interface ModifyProps {
@@ -100,12 +100,12 @@ const Modify = (props: ModifyProps) => {
     <Drawer
       title={title}
       placement="right"
-      width={600}
+      width={700}
       onClose={close}
       visible={modifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
-      <Card title="基本信息" className={styles.card} bordered={false}>
+      <Card className={styles.card}>
         {modifyVisible ? (
           <Form layout="vertical" hideRequiredMark>
             <Row gutter={24}>
@@ -115,8 +115,12 @@ const Modify = (props: ModifyProps) => {
                     initialValue: infoDetail.organizeId,
                     rules: [{ required: true, message: '请选择隶属机构' }],
                   })(
-                    <TreeSelect placeholder="请选择隶属机构" allowClear treeDefaultExpandAll>
-                      {renderTree(treeData, '0')}
+                    <TreeSelect 
+                    placeholder="请选择隶属机构" 
+                    dropdownStyle={{ maxHeight: 350 }}
+                    allowClear 
+                    treeDefaultExpandAll>
+                      {renderTree(treeData)}
                     </TreeSelect>,
                   )}
                 </Form.Item>
@@ -129,8 +133,8 @@ const Modify = (props: ModifyProps) => {
                   })(
                     <Select placeholder="请选择所属类别">
                       {venderTypes.map(item => (
-                        <Option value={item.value} key={item.value}>
-                          {item.text}
+                        <Option value={item.value} key={item.key}>
+                          {item.title}
                         </Option>
                       ))}
                     </Select>,
@@ -260,8 +264,8 @@ const Modify = (props: ModifyProps) => {
                   })(
                     <Select placeholder="请选择开户银行">
                       {banks.map(item => (
-                        <Option value={item.value} key={item.value}>
-                          {item.text}
+                        <Option value={item.value} key={item.key}>
+                          {item.title}
                         </Option>
                       ))}
                     </Select>,
@@ -284,8 +288,8 @@ const Modify = (props: ModifyProps) => {
                   })(
                     <Select placeholder="请选择状态">
                       {states.map(item => (
-                        <Option value={item.value} key={item.value}>
-                          {item.text}
+                        <Option value={item.value} key={item.key}>
+                          {item.title}
                         </Option>
                       ))}
                     </Select>,
@@ -299,8 +303,8 @@ const Modify = (props: ModifyProps) => {
                   })(
                     <Select placeholder="请选择信誉等级">
                       {creditLevels.map(item => (
-                        <Option value={item.value} key={item.value}>
-                          {item.text}
+                        <Option value={item.value} key={item.key}>
+                          {item.title}
                         </Option>
                       ))}
                     </Select>,
@@ -336,14 +340,26 @@ const Modify = (props: ModifyProps) => {
 
 export default Form.create<ModifyProps>()(Modify);
 
-const renderTree = (treeData: TreeEntity[], parentId: string) => {
-  return treeData
-    .filter(item => item.parentId === parentId)
-    .map(filteditem => {
+// const renderTree = (treeData: TreeEntity[], parentId: string) => {
+//   return treeData
+//     .filter(item => item.parentId === parentId)
+//     .map(filteditem => {
+//       return (
+//         <TreeNode title={filteditem.text} key={filteditem.id} value={filteditem.id}>
+//           {renderTree(treeData, filteditem.id as string)}
+//         </TreeNode>
+//       );
+//     });
+// };
+
+const renderTree = data =>
+  data.map(item => {
+    if (item.children) {
       return (
-        <TreeNode title={filteditem.text} key={filteditem.id} value={filteditem.id}>
-          {renderTree(treeData, filteditem.id as string)}
+        <TreeNode {...item} dataRef={item} >
+          {renderTree(item.children)}
         </TreeNode>
       );
-    });
-};
+    }
+    return <TreeNode {...item} dataRef={item} />;
+  });

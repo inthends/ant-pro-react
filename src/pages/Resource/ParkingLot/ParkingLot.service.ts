@@ -1,7 +1,7 @@
-import { ParkingData, ResponseObject, TreeEntity } from '@/model/models';
+import { ParkingData,   TreeEntity } from '@/model/models';
 import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
-export function GetQuickPublicAreaTree(): Promise<any[]> {
+export function GetQuickParkingTree(): Promise<any[]> {
   return request.get(process.env.basePath + `/ParkingLot/GetQuickParkingTree`, {}).then(getResult);
 }
  

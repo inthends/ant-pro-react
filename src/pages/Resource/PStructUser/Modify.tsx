@@ -1,22 +1,10 @@
 import { TreeEntity } from '@/model/models';
 import {
-  Button,
-  Card,
-  Col,
-  Drawer,
-  Form,
-  Input,
-  message,
-  Modal,
-  Row,
-  Select,
-  Tree,
-  TreeSelect,
-  Checkbox,
+  Button, Card, Col, Drawer, Form, Input, message, Row, Select, Tree, TreeSelect, Checkbox,
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { SaveForm, GetTreeJsonById } from './PStructUser.service';
+import { SaveForm, GetOrgTree2 } from './PStructUser.service';
 import { getCommonItems } from '@/services/commonItem';
 import styles from './style.less';
 
@@ -43,7 +31,7 @@ const Modify = (props: ModifyProps) => {
   // const [banks, setBanks] = useState<any[]>([]); // 企业性质
   // 打开抽屉时初始化
   useEffect(() => {
-    GetTreeJsonById().then((res: TreeEntity[]) => {
+    GetOrgTree2().then((res: TreeEntity[]) => {
       setTreeData(res || []);
     });
     // 获取开户银行
@@ -101,12 +89,12 @@ const Modify = (props: ModifyProps) => {
     <Drawer
       title={title}
       placement="right"
-      width={600}
+      width={700}
       onClose={close}
       visible={modifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
-      <Card title="基本信息" className={styles.card} bordered={false}>
+      <Card className={styles.card} >
         {modifyVisible ? (
           <Form layout="vertical" hideRequiredMark>
             <Row gutter={24}>
@@ -116,8 +104,13 @@ const Modify = (props: ModifyProps) => {
                     initialValue: infoDetail.organizeId,
                     rules: [{ required: true, message: '请选择隶属机构' }],
                   })(
-                    <TreeSelect placeholder="请选择隶属机构" allowClear treeDefaultExpandAll>
-                      {renderTree(treeData, '0')}
+                    <TreeSelect 
+                    placeholder="请选择隶属机构" 
+                    allowClear 
+                    treeDefaultExpandAll
+                    dropdownStyle={{ maxHeight: 350 }}
+                    >
+                      {renderTree(treeData)}
                     </TreeSelect>,
                   )}
                 </Form.Item>
@@ -141,15 +134,7 @@ const Modify = (props: ModifyProps) => {
               </Col>
             </Row>
             <Row gutter={24}>
-              <Col lg={12}>
-                <Form.Item label="客户编号" required>
-                  {getFieldDecorator('code', {
-                    initialValue: infoDetail.code,
-                    rules: [{ required: true, message: '请输入客户编号' }],
-                  })(<Input placeholder="请输入客户编号" />)}
-                </Form.Item>
-              </Col>
-              <Col lg={12}>
+            <Col lg={12}>
                 <Form.Item label="客户名称" required>
                   {getFieldDecorator('name', {
                     initialValue: infoDetail.name,
@@ -157,6 +142,14 @@ const Modify = (props: ModifyProps) => {
                   })(<Input placeholder="请输入客户名称" />)}
                 </Form.Item>
               </Col>
+              <Col lg={12}>
+                <Form.Item label="客户编号" required>
+                  {getFieldDecorator('code', {
+                    initialValue: infoDetail.code,
+                    rules: [{ required: true, message: '请输入客户编号' }],
+                  })(<Input placeholder="请输入客户编号" />)}
+                </Form.Item>
+              </Col> 
             </Row>
             <Row gutter={24}>
               <Col lg={12}>
@@ -371,14 +364,26 @@ const Modify = (props: ModifyProps) => {
 
 export default Form.create<ModifyProps>()(Modify);
 
-const renderTree = (treeData: TreeEntity[], parentId: string) => {
-  return treeData
-    .filter(item => item.parentId === parentId)
-    .map(filteditem => {
-      return (
-        <TreeNode title={filteditem.text} key={filteditem.id} value={filteditem.id}>
-          {renderTree(treeData, filteditem.id as string)}
-        </TreeNode>
-      );
+// const renderTree = (treeData: TreeEntity[], parentId: string) => {
+//   return treeData
+//     .filter(item => item.parentId === parentId)
+//     .map(filteditem => {
+//       return (
+//         <TreeNode title={filteditem.text} key={filteditem.id} value={filteditem.id}>
+//           {renderTree(treeData, filteditem.id as string)}
+//         </TreeNode>
+//       );
+//     });
+// };
+
+const renderTree = data =>
+    data.map(item => {
+      if (item.children) {
+        return ( 
+          <TreeNode {...item} dataRef={item} >
+            {renderTree(item.children)}
+          </TreeNode>
+        );
+      }
+      return <TreeNode {...item} dataRef={item} />;
     });
-};

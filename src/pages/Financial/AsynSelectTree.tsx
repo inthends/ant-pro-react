@@ -1,25 +1,22 @@
 //异步树
 import Page from '@/components/Common/Page';
-import { Icon, Layout, Tree } from 'antd';
-import React, { useContext, useEffect, useState } from 'react';
-import { SiderContext } from '../SiderContext';
+import { Tree } from 'antd';
+import React, {  useEffect, useState } from 'react'; 
 import { GetOrgTree, GetAsynChildBuildings } from './AsynLeftTree.service';
 
-const { TreeNode } = Tree;
-const { Sider } = Layout;
+const { TreeNode } = Tree; 
 
-interface AsynLeftTreeProps {
+interface AsynSelectTreeProps {
   //treeData: any[];
   selectTree(parentId, type): void;
   parentid: string;
 }
 
-function AsynLeftTree(props: AsynLeftTreeProps) {
+function AsynSelectTree(props: AsynSelectTreeProps) {
 
-  const { parentid, selectTree } = props;
+  const {selectTree } = props;
   // const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
-  // const [autoExpandParent, setAutoExpandParent] = useState<boolean>(false);
-  const { hideSider, setHideSider } = useContext(SiderContext);
+  // const [autoExpandParent, setAutoExpandParent] = useState<boolean>(false); 
   //动态子节点
   const [treeData, setTreeData] = useState<any[]>([]);
 
@@ -38,7 +35,7 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
     if (selectedKeys.length === 1) {
       //const item = treeData.filter(treeItem => treeItem.key === selectedKeys[0])[0];
       const type = info.node.props.type;
-      if('ABCD'.indexOf(type)!=-1)
+      if ('ABCD'.indexOf(type) != -1)
         return;
       selectTree(selectedKeys[0], type);
     }
@@ -103,55 +100,28 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
       return <TreeNode {...item} dataRef={item} />;
     });
 
-  return (
-    <Sider
-      theme="light"
-      style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh - 60px)' }}
-      width={hideSider ? 20 : 245}
+  return ( 
+    <Page
+      style={{
+        padding: '6px',
+        borderLeft: 'none',
+        borderBottom: 'none',
+        height: '100%',
+        overflowY: 'auto',
+      }}
     >
-      {hideSider ? (
-        <div style={{ position: 'absolute', top: '40%', left: 5 }}>
-          <Icon
-            type="double-right"
-            onClick={() => {
-              setHideSider(false);
-            }}
-            style={{ color: '#1890ff' }}
-          />
-        </div>
-      ) : (
-          <>
-            <Page
-              style={{
-                padding: '6px',
-                borderLeft: 'none',
-                borderBottom: 'none',
-                height: '100%',
-                overflowY: 'auto',
-              }}
-            >
-              <Tree
-                loadData={onLoadData}
-                showLine
-                // expandedKeys={expandedKeys}
-                // autoExpandParent={autoExpandParent}
-                // onExpand={clickExpend}
-                onSelect={onSelect}>
-                {renderTreeNodes(treeData)}
-              </Tree>
-            </Page>
-            <div
-              style={{ position: 'absolute', top: '40%', right: -15 }}
-              onClick={() => {
-                setHideSider(true);
-              }}
-            >
-              <Icon type="double-left" style={{ color: '#1890ff' }} />
-            </div>
-          </>
-        )}
-    </Sider>
+      <Tree
+        loadData={onLoadData}
+        showLine
+        checkable
+        // expandedKeys={expandedKeys}
+        // autoExpandParent={autoExpandParent}
+        // onExpand={clickExpend}
+        onSelect={onSelect}>
+        {renderTreeNodes(treeData)}
+      </Tree>
+    </Page>
   );
 }
 
-export default AsynLeftTree;
+export default AsynSelectTree;

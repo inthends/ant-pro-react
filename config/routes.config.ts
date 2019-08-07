@@ -84,7 +84,7 @@ export default [
       {
         name: '财务管理',
         path: '/financial',
-        icon:'pay-circle',
+        icon:'pay-circle', 
         component: './Financial/Financial',
         routes: [
           {

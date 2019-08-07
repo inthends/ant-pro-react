@@ -1,11 +1,11 @@
 //项目资料 
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { getResult } from '@/utils/networkUtils';
-import { Button, Icon, Input, Layout } from 'antd';
+import { Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import General from './General';
-import { GetStatistics, GetStatisticsTotal, GetOrgTree } from './House.service';
+import { GetStatistics, GetStatisticsTotal, GetOrgTree2 } from './House.service';
 import LeftTree from '../LeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
@@ -24,26 +24,33 @@ function House() {
   const [data, setData] = useState<any[]>([]);
   const [id, setId] = useState<string>();
   const [search, setSearch] = useState<string>('');
+  //是否能新增
+  const [isAdd, setIsAdd] = useState<boolean>(true);
 
-  const disabledCreate = (tree: any[], orgId: string) => {
-    for (const item of tree) {
-      if (item.id === orgId && item.parentId !== '0') {
-        return false;
-      }
+  // const disabledCreate = (tree: any[], orgId: string) => {
+  //   for (const item of tree) {
+  //     if (item.id === orgId && item.parentId !== '0') {
+  //       return false;
+  //     }
+  //   }
+  //   return true;
+  // };
+
+  const selectTree = (orgid, orgtype, searchText) => {
+    initLoadData(orgid, searchText);
+    SetOrganizeId(orgid);
+    if (orgtype == 'D') {
+      setIsAdd(false);
+    } else {
+      setIsAdd(true);
     }
-    return true;
-  };
-
-  const selectTree = (org, searchText) => {
-    initLoadData(org, searchText);
-    SetOrganizeId(org);
   };
 
   useEffect(() => {
     getTreeData().then(res => {
       const root = res.filter(item => item.parentId === '0');
-      const rootOrg = root.length === 1 ? root[0].id : '';
-      SetOrganizeId(rootOrg as string);
+      const key = root.length === 1 ? root[0].key : '';
+      SetOrganizeId(key);
       //initLoadData(rootOrg as string, '');
       initLoadData('', '');
     });
@@ -51,7 +58,7 @@ function House() {
   }, []);
   // 获取属性数据
   const getTreeData = () => {
-    return GetOrgTree().then((res: any[]) => {
+    return GetOrgTree2().then((res: any[]) => {
       setTreeData(res || []);
       return res || [];
     });
@@ -131,25 +138,23 @@ function House() {
       <LeftTree
         treeData={treeData}
         selectTree={(orgId, item) => {
-          selectTree(orgId, search);
-        }}  
+          selectTree(orgId, item.type, search);
+        }}
       />
-      <Content style={{paddingLeft:'18px'}}>
-        <div style={{ marginBottom: '10px'  }}>
+      <Content style={{ paddingLeft: '18px' }}>
+        <div style={{ marginBottom: '10px' }}>
           <Search
             className="search-input"
-            placeholder="搜索项目名称"
-            value={search}
+            placeholder="搜索项目名称" 
             onSearch={value => loadData(value, organizeId)}
             style={{ width: 200 }}
           />
           <AuthButton
             type="primary"
-            // disabled={disabledCreate(treeData, organizeId)}
+            disabled={isAdd}
             style={{ float: 'right' }}
             onClick={() => showDrawer()}
-            encode="lr-replace"
-          >
+            encode="lr-add" >
             <Icon type="plus" />
             项目
           </AuthButton>

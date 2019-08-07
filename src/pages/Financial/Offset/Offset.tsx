@@ -2,11 +2,11 @@
 import { TreeEntity } from '@/model/models';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { getResult } from '@/utils/networkUtils';
-import { Tabs ,Button, Icon, Input, Layout} from 'antd';
+import { Tabs, Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
-import React, {useContext, useEffect, useState } from 'react';
-import { GetTreeListExpand,GetOffsetPageDetailData,GetOffsetPageData,GetRoomTreeListExpand} from './Offset.service';
-import LeftTree from '../LeftTree';
+import React, { useContext, useEffect, useState } from 'react';
+import { GetTreeListExpand, GetOffsetPageDetailData, GetOffsetPageData, GetRoomTreeListExpand } from './Offset.service';
+import AsynLeftTree from '../AsynLeftTree';
 import Page from '@/components/Common/Page';
 import { SiderContext } from './SiderContext';
 import Modify from './Modify';
@@ -16,7 +16,7 @@ import BillNoticeTable from './BillNoticeTable';
 
 const { Sider, Content } = Layout;
 const { Search } = Input;
-const{TabPane} = Tabs;
+const { TabPane } = Tabs;
 
 function Offset() {
   const [treeData, setTreeData] = useState<TreeEntity[]>([]);
@@ -49,12 +49,12 @@ function Offset() {
       const root = res.filter(item => item.parentId === '0');
       const rootOrg = root.length === 1 ? root[0] : undefined;
       SetOrganize(rootOrg);
-      initCheckLoadData(rootOrg,'');
-      initNoticeLoadData(rootOrg,'');
+      initCheckLoadData(rootOrg, '');
+      initNoticeLoadData(rootOrg, '');
     });
   }, []);
   // 获取属性数据
-  const getTreeData = () =>{
+  const getTreeData = () => {
     return GetRoomTreeListExpand()
       .then((res: TreeEntity[]) => {
         const treeList = (res || []).map(item => {
@@ -92,7 +92,7 @@ function Offset() {
       pageIndex,
       pageSize,
       total,
-      queryJson:{ keyword: search }
+      queryJson: { keyword: search }
     };
 
     if (sorter) {
@@ -106,26 +106,26 @@ function Offset() {
     });
   };
 
- //账单表加载
- const checkload = data => {
-  setCheckLoading(true);
-  data.sidx = data.sidx || 'billID';
-  data.sord = data.sord || 'asc';
-  return GetOffsetPageData(data).then(res => {
-    const { pageIndex: current, total, pageSize } = res;
-    setCheckPagination(pagesetting => {
-      return {
-        ...pagesetting,
-        current,
-        total,
-        pageSize,
-      };
+  //账单表加载
+  const checkload = data => {
+    setCheckLoading(true);
+    data.sidx = data.sidx || 'billID';
+    data.sord = data.sord || 'asc';
+    return GetOffsetPageData(data).then(res => {
+      const { pageIndex: current, total, pageSize } = res;
+      setCheckPagination(pagesetting => {
+        return {
+          ...pagesetting,
+          current,
+          total,
+          pageSize,
+        };
+      });
+      setCheckData(res.data);
+      setCheckLoading(false);
+      return res;
     });
-    setCheckData(res.data);
-    setCheckLoading(false);
-    return res;
-  });
-};
+  };
 
   //明细表数据
   const loadNoticeData = (search, paginationConfig?: PaginationConfig, sorter?) => {
@@ -206,52 +206,13 @@ function Offset() {
   };
 
   return (
-    <Layout style={{ height: '100%' }}>
-      <Sider
-        theme="light"
-        style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh - 100px)' }}
-        width={hideSider ? 20 : 245}
-      >
-      {hideSider ? (
-        <div style={{ position: 'absolute', top: '40%', left: 5 }}>
-          <Icon
-            type="double-right"
-            onClick={() => {
-              setHideSider(false);
-            }}
-            style={{ color: '#1890ff' }}
-          />
-        </div>
-      ) : (
-        <>
-          <Page
-            style={{
-              padding: '6px',
-              borderLeft: 'none',
-              borderBottom: 'none',
-              height: '100%',
-              overflowY: 'auto',
-            }}
-          >
-            <LeftTree
-              treeData={treeData}
-              selectTree={(id, item) => {
-                selectTree(id, item, search);
-              }}
-            />
-          </Page>
-          ,
-          <div
-            style={{ position: 'absolute', top: '40%', right: -15 }}
-            onClick={() => {
-              setHideSider(true);
-            }}
-          >
-            <Icon type="double-left" style={{ color: '#1890ff' }} />
-          </div>
-        </>
-      )}
-    </Sider>
+    <Layout style={{ height: '100%' }}> 
+      <AsynLeftTree
+        parentid={'0'}
+        selectTree={(id, item) => {
+          selectTree(id, item, search);
+        }}
+      />
       <Content style={{ padding: '0 20px' }}>
         <Tabs defaultActiveKey="1" >
           <TabPane tab="账单" key="1">
@@ -262,13 +223,13 @@ function Offset() {
                 style={{ width: 280 }}
                 onSearch={value => loadCheckData(value)}
               />
-              <Button type="primary" style={{ float: 'right' ,marginLeft:'10px'}}
-                onClick={() => initCheckLoadData(organize,null)}
+              <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
+                onClick={() => initCheckLoadData(organize, null)}
               >
                 <Icon type="reload" />
                 刷新
               </Button>
-              <Button type="primary" style={{ float: 'right',marginLeft:'10px' }}
+              <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
                 onClick={() => showDrawer()}
               >
                 <Icon type="plus" />
@@ -282,11 +243,11 @@ function Offset() {
               loading={checkloading}
               pagination={checkpagination}
               data={checkdata}
-              reload={() => initCheckLoadData('',checksearch)}
+              reload={() => initCheckLoadData('', checksearch)}
             />
           </TabPane>
           <TabPane tab="明细" key="2">
-              <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
+            <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
               <Search
                 className="search-input"
                 placeholder="请输入要查询的单号"
@@ -301,7 +262,7 @@ function Offset() {
               loading={noticeloading}
               pagination={noticepagination}
               data={noticedata}
-              reload={() => initNoticeLoadData('',noticesearch)}
+              reload={() => initNoticeLoadData('', noticesearch)}
             />
           </TabPane>
         </Tabs>
@@ -311,7 +272,7 @@ function Offset() {
         closeDrawer={closeDrawer}
         organizeId={organize}
         id={id}
-        reload={() => initCheckLoadData('',checksearch)}
+        reload={() => initCheckLoadData('', checksearch)}
       />
 
     </Layout>

@@ -6,14 +6,11 @@ import React, { useEffect, useState } from 'react';
 import { GetPageListJson } from './House.service';
 import AsynLeftTree from '../AsynLeftTree';
 import ListTableMore from './ListTableMore';
-import Modify from './Modify';
+import PstructInfo from './PstructInfo';
 
 const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
-
-// interface HouseMoreProps {
-// }
 
 function HouseMore(props) {
   const [pstructId, setPstructId] = useState<string>('');//小区id
@@ -26,7 +23,9 @@ function HouseMore(props) {
   const [data, setData] = useState<any[]>([]);
   const [search, setSearch] = useState<string>('');
 
-  const selectTree = (parentId,type, searchText) => { 
+  const [currData, setCurrData] = useState<any>();
+
+  const selectTree = (parentId, type, searchText) => {
     initLoadData(parentId, type, searchText, pstructId);
     setType(type);
     setParentId(parentId);
@@ -46,8 +45,8 @@ function HouseMore(props) {
   const closeDrawer = () => {
     setModifyVisible(false);
   };
-  const showDrawer = (orgId?) => {
-    //setId(orgId);
+  const showDrawer = (item?) => {
+    setCurrData(item);
     setModifyVisible(true);
   };
   const loadData = (searchText, parentId, type, paginationConfig?: PaginationConfig, sorter?) => {
@@ -100,7 +99,7 @@ function HouseMore(props) {
     });
   };
 
-  const initLoadData = (parentId, type, searchText, psid) => {  
+  const initLoadData = (parentId, type, searchText, psid) => {
     setSearch(searchText);
     const queryJson = {
       keyword: search,
@@ -162,12 +161,12 @@ function HouseMore(props) {
         </Tabs>
       </Content>
 
-      <Modify
+      <PstructInfo
         modifyVisible={modifyVisible}
         closeDrawer={closeDrawer}
-        treeData={[]}
         organizeId={''}
-        id={''}
+        data={currData} 
+        type={type}
         reload={() => initLoadData(parentId, type, search, pstructId)}
       />
     </Layout>
