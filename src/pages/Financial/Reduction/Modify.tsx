@@ -491,7 +491,7 @@ const Modify = (props: ModifyProps) => {
       <Form layout="vertical" hideRequiredMark>
         <Card bordered={false}>
           <Row gutter={24}>
-            <Col lg={12}>
+            <Col lg={8}>
               <Form.Item label="单据编号">
                 {getFieldDecorator('billCode', {
                   initialValue: infoDetail.billCode,
@@ -501,7 +501,7 @@ const Modify = (props: ModifyProps) => {
                 )}
               </Form.Item>
             </Col>
-            <Col lg={12}>
+            <Col lg={8}>
               <Form.Item label="单据日期">
                 {getFieldDecorator('billDate', {
                   initialValue: infoDetail.billDate == null ? '' : infoDetail.billDate
@@ -513,9 +513,7 @@ const Modify = (props: ModifyProps) => {
                 )}
               </Form.Item>
             </Col>
-          </Row>
-          <Row gutter={24}>
-            <Col lg={12}>
+            <Col lg={8}>
               <Form.Item label="经办人">
                 {getFieldDecorator('createUserName', {
                   initialValue: infoDetail.createUserName,
@@ -525,29 +523,9 @@ const Modify = (props: ModifyProps) => {
                 )}
               </Form.Item>
             </Col>
-            <Col lg={12}>
-              <Form.Item label="批量折扣">
-                {getFieldDecorator('rebate', {
-                  initialValue: infoDetail.rebate,
-                  rules: [{ required: true, message: '请输入批量折扣' }],
-                })(
-                  <InputNumber step={0.1} style={{ width: '100%' }}></InputNumber>
-                )}
-              </Form.Item>
-            </Col>
           </Row>
           <Row gutter={24}>
-            <Col lg={12}>
-              <Form.Item label="减免金额">
-                {getFieldDecorator('reductionAmount', {
-                  initialValue: infoDetail.reductionAmount,
-                  rules: [{ required: true, message: '请输入减免金额' }],
-                })(
-                  <InputNumber step={0.1} style={{ width: '100%' }}></InputNumber>
-                )}
-              </Form.Item>
-            </Col>
-            <Col lg={12}>
+          <Col lg={8}>
               <Form.Item label="减免费项">
                 {getFieldDecorator('reductionFeeItemID', {
                   initialValue: infoDetail.reductionFeeItemID,
@@ -560,12 +538,32 @@ const Modify = (props: ModifyProps) => {
                       <Option key={item.key} value={item.value}>
                         {item.title}
                       </Option>
-                    ))}
-
+                    ))} 
                   </Select>
                 )}
               </Form.Item>
             </Col>
+            <Col lg={8}>
+              <Form.Item label="批量折扣">
+                {getFieldDecorator('rebate', {
+                  initialValue: infoDetail.rebate,
+                  rules: [{ required: true, message: '请输入批量折扣' }],
+                })(
+                  <InputNumber step={0.1} style={{ width: '100%' }}></InputNumber>
+                )}
+              </Form.Item>
+            </Col>
+            <Col lg={8}>
+              <Form.Item label="减免金额">
+                {getFieldDecorator('reductionAmount', {
+                  initialValue: infoDetail.reductionAmount,
+                  rules: [{ required: true, message: '请输入减免金额' }],
+                })(
+                  <InputNumber step={0.1} style={{ width: '100%' }}></InputNumber>
+                )}
+              </Form.Item>
+            </Col>
+           
           </Row>
           <Row>
             <Col>
@@ -574,13 +572,11 @@ const Modify = (props: ModifyProps) => {
                   initialValue: infoDetail.memo,
                   rules: [{ required: false }],
                 })(
-                  <Input.TextArea rows={4} ></Input.TextArea>
+                  <Input.TextArea rows={3} ></Input.TextArea>
                 )}
               </Form.Item>
             </Col>
-          </Row>
-        </Card>
-        <Card bordered={false} style={{ marginTop: '5px' }}>
+          </Row> 
           <Row>
             <Col>
               <Button style={{ float: 'right', marginLeft: 8 }}>

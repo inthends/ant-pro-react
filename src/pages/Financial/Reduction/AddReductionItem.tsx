@@ -1,64 +1,62 @@
-import { Layout,Row,Col,DatePicker,Modal } from 'antd';
+import { Card, Form, Layout, Row, Col, DatePicker, Modal } from 'antd';
 import React, { useEffect, useState } from 'react';
 import AsynSelectTree from '../AsynSelectTree';
 import LeftTree from '../LeftTree';
 import { TreeEntity } from '@/model/models';
 import { GetFeeTreeListExpand } from './Main.service';
 import { getResult } from '@/utils/networkUtils';
-import  moment from 'moment';
+import moment from 'moment';
 
-const { Sider, Content } = Layout;
 
 interface AddReductionProps {
-  visible:boolean;
+  visible: boolean;
   getReducetionItem(data?): void;
-  closeModal():void;
+  closeModal(): void;
 }
 
-const AddReductionItem = (props:AddReductionProps)=> {
-  const {visible,getReducetionItem,closeModal}= props; 
+const AddReductionItem = (props: AddReductionProps) => {
+  const { visible, getReducetionItem, closeModal } = props;
   const [feetreeData, setFeeTreeData] = useState<TreeEntity[]>([]);
 
-  //单元选择
-  const [unitData, setUnitData] = useState<string>();
+  //单元选择多选
+  const [unitData, setUnitData] = useState<string[]>([]);
   //费项选择
   const [feeData, setFeeData] = useState<string>();
-
   const [startDate, setStartDate] = useState<string>();
-
   const [endDate, setEndDate] = useState<string>();
 
-
-  useEffect(()=>{
-    if (visible){
+  useEffect(() => {
+    if (visible) {
       setStartDate(getCurrentMonthFirstDay());
       setEndDate(getCurrentDay());
     }
-  },[visible])
+  }, [visible])
 
-  const selectStartDate=(date)=>{
+  const selectStartDate = (date) => {
     setStartDate(date);
   }
 
-  const selectEndDate=(date)=>{
+  const selectEndDate = (date) => {
     setEndDate(date);
   }
 
-  const selectUnitTree = (item) => {
-    setUnitData(item);
+  //选择房源
+  const selectUnitTree = (id) => {
+    //setUnitData(id);
   };
 
-  const selectFeeTree = ( item) => {
-    setFeeData(item);
+  const selectFeeTree = (id) => {
+    setFeeData(id);
   };
 
-  const onOk=()=>{
+  const onOk = () => {
     var data = {
-      units:'["'+unitData+'"]',
-      feeitemid:feeData,//'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1',//
-      begin:moment(startDate).format('YYYY-MM-DD'),
-      end:moment(endDate).format('YYYY-MM-DD'),
-      Rebate:1,ReductionAmount:1
+      units: '["' + unitData + '"]',
+      feeitemid: feeData,
+      begin: moment(startDate).format('YYYY-MM-DD'),
+      end: moment(endDate).format('YYYY-MM-DD'),
+      Rebate: 1,
+      ReductionAmount: 1
     };
     getReducetionItem(data);
   }
@@ -97,93 +95,97 @@ const AddReductionItem = (props:AddReductionProps)=> {
   //获取所有费项
   const getFeeTreeData = () => {
     return GetFeeTreeListExpand()
-        .then(getResult)
-        .then((res: TreeEntity[]) => {
-          setFeeTreeData(res || []);
-          return res || [];
+      .then(getResult)
+      .then((res: TreeEntity[]) => {
+        setFeeTreeData(res || []);
+        return res || [];
       });
   };
 
   //获取当前月份第一天
-  const getCurrentMonthFirstDay=() =>{
-    var monthStr='';
-    var dayStr='';
+  const getCurrentMonthFirstDay = () => {
+    var monthStr = '';
+    var dayStr = '';
     var date = new Date()
     date.setDate(1)
     var month = date.getMonth() + 1
     var day = date.getDate()
     if (month < 10) {
       monthStr = '0' + month
-    }else{
-      monthStr = ''+month
+    } else {
+      monthStr = '' + month
 
     }
     if (day < 10) {
       dayStr = '0' + day
-    }else{
-      dayStr = ''+day
+    } else {
+      dayStr = '' + day
     }
     return date.getFullYear() + '-' + monthStr + '-' + dayStr
   }
- //获取当前月份第一天
- const getCurrentDay=() =>{
-  var monthStr='';
-  var dayStr='';
-  var date = new Date()
+  //获取当前月份第一天
+  const getCurrentDay = () => {
+    var monthStr = '';
+    var dayStr = '';
+    var date = new Date()
 
-  var month = date.getMonth() + 1
-  var day = date.getDate()
-  if (month < 10) {
-    monthStr = '0' + month
-  }else{
-    monthStr = ''+month
+    var month = date.getMonth() + 1
+    var day = date.getDate()
+    if (month < 10) {
+      monthStr = '0' + month
+    } else {
+      monthStr = '' + month
 
+    }
+    if (day < 10) {
+      dayStr = '0' + day
+    } else {
+      dayStr = '' + day
+    }
+    return date.getFullYear() + '-' + monthStr + '-' + dayStr
   }
-  if (day < 10) {
-    dayStr = '0' + day
-  }else{
-    dayStr = ''+day
-  }
-  return date.getFullYear() + '-' + monthStr + '-' + dayStr
-}
   return (
     <Modal
-        title="新增减免的费项"
-        visible={visible}
-        okText="确认"
-        cancelText="取消"
-        onCancel={()=>closeModal()}
-        onOk={()=>onOk()}
-        destroyOnClose={true}
-        width='860px'
-      >
-      <Layout style={{height:'500px'}}>
-        <Sider theme="light" style={{height: '100%' ,overflow:'auto'}} width="350px">
-          <AsynSelectTree 
-           parentid={'0'}
-            selectTree={(id,item) => {
-              selectUnitTree(id);
-            }} 
-          >
-          </AsynSelectTree>
+      title="新增减免的费项"
+      visible={visible}
+      okText="确认"
+      cancelText="取消"
+      onCancel={() => closeModal()}
+      onOk={() => onOk()}
+      destroyOnClose={true}
+      width='860px' >
+      <Layout style={{ height: '100%' }}> 
+        <Row gutter={24}>
+          <Col span={12}> 
+            <AsynSelectTree parentid={'0'}
+              selectTree={(parentId) => {
+                selectUnitTree(parentId);
+              }}/> 
+          </Col> 
+          <Col span={12}>
+            <Form layout="vertical" hideRequiredMark  >
+              <Card >
+                <Row gutter={24}>
+                  <Col lg={12}>
+                    <Form.Item label="账单日">
+                      <DatePicker defaultValue={moment(startDate)}
+                        onChange={(date, dateString) => selectStartDate(dateString)} /></Form.Item>
+                  </Col>
+                  <Col span={12}><Form.Item label="至">
+                    <DatePicker
+                    defaultValue={moment(endDate)}
+                    onChange={(date, dateString) => selectEndDate(dateString)} /></Form.Item></Col>
+                </Row>
 
-        </Sider>
-        <Content style={{marginLeft:'10px',border: '1px solid rgb(232, 234, 243)',padding:'15px',paddingLeft:'25px',backgroundColor: '#fff'}}>
-          <Row>
-            <Col span={12}>&nbsp;账单日：<DatePicker defaultValue={moment(startDate)}  onChange={(date,dateString)=>selectStartDate(dateString)}/></Col>
-            <Col span={12}>&nbsp;&nbsp;至：<DatePicker defaultValue={moment(endDate)}  onChange={(date,dateString)=>selectEndDate(dateString)}/></Col>
-          </Row>
-          <Row style={{marginTop:'15px'}}>
-            <Col style={{height: '100%' ,overflow:'auto'}} >
-              <LeftTree
-                selectTree={(id,item) => {
-                  selectFeeTree(id);
-                }}
-                treeData={feetreeData} >
-              </LeftTree>
-            </Col>
-          </Row>
-        </Content>
+                <LeftTree
+                  selectTree={(id, item) => {
+                    selectFeeTree(id);
+                  }}
+                  treeData={feetreeData} />
+              </Card>
+            </Form>
+          </Col>
+        </Row> 
       </Layout>
     </Modal>
   );

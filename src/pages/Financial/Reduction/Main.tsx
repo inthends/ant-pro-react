@@ -200,10 +200,10 @@ function Main() {
           selectTree(id, item, search);
         }}
       />
-      <Content style={{ padding: '0 18px' }}>
+      <Content style={{ paddingLeft: '18px' }}>
         <Tabs defaultActiveKey="1" >
           <TabPane tab="减免单" key="1">
-            <div style={{ marginBottom: '10px', padding: '3px 2px' }}>
+            <div style={{ marginBottom: '10px'  }}>
               <Search
                 className="search-input"
                 placeholder="请输入要查询的单号"
