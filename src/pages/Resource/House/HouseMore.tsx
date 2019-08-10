@@ -1,4 +1,4 @@
-//房产资料 
+//房产资料
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { Form, Tabs, Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
@@ -7,13 +7,13 @@ import { GetPageListJson } from './House.service';
 import AsynLeftTree from '../AsynLeftTree';
 import ListTableMore from './ListTableMore';
 import PstructInfo from './PstructInfo';
-
+import Atlas from './Atlas/Atlas';
 const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
 
 function HouseMore(props) {
-  const [pstructId, setPstructId] = useState<string>('');//小区id
+  const [pstructId, setPstructId] = useState<string>(''); //小区id
   const [type, setType] = useState<string>('1');
   const [parentId, setParentId] = useState<string>('');
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
@@ -32,7 +32,7 @@ function HouseMore(props) {
   };
 
   useEffect(() => {
-    //页面传递过来的值  
+    //页面传递过来的值
     const psid = props.location.state ? props.location.state.pstructid : '';
     setPstructId(psid);
     // GetBuildings(psid).then((res: any[]) => {
@@ -40,7 +40,6 @@ function HouseMore(props) {
     // });
     initLoadData(parentId, type, '', psid);
   }, []);
-
 
   const closeDrawer = () => {
     setModifyVisible(false);
@@ -64,7 +63,7 @@ function HouseMore(props) {
         ParentId: parentId,
         keyword: searchText,
         PStructId: pstructId,
-        Type: type
+        Type: type,
       },
     };
 
@@ -105,7 +104,7 @@ function HouseMore(props) {
       keyword: search,
       PStructId: psid,
       ParentId: parentId == null ? psid : parentId,
-      Type: type == null ? 1 : type
+      Type: type == null ? 1 : type,
     };
     const sidx = 'id';
     const sord = 'asc';
@@ -125,7 +124,7 @@ function HouseMore(props) {
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>
-        <Tabs defaultActiveKey="1" >
+        <Tabs defaultActiveKey="1">
           <TabPane tab="房产列表" key="1">
             <div style={{ marginBottom: '10px' }}>
               <Search
@@ -135,13 +134,10 @@ function HouseMore(props) {
                 onSearch={value => loadData(value, parentId, type)}
                 style={{ width: 200 }}
               />
-              <Button
-                type="primary"
-                style={{ float: 'right' }}
-                onClick={() => showDrawer()}  >
+              <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer()}>
                 <Icon type="plus" />
                 新增
-          </Button>
+              </Button>
             </div>
 
             <ListTableMore
@@ -154,9 +150,9 @@ function HouseMore(props) {
               modify={showDrawer}
               reload={() => initLoadData(parentId, type, search, pstructId)}
             />
-
           </TabPane>
           <TabPane tab="房态图" key="2">
+            <Atlas></Atlas>
           </TabPane>
         </Tabs>
       </Content>
@@ -165,7 +161,7 @@ function HouseMore(props) {
         modifyVisible={modifyVisible}
         closeDrawer={closeDrawer}
         organizeId={''}
-        data={currData} 
+        data={currData}
         type={type}
         reload={() => initLoadData(parentId, type, search, pstructId)}
       />
