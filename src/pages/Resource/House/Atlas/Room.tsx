@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Children } from 'react';
 import styles from './index.less';
 interface RoomProps {
   inline: boolean;
+  children?: any;
 }
 const Room = (props: RoomProps) => {
-  const { inline } = props;
+  const { inline, children } = props;
 
   return (
     <div className={styles.buildingRoom} style={inline ? inlineStyle : notInlineStyle}>
-      <div className={styles.roomInnner}></div>
+      <div className={styles.roomInnner}>{inline ? null : children}</div>
     </div>
   );
 };
