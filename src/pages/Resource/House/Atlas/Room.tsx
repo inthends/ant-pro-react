@@ -9,7 +9,9 @@ const Room = (props: RoomProps) => {
 
   return (
     <div className={styles.buildingRoom} style={inline ? inlineStyle : notInlineStyle}>
-      <div className={styles.roomInnner}>{inline ? null : children}</div>
+      <div className={styles.roomInnner} style={inline ? undefined : { padding: 12 }}>
+        {inline ? null : children}
+      </div>
     </div>
   );
 };

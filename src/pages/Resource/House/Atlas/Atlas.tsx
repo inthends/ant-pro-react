@@ -34,7 +34,130 @@ const Atlas = () => {
           <div className={styles.buildingRow}>
             <div className={styles.buildingTtitle}>第27层</div>
             <div style={{ flexGrow: 1 }}>
-              <div className={styles.buildingRooms}>
+              <div
+                className={styles.buildingRooms}
+                style={inline ? undefined : { flexFlow: 'row wrap' }}
+              >
+                <Room inline={inline}>
+                  2701
+                  <br />
+                  128.74㎡
+                  <br />
+                  中国核工业华兴建设有限公司
+                  <br />
+                </Room>
+                <Room inline={inline}>
+                  2701
+                  <br />
+                  128.74㎡
+                  <br />
+                  中国核工业华兴建设有限公司
+                  <br />
+                </Room>
+                <Room inline={inline}>
+                  2701
+                  <br />
+                  128.74㎡
+                  <br />
+                  中国核工业华兴建设有限公司
+                  <br />
+                </Room>
+                <Room inline={inline}>
+                  2701
+                  <br />
+                  128.74㎡
+                  <br />
+                  中国核工业华兴建设有限公司
+                  <br />
+                </Room>
+                <Room inline={inline}>
+                  2701
+                  <br />
+                  128.74㎡
+                  <br />
+                  中国核工业华兴建设有限公司
+                  <br />
+                </Room>
+                <Room inline={inline}>
+                  2701
+                  <br />
+                  128.74㎡
+                  <br />
+                  中国核工业华兴建设有限公司
+                  <br />
+                </Room>
+                <Room inline={inline}>
+                  2701
+                  <br />
+                  128.74㎡
+                  <br />
+                  中国核工业华兴建设有限公司
+                  <br />
+                </Room>
+                <Room inline={inline}>
+                  2701
+                  <br />
+                  128.74㎡
+                  <br />
+                  中国核工业华兴建设有限公司
+                  <br />
+                </Room>
+                <Room inline={inline}>
+                  2701
+                  <br />
+                  128.74㎡
+                  <br />
+                  中国核工业华兴建设有限公司
+                  <br />
+                </Room>
+                <Room inline={inline}>
+                  2701
+                  <br />
+                  128.74㎡
+                  <br />
+                  中国核工业华兴建设有限公司
+                  <br />
+                </Room>
+                <Room inline={inline}>
+                  2701
+                  <br />
+                  128.74㎡
+                  <br />
+                  中国核工业华兴建设有限公司
+                  <br />
+                </Room>
+                <Room inline={inline}>
+                  2701
+                  <br />
+                  128.74㎡
+                  <br />
+                  中国核工业华兴建设有限公司
+                  <br />
+                </Room>
+                <Room inline={inline}>
+                  2701
+                  <br />
+                  128.74㎡
+                  <br />
+                  中国核工业华兴建设有限公司
+                  <br />
+                </Room>
+                <Room inline={inline}>
+                  2701
+                  <br />
+                  128.74㎡
+                  <br />
+                  中国核工业华兴建设有限公司
+                  <br />
+                </Room>
+                <Room inline={inline}>
+                  2701
+                  <br />
+                  128.74㎡
+                  <br />
+                  中国核工业华兴建设有限公司
+                  <br />
+                </Room>
                 <Room inline={inline}>
                   2701
                   <br />
