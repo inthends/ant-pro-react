@@ -1,5 +1,5 @@
 import Page from '@/components/Common/Page';
-import { Tag,Button, message, Modal, Table } from 'antd';
+import { Tag, Button, message, Modal, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import moment from 'moment';
@@ -49,44 +49,30 @@ function ListTable(props: ListTableProps) {
       sorter: true,
     },
     {
-      title: '报修区域',
-      dataIndex: 'repairArea',
-      key: 'repairArea',
-      width: 100,
-      sorter: true,
-    },
-    {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
       width: 100,
       sorter: true,
-      render: (text, record) => {
-        switch (text) {
-          case 1:
-            return  <Tag color="#e4aa5b">待派单</Tag>
-          case 2:
-            return  <Tag color="#19d54e">待接单</Tag>
-          case 3:
-            return  <Tag color="#e4aa5b">待开工</Tag>
-          case 4:
-            return  <Tag color="#61c33a">处理中</Tag>
-          case 5:
-            return  <Tag color="#ff5722">暂停</Tag>
-          case 6:
-            return  <Tag color="#5fb878">待回访</Tag>
-          case 7:
-            return  <Tag color="#29cc63">待检验</Tag>
-          case 8:
-            return  <Tag color="#e48f27">待审核</Tag>
-          case 9:
-            return  <Tag color="#c31818">已退单</Tag>
-          case 10:
-            return  <Tag color="#009688">已归档</Tag>
-          case -1:
-            return  <Tag color="#d82d2d">已作废</Tag>
-          default:
-            return '';
+      render: (text, record) => { 
+        if (record.isEnable == 0) {
+          return <Tag color="#d82d2d">无效投诉</Tag>
+        } else {
+
+          switch (text) {
+            case 1:
+              return <Tag color="#e4aa5b">待处理</Tag>
+            case 2:
+              return <Tag color="#19d54e">处理中</Tag>
+            case 3:
+              return <Tag color="#e4aa5b">待回访</Tag>
+            case 4:
+              return <Tag color="#61c33a">待审核</Tag>
+            case 5:
+              return <Tag color="#40A9FF">已归档</Tag> 
+            default:
+              return '';
+          }
         }
       }
     },
@@ -101,22 +87,22 @@ function ListTable(props: ListTableProps) {
     },
     {
       title: '关联地址',
-      dataIndex: 'address',
-      key: 'address',
-      width: 200,
+      dataIndex: 'complaintAddress',
+      key: 'complaintAddress',
+      width: 250,
       sorter: true,
     },
     {
       title: '联系人',
-      dataIndex: 'contactName',
-      key: 'contactName',
+      dataIndex: 'complaintUser',
+      key: 'complaintUser',
       width: 100,
       sorter: true,
     },
     {
       title: '联系方式',
-      dataIndex: 'contactLink',
-      key: 'contactLink',
+      dataIndex: 'complaintLink',
+      key: 'complaintLink',
       sorter: true,
     },
     {

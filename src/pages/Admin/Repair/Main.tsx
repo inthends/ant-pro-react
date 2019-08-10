@@ -1,19 +1,18 @@
-import { TreeEntity } from '@/model/models';
+
 import { DefaultPagination } from '@/utils/defaultSetting';
-import {  Input, Layout } from 'antd';
+import { Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import LeftTree from '../LeftTree';
+import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
-import { GetPageListJson, GetQuickPStructsTree } from './Main.service';
+import { GetPageListJson } from './Main.service';
 
 const { Content } = Layout;
 const { Search } = Input;
 
 function Main() {
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
-  const [treeData, setTreeData] = useState<TreeEntity[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [organize, SetOrganize] = useState<any>({});
@@ -27,28 +26,30 @@ function Main() {
   };
 
   useEffect(() => {
-    getTreeData().then(res => {
-      const root = res.filter(item => item.parentId === '0');
-      const rootOrg = root.length === 1 ? root[0] : undefined;
-      SetOrganize(rootOrg);
-      initLoadData(rootOrg, '');
-    });
+    // getTreeData().then(res => {
+    //   const root = res.filter(item => item.parentId === '0');
+    //   const rootOrg = root.length === 1 ? root[0] : undefined;
+    //   SetOrganize(rootOrg); 
+    // });
+
+    initLoadData('', '');
+
   }, []);
   // 获取属性数据
-  const getTreeData = () => {
-    return GetQuickPStructsTree().then((res: any[]) => {
-      // const treeList = (res || []).map(item => {
-      //   return {
-      //     ...item,
-      //     id: item.id,
-      //     text: item.name,
-      //     parentId: item.pId,
-      //   };
-      // });
-      setTreeData(res || []);
-      return res || [];
-    });
-  };
+  // const getTreeData = () => {
+  //   return GetQuickPStructsTree().then((res: any[]) => {
+  //     // const treeList = (res || []).map(item => {
+  //     //   return {
+  //     //     ...item,
+  //     //     id: item.id,
+  //     //     text: item.name,
+  //     //     parentId: item.pId,
+  //     //   };
+  //     // });
+  //     setTreeData(res || []);
+  //     return res || [];
+  //   });
+  // };
 
   const closeDrawer = () => {
     setModifyVisible(false);
@@ -125,8 +126,8 @@ function Main() {
 
   return (
     <Layout style={{ height: '100%' }}>
-      <LeftTree
-        treeData={treeData}
+      <AsynLeftTree
+        parentid={'0'}
         selectTree={(id, item) => {
           selectTree(id, item, search);
         }}

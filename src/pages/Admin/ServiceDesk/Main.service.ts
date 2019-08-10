@@ -1,16 +1,10 @@
 import {  ResponseObject } from '@/model/models';
 import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
-export function GetQuickPStructsTree(): Promise<any[]> {
-  return request
-    .get(process.env.basePath + `/Common/GetQuickPStructsTree`, {})
-    .then(getResult);
-}
-
+ 
 export function GetQuickSimpleTreeAll(): Promise<ResponseObject<any[]>> {
   return request.get(process.env.basePath + `/Common/GetQuickSimpleTreeAll`, {});
 } 
- 
 
 //获取服务单
 export function GetPageListJson(data): Promise<any> {
@@ -32,3 +26,39 @@ export function GetCommunicates(keyValue): Promise<any> {
     .get(process.env.basePath + `/ServiceDesk/GetCommunicates?keyValue=${keyValue}`)
     .then(getResult as any);
 }
+
+// 保存
+export function SaveForm(data): Promise<any> { 
+  return request
+    .post(process.env.basePath + `/ServiceDesk/SaveForm`, { data:objToFormdata(data) })
+    .then(getResult as any);
+}
+
+// 删除
+export function RemoveForm(keyValue): Promise<any> {
+  return request
+    .post(process.env.basePath + `/ServiceDesk/RemoveForm`, { data: objToFormdata({ keyValue }) })
+    .then(getResult as any);
+}
+
+// 获取房间住户信息
+export function GetRoomUser(keyValue): Promise<any> {
+  return request
+    .get(process.env.basePath + `/ServiceDesk/GetRoomUser?keyValue=${keyValue}`)
+    .then(getResult as any);
+}
+
+// 转报修
+export function ChangeToRepair(data): Promise<any> { 
+  return request
+    .post(process.env.basePath + `/ServiceDesk/ChangeToRepair`, { data:objToFormdata(data) })
+    .then(getResult as any);
+}
+
+// 转投诉
+export function ChangeToComplaint(data): Promise<any> { 
+  return request
+    .post(process.env.basePath + `/ServiceDesk/ChangeToComplaint`, { data:objToFormdata(data) })
+    .then(getResult as any);
+}
+

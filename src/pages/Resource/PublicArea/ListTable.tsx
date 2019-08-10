@@ -37,7 +37,7 @@ function ListTable(props: ListTableProps) {
       title: '公区名称',
       dataIndex: 'name',
       key: 'name',
-      width: 250,
+      width: 200,
       fixed: 'left',
       sorter: true,
     },
@@ -49,7 +49,7 @@ function ListTable(props: ListTableProps) {
       sorter: true,
     },
     {
-      title: '房产全称',
+      title: '全称',
       dataIndex: 'psAllName',
       key: 'psAllName',
       width: 300,
@@ -66,7 +66,7 @@ function ListTable(props: ListTableProps) {
       title: '是否审核',
       dataIndex: 'auditMark',
       key: 'auditMark',
-      width: 200,
+      width: 100,
       sorter: true,
       render: (text: any) => {
         switch (text) {
@@ -102,7 +102,7 @@ function ListTable(props: ListTableProps) {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
-      width: 200,
+      width: 155,
       fixed: 'right',
       render: (text, record) => {
         return [

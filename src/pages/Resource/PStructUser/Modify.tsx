@@ -25,13 +25,13 @@ const Modify = (props: ModifyProps) => {
   const title = data === undefined ? '添加住户资料' : '修改住户资料';
   const [infoDetail, setInfoDetail] = useState<any>({});
 
-  const [treeData, setTreeData] = useState<TreeEntity[]>([]); //所属机构
+  const [treeData, setTreeData] = useState<any[]>([]); //所属机构
   const [banks, setBanks] = useState<any[]>([]); // 开户银行
   // const [banks, setBanks] = useState<any[]>([]); // 证件类别
   // const [banks, setBanks] = useState<any[]>([]); // 企业性质
   // 打开抽屉时初始化
   useEffect(() => {
-    GetOrgTree2().then((res: TreeEntity[]) => {
+    GetOrgTree2().then((res: any[]) => {
       setTreeData(res || []);
     });
     // 获取开户银行
@@ -106,11 +106,12 @@ const Modify = (props: ModifyProps) => {
                   })(
                     <TreeSelect 
                     placeholder="请选择隶属机构" 
+                    treeData={treeData}
                     allowClear 
                     treeDefaultExpandAll
                     dropdownStyle={{ maxHeight: 350 }}
                     >
-                      {renderTree(treeData)}
+                      {/* {renderTree(treeData)} */}
                     </TreeSelect>,
                   )}
                 </Form.Item>
@@ -376,14 +377,14 @@ export default Form.create<ModifyProps>()(Modify);
 //     });
 // };
 
-const renderTree = data =>
-    data.map(item => {
-      if (item.children) {
-        return ( 
-          <TreeNode {...item} dataRef={item} >
-            {renderTree(item.children)}
-          </TreeNode>
-        );
-      }
-      return <TreeNode {...item} dataRef={item} />;
-    });
+// const renderTree = data =>
+//     data.map(item => {
+//       if (item.children) {
+//         return ( 
+//           <TreeNode {...item} dataRef={item} >
+//             {renderTree(item.children)}
+//           </TreeNode>
+//         );
+//       }
+//       return <TreeNode {...item} dataRef={item} />;
+//     });

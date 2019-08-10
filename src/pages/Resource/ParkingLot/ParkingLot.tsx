@@ -16,27 +16,38 @@ function ParkingLot() {
   const [treeData, setTreeData] = useState<TreeEntity[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
-  const [organize, SetOrganize] = useState<any>({});
+  const [orgid, SetOrgid] = useState<string>('');
+  const [orgtype, SetOrgtype] = useState<string>('');
   const [data, setData] = useState<any[]>([]);
   const [currData, setCurrData] = useState<ParkingData>();
   const [search, setSearch] = useState<string>('');
+  //是否能新增
+  const [isAdd, setIsAdd] = useState<boolean>(true);
 
-  const selectTree = (org, item, searchText) => {
-    initLoadData(item, searchText);
-    SetOrganize(item);
+  const selectTree = (id, type, searchText) => {
+    initLoadData(id, type, searchText);
+    if (type == '1' || type == '8' ) {
+      setIsAdd(false);
+    } else {
+      setIsAdd(true);
+    }
+
+    SetOrgid(id);
+    SetOrgtype(type);
+
   };
 
   useEffect(() => {
     getTreeData().then(res => {
-      const root = res.filter(item => item.parentId === '0');
-      const rootOrg = root.length === 1 ? root[0] : undefined;
-      SetOrganize(rootOrg);
-      initLoadData('', '');
+      // const root = res.filter(item => item.parentId === '0');
+      // const rootOrg = root.length === 1 ? root[0] : undefined;
+      // SetOrganize(rootOrg);
+      initLoadData('', '', '');
     });
   }, []);
   // 获取属性数据
   const getTreeData = () => {
-    return GetQuickParkingTree().then((res: any[]) => {
+    return GetQuickParkingTree('').then((res: any[]) => {
       setTreeData(res || []);
       return res || [];
       // const treeList = (res || []).map(item => {
@@ -118,13 +129,13 @@ function ParkingLot() {
     });
   };
 
-  const initLoadData = (org, searchText) => {
+  const initLoadData = (id, type, searchText) => {
     setSearch(searchText);
     const queryJson = {
-      OrganizeId: org.organizeId,
+      //OrganizeId: org.organizeId,
       keyword: searchText,
-      TreeTypeId: org.id,
-      TreeType: org.type,
+      TreeTypeId: id,
+      TreeType: type,
     };
     const sidx = 'id';
     const sord = 'asc';
@@ -133,64 +144,65 @@ function ParkingLot() {
       return res;
     });
   };
-  const disabledCreate = org => {
-    return !(org.type === '1' || org.type === '8' || org.type === '');
-  };
+  // const disabledCreate = org => {
+  //   return !(org.type === '1' || org.type === '8' || org.type === '');
+  // };
   return (
     <Layout style={{ height: '100%' }}>
       <LeftTree
         treeData={treeData}
-        selectTree={(id, item) => {
-          selectTree(id, item, search);
+        selectTree={(id, type) => {
+          selectTree(id, type, search);
         }}
       />
-      <Content  style={{paddingLeft:'18px'}} >
-        <div style={{ marginBottom: '10px'  }}>
+      <Content style={{ paddingLeft: '18px' }} >
+        <div style={{ marginBottom: '10px' }}>
           <Search
             className="search-input"
             placeholder="请输入要查询的关键词"
-            onSearch={value => loadData(value, organize)}
+            onSearch={value => loadData(value, orgid)}
             style={{ width: 200 }}
           />
           <Button
             type="primary"
             style={{ float: 'right' }}
-            disabled={disabledCreate(organize)}
-            onClick={() => create(organize)}
+            // disabled={disabledCreate(orgid)}
+            disabled={isAdd}
+            onClick={() => create(orgid)}
           >
             <Icon type="plus" />
-            车位
+            {orgtype == '8' ? '车位' : '车库'}
           </Button>
         </div>
         <ListTable
           onchange={(paginationConfig, filters, sorter) =>
-            loadData(search, organize, paginationConfig, sorter)
+            loadData(search, orgid, paginationConfig, sorter)
           }
           loading={loading}
           pagination={pagination}
           data={data}
           modify={showDrawer}
-          reload={() => initLoadData(organize, search)}
+          reload={() => initLoadData(orgid, orgtype, search)}
         />
       </Content>
-      {currData && currData.baseInfo && currData.baseInfo.type === 9 ? (
+      {orgtype == '8' ? (
         <ModifyParking
           modifyVisible={modifyVisible}
           closeDrawer={closeDrawer}
           treeData={treeData}
-          organizeId={organize.organizeId}
+          organizeId={orgid}
           data={currData}
-          reload={() => initLoadData(organize, search)}
+          reload={() => initLoadData(orgid, orgtype, search)}
         />
       ) : null}
-      {currData && currData.baseInfo && currData.baseInfo.type === 8 ? (
+      {orgtype == '1' ? (
         <ModifyGarage
           modifyVisible={modifyVisible}
           closeDrawer={closeDrawer}
           treeData={treeData}
-          organizeId={organize.id}
+          organizeId={orgid}
           data={currData}
-          reload={() => initLoadData(organize, search)}
+          reload={() => initLoadData(orgid, orgtype, search)}
         />
       ) : null}
     </Layout>

@@ -19,14 +19,14 @@ import { getCommonItems } from '@/services/commonItem';
 import styles from './style.less';
 
 const { Option } = Select;
-const { TreeNode } = Tree;
+// const { TreeNode } = Tree;
 
 interface ModifyProps {
   modifyVisible: boolean;
   data?: any;
   form: WrappedFormUtils;
   organizeId: string;
-  treeData: TreeEntity[];
+  treeData: any[];
   closeDrawer(): void;
   reload(): void;
 }
@@ -118,9 +118,10 @@ const Modify = (props: ModifyProps) => {
                     <TreeSelect 
                     placeholder="请选择隶属机构" 
                     dropdownStyle={{ maxHeight: 350 }}
+                    treeData={treeData}
                     allowClear 
                     treeDefaultExpandAll>
-                      {renderTree(treeData)}
+                      {/* {renderTree(treeData)} */}
                     </TreeSelect>,
                   )}
                 </Form.Item>
@@ -143,7 +144,7 @@ const Modify = (props: ModifyProps) => {
               </Col>
             </Row>
             <Row gutter={24}>
-              <Col lg={12}>
+              <Col lg={8}>
                 <Form.Item label="单位名称" required>
                   {getFieldDecorator('fullName', {
                     initialValue: infoDetail.fullName,
@@ -151,7 +152,7 @@ const Modify = (props: ModifyProps) => {
                   })(<Input placeholder="请输入单位名称" />)}
                 </Form.Item>
               </Col>
-              <Col lg={12}>
+              <Col lg={8}>
                 <Form.Item label="编号" required>
                   {getFieldDecorator('enCode', {
                     initialValue: infoDetail.enCode,
@@ -159,32 +160,32 @@ const Modify = (props: ModifyProps) => {
                   })(<Input placeholder="请输入编号" />)}
                 </Form.Item>
               </Col>
-            </Row>
-            <Row gutter={24}>
-              <Col lg={12}>
+              <Col lg={8}>
                 <Form.Item label="简称">
                   {getFieldDecorator('shortName', {
                     initialValue: infoDetail.shortName,
                   })(<Input placeholder="请输入简称" />)}
                 </Form.Item>
               </Col>
-              <Col lg={12}>
+            </Row>
+            <Row gutter={24}>
+              
+              <Col lg={8}>
                 <Form.Item label="单位性质">
                   {getFieldDecorator('nature', {
                     initialValue: infoDetail.nature,
                   })(<Input placeholder="请输入单位性质" />)}
                 </Form.Item>
               </Col>
-            </Row>
-            <Row gutter={24}>
-              <Col lg={12}>
+           
+              <Col lg={8}>
                 <Form.Item label="经营范围">
                   {getFieldDecorator('businessScope', {
                     initialValue: infoDetail.businessScope,
                   })(<Input placeholder="请输入经营范围" />)}
                 </Form.Item>
               </Col>
-              <Col lg={12}>
+              <Col lg={8}>
                 <Form.Item label="负责人">
                   {getFieldDecorator('manager', {
                     initialValue: infoDetail.manager,
@@ -193,46 +194,46 @@ const Modify = (props: ModifyProps) => {
               </Col>
             </Row>
             <Row gutter={24}>
-              <Col lg={12}>
+              <Col lg={8}>
                 <Form.Item label="联系电话">
                   {getFieldDecorator('innerPhone', {
                     initialValue: infoDetail.innerPhone,
                   })(<Input placeholder="请输入联系电话" />)}
                 </Form.Item>
               </Col>
-              <Col lg={12}>
+              <Col lg={8}>
                 <Form.Item label="联系地址">
                   {getFieldDecorator('address', {
                     initialValue: infoDetail.address,
                   })(<Input placeholder="请输入联系地址" />)}
                 </Form.Item>
               </Col>
-            </Row>
-            <Row gutter={24}>
-              <Col lg={12}>
+              <Col lg={8}>
                 <Form.Item label="电子邮箱">
                   {getFieldDecorator('email', {
                     initialValue: infoDetail.email,
                   })(<Input placeholder="请输入电子邮箱" />)}
                 </Form.Item>
               </Col>
-              <Col lg={12}>
+            </Row>
+            <Row gutter={24}>
+            
+              <Col lg={8}>
                 <Form.Item label="邮政编码">
                   {getFieldDecorator('postalcode', {
                     initialValue: infoDetail.postalcode,
                   })(<Input placeholder="请输入邮政编码" />)}
                 </Form.Item>
               </Col>
-            </Row>
-            <Row gutter={24}>
-              <Col lg={12}>
+           
+              <Col lg={8}>
                 <Form.Item label="税务地址">
                   {getFieldDecorator('taxAddress', {
                     initialValue: infoDetail.taxAddress,
                   })(<Input placeholder="请输入税务地址" />)}
                 </Form.Item>
               </Col>
-              <Col lg={12}>
+              <Col lg={8}>
                 <Form.Item label="注册资金">
                   {getFieldDecorator('registeredCapital', {
                     initialValue: infoDetail.registeredCapital,
@@ -241,23 +242,21 @@ const Modify = (props: ModifyProps) => {
               </Col>
             </Row>
             <Row gutter={24}>
-              <Col lg={12}>
+              <Col lg={8}>
                 <Form.Item label="信用代码">
                   {getFieldDecorator('uscCode', {
                     initialValue: infoDetail.uscCode,
                   })(<Input placeholder="请输入信用代码" />)}
                 </Form.Item>
               </Col>
-              <Col lg={12}>
+              <Col lg={8}>
                 <Form.Item label="税务识别号">
                   {getFieldDecorator('taxNumber', {
                     initialValue: infoDetail.taxNumber,
                   })(<Input placeholder="请输入税务识别号" />)}
                 </Form.Item>
               </Col>
-            </Row>
-            <Row gutter={24}>
-              <Col lg={12}>
+              <Col lg={8}>
                 <Form.Item label="开户银行">
                   {getFieldDecorator('bank', {
                     initialValue: infoDetail.bank,
@@ -272,16 +271,18 @@ const Modify = (props: ModifyProps) => {
                   )}
                 </Form.Item>
               </Col>
-              <Col lg={12}>
+            </Row>
+            <Row gutter={24}>
+             
+              <Col lg={8}>
                 <Form.Item label="银行账号">
                   {getFieldDecorator('bankCcount', {
                     initialValue: infoDetail.bankCcount,
                   })(<Input placeholder="请输入银行账号" />)}
                 </Form.Item>
               </Col>
-            </Row>
-            <Row gutter={24}>
-              <Col lg={12}>
+          
+              <Col lg={8}>
                 <Form.Item label="状态">
                   {getFieldDecorator('state', {
                     initialValue: infoDetail.state,
@@ -296,7 +297,7 @@ const Modify = (props: ModifyProps) => {
                   )}
                 </Form.Item>
               </Col>
-              <Col lg={12}>
+              <Col lg={8}>
                 <Form.Item label="信誉等级">
                   {getFieldDecorator('creditLevel', {
                     initialValue: infoDetail.creditLevel,
@@ -352,14 +353,14 @@ export default Form.create<ModifyProps>()(Modify);
 //     });
 // };
 
-const renderTree = data =>
-  data.map(item => {
-    if (item.children) {
-      return (
-        <TreeNode {...item} dataRef={item} >
-          {renderTree(item.children)}
-        </TreeNode>
-      );
-    }
-    return <TreeNode {...item} dataRef={item} />;
-  });
+// const renderTree = data =>
+//   data.map(item => {
+//     if (item.children) {
+//       return (
+//         <TreeNode {...item} dataRef={item} >
+//           {renderTree(item.children)}
+//         </TreeNode>
+//       );
+//     }
+//     return <TreeNode {...item} dataRef={item} />;
+//   });

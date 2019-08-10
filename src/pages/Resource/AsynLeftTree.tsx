@@ -16,29 +16,40 @@ interface AsynLeftTreeProps {
 
 function AsynLeftTree(props: AsynLeftTreeProps) {
 
-  const { parentid, selectTree } = props;
-  // const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
+  const { selectTree } = props;
+  const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
   // const [autoExpandParent, setAutoExpandParent] = useState<boolean>(false);
   const { hideSider, setHideSider } = useContext(SiderContext);
   //动态子节点
   const [treeData, setTreeData] = useState<any[]>([]);
 
-  useEffect(() => {
+  var keys: any[];
+  keys = []; 
+  const getAllkeys = res =>
+    res.map(item => { 
+      if (item.children&&item.type!='D') {
+        keys.push(getAllkeys(item.children))
+      }
+      keys.push(item.key);
+    });
 
+  //展开到管理处
+  useEffect(() => {
     //根据父节点获取房产树
     GetOrgTree().then((res: any[]) => {
       setTreeData(res || []);
+      getAllkeys(res || []);
     });
 
-    //setExpandedKeys(treeData.map(item => item.id as string));
-
+    setExpandedKeys(keys);
+    //setExpandedKeys(treeData.map(item => item.id as string)); 
   }, []);
 
   const onSelect = (selectedKeys, info) => {
     if (selectedKeys.length === 1) {
       //const item = treeData.filter(treeItem => treeItem.key === selectedKeys[0])[0];
       const type = info.node.props.type;
-      if('ABCD'.indexOf(type)!=-1)
+      if ('ABCD'.indexOf(type) != -1)
         return;
       selectTree(selectedKeys[0], type);
     }
@@ -53,19 +64,20 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
   //   }
   // };
 
-  // const clickExpend = expandedKeys => {
-  //   // if not set autoExpandParent to false, if children expanded, parent can not collapse.
-  //   // or, you can remove all expanded children keys.
-  //   setExpandedKeys(expandedKeys);
-  //   setAutoExpandParent(false);
-  // };
+  const clickExpend = expandedKeys => {
+    // if not set autoExpandParent to false, if children expanded, parent can not collapse.
+    // or, you can remove all expanded children keys.
+    setExpandedKeys(expandedKeys);
+    //setAutoExpandParent(false);
+  };
 
 
+  //异步加载
   const onLoadData = treeNode =>
     new Promise<any>(resolve => {
-
       if (treeNode.props.children &&
-        treeNode.props.children.length > 0) {
+        treeNode.props.children.length > 0&&
+        treeNode.props.type!='D') {
         resolve();
         return;
       }
@@ -106,7 +118,7 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
   return (
     <Sider
       theme="light"
-      style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh - 60px)' }}
+      style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh + 10px)' }}
       width={hideSider ? 20 : 245}
     >
       {hideSider ? (
@@ -133,9 +145,8 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
               <Tree
                 loadData={onLoadData}
                 showLine
-                // expandedKeys={expandedKeys}
-                // autoExpandParent={autoExpandParent}
-                // onExpand={clickExpend}
+                expandedKeys={expandedKeys}
+                onExpand={clickExpend}
                 onSelect={onSelect}>
                 {renderTreeNodes(treeData)}
               </Tree>

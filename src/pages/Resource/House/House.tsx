@@ -36,7 +36,7 @@ function House() {
   //   return true;
   // };
 
-  const selectTree = (orgid, orgtype, searchText) => {
+  const selectTree = (orgid, orgtype, searchText) => { 
     initLoadData(orgid, searchText);
     SetOrganizeId(orgid);
     if (orgtype == 'D') {
@@ -137,8 +137,8 @@ function House() {
     <Layout style={{ height: '100%' }}>
       <LeftTree
         treeData={treeData}
-        selectTree={(orgId, item) => {
-          selectTree(orgId, item.type, search);
+        selectTree={(orgid, orgtype) => {
+          selectTree(orgid, orgtype, search);
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>

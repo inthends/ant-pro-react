@@ -1,8 +1,9 @@
 import { ParkingData,   TreeEntity } from '@/model/models';
 import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
-export function GetQuickParkingTree(): Promise<any[]> {
-  return request.get(process.env.basePath + `/ParkingLot/GetQuickParkingTree`, {}).then(getResult);
+
+export function GetQuickParkingTree(type): Promise<any[]> {
+  return request.get(process.env.basePath + `/ParkingLot/GetQuickParkingTree?type=${type}`, {}).then(getResult);
 }
  
 export function GetPublicAreas(data): Promise<any> {
@@ -48,12 +49,12 @@ export function RemoveForm(keyValue): Promise<any> {
     .post(process.env.basePath + `/ParkingLot/RemoveForm?keyValue=${keyValue}`, {})
     .then(getResult as any);
 }
-export function getTreeData(): Promise<TreeEntity[]> {
-  return request.get(process.env.basePath + `/Common/GetTreeJsonById`).then(getResult as any);
-}
-export function getEstateTreeData(organizeId, type?): Promise<any[]> {
-  const typestr = type !== undefined ? `&type=${type}` : '';
-  return request
-    .get(process.env.basePath + `/Common/GetTreeJson?organizeId=${organizeId}${typestr}`)
-    .then(getResult as any);
-}
+// export function getTreeData(): Promise<TreeEntity[]> {
+//   return request.get(process.env.basePath + `/Common/GetTreeJsonById`).then(getResult as any);
+// }
+// export function getEstateTreeData(organizeId, type?): Promise<any[]> {
+//   const typestr = type !== undefined ? `&type=${type}` : '';
+//   return request
+//     .get(process.env.basePath + `/Common/GetTreeJson?organizeId=${organizeId}${typestr}`)
+//     .then(getResult as any);
+// }

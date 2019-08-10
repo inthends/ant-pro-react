@@ -1,19 +1,20 @@
 import Page from '@/components/Common/Page';
 import { Icon, Layout, Tree } from 'antd';
-import React, { useContext ,useState,useEffect} from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { SiderContext } from '../SiderContext';
 
-const { Sider } = Layout; 
+const { Sider } = Layout;
 
-interface LeftTreeProps{ 
+interface LeftTreeProps {
   treeData: any[];
-  selectTree(treeNode, item?: any): void;
+  // selectTree(treeNode, item?: any): void;
+  selectTree(orgid, orgtype): void;
 }
 
 function LeftTree(props: LeftTreeProps) {
 
   const { treeData, selectTree } = props;
-     const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
+  const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
   // const [autoExpandParent, setAutoExpandParent] = useState<boolean>(false);
   const { hideSider, setHideSider } = useContext(SiderContext);
 
@@ -29,18 +30,19 @@ function LeftTree(props: LeftTreeProps) {
   //   return keys;
   // }
 
-    //展开全部
-    const keys =[];
-    const getAllkeys = data =>
-    data.map(item => { 
-      if (item.children) { 
-          keys.push(getAllkeys(item.children) ) 
+  //展开全部
+  var keys: any[];
+  keys = [];
+  const getAllkeys = data =>
+    data.map(item => {
+      if (item.children) {
+        keys.push(getAllkeys(item.children))
       }
       keys.push(item.key);
     });
 
 
-  useEffect(() => { 
+  useEffect(() => {
     getAllkeys(treeData);
     setExpandedKeys(keys);
   }, [treeData]);
@@ -49,7 +51,7 @@ function LeftTree(props: LeftTreeProps) {
     // if (selectedKeys.length === 1) {
     //   const item = treeData.filter(treeItem => treeItem.key === selectedKeys[0])[0];
     //   selectTree(selectedKeys[0], item);
-    // } 
+    // }  
 
     if (selectedKeys.length === 1) {
       selectTree(selectedKeys[0], info.node.props.type);
@@ -97,7 +99,7 @@ function LeftTree(props: LeftTreeProps) {
   //     return <TreeNode {...item} dataRef={item} />;
   //   });
 
- 
+
   return (
     <Sider
       theme="light"
@@ -125,13 +127,13 @@ function LeftTree(props: LeftTreeProps) {
                 overflowY: 'auto',
               }}
             >
-              <Tree 
-                expandedKeys ={expandedKeys} 
-                showLine 
+              <Tree
+                showLine
                 treeData={treeData}
+                expandedKeys={expandedKeys}
                 onExpand={clickExpend}
-                onSelect={onSelect} > 
-                
+                onSelect={onSelect} >
+
               </Tree>
             </Page>
             <div

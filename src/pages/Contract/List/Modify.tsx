@@ -183,9 +183,7 @@ const Modify = (props: ModifyProps) => {
           });
           return;
         }
-        //保存合同数据 
-
-        
+        //保存合同数据
         let ContractCharge: LeaseContractChargeEntity = {};
         //费用条款-基本条款 
         ContractCharge.depositFeeItemID = values.depositFeeItemID;
@@ -348,10 +346,10 @@ const Modify = (props: ModifyProps) => {
                     <Col lg={12}>
                       <Form.Item label="计算精度">
                         {getFieldDecorator('calcPrecisionMode', {
-                          initialValue: "1"
+                          initialValue: "最终计算结果保留2位"
                         })(<Select>
-                          <Option value="1" >最终计算结果保留2位</Option>
-                          <Option value="2" >每步计算结果保留2位</Option>
+                          <Option value="最终计算结果保留2位" >最终计算结果保留2位</Option>
+                          <Option value="每步计算结果保留2位" >每步计算结果保留2位</Option>
                         </Select>
                         )}
                       </Form.Item>
@@ -439,10 +437,10 @@ const Modify = (props: ModifyProps) => {
                     <Col lg={6}>
                       <Form.Item label="&nbsp;" >
                         {getFieldDecorator('lateFeeUnit', {
-                          initialValue: "1"
+                          initialValue: "%/天"
                         })(
                           <Select>
-                            <Option value="1">%/天</Option>
+                            <Option value="%/天">%/天</Option>
                           </Select>)}
                       </Form.Item>
                     </Col>
@@ -455,9 +453,9 @@ const Modify = (props: ModifyProps) => {
                     <Col lg={5}>
                       <Form.Item label="&nbsp;" >
                         {getFieldDecorator('maxLateFeeUnit', {
-                          initialValue: "1"
+                          initialValue: "%"
                         })(<Select>
-                          <Option value="1">%</Option>
+                          <Option value="%">%</Option>
                         </Select>)}
                       </Form.Item>
                     </Col>
@@ -485,8 +483,8 @@ const Modify = (props: ModifyProps) => {
                     })(
                       <Select placeholder="请选择费项">
                         {feeitems.map(item => (
-                          <Option value={item.value} key={item.value}>
-                            {item.text}
+                          <Option value={item.key} key={item.key}>
+                            {item.title}
                           </Option>
                         ))}
                       </Select>
@@ -504,11 +502,11 @@ const Modify = (props: ModifyProps) => {
                 <Col lg={5}>
                   <Form.Item label="&nbsp;" >
                     {getFieldDecorator('depositUnit', {
-                      initialValue: "1"
+                      initialValue: "月"
                     })(
                       <Select>
-                        <Option value="1">月</Option>
-                        <Option value="2">元</Option>
+                        <Option value="月">月</Option>
+                        <Option value="元">元</Option>
                       </Select>)}
                   </Form.Item>
                 </Col>

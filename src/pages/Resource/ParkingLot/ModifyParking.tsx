@@ -17,7 +17,7 @@ import {
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { getEstateTreeData, SaveParkingForm } from './ParkingLot.service';
+import { SaveParkingForm } from './ParkingLot.service';
 import styles from './style.less';
 
 const { Option } = Select;
@@ -29,21 +29,21 @@ interface ModifyParkingProps {
   data?: ParkingData;
   form: WrappedFormUtils;
   organizeId: string;
-  treeData: TreeEntity[];
+  treeData: any[];
   closeDrawer(): void;
   reload(): void;
 }
 const ModifyParking = (props: ModifyParkingProps) => {
-  const { modifyVisible, data, closeDrawer, form, organizeId, reload } = props;
+  const { treeData, modifyVisible, data, closeDrawer, form, organizeId, reload } = props;
   const { getFieldDecorator } = form;
-  const title = data && data.baseInfo && data.baseInfo.id === undefined ? '添加车位' : '修改车位';
+  const title = data === undefined ? '添加车位' : '修改车位';
   const [infoDetail, setInfoDetail] = useState<any>({});
-  const [estateTree, setEstateTree] = useState<any[]>([]);
+  // const [estateTree, setEstateTree] = useState<any[]>([]);
   const [parkingLotState, setParkingLotState] = useState<any[]>([]); // 获取车位状态
   const [vehicleBrand, setVehicleBrand] = useState<any[]>([]); // 车辆品牌
   const [parkingLotType, setParkingLotType] = useState<any[]>([]); // 车位类型
   const [parkingNature, setParkingNature] = useState<any[]>([]); // 车位性质
-  const [color, setColor] = useState<any[]>([]); // 颜色
+  const [color, setColor] = useState<any[]>([]); // 颜色 
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -67,6 +67,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
     getCommonItems('Color').then(res => {
       setColor(res || []);
     });
+
   }, []);
 
   // 打开抽屉时初始化
@@ -74,10 +75,10 @@ const ModifyParking = (props: ModifyParkingProps) => {
     if (modifyVisible) {
       if (data) {
         setInfoDetail({ ...data.baseInfo, ...data.parkingDetail });
-        getEstateTreeData(organizeId, '8').then(res => {
-          const treeList = res || [];
-          setEstateTree(treeList);
-        });
+        // getEstateTreeData(organizeId, '8').then(res => {
+        //   const treeList = res || [];
+        //   setEstateTree(treeList);
+        // });
         form.resetFields();
       }
     } else {
@@ -126,9 +127,26 @@ const ModifyParking = (props: ModifyParkingProps) => {
       visible={modifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
-      <Card title="基本信息" className={styles.card} bordered={false}>
+      <Card className={styles.card}  >
         {modifyVisible ? (
           <Form layout="vertical" hideRequiredMark>
+            <Row gutter={24}>
+              <Col lg={24}>
+                <Form.Item label="所属车库" required>
+                  {getFieldDecorator('parentId', {
+                    rules: [{ required: true, message: '请选择所属车库' }],
+                    initialValue: infoDetail.parentId,
+                  })(
+                    <TreeSelect placeholder="请选择所属车库"
+                      allowClear
+                      treeData={treeData}
+                      dropdownStyle={{ maxHeight: 300 }}
+                      treeDefaultExpandAll>
+                    </TreeSelect>
+                  )}
+                </Form.Item>
+              </Col>
+            </Row>
             <Row gutter={24}>
               <Col lg={12}>
                 <Form.Item label="车位名称" required>
@@ -147,22 +165,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
                 </Form.Item>
               </Col>
             </Row>
-            <Row gutter={24}>
-              <Col lg={12}>
-                <Form.Item label="所属上级" required>
-                  {getFieldDecorator('parentId', {
-                    rules: [{ required: true, message: '请选择所属小区' }],
-                    initialValue: infoDetail.parentId,
-                  })(
-                    <TreeSelect placeholder="请选择所属上级" allowClear treeDefaultExpandAll>
-                      {estateTree.map(item => {
-                        return <TreeNode title={item.text} key={item.id} value={item.id} />;
-                      })}
-                    </TreeSelect>,
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
+
 
             <Row gutter={24}>
               <Col lg={12}>
@@ -172,8 +175,8 @@ const ModifyParking = (props: ModifyParkingProps) => {
                   })(
                     <Select placeholder="请选择车位状态">
                       {parkingLotState.map(item => (
-                        <Option value={item.value} key={item.value}>
-                          {item.text}
+                        <Option value={item.value} key={item.key}>
+                          {item.title}
                         </Option>
                       ))}
                     </Select>,
@@ -188,8 +191,8 @@ const ModifyParking = (props: ModifyParkingProps) => {
                   })(
                     <Select placeholder="请选择车位类型">
                       {parkingLotType.map(item => (
-                        <Option value={item.id} key={item.id}>
-                          {item.text}
+                        <Option value={item.value} key={item.key}>
+                          {item.title}
                         </Option>
                       ))}
                     </Select>,
@@ -206,8 +209,8 @@ const ModifyParking = (props: ModifyParkingProps) => {
                   })(
                     <Select placeholder="请选择车位性质">
                       {parkingNature.map(item => (
-                        <Option value={item.id} key={item.id}>
-                          {item.text}
+                        <Option value={item.value} key={item.key}>
+                          {item.title}
                         </Option>
                       ))}
                     </Select>,
@@ -303,8 +306,8 @@ const ModifyParking = (props: ModifyParkingProps) => {
                   })(
                     <Select placeholder="请选择车辆品牌">
                       {vehicleBrand.map(item => (
-                        <Option value={item.value} key={item.value}>
-                          {item.text}
+                        <Option value={item.value} key={item.key}>
+                          {item.title}
                         </Option>
                       ))}
                     </Select>,
@@ -318,8 +321,8 @@ const ModifyParking = (props: ModifyParkingProps) => {
                   })(
                     <Select placeholder="请选择颜色">
                       {color.map(item => (
-                        <Option value={item.value} key={item.value}>
-                          {item.text}
+                        <Option value={item.value} key={item.key}>
+                          {item.title}
                         </Option>
                       ))}
                     </Select>,

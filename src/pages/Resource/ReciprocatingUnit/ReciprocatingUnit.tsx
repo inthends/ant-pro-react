@@ -16,22 +16,25 @@ function PublicArea() {
   const [treeData, setTreeData] = useState<TreeEntity[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
-  const [organize, SetOrganize] = useState<any>({});
+  // const [organize, SetOrganize] = useState<any>({});
   const [data, setData] = useState<any[]>([]);
   const [currData, setCurrData] = useState<any>();
   const [search, setSearch] = useState<string>('');
+  const [orgid, SetOrgid] = useState<string>('');
+  const [orgtype, SetOrgtype] = useState<string>('');
 
-  const selectTree = (org, item, searchText) => {
-    initLoadData(item, search);
-    SetOrganize(item);
+  const selectTree = (id, type,  searchText) => {
+    initLoadData(id, type,  searchText);
+    SetOrgid(id);
+    SetOrgtype(type);
   };
 
   useEffect(() => {
     getTreeData().then(res => {
-      const root = res.filter(item => item.parentId === '0');
-      const rootOrg = root.length === 1 ? root[0] : undefined;
-      SetOrganize(rootOrg);
-      initLoadData('', '');
+      // const root = res.filter(item => item.parentId === '0');
+      // const rootOrg = root.length === 1 ? root[0] : undefined;
+      // SetOrganize(rootOrg);
+      initLoadData('', '', '');
     });
   }, []);
   // 获取属性数据
@@ -97,10 +100,10 @@ function PublicArea() {
     });
   };
 
-  const initLoadData = (org, searchText) => {
+  const initLoadData = (id, type, searchText) => {
     setSearch(searchText);
     const queryJson = {
-      OrganizeId: org.id,
+      OrganizeId: id,
       keyword: search,
     };
     const sidx = 'EnCode';
@@ -123,8 +126,8 @@ function PublicArea() {
         <div style={{ marginBottom: '10px' }}>
           <Search
             className="search-input"
-            placeholder="搜索往来单位"
-            onSearch={value => loadData(value, organize)}
+            placeholder="请输入要查询的关键词"
+            onSearch={value => loadData(value, orgid)}
             style={{ width: 200 }}
           />
           <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer()}>
@@ -134,13 +137,13 @@ function PublicArea() {
         </div>
         <ListTable
           onchange={(paginationConfig, filters, sorter) =>
-            loadData(search, organize, paginationConfig, sorter)
+            loadData(search, orgid, paginationConfig, sorter)
           }
           loading={loading}
           pagination={pagination}
           data={data}
           modify={showDrawer}
-          reload={() => initLoadData(organize, search)}
+          reload={() => initLoadData(orgid, orgtype,search)}
         />
       </Content>
 
@@ -148,9 +151,9 @@ function PublicArea() {
         modifyVisible={modifyVisible}
         closeDrawer={closeDrawer}
         treeData={treeData}
-        organizeId={organize.id}
+        organizeId={orgid}
         data={currData}
-        reload={() => initLoadData(organize, search)}
+        reload={() => initLoadData(orgid, orgtype,search)}
       />
     </Layout>
   );

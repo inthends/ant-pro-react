@@ -22,9 +22,9 @@ function ListTable(props: ListTableProps) {
   const doDelete = record => {
     Modal.confirm({
       title: '请确认',
-      content: `您是否要删除${record.name}吗`,
-      onOk: () => {
-        RemoveForm(record.pCode)
+      content: `您是否要删除${record.billCode}吗`,
+      onOk: () => { 
+        RemoveForm(record.id)
           .then(() => {
             message.success('删除成功');
             reload();

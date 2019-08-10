@@ -29,7 +29,7 @@ interface ModifyProps {
   data?: any;
   form: WrappedFormUtils;
   organizeId: string;
-  treeData: TreeEntity[];
+  treeData: any[];
   id?: string;
   closeDrawer(): void;
   reload(): void;
@@ -152,10 +152,11 @@ const Modify = (props: ModifyProps) => {
                     rules: [{ required: true, message: '请选择隶属机构' }],
                   })(
                     <TreeSelect placeholder="请选择隶属机构"
+                      treeData={treeData}
                       dropdownStyle={{ maxHeight: 400 }}
                       allowClear
                       treeDefaultExpandAll>
-                      {renderTree(treeData, '0')}
+                      {/* {renderTree(treeData, '0')} */}
                     </TreeSelect>,
                   )}
                 </Form.Item>
@@ -346,7 +347,7 @@ const Modify = (props: ModifyProps) => {
                     initialValue: infoDetail.date
                       ? moment(new Date(infoDetail.date))
                       : moment(new Date()),
-                  })(<DatePicker />)}
+                  })(<DatePicker style={{ width: '100%' }} />)}
                 </Form.Item>
               </Col>
             </Row>
@@ -419,14 +420,14 @@ const Modify = (props: ModifyProps) => {
 
 export default Form.create<ModifyProps>()(Modify);
 
-const renderTree = (treeData: TreeEntity[], parentId) => {
-  return treeData
-    .filter(item => item.parentId === parentId)
-    .map(filteditem => {
-      return (
-        <TreeNode title={filteditem.title} key={filteditem.key} value={filteditem.value} >
-          {renderTree(treeData, filteditem.key)}
-        </TreeNode>
-      );
-    });
-};
+// const renderTree = (treeData: TreeEntity[], parentId) => {
+//   return treeData
+//     .filter(item => item.parentId === parentId)
+//     .map(filteditem => {
+//       return (
+//         <TreeNode title={filteditem.title} key={filteditem.key} value={filteditem.value} >
+//           {renderTree(treeData, filteditem.key)}
+//         </TreeNode>
+//       );
+//     });
+// };
