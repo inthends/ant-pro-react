@@ -15,9 +15,12 @@ const Atlas = (props: AtlasProps) => {
   const { parentId } = props;
   useEffect(() => {
     setLoading(true);
+    // 获取楼层信息
     GetFloorData(parentId).then(res => {
       const floors = res || [];
       const promises = floors.map(item => {
+        
+        // 获取房间信息
         return GetRoomData(item.id).then(rooms => {
           item.rooms = rooms || [];
           return rooms;
