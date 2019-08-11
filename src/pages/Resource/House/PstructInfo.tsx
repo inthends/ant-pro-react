@@ -24,7 +24,7 @@ interface PstructInfoProps {
   data?: any;
   form: WrappedFormUtils;
   organizeId: string;
-  type?: string;
+  type?: number;
   closeDrawer(): void;
   reload(): void;
 }
@@ -33,10 +33,10 @@ const PstructInfo = (props: PstructInfoProps) => {
   const { getFieldDecorator } = form;
   const title = data === undefined ? '添加' : '修改';
   var formLabel = '楼栋';
-  if (type == '1') {
+  if (type === 1) {
     formLabel = '楼栋';
   }
-  else if (type == '2') {
+  else if (type === 2) {
     formLabel = '楼层';
   } else {
     formLabel = '房间';

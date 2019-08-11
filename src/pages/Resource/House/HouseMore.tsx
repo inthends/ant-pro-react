@@ -14,7 +14,7 @@ const { TabPane } = Tabs;
 
 function HouseMore(props) {
   const [pstructId, setPstructId] = useState<string>(''); //小区id
-  const [type, setType] = useState<string>('1');
+  const [type, setType] = useState<number>(1);
   const [parentId, setParentId] = useState<string>('');
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   //const [treeData, setTreeData] = useState<any[]>([]);
@@ -151,9 +151,11 @@ function HouseMore(props) {
               reload={() => initLoadData(parentId, type, search, pstructId)}
             />
           </TabPane>
-          <TabPane tab="房态图" key="2">
-            <Atlas></Atlas>
-          </TabPane>
+          {type === 2 ? (
+            <TabPane tab="房态图" key="2">
+              <Atlas parentId={parentId}></Atlas>
+            </TabPane>
+          ) : null}
         </Tabs>
       </Content>
 
