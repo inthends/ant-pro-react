@@ -7,7 +7,6 @@ import { GetFeeTreeListExpand } from './Main.service';
 import { getResult } from '@/utils/networkUtils';
 import moment from 'moment';
 
-
 interface AddReductionProps {
   visible: boolean;
   getReducetionItem(data?): void;
@@ -42,7 +41,7 @@ const AddReductionItem = (props: AddReductionProps) => {
 
   //选择房源
   const selectUnitTree = (id) => {
-    //setUnitData(id);
+    //setUnitData([...unitData,id]);
   };
 
   const selectFeeTree = (id) => {
@@ -92,13 +91,39 @@ const AddReductionItem = (props: AddReductionProps) => {
   //     });
   // };
 
+  const GetAllTreeNode=(root)=>{
+    var treeListNodes=[];
+    root.forEach((rootItem=>{
+      var node={
+        key: rootItem.key,
+        parentId: rootItem.parentId,
+        title: rootItem.title,
+        value:rootItem.value,
+        type: rootItem.type,
+        id: rootItem.key
+      };
+      treeListNodes.push(node);
+      if(rootItem.children&&rootItem.children.length>0)
+      {
+        var nodes=GetAllTreeNode(rootItem.children);
+        nodes.forEach(item=>{
+          treeListNodes.push(item);
+        });
+      }
+    }));
+    return treeListNodes;
+  }
+
+
   //获取所有费项
   const getFeeTreeData = () => {
     return GetFeeTreeListExpand()
       .then(getResult)
       .then((res: TreeEntity[]) => {
-        setFeeTreeData(res || []);
-        return res || [];
+      //  console.log(res);
+        var newData=GetAllTreeNode(res);
+        setFeeTreeData(newData || []);
+        return newData || [];
       });
   };
 
@@ -144,6 +169,11 @@ const AddReductionItem = (props: AddReductionProps) => {
     }
     return date.getFullYear() + '-' + monthStr + '-' + dayStr
   }
+
+  const getCheckedKeys=(keys)=>{
+    setUnitData(keys);
+  }
+
   return (
     <Modal
       title="新增减免的费项"
@@ -154,14 +184,15 @@ const AddReductionItem = (props: AddReductionProps) => {
       onOk={() => onOk()}
       destroyOnClose={true}
       width='860px' >
-      <Layout style={{ height: '100%' }}> 
-        <Row gutter={24}>
-          <Col span={12}> 
+      <Layout>
+        <Row style={{height:'calc(60vh)'}}>
+          <Col span={12} style={{ height: '100%'}}>
             <AsynSelectTree parentid={'0'}
+              getCheckedKeys={getCheckedKeys}
               selectTree={(parentId) => {
                 selectUnitTree(parentId);
-              }}/> 
-          </Col> 
+              }}/>
+          </Col>
           <Col span={12}>
             <Form layout="vertical" hideRequiredMark  >
               <Card >
@@ -176,7 +207,6 @@ const AddReductionItem = (props: AddReductionProps) => {
                     defaultValue={moment(endDate)}
                     onChange={(date, dateString) => selectEndDate(dateString)} /></Form.Item></Col>
                 </Row>
-
                 <LeftTree
                   selectTree={(id, item) => {
                     selectFeeTree(id);
@@ -185,7 +215,7 @@ const AddReductionItem = (props: AddReductionProps) => {
               </Card>
             </Form>
           </Col>
-        </Row> 
+        </Row>
       </Layout>
     </Modal>
   );

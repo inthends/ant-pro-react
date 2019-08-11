@@ -26,48 +26,50 @@ function BillNoticeTable(props: BillNoticeTableProps) {
       title: '单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 80,
+      width: 180,
       sorter: true
     },
     {
       title: '房屋名称',
       dataIndex: 'allName',
       key: 'allName',
-      width: 80,
+      width: 180,
       sorter: true
     },
     {
       title: '付款项目',
       dataIndex: 'payFeeName',
       key: 'payFeeName',
-      width: 80,
+      width: 180,
       sorter: true,
     },
     {
       title: '应付金额',
       dataIndex: 'payAmount',
       key: 'payAmount',
-      width: 80,
+      width: 180,
       sorter: true,
     },
     {
       title: '收费项目',
       dataIndex: 'billFeeName',
       key: 'billFeeName',
-      width: 85,
+      width: 180,
       sorter: true,
     },
     {
       title: '冲抵金额',
       dataIndex: 'billAmount',
       key: 'billAmount',
-      width: 85
+      sorter: true,
+      width: 180
     },
     {
       title: '应付余额',
       dataIndex: 'lastAmount',
+      sorter: true,
       key: 'lastAmount',
-      width: 85,
+      width: 180,
       render: val =>{
         if(val==null){
           return <span></span>
@@ -80,7 +82,8 @@ function BillNoticeTable(props: BillNoticeTableProps) {
       title: '计费起始日期',
       dataIndex: 'billBeginDate',
       key: 'billBeginDate',
-      width: 85,
+      sorter: true,
+      width: 180,
       render: val =>{
         if(val==null){
           return <span></span>
@@ -92,7 +95,8 @@ function BillNoticeTable(props: BillNoticeTableProps) {
       title: '计费终止日期',
       dataIndex: 'billEndDate',
       key: 'billEndDate',
-      width: 85,
+      sorter: true,
+      width: 180,
       render: val =>{
         if(val==null){
           return <span></span>
@@ -112,7 +116,7 @@ function BillNoticeTable(props: BillNoticeTableProps) {
         dataSource={data}
         rowKey="billID"
         pagination={pagination}
-        scroll={{ y: 500, x: 1800 }}
+        scroll={{ y: 500, x: 1620 }}
         loading={loading}
       />
     </Page>

@@ -47,7 +47,7 @@ function ListTable(props: ListTableProps) {
       title: '单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 140,
+      width: 100,
       sorter: true,
     },
     {
@@ -121,7 +121,7 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'operation',
       key: 'operation',
       fixed: 'right',
-      width: 155,
+      width: 380,
       render: (text, record) => {
         return [
           <Button
@@ -135,6 +135,7 @@ function ListTable(props: ListTableProps) {
             <Button
             type="primary"
             key="verify"
+            disabled={record.ifVerify==1?true:false}
             style={{ marginRight: '10px' }}
             onClick={()=>showVerifyModel(record.billID,true)}
           >
@@ -143,6 +144,7 @@ function ListTable(props: ListTableProps) {
             <Button
             type="primary"
             key="unverify"
+            disabled={record.ifVerify==1?false:true}
             style={{ marginRight: '10px' }}
             onClick={()=>showVerifyModel(record.billID,false)}
           >
@@ -180,7 +182,7 @@ function ListTable(props: ListTableProps) {
         columns={columns}
         rowKey={record => record.unitID}
         pagination={pagination}
-        scroll={{ y: 500, x: 1800 }}
+        scroll={{ y: 500, x: 970 }}
         onChange={(pagination: PaginationConfig, filters, sorter) =>
           changePage(pagination, filters, sorter)
         }
