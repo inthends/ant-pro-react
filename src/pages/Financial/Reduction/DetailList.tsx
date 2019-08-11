@@ -4,8 +4,6 @@ import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState } from 'react';
 import  moment from 'moment';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-
-
 import { RemoveForm } from './Main.service';
 import styles from './style.less';
 const { Option } = Select;
@@ -15,14 +13,12 @@ interface DetailListProps {
   loading: boolean;
   pagination: PaginationConfig;
   data: any[];
-  modify(id: string): void;
   reload(): void;
   form: WrappedFormUtils;
 }
 
 function DetailList(props: DetailListProps) {
-  const { form, onchange, loading, pagination, data, modify, reload } = props;
-  const { getFieldDecorator } = form;
+  const { form, onchange, loading, pagination, data,reload } = props;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
   };
@@ -37,8 +33,8 @@ function DetailList(props: DetailListProps) {
     },
     {
       title: '收费项目',
-      dataIndex: 'feeName ',
-      key: 'feeName ',
+      dataIndex: 'feeName',
+      key: 'feeName',
       width: 80,
       sorter: true
     },
@@ -106,34 +102,7 @@ function DetailList(props: DetailListProps) {
       key: 'memo',
       width: 85
     }
-  ] as ColumnProps<any>;
-
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-
-  const onSelectChange = (selectedRowKeys, selectedRows) => {
-    setSelectedRowKeys(selectedRowKeys);
-
-    var sumEntity = {};
-    var sumAmount = 0, sumreductionAmount = 0, sumoffsetAmount = 0, sumlastAmount = 0;
-    selectedRows.map(item => {
-      sumAmount = selectedRows.reduce((sum, row) => { return sum + row.amount; }, 0);
-      sumreductionAmount = selectedRows.reduce((sum, row) => { return sum + row.reductionAmount; }, 0);
-      sumoffsetAmount = selectedRows.reduce((sum, row) => { return sum + row.offsetAmount; }, 0);
-      sumlastAmount = selectedRows.reduce((sum, row) => { return sum + row.lastAmount; }, 0);
-    });
-
-    sumEntity['sumAmount'] = sumAmount.toFixed(2);
-    sumEntity['sumreductionAmount'] = sumreductionAmount.toFixed(2);
-    sumEntity['sumoffsetAmount'] = sumoffsetAmount.toFixed(2);
-    sumEntity['sumlastAmount'] = sumlastAmount.toFixed(2);
-    setSumEntity(sumEntity);
-  };
-
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectChange,
-  };
-  const hasSelected = selectedRowKeys.length > 0;
+  ] as ColumnProps<any>[];
 
   return (
     <Page>

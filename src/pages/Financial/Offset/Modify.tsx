@@ -1,26 +1,24 @@
-import { TreeEntity } from '@/model/models';
 import {
-  Select,
   Button,
-  Col,Icon,
+  Col,
   DatePicker,
   Drawer,
   Form,
   Row,
-  notification ,
-  message,
-  RangePicker
+  Spin,
+  Input,
+  Table
 } from 'antd';
+import { DefaultPagination } from '@/utils/defaultSetting';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
+import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { GetRoomTreeListExpand,GetBillTreeListExpand,GetCheckTreeListExpand,SaveForm} from './Offset.service';
-import styles from './style.less';
+import {SaveForm,GetFormJson,GetOffsetPageDetailData} from './Offset.service';
+import './style.less';
 import  moment from 'moment';
-import LeftTree from '../LeftTree';
 
 interface ModifyProps {
   modifyVisible: boolean;
-  data?: any;
   closeDrawer(): void;
   form: WrappedFormUtils;
   id?: string;
@@ -29,52 +27,28 @@ interface ModifyProps {
 }
 
 const Modify = (props: ModifyProps) => {
-  const { modifyVisible, closeDrawer, form, id,organizeId } = props;
+  const { modifyVisible, closeDrawer, form, id } = props;
   const title = id === undefined ? '新增冲抵单' : '修改冲抵单';
   const [loading, setLoading] = useState<boolean>(false);
-  const [modalvisible,setModalVisible]=useState<boolean>(false);
-
   const { getFieldDecorator } = form;
-
-  const [infoDetail, setInfoDetail] = useState<any>({});
-
-  const [payfeeitemid,setPayFeeItemId ] = useState<string>('');
-  const [feeitemid,setFeeItemId] = useState<string>('');
   const [units,setUnits] = useState<string>([]);
-
-  const [roomTreeData,setRoomTreeData] = useState<any>();
-  const [checkTreeData,setCheckTreeData] = useState<any>();
-  const [billTreeData,setBillTreeData] = useState<any>();
-
-
-  const [payBeginDate,setPayBeginDate   ] = useState<string>();
-  const [payEndDate,setPayEndDate] = useState<string>();
-  const [beginDate,setBeginDate] = useState<string>();
-  const [endDate,setEndDate] = useState<string>();
+  const [infoDetail, setInfoDetail] = useState<any>({});
+  const [noticeData, setNoticeData] = useState<any>([]);
+  const [pagination, setPagination] = useState<DefaultPagination>(new DefaultPagination());
 
   useEffect(() => {
-    getRoomTreeData().then(res => {
-
-    }).then(()=>{
-      getCheckTreeData();
-    }).then(()=>{
-      getBillTreeData();
-    });
-
     if(id)
     {
-
+      setLoading(true);
+      GetFormJson(id).then(res=>{
+        setInfoDetail(res);
+        loadNoticeData('',res.organizeID);
+        setLoading(false);
+      });
     }else{
-      setPayBeginDate(getCurrentMonthFirstDay);
-      setPayEndDate(getCurrentMonthLastDay);
-      setBeginDate(getCurrentMonthFirstDay);
-      setEndDate(getCurrentMonthLastDay);
+      setLoading(false);
     }
-  }, []);
-
-  const closeModal=()=>{
-    setModalVisible(false);
-  }
+  }, [modifyVisible]);
 
   const close = () => {
     closeDrawer();
@@ -87,76 +61,46 @@ const Modify = (props: ModifyProps) => {
     });
   }
 
-  const getRoomTreeData = () =>{
-    return GetRoomTreeListExpand()
-      .then((res: TreeEntity[]) => {
-        const treeList = (res || []).map(item => {
-          return {
-            ...item,
-            id: item.id,
-            text: item.title,
-            parentId: item.pId,
-          };
-        });
-        setRoomTreeData(treeList);
-        return treeList;
+   //明细表数据
+  const loadNoticeData = (search, organizeID,paginationConfig?: PaginationConfig, sorter?) => {
+    const { current: pageIndex, pageSize, total } = paginationConfig || {
+      current: 1,
+      pageSize: pagination.pageSize,
+      total: 0,
+    };
+    let searchCondition: any = {
+      pageIndex,
+      pageSize,
+      total,
+      queryJson: { keyword: '',billid:infoDetail.billID},
+    };
+    if (sorter) {
+      let { field, order } = sorter;
+      searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sidx = field ? field : 'billid';
+    }
+    return noticeload(searchCondition).then(res => {
+      return res;
+    });
+  };
+
+  //明细表加载
+  const noticeload = data => {
+    data.sidx = data.sidx || 'billid';
+    data.sord = data.sord || 'asc';
+    return GetOffsetPageDetailData(data).then(res => {
+      const { pageIndex: current, total, pageSize } = res;
+      setPagination(pagesetting => {
+        return {
+          ...pagesetting,
+          current,
+          total,
+          pageSize,
+        };
       });
-  };
-
-  const getCheckTreeData = () =>{
-    return GetCheckTreeListExpand()
-      .then((res: TreeEntity[]) => {
-        const treeList = (res || []).map(item => {
-          return {
-            ...item,
-            id: item.id,
-            text: item.text,
-            parentId: item.parentId,
-          };
-        });
-        setCheckTreeData(treeList);
-        return treeList;
-      });
-  };
-
-  const getBillTreeData = () =>{
-    return GetBillTreeListExpand()
-      .then((res: TreeEntity[]) => {
-        const treeList = (res || []).map(item => {
-          return {
-            ...item,
-            id: item.id,
-            text: item.text,
-            parentId: item.parentId,
-          };
-        });
-        setBillTreeData(treeList);
-        return treeList;
-      });
-  };
-
-  const selectRoomTree = (org, item) => {
-    /*setInfoDetail({
-      ...infoDetail,
-      units:org
-    });*/
-    setUnits(org);
-  };
-
-  const selectBillTree = (org, item) => {
-    /*setInfoDetail({
-      ...infoDetail,
-      feeitemid:org
-    });*/
-    setFeeItemId(org);
-  };
-
-  const selectCheckTree = (org, item) => {
-    /*setInfoDetail({
-      ...infoDetail,
-      payfeeitemid :org
-    });*/
-    setPayFeeItemId(org);
+      setNoticeData(res.data);
+      return res;
+    });
   };
 
   const onSave=()=>{
@@ -167,168 +111,199 @@ const Modify = (props: ModifyProps) => {
           payEndDate: values.payEndDate.format('YYYY-MM-DD HH:mm:ss'),
           beginDate:values.beginDate.format('YYYY-MM-DD HH:mm:ss'),
           endDate: values.endDate.format('YYYY-MM-DD HH:mm:ss'),
-          payfeeitemid: payfeeitemid,
-          feeitemid: feeitemid
+          //payfeeitemid: infoDetail.billId,
+          //feeitemid: infoDetail.feeitemid
         };
 
-        SaveForm(units,newData).then((res)=>{
-          console.log(res);
-          closeModal();
-        })
+        SaveForm(infoDetail.organizeID,newData).then((res)=>{
+          close();
+        });
       }
     });
   };
 
-  //获取当前月份第一天
-  const getCurrentMonthFirstDay=() =>{
-    var monthStr='';
-    var dayStr='';
-    var date = new Date()
-    date.setDate(1)
-    var month = date.getMonth() + 1
-    var day = date.getDate()
-    if (month < 10) {
-      monthStr = '0' + month
-    }else{
-      monthStr = ''+month
+  const columns = [
+    {
+      title: '单号',
+      dataIndex: 'billCode',
+      key: 'billCode',
+      width: 180,
+      sorter: true
+    },
+    {
+      title: '房屋名称',
+      dataIndex: 'allName',
+      key: 'allName',
+      width: 180,
+      sorter: true
+    },
+    {
+      title: '付款项目',
+      dataIndex: 'payFeeName',
+      key: 'payFeeName',
+      width: 180,
+      sorter: true,
+    },
+    {
+      title: '应付金额',
+      dataIndex: 'payAmount',
+      key: 'payAmount',
+      width: 180,
+      sorter: true,
+    },
+    {
+      title: '收费项目',
+      dataIndex: 'billFeeName',
+      key: 'billFeeName',
+      width: 180,
+      sorter: true,
+    },
+    {
+      title: '冲抵金额',
+      dataIndex: 'billAmount',
+      key: 'billAmount',
+      sorter: true,
+      width: 180
+    },
+    {
+      title: '应付余额',
+      dataIndex: 'lastAmount',
+      sorter: true,
+      key: 'lastAmount',
+      width: 180,
+      render: val =>{
+        if(val==null){
+          return <span></span>
+        }else{
+          return <span> {val} </span>
+        }
+      }
+    },
+    {
+      title: '计费起始日期',
+      dataIndex: 'billBeginDate',
+      key: 'billBeginDate',
+      sorter: true,
+      width: 180,
+      render: val =>{
+        if(val==null){
+          return <span></span>
+        }else{
+          return <span> {moment(val).format('YYYY-MM-DD')} </span>
+        }
+      }
+    },   {
+      title: '计费终止日期',
+      dataIndex: 'billEndDate',
+      key: 'billEndDate',
+      sorter: true,
+      width: 180,
+      render: val =>{
+        if(val==null){
+          return <span></span>
+        }else{
+          return <span> {moment(val).format('YYYY-MM-DD')} </span>
+        }
+      }
+    }
+  ] as ColumnProps<any>[];
 
-    }
-    if (day < 10) {
-      dayStr = '0' + day
-    }else{
-      dayStr = ''+day
-    }
-    return date.getFullYear() + '-' + monthStr + '-' + dayStr
-  }
 
-
-  //获取当前月份最后
-  const getCurrentMonthLastDay=() =>{
-    var monthStr='';
-    var dayStr='';
-    var date=new Date();
-    var currentMonth=date.getMonth();
-    var nextMonth=++currentMonth;
-    var nextMonthFirstDay=new Date(date.getFullYear(),nextMonth,1);
-    var oneDay=1000*60*60*24;
-    var lastTime = new Date(nextMonthFirstDay-oneDay);
-    var month = parseInt(lastTime.getMonth()+1);
-    var day = lastTime.getDate();
-    var dayStr=''+day;
-    if (month < 10) {
-      monthStr = '0' + month
-    }
-    if (day < 10) {
-      dayStr = '0' + day
-    }
-    return date.getFullYear() + '-' + monthStr + '-' + dayStr ;
-  }
   return (
-    <Drawer
+    <Drawer className="offsetModify"
       title={title}
       placement="right"
       width={880}
       onClose={close}
       visible={modifyVisible}
-      bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
+      style={{height:'calc(100vh-50px)'}}
+      bodyStyle={{ background: '#f6f7fb', height: 'calc(100vh -50px)' }}
     >
-      <Form layout="vertical" hideRequiredMark>
-        <Row gutter={12}>
-          <Col span={8}
-            style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh - 140px)' }}
-          >
-            <LeftTree
-              treeData={roomTreeData}
-              selectTree={(id, item) => {
-                selectRoomTree(id, item);
-              }}
-            />
-          </Col>
-          <Col span={8}>
-            <Row style={{paddingBottom:'7px'}}>
-                <Col>
-                <Form.Item label="应付日期">
-                {getFieldDecorator('payBeginDate', {
-                    initialValue:infoDetail.payBeginDate!=null
-                    ? moment(new Date(infoDetail.payBeginDate))
-                    : moment(getCurrentMonthFirstDay()),
-                  rules: [{ required: true }],
+      <Form  hideRequiredMark>
+        <Spin tip="数据加载中..." spinning={loading}>
+          <Row gutter={12}>
+            <Col span={8}>
+              <Form.Item className="vertifyItem" label="单号" labelCol={{span:6}} wrapperCol={{span:18}} >
+                {getFieldDecorator('billCode', {
+                    initialValue:infoDetail.billCode,
+                  rules: [{ required: true ,message:'请输入单号' }],
                 })(
-                  <DatePicker ></DatePicker>
+                  <Input  disabled={true}></Input>
                 )}
               </Form.Item>
-                </Col>
-
-            </Row>
-            <Row style={{paddingBottom:'7px'}}>
-              <Col>
-              <Form.Item label="至">
-                {getFieldDecorator('payEndDate', {
-                    initialValue:infoDetail.payEndDate!=null
-                    ? moment(new Date(infoDetail.payEndDate))
-                    : moment(getCurrentMonthLastDay()),
-                  rules: [{ required: true }],
-                })(
-                  <DatePicker ></DatePicker>
-                )}
-              </Form.Item>
-              </Col>
-
-            </Row>
-            <Row
-              style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh - 300px)' }}
-            >
-              <LeftTree
-                treeData={checkTreeData}
-                selectTree={(id, item) => {
-                  selectCheckTree(id, item);
-                }}
-              />
-            </Row>
-          </Col>
-          <Col span={8}>
-            <Row style={{paddingBottom:'7px'}}>
-            <Col>
-            <Form.Item label="账单日">
-                {getFieldDecorator('beginDate', {
-                    initialValue:infoDetail.beginDate!=null
-                    ? moment(new Date(infoDetail.beginDate))
-                    : moment(getCurrentMonthFirstDay()),
-                  rules: [{ required: true }],
+            </Col>
+            <Col span={8}>
+              <Form.Item label="单据日期" labelCol={{span:6}} wrapperCol={{span:18}} >
+                {getFieldDecorator('billDate', {
+                    initialValue:infoDetail.billDate!=null
+                    ? moment(new Date(infoDetail.billDate))
+                    : moment(new Date()),
+                  rules: [{ required: true ,message:'请选择单据日期'}],
                 })(
                   <DatePicker></DatePicker>
                 )}
               </Form.Item>
-              </Col>
-
-            </Row>
-            <Row style={{paddingBottom:'7px'}}>
-            <Col>
-            <Form.Item label="至">
-                {getFieldDecorator('endDate', {
-                    initialValue:infoDetail.endDate!=null
-                    ? moment(new Date(infoDetail.endDate))
-                    : moment(getCurrentMonthLastDay()),
-                  rules: [{ required: true }],
+            </Col>
+            <Col span={8}>
+              <Form.Item label="冲抵人" labelCol={{span:6}} wrapperCol={{span:18}} >
+                {getFieldDecorator('createUserName', {
+                    initialValue:infoDetail.createUserName,
+                  rules: [{ required: true ,message:'请输入冲抵人'}],
                 })(
-                  <DatePicker ></DatePicker>
+                  <Input  disabled={true}></Input>
                 )}
               </Form.Item>
-              </Col>
-
-            </Row>
-            <Row
-              style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh - 300px)' }}
-            >
-              <LeftTree
-                treeData={billTreeData}
-                selectTree={(id, item) => {
-                  selectBillTree(id, item);
-                }}
-              />
-            </Row>
-          </Col>
-        </Row>
+            </Col>
+          </Row>
+          <Row gutter={12}>
+            <Col span={8}>
+              <Form.Item label="状态" labelCol={{span:6}} wrapperCol={{span:18}} >
+                  {getFieldDecorator('createUserName', {
+                      initialValue:infoDetail.createUserName,
+                    rules: [{ required: true ,message:'请输入冲抵人'}],
+                  })(
+                    <Input  disabled={true}></Input>
+                  )}
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="审核日期" labelCol={{span:6}} wrapperCol={{span:18}} >
+                {getFieldDecorator('verifyDate', {
+                    initialValue:infoDetail.verifyDate!=null
+                    ? moment(new Date(infoDetail.verifyDate))
+                    : moment(new Date()),
+                  rules: [{ required: true ,message:'请选择审核日期'}],
+                })(
+                  <DatePicker  disabled={true}></DatePicker>
+                )}
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="审核日期" labelCol={{span:6}} wrapperCol={{span:18}} >
+                {getFieldDecorator('verifyDate', {
+                    initialValue:infoDetail.verifyDate!=null
+                    ? moment(new Date(infoDetail.verifyDate))
+                    : moment(new Date()),
+                  rules: [{ required: true ,message:'请选择审核日期'}],
+                })(
+                  <DatePicker  disabled={true}></DatePicker>
+                )}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <Table<any>
+              bordered={false}
+              size="middle"
+              columns={columns}
+              dataSource={noticeData}
+              rowKey="billID"
+              pagination={pagination}
+              scroll={{ y: 500, x: 1620 }}
+              loading={loading}
+            />
+          </Row>
+        </Spin>
       <div
         style={{
           position: 'absolute',

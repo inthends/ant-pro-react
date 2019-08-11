@@ -2,15 +2,16 @@
 import { TreeEntity } from '@/model/models';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { getResult } from '@/utils/networkUtils';
-import { Tabs, Button, Icon, Input, Layout } from 'antd';
+import { Tabs, Button, Icon, Input, Layout ,Modal} from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useContext, useEffect, useState } from 'react';
-import { GetTreeListExpand, GetOffsetPageDetailData, GetOffsetPageData, GetRoomTreeListExpand } from './Offset.service';
+import { GetTreeListExpand, GetOffsetPageDetailData, GetOffsetPageData, GetRoomTreeListExpand ,RemoveForm} from './Offset.service';
 import AsynLeftTree from '../AsynLeftTree';
 import Page from '@/components/Common/Page';
 import { SiderContext } from './SiderContext';
+import AddDrawer from './AddDrawer';
+import Vertify from './Vertify';
 import Modify from './Modify';
-
 import BillCheckTable from './BillCheckTable';
 import BillNoticeTable from './BillNoticeTable';
 
@@ -23,10 +24,16 @@ function Offset() {
   const [organize, SetOrganize] = useState<any>({});
   const [search, SetSearch] = useState<any>({});
   const { hideSider, setHideSider } = useContext(SiderContext);
-  const [modifyVisible, setModifyVisible] = useState<boolean>(false);
+  const [addDrawerVisible, setAddDrawerVisible] = useState<boolean>(false);
   const [id, setId] = useState<string>();
 
-  const [vertifyVisible, setVertifuVisible] = useState<boolean>(false);
+  const [vertifyVisible, setVertifyVisible] = useState<boolean>(false);
+  const [modifyVisible, setModifyVisible] = useState<boolean>(false);
+
+  const [ifVertify,setIfVertify]= useState<boolean>(false);
+
+  const [addButtonDisable,setAddButtonDisable]=useState<boolean>(true);
+
 
   const [checkloading, setCheckLoading] = useState<boolean>(false);
   const [checkpagination, setCheckPagination] = useState<DefaultPagination>(new DefaultPagination());
@@ -71,12 +78,12 @@ function Offset() {
   };
 
   const closeDrawer = () => {
-    setModifyVisible(false);
+    setAddDrawerVisible(false);
     setId(null);
   };
 
   const showDrawer = (id?) => {
-    setModifyVisible(true);
+    setAddDrawerVisible(true);
     setId(id);
   };
 
@@ -184,8 +191,11 @@ function Offset() {
     const sidx = 'billcode';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = checkpagination;
+    setAddButtonDisable(true);
     return checkload({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
       return res;
+    }).then(()=>{
+      setAddButtonDisable(false);
     });
   };
 
@@ -205,8 +215,47 @@ function Offset() {
     });
   };
 
+  const closeVertify = (result?) => {
+    setVertifyVisible(false);
+    if(result){
+      initCheckLoadData(organize, null);
+    }
+    setId(null);
+  };
+
+  const showVertify = (id?,ifVertify?) => {
+    setVertifyVisible(true);
+    setIfVertify(ifVertify);
+    setId(id);
+  };
+  const closeModify = (result?) => {
+    setModifyVisible(false);
+    if(result){
+      initCheckLoadData(organize, null);
+    }
+  };
+
+  const showModify = (id?) => {
+    setModifyVisible(true);
+    setId(id);
+  };
+  //删除冲抵单
+  const deleteData=(id?)=>{
+    Modal.confirm({
+      title: '是否确认删除该条抵冲记录?',
+      onOk() {
+        RemoveForm({
+          keyValue:id
+        }).then(res=>{
+
+        });
+      },
+      onCancel() {},
+    });
+  }
+
   return (
-    <Layout style={{ height: '100%' }}> 
+    <Layout className="offsetMain">
       <AsynLeftTree
         parentid={'0'}
         selectTree={(id, item) => {
@@ -230,7 +279,7 @@ function Offset() {
                 刷新
               </Button>
               <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
-                onClick={() => showDrawer()}
+                onClick={() => showDrawer()} disabled={addButtonDisable}
               >
                 <Icon type="plus" />
                 添加
@@ -243,6 +292,11 @@ function Offset() {
               loading={checkloading}
               pagination={checkpagination}
               data={checkdata}
+              showVertify={showVertify}
+              closeVertify={closeVertify}
+              deleteData={deleteData}
+              showModify={showModify}
+              closeModify={closeModify}
               reload={() => initCheckLoadData('', checksearch)}
             />
           </TabPane>
@@ -267,22 +321,29 @@ function Offset() {
           </TabPane>
         </Tabs>
       </Content>
-      <Modify
-        modifyVisible={modifyVisible}
+      <AddDrawer
+        addDrawerVisible={addDrawerVisible}
         closeDrawer={closeDrawer}
         organizeId={organize}
         id={id}
         reload={() => initCheckLoadData('', checksearch)}
       />
-
+      <Modify
+        modifyVisible={modifyVisible}
+        closeDrawer={closeModify}
+        organizeId={organize}
+        id={id}
+        reload={() => initCheckLoadData('', checksearch)}
+      />
+      <Vertify
+        vertifyVisible={vertifyVisible}
+        closeVertify={closeVertify}
+        ifVertify={ifVertify}
+        id={id}
+        reload={() => initCheckLoadData('',checksearch)}
+      />
     </Layout>
   );
 }
 
 export default Offset;
-/*  <Vertify
-        vertifyVisible={vertifyVisible}
-        closeVertify={closeDrawer}
-        id={id}
-        reload={() => initCheckLoadData('',checksearch)}
-      /> */

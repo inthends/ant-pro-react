@@ -1,12 +1,7 @@
-import {  Input, Row,Col,Card,Form,Select, DatePicker, Modal} from 'antd';
+import {  Input, Row,Col,Form,Select, DatePicker, Button,Drawer} from 'antd';
 import React, { useEffect, useState } from 'react';
-import LeftTree from '../LeftTree';
-import { TreeEntity } from '@/model/models';
-import { GetTreeListExpand,GetFeeTreeListExpand,GetFormJson,GetReductionItem,GetUseInfo ,AuditBill,CheckBill} from './Main.service';
-import { getResult } from '@/utils/networkUtils';
-import TextArea from 'antd/es/input/TextArea';
+import { GetFormJson,GetReductionItem,GetUseInfo ,AuditBill,CheckBill} from './Main.service';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import { getFileInfo } from 'prettier';
 import  moment from 'moment';
 
 interface VerifyReductionProps {
@@ -104,7 +99,7 @@ const VerifyReductionModal = (props:VerifyReductionProps)=> {
   const buildOption=(item:any)=>{
     const children = [];
     for ( let i = 0; i < item.length; i++) {
-        children.push(<Option key={item[i].id}>{item[i].title}</Option>);
+        children.push(<Option key={item[i].key}>{item[i].title}</Option>);
     }
     return children;
   }
@@ -113,46 +108,71 @@ const VerifyReductionModal = (props:VerifyReductionProps)=> {
       //如果是审核减免单
       if(ifVerifyModal)
       {
-        //验证是否可以取消审核
-        return CheckBill(infoDetail.billID).then(res=>{
-          if(res)
-          {
-            GetUseInfo(localStorage.getItem('userid')).then(res=>{
-              return {
-                ...infoDetail,
-                ifVerify: ifVerifyModal
+        form.validateFields((errors, values) => {
+          if (!errors) {
+            return CheckBill(infoDetail.billID).then(res=>{
+              if(res)
+              {
+                GetUseInfo(localStorage.getItem('userid')).then(res=>{
+                  let newData={
+                    keyValue:infoDetail.billID,
+                    BillID:infoDetail.billID,
+                    OrganizeID:infoDetail.organizeID,
+                    IfVerify:ifVerifyModal,
+                    VerifyPerson:localStorage.getItem('userid'),
+                    VerifyDate:values.verifyDate.format('YYYY-MM-DD HH:mm:ss'),
+                    VerifyMemo:values.verifyMemo
+                  };
+                  return newData
+                }).then(data=>{
+                  return AuditBill(data);
+                }).then(()=>{
+                  closeModal();
+                })
               }
-            }).then(data=>{
-              return AuditBill(data);
-            }).then(()=>{
-              closeModal();
-            })
+            });
           }
-        })
+        });
       }else{
-        GetUseInfo(localStorage.getItem('userid')).then(res=>{
-          return {
-            ...infoDetail,
-            ifVerify: ifVerifyModal
+        form.validateFields((errors, values) => {
+          if (!errors) {
+            return CheckBill(infoDetail.billID).then(res=>{
+              if(res)
+              {
+                GetUseInfo(localStorage.getItem('userid')).then(res=>{
+                  let newData={
+                    keyValue:infoDetail.billID,
+                    BillID:infoDetail.billID,
+                    OrganizeID:infoDetail.organizeID,
+                    IfVerify:ifVerifyModal,
+                    VerifyPerson:'',
+                    VerifyDate:'',
+                    VerifyMemo:''
+                  };
+                  return newData
+                }).then(data=>{
+                  return AuditBill(data);
+                }).then(()=>{
+                  closeModal();
+                })
+              }
+            });
           }
-        }).then(data=>{
-          return AuditBill(data);
-        })
+        });
       }
   }
 
   return (
-    <Modal
+    <Drawer
       title="减免单审核"
-      visible={modalVisible}
-      okText="确认"
-      cancelText="关闭"
-      onCancel={closeModal}
-      onOk={()=>saveVertify()}
       destroyOnClose={true}
-      width='860px'
+      placement="right"
+      width={880}
+      onClose={closeModal}
+      visible={modalVisible}
+      bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
-      <Card>
+      <Form >
         <Row gutter={16}>
           <Col span={8}>
           <Form.Item label="单据编号">
@@ -172,7 +192,7 @@ const VerifyReductionModal = (props:VerifyReductionProps)=> {
               : moment(new Date()),
               rules: [{ required: true}],
             })(
-            <DatePicker  disabled={true}></DatePicker>
+            <DatePicker   disabled={true}></DatePicker>
             )}
           </Form.Item>
           </Col>
@@ -208,7 +228,7 @@ const VerifyReductionModal = (props:VerifyReductionProps)=> {
               : moment(new Date()),
               rules: [{ required: true}],
             })(
-            <DatePicker  disabled={true}></DatePicker>
+            <DatePicker disabled={true}></DatePicker>
             )}
           </Form.Item>
           </Col>
@@ -230,13 +250,37 @@ const VerifyReductionModal = (props:VerifyReductionProps)=> {
               initialValue: infoDetail.verifyMemo,
               //rules: [{ required: true}],
             })(
-            <Input ></Input>
+            <Input.TextArea rows={4} ></Input.TextArea>
             )}
           </Form.Item>
           </Col>
         </Row>
-      </Card>
-    </Modal>
+
+        <div
+            style={{
+              position: 'absolute',
+              left: 0,
+              bottom: 0,
+              width: '100%',
+              borderTop: '1px solid #e9e9e9',
+              padding: '10px 16px',
+              background: '#fff',
+              textAlign: 'right',
+            }}
+          >
+            <Button style={{ marginRight: 8 }}
+            onClick={()=>closeModal()}
+            >
+              取消
+            </Button>
+            <Button type="primary"
+              onClick={()=>saveVertify()}
+            >
+              提交
+            </Button>
+          </div>
+        </Form>
+    </Drawer>
   );
 };
 

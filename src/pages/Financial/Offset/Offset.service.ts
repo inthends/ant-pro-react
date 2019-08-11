@@ -3,7 +3,7 @@ import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
 import { 	OffsetMainEntity } from '@/model/offsetMainEntity';
 import { 	CalOffsetMain } from '@/model/calOffsetMain';
-
+import {CustomerInfoEntity} from '@/model/customerInfoEntity';
 //加载所有收费项
 export function GetCheckTreeListExpand(): Promise<ResponseObject<TreeEntity[]>> {
   return request.get(process.env.basePath + `/FeeItems/GetTempPaymentFeeItemTreeJson`, {}).then(getResult as any);
@@ -45,4 +45,15 @@ export function GetFormJson(data): Promise<OffsetMainEntity> {
 //审核
 export function Audit(data): Promise<any> {
   return request.post(process.env.basePath + `/Offset/Audit`, {data:objToFormdata(data)}).then(getResult as any);
+}
+//获取客户详情
+export function GetCustomInfo(data): Promise<CustomerInfoEntity>  {
+  return request.get(process.env.basePath + `/PStructUser/GetFormJson?keyValue=${data}`, {data:objToFormdata(data)}).then(getResult as any);
+}
+
+//获取当前用户信息
+export function GetUserInfo(userid): Promise<any[]> {
+  return request
+    .get(process.env.basePath + `/Login/GetUserInfo?userid=${userid}`)
+    .then(getResult as any);
 }

@@ -1,5 +1,5 @@
- 
-import { DefaultPagination } from '@/utils/defaultSetting'; 
+
+import { DefaultPagination } from '@/utils/defaultSetting';
 import { Tabs, Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
@@ -8,12 +8,13 @@ import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
 import DetailList from './DetailList';
+import { bool } from 'prop-types';
 const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
 
 function Main() {
-  const [modifyVisible, setModifyVisible] = useState<boolean>(false); 
+  const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   const [organize, SetOrganize] = useState<any>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [detailloading, setDetailLoading] = useState<boolean>(false);
@@ -21,6 +22,8 @@ function Main() {
   const [detailpagination, setDetailPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [data, setData] = useState<any[]>([]); const [detaildata, setDetailData] = useState<any[]>([]);
   const [id, setId] = useState<string>();
+
+  const [addButtonDisabled,setAddButtonDisabled]=useState<boolean>(true);
 
   const [search, setSearch] = useState<string>('');
   const [detailsearch, setDetailSearch] = useState<string>('');
@@ -117,6 +120,7 @@ function Main() {
   };
   const initLoadData = (org, searchText) => {
     setSearch(searchText);
+    setAddButtonDisabled(true);
     const queryJson = {
       OrganizeId: org.organizeId,
       keyword: searchText,
@@ -127,6 +131,7 @@ function Main() {
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
+      setAddButtonDisabled(false);
       return res;
     });
   };
@@ -191,7 +196,6 @@ function Main() {
     });
   };
 
-
   return (
     <Layout style={{ height: '100%' }}>
       <AsynLeftTree
@@ -212,6 +216,7 @@ function Main() {
               />
               <Button type="primary" style={{ float: 'right' }}
                 onClick={() => showDrawer()}
+                disabled={addButtonDisabled}
               >
                 <Icon type="plus" />
                 添加
