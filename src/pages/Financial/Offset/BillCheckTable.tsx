@@ -136,7 +136,7 @@ function BillCheckTable(props: BillCheckTableProps) {
       dataIndex: 'operation',
       key: 'operation',
       fixed: 'right',
-      width: 340,
+      width: 330,
       render: (text, record) => {
         return [
           <Button

@@ -1,4 +1,4 @@
-import { Card, Form, Layout, Row, Col, DatePicker, Modal } from 'antd';
+import { Form, Row, Col, DatePicker, Modal } from 'antd';
 import React, { useEffect, useState } from 'react';
 import AsynSelectTree from '../AsynSelectTree';
 import LeftTree from '../LeftTree';
@@ -6,17 +6,19 @@ import { TreeEntity } from '@/model/models';
 import { GetFeeTreeListExpand } from './Main.service';
 import { getResult } from '@/utils/networkUtils';
 import moment from 'moment';
+import { WrappedFormUtils } from 'antd/lib/form/Form';
 
-interface AddReductionProps {
+interface AddReductionItemProps {
   visible: boolean;
   getReducetionItem(data?): void;
   closeModal(): void;
+  form: WrappedFormUtils;
 }
 
-const AddReductionItem = (props: AddReductionProps) => {
-  const { visible, getReducetionItem, closeModal } = props;
+const AddReductionItem = (props: AddReductionItemProps) => {
+  const { form, visible, getReducetionItem, closeModal } = props;
+  const { getFieldDecorator } = form;
   const [feetreeData, setFeeTreeData] = useState<TreeEntity[]>([]);
-
   //单元选择多选
   const [unitData, setUnitData] = useState<string[]>([]);
   //费项选择
@@ -49,16 +51,22 @@ const AddReductionItem = (props: AddReductionProps) => {
   };
 
   const onOk = () => {
-    var data = {
-      units: '["' + unitData + '"]',
-      feeitemid: feeData,
-      begin: moment(startDate).format('YYYY-MM-DD'),
-      end: moment(endDate).format('YYYY-MM-DD'),
-      Rebate: 1,
-      ReductionAmount: 1
-    };
-    getReducetionItem(data);
+    form.validateFields((errors, values) => {
+      if (!errors) {
+
+        var data = {
+          units: '["' + unitData + '"]',
+          feeitemid: feeData,
+          begin: moment(startDate).format('YYYY-MM-DD'),
+          end: moment(endDate).format('YYYY-MM-DD'),
+          Rebate: 1,
+          ReductionAmount: 1
+        };
+        getReducetionItem(data);
+      }
+    });
   }
+
   useEffect(() => {
     // getTreeData().then(res => {
     //   const root = res.filter(item => item.parentId === '0');
@@ -91,22 +99,21 @@ const AddReductionItem = (props: AddReductionProps) => {
   //     });
   // };
 
-  const GetAllTreeNode=(root)=>{
-    var treeListNodes=[];
-    root.forEach((rootItem=>{
-      var node={
+  const GetAllTreeNode = (root) => {
+    let treeListNodes: any[] = [];
+    root.forEach((rootItem => {
+      let node = {
         key: rootItem.key,
         parentId: rootItem.parentId,
         title: rootItem.title,
-        value:rootItem.value,
+        value: rootItem.value,
         type: rootItem.type,
         id: rootItem.key
       };
       treeListNodes.push(node);
-      if(rootItem.children&&rootItem.children.length>0)
-      {
-        var nodes=GetAllTreeNode(rootItem.children);
-        nodes.forEach(item=>{
+      if (rootItem.children && rootItem.children.length > 0) {
+        var nodes = GetAllTreeNode(rootItem.children);
+        nodes.forEach(item => {
           treeListNodes.push(item);
         });
       }
@@ -120,8 +127,8 @@ const AddReductionItem = (props: AddReductionProps) => {
     return GetFeeTreeListExpand()
       .then(getResult)
       .then((res: TreeEntity[]) => {
-      //  console.log(res);
-        var newData=GetAllTreeNode(res);
+        //  console.log(res);
+        var newData = GetAllTreeNode(res);
         setFeeTreeData(newData || []);
         return newData || [];
       });
@@ -170,55 +177,73 @@ const AddReductionItem = (props: AddReductionProps) => {
     return date.getFullYear() + '-' + monthStr + '-' + dayStr
   }
 
-  const getCheckedKeys=(keys)=>{
+  const getCheckedKeys = (keys) => {
     setUnitData(keys);
   }
 
   return (
     <Modal
-      title="新增减免的费项"
+      title="新增减免费项"
       visible={visible}
       okText="确认"
       cancelText="取消"
       onCancel={() => closeModal()}
       onOk={() => onOk()}
       destroyOnClose={true}
-      width='860px' >
-      <Layout>
-        <Row style={{height:'calc(60vh)'}}>
-          <Col span={12} style={{ height: '100%'}}>
-            <AsynSelectTree parentid={'0'}
-              getCheckedKeys={getCheckedKeys}
-              selectTree={(parentId) => {
-                selectUnitTree(parentId);
-              }}/>
+      bodyStyle={{ background: '#f6f7fb' }}
+      width='700px' >
+      <Form layout='inline' hideRequiredMark >
+        <Row gutter={24}>
+          <Col lg={12}>
+            <Form.Item label="账单起始日" required >
+              {getFieldDecorator('startDate', {
+                initialValue: moment(startDate),
+                rules: [{ required: true, message: '请选择账单起始日' }],
+              })(
+                <DatePicker onChange={(date, dateString) => selectStartDate(dateString)} />
+              )}
+            </Form.Item>
+
+          </Col> <Col lg={12}>
+            <Form.Item label="账单截止日" required >
+
+              {getFieldDecorator('endDate', {
+                initialValue: moment(endDate),
+                rules: [{ required: true, message: '请选择账单截止日' }],
+              })(
+                <DatePicker onChange={(date, dateString) => selectEndDate(dateString)} />
+              )}
+            </Form.Item>
           </Col>
-          <Col span={12}>
-            <Form layout="vertical" hideRequiredMark  >
-              <Card >
-                <Row gutter={24}>
-                  <Col lg={12}>
-                    <Form.Item label="账单日">
-                      <DatePicker defaultValue={moment(startDate)}
-                        onChange={(date, dateString) => selectStartDate(dateString)} /></Form.Item>
-                  </Col>
-                  <Col span={12}><Form.Item label="至">
-                    <DatePicker
-                    defaultValue={moment(endDate)}
-                    onChange={(date, dateString) => selectEndDate(dateString)} /></Form.Item></Col>
-                </Row>
-                <LeftTree
-                  selectTree={(id, item) => {
-                    selectFeeTree(id);
-                  }}
-                  treeData={feetreeData} />
-              </Card>
-            </Form>
-          </Col>
+
         </Row>
-      </Layout>
-    </Modal>
+      </Form>
+      <Row  >
+        <Col lg={10} style={{ height: 'calc(70vh)' }} >
+          <AsynSelectTree
+            parentid={'0'}
+            getCheckedKeys={getCheckedKeys}
+            selectTree={(parentId) => {
+              selectUnitTree(parentId);
+            }} />
+        </Col>
+        <Col lg={14}  >
+
+          <Row gutter={24} >
+            <Col lg={24} style={{ height: 'calc(70vh)' }}>
+              <LeftTree
+                selectTree={(id, item) => {
+                  selectFeeTree(id);
+                }}
+                treeData={feetreeData}
+              />
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+    </Modal >
   );
 };
 
-export default AddReductionItem;
+//export default AddReductionItem; 
+export default Form.create<AddReductionItemProps>()(AddReductionItem);

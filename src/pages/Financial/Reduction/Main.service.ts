@@ -3,9 +3,9 @@ import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
 import { 	ReductionMainEntity } from '@/model/reductionMainEntity'; 
 
-//加载所有收费项
+//加载收款费项
 export function GetFeeTreeListExpand(): Promise<ResponseObject<TreeEntity[]>> {
-  return request.get(process.env.basePath + `/FeeItems/GetTreeListExpand`, {});
+  return request.get(process.env.basePath + `/FeeItems/GetReceivablesFeeItemTreeJson`, {});
 }
 
 //加载房间树

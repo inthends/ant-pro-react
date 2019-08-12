@@ -30,7 +30,7 @@ interface ModifyProps {
   reload(): void;
 }
 const Modify = (props: ModifyProps) => {
-  const { treeData, modifyVisible, data, closeDrawer, form, organizeId, reload } = props;
+  const { treeData, modifyVisible, data, closeDrawer, form,  reload } = props;
   const { getFieldDecorator } = form;
   const title = data === undefined ? '添加公共区域' : '修改公共区域';
   const [infoDetail, setInfoDetail] = useState<any>({});

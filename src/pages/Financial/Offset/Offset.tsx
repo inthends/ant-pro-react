@@ -2,10 +2,10 @@
 import { TreeEntity } from '@/model/models';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { getResult } from '@/utils/networkUtils';
-import { Tabs, Button, Icon, Input, Layout ,Modal} from 'antd';
+import { Tabs, Button, Icon, Input, Layout, Modal } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useContext, useEffect, useState } from 'react';
-import { GetTreeListExpand, GetOffsetPageDetailData, GetOffsetPageData, GetRoomTreeListExpand ,RemoveForm} from './Offset.service';
+import { GetTreeListExpand, GetOffsetPageDetailData, GetOffsetPageData, GetRoomTreeListExpand, RemoveForm } from './Offset.service';
 import AsynLeftTree from '../AsynLeftTree';
 import Page from '@/components/Common/Page';
 import { SiderContext } from './SiderContext';
@@ -30,9 +30,9 @@ function Offset() {
   const [vertifyVisible, setVertifyVisible] = useState<boolean>(false);
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
 
-  const [ifVertify,setIfVertify]= useState<boolean>(false);
+  const [ifVertify, setIfVertify] = useState<boolean>(false);
 
-  const [addButtonDisable,setAddButtonDisable]=useState<boolean>(true);
+  const [addButtonDisable, setAddButtonDisable] = useState<boolean>(true);
 
 
   const [checkloading, setCheckLoading] = useState<boolean>(false);
@@ -194,7 +194,7 @@ function Offset() {
     setAddButtonDisable(true);
     return checkload({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
       return res;
-    }).then(()=>{
+    }).then(() => {
       setAddButtonDisable(false);
     });
   };
@@ -217,20 +217,20 @@ function Offset() {
 
   const closeVertify = (result?) => {
     setVertifyVisible(false);
-    if(result){
+    if (result) {
       initCheckLoadData(organize, null);
     }
     setId(null);
   };
 
-  const showVertify = (id?,ifVertify?) => {
+  const showVertify = (id?, ifVertify?) => {
     setVertifyVisible(true);
     setIfVertify(ifVertify);
     setId(id);
   };
   const closeModify = (result?) => {
     setModifyVisible(false);
-    if(result){
+    if (result) {
       initCheckLoadData(organize, null);
     }
   };
@@ -240,17 +240,17 @@ function Offset() {
     setId(id);
   };
   //删除冲抵单
-  const deleteData=(id?)=>{
+  const deleteData = (id?) => {
     Modal.confirm({
       title: '是否确认删除该条抵冲记录?',
       onOk() {
         RemoveForm({
-          keyValue:id
-        }).then(res=>{
+          keyValue: id
+        }).then(res => {
 
         });
       },
-      onCancel() {},
+      onCancel() { },
     });
   }
 
@@ -272,12 +272,12 @@ function Offset() {
                 style={{ width: 280 }}
                 onSearch={value => loadCheckData(value)}
               />
-              <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
+              {/* <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
                 onClick={() => initCheckLoadData(organize, null)}
               >
                 <Icon type="reload" />
                 刷新
-              </Button>
+              </Button> */}
               <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
                 onClick={() => showDrawer()} disabled={addButtonDisable}
               >
@@ -340,7 +340,7 @@ function Offset() {
         closeVertify={closeVertify}
         ifVertify={ifVertify}
         id={id}
-        reload={() => initCheckLoadData('',checksearch)}
+        reload={() => initCheckLoadData('', checksearch)}
       />
     </Layout>
   );

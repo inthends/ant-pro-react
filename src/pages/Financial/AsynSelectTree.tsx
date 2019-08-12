@@ -1,22 +1,24 @@
 //异步树
 import Page from '@/components/Common/Page';
 import { Tree } from 'antd';
-import React, {  useEffect, useState } from 'react'; 
+import React, {  useEffect, useState } from 'react';
 import { GetOrgTree, GetAsynChildBuildings } from './AsynLeftTree.service';
 
-const { TreeNode } = Tree; 
+const { TreeNode } = Tree;
 
 interface AsynSelectTreeProps {
   //treeData: any[];
   selectTree(parentId, type): void;
+  getCheckedKeys(keys):string[];
   parentid: string;
 }
 
 function AsynSelectTree(props: AsynSelectTreeProps) {
 
-  const {selectTree } = props;
+  const {selectTree,getCheckedKeys } = props;
+  const [checkedKeys,setCheckedKeys]=useState<string[]>([]);
   // const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
-  // const [autoExpandParent, setAutoExpandParent] = useState<boolean>(false); 
+  // const [autoExpandParent, setAutoExpandParent] = useState<boolean>(false);
   //动态子节点
   const [treeData, setTreeData] = useState<any[]>([]);
 
@@ -31,6 +33,11 @@ function AsynSelectTree(props: AsynSelectTreeProps) {
 
   }, []);
 
+  const onCheck=(checkedKeys)=>{
+    setCheckedKeys(checkedKeys);
+    getCheckedKeys(checkedKeys);
+  }
+
   const onSelect = (selectedKeys, info) => {
     if (selectedKeys.length === 1) {
       //const item = treeData.filter(treeItem => treeItem.key === selectedKeys[0])[0];
@@ -42,7 +49,7 @@ function AsynSelectTree(props: AsynSelectTreeProps) {
   };
 
   // const clickExpend = (expandedKeys, { isExpanded, node }) => {
-  //   const selectNode = node.props.eventKey; 
+  //   const selectNode = node.props.eventKey;
   //   if (isExpanded) {
   //     setExpanded(expend => [...expend, selectNode]);
   //   } else {
@@ -100,7 +107,7 @@ function AsynSelectTree(props: AsynSelectTreeProps) {
       return <TreeNode {...item} dataRef={item} />;
     });
 
-  return ( 
+  return (
     <Page
       style={{
         padding: '6px',
@@ -114,6 +121,8 @@ function AsynSelectTree(props: AsynSelectTreeProps) {
         loadData={onLoadData}
         showLine
         checkable
+        checkedKeys={checkedKeys}
+        onCheck={onCheck}
         // expandedKeys={expandedKeys}
         // autoExpandParent={autoExpandParent}
         // onExpand={clickExpend}

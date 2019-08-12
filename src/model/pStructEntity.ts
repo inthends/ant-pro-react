@@ -14,7 +14,7 @@
 /**
  * 房产结构表
  */
-export interface PStructEntity { 
+export interface PStructEntity {
     /**
      * 房产主键
      */
@@ -47,40 +47,95 @@ export interface PStructEntity {
      * 房产类别 1-楼盘 2-楼栋 4-楼层 5-房间 6-公共部位 8-车库，9-车位
      */
     type?: number;
+
     /**
-     * 电话号码
-     */
-    phoneNum?: string;
-    /**
-     * 是否空置
-     */
-    activeMark?: number;
-    /**
-     * 是否有效1-是 0-否
-     */
-    enabledMark?: number;
-    /**
-     * 是否发布
-     */
-    isPublish?: number;
-    /**
-     * 主图
-     */
-    mainPic?: string;
-    /**
-     * 下级数量
-     */
-    juniorNum?: number;
-    /**
-     * 建筑面积
-     */
+    * 建筑面积
+    */
     area?: number;
     /**
      * 占地面积
      */
     coverArea?: number;
+
     /**
-     * 备注
+     * 主图
      */
+    mainPic?: string;
+
+    /**
+     * 电话号码
+     */
+    phoneNum?: string;
+
+    /**
+       * 绿化面积
+       */
+    greenArea?: number;
+    /**
+     * 容积率
+     */
+    volumeRate?: number;
+    /**
+     * 绿化率
+     */
+    greenRate?: number;
+    province?: string;
+    city?: string;
+    region?: string;
+
+    /**
+       * 楼盘地址
+       */
+    address?: string;
+
+    lon?: string;
+    lat?: string;
+    propertyType?: string;
+    /**
+     * 建成年份
+     */
+    createYear?: Date;
+    /**
+     * 开发商
+     */
+    developerName?: string;
+    /**
+     * 物业公司
+     */
+    propertyCompany?: string;
+    /**
+     * 物业费标准
+     */
+    feeItemRule?: string;
+
+    /**
+    * 状态 -1删除，0-未售（默认状态）1-待交房 2-装修 3-空置 4-出租 5-自用
+    */
+    state?: number;
+
+    /**
+    * 业主
+    */
+   ownerId?: string;
+
+   /**
+    * 业主
+    */
+   ownerName?: string;
+
+      /**
+    * 租户
+    */
+   tenantId?: string;
+
+      /**
+    * 租户
+    */
+   tenantName?: string;
+
+    /**
+    * 备注
+    */
     memo?: string;
+
 }

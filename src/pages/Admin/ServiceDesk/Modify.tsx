@@ -29,7 +29,7 @@ const Modify = (props: ModifyProps) => {
 
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [treeData, setTreeData] = useState<any[]>([]);
-  //const [roomUser, setRoomUser] = useState<any>();
+  //const [roomUser, setRoomUser] = useState<any>(); 
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -372,7 +372,7 @@ const Modify = (props: ModifyProps) => {
       >
 
 
-        {infoDetail.billStatus != 2 ? (
+        {(infoDetail.billStatus && infoDetail.billStatus != 2) ? (
           <div>
             <Button onClick={close} style={{ marginRight: 8 }}>
               取消
@@ -384,12 +384,14 @@ const Modify = (props: ModifyProps) => {
             </Dropdown>
             <Button onClick={save} type="primary">
               保存
-           </Button></div>) : <div>
-
+           </Button></div>) : 
+           <div> 
             <Button onClick={close} style={{ marginRight: 8 }}>
               取消
            </Button>
-
+            <Button onClick={save} type="primary">
+              保存
+           </Button>
           </div>}
       </div>
     </Drawer>

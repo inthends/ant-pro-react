@@ -47,14 +47,14 @@ function ListTable(props: ListTableProps) {
       title: '单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 100,
+      width: 150,
       sorter: true,
     },
     {
       title: '单据日期',
       dataIndex: 'billDate',
       key: 'billDate',
-      width: 80,
+      width: 100,
       sorter: true,
       render: val =>{
         if(val==null){
@@ -68,21 +68,21 @@ function ListTable(props: ListTableProps) {
       title: '减免费项',
       dataIndex: 'feeName',
       key: 'feeName',
-      width: 80,
+      width: 150,
       sorter: true,
     },
     {
       title: '经办人',
       dataIndex: 'createUserName',
       key: 'createUserName',
-      width: 80,
+      width: 100,
       sorter: true,
     },
     {
       title: '审核状态',
       dataIndex: 'ifVerifyName',
       key: 'ifVerifyName',
-      width: 80,
+      width: 100,
       sorter: true,
     },
     {
@@ -95,7 +95,7 @@ function ListTable(props: ListTableProps) {
       title: '审核日期',
       dataIndex: 'verifyDate',
       key: 'verifyDate',
-      width: 85,
+      width: 100,
       render: val =>{
         if(val==null){
           return <span></span>
@@ -106,22 +106,14 @@ function ListTable(props: ListTableProps) {
     }, {
       title: '审核情况',
       dataIndex: 'verifyMemo',
-      key: 'verifyMemo',
-      width: 85,
-      render: val =>{
-        if(val==null){
-          return <span></span>
-        }else{
-          return <span> {val} </span>
-        }
-      }
+      key: 'verifyMemo'
     },
     {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
       fixed: 'right',
-      width: 380,
+      width: 330,
       render: (text, record) => {
         return [
           <Button
@@ -158,11 +150,10 @@ function ListTable(props: ListTableProps) {
     },
   ] as ColumnProps<any>;
 
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-
-  const onSelectChange = (selectedRowKeys, selectedRows) => {
-    setSelectedRowKeys(selectedRowKeys);
-  };
+  // const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  // const onSelectChange = (selectedRowKeys, selectedRows) => {
+  //   setSelectedRowKeys(selectedRowKeys);
+  // };
 
   const closeVerifyModel=()=>{
     setVerifyVisible(false);
@@ -182,7 +173,7 @@ function ListTable(props: ListTableProps) {
         columns={columns}
         rowKey={record => record.unitID}
         pagination={pagination}
-        scroll={{ y: 500, x: 970 }}
+        scroll={{ y: 500, x: 1400 }}
         onChange={(pagination: PaginationConfig, filters, sorter) =>
           changePage(pagination, filters, sorter)
         }

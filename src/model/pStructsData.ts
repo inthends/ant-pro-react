@@ -11,7 +11,7 @@
  */
 import { PStructEntity } from './pStructEntity';
 import { PStructFileEntity } from './pStructFileEntity';
-import { PropertyEntity } from './propertyEntity';
+//import { PropertyEntity } from './propertyEntity';
 
 
 /**
@@ -25,7 +25,7 @@ export interface PStructsData {
     /**
      * 小区扩展信息
      */
-    pProperty?: PropertyEntity;
+    //pProperty?: PropertyEntity;
     /**
      * 附件信息
      */

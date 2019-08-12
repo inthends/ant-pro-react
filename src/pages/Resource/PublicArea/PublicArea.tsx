@@ -136,8 +136,8 @@ function PublicArea() {
           selectTree(parentId, type, search);
         }}
       />
-      <Content style={{ padding: '0 20px' }}>
-        <div style={{ marginBottom: '20px', padding: '3px 0' }}>
+ <Content style={{ paddingLeft: '18px' }} >
+        <div style={{ marginBottom: '10px' }}>
           <Search
             className="search-input"
             placeholder="搜索区域名称"

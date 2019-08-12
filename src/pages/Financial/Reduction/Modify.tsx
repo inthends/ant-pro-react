@@ -20,7 +20,7 @@ import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import AddReductionItem from './AddReductionItem';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetFormJson, GetFeeType, GetListByID, GetReductionItem, GetUseInfo, GetUnitBillDetail, SaveForm } from './Main.service';
+import { GetFormJson,  GetListByID, GetReductionItem, GetUseInfo, GetUnitBillDetail, SaveForm } from './Main.service';
 
 import moment from 'moment';
 
@@ -565,18 +565,7 @@ const Modify = (props: ModifyProps) => {
             </Col>
            
           </Row>
-          <Row>
-            <Col>
-              <Form.Item label="备注">
-                {getFieldDecorator('memo', {
-                  initialValue: infoDetail.memo,
-                  rules: [{ required: false }],
-                })(
-                  <Input.TextArea rows={3} ></Input.TextArea>
-                )}
-              </Form.Item>
-            </Col>
-          </Row> 
+        
           <Row>
             <Col>
               <Button style={{ float: 'right', marginLeft: 8 }}>
@@ -604,6 +593,18 @@ const Modify = (props: ModifyProps) => {
               loading={loading}
             />
           </Row>
+          <Row>
+            <Col>
+              <Form.Item label="备注">
+                {getFieldDecorator('memo', {
+                  initialValue: infoDetail.memo,
+                  rules: [{ required: false }],
+                })(
+                  <Input.TextArea rows={3} ></Input.TextArea>
+                )}
+              </Form.Item>
+            </Col>
+          </Row> 
         </Card>
         <div
           style={{

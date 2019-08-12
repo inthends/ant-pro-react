@@ -1,12 +1,9 @@
 import Page from '@/components/Common/Page';
-import { InputNumber, Input, Select, Col, Row, Form, DatePicker, Card, Button, message, Table, Modal } from 'antd';
+import { Form, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
-import React, { useState } from 'react';
-import  moment from 'moment';
-import { WrappedFormUtils } from 'antd/lib/form/Form';
-import { RemoveForm } from './Main.service';
-import styles from './style.less';
-const { Option } = Select;
+import React from 'react';
+import moment from 'moment';
+import { WrappedFormUtils } from 'antd/lib/form/Form'; 
 
 interface DetailListProps {
   onchange(page: any, filter: any, sort: any): any;
@@ -18,7 +15,7 @@ interface DetailListProps {
 }
 
 function DetailList(props: DetailListProps) {
-  const { form, onchange, loading, pagination, data,reload } = props;
+  const {  onchange, loading, pagination, data  } = props;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
   };
@@ -26,8 +23,8 @@ function DetailList(props: DetailListProps) {
   const columns = [
     {
       title: '单元编号',
-      dataIndex: 'billID',
-      key: 'billID',
+      dataIndex: 'unitID',
+      key: 'unitID',
       width: 80,
       sorter: true,
     },
@@ -39,15 +36,15 @@ function DetailList(props: DetailListProps) {
       sorter: true
     },
     {
-      title: '应收时间',
+      title: '应收期间',
       dataIndex: 'period',
       key: 'period',
       width: 80,
       sorter: true,
-      render: val =>{
-        if(val==null){
+      render: val => {
+        if (val == null) {
           return <span></span>
-        }else{
+        } else {
           return <span> {moment(val).format('YYYY年MM月')} </span>
         }
       }
@@ -58,10 +55,10 @@ function DetailList(props: DetailListProps) {
       key: 'beginDate',
       width: 80,
       sorter: true,
-      render: val =>{
-        if(val==null){
+      render: val => {
+        if (val == null) {
           return <span></span>
-        }else{
+        } else {
           return <span> {moment(val).format('YYYY-MM-DD')} </span>
         }
       }
@@ -72,10 +69,10 @@ function DetailList(props: DetailListProps) {
       key: 'endDate',
       width: 80,
       sorter: true,
-      render: val =>{
-        if(val==null){
+      render: val => {
+        if (val == null) {
           return <span></span>
-        }else{
+        } else {
           return <span> {moment(val).format('YYYY-MM-DD')} </span>
         }
       }
@@ -113,7 +110,7 @@ function DetailList(props: DetailListProps) {
         columns={columns}
         rowKey={record => record.unitID}
         pagination={pagination}
-        scroll={{ y: 500, x: 1800 }}
+        scroll={{ y: 500, x: 1300 }}
         onChange={(pagination: PaginationConfig, filters, sorter) =>
           changePage(pagination, filters, sorter)
         }
