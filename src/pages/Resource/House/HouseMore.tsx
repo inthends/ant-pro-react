@@ -153,7 +153,7 @@ function HouseMore(props) {
           </TabPane>
           {type === 2 ? (
             <TabPane tab="房态图" key="2">
-              <Atlas parentId={parentId}></Atlas>
+              <Atlas parentId={parentId} showDrawer={showDrawer}></Atlas>
             </TabPane>
           ) : null}
         </Tabs>

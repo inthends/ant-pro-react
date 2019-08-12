@@ -4,14 +4,19 @@ interface RoomProps {
   inline: boolean;
   children?: any;
   state: string;
+  onClick(): void;
 }
 const Room = (props: RoomProps) => {
-  const { inline, children, state } = props;
+  const { inline, children, state, onClick } = props;
   const color = RoomStates[state] || {};
-  const pad = inline ? { padding: '12px 0' } : { padding: 12 };
+  const pad = inline ? { padding: '12px 0', textAlign: 'center' } : { padding: 12 };
 
   return (
-    <div className={styles.buildingRoom} style={inline ? inlineStyle : notInlineStyle}>
+    <div
+      className={styles.buildingRoom}
+      style={inline ? inlineStyle : notInlineStyle}
+      onClick={onClick}
+    >
       <div className={styles.roomInnner} style={{ ...pad, ...color }}>
         {children}
       </div>
@@ -26,28 +31,34 @@ const notInlineStyle = {
   flex: '0 0 16%',
 };
 const RoomStates = {
-  未售: {
+  0: {
+    // 未售
     borderColor: '#c32c2b',
     background: '#dc7b78',
   },
-  待交房: {
+  1: {
+    //待交房
     borderColor: '#cf366f',
     background: '#de7b9e',
   },
-  装修: {
+  2: {
+    //装修
     borderColor: '#e97d1c',
     background: '#feb97a',
   },
-  出租: {
+  3: {
+    //空置
+    borderColor: '#566485',
+    background: '#728db0',
+  },
+  4: {
+    //出租
     borderColor: '#9ac82b',
     background: '#bfe06c',
   },
-  自用: {
+  5: {
+    //自用
     borderColor: '#e7ba0d',
     background: '#fee067',
-  },
-  空置: {
-    borderColor: '#566485',
-    background: '#728db0',
   },
 };

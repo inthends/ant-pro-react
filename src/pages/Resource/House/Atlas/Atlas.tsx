@@ -7,19 +7,19 @@ import { Icon, Spin } from 'antd';
 import { GetFloorData, GetRoomData } from '../House.service';
 interface AtlasProps {
   parentId?: string;
+  showDrawer(item): void;
 }
 const Atlas = (props: AtlasProps) => {
   const [inline, setInline] = useState(false);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<any[]>([]);
-  const { parentId } = props;
+  const { parentId, showDrawer } = props;
   useEffect(() => {
     setLoading(true);
     // 获取楼层信息
     GetFloorData(parentId).then(res => {
       const floors = res || [];
       const promises = floors.map(item => {
-        
         // 获取房间信息
         return GetRoomData(item.id).then(rooms => {
           item.rooms = rooms || [];
@@ -74,9 +74,10 @@ const Atlas = (props: AtlasProps) => {
                   style={inline ? undefined : { flexFlow: 'row wrap' }}
                 >
                   {floor.rooms.map(room => (
-                    <Room inline={inline} state="空置">
+                    <Room inline={inline} state={room.state} onClick={() => showDrawer(room)}>
                       <div>{room.name}</div>
                       <div>{room.area}㎡</div>
+                      <div>{room.tenantName}</div>
                     </Room>
                   ))}
                 </div>
