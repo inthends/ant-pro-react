@@ -91,7 +91,6 @@ export interface MenuModelState {
   menuData: MenuDataItem[];
   routerData: IRoute[];
   breadcrumbNameMap: object;
-  secondMenuMap: Map<string, MenuDataItem[]>;
 }
 
 export interface MenuModelType {
@@ -99,6 +98,7 @@ export interface MenuModelType {
   state: MenuModelState;
   effects: {
     getMenuData: Effect;
+    refresh: Effect;
   };
   reducers: {
     save: Reducer<MenuModelState>;
@@ -112,7 +112,6 @@ const MenuModel: MenuModelType = {
     menuData: [],
     routerData: [],
     breadcrumbNameMap: {},
-    secondMenuMap: new Map<string, MenuDataItem[]>(),
   },
 
   effects: {
@@ -123,9 +122,14 @@ const MenuModel: MenuModelType = {
       const breadcrumbNameMap = memoizeOneGetBreadcrumbNameMap(originalMenuData);
       yield put({
         type: 'save',
-        payload: { menuData, breadcrumbNameMap, routerData: routes, secondMenuMap },
+        payload: { menuData, breadcrumbNameMap, routerData: routes },
       });
-      
+    },
+    *refresh({ payload }, { put }) {
+      yield put({
+        type: 'save',
+        payload: {},
+      });
     },
   },
 

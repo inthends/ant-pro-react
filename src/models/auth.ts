@@ -7,7 +7,7 @@ export interface AuthModelType {
   state: AuthModelState;
   effects: {
     fetch: Effect;
-    };
+  };
   reducers: {
     save: Reducer<any>;
   };
@@ -37,6 +37,7 @@ const AuthModel: AuthModelType = {
         type: 'save',
         payload: { authbtnlist: response },
       });
+      return Promise.resolve();
     },
   },
 

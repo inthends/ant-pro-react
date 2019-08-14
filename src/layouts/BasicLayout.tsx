@@ -7,15 +7,18 @@
 import RightContent from '@/components/GlobalHeader/RightContent';
 import SettingDrawer from '@/components/SettingDrawer';
 import { ConnectState, Dispatch } from '@/models/connect';
-import  AuthPage from '@/pages/Authorized';
+import AuthPage from '@/pages/Authorized';
 import Authorized from '@/utils/Authorized';
-import ProLayout, { BasicLayoutProps as ProLayoutProps, MenuDataItem, Settings } from '@ant-design/pro-layout';
+import ProLayout, {
+  BasicLayoutProps as ProLayoutProps,
+  MenuDataItem,
+  Settings,
+} from '@ant-design/pro-layout';
 import { connect } from 'dva';
 import React, { useEffect } from 'react';
 import { formatMessage } from 'umi-plugin-react/locale';
 import Link from 'umi/link';
 import logo from '../assets/logo.svg';
-
 
 export interface BasicLayoutProps extends ProLayoutProps {
   breadcrumbNameMap: {
@@ -82,13 +85,13 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
     settings,
     auth: { authlist },
   } = props;
-  const auths =  (authlist && authlist.map(item => item.urlAddress)) || [];
+  const auths = (authlist && authlist.map(item => item.urlAddress)) || [];
   // const [settings, setSettings] = useState<Partial<Settings>>(defaultSettings as Partial<Settings>);
   /**
    * constructor
    */
 
-  useEffect(() => {
+  useEffect(async () => {
     if (dispatch) {
       dispatch({
         type: 'user/fetchCurrent',
@@ -96,8 +99,12 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
       dispatch({
         type: 'settings/getSetting',
       });
-      dispatch({
+      const res = await dispatch({
         type: 'auth/fetch',
+      });
+      console.log(res);
+      dispatch({
+        type: 'menu/refresh',
       });
     }
   }, []);
@@ -154,9 +161,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
         {...props}
         {...settings}
       >
-        <AuthPage>
-          {children}
-        </AuthPage>
+        <AuthPage>{children}</AuthPage>
       </ProLayout>
 
       <SettingDrawer settings={settings} onSettingChange={config => setSettings(config)} />
