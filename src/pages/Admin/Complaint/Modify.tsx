@@ -1,13 +1,13 @@
 
-import { DatePicker, TreeSelect, Select, Tag, Typography, Row, Divider, PageHeader, Button, Card, Col, Drawer, Form, Input, message } from 'antd';
+import { DatePicker,  AutoComplete, Select, Tag, Typography, Row, Divider, PageHeader, Button, Card, Col, Drawer, Form, Input, message } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { getResult } from '@/utils/networkUtils';
-import { GetQuickSimpleTreeAll, SaveForm } from './Main.service';
-import { TreeEntity } from '@/model/models';
+// import { getResult } from '@/utils/networkUtils';
+import { GetCustomerList, SaveForm } from './Main.service';
+// import { TreeEntity } from '@/model/models';
 import styles from './style.less';
 const { Paragraph } = Typography;
-const { Option } = Select;
+const { Option } = Select; 
 
 interface ModifyProps {
   modifyVisible: boolean;
@@ -21,18 +21,19 @@ const Modify = (props: ModifyProps) => {
   const { getFieldDecorator } = form;
   const title = data === undefined ? '添加投诉单' : '修改投诉单';
   const [infoDetail, setInfoDetail] = useState<any>({});
-  const [treeData, setTreeData] = useState<any[]>([]);
+  // const [treeData, setTreeData] = useState<any[]>([]);
+  const [userSource, setUserSource] = useState<any[]>([]);
 
   // 打开抽屉时初始化
   useEffect(() => {
 
     // 获取房产树
-    GetQuickSimpleTreeAll()
-      .then(getResult)
-      .then((res: TreeEntity[]) => {
-        setTreeData(res || []);
-        return res || [];
-      });
+    // GetQuickSimpleTreeAll()
+    //   .then(getResult)
+    //   .then((res: TreeEntity[]) => {
+    //     setTreeData(res || []);
+    //     return res || [];
+    //   });
 
   }, []);
 
@@ -94,6 +95,22 @@ const Modify = (props: ModifyProps) => {
     }
   }
 
+  const handleSearch = value => {
+    if (value == '')
+      return;
+    GetCustomerList(value).then(res => {
+      setUserSource(res || []);
+    })
+  };
+
+  const userList = userSource.map
+    (item => <Option key={item.id} value={item.name}>{item.name}</Option>);
+
+  const onOwnerSelect = (value, option) => {
+    form.setFieldsValue({ ownerId: option.key });
+  }
+
+
   return (
     <Drawer
       title={title}
@@ -113,7 +130,7 @@ const Modify = (props: ModifyProps) => {
         <Paragraph>
           {infoDetail.complaintAddress}，{infoDetail.complaintUser}，电话：<a>{infoDetail.complaintLink}</a>，在 {infoDetail.billDate} 投诉，内容如下
         </Paragraph>
-          {infoDetail.contents}
+        {infoDetail.contents}
       </PageHeader>
       <Divider dashed />
 
@@ -139,16 +156,23 @@ const Modify = (props: ModifyProps) => {
                 <Form.Item label="投诉对象" required>
                   {getFieldDecorator('byComplaintUser', {
                     initialValue: infoDetail.byComplaintUser,
-                    rules: [{ required: true, message: '请选择投诉对象' }],
+                    rules: [{ required: true, message: '请输入投诉对象' }],
                   })(
-                    <TreeSelect
-                      placeholder="请选择投诉对象"
-                      allowClear
-                      dropdownStyle={{ maxHeight: 300 }}
-                      treeData={treeData}
-                      treeDataSimpleMode={true} />
+                    // <TreeSelect
+                    //   placeholder="请选择投诉对象"
+                    //   allowClear
+                    //   dropdownStyle={{ maxHeight: 300 }}
+                    //   treeData={treeData}
+                    //   treeDataSimpleMode={true} /> 
+                    <AutoComplete
+                      dataSource={userList}
+                      style={{ width: 200 }}
+                      onSearch={handleSearch}
+                      placeholder="请输入投诉对象"
+                      onSelect={onOwnerSelect}
+                    />
+                  )} 
 
-                  )}
                 </Form.Item>
               </Col>
               <Col lg={6}>
@@ -167,7 +191,7 @@ const Modify = (props: ModifyProps) => {
                   })(<Input placeholder="请输入地址" />)}
                 </Form.Item>
               </Col>
-              
+
             </Row>
 
             <Row gutter={24}>

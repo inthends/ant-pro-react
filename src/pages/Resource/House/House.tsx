@@ -36,7 +36,7 @@ function House() {
   //   return true;
   // };
 
-  const selectTree = (orgid, orgtype, searchText) => { 
+  const setButton = (orgid, orgtype, searchText) => { 
     initLoadData(orgid, searchText);
     SetOrganizeId(orgid);
     if (orgtype == 'D') {
@@ -48,9 +48,9 @@ function House() {
 
   useEffect(() => {
     getTreeData().then(res => {
-      const root = res.filter(item => item.parentId === '0');
-      const key = root.length === 1 ? root[0].key : '';
-      SetOrganizeId(key);
+      // const root = res.filter(item => item.parentId === '0');
+      // const key = root.length === 1 ? root[0].key : '';
+      //SetOrganizeId(key);
       //initLoadData(rootOrg as string, '');
       initLoadData('', '');
     });
@@ -138,7 +138,7 @@ function House() {
       <LeftTree
         treeData={treeData}
         selectTree={(orgid, orgtype) => {
-          selectTree(orgid, orgtype, search);
+          setButton(orgid, orgtype, search);
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>

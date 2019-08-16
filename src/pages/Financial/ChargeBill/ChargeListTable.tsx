@@ -3,7 +3,7 @@ import Page from '@/components/Common/Page';
 import { InputNumber, Input, Select, Col, Row,  DatePicker,  Button, message, Table, Modal } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState } from 'react';
-import  moment from 'moment'; 
+import  moment from 'moment';
 
 import { RemoveForm, Charge } from './Main.service';
 import styles from './style.less';
@@ -16,10 +16,11 @@ interface ChargeListTableProps {
   data: any[];
   modify(id: string): void;
   reload(): void;
+  rowSelect(status:number):void;
 }
 
 function ChargeListTable(props: ChargeListTableProps) {
-  const { onchange, loading, pagination, data, modify, reload } = props; 
+  const { onchange, loading, pagination, data, modify, reload,rowSelect } = props;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
   };
@@ -38,77 +39,76 @@ function ChargeListTable(props: ChargeListTableProps) {
   const columns = [
     {
       title: '收款单编号',
-      dataIndex: 'feeName',
-      key: 'feeName',
-      width: 140,
+      dataIndex: 'billCode',
+      key: 'billCode',
+      width: 150,
       sorter: true,
     },
     {
       title: '收款日期',
-      dataIndex: 'amount',
-      key: 'amount',
-      width: 80,
+      dataIndex: 'billDate',
+      key: 'billDate',
+      width: 150,
       sorter: true,
+      render: val => <span> {moment(val).format('YYYY-MM-DD')} </span>
     },
     {
       title: '房间编号',
-      dataIndex: 'reductionAmount',
-      key: 'reductionAmount',
-      width: 80,
+      dataIndex: 'organizeId',
+      key: 'organizeId',
+      width: 150,
       sorter: true,
     },
     {
       title: '业户名称',
       dataIndex: 'offsetAmount',
       key: 'offsetAmount',
-      width: 80,
+      width: 150,
       sorter: true,
     },
     {
       title: '收款人',
-      dataIndex: 'lastAmount',
-      key: 'lastAmount',
-      width: 80,
+      dataIndex: 'createUserName',
+      key: 'createUserName',
+      width: 150,
       sorter: true,
     },
     {
       title: '收款金额',
-      dataIndex: 'begindate',
-      key: 'begindate',
-      width: 85,
-      render: val => <span> {moment(val).format('YYYY-MM-DD')} </span>
+      dataIndex: 'payAmount',
+      key: 'payAmount',
+      width: 150,
     }, {
       title: '收据编号',
-      dataIndex: 'enddate',
-      key: 'enddate',
-      width: 85,
-      render: val => <span> {moment(val).format('YYYY-MM-DD')} </span>
+      dataIndex: 'payCode',
+      key: 'payCode',
+      width: 150,
     }, {
       title: '审核日期',
-      dataIndex: 'billDate',
-      key: 'billDate',
-      width: 85,
+      dataIndex: 'verifyDate',
+      key: 'verifyDate',
+      width: 150,
       render: val => <span> {moment(val).format('YYYY-MM-DD')} </span>
     }, {
       title: '审核人',
-      dataIndex: 'allname',
-      key: 'allname',
-      width: 250
-    }, 
+      dataIndex: 'verifyPerson',
+      key: 'verifyPerson',
+      width: 150
+    },
     {
       title: '状态',
       dataIndex: 'statusName',
       key: 'statusName',
-      width: 250
-    }, 
-    
+      width: 150
+    },
+
     {
       title: '审核情况',
       dataIndex: 'verifyMemo',
       key: 'verifyMemo',
-      width: 250
-    }, 
-    
+      width: 150
+    },
+
     {
       title: '备注',
       dataIndex: 'memo',
@@ -137,76 +137,58 @@ function ChargeListTable(props: ChargeListTableProps) {
         ];
       },
     },
-  ] as ColumnProps<any>;
+  ] as ColumnProps<any>[];
 
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [selectedRowKey, setSelectedRowKey] = useState([]);
+
   const [sumEntity, setSumEntity] = useState();
   const [unitID, setUnitID] = useState();
   const [customerName, setCustomerName] = useState();
 
-  const onSelectChange = (selectedRowKeys, selectedRows) => {
-    setSelectedRowKeys(selectedRowKeys);
-    //应收金额
-    var sumEntity = {};
-    var sumAmount = 0, sumreductionAmount = 0, sumoffsetAmount = 0, sumlastAmount = 0;
-    selectedRows.map(item => {
-      sumAmount = selectedRows.reduce((sum, row) => { return sum + row.amount; }, 0);
-      sumreductionAmount = selectedRows.reduce((sum, row) => { return sum + row.reductionAmount; }, 0);
-      sumoffsetAmount = selectedRows.reduce((sum, row) => { return sum + row.offsetAmount; }, 0);
-      sumlastAmount = selectedRows.reduce((sum, row) => { return sum + row.lastAmount; }, 0);
-    });
+  const  onRow=(record)=>{
+    return {
+      onClick: event => {
+        setSelectedRowKey(record.billID);
+        rowSelect(record.status)
+        console.log(record);
+      }, // 点击行
+      onDoubleClick: event => {
 
-    sumEntity['sumAmount'] = sumAmount.toFixed(2);
-    sumEntity['sumreductionAmount'] = sumreductionAmount.toFixed(2);
-    sumEntity['sumoffsetAmount'] = sumoffsetAmount.toFixed(2);
-    sumEntity['sumlastAmount'] = sumlastAmount.toFixed(2);
-    setSumEntity(sumEntity);
-  };
+      },
+      onContextMenu: event => {
 
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectChange,
-  };
-  const hasSelected = selectedRowKeys.length > 0;
-  //收款
-  const charge = () => {
-    form.validateFields((errors, values) => {
-      if (!errors) {
+      },
+      onMouseEnter: event => {
 
-        Modal.confirm({
-          title: '请确认',
-          content: `确定要执行收款操作吗？`,
-          onOk: () => {
-            const newData = { ...values, billDate: values.billDate.format('YYYY-MM-DD') };
-            newData.unitID = 'HBL021404';//unitID
-            newData.customerName = '徐英婕/徐凯';//customerName;
-            Charge({ ...newData, ids: selectedRowKeys }).then(res => {
-              message.success('保存成功');
-            });
-          }
-        });
-      }
-    });
-  };
+      }, // 鼠标移入行
+      onMouseLeave: event => {
 
+      },
+    };
+  }
+
+  const setClassName=(record,index)=>{
+    //record代表表格行的内容，index代表行索引
+    //判断索引相等时添加行的高亮样式
+    return record.billID === selectedRowKey? styles.rowSelect : "";
+  }
   return (
-    <Page> 
+    <Page >
       <Table
+        className={styles.chargeListTable}
         bordered={false}
         size="middle"
         dataSource={data}
         columns={columns}
         rowKey={record => record.billID}
         pagination={pagination}
-        scroll={{ y: 500, x: 1800 }}
-        onChange={(pagination: PaginationConfig, filters, sorter) =>
-          changePage(pagination, filters, sorter)
-        }
+        scroll={{ y: 500, x: 2005 }}
+        rowClassName={setClassName} //表格行点击高亮
         loading={loading}
-        rowSelection={rowSelection}
+        onRow={onRow}
       />
     </Page>
   );
 }
 
-export default ChargeListTable; 
+export default ChargeListTable;

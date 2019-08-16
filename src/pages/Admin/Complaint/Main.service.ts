@@ -31,3 +31,10 @@ export function RemoveForm(keyValue): Promise<any> {
     .post(process.env.basePath + `/Complaint/RemoveForm?keyValue=${keyValue}`, {})
     .then(getResult as any);
 }
+
+//查询客户数据
+export function GetCustomerList(keyword): Promise<any> {
+  return request
+    .get(process.env.basePath + `/PStructUser/GetCustomerList?keyword=${keyword}`)
+    .then(getResult as any);
+}

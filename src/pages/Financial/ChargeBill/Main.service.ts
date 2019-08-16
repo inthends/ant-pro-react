@@ -2,10 +2,14 @@ import { ResponseObject, TreeEntity } from '@/model/models';
 import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
 import { FeeItemData } from '@/model/feeItemData';
+
 export function GetTreeListExpand(): Promise<ResponseObject<TreeEntity[]>> {
   return request.get(process.env.basePath + `/FeeItems/GetTreeListExpand`, {});
-} 
-
+}
+//获取所有收费列表
+export function GetReceivablesFeeItemTreeJson(): Promise<ResponseObject<TreeEntity[]>> {
+  return request.get(process.env.basePath + `/FeeItems/GetReceivablesFeeItemTreeJson`, {}).then(getResult as any);;
+}
 //未收
 export function GetPageListJson(data): Promise<any> {
   return request.post(process.env.basePath + `/Receivable/NotChargeFeeData`, {data:objToFormdata(data)}).then(getResult as any);
@@ -31,7 +35,6 @@ export function GetAllFeeItems(): Promise<TreeEntity[]> {
     .get(process.env.basePath + `/FeeItems/GetAllFeeItems`)
     .then(getResult as any);
 }
-
 
 // 收款
 export function Charge(data): Promise<any> {

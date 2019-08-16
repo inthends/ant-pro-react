@@ -91,7 +91,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
    * constructor
    */
 
-  useEffect(async () => {
+  useEffect(async() => {
     if (dispatch) {
       dispatch({
         type: 'user/fetchCurrent',
@@ -102,7 +102,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
       const res = await dispatch({
         type: 'auth/fetch',
       });
-      console.log(res);
+      //console.log(res);
       dispatch({
         type: 'menu/refresh',
       });

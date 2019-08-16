@@ -1,23 +1,14 @@
 //房产信息
 import { TreeEntity } from '@/model/models';
-import {
-  Button,
-  Card,
-  Col,
-  Drawer,
-  Form,
-  Input,
-  Row,
-  Tree,
-  message,
-} from 'antd';
+import { AutoComplete, Button, Card, Col, Drawer, Form, Input, Row, Tree, message } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { SaveForm } from './House.service';
+import { SaveForm, GetCustomerList } from './House.service';
 import styles from './style.less';
 
 const { TextArea } = Input;
 const { TreeNode } = Tree;
+const { Option } = AutoComplete;
 
 interface PstructInfoProps {
   modifyVisible: boolean;
@@ -28,8 +19,9 @@ interface PstructInfoProps {
   closeDrawer(): void;
   reload(): void;
 }
+
 const PstructInfo = (props: PstructInfoProps) => {
-  const { type, modifyVisible, closeDrawer, form, organizeId, data, reload } = props;
+  const { type, modifyVisible, closeDrawer, form, data, reload } = props;
   const { getFieldDecorator } = form;
   const title = data === undefined ? '添加' : '修改';
   var formLabel = '楼栋';
@@ -43,6 +35,7 @@ const PstructInfo = (props: PstructInfoProps) => {
   }
 
   const [infoDetail, setInfoDetail] = useState<any>({});
+  const [userSource, setUserSource] = useState<any[]>([]);
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -109,6 +102,24 @@ const PstructInfo = (props: PstructInfoProps) => {
   //   }
   // };
 
+  const handleSearch = value => {
+    if (value == '')
+      return;
+    GetCustomerList(value).then(res => {
+      setUserSource(res || []);
+    })
+  };
+
+  const userList = userSource.map
+    (item => <Option key={item.id} value={item.name}>{item.name}</Option>);
+
+  const onOwnerSelect = (value, option) => {
+    form.setFieldsValue({ ownerId: option.key });
+  }
+
+  const onTenantSelect = (value, option) => {
+    form.setFieldsValue({ tenantId: option.key });
+  } 
 
   return (
     <Drawer
@@ -143,7 +154,6 @@ const PstructInfo = (props: PstructInfoProps) => {
             <Row gutter={24}>
               <Col lg={12}>
                 <Form.Item label="建筑面积(㎡)">
-                  {console.log(infoDetail.area)}
                   {getFieldDecorator('area', {
                     initialValue: infoDetail.area || 0,
                   })(<Input placeholder="请输入建筑面积" />)}
@@ -160,17 +170,44 @@ const PstructInfo = (props: PstructInfoProps) => {
 
             <Row gutter={24}>
               <Col lg={12}>
-                <Form.Item label="业主"> 
+                <Form.Item label="业主">
                   {getFieldDecorator('ownerName', {
                     initialValue: infoDetail.ownerName,
-                  })(<Input placeholder="请输入业主" />)}
+                  })(
+                    <AutoComplete
+                      dataSource={userList}
+                      style={{ width: 200 }}
+                      onSearch={handleSearch}
+                      placeholder="请输入业主"
+                      onSelect={onOwnerSelect}
+                    />
+                  )}
+
+                  {getFieldDecorator('ownerId', {
+                    initialValue: infoDetail.ownerId,
+                  })(
+                    <input type='hidden' />
+                  )}
                 </Form.Item>
               </Col>
               <Col lg={12}>
                 <Form.Item label="住户">
                   {getFieldDecorator('tenantName', {
                     initialValue: infoDetail.tenantName,
-                  })(<Input placeholder="请输入住户" />)}
+                  })(<AutoComplete
+                    dataSource={userList}
+                    style={{ width: 200 }}
+                    onSearch={handleSearch}
+                    placeholder="请输入住户"
+                    onSelect={onTenantSelect}
+                  />)}
+
+                  {getFieldDecorator('tenantId', {
+                    initialValue: infoDetail.tenantId,
+                  })(
+                    <input type='hidden' />
+                  )}
+
                 </Form.Item>
               </Col>
             </Row>

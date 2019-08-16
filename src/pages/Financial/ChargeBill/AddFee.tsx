@@ -22,51 +22,48 @@ const { Option } = Select;
 const { TextArea } = Input;
 const{TabPane} = Tabs;
 
-interface ModifyProps {
-  modifyVisible: boolean;
-  closeDrawer(): void;
+interface AddFeeProps {
+  addFeeVisible: boolean;
+  closeAddDrawer(): void;
   form: WrappedFormUtils;
   organizeId?:string;
   id?:string;
   reload(): void;
 }
-const  Modify = (props:  ModifyProps) => {
-  const { modifyVisible, closeDrawer, form, organizeId,id} = props;
+const AddFee = (props: AddFeeProps) => {
+  const { addFeeVisible, closeAddDrawer, form, organizeId,id} = props;
   const { getFieldDecorator } = form;
-  const title=id==""? '新增费用' :"修改费用";
+  const title = '新增费用' ;
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [feeTreeData, setFeeTreeData] = useState<TreeEntity[]>([]);
+
   const [relatrionIds,setRelatrionID]=useState<any[]>([]);
   const [unitIds,setUnitIds]=useState<any[]>([]);
 
   // 打开抽屉时初始化
   useEffect(() => {
-    if (modifyVisible) {
-      if(id){
-
-      }else{
-        GetReceivablesFeeItemTreeJson().then(res=>{
-          const treeList = (res || []).map(item => {
-            return {
-              ...item,
-              id: item.key,
-              text: item.text,
-              parentId: item.parentId,
-            };
-          });
-          setFeeTreeData(treeList);
+    if (addFeeVisible) {
+      GetReceivablesFeeItemTreeJson().then(res=>{
+        const treeList = (res || []).map(item => {
+          return {
+            ...item,
+            id: item.key,
+            text: item.text,
+            parentId: item.parentId,
+          };
         });
-        //重置之前选择加载的费项类别
-        setInfoDetail({  });
-        form.resetFields();
-      }
+        setFeeTreeData(treeList);
+      });
+      //重置之前选择加载的费项类别
+      setInfoDetail({  });
+      form.resetFields();
     } else {
       form.setFieldsValue({});
     }
-  }, [modifyVisible]);
+  }, [addFeeVisible]);
 
   const close = () => {
-    closeDrawer();
+    closeAddDrawer();
   };
   const save = () => {
     form.validateFields((errors, values) => {
@@ -80,25 +77,21 @@ const  Modify = (props:  ModifyProps) => {
     <Drawer
       title={title}
       placement="right"
-      width={id!=''?488:780}
+      width={780}
       onClose={close}
-      visible={modifyVisible}
+      visible={addFeeVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
       <Row>
-        {
-          id!=''?
-          null:<Col span={8}  style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh - 140px)' }}>
-            <LeftTree
-              treeData={feeTreeData}
-              selectTree={(id, item) => {
+        <Col span={8}  style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh - 140px)' }}>
+          <LeftTree
+            treeData={feeTreeData}
+            selectTree={(id, item) => {
 
-              }}
-            />
-          </Col>
-        }
-
-        <Col span={id!=''?24:16}>
+            }}
+          />
+        </Col>
+        <Col span={16}>
           <Form hideRequiredMark>
             <Row>
               <Form.Item label="加费对象" required labelCol={{span:4}} wrapperCol={{span:20}} >
@@ -134,7 +127,7 @@ const  Modify = (props:  ModifyProps) => {
             </Row>
             <Row>
               <Col span={10}>
-                <Form.Item label="单价" required labelCol={{span:9}} wrapperCol={{span:15}} >
+                <Form.Item label="单价" required labelCol={{span:10}} wrapperCol={{span:14}} >
                   {getFieldDecorator('price', {
                     initialValue: infoDetail.price,
                     rules: [{ required: true, message: '请输入单价' }]
@@ -184,7 +177,7 @@ const  Modify = (props:  ModifyProps) => {
             </Row>
             <Row gutter={8}>
               <Col span={12}>
-                <Form.Item label="周期" required   labelCol={{span:8}} wrapperCol={{span:16}} >
+                <Form.Item label="周期" required   labelCol={{span:10}} wrapperCol={{span:14}} >
                   {getFieldDecorator('cycleValue', {
                     initialValue: infoDetail.cycleValue,
                     rules: [{ required: true, message: '=请选择=' }]
@@ -216,7 +209,7 @@ const  Modify = (props:  ModifyProps) => {
             </Row>
             <Row>
               <Col span={12}>
-                <Form.Item label="起始日期" required  labelCol={{span:8}} wrapperCol={{span:16}}  >
+                <Form.Item label="起始日期" required   labelCol={{span:10}} wrapperCol={{span:14}} >
                   {getFieldDecorator('beginDate', {
                     initialValue: infoDetail.beginDate,
                     rules: [{ required: true, message: '请选择起始日期' }]
@@ -226,7 +219,7 @@ const  Modify = (props:  ModifyProps) => {
                 </Form.Item>
               </Col>
               <Col  span={12}>
-                <Form.Item label="结束日期" required labelCol={{span:8}} wrapperCol={{span:16}} >
+                <Form.Item label="结束日期" required  labelCol={{span:10}} wrapperCol={{span:14}}>
                   {getFieldDecorator('endDate', {
                     initialValue: infoDetail.endDate,
                     rules: [{ required: true, message: '请选择结束日期' }]
@@ -238,7 +231,7 @@ const  Modify = (props:  ModifyProps) => {
             </Row>
             <Row>
               <Col  span={12}>
-                <Form.Item label="账单日" required  labelCol={{span:8}} wrapperCol={{span:16}} >
+                <Form.Item label="账单日" required   labelCol={{span:10}} wrapperCol={{span:14}}>
                   {getFieldDecorator('billDate', {
                     initialValue: infoDetail.billDate,
                     rules: [{ required: true, message: '请选择账单日' }]
@@ -248,7 +241,7 @@ const  Modify = (props:  ModifyProps) => {
                 </Form.Item>
               </Col>
               <Col  span={12}>
-                <Form.Item label="应收期间" required  labelCol={{span:8}} wrapperCol={{span:16}} >
+                <Form.Item label="应收期间" required   labelCol={{span:10}} wrapperCol={{span:14}}>
                   {getFieldDecorator('period', {
                     initialValue: infoDetail.period,
                     rules: [{ required: true, message: '请选择应收期间' }]
@@ -293,7 +286,8 @@ const  Modify = (props:  ModifyProps) => {
         </Button>
       </div>
     </Drawer>
+
   );
 };
-export default Form.create< ModifyProps>()(Modify);
+export default Form.create<AddFeeProps>()(AddFee);
 

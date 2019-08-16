@@ -78,3 +78,11 @@ export function GetRoomData(keyValue): Promise<any> {
 //     .get(process.env.basePath + `/Common/GetBuildings?parentId=${pstructid}`)
 //     .then(getResult as any);
 // }
+
+
+//查询客户数据
+export function GetCustomerList(keyword): Promise<any> {
+  return request
+    .get(process.env.basePath + `/PStructUser/GetCustomerList?keyword=${keyword}`)
+    .then(getResult as any);
+}

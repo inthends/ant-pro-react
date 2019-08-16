@@ -95,9 +95,8 @@ const Detail = (props: DetailProps) => {
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
       <PageHeader title={infoDetail.state}
         extra={[
-          <Button key="3">附件</Button>,
-          <Button key="2">备注</Button>,
-          <Button key="1">打印</Button>,
+          <Button key="1">附件</Button>, 
+          <Button key="2">打印</Button>,
         ]}
       />
       <Divider dashed />

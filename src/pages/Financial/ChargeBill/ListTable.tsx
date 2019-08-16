@@ -31,6 +31,8 @@ function ListTable(props: ListTableProps) {
     Modal.confirm({
       title: '请确认',
       content: `您是否要删除${record.name}`,
+      okText:'确认',
+      cancelText:'取消',
       onOk: () => {
         RemoveForm(record.id).then(() => {
           message.success('保存成功');
@@ -126,7 +128,7 @@ function ListTable(props: ListTableProps) {
         ];
       },
     },
-  ] as ColumnProps<any>;
+  ] as ColumnProps<any>[];
 
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [sumEntity, setSumEntity] = useState();
@@ -159,19 +161,66 @@ function ListTable(props: ListTableProps) {
   const hasSelected = selectedRowKeys.length > 0;
   //收款
   const charge = () => {
+    if(selectedRowKeys.length==0)
+    {
+      message.warning('请选择收款项目!');
+      return;
+    }
+
     form.validateFields((errors, values) => {
       if (!errors) {
-
         Modal.confirm({
           title: '请确认',
           content: `确定要执行收款操作吗？`,
+          cancelText:'取消',
+          okText:'确定',
           onOk: () => {
+/* ids
+费项id
+BillID
+收款单主单id
+OrganizeID
+BillCode
+收款单号
+BillDate
+收款日
+PayCode
+收据编号
+InvoiceCode
+发票号
+PayTypeA
+PayAmountA
+PayTypeB
+PayAmountB
+PayTypeC
+PayAmountC
+PayDetail
+VerifyPerson
+VerifyDate
+VerifyMemo
+CreateUserId
+CreateUserName
+CreateDate
+ModifyUserId
+ModifyUserName
+ModifyDate
+Memo
+Status
+状态 已作废\逻辑删除-1，未收未审核0，已收未审核1，已审核2，已冲红3
+LinkID
+冲红关联的单据
+CustomerName
+UnitID*/
+
+
+
             const newData = { ...values, billDate: values.billDate.format('YYYY-MM-DD') };
             newData.unitID = 'HBL021404';//unitID
             newData.customerName = '徐英婕/徐凯';//customerName;
-            Charge({ ...newData, ids: selectedRowKeys }).then(res => {
+            console.log(newData);
+           /* Charge({ ...newData, ids: selectedRowKeys }).then(res => {
               message.success('保存成功');
-            });
+            });*/
           }
         });
       }
@@ -231,7 +280,6 @@ function ListTable(props: ListTableProps) {
                     <Option value="抵扣卷">抵扣卷</Option>
                   </Select>
                 )}
-
               </Form.Item>
             </Col>
             <Col lg={4}>
@@ -302,10 +350,8 @@ function ListTable(props: ListTableProps) {
             </Col>
             <Col lg={6}>
               <Form.Item >
-
                 {getFieldDecorator('invoiceCode', {
                 })(<Input placeholder="请输入发票编号" />)}
-
               </Form.Item>
             </Col>
 

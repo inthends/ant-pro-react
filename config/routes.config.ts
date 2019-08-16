@@ -38,7 +38,7 @@ export default [
         redirect: '/login',
       },
       {
-        name: '资源管理',
+        name: 'resource',
         path: '/resource',
         component: './Resource/Resource',
         icon:'bank',
@@ -48,33 +48,33 @@ export default [
             redirect: '/resource/house',
           },
           {
-            name: '项目资料',
+            name: 'house',
             path: '/resource/house',
             component: './Resource/House/House',
           },
           {
-            name: '房产资料',
+            name: 'housemore',
             hideInMenu: true,
             path: '/resource/housemore',
             component: './Resource/House/HouseMore',
           },
           {
-            name: '公共区域',
+            name: 'publicarea',
             path: '/resource/publicarea',
             component: './Resource/PublicArea/PublicArea',
           },
           {
-            name: '车位资料',
+            name: 'parkinglot',
             path: '/resource/parkinglot',
             component: './Resource/ParkingLot/ParkingLot',
           },
           {
-            name: '住户资料',
+            name: 'pstructuser',
             path: '/resource/pstructuser',
             component: './Resource/PStructUser/PStructUser',
           },
           {
-            name: '往来单位',
+            name: 'reciprocatingunit',
             path: '/resource/reciprocatingunit',
             component: './Resource/ReciprocatingUnit/ReciprocatingUnit',
           },
@@ -82,7 +82,7 @@ export default [
       },
 
       {
-        name: '财务管理',
+        name: 'financial',
         path: '/financial',
         icon:'pay-circle', 
         component: './Financial/Financial',
@@ -92,14 +92,14 @@ export default [
             redirect: '/financial/feeitem',
           },
           {
-            name: '费项设置',
+            name: 'feeitem',
             path: '/financial/feeitem',
             component: './Financial/FeeItem/Main',
           },
           {
-            name: '水电费管理',
-            path: '/financial/test1',
-            component: './Financial/Test1',
+            name: 'meter',
+            path: '/financial/meter',
+            component: './Financial/Meter/Meter',
           },
           {
             name: '周期费计算',
@@ -112,7 +112,7 @@ export default [
             component: './Financial/Test1',
           },
           {
-            name: '收款管理',
+            name: 'chargebill',
             path: '/financial/chargebill',
             component: './Financial/ChargeBill/Main',
           },
@@ -122,19 +122,19 @@ export default [
             component: './Financial/Test1',
           },
           {
-            name: '费用冲抵',
+            name: 'offset',
             path: '/financial/offset',
             component: './Financial/Offset/Offset',
           },
           {
-            name: '费用减免',
+            name: 'reduction',
             path: '/financial/reduction',
             component: './Financial/Reduction/Main',
           },
         ],
       },
       {
-        name: '物业管理',
+        name: 'admin',
         path: '/admin', 
         icon:'security-scan',
         component: './Admin/Admin',
@@ -144,17 +144,17 @@ export default [
             redirect: '/admin/servicedesk',
           },
           {
-            name: '服务总台',
+            name: 'servicedesk',
             path: '/admin/servicedesk',
             component: './Admin/ServiceDesk/Main',
           },
           {
-            name: '报修管理',
+            name: 'repair',
             path: '/admin/repair',
             component: './Admin/Repair/Main',
           },
           {
-            name: '投诉管理',
+            name: 'complaint',
             path: '/admin/complaint',
             component: './Admin/Complaint/Main',
           },
@@ -162,7 +162,7 @@ export default [
       },
 
       {
-        name: '资产运营',
+        name: 'contract',
         path: '/contract',
         icon:'transaction',
         component: './Contract/Contract',
@@ -172,7 +172,7 @@ export default [
             redirect: '/contract/list',
           },
           {
-            name: '合同列表',
+            name: 'list',
             path: '/contract/list',
             component: './Contract/List/Main',
           },
