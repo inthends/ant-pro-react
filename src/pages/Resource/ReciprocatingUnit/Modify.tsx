@@ -1,4 +1,4 @@
-import { TreeEntity } from '@/model/models';
+ 
 import {
   Button,
   Card,
@@ -8,8 +8,7 @@ import {
   Input,
   message,
   Row,
-  Select,
-  Tree,
+  Select, 
   TreeSelect
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
@@ -31,7 +30,7 @@ interface ModifyProps {
   reload(): void;
 }
 const Modify = (props: ModifyProps) => {
-  const { treeData, modifyVisible, data, closeDrawer, form, organizeId, reload } = props;
+  const { treeData, modifyVisible, data, closeDrawer, form,  reload } = props;
   const { getFieldDecorator } = form;
   const title = data === undefined ? '添加往来单位' : '修改往来单位';
   const [infoDetail, setInfoDetail] = useState<any>({});

@@ -15,7 +15,7 @@ import { DefaultPagination } from '@/utils/defaultSetting';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { } from './Main.service';
+import {GetEntityShow ,ChargeFeeDetail,ChargeFeeDetail } from './Main.service';
 import styles from './style.less';
 import  moment from 'moment';
 
@@ -29,13 +29,25 @@ const Show = (props:  ShowProps) => {
   const { showVisible, closeShow, id,form} = props;
   const { getFieldDecorator } = form;
   const title="查看收费单";
+  const [loading, setLoading] = useState<boolean>(false);
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [chargeBillData,setChargeBillData]=useState<any[]>([]);
   // 打开抽屉时初始化
   useEffect(() => {
+    form.resetFields();
     if (showVisible) {
       if(id){
+        GetEntityShow(id).then(res=>{
+          if(res!=null)
+          {  setInfoDetail(res.entity);
+          return res.entity.billID;
+          }
+          return '';
+        }).then(res=>{
+          if(res!='')
+            initLoadFeeDetail(res);
+        })
         /*setPagination(pagesetting => {
           return {
             ...pagesetting,
@@ -56,8 +68,8 @@ const Show = (props:  ShowProps) => {
   const columns = [
     {
       title: '单元编号',
-      dataIndex: 'billCode',
-      key: 'billCode',
+      dataIndex: 'code',
+      key: 'code',
       width: 150,
       sorter: true,
     },
@@ -70,8 +82,8 @@ const Show = (props:  ShowProps) => {
     },
     {
       title: '应收期间',
-      dataIndex: 'priod',
-      key: 'priod',
+      dataIndex: 'period',
+      key: 'period',
       width: 150,
       sorter: true,
       render: val => val!=null?<span> {moment(val).format('YYYY年MM月')} </span>:<span></span>
@@ -102,8 +114,8 @@ const Show = (props:  ShowProps) => {
       width: 150,
     }, {
       title: '计费起始日期',
-      dataIndex: 'startDate',
-      key: 'startDate',
+      dataIndex: 'beginDate',
+      key: 'beginDate',
       width: 150,
       render: val => val!=null?<span> {moment(val).format('YYYY-MM-DD')} </span>:<span></span>
     }, {
@@ -121,6 +133,35 @@ const Show = (props:  ShowProps) => {
     }
   ] as ColumnProps<any>[];
 
+  const initLoadFeeDetail=(billid)=>{
+    const queryJson = {billid:billid};
+    const sidx = 'begindate';
+    const sord = 'asc';
+    const { current: pageIndex, pageSize, total } = pagination;
+    return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
+      return res;
+    });
+  }
+
+  const load = data => {
+    setLoading(true);
+    data.sidx = data.sidx || 'BillID';
+    data.sord = data.sord || 'asc';
+    return ChargeFeeDetail(data).then(res => {
+      const { pageIndex: current, total, pageSize } = res;
+      setPagination(pagesetting => {
+        return {
+          ...pagesetting,
+          current,
+          total,
+          pageSize,
+        };
+      });
+      setChargeBillData(res.data);
+      setLoading(false);
+      return res;
+    });
+  };
   const close = () => {
     closeShow();
   };
@@ -195,8 +236,8 @@ const Show = (props:  ShowProps) => {
             <Row gutter={4}>
               <Col span={8}>
               <Form.Item label="审核人"  labelCol={{span:8}} wrapperCol={{span:16}} >
-                  {getFieldDecorator('vertifyPerson', {
-                    initialValue: infoDetail.vertifyPerson,
+                  {getFieldDecorator('verifyPerson', {
+                    initialValue: infoDetail.verifyPerson,
                   })(
                     <Input disabled={true} style={{width:'100%'}}/>
                   )}
@@ -204,8 +245,8 @@ const Show = (props:  ShowProps) => {
               </Col>
               <Col span={8}>
                 <Form.Item label="审核情况" labelCol={{span:8}} wrapperCol={{span:16}} >
-                  {getFieldDecorator('verfyMemo', {
-                    initialValue: infoDetail.verfyMemo,
+                  {getFieldDecorator('verifyMemo', {
+                    initialValue: infoDetail.verifyMemo,
                   })(
                     <Input disabled={true} style={{width:'100%'}}/>
                   )}
@@ -225,7 +266,7 @@ const Show = (props:  ShowProps) => {
               <Col span={24}>
               <Form.Item label="收款金额" labelCol={{span:2}} wrapperCol={{span:22}}>
                   {getFieldDecorator('amountDetail', {
-                    initialValue: infoDetail.amountDetail,
+                    initialValue:`收款金额：${infoDetail.payAmountA +infoDetail.payAmountB +infoDetail.payAmountC }元,其中${infoDetail.payTypeA} ${infoDetail.payAmountA }元，${infoDetail.payTypeB} ${infoDetail.payAmountB}元， ${infoDetail.payTypeC} ${infoDetail.payAmountC }元`,
                   })(
                     <Input disabled={true} style={{width:'100%'}}/>
                   )}

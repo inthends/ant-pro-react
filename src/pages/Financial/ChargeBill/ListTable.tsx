@@ -19,10 +19,12 @@ interface ListTableProps {
   modify(id: string): void;
   reload(): void;
   form: WrappedFormUtils;
+  rowSelect(rowSelectedKeys):void;
+  organize?:any;
 }
 
 function ListTable(props: ListTableProps) {
-  const { form, onchange, loading, pagination, data, modify, reload } = props;
+  const { form, onchange, loading, pagination, data, modify, reload,rowSelect ,organize} = props;
   const { getFieldDecorator } = form;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
@@ -30,12 +32,13 @@ function ListTable(props: ListTableProps) {
   const doDelete = record => {
     Modal.confirm({
       title: '请确认',
-      content: `您是否要删除${record.name}`,
+      content: `您是否要删除${record.feeName}`,
       okText:'确认',
       cancelText:'取消',
       onOk: () => {
-        RemoveForm(record.id).then(() => {
-          message.success('保存成功');
+        console.log(record);
+        RemoveForm(record.billID).then(() => {
+          message.success('删除成功');
           reload();
         });
       },
@@ -79,14 +82,14 @@ function ListTable(props: ListTableProps) {
     },
     {
       title: '计费起始日期',
-      dataIndex: 'begindate',
-      key: 'begindate',
+      dataIndex: 'beginDate',
+      key: 'beginDate',
       width: 85,
       render: val => <span> {moment(val).format('YYYY-MM-DD')} </span>
     }, {
       title: '计费终止日期',
-      dataIndex: 'enddate',
-      key: 'enddate',
+      dataIndex: 'endDate',
+      key: 'endDate',
       width: 85,
       render: val => <span> {moment(val).format('YYYY-MM-DD')} </span>
     }, {
@@ -136,7 +139,9 @@ function ListTable(props: ListTableProps) {
   const [customerName, setCustomerName] = useState();
 
   const onSelectChange = (selectedRowKeys, selectedRows) => {
+    console.log(selectedRows);
     setSelectedRowKeys(selectedRowKeys);
+    rowSelect(selectedRows);
     //应收金额
     var sumEntity = {};
     var sumAmount = 0, sumreductionAmount = 0, sumoffsetAmount = 0, sumlastAmount = 0;
@@ -175,52 +180,20 @@ function ListTable(props: ListTableProps) {
           cancelText:'取消',
           okText:'确定',
           onOk: () => {
-/* ids
-费项id
-BillID
-收款单主单id
-OrganizeID
-BillCode
-收款单号
-BillDate
-收款日
-PayCode
-收据编号
-InvoiceCode
-发票号
-PayTypeA
-PayAmountA
-PayTypeB
-PayAmountB
-PayTypeC
-PayAmountC
-PayDetail
-VerifyPerson
-VerifyDate
-VerifyMemo
-CreateUserId
-CreateUserName
-CreateDate
-ModifyUserId
-ModifyUserName
-ModifyDate
-Memo
-Status
-状态 已作废\逻辑删除-1，未收未审核0，已收未审核1，已审核2，已冲红3
-LinkID
-冲红关联的单据
-CustomerName
-UnitID*/
-
-
-
-            const newData = { ...values, billDate: values.billDate.format('YYYY-MM-DD') };
-            newData.unitID = 'HBL021404';//unitID
-            newData.customerName = '徐英婕/徐凯';//customerName;
-            console.log(newData);
-           /* Charge({ ...newData, ids: selectedRowKeys }).then(res => {
+            let info =Object.assign({},values,{
+              roomId:organize.code,
+              ids:JSON.stringify(selectedRowKeys),
+              billDate: values.billDate.format('YYYY-MM-DD'),
+              customerName: organize.title.split(' ')[1]
+            });
+            if(Number(sumEntity.sumlastAmount)!=Number(info.payAmountA+info.payAmountB+info.payAmountC)){
+              message.warning('本次收款金额小于本次选中未收金额合计，不允许收款，请拆费或者重新选择收款项');
+              return ;
+            }
+            Charge(info).then(res => {
               message.success('保存成功');
-            });*/
+              reload();
+            });
           }
         });
       }
@@ -383,6 +356,7 @@ UnitID*/
         }
         loading={loading}
         rowSelection={rowSelection}
+        onChange={onchange}
       />
     </Page>
   );

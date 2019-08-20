@@ -23,7 +23,7 @@ function ListTable(props: ListTableProps) {
     Modal.confirm({
       title: '请确认',
       content: `您是否要删除${record.billCode}吗`,
-      onOk: () => { 
+      onOk: () => {
         RemoveForm(record.id)
           .then(() => {
             message.success('删除成功');
@@ -61,7 +61,7 @@ function ListTable(props: ListTableProps) {
           case 2:
             return <Tag color="#19d54e">进行中</Tag>;
           case 3:
-            return <Tag color="#5FB878">待归档</Tag>;
+            return <Tag color="#5FB878">待毕单</Tag>;
           case 4:
             return <Tag color="#009688">已归档</Tag>;
           default:
@@ -135,19 +135,37 @@ function ListTable(props: ListTableProps) {
       width: 155,
       fixed: 'right',
       render: (text, record) => {
-        return [
-          <Button
-            type="primary"
-            key="modify"
-            style={{ marginRight: '10px' }}
-            onClick={() => modify(record)}
-          >
-            修改
+        //新增
+        if (record.billStatus == 1) {
+          return [
+            <Button
+              type="primary"
+              key="modify"
+              style={{ marginRight: '10px' }}
+              onClick={() => modify(record)}
+            >
+              修改
           </Button>,
-          <Button type="danger" key="delete" onClick={() => doDelete(record)}>
-            删除
+            <Button type="danger" key="delete" onClick={() => doDelete(record)}>
+              删除
           </Button>,
-        ];
+          ];
+        } else {
+
+          return [
+            <Button
+              type="primary"
+              key="modify"
+              style={{ marginRight: '10px' }}
+              onClick={() => modify(record)}
+            >
+              查看
+          </Button>,
+            <Button type="danger" key="delete" disabled={true} >
+              删除
+          </Button>,
+          ];
+        }
       },
     },
   ] as ColumnProps<any>[];

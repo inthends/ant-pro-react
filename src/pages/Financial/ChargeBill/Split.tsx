@@ -10,10 +10,11 @@ import {
   Form,
   Input,InputNumber,
   Row,
+  message,
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { } from './Main.service';
+import { GetShowDetail,SplitBilling} from './Main.service';
 import styles from './style.less';
 import  moment from 'moment';
 
@@ -22,19 +23,27 @@ interface SplitProps {
   closeSplit(): void;
   form: WrappedFormUtils;
   id?:string;
-
+reload():void;
 }
 const Split = (props:  SplitProps) => {
-  const { splitVisible, closeSplit, id,form} = props;
+  const { splitVisible, closeSplit, id,form,reload} = props;
   const { getFieldDecorator } = form;
   const title="拆分费用";
   const [infoDetail, setInfoDetail] = useState<any>({});
+  const [maxAmount,setMaxAmount]=useState<number>(0);
   // 打开抽屉时初始化
   useEffect(() => {
     if (splitVisible) {
-      if(id){
+      form.resetFields();
+      if(id!=null&&id!=""){
+        GetShowDetail(id).then(res=>{
+          var infoTemp =Object.assign({},res.entity,
+            { number:res.number,feeName:res.feeName, customerName:res.customerName, unitName:res.unitName});
+          setInfoDetail(infoTemp);
+          setMaxAmount(res.entity.amount);
+        });
       }else{
-        setInfoDetail({  });
+        setInfoDetail({});
       }
     } else {
 
@@ -46,7 +55,26 @@ const Split = (props:  SplitProps) => {
   };
 
   const save=()=>{
+    form.validateFields((errors, values) =>{
+      var data={
+        FirstAmount: values.firstAmount,
+        FirstBeginDate:moment(values.firstBeginDate).format('YYYY-MM-DD')  ,
+        FirstEndDate: moment(values.firstEndDate).format('YYYY-MM-DD')  ,
+        SecondAmount: values.secondAmount,
+        SecondBeginDate:   moment(values.secondBeginDate).format('YYYY-MM-DD')  ,
+        SecondEndDate: moment(values.secondEndDate).format('YYYY-MM-DD') ,
+        Memo:values.memo
+      }
 
+      var splitData={
+        Data:JSON.stringify(data),
+        keyValue:id
+      };
+      SplitBilling(splitData).then(res=>{
+        reload();
+        close();
+      });
+    });
   }
   return (
     <Drawer
@@ -131,15 +159,27 @@ const Split = (props:  SplitProps) => {
             <Form.Item label="第一笔金额"  labelCol={{span:8}} wrapperCol={{span:16}} >
               {getFieldDecorator('firstAmount', {
                 initialValue: infoDetail.firstAmount,
+                rules: [{
+                  validator:(rules,value,callback)=>{
+                    if ( value>infoDetail.amount) {
+                      callback('金额不能大于拆分前总金额');
+                    }
+                  }
+                }]
               })(
-                <Input disabled={true} style={{width:'100%'}}/>
+                <InputNumber style={{width:'100%'}} onChange={(value)=>{
+                  if(value<infoDetail.amount){
+                    var tempInfo=Object.assign({},infoDetail,{firstAmount:value});
+                    setInfoDetail(tempInfo);
+                  }
+                }}/>
               )}
             </Form.Item>
           </Col>
           <Col span={8}>
             <Form.Item label="计费起始日期" labelCol={{span:9}} wrapperCol={{span:15}}>
             {getFieldDecorator('firstBeginDate', {
-                initialValue: infoDetail.firstBeginDate==null?moment(new Date):moment(infoDetail.firstBeginDate),
+                initialValue: infoDetail.beginDate==null?moment(new Date):moment(infoDetail.beginDate),
               })(
                 <DatePicker disabled={true} style={{width:'100%'}}/>
               )}
@@ -149,8 +189,26 @@ const Split = (props:  SplitProps) => {
             <Form.Item label="计费终止日期" labelCol={{span:9}} wrapperCol={{span:15}}>
             {getFieldDecorator('firstEndDate', {
                 initialValue: infoDetail.firstEndDate==null?moment(new Date):moment(infoDetail.firstEndDate),
+                rules:[{
+                  validator:(rules,value,callback)=>{
+                    if (value.isBefore(moment(infoDetail.beginDate).format('YYYY-MM-DD'))||value.isAfter(moment(infoDetail.endDate).format('YYYY-MM-DD'))) {
+                      callback('拆分日期必须早于拆分前终止日期');
+                    }
+                  }
+                }]
               })(
-                <DatePicker disabled={true} style={{width:'100%'}}/>
+                <DatePicker  style={{width:'100%'}} onChange={(date,datestr)=>{
+                  /*if(date.isBefore(moment(infoDetail.beginDate).format('YYYY-MM-DD'))||date.isAfter(moment(infoDetail.endDate).format('YYYY-MM-DD')))
+                  {
+                    message.warning('计费终止日期必须晚于起始日期且早于第二次计费截止日期');
+                    var tempInfo=Object.assign({},infoDetail,{firstEndDate:null});
+                    setInfoDetail(tempInfo);
+                  }else{*/
+                    var tempInfo=Object.assign({},infoDetail,{firstEndDate:date.format('YYYY-MM-DD'),secondBeginDate:moment(datestr).add(1,'days').format('YYYY-MM-DD')});
+                    //console.log(date,tempInfo);
+                    setInfoDetail(tempInfo);
+                 /*}*/
+                }}/>
               )}
             </Form.Item>
           </Col>
@@ -159,9 +217,9 @@ const Split = (props:  SplitProps) => {
           <Col span={8}>
             <Form.Item label="第二笔金额"  labelCol={{span:8}} wrapperCol={{span:16}} >
               {getFieldDecorator('secondAmount', {
-                initialValue: infoDetail.secondAmount,
+                initialValue: infoDetail.firstAmount==null||infoDetail.amount==null?0: infoDetail.amount-infoDetail.firstAmount,
               })(
-                <Input disabled={true} style={{width:'100%'}}/>
+                <InputNumber  disabled={true}  style={{width:'100%'}}/>
               )}
             </Form.Item>
           </Col>
@@ -177,7 +235,7 @@ const Split = (props:  SplitProps) => {
           <Col span={8}>
             <Form.Item label="计费终止日期" labelCol={{span:9}} wrapperCol={{span:15}}>
             {getFieldDecorator('secondEndDate', {
-                initialValue: infoDetail.secondEndDate==null?moment(new Date):moment(infoDetail.secondEndDate),
+                initialValue: infoDetail.endDate==null?moment(new Date):moment(infoDetail.endDate),
               })(
                 <DatePicker disabled={true} style={{width:'100%'}}/>
               )}
@@ -186,11 +244,11 @@ const Split = (props:  SplitProps) => {
         </Row>
         <Row gutter={4}>
           <Col span={24}>
-          <Form.Item label="审核情况" labelCol={{span:2}} wrapperCol={{span:22}}>
+          <Form.Item label="备注" labelCol={{span:2}} wrapperCol={{span:22}}>
               {getFieldDecorator('memo', {
                 initialValue: infoDetail.memo,
               })(
-                <Input.TextArea rows={6} disabled={true} style={{width:'100%'}}/>
+                <Input.TextArea rows={6} style={{width:'100%'}}/>
               )}
             </Form.Item>
           </Col>

@@ -22,9 +22,9 @@ interface ListTableProps {
 function ListTable(props: ListTableProps) {
   const { form, onchange, loading, pagination, data, modify, reload } = props;
   const [verifyVisible, setVerifyVisible] = useState<boolean>(false);
-  const [id,setId]=useState<string>('');
-  const [verifyId,setVerifyId]=useState<any>('');
-  const [ifVerifyModal,setIfVerifyModal]=useState<boolean>(false);
+  const [id, setId] = useState<string>('');
+  const [verifyId, setVerifyId] = useState<any>('');
+  const [ifVerifyModal, setIfVerifyModal] = useState<boolean>(false);
 
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
@@ -56,10 +56,10 @@ function ListTable(props: ListTableProps) {
       key: 'billDate',
       width: 100,
       sorter: true,
-      render: val =>{
-        if(val==null){
+      render: val => {
+        if (val == null) {
           return <span></span>
-        }else{
+        } else {
           return <span> {moment(val).format('YYYY-MM-DD')} </span>
         }
       }
@@ -96,10 +96,10 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'verifyDate',
       key: 'verifyDate',
       width: 100,
-      render: val =>{
-        if(val==null){
+      render: val => {
+        if (val == null) {
           return <span></span>
-        }else{
+        } else {
           return <span> {moment(val).format('YYYY-MM-DD')} </span>
         }
       }
@@ -113,39 +113,59 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'operation',
       key: 'operation',
       fixed: 'right',
-      width: 330,
+      width:'230px',
       render: (text, record) => {
-        return [
-          <Button
-            type="primary"
-            key="modify"
-            style={{ marginRight: '10px' }}
-            onClick={() => modify(record.billID)}
-          >
-            编辑
+
+        if (record.ifVerify) {
+          return [
+            <Button
+              type="primary" 
+              key="modify"
+              style={{ marginRight: '10px' }}
+              onClick={() => modify(record.billID)}
+            >
+              查看
+        </Button>,
+            <Button
+              type="primary"
+              key="unverify"
+              disabled={record.ifVerify == 1 ? false : true}
+              style={{ marginRight: '10px' }}
+              onClick={() => showVerifyModel(record.billID, false)}
+            >
+              反审
+            </Button>,
+            <Button type="danger"
+              disabled={true}
+              key="delete" onClick={() => doDelete(record)}>
+              删除
+           </Button>,
+          ];
+        } else {
+
+          return [
+            <Button
+              type="primary"
+              key="modify"
+              style={{ marginRight: '10px' }}
+              onClick={() => modify(record.billID)}
+            >
+              编辑
           </Button>,
             <Button
-            type="primary"
-            key="verify"
-            disabled={record.ifVerify==1?true:false}
-            style={{ marginRight: '10px' }}
-            onClick={()=>showVerifyModel(record.billID,true)}
-          >
-            审核
+              type="primary"
+              key="verify" 
+              style={{ marginRight: '10px' }}
+              onClick={() => showVerifyModel(record.billID, true)}
+            >
+              审核
           </Button>,
-            <Button
-            type="primary"
-            key="unverify"
-            disabled={record.ifVerify==1?false:true}
-            style={{ marginRight: '10px' }}
-            onClick={()=>showVerifyModel(record.billID,false)}
-          >
-            取消审核
+            <Button type="danger"
+              key="delete" onClick={() => doDelete(record)}>
+              删除
           </Button>,
-          <Button type="danger" key="delete" onClick={() => doDelete(record)}>
-            删除
-          </Button>,
-        ];
+          ];
+        }
       },
     },
   ] as ColumnProps<any>;
@@ -155,11 +175,11 @@ function ListTable(props: ListTableProps) {
   //   setSelectedRowKeys(selectedRowKeys);
   // };
 
-  const closeVerifyModel=()=>{
+  const closeVerifyModel = () => {
     setVerifyVisible(false);
     reload();
   }
-  const showVerifyModel=(id,ifVerfy)=>{
+  const showVerifyModel = (id, ifVerfy) => {
     setVerifyVisible(true);
     setVerifyId(id);
     setIfVerifyModal(ifVerfy);
@@ -179,12 +199,12 @@ function ListTable(props: ListTableProps) {
         }
         loading={loading}
       />
-        <VerifyReductionModal
-          modalVisible={verifyVisible}
-          id={verifyId}
-          closeModal={closeVerifyModel}
-          ifVerifyModal={ifVerifyModal}
-        />
+      <VerifyReductionModal
+        modalVisible={verifyVisible}
+        id={verifyId}
+        closeModal={closeVerifyModel}
+        ifVerifyModal={ifVerifyModal}
+      />
     </Page>
   );
 }

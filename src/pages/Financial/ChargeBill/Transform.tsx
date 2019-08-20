@@ -13,7 +13,7 @@ import {
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { } from './Main.service';
+import { GetShowDetail,TransferBilling,GetTransferRoomUsers} from './Main.service';
 import styles from './style.less';
 import  moment from 'moment';
 
@@ -22,17 +22,29 @@ interface TransfromProps {
   closeTrans(): void;
   form: WrappedFormUtils;
   id?:string;
+reload():void;
 
 }
 const Transfrom = (props:  TransfromProps) => {
-  const { transVisible, closeTrans, id,form} = props;
+  const { transVisible, closeTrans, id,form,reload} = props;
   const { getFieldDecorator } = form;
   const title="拆分费用";
   const [infoDetail, setInfoDetail] = useState<any>({});
+
+  const [relationIds, setRelationIds] = useState<any>([]);
+
   // 打开抽屉时初始化
   useEffect(() => {
     if (transVisible) {
       if(id){
+        GetShowDetail(id).then(res=>{
+          var infoTemp =Object.assign({},res.entity,
+            { feeName:res.feeName, customerName:res.customerName, unitName:res.unitName});
+          setInfoDetail(infoTemp);
+          return  GetTransferRoomUsers(res.entity.UnitID, res.entity.RelationID);
+        }).then(res=>{
+          setRelationIds(res);
+        });
       }else{
         setInfoDetail({  });
       }
@@ -46,7 +58,21 @@ const Transfrom = (props:  TransfromProps) => {
   };
 
   const save=()=>{
+    form.validateFields((errors, values) =>{
+      var data= {
+        RelationID:values.relationID,
+        Memo:values.memo
+      };
 
+      var splitData={
+        Data:JSON.stringify(data),
+        keyValue:id
+      };
+      TransferBilling(splitData).then(res=>{
+        reload();
+        close();
+      });
+    });
   }
   return (
     <Drawer
@@ -104,7 +130,13 @@ const Transfrom = (props:  TransfromProps) => {
               {getFieldDecorator('relationID', {
                 initialValue: infoDetail.relationID,
               })(
-                <Input disabled={true} style={{width:'100%'}}/>
+                <Select placeholder="=请选择=">
+                {relationIds.map(item => (
+                  <Option  value={item.key}>
+                    {item.title}
+                  </Option>
+                ))}
+              </Select>
               )}
             </Form.Item>
           </Col>

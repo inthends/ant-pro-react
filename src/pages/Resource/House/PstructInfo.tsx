@@ -1,13 +1,12 @@
 //房产信息
-import { TreeEntity } from '@/model/models';
-import { AutoComplete, Button, Card, Col, Drawer, Form, Input, Row, Tree, message } from 'antd';
+ 
+import { AutoComplete, Button, Card, Col, Drawer, Form, Input, Row, message } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { SaveForm, GetCustomerList } from './House.service';
+import { SaveForm, GetCustomerList } from './House.service'; 
 import styles from './style.less';
 
-const { TextArea } = Input;
-const { TreeNode } = Tree;
+const { TextArea } = Input; 
 const { Option } = AutoComplete;
 
 interface PstructInfoProps {
@@ -79,7 +78,6 @@ const PstructInfo = (props: PstructInfoProps) => {
       reload();
     });
   };
-
 
   // const getInfo = orgId => {
   //   if (orgId) {
@@ -249,14 +247,14 @@ const PstructInfo = (props: PstructInfoProps) => {
 
 export default Form.create<PstructInfoProps>()(PstructInfo);
 
-const renderTree = (treeData: TreeEntity[], parentId) => {
-  return treeData
-    .filter(item => item.parentId === parentId)
-    .map(filteditem => {
-      return (
-        <TreeNode title={filteditem.title} key={filteditem.key} value={filteditem.value} >
-          {renderTree(treeData, filteditem.key)}
-        </TreeNode>
-      );
-    });
-};
+// const renderTree = (treeData: TreeEntity[], parentId) => {
+//   return treeData
+//     .filter(item => item.parentId === parentId)
+//     .map(filteditem => {
+//       return (
+//         <TreeNode title={filteditem.title} key={filteditem.key} value={filteditem.value} >
+//           {renderTree(treeData, filteditem.key)}
+//         </TreeNode>
+//       );
+//     });
+// };

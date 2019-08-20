@@ -1,13 +1,14 @@
 
-import { DatePicker,  AutoComplete, Select, Tag, Typography, Row, Divider, PageHeader, Button, Card, Col, Drawer, Form, Input, message } from 'antd';
+import { DatePicker, AutoComplete, Select, Tag, Typography, Row, Divider, PageHeader, Button, Card, Col, Drawer, Form, Input, message } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 // import { getResult } from '@/utils/networkUtils';
-import { GetCustomerList, SaveForm } from './Main.service';
+import { Visit, Handle, Approve, Project } from './Main.service';
+import { GetUserList } from '@/services/commonItem';
 // import { TreeEntity } from '@/model/models';
 import styles from './style.less';
 const { Paragraph } = Typography;
-const { Option } = Select; 
+const { Option } = Select;
 
 interface ModifyProps {
   modifyVisible: boolean;
@@ -33,7 +34,7 @@ const Modify = (props: ModifyProps) => {
     //   .then((res: TreeEntity[]) => {
     //     setTreeData(res || []);
     //     return res || [];
-    //   });
+    //   }); 
 
   }, []);
 
@@ -55,22 +56,75 @@ const Modify = (props: ModifyProps) => {
   const close = () => {
     closeDrawer();
   };
-  const save = () => {
+
+  const project = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
         const newData = data ? { ...data, ...values } : values;
-        doSave(newData);
+        //doSave(newData);
+        //newData.keyValue = newData.pCode;
+        Project({ ...newData, keyValue: newData.id }).then(res => {
+          message.success('立项成功！');
+          closeDrawer();
+          reload();
+        });
       }
     });
   };
-  const doSave = dataDetail => {
-    dataDetail.keyValue = dataDetail.pCode;
-    SaveForm({ ...dataDetail, type: 5 }).then(res => {
-      message.success('保存成功');
-      closeDrawer();
-      reload();
+
+  const handle = () => {
+    form.validateFields((errors, values) => {
+      if (!errors) {
+        const newData = data ? { ...data, ...values } : values;
+        //doSave(newData);
+        //newData.keyValue = newData.pCode;
+        Handle({ ...newData, keyValue: newData.id }).then(res => {
+          message.success('处理成功！');
+          closeDrawer();
+          reload();
+        });
+      }
     });
   };
+
+  const visit = () => {
+    form.validateFields((errors, values) => {
+      if (!errors) {
+        const newData = data ? { ...data, ...values } : values;
+        //doSave(newData);
+        //newData.keyValue = newData.pCode;
+        Visit({ ...newData, keyValue: newData.id }).then(res => {
+          message.success('回访成功！');
+          closeDrawer();
+          reload();
+        });
+      }
+    });
+  };
+
+  const approve = () => {
+    form.validateFields((errors, values) => {
+      if (!errors) {
+        const newData = data ? { ...data, ...values } : values;
+        //doSave(newData);
+        //newData.keyValue = newData.pCode;
+        Approve({ ...newData, keyValue: newData.id }).then(res => {
+          message.success('审核成功！');
+          closeDrawer();
+          reload();
+        });
+      }
+    });
+  };
+
+  // const doSave = dataDetail => {
+  //   dataDetail.keyValue = dataDetail.pCode;
+  //   SaveForm({ ...dataDetail, type: 5 }).then(res => {
+  //     message.success('保存成功');
+  //     closeDrawer();
+  //     reload();
+  //   });
+  // };
 
   //转换状态
   const GetStatus = (infoDetail) => {
@@ -98,18 +152,35 @@ const Modify = (props: ModifyProps) => {
   const handleSearch = value => {
     if (value == '')
       return;
-    GetCustomerList(value).then(res => {
+    GetUserList(value, '业主').then(res => {
       setUserSource(res || []);
     })
   };
 
+  //实际处理人
+  const handleUserSearch = value => {
+    if (value == '')
+      return;
+    GetUserList(value, '员工').then(res => {
+      setUserSource(res || []);
+    })
+  };
+  
   const userList = userSource.map
     (item => <Option key={item.id} value={item.name}>{item.name}</Option>);
 
+  //选择投诉对象
   const onOwnerSelect = (value, option) => {
-    form.setFieldsValue({ ownerId: option.key });
+    //设置投诉对象电话和地址
+    //form.setFieldsValue({ownerId: option.key });
   }
 
+  //选择投诉对象类型
+  const onSelectType = (value, option) => {
+    GetUserList('', value).then(res => {
+      setUserSource(res || []);
+    })
+  }
 
   return (
     <Drawer
@@ -136,125 +207,187 @@ const Modify = (props: ModifyProps) => {
 
       {modifyVisible ? (
         <Form layout="vertical" hideRequiredMark>
-          <Card title="立项信息" className={styles.card}  >
-            <Row gutter={24}>
-              <Col lg={6}>
-                <Form.Item label="对象类别" required>
-                  {getFieldDecorator('byComplaintType', {
-                    initialValue: infoDetail.byComplaintType == undefined ? '业主' : infoDetail.byComplaintType,
-                    rules: [{ required: true, message: '请选对象类别' }],
-                  })(
-                    <Select>
-                      <Option value="业主" >业主</Option>
-                      <Option value="员工" >员工</Option>
-                      <Option value="其他" >其他</Option>
-                    </Select>
-                  )}
-                </Form.Item>
-              </Col>
-              <Col lg={6}>
-                <Form.Item label="投诉对象" required>
-                  {getFieldDecorator('byComplaintUser', {
-                    initialValue: infoDetail.byComplaintUser,
-                    rules: [{ required: true, message: '请输入投诉对象' }],
-                  })(
-                    // <TreeSelect
-                    //   placeholder="请选择投诉对象"
-                    //   allowClear
-                    //   dropdownStyle={{ maxHeight: 300 }}
-                    //   treeData={treeData}
-                    //   treeDataSimpleMode={true} /> 
-                    <AutoComplete
-                      dataSource={userList}
-                      style={{ width: 200 }}
-                      onSearch={handleSearch}
-                      placeholder="请输入投诉对象"
-                      onSelect={onOwnerSelect}
-                    />
-                  )} 
 
-                </Form.Item>
-              </Col>
-              <Col lg={6}>
-                <Form.Item label="联系电话" required>
-                  {getFieldDecorator('byComplaintUerTel', {
-                    initialValue: infoDetail.byComplaintUerTel,
-                    rules: [{ required: true, message: '请输入联系电话' }],
-                  })(<Input placeholder="请输入联系电话" />)}
-                </Form.Item>
-              </Col>
-              <Col lg={6}>
-                <Form.Item label="地址" required>
-                  {getFieldDecorator('byComplaintRoomAllName', {
-                    initialValue: infoDetail.byComplaintRoomAllName,
-                    rules: [{ required: true, message: '请输入地址' }],
-                  })(<Input placeholder="请输入地址" />)}
-                </Form.Item>
-              </Col>
+          {infoDetail.status == 1 ? (
+            <Card title="立项信息" className={styles.card}  >
+              <Row gutter={24}>
+                <Col lg={6}>
+                  <Form.Item label="对象类别" required>
+                    {getFieldDecorator('byComplaintType', {
+                      initialValue: infoDetail.byComplaintType == undefined ? '业主' : infoDetail.byComplaintType,
+                      rules: [{ required: true, message: '请选对象类别' }],
+                    })(
+                      <Select onSelect={onSelectType}>
+                        <Option value="业主">业主</Option>
+                        <Option value="员工">员工</Option>
+                        {/* <Option value="其他" >其他</Option> */}
+                      </Select>
+                    )}
+                  </Form.Item>
+                </Col>
+                <Col lg={6}>
+                  <Form.Item label="投诉对象" required>
+                    {getFieldDecorator('byComplaintUser', {
+                      initialValue: infoDetail.byComplaintUser,
+                      rules: [{ required: true, message: '请输入投诉对象' }],
+                    })(
+                      // <TreeSelect
+                      //   placeholder="请选择投诉对象"
+                      //   allowClear
+                      //   dropdownStyle={{ maxHeight: 300 }}
+                      //   treeData={treeData}
+                      //   treeDataSimpleMode={true} /> 
+                      <AutoComplete
+                        dataSource={userList}
+                        onSearch={handleSearch}
+                        placeholder="请输入投诉对象"
+                        onSelect={onOwnerSelect}
+                      />
+                    )}
+                  </Form.Item>
+                </Col>
+                <Col lg={6}>
+                  <Form.Item label="联系电话" required>
+                    {getFieldDecorator('byComplaintUerTel', {
+                      initialValue: infoDetail.byComplaintUerTel,
+                      rules: [{ required: true, message: '请输入联系电话' }],
+                    })(<Input placeholder="请输入联系电话" />)}
+                  </Form.Item>
+                </Col>
+                <Col lg={6}>
+                  <Form.Item label="地址" required>
+                    {getFieldDecorator('byComplaintRoomAllName', {
+                      initialValue: infoDetail.byComplaintRoomAllName,
+                      rules: [{ required: true, message: '请输入地址' }],
+                    })(<Input placeholder="请输入地址" />)}
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row gutter={24}>
+                <Col lg={6}>
+                  <Form.Item label="投诉性质" required>
+                    {getFieldDecorator('complaintNature', {
+                      initialValue: infoDetail.complaintNature == undefined ? '一般投诉' : infoDetail.complaintNature,
+                      rules: [{ required: true, message: '请选投诉性质' }],
+                    })(
+                      <Select>
+                        <Option value="一般投诉" >一般投诉</Option>
+                        <Option value="严重投诉" >严重投诉</Option>
+                      </Select>
+                    )}
+                  </Form.Item>
+                </Col>
+                <Col lg={6}>
+                  <Form.Item label="处理负责人" required>
+                    {getFieldDecorator('handleCharger', {
+                      initialValue: infoDetail.handleCharger,
+                      rules: [{ required: true, message: '请选择处理负责人' }],
+                    })(<Input placeholder="请选择处理负责人" />)}
 
-            </Row>
+                    {getFieldDecorator('handleChargerID', {
+                      initialValue: infoDetail.handleChargerID
+                    })(<Input type='hidden' />)}
+                  </Form.Item>
+                </Col>
+                <Col lg={6}>
+                  <Form.Item label="联系电话" required>
+                    {getFieldDecorator('handleChargeTel', {
+                      initialValue: infoDetail.handleChargeTel,
+                      rules: [{ required: true, message: '请输入联系电话' }],
+                    })(<Input placeholder="请输入联系电话" />)}
+                  </Form.Item>
+                </Col>
+                <Col lg={6}>
+                  <Form.Item label="立项人">
+                    {getFieldDecorator('setUpUserName', {
+                      initialValue: infoDetail.setUpUserName
+                    })(<Input placeholder="自动获取立项人" readOnly />)}
+                  </Form.Item>
+                </Col>
+              </Row>
 
-            <Row gutter={24}>
-              <Col lg={6}>
-                <Form.Item label="投诉性质" required>
-                  {getFieldDecorator('complaintNature', {
-                    initialValue: infoDetail.complaintNature == undefined ? '一般投诉' : infoDetail.complaintNature,
-                    rules: [{ required: true, message: '请选投诉性质' }],
-                  })(
-                    <Select>
-                      <Option value="一般投诉" >一般投诉</Option>
-                      <Option value="严重投诉" >严重投诉</Option>
-                    </Select>
-                  )}
-                </Form.Item>
-              </Col>
-              <Col lg={6}>
-                <Form.Item label="处理负责人" required>
-                  {getFieldDecorator('handleCharger', {
-                    initialValue: infoDetail.handleCharger,
-                    rules: [{ required: true, message: '请选择处理负责人' }],
-                  })(<Input placeholder="请选择处理负责人" />)}
+              <Row gutter={24}>
+                <Col lg={6}>
+                  <Form.Item label="立项时间">
+                    {getFieldDecorator('setUpDate', {
+                      initialValue: infoDetail.setUpDate,
+                    })(<Input placeholder="自动获取时间" readOnly />)}
+                  </Form.Item>
+                </Col>
+                <Col lg={18}>
+                  <Form.Item label="处理建议" required>
+                    {getFieldDecorator('suggestion', {
+                      initialValue: infoDetail.suggestion,
+                      rules: [{ required: true, message: '请输入处理建议' }],
+                    })(<Input placeholder="请输入处理建议" />)}
+                  </Form.Item>
+                </Col>
+              </Row>
+            </Card>
+          ) : (
+              <Card title="立项信息" className={styles.card}  >
+                <Row gutter={24}>
+                  <Col lg={6}>
+                    <Form.Item label="对象类别" >
+                      {infoDetail.byComplaintType}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={6}>
+                    <Form.Item label="投诉对象"  >
+                      {infoDetail.byComplaintUser}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={6}>
+                    <Form.Item label="联系电话"  >
+                      {infoDetail.byComplaintUerTel}
 
-                  {getFieldDecorator('handleChargerID', {
-                    initialValue: infoDetail.handleChargerID
-                  })(<Input type='hidden' />)}
-                </Form.Item>
-              </Col>
-              <Col lg={6}>
-                <Form.Item label="联系电话" required>
-                  {getFieldDecorator('handleChargeTel', {
-                    initialValue: infoDetail.handleChargeTel,
-                    rules: [{ required: true, message: '请输入联系电话' }],
-                  })(<Input placeholder="请输入联系电话" />)}
-                </Form.Item>
-              </Col>
-              <Col lg={6}>
-                <Form.Item label="立项人">
-                  {getFieldDecorator('setUpUserName', {
-                    initialValue: infoDetail.setUpUserName
-                  })(<Input placeholder="自动获取立项人" readOnly />)}
-                </Form.Item>
-              </Col>
-            </Row>
+                    </Form.Item>
+                  </Col>
+                  <Col lg={6}>
+                    <Form.Item label="地址"  >
+                      {infoDetail.byComplaintRoomAllName}
 
-            <Row gutter={24}>
-              <Col lg={6}>
-                <Form.Item label="立项时间">
-                  {getFieldDecorator('setUpDate', {
-                    initialValue: infoDetail.setUpDate,
-                  })(<Input placeholder="自动获取时间" readOnly />)}
-                </Form.Item>
-              </Col>
-              <Col lg={18}>
-                <Form.Item label="处理建议" required>
-                  {getFieldDecorator('suggestion', {
-                    initialValue: infoDetail.suggestion,
-                    rules: [{ required: true, message: '请输入处理建议' }],
-                  })(<Input placeholder="请输入处理建议" />)}
-                </Form.Item>
-              </Col>
-            </Row>
-          </Card>
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={24}>
+                  <Col lg={6}>
+                    <Form.Item label="投诉性质"  >
+                      {infoDetail.complaintNature}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={6}>
+                    <Form.Item label="处理负责人"  >
+                      {infoDetail.handleCharger}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={6}>
+                    <Form.Item label="联系电话"  >
+                      {infoDetail.handleChargeTel}
+
+                    </Form.Item>
+                  </Col>
+                  <Col lg={6}>
+                    <Form.Item label="立项人">
+                      {infoDetail.setUpUserName}
+                    </Form.Item>
+                  </Col>
+                </Row>
+
+                <Row gutter={24}>
+                  <Col lg={6}>
+                    <Form.Item label="立项时间">
+                      {infoDetail.setUpDate}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={18}>
+                    <Form.Item label="处理建议"  >
+                      {infoDetail.suggestion}
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </Card>
+            )}
 
           {infoDetail.status == 2 ? (
             <Card title="处理过程" className={styles.card}  >
@@ -263,8 +396,16 @@ const Modify = (props: ModifyProps) => {
                   <Form.Item label="实际处理人" required>
                     {getFieldDecorator('handleUser', {
                       initialValue: infoDetail.handleUser,
-                      rules: [{ required: true, message: '请选择实际处理人' }],
-                    })(<Input placeholder="请选择实际处理人" />)}
+                      rules: [{ required: true, message: '请输入实际处理人' }],
+                    })(
+
+                      <AutoComplete
+                        dataSource={userList}
+                        onSearch={handleUserSearch}
+                        placeholder="请输入实际处理人" 
+                      />
+
+                    )}
                   </Form.Item>
                 </Col>
                 <Col lg={18}>
@@ -370,9 +511,31 @@ const Modify = (props: ModifyProps) => {
         <Button onClick={close} style={{ marginRight: 8 }}>
           取消
         </Button>
-        <Button onClick={save} type="primary">
-          立项
-        </Button>
+
+        {infoDetail.status == 1 ? (
+          <Button onClick={project} type="primary">
+            立项
+         </Button>
+        ) : null}
+
+        {infoDetail.status == 2 ? (
+          <Button onClick={handle} type="primary">
+            处理
+          </Button>
+        ) : null}
+
+        {infoDetail.status == 3 ? (
+          <Button onClick={visit} type="primary">
+            回访
+          </Button>
+        ) : null}
+
+        {infoDetail.status == 4 ? (
+          <Button onClick={approve} type="primary">
+            审核
+          </Button>
+        ) : null}
+
       </div>
     </Drawer>
   );

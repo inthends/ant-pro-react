@@ -16,11 +16,11 @@ interface ChargeListTableProps {
   data: any[];
   modify(id: string): void;
   reload(): void;
-  rowSelect(status:number):void;
+  getRowSelect(record):void;
 }
 
 function ChargeListTable(props: ChargeListTableProps) {
-  const { onchange, loading, pagination, data, modify, reload,rowSelect } = props;
+  const { onchange, loading, pagination, data, modify, reload ,getRowSelect} = props;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
   };
@@ -54,8 +54,8 @@ function ChargeListTable(props: ChargeListTableProps) {
     },
     {
       title: '房间编号',
-      dataIndex: 'organizeId',
-      key: 'organizeId',
+      dataIndex: 'unitID',
+      key: 'unitID',
       width: 150,
       sorter: true,
     },
@@ -88,7 +88,7 @@ function ChargeListTable(props: ChargeListTableProps) {
       dataIndex: 'verifyDate',
       key: 'verifyDate',
       width: 150,
-      render: val => <span> {moment(val).format('YYYY-MM-DD')} </span>
+      render: val =>val==null||val==""?<span></span>: <span> {moment(val).format('YYYY-MM-DD')} </span>
     }, {
       title: '审核人',
       dataIndex: 'verifyPerson',
@@ -114,42 +114,16 @@ function ChargeListTable(props: ChargeListTableProps) {
       dataIndex: 'memo',
       key: 'memo',
       width: 200
-    },
-    {
-      title: '操作',
-      dataIndex: 'operation',
-      key: 'operation',
-      fixed: 'right',
-      width: 155,
-      render: (text, record) => {
-        return [
-          <Button
-            type="primary"
-            key="modify"
-            style={{ marginRight: '10px' }}
-            onClick={() => modify(record.id)}
-          >
-            修改
-          </Button>,
-          <Button type="danger" key="delete" onClick={() => doDelete(record)}>
-            删除
-          </Button>,
-        ];
-      },
-    },
+    }
   ] as ColumnProps<any>[];
 
   const [selectedRowKey, setSelectedRowKey] = useState([]);
-
-  const [sumEntity, setSumEntity] = useState();
-  const [unitID, setUnitID] = useState();
-  const [customerName, setCustomerName] = useState();
 
   const  onRow=(record)=>{
     return {
       onClick: event => {
         setSelectedRowKey(record.billID);
-        rowSelect(record.status)
+        getRowSelect(record);
         console.log(record);
       }, // 点击行
       onDoubleClick: event => {
@@ -168,9 +142,18 @@ function ChargeListTable(props: ChargeListTableProps) {
   }
 
   const setClassName=(record,index)=>{
-    //record代表表格行的内容，index代表行索引
-    //判断索引相等时添加行的高亮样式
-    return record.billID === selectedRowKey? styles.rowSelect : "";
+    if(record.billID === selectedRowKey)
+    {
+      return  styles.rowSelect ;
+    }else{
+      if(record.status==3)
+      {
+        return styles.rowFlush
+      }else{
+        return '';
+      }
+    }
+
   }
   return (
     <Page >
@@ -186,6 +169,7 @@ function ChargeListTable(props: ChargeListTableProps) {
         rowClassName={setClassName} //表格行点击高亮
         loading={loading}
         onRow={onRow}
+        onChange={onchange}
       />
     </Page>
   );

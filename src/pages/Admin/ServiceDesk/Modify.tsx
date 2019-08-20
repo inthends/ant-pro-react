@@ -133,8 +133,8 @@ const Modify = (props: ModifyProps) => {
     <Menu onClick={handleMenuClick}>
       <Menu.Item key="1">转报修</Menu.Item>
       <Menu.Item key="2">转投诉</Menu.Item>
-      {/* <Menu.Item key="3">毕单</Menu.Item>
-      <Menu.Item key="3">归档</Menu.Item> */}
+      <Menu.Item key="3">毕单</Menu.Item>
+      <Menu.Item key="4">归档</Menu.Item>
     </Menu>
   );
 
@@ -370,9 +370,16 @@ const Modify = (props: ModifyProps) => {
           textAlign: 'right',
         }}
       >
+        {data === undefined ? (
+          <div><Button onClick={close} style={{ marginRight: 8 }}>
+            取消
+           </Button>
+            <Button onClick={save} type="primary">
+              保存
+            </Button>
+          </div>) : null}
 
-
-        {(infoDetail.billStatus && infoDetail.billStatus != 2) ? (
+        {(infoDetail.billStatus && infoDetail.billStatus == 1) ? (
           <div>
             <Button onClick={close} style={{ marginRight: 8 }}>
               取消
@@ -384,15 +391,23 @@ const Modify = (props: ModifyProps) => {
             </Dropdown>
             <Button onClick={save} type="primary">
               保存
-           </Button></div>) : 
-           <div> 
+           </Button></div>) : null}
+
+        {(infoDetail.billStatus && infoDetail.billStatus == 2) ? (
+          <div>
+            <Button onClick={close} style={{ marginRight: 8 }}>
+              取消
+           </Button> </div>) : null} 
+
+        {(infoDetail.billStatus && infoDetail.billStatus == 3) ? (
+          <div>
             <Button onClick={close} style={{ marginRight: 8 }}>
               取消
            </Button>
-            <Button onClick={save} type="primary">
-              保存
-           </Button>
-          </div>}
+            <Button onClick={close} type="primary">
+              毕单
+           </Button></div>) : null}
+
       </div>
     </Drawer>
   );
