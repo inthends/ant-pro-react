@@ -214,9 +214,9 @@ export default [
             component: './System/Department/Main',
           },
           {
-            name: '员工资料',
-            path: '/resource/test1',
-            component: './Resource/Test1',
+            name: 'user',
+            path: '/system/user',
+            component: './System/User/User',
           },
           {
             name: '角色资料',
