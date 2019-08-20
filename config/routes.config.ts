@@ -14,7 +14,6 @@ export default [
     path: '/exception/403',
     component: './403',
   },
-
   
   // {
   //   path: '/register',
@@ -194,23 +193,23 @@ export default [
         path: '/welcome7',
         component: './Welcome',
       },
-
       {
-        name: '系统管理',
-        path: '/System',
-
+        name: 'system',
+        path: '/system', 
+        component: './System/System',
+        icon:'bank',
         routes: [
           {
             path: '/system',
             redirect: '/System/Organize',
           },
           {
-            name: '机构设置',
+            name: 'organize',
             path: '/system/organize',
             component: './System/Organize/Main',
           },
           {
-            name: '部门资料',
+            name: 'department',
             path: '/system/department',
             component: './System/Department/Main',
           },

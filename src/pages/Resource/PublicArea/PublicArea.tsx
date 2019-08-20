@@ -6,19 +6,21 @@ import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
 import { GetPublicAreas } from './PublicArea.service';
+import { GetQuickSimpleTreeAllForArea } from '@/services/commonItem';
+import { getResult } from '@/utils/networkUtils';
 
 const { Content } = Layout;
 const { Search } = Input;
 
 function PublicArea() {
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
-  //const [treeData, setTreeData] = useState<TreeEntity[]>([]);
+  const [treeData, setTreeData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [organize, SetOrganize] = useState<any>({});
   const [data, setData] = useState<any[]>([]);
   const [currData, setCurrData] = useState<any>();
-  const [search, setSearch] = useState<string>('');  
+  const [search, setSearch] = useState<string>('');
 
   const selectTree = (org, item, searchText) => {
     initLoadData(item, searchText);
@@ -32,8 +34,15 @@ function PublicArea() {
     //   SetOrganize(rootOrg);
     //   initLoadData('', '');
     // });
+    //获取房产树
+    GetQuickSimpleTreeAllForArea()
+      .then(getResult)
+      .then((res: any[]) => {
+        setTreeData(res || []);
+        return res || [];
+      });
 
-    initLoadData('', ''); 
+    initLoadData('', '');
 
   }, []);
 
@@ -129,14 +138,14 @@ function PublicArea() {
 
   return (
     <Layout style={{ height: '100%' }}>
-     <AsynLeftTree
+      <AsynLeftTree
         parentid={'0'}
         //treeData={treeData}
         selectTree={(parentId, type) => {
           selectTree(parentId, type, search);
         }}
       />
- <Content style={{ paddingLeft: '18px' }} >
+      <Content style={{ paddingLeft: '18px' }} >
         <div style={{ marginBottom: '10px' }}>
           <Search
             className="search-input"
@@ -163,9 +172,10 @@ function PublicArea() {
 
       <Modify
         modifyVisible={modifyVisible}
-        closeDrawer={closeDrawer} 
+        closeDrawer={closeDrawer}
         organizeId={organize.id}
         data={currData}
+        treeData={treeData}
         reload={() => initLoadData(organize, search)}
       />
     </Layout>

@@ -70,7 +70,7 @@ function LeaseTerm(props: LeaseTermProps) {
               <Select placeholder="请选择费项">
                 {feeitems.map(item => (
                   <Option value={item.value} >
-                    {item.text}
+                    {item.title}
                   </Option>
                 ))}
               </Select> 
@@ -80,8 +80,7 @@ function LeaseTerm(props: LeaseTermProps) {
 
         <Col lg={4}>
           <Form.Item label="合同单价" required>
-            {getFieldDecorator(`price[${k}]`, {
-              initialValue:10,
+            {getFieldDecorator(`price[${k}]`, { 
               rules: [{ required: true, message: '请输入合同单价' }],
             })(<InputNumber placeholder="请输入合同单价" />)}
           </Form.Item>
@@ -207,7 +206,7 @@ function LeaseTerm(props: LeaseTermProps) {
                 <Select placeholder="请选择费项">
                   {feeitems.map(item => (
                     <Option value={item.value} key={item.value}>
-                      {item.text}
+                      {item.title}
                     </Option>
                   ))}
                 </Select>
@@ -217,8 +216,7 @@ function LeaseTerm(props: LeaseTermProps) {
 
           <Col lg={4}>
             <Form.Item label='合同单价' required>
-              {getFieldDecorator(`price[0]`, {
-                initialValue:5,
+              {getFieldDecorator(`price[0]`, { 
                 rules: [{ required: true, message: '请输入合同单价' }],
               })(<InputNumber placeholder="请输入合同单价" style={{ width: '100%' }} />)}
             </Form.Item>

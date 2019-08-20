@@ -170,8 +170,7 @@ const Modify = (props: ModifyProps) => {
     (item => <Option key={item.id} value={item.name}>{item.name}</Option>);
 
   //选择投诉对象
-  const onOwnerSelect = (value, option) => {
-    //设置投诉对象电话和地址
+  const onOwnerSelect = (value, option) => { 
     //form.setFieldsValue({ownerId: option.key });
   }
 

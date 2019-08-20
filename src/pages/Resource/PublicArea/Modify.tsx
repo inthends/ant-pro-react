@@ -9,14 +9,13 @@ import {
   Input,
   message,
   Modal,
-  Row, 
+  Row,
   TreeSelect,
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { SaveForm } from './PublicArea.service';
 import styles from './style.less';
-
 const { TextArea } = Input;
 // const { TreeNode } = Tree;
 
@@ -30,13 +29,15 @@ interface ModifyProps {
   reload(): void;
 }
 const Modify = (props: ModifyProps) => {
-  const { treeData, modifyVisible, data, closeDrawer, form,  reload } = props;
+  const { modifyVisible, data, closeDrawer, form, reload, treeData } = props;
   const { getFieldDecorator } = form;
   const title = data === undefined ? '添加公共区域' : '修改公共区域';
   const [infoDetail, setInfoDetail] = useState<any>({});
 
   // 打开抽屉时初始化
-  useEffect(() => { }, []);
+  useEffect(() => {
+
+  }, []);
 
   // 打开抽屉时初始化
   // useEffect(() => {
@@ -104,13 +105,13 @@ const Modify = (props: ModifyProps) => {
     });
   };
   const selectOrg = orgId => {
-    const type = treeData.filter(item => item.id === orgId)[0].type;
-    if (type !== '4') {
-      Modal.warn({
-        title: '警告',
-        content: '只能选到楼层不可以选择其他层次！',
-      });
-    }
+    //const type = treeData.filter(item => item.id === orgId)[0].type;
+    // if (type !== '4') {
+    //   Modal.warn({
+    //     title: '警告',
+    //     content: '只能选到楼层不可以选择其他层次！',
+    //   });
+    // }
     form.setFieldsValue({ parentId: undefined });
   };
 
@@ -123,7 +124,7 @@ const Modify = (props: ModifyProps) => {
       visible={modifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
-      <Card  className={styles.card}  >
+      <Card className={styles.card}  >
         {modifyVisible ? (
           <Form layout="vertical" hideRequiredMark>
             <Row gutter={24}>
@@ -153,12 +154,10 @@ const Modify = (props: ModifyProps) => {
                   })(
                     <TreeSelect
                       placeholder="请选择所在位置"
+                      dropdownStyle={{ maxHeight: 350 }}
                       treeData={treeData}
-                      allowClear
-                      treeDefaultExpandAll
                       onSelect={selectOrg}
-                    >
-                      {/* {renderTree(treeData, '0')} */}
+                      treeDataSimpleMode={true}>
                     </TreeSelect>,
                   )}
                 </Form.Item>

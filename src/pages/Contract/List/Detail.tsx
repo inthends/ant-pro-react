@@ -69,8 +69,7 @@ const Detail = (props: DetailProps) => {
             setContractCharge(charge.contractCharge || {});
             setChargeFeeList(charge.chargeFeeList || []);
             setChargeIncreList(charge.chargeIncreList || []);
-            setChargeOfferList(charge.chargeFeeOfferList || []);
-
+            setChargeOfferList(charge.chargeFeeOfferList || []); 
             setDepositData(charge.depositFeeResultList || []);//保证金明细
             setChargeData(charge.chargeFeeResultList || []);//租金明细   
 

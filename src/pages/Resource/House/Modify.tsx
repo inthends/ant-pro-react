@@ -9,7 +9,6 @@ import {
   Input,
   Row,
   Select,
-  Tree,
   TreeSelect,
   message,
 } from 'antd';
@@ -17,12 +16,10 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { GetFormInfoJson, GetProjectType, GetTreeAreaJson, SaveForm } from './House.service';
 import styles from './style.less';
-
 import moment from 'moment';
 
 const { Option } = Select;
 const { TextArea } = Input;
-const { TreeNode } = Tree;
 
 interface ModifyProps {
   modifyVisible: boolean;
@@ -104,25 +101,30 @@ const Modify = (props: ModifyProps) => {
         getInfo(id).then(tempInfo => {
           const newvalue = { ...values, date: values.date.format('YYYY-MM-DD') };
           SaveForm({ ...tempInfo, ...newvalue, keyValue: tempInfo.pStructId }).then(res => {
-            message.success('保存成功');
-            closeDrawer();
-            reload();
+             message.success('保存成功');
+             closeDrawer();
+             reload(); 
           });
         });
       }
     });
   };
+
   const getInfo = orgId => {
     if (orgId) {
       return GetFormInfoJson(orgId).then(res => {
-        const { baseInfo, pProperty } = res || ({} as any);
+        // const { baseInfo, pProperty } = res || ({} as any);
+        // const info: any = {
+        //   ...pProperty,
+        //   ...baseInfo,
+        // }; 
+        const baseInfo = res || ({} as any);
         const info: any = {
-          ...pProperty,
-          ...baseInfo,
-        };
-        info.id = pProperty && pProperty.id;
-        info.pStructId = baseInfo && baseInfo.id;
-        info.area = pProperty!.area;
+          ...baseInfo
+        }
+        // info.id = pProperty && pProperty.id;
+        // info.pStructId = baseInfo && baseInfo.id;
+        // info.area = pProperty!.area;
         return info;
       });
     } else {

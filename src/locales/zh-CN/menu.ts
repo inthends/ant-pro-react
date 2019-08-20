@@ -42,4 +42,8 @@ export default {
 
   'menu.contract': '资产运营',
   'menu.contract.list': '合同列表',
+
+  'menu.system': '系统管理',
+  'menu.system.organize': '机构设置',
+  'menu.system.department': '部门资料',
 };

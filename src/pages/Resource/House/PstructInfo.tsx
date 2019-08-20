@@ -1,12 +1,12 @@
 //房产信息
- 
-import { AutoComplete, Button, Card, Col, Drawer, Form, Input, Row, message } from 'antd';
+
+import { AutoComplete, Button, Card, Col, Drawer, Form, Input, Row, message, InputNumber } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { SaveForm, GetCustomerList } from './House.service'; 
+import { SaveForm, GetCustomerList } from './House.service';
 import styles from './style.less';
 
-const { TextArea } = Input; 
+const { TextArea } = Input;
 const { Option } = AutoComplete;
 
 interface PstructInfoProps {
@@ -117,13 +117,13 @@ const PstructInfo = (props: PstructInfoProps) => {
 
   const onTenantSelect = (value, option) => {
     form.setFieldsValue({ tenantId: option.key });
-  } 
+  }
 
   return (
     <Drawer
       title={title + formLabel}
       placement="right"
-      width={700}
+      width={650}
       onClose={close}
       visible={modifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
@@ -154,14 +154,14 @@ const PstructInfo = (props: PstructInfoProps) => {
                 <Form.Item label="建筑面积(㎡)">
                   {getFieldDecorator('area', {
                     initialValue: infoDetail.area || 0,
-                  })(<Input placeholder="请输入建筑面积" />)}
+                  })(<InputNumber placeholder="请输入建筑面积" style={{ width: '100%' }} />)}
                 </Form.Item>
               </Col>
               <Col lg={12}>
                 <Form.Item label="占地面积(㎡)">
                   {getFieldDecorator('coverArea', {
                     initialValue: infoDetail.coverArea || 0,
-                  })(<Input placeholder="请输入占地面积" />)}
+                  })(<InputNumber placeholder="请输入占地面积" style={{ width: '100%' }} />)}
                 </Form.Item>
               </Col>
             </Row>
@@ -174,13 +174,12 @@ const PstructInfo = (props: PstructInfoProps) => {
                   })(
                     <AutoComplete
                       dataSource={userList}
-                      style={{ width: 200 }}
+                      style={{ width: '100%' }}
                       onSearch={handleSearch}
                       placeholder="请输入业主"
                       onSelect={onOwnerSelect}
                     />
                   )}
-
                   {getFieldDecorator('ownerId', {
                     initialValue: infoDetail.ownerId,
                   })(
@@ -194,7 +193,7 @@ const PstructInfo = (props: PstructInfoProps) => {
                     initialValue: infoDetail.tenantName,
                   })(<AutoComplete
                     dataSource={userList}
-                    style={{ width: 200 }}
+                    style={{ width: '100%' }}
                     onSearch={handleSearch}
                     placeholder="请输入住户"
                     onSelect={onTenantSelect}

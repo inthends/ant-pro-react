@@ -3,7 +3,7 @@ import Page from '@/components/Common/Page';
 import { Icon, Layout, Tree } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import { SiderContext } from '../SiderContext';
-import { GetOrgTree, GetAsynChildBuildings } from './AsynLeftTree.service';
+import { GetOrgTree, GetAsynChildBuildingsForArea } from '@/services/commonItem';
 
 const { TreeNode } = Tree;
 const { Sider } = Layout;
@@ -24,10 +24,10 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
   const [treeData, setTreeData] = useState<any[]>([]);
 
   var keys: any[];
-  keys = []; 
+  keys = [];
   const getAllkeys = res =>
-    res.map(item => { 
-      if (item.children&&item.type!='D') {
+    res.map(item => {
+      if (item.children && item.type != 'D') {
         keys.push(getAllkeys(item.children))
       }
       keys.push(item.key);
@@ -40,7 +40,6 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
       setTreeData(res || []);
       getAllkeys(res || []);
     });
-
     setExpandedKeys(keys);
     //setExpandedKeys(treeData.map(item => item.id as string)); 
   }, []);
@@ -76,14 +75,14 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
   const onLoadData = treeNode =>
     new Promise<any>(resolve => {
       if (treeNode.props.children &&
-        treeNode.props.children.length > 0&&
-        treeNode.props.type!='D') {
+        treeNode.props.children.length > 0 &&
+        treeNode.props.type != 'D') {
         resolve();
         return;
       }
 
       setTimeout(() => {
-        GetAsynChildBuildings(treeNode.props.eventKey, treeNode.props.type).then((res: any[]) => {
+        GetAsynChildBuildingsForArea(treeNode.props.eventKey, treeNode.props.type).then((res: any[]) => {
           treeNode.props.dataRef.children = res || [];
           setTreeData([...treeData]);
         });
@@ -101,7 +100,7 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
   //     });
   // };
 
-
+  //异步绑定
   const renderTreeNodes = data =>
     data.map(item => {
       if (item.children) {
