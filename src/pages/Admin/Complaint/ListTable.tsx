@@ -1,5 +1,5 @@
 import Page from '@/components/Common/Page';
-import { Tag, Button, message, Modal, Table } from 'antd';
+import { Tag, Divider, message, Modal, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import moment from 'moment';
@@ -54,7 +54,7 @@ function ListTable(props: ListTableProps) {
       key: 'status',
       width: 100,
       sorter: true,
-      render: (text, record) => { 
+      render: (text, record) => {
         if (record.isEnable == 0) {
           return <Tag color="#d82d2d">无效投诉</Tag>
         } else {
@@ -69,7 +69,7 @@ function ListTable(props: ListTableProps) {
             case 4:
               return <Tag color="#61c33a">待审核</Tag>
             case 5:
-              return <Tag color="#40A9FF">已归档</Tag> 
+              return <Tag color="#40A9FF">已归档</Tag>
             default:
               return '';
           }
@@ -113,16 +113,21 @@ function ListTable(props: ListTableProps) {
       fixed: 'right',
       render: (text, record) => {
         return [
-          <Button
-            type="primary"
-            key="modify"
-            style={{ marginRight: '10px' }}
-            onClick={() => modify(record)}>
-            修改
-          </Button>,
-          <Button type="danger" key="delete" onClick={() => doDelete(record)}>
-            删除
-          </Button>
+          // <Button
+          //   type="primary"
+          //   key="modify"
+          //   style={{ marginRight: '10px' }}
+          //   onClick={() => modify(record)}>
+          //   修改
+          // </Button>,
+          // <Button type="danger" key="delete" onClick={() => doDelete(record)}>
+          //   删除
+          // </Button>
+          <span>
+            <a onClick={() => modify(record.id)} key="modify">修改</a>
+            <Divider type="vertical" />
+            <a onClick={() => doDelete(record)} key="delete"  >删除</a>
+          </span>
         ];
       },
     },

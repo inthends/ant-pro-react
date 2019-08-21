@@ -1,5 +1,5 @@
 import Page from '@/components/Common/Page';
-import { Tag,Button, message, Modal, Table } from 'antd';
+import { Tag, Divider, message, Modal, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import moment from 'moment';
@@ -64,27 +64,27 @@ function ListTable(props: ListTableProps) {
       render: (text, record) => {
         switch (text) {
           case 1:
-            return  <Tag color="#e4aa5b">待派单</Tag>
+            return <Tag color="#e4aa5b">待派单</Tag>
           case 2:
-            return  <Tag color="#19d54e">待接单</Tag>
+            return <Tag color="#19d54e">待接单</Tag>
           case 3:
-            return  <Tag color="#e4aa5b">待开工</Tag>
+            return <Tag color="#e4aa5b">待开工</Tag>
           case 4:
-            return  <Tag color="#61c33a">处理中</Tag>
+            return <Tag color="#61c33a">处理中</Tag>
           case 5:
-            return  <Tag color="#ff5722">暂停</Tag>
+            return <Tag color="#ff5722">暂停</Tag>
           case 6:
-            return  <Tag color="#5fb878">待回访</Tag>
+            return <Tag color="#5fb878">待回访</Tag>
           case 7:
-            return  <Tag color="#29cc63">待检验</Tag>
+            return <Tag color="#29cc63">待检验</Tag>
           case 8:
-            return  <Tag color="#e48f27">待审核</Tag>
+            return <Tag color="#e48f27">待审核</Tag>
           case 9:
-            return  <Tag color="#c31818">已退单</Tag>
+            return <Tag color="#c31818">已退单</Tag>
           case 10:
-            return  <Tag color="#009688">已归档</Tag>
+            return <Tag color="#009688">已归档</Tag>
           case -1:
-            return  <Tag color="#d82d2d">已作废</Tag>
+            return <Tag color="#d82d2d">已作废</Tag>
           default:
             return '';
         }
@@ -127,16 +127,21 @@ function ListTable(props: ListTableProps) {
       fixed: 'right',
       render: (text, record) => {
         return [
-          <Button
-            type="primary"
-            key="modify"
-            style={{ marginRight: '10px' }}
-            onClick={() => modify(record)}>
-            修改
-          </Button>,
-          <Button type="danger" key="delete" onClick={() => doDelete(record)}>
-            删除
-          </Button>
+          // <Button
+          //   type="primary"
+          //   key="modify"
+          //   style={{ marginRight: '10px' }}
+          //   onClick={() => modify(record)}>
+          //   修改
+          // </Button>,
+          // <Button type="danger" key="delete" onClick={() => doDelete(record)}>
+          //   删除
+          // </Button>
+          <span>
+            <a onClick={() => modify(record)} key="modify">查看</a>
+            <Divider type="vertical" />
+            <a onClick={() => doDelete(record)} key="delete">删除</a>
+          </span>
         ];
       },
     },

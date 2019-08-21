@@ -1,5 +1,5 @@
 import Page from '@/components/Common/Page';
-import { Button, message, Table, Modal } from 'antd';
+import { Divider, message, Table, Modal } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import { RemoveForm } from './Main.service'; 
@@ -160,21 +160,26 @@ function ListTable(props: ListTableProps) {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
-      width: 155, 
+      width: 95, 
       fixed:'right',
       render: (text, record) => {
         return [
-          <Button
-            type="primary"
-            key="detail"
-            style={{ marginRight: '10px' }}
-            onClick={() => detail(record.id,record.chargeID)}
-          >
-            查看
-          </Button>,
-          <Button type="danger" key="delete" onClick={() => doDelete(record)}>
-            删除
-          </Button>,
+          // <Button
+          //   type="primary"
+          //   key="detail"
+          //   style={{ marginRight: '10px' }}
+          //   onClick={() => detail(record.id,record.chargeID)}
+          // >
+          //   查看
+          // </Button>,
+          // <Button type="danger" key="delete" onClick={() => doDelete(record)}>
+          //   删除
+          // </Button>,
+          <span>
+          <a onClick={() => detail(record.id,record.chargeID)} key="detail">查看</a>
+          <Divider type="vertical" />
+          <a onClick={() => doDelete(record)} key="delete">删除</a>
+        </span>
         ];
       },
     },

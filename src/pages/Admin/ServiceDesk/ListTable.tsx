@@ -1,5 +1,5 @@
 import Page from '@/components/Common/Page';
-import { Tag, Button, message, Modal, Table } from 'antd';
+import { Divider,Tag, Button, message, Modal, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import moment from 'moment';
@@ -138,17 +138,20 @@ function ListTable(props: ListTableProps) {
         //新增
         if (record.billStatus == 1) {
           return [
-            <Button
-              type="primary"
-              key="modify"
-              style={{ marginRight: '10px' }}
-              onClick={() => modify(record)}
-            >
-              修改
-          </Button>,
-            <Button type="danger" key="delete" onClick={() => doDelete(record)}>
-              删除
-          </Button>,
+            //   <Button
+            //     type="primary"
+            //     key="modify"
+            //     style={{ marginRight: '10px' }}
+            //     onClick={() => modify(record)}
+            //   > 修改  </Button>,
+            //   <Button type="danger" key="delete" onClick={() => doDelete(record)}>
+            //     删除
+            // </Button>,
+            <span>
+              <a onClick={() => modify(record)} key="modify">查看</a>
+              <Divider type="vertical" />
+              <a onClick={() => doDelete(record)} key="delete">删除</a>
+            </span>
           ];
         } else {
 

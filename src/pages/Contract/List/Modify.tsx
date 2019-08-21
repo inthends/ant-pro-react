@@ -16,8 +16,7 @@ import IncreasingRate from './IncreasingRate';
 import Rebate from './Rebate';
 import ResultList from './ResultList';
 import moment from 'moment';
-import { getResult } from '@/utils/networkUtils';
-import { GetQuickSimpleTreeAllForContract, getCommonItems, GetUserList } from '@/services/commonItem';
+import { getCommonItems, GetUserList } from '@/services/commonItem';
 import { SaveForm, GetAllFeeItems, GetChargeDetail } from './Main.service';
 import styles from './style.less';
 
@@ -28,13 +27,14 @@ interface ModifyProps {
   modifyVisible: boolean;
   id?: string;
   data?: any;
+  treeData: any[];
   closeDrawer(): void;
   form: WrappedFormUtils;
   reload(): void;
 }
 
 const Modify = (props: ModifyProps) => {
-  const { modifyVisible, closeDrawer, form, reload } = props;
+  const { modifyVisible, closeDrawer, form, reload, treeData } = props;
   const { getFieldDecorator } = form;
   const title = '添加合同';
   const [industryType, setIndustryType] = useState<any[]>([]); //行业  
@@ -42,15 +42,12 @@ const Modify = (props: ModifyProps) => {
 
   //租金计算结果
   const [depositData, setDepositData] = useState<ChargeFeeResultEntity[]>([]);//保证金
-  const [chargeData, setChargeData] = useState<ChargeFeeResultEntity[]>([]);//租金
-
-  const [treeData, setTreeData] = useState<any[]>([]);
+  const [chargeData, setChargeData] = useState<ChargeFeeResultEntity[]>([]);//租金 
+  // const [treeData, setTreeData] = useState<any[]>([]);
   const [isCal, setIsCal] = useState<boolean>(false);
-
   const [TermJson, setTermJson] = useState<string>();
   const [RateJson, setRateJson] = useState<string>();
   const [RebateJson, setRebateJson] = useState<string>();
-
   const [userSource, setUserSource] = useState<any[]>([]);
 
   // const [DepositResult, setDepositResult] = useState<ChargeFeeResultEntity[]>([]);
@@ -249,13 +246,12 @@ const Modify = (props: ModifyProps) => {
     });
 
     //获取房产树
-    GetQuickSimpleTreeAllForContract()
-      .then(getResult)
-      .then((res: TreeEntity[]) => {
-        setTreeData(res || []);
-        return res || [];
-      });
-
+    // GetQuickSimpleTreeAllForContract()
+    //   .then(getResult)
+    //   .then((res: TreeEntity[]) => {
+    //     setTreeData(res || []);
+    //     return res || [];
+    //   });
   }, []);
 
   // 打开抽屉时初始化
@@ -292,11 +288,11 @@ const Modify = (props: ModifyProps) => {
     form.setFieldsValue({ leaseArea: area.toFixed(2) });
   };
 
-  const onIndustrySelect = (value, option) => { 
+  const onIndustrySelect = (value, option) => {
     //设置行业名称
     form.setFieldsValue({ industry: option.props.children });
   };
-  
+
 
   return (
     <Drawer
@@ -441,7 +437,7 @@ const Modify = (props: ModifyProps) => {
                           rules: [{ required: true, message: '请选择行业' }],
                         })(
                           <Select placeholder="请选择行业"
-                          onSelect={onIndustrySelect}
+                            onSelect={onIndustrySelect}
                           >
                             {industryType.map(item => (
                               <Option value={item.value} key={item.key}>
@@ -449,7 +445,7 @@ const Modify = (props: ModifyProps) => {
                               </Option>
                             ))}
                           </Select>
-                        )} 
+                        )}
                         {getFieldDecorator('industry', {
                         })(
                           <input type='hidden' />

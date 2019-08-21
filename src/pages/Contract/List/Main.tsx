@@ -5,14 +5,16 @@ import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import { GetPageListJson } from './Main.service';
 import ListTable from './ListTable';
+import { getResult } from '@/utils/networkUtils';
 import Modify from './Modify';
 import Detail from './Detail';
+import { GetQuickSimpleTreeAllForContract } from '@/services/commonItem';
 
 const { Content } = Layout;
 const { Search } = Input;
 
 function Main() {
-  const [modifyVisible, setModifyVisible] = useState<boolean>(false); 
+  const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   const [detailVisible, setDetailVisible] = useState<boolean>(false);
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -21,6 +23,7 @@ function Main() {
   const [id, setId] = useState<string>();
   const [chargeID, setChargeID] = useState<string>();
   const [search, setSearch] = useState<string>('');
+  const [treeData, setTreeData] = useState<any[]>([]);
 
   const closeDrawer = () => {
     setModifyVisible(false);
@@ -34,7 +37,7 @@ function Main() {
     setDetailVisible(false);
   };
 
-  const showDetailDrawer = (id?,chargeID?) => { 
+  const showDetailDrawer = (id?, chargeID?) => {
     setDetailVisible(true);
     setId(id);
     setChargeID(chargeID);
@@ -96,6 +99,13 @@ function Main() {
   };
 
   useEffect(() => {
+    //获取房产树
+    GetQuickSimpleTreeAllForContract()
+      .then(getResult)
+      .then((res: any[]) => {
+        setTreeData(res || []);
+        return res || [];
+      });
     initLoadData('');
   }, []);
 
@@ -132,6 +142,7 @@ function Main() {
       <Modify
         modifyVisible={modifyVisible}
         closeDrawer={closeDrawer}
+        treeData={treeData}
         id={id}
         reload={() => initLoadData(search)}
       />
@@ -142,7 +153,7 @@ function Main() {
         id={id}
         chargeID={chargeID}
         reload={() => initLoadData(search)}
-      /> 
+      />
     </Layout>
   );
 }

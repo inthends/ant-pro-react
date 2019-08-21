@@ -1,5 +1,5 @@
 import Page from '@/components/Common/Page';
-import { Button, message, Modal, Table } from 'antd';
+import { Divider, message, Modal, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import { RemoveForm, GetDetailJson } from './PStructUser.service';
@@ -121,17 +121,24 @@ function ListTable(props: ListTableProps) {
       fixed: 'right',
       render: (text, record) => {
         return [
-          <Button
-            type="primary"
-            key="modify"
-            style={{ marginRight: '10px' }}
-            onClick={() => doModify(record.id)}
-          >
-            修改
-          </Button>,
-          <Button type="danger" key="delete" onClick={() => doDelete(record)}>
-            删除
-          </Button>,
+          // <Button
+          //   type="primary"
+          //   key="modify"
+          //   style={{ marginRight: '10px' }}
+          //   onClick={() => doModify(record.id)}
+          // >
+          //   修改
+          // </Button>,
+          // <Button type="danger" key="delete" onClick={() => doDelete(record)}>
+          //   删除
+          // </Button>,
+
+          <span>
+          <a onClick={() => doModify(record.id)} key="modify">修改</a>
+          <Divider type="vertical" />
+          <a onClick={() => doDelete(record)} key="delete">删除</a>
+        </span>
+
         ];
       },
     },

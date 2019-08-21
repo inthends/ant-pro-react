@@ -1,6 +1,6 @@
 import Page from '@/components/Common/Page';
-import { Button, message, Table, Modal } from 'antd';
-import { ColumnProps, PaginationConfig } from 'antd/lib/table'; 
+import { Divider, message, Table, Modal } from 'antd';
+import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import { RemoveForm } from './House.service';
 
@@ -13,7 +13,7 @@ interface ListTableMoreProps {
   reload(): void;
 }
 
-function ListTableMore(props: ListTableMoreProps) {  
+function ListTableMore(props: ListTableMoreProps) {
   const { onchange, loading, pagination, data, modify, reload } = props;
   const changePage = (pag: PaginationConfig, filters, sorter) => {
     onchange(pag, filters, sorter);
@@ -54,37 +54,42 @@ function ListTableMore(props: ListTableMoreProps) {
       width: 120,
       sorter: true,
     },
-   
+
     {
       title: '联系电话',
       dataIndex: 'phonenum',
       key: 'phonenum',
       width: 100,
       sorter: true,
-    }, 
+    },
     {
       title: '全称',
       dataIndex: 'allname',
-      key: 'allname', 
+      key: 'allname',
       sorter: true,
-    }, 
+    },
     {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
-      width: 155, 
+      width: 95,
       render: (text, record) => {
         return [
-          <Button
-            type="primary"
-            key="modify"
-            style={{ marginRight: '10px' }}
-            onClick={() => modify(record)} >
-            修改
-          </Button>,
-          <Button type="danger" key="delete" onClick={() => doDelete(record)}>
-            删除
-          </Button>,
+          // <Button
+          //   type="primary"
+          //   key="modify"
+          //   style={{ marginRight: '10px' }}
+          //   onClick={() => modify(record)} >
+          //   修改
+          // </Button>,
+          // <Button type="danger" key="delete" onClick={() => doDelete(record)}>
+          //   删除
+          // </Button>,
+          <span>
+            <a onClick={() => modify(record)} key="modify">修改</a>
+            <Divider type="vertical" />
+            <a onClick={() => doDelete(record)} key="delete"  >删除</a>
+          </span>
         ];
       },
     },
@@ -99,7 +104,7 @@ function ListTableMore(props: ListTableMoreProps) {
         dataSource={data}
         columns={columns}
         rowKey={record => record.id}
-        pagination={pagination} 
+        pagination={pagination}
         onChange={(pag: PaginationConfig, filters, sorter) => changePage(pag, filters, sorter)}
         loading={loading}
       />

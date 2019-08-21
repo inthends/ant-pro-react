@@ -7,7 +7,8 @@ import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
 import { GetPageListJson } from './Main.service';
-
+import { GetQuickSimpleTreeAll } from '@/services/commonItem';
+import { getResult } from '@/utils/networkUtils';
 const { Content } = Layout;
 const { Search } = Input;
 
@@ -19,6 +20,7 @@ function Main() {
   const [data, setData] = useState<any[]>([]);
   const [currData, setCurrData] = useState<any>();
   const [search, setSearch] = useState<string>('');
+  const [treeData, setTreeData] = useState<any[]>([]); 
 
   const selectTree = (org, item, searchText) => {
     initLoadData(item, searchText);
@@ -32,6 +34,16 @@ function Main() {
     //   SetOrganize(rootOrg);
     //   initLoadData('', '');
     // });
+
+
+    //获取房产树
+    GetQuickSimpleTreeAll()
+      .then(getResult)
+      .then((res: any[]) => {
+        setTreeData(res || []);
+        return res || [];
+      });
+
     initLoadData('', '');
 
   }, []);
@@ -160,6 +172,7 @@ function Main() {
       <Modify
         modifyVisible={modifyVisible}
         closeDrawer={closeDrawer}
+        treeData={treeData}
         data={currData}
         reload={() => initLoadData(organize, search)}
       />

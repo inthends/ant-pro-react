@@ -2,7 +2,7 @@ import { TreeEntity } from '@/model/models';
 import { Modal, Menu, Dropdown, Icon, Tabs, Select, Button, Card, Col, Drawer, Form, Input, message, Row, TreeSelect } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetRoomUser, GetQuickSimpleTreeAll, SaveForm, ChangeToRepair, ChangeToComplaint } from './Main.service';
+import { GetRoomUser, SaveForm, ChangeToRepair, ChangeToComplaint } from './Main.service';
 import { getResult } from '@/utils/networkUtils';
 import styles from './style.less';
 import CommentBox from './CommentBox';
@@ -17,10 +17,11 @@ interface ModifyProps {
   form: WrappedFormUtils;
   closeDrawer(): void;
   reload(): void;
+  treeData: any[];
 }
 
 const Modify = (props: ModifyProps) => {
-  const { modifyVisible, data, closeDrawer, form, reload } = props;
+  const { modifyVisible, data, closeDrawer, form, reload, treeData } = props;
   const { getFieldDecorator } = form;
   var title = data === undefined ? '添加服务单' : '修改服务单';
   if (data && data.billStatus != '1') {
@@ -28,19 +29,19 @@ const Modify = (props: ModifyProps) => {
   }
 
   const [infoDetail, setInfoDetail] = useState<any>({});
-  const [treeData, setTreeData] = useState<any[]>([]);
+  // const [treeData, setTreeData] = useState<any[]>([]);
   //const [roomUser, setRoomUser] = useState<any>(); 
 
   // 打开抽屉时初始化
   useEffect(() => {
 
     //获取房产树
-    GetQuickSimpleTreeAll()
-      .then(getResult)
-      .then((res: TreeEntity[]) => {
-        setTreeData(res || []);
-        return res || [];
-      });
+    // GetQuickSimpleTreeAll()
+    //   .then(getResult)
+    //   .then((res: TreeEntity[]) => {
+    //     setTreeData(res || []);
+    //     return res || [];
+    //   });
 
 
   }, []);
@@ -397,7 +398,7 @@ const Modify = (props: ModifyProps) => {
           <div>
             <Button onClick={close} style={{ marginRight: 8 }}>
               取消
-           </Button> </div>) : null} 
+           </Button> </div>) : null}
 
         {(infoDetail.billStatus && infoDetail.billStatus == 3) ? (
           <div>
