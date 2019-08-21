@@ -98,7 +98,7 @@ function User() {
           <Select
             style={{ marginRight: 20, width: 100 }}
             value={search.condition}
-            onChange={value => loadData({ condition: value, keyword: search.keyword })}
+            onChange={condition => loadData({ ...search, condition })}
           >
             <Option value="Account" key="Account">
               账户
@@ -113,7 +113,7 @@ function User() {
           <Search
             className="search-input"
             placeholder="请输入要查询的关键词"
-            onSearch={value => loadData({ condition: search.condition, keyword: value })}
+            onSearch={keyword => loadData({ ...search, keyword })}
             style={{ width: 200 }}
           />
           <Button
@@ -140,7 +140,7 @@ function User() {
         modifyVisible={modifyVisible}
         closeDrawer={closeDrawer}
         data={currData}
-        reload={() => initLoadData({ condition: search.condition, keyword: search.keyword })}
+        reload={() => initLoadData({ ...search })}
       /> */}
     </Layout>
   );
