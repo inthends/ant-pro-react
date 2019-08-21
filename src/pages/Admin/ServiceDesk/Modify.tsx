@@ -1,9 +1,8 @@
-import { TreeEntity } from '@/model/models';
-import { Modal, Menu, Dropdown, Icon, Tabs, Select, Button, Card, Col, Drawer, Form, Input, message, Row, TreeSelect } from 'antd';
+
+import { Upload, Modal, Menu, Dropdown, Icon, Tabs, Select, Button, Card, Col, Drawer, Form, Input, message, Row, TreeSelect } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetRoomUser, SaveForm, ChangeToRepair, ChangeToComplaint } from './Main.service';
-import { getResult } from '@/utils/networkUtils';
+import { GetFilesData, RemoveFile, GetRoomUser, SaveForm, ChangeToRepair, ChangeToComplaint } from './Main.service';
 import styles from './style.less';
 import CommentBox from './CommentBox';
 
@@ -31,6 +30,11 @@ const Modify = (props: ModifyProps) => {
   const [infoDetail, setInfoDetail] = useState<any>({});
   // const [treeData, setTreeData] = useState<any[]>([]);
   //const [roomUser, setRoomUser] = useState<any>(); 
+  const [keyValue, setkeyValue] = useState<any>();
+
+  const [previewVisible, setPreviewVisible] = useState<boolean>(false);
+  const [fileList, setFileList] = useState<any[]>([]);
+  const [previewImage, setPreviewImage] = useState<string>('');
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -41,8 +45,7 @@ const Modify = (props: ModifyProps) => {
     //   .then((res: TreeEntity[]) => {
     //     setTreeData(res || []);
     //     return res || [];
-    //   });
-
+    //   }); 
 
   }, []);
 
@@ -50,11 +53,19 @@ const Modify = (props: ModifyProps) => {
   useEffect(() => {
     if (modifyVisible) {
       if (data) {
+        setkeyValue(data.id);
         setInfoDetail(data);
         form.resetFields();
+        //图片
+        GetFilesData(data.id).then(res => {
+          setFileList(res || []);
+        });
+
       } else {
+        setkeyValue(guid());
         setInfoDetail({});
         form.resetFields();
+        setFileList([]);
       }
     } else {
       form.resetFields();
@@ -63,6 +74,13 @@ const Modify = (props: ModifyProps) => {
 
   const close = () => {
     closeDrawer();
+  };
+
+  const guid = () => {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
   };
 
   const save = () => {
@@ -75,7 +93,7 @@ const Modify = (props: ModifyProps) => {
   };
 
   const doSave = dataDetail => {
-    dataDetail.keyValue = dataDetail.id;
+    dataDetail.keyValue = keyValue;//dataDetail.id ? dataDetail.id : guid();
     SaveForm({ ...dataDetail }).then(res => {
       message.success('保存成功');
       closeDrawer();
@@ -109,7 +127,6 @@ const Modify = (props: ModifyProps) => {
           onOk: () => {
             const newData = data ? { ...data, ...values } : values;
             newData.keyValue = newData.id;
-
             if (e.key == '1') {
               ChangeToRepair({ ...newData }).then(res => {
                 message.success('操作成功');
@@ -128,7 +145,7 @@ const Modify = (props: ModifyProps) => {
         });
       }
     });
-  }
+  };
 
   const menu = (
     <Menu onClick={handleMenuClick}>
@@ -139,11 +156,64 @@ const Modify = (props: ModifyProps) => {
     </Menu>
   );
 
+  //图片上传
+  const getBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
+  }
+
+
+  const uploadButton = (
+    <div>
+      <Icon type="plus" />
+      <div className="ant-upload-text">点击上传图片</div>
+    </div>
+  );
+  const handleCancel = () => setPreviewVisible(false);
+  const handlePreview = async file => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewVisible(true);
+  };
+
+  //重新设置state
+  const handleChange = ({ fileList }) => setFileList([...fileList]);
+  //等价上面的
+  // const handleChange = (info) => {
+  //   console.log(info);
+  //   //把fileList拿出来
+  //   let { fileList } = info;
+  //   const status = info.file.status;
+  //   if (status !== 'uploading') {
+  //     console.log(info.file, info.fileList);
+  //   }
+  //   if (status === 'done') {
+  //     message.success(`${info.file.name} file uploaded successfully.`);
+  //   } else if (status === 'error') {
+  //     message.error(`${info.file.name} file upload failed.`);
+  //   } 
+  //   //重新设置state
+  //   setFileList([...fileList]);
+  // } 
+
+  const handleRemove = (file) => {
+    const fileid = file.fileid || file.response.fileid;
+    RemoveFile(fileid).then(res => {
+    });
+  };
+  //图片上传结束
+
   return (
     <Drawer
       title={title}
       placement="right"
-      width={750}
+      width={760}
       onClose={close}
       visible={modifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
@@ -275,6 +345,27 @@ const Modify = (props: ModifyProps) => {
                       </Form.Item>
                     </Col>
                   </Row>
+
+                  <Row gutter={24}>
+                    <Col lg={24}>
+                      <div className="clearfix">
+                        <Upload
+                          accept='image/*'
+                          action={process.env.basePath + '/ServiceDesk/Upload?keyValue=' + keyValue}
+                          listType="picture-card"
+                          fileList={fileList}
+                          onPreview={handlePreview}
+                          onChange={handleChange}
+                          onRemove={handleRemove}
+                        >
+                          {fileList.length >= 12 ? null : (infoDetail.billStatus && infoDetail.billStatus == 1) ? uploadButton : null}
+                        </Upload>
+                        <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
+                          <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                        </Modal>
+                      </div>
+                    </Col>
+                  </Row>
                 </Card>
               ) :
                 <Card className={styles.card}  >
@@ -371,20 +462,17 @@ const Modify = (props: ModifyProps) => {
           textAlign: 'right',
         }}
       >
-        {data === undefined ? (
-          <div><Button onClick={close} style={{ marginRight: 8 }}>
-            取消
+        <Button onClick={close} style={{ marginRight: 8 }}>
+          取消
            </Button>
-            <Button onClick={save} type="primary">
-              保存
-            </Button>
-          </div>) : null}
+
+        {data === undefined ? (
+          <Button onClick={save} type="primary">
+            保存
+            </Button>) : null}
 
         {(infoDetail.billStatus && infoDetail.billStatus == 1) ? (
-          <div>
-            <Button onClick={close} style={{ marginRight: 8 }}>
-              取消
-           </Button>
+          <span>
             <Dropdown overlay={menu} >
               <Button style={{ marginRight: 8 }}>
                 操作<Icon type="down" />
@@ -392,22 +480,13 @@ const Modify = (props: ModifyProps) => {
             </Dropdown>
             <Button onClick={save} type="primary">
               保存
-           </Button></div>) : null}
+           </Button></span>) : null}
 
-        {(infoDetail.billStatus && infoDetail.billStatus == 2) ? (
-          <div>
-            <Button onClick={close} style={{ marginRight: 8 }}>
-              取消
-           </Button> </div>) : null}
 
         {(infoDetail.billStatus && infoDetail.billStatus == 3) ? (
-          <div>
-            <Button onClick={close} style={{ marginRight: 8 }}>
-              取消
-           </Button>
-            <Button onClick={close} type="primary">
-              毕单
-           </Button></div>) : null}
+          <Button onClick={close} type="primary">
+            毕单
+           </Button>) : null}
 
       </div>
     </Drawer>

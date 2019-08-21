@@ -109,7 +109,8 @@ function ListTable(props: ListTableProps) {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
-      width: 155,
+      align:'center',
+      width: 95,
       fixed: 'right',
       render: (text, record) => {
         return [

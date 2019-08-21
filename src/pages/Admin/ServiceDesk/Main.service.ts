@@ -27,6 +27,14 @@ export function GetCommunicates(keyValue): Promise<any> {
     .then(getResult as any);
 }
 
+//获取图片
+export function GetFilesData(keyValue): Promise<any> {
+  return request
+    .get(process.env.basePath + `/ServiceDesk/GetFilesData?keyValue=${keyValue}`)
+    .then(getResult as any);
+}
+
+
 // 保存
 export function SaveForm(data): Promise<any> { 
   return request
@@ -37,7 +45,14 @@ export function SaveForm(data): Promise<any> {
 // 删除
 export function RemoveForm(keyValue): Promise<any> {
   return request
-    .post(process.env.basePath + `/ServiceDesk/RemoveForm`, { data: objToFormdata({ keyValue }) })
+    .post(process.env.basePath + `/ServiceDesk/RemoveForm?keyValue=${keyValue}`, {})
+    .then(getResult as any);
+}
+
+//删除附件
+export function RemoveFile(keyValue): Promise<any> {
+  return request
+    .post(process.env.basePath + `/ServiceDesk/RemoveFile?keyValue=${keyValue}`, {})
     .then(getResult as any);
 }
 

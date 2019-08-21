@@ -1,5 +1,5 @@
 import Page from '@/components/Common/Page';
-import { Divider,Tag, Button, message, Modal, Table } from 'antd';
+import { Divider, Tag, Button, message, Modal, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import moment from 'moment';
@@ -132,7 +132,8 @@ function ListTable(props: ListTableProps) {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
-      width: 155,
+      align: 'center',
+      width: 95,
       fixed: 'right',
       render: (text, record) => {
         //新增
@@ -148,7 +149,7 @@ function ListTable(props: ListTableProps) {
             //     删除
             // </Button>,
             <span>
-              <a onClick={() => modify(record)} key="modify">查看</a>
+              <a onClick={() => modify(record)} key="modify">修改</a>
               <Divider type="vertical" />
               <a onClick={() => doDelete(record)} key="delete">删除</a>
             </span>
@@ -156,17 +157,18 @@ function ListTable(props: ListTableProps) {
         } else {
 
           return [
-            <Button
-              type="primary"
-              key="modify"
-              style={{ marginRight: '10px' }}
-              onClick={() => modify(record)}
-            >
-              查看
-          </Button>,
-            <Button type="danger" key="delete" disabled={true} >
-              删除
-          </Button>,
+            //   <Button
+            //     type="primary"
+            //     key="modify"
+            //     style={{ marginRight: '10px' }}
+            //     onClick={() => modify(record)}
+            //   >
+            //     查看
+            // </Button>,
+            //   <Button type="danger" key="delete" disabled={true} >
+            //     删除
+            // </Button>, 
+            <a onClick={() => modify(record)} key="modify">查看</a>
           ];
         }
       },
