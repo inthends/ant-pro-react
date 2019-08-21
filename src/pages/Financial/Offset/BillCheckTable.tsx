@@ -1,13 +1,11 @@
 //账单
 import Page from '@/components/Common/Page';
-import { InputNumber, Input, Select, Col, Row, Form, DatePicker, Card, Button, message, Table, Modal } from 'antd';
+import { Divider, Form, Button, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
-import React, { useState } from 'react';
+import React from 'react';
 import moment from 'moment';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { } from './Offset.service';
-import styles from './style.less';
-const { Option } = Select;
 
 interface BillCheckTableProps {
   onchange(page: any, filter: any, sort: any): any;
@@ -25,7 +23,7 @@ interface BillCheckTableProps {
 }
 
 function BillCheckTable(props: BillCheckTableProps) {
-  const { form, onchange, loading, pagination, data, modify, reload, showVertify, closeVertify, deleteData, showModify, closeModify } = props;
+  const { deleteData, loading, pagination, data, showVertify, showModify } = props;
 
   const columns = [
     {
@@ -111,49 +109,62 @@ function BillCheckTable(props: BillCheckTableProps) {
       render: (text, record) => {
         if (record.ifVerify) {
           return [
-            <Button
-              type="primary"
-              key="modify"
-              style={{ marginRight: '10px' }}
-              onClick={() => showModify(record.billID)}  >
-              查看
-            </Button>,
-            <Button
-              type="primary"
-              key="verify"
-              style={{ marginRight: '10px' }}
-              onClick={() => showVertify(record.billID, false)}
-            >
-              反审
-            </Button>,
-            <Button
-              type="danger"
-              key="delete"
-              disabled={true}>
-              删除
-            </Button>
+            // <Button
+            //   type="primary"
+            //   key="modify"
+            //   style={{ marginRight: '10px' }}
+            //   onClick={() => showModify(record.billID)}  >
+            //   查看
+            // </Button>,
+            // <Button
+            //   type="primary"
+            //   key="verify"
+            //   style={{ marginRight: '10px' }}
+            //   onClick={() => showVertify(record.billID, false)}
+            // >
+            //   反审
+            // </Button>,
+            // <Button
+            //   type="danger"
+            //   key="delete"
+            //   disabled={true}>
+            //   删除
+            // </Button>
+            <span>
+              <a onClick={() => showModify(record.billID)} key="modify">查看</a>
+              <Divider type="vertical" />
+              <a onClick={() => showVertify(record.billID, false)} key="modify">反审</a> 
+            </span>
           ];
         }
         else {
           return [
-            <Button
-              type="primary"
-              key="modify"
-              style={{ marginRight: '10px' }}
-              onClick={() => showModify(record.billID)} >
-              编辑
-            </Button>,
-            <Button
-              type="primary"
-              key="verify"
-              style={{ marginRight: '10px' }}
-              onClick={() => showVertify(record.billID, true)}   >
-              审核
-              </Button>,
-               <Button type="danger"
-               key="delete" onClick={() =>  deleteData(record.billID)}>
-               删除
-           </Button>,  
+            //   <Button
+            //     type="primary"
+            //     key="modify"
+            //     style={{ marginRight: '10px' }}
+            //     onClick={() => showModify(record.billID)} >
+            //     编辑
+            //   </Button>,
+            //   <Button
+            //     type="primary"
+            //     key="verify"
+            //     style={{ marginRight: '10px' }}
+            //     onClick={() => showVertify(record.billID, true)}   >
+            //     审核
+            //     </Button>,
+            //      <Button type="danger"
+            //      key="delete" onClick={() =>  deleteData(record.billID)}>
+            //      删除
+            //  </Button>,  
+            <span>
+              <a onClick={() => showModify(record.billID)} key="modify">编辑</a>
+              <Divider type="vertical" />
+              <a onClick={() => showVertify(record.billID, true)} key="verify">审核</a>
+              <Divider type="vertical" />
+              <a onClick={() => deleteData(record.billID)} key="delete">删除</a>
+            </span>
+
           ];
         }
       }
