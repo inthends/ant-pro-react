@@ -1,12 +1,10 @@
 //未收列表
 import Page from '@/components/Common/Page';
-import { InputNumber, Input, Select, Col, Row, Form, DatePicker, Card, Button, message, Table, Modal } from 'antd';
+import { Menu, Dropdown, Icon, Divider, InputNumber, Input, Select, Col, Row, Form, DatePicker, Card, Button, message, Table, Modal } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState } from 'react';
 import moment from 'moment';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-
-
 import { RemoveForm, Charge } from './Main.service';
 import styles from './style.less';
 const { Option } = Select;
@@ -19,12 +17,12 @@ interface ListTableProps {
   modify(id: string): void;
   reload(): void;
   form: WrappedFormUtils;
-  rowSelect(rowSelectedKeys):void;
-  organize?:any;
+  rowSelect(rowSelectedKeys): void;
+  organize?: any;
 }
 
 function ListTable(props: ListTableProps) {
-  const { form, onchange, loading, pagination, data, modify, reload,rowSelect ,organize} = props;
+  const { form, onchange, loading, pagination, data, modify, reload, rowSelect, organize } = props;
   const { getFieldDecorator } = form;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
@@ -33,8 +31,8 @@ function ListTable(props: ListTableProps) {
     Modal.confirm({
       title: '请确认',
       content: `您是否要删除${record.feeName}`,
-      okText:'确认',
-      cancelText:'取消',
+      okText: '确认',
+      cancelText: '取消',
       onOk: () => {
         console.log(record);
         RemoveForm(record.billID).then(() => {
@@ -44,6 +42,38 @@ function ListTable(props: ListTableProps) {
       },
     });
   };
+
+  const editAndDelete = (key: string, currentItem: any) => {
+    if (key === 'edit') {
+      //this.showEditModal(currentItem);
+    }
+    else if (key === 'delete') {
+      Modal.confirm({
+        title: '删除任务',
+        content: '确定删除该任务吗？',
+        okText: '确认',
+        cancelText: '取消',
+        //onOk: () => this.deleteItem(currentItem.id),
+      });
+    }
+  };
+
+  const MoreBtn: React.FC<{
+    item: any;
+  }> = ({ item }) => (
+    <Dropdown
+      overlay={
+        <Menu onClick={({ key }) => editAndDelete(key, item)}>
+          <Menu.Item key="view">查看</Menu.Item>
+          <Menu.Item key="split">拆费</Menu.Item>
+          <Menu.Item key="change">转费</Menu.Item>
+        </Menu>}>
+      <a>
+        更多 <Icon type="down" />
+      </a>
+    </Dropdown>
+  );
+
   const columns = [
     {
       title: '收费项目',
@@ -114,20 +144,30 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'operation',
       key: 'operation',
       fixed: 'right',
-      width: 155,
+      align: 'center',
+      width: 150,
       render: (text, record) => {
         return [
-          <Button
-            type="primary"
-            key="modify"
-            style={{ marginRight: '10px' }}
-            onClick={() => modify(record.id)}
-          >
-            修改
-          </Button>,
-          <Button type="danger" key="delete" onClick={() => doDelete(record)}>
-            删除
-          </Button>,
+          // <Button
+          //   type="primary"
+          //   key="modify"
+          //   style={{ marginRight: '10px' }}
+          //   onClick={() => modify(record.id)}
+          // >
+          //   修改
+          // </Button>,
+          // <Button type="danger" key="delete" onClick={() => doDelete(record)}>
+          //   删除
+          // </Button>,
+
+          <span>
+            <a onClick={() => modify(record.id)} key="modify">修改</a>
+            <Divider type="vertical" />
+            <a onClick={() => doDelete(record)} key="delete">删除</a>
+            <Divider type="vertical" />
+            <MoreBtn key="more" item={record} />
+          </span>
+
         ];
       },
     },
@@ -135,8 +175,8 @@ function ListTable(props: ListTableProps) {
 
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [sumEntity, setSumEntity] = useState();
-  const [unitID, setUnitID] = useState();
-  const [customerName, setCustomerName] = useState();
+  // const [unitID, setUnitID] = useState();
+  // const [customerName, setCustomerName] = useState();
 
   const onSelectChange = (selectedRowKeys, selectedRows) => {
     console.log(selectedRows);
@@ -166,8 +206,7 @@ function ListTable(props: ListTableProps) {
   const hasSelected = selectedRowKeys.length > 0;
   //收款
   const charge = () => {
-    if(selectedRowKeys.length==0)
-    {
+    if (selectedRowKeys.length == 0) {
       message.warning('请选择收款项目!');
       return;
     }
@@ -177,18 +216,18 @@ function ListTable(props: ListTableProps) {
         Modal.confirm({
           title: '请确认',
           content: `确定要执行收款操作吗？`,
-          cancelText:'取消',
-          okText:'确定',
+          cancelText: '取消',
+          okText: '确定',
           onOk: () => {
-            let info =Object.assign({},values,{
-              roomId:organize.code,
-              ids:JSON.stringify(selectedRowKeys),
+            let info = Object.assign({}, values, {
+              roomId: organize.code,
+              ids: JSON.stringify(selectedRowKeys),
               billDate: values.billDate.format('YYYY-MM-DD'),
               customerName: organize.title.split(' ')[1]
             });
-            if(Number(sumEntity.sumlastAmount)!=Number(info.payAmountA+info.payAmountB+info.payAmountC)){
+            if (Number(sumEntity.sumlastAmount) != Number(info.payAmountA + info.payAmountB + info.payAmountC)) {
               message.warning('本次收款金额小于本次选中未收金额合计，不允许收款，请拆费或者重新选择收款项');
-              return ;
+              return;
             }
             Charge(info).then(res => {
               message.success('保存成功');
@@ -356,7 +395,6 @@ function ListTable(props: ListTableProps) {
         }
         loading={loading}
         rowSelection={rowSelection}
-        onChange={onchange}
       />
     </Page>
   );

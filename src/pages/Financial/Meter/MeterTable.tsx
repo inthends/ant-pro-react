@@ -1,12 +1,10 @@
 //费表列表
 import Page from '@/components/Common/Page';
-import { InputNumber, Input, Select, Col, Row, Form, DatePicker, Card, Button, message, Table, Modal } from 'antd';
+import { Divider, Form, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
-import React, { useState } from 'react';
-import moment from 'moment';
+import React from 'react';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import {  } from './Meter.service';
-import styles from './style.less';
+import { RemoveForm } from './Meter.service';
 
 interface MeterTableProps {
   onchange(page: any, filter: any, sort: any): any;
@@ -14,25 +12,26 @@ interface MeterTableProps {
   pagination: PaginationConfig;
   data: any[];
   reload(): void;
+  showModify(id?): void;
   form: WrappedFormUtils;
 }
 
 function MeterTable(props: MeterTableProps) {
-  const { form, onchange, loading, pagination, data,  reload } = props;
+  const { onchange, loading, pagination, data, reload, showModify } = props;
 
   const columns = [
     {
       title: '费表类型',
-      dataIndex: 'meterkind',
-      key: 'meterkind',
-      width: 200,
+      dataIndex: 'meterkindname',
+      key: 'meterkindname',
+      width: 100,
       sorter: true
     },
     {
       title: '费表种类',
-      dataIndex: 'metertype',
-      key: 'metertype',
-      width: 200,
+      dataIndex: 'metertypename',
+      key: 'metertypename',
+      width: 100,
       sorter: true
     },
     {
@@ -46,14 +45,14 @@ function MeterTable(props: MeterTableProps) {
       title: '倍率',
       dataIndex: 'meterzoom',
       key: 'meterzoom',
-      width: 200,
+      width: 80,
       sorter: true,
     },
     {
       title: '量程',
       dataIndex: 'meterrange',
       key: 'meterrange',
-      width: 200,
+      width: 80,
       sorter: true,
     },
     {
@@ -61,38 +60,63 @@ function MeterTable(props: MeterTableProps) {
       dataIndex: 'feeitemname',
       key: 'feeitemname',
       sorter: true,
-      width: 200
+      width: 150
     },
     {
       title: '所属机构',
       dataIndex: 'fullname',
       key: 'fullname',
-      sorter: true,
-      width: 200
+      sorter: true
     },
     {
       title: '操作',
       dataIndex: 'operation',
-      key: 'operation',
-      fixed: 'right',
-      width: 300,
+      key: 'operation', 
+      align:'center',
+      width: 95,
       render: (text, record) => {
         return [
-          <Button
-            type="primary"
-            key="modify"
-            style={{ marginRight: '10px' }}
-            onClick={() =>{}}
-          >
-            编辑
-          </Button>,
-          <Button
-            type="danger"
-            key="delete"
-            onClick={() => {}}
-          >
-            删除
-          </Button>
+          // <Button
+          //   type="primary"
+          //   key="modify"
+          //   style={{ marginRight: '10px' }}
+          //   onClick={() => {
+          //     showModify(record.meterid);
+          //   }}
+          // >
+          //   编辑
+          // </Button>,
+          // <Button
+          //   type="danger"
+          //   key="delete"
+          //   onClick={() => {
+          //     Modal.confirm({
+          //       title: '请确认',
+          //       content: `您是否确定删除？`,
+          //       onOk: () => {
+          //         RemoveForm(record.meterid).then(res => {
+          //           if (res.code != 0) {
+          //             reload();
+          //           }
+          //         })
+          //       },
+          //     });
+          //   }}
+          // >
+          //   删除
+          // </Button>
+
+          <span>
+            <a onClick={() => showModify(record.meterid)} key="modify">修改</a>
+            <Divider type="vertical" />
+            <a onClick={() => {
+              RemoveForm(record.meterid).then(res => {
+                if (res.code != 0) { reload(); }
+              })
+
+            }} key="delete">删除</a>
+          </span>
+
         ];
       },
     },
@@ -107,8 +131,9 @@ function MeterTable(props: MeterTableProps) {
         dataSource={data}
         rowKey="meterid"
         pagination={pagination}
-        scroll={{ y: 500, x: 1700 }}
+        scroll={{ y: 500  }}
         loading={loading}
+        onChange={onchange}
       />
     </Page>
   );

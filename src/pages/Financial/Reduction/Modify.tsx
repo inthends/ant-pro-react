@@ -20,7 +20,7 @@ import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import AddReductionItem from './AddReductionItem';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetFormJson,  GetListByID, GetReductionItem, GetUseInfo, GetUnitBillDetail, SaveForm } from './Main.service';
+import { GetFormJson, GetListByID, GetReductionItem, GetUseInfo, GetUnitBillDetail, SaveForm } from './Main.service';
 
 import moment from 'moment';
 
@@ -489,7 +489,7 @@ const Modify = (props: ModifyProps) => {
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
       <Form layout="vertical" hideRequiredMark>
-        <Card bordered={false}>
+        <Card  >
           <Row gutter={24}>
             <Col lg={8}>
               <Form.Item label="单据编号">
@@ -525,7 +525,7 @@ const Modify = (props: ModifyProps) => {
             </Col>
           </Row>
           <Row gutter={24}>
-          <Col lg={8}>
+            <Col lg={8}>
               <Form.Item label="减免费项">
                 {getFieldDecorator('reductionFeeItemID', {
                   initialValue: infoDetail.reductionFeeItemID,
@@ -538,7 +538,7 @@ const Modify = (props: ModifyProps) => {
                       <Option key={item.key} value={item.value}>
                         {item.title}
                       </Option>
-                    ))} 
+                    ))}
                   </Select>
                 )}
               </Form.Item>
@@ -563,9 +563,19 @@ const Modify = (props: ModifyProps) => {
                 )}
               </Form.Item>
             </Col>
-           
           </Row>
-        
+          <Row>
+            <Col>
+              <Form.Item label="备注">
+                {getFieldDecorator('memo', {
+                  initialValue: infoDetail.memo,
+                  rules: [{ required: false }],
+                })(
+                  <Input.TextArea rows={3} ></Input.TextArea>
+                )}
+              </Form.Item>
+            </Col>
+          </Row>
           <Row>
             <Col>
               <Button style={{ float: 'right', marginLeft: 8 }}>
@@ -593,22 +603,12 @@ const Modify = (props: ModifyProps) => {
               loading={loading}
             />
           </Row>
-          <Row>
-            <Col>
-              <Form.Item label="备注">
-                {getFieldDecorator('memo', {
-                  initialValue: infoDetail.memo,
-                  rules: [{ required: false }],
-                })(
-                  <Input.TextArea rows={3} ></Input.TextArea>
-                )}
-              </Form.Item>
-            </Col>
-          </Row> 
+
         </Card>
         <div
           style={{
             position: 'absolute',
+            zIndex: 999,
             left: 0,
             bottom: 0,
             width: '100%',

@@ -159,6 +159,7 @@ function ReadingMeterTable(props: ReadingMeterTableProps) {
         pagination={pagination}
         scroll={{ y: 500, x: 2700 }}
         loading={loading}
+        onChange={onchange}
       />
     </Page>
   );

@@ -1,8 +1,9 @@
 import Page from '@/components/Common/Page';
-import { Button, message, Table, Modal } from 'antd';
+import { Divider, message, Table, Modal } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import { RemoveForm } from './Main.service';
+import moment from 'moment';
 
 interface ListTableProps {
   onchange(page: any, filter: any, sort: any): any;
@@ -77,35 +78,45 @@ function ListTable(props: ListTableProps) {
       title: '计费起始日期',
       dataIndex: 'begindate',
       key: 'begindate',
-      width: 85
+      width: 85,
+      render: val => <span> {moment(val).format('YYYY-MM-DD')} </span>
     }, {
       title: '计费终止日期',
       dataIndex: 'enddate',
       key: 'enddate',
-      width: 85
+      width: 85,
+      render: val => <span> {moment(val).format('YYYY-MM-DD')} </span>
     },
     {
       title: '操作',
       dataIndex: 'operation',
+      align:'center',
       key: 'operation',
-      width: 125, 
+      width: 95,
       render: (text, record) => {
         return [
-          <Button
-            type="primary"
-            key="modify"
-            style={{ marginRight: '10px' }}
-            onClick={() => modify(record.feeitemid)}
-          >
-            修改
-          </Button>,
-          <Button type="danger" key="delete" onClick={() => doDelete(record)}>
-            删除
-          </Button>,
+          // <Button
+          //   type="primary"
+          //   key="modify"
+          //   style={{ marginRight: '10px' }}
+          //   onClick={() => modify(record.feeitemid)}
+          // >
+          //   修改
+          // </Button>,
+          // <Button type="danger" key="delete" onClick={() => doDelete(record)}>
+          //   删除
+          // </Button>,
+
+          <span>
+            <a onClick={() => modify(record.feeitemid)} key="modify">修改</a>
+            <Divider type="vertical" />
+            <a onClick={() => doDelete(record)} key="delete">删除</a> 
+          </span>
         ];
       },
     },
-  ] as ColumnProps<any>;
+  ] as ColumnProps<any>[];
+
   return (
     <Page>
       <Table
