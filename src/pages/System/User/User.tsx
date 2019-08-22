@@ -136,12 +136,12 @@ function User() {
           reload={() => initLoadData(search)}
         />
       </Content>
-      {/* <Modify
-        modifyVisible={modifyVisible}
+      <Modify
+        visible={modifyVisible}
         closeDrawer={closeDrawer}
         data={currData}
         reload={() => initLoadData({ ...search })}
-      /> */}
+      />
     </Layout>
   );
 }

@@ -91,22 +91,25 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
    * constructor
    */
 
-  useEffect(async() => {
-    if (dispatch) {
-      dispatch({
-        type: 'user/fetchCurrent',
-      });
-      dispatch({
-        type: 'settings/getSetting',
-      });
-      const res = await dispatch({
-        type: 'auth/fetch',
-      });
-      //console.log(res);
-      dispatch({
-        type: 'menu/refresh',
-      });
-    }
+  useEffect(() => {
+    (async () => {
+      if (dispatch) {
+        dispatch({
+          type: 'user/fetchCurrent',
+        });
+        dispatch({
+          type: 'settings/getSetting',
+        });
+        const res = await dispatch({
+          type: 'auth/fetch',
+        });
+        //console.log(res);
+        dispatch({
+          type: 'menu/refresh',
+        });
+      }
+    })();
+   
   }, []);
 
   /**
