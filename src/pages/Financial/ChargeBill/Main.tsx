@@ -12,15 +12,15 @@ import Show from './Show';
 import Vertify from './Vertify';
 import Split from './Split';
 import Transform from './Transform';
-const { Sider, Content } = Layout;
+const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
 const { Option } = Select;
 
 function Main() {
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
-  const [addFeeVisible, setAddFeeVisibleisible] = useState<boolean>(false);
-  const [treeData, setTreeData] = useState<TreeEntity[]>([]);
+  // const [addFeeVisible, setAddFeeVisibleisible] = useState<boolean>(false);
+  // const [treeData, setTreeData] = useState<TreeEntity[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [data, setData] = useState<any[]>([]);
@@ -35,16 +35,15 @@ function Main() {
 
   const [splitVisible, setSplitVisible] = useState<boolean>(false);
   const [transVisible, setTransVisible] = useState<boolean>(false);
-  const [billDetailVisible, setBillDetailVisible] = useState<boolean>(false);
+  // const [billDetailVisible, setBillDetailVisible] = useState<boolean>(false);
 
 
   const [showVisible, setShowVisible] = useState<boolean>(false);
   const [vertifyVisible, setVertifyVisible] = useState<boolean>(false);
   const [ifVertify, setIfVertify] = useState<boolean>(false);
 
-  const [flushVisible, setflushVisible] = useState<boolean>(false);
-
-  const [chargeRowStatus, setChargeRowStatus] = useState<number>(0);
+  // const [flushVisible, setflushVisible] = useState<boolean>(false); 
+  // const [chargeRowStatus, setChargeRowStatus] = useState<number>(0);
   const [billRowKey, setBillRowKey] = useState<number>(0);
 
   const [unChargeSelectedKeys, setUnChargeSelectedKeys] = useState<any[]>([]);
@@ -316,7 +315,7 @@ function Main() {
         selectTree={(id, type, info?) => {
           SetOrganizeId(id);
           SetOrganize(info);
-          if (type == 5) setAddButtonDisable(false);
+          // if (type == 5) setAddButtonDisable(false);
           selectTree(id, search);
         }}
       />
@@ -332,11 +331,9 @@ function Main() {
                 onSearch={value => loadData(value)}
               />
               <Checkbox style={{ paddingLeft: '20px' }} onChange={onShowCustomerChange} >显示该户其他费用</Checkbox>
-
-              <Button type="primary" style={{ float: 'right', marginLeft: '3px' }}
+              {/* <Button type="primary" style={{ float: 'right', marginLeft: '3px' }}
                 onClick={() => showTrans()}
-                disabled={billRowKey == -1 ? true : false}
-              >
+                disabled={billRowKey == -1 ? true : false}  >
                 <Icon type="minus-square" />
                 转费
               </Button>
@@ -353,7 +350,7 @@ function Main() {
               >
                 <Icon type="minus-square" />
                 查看
-              </Button>
+              </Button> */}
 
               <Button type="primary" style={{ float: 'right', marginLeft: '3px' }}
                 onClick={() => showDrawer()}
@@ -384,7 +381,7 @@ function Main() {
             />
           </TabPane>
           <TabPane tab="收款单列表" key="2">
-             <div style={{ marginBottom: '10px' }}>
+            <div style={{ marginBottom: '10px' }}>
               <Select placeholder="=请选择=" style={{ width: '110px', marginRight: '5px' }} onChange={(value) => {
                 var params = Object.assign({}, chargedSearchParams, { status: value });
                 setChargedSearchParams(params);
@@ -405,12 +402,12 @@ function Main() {
               <DatePicker onChange={(date, dateStr) => {
                 var params = Object.assign({}, chargedSearchParams, { startDate: dateStr });
                 setChargedSearchParams(params);
-              }} style={{ marginRight: '5px', width:'120px' }} />
+              }} style={{ marginRight: '5px', width: '120px' }} />
               至
               <DatePicker onChange={(date, dateStr) => {
                 var params = Object.assign({}, chargedSearchParams, { endDate: dateStr });
                 setChargedSearchParams(params);
-              }} style={{ marginLeft: '5px', marginRight: '5px' , width:'120px'}} />
+              }} style={{ marginLeft: '5px', marginRight: '5px', width: '120px' }} />
               <Search
                 className="search-input"
                 placeholder="请输入关键字"

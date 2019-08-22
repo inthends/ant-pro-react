@@ -105,6 +105,7 @@ function MeterFormsTable(props: MeterFormsTableProps) {
         pagination={pagination}
         scroll={{ y: 500, x: 2000 }}
         loading={loading}
+        onChange={onchange}
       />
     </Page>
   );

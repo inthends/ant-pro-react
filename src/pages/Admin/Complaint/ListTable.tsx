@@ -22,9 +22,9 @@ function ListTable(props: ListTableProps) {
   const doDelete = record => {
     Modal.confirm({
       title: '请确认',
-      content: `您是否要删除${record.name}吗`,
+      content: `您是否要删除${record.billCode}吗`,
       onOk: () => {
-        RemoveForm(record.pCode)
+        RemoveForm(record.id)
           .then(() => {
             message.success('删除成功');
             reload();
@@ -109,27 +109,31 @@ function ListTable(props: ListTableProps) {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
-      align:'center',
+      align: 'center',
       width: 95,
       fixed: 'right',
       render: (text, record) => {
-        return [
-          // <Button
-          //   type="primary"
-          //   key="modify"
-          //   style={{ marginRight: '10px' }}
-          //   onClick={() => modify(record)}>
-          //   修改
-          // </Button>,
-          // <Button type="danger" key="delete" onClick={() => doDelete(record)}>
-          //   删除
-          // </Button>
-          <span>
-            <a onClick={() => modify(record.id)} key="modify">修改</a>
-            <Divider type="vertical" />
-            <a onClick={() => doDelete(record)} key="delete">删除</a>
-          </span>
-        ];
+        if (record.status == 1) {
+          return [
+            // <Button
+            //   type="primary"
+            //   key="modify"
+            //   style={{ marginRight: '10px' }}
+            //   onClick={() => modify(record)}>
+            //   修改
+            // </Button>,
+            // <Button type="danger" key="delete" onClick={() => doDelete(record)}>
+            //   删除
+            // </Button>  
+            <span>
+              <a onClick={() => modify(record)} key="modify">修改</a>
+              <Divider type="vertical" />
+              <a onClick={() => doDelete(record)} key="delete">删除</a>
+            </span>
+          ];
+        } else {
+          return [<a onClick={() => modify(record)} key="view">查看</a>];
+        }
       },
     },
   ] as ColumnProps<any>[];
