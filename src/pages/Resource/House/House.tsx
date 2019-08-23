@@ -5,11 +5,12 @@ import { Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import General from './General';
-import { GetStatistics, GetStatisticsTotal, GetOrgTree2 } from './House.service';
+import { GetStatistics, GetStatisticsTotal } from './House.service';
 import LeftTree from '../LeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
 import AuthButton from '@/components/AuthButton/AuthButton';
+import { GetOrgTree2 } from '@/services/commonItem';
 
 const { Content } = Layout;
 const { Search } = Input;
@@ -36,7 +37,7 @@ function House() {
   //   return true;
   // };
 
-  const setButton = (orgid, orgtype, searchText) => { 
+  const setButton = (orgid, orgtype, searchText) => {
     initLoadData(orgid, searchText);
     SetOrganizeId(orgid);
     if (orgtype == 'D') {
@@ -53,8 +54,8 @@ function House() {
       //SetOrganizeId(key);
       //initLoadData(rootOrg as string, '');
       initLoadData('', '');
+      getHouseTotal();
     });
-    getHouseTotal();
   }, []);
   // 获取属性数据
   const getTreeData = () => {
@@ -78,7 +79,7 @@ function House() {
     setId(orgId);
     setModifyVisible(true);
   };
-  const loadData = (searchText, org, paginationConfig?: PaginationConfig, sorter?) => {
+  const loadData = (searchText, orgid, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(searchText);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
@@ -89,7 +90,7 @@ function House() {
       pageIndex,
       pageSize,
       total,
-      queryJson: { OrganizeId: org, keyword: searchText },
+      queryJson: { OrganizeId: orgid, keyword: searchText },
     };
 
     if (sorter) {
@@ -104,7 +105,7 @@ function House() {
   };
   const load = formData => {
     setLoading(true);
-    formData.sidx = formData.sidx || 'id';
+    formData.sidx = formData.sidx || 'name';
     formData.sord = formData.sord || 'asc';
     return GetStatistics(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -125,7 +126,7 @@ function House() {
   const initLoadData = (orgId: string, searchText) => {
     setSearch(searchText);
     const queryJson = { OrganizeId: orgId, keyword: searchText };
-    const sidx = 'id';
+    const sidx = 'name';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
@@ -145,16 +146,16 @@ function House() {
         <div style={{ marginBottom: '10px' }}>
           <Search
             className="search-input"
-            placeholder="搜索项目名称" 
+            placeholder="搜索项目名称"
             onSearch={value => loadData(value, organizeId)}
             style={{ width: 200 }}
           />
           <AuthButton
-            type="primary"
             disabled={isAdd}
             style={{ float: 'right' }}
             onClick={() => showDrawer()}
-            encode="lr-add" >
+            encode="lr-add" 
+            btype="primary">
             <Icon type="plus" />
             项目
           </AuthButton>
@@ -171,7 +172,6 @@ function House() {
           reload={() => initLoadData(organizeId, search)}
         />
       </Content>
-
       <Modify
         modifyVisible={modifyVisible}
         closeDrawer={closeDrawer}

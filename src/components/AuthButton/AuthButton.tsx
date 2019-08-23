@@ -8,13 +8,14 @@ interface AuthButtonProps extends ButtonProps {
   encode: string;
   authbtnlist?: any[];
   pathname?: string;
+  btype: any;
 }
 
 const AuthButton = (props: AuthButtonProps) => {
-  const { authbtnlist = [], pathname = '', encode, disabled = false } = props;
+  const { authbtnlist = [], pathname = '', btype, encode, disabled = false } = props;
   const authDisabled =
-  !authbtnlist.some(item => (item.actionAddress = pathname && item.enCode === encode)) || disabled;
-  return <Button {...props} disabled={authDisabled}></Button>;
+    !authbtnlist.some(item => (item.actionAddress = pathname && item.enCode === encode)) || disabled;
+  return <Button {...props} disabled={authDisabled} type={btype}></Button>;
 };
 
 interface RoutingType {

@@ -9,11 +9,7 @@ import SettingDrawer from '@/components/SettingDrawer';
 import { ConnectState, Dispatch } from '@/models/connect';
 import AuthPage from '@/pages/Authorized';
 import Authorized from '@/utils/Authorized';
-import ProLayout, {
-  BasicLayoutProps as ProLayoutProps,
-  MenuDataItem,
-  Settings,
-} from '@ant-design/pro-layout';
+import ProLayout, { BasicLayoutProps as ProLayoutProps, MenuDataItem, Settings } from '@ant-design/pro-layout';
 import { connect } from 'dva';
 import React, { useEffect } from 'react';
 import { formatMessage } from 'umi-plugin-react/locale';
@@ -91,26 +87,33 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
    * constructor
    */
 
+  // useEffect(async() => {
+  //   if (dispatch) {
+  //     dispatch({
+  //       type: 'user/fetchCurrent',
+  //     });
+  //     dispatch({
+  //       type: 'settings/getSetting',
+  //     });
+  //     const res = await dispatch({
+  //       type: 'auth/fetch',
+  //     });
+  //     //console.log(res);
+  //     dispatch({
+  //       type: 'menu/refresh',
+  //     });
+  //   }
+  // }, []);
+
+
   useEffect(() => {
-    (async () => {
-      if (dispatch) {
-        dispatch({
-          type: 'user/fetchCurrent',
-        });
-        dispatch({
-          type: 'settings/getSetting',
-        });
-        const res = await dispatch({
-          type: 'auth/fetch',
-        });
-        //console.log(res);
-        dispatch({
-          type: 'menu/refresh',
-        });
-      }
-    })();
-   
+    if (dispatch) {
+      dispatch({
+        type: 'auth/fetch',
+      }); 
+    }
   }, []);
+
 
   /**
    * init variables

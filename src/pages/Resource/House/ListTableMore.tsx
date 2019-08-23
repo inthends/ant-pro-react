@@ -18,6 +18,7 @@ function ListTableMore(props: ListTableMoreProps) {
   const changePage = (pag: PaginationConfig, filters, sorter) => {
     onchange(pag, filters, sorter);
   };
+  
   const doDelete = record => {
     Modal.confirm({
       title: '请确认',

@@ -1,26 +1,20 @@
 import { ParkingData, TreeEntity } from '@/model/models';
 import {
   Button,
-  Card,
-  Checkbox,
+  Card, 
   Col,
   Drawer,
   Form,
   Input,
   message,
   Modal,
-  Row,
-  Select,
-  Tree,
-  TreeSelect,
+  Row, 
+  Tree, 
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { SaveForm } from './ParkingLot.service';
 import styles from './style.less';
-
-const { Option } = Select;
-const { TextArea } = Input;
 const { TreeNode } = Tree;
 
 interface ModifyProps {

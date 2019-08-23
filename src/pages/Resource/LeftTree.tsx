@@ -31,20 +31,27 @@ function LeftTree(props: LeftTreeProps) {
   // }
 
   //展开全部
-  var keys: any[];
-  keys = [];
+  let keys: any[] = [];
+  // const getAllkeys = data =>
+  //   data.map(item => { 
+  //     if (!item.isLeaf) {
+  //       keys.push(getAllkeys(item.children))
+  //     }
+  //     keys.push(item.key); 
+  //   });
+
   const getAllkeys = data =>
-    data.map(item => {
-      if (item.children) {
+    data.forEach(item => {
+      if (!item.isLeaf) {
         keys.push(getAllkeys(item.children))
       }
       keys.push(item.key);
     });
 
-
   useEffect(() => {
     getAllkeys(treeData);
     setExpandedKeys(keys);
+    // console.log(keys);
   }, [treeData]);
 
   const onSelect = (selectedKeys, info) => {
@@ -132,7 +139,8 @@ function LeftTree(props: LeftTreeProps) {
                 treeData={treeData}
                 expandedKeys={expandedKeys}
                 onExpand={clickExpend}
-                onSelect={onSelect} >
+                onSelect={onSelect}
+              >
 
               </Tree>
             </Page>
@@ -142,7 +150,7 @@ function LeftTree(props: LeftTreeProps) {
                 setHideSider(true);
               }}
             >
-              <Icon type="double-left" style={{ color: '#1890ff' }} />
+              <Icon type="double-left" style={{ color: '#1890ff', cursor: 'pointer' }} />
             </div>
           </>
         )}

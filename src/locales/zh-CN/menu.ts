@@ -47,4 +47,5 @@ export default {
   'menu.system.organize': '机构设置',
   'menu.system.department': '部门资料',
   'menu.system.user': '用户管理',
+  'menu.system.role': '角色资料', 
 };

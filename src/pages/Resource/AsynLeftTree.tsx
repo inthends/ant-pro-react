@@ -16,22 +16,32 @@ interface AsynLeftTreeProps {
 
 function AsynLeftTree(props: AsynLeftTreeProps) {
 
-  const { selectTree } = props;
+  const { selectTree, parentid } = props;
   const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
   // const [autoExpandParent, setAutoExpandParent] = useState<boolean>(false);
   const { hideSider, setHideSider } = useContext(SiderContext);
   //动态子节点
   const [treeData, setTreeData] = useState<any[]>([]);
+  //选中节点
+  // const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
 
-  var keys: any[];
-  keys = [];
-  const getAllkeys = res =>
-    res.map(item => {
-      if (item.children && item.type != 'D') {
-        keys.push(getAllkeys(item.children))
-      }
-      keys.push(item.key);
-    });
+  let keys: any[]  = [];
+  // const getAllkeys = res =>
+  //   res.map(item => {
+  //     if (item.children && item.type != 'D') {
+  //       keys.push(getAllkeys(item.children))
+  //     }
+  //     keys.push(item.key);
+  //   });
+
+
+  const getAllkeys = data =>
+  data.forEach(item => {
+    if (!item.isLeaf && item.type != 'D') {
+      keys.push(getAllkeys(item.children))
+    }
+    keys.push(item.key);
+  });
 
   //展开到管理处
   useEffect(() => {
@@ -147,7 +157,7 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
                 expandedKeys={expandedKeys}
                 onExpand={clickExpend}
                 onSelect={onSelect}>
-                {renderTreeNodes(treeData)}
+                {renderTreeNodes(treeData)} 
               </Tree>
             </Page>
             <div
@@ -156,7 +166,7 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
                 setHideSider(true);
               }}
             >
-              <Icon type="double-left" style={{ color: '#1890ff' }} />
+              <Icon type="double-left" style={{ color: '#1890ff', cursor: 'pointer' }} />
             </div>
           </>
         )}

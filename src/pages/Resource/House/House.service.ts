@@ -2,9 +2,6 @@ import { PStructsData, ResponseObject, TreeEntity } from '@/model/models';
 import { getResult, objToFormdata, objToUrl } from '@/utils/networkUtils';
 import request from '@/utils/request';
 
-export function GetOrgTree2(): Promise<any[]> {
-  return request.get(process.env.basePath + `/Common/GetOrgTree2`, {}).then(getResult);
-}
 export function GetStatisticsTotal(): Promise<ResponseObject<any>> {
   return request.post(process.env.basePath + `/PStructs/GetStatisticsTotal`, {});
 }
@@ -19,11 +16,12 @@ export function GetTreeAreaJson(id): Promise<TreeEntity[]> {
     .get(process.env.basePath + `/PStructs/GetTreeAreaJson?id=${id}`)
     .then(getResult as any);
 }
-export function GetProjectType(): Promise<TreeEntity[]> {
-  return request
-    .get(process.env.basePath + `/Common/GetDataItemTreeJson?EnCode=ProjectType`)
-    .then(getResult as any);
-}
+
+// export function GetProjectType(): Promise<TreeEntity[]> {
+//   return request
+//     .get(process.env.basePath + `/Common/GetDataItemTreeJson?EnCode=ProjectType`)
+//     .then(getResult as any);
+// }
 
 // 获取房产信息
 export function GetFormInfoJson(keyValue): Promise<PStructsData> {

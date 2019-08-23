@@ -1,29 +1,29 @@
 //费用冲抵
 import { TreeEntity } from '@/model/models';
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { getResult } from '@/utils/networkUtils';
+// import { getResult } from '@/utils/networkUtils';
 import { Tabs, Button, Icon, Input, Layout, Modal } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useContext, useEffect, useState } from 'react';
 import { GetTreeListExpand, GetOffsetPageDetailData, GetOffsetPageData, GetRoomTreeListExpand, RemoveForm } from './Offset.service';
 import AsynLeftTree from '../AsynLeftTree';
-import Page from '@/components/Common/Page';
-import { SiderContext } from './SiderContext';
+// import Page from '@/components/Common/Page';
+// import { SiderContext } from './SiderContext'; 
 import AddDrawer from './AddDrawer';
 import Vertify from './Vertify';
 import Modify from './Modify';
 import BillCheckTable from './BillCheckTable';
 import BillNoticeTable from './BillNoticeTable';
 
-const { Sider, Content } = Layout;
+const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
 
 function Offset() {
-  const [treeData, setTreeData] = useState<TreeEntity[]>([]);
+  // const [treeData, setTreeData] = useState<TreeEntity[]>([]);
   const [organize, SetOrganize] = useState<any>({});
   const [search, SetSearch] = useState<any>({});
-  const { hideSider, setHideSider } = useContext(SiderContext);
+  // const { hideSider, setHideSider } = useContext(SiderContext);
   const [addDrawerVisible, setAddDrawerVisible] = useState<boolean>(false);
   const [id, setId] = useState<string>();
 
@@ -33,8 +33,6 @@ function Offset() {
   const [ifVertify, setIfVertify] = useState<boolean>(false);
 
   const [addButtonDisable, setAddButtonDisable] = useState<boolean>(true);
-
-
   const [checkloading, setCheckLoading] = useState<boolean>(false);
   const [checkpagination, setCheckPagination] = useState<DefaultPagination>(new DefaultPagination());
   const [checkdata, setCheckData] = useState<any>();
@@ -52,34 +50,35 @@ function Offset() {
   };
 
   useEffect(() => {
-    getTreeData().then(res => {
-      const root = res.filter(item => item.parentId === '0');
-      const rootOrg = root.length === 1 ? root[0] : undefined;
-      SetOrganize(rootOrg);
-      initCheckLoadData(rootOrg, '');
-      initNoticeLoadData(rootOrg, '');
-    });
+    //getTreeData().then(res => {
+      // const root = res.filter(item => item.parentId === '0');
+      // const rootOrg = root.length === 1 ? root[0] : undefined;
+      // SetOrganize(rootOrg);
+      initCheckLoadData('', '');
+      initNoticeLoadData('', '');
+    //});
   }, []);
+
   // 获取属性数据
-  const getTreeData = () => {
-    return GetRoomTreeListExpand()
-      .then((res: TreeEntity[]) => {
-        const treeList = (res || []).map(item => {
-          return {
-            ...item,
-            id: item.id,
-            text: item.title,
-            parentId: item.pId,
-          };
-        });
-        setTreeData(treeList);
-        return treeList;
-      });
-  };
+  // const getTreeData = () => {
+  //   return GetRoomTreeListExpand()
+  //     .then((res: any[]) => {
+  //       const treeList = (res || []).map(item => {
+  //         return {
+  //           ...item,
+  //           id: item.id,
+  //           text: item.title,
+  //           parentId: item.pId,
+  //         };
+  //       });
+  //       setTreeData(treeList);
+  //       return treeList;
+  //     });
+  // };
 
   const closeDrawer = () => {
     setAddDrawerVisible(false);
-    setId(null);
+    setId('');
   };
 
   const showDrawer = (id?) => {
@@ -220,7 +219,7 @@ function Offset() {
     if (result) {
       initCheckLoadData(organize, null);
     }
-    setId(null);
+    setId('');
   };
 
   const showVertify = (id?, ifVertify?) => {

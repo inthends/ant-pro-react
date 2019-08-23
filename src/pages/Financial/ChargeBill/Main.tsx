@@ -1,4 +1,3 @@
-import { TreeEntity } from '@/model/models';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { Checkbox, Tabs, Button, Icon, Input, Layout, Select, DatePicker, message, Modal } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
@@ -30,8 +29,10 @@ function Main() {
   const [id, setId] = useState<string>('');
   const [search, setSearch] = useState<string>('');
   const [organizeId, SetOrganizeId] = useState<string>('');
+  const [customerName, SetCustomerName] = useState<string>('');
+  const [showname, SetShowname] = useState<string>('');
   const [addButtonDisable, setAddButtonDisable] = useState<boolean>(true);
-  const [showCustomerFee, setShowCustomerFee] = useState<boolean>(false)
+  // const [showCustomerFee, setShowCustomerFee] = useState<boolean>(false)
 
   const [splitVisible, setSplitVisible] = useState<boolean>(false);
   const [transVisible, setTransVisible] = useState<boolean>(false);
@@ -44,13 +45,11 @@ function Main() {
 
   // const [flushVisible, setflushVisible] = useState<boolean>(false); 
   // const [chargeRowStatus, setChargeRowStatus] = useState<number>(0);
-  const [billRowKey, setBillRowKey] = useState<number>(0);
+  // const [billRowKey, setBillRowKey] = useState<number>(0);
 
   const [unChargeSelectedKeys, setUnChargeSelectedKeys] = useState<any[]>([]);
   const [modifyEdit, setModifyEdit] = useState<boolean>(true);
-
-  const [organize, SetOrganize] = useState<any>({});
-
+  // const [organize, SetOrganize] = useState<any>({}); 
   const [chargedSearchParams, setChargedSearchParams] = useState<any>({});
 
   const selectTree = (id, search) => {
@@ -62,7 +61,7 @@ function Main() {
   useEffect(() => {
     //getTreeData().then(res => {
     //  initLoadData('',organizeId);
-    // initChargeLoadData('');
+    initChargeLoadData('');
     //});
   }, []);
 
@@ -186,7 +185,7 @@ function Main() {
 
   const initLoadData = (search, roomid = '', showCustomerFee = false) => {
     setSearch(search);
-    setShowCustomerFee(showCustomerFee);
+    // setShowCustomerFee(showCustomerFee);
     const queryJson = { keyword: search, roomid: roomid, showCustomerFee: showCustomerFee };
     const sidx = 'BillID';
     const sord = 'asc';
@@ -196,6 +195,7 @@ function Main() {
     });
   };
 
+  //已收款
   const initChargeLoadData = (id) => {
     const queryJson = {
       keyword: chargedSearchParams.search ? chargedSearchParams.search : '',
@@ -250,7 +250,6 @@ function Main() {
   const closeTrans = () => {
     setTransVisible(false);
   }
-
 
   const showDetail = () => {
     setShowVisible(true);
@@ -313,10 +312,15 @@ function Main() {
       <AsynLeftTree
         parentid={'0'}
         selectTree={(id, type, info?) => {
+          debugger
           SetOrganizeId(id);
-          SetOrganize(info);
-          // if (type == 5) setAddButtonDisable(false);
-          selectTree(id, search);
+          // SetOrganize(info);
+          if (type == 5) {
+            setAddButtonDisable(false);
+            SetCustomerName(info.node.props.tenantname);
+            SetShowname(info.node.props.title);
+            selectTree(id, search);
+          }
         }}
       />
       {/* </Sider> */}
@@ -328,9 +332,8 @@ function Main() {
                 className="search-input"
                 placeholder="搜索费项名称"
                 style={{ width: 200 }}
-                onSearch={value => loadData(value)}
-              />
-              <Checkbox style={{ paddingLeft: '20px' }} onChange={onShowCustomerChange} >显示该户其他费用</Checkbox>
+                onSearch={value => loadData(value)} />
+              <Checkbox style={{ marginLeft: '3px' }} onChange={onShowCustomerChange} >显示该户其他费用</Checkbox>
               {/* <Button type="primary" style={{ float: 'right', marginLeft: '3px' }}
                 onClick={() => showTrans()}
                 disabled={billRowKey == -1 ? true : false}  >
@@ -352,7 +355,11 @@ function Main() {
                 查看
               </Button> */}
 
-              <Button type="primary" style={{ float: 'right', marginLeft: '3px' }}
+              <span style={{ marginLeft: 8, color: "red" }}>
+                已选择：{showname}
+              </span>
+
+              <Button type="primary" style={{ float: 'right' }}
                 onClick={() => showDrawer()}
                 disabled={addButtonDisable}
               >
@@ -377,7 +384,8 @@ function Main() {
               modify={showDrawer}
               reload={() => initLoadData(search, organizeId)}
               rowSelect={GetUnChargeSelectedKeys}
-              organize={organize}
+              organizeId={organizeId}
+              customerName={customerName}
             />
           </TabPane>
           <TabPane tab="收款单列表" key="2">
@@ -426,7 +434,7 @@ function Main() {
                 搜索
               </Button>
 
-              <Button type="danger" style={{ float: 'right', marginLeft: '3px' }}
+              {/* <Button type="danger" style={{ float: 'right', marginLeft: '3px' }}
                 onClick={() => onInvalid()}
                 disabled={chargedRowSelectedKey.status == null || chargedRowSelectedKey.status == 2 || chargedRowSelectedKey.status == 3 || chargedRowSelectedKey.status == -1 || chargedRowSelectedKey.status == 0 ? true : false}
               >
@@ -460,7 +468,7 @@ function Main() {
               >
                 <Icon type="file" />
                 查看
-              </Button>
+              </Button> */}
             </div>
             <ChargeListTable
               onchange={(paginationConfig, filters, sorter) =>
@@ -469,7 +477,7 @@ function Main() {
               loading={loading}
               pagination={paginationCharge}
               data={dataCharge}
-              modify={showDrawer}
+              showDetail={showDetail}
               reload={() => initChargeLoadData(organizeId)}
               getRowSelect={GetChargedSelectedKey}
             />

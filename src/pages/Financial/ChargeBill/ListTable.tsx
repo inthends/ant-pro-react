@@ -18,11 +18,12 @@ interface ListTableProps {
   reload(): void;
   form: WrappedFormUtils;
   rowSelect(rowSelectedKeys): void;
-  organize?: any;
+  organizeId: string;
+  customerName: string;
 }
 
 function ListTable(props: ListTableProps) {
-  const { form, onchange, loading, pagination, data, modify, reload, rowSelect, organize } = props;
+  const { form, onchange, loading, pagination, data, modify, reload, rowSelect, organizeId, customerName } = props;
   const { getFieldDecorator } = form;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
@@ -220,17 +221,19 @@ function ListTable(props: ListTableProps) {
           okText: '确定',
           onOk: () => {
             let info = Object.assign({}, values, {
-              roomId: organize.code,
+              // roomId: organizeId,
               ids: JSON.stringify(selectedRowKeys),
-              billDate: values.billDate.format('YYYY-MM-DD'),
-              customerName: organize.title.split(' ')[1]
+              UnitID:organizeId,
+              CustomerName: customerName,
+              billDate: values.billDate.format('YYYY-MM-DD HH:mm:ss'),
+              //organize.title.split(' ')[1]
             });
             if (Number(sumEntity.sumlastAmount) != Number(info.payAmountA + info.payAmountB + info.payAmountC)) {
               message.warning('本次收款金额小于本次选中未收金额合计，不允许收款，请拆费或者重新选择收款项');
               return;
             }
             Charge(info).then(res => {
-              message.success('保存成功');
+              message.success('收款成功！');
               reload();
             });
           }

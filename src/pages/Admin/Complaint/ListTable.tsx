@@ -127,7 +127,7 @@ function ListTable(props: ListTableProps) {
             // </Button>  
             <span>
               <a onClick={() => modify(record)} key="modify">修改</a>
-              <Divider type="vertical" />
+              <Divider type="vertical" key='split' />
               <a onClick={() => doDelete(record)} key="delete">删除</a>
             </span>
           ];

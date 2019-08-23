@@ -42,7 +42,7 @@ function ListTable(props: ListTableProps) {
       sorter: true,
       render: (text, record) => {
         //return <Link to={`housemore?pstructid=${record.id}&type=2`}>{record.name}</Link>   
-        return <Link to={{ pathname: 'housemore', state: { pstructid: record.id } }}>{record.name}</Link>
+        return <Link key='linkto' to={{ pathname: 'housemore', state: { pstructid: record.id } }}>{record.name}</Link>
       }
     },
     {
@@ -118,14 +118,12 @@ function ListTable(props: ListTableProps) {
           // </Button>,
           // <Button type="danger" key="delete" onClick={() => doDelete(record)}>
           //   删除
-          // </Button>,
-
-          <span>
+          // </Button>, 
+          <span key='buttons'>
             <a onClick={() => modify(record.id)} key="modify">修改</a>
-            <Divider type="vertical" />
-            <a onClick={() => doDelete(record)} key="delete"  >删除</a>
-          </span>
-
+            <Divider type="vertical" key="split" />
+            <a onClick={() => doDelete(record)} key="delete">删除</a>
+          </span> 
         ];
       },
     },

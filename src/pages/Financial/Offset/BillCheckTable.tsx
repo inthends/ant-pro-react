@@ -1,6 +1,6 @@
 //账单
 import Page from '@/components/Common/Page';
-import { Divider, Form, Button, Table } from 'antd';
+import { Divider, Form,   Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import moment from 'moment';
@@ -12,7 +12,7 @@ interface BillCheckTableProps {
   loading: boolean;
   pagination: PaginationConfig;
   data: any[];
-  modify(id: string): void;
+  // modify(id: string): void;
   reload(): void;
   form: WrappedFormUtils;
   deleteData(id): void;

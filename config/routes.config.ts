@@ -100,26 +100,26 @@ export default [
             path: '/financial/meter',
             component: './Financial/Meter/Meter',
           },
-          {
-            name: '周期费计算',
-            path: '/financial/test2',
-            component: './Financial/Test1',
-          },
-          {
-            name: '通知单',
-            path: '/financial/test3',
-            component: './Financial/Test1',
-          },
+          // {
+          //   name: '周期费计算',
+          //   path: '/financial/test2',
+          //   component: './Financial/Test1',
+          // },
+          // {
+          //   name: '通知单',
+          //   path: '/financial/test3',
+          //   component: './Financial/Test1',
+          // },
           {
             name: 'chargebill',
             path: '/financial/chargebill',
             component: './Financial/ChargeBill/Main',
           },
-          {
-            name: '付款管理',
-            path: '/financial/test5',
-            component: './Financial/Test1',
-          },
+          // {
+          //   name: '付款管理',
+          //   path: '/financial/test5',
+          //   component: './Financial/Test1',
+          // },
           {
             name: 'offset',
             path: '/financial/offset',
@@ -175,11 +175,11 @@ export default [
             path: '/contract/list',
             component: './Contract/List/Main',
           },
-          {
-            name: '归档合同',
-            path: '/resource/test1',
-            component: './Resource/Test1',
-          },
+          // {
+          //   name: '归档合同',
+          //   path: '/resource/test1',
+          //   component: './Resource/Test1',
+          // },
         ],
       },
 
@@ -219,40 +219,40 @@ export default [
             component: './System/User/User',
           },
           {
-            name: '角色资料',
+            name: 'role',
             path: '/system/role',
             component: './System/Role/Main',
           },
-          {
-            name: '用户管理',
-            path: '/resource/test1',
-            component: './Resource/Test1',
-          },
-          {
-            name: '菜单管理',
-            path: '/resource/test1',
-            component: './Resource/Test1',
-          },
-          {
-            name: '编码管理',
-            path: '/resource/test1',
-            component: './Resource/Test1',
-          },
-          {
-            name: '词典管理',
-            path: '/resource/test1',
-            component: './Resource/Test1',
-          },
-          {
-            name: '模板管理',
-            path: '/resource/test1',
-            component: './Resource/Test1',
-          },
-          {
-            name: '接口管理',
-            path: '/resource/test1',
-            component: './Resource/Test1',
-          },
+          // {
+          //   name: '用户管理',
+          //   path: '/resource/test1',
+          //   component: './Resource/Test1',
+          // },
+          // {
+          //   name: '菜单管理',
+          //   path: '/resource/test1',
+          //   component: './Resource/Test1',
+          // },
+          // {
+          //   name: '编码管理',
+          //   path: '/resource/test1',
+          //   component: './Resource/Test1',
+          // },
+          // {
+          //   name: '词典管理',
+          //   path: '/resource/test1',
+          //   component: './Resource/Test1',
+          // },
+          // {
+          //   name: '模板管理',
+          //   path: '/resource/test1',
+          //   component: './Resource/Test1',
+          // },
+          // {
+          //   name: '接口管理',
+          //   path: '/resource/test1',
+          //   component: './Resource/Test1',
+          // },
         ],
       },
     ],

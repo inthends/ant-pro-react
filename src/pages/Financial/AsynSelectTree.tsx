@@ -1,42 +1,36 @@
 //异步树
 import Page from '@/components/Common/Page';
 import { Tree } from 'antd';
-import React, {  useEffect, useState } from 'react';
-import { GetOrgTree, GetAsynChildBuildings } from './AsynLeftTree.service';
-
+import React, { useEffect, useState } from 'react';
+import { GetOrgTree, GetAsynChildBuildings } from '@/services/commonItem';
 const { TreeNode } = Tree;
-
 interface AsynSelectTreeProps {
   //treeData: any[];
   selectTree(parentId, type): void;
-  getCheckedKeys(keys):string[];
+  getCheckedKeys(keys): string[];
   parentid: string;
 }
 
 function AsynSelectTree(props: AsynSelectTreeProps) {
-
-  const {selectTree,getCheckedKeys } = props;
-  const [checkedKeys,setCheckedKeys]=useState<string[]>([]);
+  const { selectTree, getCheckedKeys } = props;
+  const [checkedKeys, setCheckedKeys] = useState<string[]>([]);
   // const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
   // const [autoExpandParent, setAutoExpandParent] = useState<boolean>(false);
   //动态子节点
   const [treeData, setTreeData] = useState<any[]>([]);
 
   useEffect(() => {
-
     //根据父节点获取房产树
     GetOrgTree().then((res: any[]) => {
       setTreeData(res || []);
     });
-
-    //setExpandedKeys(treeData.map(item => item.id as string));
-
+    //setExpandedKeys(treeData.map(item => item.id as string)); 
   }, []);
 
-  const onCheck=(checkedKeys)=>{
+  const onCheck = (checkedKeys) => {
     setCheckedKeys(checkedKeys);
     getCheckedKeys(checkedKeys);
-  }
+  };
 
   const onSelect = (selectedKeys, info) => {
     if (selectedKeys.length === 1) {
@@ -131,6 +125,5 @@ function AsynSelectTree(props: AsynSelectTreeProps) {
       </Tree>
     </Page>
   );
-}
-
+};
 export default AsynSelectTree;

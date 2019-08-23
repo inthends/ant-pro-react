@@ -58,3 +58,7 @@ export function GetOrgTree(): Promise<any[]> {
       .then(getResult as any);
 }
  
+
+export function GetOrgTree2(): Promise<any[]> {
+  return request.get(process.env.basePath + `/Common/GetOrgTree2`, {}).then(getResult);
+}

@@ -1,10 +1,11 @@
 //房产资料
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { Form, Tabs, Button, Icon, Input, Layout } from 'antd';
+import Link from 'umi/link';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import { GetPageListJson } from './House.service';
-import AsynLeftTree from '../AsynLeftTree';
+import HouseMoreLeftTree from '../HouseMoreLeftTree';
 import ListTableMore from './ListTableMore';
 import PstructInfo from './PstructInfo';
 import Atlas from './Atlas/Atlas';
@@ -116,7 +117,7 @@ function HouseMore(props) {
 
   return (
     <Layout style={{ height: '100%' }}>
-      <AsynLeftTree
+      <HouseMoreLeftTree
         parentid={pstructId}
         // treeData={treeData}
         selectTree={(parentId, type) => {
@@ -134,9 +135,18 @@ function HouseMore(props) {
                 onSearch={value => loadData(value, parentId, type)}
                 style={{ width: 200 }}
               />
-              <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer()}>
+              <Button type="primary" style={{ float: 'right', marginLeft: '10px' }} onClick={() => showDrawer()}>
                 <Icon type="plus" />
                 新增
+              </Button>
+              {/* <Button style={{ float: 'right' }} >
+                <Icon type="arrow-left" />
+                返回
+              </Button> */}
+              <Button style={{ float: 'right' }}>
+                <Link to={{ pathname: 'house' }}>
+                  <Icon type="arrow-left" />
+                  返回</Link>
               </Button>
             </div>
 

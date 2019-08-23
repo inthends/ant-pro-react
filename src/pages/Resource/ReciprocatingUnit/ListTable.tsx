@@ -32,11 +32,13 @@ function ListTable(props: ListTableProps) {
       },
     });
   };
+
   const doModify = id => {
     GetDetailJson(id).then(res => {
       modify(res);
     });
   };
+  
   const columns = [
     {
       title: '名称',

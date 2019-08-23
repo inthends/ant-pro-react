@@ -14,7 +14,8 @@ import {
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetFormInfoJson, GetProjectType, GetTreeAreaJson, SaveForm } from './House.service';
+import { GetFormInfoJson, GetTreeAreaJson, SaveForm } from './House.service';
+import { getCommonItems } from '@/services/commonItem';
 import styles from './style.less';
 import moment from 'moment';
 
@@ -38,8 +39,7 @@ const Modify = (props: ModifyProps) => {
   const [pro, setPro] = useState<TreeEntity[]>([]);
   const [city, setCity] = useState<TreeEntity[]>([]);
   const [area, setArea] = useState<TreeEntity[]>([]);
-  const [project, setProject] = useState<TreeEntity[]>([]);
-
+  const [project, setProject] = useState<TreeEntity[]>([]); 
   const [infoDetail, setInfoDetail] = useState<any>({});
 
   // 打开抽屉时初始化
@@ -47,7 +47,7 @@ const Modify = (props: ModifyProps) => {
     GetTreeAreaJson('100000').then(res => {
       setPro(res || []);
     });
-    GetProjectType().then(res => {
+    getCommonItems('ProjectType').then(res => {
       setProject(res || []);
     });
   }, []);
@@ -101,9 +101,9 @@ const Modify = (props: ModifyProps) => {
         getInfo(id).then(tempInfo => {
           const newvalue = { ...values, date: values.date.format('YYYY-MM-DD') };
           SaveForm({ ...tempInfo, ...newvalue, keyValue: tempInfo.pStructId }).then(res => {
-             message.success('保存成功');
-             closeDrawer();
-             reload(); 
+            message.success('保存成功');
+            closeDrawer();
+            reload();
           });
         });
       }
@@ -167,23 +167,22 @@ const Modify = (props: ModifyProps) => {
 
             <Row gutter={24}>
               <Col lg={12}>
-                <Form.Item label="小区编号" required>
-                  {getFieldDecorator('code', {
-                    initialValue: infoDetail.code,
-                    rules: [{ required: true, message: '请输入小区编号' }],
-                  })(<Input placeholder="请输入小区编号" />)}
+                <Form.Item label="项目名称" required>
+                  {getFieldDecorator('name', {
+                    initialValue: infoDetail.name,
+                    rules: [{ required: true, message: '请输入项目名称' }],
+                  })(<Input placeholder="请输入项目名称" />)}
                 </Form.Item>
               </Col>
               <Col lg={12}>
-                <Form.Item label="小区名称" required>
-                  {getFieldDecorator('name', {
-                    initialValue: infoDetail.name,
-                    rules: [{ required: true, message: '请输入小区名称' }],
-                  })(<Input placeholder="请输入小区名称" />)}
+                <Form.Item label="项目编号" required>
+                  {getFieldDecorator('code', {
+                    initialValue: infoDetail.code,
+                    rules: [{ required: true, message: '请输入项目编号' }],
+                  })(<Input placeholder="请输入项目编号" />)}
                 </Form.Item>
               </Col>
             </Row>
-
             <Row gutter={24}>
               <Col lg={24}>
                 <Row gutter={24}>

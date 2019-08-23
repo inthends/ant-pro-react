@@ -3,14 +3,15 @@ import Page from '@/components/Common/Page';
 import { Icon, Layout, Tree } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import { SiderContext } from '../SiderContext';
-import { GetOrgTree, GetAsynChildBuildings } from './AsynLeftTree.service';
+import { GetOrgTree, GetAsynChildBuildings } from '@/services/commonItem';
+// import { GetOrgTree, GetAsynChildBuildings } from './AsynLeftTree.service';
 
 const { TreeNode } = Tree;
 const { Sider } = Layout;
 
 interface AsynLeftTreeProps {
   //treeData: any[];
-  selectTree(parentId, type): void;
+  selectTree(parentId, type, info): void;
   parentid: string;
 }
 
@@ -24,10 +25,10 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
   const [treeData, setTreeData] = useState<any[]>([]);
 
   var keys: any[];
-  keys = []; 
+  keys = [];
   const getAllkeys = res =>
-    res.map(item => { 
-      if (item.children&&item.type!='D') {
+    res.forEach(item => {
+      if (item.children && item.type != 'D') {
         keys.push(getAllkeys(item.children))
       }
       keys.push(item.key);
@@ -51,7 +52,7 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
       const type = info.node.props.type;
       if ('ABCD'.indexOf(type) != -1)
         return;
-      selectTree(selectedKeys[0], type);
+      selectTree(selectedKeys[0], type, info);
     }
   };
 
@@ -75,9 +76,7 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
   //异步加载
   const onLoadData = treeNode =>
     new Promise<any>(resolve => {
-      if (treeNode.props.children &&
-        treeNode.props.children.length > 0&&
-        treeNode.props.type!='D') {
+      if (treeNode.props.children && treeNode.props.children.length > 0 && treeNode.props.type != 'D') {
         resolve();
         return;
       }
@@ -155,9 +154,8 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
               style={{ position: 'absolute', top: '40%', right: -15 }}
               onClick={() => {
                 setHideSider(true);
-              }}
-            >
-              <Icon type="double-left" style={{ color: '#1890ff' }} />
+              }} >
+              <Icon type="double-left" style={{ color: '#1890ff', cursor: 'pointer' }} />
             </div>
           </>
         )}
