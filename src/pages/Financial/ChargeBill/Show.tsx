@@ -1,51 +1,47 @@
 //查看收款单
 import {
-  Checkbox,
-  Tabs,
-  Select,
-  Button,Table,
+  Button,
+  Card,
+  Table,
   Col,
-  DatePicker,
   Drawer,
   Form,
-  Input,InputNumber,
   Row,
 } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import {GetEntityShow ,ChargeFeeDetail,ChargeFeeDetail } from './Main.service';
+import { GetEntityShow, ChargeFeeDetail } from './Main.service';
+import moment from 'moment';
 import styles from './style.less';
-import  moment from 'moment';
 
 interface ShowProps {
   showVisible: boolean;
   closeShow(): void;
   form: WrappedFormUtils;
-  id?:string;
+  id?: string;
 }
-const Show = (props:  ShowProps) => {
-  const { showVisible, closeShow, id,form} = props;
-  const { getFieldDecorator } = form;
-  const title="查看收费单";
+const Show = (props: ShowProps) => {
+  const { showVisible, closeShow, id, form } = props;
+  const title = "查看收费单";
   const [loading, setLoading] = useState<boolean>(false);
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
-  const [chargeBillData,setChargeBillData]=useState<any[]>([]);
+  const [chargeBillData, setChargeBillData] = useState<any[]>([]);
   // 打开抽屉时初始化
   useEffect(() => {
     form.resetFields();
     if (showVisible) {
-      if(id){
-        GetEntityShow(id).then(res=>{
-          if(res!=null)
-          {  setInfoDetail(res.entity);
-          return res.entity.billID;
+      if (id) {
+        GetEntityShow(id).then(res => {
+          if (res != null) {
+            setInfoDetail(res.entity);
+            return res.entity.billID;
           }
           return '';
-        }).then(res=>{
-          if(res!='')
+        }).then(res => {
+          if (res != '')
             initLoadFeeDetail(res);
         })
         /*setPagination(pagesetting => {
@@ -56,8 +52,8 @@ const Show = (props:  ShowProps) => {
             pageSize,
           };
         });*/
-      }else{
-        setInfoDetail({  });
+      } else {
+        setInfoDetail({});
       }
     } else {
 
@@ -86,7 +82,7 @@ const Show = (props:  ShowProps) => {
       key: 'period',
       width: 150,
       sorter: true,
-      render: val => val!=null?<span> {moment(val).format('YYYY年MM月')} </span>:<span></span>
+      render: val => val != null ? <span> {moment(val).format('YYYY年MM月')} </span> : <span></span>
     },
     {
       title: '数量',
@@ -117,13 +113,13 @@ const Show = (props:  ShowProps) => {
       dataIndex: 'beginDate',
       key: 'beginDate',
       width: 150,
-      render: val => val!=null?<span> {moment(val).format('YYYY-MM-DD')} </span>:<span></span>
+      render: val => val != null ? <span> {moment(val).format('YYYY-MM-DD')} </span> : <span></span>
     }, {
       title: '计费终止日期',
       dataIndex: 'endDate',
       key: 'endDate',
       width: 150,
-      render: val => val!=null?<span> {moment(val).format('YYYY-MM-DD')} </span>:<span></span>
+      render: val => val != null ? <span> {moment(val).format('YYYY-MM-DD')} </span> : <span></span>
     },
     {
       title: '备注',
@@ -133,8 +129,8 @@ const Show = (props:  ShowProps) => {
     }
   ] as ColumnProps<any>[];
 
-  const initLoadFeeDetail=(billid)=>{
-    const queryJson = {billid:billid};
+  const initLoadFeeDetail = (billid) => {
+    const queryJson = { billid: billid };
     const sidx = 'begindate';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
@@ -174,121 +170,92 @@ const Show = (props:  ShowProps) => {
       visible={showVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
-      <Form hideRequiredMark>
-            <Row gutter={4}>
-              <Col span={8}>
-                <Form.Item label="收款单号"  labelCol={{span:8}} wrapperCol={{span:16}} >
-                  {getFieldDecorator('billCode', {
-                    initialValue: infoDetail.billCode,
-                  })(
-                    <Input disabled={true} style={{width:'100%'}}/>
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item label="收款日期"  labelCol={{span:8}} wrapperCol={{span:16}}>
-                  {getFieldDecorator('billDate', {
-                    initialValue: infoDetail.billDate==null?moment(new Date):moment(infoDetail.billDate),
-                  })(
-                    <DatePicker disabled={true} style={{width:'100%'}}/>
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item label="发票编号" labelCol={{span:8}} wrapperCol={{span:16}}>
-                  {getFieldDecorator('invoiceCdde', {
-                    initialValue: infoDetail.invoiceCdde,
-                  })(
-                    <Input disabled={true} style={{width:'100%'}}/>
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={4}>
-              <Col span={8}>
-                <Form.Item label="收款编号"  labelCol={{span:8}} wrapperCol={{span:16}} >
-                  {getFieldDecorator('payCode', {
-                    initialValue: infoDetail.payCode,
-                  })(
-                    <Input disabled={true} style={{width:'100%'}}/>
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item label="冲红单号" labelCol={{span:8}} wrapperCol={{span:16}}>
-                  {getFieldDecorator('linkId', {
-                    initialValue: infoDetail.linkId,
-                  })(
-                    <Input disabled={true} style={{width:'100%'}}/>
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item label="收款人" labelCol={{span:8}} wrapperCol={{span:16}}>
-                  {getFieldDecorator('createUserName', {
-                    initialValue: infoDetail.createUserName,
-                  })(
-                    <Input disabled={true} style={{width:'100%'}}/>
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={4}>
-              <Col span={8}>
-              <Form.Item label="审核人"  labelCol={{span:8}} wrapperCol={{span:16}} >
-                  {getFieldDecorator('verifyPerson', {
-                    initialValue: infoDetail.verifyPerson,
-                  })(
-                    <Input disabled={true} style={{width:'100%'}}/>
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item label="审核情况" labelCol={{span:8}} wrapperCol={{span:16}} >
-                  {getFieldDecorator('verifyMemo', {
-                    initialValue: infoDetail.verifyMemo,
-                  })(
-                    <Input disabled={true} style={{width:'100%'}}/>
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item label="创建日期" labelCol={{span:8}} wrapperCol={{span:16}} >
-                  {getFieldDecorator('createDate', {
-                    initialValue:infoDetail.createDate==null?moment(new Date): moment(infoDetail.createDate),
-                  })(
-                    <DatePicker disabled={true} style={{width:'100%'}}/>
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={4}>
-              <Col span={24}>
-              <Form.Item label="收款金额" labelCol={{span:2}} wrapperCol={{span:22}}>
-                  {getFieldDecorator('amountDetail', {
-                    initialValue:`收款金额：${infoDetail.payAmountA +infoDetail.payAmountB +infoDetail.payAmountC }元,其中${infoDetail.payTypeA} ${infoDetail.payAmountA }元，${infoDetail.payTypeB} ${infoDetail.payAmountB}元， ${infoDetail.payTypeC} ${infoDetail.payAmountC }元`,
-                  })(
-                    <Input disabled={true} style={{width:'100%'}}/>
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-          </Form>
-          <Row>
-            <Col span={24}>
-              <Table
-                bordered={true}
-                size="middle"
-                dataSource={chargeBillData}
-                columns={columns}
-                rowKey={record => record.billID}
-                pagination={pagination}
-                scroll={{ y: 500, x: 1550 }}
-              />
+      <Card className={styles.card}>
+        <Form layout="vertical" >
+          <Row gutter={24}>
+            <Col span={6}>
+              <Form.Item label="收款单号"  >
+                {infoDetail.billCode}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item label="收款日期" >
+                {infoDetail.billDate}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item label="发票编号"  >
+                {infoDetail.invoiceCdde}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item label="收款编号"  >
+                {infoDetail.payCode}
+              </Form.Item>
             </Col>
           </Row>
+          <Row gutter={24}>
+
+            <Col span={6}>
+              <Form.Item label="冲红单号" >
+                {infoDetail.linkId}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item label="收款人"  >
+                {infoDetail.createUserName}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item label="审核人"   >
+                {infoDetail.verifyPerson}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item label="审核情况"   >
+                {infoDetail.verifyMemo}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={24}>
+            <Col span={24}>
+              <Form.Item label="收款金额" >
+                {`${infoDetail.payAmountA + infoDetail.payAmountB + infoDetail.payAmountC}元,其中${infoDetail.payTypeA} ${infoDetail.payAmountA}元，${infoDetail.payTypeB} ${infoDetail.payAmountB}元， ${infoDetail.payTypeC} ${infoDetail.payAmountC}元`}
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
+      </Card>
+      <Table
+        bordered={true}
+        size="middle"
+        dataSource={chargeBillData}
+        columns={columns}
+        rowKey={record => record.billID}
+        pagination={pagination}
+        scroll={{ y: 500, x: 1550 }}
+      />
+
+
+      <div
+        style={{
+          position: 'absolute',
+          left: 0,
+          bottom: 0,
+          width: '100%',
+          borderTop: '1px solid #e9e9e9',
+          padding: '10px 16px',
+          background: '#fff',
+          textAlign: 'right',
+        }}
+      >
+        <Button onClick={close} style={{ marginRight: 8 }}>
+          取消
+           </Button>
+      </div>
+
     </Drawer>
   );
 };
-export default Form.create< ShowProps>()(Show);
+export default Form.create<ShowProps>()(Show);
 

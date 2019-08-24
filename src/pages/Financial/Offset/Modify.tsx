@@ -31,7 +31,7 @@ const Modify = (props: ModifyProps) => {
   const title = id === undefined ? '新增冲抵单' : '修改冲抵单';
   const [loading, setLoading] = useState<boolean>(false);
   const { getFieldDecorator } = form;
-  const [units,setUnits] = useState<string>([]);
+  // const [units,setUnits] = useState<string>([]);
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [noticeData, setNoticeData] = useState<any>([]);
   const [pagination, setPagination] = useState<DefaultPagination>(new DefaultPagination());
@@ -54,12 +54,12 @@ const Modify = (props: ModifyProps) => {
     closeDrawer();
   };
 
-  const guid=()=> {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-        return v.toString(16);
-    });
-  }
+  // const guid=()=> {
+  //   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+  //       var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+  //       return v.toString(16);
+  //   });
+  // }
 
    //明细表数据
   const loadNoticeData = (search, organizeID,paginationConfig?: PaginationConfig, sorter?) => {

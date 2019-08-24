@@ -29,7 +29,7 @@ interface ModifyProps {
 const Modify = (props: ModifyProps) => {
   const { treeData, modifyVisible, data, closeDrawer, form, organizeId, reload } = props;
   const { getFieldDecorator } = form;
-  const title = data === undefined ? '添加小区' : '修改小区';
+  const title = data === undefined ? '添加车位' : '修改车位';
   const [infoDetail, setInfoDetail] = useState<any>({});
 
   // 打开抽屉时初始化
@@ -84,16 +84,17 @@ const Modify = (props: ModifyProps) => {
       reload();
     });
   };
-  const selectOrg = orgId => {
-    const type = treeData.filter(item => item.id === orgId)[0].type;
-    if (type !== '4') {
-      Modal.warn({
-        title: '警告',
-        content: '只能选到楼层不可以选择其他层次！',
-      });
-    }
-    form.setFieldsValue({ parentId: undefined });
-  };
+
+  // const selectOrg = orgId => {
+  //   const type = treeData.filter(item => item.id === orgId)[0].type;
+  //   if (type !== '4') {
+  //     Modal.warn({
+  //       title: '警告',
+  //       content: '只能选到楼层不可以选择其他层次！',
+  //     });
+  //   }
+  //   form.setFieldsValue({ parentId: undefined });
+  // };
 
   return (
     <Drawer
@@ -104,7 +105,7 @@ const Modify = (props: ModifyProps) => {
       visible={modifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
-      <Card title="基本信息" className={styles.card} bordered={false}>
+      <Card title="基本信息" className={styles.card}>
         {modifyVisible ? (
           <Form layout="vertical" hideRequiredMark>
             <Row gutter={24}>

@@ -1,49 +1,45 @@
 //审核
 import {
-
-  Checkbox,
-  Tabs,
-  Select,
-  Button,Table,
+  Card,
+  Button,
   Col,
-  DatePicker,
   Drawer,
   Form,
-  Input,InputNumber,
+  Input,
   Row,
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetEntity,Audit} from './Main.service';
+import { GetEntity, Audit } from './Main.service';
 import styles from './style.less';
-import  moment from 'moment';
+import moment from 'moment';
 
 interface VertifyProps {
   vertifyVisible: boolean;
   closeVertify(): void;
   form: WrappedFormUtils;
-  id?:string;
-  ifVertify:boolean;
-  reload():void;
+  id?: string;
+  ifVertify: boolean;
+  reload(): void;
 }
-const Vertify = (props:  VertifyProps) => {
-  const { vertifyVisible, closeVertify, id,form,ifVertify,reload} = props;
+const Vertify = (props: VertifyProps) => {
+  const { vertifyVisible, closeVertify, id, form, ifVertify, reload } = props;
   const { getFieldDecorator } = form;
-  const title=ifVertify?"收款单取消审核":"收款单审核";
+  const title = ifVertify ? "收款单取消审核" : "收款单审核";
   const [infoDetail, setInfoDetail] = useState<any>({});
   // 打开抽屉时初始化
   useEffect(() => {
     form.resetFields();
     if (vertifyVisible) {
-      if(id){
-        GetEntity(id).then(res=>{
-          if(res!=null)
-        /*  var infoTemp =Object.assign({},res.entity,
-            { feeName:res.feeName, customerName:res.customerName, unitName:res.unitName});*/
-          setInfoDetail(res);
+      if (id) {
+        GetEntity(id).then(res => {
+          if (res != null)
+            /*  var infoTemp =Object.assign({},res.entity,
+                { feeName:res.feeName, customerName:res.customerName, unitName:res.unitName});*/
+            setInfoDetail(res);
         });
-      }else{
-        setInfoDetail({  });
+      } else {
+        setInfoDetail({});
       }
     } else {
 
@@ -54,18 +50,19 @@ const Vertify = (props:  VertifyProps) => {
     closeVertify();
   };
 
-  const save=()=>{
-    form.validateFields((errors, values) =>{
-      console.log(values,infoDetail);
-      var newData=Object.assign({},values,
-        {verifyPerson:ifVertify?localStorage.getItem('userid'):'',
-        verifyDate:ifVertify?moment(new Date).format('YYYY-MM-DD'):'',
-        verifyMemo:ifVertify?values.verifyMemo:'',
-        keyValue:infoDetail.billID,
-        billDate:moment(values.billDate).format('YYYY-MM-DD'),
-        status:ifVertify?2:1//，已收未审核1，已审核2，已冲红3
-      });
-      Audit(newData).then(res=>{
+  const save = () => {
+    form.validateFields((errors, values) => {
+      // console.log(values, infoDetail);
+      var newData = Object.assign({}, infoDetail,
+        {
+          verifyPerson: localStorage.getItem('userid'),
+          verifyDate: moment(new Date).format('YYYY-MM-DD'),
+          verifyMemo: values.verifyMemo,
+          keyValue: infoDetail.billID,
+          billDate: moment(values.billDate).format('YYYY-MM-DD'),
+          status: ifVertify ? 1 : 2//，已收未审核1，已审核2，已冲红3
+        });
+      Audit(newData).then(res => {
         reload();
         close();
       });
@@ -80,136 +77,90 @@ const Vertify = (props:  VertifyProps) => {
       visible={vertifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
-      <Form hideRequiredMark>
-        <Row gutter={4}>
-          <Col span={8}>
-            <Form.Item label="收款单号"  labelCol={{span:8}} wrapperCol={{span:16}} >
-              {getFieldDecorator('billCode', {
-                initialValue: infoDetail.billCode,
-              })(
-                <Input disabled={true} style={{width:'100%'}}/>
-              )}
-            </Form.Item>
-          </Col>
-          <Col span={8}>
-            <Form.Item label="收款日期"  labelCol={{span:8}} wrapperCol={{span:16}}>
-              {getFieldDecorator('billDate', {
-                initialValue: infoDetail.billDate==null?moment(new Date):moment(infoDetail.billDate),
-              })(
-                <DatePicker disabled={true} style={{width:'100%'}}/>
-              )}
-            </Form.Item>
-          </Col>
-          <Col span={8}>
-            <Form.Item label="收款人" labelCol={{span:8}} wrapperCol={{span:16}}>
-              {getFieldDecorator('createUserName', {
-                initialValue: infoDetail.createUserName,
-              })(
-                <Input disabled={true} style={{width:'100%'}}/>
-              )}
-            </Form.Item>
+      <Card className={styles.card}>
+        <Form layout="vertical">
+          <Row gutter={24}>
+            <Col span={6}>
+              <Form.Item label="收款单号"  >
+                {infoDetail.billCode}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item label="收款日期"  >
+                {infoDetail.billDate}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item label="收据编号" >
+                {infoDetail.payCode}
+              </Form.Item>
+            </Col>
 
-          </Col>
-        </Row>
-        <Row gutter={4}>
-          <Col span={8}>
-            <Form.Item label="收款方式A"  labelCol={{span:8}} wrapperCol={{span:16}} >
-              {getFieldDecorator('payTypeA', {
-                initialValue: infoDetail.payTypeA,
-              })(
-                <Input disabled={true} style={{width:'100%'}}/>
-              )}
-            </Form.Item>
-          </Col>
-          <Col span={8}>
-            <Form.Item label="收款金额A" labelCol={{span:8}} wrapperCol={{span:16}}>
-              {getFieldDecorator('payAmountA', {
-                initialValue: infoDetail.payAmountA,
-              })(
-                <Input disabled={true} style={{width:'100%'}}/>
-              )}
-            </Form.Item>
-          </Col>
-          <Col span={8}>
-            <Form.Item label="发票编号" labelCol={{span:8}} wrapperCol={{span:16}}>
-              {getFieldDecorator('invoiceCdde', {
-                initialValue: infoDetail.invoiceCdde,
-              })(
-                <Input disabled={true} style={{width:'100%'}}/>
-              )}
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={4}>
-          <Col span={8}>
-            <Form.Item label="收款方式B"  labelCol={{span:8}} wrapperCol={{span:16}} >
-              {getFieldDecorator('payTypeB', {
-                initialValue: infoDetail.payTypeB,
-              })(
-                <Input disabled={true} style={{width:'100%'}}/>
-              )}
-            </Form.Item>
-          </Col>
-          <Col span={8}>
-            <Form.Item label="收款金额B" labelCol={{span:8}} wrapperCol={{span:16}}>
-              {getFieldDecorator('payAmountB', {
-                initialValue: infoDetail.payAmountB,
-              })(
-                <Input disabled={true} style={{width:'100%'}}/>
-              )}
-            </Form.Item>
-          </Col>
-          <Col span={8}>
-            <Form.Item label="收据编号" labelCol={{span:8}} wrapperCol={{span:16}}>
-              {getFieldDecorator('payCode', {
-                initialValue: infoDetail.payCode,
-              })(
-                <Input disabled={true} style={{width:'100%'}}/>
-              )}
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={4}>
-          <Col span={8}>
-            <Form.Item label="收款方式C"  labelCol={{span:8}} wrapperCol={{span:16}} >
-              {getFieldDecorator('payTypeC', {
-                initialValue: infoDetail.payTypeC,
-              })(
-                <Input disabled={true} style={{width:'100%'}}/>
-              )}
-            </Form.Item>
-          </Col>
-          <Col span={8}>
-            <Form.Item label="收款金额C" labelCol={{span:8}} wrapperCol={{span:16}}>
-              {getFieldDecorator('payAmountC', {
-                initialValue: infoDetail.payAmountC,
-              })(
-                <Input disabled={true} style={{width:'100%'}}/>
-              )}
-            </Form.Item>
-          </Col>
-          <Col span={8}>
-            <Form.Item label="审核人"  labelCol={{span:8}} wrapperCol={{span:16}} >
-              {getFieldDecorator('verifyPerson', {
-                initialValue: infoDetail.verifyPerson,
-              })(
-                <Input disabled={true} style={{width:'100%'}}/>
-              )}
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={4}>
-          <Col span={24}>
-          <Form.Item label="审核情况" labelCol={{span:2}} wrapperCol={{span:22}}>
-              {getFieldDecorator('verifyMemo', {
-                initialValue: infoDetail.verifyMemo,
-              })(
-                <Input.TextArea rows={6} style={{width:'100%'}}/>
-              )}
-            </Form.Item>
-          </Col>
-        </Row>
-      </Form>
+            <Col span={6}>
+              <Form.Item label="发票编号"  >
+                {infoDetail.invoiceCdde}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={24}>
+            <Col span={6}>
+              <Form.Item label="收款方式A"   >
+                {infoDetail.payTypeA}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item label="收款金额A" >
+                {infoDetail.payAmountA}
+              </Form.Item>
+            </Col>
+
+            <Col span={6}>
+              <Form.Item label="收款方式B"  >
+                {infoDetail.payTypeB}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item label="收款金额B"  >
+                {infoDetail.payAmountB}
+              </Form.Item>
+            </Col>
+
+          </Row>
+          <Row gutter={24}>
+            <Col span={6}>
+              <Form.Item label="收款方式C"   >
+                {infoDetail.payTypeC}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item label="收款金额C" >
+                {infoDetail.payAmountC}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item label="收款人" >
+                {infoDetail.createUserName}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item label="审核人"  >
+                {infoDetail.verifyPerson}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={24}>
+            <Col span={24}>
+              <Form.Item label="审核情况" >
+                {getFieldDecorator('verifyMemo', {
+                  initialValue: infoDetail.verifyMemo,
+                })(
+                  <Input.TextArea rows={6} style={{ width: '100%' }} />
+                )}
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
+      </Card>
       <div
         style={{
           position: 'absolute',
@@ -232,5 +183,5 @@ const Vertify = (props:  VertifyProps) => {
     </Drawer>
   );
 };
-export default Form.create< VertifyProps>()(Vertify);
+export default Form.create<VertifyProps>()(Vertify);
 

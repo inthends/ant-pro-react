@@ -37,8 +37,7 @@ const PstructInfo = (props: PstructInfoProps) => {
   const [userSource, setUserSource] = useState<any[]>([]);
 
   // 打开抽屉时初始化
-  useEffect(() => {
-
+  useEffect(() => { 
   }, []);
 
 
@@ -100,6 +99,7 @@ const PstructInfo = (props: PstructInfoProps) => {
   //   }
   // };
 
+  //用户选择
   const handleSearch = value => {
     if (value == '')
       return;
@@ -113,11 +113,11 @@ const PstructInfo = (props: PstructInfoProps) => {
 
   const onOwnerSelect = (value, option) => {
     form.setFieldsValue({ ownerId: option.key });
-  }
+  };
 
   const onTenantSelect = (value, option) => {
     form.setFieldsValue({ tenantId: option.key });
-  }
+  };
 
   return (
     <Drawer
@@ -188,23 +188,21 @@ const PstructInfo = (props: PstructInfoProps) => {
                 </Form.Item>
               </Col>
               <Col lg={12}>
-                <Form.Item label="住户">
+                <Form.Item label="租户">
                   {getFieldDecorator('tenantName', {
                     initialValue: infoDetail.tenantName,
                   })(<AutoComplete
                     dataSource={userList}
                     style={{ width: '100%' }}
                     onSearch={handleSearch}
-                    placeholder="请输入住户"
+                    placeholder="请输入租户"
                     onSelect={onTenantSelect}
-                  />)}
-
+                  />)} 
                   {getFieldDecorator('tenantId', {
                     initialValue: infoDetail.tenantId,
                   })(
                     <input type='hidden' />
-                  )}
-
+                  )} 
                 </Form.Item>
               </Col>
             </Row>

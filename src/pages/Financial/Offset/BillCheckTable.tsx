@@ -105,7 +105,8 @@ function BillCheckTable(props: BillCheckTableProps) {
       dataIndex: 'operation',
       key: 'operation',
       fixed: 'right',
-      width: 230,
+      align:'center',
+      width: 155,
       render: (text, record) => {
         if (record.ifVerify) {
           return [

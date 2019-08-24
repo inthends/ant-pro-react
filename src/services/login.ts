@@ -11,6 +11,10 @@ export async function loginService(data: any): Promise<any> {
   });
 }
 
+// export async function logoutService(params): Promise<any> {
+//   return request.get('/logout', { params });
+// }
+
 export async function logoutService(params): Promise<any> {
-  return request.get('/logout', { params });
+  return request.get(process.env.basePath + '/Login/Logout', { params });
 }

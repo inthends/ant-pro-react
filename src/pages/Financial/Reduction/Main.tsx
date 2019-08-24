@@ -8,7 +8,7 @@ import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
 import DetailList from './DetailList';
-import { bool } from 'prop-types';
+// import { bool } from 'prop-types';
 const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;

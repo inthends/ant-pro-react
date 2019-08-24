@@ -261,9 +261,10 @@ const Modify = (props: ModifyProps) => {
       <PageHeader
         title={infoDetail.billCode}
         subTitle={GetStatus(infoDetail)}
-        extra={[
-          <Button key="3">附件</Button>,
-        ]}>
+        // extra={[
+        //   <Button key="3">附件</Button>,
+        // ]}
+        >
         <Paragraph>
           {infoDetail.address}，{infoDetail.contactName}，电话：<a>{infoDetail.contactLink}</a>，在 {infoDetail.billDate} 报修，内容如下
         </Paragraph>

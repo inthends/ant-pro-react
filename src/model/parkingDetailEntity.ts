@@ -10,11 +10,10 @@
  * Do not edit the class manually.
  */
 
-
 /**
  * 车位详细信息
  */
-export interface ParkingDetailEntity { 
+export interface ParkingDetailEntity {
     /**
      * 
      */
@@ -31,6 +30,18 @@ export interface ParkingDetailEntity {
      * 业主id
      */
     ownerId?: string;
+    /**
+  * 业主
+  */
+    ownerName?: string;
+    /**
+  * 租户Id
+  */
+    tenantId?: string;
+    /**
+  * 租户
+  */
+    tenantName?: string;
     /**
      * 是否有效的标志
      */
@@ -55,10 +66,7 @@ export interface ParkingDetailEntity {
      * 
      */
     deliveryDate?: Date;
-    /**
-     * 租户Id
-     */
-    customerId?: string;
+
     /**
      * 
      */

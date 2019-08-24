@@ -1,9 +1,9 @@
-import { PStructsData, ResponseObject, TreeEntity } from '@/model/models';
+// import { PStructsData, ResponseObject, TreeEntity } from '@/model/models';
 import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
-export function GetTreeJsonById(): Promise<TreeEntity[]> {
-  return request.get(process.env.basePath + `/Common/GetTreeJsonById`, {}).then(getResult);
-}
+// export function GetTreeJsonById(): Promise<TreeEntity[]> {
+//   return request.get(process.env.basePath + `/Common/GetTreeJsonById`, {}).then(getResult);
+// }
 
 //获取组织机构
 export function GetTreeListJson(data): Promise<any> {

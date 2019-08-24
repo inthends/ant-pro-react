@@ -1,5 +1,6 @@
-import { TreeEntity } from '@/model/models';
+ 
 import {
+  Row,
   Button,
   Card,
   Col,
@@ -7,22 +8,18 @@ import {
   Form,
   Input,
   message,
-  Modal,
-  Row,
-  Select,
-  Tree,
+  Select, 
   TreeSelect,
   Checkbox,
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { SaveForm, GetTreeJsonById } from './Main.service';
+import { SaveForm } from './Main.service';
 import { getCommonItems } from '@/services/commonItem';
 import styles from './style.less';
 
 const { Option } = Select;
-const { TextArea } = Input;
-const { TreeNode } = Tree;
+const { TextArea } = Input; 
 
 interface ModifyProps {
   modifyVisible: boolean;
@@ -30,22 +27,22 @@ interface ModifyProps {
   form: WrappedFormUtils;
   closeDrawer(): void;
   reload(): void;
+  treeData: any[];
 }
 const Modify = (props: ModifyProps) => {
-  const { modifyVisible, data, closeDrawer, form, reload } = props;
+  const { modifyVisible, data, closeDrawer, form, reload, treeData } = props;
   const { getFieldDecorator } = form;
   const title = data === undefined ? '添加住户资料' : '修改住户资料';
-  const [infoDetail, setInfoDetail] = useState<any>({});
-
-  const [treeData, setTreeData] = useState<TreeEntity[]>([]); //所属机构
+  const [infoDetail, setInfoDetail] = useState<any>({}); 
+  // const [treeData, setTreeData] = useState<TreeEntity[]>([]); //所属机构
   const [banks, setBanks] = useState<any[]>([]); // 开户银行
   // const [banks, setBanks] = useState<any[]>([]); // 证件类别
   // const [banks, setBanks] = useState<any[]>([]); // 企业性质
   // 打开抽屉时初始化
   useEffect(() => {
-    GetTreeJsonById().then((res: TreeEntity[]) => {
-      setTreeData(res || []);
-    });
+    // GetTreeJsonById().then((res: TreeEntity[]) => {
+    //   setTreeData(res || []);
+    // });
     // 获取开户银行
     getCommonItems('Bank').then(res => {
       setBanks(res || []);
@@ -116,9 +113,16 @@ const Modify = (props: ModifyProps) => {
                     initialValue: infoDetail.organizeId,
                     rules: [{ required: true, message: '请选择隶属机构' }],
                   })(
-                    <TreeSelect placeholder="请选择隶属机构" allowClear treeDefaultExpandAll>
-                      {renderTree(treeData, '0')}
-                    </TreeSelect>,
+                    // <TreeSelect placeholder="请选择隶属机构" allowClear treeDefaultExpandAll>
+                    //   {renderTree(treeData, '0')}
+                    // </TreeSelect>,
+
+                    <TreeSelect
+                      placeholder="请选择所在位置"
+                      dropdownStyle={{ maxHeight: 350 }}
+                      treeData={treeData} 
+                      treeDataSimpleMode={true}>
+                    </TreeSelect>,  
                   )}
                 </Form.Item>
               </Col>
@@ -371,14 +375,14 @@ const Modify = (props: ModifyProps) => {
 
 export default Form.create<ModifyProps>()(Modify);
 
-const renderTree = (treeData: TreeEntity[], parentId: string) => {
-  return treeData
-    .filter(item => item.parentId === parentId)
-    .map(filteditem => {
-      return (
-        <TreeNode title={filteditem.text} key={filteditem.id} value={filteditem.id}>
-          {renderTree(treeData, filteditem.id as string)}
-        </TreeNode>
-      );
-    });
-};
+// const renderTree = (treeData: TreeEntity[], parentId: string) => {
+//   return treeData
+//     .filter(item => item.parentId === parentId)
+//     .map(filteditem => {
+//       return (
+//         <TreeNode title={filteditem.text} key={filteditem.id} value={filteditem.id}>
+//           {renderTree(treeData, filteditem.id as string)}
+//         </TreeNode>
+//       );
+//     });
+// };

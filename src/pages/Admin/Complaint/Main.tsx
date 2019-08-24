@@ -1,4 +1,4 @@
- 
+
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
@@ -6,13 +6,15 @@ import React, { useEffect, useState } from 'react';
 import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
+import Show from './Show';
 import { GetPageListJson } from './Main.service';
 
 const { Content } = Layout;
 const { Search } = Input;
 
 function Main() {
-  const [modifyVisible, setModifyVisible] = useState<boolean>(false); 
+  const [modifyVisible, setModifyVisible] = useState<boolean>(false);
+  const [viewVisible, setViewVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [organize, SetOrganize] = useState<any>({});
@@ -58,6 +60,17 @@ function Main() {
     setCurrData(item);
     setModifyVisible(true);
   };
+
+  const closeViewDrawer = () => {
+    setViewVisible(false);
+  };
+
+  const showViewDrawer = (item?) => {
+    setCurrData(item);
+    setViewVisible(true);
+  };
+   
+ 
   const loadData = (searchText, org, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(searchText);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
@@ -149,6 +162,7 @@ function Main() {
           pagination={pagination}
           data={data}
           modify={showDrawer}
+          show={showViewDrawer}
           reload={() => initLoadData(organize, search)}
         />
       </Content>
@@ -159,6 +173,13 @@ function Main() {
         data={currData}
         reload={() => initLoadData(organize, search)}
       />
+
+      <Show
+        modifyVisible={viewVisible}
+        closeDrawer={closeViewDrawer}
+        data={currData} 
+      />
+
     </Layout>
   );
 }

@@ -165,12 +165,12 @@ const Modify = (props: ModifyProps) => {
       setUserSource(res || []);
     })
   };
-  
+
   const userList = userSource.map
     (item => <Option key={item.id} value={item.name}>{item.name}</Option>);
 
   //选择投诉对象
-  const onOwnerSelect = (value, option) => { 
+  const onOwnerSelect = (value, option) => {
     //form.setFieldsValue({ownerId: option.key });
   }
 
@@ -193,20 +193,18 @@ const Modify = (props: ModifyProps) => {
       <PageHeader
         title={infoDetail.billCode}
         subTitle={GetStatus(infoDetail)}
-        extra={[
-          <Button key="1">附件</Button>
-        ]}
+      // extra={[
+      //   <Button key="1">附件</Button>
+      // ]}
       >
         <Paragraph>
           {infoDetail.complaintAddress}，{infoDetail.complaintUser}，电话：<a>{infoDetail.complaintLink}</a>，在 {infoDetail.billDate} 投诉，内容如下
         </Paragraph>
         {infoDetail.contents}
       </PageHeader>
-      <Divider dashed />
-
+      <Divider dashed /> 
       {modifyVisible ? (
         <Form layout="vertical" hideRequiredMark>
-
           {infoDetail.status == 1 ? (
             <Card title="立项信息" className={styles.card}  >
               <Row gutter={24}>
@@ -282,7 +280,6 @@ const Modify = (props: ModifyProps) => {
                       initialValue: infoDetail.handleCharger,
                       rules: [{ required: true, message: '请选择处理负责人' }],
                     })(<Input placeholder="请选择处理负责人" />)}
-
                     {getFieldDecorator('handleChargerID', {
                       initialValue: infoDetail.handleChargerID
                     })(<Input type='hidden' />)}
@@ -371,8 +368,7 @@ const Modify = (props: ModifyProps) => {
                       {infoDetail.setUpUserName}
                     </Form.Item>
                   </Col>
-                </Row>
-
+                </Row> 
                 <Row gutter={24}>
                   <Col lg={6}>
                     <Form.Item label="立项时间">
@@ -397,13 +393,11 @@ const Modify = (props: ModifyProps) => {
                       initialValue: infoDetail.handleUser,
                       rules: [{ required: true, message: '请输入实际处理人' }],
                     })(
-
                       <AutoComplete
                         dataSource={userList}
                         onSearch={handleUserSearch}
-                        placeholder="请输入实际处理人" 
-                      />
-
+                        placeholder="请输入实际处理人"
+                      /> 
                     )}
                   </Form.Item>
                 </Col>

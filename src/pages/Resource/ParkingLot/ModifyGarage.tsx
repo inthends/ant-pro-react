@@ -1,5 +1,5 @@
 import { ParkingData, TreeEntity } from '@/model/models';
-import { Button, Card, Col, Drawer, Form, Input, message, Row, Tree, TreeSelect } from 'antd';
+import { Button, Card, Col, Drawer, Form, Input, message, Row, Tree, TreeSelect, InputNumber } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import {  GetQuickParkingTree, SaveGarageForm } from './ParkingLot.service';
@@ -85,7 +85,7 @@ const ModifyGarage = (props: ModifyGarageProps) => {
       visible={modifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
-      <Card title="基本信息" className={styles.card} bordered={false}>
+      <Card title="基本信息" className={styles.card} >
         {modifyVisible ? (
           <Form layout="vertical" hideRequiredMark>
             <Row gutter={24}>
@@ -162,7 +162,7 @@ const ModifyGarage = (props: ModifyGarageProps) => {
                 <Form.Item label="建筑面积(㎡)">
                   {getFieldDecorator('area', {
                     initialValue: infoDetail.area || 0,
-                  })(<Input placeholder="请输入建筑面积(㎡)" />)}
+                  })(<InputNumber placeholder="请输入建筑面积(㎡)" style={{ width: '100%' }}/>)}
                 </Form.Item>
               </Col>
 
@@ -170,7 +170,7 @@ const ModifyGarage = (props: ModifyGarageProps) => {
                 <Form.Item label="占地面积(㎡)">
                   {getFieldDecorator('coverArea', {
                     initialValue: infoDetail.coverArea || 0,
-                  })(<Input placeholder="请输入占地面积(㎡)" />)}
+                  })(<InputNumber placeholder="请输入占地面积(㎡)" style={{ width: '100%' }}/>)}
                 </Form.Item>
               </Col>
             </Row>

@@ -1,6 +1,6 @@
 //已收列表
 import Page from '@/components/Common/Page';
-import { Icon , Menu, Dropdown, Divider , message, Table, Modal } from 'antd';
+import { Icon, Menu, Dropdown, Divider, message, Table, Modal } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState } from 'react';
 import moment from 'moment';
@@ -13,27 +13,17 @@ interface ChargeListTableProps {
   pagination: PaginationConfig;
   data: any[];
   showDetail(): void;
+  showVertify(id: string, ifVertify: boolean): void;
   reload(): void;
   getRowSelect(record): void;
 }
 
 function ChargeListTable(props: ChargeListTableProps) {
-  const { onchange, loading, pagination, data, reload, getRowSelect,showDetail } = props;
-  const changePage = (pagination: PaginationConfig, filters, sorter) => {
-    onchange(pagination, filters, sorter);
-  };
-  const doDelete = record => {
-    Modal.confirm({
-      title: '请确认',
-      content: `您是否要删除${record.name}`,
-      onOk: () => {
-        RemoveForm(record.id).then(() => {
-          message.success('保存成功');
-          reload();
-        });
-      },
-    });
-  };
+  const { onchange, loading, pagination, data, reload, getRowSelect, showDetail, showVertify } = props;
+  // const changePage = (pagination: PaginationConfig, filters, sorter) => {
+  //   onchange(pagination, filters, sorter);
+  // };
+
 
   const MoreBtn: React.FC<{
     item: any;
@@ -41,9 +31,8 @@ function ChargeListTable(props: ChargeListTableProps) {
     <Dropdown
       overlay={
         <Menu onClick={({ key }) => editAndDelete(key, item)}>
-          <Menu.Item key="view">查看</Menu.Item>
-          <Menu.Item key="split">拆费</Menu.Item>
-          <Menu.Item key="change">转费</Menu.Item>
+          <Menu.Item key="redflush">冲红</Menu.Item>
+          <Menu.Item key="delete">作废</Menu.Item>
         </Menu>}>
       <a>
         更多<Icon type="down" />
@@ -52,17 +41,22 @@ function ChargeListTable(props: ChargeListTableProps) {
   );
 
   const editAndDelete = (key: string, currentItem: any) => {
-    if (key === 'edit') {
+    if (key === 'redflush') {
       //this.showEditModal(currentItem);
+
+
     }
-    else if (key === 'delete') {
+    else if (key === 'delete') { 
       Modal.confirm({
-        title: '删除任务',
-        content: '确定删除该任务吗？',
-        okText: '确认',
-        cancelText: '取消',
-        //onOk: () => this.deleteItem(currentItem.id),
-      });
+        title: '请确认',
+        content: `您是否要作废${currentItem.billCode}`,
+        onOk: () => {
+          RemoveForm(currentItem.id).then(() => {
+            message.success('作废成功');
+            reload();
+          });
+        },
+      }); 
     }
   };
 
@@ -117,7 +111,7 @@ function ChargeListTable(props: ChargeListTableProps) {
       title: '审核日期',
       dataIndex: 'verifyDate',
       key: 'verifyDate',
-      width: 100, 
+      width: 100,
       render: val => val == null || val == "" ? <span></span> : <span> {moment(val).format('YYYY-MM-DD')} </span>
     }, {
       title: '审核人',
@@ -137,7 +131,7 @@ function ChargeListTable(props: ChargeListTableProps) {
       dataIndex: 'verifyMemo',
       key: 'verifyMemo',
       width: 120
-    }, 
+    },
     {
       title: '备注',
       dataIndex: 'memo',
@@ -151,11 +145,11 @@ function ChargeListTable(props: ChargeListTableProps) {
       align: 'center',
       width: 150,
       render: (text, record) => {
-        return [  
+        return [
           <span>
             <a onClick={() => showDetail()} key="view">查看</a>
             <Divider type="vertical" />
-            <a onClick={() => doDelete(record)} key="delete">作废</a>
+            {record.status == 1 ? <a onClick={() => showVertify(record.id, false)} key="delete">审核</a> : <a onClick={() => showVertify(record.id, true)} key="delete">反审</a>}
             <Divider type="vertical" />
             <MoreBtn key="more" item={record} />
           </span>

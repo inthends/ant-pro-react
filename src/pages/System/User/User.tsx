@@ -130,7 +130,6 @@ function User() {
           data={data}
           modify={showDrawer}
           reload={() => initLoadData(search)}
-          setData={setData}
         />
       </Content>
       <Modify

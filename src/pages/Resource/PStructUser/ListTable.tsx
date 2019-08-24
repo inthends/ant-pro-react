@@ -65,14 +65,14 @@ function ListTable(props: ListTableProps) {
       title: '简称',
       dataIndex: 'shortname',
       key: 'shortname',
-      width: 150,
+      width: 100,
       // sorter: true,
     },
     {
       title: '客户类别',
       dataIndex: 'flag',
       key: 'flag',
-      width: 150,
+      width: 100,
       render: (text, record) => {
         switch (text) {
           case '1':
@@ -89,7 +89,7 @@ function ListTable(props: ListTableProps) {
       title: '客户证件类型',
       dataIndex: 'certificatetype',
       key: 'certificatetype',
-      width: 150,
+      width: 100,
       render: (text, record) => {
         switch (text) {
           case '1':
@@ -105,7 +105,7 @@ function ListTable(props: ListTableProps) {
       title: '客户证件编号',
       dataIndex: 'certificateno',
       key: 'certificateno',
-      width: 200,
+      width: 100,
       // sorter: true,
     },
     {
@@ -117,7 +117,8 @@ function ListTable(props: ListTableProps) {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
-      width: 155,
+      align:'center',
+      width: 95,
       fixed: 'right',
       render: (text, record) => {
         return [
