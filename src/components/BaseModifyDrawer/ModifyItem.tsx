@@ -7,7 +7,7 @@ interface ModifyItemProps {
   type?: 'select' | 'textarea' | 'password' | 'radio';
   field: string;
   label: React.ReactNode;
-  data: any;
+  initData?: any;
   wholeLine?: boolean;
   form: WrappedFormUtils;
   rules?: ValidationRule[];
@@ -15,7 +15,7 @@ interface ModifyItemProps {
   onChange?(value): void;
 }
 const ModifyItem = (props: ModifyItemProps) => {
-  const { type, field, label, data, wholeLine, form, rules, onChange, items } = props;
+  const { type, field, label, initData, wholeLine, form, rules, onChange, items } = props;
   const { getFieldDecorator } = form;
 
   const getFormItem = () => {
@@ -58,7 +58,7 @@ const ModifyItem = (props: ModifyItemProps) => {
     <Col lg={wholeLine ? 24 : 12}>
       <Form.Item label={label} required>
         {getFieldDecorator(field, {
-          initialValue: data[field],
+          initialValue: initData ? initData[field] : undefined,
           rules,
         })(getFormItem())}
       </Form.Item>

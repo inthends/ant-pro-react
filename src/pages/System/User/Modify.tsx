@@ -12,16 +12,17 @@ interface ModifyProps {
   reload(): void;
 }
 const Modify = (props: ModifyProps) => {
-  const { visible, data, form } = props;
+  const { data, form } = props;
   const { saveSuccess } = useContext(BaseModify);
+  const initData = data ? data : { accountType: 2 };
 
   const doSave = dataDetail => {
     console.log(dataDetail);
-    // SaveForm({ ...data,...dataDetail }).then(res => {
+    // SaveForm({ ...initData,...dataDetail }).then(res => {
     //   saveSuccess();
     // });
   };
-  const baseFormProps = { form, data };
+  const baseFormProps = { form, initData };
   const accountTypes: SelectItem[] = [
     { label: '系统初始账户', value: 1 },
     { label: '员工账户', value: 2 },
@@ -32,16 +33,9 @@ const Modify = (props: ModifyProps) => {
 
   const expModes: SelectItem[] = [{ label: '永久有效', value: 1 }, { label: '临时', value: 2 }];
   return (
-    <BaseModifyProvider {...props} name="用户" save={doSave}>
+    <BaseModifyProvider {...props} name="用户" save={doSave} initData={initData}>
       <Form layout="vertical" hideRequiredMark>
         <Row gutter={24}>
-          <ModifyItem
-            {...baseFormProps}
-            type="select"
-            field="accountType"
-            label="类型"
-            items={accountTypes}
-          ></ModifyItem>
           <ModifyItem {...baseFormProps} field="organizeId" label="所属机构"></ModifyItem>
         </Row>
         <Row gutter={24}>
