@@ -1,10 +1,10 @@
-import { Button, Icon, Input, Layout, Select } from 'antd';
-import React, { useEffect, useState } from 'react';
-import { getDataList } from './User.service';
-import Modify from './Modify';
-import ListTable from './ListTable';
-import { PaginationConfig } from 'antd/lib/table';
 import { DefaultPagination } from '@/utils/defaultSetting';
+import { Button, Icon, Input, Layout, Select } from 'antd';
+import { PaginationConfig } from 'antd/lib/table';
+import React, { useEffect, useState } from 'react';
+import ListTable from './ListTable';
+import Modify from './Modify';
+import { getDataList } from './User.service';
 
 const { Option } = Select;
 const { Content } = Layout;
@@ -130,6 +130,7 @@ function User() {
           data={data}
           modify={showDrawer}
           reload={() => initLoadData(search)}
+          setData={setData}
         />
       </Content>
       <Modify
