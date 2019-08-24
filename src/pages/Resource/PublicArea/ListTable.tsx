@@ -37,7 +37,7 @@ function ListTable(props: ListTableProps) {
       title: '公区名称',
       dataIndex: 'name',
       key: 'name',
-      width: 200,
+      width: 150,
       fixed: 'left',
       sorter: true,
     },
@@ -45,14 +45,14 @@ function ListTable(props: ListTableProps) {
       title: '公区编号',
       dataIndex: 'enCode',
       key: 'enCode',
-      width: 150,
+      width: 100,
       sorter: true,
     },
     {
       title: '全称',
       dataIndex: 'psAllName',
       key: 'psAllName',
-      width: 300,
+      width: 200,
       sorter: true,
     },
     {
@@ -83,26 +83,27 @@ function ListTable(props: ListTableProps) {
       title: '审核人',
       dataIndex: 'auditman',
       key: 'auditman',
-      width: 150,
+      width: 100,
       sorter: true,
     },
     {
       title: '审核日期',
       dataIndex: 'auditdate',
       key: 'auditdate',
-      width: 200,
+      width: 100,
       sorter: true,
     },
     {
       title: '备注',
-      dataIndex: 'memo',
+      dataIndex: 'memo', 
       key: 'memo',
     },
     {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
-      width: 155,
+      align:'center',
+      width: 95,
       fixed: 'right',
       render: (text, record) => {
         return [
@@ -118,7 +119,7 @@ function ListTable(props: ListTableProps) {
           //   删除
           // </Button>,  
           <span>
-          <a onClick={() => modify(record.id)} key="modify">修改</a>
+          <a onClick={() => modify(record)} key="modify">修改</a>
           <Divider type="vertical" />
           <a onClick={() => doDelete(record)} key="delete">删除</a>
         </span> 
@@ -136,7 +137,7 @@ function ListTable(props: ListTableProps) {
         columns={columns}
         rowKey={record => record.pCode}
         pagination={pagination}
-        scroll={{ x: 1850 }}
+        scroll={{ x: 1200 }}
         onChange={(pag: PaginationConfig, filters, sorter) => changePage(pag, filters, sorter)}
         loading={loading}
       />

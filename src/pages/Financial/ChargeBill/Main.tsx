@@ -478,6 +478,7 @@ function Main() {
               pagination={paginationCharge}
               data={dataCharge}
               showDetail={showDetail}
+              showVertify={showVertify}
               reload={() => initChargeLoadData(organizeId)}
               getRowSelect={GetChargedSelectedKey}
             />

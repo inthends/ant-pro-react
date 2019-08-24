@@ -11,11 +11,12 @@ interface ListTableProps {
   data: any[];
   onchange(page: any, filter: any, sort: any): any;
   modify(data: any): void;
+  show(data: any): void;
   reload(): void;
 }
 
 function ListTable(props: ListTableProps) {
-  const { onchange, loading, pagination, data, modify, reload } = props;
+  const { onchange, loading, pagination, data, modify, reload, show } = props;
   const changePage = (pag: PaginationConfig, filters, sorter) => {
     onchange(pag, filters, sorter);
   };
@@ -132,7 +133,7 @@ function ListTable(props: ListTableProps) {
             </span>
           ];
         } else {
-          return [<a onClick={() => modify(record)} key="view">查看</a>];
+          return [<a onClick={() => show(record)} key="view">查看</a>];
         }
       },
     },

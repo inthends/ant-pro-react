@@ -28,7 +28,7 @@ function ListTable(props: ListTableProps) {
             message.success('删除成功');
             reload();
           })
-          .catch(e => {});
+          .catch(e => { });
       },
     });
   };
@@ -38,7 +38,7 @@ function ListTable(props: ListTableProps) {
       modify(res);
     });
   };
-  
+
   const columns = [
     {
       title: '名称',
@@ -104,8 +104,9 @@ function ListTable(props: ListTableProps) {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
-      width: 155,
-      fixed:'right',
+      align: 'center',
+      width: 95,
+      fixed: 'right',
       render: (text, record) => {
         return [
           // <Button
@@ -118,13 +119,12 @@ function ListTable(props: ListTableProps) {
           // </Button>,
           // <Button type="danger" key="delete" onClick={() => doDelete(record)}>
           //   删除
-          // </Button>,
-
+          // </Button>, 
           <span>
-          <a onClick={() => modify(record.id)} key="modify">修改</a>
-          <Divider type="vertical" />
-          <a onClick={() => doDelete(record)} key="delete">删除</a>
-        </span> 
+            <a onClick={() => doModify(record.id)} key="modify">修改</a>
+            <Divider type="vertical" />
+            <a onClick={() => doDelete(record)} key="delete">删除</a>
+          </span>
         ];
       },
     },
@@ -138,7 +138,7 @@ function ListTable(props: ListTableProps) {
         dataSource={data}
         columns={columns}
         rowKey={record => record.id}
-        pagination={pagination} 
+        pagination={pagination}
         scroll={{ x: 1150 }}
         onChange={(pag: PaginationConfig, filters, sorter) => changePage(pag, filters, sorter)}
         loading={loading}

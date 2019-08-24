@@ -132,7 +132,7 @@ function PublicArea() {
           />
           <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer()}>
             <Icon type="plus" />
-            往来单位
+            单位
           </Button>
         </div>
         <ListTable

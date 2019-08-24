@@ -1,13 +1,15 @@
 import { ConnectProps, ConnectState } from '@/models/connect';
 import { CurrentUser } from '@/models/user';
 import { connect } from 'dva';
-import HeaderDropdown from '../HeaderDropdown';
+// import HeaderDropdown from '../HeaderDropdown'; 
+import SelectLang from '../SelectLang';
+import NoticeIconView from './NoticeIconView';
 import React from 'react';
 import Avatar from './AvatarDropdown';
 import styles from './index.less';
-import { Menu, Icon } from 'antd';
-import { FormattedMessage } from 'umi-plugin-locale';
-import { router } from 'umi';
+// import { Menu, Icon } from 'antd';
+// import { FormattedMessage } from 'umi-plugin-locale';
+// import { router } from 'umi';
 
 export type SiderTheme = 'light' | 'dark';
 export interface GlobalHeaderRightProps extends ConnectProps {
@@ -19,29 +21,29 @@ export interface GlobalHeaderRightProps extends ConnectProps {
 const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
   const { currentUser, theme, layout } = props;
   let className = styles.right;
-  const menu = (
-    <Menu className={styles.menu}>
-      <Menu.Item key="userCenter">
-        <Icon type="user" />
-        <FormattedMessage id="menu.account.center" defaultMessage="account center" />
-      </Menu.Item>
-      <Menu.Item key="userinfo">
-        <Icon type="setting" />
-        <FormattedMessage id="menu.account.settings" defaultMessage="account settings" />
-      </Menu.Item>
-      <Menu.Divider />
-      <Menu.Item key="logout" onClick={() => { router.replace('/') }}>
-        <Icon type="logout" />
-        <FormattedMessage id="menu.account.logout" defaultMessage="logout" />
-      </Menu.Item>
-    </Menu>
-  );
+  // const menu = (
+  //   <Menu className={styles.menu}>
+  //     <Menu.Item key="userCenter">
+  //       <Icon type="user" />
+  //       <FormattedMessage id="menu.account.center" defaultMessage="account center" />
+  //     </Menu.Item>
+  //     <Menu.Item key="userinfo">
+  //       <Icon type="setting" />
+  //       <FormattedMessage id="menu.account.settings" defaultMessage="account settings" />
+  //     </Menu.Item>
+  //     <Menu.Divider />
+  //     <Menu.Item key="logout" onClick={() => { router.replace('/') }}>
+  //       <Icon type="logout" />
+  //       <FormattedMessage id="menu.account.logout" defaultMessage="logout" />
+  //     </Menu.Item>
+  //   </Menu>
+  // );
   if (theme === 'dark' && layout === 'topmenu') {
     className = `${styles.right}  ${styles.dark}`;
   }
   return (
     <div className={className}>
-      {currentUser && currentUser.name ? (
+      {/* {currentUser && currentUser.name ? (
         <HeaderDropdown overlay={menu}>
           <span className={`${styles.action} ${styles.account}`}>
             <Avatar
@@ -55,7 +57,14 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
         </HeaderDropdown>
       ) : (
           <div />
-        )}
+        )} */}
+
+
+      <NoticeIconView />
+      <Avatar menu />
+      <SelectLang className={styles.action} />
+
+
     </div>
   );
 };

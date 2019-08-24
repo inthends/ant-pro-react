@@ -1,5 +1,5 @@
 import Page from '@/components/Common/Page';
-import { Button, message, Modal, Table } from 'antd';
+import { Divider, message, Modal, Table } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import React from 'react';
 import { RemoveForm, GetDetailJson } from './Main.service';
@@ -52,7 +52,7 @@ function ListTable(props: ListTableProps) {
       title: '成立时间',
       dataIndex: 'foundedTime',
       key: 'foundedTime',
-      width: 150, 
+      width: 100, 
     },
     {
       title: '负责人',
@@ -69,28 +69,32 @@ function ListTable(props: ListTableProps) {
     {
       title: '备注',
       dataIndex: 'description',
-      key: 'description',
-      width: 300
+      key: 'description'
     },
     {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
-      width: 155,
-      fixed: 'right',
+      align:'center',
+      width: 95, 
       render: (text, record) => {
         return [
-          <Button
-            type="primary"
-            key="modify"
-            style={{ marginRight: '10px' }}
-            onClick={() => doModify(record.id)}
-          >
-            修改
-          </Button>,
-          <Button type="danger" key="delete" onClick={() => doDelete(record)}>
-            删除
-          </Button>,
+          // <Button
+          //   type="primary"
+          //   key="modify"
+          //   style={{ marginRight: '10px' }}
+          //   onClick={() => doModify(record.id)}
+          // >
+          //   修改
+          // </Button>,
+          // <Button type="danger" key="delete" onClick={() => doDelete(record)}>
+          //   删除
+          // </Button>, 
+          <span>
+          <a onClick={() => doModify(record.id)} key="modify">编辑</a>
+          <Divider type="vertical" />
+          <a onClick={() => doDelete(record)} key="delete">删除</a> 
+        </span>
         ];
       },
     },
@@ -103,8 +107,7 @@ function ListTable(props: ListTableProps) {
         size="middle"
         dataSource={data}
         columns={columns}
-        rowKey={record => record.id} 
-        scroll={{y:500}} 
+        rowKey={record => record.id}  
         loading={loading}
       />
     </Page>

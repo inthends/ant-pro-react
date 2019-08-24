@@ -137,5 +137,4 @@ export interface PStructEntity {
     * 备注
     */
     memo?: string;
-
 }

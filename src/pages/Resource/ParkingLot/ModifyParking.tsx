@@ -1,6 +1,7 @@
-import { ParkingData, TreeEntity } from '@/model/models';
+import { ParkingData } from '@/model/models';
 import { getCommonItems } from '@/services/commonItem';
 import {
+  AutoComplete,
   Button,
   Card,
   Col,
@@ -10,19 +11,19 @@ import {
   message,
   Row,
   Select,
-  Tree,
   DatePicker,
   TreeSelect,
+  InputNumber,
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { SaveParkingForm } from './ParkingLot.service';
+import { SaveParkingForm, GetCustomerList } from './ParkingLot.service';
 import styles from './style.less';
 
 const { Option } = Select;
 const { TextArea } = Input;
-const { TreeNode } = Tree;
+// const { TreeNode } = Tree;
 
 interface ModifyParkingProps {
   modifyVisible: boolean;
@@ -34,23 +35,24 @@ interface ModifyParkingProps {
   reload(): void;
 }
 const ModifyParking = (props: ModifyParkingProps) => {
-  const { treeData, modifyVisible, data, closeDrawer, form, organizeId, reload } = props;
+  const { treeData, modifyVisible, data, closeDrawer, form, reload } = props;
   const { getFieldDecorator } = form;
   const title = data === undefined ? '添加车位' : '修改车位';
   const [infoDetail, setInfoDetail] = useState<any>({});
   // const [estateTree, setEstateTree] = useState<any[]>([]);
-  const [parkingLotState, setParkingLotState] = useState<any[]>([]); // 获取车位状态
+  // const [parkingLotState, setParkingLotState] = useState<any[]>([]); // 获取车位状态
   const [vehicleBrand, setVehicleBrand] = useState<any[]>([]); // 车辆品牌
   const [parkingLotType, setParkingLotType] = useState<any[]>([]); // 车位类型
   const [parkingNature, setParkingNature] = useState<any[]>([]); // 车位性质
   const [color, setColor] = useState<any[]>([]); // 颜色 
+  const [userSource, setUserSource] = useState<any[]>([]);
 
   // 打开抽屉时初始化
   useEffect(() => {
     // 获取车位状态
-    getCommonItems('ParkingLotState').then(res => {
-      setParkingLotState(res || []);
-    });
+    // getCommonItems('ParkingLotState').then(res => {
+    //   setParkingLotState(res || []);
+    // });
     // 车位性质
     getCommonItems('ParkingNature').then(res => {
       setParkingNature(res || []);
@@ -118,6 +120,26 @@ const ModifyParking = (props: ModifyParkingProps) => {
     });
   };
 
+  //用户选择
+  const handleSearch = value => {
+    if (value == '')
+      return;
+    GetCustomerList(value).then(res => {
+      setUserSource(res || []);
+    })
+  };
+
+  const userList = userSource.map
+    (item => <Option key={item.id} value={item.name}>{item.name}</Option>);
+
+  const onOwnerSelect = (value, option) => {
+    form.setFieldsValue({ ownerId: option.key });
+  };
+
+  const onTenantSelect = (value, option) => {
+    form.setFieldsValue({ tenantId: option.key });
+  };
+
   return (
     <Drawer
       title={title}
@@ -165,8 +187,6 @@ const ModifyParking = (props: ModifyParkingProps) => {
                 </Form.Item>
               </Col>
             </Row>
-
-
             <Row gutter={24}>
               <Col lg={12}>
                 <Form.Item label="车位状态">
@@ -174,11 +194,13 @@ const ModifyParking = (props: ModifyParkingProps) => {
                     initialValue: infoDetail.state,
                   })(
                     <Select placeholder="请选择车位状态">
-                      {parkingLotState.map(item => (
+                      {/* {parkingLotState.map(item => (
                         <Option value={item.value} key={item.key}>
                           {item.title}
                         </Option>
-                      ))}
+                      ))} */}
+                      <Option value="0">空置</Option>
+                      <Option value="1">出租</Option>
                     </Select>,
                   )}
                 </Form.Item>
@@ -200,7 +222,6 @@ const ModifyParking = (props: ModifyParkingProps) => {
                 </Form.Item>
               </Col>
             </Row>
-
             <Row gutter={24}>
               <Col lg={12}>
                 <Form.Item label="车位性质">
@@ -217,14 +238,13 @@ const ModifyParking = (props: ModifyParkingProps) => {
                   )}
                 </Form.Item>
               </Col>
-
               <Col lg={12}>
                 <Form.Item label="交付日期">
                   {getFieldDecorator('date', {
                     initialValue: infoDetail.date
                       ? moment(new Date(infoDetail.date))
                       : moment(new Date()),
-                  })(<DatePicker />)}
+                  })(<DatePicker style={{ width: '100%' }} />)}
                 </Form.Item>
               </Col>
             </Row>
@@ -233,14 +253,14 @@ const ModifyParking = (props: ModifyParkingProps) => {
                 <Form.Item label="建筑面积(㎡)">
                   {getFieldDecorator('area', {
                     initialValue: infoDetail.area,
-                  })(<Input placeholder="请输入建筑面积" />)}
+                  })(<InputNumber placeholder="请输入建筑面积" style={{ width: '100%' }} />)}
                 </Form.Item>
               </Col>
               <Col lg={12}>
                 <Form.Item label="计费面积(㎡)">
                   {getFieldDecorator('chargingArea', {
                     initialValue: infoDetail.chargingArea,
-                  })(<Input placeholder="请输入计费面积" />)}
+                  })(<InputNumber placeholder="请输入计费面积" style={{ width: '100%' }} />)}
                 </Form.Item>
               </Col>
             </Row>
@@ -248,16 +268,46 @@ const ModifyParking = (props: ModifyParkingProps) => {
             <Row gutter={24}>
               <Col lg={12}>
                 <Form.Item label="业主名称">
+                  {/* {getFieldDecorator('ownerId', {
+                    initialValue: infoDetail.ownerId,
+                  })(<TextArea rows={4} placeholder="请输入建筑面积" />)} */}
+                  {getFieldDecorator('ownerName', {
+                    initialValue: infoDetail.ownerName,
+                  })(
+                    <AutoComplete
+                      dataSource={userList}
+                      style={{ width: '100%' }}
+                      onSearch={handleSearch}
+                      placeholder="请输入业主"
+                      onSelect={onOwnerSelect}
+                    />
+                  )}
                   {getFieldDecorator('ownerId', {
                     initialValue: infoDetail.ownerId,
-                  })(<TextArea rows={4} placeholder="请输入建筑面积" />)}
+                  })(
+                    <input type='hidden' />
+                  )}
                 </Form.Item>
               </Col>
               <Col lg={12}>
                 <Form.Item label="租户名称">
-                  {getFieldDecorator('customerId', {
+                  {/* {getFieldDecorator('customerId', {
                     initialValue: infoDetail.customerId,
-                  })(<TextArea rows={4} placeholder="请输计费面积" />)}
+                  })(<TextArea rows={4} placeholder="请输计费面积" />)} */}
+                  {getFieldDecorator('tenantName', {
+                    initialValue: infoDetail.tenantName,
+                  })(<AutoComplete
+                    dataSource={userList}
+                    style={{ width: '100%' }}
+                    onSearch={handleSearch}
+                    placeholder="请输入住户"
+                    onSelect={onTenantSelect}
+                  />)}
+                  {getFieldDecorator('tenantId', {
+                    initialValue: infoDetail.tenantId,
+                  })(
+                    <input type='hidden' />
+                  )}
                 </Form.Item>
               </Col>
             </Row>
@@ -268,7 +318,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
                     initialValue: infoDetail.beginRentDate
                       ? moment(new Date(infoDetail.beginRentDate))
                       : moment(new Date()),
-                  })(<DatePicker />)}
+                  })(<DatePicker style={{ width: '100%' }} />)}
                 </Form.Item>
               </Col>
               <Col lg={12}>
@@ -277,7 +327,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
                     initialValue: infoDetail.endRentDate
                       ? moment(new Date(infoDetail.endRentDate))
                       : moment(new Date()),
-                  })(<DatePicker />)}
+                  })(<DatePicker style={{ width: '100%' }} />)}
                 </Form.Item>
               </Col>
             </Row>
@@ -367,14 +417,14 @@ const ModifyParking = (props: ModifyParkingProps) => {
 
 export default Form.create<ModifyParkingProps>()(ModifyParking);
 
-const renderTree = (treeData: TreeEntity[], parentId: string) => {
-  return treeData
-    .filter(item => item.parentId === parentId)
-    .map(filteditem => {
-      return (
-        <TreeNode title={filteditem.text} key={filteditem.id} value={filteditem.id}>
-          {renderTree(treeData, filteditem.id as string)}
-        </TreeNode>
-      );
-    });
-};
+// const renderTree = (treeData: TreeEntity[], parentId: string) => {
+//   return treeData
+//     .filter(item => item.parentId === parentId)
+//     .map(filteditem => {
+//       return (
+//         <TreeNode title={filteditem.text} key={filteditem.id} value={filteditem.id}>
+//           {renderTree(treeData, filteditem.id as string)}
+//         </TreeNode>
+//       );
+//     });
+// };

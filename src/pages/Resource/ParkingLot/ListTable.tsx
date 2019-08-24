@@ -41,7 +41,7 @@ function ListTable(props: ListTableProps) {
       title: '名称',
       dataIndex: 'name',
       key: 'name',
-      width: 250,
+      width: 150,
       fixed: 'left',
       sorter: true,
     },
@@ -90,7 +90,8 @@ function ListTable(props: ListTableProps) {
       title: '操作',
       dataIndex: 'allname',
       key: 'allname',
-      width: 155,
+      align: 'center',
+      width: 95,
       fixed: 'right',
       render: (text, record) => {
         return [
@@ -107,7 +108,7 @@ function ListTable(props: ListTableProps) {
           // </Button>,
           <span>
             <a onClick={() => doModify(record.id)} key="modify">修改</a>
-            <Divider type="vertical" />
+            <Divider type="vertical" key='split' />
             <a onClick={() => doDelete(record)} key="delete">删除</a>
           </span>
         ];

@@ -14,7 +14,7 @@ export default [
     path: '/exception/403',
     component: './403',
   },
-  
+
   // {
   //   path: '/register',
   //   component: '../layouts/UserLayout',
@@ -36,11 +36,48 @@ export default [
         path: '/',
         redirect: '/login',
       },
+
+      {
+        name: 'account',
+        icon: 'user',
+        path: '/account',
+        routes: [ 
+          {
+            name: 'settings',
+            path: '/account/settings',
+            component: './account/settings',
+          },
+        ],
+      },
+
+      {
+        name: 'dashboard', 
+        path: '/dashboard',  
+        component: './dashboard/dashboard',
+        icon: 'dashboard',
+        routes: [
+          {
+            path: '/dashboard',
+            redirect: '/dashboard/analysis',
+          },
+          {
+            name: 'analysis',
+            path: '/dashboard/analysis',
+            component: './dashboard/analysis',
+          },
+          {
+            name: 'workplace',
+            path: '/dashboard/workplace',
+            component: './dashboard/workplace',
+          },
+        ],
+      },
+
       {
         name: 'resource',
         path: '/resource',
         component: './Resource/Resource',
-        icon:'bank',
+        icon: 'bank',
         routes: [
           {
             path: '/resource',
@@ -83,7 +120,7 @@ export default [
       {
         name: 'financial',
         path: '/financial',
-        icon:'pay-circle', 
+        icon: 'pay-circle',
         component: './Financial/Financial',
         routes: [
           {
@@ -134,8 +171,8 @@ export default [
       },
       {
         name: 'admin',
-        path: '/admin', 
-        icon:'security-scan',
+        path: '/admin',
+        icon: 'security-scan',
         component: './Admin/Admin',
         routes: [
           {
@@ -163,7 +200,7 @@ export default [
       {
         name: 'contract',
         path: '/contract',
-        icon:'transaction',
+        icon: 'transaction',
         component: './Contract/Contract',
         routes: [
           {
@@ -195,9 +232,9 @@ export default [
       },
       {
         name: 'system',
-        path: '/system', 
+        path: '/system',
         component: './System/System',
-        icon:'bank',
+        icon: 'bank',
         routes: [
           {
             path: '/system',

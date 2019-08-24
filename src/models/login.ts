@@ -30,7 +30,7 @@ export default {
       const {
         code,
         msg,
-        data: {  token, userid },
+        data: { token, userid },
       } = yield call(loginService, data);
       if (code === 200) {
         message.success('登陆成功');
@@ -45,10 +45,17 @@ export default {
       }
       return data;
     },
-    *logout(_, { call }) {
-      const logoutUrl = `${location.protocol}://${location.host}/`;
-      yield call(logoutService, { logoutUrl });
+    // *logout(_, { call }) {
+    //   const logoutUrl = `${location.protocol}://${location.host}/`;
+    //   yield call(logoutService, { logoutUrl });
+    // },
+
+    *logout(_, { call }) { 
+      const userid = localStorage.getItem('userid');
+      yield call(logoutService, { userid });
+      router.replace('/')
     },
+
   },
   reducers: {
     doLogin(state) {

@@ -23,12 +23,14 @@ function Login(props: ConnectFormProps) {
           .then(({ code, msg, data }) => {
             if (code === 200) {
               //console.log(data);
+              debugger
               const { token, id } = data;
               message.success('登陆成功');
               localStorage.setItem('token', token);
               localStorage.setItem('userid', id);
               delay(() => {
-                router.push('/resource');
+                // router.push('/resource');
+                router.push('/dashboard');
               }, 500);
               dispatch!({ type: 'user/setCurrent', payload: data });
             }
