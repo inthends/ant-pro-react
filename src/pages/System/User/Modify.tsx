@@ -16,11 +16,9 @@ const Modify = (props: ModifyProps) => {
   const { saveSuccess } = useContext(BaseModify);
 
   const doSave = dataDetail => {
-    // dataDetail.keyValue = dataDetail.id;
-    // SaveForm({ ...dataDetail }).then(res => {
-    //   message.success('保存成功');
-    //   closeDrawer();
-    //   reload();
+    console.log(dataDetail);
+    // SaveForm({ ...data,...dataDetail }).then(res => {
+    //   saveSuccess();
     // });
   };
   const baseFormProps = { form, data };
@@ -31,13 +29,10 @@ const Modify = (props: ModifyProps) => {
     { label: '供应商账户', value: 4 },
     { label: '其他', value: 5 },
   ];
-  
-  const expModes: SelectItem[] = [
-    { label: '永久有效', value: 1 },
-    { label: '临时', value: 2 },
-  ];
+
+  const expModes: SelectItem[] = [{ label: '永久有效', value: 1 }, { label: '临时', value: 2 }];
   return (
-    <BaseModifyProvider {...props} name="用户">
+    <BaseModifyProvider {...props} name="用户" save={doSave}>
       <Form layout="vertical" hideRequiredMark>
         <Row gutter={24}>
           <ModifyItem
@@ -50,8 +45,18 @@ const Modify = (props: ModifyProps) => {
           <ModifyItem {...baseFormProps} field="organizeId" label="所属机构"></ModifyItem>
         </Row>
         <Row gutter={24}>
-          <ModifyItem {...baseFormProps} field="account" label="账户"></ModifyItem>
-          <ModifyItem {...baseFormProps} field="password" label="密码"></ModifyItem>
+          <ModifyItem
+            {...baseFormProps}
+            field="account"
+            label="账户"
+            rules={[{ required: true, message: '请输入账户' }]}
+          ></ModifyItem>
+          <ModifyItem
+            {...baseFormProps}
+            field="password"
+            label="密码"
+            rules={[{ required: true, message: '请输入密码' }]}
+          ></ModifyItem>
         </Row>
         <Row gutter={24}>
           <ModifyItem
@@ -61,11 +66,9 @@ const Modify = (props: ModifyProps) => {
             label="有效期"
             items={expModes}
           ></ModifyItem>
-          <ModifyItem
-            {...baseFormProps}
-            field="account"
-            label="有效期限"
-          ></ModifyItem>
+          {form.getFieldValue('expMode') === 2 ? (
+            <ModifyItem {...baseFormProps} field="expDate" label="有效期限"></ModifyItem>
+          ) : null}
         </Row>
 
         <Row gutter={24}>

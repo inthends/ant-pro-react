@@ -1,8 +1,8 @@
 import Page from '@/components/Common/Page';
-import { Button, message, Modal, Table } from 'antd';
+import { Button, message, Modal, Table, Switch } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
-import { RemoveForm } from './User.service';
+import { RemoveForm, DisabledToggle } from './User.service';
 
 interface ListTableProps {
   loading: boolean;
@@ -11,10 +11,11 @@ interface ListTableProps {
   modify(record: any): void;
   onchange(page: any, filter: any, sort: any): any;
   reload(): void;
+  setData(data: any[]): void;
 }
 
 function ListTable(props: ListTableProps) {
-  const { loading, data, modify, reload, pagination } = props;
+  const { loading, data, modify, reload, pagination, setData } = props;
 
   const doDelete = record => {
     Modal.confirm({
@@ -31,7 +32,7 @@ function ListTable(props: ListTableProps) {
     });
   };
   const doModify = record => {
-    modify(record);
+    modify({ ...record, password: '' });
   };
   const columns = [
     {
@@ -39,6 +40,7 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'accountType',
       key: 'accountType',
       width: 150,
+      fixed: 'left',
       render: (text: any) => {
         return ACCOUNTTYPES[text];
       },
@@ -47,6 +49,7 @@ function ListTable(props: ListTableProps) {
       title: '账户',
       dataIndex: 'account',
       key: 'account',
+      fixed: 'left',
       width: 150,
     },
     {
@@ -66,8 +69,22 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'enabledMark',
       key: 'enabledMark',
       width: 100,
-      render: (text: any) => {
-        return ENABLEDMARKS[text];
+      render: (text: any, record, index) => {
+        return (
+          <Switch
+            size="small"
+            checked={text === ENABLEDMARKS.正常}
+            checkedChildren={ENABLEDMARKS[ENABLEDMARKS.正常]}
+            unCheckedChildren={ENABLEDMARKS[ENABLEDMARKS.禁用]}
+            onClick={() => {
+              DisabledToggle(record.id, text === ENABLEDMARKS.正常).then(() => {
+                const state = text === ENABLEDMARKS.正常 ? ENABLEDMARKS.禁用 : ENABLEDMARKS.正常;
+                record.enabledMark = state;
+                setData(data.splice(index, 1, { ...record }));
+              });
+            }}
+          />
+        );
       },
     },
     {
@@ -163,4 +180,3 @@ enum USERONLINES {
   上线 = 1,
   下线 = 2,
 }
-
