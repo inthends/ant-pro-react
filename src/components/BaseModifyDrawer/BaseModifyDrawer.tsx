@@ -5,7 +5,7 @@ interface BaseModifyProps {
   visible: boolean;
   closeDrawer(): void;
   reload(): void;
-  save(data): void;
+  save(data): Promise<any>;
   name: string;
   data?: any;
   initData?: any;
@@ -15,7 +15,6 @@ interface BaseModifyProps {
 interface BaseModifyStates {
   saveSuccess?(): void;
 }
-
 const BaseModify = React.createContext<BaseModifyStates>({});
 
 const BaseModifyProvider = (props: BaseModifyProps) => {
@@ -29,7 +28,7 @@ const BaseModifyProvider = (props: BaseModifyProps) => {
   const clickSave = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        save(values);
+        save(values).then(saveSuccess);
       }
     });
   };
