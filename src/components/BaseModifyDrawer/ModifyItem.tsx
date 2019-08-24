@@ -1,40 +1,25 @@
-import { Col, Form, Select, Input, Radio, AutoComplete } from 'antd';
+import { Col, Form, Select, Input, Radio } from 'antd';
 import React from 'react';
 import { WrappedFormUtils, ValidationRule } from 'antd/lib/form/Form';
 const { TextArea, Password } = Input;
 const { Option } = Select;
 interface ModifyItemProps {
-  type?: 'select' | 'textarea' | 'password' | 'radio' | 'autoComplete';
+  type?: 'select' | 'textarea' | 'password' | 'radio';
   field: string;
   label: React.ReactNode;
-  initData?: any;
+  data: any;
   wholeLine?: boolean;
   form: WrappedFormUtils;
   rules?: ValidationRule[];
   items?: SelectItem[];
   onChange?(value): void;
-  onSearch?(value): void;
 }
 const ModifyItem = (props: ModifyItemProps) => {
-  const { type, field, label, initData, wholeLine, form, rules, onChange, items, onSearch } = props;
+  const { type, field, label, data, wholeLine, form, rules, onChange, items } = props;
   const { getFieldDecorator } = form;
 
   const getFormItem = () => {
     switch (type) {
-      case 'autoComplete':
-        return (
-          <AutoComplete
-            dataSource={(items || []).map((item: SelectItem) => (
-              <Option value={item.value} key={item.value}>
-                {item.label}
-              </Option>
-            ))}
-            style={{ width: '100%' }}
-            onSearch={onSearch}
-            placeholder={`请输入${label as string}`}
-            // onSelect={onOwnerSelect}
-          />
-        );
       case 'textarea':
         return (
           <TextArea
@@ -73,7 +58,7 @@ const ModifyItem = (props: ModifyItemProps) => {
     <Col lg={wholeLine ? 24 : 12}>
       <Form.Item label={label} required>
         {getFieldDecorator(field, {
-          initialValue: initData ? initData[field] : undefined,
+          initialValue: data[field],
           rules,
         })(getFormItem())}
       </Form.Item>

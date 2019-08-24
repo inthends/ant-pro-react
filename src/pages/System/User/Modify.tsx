@@ -3,7 +3,6 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState, useContext } from 'react';
 import { BaseModify, BaseModifyProvider } from '@/components/BaseModifyDrawer/BaseModifyDrawer';
 import ModifyItem, { SelectItem } from '@/components/BaseModifyDrawer/ModifyItem';
-import { SaveForm, searchUser } from './User.service';
 
 interface ModifyProps {
   visible: boolean;
@@ -13,13 +12,18 @@ interface ModifyProps {
   reload(): void;
 }
 const Modify = (props: ModifyProps) => {
-  const { data, form } = props;
+  const { visible, data, form } = props;
   const { saveSuccess } = useContext(BaseModify);
-  const initData = data ? data : { accountType: 2 };
-  const [names, setNames] = useState<any[]>([]);
 
-  const baseFormProps = { form, initData };
-  const expModes: SelectItem[] = [{ label: '永久有效', value: 1 }, { label: '临时', value: 2 }];
+  const doSave = dataDetail => {
+    // dataDetail.keyValue = dataDetail.id;
+    // SaveForm({ ...dataDetail }).then(res => {
+    //   message.success('保存成功');
+    //   closeDrawer();
+    //   reload();
+    // });
+  };
+  const baseFormProps = { form, data };
   const accountTypes: SelectItem[] = [
     { label: '系统初始账户', value: 1 },
     { label: '员工账户', value: 2 },
@@ -27,47 +31,27 @@ const Modify = (props: ModifyProps) => {
     { label: '供应商账户', value: 4 },
     { label: '其他', value: 5 },
   ];
-  const doSave = dataDetail => {
-    return SaveForm({ ...initData, ...dataDetail, keyValue: initData.id });
-  };
-  const searchName = value => {
-    searchUser(value).then(res => {
-      const users = res.map(item => {
-        return {
-          label: item.name,
-          value: item.name,
-        };
-      });
-      setNames(users);
-    });
-  };
-
+  
+  const expModes: SelectItem[] = [
+    { label: '永久有效', value: 1 },
+    { label: '临时', value: 2 },
+  ];
   return (
-    <BaseModifyProvider {...props} name="用户" save={doSave} initData={initData}>
+    <BaseModifyProvider {...props} name="用户">
       <Form layout="vertical" hideRequiredMark>
         <Row gutter={24}>
           <ModifyItem
             {...baseFormProps}
-            field="name"
-            label="用户"
-            type="autoComplete"
-            onSearch={searchName}
-            items={names}
+            type="select"
+            field="accountType"
+            label="类型"
+            items={accountTypes}
           ></ModifyItem>
+          <ModifyItem {...baseFormProps} field="organizeId" label="所属机构"></ModifyItem>
         </Row>
         <Row gutter={24}>
-          <ModifyItem
-            {...baseFormProps}
-            field="account"
-            label="账户"
-            rules={[{ required: true, message: '请输入账户' }]}
-          ></ModifyItem>
-          <ModifyItem
-            {...baseFormProps}
-            field="password"
-            label="密码"
-            rules={[{ required: true, message: '请输入密码' }]}
-          ></ModifyItem>
+          <ModifyItem {...baseFormProps} field="account" label="账户"></ModifyItem>
+          <ModifyItem {...baseFormProps} field="password" label="密码"></ModifyItem>
         </Row>
         <Row gutter={24}>
           <ModifyItem
@@ -77,9 +61,11 @@ const Modify = (props: ModifyProps) => {
             label="有效期"
             items={expModes}
           ></ModifyItem>
-          {form.getFieldValue('expMode') === 2 ? (
-            <ModifyItem {...baseFormProps} field="expDate" label="有效期限"></ModifyItem>
-          ) : null}
+          <ModifyItem
+            {...baseFormProps}
+            field="account"
+            label="有效期限"
+          ></ModifyItem>
         </Row>
 
         <Row gutter={24}>
