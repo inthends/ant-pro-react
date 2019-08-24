@@ -1,10 +1,11 @@
-import { Col, Form, Select, Input, Radio, AutoComplete } from 'antd';
+import { Col, Form, Select, Input, Radio, AutoComplete, DatePicker } from 'antd';
 import React from 'react';
 import { WrappedFormUtils, ValidationRule } from 'antd/lib/form/Form';
+import moment from 'moment';
 const { TextArea, Password } = Input;
 const { Option } = Select;
 interface ModifyItemProps {
-  type?: 'select' | 'textarea' | 'password' | 'radio' | 'autoComplete';
+  type?: 'select' | 'textarea' | 'password' | 'radio' | 'autoComplete' | 'date';
   field: string;
   label: React.ReactNode;
   initData?: any;
@@ -21,6 +22,8 @@ const ModifyItem = (props: ModifyItemProps) => {
 
   const getFormItem = () => {
     switch (type) {
+      case 'date':
+        return <DatePicker style={{ width: '100%' }} />;
       case 'autoComplete':
         return (
           <AutoComplete
@@ -69,11 +72,22 @@ const ModifyItem = (props: ModifyItemProps) => {
         return <Input placeholder={`请输入${label as string}`} onChange={onChange}></Input>;
     }
   };
+  const getInitValue = () => {
+    if (initData) {
+      if (type === 'date') {
+        return moment(new Date(initData[field]));
+      } else {
+        return initData[field];
+      }
+    } else {
+      return undefined;
+    }
+  };
   return (
     <Col lg={wholeLine ? 24 : 12}>
       <Form.Item label={label} required>
         {getFieldDecorator(field, {
-          initialValue: initData ? initData[field] : undefined,
+          initialValue: getInitValue(),
           rules,
         })(getFormItem())}
       </Form.Item>

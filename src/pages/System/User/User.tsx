@@ -116,11 +116,7 @@ function User() {
             onSearch={keyword => loadData({ ...search, keyword })}
             style={{ width: 200 }}
           />
-          <Button
-            type="primary"
-            style={{ float: 'right' }}
-            onClick={() => showDrawer({ flag: '' })}
-          >
+          <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer()}>
             <Icon type="plus" />
             用户
           </Button>

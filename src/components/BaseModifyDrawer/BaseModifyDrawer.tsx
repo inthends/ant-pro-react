@@ -8,7 +8,6 @@ interface BaseModifyProps {
   save(data): Promise<any>;
   name: string;
   data?: any;
-  initData?: any;
   children?: React.ReactNode;
   form: WrappedFormUtils;
 }
@@ -18,8 +17,9 @@ interface BaseModifyStates {
 const BaseModify = React.createContext<BaseModifyStates>({});
 
 const BaseModifyProvider = (props: BaseModifyProps) => {
-  const { closeDrawer, reload, children, data, name, visible, form, save, initData } = props;
+  const { closeDrawer, reload, children, data, name, visible, form, save } = props;
   const title = data === undefined ? `添加${name}` : `修改${name}`;
+
   const saveSuccess = () => {
     message.success('保存成功');
     closeDrawer();

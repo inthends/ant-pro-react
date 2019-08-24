@@ -4,6 +4,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { BaseModify, BaseModifyProvider } from '@/components/BaseModifyDrawer/BaseModifyDrawer';
 import ModifyItem, { SelectItem } from '@/components/BaseModifyDrawer/ModifyItem';
 import { SaveForm, searchUser } from './User.service';
+import moment from 'moment';
 
 interface ModifyProps {
   visible: boolean;
@@ -14,9 +15,13 @@ interface ModifyProps {
 }
 const Modify = (props: ModifyProps) => {
   const { data, form } = props;
-  const { saveSuccess } = useContext(BaseModify);
-  const initData = data ? data : { accountType: 2 };
+  let initData = data ? data : { accountType: 2, expMode: 1 };
+  initData.expDate = initData.expDate ? initData.expDate : new Date();
   const [names, setNames] = useState<any[]>([]);
+  const [showTime, setShowTime] = useState<boolean>(true);
+  useEffect(() => {
+    setShowTime(form.getFieldValue('expMode') === 2);
+  }, [form]);
 
   const baseFormProps = { form, initData };
   const expModes: SelectItem[] = [{ label: '永久有效', value: 1 }, { label: '临时', value: 2 }];
@@ -28,7 +33,9 @@ const Modify = (props: ModifyProps) => {
     { label: '其他', value: 5 },
   ];
   const doSave = dataDetail => {
-    return SaveForm({ ...initData, ...dataDetail, keyValue: initData.id });
+    let modifyData = { ...initData, ...dataDetail, keyValue: initData.id };
+    modifyData.expDate = modifyData.expDate ? modifyData.expDate.format('YYYY-MM-DD') : undefined;
+    return SaveForm(modifyData);
   };
   const searchName = value => {
     searchUser(value).then(res => {
@@ -43,7 +50,7 @@ const Modify = (props: ModifyProps) => {
   };
 
   return (
-    <BaseModifyProvider {...props} name="用户" save={doSave} initData={initData}>
+    <BaseModifyProvider {...props} name="用户" save={doSave}>
       <Form layout="vertical" hideRequiredMark>
         <Row gutter={24}>
           <ModifyItem
@@ -77,8 +84,13 @@ const Modify = (props: ModifyProps) => {
             label="有效期"
             items={expModes}
           ></ModifyItem>
-          {form.getFieldValue('expMode') === 2 ? (
-            <ModifyItem {...baseFormProps} field="expDate" label="有效期限"></ModifyItem>
+          {showTime ? (
+            <ModifyItem
+              {...baseFormProps}
+              field="expDate"
+              label="有效期限"
+              type="date"
+            ></ModifyItem>
           ) : null}
         </Row>
 

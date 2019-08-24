@@ -32,7 +32,7 @@ function ListTable(props: ListTableProps) {
     });
   };
   const doModify = record => {
-    modify({ ...record, password: '' });
+    modify({ ...record });
   };
   const columns = [
     {
