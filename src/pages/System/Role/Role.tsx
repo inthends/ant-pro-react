@@ -1,24 +1,31 @@
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { Button, Icon, Input, Layout } from 'antd';
+import { Button, Icon, Input, Layout, Select } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import ListTable from './ListTable';
-import { GetPageListJson } from './Main.service';
 import Modify from './Modify';
+import { getDataList } from './Role.service';
+
+const { Option } = Select;
 const { Content } = Layout;
 const { Search } = Input;
-
-function Main() {
-
-  const [search, setSearch] = useState<string>('');
+interface SearchParam {
+  condition: 'EnCode' | 'FullName';
+  keyword: string;
+}
+const Role = () => {
+  const [search, setSearch] = useState<SearchParam>({
+    condition: 'EnCode',
+    keyword: '',
+  });
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [data, setData] = useState<any[]>([]);
   const [currData, setCurrData] = useState<any>();
+  const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
 
   useEffect(() => {
-    initLoadData({ searchText: '' });
+    initLoadData(search);
   }, []);
 
   const closeDrawer = () => {
@@ -28,30 +35,24 @@ function Main() {
     setCurrData(item);
     setModifyVisible(true);
   };
-  const loadData = (
-    { searchText },
-    paginationConfig?: PaginationConfig,
-    sorter?,
-  ) => {
-    setSearch(searchText);
+  const loadData = (searchParam: any, paginationConfig?: PaginationConfig, sorter?) => {
+    setSearch(searchParam);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: pagination.pageSize,
       total: 0,
     };
-
-    const queryJson = { keyword: searchText };
     const searchCondition: any = {
       pageIndex,
       pageSize,
       total,
-      queryJson,
+      queryJson: searchParam,
     };
 
     if (sorter) {
       const { field, order } = sorter;
       searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'RoleId';
+      searchCondition.sidx = field ? field : 'CreateDate';
     }
 
     return load(searchCondition).then(res => {
@@ -60,9 +61,9 @@ function Main() {
   };
   const load = formData => {
     setLoading(true);
-    formData.sidx = formData.sidx || 'RoleId';
-    formData.sord = formData.sord || 'asc';
-    return GetPageListJson(formData).then(res => {
+    formData.sidx = formData.sidx || 'CreateDate';
+    formData.sord = formData.sord || 'desc';
+    return getDataList(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
         return {
@@ -79,10 +80,11 @@ function Main() {
     });
   };
 
-  const initLoadData = ({ searchText }) => {
-    const queryJson = { keyword: searchText };
-    const sidx = 'RoleId';
-    const sord = 'asc';
+  const initLoadData = (searchParam: SearchParam) => {
+    setSearch(searchParam);
+    const queryJson = searchParam;
+    const sidx = 'CreateDate';
+    const sord = 'desc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
       return res;
@@ -92,47 +94,50 @@ function Main() {
   return (
     <Layout style={{ height: '100%' }}>
       <Content style={{ padding: '0 20px', overflow: 'auto' }}>
-        <div style={{ marginBottom: '20px', padding: '3px 0' }}>
+        <div style={{ marginBottom: 20, padding: '3px 0' }}>
+          <Select
+            style={{ marginRight: 20, width: 100 }}
+            value={search.condition}
+            onChange={condition => loadData({ ...search, condition })}
+          >
+            <Option value="EnCode" key="EnCode">
+              角色编号
+            </Option>
+            <Option value="FullName" key="FullName">
+              角色名称
+            </Option>
+          </Select>
           <Search
             className="search-input"
             placeholder="请输入要查询的关键词"
-            onSearch={value =>
-              loadData({ searchText: value })
-            }
+            onSearch={keyword => loadData({ ...search, keyword })}
             style={{ width: 200 }}
           />
-          <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer({ flag: '' })}>
+          <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer()}>
             <Icon type="plus" />
             角色
           </Button>
         </div>
         <ListTable
           onchange={(paginationConfig, filters, sorter) =>
-            loadData(
-              { searchText: search },
-              paginationConfig,
-              sorter,
-            )
+            loadData(search, paginationConfig, sorter)
           }
           loading={loading}
           pagination={pagination}
           data={data}
           modify={showDrawer}
-          reload={() =>
-            initLoadData({ searchText: search })
-          }
+          reload={() => initLoadData(search)}
+          setData={setData}
         />
       </Content>
       <Modify
-        modifyVisible={modifyVisible}
+        visible={modifyVisible}
         closeDrawer={closeDrawer}
         data={currData}
-        reload={() =>
-          initLoadData({ searchText: search })
-        }
+        reload={() => initLoadData({ ...search })}
       />
     </Layout>
   );
-}
+};
 
-export default Main;
+export default Role;
