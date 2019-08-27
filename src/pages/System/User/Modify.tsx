@@ -4,11 +4,12 @@ import { Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { SaveForm, searchUser } from './User.service';
+import { AccountEntity } from '@/model/accountEntity';
 
 interface ModifyProps {
   visible: boolean;
-  data?: any;
-  form: WrappedFormUtils;
+  data?: AccountEntity;
+  form: WrappedFormUtils<AccountEntity>;
   closeDrawer(): void;
   reload(): void;
 }
@@ -19,8 +20,8 @@ const Modify = (props: ModifyProps) => {
   const [names, setNames] = useState<any[]>([]);
   const [showTime, setShowTime] = useState<boolean>(true);
   useEffect(() => {
-    setShowTime(form.getFieldValue('expMode') === 2);
-  }, [form]);
+    setShowTime(initData.expMode === 2);
+  }, [initData]);
 
   const baseFormProps = { form, initData };
   const expModes: SelectItem[] = [{ label: '永久有效', value: 1 }, { label: '临时', value: 2 }];
@@ -82,6 +83,7 @@ const Modify = (props: ModifyProps) => {
             field="expMode"
             label="有效期"
             items={expModes}
+            onChange={(e) => setShowTime(e===2)}
           ></ModifyItem>
           {showTime ? (
             <ModifyItem
