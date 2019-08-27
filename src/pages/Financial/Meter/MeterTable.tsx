@@ -22,15 +22,15 @@ function MeterTable(props: MeterTableProps) {
   const columns = [
     {
       title: '费表类型',
-      dataIndex: 'meterkindname',
-      key: 'meterkindname',
+      dataIndex: 'meterkind',
+      key: 'meterkind',
       width: 100,
       sorter: true
     },
     {
       title: '费表种类',
-      dataIndex: 'metertypename',
-      key: 'metertypename',
+      dataIndex: 'metertype',
+      key: 'metertype',
       width: 100,
       sorter: true
     },
@@ -71,7 +71,7 @@ function MeterTable(props: MeterTableProps) {
     {
       title: '操作',
       dataIndex: 'operation',
-      key: 'operation', 
+      key: 'operation',
       align:'center',
       width: 95,
       render: (text, record) => {

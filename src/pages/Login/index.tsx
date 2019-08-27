@@ -22,8 +22,7 @@ function Login(props: ConnectFormProps) {
         loginService(values)
           .then(({ code, msg, data }) => {
             if (code === 200) {
-              //console.log(data);
-              debugger
+              //console.log(data); 
               const { token, id } = data;
               message.success('登陆成功');
               localStorage.setItem('token', token);

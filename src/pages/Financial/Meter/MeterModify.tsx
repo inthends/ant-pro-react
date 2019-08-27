@@ -142,7 +142,7 @@ const MeterModify = (props: MeterModifyProps) => {
         var meterEntity = {
           keyValue: id == null || id == '' ? guid : id,
           MeterID: id == null || id == '' ? guid : id,
-          OrganizeId: values.organizeId,
+          OrganizeId: infoDetail.organizeId,
           MeterType: values.meterType,
           MeterKind: values.meterKind,
           MeterName: values.meterName,
@@ -156,7 +156,7 @@ const MeterModify = (props: MeterModifyProps) => {
           Memo: values.memo,
           FeeItemID: infoDetail.feeItemID,
           FeeItemName: infoDetail.feeItemName,
-          IsStop: values.isStop
+          IsStop: values.isStop==null?false:true
         }
         setFeeDetail(
           meterEntity
@@ -217,7 +217,7 @@ const MeterModify = (props: MeterModifyProps) => {
           //   style={{ marginRight: '10px' }}
           //   onClick={() => {
           //     setHouseFeeItemId(record.unitmeterid);
-          //     setEditHouseFeeItemVisible(true); 
+          //     setEditHouseFeeItemVisible(true);
           //   }}
           // >
           //   编辑
@@ -308,7 +308,7 @@ const MeterModify = (props: MeterModifyProps) => {
                     <Select placeholder="=请选择=" style={{ width: '100%', marginRight: '5px' }}>
                       {
                         meterKinds.map(item => {
-                          return <Option value={item.value}>{item.title}</Option>
+                          return <Option value={item.title}>{item.title}</Option>
                         })
                       }
                     </Select>
@@ -324,7 +324,7 @@ const MeterModify = (props: MeterModifyProps) => {
                     <Select placeholder="=请选择=" style={{ width: '100%', marginRight: '5px' }}>
                       {
                         meterTypes.map(item => {
-                          return <Option value={item.value}>{item.title}</Option>
+                          return <Option value={item.title}>{item.title}</Option>
                         })
                       }
                     </Select>
@@ -345,7 +345,7 @@ const MeterModify = (props: MeterModifyProps) => {
               </Col>
               <Col span={8}>
                 <Form.Item required label="所属机构"  >
-                  {getFieldDecorator('organizeId', {
+                  {getFieldDecorator('organieId', {
                     initialValue: infoDetail.organizeId,
                     rules: [{ required: true, message: '请选择所属机构' }],
                   })(
@@ -357,6 +357,7 @@ const MeterModify = (props: MeterModifyProps) => {
                       treeDefaultExpandAll
                       onChange={(value => {
                         var info = Object.assign({}, infoDetail, { organizeId: value });
+                        console.log(value);
                         setInfoDetail(info);
                       })}
                     />
@@ -422,7 +423,7 @@ const MeterModify = (props: MeterModifyProps) => {
               <Col span={4}>
                 <Form.Item required label="是否停用"   >
                   {getFieldDecorator('isStop', {
-                    initialValue: infoDetail.isStop
+                    initialValue: infoDetail.isStop==null?false:true
                   })(
                     <Checkbox />
                   )}
@@ -555,7 +556,7 @@ const MeterModify = (props: MeterModifyProps) => {
                 var meterEntity = {
                   keyValue: id == null || id == '' ? '' : id,
                   MeterID: id == null || id == '' ? guid : id,
-                  OrganizeId: values.organizeId,
+                  OrganizeId: infoDetail.organizeId,
                   MeterType: values.meterType,
                   MeterKind: values.meterKind,
                   MeterName: values.meterName,
@@ -569,7 +570,7 @@ const MeterModify = (props: MeterModifyProps) => {
                   Memo: values.memo,
                   FeeItemID: infoDetail.feeItemID,
                   FeeItemName: infoDetail.feeItemName,
-                  IsStop: values.isStop,
+                  IsStop: values.isStop==null?false:true,
                   type: isAdd ? 1 : 0
                 }
                 SaveForm(meterEntity).then(() => {
@@ -583,13 +584,11 @@ const MeterModify = (props: MeterModifyProps) => {
           确定
         </Button>
       </div>
-
       <ChargeFeeItem
         visible={chargeFeeItemVisible}
         closeModal={closeChargeFeeItem}
         getSelectTree={(item) => {
           var info = Object.assign({}, infoDetail, { feeItemName: item.name, feeItemID: item.id });
-          //console.log(info);
           setInfoDetail(info);
         }}
       />

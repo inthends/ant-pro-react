@@ -1,12 +1,12 @@
 //抄表单列表
 
 import Page from '@/components/Common/Page';
-import { InputNumber, Input, Select, Col, Row, Form, DatePicker, Card, Button, message, Table, Modal } from 'antd';
+import { Form, message, Table, Divider } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState } from 'react';
 import moment from 'moment';
-import { WrappedFormUtils } from 'antd/lib/form/Form';
-import {  } from './Meter.service';
+import { WrappedFormUtils} from 'antd/lib/form/Form';
+import { RemoveReadForm  } from './Meter.service';
 import styles from './style.less';
 
 interface ReadingMeterTableProps {
@@ -16,10 +16,12 @@ interface ReadingMeterTableProps {
   data: any[];
   reload(): void;
   form: WrappedFormUtils;
+  showModify(id?):any;
+  getRowSelect(record):void;
 }
 
 function ReadingMeterTable(props: ReadingMeterTableProps) {
-  const { form, onchange, loading, pagination, data,  reload } = props;
+  const { form, onchange, loading, pagination, data,  reload ,showModify,getRowSelect} = props;
 
   const columns = [
     {
@@ -128,38 +130,59 @@ function ReadingMeterTable(props: ReadingMeterTableProps) {
       width: 300,
       render: (text, record) => {
         return [
-          <Button
-            type="primary"
-            key="modify"
-            style={{ marginRight: '10px' }}
-            onClick={() =>{}}
-          >
-            编辑
-          </Button>,
-          <Button
-            type="danger"
-            key="delete"
-            onClick={() => {}}
-          >
-            删除
-          </Button>
+          <span>
+          <a onClick={() =>{showModify(record.billid)}} key="modify">修改</a>
+          <Divider type="vertical" />
+          <a onClick={() => {
+            RemoveReadForm(record.billid).then(res => {
+              if (res.code != 0) { reload(); message.success('删除成功');}
+            });
+          }} key="delete">删除</a>
+        </span>
         ];
       }
     }
   ] as ColumnProps<any>[];
 
+  const [selectedRowKey, setSelectedRowKey] = useState([]);
+  const setClassName=(record,index)=>{
+    if(record.billid === selectedRowKey)
+    {
+      return  styles.rowSelect ;
+    }else{
+      if(record.status==3)
+      {
+        return styles.rowFlush
+      }else{
+        return '';
+      }
+    }
+
+  }
+  const  onRow=(record)=>{
+    return {
+      onClick: event => {
+        setSelectedRowKey(record.billid);
+        getRowSelect(record);
+      }
+    };
+  }
+
   return (
     <Page>
       <Table<any>
+        className={styles.readingMeterTable}
         bordered={false}
         size="middle"
         columns={columns}
         dataSource={data}
-        rowKey="billID"
+        rowKey="billid"
         pagination={pagination}
         scroll={{ y: 500, x: 2700 }}
         loading={loading}
         onChange={onchange}
+        rowClassName={setClassName} //表格行点击高亮
+        onRow={onRow}
       />
     </Page>
   );

@@ -82,7 +82,7 @@ const onSave=()=>{
           Memo:  meterinfo.memo ,
           FeeItemID: meterinfo.feeItemID,
           FeeItemName: meterinfo.feeItemName,
-          IsStop:  meterinfo.isStop,
+          IsStop:  meterinfo.isStop==null?false:true,
         },{
           keyValue:id,
           UnitMeterID:id,

@@ -83,6 +83,7 @@ function UnitMeterTable(props: UnitMeterTableProps) {
         pagination={pagination}
         scroll={{ y: 500, x: 1400 }}
         loading={loading}
+        onChange={onchange}
       />
     </Page>
   );

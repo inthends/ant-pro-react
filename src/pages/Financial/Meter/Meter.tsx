@@ -1,6 +1,6 @@
 //水电费管理
-import { DefaultPagination } from '@/utils/defaultSetting'; 
-import { Tabs, Button, Icon, Input, Layout ,Modal,Select} from 'antd';
+import { DefaultPagination } from '@/utils/defaultSetting';
+import { Tabs, Button, Icon, Input, Layout ,Modal,Select, message} from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, {   useEffect, useState } from 'react';
 import { GetDataItemTreeJson, GetMeterPageList, GetUnitMeterPageList ,GetReadingMeterPageList, GetMeterFormsPageList , RemoveForm ,SaveForm} from './Meter.service';
@@ -11,6 +11,7 @@ import ReadingMeterTable from './ReadingMeterTable';
 import UnitMeterTable from './UnitMeterTable';
 import MeterModify from './MeterModify';
 import ReadingMeterModify from './ReadingMeterModify';
+import ReadingMeterVertify from './ReadingMeterVertify';
 const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
@@ -46,6 +47,8 @@ function Meter() {
   const [meterKinds, setMeterKinds] = useState<any>([]);
   const [meterTypes, setMeterTypes] = useState<any>([]);
 
+  const [ifVertify,setIfVertify]=useState<boolean>(false);
+  const [vertifyVisible,setVertifyVisible]=useState<boolean>(false);
   const selectTree = (org, item, searchText) => {
     SetOrganize(item);
 
@@ -75,7 +78,6 @@ function Meter() {
       initMeterFormsLoadData('','');
       initReadingMeterLoadData('','')
     })
-
   }, []);
 
 
@@ -99,9 +101,7 @@ function Meter() {
       searchCondition.sidx = field ? field : 'meterkind';
     }
 
-    return meterload(searchCondition).then(res => {
-      return res;
-    });
+    return meterload(searchCondition);
   }
   const loadUnitMeterData=(search, paginationConfig?: PaginationConfig, sorter?)=>{
     setUnitMeterSearch(search);
@@ -123,9 +123,7 @@ function Meter() {
       searchCondition.sidx = field ? field : 'unitmeterid';
     }
 
-    return unitMeterload(searchCondition).then(res => {
-      return res;
-    });
+    return unitMeterload(searchCondition);
   }
   const loadReadingMeterData=(search, paginationConfig?: PaginationConfig, sorter?)=>{
     setReadingMeterSearch(search);
@@ -138,7 +136,7 @@ function Meter() {
       pageIndex,
       pageSize,
       total,
-      queryJson: { keyword: search }
+     // queryJson: { keyword: search }
     };
 
     if (sorter) {
@@ -147,9 +145,7 @@ function Meter() {
       searchCondition.sidx = field ? field : 'billcode';
     }
 
-    return readingMeterload(searchCondition).then(res => {
-      return res;
-    });
+    return readingMeterload(searchCondition);
   }
   const loadMeterFormsData=(search, paginationConfig?: PaginationConfig, sorter?)=>{
     setMeterFormsSearch(search);
@@ -171,66 +167,115 @@ function Meter() {
       searchCondition.sidx = field ? field : 'billcode';
     }
 
-    return meterFormsload(searchCondition).then(res => {
-      return res;
-    });
+    return meterFormsload(searchCondition);
   }
   const meterload = data => {
     setMeterLoading(true);
     data.sidx = data.sidx || 'meterkind';
     data.sord = data.sord || 'asc';
-    return GetMeterPageList(data).then(res => {
-      const { pageIndex: current, total, pageSize } = res;
-      setMeterPagination(pagesetting => {
-        return {
-          ...pagesetting,
-          current,
-          total,
-          pageSize,
-        };
-      });
-      var newData=[];
-      res.data.map(item=>{
-        var meterkindname="";
-        var metertypename="";
 
-        meterKind.map(i=>{
-          if(item.meterkind==i.key){
-            meterkindname=i.title;
-          }
+     //获取费表类型
+    GetDataItemTreeJson('EnergyMeterKind').then(res=>{
+      setMeterKinds(res);
+      meterKind=res;
+      return;
+    }).then(()=>{
+      //获取费表种类
+      return GetDataItemTreeJson('EnergyMeterType')
+    }).then(res=>{
+      setMeterTypes(res);
+      meterType=res;
+      return;
+    }).then(()=>{
+      return GetMeterPageList(data).then(res => {
+        const { pageIndex: current, total, pageSize } = res;
+        setMeterPagination(pagesetting => {
+          return {
+            ...pagesetting,
+            current,
+            total,
+            pageSize,
+          };
         });
-        meterType.map(i=>{
-          if(item.metertype==i.key){
-            metertypename=i.title;
-          }
-        });
-        var d=Object.assign({},item,{meterkindname,metertypename});
-        newData.push(d);
-      })
-      console.log(newData);
-      setMeterData(newData);
-      setMeterLoading(false);
-      return res;
+        /*var newData=[];
+        res.data.map(item=>{
+          var meterkindname="";
+          var metertypename="";
+
+          meterKind.map(i=>{
+            if(item.meterkind==i.key){
+              meterkindname=i.title;
+            }
+          });
+          meterType.map(i=>{
+            if(item.metertype==i.key){
+              metertypename=i.title;
+            }
+          });
+          var d=Object.assign({},item,{meterkindname,metertypename});
+          newData.push(d);
+        })
+        console.log(newData);*/
+        setMeterData(res.data);
+        setMeterLoading(false);
+        return res;
+      });
     });
+
+
   };
   const unitMeterload = data => {
     setUnitMeterLoading(true);
     data.sidx = data.sidx || 'unitmeterid';
     data.sord = data.sord || 'asc';
-    return GetUnitMeterPageList(data).then(res => {
-      const { pageIndex: current, total, pageSize } = res;
-      setUnitMeterPagination(pagesetting => {
-        return {
-          ...pagesetting,
-          current,
-          total,
-          pageSize,
-        };
+    //获取费表类型
+    GetDataItemTreeJson('EnergyMeterKind').then(res=>{
+      setMeterKinds(res);
+      meterKind=res;
+      return;
+    }).then(()=>{
+      //获取费表种类
+      return GetDataItemTreeJson('EnergyMeterType')
+    }).then(res=>{
+      setMeterTypes(res);
+      meterType=res;
+      return;
+    }).then(()=>{
+      return GetUnitMeterPageList(data).then(res => {
+        const { pageIndex: current, total, pageSize } = res;
+        setUnitMeterPagination(pagesetting => {
+          return {
+            ...pagesetting,
+            current,
+            total,
+            pageSize,
+          };
+        });
+
+        /*var newData=[];
+        res.data.map(item=>{
+          var meterkindname="";
+          var metertypename="";
+          meterKind.map(i=>{
+            if(item.meterkind==i.key){
+              meterkindname=i.title;
+            }
+          });
+          meterType.map(i=>{
+            if(item.metertype==i.key){
+              metertypename=i.title;
+            }
+          });
+          var d=Object.assign({},item,{meterkindname,metertypename});
+          newData.push(d);
+        })*/
+       // console.log(meterKind,meterType,newData);
+        setUnitMeterData(res.data);
+        setUnitMeterLoading(false);
+        return res;
       });
-      setUnitMeterData(res.data);
-      setUnitMeterLoading(false);
-      return res;
     });
+
   };
   const readingMeterload = data => {
     setReadingMeterLoading(true);
@@ -283,11 +328,7 @@ function Meter() {
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = meterPagination;
     //setAddButtonDisable(true);
-    return meterload({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
-      return res;
-    }).then(()=>{
-      //setAddButtonDisable(false);
-    });
+    return meterload({ pageIndex, pageSize, sidx, sord, total, queryJson });
   };
   const initUnitMeterLoadData = (org, searchText) => {
     setUnitMeterSearch(searchText);
@@ -301,11 +342,7 @@ function Meter() {
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = unitMeterPagination;
     //setAddButtonDisable(true);
-    return unitMeterload({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
-      return res;
-    }).then(()=>{
-      //setAddButtonDisable(false);
-    });
+    return unitMeterload({ pageIndex, pageSize, sidx, sord, total, queryJson });
   };
   const initReadingMeterLoadData = (org, searchText) => {
     setReadingMeterSearch(searchText);
@@ -319,11 +356,7 @@ function Meter() {
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = readingMeterPagination;
     //setAddButtonDisable(true);
-    return readingMeterload({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
-      return res;
-    }).then(()=>{
-      //setAddButtonDisable(false);
-    });
+    return readingMeterload({ pageIndex, pageSize, sidx, sord, total, queryJson });
   };
   const initMeterFormsLoadData = (org, searchText) => {
     setMeterFormsSearch(searchText);
@@ -337,24 +370,20 @@ function Meter() {
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = meterFormsPagination;
     //setAddButtonDisable(true);
-    return meterFormsload({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
-      return res;
-    }).then(()=>{
-     //setAddButtonDisable(false);
-    });
+    return meterFormsload({ pageIndex, pageSize, sidx, sord, total, queryJson });
   };
 
   const closeVertify = (result?) => {
-    //setVertifyVisible(false);
+    setVertifyVisible(false);
     if(result){
-     // initCheckLoadData(organize, null);
+      loadReadingMeterData(organize);
     }
-    setId(null);
+    setId('');
   };
 
   const showVertify = (id?,ifVertify?) => {
-    //setVertifyVisible(true);
-    //setIfVertify(ifVertify);
+    setVertifyVisible(true);
+    setIfVertify(ifVertify);
     setId(id);
   };
   const closeModify = (result?) => {
@@ -491,18 +520,26 @@ const [meterSearchParams,setMeterSearchParams]=useState<any>({});
                 style={{ width: 280 }}
                 onSearch={value => loadReadingMeterData(value)}
               />
-                {/* <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
-                onClick={() => initReadingMeterLoadData(organize, null)}
+              <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
+                onClick={() => {}}  disabled={ifVertify?false:true}
               >
                 <Icon type="minus-square" />
                 取消审核
               </Button>
               <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
-                onClick={() => {}}
+                onClick={() => {
+                  if(readingMeterId==null||readingMeterId=='')
+                  {
+                    message.warning('请先选择抄表单');
+                  }else{
+                    showVertify(true);
+                  }
+                }}
+                disabled={!ifVertify?false:true}
               >
                 <Icon type="check-square" />
                 审核
-              </Button> */}
+              </Button>
               <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
                 onClick={() =>{
                   showReadingMeterModify();
@@ -526,6 +563,22 @@ const [meterSearchParams,setMeterSearchParams]=useState<any>({});
               pagination={readingMeterPagination}
               data={readingMeterData}
               reload={() => initReadingMeterLoadData('', readingMeterSearch)}
+              showModify={(id?)=>{
+                setModifyReadingMeterVisible(true);
+                if(id!=null&&id!='')
+                {
+                  setReadingMeterId(id);
+                }
+              }}
+              getRowSelect={(record)=>{
+                setReadingMeterId(record.billid);
+                if(record.ifverify==1)
+                {
+                  setIfVertify(true);
+                }else{
+                  setIfVertify(false);
+                }
+              }}
             />
           </TabPane>
           <TabPane tab="抄表列表" key="4">
@@ -560,6 +613,13 @@ const [meterSearchParams,setMeterSearchParams]=useState<any>({});
         modifyVisible={modifyReadingMeterVisible}
         closeDrawer={closeReadingMeterModify}
         organizeId={organize}
+        id={readingMeterId}
+        reload={() => loadReadingMeterData('')}
+      />
+      <ReadingMeterVertify
+        vertifyVisible={vertifyVisible}
+        closeVertify={closeVertify}
+        ifVertify={ifVertify}
         id={readingMeterId}
         reload={() => loadReadingMeterData('')}
       />
