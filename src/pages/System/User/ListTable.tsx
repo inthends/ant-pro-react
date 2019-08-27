@@ -1,4 +1,5 @@
 import Page from '@/components/Common/Page';
+import { AccountEntity } from '@/model/accountEntity';
 import { Button, message, Modal, Switch, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
@@ -145,7 +146,7 @@ function ListTable(props: ListTableProps) {
         ];
       },
     },
-  ] as ColumnProps<any>[];
+  ] as ColumnProps<AccountEntity>[];
   return (
     <Page>
       <Table

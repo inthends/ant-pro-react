@@ -1,11 +1,11 @@
-import { ResponseAccountEntity } from './../../../model/responseAccountEntity';
 import { AccountEntity } from '@/model/accountEntity';
 import { getResult, objToFormdata, objToUrl } from '@/utils/networkUtils';
 import request from '@/utils/request';
 
-export function getDataList(data): Promise<ResponseAccountEntity> {
+export function getDataList(data): Promise<any> {
   return request
     .post(process.env.basePath + `/Account/GetPageListJson`, { data: objToFormdata(data) })
+    .then(getResult as any);
 }
 // 新增修改
 export function SaveForm(data): Promise<AccountEntity> {

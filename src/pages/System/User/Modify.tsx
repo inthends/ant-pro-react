@@ -102,7 +102,6 @@ const Modify = (props: ModifyProps) => {
             type="textarea"
             field="description"
             label="备注"
-            items={accountTypes}
           ></ModifyItem>
         </Row>
       </Form>

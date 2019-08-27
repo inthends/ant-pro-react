@@ -13,7 +13,7 @@ interface SearchParam {
   condition: 'Account' | 'Name' | 'Code';
   keyword: string;
 }
-function User() {
+const  User = () => {
   const [search, setSearch] = useState<SearchParam>({
     condition: 'Account',
     keyword: '',
