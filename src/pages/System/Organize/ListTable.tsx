@@ -2,7 +2,7 @@ import Page from '@/components/Common/Page';
 import { Divider, message, Modal, Table } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import React from 'react';
-import { RemoveForm, GetDetailJson } from './Main.service';
+import { RemoveForm, GetDetailJson } from './Organize.service';
 
 interface ListTableProps {
   loading: boolean; 
@@ -18,7 +18,7 @@ function ListTable(props: ListTableProps) {
   const doDelete = record => {
     Modal.confirm({
       title: '请确认',
-      content: `您是否要删除 ${record.name} 吗`,
+      content: `您是否要删除 ${record.fullName} 吗`,
       onOk: () => {
         RemoveForm(record.id)
           .then(() => {
@@ -31,8 +31,8 @@ function ListTable(props: ListTableProps) {
   };
   const doModify = id => {
     GetDetailJson(id).then(res => {
-      const { customerInfo = {}, relationPC = {} } = res;
-      modify({ ...relationPC, ...customerInfo });
+      console.log(res)
+      modify(res);
     });
   };
   const columns = [
@@ -107,7 +107,7 @@ function ListTable(props: ListTableProps) {
         size="middle"
         dataSource={data}
         columns={columns}
-        rowKey={record => record.id}  
+        rowKey={record => record.organizeId}  
         loading={loading}
       />
     </Page>

@@ -2,25 +2,20 @@
 import { Button, Icon, Input, Layout } from 'antd';
 import React, { useEffect, useState } from 'react';
 import ListTable from './ListTable';
-import { GetTreeListJson } from './Main.service';
+import { GetTreeListJson } from './Organize.service';
 import Modify from './Modify';
-import { GetOrgTree2 } from '@/services/commonItem';
 
 const { Content } = Layout;
 const { Search } = Input;
 
-function Main() {
+const Organize = () => {
   const [search, setSearch] = useState<string>('');
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<any[]>([]);
   const [currData, setCurrData] = useState<any>();
-  const [treeData, setTreeData] = useState<any[]>([]);
 
   useEffect(() => {
-    GetOrgTree2().then((res: any[]) => {
-      setTreeData(res || []);
-    });
     initLoadData({ searchText: '' });
   }, []);
 
@@ -103,14 +98,14 @@ function Main() {
         />
       </Content>
       <Modify
-        modifyVisible={modifyVisible}
+        visible={modifyVisible}
         closeDrawer={closeDrawer}
         data={currData}
-        treeData={treeData}
-        reload={() => initLoadData({ searchText: search })}
+        reload={() => {}}
       />
+      
     </Layout>
   );
 }
 
-export default Main;
+export default Organize;
