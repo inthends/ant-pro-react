@@ -67,3 +67,8 @@ export function GetOrgTree(): Promise<TreeEntity[]> {
 export function GetOrgTree2(): Promise<TreeEntity[]> {
   return request.get(process.env.basePath + `/Common/GetOrgTree2`, {}).then(getResult);
 }
+
+//获取组织父子节点id
+export function GetAllOrgIds(pstructid): Promise<string[]> {
+  return request.get(process.env.basePath + `/Common/GetAllOrgIds?pstructid=${pstructid}`, {}).then(getResult);
+}

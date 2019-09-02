@@ -1,6 +1,6 @@
 //房产信息
 
-import { AutoComplete, Button, Card, Col, Drawer, Form, Input, Row, message, InputNumber } from 'antd';
+import { Select, AutoComplete, Button, Card, Col, Drawer, Form, Input, Row, message, InputNumber } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { SaveForm, GetCustomerList } from './House.service';
@@ -23,21 +23,23 @@ const PstructInfo = (props: PstructInfoProps) => {
   const { type, modifyVisible, closeDrawer, form, data, reload } = props;
   const { getFieldDecorator } = form;
   const title = data === undefined ? '添加' : '修改';
-  var formLabel = '楼栋';
-  if (type === 1) {
-    formLabel = '楼栋';
-  }
-  else if (type === 2) {
-    formLabel = '楼层';
-  } else {
-    formLabel = '房间';
+  let formLabel = '楼栋';
+  if (data != undefined) {
+    if (data.type == 2) {
+      formLabel = '楼栋';
+    }
+    else if (data.type == 4) {
+      formLabel = '楼层';
+    } else {
+      formLabel = '房间';
+    }
   }
 
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [userSource, setUserSource] = useState<any[]>([]);
 
   // 打开抽屉时初始化
-  useEffect(() => { 
+  useEffect(() => {
   }, []);
 
 
@@ -141,11 +143,27 @@ const PstructInfo = (props: PstructInfoProps) => {
                 </Form.Item>
               </Col>
               <Col lg={12}>
+                <Form.Item label="全称"  >
+                  {getFieldDecorator('allName', {
+                    initialValue: infoDetail.allName,
+                  })(<Input readOnly />)}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={24}>
+              <Col lg={12}>
                 <Form.Item label="编号" required>
                   {getFieldDecorator('code', {
                     initialValue: infoDetail.code,
                     rules: [{ required: true, message: '请输入编号' }],
                   })(<Input placeholder="请输入编号" />)}
+                </Form.Item>
+              </Col>
+              <Col lg={12}>
+                <Form.Item label="联系电话">
+                  {getFieldDecorator('phoneNum', {
+                    initialValue: infoDetail.phoneNum,
+                  })(<Input placeholder="请输入联系电话" />)}
                 </Form.Item>
               </Col>
             </Row>
@@ -158,54 +176,80 @@ const PstructInfo = (props: PstructInfoProps) => {
                 </Form.Item>
               </Col>
               <Col lg={12}>
-                <Form.Item label="占地面积(㎡)">
-                  {getFieldDecorator('coverArea', {
-                    initialValue: infoDetail.coverArea || 0,
-                  })(<InputNumber placeholder="请输入占地面积" style={{ width: '100%' }} />)}
-                </Form.Item>
+
+                {data != undefined && data.type == 5 ? (
+                  <Form.Item label="计费面积(㎡)">
+                    {getFieldDecorator('billArea', {
+                      initialValue: infoDetail.billArea || 0,
+                    })(<InputNumber placeholder="请输入计费面积" style={{ width: '100%' }} />)}
+                  </Form.Item>) :
+                  (<Form.Item label="占地面积(㎡)">
+                    {getFieldDecorator('coverArea', {
+                      initialValue: infoDetail.coverArea || 0,
+                    })(<InputNumber placeholder="请输入占地面积" style={{ width: '100%' }} />)}
+                  </Form.Item>)}
               </Col>
             </Row>
 
-            <Row gutter={24}>
-              <Col lg={12}>
-                <Form.Item label="业主">
-                  {getFieldDecorator('ownerName', {
-                    initialValue: infoDetail.ownerName,
-                  })(
-                    <AutoComplete
+            {data != undefined && data.type == 5 ? (
+              <Row gutter={24}>
+                <Col lg={12}>
+                  <Form.Item label="业主">
+                    {getFieldDecorator('ownerName', {
+                      initialValue: infoDetail.ownerName,
+                    })(
+                      <AutoComplete
+                        dataSource={userList}
+                        style={{ width: '100%' }}
+                        onSearch={handleSearch}
+                        placeholder="请输入业主"
+                        onSelect={onOwnerSelect}
+                      />
+                    )}
+                    {getFieldDecorator('ownerId', {
+                      initialValue: infoDetail.ownerId,
+                    })(
+                      <input type='hidden' />
+                    )}
+                  </Form.Item>
+                </Col>
+                <Col lg={12}>
+                  <Form.Item label="租户">
+                    {getFieldDecorator('tenantName', {
+                      initialValue: infoDetail.tenantName,
+                    })(<AutoComplete
                       dataSource={userList}
                       style={{ width: '100%' }}
                       onSearch={handleSearch}
-                      placeholder="请输入业主"
-                      onSelect={onOwnerSelect}
-                    />
-                  )}
-                  {getFieldDecorator('ownerId', {
-                    initialValue: infoDetail.ownerId,
-                  })(
-                    <input type='hidden' />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col lg={12}>
-                <Form.Item label="租户">
-                  {getFieldDecorator('tenantName', {
-                    initialValue: infoDetail.tenantName,
-                  })(<AutoComplete
-                    dataSource={userList}
-                    style={{ width: '100%' }}
-                    onSearch={handleSearch}
-                    placeholder="请输入租户"
-                    onSelect={onTenantSelect}
-                  />)} 
-                  {getFieldDecorator('tenantId', {
-                    initialValue: infoDetail.tenantId,
-                  })(
-                    <input type='hidden' />
-                  )} 
-                </Form.Item>
-              </Col>
-            </Row>
+                      placeholder="请输入租户"
+                      onSelect={onTenantSelect}
+                    />)}
+                    {getFieldDecorator('tenantId', {
+                      initialValue: infoDetail.tenantId,
+                    })(
+                      <input type='hidden' />
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row>) : (<Row gutter={24}>
+                <Col lg={12}>
+                  <Form.Item label="业态">
+                    {getFieldDecorator('buildingFormat', {
+                      initialValue: infoDetail.buildingFormat ? '多层' : infoDetail.buildingFormat,
+                    })(
+                      <Select>
+                        <Option value="多层" >多层</Option>
+                        <Option value="小高层">小高层</Option>
+                        <Option value="高层" >高层</Option>
+                        <Option value="超高层" >超高层</Option>
+                        <Option value="联排别墅" >联排别墅</Option>
+                        <Option value="独栋别墅" >独栋别墅</Option>
+                        <Option value="叠加别墅" >叠加别墅</Option>
+                      </Select>
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row>)}
 
             <Row gutter={24}>
               <Col lg={24}>

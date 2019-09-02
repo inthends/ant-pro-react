@@ -42,7 +42,7 @@ function ListTable(props: ListTableProps) {
       sorter: true,
       render: (text, record) => {
         //return <Link to={`housemore?pstructid=${record.id}&type=2`}>{record.name}</Link>   
-        return <Link key='linkto' to={{ pathname: 'housemore', state: { pstructid: record.id } }}>{record.name}</Link>
+        return <Link key='linkto' to={{ pathname: 'housemore', state: {organizeid:record.organizeid, pstructid: record.id } }}>{record.name}</Link>
       }
     },
     {

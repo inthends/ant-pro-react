@@ -368,22 +368,22 @@ const Modify = (props: ModifyProps) => {
                 </Form.Item>
               </Col>
             </Row>
-            {/* <Row gutter={24}>
+            <Row gutter={24}>
               <Col lg={12}>
-                <Form.Item label="物业公司">
-                  {getFieldDecorator('propertyCompany', {
-                    initialValue: infoDetail.propertyCompany,
-                  })(<Input placeholder="请输入物业公司" />)}
+                <Form.Item label="楼栋管家">
+                  {getFieldDecorator('housekeeper', {
+                    initialValue: infoDetail.housekeeper,
+                  })(<Input placeholder="请输入楼栋管家" />)}
                 </Form.Item>
               </Col>
               <Col lg={12}>
-                <Form.Item label="物业标准费">
-                  {getFieldDecorator('feeItemRule', {
-                    initialValue: infoDetail.feeItemRule,
-                  })(<Input placeholder="请输入物业标准费" />)}
+                <Form.Item label="电子发票">
+                  {getFieldDecorator('invoiceTitle', {
+                    initialValue: infoDetail.invoiceTitle,
+                  })(<Input placeholder="请输入电子发票" />)}
                 </Form.Item>
               </Col>
-            </Row> */}
+            </Row>
             <Row gutter={24}>
               <Col lg={24}>
                 <Form.Item label="附加说明">

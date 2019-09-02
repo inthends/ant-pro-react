@@ -280,15 +280,14 @@ const Modify = (props: ModifyProps) => {
                     initialValue: infoDetail.bankCcount,
                   })(<Input placeholder="请输入银行账号" />)}
                 </Form.Item>
-              </Col>
-          
+              </Col> 
               <Col lg={8}>
-                <Form.Item label="状态">
-                  {getFieldDecorator('state', {
-                    initialValue: infoDetail.state,
+                <Form.Item label="信誉等级">
+                  {getFieldDecorator('creditLevel', {
+                    initialValue: infoDetail.creditLevel,
                   })(
-                    <Select placeholder="请选择状态">
-                      {states.map(item => (
+                    <Select placeholder="请选择信誉等级">
+                      {creditLevels.map(item => (
                         <Option value={item.value} key={item.key}>
                           {item.title}
                         </Option>
@@ -298,12 +297,12 @@ const Modify = (props: ModifyProps) => {
                 </Form.Item>
               </Col>
               <Col lg={8}>
-                <Form.Item label="信誉等级">
-                  {getFieldDecorator('creditLevel', {
-                    initialValue: infoDetail.creditLevel,
+                <Form.Item label="状态">
+                  {getFieldDecorator('state', {
+                    initialValue: infoDetail.state,
                   })(
-                    <Select placeholder="请选择信誉等级">
-                      {creditLevels.map(item => (
+                    <Select placeholder="请选择状态">
+                      {states.map(item => (
                         <Option value={item.value} key={item.key}>
                           {item.title}
                         </Option>

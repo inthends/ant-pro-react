@@ -14,30 +14,36 @@ const { Search } = Input;
 const { TabPane } = Tabs;
 
 function HouseMore(props) {
-  const [pstructId, setPstructId] = useState<string>(''); //小区id
+  //const [pstructId, setPstructId] = useState<string>(''); //小区id
   const [type, setType] = useState<number>(1);
-  const [parentId, setParentId] = useState<string>('');
+  
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   //const [treeData, setTreeData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [data, setData] = useState<any[]>([]);
   const [search, setSearch] = useState<string>('');
-  const [currData, setCurrData] = useState<any>();
-  const selectTree = (parentId, type, searchText) => {
-    initLoadData(parentId, type, searchText, pstructId);
+  const [currData, setCurrData] = useState<any>(); 
+  const [parentId, setParentId] = useState<string>('');//左侧树点击的节点id
+  const [selectId, setSelectId] = useState<string>(''); //列表选中的节点id  
+
+  const selectTree = (parentId, type, searchText) => { 
+    initLoadData(parentId, type, searchText);//, pstructId);
     setType(type);
-    setParentId(parentId);
+    //setParentId(parentId);
   };
 
   useEffect(() => {
-    //页面传递过来的值
-    const psid = props.location.state ? props.location.state.pstructid : '';
-    setPstructId(psid);
+    //首页传递过来小区id
+    const pid = props.location.state ? props.location.state.pstructid : '';//房产id 
+    const organizeid=  props.location.state ? props.location.state.organizeid : '';//房产所在组织id 
+    setParentId(organizeid);
+    setSelectId(pid); 
+    //setPstructId(psid);
     // GetBuildings(psid).then((res: any[]) => {
     //   setTreeData(res || []);
     // });
-    initLoadData(parentId, type, '', psid);
+    initLoadData(pid, type, '');//, psid);
   }, []);
 
   const closeDrawer = () => {
@@ -61,7 +67,7 @@ function HouseMore(props) {
       queryJson: {
         ParentId: parentId,
         keyword: searchText,
-        PStructId: pstructId,
+        //PStructId: pstructId,
         Type: type,
       },
     };
@@ -97,12 +103,12 @@ function HouseMore(props) {
     });
   };
 
-  const initLoadData = (parentId, type, searchText, psid) => {
+  const initLoadData = (parentId, type, searchText) => {
     setSearch(searchText);
     const queryJson = {
       keyword: search,
-      PStructId: psid,
-      ParentId: parentId == null ? psid : parentId,
+      //PStructId: psid,
+      ParentId: parentId ,//== null ? psid : parentId,
       Type: type == null ? 1 : type,
     };
     const sidx = 'id';
@@ -116,7 +122,8 @@ function HouseMore(props) {
   return (
     <Layout style={{ height: '100%' }}>
       <HouseMoreLeftTree
-        parentid={pstructId}
+        parentid={parentId}
+        selectid={selectId} 
         // treeData={treeData}
         selectTree={(parentId, type) => {
           selectTree(parentId, type, search);
@@ -147,7 +154,7 @@ function HouseMore(props) {
               </Button>
             </div>
 
-            <ListTableMore 
+            <ListTableMore
               onchange={(paginationConfig, filters, sorter) =>
                 loadData(search, parentId, type, paginationConfig, sorter)
               }
@@ -155,7 +162,7 @@ function HouseMore(props) {
               pagination={pagination}
               data={data}
               modify={showDrawer}
-              reload={() => initLoadData(parentId, type, search, pstructId)}
+              reload={(id, selecttype) => { setSelectId(id); initLoadData(id || parentId, selecttype || type, search) }}
             />
           </TabPane>
           {type === 2 ? (
@@ -171,8 +178,8 @@ function HouseMore(props) {
         closeDrawer={closeDrawer}
         organizeId={''}
         data={currData}
-        type={type}
-        reload={() => initLoadData(parentId, type, search, pstructId)}
+        // type={type}
+        reload={() => initLoadData(parentId, type, search)}
       />
     </Layout>
   );

@@ -4,7 +4,7 @@ import { Icon, Layout, Tree } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import { TreeEntity } from '@/model/models';
 import { SiderContext } from '../SiderContext';
-import { GetOrgTree, GetAsynChildBuildings } from '@/services/commonItem';
+import { GetOrgTree, GetAsynChildBuildings, GetAllOrgIds } from '@/services/commonItem';
 
 const { TreeNode } = Tree;
 const { Sider } = Layout;
@@ -13,11 +13,12 @@ interface HouseMoreLeftTreeProps {
   //treeData: any[];
   selectTree(parentId, type): void;
   parentid?: string;
+  selectid?: string;//选中的节点 
 }
 
 function HouseMoreLeftTree(props: HouseMoreLeftTreeProps) {
 
-  const { selectTree, parentid } = props;
+  const { selectTree, parentid, selectid } = props;
   const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
   // const [autoExpandParent, setAutoExpandParent] = useState<boolean>(false);
   const { hideSider, setHideSider } = useContext(SiderContext);
@@ -28,7 +29,7 @@ function HouseMoreLeftTree(props: HouseMoreLeftTreeProps) {
   //let selectedKey=[parentid];  
   // var keys: any[];
   // keys = [];
-  let keys: string[] = [];
+  //let keys: string[] = [];
   // const getAllkeys = res =>
   //   res.map(item => {
   //     if (item.children && item.type != 'D') {
@@ -37,33 +38,55 @@ function HouseMoreLeftTree(props: HouseMoreLeftTreeProps) {
   //     keys.push(item.key);
   //   });
 
-  const getAllkeys = data =>
-    data.forEach(item => {
-      if (!item.isLeaf && item.type != 'D') {
-        keys.push(getAllkeys(item.children))
-      }
-      keys.push(item.key);
-    });
+  // const getAllkeys = data =>
+  //   data.forEach(item => { 
+  //     if (!item.isLeaf && item.type != 'D') {
+  //       keys.push(getAllkeys(item.children))
+  //     }
+  //     keys.push(item.key);
+  //   });
+
 
   //展开到管理处
   useEffect(() => {
     //根据父节点获取房产树
     GetOrgTree().then((res: TreeEntity[]) => {
       setTreeData(res || []);
-      getAllkeys(res || []);
+      //getAllkeys(res || []);
       //setSelectedKey(selects);
       //默认选中
       // let selectid: string[] = [];
       // selectid.push(parentid);  
       // setSelectedKey(selects); 
-      // setSelectedKey(selects); 
+      // setSelectedKey(selects);
+
+      //设置选中
+      GetAllOrgIds(parentid).then((res: string[]) => {
+        const expands = res || [];
+        expands.push(selectid || '');//添加选中的节点
+        setExpandedKeys(expands);
+        setSelectedKey([selectid || '']);
+      });
+
     });
 
-    setExpandedKeys(keys);
-    setSelectedKey([parentid || '']);
-    //setExpandedKeys(treeData.map(item => item.id as string)); 
-
+    //setExpandedKeys(keys); 
+    //setSelectedKey([parentid || '']);  
+    //setSelectedKey([selectid || '']);  
+    //setExpandedKeys(treeData.map(item => item.id as string));  
   }, [parentid]);
+
+
+    useEffect(() => { 
+      //继续展开房产节点
+        const expands = expandedKeys;
+        expands.push(selectid || '');//添加选中的节点
+        setExpandedKeys(expands);
+        setSelectedKey([selectid || '']); 
+   }, [selectid]);
+
+
+
 
   const onSelect = (selectedKeys, info) => {
     if (selectedKeys.length === 1) {
@@ -128,7 +151,7 @@ function HouseMoreLeftTree(props: HouseMoreLeftTreeProps) {
     data.map(item => {
       if (item.children) {
         return (
-          // <TreeNode title={item.title} key={item.key} dataRef={item} type={item.type} >
+          //<TreeNode title={item.title} key={item.key} dataRef={item} type={item.type} >
           <TreeNode {...item} dataRef={item} >
             {renderTreeNodes(item.children)}
           </TreeNode>

@@ -244,7 +244,7 @@ export default [
           {
             name: 'organize',
             path: '/system/organize',
-            component: './System/Organize/Main',
+            component: './System/Organize/Organize',
           },
           {
             name: 'department',
@@ -259,7 +259,7 @@ export default [
           {
             name: 'role',
             path: '/system/role',
-            component: './System/Role/Main',
+            component: './System/Role/Role',
           },
           // {
           //   name: '用户管理',

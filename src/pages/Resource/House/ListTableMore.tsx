@@ -10,7 +10,7 @@ interface ListTableMoreProps {
   data: any[];
   modify(id: string): void;
   onchange(page: any, filter: any, sort: any): any;
-  reload(): void;
+  reload(id, type): void;
 }
 
 function ListTableMore(props: ListTableMoreProps) {
@@ -18,7 +18,7 @@ function ListTableMore(props: ListTableMoreProps) {
   const changePage = (pag: PaginationConfig, filters, sorter) => {
     onchange(pag, filters, sorter);
   };
-  
+
   const doDelete = record => {
     Modal.confirm({
       title: '请确认',
@@ -26,10 +26,14 @@ function ListTableMore(props: ListTableMoreProps) {
       onOk: () => {
         RemoveForm(record.id).then(() => {
           message.success('删除成功');
-          reload();
+          reload('', '');
         });
       },
     });
+  };
+
+  const refresh = (id, type) => {
+    reload(id, type);
   };
 
   const columns = [
@@ -39,7 +43,10 @@ function ListTableMore(props: ListTableMoreProps) {
       key: 'name',
       width: 200,
       fixed: 'left',
-      sorter: true
+      sorter: true,
+      render: (text, record) => { 
+        return record.type == 5 ? text : <a onClick={() => refresh(record.id, record.type)} key="refresh">{record.name}</a>
+      }
     },
     {
       title: '编号',
@@ -57,15 +64,15 @@ function ListTableMore(props: ListTableMoreProps) {
     },
     {
       title: '联系电话',
-      dataIndex: 'phonenum',
-      key: 'phonenum',
+      dataIndex: 'phoneNum',
+      key: 'phoneNum',
       width: 100,
       sorter: true,
     },
     {
       title: '全称',
-      dataIndex: 'allname',
-      key: 'allname',
+      dataIndex: 'allName',
+      key: 'allName',
       sorter: true,
     },
     {
@@ -87,7 +94,7 @@ function ListTableMore(props: ListTableMoreProps) {
           // </Button>,
           <span key='buttons'>
             <a onClick={() => modify(record)} key="modify">修改</a>
-            <Divider type="vertical" key='split'/>
+            <Divider type="vertical" key='split' />
             <a onClick={() => doDelete(record)} key="delete">删除</a>
           </span>
         ];
@@ -97,7 +104,7 @@ function ListTableMore(props: ListTableMoreProps) {
 
   return (
     <Page>
-      <Table 
+      <Table
         style={{ border: 'none' }}
         bordered={false}
         size="middle"

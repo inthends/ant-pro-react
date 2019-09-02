@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Children } from 'react';
+import React  from 'react';
 import styles from './index.less';
 interface RoomProps {
   inline: boolean;
