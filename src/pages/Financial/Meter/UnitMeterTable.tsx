@@ -1,13 +1,10 @@
 //装表列表
 import Page from '@/components/Common/Page';
-import { InputNumber, Input, Select, Col, Row, Form, DatePicker, Card, Button, message, Table, Modal } from 'antd';
+import { Form,  Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
-import React, { useState } from 'react';
-import moment from 'moment';
+import React from 'react'; 
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import {  } from './Meter.service';
-import styles from './style.less';
-
+import {  } from './Meter.service'; 
 interface UnitMeterTableProps {
   onchange(page: any, filter: any, sort: any): any;
   loading: boolean;
@@ -18,55 +15,55 @@ interface UnitMeterTableProps {
 }
 
 function UnitMeterTable(props: UnitMeterTableProps) {
-  const { form, onchange, loading, pagination, data,  reload } = props;
+  const {   onchange, loading, pagination, data } = props;
 
   const columns = [
     {
       title: '费表类型',
-      dataIndex: 'meterkind',
-      key: 'meterkind',
+      dataIndex: 'meterKind',
+      key: 'meterKind',
       width: 200,
       sorter: true
     },
     {
       title: '费表种类',
-      dataIndex: 'metertype',
-      key: 'metertype',
+      dataIndex: 'meterType',
+      key: 'meterType',
       width: 200,
       sorter: true
     },
     {
       title: '费表编号',
-      dataIndex: 'metercode',
-      key: 'metercode',
+      dataIndex: 'meterCode',
+      key: 'meterCode',
       width: 200,
       sorter: true,
     },
     {
       title: '费表名称',
-      dataIndex: 'metername',
-      key: 'metername',
+      dataIndex: 'meterName',
+      key: 'meterName',
       width: 200,
       sorter: true,
     },
     {
       title: '倍率',
-      dataIndex: 'meterzoom',
-      key: 'meterzoom',
+      dataIndex: 'meterZoom',
+      key: 'meterZoom',
       width: 200,
       sorter: true,
     },
     {
       title: '量程',
-      dataIndex: 'meterrange',
-      key: 'meterrange',
+      dataIndex: 'meterRange',
+      key: 'meterRange',
       sorter: true,
       width: 200
     },
     {
       title: '所属机构',
-      key: 'allname',
-      dataIndex: 'allname',
+      key: 'allName',
+      dataIndex: 'allName',
       sorter: true,
       width: 200
     }
@@ -88,6 +85,5 @@ function UnitMeterTable(props: UnitMeterTableProps) {
     </Page>
   );
 }
-
 export default Form.create<UnitMeterTableProps>()(UnitMeterTable);
 

@@ -15,11 +15,10 @@ export interface GlobalHeaderRightProps extends ConnectProps {
   menu?: boolean;
 }
 
-class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
+class AvatarDropdown extends React.Component<GlobalHeaderRightProps> { 
   onMenuClick = (event: ClickParam) => {
     const { key } = event; 
-    if (key === 'logout') {
-      
+    if (key === 'logout') { 
       const { dispatch } = this.props;
       if (dispatch) {
         dispatch({
@@ -32,7 +31,7 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
   };
 
   render(): React.ReactNode {
-    const { currentUser = {}, menu } = this.props;
+    const { currentUser = {}, menu } = this.props; 
     if (!menu) {
       return (
         <span className={`${styles.action} ${styles.account}`}>

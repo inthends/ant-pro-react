@@ -14,7 +14,7 @@
 /**
  * 返回分页数据
  */
-export interface PageData { 
+export interface PageData {
     /**
      * 数据
      */

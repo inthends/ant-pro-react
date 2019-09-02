@@ -54,7 +54,7 @@ export default {
   menu: {
     locale: true,
   },
-  title: '乐软A6物业管理',
+  title: 'A6物业管理系统',
   pwa: false,
   iconfontUrl: '',
 } as DefaultSettings;

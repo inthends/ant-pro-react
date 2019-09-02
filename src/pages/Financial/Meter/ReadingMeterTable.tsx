@@ -127,7 +127,7 @@ function ReadingMeterTable(props: ReadingMeterTableProps) {
       dataIndex: 'operation',
       key: 'operation',
       fixed: 'right',
-      width: 300,
+      width: 100,
       render: (text, record) => {
         return [
           <span>

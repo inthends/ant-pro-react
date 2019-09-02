@@ -115,7 +115,7 @@ function Main() {
         <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
           <Search
             className="search-input"
-            placeholder="搜索合同名称或编号"
+            placeholder="搜索合同编号"
             style={{ width: 200 }}
             onSearch={value => loadData(value)}
           />

@@ -93,10 +93,10 @@ const Detail = (props: DetailProps) => {
       visible={modifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
       <PageHeader title={infoDetail.state}
-        extra={[
-          <Button key="1">附件</Button>, 
-          <Button key="2">打印</Button>,
-        ]}
+        // extra={[
+        //   <Button key="1">附件</Button>, 
+        //   <Button key="2">打印</Button>,
+        // ]}
       />
       <Divider dashed />
       <Form layout="vertical">

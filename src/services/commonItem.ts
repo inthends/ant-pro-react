@@ -17,7 +17,7 @@ export function GetUserList(keyword,type): Promise<any> {
 }
 
 //下拉房屋树
-export function GetQuickSimpleTreeAll(): Promise<ResponseObject<any[]>> {
+export function GetQuickSimpleTreeAll(): Promise<ResponseObject<any>> {
   return request.get(process.env.basePath + `/Common/GetQuickSimpleTreeAll`, {});
 } 
 
@@ -46,19 +46,24 @@ export function GetAsynChildBuildings(pstructid,type): Promise<any[]> {
 }
 
 //获取公共区域下级
-export function GetAsynChildBuildingsForArea(pstructid,type): Promise<any[]> {
+export function GetAsynChildBuildingsForArea(pstructid,type): Promise<any[]> { 
   return request
     .get(process.env.basePath + `/Common/GetAsynChildBuildingsForArea?parentId=${pstructid}&type=${type}`)
     .then(getResult as any);
 }
 
-export function GetOrgTree(): Promise<any[]> {
-    return request
-      .get(process.env.basePath + `/Common/GetOrgTree`)
-      .then(getResult as any);
-}
- 
+// export function GetOrgTree(): Promise<any[]> {
+//     return request
+//       .get(process.env.basePath + `/Common/GetOrgTree`)
+//       .then(getResult as any);
+// }
 
-export function GetOrgTree2(): Promise<any[]> {
+export function GetOrgTree(): Promise<TreeEntity[]> {
+  return request
+    .get(process.env.basePath + `/Common/GetOrgTree`)
+    .then(getResult as any);
+}
+
+export function GetOrgTree2(): Promise<TreeEntity[]> {
   return request.get(process.env.basePath + `/Common/GetOrgTree2`, {}).then(getResult);
 }

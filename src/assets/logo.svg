@@ -22,9 +22,9 @@
             <stop stop-color="#FA8E7D" offset="0%"></stop>
             <stop stop-color="#F74A5C" offset="51.2635191%"></stop>
             <stop stop-color="#F51D2C" offset="100%"></stop>
-        </linearGradient>
+        </linearGradient> 
     </defs>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <!-- <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="logo" transform="translate(-20.000000, -20.000000)">
             <g id="Group-28-Copy-5" transform="translate(20.000000, 20.000000)">
                 <g id="Group-27-Copy-3">
@@ -39,5 +39,5 @@
                 </g>
             </g>
         </g>
-    </g>
+    </g> -->
 </svg>

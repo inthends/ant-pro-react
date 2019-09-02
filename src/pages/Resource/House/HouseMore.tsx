@@ -23,9 +23,7 @@ function HouseMore(props) {
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [data, setData] = useState<any[]>([]);
   const [search, setSearch] = useState<string>('');
-
   const [currData, setCurrData] = useState<any>();
-
   const selectTree = (parentId, type, searchText) => {
     initLoadData(parentId, type, searchText, pstructId);
     setType(type);
@@ -135,7 +133,7 @@ function HouseMore(props) {
                 onSearch={value => loadData(value, parentId, type)}
                 style={{ width: 200 }}
               />
-              <Button type="primary" style={{ float: 'right', marginLeft: '10px' }} onClick={() => showDrawer()}>
+              <Button key='add' type="primary" style={{ float: 'right', marginLeft: '10px' }} onClick={() => showDrawer()}>
                 <Icon type="plus" />
                 新增
               </Button>
@@ -143,14 +141,13 @@ function HouseMore(props) {
                 <Icon type="arrow-left" />
                 返回
               </Button> */}
-              <Button style={{ float: 'right' }}>
+              <Button style={{ float: 'right' }} key='return'>
                 <Link to={{ pathname: 'house' }}>
-                  <Icon type="arrow-left" />
-                  返回</Link>
+                  <Icon type="arrow-left" />返回</Link>
               </Button>
             </div>
 
-            <ListTableMore
+            <ListTableMore 
               onchange={(paginationConfig, filters, sorter) =>
                 loadData(search, parentId, type, paginationConfig, sorter)
               }

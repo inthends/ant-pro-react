@@ -40,8 +40,9 @@ export default [
       {
         name: 'account',
         icon: 'user',
+        hideInMenu: true,
         path: '/account',
-        routes: [
+        routes: [ 
           {
             name: 'settings',
             path: '/account/settings',
@@ -51,8 +52,8 @@ export default [
       },
 
       {
-        name: 'dashboard',
-        path: '/dashboard',
+        name: 'dashboard', 
+        path: '/dashboard',  
         component: './dashboard/dashboard',
         icon: 'dashboard',
         routes: [
@@ -243,7 +244,7 @@ export default [
           {
             name: 'organize',
             path: '/system/organize',
-            component: './System/Organize/Organize',
+            component: './System/Organize/Main',
           },
           {
             name: 'department',
@@ -258,7 +259,7 @@ export default [
           {
             name: 'role',
             path: '/system/role',
-            component: './System/Role/Role',
+            component: './System/Role/Main',
           },
           // {
           //   name: '用户管理',

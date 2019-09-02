@@ -36,11 +36,6 @@ export interface LeaseContractDTO {
      * 租赁数量
      */
     leaseSize?: number;
-
-    /**
-     * 当前租赁数量单位
-     */
-    leaseSizeUnit?: string;
     /**
      * 合同签约日期
      */
@@ -57,7 +52,6 @@ export interface LeaseContractDTO {
      * 单价保留小数点位数
      */
     precision?: number;
- 
     /**
      * 计算精度的方式  0-精确计算结果保留2位小数  1-每步计算保留2位小数
      */
@@ -70,7 +64,6 @@ export interface LeaseContractDTO {
      * 租客名称
      */
     customer?: string;
-
     /**
      * 行业
      */
@@ -87,7 +80,6 @@ export interface LeaseContractDTO {
      * 签订人
      */
     signer?: string;
- 
     /**
      * 租客联系人
      */
@@ -96,7 +88,6 @@ export interface LeaseContractDTO {
      * 滞纳金比例
      */
     lateFee?: number;
-
     /**
      * 滞纳金比例单位
      */
@@ -105,12 +96,10 @@ export interface LeaseContractDTO {
      * 滞纳金上限
      */
     maxLateFee?: number;
-
     /**
      * 滞纳金上限单位
      */
     maxLateFeeUnit?: string;
-
     /**
      * 合同状态
      */

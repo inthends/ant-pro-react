@@ -22,56 +22,56 @@ function MeterFormsTable(props: MeterFormsTableProps) {
   const columns = [
     {
       title: '单号',
-      dataIndex: 'billcode',
+      dataIndex: 'billCode',
       key: 'billcode',
       width: 200,
       sorter: true
     },
     {
       title: '抄表期间',
-      dataIndex: 'meterdate',
-      key: 'meterdate',
+      dataIndex: 'meterDate',
+      key: 'meterDate',
       width: 200,
       sorter: true
     },
     {
       title: '表编号',
-      dataIndex: 'metercode',
-      key: 'metercode',
+      dataIndex: 'meterCode',
+      key: 'meterCode',
       width: 200,
       sorter: true,
     },
     {
       title: '表名称',
-      dataIndex: 'metername',
-      key: 'metername',
+      dataIndex: 'meterName',
+      key: 'meterName',
       width: 200,
       sorter: true,
     },
     {
       title: '上次读数',
-      dataIndex: 'lastreading',
-      key: 'lastreading',
+      dataIndex: 'lastReading',
+      key: 'lastReading',
       width: 200,
       sorter: true,
     },
     {
       title: '本次读数',
-      dataIndex: 'nowreading',
-      key: 'nowreading',
+      dataIndex: 'nowReading',
+      key: 'nowReading',
       sorter: true,
       width: 200
     },
     {
       title: '倍率',
-      dataIndex: 'meterzoom',
+      dataIndex: 'meterZoom',
       sorter: true,
-      key: 'meterzoom',
+      key: 'meterZoom',
       width: 200
     }, {
       title: '金额',
-      dataIndex: 'meterprice',
-      key: 'meterprice',
+      dataIndex: 'meterPrice',
+      key: 'meterPrice',
       sorter: true,
       width: 200,
       render: val =>{
@@ -87,13 +87,12 @@ function MeterFormsTable(props: MeterFormsTableProps) {
     },
     {
       title: '安装位置',
-      dataIndex: 'allname',
-      key: 'allname',
+      dataIndex: 'allName',
+      key: 'allName',
       sorter: true,
       width: 200
     }
   ] as ColumnProps<any>[];
-
   return (
     <Page>
       <Table<any>
@@ -110,6 +109,5 @@ function MeterFormsTable(props: MeterFormsTableProps) {
     </Page>
   );
 }
-
 export default Form.create<MeterFormsTableProps>()(MeterFormsTable);
 

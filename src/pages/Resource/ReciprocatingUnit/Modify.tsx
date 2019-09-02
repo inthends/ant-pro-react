@@ -64,7 +64,8 @@ const Modify = (props: ModifyProps) => {
   useEffect(() => {
     if (modifyVisible) {
       if (data) {
-        setInfoDetail({ ...data.vendor });
+        // setInfoDetail({ ...data.vendor });
+        setInfoDetail(data);
         form.resetFields();
       } else {
         setInfoDetail({});
@@ -81,7 +82,7 @@ const Modify = (props: ModifyProps) => {
   const save = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        const newData = data ? { ...data.vendor, ...values } : values;
+        const newData = data ? { ...data, ...values } : values;
         doSave(newData);
       }
     });

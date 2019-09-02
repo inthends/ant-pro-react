@@ -20,7 +20,7 @@ function ListTable(props: ListTableProps) {
   };
   const doDelete = record => {
     Modal.confirm({
-      title: '请确认',
+      title: '请确认', 
       content: `您是否要删除${record.fullName}吗`,
       onOk: () => {
         RemoveForm(record.id)
@@ -57,8 +57,8 @@ function ListTable(props: ListTableProps) {
     },
     {
       title: '所属机构',
-      dataIndex: 'OrganizeId',
-      key: 'OrganizeId',
+      dataIndex: 'orgName',
+      key: 'orgName',
       width: 100,
       // sorter: true,
     },
@@ -92,8 +92,8 @@ function ListTable(props: ListTableProps) {
     },
     {
       title: '联系电话',
-      dataIndex: 'InnerPhone',
-      key: 'InnerPhone',
+      dataIndex: 'innerPhone',
+      key: 'innerPhone',
     },
     {
       title: '联系地址',

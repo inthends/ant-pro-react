@@ -18,8 +18,14 @@ export interface UnitReductionDetail {
     /**
      * 收费明细Id
      */
-    billID?: string;
-    unitID?: string;
+    billId?: string;
+    /**
+     * 房间id
+     */
+    unitId?: string;
+    /**
+     * 费项名称
+     */
     feeName?: string;
     /**
      * 应收期间

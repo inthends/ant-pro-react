@@ -9,11 +9,11 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { ChargeFeeResultEntity } from './chargeFeeResultEntity';
-import { LeaseContractChargeEntity } from './leaseContractChargeEntity';
-import { LeaseContractChargeFeeEntity } from './leaseContractChargeFeeEntity';
-import { LeaseContractChargeFeeOfferEntity } from './leaseContractChargeFeeOfferEntity';
-import { LeaseContractChargeIncreEntity } from './leaseContractChargeIncreEntity';
+import { HtChargefeeresult } from './htChargefeeresult';
+import { HtLeasecontractcharge } from './htLeasecontractcharge';
+import { HtLeasecontractchargefee } from './htLeasecontractchargefee';
+import { HtLeasecontractchargefeeoffer } from './htLeasecontractchargefeeoffer';
+import { HtLeasecontractchargeincre } from './htLeasecontractchargeincre';
 
 
 /**
@@ -21,28 +21,27 @@ import { LeaseContractChargeIncreEntity } from './leaseContractChargeIncreEntity
  */
 export interface ChargeDetailDTO {
     /**
-     * 合同条款主信息
+     * 合同费用基本条款
      */
-    contractCharge?: LeaseContractChargeEntity;
+    contractCharge?: HtLeasecontractcharge;
     /**
      * 条款
      */
-    chargeFeeList?: Array<LeaseContractChargeFeeEntity>;
+    chargeFeeList?: Array<HtLeasecontractchargefee>;
     /**
      * 递增率
      */
-    chargeIncreList?: Array<LeaseContractChargeIncreEntity>;
+    chargeIncreList?: Array<HtLeasecontractchargeincre>;
     /**
      * 优惠
      */
-    chargeFeeOfferList?: Array<LeaseContractChargeFeeOfferEntity>;
+    chargeFeeOfferList?: Array<HtLeasecontractchargefeeoffer>;
+    /**
+     * 保证金明细
+     */
+    depositFeeResultList?: Array<HtChargefeeresult>;
     /**
      * 租金明细
      */
-    chargeFeeResultList?: Array<ChargeFeeResultEntity>;
-
-      /**
-     * 保证金明细
-     */
-    depositFeeResultList?: Array<ChargeFeeResultEntity>;
+    chargeFeeResultList?: Array<HtChargefeeresult>;
 }

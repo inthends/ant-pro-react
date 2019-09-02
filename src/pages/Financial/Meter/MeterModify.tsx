@@ -170,36 +170,36 @@ const MeterModify = (props: MeterModifyProps) => {
   const columns = [
     {
       title: '表编号',
-      dataIndex: 'metercode',
-      key: 'metercode',
+      dataIndex: 'meterCode',
+      key: 'meterCode',
       width: 180,
       sorter: true
     },
     {
       title: '单价',
-      dataIndex: 'meterprice',
-      key: 'meterprice',
+      dataIndex: 'meterPrice',
+      key: 'meterPrice',
       width: 80,
       sorter: true
     },
     {
       title: '倍率',
-      dataIndex: 'meterzoom',
-      key: 'meterzoom',
+      dataIndex: 'meterZoom',
+      key: 'meterZoom',
       width: 80,
       sorter: true,
     },
     {
       title: '量程',
-      dataIndex: 'meterrange',
-      key: 'meterrange',
+      dataIndex: 'meterRange',
+      key: 'meterRange',
       width: 80,
       sorter: true,
     },
     {
       title: '房屋全称',
-      dataIndex: 'allname',
-      key: 'allname',
+      dataIndex: 'allName',
+      key: 'allName',
       sorter: true
     },
     {
@@ -240,15 +240,14 @@ const MeterModify = (props: MeterModifyProps) => {
           // </Button>
 
           <span>
-            <a onClick={() => { setHouseFeeItemId(record.unitmeterid); setEditHouseFeeItemVisible(true); }} key="modify">编辑</a>
+            <a onClick={() => { setHouseFeeItemId(record.unitMeterID); setEditHouseFeeItemVisible(true); }} key="modify">编辑</a>
             <Divider type="vertical" />
             <a onClick={() => {
-              RemoveUnitForm(record.unitmeterid).then(res => {
+              RemoveUnitForm(record.unitMeterID).then(res => {
                 initMeterLoadData();
               })
             }} key="delete">删除</a>
-          </span>
-
+          </span> 
         ];
       },
     }
@@ -513,8 +512,8 @@ const MeterModify = (props: MeterModifyProps) => {
               </div>
               <Table<any>
                 onChange={(paginationConfig, filters, sorter) => {
-                  initMeterLoadData(paginationConfig, sorter)
-                }
+                     initMeterLoadData(paginationConfig, sorter)
+                   }
                 }
                 bordered={false}
                 size="middle"

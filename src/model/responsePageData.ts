@@ -15,7 +15,7 @@ import { PageData } from './pageData';
 /**
  * 返回消息
  */
-export interface ResponsePageData { 
+export interface ResponsePageData {
     /**
      * 状态码
      */

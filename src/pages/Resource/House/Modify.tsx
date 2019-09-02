@@ -98,9 +98,9 @@ const Modify = (props: ModifyProps) => {
   const save = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        getInfo(id).then(tempInfo => {
+        getInfo(id).then(tempInfo => { 
           const newvalue = { ...values, date: values.date.format('YYYY-MM-DD') };
-          SaveForm({ ...tempInfo, ...newvalue, keyValue: tempInfo.pStructId }).then(res => {
+          SaveForm({ ...tempInfo, ...newvalue, keyValue: tempInfo.id }).then(res => {
             message.success('保存成功');
             closeDrawer();
             reload();
@@ -368,7 +368,7 @@ const Modify = (props: ModifyProps) => {
                 </Form.Item>
               </Col>
             </Row>
-            <Row gutter={24}>
+            {/* <Row gutter={24}>
               <Col lg={12}>
                 <Form.Item label="物业公司">
                   {getFieldDecorator('propertyCompany', {
@@ -383,7 +383,7 @@ const Modify = (props: ModifyProps) => {
                   })(<Input placeholder="请输入物业标准费" />)}
                 </Form.Item>
               </Col>
-            </Row>
+            </Row> */}
             <Row gutter={24}>
               <Col lg={24}>
                 <Form.Item label="附加说明">

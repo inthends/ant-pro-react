@@ -9,34 +9,29 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { CustomerInfoEntity } from './customerInfoEntity';
-import { PStructEntity } from './pStructEntity';
-import { PStructFileEntity } from './pStructFileEntity';
-import { ParkingDetailEntity } from './parkingDetailEntity';
+import { GmCustomerinfo } from './gmCustomerinfo';
+import { GmParkingdetail } from './gmParkingdetail';
+import { GmPstructure } from './gmPstructure';
 
 
 /**
  * 车库车位信息
  */
-export interface ParkingData { 
+export interface ParkingData {
     /**
      * 房产主信息
      */
-    baseInfo?: PStructEntity;
+    baseInfo?: GmPstructure;
     /**
      * 车位详情
      */
-    parkingDetail?: ParkingDetailEntity;
-    /**
-     * 附件信息
-     */
-    fileList?: Array<PStructFileEntity>;
+    parkingDetail?: GmParkingdetail;
     /**
      * 拥有者
      */
-    owner?: CustomerInfoEntity;
+    owner?: GmCustomerinfo;
     /**
      * 租户
      */
-    tenant?: CustomerInfoEntity;
+    tenant?: GmCustomerinfo;
 }

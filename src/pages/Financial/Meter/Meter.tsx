@@ -1,9 +1,9 @@
 //水电费管理
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { Tabs, Button, Icon, Input, Layout ,Modal,Select, message} from 'antd';
+import { Tabs, Button, Icon, Input, Layout, Modal, Select, message } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
-import React, {   useEffect, useState } from 'react';
-import { GetDataItemTreeJson, GetMeterPageList, GetUnitMeterPageList ,GetReadingMeterPageList, GetMeterFormsPageList , RemoveForm ,SaveForm} from './Meter.service';
+import React, { useEffect, useState } from 'react';
+import { GetDataItemTreeJson, GetMeterPageList, GetUnitMeterPageList, GetReadingMeterPageList, GetMeterFormsPageList, RemoveForm, SaveForm } from './Meter.service';
 import AsynLeftTree from '../AsynLeftTree';
 import MeterTable from './MeterTable';
 import MeterFormsTable from './MeterFormsTable';
@@ -15,13 +15,13 @@ import ReadingMeterVertify from './ReadingMeterVertify';
 const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
-const {Option} =Select;
+const { Option } = Select;
 function Meter() {
   const [organize, SetOrganize] = useState<any>({});
   const [treeSearch, SetTreeSearch] = useState<any>({});
   const [id, setId] = useState<string>();
 
-  const [readingMeterId,setReadingMeterId]=useState<string>();
+  const [readingMeterId, setReadingMeterId] = useState<string>();
 
   const [meterLoading, setMeterLoading] = useState<boolean>(false);
   const [meterFormsLoading, setMeterFormsLoading] = useState<boolean>(false);
@@ -34,10 +34,10 @@ function Meter() {
   const [meterFormsData, setMeterFormsData] = useState<any>();
 
 
-  const [meterSearch,setMeterSearch] = useState<string>('');
-  const [unitMeterSearch,setUnitMeterSearch] = useState<string>('');
-  const [readingMeterSearch,setReadingMeterSearch] = useState<string>('');
-  const [meterFormsSearch,setMeterFormsSearch] = useState<string>('');
+  const [meterSearch, setMeterSearch] = useState<string>('');
+  const [unitMeterSearch, setUnitMeterSearch] = useState<string>('');
+  const [readingMeterSearch, setReadingMeterSearch] = useState<string>('');
+  const [meterFormsSearch, setMeterFormsSearch] = useState<string>('');
 
   const [meterPagination, setMeterPagination] = useState<DefaultPagination>(new DefaultPagination());
   const [unitMeterPagination, setUnitMeterPagination] = useState<DefaultPagination>(new DefaultPagination());
@@ -47,41 +47,41 @@ function Meter() {
   const [meterKinds, setMeterKinds] = useState<any>([]);
   const [meterTypes, setMeterTypes] = useState<any>([]);
 
-  const [ifVertify,setIfVertify]=useState<boolean>(false);
-  const [vertifyVisible,setVertifyVisible]=useState<boolean>(false);
+  const [ifVertify, setIfVertify] = useState<boolean>(false);
+  const [vertifyVisible, setVertifyVisible] = useState<boolean>(false);
   const selectTree = (org, item, searchText) => {
     SetOrganize(item);
 
-    initMeterLoadData(item,'');
-    initReadingMeterLoadData(item,'');
-    initMeterFormsLoadData(item,'');
-    initUnitMeterLoadData(item,'');
+    initMeterLoadData(item, '');
+    initReadingMeterLoadData(item, '');
+    initMeterFormsLoadData(item, '');
+    initUnitMeterLoadData(item, '');
   };
-  let meterKind=[];
-  let meterType=[];
+  let meterKind = [];
+  let meterType = [];
   useEffect(() => {
     //获取费表类型
-    GetDataItemTreeJson('EnergyMeterKind').then(res=>{
+    GetDataItemTreeJson('EnergyMeterKind').then(res => {
       setMeterKinds(res);
-      meterKind=res;
+      meterKind = res;
       return;
-    }).then(()=>{
+    }).then(() => {
       //获取费表种类
       return GetDataItemTreeJson('EnergyMeterType')
-    }).then(res=>{
+    }).then(res => {
       setMeterTypes(res);
-      meterType=res;
+      meterType = res;
       return;
-    }).then(()=>{
-      initMeterLoadData('','');
-      initUnitMeterLoadData('','');
-      initMeterFormsLoadData('','');
-      initReadingMeterLoadData('','')
+    }).then(() => {
+      initMeterLoadData('', '');
+      initUnitMeterLoadData('', '');
+      initMeterFormsLoadData('', '');
+      initReadingMeterLoadData('', '')
     })
   }, []);
 
 
-  const loadMeterData=(paginationConfig?: PaginationConfig, sorter?)=>{
+  const loadMeterData = (paginationConfig?: PaginationConfig, sorter?) => {
     //setMeterSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
@@ -92,7 +92,7 @@ function Meter() {
       pageIndex,
       pageSize,
       total,
-      queryJson: { keyword:meterSearchParams.search }
+      queryJson: { keyword: meterSearchParams.search }
     };
 
     if (sorter) {
@@ -103,7 +103,7 @@ function Meter() {
 
     return meterload(searchCondition);
   }
-  const loadUnitMeterData=(search, paginationConfig?: PaginationConfig, sorter?)=>{
+  const loadUnitMeterData = (search, paginationConfig?: PaginationConfig, sorter?) => {
     setUnitMeterSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
@@ -122,10 +122,10 @@ function Meter() {
       searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
       searchCondition.sidx = field ? field : 'unitmeterid';
     }
-
     return unitMeterload(searchCondition);
-  }
-  const loadReadingMeterData=(search, paginationConfig?: PaginationConfig, sorter?)=>{
+  };
+
+  const loadReadingMeterData = (search, paginationConfig?: PaginationConfig, sorter?) => {
     setReadingMeterSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
@@ -136,7 +136,7 @@ function Meter() {
       pageIndex,
       pageSize,
       total,
-     // queryJson: { keyword: search }
+      // queryJson: { keyword: search }
     };
 
     if (sorter) {
@@ -147,7 +147,7 @@ function Meter() {
 
     return readingMeterload(searchCondition);
   }
-  const loadMeterFormsData=(search, paginationConfig?: PaginationConfig, sorter?)=>{
+  const loadMeterFormsData = (search, paginationConfig?: PaginationConfig, sorter?) => {
     setMeterFormsSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
@@ -174,19 +174,19 @@ function Meter() {
     data.sidx = data.sidx || 'meterkind';
     data.sord = data.sord || 'asc';
 
-     //获取费表类型
-    GetDataItemTreeJson('EnergyMeterKind').then(res=>{
+    //获取费表类型
+    GetDataItemTreeJson('EnergyMeterKind').then(res => {
       setMeterKinds(res);
-      meterKind=res;
+      meterKind = res;
       return;
-    }).then(()=>{
+    }).then(() => {
       //获取费表种类
       return GetDataItemTreeJson('EnergyMeterType')
-    }).then(res=>{
+    }).then(res => {
       setMeterTypes(res);
-      meterType=res;
+      meterType = res;
       return;
-    }).then(()=>{
+    }).then(() => {
       return GetMeterPageList(data).then(res => {
         const { pageIndex: current, total, pageSize } = res;
         setMeterPagination(pagesetting => {
@@ -229,18 +229,18 @@ function Meter() {
     data.sidx = data.sidx || 'unitmeterid';
     data.sord = data.sord || 'asc';
     //获取费表类型
-    GetDataItemTreeJson('EnergyMeterKind').then(res=>{
+    GetDataItemTreeJson('EnergyMeterKind').then(res => {
       setMeterKinds(res);
-      meterKind=res;
+      meterKind = res;
       return;
-    }).then(()=>{
+    }).then(() => {
       //获取费表种类
       return GetDataItemTreeJson('EnergyMeterType')
-    }).then(res=>{
+    }).then(res => {
       setMeterTypes(res);
-      meterType=res;
+      meterType = res;
       return;
-    }).then(()=>{
+    }).then(() => {
       return GetUnitMeterPageList(data).then(res => {
         const { pageIndex: current, total, pageSize } = res;
         setUnitMeterPagination(pagesetting => {
@@ -269,14 +269,14 @@ function Meter() {
           var d=Object.assign({},item,{meterkindname,metertypename});
           newData.push(d);
         })*/
-       // console.log(meterKind,meterType,newData);
+        // console.log(meterKind,meterType,newData);
         setUnitMeterData(res.data);
         setUnitMeterLoading(false);
         return res;
       });
     });
-
   };
+
   const readingMeterload = data => {
     setReadingMeterLoading(true);
     data.sidx = data.sidx || 'billcode';
@@ -375,36 +375,34 @@ function Meter() {
 
   const closeVertify = (result?) => {
     setVertifyVisible(false);
-    if(result){
+    if (result) {
       loadReadingMeterData(organize);
     }
     setId('');
   };
 
-  const showVertify = (id?,ifVertify?) => {
+  const showVertify = (id?, ifVertify?) => {
     setVertifyVisible(true);
     setIfVertify(ifVertify);
     setId(id);
   };
   const closeModify = (result?) => {
     setModifyVisible(false);
-    if(result){
+    if (result) {
       //initCheckLoadData(organize, null);
     }
   };
-  const [modifyVisible,setModifyVisible]=useState<boolean>(false);
-  const [modifyReadingMeterVisible,setModifyReadingMeterVisible]=useState<boolean>(false);
-  const showReadingMeterModify=(id?)=>
-  {
+  const [modifyVisible, setModifyVisible] = useState<boolean>(false);
+  const [modifyReadingMeterVisible, setModifyReadingMeterVisible] = useState<boolean>(false);
+  const showReadingMeterModify = (id?) => {
     setModifyReadingMeterVisible(true);
     setReadingMeterId(id);
   }
-  const closeReadingMeterModify=(result?)=>{
+  const closeReadingMeterModify = (result?) => {
     setModifyReadingMeterVisible(false);
     setReadingMeterId('');
-    if(result)
-    {
-      initReadingMeterLoadData(organize.id,'');
+    if (result) {
+      initReadingMeterLoadData(organize.id, '');
     }
   }
   const showModify = (id?) => {
@@ -412,20 +410,20 @@ function Meter() {
     setId(id);
   };
   //删除冲抵单
-  const deleteData=(id?)=>{
+  const deleteData = (id?) => {
     Modal.confirm({
       title: '是否确认删除该条抵冲记录?',
       onOk() {
         RemoveForm({
-          keyValue:id
-        }).then(res=>{
+          keyValue: id
+        }).then(res => {
 
         });
       },
-      onCancel() {},
+      onCancel() { },
     });
   }
-const [meterSearchParams,setMeterSearchParams]=useState<any>({});
+  const [meterSearchParams, setMeterSearchParams] = useState<any>({});
   return (
     <Layout>
       <AsynLeftTree
@@ -437,12 +435,12 @@ const [meterSearchParams,setMeterSearchParams]=useState<any>({});
       <Content style={{ paddingLeft: '18px' }}>
         <Tabs defaultActiveKey="1" >
           <TabPane tab="费表列表" key="1">
-              <div style={{ marginBottom: '20px', padding: '3px 2px' }} onChange={(value)=>{
-                var params=Object.assign({},meterSearchParams,{metertype:value});
-                setMeterSearchParams(params);
-              }}>
-              <Select placeholder="=请选择=" style={{width:'120px',marginRight:'5px'}} onChange={value=>{
-                var params=Object.assign({},meterSearchParams,{meterkind:value});
+            <div style={{ marginBottom: '20px', padding: '3px 2px' }} onChange={(value) => {
+              var params = Object.assign({}, meterSearchParams, { metertype: value });
+              setMeterSearchParams(params);
+            }}>
+              <Select placeholder="=请选择=" style={{ width: '120px', marginRight: '5px' }} onChange={value => {
+                var params = Object.assign({}, meterSearchParams, { meterkind: value });
                 setMeterSearchParams(params);
               }}>
                 <Option value="private">单元表</Option>
@@ -453,19 +451,19 @@ const [meterSearchParams,setMeterSearchParams]=useState<any>({});
                 className="search-input"
                 placeholder="请输入要查询的费表名称"
                 style={{ width: 200 }}
-                onChange={e =>{
-                  var params=Object.assign({},meterSearchParams,{search:e.target.value});
+                onChange={e => {
+                  var params = Object.assign({}, meterSearchParams, { search: e.target.value });
                   setMeterSearchParams(params);
                 }}
               />
-              <Button type="primary" style={{marginLeft: '10px' }}
-                onClick={() =>{loadMeterData()}}
+              <Button type="primary" style={{ marginLeft: '10px' }}
+                onClick={() => { loadMeterData() }}
               >
                 <Icon type="search" />
                 查询
               </Button>
               <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
-                onClick={() => {showModify(null)}}
+                onClick={() => { showModify(null) }}
               >
                 <Icon type="plus" />
                 新增
@@ -478,13 +476,14 @@ const [meterSearchParams,setMeterSearchParams]=useState<any>({});
               </Button> */}
             </div>
             <MeterTable
-              onchange={(paginationConfig, filters, sorter) =>{
-                loadMeterData(paginationConfig, sorter)}
+              onchange={(paginationConfig, filters, sorter) => {
+                loadMeterData(paginationConfig, sorter)
+              }
               }
               loading={meterLoading}
               pagination={meterPagination}
               data={meterData}
-              showModify={(id)=>{
+              showModify={(id) => {
                 setId(id);
                 setModifyVisible(true);
               }}
@@ -497,20 +496,18 @@ const [meterSearchParams,setMeterSearchParams]=useState<any>({});
                 className="search-input"
                 placeholder="请输入要查询的名称或者编号"
                 style={{ width: 280 }}
-                onSearch={value => loadMeterFormsData(value)}
+                onSearch={value => loadUnitMeterData(value)}
               />
             </div>
-
-            <MeterFormsTable
-              onchange={(paginationConfig, filters, sorter) =>{
-                  loadMeterFormsData(meterFormsSearch, paginationConfig, sorter)
-                }
+            <UnitMeterTable
+              onchange={(paginationConfig, filters, sorter) =>
+                loadUnitMeterData(unitMeterSearch, paginationConfig, sorter)
               }
-              loading={meterFormsLoading}
-              pagination={meterFormsPagination}
-              data={meterFormsData}
-              reload={() => initMeterFormsLoadData('', meterFormsSearch)}
-            />
+              loading={unitMeterLoading}
+              pagination={unitMeterPagination}
+              data={unitMeterData}
+              reload={() => initUnitMeterLoadData('', unitMeterSearch)}
+            />  
           </TabPane>
           <TabPane tab="抄表单列表" key="3">
             <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
@@ -521,27 +518,26 @@ const [meterSearchParams,setMeterSearchParams]=useState<any>({});
                 onSearch={value => loadReadingMeterData(value)}
               />
               <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
-                onClick={() => {}}  disabled={ifVertify?false:true}
+                onClick={() => { }} disabled={ifVertify ? false : true}
               >
                 <Icon type="minus-square" />
                 取消审核
               </Button>
               <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
                 onClick={() => {
-                  if(readingMeterId==null||readingMeterId=='')
-                  {
+                  if (readingMeterId == null || readingMeterId == '') {
                     message.warning('请先选择抄表单');
-                  }else{
+                  } else {
                     showVertify(true);
                   }
                 }}
-                disabled={!ifVertify?false:true}
+                disabled={!ifVertify ? false : true}
               >
                 <Icon type="check-square" />
                 审核
               </Button>
               <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
-                onClick={() =>{
+                onClick={() => {
                   showReadingMeterModify();
                 }}
               >
@@ -563,19 +559,17 @@ const [meterSearchParams,setMeterSearchParams]=useState<any>({});
               pagination={readingMeterPagination}
               data={readingMeterData}
               reload={() => initReadingMeterLoadData('', readingMeterSearch)}
-              showModify={(id?)=>{
+              showModify={(id?) => {
                 setModifyReadingMeterVisible(true);
-                if(id!=null&&id!='')
-                {
+                if (id != null && id != '') {
                   setReadingMeterId(id);
                 }
               }}
-              getRowSelect={(record)=>{
+              getRowSelect={(record) => {
                 setReadingMeterId(record.billid);
-                if(record.ifverify==1)
-                {
+                if (record.ifverify == 1) {
                   setIfVertify(true);
-                }else{
+                } else {
                   setIfVertify(false);
                 }
               }}
@@ -590,15 +584,19 @@ const [meterSearchParams,setMeterSearchParams]=useState<any>({});
                 onSearch={value => loadUnitMeterData(value)}
               />
             </div>
-            <UnitMeterTable
-              onchange={(paginationConfig, filters, sorter) =>
-                loadUnitMeterData(unitMeterSearch, paginationConfig, sorter)
+
+            <MeterFormsTable
+              onchange={(paginationConfig, filters, sorter) => {
+                loadMeterFormsData(meterFormsSearch, paginationConfig, sorter)
               }
-              loading={unitMeterLoading}
-              pagination={unitMeterPagination}
-              data={unitMeterData}
-              reload={() => initUnitMeterLoadData('', unitMeterSearch)}
+              }
+              loading={meterFormsLoading}
+              pagination={meterFormsPagination}
+              data={meterFormsData}
+              reload={() => initMeterFormsLoadData('', meterFormsSearch)}
             />
+
+
           </TabPane>
         </Tabs>
       </Content>

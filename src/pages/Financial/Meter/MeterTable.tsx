@@ -22,50 +22,50 @@ function MeterTable(props: MeterTableProps) {
   const columns = [
     {
       title: '费表类型',
-      dataIndex: 'meterkind',
-      key: 'meterkind',
+      dataIndex: 'meterKind',
+      key: 'meterKind',
       width: 100,
       sorter: true
     },
     {
       title: '费表种类',
-      dataIndex: 'metertype',
-      key: 'metertype',
+      dataIndex: 'meterType',
+      key: 'meterType',
       width: 100,
       sorter: true
     },
     {
       title: '费表名称',
-      dataIndex: 'metername',
-      key: 'metername',
+      dataIndex: 'meterName',
+      key: 'meterName',
       width: 200,
       sorter: true,
     },
     {
       title: '倍率',
-      dataIndex: 'meterzoom',
-      key: 'meterzoom',
+      dataIndex: 'meterZoom',
+      key: 'meterZoom',
       width: 80,
       sorter: true,
     },
     {
       title: '量程',
-      dataIndex: 'meterrange',
-      key: 'meterrange',
+      dataIndex: 'meterRange',
+      key: 'meterRange',
       width: 80,
       sorter: true,
     },
     {
       title: '关联收费项目',
-      dataIndex: 'feeitemname',
-      key: 'feeitemname',
+      dataIndex: 'feeItemname',
+      key: 'feeItemname',
       sorter: true,
       width: 150
     },
     {
       title: '所属机构',
-      dataIndex: 'fullname',
-      key: 'fullname',
+      dataIndex: 'fullName',
+      key: 'fullName',
       sorter: true
     },
     {
@@ -107,10 +107,10 @@ function MeterTable(props: MeterTableProps) {
           // </Button>
 
           <span>
-            <a onClick={() => showModify(record.meterid)} key="modify">修改</a>
+            <a onClick={() => showModify(record.meterID)} key="modify">修改</a>
             <Divider type="vertical" />
             <a onClick={() => {
-              RemoveForm(record.meterid).then(res => {
+              RemoveForm(record.meterID).then(res => {
                 if (res.code != 0) { reload(); }
               })
 

@@ -22,9 +22,9 @@ function ListTable(props: ListTableProps) {
   const doDelete = record => {
     Modal.confirm({
       title: '请确认',
-      content: `您是否要删除${record.name}`,
+      content: `您是否要删除${record.feeName}`,
       onOk: () => {
-        RemoveForm(record.id).then(() => {
+        RemoveForm(record.feeItemID).then(() => {
           message.success('保存成功');
           reload();
         });
@@ -34,56 +34,56 @@ function ListTable(props: ListTableProps) {
   const columns = [
     {
       title: '费项名称',
-      dataIndex: 'feename',
-      key: 'feename',
+      dataIndex: 'feeName',
+      key: 'feeName',
       width: 140,
       sorter: true,
     },
     {
       title: '费项种类',
-      dataIndex: 'feekind',
-      key: 'feekind',
+      dataIndex: 'feeKind',
+      key: 'feeKind',
       width: 80,
       sorter: true,
     },
     {
       title: '费项类别',
-      dataIndex: 'feetype',
-      key: 'feetype',
+      dataIndex: 'feeType',
+      key: 'feeType',
       width: 80,
       sorter: true,
     },
     {
       title: '单价',
-      dataIndex: 'feeprice',
-      key: 'feeprice',
+      dataIndex: 'feePrice',
+      key: 'feePrice',
       width: 80,
       sorter: true,
     },
     {
       title: '计费周期',
-      dataIndex: 'cyclevalue',
-      key: 'cyclevalue',
+      dataIndex: 'cycleValue',
+      key: 'cycleValue',
       width: 80,
       sorter: true,
     },
     {
       title: '周期单位',
-      dataIndex: 'cycletype',
-      key: 'cycletype',
+      dataIndex: 'cycleType',
+      key: 'cycleType',
       width: 80,
       sorter: true,
     },
     {
       title: '计费起始日期',
-      dataIndex: 'begindate',
-      key: 'begindate',
+      dataIndex: 'beginDate',
+      key: 'beginDate',
       width: 85,
       render: val => <span> {moment(val).format('YYYY-MM-DD')} </span>
     }, {
       title: '计费终止日期',
-      dataIndex: 'enddate',
-      key: 'enddate',
+      dataIndex: 'endDate',
+      key: 'endDate',
       width: 85,
       render: val => <span> {moment(val).format('YYYY-MM-DD')} </span>
     },
@@ -106,9 +106,8 @@ function ListTable(props: ListTableProps) {
           // <Button type="danger" key="delete" onClick={() => doDelete(record)}>
           //   删除
           // </Button>,
-
           <span>
-            <a onClick={() => modify(record.feeitemid)} key="modify">修改</a>
+            <a onClick={() => modify(record.feeItemID)} key="modify">修改</a>
             <Divider type="vertical" />
             <a onClick={() => doDelete(record)} key="delete">删除</a> 
           </span>

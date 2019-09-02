@@ -15,7 +15,7 @@ import { ParkingData } from './parkingData';
 /**
  * 返回消息
  */
-export interface ResponseParkingData { 
+export interface ResponseParkingData {
     /**
      * 状态码
      */

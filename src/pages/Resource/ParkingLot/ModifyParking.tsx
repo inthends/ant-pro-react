@@ -162,7 +162,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
                     <TreeSelect placeholder="请选择所属车库"
                       allowClear
                       treeData={treeData}
-                      dropdownStyle={{ maxHeight: 300 }}
+                      dropdownStyle={{ maxHeight: 400 }}
                       treeDefaultExpandAll>
                     </TreeSelect>
                   )}

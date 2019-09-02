@@ -1,52 +1,32 @@
-import { AutoComplete, Col, DatePicker, Form, Input, Radio, Select, TreeSelect } from 'antd';
+import { AutoComplete, Col, DatePicker, Form, Input, Radio, Select } from 'antd';
 import { ValidationRule, WrappedFormUtils } from 'antd/lib/form/Form';
 import moment from 'moment';
 import React from 'react';
-import { TreeNode } from 'antd/lib/tree-select';
 const { TextArea, Password } = Input;
 const { Option } = Select;
 interface ModifyItemProps {
-  type?: 'select' | 'textarea' | 'password' | 'radio' | 'autoComplete' | 'date' | 'tree';
+  type?: 'select' | 'textarea' | 'password' | 'radio' | 'autoComplete' | 'date';
   field: string;
   label: React.ReactNode;
   initData?: any;
-  disabled?: boolean;
   wholeLine?: boolean;
   form: WrappedFormUtils;
   rules?: ValidationRule[];
   items?: SelectItem[];
-  treeData?: TreeNode[];
   onChange?(value): void;
   onSearch?(value): void;
 }
 const ModifyItem = (props: ModifyItemProps) => {
-  const {
-    type,
-    field,
-    label,
-    initData,
-    wholeLine,
-    form,
-    rules,
-    onChange,
-    items,
-    treeData,
-    onSearch,
-    disabled,
-  } = props;
+  const { type, field, label, initData, wholeLine, form, rules, onChange, items, onSearch } = props;
   const { getFieldDecorator } = form;
-  const inner = { disabled };
 
   const getFormItem = () => {
     switch (type) {
-      case 'tree':
-        return <TreeSelect {...inner} style={{ width: '100%' }} treeData={treeData || []} />;
       case 'date':
-        return <DatePicker {...inner} style={{ width: '100%' }} />;
+        return <DatePicker style={{ width: '100%' }} />;
       case 'autoComplete':
         return (
           <AutoComplete
-            {...inner}
             dataSource={(items || []).map((item: SelectItem) => (
               <Option value={item.value} key={item.value}>
                 {item.label}
@@ -61,7 +41,6 @@ const ModifyItem = (props: ModifyItemProps) => {
       case 'textarea':
         return (
           <TextArea
-            {...inner}
             rows={4}
             placeholder={`请输入${label as string}`}
             onChange={onChange}
@@ -69,7 +48,7 @@ const ModifyItem = (props: ModifyItemProps) => {
         );
       case 'select':
         return (
-          <Select {...inner} placeholder={`请选择${label as string}`} onChange={onChange}>
+          <Select placeholder={`请选择${label as string}`} onChange={onChange}>
             {(items || []).map((item: SelectItem) => (
               <Option value={item.value} key={item.value}>
                 {item.label}
@@ -78,16 +57,10 @@ const ModifyItem = (props: ModifyItemProps) => {
           </Select>
         );
       case 'password':
-        return (
-          <Password
-            {...inner}
-            placeholder={`请输入${label as string}`}
-            onChange={onChange}
-          ></Password>
-        );
+        return <Password placeholder={`请输入${label as string}`} onChange={onChange}></Password>;
       case 'radio':
         return (
-          <Radio.Group {...inner}>
+          <Radio.Group>
             {(items || []).map((item: SelectItem) => (
               <Radio value={item.value} key={item.value}>
                 {item.label}
@@ -96,19 +69,13 @@ const ModifyItem = (props: ModifyItemProps) => {
           </Radio.Group>
         );
       default:
-        return (
-          <Input {...inner} placeholder={`请输入${label as string}`} onChange={onChange}></Input>
-        );
+        return <Input placeholder={`请输入${label as string}`} onChange={onChange}></Input>;
     }
   };
   const getInitValue = () => {
     if (initData) {
       if (type === 'date') {
-        if (initData[field]) {
-          return moment(new Date(initData[field]));
-        } else {
-          return undefined;
-        }
+        return moment(new Date(initData[field]));
       } else {
         return initData[field];
       }
@@ -131,6 +98,5 @@ export default ModifyItem;
 interface SelectItem {
   label;
   value;
-  title?;
 }
 export { SelectItem };

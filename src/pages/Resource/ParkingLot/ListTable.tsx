@@ -82,14 +82,12 @@ function ListTable(props: ListTableProps) {
     },
     {
       title: '全称',
-      dataIndex: 'auditdate',
-      key: 'auditdate',
+      dataIndex: 'allname',
+      key: 'allname',
       sorter: true,
     },
     {
-      title: '操作',
-      dataIndex: 'allname',
-      key: 'allname',
+      title: '操作', 
       align: 'center',
       width: 95,
       fixed: 'right',

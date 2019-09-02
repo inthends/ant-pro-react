@@ -2,8 +2,9 @@
 import Page from '@/components/Common/Page';
 import { Icon, Layout, Tree } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
+import { TreeEntity } from '@/model/models';
 import { SiderContext } from '../SiderContext';
-import { GetOrgTree, GetAsynChildBuildingsForArea } from '@/services/commonItem';
+import { GetOrgTree, GetAsynChildBuildings } from '@/services/commonItem';
 
 const { TreeNode } = Tree;
 const { Sider } = Layout;
@@ -47,7 +48,7 @@ function HouseMoreLeftTree(props: HouseMoreLeftTreeProps) {
   //展开到管理处
   useEffect(() => {
     //根据父节点获取房产树
-    GetOrgTree().then((res: any[]) => {
+    GetOrgTree().then((res: TreeEntity[]) => {
       setTreeData(res || []);
       getAllkeys(res || []);
       //setSelectedKey(selects);
@@ -104,7 +105,7 @@ function HouseMoreLeftTree(props: HouseMoreLeftTreeProps) {
       }
 
       setTimeout(() => {
-        GetAsynChildBuildingsForArea(treeNode.props.eventKey, treeNode.props.type).then((res: any[]) => {
+        GetAsynChildBuildings(treeNode.props.eventKey, treeNode.props.type).then((res: any[]) => {
           treeNode.props.dataRef.children = res || [];
           setTreeData([...treeData]);
         });

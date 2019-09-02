@@ -15,7 +15,7 @@ import { TreeEntity } from './treeEntity';
 /**
  * 返回消息
  */
-export interface ResponseListTreeEntity { 
+export interface ResponseListTreeEntity {
     /**
      * 状态码
      */

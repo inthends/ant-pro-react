@@ -55,7 +55,6 @@ function ListTableMore(props: ListTableMoreProps) {
       width: 120,
       sorter: true,
     },
-
     {
       title: '联系电话',
       dataIndex: 'phonenum',
@@ -86,10 +85,10 @@ function ListTableMore(props: ListTableMoreProps) {
           // <Button type="danger" key="delete" onClick={() => doDelete(record)}>
           //   删除
           // </Button>,
-          <span>
+          <span key='buttons'>
             <a onClick={() => modify(record)} key="modify">修改</a>
-            <Divider type="vertical" />
-            <a onClick={() => doDelete(record)} key="delete"  >删除</a>
+            <Divider type="vertical" key='split'/>
+            <a onClick={() => doDelete(record)} key="delete">删除</a>
           </span>
         ];
       },
@@ -98,7 +97,7 @@ function ListTableMore(props: ListTableMoreProps) {
 
   return (
     <Page>
-      <Table
+      <Table 
         style={{ border: 'none' }}
         bordered={false}
         size="middle"
@@ -112,5 +111,4 @@ function ListTableMore(props: ListTableMoreProps) {
     </Page>
   );
 }
-
 export default ListTableMore;

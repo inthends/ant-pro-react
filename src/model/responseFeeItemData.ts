@@ -15,7 +15,7 @@ import { FeeItemData } from './feeItemData';
 /**
  * 返回消息
  */
-export interface ResponseFeeItemData { 
+export interface ResponseFeeItemData {
     /**
      * 状态码
      */

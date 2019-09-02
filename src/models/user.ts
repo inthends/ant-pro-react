@@ -38,7 +38,6 @@ export interface UserModelType {
 
 const UserModel: UserModelType = {
   namespace: 'user',
-
   state: {
     list: [],
     currentUser: {},
@@ -62,8 +61,7 @@ const UserModel: UserModelType = {
             type: 'saveCurrentUser',
             payload: data,
           });
-        }
-       
+        } 
       }
     },
     
@@ -111,5 +109,4 @@ const UserModel: UserModelType = {
     },
   },
 };
-
 export default UserModel;

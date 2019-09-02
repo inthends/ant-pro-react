@@ -9,20 +9,20 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { FeeItemDetailEntity } from './feeItemDetailEntity';
-import { FeeItemEntity } from './feeItemEntity';
+import { CwFeeitem } from './cwFeeitem';
+import { CwFeeitemDetail } from './cwFeeitemDetail';
 
 
 /**
  * 费项信息
  */
-export interface FeeItemData { 
+export interface FeeItemData {
     /**
      * 主信息
      */
-    feeItem?: FeeItemEntity;
+    feeItem?: CwFeeitem;
     /**
      * 扩展信息
      */
-    feeItemDetail?: FeeItemDetailEntity;
+    feeItemDetail?: CwFeeitemDetail;
 }

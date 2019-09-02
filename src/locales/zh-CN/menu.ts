@@ -26,6 +26,7 @@ export default {
 
   'menu.resource': '资源管理',
   'menu.resource.house': '项目资料',
+  'menu.resource.housemore': '房产资料',
   'menu.resource.publicarea': '公共区域',
   'menu.resource.parkinglot': '车位资料',
   'menu.resource.pstructuser': '住户资料',

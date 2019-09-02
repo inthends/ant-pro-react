@@ -103,7 +103,7 @@ function Main() {
     setLoading(true);
     formData.sidx = formData.sidx || 'id';
     formData.sord = formData.sord || 'asc';
-    return GetPageListJson(formData).then(res => {
+    return GetPageListJson(formData).then(res => {  
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
         return {

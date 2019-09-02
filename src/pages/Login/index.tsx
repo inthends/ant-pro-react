@@ -23,10 +23,11 @@ function Login(props: ConnectFormProps) {
           .then(({ code, msg, data }) => {
             if (code === 200) {
               //console.log(data); 
-              const { token, id } = data;
+              //const { token, id } = data;
               message.success('登陆成功');
-              localStorage.setItem('token', token);
-              localStorage.setItem('userid', id);
+              //localStorage.setItem('token', token);
+              const { userid } = data;
+              localStorage.setItem('userid', userid);
               delay(() => {
                 // router.push('/resource');
                 router.push('/dashboard');
@@ -42,12 +43,16 @@ function Login(props: ConnectFormProps) {
   };
   return (
     <div className={styles.main}>
-      <Form onSubmit={login}>
-        <FormItem label="账号" colon={false}>
-          {getFieldDecorator('username', {})(<Input size="large" placeholder="账号" allowClear />)}
+      <Form onSubmit={login} hideRequiredMark>
+        <FormItem label="账号" colon={false} required>
+          {getFieldDecorator('username', {
+            rules: [{ required: true, message: '请输入用户名' }],  
+          })(<Input size="large" placeholder="账号" allowClear />)}
         </FormItem>
-        <FormItem label="密码" colon={false}>
-          {getFieldDecorator('password', {})(
+        <FormItem label="密码" colon={false} required>
+          {getFieldDecorator('password', {
+            rules: [{ required: true, message: '请输入密码' }],  
+          })(
             <Input.Password size="large" placeholder="密码" allowClear />,
           )}
         </FormItem>

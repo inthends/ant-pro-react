@@ -29,12 +29,14 @@ export function GetFormInfoJson(keyValue): Promise<PStructsData> {
     .get(process.env.basePath + `/PStructs/GetFormInfoJson?keyValue=${keyValue}`)
     .then(getResult as any);
 }
+
 // 新增修改
 export function SaveForm(data): Promise<any> {
   return request
     .post(process.env.basePath + `/PStructs/SaveForm`, { data: objToFormdata(data) })
     .then(getResult as any);
 }
+
 // 删除
 export function RemoveForm(keyValue): Promise<any> {
   return request
@@ -59,6 +61,7 @@ export function GetFloorData(keyValue): Promise<any> {
     .get(process.env.basePath + `/PStructs/GetPStructs?${objToUrl(data)}`)
     .then(getResult as any);
 }
+
 //获取房态图房间数据
 export function GetRoomData(keyValue): Promise<any> {
   const data = {
@@ -76,7 +79,6 @@ export function GetRoomData(keyValue): Promise<any> {
 //     .get(process.env.basePath + `/Common/GetBuildings?parentId=${pstructid}`)
 //     .then(getResult as any);
 // }
-
 
 //查询客户数据
 export function GetCustomerList(keyword): Promise<any> {

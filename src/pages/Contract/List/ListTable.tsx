@@ -152,8 +152,7 @@ function ListTable(props: ListTableProps) {
     {
       title: '行业',
       dataIndex: 'industry',
-      key: 'industry',
-      width: 120,
+      key: 'industry', 
     },
  
     {

@@ -18,9 +18,9 @@ export interface LeaseContractHouseDTO {
     /**
      * 唯一键
      */
-    id?: string; 
+    id?: string;
     /**
-     * 房屋代码
+     * 房屋id
      */
     roomId?: string;
     /**
@@ -28,11 +28,11 @@ export interface LeaseContractHouseDTO {
      */
     name?: string;
     /**
-     * 面积
-     */
-    area?: number; 
-    /**
      * 全称
      */
     allName?: string;
+    /**
+     * 面积
+     */
+    area?: number;
 }
