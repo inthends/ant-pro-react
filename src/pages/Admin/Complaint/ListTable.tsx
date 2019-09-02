@@ -16,6 +16,11 @@ interface ListTableProps {
 }
 
 
+
+
+
+//////////////
+
 function ListTable(props: ListTableProps) {
   const { onchange, loading, pagination, data, modify, reload, show } = props;
   const changePage = (pag: PaginationConfig, filters, sorter) => {
