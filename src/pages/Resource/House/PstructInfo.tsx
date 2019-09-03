@@ -14,13 +14,14 @@ interface PstructInfoProps {
   data?: any;
   form: WrappedFormUtils;
   organizeId: string;
+  parentId: string;
   type?: number;
   closeDrawer(): void;
-  reload(): void;
+  reload(parentId, type): void;
 }
 
 const PstructInfo = (props: PstructInfoProps) => {
-  const { type, modifyVisible, closeDrawer, form, data, reload } = props;
+  const { organizeId, parentId, type, modifyVisible, closeDrawer, form, data, reload } = props;
   const { getFieldDecorator } = form;
   const title = data === undefined ? '添加' : '修改';
   let formLabel = '楼栋';
@@ -66,17 +67,28 @@ const PstructInfo = (props: PstructInfoProps) => {
   const save = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        const newData = data ? { ...data.vendor, ...values } : values;
+        //const newData = data ? { ...data.vendor, ...values } : values;
+        const newData = data ? { ...data, ...values } : values;
         doSave(newData);
       }
     });
   };
+
   const doSave = dataDetail => {
     dataDetail.keyValue = dataDetail.id;
+    dataDetail.organizeId = organizeId;
+    dataDetail.parentId = parentId;
+    //设置房产类型
+    if (type == 1)
+      dataDetail.type = 2;
+    else if (type == 2)
+      dataDetail.type = 4;
+    else
+      dataDetail.type = 5;
     SaveForm({ ...dataDetail }).then(res => {
       message.success('保存成功');
       closeDrawer();
-      reload();
+      reload(parentId, type);
     });
   };
 
@@ -191,7 +203,27 @@ const PstructInfo = (props: PstructInfoProps) => {
               </Col>
             </Row>
 
-            {data != undefined && data.type == 5 ? (
+            {type == 1 ? (<Row gutter={24}>
+              <Col lg={12}>
+                <Form.Item label="业态">
+                  {getFieldDecorator('buildingFormat', {
+                    initialValue: infoDetail.buildingFormat ? '多层' : infoDetail.buildingFormat,
+                  })(
+                    <Select>
+                      <Option value="多层" >多层</Option>
+                      <Option value="小高层">小高层</Option>
+                      <Option value="高层" >高层</Option>
+                      <Option value="超高层" >超高层</Option>
+                      <Option value="联排别墅" >联排别墅</Option>
+                      <Option value="独栋别墅" >独栋别墅</Option>
+                      <Option value="叠加别墅" >叠加别墅</Option>
+                    </Select>
+                  )}
+                </Form.Item>
+              </Col>
+            </Row>) : null}
+
+            {type == 4 ? (
               <Row gutter={24}>
                 <Col lg={12}>
                   <Form.Item label="业主">
@@ -231,25 +263,7 @@ const PstructInfo = (props: PstructInfoProps) => {
                     )}
                   </Form.Item>
                 </Col>
-              </Row>) : (<Row gutter={24}>
-                <Col lg={12}>
-                  <Form.Item label="业态">
-                    {getFieldDecorator('buildingFormat', {
-                      initialValue: infoDetail.buildingFormat ? '多层' : infoDetail.buildingFormat,
-                    })(
-                      <Select>
-                        <Option value="多层" >多层</Option>
-                        <Option value="小高层">小高层</Option>
-                        <Option value="高层" >高层</Option>
-                        <Option value="超高层" >超高层</Option>
-                        <Option value="联排别墅" >联排别墅</Option>
-                        <Option value="独栋别墅" >独栋别墅</Option>
-                        <Option value="叠加别墅" >叠加别墅</Option>
-                      </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-              </Row>)}
+              </Row>) : null}
 
             <Row gutter={24}>
               <Col lg={24}>

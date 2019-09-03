@@ -138,16 +138,16 @@ export default [
             path: '/financial/meter',
             component: './Financial/Meter/Meter',
           },
-          // {
-          //   name: '周期费计算',
-          //   path: '/financial/test2',
-          //   component: './Financial/Test1',
-          // },
-          // {
-          //   name: '通知单',
-          //   path: '/financial/test3',
-          //   component: './Financial/Test1',
-          // },
+          {
+            name: 'billingmain',
+            path: '/financial/billingmain',
+            component: './Financial/BillingMain/BillingMain',
+          },
+          {
+            name: 'billnotice',
+            path: '/financial/billnotice',
+            component: './Financial/BillNotice/BillNotice',
+          },
           {
             name: 'chargebill',
             path: '/financial/chargebill',

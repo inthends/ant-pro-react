@@ -38,6 +38,9 @@ export default {
   'menu.financial.chargebill': '收款管理',
   'menu.financial.offset': '费用冲抵',
   'menu.financial.reduction': '费用减免',
+  'menu.financial.billnotice': '通知单',
+  'menu.financial.billingmain': '周期费计算',
+
 
   'menu.admin': '物业管理',
   'menu.admin.servicedesk': '服务总台',

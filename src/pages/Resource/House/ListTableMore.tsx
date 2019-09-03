@@ -8,13 +8,14 @@ interface ListTableMoreProps {
   loading: boolean;
   pagination: PaginationConfig;
   data: any[];
+  selectId:string;
   modify(id: string): void;
   onchange(page: any, filter: any, sort: any): any;
   reload(id, type): void;
 }
 
 function ListTableMore(props: ListTableMoreProps) {
-  const { onchange, loading, pagination, data, modify, reload } = props;
+  const { selectId, onchange, loading, pagination, data, modify, reload } = props;
   const changePage = (pag: PaginationConfig, filters, sorter) => {
     onchange(pag, filters, sorter);
   };
@@ -26,7 +27,7 @@ function ListTableMore(props: ListTableMoreProps) {
       onOk: () => {
         RemoveForm(record.id).then(() => {
           message.success('删除成功');
-          reload('', '');
+          reload(selectId, '');
         });
       },
     });

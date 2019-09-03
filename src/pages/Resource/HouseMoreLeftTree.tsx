@@ -12,13 +12,12 @@ const { Sider } = Layout;
 interface HouseMoreLeftTreeProps {
   //treeData: any[];
   selectTree(parentId, type): void;
-  parentid?: string;
-  selectid?: string;//选中的节点 
+  organizeId?: string;//管理处组织id
+  selectId?: string;//选中的节点 
 }
 
 function HouseMoreLeftTree(props: HouseMoreLeftTreeProps) {
-
-  const { selectTree, parentid, selectid } = props;
+  const { selectTree, organizeId, selectId } = props;
   const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
   // const [autoExpandParent, setAutoExpandParent] = useState<boolean>(false);
   const { hideSider, setHideSider } = useContext(SiderContext);
@@ -61,11 +60,11 @@ function HouseMoreLeftTree(props: HouseMoreLeftTreeProps) {
       // setSelectedKey(selects);
 
       //设置选中
-      GetAllOrgIds(parentid).then((res: string[]) => {
+      GetAllOrgIds(organizeId).then((res: string[]) => {
         const expands = res || [];
-        expands.push(selectid || '');//添加选中的节点
+        expands.push(selectId || '');//添加选中的节点
         setExpandedKeys(expands);
-        setSelectedKey([selectid || '']);
+        setSelectedKey([selectId || '']);
       });
 
     });
@@ -74,16 +73,16 @@ function HouseMoreLeftTree(props: HouseMoreLeftTreeProps) {
     //setSelectedKey([parentid || '']);  
     //setSelectedKey([selectid || '']);  
     //setExpandedKeys(treeData.map(item => item.id as string));  
-  }, [parentid]);
+  }, [organizeId]);
 
 
-    useEffect(() => { 
-      //继续展开房产节点
-        const expands = expandedKeys;
-        expands.push(selectid || '');//添加选中的节点
-        setExpandedKeys(expands);
-        setSelectedKey([selectid || '']); 
-   }, [selectid]);
+  useEffect(() => {
+    //继续展开房产节点
+    const expands = expandedKeys;
+    expands.push(selectId || '');//添加选中的节点
+    setExpandedKeys(expands);
+    setSelectedKey([selectId || '']);
+  }, [selectId]);
 
 
 
