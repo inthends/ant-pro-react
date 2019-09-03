@@ -15,12 +15,12 @@ function LeftTree(props: LeftTreeProps) {
   const [expanded, setExpanded] = useState<string[]>([]);
 
   useEffect(() => {
-    setExpanded(treeData.map(item => item.id as string));
+    setExpanded(treeData.map(item => item.key as string));
   }, [treeData]);
 
   const onSelect = (selectedKeys, info) => {
     if (selectedKeys.length === 1) {
-      const item = treeData.filter(item => item.id === selectedKeys[0])[0];
+      const item = treeData.filter(item => item.key === selectedKeys[0])[0];
       selectTree(selectedKeys[0], item);
     }
   };

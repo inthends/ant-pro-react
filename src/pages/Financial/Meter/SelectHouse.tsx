@@ -1,20 +1,12 @@
-//添加编辑费项
-import {
-  Button,
-  Col,
-  Select,
-  Form,Input,
-  Row,Icon,Modal, message,
-} from 'antd';
-import { TreeEntity } from '@/model/models';
+//费表装表选择房间
+import { Button,Col, Form,Input,Row,Icon,Modal, message} from 'antd';
+// import { TreeEntity } from '@/model/models';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import {GetHouseTreeListExpand ,UnitMeterSaveForm} from './Meter.service';
+import { UnitMeterSaveForm} from './Meter.service';
 import './style.less';
-import AsynSelectTree from '../AsynSelectTree';
-
-const Option = Select.Option;
-
+import AsynSelectTree from '../AsynSelectTree'; 
+// const Option = Select.Option;
 interface SelectHouseProps {
   visible: boolean;
   closeModal(): void;
@@ -26,16 +18,15 @@ interface SelectHouseProps {
 const SelectHouse = (props: SelectHouseProps) => {
   const { visible, closeModal,feeDetail } = props;
   useEffect(() => {
-    if(visible){
-
+    if(visible){ 
     }
   }, [visible]);
 
-  const [unitData,setUnitData]=useState<string[]>([]);
+  const [unitData,setUnitData]=useState<any[]>([]);
 
   return (
     <Modal
-      title="选择收费项目"
+      title="选择单元"
       visible={visible}
       okText="确认"
       cancelText="取消"
@@ -73,7 +64,8 @@ const SelectHouse = (props: SelectHouseProps) => {
             getCheckedKeys={(keys)=>{
               setUnitData(keys);
             }}
-            selectTree={(id, type,info?) => {
+            
+            selectTree={(id, type, info?) => {
             }}
           />
         </Col>

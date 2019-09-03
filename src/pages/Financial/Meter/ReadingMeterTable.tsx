@@ -1,5 +1,4 @@
 //抄表单列表
-
 import Page from '@/components/Common/Page';
 import { Form, message, Table, Divider } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
@@ -21,35 +20,35 @@ interface ReadingMeterTableProps {
 }
 
 function ReadingMeterTable(props: ReadingMeterTableProps) {
-  const { form, onchange, loading, pagination, data,  reload ,showModify,getRowSelect} = props;
+  const { onchange, loading, pagination, data,  reload ,showModify,getRowSelect} = props;
 
   const columns = [
     {
       title: '单号',
-      dataIndex: 'billcode',
-      key: 'billcode',
-      width: 200,
+      dataIndex: 'billCode',
+      key: 'billCode',
+      width: 150,
       sorter: true
     },
     {
       title: '抄表期间',
-      dataIndex: 'metercode',
-      key: 'metercode',
-      width: 200,
+      dataIndex: 'meterCode',
+      key: 'meterCode',
+      width: 100,
       sorter: true
     },
     {
       title: '抄表人',
-      dataIndex: 'meterreader',
-      key: 'meterreader',
-      width: 200,
+      dataIndex: 'meterReader',
+      key: 'meterReader',
+      width: 80,
       sorter: true,
     },
     {
       title: '抄表日期',
-      dataIndex: 'readdate',
-      key: 'readdate',
-      width: 200,
+      dataIndex: 'readDate',
+      key: 'readDate',
+      width: 100,
       sorter: true,
       render: val =>{
         if(val==null){
@@ -63,7 +62,7 @@ function ReadingMeterTable(props: ReadingMeterTableProps) {
       title: '单元金额合计',
       dataIndex: 'amount',
       key: 'amount',
-      width: 200,
+      width: 120,
       sorter: true,
     },
     {
@@ -71,35 +70,35 @@ function ReadingMeterTable(props: ReadingMeterTableProps) {
       dataIndex: 'total',
       key: 'total',
       sorter: true,
-      width: 200
+      width: 100
     },
     {
       title: '公共用量',
-      dataIndex: 'publictotal',
+      dataIndex: 'publicTotal',
       sorter: true,
-      key: 'publictotal',
-      width: 200
+      key: 'publicTotal',
+      width: 100
     },
     {
       title: '审核状态',
-      dataIndex: 'isverifyname',
-      key: 'isverifyname',
+      dataIndex: 'isverifyName',
+      key: 'isverifyName',
       sorter: true,
-      width: 200
+      width: 100
     },
     {
       title: '审核人',
-      dataIndex: 'verifyperson',
-      key: 'verifyperson',
+      dataIndex: 'verifyPerson',
+      key: 'verifyPerson',
       sorter: true,
-      width: 200
+      width: 80
     },
     {
       title: '审核日期',
-      dataIndex: 'verifydate',
-      key: 'verifydate',
+      dataIndex: 'verifyDate',
+      key: 'verifyDate',
       sorter: true,
-      width: 200,
+      width: 100,
       render: val =>{
         if(val==null){
           return <span></span>
@@ -110,17 +109,16 @@ function ReadingMeterTable(props: ReadingMeterTableProps) {
     },
     {
       title: '审核情况',
-      dataIndex: 'verifymemo',
-      key: 'verifymemo',
+      dataIndex: 'verifyMemo',
+      key: 'verifyMemo',
       sorter: true,
-      width: 200
+      width: 100
     },
     {
       title: '备注',
-      dataIndex: 'memo',
-      key: 'memo',
-      sorter: true,
-      width: 200
+      dataIndex: 'Memo',
+      key: 'Memo',
+      sorter: true
     },
     {
       title: '操作',
@@ -178,7 +176,7 @@ function ReadingMeterTable(props: ReadingMeterTableProps) {
         dataSource={data}
         rowKey="billid"
         pagination={pagination}
-        scroll={{ y: 500, x: 2700 }}
+        scroll={{ y: 500, x: 1400 }}
         loading={loading}
         onChange={onchange}
         rowClassName={setClassName} //表格行点击高亮

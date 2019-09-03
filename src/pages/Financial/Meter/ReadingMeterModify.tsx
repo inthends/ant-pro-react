@@ -1,18 +1,18 @@
-//添加编辑费项
-import {  Button,  Col, Divider, DatePicker,Select,  Drawer,Tabs,  Form,  Row,Icon,  Spin,  Input,InputNumber,TreeSelect,  Table,Checkbox} from 'antd';
+//新增抄表单
+import { Button, Col,  DatePicker,   Drawer, Tabs, Form, Row, Icon, Spin, Input, Table } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import { ColumnProps, PaginationConfig} from 'antd/lib/table';
+import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import {GetDataItemTreeJson,GetOrgTree,GetVirtualReadPageList,SaveUnitForm, SaveReadPublicForm ,SaveReadUnitForm,SaveMainForm,UnitMeterSaveForm,RemoveFormAll,RemoveUnitForm,RemoveReadPublicFormAll,RemoveReadPublicForm,GetPublicReadPageList,GetUnitReadPageList,GetMeterRead ,RemoveReadVirtualForm,RemoveReadVirtualFormAll  } from './Meter.service';
+import { GetDataItemTreeJson, GetOrgTree, GetVirtualReadPageList, SaveReadPublicForm, SaveReadUnitForm, RemoveFormAll, RemoveUnitForm, RemoveReadPublicFormAll, RemoveReadPublicForm, GetPublicReadPageList, GetUnitReadPageList, GetMeterRead,   RemoveReadVirtualFormAll } from './Meter.service';
 import './style.less';
 import ChargeFeeItem from './ChargeFeeItem';
 import SelectReadingMeterPublic from './SelectReadingMeterPublic';
 import SelectReadingMeterHouse from './SelectReadingMeterHouse';
 import SelectReadingMeterVirtual from './SelectReadingMeterVirtual';
-import  moment from 'moment';
+import moment from 'moment';
 const Search = Input.Search;
-const {TabPane}=Tabs;
+const { TabPane } = Tabs;
 
 /*详情可编辑单元格*/
 const EditableContext = React.createContext();
@@ -105,7 +105,7 @@ interface ReadingMeterModifyProps {
   closeDrawer(): void;
   form: WrappedFormUtils;
   id?: string;
-  organizeId?:string;
+  organizeId?: string;
   reload(): void;
 }
 
@@ -114,7 +114,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
   const title = id === undefined ? '新增抄表单' : '修改抄表单';
   const [loading, setLoading] = useState<boolean>(false);
   const { getFieldDecorator } = form;
-  const [units,setUnits] = useState<string>('');
+  const [units, setUnits] = useState<string>('');
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [noticeData, setNoticeData] = useState<any>([]);
   const [pagination, setPagination] = useState<DefaultPagination>(new DefaultPagination());
@@ -145,8 +145,8 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
   const [virtualPagination, setVirtualPagination] = useState<DefaultPagination>(new DefaultPagination());
 
   const [addFormulaVisible, setAddFormulaVisible] = useState<boolean>(false);
-  const [houseFeeItemRowId,setHouseFeeItemRowId]=useState<string>('');
-  const [publicFeeItemRowId,setPublicFeeItemRowId]=useState<string>('');
+  const [houseFeeItemRowId, setHouseFeeItemRowId] = useState<string>('');
+  const [publicFeeItemRowId, setPublicFeeItemRowId] = useState<string>('');
   const components = {
     body: {
       row: EditableFormRow,
@@ -155,30 +155,29 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
   };
 
   useEffect(() => {
-    if(modifyVisible){
+    if (modifyVisible) {
       //获取费表类型
-      GetDataItemTreeJson('EnergyMeterKind').then(res=>{
+      GetDataItemTreeJson('EnergyMeterKind').then(res => {
         setMeterKinds(res);
       })
       //获取费表种类
-      GetDataItemTreeJson('EnergyMeterType').then(res=>{
+      GetDataItemTreeJson('EnergyMeterType').then(res => {
         setMeterTypes(res);
       });
-      GetOrgTree().then(res=>{
+      GetOrgTree().then(res => {
         setOrgTreeData(res);
       })
-      if(id)
-      {
+      if (id) {
         //setIsAdd(false);
         setLoading(true);
-        GetMeterRead(id).then(res=>{
+        GetMeterRead(id).then(res => {
           setInfoDetail(res);
           setLoading(false);
           initHouseLoadData();
           initPublicLoadData();
           initVirtualLoadData();
         });
-      }else{
+      } else {
         form.resetFields();
         setInfoDetail({});
         //setMeterData([]);
@@ -195,20 +194,18 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
       pageSize: housePagination.pageSize,
       total: 0,
     };
-    var keyvalue="";
-    if(id!=null||id!='')
-    {
-      keyvalue=id;
+    var keyvalue = "";
+    if (id != null || id != '') {
+      keyvalue = id;
     }
-    if(infoDetail!=null&&infoDetail.BillID!=null)
-    {
-      keyvalue=infoDetail.BillID;
+    if (infoDetail != null && infoDetail.BillID != null) {
+      keyvalue = infoDetail.BillID;
     }
     let searchCondition: any = {
       pageIndex,
       pageSize,
       total,
-      queryJson: { keyword: houseSearchParams.search == null ? '' : houseSearchParams.search, keyValue:keyvalue}
+      queryJson: { keyword: houseSearchParams.search == null ? '' : houseSearchParams.search, keyValue: keyvalue }
     };
 
     if (sorter) {
@@ -282,7 +279,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
         };
       });
       setPublicData(res.data);
-     // setMeterLoading(false);
+      // setMeterLoading(false);
       return res;
     });
   };
@@ -336,20 +333,20 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
     closeDrawer();
   };
 
-  const guid=()=> {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-        return v.toString(16);
-    });
-  }
+  // const guid=()=> {
+  //   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+  //       var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+  //       return v.toString(16);
+  //   });
+  // }
 
-  const onSave=()=>{
+  const onSave = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        let newData={
+        let newData = {
           payBeginDate: values.payBeginDate.format('YYYY-MM-DD HH:mm:ss'),
           payEndDate: values.payEndDate.format('YYYY-MM-DD HH:mm:ss'),
-          beginDate:values.beginDate.format('YYYY-MM-DD HH:mm:ss'),
+          beginDate: values.beginDate.format('YYYY-MM-DD HH:mm:ss'),
           endDate: values.endDate.format('YYYY-MM-DD HH:mm:ss')
         };
 
@@ -395,7 +392,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
       key: 'nowreading',
       sorter: false,
       width: 200,
-      editable:true
+      editable: true
     },
     {
       title: '倍率',
@@ -445,12 +442,12 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
       key: 'memo',
       sorter: false,
       width: 200,
-      editable:true
-    },{
+      editable: true
+    }, {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
-      align:'center',
+      align: 'center',
       width: 95,
       render: (text, record) => {
         return [
@@ -518,7 +515,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
       key: 'nowreading',
       sorter: false,
       width: 200,
-      editable:true
+      editable: true
     },
     {
       title: '倍率',
@@ -568,20 +565,20 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
       key: 'memo',
       sorter: false,
       width: 200,
-      editable:true
-    },{
+      editable: true
+    }, {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
-      align:'center',
+      align: 'center',
       width: 95,
       render: (text, record) => {
         return [
           <span>
             <a onClick={() => {
               RemoveUnitForm(record.id).then(res => {
-              if (res.code != 0) { initHouseLoadData(); }
-            });
+                if (res.code != 0) { initHouseLoadData(); }
+              });
             }} key="delete">删除</a>
           </span>
 
@@ -608,25 +605,24 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
 
   const handleHouseSave = row => {
     row.baseusage = (row.nowreading - row.lastreading);
-    row.amount = (row.nowreading - row.lastreading)*row.meterprice;
+    row.amount = (row.nowreading - row.lastreading) * row.meterprice;
 
     form.validateFields((errors, values) => {
       if (!errors) {
         let guid = getGuid();
-        if( id == null || id == '' )
-        {
-          var info=Object.assign({},infoDetail,{
-            BillID:guid
+        if (id == null || id == '') {
+          var info = Object.assign({}, infoDetail, {
+            BillID: guid
           })
           setInfoDetail(info)
         }
-        var newHouseData={
-          id: id == null || id == '' ? guid: id,
-          nowreading:row.nowreading,
-          memo:row.memo
+        var newHouseData = {
+          id: id == null || id == '' ? guid : id,
+          nowreading: row.nowreading,
+          memo: row.memo
         };
         //SaveReadPublicForm ,
-        SaveReadUnitForm(newHouseData).then((res)=>{
+        SaveReadUnitForm(newHouseData).then((res) => {
           const newData = [...houseData];
           const index = newData.findIndex(item => row.id === item.id);
           const item = newData[index];
@@ -644,23 +640,22 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
 
   const handlePublicSave = row => {
     row.baseusage = (row.nowreading - row.lastreading);
-    row.amount = (row.nowreading - row.lastreading)*row.meterprice;
+    row.amount = (row.nowreading - row.lastreading) * row.meterprice;
     form.validateFields((errors, values) => {
       if (!errors) {
         let guid = getGuid();
-        if( id == null || id == '' )
-        {
-          var info=Object.assign({},infoDetail,{
-            BillID:guid
+        if (id == null || id == '') {
+          var info = Object.assign({}, infoDetail, {
+            BillID: guid
           })
           setInfoDetail(info)
         }
-        var newHouseData={
-          id: id == null || id == '' ? guid: id,
-          nowreading:row.nowreading,
-          memo:row.memo
+        var newHouseData = {
+          id: id == null || id == '' ? guid : id,
+          nowreading: row.nowreading,
+          memo: row.memo
         };
-        SaveReadPublicForm(newHouseData).then((res)=>{
+        SaveReadPublicForm(newHouseData).then((res) => {
           const newData = [...publicData];
           const index = newData.findIndex(item => row.id === item.id);
           const item = newData[index];
@@ -676,7 +671,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
 
   };
 
-  const virtualFeeColumns=[
+  const virtualFeeColumns = [
     {
       title: '种类',
       dataIndex: 'meterkind',
@@ -720,18 +715,18 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
       width: 200
     }
   ] as ColumnProps<any>[];
-const closeChargeFeeItem=()=>{
-  setChargeFeeItemVisible(false);
-}
-const getGuid = () => {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-    return v.toString(16);
-  });
-}
+  const closeChargeFeeItem = () => {
+    setChargeFeeItemVisible(false);
+  }
+  const getGuid = () => {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+  }
 
-const [readingDetail,setReadingDetail]=useState<any>({});
-const [isFormula,setIsFormula]=useState<boolean>(false);
+  const [readingDetail, setReadingDetail] = useState<any>({});
+  // const [isFormula, setIsFormula] = useState<boolean>(false);
   return (
     <Drawer
       title={title}
@@ -739,73 +734,73 @@ const [isFormula,setIsFormula]=useState<boolean>(false);
       width={880}
       onClose={close}
       visible={modifyVisible}
-      style={{height:'calc(100vh-50px)'}}
+      style={{ height: 'calc(100vh-50px)' }}
       bodyStyle={{ background: '#f6f7fb', height: 'calc(100vh -50px)' }}
     >
-      <Form layout="vertical"  hideRequiredMark>
+      <Form layout="vertical" hideRequiredMark>
         <Spin tip="数据加载中..." spinning={loading}>
           <Row gutter={12}>
             <Col span={8}>
               <Form.Item required={true} label="单据编号"  >
                 {getFieldDecorator('billCode', {
-                    initialValue:infoDetail.billCode,
+                  initialValue: infoDetail.billCode,
                 })(
-                  <Input placeholder="自动获取编号" disabled={true} style={{width:'100%'}} ></Input>
+                  <Input placeholder="自动获取编号" readOnly style={{ width: '100%' }} ></Input>
                 )}
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item required={true}  label="单据日期">
+              <Form.Item required={true} label="单据日期">
                 {getFieldDecorator('readDate', {
-                    initialValue:infoDetail.readDate==null?moment(new Date()):moment(infoDetail.readDate),
-                  rules: [{ required: true ,message:'请选择单据日期'}],
+                  initialValue: infoDetail.readDate == null ? moment(new Date()) : moment(infoDetail.readDate),
+                  rules: [{ required: true, message: '请选择单据日期' }],
                 })(
-                  <DatePicker  style={{width:'100%'}} ></DatePicker>
+                  <DatePicker style={{ width: '100%' }} ></DatePicker>
                 )}
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item  required={true} label="抄表日期" >
+              <Form.Item required={true} label="抄表日期" >
                 {getFieldDecorator('meterCode', {
-                    initialValue:infoDetail.meterCode==null?moment(new Date()):moment(infoDetail.readDate),
-                  rules: [{ required: true ,message:'请选择抄表时间'}],
+                  initialValue: infoDetail.meterCode == null ? moment(new Date()) : moment(infoDetail.readDate),
+                  rules: [{ required: true, message: '请选择抄表时间' }],
                 })(
-                  <DatePicker.MonthPicker style={{width:'100%'}}  ></DatePicker.MonthPicker>
+                  <DatePicker.MonthPicker style={{ width: '100%' }}  ></DatePicker.MonthPicker>
                 )}
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={12}>
             <Col span={8}>
-              <Form.Item  required={true} label="抄表人">
-                  {getFieldDecorator('meterReader', {
-                      initialValue:infoDetail.meterReader,
-                  })(
-                    <Input style={{width:'100%'}}  placeholder="自动获取当前用户" disabled={true}></Input>
-                  )}
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item  required={true} label="结束抄表日期"  >
-                {getFieldDecorator('endReadDate', {
-                    initialValue:infoDetail.endReadDate==null?moment(new Date()):moment(infoDetail.endReadDate),
-                    rules: [{ required: true ,message:'请选择结束抄表日期'}],
+              <Form.Item required={true} label="抄表人">
+                {getFieldDecorator('meterReader', {
+                  initialValue: infoDetail.meterReader,
                 })(
-                  <DatePicker  style={{width:'100%'}} ></DatePicker>
+                  <Input style={{ width: '100%' }} placeholder="自动获取当前用户" readOnly ></Input>
                 )}
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item  required={true} label="结束标识"  >
-                {getFieldDecorator('batchCode', {
-                    initialValue:infoDetail.batchCode==null?"":infoDetail.batchCode,
+              <Form.Item required={true} label="结束抄表日期"  >
+                {getFieldDecorator('endReadDate', {
+                  initialValue: infoDetail.endReadDate == null ? moment(new Date()) : moment(infoDetail.endReadDate),
+                  rules: [{ required: true, message: '请选择结束抄表日期' }],
                 })(
-                  <Input style={{width:'100%'}} />
+                  <DatePicker style={{ width: '100%' }} ></DatePicker>
+                )}
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item required={true} label="结束标识"  >
+                {getFieldDecorator('batchCode', {
+                  initialValue: infoDetail.batchCode == null ? "" : infoDetail.batchCode,
+                })(
+                  <Input style={{ width: '100%' }} />
                 )}
               </Form.Item>
             </Col>
           </Row>
-            <Row gutter={12}>
+          {/* <Row gutter={12}>
               <Col span={8}>
                 <Form.Item  required={true} label="状态"  >
                   {getFieldDecorator('ifVerifyName', {
@@ -833,270 +828,273 @@ const [isFormula,setIsFormula]=useState<boolean>(false);
                   )}
                 </Form.Item>
               </Col>
-          </Row>
+          </Row> */}
           <Row gutter={12}>
             <Col span={24}>
-              <Form.Item required={true}  label="抄表说明">
-                  {getFieldDecorator('memo', {
-                      initialValue:infoDetail.memo==null?'':infoDetail.memo,
-                  })(
-                    <Input style={{width:'100%'}} ></Input>
-                  )}
+              <Form.Item required={true} label="抄表说明">
+                {getFieldDecorator('memo', {
+                  initialValue: infoDetail.memo == null ? '' : infoDetail.memo,
+                })(
+                  <Input style={{ width: '100%' }} ></Input>
+                )}
               </Form.Item>
             </Col>
           </Row>
           <Row>
-            <Tabs type="card">
+            <Tabs >
               <TabPane tab="房屋费表" key="1">
-              <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
-                <Search
-                  className="search-input"
-                  placeholder="请输入要查询的费表编号"
-                  style={{ width: 280 }}
-                />
+                <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
+                  <Search
+                    className="search-input"
+                    placeholder="请输入要查询的费表编号"
+                    style={{ width: 280 }}
+                  />
 
-                <Button type="primary" style={{float: 'right',marginLeft: '10px' }}
-                  onClick={() =>{
-                    /*var ids=[];
-                    houseData.map(item=>{
-                      ids.push(item.id);
-                    });*/
-                    RemoveFormAll(id).then(res=>{
-                      initHouseLoadData();
-                    });
-                  }}
-                >
-                  <Icon type="delete" />
-                  全部删除
+                  <Button type="link" style={{ float: 'right'  }}
+                    onClick={() => {
+                      /*var ids=[];
+                      houseData.map(item=>{
+                        ids.push(item.id);
+                      });*/
+                      RemoveFormAll(id).then(res => {
+                        initHouseLoadData();
+                      });
+                    }}
+                  >
+                    <Icon type="delete" />
+                    全部删除
                 </Button>
-                <Button type="default" style={{ float: 'right', marginLeft: '10px' }}
-                  onClick={() => {
-                    form.validateFields((errors, values) => {
-                      if (!errors) {
-                        let guid = getGuid();
-                        var meterEntity = {
-                          keyValue: id == null || id == '' ? guid: id,
-                          BillID: id == null || id == '' ? guid: id,
-                          BatchCode: values.batchCode,
-                          MeterCode: moment(values.meterCode).format('YYYYMM'),
-                          ReadDate:moment( values.readDate).format('YYYY-MM-DD'),
-                          EndReadDate: moment(values.endReadDate).format('YYYY-MM-DD'),
-                          IfVerify: false,
-                          Memo:values.memo,
-                          //MeterReader:values.meterReader
+                  <Button type="link" style={{ float: 'right', marginLeft: '1px' }}
+                    onClick={() => {
+                      form.validateFields((errors, values) => {
+                        if (!errors) {
+                          let guid = getGuid();
+                          var meterEntity = {
+                            keyValue: id == null || id == '' ? guid : id,
+                            BillID: id == null || id == '' ? guid : id,
+                            BatchCode: values.batchCode,
+                            MeterCode: moment(values.meterCode).format('YYYYMM'),
+                            ReadDate: moment(values.readDate).format('YYYY-MM-DD'),
+                            EndReadDate: moment(values.endReadDate).format('YYYY-MM-DD'),
+                            IfVerify: false,
+                            Memo: values.memo,
+                            //MeterReader:values.meterReader
+                          }
+                          setReadingDetail(
+                            meterEntity
+                          );
+                          setUnitFeeVisible(true);
                         }
-                        setReadingDetail(
-                          meterEntity
-                        );
-                        setUnitFeeVisible(true);
-                      }
-                    });
-                  }}
-                >
-                  <Icon type="plus" />
-                  选择房屋
+                      });
+                    }}
+                  >
+                    <Icon type="plus" />
+                    选择房屋
                 </Button>
-              </div>
-              <div style={{color:'rgb(255,0,0)'}}> 请仔细核对抄表度数，度数错误会影响公摊计费，点击本次读数列和备注列可以编辑，编辑完按回车保存。</div>
-              <Table<any>
-                components={components}
-                onChange={(paginationConfig, filters, sorter) => {
-                  initHouseLoadData(paginationConfig, sorter)}}
-                bordered={false}
-                size="middle"
-                columns={houseDataColumns}
-                dataSource={houseData}
-                rowKey="id"
-                pagination={pagination}
-                scroll={{ y: 500, x: 1620 }}
-                loading={loading}
-              />
+                </div>
+                <div style={{ color: 'rgb(255,0,0)' }}> 请仔细核对抄表度数，度数错误会影响公摊计费，点击本次读数列和备注列可以编辑，编辑完按回车保存。</div>
+                <Table<any>
+                  components={components}
+                  onChange={(paginationConfig, filters, sorter) => {
+                    initHouseLoadData(paginationConfig, sorter)
+                  }}
+                  bordered={false}
+                  size="middle"
+                  columns={houseDataColumns}
+                  dataSource={houseData}
+                  rowKey="id"
+                  pagination={pagination}
+                  scroll={{ y: 500, x: 1620 }}
+                  loading={loading}
+                />
               </TabPane>
               <TabPane tab="公用费表" key="2">
-              <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
-                <Search
-                  className="search-input"
-                  placeholder="请输入要查询的费表名称"
-                  style={{ width: 280 }}
-                />
-                <Button type="primary" style={{float: 'right',marginLeft: '10px' }}
-                  onClick={() =>{
-                    /*var ids=[];
-                    publicData.map(item=>{
-                      ids.push(item.id);
-                    });*/
-                    RemoveReadPublicFormAll(id).then(res=>{
-                      initPublicLoadData();
-                    });
-                  }}
-                >
-                  <Icon type="delete" />
-                  全部删除
+                <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
+                  <Search
+                    className="search-input"
+                    placeholder="请输入要查询的费表名称"
+                    style={{ width: 280 }}
+                  />
+                  <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
+                    onClick={() => {
+                      /*var ids=[];
+                      publicData.map(item=>{
+                        ids.push(item.id);
+                      });*/
+                      RemoveReadPublicFormAll(id).then(res => {
+                        initPublicLoadData();
+                      });
+                    }}
+                  >
+                    <Icon type="delete" />
+                    全部删除
                 </Button>
-                <Button type="default" style={{ float: 'right', marginLeft: '10px' }}
-                  onClick={() => {
-                    form.validateFields((errors, values) => {
-                      if (!errors) {
-                        let guid = getGuid();
-                        var meterEntity = {
-                          keyValue: id == null || id == '' ?guid: id,
-                          BillID: id == null || id == '' ? guid: id,
-                          BatchCode: values.batchCode,
-                          MeterCode: moment(values.meterCode).format('YYYYMM'),
-                          ReadDate:moment( values.readDate).format('YYYY-MM-DD'),
-                          EndReadDate: moment(values.endReadDate).format('YYYY-MM-DD'),
-                          IfVerify: false,
-                          Memo:values.memo,
+                  <Button type="default" style={{ float: 'right', marginLeft: '10px' }}
+                    onClick={() => {
+                      form.validateFields((errors, values) => {
+                        if (!errors) {
+                          let guid = getGuid();
+                          var meterEntity = {
+                            keyValue: id == null || id == '' ? guid : id,
+                            BillID: id == null || id == '' ? guid : id,
+                            BatchCode: values.batchCode,
+                            MeterCode: moment(values.meterCode).format('YYYYMM'),
+                            ReadDate: moment(values.readDate).format('YYYY-MM-DD'),
+                            EndReadDate: moment(values.endReadDate).format('YYYY-MM-DD'),
+                            IfVerify: false,
+                            Memo: values.memo,
+                          }
+                          setReadingDetail(meterEntity);
+                          setPublicFeeVisible(true);
                         }
-                        setReadingDetail( meterEntity);
-                        setPublicFeeVisible(true);
-                      }
-                    })
-                  }
-                }
-                >
-                  <Icon type="plus" />
-                  添加公用费表
+                      })
+                    }
+                    }
+                  >
+                    <Icon type="plus" />
+                    添加公用费表
                 </Button>
-              </div>
-              <div style={{color:'rgb(255,0,0)'}}>点击本次读数列和备注列可以编辑，编辑完按回车保存。</div>
-              <Table<any>
-                components={components}
-                onChange={(paginationConfig, filters, sorter) => {
-                  initPublicLoadData(paginationConfig, sorter)}}
-                bordered={false}
-                size="middle"
-                columns={publicDataColumns}
-                dataSource={publicData}
-                rowKey="id"
-                pagination={pagination}
-                scroll={{ y: 500, x: 1620 }}
-                loading={loading}
-              />
+                </div>
+                <div style={{ color: 'rgb(255,0,0)' }}>点击本次读数列和备注列可以编辑，编辑完按回车保存。</div>
+                <Table<any>
+                  components={components}
+                  onChange={(paginationConfig, filters, sorter) => {
+                    initPublicLoadData(paginationConfig, sorter)
+                  }}
+                  bordered={false}
+                  size="middle"
+                  columns={publicDataColumns}
+                  dataSource={publicData}
+                  rowKey="id"
+                  pagination={pagination}
+                  scroll={{ y: 500, x: 1620 }}
+                  loading={loading}
+                />
               </TabPane>
               <TabPane tab="虚拟费表" key="3">
-              <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
-                <Search
-                  className="search-input"
-                  placeholder="请输入要查询的费表编号"
-                  style={{ width: 280 }}
-                />
-                <Button type="primary" style={{float: 'right',marginLeft: '10px' }}
-                  onClick={() =>{
-                    var ids=[];
-                    virtualData.map(item=>{
-                      ids.push(item.id);
-                    });
-                    RemoveReadVirtualFormAll(JSON.stringify(ids)).then(res=>{
-                      if (res.code != 0) { initVirtualLoadData(); }
-                    });
-                  }}
-                >
-                  <Icon type="delete" />
-                  全部删除
+                <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
+                  <Search
+                    className="search-input"
+                    placeholder="请输入要查询的费表编号"
+                    style={{ width: 280 }}
+                  />
+                  <Button type="link" style={{ float: 'right', marginLeft: '10px' }}
+                    onClick={() => {
+                      var ids = [];
+                      virtualData.map(item => {
+                        ids.push(item.id);
+                      });
+                      RemoveReadVirtualFormAll(JSON.stringify(ids)).then(res => {
+                        if (res.code != 0) { initVirtualLoadData(); }
+                      });
+                    }}
+                  >
+                    <Icon type="delete" />
+                    全部删除
                 </Button>
-                <Button type="default" style={{ float: 'right', marginLeft: '10px' }}
-                  onClick={() => {
-                    form.validateFields((errors, values) => {
-                      if (!errors) {
-                        let guid = getGuid();
-                        var meterEntity = {
-                          keyValue: id == null || id == '' ?guid: id,
-                          BillID: id == null || id == '' ?guid : id,
-                          BatchCode: values.batchCode,
-                          MeterCode: moment(values.meterCode).format('YYYYMM'),
-                          ReadDate:moment( values.readDate).format('YYYY-MM-DD'),
-                          EndReadDate: moment(values.endReadDate).format('YYYY-MM-DD'),
-                          IfVerify: false,
-                          Memo:values.memo,
+                  <Button type="link" style={{ float: 'right', marginLeft: '10px' }}
+                    onClick={() => {
+                      form.validateFields((errors, values) => {
+                        if (!errors) {
+                          let guid = getGuid();
+                          var meterEntity = {
+                            keyValue: id == null || id == '' ? guid : id,
+                            BillID: id == null || id == '' ? guid : id,
+                            BatchCode: values.batchCode,
+                            MeterCode: moment(values.meterCode).format('YYYYMM'),
+                            ReadDate: moment(values.readDate).format('YYYY-MM-DD'),
+                            EndReadDate: moment(values.endReadDate).format('YYYY-MM-DD'),
+                            IfVerify: false,
+                            Memo: values.memo,
+                          }
+                          setReadingDetail(meterEntity);
+                          setVirtualFeeVisible(true);
                         }
-                        setReadingDetail( meterEntity);
-                        setVirtualFeeVisible(true);
-                      }
-                    })
-                  }}
-                >
-                  <Icon type="plus" />
+                      })
+                    }}
+                  >
+                    <Icon type="plus" />
                     添加虚拟费表
                 </Button>
-              </div>
-              <Table<any>
-                onChange={(paginationConfig, filters, sorter) => {
-                  initVirtualLoadData(paginationConfig, sorter)}}
-                bordered={false}
-                size="middle"
-                columns={virtualFeeColumns}
-                dataSource={virtualData}
-                rowKey="id"
-                pagination={pagination}
-                scroll={{ y: 500, x: 1620 }}
-                loading={loading}
-              />
+                </div>
+                <Table<any>
+                  onChange={(paginationConfig, filters, sorter) => {
+                    initVirtualLoadData(paginationConfig, sorter)
+                  }}
+                  bordered={false}
+                  size="middle"
+                  columns={virtualFeeColumns}
+                  dataSource={virtualData}
+                  rowKey="id"
+                  pagination={pagination}
+                  scroll={{ y: 500, x: 1620 }}
+                  loading={loading}
+                />
               </TabPane>
             </Tabs>
           </Row>
         </Spin>
-      <div
-        style={{
-          position: 'absolute',
-          left: 0,
-          bottom: 0,
-          width: '100%',
-          borderTop: '1px solid #e9e9e9',
-          padding: '10px 16px',
-          background: '#fff',
-          textAlign: 'right',
-        }}
-      >
-        <Button style={{ marginRight: 8 }}
-        onClick={()=>closeDrawer()}
+        <div
+          style={{
+            position: 'absolute',
+            left: 0,
+            bottom: 0,
+            width: '100%',
+            borderTop: '1px solid #e9e9e9',
+            padding: '10px 16px',
+            background: '#fff',
+            textAlign: 'right',
+          }}
         >
-          取消
+          <Button style={{ marginRight: 8 }}
+            onClick={() => closeDrawer()}
+          >
+            取消
         </Button>
-        <Button type="primary"
-          onClick={()=>onSave()}
-        >
-          提交
+          <Button type="primary"
+            onClick={() => onSave()}
+          >
+            提交
         </Button>
-      </div>
+        </div>
       </Form>
       <ChargeFeeItem
-          visible= {chargeFeeItemVisible}
-          closeModal={closeChargeFeeItem}
-          getSelectTree={(id)=>{
-            var info= Object.assign({},infoDetail,{feeItemName:id});
-            setInfoDetail(info);
-          }}
+        visible={chargeFeeItemVisible}
+        closeModal={closeChargeFeeItem}
+        getSelectTree={(id) => {
+          var info = Object.assign({}, infoDetail, { feeItemName: id });
+          setInfoDetail(info);
+        }}
       />
       <SelectReadingMeterHouse
         visible={unitFeeVisible}
-        closeModal={()=>{
+        closeModal={() => {
           setUnitFeeVisible(false);
         }}
         readingDetail={readingDetail}
-        reload={()=>{
+        reload={() => {
           initHouseLoadData();
         }}
         id={houseFeeItemRowId}
       />
       <SelectReadingMeterPublic
         visible={publicFeeVisible}
-        closeModal={()=>{
+        closeModal={() => {
           setPublicFeeVisible(false);
         }}
         readingDetail={readingDetail}
-        reload={()=>{
+        reload={() => {
 
         }}
         id={publicFeeItemRowId}
       />
       <SelectReadingMeterVirtual
         visible={virtualFeeVisible}
-        closeModal={()=>{
+        closeModal={() => {
           setVirtualFeeVisible(false);
         }}
         readingDetail={readingDetail}
-        reload={()=>{
+        reload={() => {
 
         }}
         id={publicFeeItemRowId}

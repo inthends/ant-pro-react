@@ -107,10 +107,10 @@ function MeterTable(props: MeterTableProps) {
           // </Button>
 
           <span>
-            <a onClick={() => showModify(record.meterID)} key="modify">修改</a>
+            <a onClick={() => showModify(record.meterId)} key="modify">修改</a>
             <Divider type="vertical" />
             <a onClick={() => {
-              RemoveForm(record.meterID).then(res => {
+              RemoveForm(record.meterId).then(res => {
                 if (res.code != 0) { reload(); }
               })
 

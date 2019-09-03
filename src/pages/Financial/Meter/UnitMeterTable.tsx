@@ -4,7 +4,7 @@ import { Form,  Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react'; 
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import {  } from './Meter.service'; 
+// import {  } from './Meter.service'; 
 interface UnitMeterTableProps {
   onchange(page: any, filter: any, sort: any): any;
   loading: boolean;
@@ -15,28 +15,28 @@ interface UnitMeterTableProps {
 }
 
 function UnitMeterTable(props: UnitMeterTableProps) {
-  const {   onchange, loading, pagination, data } = props;
+  const { onchange, loading, pagination, data } = props;
 
   const columns = [
     {
       title: '费表类型',
       dataIndex: 'meterKind',
       key: 'meterKind',
-      width: 200,
+      width: 80,
       sorter: true
     },
     {
       title: '费表种类',
       dataIndex: 'meterType',
       key: 'meterType',
-      width: 200,
+      width: 80,
       sorter: true
     },
     {
       title: '费表编号',
       dataIndex: 'meterCode',
       key: 'meterCode',
-      width: 200,
+      width: 150,
       sorter: true,
     },
     {
@@ -50,7 +50,7 @@ function UnitMeterTable(props: UnitMeterTableProps) {
       title: '倍率',
       dataIndex: 'meterZoom',
       key: 'meterZoom',
-      width: 200,
+      width: 60,
       sorter: true,
     },
     {
@@ -58,7 +58,7 @@ function UnitMeterTable(props: UnitMeterTableProps) {
       dataIndex: 'meterRange',
       key: 'meterRange',
       sorter: true,
-      width: 200
+      width: 60
     },
     {
       title: '所属机构',
@@ -78,7 +78,7 @@ function UnitMeterTable(props: UnitMeterTableProps) {
         dataSource={data}
         rowKey="unitmeterid"
         pagination={pagination}
-        scroll={{ y: 500, x: 1400 }}
+        scroll={{ y: 500 }}
         loading={loading}
         onChange={onchange}
       />

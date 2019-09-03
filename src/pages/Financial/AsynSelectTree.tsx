@@ -7,13 +7,13 @@ const { TreeNode } = Tree;
 interface AsynSelectTreeProps {
   //treeData: any[];
   selectTree(parentId, type): void;
-  getCheckedKeys(keys): string[];
+  getCheckedKeys(keys): void;
   parentid: string;
 }
 
 function AsynSelectTree(props: AsynSelectTreeProps) {
   const { selectTree, getCheckedKeys } = props;
-  const [checkedKeys, setCheckedKeys] = useState<string[]>([]);
+  const [checkedKeys, setCheckedKeys] = useState<any[]>([]);
   // const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
   // const [autoExpandParent, setAutoExpandParent] = useState<boolean>(false);
   //动态子节点

@@ -20,7 +20,7 @@ export interface TreeEntity {
      */
     parentId?: string;
     /**
-     * 
+     * 主键
      */
     key?: string;
     /**
@@ -32,15 +32,18 @@ export interface TreeEntity {
      */
     type?: string;
     /**
-     * 
+     * 是否子节点
      */
     isLeaf?: boolean;
     /**
      * 
      */
     value?: string;
-    // /**
-    //  * 
-    //  */
-    // children?: Array<TreeEntity>;
+    //是否可用
+    disabled?: boolean;
+
+    /**
+     * 子节点
+     */
+    children?: Array<TreeEntity>;
 }

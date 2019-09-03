@@ -1,9 +1,9 @@
 //水电费管理
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { Tabs, Button, Icon, Input, Layout, Modal, Select, message } from 'antd';
+import { Tabs, Button, Icon, Input, Layout, Select, message } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { GetDataItemTreeJson, GetMeterPageList, GetUnitMeterPageList, GetReadingMeterPageList, GetMeterFormsPageList, RemoveForm, SaveForm } from './Meter.service';
+import { GetDataItemTreeJson, GetMeterPageList, GetUnitMeterPageList, GetReadingMeterPageList, GetMeterFormsPageList } from './Meter.service';
 import AsynLeftTree from '../AsynLeftTree';
 import MeterTable from './MeterTable';
 import MeterFormsTable from './MeterFormsTable';
@@ -410,19 +410,19 @@ function Meter() {
     setId(id);
   };
   //删除冲抵单
-  const deleteData = (id?) => {
-    Modal.confirm({
-      title: '是否确认删除该条抵冲记录?',
-      onOk() {
-        RemoveForm({
-          keyValue: id
-        }).then(res => {
+  // const deleteData = (id?) => {
+  //   Modal.confirm({
+  //     title: '是否确认删除该条抵冲记录?',
+  //     onOk() {
+  //       RemoveForm({
+  //         keyValue: id
+  //       }).then(res => {
 
-        });
-      },
-      onCancel() { },
-    });
-  }
+  //       });
+  //     },
+  //     onCancel() { },
+  //   });
+  // }
   const [meterSearchParams, setMeterSearchParams] = useState<any>({});
   return (
     <Layout>

@@ -1,6 +1,5 @@
 //添加编辑费项
 import { Card, Divider, Button, Col, Select, Modal, Drawer, Form, Row, Icon, Spin, Input, InputNumber, TreeSelect, message, Table, Checkbox } from 'antd';
-
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
@@ -25,8 +24,8 @@ interface MeterModifyProps {
 }
 
 const MeterModify = (props: MeterModifyProps) => {
-  const { modifyVisible, closeDrawer, form, id, reload } = props;
-  const title = id === undefined ? '新增费表资料' : '修改费表资料';
+  const { modifyVisible, closeDrawer, form, id, reload } = props; 
+  const title = id == null ? '新增费表资料' : '修改费表资料';
   const [loading, setLoading] = useState<boolean>(false);
   const { getFieldDecorator } = form;
   // const [units,setUnits] = useState<string>([]);
@@ -154,7 +153,7 @@ const MeterModify = (props: MeterModifyProps) => {
           Calculation: values.calculation,
           MeterAddress: values.meterAddress,
           Memo: values.memo,
-          FeeItemID: infoDetail.feeItemID,
+          FeeItemID: infoDetail.feeItemId,
           FeeItemName: infoDetail.feeItemName,
           IsStop: values.isStop==null?false:true
         }
@@ -278,7 +277,7 @@ const MeterModify = (props: MeterModifyProps) => {
     <Drawer
       title={title}
       placement="right"
-      width={700}
+      width={800}
       onClose={close}
       visible={modifyVisible}
       style={{ height: 'calc(100vh-50px)' }}
@@ -364,10 +363,10 @@ const MeterModify = (props: MeterModifyProps) => {
                 </Form.Item>
               </Col>
               <Col span={8}>
-                <Form.Item required label="收费项目"   >
+                <Form.Item required label="关联收费项目"   >
                   {getFieldDecorator('feeItemID', {
                     initialValue: infoDetail.feeItemName,
-                    rules: [{ required: true, message: '请选择收费项目' }],
+                    rules: [{ required: true, message: '请选择关联收费项目' }],
                   })(
                     <Input addonAfter={<Icon type="setting" onClick={() => {
                       setChargeFeeItemVisible(true);
@@ -482,7 +481,7 @@ const MeterModify = (props: MeterModifyProps) => {
                     initMeterLoadData();
                   }}
                 />
-                <Button type="danger" style={{ float: 'right', marginLeft: '10px' }}
+                <Button type="link"  style={{ float: 'right'  }}
                   onClick={() => {
                     Modal.confirm({
                       title: '请确认',
@@ -497,11 +496,8 @@ const MeterModify = (props: MeterModifyProps) => {
                       },
                     });
                   }}
-                >
-                  <Icon type="delete" />
-                  全部删除
-              </Button>
-                <Button type="default" style={{ float: 'right', marginLeft: '10px' }}
+                > <Icon type="delete" />全部删除</Button>
+                <Button type="link"   style={{ float: 'right', marginLeft: '1px' }}
                   onClick={() => {
                     checkEntity();
                   }}

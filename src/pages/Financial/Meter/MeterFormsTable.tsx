@@ -1,12 +1,9 @@
 //抄表列表
 import Page from '@/components/Common/Page';
-import { InputNumber, Input, Select, Col, Row, Form, DatePicker, Card, Button, message, Table, Modal } from 'antd';
+import {  Form,  Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
-import React, { useState } from 'react';
-import moment from 'moment';
-import { WrappedFormUtils } from 'antd/lib/form/Form';
-import {  } from './Meter.service';
-import styles from './style.less';
+import React  from 'react'; 
+import { WrappedFormUtils } from 'antd/lib/form/Form'; 
 
 interface MeterFormsTableProps {
   onchange(page: any, filter: any, sort: any): any;
@@ -18,13 +15,14 @@ interface MeterFormsTableProps {
 }
 
 function MeterFormsTable(props: MeterFormsTableProps) {
-  const { form, onchange, loading, pagination, data,  reload } = props;
+  const {  onchange, loading, pagination, data  } = props;
+  debugger
   const columns = [
     {
       title: '单号',
       dataIndex: 'billCode',
-      key: 'billcode',
-      width: 200,
+      key: 'billCode',
+      width: 150,
       sorter: true
     },
     {
