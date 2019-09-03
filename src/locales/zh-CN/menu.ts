@@ -48,7 +48,7 @@ export default {
   'menu.admin.complaint': '投诉管理',
 
   'menu.contract': '资产运营',
-  'menu.contract.list': '合同列表',
+  'menu.contract.list': '合同管理',
 
   'menu.system': '系统管理',
   'menu.system.organize': '机构设置',

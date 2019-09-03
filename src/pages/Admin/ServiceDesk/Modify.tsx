@@ -444,7 +444,9 @@ const Modify = (props: ModifyProps) => {
           </TabPane>
           {data ? (
             <TabPane tab="留言动态" key="2">
-              <CommentBox data={data} />
+              <CommentBox 
+              data={data} 
+               />
             </TabPane>
           ) : null}
 

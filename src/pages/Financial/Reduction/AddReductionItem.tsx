@@ -55,7 +55,8 @@ const AddReductionItem = (props: AddReductionItemProps) => {
       if (!errors) {
 
         var data = {
-          units: '["' + unitData + '"]',
+          // units: '["' + unitData + '"]', 
+          units:JSON.stringify(unitData), 
           feeitemid: feeData,
           begin: moment(startDate).format('YYYY-MM-DD'),
           end: moment(endDate).format('YYYY-MM-DD'),

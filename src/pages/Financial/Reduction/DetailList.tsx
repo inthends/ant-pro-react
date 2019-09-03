@@ -23,8 +23,8 @@ function DetailList(props: DetailListProps) {
   const columns = [
     {
       title: '单元编号',
-      dataIndex: 'unitID',
-      key: 'unitID',
+      dataIndex: 'unitId',
+      key: 'unitId',
       width: 80,
       sorter: true,
     },

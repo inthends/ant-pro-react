@@ -307,8 +307,8 @@ const Modify = (props: ModifyProps) => {
   const columns = [
     {
       title: '单元编号',
-      dataIndex: 'unitID',
-      key: 'unitID',
+      dataIndex: 'unitId',
+      key: 'unitId',
       width: '150px',
       sorter: true,
     },

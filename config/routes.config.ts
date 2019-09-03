@@ -38,10 +38,10 @@ export default [
       },
 
       {
-        name: 'account',
-        icon: 'user',
+        name: 'account', 
         hideInMenu: true,
         path: '/account',
+        icon: 'user',
         routes: [ 
           {
             name: 'settings',
