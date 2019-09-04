@@ -431,7 +431,7 @@ function Meter() {
     if (key == "1") {
       initMeterLoadData('', meterSearch);
     } else if (key == "2") {
-      initUnitMeterLoadData('', unitMeterSearch)
+      initUnitMeterLoadData('', unitMeterSearch);
     } else if (key == "3") {
       initReadingMeterLoadData('', readingMeterSearch);
     } else {

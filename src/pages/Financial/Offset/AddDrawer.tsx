@@ -1,21 +1,12 @@
 import { TreeEntity } from '@/model/models';
-import {
-  Button,
-  Col,
-  DatePicker,
-  Drawer,
-  Form,
-  Row,
-  Spin,
-} from 'antd';
+import {message,Button,Col,DatePicker,Drawer,Form,Row,Spin} from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetBillTreeListExpand, GetCheckTreeListExpand, SaveForm, GetFormJson } from './Offset.service';
+import { GetReceivablesTree, GetPaymentTree, SaveForm, GetFormJson } from './Offset.service';
 import './style.less';
 import moment from 'moment';
 import AsynSelectTree from '../AsynSelectTree';
 import LeftTree from '../LeftTree';
-
 
 interface AddDrawerProps {
   addDrawerVisible: boolean;
@@ -25,7 +16,7 @@ interface AddDrawerProps {
   id?: string;
   organizeId?: string;
   reload(): void;
-}
+};
 
 const AddDrawer = (props: AddDrawerProps) => {
   const { addDrawerVisible, closeDrawer, form, id } = props;
@@ -37,18 +28,26 @@ const AddDrawer = (props: AddDrawerProps) => {
   const [feeitemid, setFeeItemId] = useState<string>('');
   const [units, setUnits] = useState<string[]>([]);
   //const [roomTreeData, setRoomTreeData] = useState<any>();
-  const [checkTreeData, setCheckTreeData] = useState<any>();
-  const [billTreeData, setBillTreeData] = useState<any>();
+  const [checkTreeData, setCheckTreeData] = useState<TreeEntity[]>([]);//付款费项
+  const [billTreeData, setBillTreeData] = useState<TreeEntity[]>([]);//收款费项
 
-  const [payBeginDate, setPayBeginDate] = useState<string>();
-  const [payEndDate, setPayEndDate] = useState<string>();
-  const [beginDate, setBeginDate] = useState<string>();
-  const [endDate, setEndDate] = useState<string>();
+  // const [payBeginDate, setPayBeginDate] = useState<string>();
+  // const [payEndDate, setPayEndDate] = useState<string>();
+  // const [beginDate, setBeginDate] = useState<string>();
+  // const [endDate, setEndDate] = useState<string>();
 
   useEffect(() => {
-    getCheckTreeData().then(res => {
-    }).then(() => {
-      getBillTreeData();
+    // getCheckTreeData().then(res => {
+    // }).then(() => {
+    //   getBillTreeData();
+    // });
+
+    GetPaymentTree().then((res) => {
+      setCheckTreeData(res || []);
+    });
+
+    GetReceivablesTree().then((res) => {
+      setBillTreeData(res || []);
     });
 
     if (id) {
@@ -58,10 +57,10 @@ const AddDrawer = (props: AddDrawerProps) => {
         setLoading(false);
       })
     } else {
-      setPayBeginDate(getCurrentMonthFirstDay);
-      setPayEndDate(getCurrentMonthLastDay);
-      setBeginDate(getCurrentMonthFirstDay);
-      setEndDate(getCurrentMonthLastDay);
+      // setPayBeginDate(getCurrentMonthFirstDay);
+      // setPayEndDate(getCurrentMonthLastDay);
+      // setBeginDate(getCurrentMonthFirstDay);
+      // setEndDate(getCurrentMonthLastDay);
       setLoading(false);
     }
   }, []);
@@ -70,55 +69,55 @@ const AddDrawer = (props: AddDrawerProps) => {
     closeDrawer();
   };
 
-  const guid = () => {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-      return v.toString(16);
-    });
-  }
+  // const guid = () => {
+  //   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+  //     var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+  //     return v.toString(16);
+  //   });
+  // }
 
-  const getCheckTreeData = () => {
-    return GetCheckTreeListExpand()
-      .then((res: TreeEntity[]) => {
-        const treeList = (res || []).map(item => {
-          return {
-            ...item,
-            id: item.key,
-            text: item.text,
-            parentId: item.parentId,
-          };
-        });
-        setCheckTreeData(treeList);
-        return treeList;
-      });
-  };
+  // const getCheckTreeData = () => {
+  //   return GetCheckTreeListExpand()
+  //     .then((res: TreeEntity[]) => {
+  // const treeList = (res || []).map(item => {
+  //   return {
+  //     ...item,
+  //     id: item.key,
+  //     text: item.title,
+  //     parentId: item.parentId,
+  //   };
+  // });
+  // setCheckTreeData(res || []);
+  //return treeList;
+  //     });
+  // };
 
-  const getBillTreeData = () => {
-    return GetBillTreeListExpand()
-      .then((res: TreeEntity[]) => {
-        const treeList = (res || []).map(item => {
-          return {
-            ...item,
-            id: item.key,
-            text: item.text,
-            parentId: item.parentId,
-          };
-        });
-        setBillTreeData(treeList);
-        return treeList;
-      });
-  };
+  // const getBillTreeData = () => {
+  //   return GetBillTreeListExpand()
+  //     .then((res: TreeEntity[]) => {
+  //       const treeList = (res || []).map(item => {
+  //         return {
+  //           ...item,
+  //           id: item.key,
+  //           text: item.title,
+  //           parentId: item.parentId,
+  //         };
+  //       });
+  //       setBillTreeData(treeList);
+  //       return treeList;
+  //     });
+  // };
 
-  const selectRoomTree = (org, item) => {
-    //setUnits([...units,org]);
-  };
+  //const selectRoomTree = (org, item) => {
+  //setUnits([...units,org]);
+  //};
+
   const getCheckedKeys = (keys) => {
     setUnits(keys);
-  }
+  };
   const selectBillTree = (org, item) => {
     setFeeItemId(org);
   };
-
   const selectCheckTree = (org, item) => {
     setPayFeeItemId(org);
   };
@@ -132,16 +131,16 @@ const AddDrawer = (props: AddDrawerProps) => {
           beginDate: values.beginDate.format('YYYY-MM-DD'),
           endDate: values.endDate.format('YYYY-MM-DD'),
           payfeeitemid: payfeeitemid,
-          feeitemid: feeitemid
-          //payfeeitemid: "fa5df220-bf54-483b-bec4-84f4a0107395",
-          //feeitemid: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1"
+          feeitemid: feeitemid,
+          units: JSON.stringify(units)
         };
-        var unitsStr = "%5B";
-        units.forEach(item => {
-          unitsStr += '"' + item + '"%2C';
-        });
-        unitsStr = unitsStr.substring(0, unitsStr.length - 3) + "%5D";
-        SaveForm(unitsStr, newData).then((res) => {
+        // var unitsStr = "%5B";
+        // units.forEach(item => {
+        //   unitsStr += '"' + item + '"%2C';
+        // });
+        // unitsStr = unitsStr.substring(0, unitsStr.length - 3) + "%5D"; 
+        SaveForm(newData).then((res) => {
+          message.success('保存成功');
           close();
         })
       }
@@ -152,22 +151,22 @@ const AddDrawer = (props: AddDrawerProps) => {
   const getCurrentMonthFirstDay = () => {
     var monthStr = '';
     var dayStr = '';
-    var date = new Date()
-    date.setDate(1)
-    var month = date.getMonth() + 1
-    var day = date.getDate()
+    var date = new Date();
+    date.setDate(1);
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
     if (month < 10) {
-      monthStr = '0' + month
+      monthStr = '0' + month;
     } else {
-      monthStr = '' + month
+      monthStr = '' + month;
 
     }
     if (day < 10) {
-      dayStr = '0' + day
+      dayStr = '0' + day;
     } else {
-      dayStr = '' + day
+      dayStr = '' + day;
     }
-    return date.getFullYear() + '-' + monthStr + '-' + dayStr
+    return date.getFullYear() + '-' + monthStr + '-' + dayStr;
   }
 
 
@@ -185,13 +184,15 @@ const AddDrawer = (props: AddDrawerProps) => {
     var day = lastTime.getDate();
     var dayStr = '' + day;
     if (month < 10) {
-      monthStr = '0' + month
+      monthStr = '0' + month;
     }
     if (day < 10) {
-      dayStr = '0' + day
+      dayStr = '0' + day;
     }
     return date.getFullYear() + '-' + monthStr + '-' + dayStr;
-  }
+  };
+
+
   return (
     <Drawer className="offsetModify"
       title={title}
@@ -263,10 +264,11 @@ const AddDrawer = (props: AddDrawerProps) => {
                 parentid={'0'}
                 getCheckedKeys={getCheckedKeys}
                 selectTree={(id, item) => {
-                  selectRoomTree(id, item);
+                  //selectRoomTree(id, item);
                 }}
               />
             </Col>
+
             <Col span={8} style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh - 240px)' }}>
               <LeftTree
                 treeData={checkTreeData}

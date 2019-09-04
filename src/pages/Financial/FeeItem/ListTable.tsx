@@ -79,18 +79,18 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'beginDate',
       key: 'beginDate',
       width: 85,
-      render: val => <span> {moment(val).format('YYYY-MM-DD')} </span>
+      render: val => { moment(val).format('YYYY-MM-DD') }
     }, {
       title: '计费终止日期',
       dataIndex: 'endDate',
       key: 'endDate',
       width: 85,
-      render: val => <span> {moment(val).format('YYYY-MM-DD')} </span>
+      render: val => { moment(val).format('YYYY-MM-DD') }
     },
     {
       title: '操作',
       dataIndex: 'operation',
-      align:'center',
+      align: 'center',
       key: 'operation',
       width: 95,
       render: (text, record) => {
@@ -108,8 +108,8 @@ function ListTable(props: ListTableProps) {
           // </Button>,
           <span>
             <a onClick={() => modify(record.feeItemID)} key="modify">修改</a>
-            <Divider type="vertical" />
-            <a onClick={() => doDelete(record)} key="delete">删除</a> 
+            <Divider type="vertical" key='divider' />
+            <a onClick={() => doDelete(record)} key="delete">删除</a>
           </span>
         ];
       },
@@ -135,5 +135,4 @@ function ListTable(props: ListTableProps) {
     </Page>
   );
 }
-
 export default ListTable;

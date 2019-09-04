@@ -263,11 +263,11 @@ function Offset() {
       />
       <Content style={{ paddingLeft: '18px' }}>
         <Tabs defaultActiveKey="1" >
-          <TabPane tab="账单" key="1">
+          <TabPane tab="冲抵单" key="1">
             <div style={{ marginBottom: '10px' }}>
               <Search
                 className="search-input"
-                placeholder="请输入要查询的名称或者编号"
+                placeholder="请输入要查询的单号"
                 style={{ width: 280 }}
                 onSearch={value => loadCheckData(value)}
               />

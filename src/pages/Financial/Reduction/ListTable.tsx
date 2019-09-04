@@ -32,7 +32,7 @@ function ListTable(props: ListTableProps) {
       title: '请确认',
       content: `您是否要删除${record.billCode}`,
       onOk: () => {
-        RemoveForm(record.billID).then(() => {
+        RemoveForm(record.billId).then(() => {
           message.success('保存成功');
           reload();
         });
@@ -169,9 +169,9 @@ function ListTable(props: ListTableProps) {
             // </Button>,
 
             <span>
-              <a onClick={() => modify(record.billID)} key="modify">编辑</a>
+              <a onClick={() => modify(record.billId)} key="modify">编辑</a>
               <Divider type="vertical" />
-              <a onClick={() => showVerifyModel(record.billID, true)} key="verify">审核</a>
+              <a onClick={() => showVerifyModel(record.billId, true)} key="verify">审核</a>
               <Divider type="vertical" />
               <a onClick={() => doDelete(record)} key="delete">删除</a>
             </span>

@@ -1,19 +1,20 @@
-import { ResponseObject, TreeEntity } from '@/model/models';
+import { TreeEntity } from '@/model/models';
 import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
-import { 	OffsetMainEntity } from '@/model/offsetMainEntity';
-import { 	CalOffsetMain } from '@/model/calOffsetMain';
-import {CustomerInfoEntity} from '@/model/customerInfoEntity';
-//加载所有收费项
-export function GetCheckTreeListExpand(): Promise<ResponseObject<TreeEntity[]>> {
-  return request.get(process.env.basePath + `/FeeItems/GetTempPaymentFeeItemTreeJson`, {}).then(getResult as any);
+import { CwOffsetmain } from '@/model/cwOffsetmain';
+// import { CalOffsetMain } from '@/model/calOffsetMain';
+import {GmCustomerinfo} from '@/model/gmCustomerinfo';
+
+//获取付款费项
+export function GetPaymentTree(): Promise<TreeEntity[]> {
+  return request.get(process.env.basePath + `/FeeItems/GetPaymentFeeItemTreeJson`, {}).then(getResult as any);
 }
-//加载所有项
-export function GetBillTreeListExpand(): Promise<ResponseObject<TreeEntity[]>> {
+//获取收款费项
+export function GetReceivablesTree(): Promise<TreeEntity[]> {
   return request.get(process.env.basePath + `/FeeItems/GetReceivablesFeeItemTreeJson`, {}).then(getResult as any);
 }
 //加载房间数
-export function GetRoomTreeListExpand(): Promise<ResponseObject<TreeEntity[]>> {
+export function GetRoomTreeListExpand(): Promise<TreeEntity[]> {
   return request.get(process.env.basePath + `/Common/GetQuickSimpleTreeAll`, {}).then(getResult as any);
 }
 
@@ -35,11 +36,11 @@ export function RemoveForm(data): Promise<any> {
   return request.post(process.env.basePath + `/Offset/RemoveForm`, {data:objToFormdata(data)}).then(getResult as any);
 }
 //保存冲抵单
-export function SaveForm(unit,data): Promise<any> {
-  return request.post(process.env.basePath + `/Offset/SaveForm?units=${unit}`, {data:objToFormdata(data)}).then(getResult as any);
+export function SaveForm(data): Promise<any> {
+  return request.post(process.env.basePath + `/Offset/SaveForm`, {data:objToFormdata(data)}).then(getResult as any);
 }
 // 获取实体
-export function GetFormJson(data): Promise<OffsetMainEntity> {
+export function GetFormJson(data): Promise<CwOffsetmain> {
   return request.get(process.env.basePath + `/Offset/GetFormJson?keyValue=${data}`).then(getResult as any);
 }
 //审核
@@ -47,7 +48,7 @@ export function Audit(data): Promise<any> {
   return request.post(process.env.basePath + `/Offset/Audit`, {data:objToFormdata(data)}).then(getResult as any);
 }
 //获取客户详情
-export function GetCustomInfo(data): Promise<CustomerInfoEntity>  {
+export function GetCustomInfo(data): Promise<GmCustomerinfo>  {
   return request.get(process.env.basePath + `/PStructUser/GetFormJson?keyValue=${data}`, {data:objToFormdata(data)}).then(getResult as any);
 }
 

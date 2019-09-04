@@ -193,6 +193,15 @@ function Main() {
     });
   };
 
+    //页签切换刷新
+    const changeTab = key => {
+      if (key == "1") {
+        initLoadData('', search);
+      } else   {
+        initDetailLoadData('', detailsearch);
+      } 
+    };
+
   return (
     <Layout style={{ height: '100%' }}>
       <AsynLeftTree
@@ -202,7 +211,7 @@ function Main() {
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>
-        <Tabs defaultActiveKey="1" >
+        <Tabs defaultActiveKey="1"  onChange={changeTab}>
           <TabPane tab="减免单" key="1">
             <div style={{ marginBottom: '10px'  }}>
               <Search

@@ -1,5 +1,4 @@
 import { IConfig, IPlugin } from 'umi-types';
-
 import defaultSettings from './defaultSettings';
 // https://umijs.org/config/
 import slash from 'slash2';
@@ -131,7 +130,6 @@ export default {
           .map((a: string) => a.toLowerCase());
         return `antd-pro${arr.join('-')}-${localName}`.replace(/--/g, '-');
       }
-
       return localName;
     },
   },

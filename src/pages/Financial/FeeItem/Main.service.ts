@@ -1,9 +1,10 @@
-import { ResponseObject, TreeEntity } from '@/model/models';
+import { TreeEntity } from '@/model/models';
 import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
 import { FeeItemData } from '@/model/feeItemData';
-export function GetTreeListExpand(): Promise<ResponseObject<TreeEntity[]>> {
-  return request.get(process.env.basePath + `/FeeItems/GetTreeListExpand`, {});
+
+export function GetFeeTreeList(): Promise<TreeEntity[]> {
+  return request.get(process.env.basePath + `/FeeItems/GetFeeTreeList`, {}).then(getResult as any);
 } 
 export function GetPageListJson(data): Promise<any> {
   return request.post(process.env.basePath + `/FeeItems/GetPageListJson`, {data:objToFormdata(data)}).then(getResult as any);
@@ -29,5 +30,3 @@ export function GetAllFeeItems(): Promise<TreeEntity[]> {
     .get(process.env.basePath + `/FeeItems/GetAllFeeItems`)
     .then(getResult as any);
 }
-
-

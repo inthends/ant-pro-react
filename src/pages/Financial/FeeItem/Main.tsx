@@ -1,10 +1,10 @@
-import { TreeEntity } from '@/model/models';
+// import { TreeEntity } from '@/model/models';
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { getResult } from '@/utils/networkUtils';
+// import { getResult } from '@/utils/networkUtils';
 import { Tabs, Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { GetTreeListExpand, GetPageListJson } from './Main.service';
+import { GetFeeTreeList, GetPageListJson } from './Main.service';
 import LeftTree from '../LeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
@@ -15,16 +15,13 @@ const { TabPane } = Tabs;
 
 function Main() {
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
-  const [treeData, setTreeData] = useState<TreeEntity[]>([]);
+  const [treeData, setTreeData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
-
   const [data, setData] = useState<any[]>([]);
   const [id, setId] = useState<string>();
-
   const [FeeKind, SetFeeKind] = useState<string>('');
   const [FeeType, SetFeeType] = useState<string>('');
-
   const [search, setSearch] = useState<string>('');
 
   // const disabledCreate = (treeData: TreeEntity[], organizeId: string) => {
@@ -65,25 +62,32 @@ function Main() {
     SetFeeKind(feeKind);
     SetFeeType(feeType);
     initLoadData(feeKind, feeType, search);
-
   };
 
   useEffect(() => {
-    getTreeData().then(res => {
-      SetFeeKind('');
-      SetFeeType('');
-      initLoadData('', '', '');
+    // getTreeData().then(res => {
+    //   SetFeeKind('');
+    //   SetFeeType('');
+    //   initLoadData('', '', '');
+    // });
+
+    GetFeeTreeList().then((res) => {
+      setTreeData(res || []);
     });
+
+    //initLoadData('', '', '');
+
   }, []);
+
   // 获取属性数据
-  const getTreeData = () => {
-    return GetTreeListExpand()
-      .then(getResult)
-      .then((res: TreeEntity[]) => {
-        setTreeData(res || []);
-        return res || [];
-      });
-  };
+  // const getTreeData = () => {
+  //   return GetTreeListExpand()
+  //     .then(getResult)
+  //     .then((res: TreeEntity[]) => {
+  //       setTreeData(res || []);
+  //       return res || [];
+  //     });
+  // };
 
   const closeDrawer = () => {
     setModifyVisible(false);
@@ -148,26 +152,30 @@ function Main() {
 
   return (
     <Layout style={{ height: '100%' }}>
-      <Sider theme="light" style={{ overflow: 'hidden', height: '100%' }} width="245px">
-      <LeftTree
-        treeData={treeData}
-        selectTree={(id, item) => {
-          selectTree(item, search);
-        }}
-      />
+      <Sider theme="light" style={{ overflow: 'hidden', height: '1000px' }} width="245px"> 
+
+        {treeData != null && treeData.length > 0 ?
+          (<LeftTree
+            key='lefttree'
+            treeData={treeData} 
+            selectTree={(id, item) => {
+              selectTree(item, search);
+            }}
+          />) : null}
+
       </Sider>
       <Content style={{ paddingLeft: '18px' }}>
         <Tabs defaultActiveKey="1" >
           <TabPane tab="费项列表" key="1">
-
             <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
               <Search
+                key='search'
                 className="search-input"
                 placeholder="搜索费项名称"
                 style={{ width: 200 }}
                 onSearch={value => loadData(value)}
               />
-              <Button type="primary" style={{ float: 'right' }}
+              <Button type="primary" style={{ float: 'right' }} key='add'
                 onClick={() => showDrawer()}
               >
                 <Icon type="plus" />
@@ -188,7 +196,6 @@ function Main() {
 
           </TabPane>
           <TabPane tab="房屋费项列表" key="2">
-
           </TabPane>
         </Tabs>
       </Content>
@@ -204,5 +211,4 @@ function Main() {
     </Layout>
   );
 }
-
 export default Main;

@@ -1,11 +1,11 @@
 
-import { message, Table, Select, Button, Card, Col, Icon, DatePicker, InputNumber, Drawer, Form, Input, Row, notification } from 'antd';
+import { Modal,message, Table, Select, Button, Card, Col, Icon, DatePicker, InputNumber, Drawer, Form, Input, Row, notification } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { ColumnProps, PaginationConfig } from 'antd/lib/table';
+import { PaginationConfig } from 'antd/lib/table';
 import AddReductionItem from './AddReductionItem';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetFormJson, GetListByID, GetReductionItem, GetUseInfo, GetUnitBillDetail, SaveForm } from './Main.service';
+import { RemoveFormUnitAll,GetFormJson, GetListByID, GetReductionItem, GetUseInfo, GetUnitBillDetail, SaveForm } from './Main.service';
 import moment from 'moment';
 const { Option } = Select;
 
@@ -149,9 +149,18 @@ const Modify = (props: ModifyProps) => {
         GetFormJson(id).then(res => {
           setInfoDetail(res);
           form.resetFields();
-          GetListByID(res.billId).then(data => {
+
+          //分页查询
+          const { current: pageIndex, pageSize, total } = pagination;
+          const searchCondition: any = {
+            pageIndex,
+            pageSize,
+            total,
+            keyValue: res.billId
+          };
+          GetListByID(searchCondition).then(res => {
             //明细
-            setListData(data);
+            setListData(res.data);
           })
         });
 
@@ -299,19 +308,20 @@ const Modify = (props: ModifyProps) => {
   //   }
   // };
 
+
   const columns = [
     {
       title: '单元编号',
       dataIndex: 'unitId',
       key: 'unitId',
-      width: '150px',
+      width: '120px',
       sorter: true,
     },
     {
       title: '收费项目',
       dataIndex: 'feeName',
       key: 'feeName',
-      width: '150px',
+      width: '120px',
       sorter: true
     },
     {
@@ -360,12 +370,12 @@ const Modify = (props: ModifyProps) => {
       title: '原金额',
       dataIndex: 'amount',
       key: 'amount',
-      width: '120px',
+      width: '100px',
       sorter: true,
     }, {
       title: '累计减免',
       dataIndex: 'sumReductionAmount',
-      width: '120px',
+      width: '100px',
       key: 'sumReductionAmount',
       render: val => {
         if (val == null)
@@ -376,7 +386,7 @@ const Modify = (props: ModifyProps) => {
     }, {
       title: '本次减免',
       dataIndex: 'reductionAmount',
-      width: '120px',
+      width: '100px',
       key: 'reductionAmount',
       editable: true,
       //onChange={(id,item)=>,
@@ -390,7 +400,7 @@ const Modify = (props: ModifyProps) => {
     {
       title: '减免后金额',
       dataIndex: 'lastAmount',
-      width: '120px',
+      width: '100px',
       key: 'lastAmount',
       render: val => {
         if (val == null)
@@ -405,33 +415,47 @@ const Modify = (props: ModifyProps) => {
       key: 'memo',
       editable: true
     },
-  ] as ColumnProps<any>;
+  ]; //as ColumnProps<any>[];
 
+  //输入减免条件后，返回匹配的计费
   const getReducetionItem = (data?) => {
     // console.log(data);
-    GetUnitBillDetail(data).then(res => {
-      if (res.length == 0) {
+
+    //分页查询
+    const { current: pageIndex, pageSize, total } = pagination;
+    const searchCondition: any = {
+      pageIndex,
+      pageSize,
+      total,
+      ...data
+    };
+
+    GetUnitBillDetail(searchCondition).then(res => {
+      if (res.data.length == 0) {
         notification['warning']({
           message: '系统提示',
           description:
             '没有找到要减免的费用！'
         });
       } else {
+
         //去除原队列已存在数据
-        for (var i = res.length - 1; i < 0; i--) {
-          for (var j = 0; j < listdata.length; j++) {
-            if (res[i].unitId == listdata[j].unitId) {
-              var index = res.indexOf(res[i]);
-              if (index > -1) {
-                res.splice(index, 1);
-              }
-              //res.removeAt(i);
-            }
-          }
-        }
-        setListData([
-          ...listdata, ...res
-        ]);
+        // for (var i = res.length - 1; i < 0; i--) {
+        //   for (var j = 0; j < listdata.length; j++) {
+        //     if (res[i].unitId == listdata[j].unitId) {
+        //       var index = res.indexOf(res[i]);
+        //       if (index > -1) {
+        //         res.splice(index, 1);
+        //       }
+        //       //res.removeAt(i);
+        //     }
+        //   }
+        // }
+        // setListData([
+        //   ...listdata, ...res
+        // ]);
+        //明细
+        setListData(res.data);
         closeModal();
       }
     })
@@ -537,7 +561,7 @@ const Modify = (props: ModifyProps) => {
               </Form.Item>
             </Col>
             <Col lg={8}>
-              <Form.Item label="批量折扣">
+              <Form.Item label="折扣">
                 {getFieldDecorator('rebate', {
                   initialValue: infoDetail.rebate,
                   rules: [{ required: true, message: '请输入批量折扣' }],
@@ -571,11 +595,25 @@ const Modify = (props: ModifyProps) => {
           </Row>
           <Row>
             <Col>
-              <Button style={{ float: 'right', marginLeft: 8 }}>
+              <Button type='link' style={{ float: 'right', marginLeft: '1px' }}
+                onClick={() => {
+                  Modal.confirm({
+                    title: '请确认',
+                    content: `您是否确定删除？`,
+                    onOk: () => {
+                      if (id != null || id != "") {
+                        RemoveFormUnitAll(id).then(res => {
+                          message.success('删除成功！'); 
+                        });
+                      }
+                    },
+                  });
+                }}
+              >
                 <Icon type="delete" />
-                删除
+                全部删除
               </Button>
-              <Button type="primary" style={{ float: 'right' }}
+              <Button type='link' style={{ float: 'right' }}
                 onClick={() => showModal()}
               >
                 <Icon type="plus" />
@@ -592,7 +630,7 @@ const Modify = (props: ModifyProps) => {
               columns={datacolumns}
               rowKey={record => record.id}
               pagination={pagination}
-              scroll={{ x: 1500, y: 500 }}
+              scroll={{ x: 1150, y: 500 }}
               loading={loading}
             />
           </Row>

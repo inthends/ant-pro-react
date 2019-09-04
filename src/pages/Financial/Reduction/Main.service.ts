@@ -20,7 +20,7 @@ export function GetDetailPageListJson(data): Promise<any> {
 
 // 根据id查询明细列表
 export function GetListByID(data): Promise<any> {
-  return request.get(process.env.basePath + `/Reduction/GetListByID?keyValue=${data}`).then(getResult as any);
+  return request.post(process.env.basePath + `/Reduction/GetListByID`, {data:objToFormdata(data)}).then(getResult as any);
 }
 
 // 查询列表
@@ -71,9 +71,9 @@ export function AuditBill(data): Promise<any> {
 }
 
 //删除减免单
-export function RemoveForm(data): Promise<any> {
+export function RemoveForm(keyValue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Reduction/RemoveForm`, {data:objToFormdata(data)})
+    .post(process.env.basePath + `/Reduction/RemoveForm?keyValue=${keyValue}`)
     .then(getResult as any);
 }
 //保存减免单
@@ -87,5 +87,12 @@ export function SaveForm(data): Promise<any> {
 export function CheckBill(keyValue): Promise<any[]> {
   return request
     .get(process.env.basePath + `/Reduction/CheckBill?keyValue=${keyValue}`)
+    .then(getResult as any);
+}
+
+//删除减免单里面的全部房屋
+export function RemoveFormUnitAll(keyValue): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Reduction/RemoveFormUnitAll?keyValue=${keyValue}`)
     .then(getResult as any);
 }

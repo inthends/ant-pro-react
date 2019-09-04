@@ -53,7 +53,6 @@ const AddReductionItem = (props: AddReductionItemProps) => {
   const onOk = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-
         var data = {
           // units: '["' + unitData + '"]', 
           units:JSON.stringify(unitData), 
@@ -78,7 +77,6 @@ const AddReductionItem = (props: AddReductionItemProps) => {
       // const root = res.filter(item => item.parentId === '0');
       // const rootOrg = root.length === 1 ? root[0] : undefined;
     });
-
 
   }, []);
 
@@ -207,7 +205,6 @@ const AddReductionItem = (props: AddReductionItemProps) => {
 
           </Col> <Col lg={12}>
             <Form.Item label="账单截止日" required >
-
               {getFieldDecorator('endDate', {
                 initialValue: moment(endDate),
                 rules: [{ required: true, message: '请选择账单截止日' }],

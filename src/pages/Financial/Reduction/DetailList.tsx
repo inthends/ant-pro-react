@@ -25,7 +25,7 @@ function DetailList(props: DetailListProps) {
       title: '单元编号',
       dataIndex: 'unitId',
       key: 'unitId',
-      width: 80,
+      width: 100,
       sorter: true,
     },
     {
@@ -53,7 +53,7 @@ function DetailList(props: DetailListProps) {
       title: '计费起始日期',
       dataIndex: 'beginDate',
       key: 'beginDate',
-      width: 80,
+      width: 90,
       sorter: true,
       render: val => {
         if (val == null) {
@@ -67,7 +67,7 @@ function DetailList(props: DetailListProps) {
       title: '计费终止日期',
       dataIndex: 'endDate',
       key: 'endDate',
-      width: 80,
+      width: 90,
       sorter: true,
       render: val => {
         if (val == null) {
@@ -81,23 +81,23 @@ function DetailList(props: DetailListProps) {
       title: '金额',
       dataIndex: 'amount',
       key: 'amount',
-      width: 85,
+      width: 80,
       sorter: true,
     }, {
       title: '减免金额',
       dataIndex: 'reductionAmount',
       key: 'reductionAmount',
-      width: 85
+      width: 80
     }, {
       title: '减免后金额',
       dataIndex: 'lastAmount',
       key: 'lastAmount',
-      width: 85
+      width: 80
     }, {
       title: '备注',
       dataIndex: 'memo',
       key: 'memo',
-      width: 85
+      width: 80
     }
   ] as ColumnProps<any>[];
 
@@ -110,7 +110,7 @@ function DetailList(props: DetailListProps) {
         columns={columns}
         rowKey={record => record.unitID}
         pagination={pagination}
-        scroll={{ y: 500, x: 1300 }}
+        scroll={{ y: 500, x: 1000 }}
         onChange={(pagination: PaginationConfig, filters, sorter) =>
           changePage(pagination, filters, sorter)
         }
