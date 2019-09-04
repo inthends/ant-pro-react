@@ -1,17 +1,5 @@
 import { TreeEntity } from '@/model/models';
-import {
-  Button,
-  Card,
-  Col,
-  DatePicker,
-  Drawer,
-  Form,
-  Input,
-  Row,
-  Select,
-  TreeSelect,
-  message,
-} from 'antd';
+import { Button, Card, Col, DatePicker, Drawer, Form, Input, Row, Select, TreeSelect, message } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { GetFormInfoJson, GetTreeAreaJson, SaveForm } from './House.service';
@@ -32,6 +20,7 @@ interface ModifyProps {
   closeDrawer(): void;
   reload(): void;
 }
+
 const Modify = (props: ModifyProps) => {
   const { treeData, modifyVisible, closeDrawer, form, organizeId, id, reload } = props;
   const { getFieldDecorator } = form;
@@ -39,7 +28,7 @@ const Modify = (props: ModifyProps) => {
   const [pro, setPro] = useState<TreeEntity[]>([]);
   const [city, setCity] = useState<TreeEntity[]>([]);
   const [area, setArea] = useState<TreeEntity[]>([]);
-  const [project, setProject] = useState<TreeEntity[]>([]); 
+  const [project, setProject] = useState<TreeEntity[]>([]);
   const [infoDetail, setInfoDetail] = useState<any>({});
 
   // 打开抽屉时初始化
@@ -98,7 +87,7 @@ const Modify = (props: ModifyProps) => {
   const save = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        getInfo(id).then(tempInfo => { 
+        getInfo(id).then(tempInfo => {
           const newvalue = { ...values, date: values.date.format('YYYY-MM-DD') };
           SaveForm({ ...tempInfo, ...newvalue, keyValue: tempInfo.id }).then(res => {
             message.success('保存成功');

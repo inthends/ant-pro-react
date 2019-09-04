@@ -1,29 +1,12 @@
 
-import {
-  Table,
-  Select,
-  Button,
-  Card,
-  Col, Icon,
-  DatePicker,
-  InputNumber,
-  Drawer,
-  Form,
-  Input,
-  Row,
-  notification
-} from 'antd';
-
+import { message, Table, Select, Button, Card, Col, Icon, DatePicker, InputNumber, Drawer, Form, Input, Row, notification } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
-
 import AddReductionItem from './AddReductionItem';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { GetFormJson, GetListByID, GetReductionItem, GetUseInfo, GetUnitBillDetail, SaveForm } from './Main.service';
-
 import moment from 'moment';
-
 const { Option } = Select;
 
 interface ModifyProps {
@@ -36,18 +19,14 @@ interface ModifyProps {
   reload(): void;
 }
 
-
 /*详情可编辑单元格*/
 const EditableContext = React.createContext();
-
 const EditableRow = ({ form, index, ...props }) => (
   <EditableContext.Provider value={form}>
     <tr {...props} />
   </EditableContext.Provider>
 );
-
 const EditableFormRow = Form.create()(EditableRow);
-
 class EditableCell extends React.Component {
   state = {
     editing: false,
@@ -122,10 +101,11 @@ class EditableCell extends React.Component {
       </td>
     );
   }
-}
+};
+/*详情可编辑单元格*/
 
 const Modify = (props: ModifyProps) => {
-  const { modifyVisible, closeDrawer, form, id, organizeId } = props;
+  const { modifyVisible, closeDrawer, form, id, reload } = props;
   const { getFieldDecorator } = form;
   const title = id === undefined ? '新增减免单' : '修改减免单';
   const [infoDetail, setInfoDetail] = useState<any>({});
@@ -133,8 +113,7 @@ const Modify = (props: ModifyProps) => {
   const [modalvisible, setModalVisible] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [reductionItem, setReductionItem] = useState<any[]>([]);
-  const [editItemColumn, setEditItemColumn] = useState<boolean>(false);
-
+  // const [editItemColumn, setEditItemColumn] = useState<boolean>(false);
   const [listdata, setListData] = useState<any[]>([]);
 
   const getSelectReduction = () => {
@@ -142,7 +121,7 @@ const Modify = (props: ModifyProps) => {
       setReductionItem(res);
       setLoading(false);
     });
-  }
+  };
 
   // const buildOption=(item:any)=>{
   //   const children = [];
@@ -159,39 +138,49 @@ const Modify = (props: ModifyProps) => {
       setModalVisible(false);
       getSelectReduction();
       if (id) {
-        getInfo(id).then((tempInfo: any) => {
-          setInfoDetail(tempInfo);
+        // getInfo(id).then((tempInfo: any) => {
+        //    setInfoDetail(tempInfo);
+        //    form.resetFields();
+        //    return GetListByID(tempInfo.billID);
+        // }).then(res => {
+        //   setListData(res.data);
+        // });
+
+        GetFormJson(id).then(res => {
+          setInfoDetail(res);
           form.resetFields();
-          return GetListByID(tempInfo.billID);
-        }).then(res => {
-          setListData(res.data);
+          GetListByID(res.billId).then(data => {
+            //明细
+            setListData(data);
+          })
         });
+
       } else {
+        form.resetFields();
         //重置之前选择加载的费项类别
         GetUseInfo(localStorage.getItem('userid')).then(res => {
           setInfoDetail({
             keyValue: '',
             code: 0,
-            billID: guid(),
-            billCode: '',
-            billDate: '',
+            billId: guid(),
+            // billCode: '',
+            // billDate: '',
             createUserName: res.name == null ? '' : res.name,
-            createUserId: res.id == null ? '' : res.id,
-            rebate: "",
-            reductionFeeItemID: "",
-            memo: "",
-            reductionAmount: ""
+            //createUserId: res.userid == null ? '' : res.userid,
+            // rebate: "",
+            // reductionFeeItemID: "",
+            // memo: "",
+            // reductionAmount: ""
           })
         })
-        setListData([]);
-        setReductionItem([]);
-        //form.resetFields();
+        // setListData([]);
+        // setReductionItem([]);
+        // form.resetFields();
       }
     } else {
       form.setFieldsValue({});
     }
   }, [modifyVisible]);
-
 
   const showModal = () => {
     form.validateFields((errors, values) => {
@@ -199,11 +188,11 @@ const Modify = (props: ModifyProps) => {
         setModalVisible(true);
       }
     });
-  }
+  };
 
   const closeModal = () => {
     setModalVisible(false);
-  }
+  };
 
   const close = () => {
     closeDrawer();
@@ -214,95 +203,101 @@ const Modify = (props: ModifyProps) => {
       var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
       return v.toString(16);
     });
-  }
+  };
 
   //提交编辑
   const onSave = () => {
     form.validateFields((errors, values) => {
-
       if (!errors) {
-        GetUseInfo(localStorage.getItem('userid')).then((res) => {
-          var newListData = [];
-          listdata.forEach(element => {
-            element.period = moment(element.period).format('YYYY-MM-DD HH:mm:ss');
-            element.beginDate = moment(element.beginDate).format('YYYY-MM-DD HH:mm:ss');
-            element.endDate = moment(element.endDate).format('YYYY-MM-DD HH:mm:ss');
-            element.mainID = infoDetail.billID;
-            newListData.push(element);
-          });
+        // GetUseInfo(localStorage.getItem('userid')).then((res) => {  
+        // let newListData: any[] = [];
+        // listdata.forEach(element => {
+        //   element.period = moment(element.period).format('YYYY-MM-DD HH:mm:ss');
+        //   element.beginDate = moment(element.beginDate).format('YYYY-MM-DD HH:mm:ss');
+        //   element.endDate = moment(element.endDate).format('YYYY-MM-DD HH:mm:ss');
+        //   element.mainId = infoDetail.billId;
+        //   newListData.push(element);
+        // });
 
+        let newData = {
+          keyValue: infoDetail.billId,
+          code: infoDetail.code,
+          // code: infoDetail.billId == "" ? 0 : 1,
+          billId: infoDetail.billId,
+          organizeId: infoDetail.organizeId,
+          billCode: infoDetail.billCode,
+          billDate: moment(values.billDate).format('YYYY-MM-DD HH:mm:ss'),
+          rebate: values.rebate,
+          reductionAmount: values.reductionAmount,
+          reductionFeeItemId: values.reductionFeeItemId,
+          // ifVerify: false,
+          //  verifyPerson:'',
+          //  verifyDate:null,
+          //  verifyMemo:null,
+          // createUserName: res.name == null ? '' : res.name,
+          // createUserId: res.id == null ? '' : res.id,
+          // createDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+          // modifyUserId: res.id == null ? '' : res.id,
+          // modifyUserName: res.name == null ? '' : res.name,
+          // modifyDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+          // status: 0,
+          memo: values.memo,
+          details: JSON.stringify(listdata)
+        };
+        /*  let newData = infoDetail ? {
+            ...infoDetail,
+            ...values ,
+            keyValue:infoDetail.billID,
+            billDate:moment(infoDetail.billDate).format('YYYY-MM-DD HH:mm:ss'),
+            code:infoDetail.billID==""?0:1,
+            details: JSON.stringify(newListData)} : values;*/
 
-          let newData = {
-            keyValue: infoDetail.billID,
-            code: infoDetail.billID == "" ? 0 : 1,
-            billID: infoDetail.billID,
-            organizeId: organizeId.organizeId,
-            billCode: infoDetail.billCode,
-            billDate: moment(infoDetail.billDate).format('YYYY-MM-DD HH:mm:ss'),
-            rebate: infoDetail.rebate,
-            reductionAmount: infoDetail.reductionAmount,
-            reductionFeeItemID: infoDetail.reductionFeeItemID,
-            ifVerify: false,
-            /* verifyPerson:'',
-             verifyDate:null,
-             verifyMemo:null,*/
-            createUserName: res.name == null ? '' : res.name,
-            createUserId: res.id == null ? '' : res.id,
-            createDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
-            modifyUserId: res.id == null ? '' : res.id,
-            modifyUserName: res.name == null ? '' : res.name,
-            modifyDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
-            status: 0,
-            memo: infoDetail.memo,
-            details: JSON.stringify(newListData)
-          };
-          /*  let newData = infoDetail ? {
-              ...infoDetail,
-              ...values ,
-              keyValue:infoDetail.billID,
-              billDate:moment(infoDetail.billDate).format('YYYY-MM-DD HH:mm:ss'),
-              code:infoDetail.billID==""?0:1,
-              details: JSON.stringify(newListData)} : values;*/
-          SaveForm(newData);
-        }).then(() => {
+        SaveForm(newData).then(res => {
+          message.success('保存成功');
           closeDrawer();
+          reload();
         });
+
+        // }).then(() => {
+        //   closeDrawer();
+        // });
       }
     });
   };
-  const getInfo = id => {
-    if (id) {
-      return GetFormJson(id).then(res => {
-        const { billID,
-          billCode,
-          billDate,
-          createUserName,
-          rebate,
-          reductionFeeItemID,
-          memo,
-          reductionAmount
-        } = res || ({} as any);
-        let info = {
-          keyValue: billID,
-          code: 1,
-          billID,
-          billCode,
-          billDate,
-          createUserName,
-          rebate,
-          reductionFeeItemID,
-          memo,
-          reductionAmount
-        };
-        return info;
-      });
-    } else {
-      return Promise.resolve({
-        parentId: 0,
-        type: 1,
-      });
-    }
-  };
+
+  // const getInfo = id => {
+  //   if (id) {
+  //     return GetFormJson(id).then(res => {
+  //       const { billID,
+  //         billCode,
+  //         billDate,
+  //         createUserName,
+  //         rebate,
+  //         reductionFeeItemID,
+  //         memo,
+  //         reductionAmount
+  //       } = res || ({} as any);
+  //       let info = {
+  //         keyValue: billID,
+  //         code: 1,
+  //         billID,
+  //         billCode,
+  //         billDate,
+  //         createUserName,
+  //         rebate,
+  //         reductionFeeItemID,
+  //         memo,
+  //         reductionAmount
+  //       };
+  //       return info;
+  //     });
+  //   } else {
+  //     return Promise.resolve({
+  //       parentId: 0,
+  //       type: 1,
+  //     });
+  //   }
+  // };
 
   const columns = [
     {
@@ -317,14 +312,13 @@ const Modify = (props: ModifyProps) => {
       dataIndex: 'feeName',
       key: 'feeName',
       width: '150px',
-
       sorter: true
     },
     {
       title: '应收期间',
       dataIndex: 'period',
       key: 'period',
-      width: '150px',
+      width: '120px',
       sorter: true,
       render: val => {
         if (val == null) {
@@ -338,7 +332,7 @@ const Modify = (props: ModifyProps) => {
       title: '计费起始日期',
       dataIndex: 'beginDate',
       key: 'beginDate',
-      width: '150px',
+      width: '120px',
       sorter: true,
       render: val => {
         if (val == null) {
@@ -352,7 +346,7 @@ const Modify = (props: ModifyProps) => {
       title: '计费终止日期',
       dataIndex: 'endDate',
       key: 'endDate',
-      width: '150px',
+      width: '120px',
       sorter: true,
       render: val => {
         if (val == null) {
@@ -366,12 +360,12 @@ const Modify = (props: ModifyProps) => {
       title: '原金额',
       dataIndex: 'amount',
       key: 'amount',
-      width: '150px',
+      width: '120px',
       sorter: true,
     }, {
       title: '累计减免',
       dataIndex: 'sumReductionAmount',
-      width: '150px',
+      width: '120px',
       key: 'sumReductionAmount',
       render: val => {
         if (val == null)
@@ -382,7 +376,7 @@ const Modify = (props: ModifyProps) => {
     }, {
       title: '本次减免',
       dataIndex: 'reductionAmount',
-      width: '150px',
+      width: '120px',
       key: 'reductionAmount',
       editable: true,
       //onChange={(id,item)=>,
@@ -396,7 +390,7 @@ const Modify = (props: ModifyProps) => {
     {
       title: '减免后金额',
       dataIndex: 'lastAmount',
-      width: '150px',
+      width: '120px',
       key: 'lastAmount',
       render: val => {
         if (val == null)
@@ -414,19 +408,19 @@ const Modify = (props: ModifyProps) => {
   ] as ColumnProps<any>;
 
   const getReducetionItem = (data?) => {
-    console.log(data);
+    // console.log(data);
     GetUnitBillDetail(data).then(res => {
       if (res.length == 0) {
         notification['warning']({
           message: '系统提示',
           description:
-            '没有找到任何房屋的费项记录！'
+            '没有找到要减免的费用！'
         });
       } else {
         //去除原队列已存在数据
         for (var i = res.length - 1; i < 0; i--) {
           for (var j = 0; j < listdata.length; j++) {
-            if (res[i].unitID == listdata[j].unitID) {
+            if (res[i].unitId == listdata[j].unitId) {
               var index = res.indexOf(res[i]);
               if (index > -1) {
                 res.splice(index, 1);
@@ -435,14 +429,13 @@ const Modify = (props: ModifyProps) => {
             }
           }
         }
-
         setListData([
           ...listdata, ...res
         ]);
         closeModal();
       }
     })
-  }
+  };
 
   const components = {
     body: {
@@ -466,6 +459,7 @@ const Modify = (props: ModifyProps) => {
       }),
     };
   });
+
   //详细表单列编辑保存
   const handleSave = row => {
     row.lastAmount = row.amount - row.reductionAmount > 0 ? row.amount - row.reductionAmount : 0;
@@ -497,16 +491,15 @@ const Modify = (props: ModifyProps) => {
                   initialValue: infoDetail.billCode,
                   rules: [{ message: '自动获取编号' }],
                 })(
-                  <Input disabled={true} placeholder="自动获取编号" ></Input>
+                  <Input readOnly placeholder="自动获取编号" ></Input>
                 )}
               </Form.Item>
             </Col>
             <Col lg={8}>
               <Form.Item label="单据日期">
                 {getFieldDecorator('billDate', {
-                  initialValue: infoDetail.billDate == null ? '' : infoDetail.billDate
-                    ? moment(new Date(infoDetail.billDate))
-                    : moment(new Date()),
+                  initialValue: infoDetail.billDate == null ? moment(new Date()) :
+                    moment(new Date(infoDetail.billDate)),
                   rules: [{ required: true }],
                 })(
                   <DatePicker style={{ width: '100%' }}></DatePicker>
@@ -519,7 +512,7 @@ const Modify = (props: ModifyProps) => {
                   initialValue: infoDetail.createUserName,
                   rules: [{ required: true, message: '请输入经办人' }],
                 })(
-                  <Input style={{ width: '100%' }} disabled={true}></Input>
+                  <Input style={{ width: '100%' }} readOnly></Input>
                 )}
               </Form.Item>
             </Col>
@@ -527,8 +520,8 @@ const Modify = (props: ModifyProps) => {
           <Row gutter={24}>
             <Col lg={8}>
               <Form.Item label="减免费项">
-                {getFieldDecorator('reductionFeeItemID', {
-                  initialValue: infoDetail.reductionFeeItemID,
+                {getFieldDecorator('reductionFeeItemId', {
+                  initialValue: infoDetail.reductionFeeItemId,
                   rules: [{ required: true, message: '请选择减免项目' }],
                 })(
                   <Select placeholder="==请选择减免项目==">
@@ -603,7 +596,6 @@ const Modify = (props: ModifyProps) => {
               loading={loading}
             />
           </Row>
-
         </Card>
         <div
           style={{

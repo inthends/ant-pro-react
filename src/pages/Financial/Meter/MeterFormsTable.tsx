@@ -15,8 +15,7 @@ interface MeterFormsTableProps {
 }
 
 function MeterFormsTable(props: MeterFormsTableProps) {
-  const {  onchange, loading, pagination, data  } = props;
-  debugger
+  const {  onchange, loading, pagination, data  } = props; 
   const columns = [
     {
       title: '单号',
@@ -29,7 +28,7 @@ function MeterFormsTable(props: MeterFormsTableProps) {
       title: '抄表期间',
       dataIndex: 'meterDate',
       key: 'meterDate',
-      width: 200,
+      width: 100,
       sorter: true
     },
     {
@@ -43,14 +42,14 @@ function MeterFormsTable(props: MeterFormsTableProps) {
       title: '表名称',
       dataIndex: 'meterName',
       key: 'meterName',
-      width: 200,
+      width: 120,
       sorter: true,
     },
     {
       title: '上次读数',
       dataIndex: 'lastReading',
       key: 'lastReading',
-      width: 200,
+      width: 100,
       sorter: true,
     },
     {
@@ -58,20 +57,20 @@ function MeterFormsTable(props: MeterFormsTableProps) {
       dataIndex: 'nowReading',
       key: 'nowReading',
       sorter: true,
-      width: 200
+      width: 100
     },
     {
       title: '倍率',
       dataIndex: 'meterZoom',
       sorter: true,
       key: 'meterZoom',
-      width: 200
+      width: 100
     }, {
-      title: '金额',
+      title: '单价',
       dataIndex: 'meterPrice',
       key: 'meterPrice',
       sorter: true,
-      width: 200,
+      width: 100,
       render: val =>{
         return <span>{val}元/度</span>
       }
@@ -81,7 +80,7 @@ function MeterFormsTable(props: MeterFormsTableProps) {
       dataIndex: 'amount',
       key: 'amount',
       sorter: true,
-      width: 200
+      width: 100
     },
     {
       title: '安装位置',
@@ -100,7 +99,7 @@ function MeterFormsTable(props: MeterFormsTableProps) {
         dataSource={data}
         rowKey="id"
         pagination={pagination}
-        scroll={{ y: 500, x: 2000 }}
+        scroll={{ y: 500, x: 1300 }}
         loading={loading}
         onChange={onchange}
       />

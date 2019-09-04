@@ -111,7 +111,7 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'operation',
       key: 'operation',
       fixed: 'right',
-      width: '230px',
+      width: '135px',
       render: (text, record) => {
 
         if (record.ifVerify) {
@@ -139,9 +139,9 @@ function ListTable(props: ListTableProps) {
             //       删除
             //    </Button>, 
             <span>
-              <a onClick={() => modify(record.billID)} key="modify">查看</a>
+              <a onClick={() => modify(record.billId)} key="modify">查看</a>
               <Divider type="vertical" />
-              <a onClick={() => showVerifyModel(record.billID, false)} key="modify">反审</a> 
+              <a onClick={() => showVerifyModel(record.billId, false)} key="modify">反审</a> 
             </span> 
           ];
         } else {
@@ -180,7 +180,7 @@ function ListTable(props: ListTableProps) {
         }
       },
     },
-  ] as ColumnProps<any>;
+  ] as ColumnProps<any>[];
 
   // const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   // const onSelectChange = (selectedRowKeys, selectedRows) => {
@@ -190,12 +190,13 @@ function ListTable(props: ListTableProps) {
   const closeVerifyModel = () => {
     setVerifyVisible(false);
     reload();
-  }
+  };
   const showVerifyModel = (id, ifVerfy) => {
     setVerifyVisible(true);
     setVerifyId(id);
     setIfVerifyModal(ifVerfy);
-  }
+  };
+
   return (
     <Page>
       <Table
@@ -205,7 +206,7 @@ function ListTable(props: ListTableProps) {
         columns={columns}
         rowKey={record => record.unitID}
         pagination={pagination}
-        scroll={{ y: 500, x: 1400 }}
+        scroll={{ y: 500  }}
         onChange={(pagination: PaginationConfig, filters, sorter) =>
           changePage(pagination, filters, sorter)
         }

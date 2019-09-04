@@ -7,8 +7,7 @@ import { GetPageListJson, GetDetailPageListJson } from './Main.service';
 import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
-import DetailList from './DetailList';
-// import { bool } from 'prop-types';
+import DetailList from './DetailList'; 
 const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
@@ -22,9 +21,7 @@ function Main() {
   const [detailpagination, setDetailPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [data, setData] = useState<any[]>([]); const [detaildata, setDetailData] = useState<any[]>([]);
   const [id, setId] = useState<string>();
-
   const [addButtonDisabled,setAddButtonDisabled]=useState<boolean>(true);
-
   const [search, setSearch] = useState<string>('');
   const [detailsearch, setDetailSearch] = useState<string>('');
 
@@ -163,7 +160,7 @@ function Main() {
   //明细表加载
   const detailload = data => {
     setDetailLoading(true);
-    data.sidx = data.sidx || 'billID';
+    data.sidx = data.sidx || 'billId';
     data.sord = data.sord || 'asc';
     return GetDetailPageListJson(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -188,7 +185,7 @@ function Main() {
       TreeTypeId: org.id,
       TreeType: org.type,
     };
-    const sidx = 'billcode';
+    const sidx = 'billCode';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
     return detailload({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {

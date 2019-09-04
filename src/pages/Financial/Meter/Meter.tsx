@@ -386,6 +386,7 @@ function Meter() {
     setIfVertify(ifVertify);
     setId(id);
   };
+  
   const closeModify = (result?) => {
     setModifyVisible(false);
     if (result) {
@@ -423,6 +424,21 @@ function Meter() {
   //     onCancel() { },
   //   });
   // }
+
+
+  //页签切换刷新
+  const changeTab = key => {
+    if (key == "1") {
+      initMeterLoadData('', meterSearch);
+    } else if (key == "2") {
+      initUnitMeterLoadData('', unitMeterSearch)
+    } else if (key == "3") {
+      initReadingMeterLoadData('', readingMeterSearch);
+    } else {
+      initMeterFormsLoadData('', meterFormsSearch);
+    }
+  };
+
   const [meterSearchParams, setMeterSearchParams] = useState<any>({});
   return (
     <Layout>
@@ -433,7 +449,7 @@ function Meter() {
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>
-        <Tabs defaultActiveKey="1" >
+        <Tabs defaultActiveKey="1" onChange={changeTab}>
           <TabPane tab="费表列表" key="1">
             <div style={{ marginBottom: '20px', padding: '3px 2px' }} onChange={(value) => {
               var params = Object.assign({}, meterSearchParams, { metertype: value });
@@ -507,17 +523,17 @@ function Meter() {
               pagination={unitMeterPagination}
               data={unitMeterData}
               reload={() => initUnitMeterLoadData('', unitMeterSearch)}
-            />  
+            />
           </TabPane>
           <TabPane tab="抄表单列表" key="3">
             <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
               <Search
                 className="search-input"
-                placeholder="请输入要查询的名称或者编号"
+                placeholder="请输入要查询的单号"
                 style={{ width: 280 }}
                 onSearch={value => loadReadingMeterData(value)}
               />
-              <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
+              {/* <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
                 onClick={() => { }} disabled={ifVertify ? false : true}
               >
                 <Icon type="minus-square" />
@@ -535,7 +551,7 @@ function Meter() {
               >
                 <Icon type="check-square" />
                 审核
-              </Button>
+              </Button> */}
               <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
                 onClick={() => {
                   showReadingMeterModify();
@@ -556,6 +572,7 @@ function Meter() {
                 loadReadingMeterData(readingMeterSearch, paginationConfig, sorter)
               }
               loading={readingMeterLoading}
+              showVertify={showVertify}
               pagination={readingMeterPagination}
               data={readingMeterData}
               reload={() => initReadingMeterLoadData('', readingMeterSearch)}
@@ -566,7 +583,7 @@ function Meter() {
                 }
               }}
               getRowSelect={(record) => {
-                setReadingMeterId(record.billid);
+                setReadingMeterId(record.billId);
                 if (record.ifverify == 1) {
                   setIfVertify(true);
                 } else {
@@ -579,7 +596,7 @@ function Meter() {
             <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
               <Search
                 className="search-input"
-                placeholder="请输入要查询的名称或者表编号"
+                placeholder="请输入要查询的单号"
                 style={{ width: 280 }}
                 onSearch={value => loadUnitMeterData(value)}
               />
@@ -594,9 +611,7 @@ function Meter() {
               pagination={meterFormsPagination}
               data={meterFormsData}
               reload={() => initMeterFormsLoadData('', meterFormsSearch)}
-            />
-
-
+            /> 
           </TabPane>
         </Tabs>
       </Content>

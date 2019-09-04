@@ -16,7 +16,7 @@ interface ReadingMeterVertifyProps {
 
 const ReadingMeterVertify = (props: ReadingMeterVertifyProps) => {
   const { vertifyVisible, closeVertify, form, id,ifVertify ,reload} = props;
-  const title = id === undefined ? '抄表单审核' : '抄表单取消审核';
+  const title = ifVertify ? '抄表单取消审核' : '抄表单审核';
   const [loading, setLoading] = useState<boolean>(false);
   const { getFieldDecorator } = form;
   const [infoDetail, setInfoDetail] = useState<any>({});

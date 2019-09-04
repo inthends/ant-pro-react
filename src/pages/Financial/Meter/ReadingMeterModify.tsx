@@ -1,30 +1,28 @@
 //新增抄表单
-import { Button, Col,  DatePicker,   Drawer, Tabs, Form, Row, Icon, Spin, Input, Table } from 'antd';
+import { Button, Col, DatePicker, Drawer, Tabs, Form, Row, Icon, Spin, Input, Table } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { GetDataItemTreeJson, GetOrgTree, GetVirtualReadPageList, SaveReadPublicForm, SaveReadUnitForm, RemoveFormAll, RemoveUnitForm, RemoveReadPublicFormAll, RemoveReadPublicForm, GetPublicReadPageList, GetUnitReadPageList, GetMeterRead,   RemoveReadVirtualFormAll } from './Meter.service';
+import {  GetVirtualReadPageList, SaveReadPublicForm, SaveReadUnitForm, RemoveFormAll, RemoveUnitForm, RemoveReadPublicFormAll, RemoveReadPublicForm, GetPublicReadPageList, GetUnitReadPageList, GetMeterRead, RemoveReadVirtualFormAll } from './Meter.service';
 import './style.less';
 import ChargeFeeItem from './ChargeFeeItem';
 import SelectReadingMeterPublic from './SelectReadingMeterPublic';
 import SelectReadingMeterHouse from './SelectReadingMeterHouse';
 import SelectReadingMeterVirtual from './SelectReadingMeterVirtual';
-import moment from 'moment';
+import moment from 'moment'; 
 const Search = Input.Search;
 const { TabPane } = Tabs;
 
 /*详情可编辑单元格*/
 const EditableContext = React.createContext();
-
 const EditableRow = ({ form, index, ...props }) => (
   <EditableContext.Provider value={form}>
     <tr {...props} />
   </EditableContext.Provider>
 );
 
-const EditableFormRow = Form.create()(EditableRow);
-
+const EditableFormRow = Form.create()(EditableRow); 
 class EditableCell extends React.Component {
   state = {
     editing: false,
@@ -111,40 +109,40 @@ interface ReadingMeterModifyProps {
 
 const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
   const { modifyVisible, closeDrawer, form, id } = props;
-  const title = id === undefined ? '新增抄表单' : '修改抄表单';
+  const title = id == undefined ? '新增抄表单' : '修改抄表单';
   const [loading, setLoading] = useState<boolean>(false);
   const { getFieldDecorator } = form;
-  const [units, setUnits] = useState<string>('');
+  // const [units, setUnits] = useState<string>('');
   const [infoDetail, setInfoDetail] = useState<any>({});
-  const [noticeData, setNoticeData] = useState<any>([]);
+  // const [noticeData, setNoticeData] = useState<any>([]);
   const [pagination, setPagination] = useState<DefaultPagination>(new DefaultPagination());
 
-  const [meterKinds, setMeterKinds] = useState<any>([]);
-  const [meterTypes, setMeterTypes] = useState<any>([]);
-  const [orgTreeData, setOrgTreeData] = useState<any>({});
+  // const [meterKinds, setMeterKinds] = useState<any>([]);
+  // const [meterTypes, setMeterTypes] = useState<any>([]);
+  // const [orgTreeData, setOrgTreeData] = useState<any>({});
   const [chargeFeeItemVisible, setChargeFeeItemVisible] = useState<boolean>(false);
-  const [selectHouseVisible, setSelectHouseVisible] = useState<boolean>(false);
+  // const [selectHouseVisible, setSelectHouseVisible] = useState<boolean>(false);
 
   const [unitFeeVisible, setUnitFeeVisible] = useState<boolean>(false);
   const [virtualFeeVisible, setVirtualFeeVisible] = useState<boolean>(false);
   const [publicFeeVisible, setPublicFeeVisible] = useState<boolean>(false);
 
   const [houseSearchParams, setHouseSearchParams] = useState<any>({});
-  const [houseLoading, setHouseLoading] = useState<boolean>(false);
+  // const [houseLoading, setHouseLoading] = useState<boolean>(false);
   const [houseData, setHouseData] = useState<any>();
   const [housePagination, setHousePagination] = useState<DefaultPagination>(new DefaultPagination());
 
   const [publicSearchParams, setPublicSearchParams] = useState<any>({});
-  const [publicLoading, setPublicLoading] = useState<boolean>(false);
+  // const [publicLoading, setPublicLoading] = useState<boolean>(false);
   const [publicData, setPublicData] = useState<any>();
   const [publicPagination, setPublicPagination] = useState<DefaultPagination>(new DefaultPagination());
 
   const [virtualSearchParams, setVirtualSearchParams] = useState<any>({});
-  const [virtualLoading, setVirtualLoading] = useState<boolean>(false);
+  // const [virtualLoading, setVirtualLoading] = useState<boolean>(false);
   const [virtualData, setVirtualData] = useState<any>();
   const [virtualPagination, setVirtualPagination] = useState<DefaultPagination>(new DefaultPagination());
 
-  const [addFormulaVisible, setAddFormulaVisible] = useState<boolean>(false);
+  // const [addFormulaVisible, setAddFormulaVisible] = useState<boolean>(false);
   const [houseFeeItemRowId, setHouseFeeItemRowId] = useState<string>('');
   const [publicFeeItemRowId, setPublicFeeItemRowId] = useState<string>('');
   const components = {
@@ -156,17 +154,17 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
 
   useEffect(() => {
     if (modifyVisible) {
-      //获取费表类型
-      GetDataItemTreeJson('EnergyMeterKind').then(res => {
-        setMeterKinds(res);
-      })
-      //获取费表种类
-      GetDataItemTreeJson('EnergyMeterType').then(res => {
-        setMeterTypes(res);
-      });
-      GetOrgTree().then(res => {
-        setOrgTreeData(res);
-      })
+      // //获取费表类型
+      // GetDataItemTreeJson('EnergyMeterKind').then(res => {
+      //   setMeterKinds(res);
+      // })
+      // //获取费表种类
+      // GetDataItemTreeJson('EnergyMeterType').then(res => {
+      //   setMeterTypes(res);
+      // });
+      // GetOrgTree().then(res => {
+      //   setOrgTreeData(res);
+      // })
       if (id) {
         //setIsAdd(false);
         setLoading(true);
@@ -483,81 +481,81 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
   const houseFeeColumns = [
     {
       title: '种类',
-      dataIndex: 'metertype',
-      key: 'metertype',
-      width: 200,
+      dataIndex: 'meterType',
+      key: 'meterType',
+      width: 120,
       sorter: false
     },
     {
       title: '表名称',
-      dataIndex: 'metername',
-      key: 'metername',
-      width: 200,
+      dataIndex: 'meterName',
+      key: 'meterName',
+      width: 120,
       sorter: false
     },
     {
       title: '表编号',
-      dataIndex: 'metercode',
-      key: 'metercode',
-      width: 200,
+      dataIndex: 'meterCode',
+      key: 'meterCode',
+      width: 250,
       sorter: false,
     },
     {
       title: '上次读数',
-      dataIndex: 'lastreading',
-      key: 'lastreading',
-      width: 200,
+      dataIndex: 'lastReading',
+      key: 'lastReading',
+      width: 120,
       sorter: false,
     },
     {
       title: '本次读数',
-      dataIndex: 'nowreading',
-      key: 'nowreading',
+      dataIndex: 'nowReading',
+      key: 'nowReading',
       sorter: false,
-      width: 200,
+      width: 120,
       editable: true
     },
     {
       title: '倍率',
-      dataIndex: 'meterzoom',
-      key: 'meterzoom',
+      dataIndex: 'meterZoom',
+      key: 'meterZoom',
       sorter: false,
-      width: 200
+      width: 100
     },
     {
       title: '用量',
-      dataIndex: 'baseusage',
-      key: 'baseusage',
+      dataIndex: 'baseUsage',
+      key: 'baseUsage',
       sorter: false,
-      width: 200
+      width: 100
     },
     {
       title: '单价',
-      dataIndex: 'meterprice',
-      key: 'meterprice',
+      dataIndex: 'meterPrice',
+      key: 'meterPrice',
       sorter: false,
-      width: 200
+      width: 100
     },
     {
       title: '金额',
       dataIndex: 'amount',
       key: 'amount',
       sorter: false,
-      width: 200
+      width: 120
     },
     {
       title: '录入人',
-      dataIndex: 'createusername',
-      key: 'createusername',
+      dataIndex: 'createUserName',
+      key: 'createUserName',
       sorter: false,
-      width: 200
+      width: 100
     },
     {
       title: '录入时间',
-      dataIndex: 'createdate',
-      key: 'createdate',
+      dataIndex: 'createDate',
+      key: 'createDate',
       sorter: false,
-      width: 200
+      width: 150
     },
     {
       title: '备注',
@@ -850,7 +848,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                     style={{ width: 280 }}
                   />
 
-                  <Button type="link" style={{ float: 'right'  }}
+                  <Button type="link" style={{ float: 'right' }}
                     onClick={() => {
                       /*var ids=[];
                       houseData.map(item=>{
@@ -980,7 +978,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                   />
                   <Button type="link" style={{ float: 'right', marginLeft: '10px' }}
                     onClick={() => {
-                      var ids = [];
+                      let ids: any[] = [];
                       virtualData.map(item => {
                         ids.push(item.id);
                       });

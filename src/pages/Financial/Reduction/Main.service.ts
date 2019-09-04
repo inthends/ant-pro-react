@@ -1,7 +1,7 @@
 import { ResponseObject, TreeEntity } from '@/model/models';
 import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
-import { 	ReductionMainEntity } from '@/model/reductionMainEntity'; 
+import { CwReductionmain } from '@/model/cwReductionmain'; 
 
 //加载收款费项
 export function GetFeeTreeListExpand(): Promise<ResponseObject<TreeEntity[]>> {
@@ -13,7 +13,7 @@ export function GetTreeListExpand(): Promise<ResponseObject<TreeEntity[]>> {
   return request.get(process.env.basePath + `/Common/GetQuickPStructsTree`, {});
 }
 
-// 查询列表
+// 查询明细列表
 export function GetDetailPageListJson(data): Promise<any> {
   return request.post(process.env.basePath + `/Reduction/GetPageDetailListJson`, {data:objToFormdata(data)}).then(getResult as any);
 }
@@ -29,7 +29,7 @@ export function GetPageListJson(data): Promise<any> {
 }
 
 //获取实体
-export function GetFormJson(keyValue): Promise<ReductionMainEntity> {
+export function GetFormJson(keyValue): Promise<CwReductionmain> {
   return request
     .get(process.env.basePath + `/Reduction/GetFormJson?keyValue=${keyValue}`)
     .then(getResult as any);
@@ -50,7 +50,7 @@ export function GetAllFeeItems(): Promise<TreeEntity[]> {
 }
 
 //获取当前用户信息
-export function GetUseInfo(userid): Promise<any[]> {
+export function GetUseInfo(userid): Promise<any> {
   return request
     .get(process.env.basePath + `/Login/GetUserInfo?userid=${userid}`)
     .then(getResult as any);
