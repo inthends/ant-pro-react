@@ -1,13 +1,11 @@
-//账单
-//计费单列表
-//费表列表
+//账单 
 import Page from '@/components/Common/Page';
 import { Divider, Form, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
-import React,{ useState } from 'react';
+import React, { useState } from 'react';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { RemoveForm } from './BillNotice.service';
-import  moment from 'moment';
+import moment from 'moment';
 import styles from './style.less';
 
 interface BillCheckTableProps {
@@ -18,20 +16,20 @@ interface BillCheckTableProps {
   reload(): void;
   showCheckBill(id): void;
   form: WrappedFormUtils;
-  getRowSelect(records):void;
+  getRowSelect(records): void;
 }
 
 function BillCheckTable(props: BillCheckTableProps) {
-  const { onchange, loading, pagination, data, reload, showCheckBill,getRowSelect } = props;
-  const [selectedRowKey, setSelectedRowKey] = useState([]);
+  const { onchange, loading, pagination, data, reload, showCheckBill, getRowSelect } = props;
+  // const [selectedRowKey, setSelectedRowKey] = useState([]);
   const columns = [
     {
       title: '单据类型',
       dataIndex: 'billType',
       key: 'billType',
-      width: 150,
+      width: 100,
       sorter: true
-    },{
+    }, {
       title: '单号',
       dataIndex: 'billCode',
       key: 'billCode',
@@ -42,12 +40,12 @@ function BillCheckTable(props: BillCheckTableProps) {
       title: '账单日',
       dataIndex: 'createDate',
       key: 'createDate',
-      width: 200,
+      width: 120,
       sorter: true,
-      render: val =>{
-        if(val==null){
+      render: val => {
+        if (val == null) {
           return <span></span>
-        }else{
+        } else {
           return <span> {moment(val).format('YYYY-MM-DD')} </span>
         }
       }
@@ -56,26 +54,26 @@ function BillCheckTable(props: BillCheckTableProps) {
       title: '房间编号',
       dataIndex: 'unitId',
       key: 'unitId',
-      width: 200,
+      width: 100,
       sorter: true,
     },
     {
       title: '业户名称',
       dataIndex: 'custName',
       key: 'custName',
-      width: 150,
+      width: 100,
       sorter: true,
     },
     {
       title: '交房日期',
       dataIndex: 'handoverDate',
       key: 'handoverDate',
-      width: 200,
+      width: 120,
       sorter: true,
-      render: val =>{
-        if(val==null){
+      render: val => {
+        if (val == null) {
           return <span></span>
-        }else{
+        } else {
           return <span> {moment(val).format('YYYY-MM-DD')} </span>
         }
       }
@@ -84,19 +82,19 @@ function BillCheckTable(props: BillCheckTableProps) {
       title: '计费金额',
       dataIndex: 'amount',
       key: 'amount',
-      width: 150
+      width: 100
     },
     {
       title: '审核状态',
       dataIndex: 'ifVerifyName',
       key: 'ifVerifyName',
-      width: 150
+      width: 100
     },
     {
       title: '审核人',
       dataIndex: 'verifyPerson',
       key: 'verifyPerson',
-      width: 200
+      width: 100
     },
     {
       title: '审核时间',
@@ -104,10 +102,10 @@ function BillCheckTable(props: BillCheckTableProps) {
       key: 'verifyDate',
       width: 150,
       sorter: true,
-      render: val =>{
-        if(val==null){
+      render: val => {
+        if (val == null) {
           return <span></span>
-        }else{
+        } else {
           return <span> {moment(val).format('YYYY-MM-DD')} </span>
         }
       }
@@ -116,19 +114,19 @@ function BillCheckTable(props: BillCheckTableProps) {
       title: '审核情况',
       dataIndex: 'verifyMemo',
       key: 'verifyMemo',
-      width: 200,
+      width: 100,
     },
     {
       title: '备注',
       dataIndex: 'memo',
       key: 'memo',
-      width: 200,
     },
     {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
-      align:'center',
+      align: 'center',
+      fixed: 'right',
       width: 95,
       render: (text, record) => {
         return [
@@ -167,7 +165,7 @@ function BillCheckTable(props: BillCheckTableProps) {
         dataSource={data}
         rowKey="billID"
         pagination={pagination}
-        scroll={{ y: 500 }}
+        scroll={{ y: 500, x: 1400 }}
         loading={loading}
         onChange={onchange}
         rowSelection={rowSelection}

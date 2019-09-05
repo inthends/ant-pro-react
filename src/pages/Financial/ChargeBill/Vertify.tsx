@@ -55,8 +55,8 @@ const Vertify = (props: VertifyProps) => {
       // console.log(values, infoDetail);
       var newData = Object.assign({}, infoDetail,
         {
-          verifyPerson: localStorage.getItem('userid'),
-          verifyDate: moment(new Date).format('YYYY-MM-DD'),
+          // verifyPerson: localStorage.getItem('userid'),
+          // verifyDate: moment(new Date).format('YYYY-MM-DD'),
           verifyMemo: values.verifyMemo,
           keyValue: infoDetail.billID,
           billDate: moment(values.billDate).format('YYYY-MM-DD'),

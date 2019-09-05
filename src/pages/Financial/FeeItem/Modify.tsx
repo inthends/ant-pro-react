@@ -16,7 +16,6 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { GetFormJson, GetFeeType, GetAllFeeItems } from './Main.service';
 import styles from './style.less';
-
 import moment from 'moment';
 
 const { Option } = Select;
@@ -43,19 +42,19 @@ const Modify = (props: ModifyProps) => {
   //打开抽屉时初始化
   useEffect(() => {
     //加载关联收费项目
-    GetAllFeeItems(id).then(res => {
+    GetAllFeeItems().then(res => {
       setFeeitems(res || []);
     });
 
   }, []);
 
 
-  const changeFeeType = (id: string, init = false) => {
-    GetFeeType(id).then(res => {
+  const changeFeeType = (value) => {
+    GetFeeType(value).then(res => {
       setFeetype(res || []);
-      if (!init) {
-        form.setFieldsValue({ feeType: undefined });
-      }
+      // if (!init) {
+      //   form.setFieldsValue({ feeType: undefined });
+      // }
     });
   };
 
@@ -68,7 +67,7 @@ const Modify = (props: ModifyProps) => {
         getInfo(id).then((tempInfo: any) => {
           if (tempInfo.feeKind) {
             var kind = tempInfo.feeKind == "收款费项" ? "ReceivablesItem" : "PaymentItem";
-            changeFeeType(kind, true);
+            changeFeeType(kind);
           }
           setInfoDetail(tempInfo);
           form.resetFields();
@@ -91,7 +90,7 @@ const Modify = (props: ModifyProps) => {
     form.validateFields((errors, values) => {
       if (!errors) {
         getInfo(id).then(tempInfo => {
-          let newvalue = { ...values, date: values.date.format('YYYY-MM-DD') };
+          //let newvalue = { ...values, date: values.date.format('YYYY-MM-DD') };
         });
       }
     });
@@ -104,7 +103,7 @@ const Modify = (props: ModifyProps) => {
           ...feeItem,
           ...feeItemDetail,
         };
-        info.id = feeItem && feeItem.feeItemID;
+        //info.id = feeItem && feeItem.feeItemId;
         return info;
       });
     } else {
@@ -126,7 +125,6 @@ const Modify = (props: ModifyProps) => {
         <Tabs defaultActiveKey="1" >
           <TabPane tab="基本信息" key="1">
             <Card className={styles.card} >
-
               <Row gutter={24}>
                 <Col lg={12}>
 
@@ -134,7 +132,9 @@ const Modify = (props: ModifyProps) => {
                     {getFieldDecorator('feeKind', {
                       initialValue: infoDetail.feeKind,
                       rules: [{ required: true, message: '请选择费项种类' }],
-                    })(<Select placeholder="请选择费项种类" onChange={changeFeeType}  >
+                    })(<Select placeholder="请选择费项种类"
+                      onChange={changeFeeType}
+                    >
                       <Option value="ReceivablesItem">收款费项</Option>
                       <Option value="PaymentItem" >付款费项</Option>
                     </Select>
@@ -188,14 +188,14 @@ const Modify = (props: ModifyProps) => {
                     })(
                       <Select
                         placeholder="请选择关联收费项目"
-                        showSearch
-                        filterOption={(input, option) =>
-                          option.props.children.indexOf(input) >= 0
-                        }
+                      // showSearch
+                      // filterOption={(input, option) =>
+                      //   option.props.children.indexOf(input) >= 0
+                      // }
                       >
                         {feeitems.map(item => (
                           <Option key={item.value} value={item.value}>
-                            {item.text}
+                            {item.title}
                           </Option>
                         ))}
                       </Select>
@@ -232,7 +232,7 @@ const Modify = (props: ModifyProps) => {
                         ? moment(new Date(infoDetail.beginDate))
                         : moment(new Date()),
                       rules: [{ required: true, message: '请选择计费起始日期' }],
-                    })(<DatePicker placeholder="请选择计费起始日期" />)}
+                    })(<DatePicker placeholder="请选择计费起始日期"  style={{width:'100%'}}/>)}
                   </Form.Item>
                 </Col>
                 <Col lg={12}>
@@ -242,10 +242,10 @@ const Modify = (props: ModifyProps) => {
                         ? moment(new Date(infoDetail.endDate))
                         : moment(new Date()),
                       rules: [{ required: true, message: '计费终止日期' }],
-                    })(<DatePicker placeholder="计费终止日期" />)}
+                    })(<DatePicker placeholder="计费终止日期" style={{width:'100%'}}/>)}
                   </Form.Item>
                 </Col>
-              </Row> 
+              </Row>
               <Row gutter={24}>
                 <Col lg={24}>
                   <Form.Item  >
@@ -253,7 +253,7 @@ const Modify = (props: ModifyProps) => {
                     <Checkbox >允许修改起止日期</Checkbox>
                     <Checkbox >允许在合同中添加</Checkbox>
                     <Checkbox >含税单价</Checkbox>
-                    <Checkbox >减免费项</Checkbox> 
+                    <Checkbox >减免费项</Checkbox>
                   </Form.Item>
                 </Col>
               </Row>
@@ -282,10 +282,8 @@ const Modify = (props: ModifyProps) => {
                   <Form.Item label="&nbsp;">
                     <Button type="primary">设置</Button>
                   </Form.Item>
-                </Col>
-
-              </Row>
-
+                </Col> 
+              </Row> 
               <Row gutter={24}>
                 <Col lg={21}>
                   <Form.Item label="系数公式">
@@ -336,7 +334,7 @@ const Modify = (props: ModifyProps) => {
           </TabPane>
           <TabPane tab="高级" key="2">
 
-            <Card title="小数精度" bordered={false}>
+            <Card title="小数精度"  >
               <Row gutter={24}>
                 <Col lg={12}>
                   <Form.Item label="中间每一步计算结果保留">
@@ -407,19 +405,16 @@ const Modify = (props: ModifyProps) => {
                         <Option value="0">四舍五入</Option>
                         <Option value="1" >直接舍去</Option>
                         <Option value="2">有数进一</Option>
-                      </Select>
-
-
-
+                      </Select> 
                     )}
                   </Form.Item>
                 </Col>
               </Row>
             </Card>
-            <Card title="账单日设置" bordered={false}>
+            <Card title="账单日设置"  >
             </Card>
 
-            <Card title="其他" bordered={false}>
+            <Card title="其他"  >
             </Card>
 
           </TabPane>

@@ -1,13 +1,5 @@
 //查看收款单
-import {
-  Button,
-  Card,
-  Table,
-  Col,
-  Drawer,
-  Form,
-  Row,
-} from 'antd';
+import { Button, Card, Table, Col, Drawer, Form, Row } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
@@ -24,7 +16,7 @@ interface ShowProps {
 }
 const Show = (props: ShowProps) => {
   const { showVisible, closeShow, id, form } = props;
-  const title = "查看收费单";
+  const title = "查看收款单";
   const [loading, setLoading] = useState<boolean>(false);
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
@@ -37,7 +29,7 @@ const Show = (props: ShowProps) => {
         GetEntityShow(id).then(res => {
           if (res != null) {
             setInfoDetail(res.entity);
-            return res.entity.billID;
+            return res.entity.billId;
           }
           return '';
         }).then(res => {
@@ -60,12 +52,11 @@ const Show = (props: ShowProps) => {
     }
   }, [showVisible]);
 
-
   const columns = [
     {
       title: '单元编号',
-      dataIndex: 'code',
-      key: 'code',
+      dataIndex: 'unitId',
+      key: 'unitId',
       width: 150,
       sorter: true,
     },
@@ -73,65 +64,65 @@ const Show = (props: ShowProps) => {
       title: '收费项目',
       dataIndex: 'feeName',
       key: 'feeName',
-      width: 150,
+      width: 100,
       sorter: true,
     },
     {
       title: '应收期间',
       dataIndex: 'period',
       key: 'period',
-      width: 150,
+      width: 120,
       sorter: true,
-      render: val => val != null ? <span> {moment(val).format('YYYY年MM月')} </span> : <span></span>
+      render: val => val != null ? moment(val).format('YYYY年MM月') : ''
     },
     {
       title: '数量',
       dataIndex: 'quantity',
       key: 'quantity',
-      width: 150,
+      width: 100,
       sorter: true,
     },
     {
       title: '单价',
       dataIndex: 'price',
       key: 'price',
-      width: 150,
+      width: 100,
       sorter: true,
     },
     {
       title: '应收金额',
       dataIndex: 'amount',
       key: 'amount',
-      width: 150,
+      width: 100,
     }, {
       title: '本次实收金额',
       dataIndex: 'payAmount',
       key: 'payAmount',
-      width: 150,
+      width: 100,
     }, {
       title: '计费起始日期',
       dataIndex: 'beginDate',
       key: 'beginDate',
-      width: 150,
-      render: val => val != null ? <span> {moment(val).format('YYYY-MM-DD')} </span> : <span></span>
+      width: 120,
+      render: val => val != null ? moment(val).format('YYYY-MM-DD') : ''
     }, {
       title: '计费终止日期',
       dataIndex: 'endDate',
       key: 'endDate',
-      width: 150,
-      render: val => val != null ? <span> {moment(val).format('YYYY-MM-DD')} </span> : <span></span>
+      width: 120,
+      render: val => val != null ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '备注',
       dataIndex: 'memo',
       key: 'memo',
-      width: 200
+      width: 100
     }
   ] as ColumnProps<any>[];
 
   const initLoadFeeDetail = (billid) => {
     const queryJson = { billid: billid };
-    const sidx = 'begindate';
+    const sidx = 'beginDate';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
@@ -141,7 +132,7 @@ const Show = (props: ShowProps) => {
 
   const load = data => {
     setLoading(true);
-    data.sidx = data.sidx || 'BillID';
+    data.sidx = data.sidx || 'billId';
     data.sord = data.sord || 'asc';
     return ChargeFeeDetail(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -195,7 +186,6 @@ const Show = (props: ShowProps) => {
             </Col>
           </Row>
           <Row gutter={24}>
-
             <Col span={6}>
               <Form.Item label="冲红单号" >
                 {infoDetail.linkId}
@@ -225,18 +215,18 @@ const Show = (props: ShowProps) => {
             </Col>
           </Row>
         </Form>
-      </Card>
-      <Table
-        bordered={true}
+      </Card> 
+      <Table 
+        // title={() => '费用明细'}
         size="middle"
         dataSource={chargeBillData}
         columns={columns}
-        rowKey={record => record.billID}
+        rowKey={record => record.billId}
         pagination={pagination}
-        scroll={{ y: 500, x: 1550 }}
+        scroll={{ y: 500, x: 1150 }}
+        loading={loading}
       />
-
-
+      
       <div
         style={{
           position: 'absolute',

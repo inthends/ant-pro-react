@@ -13,7 +13,7 @@ const { TabPane } = Tabs;
 
 const rankingListData: { title: string; total: number }[] = [];
 for (let i = 0; i < 7; i += 1) {
-  rankingListData.push({
+  rankingListData.push({ 
     title: formatMessage({ id: 'dashboard-analysis.analysis.test' }, { no: i }),
     total: 323234,
   });

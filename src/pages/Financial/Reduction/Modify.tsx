@@ -118,7 +118,7 @@ const Modify = (props: ModifyProps) => {
 
   const getSelectReduction = () => {
     GetReductionItem().then(res => {
-      setReductionItem(res); 
+      setReductionItem(res);
     });
   };
 
@@ -166,21 +166,21 @@ const Modify = (props: ModifyProps) => {
       } else {
         form.resetFields();
         //重置之前选择加载的费项类别
-        GetUseInfo(localStorage.getItem('userid')).then(res => {
-          setInfoDetail({
-            keyValue: '',
-            code: 0,
-            billId: guid(),
-            // billCode: '',
-            // billDate: '',
-            createUserName: res.name == null ? '' : res.name,
-            //createUserId: res.userid == null ? '' : res.userid,
-            // rebate: "",
-            // reductionFeeItemID: "",
-            // memo: "",
-            // reductionAmount: ""
-          })
+        // GetUseInfo(localStorage.getItem('userid')).then(res => {
+        setInfoDetail({
+          keyValue: '',
+          code: 0,
+          billId: guid(),
+          // billCode: '',
+          // billDate: '',
+          createUserName: localStorage.getItem('name')//res.name == null ? '' : res.name,
+          //createUserId: res.userid == null ? '' : res.userid,
+          // rebate: "",
+          // reductionFeeItemID: "",
+          // memo: "",
+          // reductionAmount: ""
         })
+        // })
         // setListData([]);
         // setReductionItem([]);
         // form.resetFields();
@@ -497,7 +497,7 @@ const Modify = (props: ModifyProps) => {
   };
 
   //选择减免费项
-  const onFeeItemSelect = (value, option) => { 
+  const onFeeItemSelect = (value, option) => {
     form.setFieldsValue({ reductionFeeItemName: option.key });
   };
 
@@ -564,7 +564,7 @@ const Modify = (props: ModifyProps) => {
                     {getFieldDecorator('reductionFeeItemName', {
                     })(
                       <input type='hidden' />
-                    )} 
+                    )}
                   </Select>
                 )}
               </Form.Item>

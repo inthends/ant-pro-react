@@ -1,6 +1,5 @@
 //添加编辑费项
 import { Card, Divider, Button, DatePicker,Col, Select, Modal, Drawer, Form, Row, Icon, Spin, Input, InputNumber, TreeSelect, message, Table, Checkbox } from 'antd';
-
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
@@ -13,7 +12,7 @@ const Search = Input.Search;
 const Option = Select.Option;
 const { TextArea } = Input;
 
-interface MeterModifyProps {
+interface  ModifyProps {
   modifyVisible: boolean;
   closeDrawer(): void;
   form: WrappedFormUtils;
@@ -23,7 +22,7 @@ interface MeterModifyProps {
   reload(): void;
 }
 
-const MeterModify = (props: MeterModifyProps) => {
+const  Modify = (props:  ModifyProps) => {
   const { modifyVisible, closeDrawer, form, id, reload ,isEdit} = props;
   const title = id === undefined ? '新增费表资料' : '修改费表资料';
   const [newId,setNewId]=useState<string>('');
@@ -461,5 +460,5 @@ const MeterModify = (props: MeterModifyProps) => {
   );
 };
 
-export default Form.create<MeterModifyProps>()(MeterModify);
+export default Form.create< ModifyProps>()( Modify);
 

@@ -70,9 +70,9 @@ const Vertify = (props: VertifyProps) => {
     form.validateFields((errors, values) => {
       if (!errors) {
         let newData={  ...infoDetail,
-          verifyPerson:ifVertify?localStorage.getItem('userid'):'',
+          // verifyPerson:ifVertify?localStorage.getItem('userid'):'',
           ifVerify:ifVertify,
-          verifyDate:ifVertify?moment(new Date()).format('YYYY-MM-DD HH:mm:ss'):''
+          // verifyDate:ifVertify?moment(new Date()).format('YYYY-MM-DD HH:mm:ss'):''
         };
         Audit(newData).then(()=>{
           closeVertify(true);

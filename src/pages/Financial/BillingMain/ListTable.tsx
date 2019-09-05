@@ -1,27 +1,26 @@
 //计费单列表
-//费表列表
 import Page from '@/components/Common/Page';
 import { Divider, Form, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
-import React,{ useState } from 'react';
+import React, { useState } from 'react';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { RemoveForm } from './BillingMain.service';
-import  moment from 'moment';
+import moment from 'moment';
 import styles from './style.less';
 
-interface MeterTableProps {
+interface ListTableProps {
   onchange(page: any, filter: any, sort: any): any;
   loading: boolean;
   pagination: PaginationConfig;
   data: any[];
   reload(): void;
-  showModify(id?,isedit?): void;
+  showModify(id?, isedit?): void;
   form: WrappedFormUtils;
-  getRowSelect(record):void;
+  getRowSelect(record): void;
 }
 
-function MeterTable(props: MeterTableProps) {
-  const { onchange, loading, pagination, data, reload, showModify,getRowSelect } = props;
+function ListTable(props: ListTableProps) {
+  const { onchange, loading, pagination, data, reload, showModify, getRowSelect } = props;
   const [selectedRowKey, setSelectedRowKey] = useState([]);
   const columns = [
     {
@@ -35,12 +34,12 @@ function MeterTable(props: MeterTableProps) {
       title: '单据日期',
       dataIndex: 'billDate',
       key: 'billDate',
-      width: 150,
+      width: 120,
       sorter: true,
-      render: val =>{
-        if(val==null){
+      render: val => {
+        if (val == null) {
           return <span></span>
-        }else{
+        } else {
           return <span> {moment(val).format('YYYY-MM-DD')} </span>
         }
       }
@@ -49,21 +48,21 @@ function MeterTable(props: MeterTableProps) {
       title: '计费人',
       dataIndex: 'createUserName',
       key: 'createUserName',
-      width: 150,
+      width: 100,
       sorter: true,
     },
     {
       title: '来源',
       dataIndex: 'billSource',
       key: 'billSource',
-      width: 150,
+      width: 100,
       sorter: true,
     },
     {
       title: '审核状态',
       dataIndex: 'ifVerifyName',
       key: 'ifVerifyName',
-      width: 150,
+      width: 100,
       sorter: true,
     },
     {
@@ -71,18 +70,18 @@ function MeterTable(props: MeterTableProps) {
       dataIndex: 'verifyPerson',
       key: 'verifyPerson',
       sorter: true,
-      width: 150
+      width: 100
     },
     {
       title: '审核日期',
       dataIndex: 'verifyDate',
       key: 'verifyDate',
       sorter: true,
-      width: 150,
-      render: val =>{
-        if(val==null){
+      width: 120,
+      render: val => {
+        if (val == null) {
           return <span></span>
-        }else{
+        } else {
           return <span> {moment(val).format('YYYY-MM-DD')} </span>
         }
       }
@@ -91,26 +90,26 @@ function MeterTable(props: MeterTableProps) {
       title: '审核情况',
       dataIndex: 'verifyMemo',
       key: 'verifyMemo',
-      width: 200,
+      width: 100,
       sorter: true
     },
     {
       title: '备注',
       dataIndex: 'memo',
-      key: 'memo',
-      width: 200,
+      key: 'memo', 
       sorter: true
     },
     {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
-      align:'center',
+      align: 'center',
+      fixed: 'right',
       width: 95,
       render: (text, record) => {
         return [
           <span>
-            <a onClick={() => showModify(record.billID,record.ifVerifyName=="已审核"||record.billSource=="水电气生成"?false:true)} key="modify">{record.ifVerifyName=="已审核"||record.billSource=="水电气生成"?"查看":"修改"}</a>
+            <a onClick={() => showModify(record.billID, record.ifVerifyName == "已审核" || record.billSource == "水电气生成" ? false : true)} key="modify">{record.ifVerifyName == "已审核" || record.billSource == "水电气生成" ? "查看" : "修改"}</a>
             <Divider type="vertical" />
             <a onClick={() => {
               RemoveForm(record.billID).then(res => {
@@ -123,21 +122,19 @@ function MeterTable(props: MeterTableProps) {
     },
   ] as ColumnProps<any>[];
 
-  const setClassName=(record,index)=>{
-    if(record.billID === selectedRowKey)
-    {
-      return  styles.rowSelect ;
-    }else{
-      if(record.status==3)
-      {
+  const setClassName = (record, index) => {
+    if (record.billID === selectedRowKey) {
+      return styles.rowSelect;
+    } else {
+      if (record.status == 3) {
         return styles.rowFlush
-      }else{
+      } else {
         return '';
       }
     }
 
   }
-  const  onRow=(record)=>{
+  const onRow = (record) => {
     return {
       onClick: event => {
         setSelectedRowKey(record.billID);
@@ -154,9 +151,9 @@ function MeterTable(props: MeterTableProps) {
         size="middle"
         columns={columns}
         dataSource={data}
-        rowKey="billID"
+        rowKey="billId"
         pagination={pagination}
-        scroll={{ y: 500  }}
+        scroll={{ y: 500, x: 1200 }}
         loading={loading}
         onChange={onchange}
         rowClassName={setClassName} //表格行点击高亮
@@ -166,5 +163,5 @@ function MeterTable(props: MeterTableProps) {
   );
 }
 
-export default Form.create<MeterTableProps>()(MeterTable);
+export default Form.create<ListTableProps>()(ListTable);
 

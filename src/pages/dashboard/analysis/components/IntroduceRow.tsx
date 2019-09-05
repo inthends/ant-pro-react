@@ -141,12 +141,12 @@ const IntroduceRow = ({ loading, visitData }: { loading: boolean; visitData: Vis
           <div style={{ whiteSpace: 'nowrap', overflow: 'hidden' }}>
             <Trend flag="up" style={{ marginRight: 16 }}>
               <FormattedMessage id="dashboard-analysis.analysis.week" defaultMessage="Weekly Changes" />
-              <span className={styles.trendText}>12%</span>
+              <span className={styles.trendText}>75%</span>
             </Trend>
-            <Trend flag="down">
+            {/* <Trend flag="down">
               <FormattedMessage id="dashboard-analysis.analysis.day" defaultMessage="Weekly Changes" />
               <span className={styles.trendText}>11%</span>
-            </Trend>
+            </Trend> */}
           </div>
         }
         contentHeight={46}

@@ -3,19 +3,18 @@ import { DefaultPagination } from '@/utils/defaultSetting';
 import { Tabs, Button, Icon, Input, Layout ,Modal,Select,message} from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, {   useEffect, useState } from 'react';
-import { GetPageListJson , GetPageDetailListJson, GetUnitMeterPageList , RemoveForm} from './BillingMain.service';
+import { GetPageListJson , GetPageDetailListJson,   RemoveForm} from './BillingMain.service';
 import AsynLeftTree from '../AsynLeftTree';
-import MeterTable from './MeterTable';
-import UnitMeterTable from './UnitMeterTable';
-import MeterModify from './MeterModify';
-import MeterVerify from './MeterVerify';
+import ListTable from './ListTable';
+import UnitTable from './UnitTable';
+import Modify from './Modify';
+import Verify from './Verify';
 const { Content } = Layout;
 const { Search } = Input;
-const { TabPane } = Tabs;
-const {Option} =Select;
+const { TabPane } = Tabs; 
 function BillingMain() {
   const [organize, SetOrganize] = useState<any>({});
-  const [treeSearch, SetTreeSearch] = useState<any>({});
+  // const [treeSearch, SetTreeSearch] = useState<any>({});
   const [id, setId] = useState<string>();
 
   const [meterLoading, setMeterLoading] = useState<boolean>(false);
@@ -270,7 +269,7 @@ const [isEdit,setIsEdit]=useState<boolean>(false);
                 新增
               </Button>
             </div>
-            <MeterTable
+            <ListTable
               onchange={(paginationConfig, filters, sorter) =>{
                 loadMeterData(paginationConfig, sorter)}
               }
@@ -306,7 +305,7 @@ const [isEdit,setIsEdit]=useState<boolean>(false);
                 onSearch={value => loadUnitMeterData(value)}
               />
             </div>
-            <UnitMeterTable
+            <UnitTable
               onchange={(paginationConfig, filters, sorter) =>
                 loadUnitMeterData(unitMeterSearch, paginationConfig, sorter)
               }
@@ -318,7 +317,7 @@ const [isEdit,setIsEdit]=useState<boolean>(false);
           </TabPane>
         </Tabs>
       </Content>
-      <MeterModify
+      <Modify
         modifyVisible={modifyVisible}
         closeDrawer={closeModify}
         organizeId={organize}
@@ -326,7 +325,7 @@ const [isEdit,setIsEdit]=useState<boolean>(false);
         isEdit={isEdit}
         reload={() => initMeterLoadData('','')}
       />
-      <MeterVerify
+      <Verify
         vertifyVisible={vertifyVisible}
         closeVerify={closeVerify}
         ifVerify={ifVerify}

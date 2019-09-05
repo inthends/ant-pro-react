@@ -3,13 +3,12 @@
 import Page from '@/components/Common/Page';
 import {  Form, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
-import React, { useState } from 'react';
+import React  from 'react';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import {  } from './BillingMain.service';
-import styles from './style.less';
+import {  } from './BillingMain.service'; 
 import  moment from 'moment';
 
-interface UnitMeterTableProps {
+interface UnitTableProps {
   onchange(page: any, filter: any, sort: any): any;
   loading: boolean;
   pagination: PaginationConfig;
@@ -18,21 +17,20 @@ interface UnitMeterTableProps {
   form: WrappedFormUtils;
 }
 
-function UnitMeterTable(props: UnitMeterTableProps) {
-  const { form, onchange, loading, pagination, data,  reload } = props;
-
+function UnitTable(props: UnitTableProps) {
+  const { onchange, loading, pagination, data } = props; 
   const columns = [
     {
       title: '计费单号',
-      dataIndex: 'billID',
-      key: 'billID',
+      dataIndex: 'billId',
+      key: 'billId',
       width: 150,
       sorter: true
     },
     {
       title: '单元编号',
-      dataIndex: 'unitID',
-      key: 'UnitID',
+      dataIndex: 'unitId',
+      key: 'UnitId',
       width: 150,
       sorter: true
     },
@@ -138,5 +136,5 @@ function UnitMeterTable(props: UnitMeterTableProps) {
   );
 }
 
-export default Form.create<UnitMeterTableProps>()(UnitMeterTable);
+export default Form.create<UnitTableProps>()(UnitTable);
 

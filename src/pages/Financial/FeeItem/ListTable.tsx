@@ -92,7 +92,7 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'operation',
       align: 'center',
       key: 'operation',
-      width: 95,
+      width: 80,
       render: (text, record) => {
         return [
           // <Button
