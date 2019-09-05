@@ -15,7 +15,7 @@ interface NotPaymentTableProps {
   loading: boolean;
   pagination: PaginationConfig;
   data: any[];
-  modify(id: string): void;
+  modify(id: string,isEdit?:boolean): void;
   reload(): void;
   form: WrappedFormUtils;
   rowSelect(rowSelectedKeys): void;
@@ -157,22 +157,17 @@ function NotPaymentTable(props: NotPaymentTableProps) {
   ] as ColumnProps<any>[];
 
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [sumEntity, setSumEntity] = useState();
+  const [sumEntity, setSumEntity] = useState<Number>(0);
   const onSelectChange = (selectedRowKeys, selectedRows) => {
     console.log(selectedRows);
     setSelectedRowKeys(selectedRowKeys);
     rowSelect(selectedRows);
     //应收金额
-    var sumEntity = {};
-    var sumCount = selectedRows.length, sumlastAmount = 0;
-
     selectedRows.map(item => {
       sumlastAmount = selectedRows.reduce((sum, row) => { return sum + row.lastAmount; }, 0);
     });
 
-    //sumEntity['sumCount'] = sumCount;
-    sumEntity['sumlastAmount'] = sumlastAmount.toFixed(2);
-    setSumEntity(sumEntity);
+    setSumEntity(sumlastAmount.toFixed(2));
   };
 
   const rowSelection = {
@@ -219,10 +214,10 @@ function NotPaymentTable(props: NotPaymentTableProps) {
     <Page>
       <Form layout="vertical" hideRequiredMark>
         <Card className={styles.card} bordered={false}  >
-          <Row gutter={27}>
+          <Row gutter={27}  style={{ marginBottom:'8px'}}>
             <Col lg={24}>
-              <span style={{ color: "red" ,marginBottom:'8px'}}>
-                {hasSelected ? `已选择：${organize.name} ，本次选中未付金额合计：${sumEntity.sumlastAmount}`:`已选择： 本次选中未付金额合计：`}
+              <span style={{ color: "red"}}>
+                {organize.type==5 ? `已选择：${organize.id} ，本次选中未付金额合计：${sumEntity}`:`已选择： 本次选中未付金额合计：`}
               </span>
             </Col>
           </Row>
@@ -240,14 +235,9 @@ function NotPaymentTable(props: NotPaymentTableProps) {
             <Col lg={6}>
               <Form.Item required label='付款日期'>
                 {getFieldDecorator('billDate', {
-                  initialValue:  moment(new Date()).format('YYYY-MM-DD'),
+                  initialValue:  moment(new Date()),
                   rules: [{ required: true, message: '请选择付款日期' }],
-                })(<InputNumber
-                  precision={2}
-                  min={0}
-                  max={hasSelected ? sumEntity.sumAmount : 0}
-                  style={{ width: '100%' }}
-                />)}
+                })(<DatePicker  style={{ width: '100%' }}/>)}
               </Form.Item>
             </Col>
             <Col lg={6}>
@@ -259,7 +249,7 @@ function NotPaymentTable(props: NotPaymentTableProps) {
                     <InputNumber
                       precision={2}
                       min={0}
-                      max={hasSelected ? sumEntity.sumlastAmount : 0}
+                      max={ sumEntity}
                       style={{ width: '100%' }}
                     />
                   )}

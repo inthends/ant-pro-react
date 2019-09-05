@@ -38,11 +38,11 @@ export default [
       },
 
       {
-        name: 'account', 
+        name: 'account',
         hideInMenu: true,
         path: '/account',
         icon: 'user',
-        routes: [ 
+        routes: [
           {
             name: 'settings',
             path: '/account/settings',
@@ -52,8 +52,8 @@ export default [
       },
 
       {
-        name: 'dashboard', 
-        path: '/dashboard',  
+        name: 'dashboard',
+        path: '/dashboard',
         component: './dashboard/dashboard',
         icon: 'dashboard',
         routes: [
@@ -153,11 +153,11 @@ export default [
             path: '/financial/chargebill',
             component: './Financial/ChargeBill/Main',
           },
-          // {
-          //   name: '付款管理',
-          //   path: '/financial/test5',
-          //   component: './Financial/Test1',
-          // },
+          {
+            name: '付款管理',
+            path: '/financial/payment',
+            component: './Financial/Payment/Payment',
+          },
           {
             name: 'offset',
             path: '/financial/offset',

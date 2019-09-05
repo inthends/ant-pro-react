@@ -7,7 +7,7 @@ import { NotPaymentFeeData, ChargeFeePageData,RemoveForm} from './Payment.servic
 import AsynLeftTree from '../AsynLeftTree';
 import NotPaymentTable from './NotPaymentTable';
 import PaymentTable from './PaymentTable';
-import FeeModify from './FeeModify';
+import FeeModify from './FeeModify';import AddFee from './AddFee';
 import PaymentVerify from './PaymentVerify';
 
 const { Content } = Layout;
@@ -31,15 +31,22 @@ function Payment() {
   const [ifVerify,setIfVerify]=useState<boolean>(false);
   const [vertifyVisible,setVerifyVisible]=useState<boolean>(false);
 
+  const [addBtnDisable,setAddBtnDisable]=useState<boolean>(true);
+
   const selectTree = (org, item, info) => {
-    SetOrganize(item);
-    initPaymentLoadData(info,'');
-    initNotPaymentLoadData(info,'');
+    SetOrganize({id:org,type:item});
+    if(item==5){
+      initPaymentLoadData({id:org,type:item},'');
+      initNotPaymentLoadData({id:org,type:item},'');
+      setAddBtnDisable(false);
+    }else{
+      setAddBtnDisable(true);
+    }
   };
 
   useEffect(() => {
-      initPaymentLoadData('','');
-      initNotPaymentLoadData('','');
+      //initPaymentLoadData('','');
+      //initNotPaymentLoadData('','');
   }, []);
 
 
@@ -68,7 +75,7 @@ function Payment() {
     return paymentload(searchCondition);
   }
   const loadNotPaymentData=(search, paginationConfig?: PaginationConfig, sorter?)=>{
-    setNotPaymentSearch(search);
+    setNotPaymentSearchParams(Object.assign({},notPaymentSearchParams,{search:search}));
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: notPaymentPagination.pageSize,
@@ -78,9 +85,10 @@ function Payment() {
       pageIndex,
       pageSize,
       total,
-      queryJson: { keyword: search,
-        TreeTypeId: organize.id,
-        TreeType: organize.type
+      queryJson: {
+        keyword: search,
+        UnitID: organize.id==null?"":organize.id,
+       // TreeType: organize.type
       }
     };
 
@@ -138,7 +146,6 @@ const [notPaymentSearchParams,setNotPaymentSearchParams]=useState<any>({});
 const [paymentSearchParams,setPaymentSearchParams]=useState<any>({});
 const [isEdit,setIsEdit]=useState<boolean>(false);
   const initPaymentLoadData = (org, searchText) => {
-    console.log(org);
     setPaymentSearchParams(Object.assign({},paymentSearchParams,{search:searchText}));
     const queryJson = {
       keyword: searchText,
@@ -154,8 +161,7 @@ const [isEdit,setIsEdit]=useState<boolean>(false);
     setNotPaymentSearchParams(Object.assign({},notPaymentSearchParams,{search:searchText}));
     const queryJson = {
       keyword: searchText,
-      TreeTypeId: org.id,
-      TreeType: org.type,
+      UnitID: org.id==null?"":org.id,
     };
     const sidx = 'id';
     const sord = 'asc';
@@ -264,7 +270,7 @@ const [isEdit,setIsEdit]=useState<boolean>(false);
                 查询
               </Button>
               <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
-                onClick={() => {showModify(null,true)}}
+                onClick={() => {showModify(null,true)}} disabled={addBtnDisable}
               >
                 <Icon type="plus" />
                 新增
@@ -277,7 +283,7 @@ const [isEdit,setIsEdit]=useState<boolean>(false);
               loading={notPaymentLoading}
               pagination={notPaymentPagination}
               data={notPaymentData}
-              showModify={(id,isedit)=>{
+              modify={(id,isedit)=>{
                 if(id!=null&&id!='')
                 {
                   setId(id);
@@ -285,8 +291,8 @@ const [isEdit,setIsEdit]=useState<boolean>(false);
                 setIsEdit(isedit);
                 setModifyVisible(true);
               }}
-              reload={() => initNotPaymentLoadData('', paymentSearch)}
-              getRowSelect={(record)=>{
+              reload={() => initNotPaymentLoadData('', paymentSearchParams.search)}
+              rowSelect={(record)=>{
                 setId(record.billID);
                 if(record.ifVerify==1)
                 {
@@ -295,6 +301,7 @@ const [isEdit,setIsEdit]=useState<boolean>(false);
                   setIfVerify(false);
                 }
               }}
+              organize={organize}
             />
           </TabPane>
           <TabPane tab="付款单列表" key="2">

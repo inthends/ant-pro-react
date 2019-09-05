@@ -28,7 +28,7 @@ export function ChargeFeePageData(data): Promise<any> {
 //获取付款费项
 export function GetTempPaymentFeeItemTreeJson(code): Promise<TreeEntity[]> {
   return request
-    .get(process.env.basePath + `/Common/GetTempPaymentFeeItemTreeJson?roomid=` + code)
+    .get(process.env.basePath + `/FeeItems/GetPaymentFeeItemTreeJson?roomid=` + code)
     .then(getResult as any);
 }
 
@@ -48,4 +48,12 @@ export function RemoveForm(data): Promise<any> {
 //付款
 export function Pay(data): Promise<any> {
   return request.post(process.env.basePath + `/Payment/Pay`, {data:objToFormdata(data)}).then(getResult as any);
+}
+//获取房间住户
+export function GetRoomUsers(data): Promise<ResponseObject<any[]>> {
+  return request.get(process.env.basePath + `/Receivable/GetRoomUsers?roomid=${data}`, {}).then(getResult as any);;
+}
+//获取关联的房间
+export function GetUserRooms(data): Promise<ResponseObject<any[]>> {
+  return request.get(process.env.basePath + `/Receivable/GetUserRooms?customerid=${data}`, {}).then(getResult as any);;
 }

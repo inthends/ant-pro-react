@@ -8,7 +8,7 @@ import './style.less';
 import LeftTree from '../LeftTree';
 import  moment from 'moment';
 
-interface FeeModifyProps {
+interface AddFeeProps {
   visible: boolean;
   closeDrawer(): void;
   form: WrappedFormUtils;
@@ -18,7 +18,7 @@ interface FeeModifyProps {
   organize:any;
 
 }
-const FeeModify = (props: FeeModifyProps) => {
+const AddFee = (props: AddFeeProps) => {
   const { visible, closeDrawer,form,isEdit,id,reload,organize} = props;
   const [feeTreeData, setFeeTreeData] = useState<TreeEntity[]>([]);
   const [tempListData, setTempListData] = useState<any[]>([]);
@@ -108,32 +108,28 @@ const FeeModify = (props: FeeModifyProps) => {
         bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
       >
       <Row gutter={8} style={{height:'calc(100vh - 55px)',overflow:'hidden' ,marginTop:'5px',backgroundColor:'rgb(255,255,255)'}}>
-        {
-          id!=''?
-          null:
-          <Col span={8} style={{height:'calc(100vh - 100px)',overflow:'auto'}}>
-            <LeftTree
-                treeData={feeTreeData}
-                selectTree={(id, item) => {
-                  if(organize.id){
-                    GetFeeItemDetail(id,organize.id).then(res=>{
-                      var info =Object.assign({},res,{ feeItemID:id});
-                      setInfoDetail(info);
-                      return info;
-                    }).then(info=>{
-                      GetUserRooms(getRelationId(info.relationID))
-                        .then(res=>{
-                          setUnitIds(res);
-                          if(res.length>0)
-                            info =Object.assign({},info,{  householdId:res[0].value});
-                            setInfoDetail(info);
-                      });
+        <Col span={8} style={{height:'calc(100vh - 100px)',overflow:'auto'}}>
+          <LeftTree
+              treeData={feeTreeData}
+              selectTree={(id, item) => {
+                if(organizeId){
+                  GetFeeItemDetail(id,organize.id).then(res=>{
+                    var info =Object.assign({},res,{ feeItemID:id});
+                    setInfoDetail(info);
+                    return info;
+                  }).then(info=>{
+                    GetUserRooms(getRelationId(info.relationID))
+                      .then(res=>{
+                        setUnitIds(res);
+                        if(res.length>0)
+                          info =Object.assign({},info,{  householdId:res[0].value});
+                          setInfoDetail(info);
                     });
-                  }
-                }}
-              />
-          </Col>
-        }
+                  });
+                }
+              }}
+            />
+        </Col>
         <Col span={16}  style={{height:'calc(100vh - 100px)',padding:'5px',overflow:'auto'}}>
           <Form layout="vertical" hideRequiredMark>
             <Spin tip="数据加载中..." spinning={loading}>
@@ -361,5 +357,5 @@ const FeeModify = (props: FeeModifyProps) => {
     </Drawer>
   );
 };
-export default Form.create<FeeModifyProps>()(FeeModify);
+export default Form.create<AddFeeProps>()(AddFee);
 
