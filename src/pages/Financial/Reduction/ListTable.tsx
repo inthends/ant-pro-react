@@ -1,10 +1,10 @@
 import Page from '@/components/Common/Page';
 import { Divider, Form, message, Table, Modal } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
-import React, { useState } from 'react';
+import React  from 'react';
 import moment from 'moment';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import VerifyReductionModal from './VerifyReductionModal';
+// import VerifyReductionModal from './VerifyReductionModal';
 import { RemoveForm } from './Main.service';
 
 interface ListTableProps {
@@ -15,14 +15,15 @@ interface ListTableProps {
   modify(id: string): void;
   reload(): void;
   form: WrappedFormUtils;
+  verify(id: string, flag: boolean): void;
 }
 
 function ListTable(props: ListTableProps) {
-  const { onchange, loading, pagination, data, modify, reload } = props;
-  const [verifyVisible, setVerifyVisible] = useState<boolean>(false);
+  const { onchange, loading, pagination, data, verify,modify, reload } = props;
+  // const [verifyVisible, setVerifyVisible] = useState<boolean>(false);
   // const [id, setId] = useState<string>('');
-  const [verifyId, setVerifyId] = useState<any>('');
-  const [ifVerifyModal, setIfVerifyModal] = useState<boolean>(false);
+  // const [verifyId, setVerifyId] = useState<any>('');
+  // const [ifVerifyModal, setIfVerifyModal] = useState<boolean>(false);
 
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
@@ -141,8 +142,8 @@ function ListTable(props: ListTableProps) {
             <span>
               <a onClick={() => modify(record.billId)} key="modify">查看</a>
               <Divider type="vertical" />
-              <a onClick={() => showVerifyModel(record.billId, false)} key="modify">反审</a> 
-            </span> 
+              <a onClick={() => verify(record.billId, false)} key="modify">反审</a>
+            </span>
           ];
         } else {
 
@@ -171,7 +172,7 @@ function ListTable(props: ListTableProps) {
             <span>
               <a onClick={() => modify(record.billId)} key="modify">编辑</a>
               <Divider type="vertical" />
-              <a onClick={() => showVerifyModel(record.billId, true)} key="verify">审核</a>
+              <a onClick={() => verify(record.billId, true)} key="verify">审核</a>
               <Divider type="vertical" />
               <a onClick={() => doDelete(record)} key="delete">删除</a>
             </span>
@@ -187,15 +188,16 @@ function ListTable(props: ListTableProps) {
   //   setSelectedRowKeys(selectedRowKeys);
   // };
 
-  const closeVerifyModel = () => {
-    setVerifyVisible(false);
-    reload();
-  };
-  const showVerifyModel = (id, ifVerfy) => {
-    setVerifyVisible(true);
-    setVerifyId(id);
-    setIfVerifyModal(ifVerfy);
-  };
+  // const closeVerifyModel = () => {
+  //   setVerifyVisible(false);
+  //   reload();
+  // };
+
+  // const showVerifyModel = (id, ifVerfy) => {
+  //   setVerifyVisible(true);
+  //   setVerifyId(id);
+  //   setIfVerifyModal(ifVerfy);
+  // };
 
   return (
     <Page>
@@ -206,18 +208,12 @@ function ListTable(props: ListTableProps) {
         columns={columns}
         rowKey={record => record.unitID}
         pagination={pagination}
-        scroll={{ y: 500  }}
+        scroll={{ y: 500 }}
         onChange={(pagination: PaginationConfig, filters, sorter) =>
           changePage(pagination, filters, sorter)
         }
         loading={loading}
-      />
-      <VerifyReductionModal
-        modalVisible={verifyVisible}
-        id={verifyId}
-        closeModal={closeVerifyModel}
-        ifVerifyModal={ifVerifyModal}
-      />
+      /> 
     </Page>
   );
 }

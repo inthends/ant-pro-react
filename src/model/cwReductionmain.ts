@@ -49,7 +49,14 @@ export interface CwReductionmain {
      * Desc:  Default:b'0'  Nullable:False
      */
     ifVerify?: boolean;
+    /**
+     * Desc: 减免费项id
+     */
     reductionFeeItemId?: string;
+     /**
+     * Desc: 减免费项名称
+     */
+    reductionFeeItemName?: string;
     /**
      * Desc:  Default:  Nullable:True
      */
