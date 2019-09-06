@@ -64,13 +64,13 @@ const onSave=()=>{
       if (!errors) {
         console.log(meterinfo);
         var info=Object.assign({},{
-          MeterID:   meterinfo.meterID,
+          MeterId:   meterinfo.meterId,
           OrganizeId:  meterinfo.organizeId,
           MeterType:   meterinfo.meterType,
           MeterKind:  meterinfo.meterKind,
           MeterName: meterinfo. meterName,
           MeterCode: meterinfo. meterCode,
-          ParentID:  meterinfo.parentID,
+          ParentId:  meterinfo.parentId,
           RunType: meterinfo. runType,
           MeterZoom:  meterinfo.meterZoom,
           MeterRange: meterinfo. meterRange,
@@ -80,12 +80,12 @@ const onSave=()=>{
           MeterArea: meterinfo. meterArea,
           MeterAddress:  meterinfo.meterAddress,
           Memo:  meterinfo.memo ,
-          FeeItemID: meterinfo.feeItemID,
+          FeeItemId: meterinfo.feeItemId,
           FeeItemName: meterinfo.feeItemName,
           IsStop:  meterinfo.isStop==null?false:true,
         },{
           keyValue:id,
-          UnitMeterID:id,
+          UnitMeterId:id,
           MeterName:values.meterName,
           MeterCode:values.meterCode,
           MeterZoom:values.meterZoom,
@@ -96,7 +96,7 @@ const onSave=()=>{
           Capacity:values.meterCapacity,
           MinUsage:values.minUsage,
           MaxUsage:values.maxUsage,
-          UnitID:infoDetail.unitID,
+          UnitId:infoDetail.unitId,
           Formula: values.formula,
         });
 
@@ -170,8 +170,8 @@ const [isFormula,setIsFormula]=useState<boolean>(false);
             </Col>
             <Col span={12}>
               <Form.Item required={true} label="房屋编号" labelCol={{span:6}} wrapperCol={{span:18}} >
-                {getFieldDecorator('unitID', {
-                    initialValue:infoDetail.unitID,
+                {getFieldDecorator('unitId', {
+                    initialValue:infoDetail.unitId,
                   rules: [{ required: true ,message:'请输入房屋编号' }],
                 })(
                   <Input style={{width:'100%'}}  disabled={true}/>

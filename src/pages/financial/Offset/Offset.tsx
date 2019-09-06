@@ -115,7 +115,7 @@ function Offset() {
   //账单表加载
   const checkload = data => {
     setCheckLoading(true);
-    data.sidx = data.sidx || 'billID';
+    data.sidx = data.sidx || 'billId';
     data.sord = data.sord || 'asc';
     return GetOffsetPageData(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;

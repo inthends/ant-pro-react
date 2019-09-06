@@ -1,9 +1,9 @@
 //周期费计算
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { Tabs, Button, Icon, Input, Layout ,Modal,Select,message} from 'antd';
+import { Tabs, Button, Icon, Input, Layout ,Modal} from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, {   useEffect, useState } from 'react';
-import { GetPageListJson , GetPageDetailListJson,   RemoveForm} from './BillingMain.service';
+import { GetPageListJson , GetPageDetailListJson,  RemoveForm} from './BillingMain.service';
 import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
 import UnitTable from './UnitTable';
@@ -61,7 +61,7 @@ function BillingMain() {
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'billID';
+      searchCondition.sidx = field ? field : 'billId';
     }
     return meterload(searchCondition);
   }
@@ -89,7 +89,7 @@ function BillingMain() {
   }
   const meterload = data => {
     setMeterLoading(true);
-    data.sidx = data.sidx || 'billID';
+    data.sidx = data.sidx || 'billId';
     data.sord = data.sord || 'asc';
 
     return GetPageListJson(data).then(res => {
@@ -138,7 +138,7 @@ function BillingMain() {
       TreeTypeId: org.id,
       TreeType: org.type,
     };
-    const sidx = 'billID';
+    const sidx = 'billId';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = meterPagination;
     return meterload({ pageIndex, pageSize, sidx, sord, total, queryJson });
@@ -223,7 +223,7 @@ const [isEdit,setIsEdit]=useState<boolean>(false);
                   setMeterSearchParams(params);
                 }}
               />
-              <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
+              {/* <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
                 onClick={() => {}}  disabled={ifVerify?false:true}
               >
                 <Icon type="minus-square" />
@@ -255,7 +255,7 @@ const [isEdit,setIsEdit]=useState<boolean>(false);
               >
                 <Icon type="check-square" />
                 审核
-              </Button>
+              </Button> */}
               <Button type="primary" style={{marginLeft: '10px' }}
                 onClick={() =>{loadMeterData()}}
               >
@@ -276,6 +276,7 @@ const [isEdit,setIsEdit]=useState<boolean>(false);
               loading={meterLoading}
               pagination={meterPagination}
               data={meterData}
+              showVerify={showVerify}
               showModify={(id,isedit)=>{
                 if(id!=null&&id!='')
                 {
@@ -286,7 +287,7 @@ const [isEdit,setIsEdit]=useState<boolean>(false);
               }}
               reload={() => initMeterLoadData('', meterSearch)}
               getRowSelect={(record)=>{
-                setId(record.billID);
+                setId(record.billId);
                 if(record.ifVerify==1)
                 {
                   setIfVerify(true);

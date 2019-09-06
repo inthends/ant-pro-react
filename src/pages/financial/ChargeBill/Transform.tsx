@@ -41,7 +41,7 @@ const Transfrom = (props:  TransfromProps) => {
           var infoTemp =Object.assign({},res.entity,
             { feeName:res.feeName, customerName:res.customerName, unitName:res.unitName});
           setInfoDetail(infoTemp);
-          return  GetTransferRoomUsers(res.entity.UnitID, res.entity.RelationID);
+          return  GetTransferRoomUsers(res.entity.UnitId, res.entity.RelationId);
         }).then(res=>{
           setRelationIds(res);
         });
@@ -60,7 +60,7 @@ const Transfrom = (props:  TransfromProps) => {
   const save=()=>{
     form.validateFields((errors, values) =>{
       var data= {
-        RelationID:values.relationID,
+        RelationId:values.relationId,
         Memo:values.memo
       };
 
@@ -127,12 +127,12 @@ const Transfrom = (props:  TransfromProps) => {
           <Row gutter={4}>
           <Col span={24}>
             <Form.Item label="新收费对象"  labelCol={{span:3}} wrapperCol={{span:21}} >
-              {getFieldDecorator('relationID', {
-                initialValue: infoDetail.relationID,
+              {getFieldDecorator('relationId', {
+                initialValue: infoDetail.relationId,
               })(
                 <Select placeholder="=请选择=">
                 {relationIds.map(item => (
-                  <Option  value={item.key}>
+                  <Option value={item.key}>
                     {item.title}
                   </Option>
                 ))}

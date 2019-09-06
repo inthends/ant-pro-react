@@ -113,7 +113,7 @@ export interface LeaseContractDTO {
      */
     houseList?: Array<LeaseContractHouseDTO>;
      /**
-      * 合同条款ID
+      * 合同条款Id
       */
-     chargeID?: string;
+     chargeId?: string;
 }

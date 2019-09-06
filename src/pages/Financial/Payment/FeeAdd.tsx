@@ -44,12 +44,12 @@ const AddFee = (props: AddFeeProps) => {
         GetRoomUsers(organize.id).then(res=>{
           setRelationID(res);
           if(res.length>0){
-            var info =Object.assign({},infoDetail,{ relationID:res[0].key});
+            var info =Object.assign({},infoDetail,{ relationId:res[0].key});
             setInfoDetail(info);
           }
           return info;
         }).then(infoDetail=>{
-            GetUserRooms(getRelationId(infoDetail.relationID))
+            GetUserRooms(getRelationId(infoDetail.relationId))
             .then(res=>{
               setUnitIds(res);
               if(res.length>0){
@@ -114,11 +114,11 @@ const AddFee = (props: AddFeeProps) => {
               selectTree={(id, item) => {
                 if(organizeId){
                   GetFeeItemDetail(id,organize.id).then(res=>{
-                    var info =Object.assign({},res,{ feeItemID:id});
+                    var info =Object.assign({},res,{ feeItemId:id});
                     setInfoDetail(info);
                     return info;
                   }).then(info=>{
-                    GetUserRooms(getRelationId(info.relationID))
+                    GetUserRooms(getRelationId(info.relationId))
                       .then(res=>{
                         setUnitIds(res);
                         if(res.length>0)
@@ -136,8 +136,8 @@ const AddFee = (props: AddFeeProps) => {
             <Col span={16}>
               <Row>
                 <Form.Item label="付款对象" required labelCol={{span:4}} wrapperCol={{span:20}} >
-                  {getFieldDecorator('relationID', {
-                    initialValue:infoDetail.relationID==null?null:infoDetail.relationID,// getRelationId(infoDetail.relationID),
+                  {getFieldDecorator('relationId', {
+                    initialValue:infoDetail.relationId==null?null:infoDetail.relationId,// getRelationId(infoDetail.relationId),
                     rules: [{ required: true, message: '请选择付款对象' }]
                   })(
                     <Select placeholder="=请选择=" disabled={isEdit?false:true} onSelect={(key)=>{
@@ -333,7 +333,7 @@ const AddFee = (props: AddFeeProps) => {
                         EndDate:moment( values.endDate).format('YYYY-MM-DD'),
                         BillType:"通知单",
                         Status:values.status,
-                        TemplateId:values.templateID,
+                        TemplateId:values.templateId,
                         IncludeBefore:values.includeBefore,
                         CalType:values.calType,
                         Memo:values.memo,

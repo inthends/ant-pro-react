@@ -121,7 +121,7 @@ function ListTable(props: ListTableProps) {
             //       type="primary"
             //       key="modify"
             //       style={{ marginRight: '10px' }}
-            //       onClick={() => modify(record.billID)}
+            //       onClick={() => modify(record.billId)}
             //     >
             //       查看
             // </Button>,
@@ -130,7 +130,7 @@ function ListTable(props: ListTableProps) {
             //       key="unverify"
             //       disabled={record.ifVerify == 1 ? false : true}
             //       style={{ marginRight: '10px' }}
-            //       onClick={() => showVerifyModel(record.billID, false)}
+            //       onClick={() => showVerifyModel(record.billId, false)}
             //     >
             //       反审
             //     </Button>,
@@ -152,7 +152,7 @@ function ListTable(props: ListTableProps) {
             //     type="primary"
             //     key="modify"
             //     style={{ marginRight: '10px' }}
-            //     onClick={() => modify(record.billID)}
+            //     onClick={() => modify(record.billId)}
             //   >
             //     编辑
             // </Button>,
@@ -160,7 +160,7 @@ function ListTable(props: ListTableProps) {
             //     type="primary"
             //     key="verify" 
             //     style={{ marginRight: '10px' }}
-            //     onClick={() => showVerifyModel(record.billID, true)}
+            //     onClick={() => showVerifyModel(record.billId, true)}
             //   >
             //     审核
             // </Button>,
@@ -206,7 +206,7 @@ function ListTable(props: ListTableProps) {
         size="middle"
         dataSource={data}
         columns={columns}
-        rowKey={record => record.unitID}
+        rowKey={record => record.unitId}
         pagination={pagination}
         scroll={{ y: 500 }}
         onChange={(pagination: PaginationConfig, filters, sorter) =>

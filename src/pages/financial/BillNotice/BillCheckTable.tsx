@@ -131,10 +131,10 @@ function BillCheckTable(props: BillCheckTableProps) {
       render: (text, record) => {
         return [
           <span>
-            <a onClick={() => showCheckBill(record.billID)} key="show">{"查看"}</a>
+            <a onClick={() => showCheckBill(record.billId)} key="show">{"查看"}</a>
             <Divider type="vertical" />
             <a onClick={() => {
-              RemoveForm(record.billID).then(res => {
+              RemoveForm(record.billId).then(res => {
                 reload();
               })
             }} key="delete">删除</a>
@@ -163,7 +163,7 @@ function BillCheckTable(props: BillCheckTableProps) {
         size="middle"
         columns={columns}
         dataSource={data}
-        rowKey="billID"
+        rowKey="billId"
         pagination={pagination}
         scroll={{ y: 500, x: 1400 }}
         loading={loading}

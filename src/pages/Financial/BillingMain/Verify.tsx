@@ -46,7 +46,7 @@ const  Verify = (props:  VerifyProps) => {
       if (!errors) {
         console.log(infoDetail);
         let newData={
-          keyValue:infoDetail.billID,
+          keyValue:infoDetail.billId,
           billCode:values.billCode,
           billDate:moment(values.billDate).format('YYYY-MM-DD'),
           createUserName:values.createUserName,

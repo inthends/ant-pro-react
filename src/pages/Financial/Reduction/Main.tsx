@@ -100,7 +100,7 @@ function Main() {
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'billID';
+      searchCondition.sidx = field ? field : 'billId';
     }
 
     return load(searchCondition).then(res => {
@@ -109,7 +109,7 @@ function Main() {
   };
   const load = data => {
     setLoading(true);
-    data.sidx = data.sidx || 'billID';
+    data.sidx = data.sidx || 'billId';
     data.sord = data.sord || 'asc';
     return GetPageListJson(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -161,7 +161,7 @@ function Main() {
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'billID';
+      searchCondition.sidx = field ? field : 'billId';
     }
 
     return detailload(searchCondition).then(res => {

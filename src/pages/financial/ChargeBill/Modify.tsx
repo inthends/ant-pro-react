@@ -45,17 +45,17 @@ const Modify = (props: ModifyProps) => {
         var infoTemp = {};
         GetShowDetail(id).then(res => {
           infoTemp = Object.assign({}, res.entity, { number: res.number });
-          return GetRoomUsers(res.entity.unitID);
+          return GetRoomUsers(res.entity.unitId);
         }).then(res => {
           setRelationID(res);
           if (res.length > 0) {
-            infoTemp = Object.assign({}, infoTemp, { relationID: res[0].key });
+            infoTemp = Object.assign({}, infoTemp, { relationId: res[0].key });
           }
           setInfoDetail(infoTemp);
           return;
         }).then(() => {
-          if (infoTemp.relationID)
-            return GetUserRooms(getRelationId(infoTemp.relationID));
+          if (infoTemp.relationId)
+            return GetUserRooms(getRelationId(infoTemp.relationId));
         }).then(res => {
           setUnitIds(res);
           if (res.length > 0) {
@@ -68,12 +68,12 @@ const Modify = (props: ModifyProps) => {
           GetRoomUsers(organizeId).then(res => {
             setRelationID(res);
             if (res.length > 0) {
-              var info = Object.assign({}, infoDetail, { relationID: res[0].key });
+              var info = Object.assign({}, infoDetail, { relationId: res[0].key });
               setInfoDetail(info);
             }
             return info;
           }).then(infoDetail => {
-            GetUserRooms(getRelationId(infoDetail.relationID))
+            GetUserRooms(getRelationId(infoDetail.relationId))
               .then(res => {
                 setUnitIds(res);
                 if (res.length > 0) {
@@ -143,15 +143,15 @@ const Modify = (props: ModifyProps) => {
 
   const onSave = () => {
     form.validateFields((errors, values) => {
-      if (infoDetail.feeItemID == null || infoDetail.feeItemID == '') {
+      if (infoDetail.feeItemId == null || infoDetail.feeItemId == '') {
 
       }
       if (!errors) {
         var guid = getGuid();
         let units = [{
-          BillID: id != null && id != "" ? infoDetail.billID : guid,
-          UnitID: values.householdId,
-          FeeItemID: infoDetail.feeItemID,
+          BillId: id != null && id != "" ? infoDetail.billId : guid,
+          UnitId: values.householdId,
+          FeeItemId: infoDetail.feeItemId,
           Quantity: "" + values.quantity,
           Price: "" + values.price,
           Amount: "" + values.amount,
@@ -159,25 +159,25 @@ const Modify = (props: ModifyProps) => {
           BeginDate: moment(values.beginDate).format("YYYY-MM-DD"),//"2019-04-01",
           EndDate: moment(values.endDate).format("YYYY-MM-DD"),//"2019-04-30",
           Memo: values.memo,
-          RelationID: values.relationID,//getRelationId(values.relationID),
+          RelationId: values.relationId,//getRelationId(values.relationId),
           CycleValue: "" + values.cycleValue,
           CycleType: values.cycleType,
           BillDate: moment(values.billDate).format("YYYY-MM-DD")
         }];
 
         let newData = {
-          BillID: id != null && id != "" ? infoDetail.billID : guid,
-          OrganizeID: organizeId,
+          BillId: id != null && id != "" ? infoDetail.billId : guid,
+          OrganizeId: organizeId,
           BillSource: "临时加费",
           Units: JSON.stringify(units),
-          keyValue: id != null && id != "" ? infoDetail.billID : guid,
+          keyValue: id != null && id != "" ? infoDetail.billId : guid,
           // CreateUserId: localStorage.getItem('userid'),
           // CreateUserName: localStorage.getItem('username'),
           // CreateDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
           // ModifyUserId: localStorage.getItem('userid'),
           // ModifyUserName: localStorage.getItem('username'),
           // ModifyDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
-          LinkID: '',
+          LinkId: '',
           IfVerify: false,
           VerifyPerson: '',
           VerifyDate: '',
@@ -211,12 +211,12 @@ const Modify = (props: ModifyProps) => {
                   // setFeeItemId(id);
                   if (organizeId) {
                     GetFeeItemDetail(id, organizeId).then(res => {
-                      var info = Object.assign({}, res, { feeItemID: id });
+                      var info = Object.assign({}, res, { feeItemId: id });
                       // console.log(info);
                       setInfoDetail(info);
                       return info;
                     }).then(info => {
-                      GetUserRooms(getRelationId(info.relationID))
+                      GetUserRooms(getRelationId(info.relationId))
                         .then(res => {
                           setUnitIds(res);
                           if (res.length > 0)
@@ -234,8 +234,8 @@ const Modify = (props: ModifyProps) => {
           <Form hideRequiredMark>
             <Row>
               <Form.Item label="加费对象" required labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} >
-                {getFieldDecorator('relationID', {
-                  initialValue: infoDetail.relationID == null ? null : infoDetail.relationID,// getRelationId(infoDetail.relationID),
+                {getFieldDecorator('relationId', {
+                  initialValue: infoDetail.relationId == null ? null : infoDetail.relationId,// getRelationId(infoDetail.relationId),
                   rules: [{ required: true, message: '请选择加费对象' }]
                 })(
                   <Select placeholder="=请选择=" disabled={edit ? false : true} onSelect={(key) => {

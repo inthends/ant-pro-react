@@ -5,7 +5,7 @@ import { PaginationConfig } from 'antd/lib/table';
 import AddReductionItem from './AddReductionItem';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { RemoveFormUnitAll, GetFormJson, GetListByID, GetReductionItem, GetUseInfo, GetUnitBillDetail, SaveForm } from './Main.service';
+import { RemoveFormUnitAll, GetFormJson, GetListByID, GetReductionItem, GetUnitBillDetail, SaveForm } from './Main.service';
 import moment from 'moment';
 const { Option } = Select;
 
@@ -140,7 +140,7 @@ const Modify = (props: ModifyProps) => {
         // getInfo(id).then((tempInfo: any) => {
         //    setInfoDetail(tempInfo);
         //    form.resetFields();
-        //    return GetListByID(tempInfo.billID);
+        //    return GetListByID(tempInfo.billId);
         // }).then(res => {
         //   setListData(res.data);
         // });
@@ -176,7 +176,7 @@ const Modify = (props: ModifyProps) => {
           createUserName: localStorage.getItem('name')//res.name == null ? '' : res.name,
           //createUserId: res.userid == null ? '' : res.userid,
           // rebate: "",
-          // reductionFeeItemID: "",
+          // reductionFeeItemId: "",
           // memo: "",
           // reductionAmount: ""
         })
@@ -255,9 +255,9 @@ const Modify = (props: ModifyProps) => {
         /*  let newData = infoDetail ? {
             ...infoDetail,
             ...values ,
-            keyValue:infoDetail.billID,
+            keyValue:infoDetail.billId,
             billDate:moment(infoDetail.billDate).format('YYYY-MM-DD HH:mm:ss'),
-            code:infoDetail.billID==""?0:1,
+            code:infoDetail.billId==""?0:1,
             details: JSON.stringify(newListData)} : values;*/
 
         SaveForm(newData).then(res => {
@@ -276,24 +276,24 @@ const Modify = (props: ModifyProps) => {
   // const getInfo = id => {
   //   if (id) {
   //     return GetFormJson(id).then(res => {
-  //       const { billID,
+  //       const { billId,
   //         billCode,
   //         billDate,
   //         createUserName,
   //         rebate,
-  //         reductionFeeItemID,
+  //         reductionFeeItemId,
   //         memo,
   //         reductionAmount
   //       } = res || ({} as any);
   //       let info = {
-  //         keyValue: billID,
+  //         keyValue: billId,
   //         code: 1,
-  //         billID,
+  //         billId,
   //         billCode,
   //         billDate,
   //         createUserName,
   //         rebate,
-  //         reductionFeeItemID,
+  //         reductionFeeItemId,
   //         memo,
   //         reductionAmount
   //       };

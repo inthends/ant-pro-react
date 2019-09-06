@@ -176,7 +176,7 @@ function ListTable(props: ListTableProps) {
 
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [sumEntity, setSumEntity] = useState();
-  // const [unitID, setUnitID] = useState();
+  // const [unitId, setUnitId] = useState();
   // const [customerName, setCustomerName] = useState();
 
   const onSelectChange = (selectedRowKeys, selectedRows) => {
@@ -223,7 +223,7 @@ function ListTable(props: ListTableProps) {
             let info = Object.assign({}, values, {
               // roomId: organizeId,
               ids: JSON.stringify(selectedRowKeys),
-              UnitID:organizeId,
+              UnitId:organizeId,
               CustomerName: customerName,
               billDate: values.billDate.format('YYYY-MM-DD HH:mm:ss'),
               //organize.title.split(' ')[1]

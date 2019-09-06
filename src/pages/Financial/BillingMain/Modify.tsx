@@ -24,7 +24,7 @@ interface  ModifyProps {
 
 const  Modify = (props:  ModifyProps) => {
   const { modifyVisible, closeDrawer, form, id, reload ,isEdit} = props;
-  const title = id === undefined ? '新增费表资料' : '修改费表资料';
+  const title = id === undefined ? '新增计费' : '修改计费单';
   const [newId,setNewId]=useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const { getFieldDecorator } = form;
@@ -110,10 +110,10 @@ const  Modify = (props:  ModifyProps) => {
         let guid = getGuid();
         var meterEntity = {
           keyValue:( id == null || id == '' )? guid: id,
-         // BillID: id == null || id == '' ? guid : id,
+         // BillId: id == null || id == '' ? guid : id,
           BillSource:'周期费计算',
           BillDate:moment(values.billDate).format('YYYY-MM-DD'),
-          LinkID:'',
+          LinkId:'',
           IfVerify:values.ifVerify=="未审核"?false:true,
           Status:0,
           Memo:values.memo
@@ -136,8 +136,8 @@ const  Modify = (props:  ModifyProps) => {
     },
     {
       title: '单元编号',
-      dataIndex: 'unitID',
-      key: 'unitID',
+      dataIndex: 'unitId',
+      key: 'unitId',
       width: 150,
       sorter: true
     },
@@ -423,10 +423,10 @@ const  Modify = (props:  ModifyProps) => {
                 let guid = getGuid();
                 var meterEntity = {
                   keyValue: id == null || id == '' ? guid : id,
-                  //BillID:'',// id == null || id == '' ? guid : id,
+                  //BillId:'',// id == null || id == '' ? guid : id,
                   BillSource:'周期费计算',
                   BillDate:moment(values.billDate).format('YYYY-MM-DD'),
-                  LinkID:'',
+                  LinkId:'',
                   IfVerify:values.ifVerify=="未审核"?false:true,
                   Status:0,
                   type:1,

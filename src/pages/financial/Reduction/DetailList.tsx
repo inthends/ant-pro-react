@@ -108,7 +108,7 @@ function DetailList(props: DetailListProps) {
         size="middle"
         dataSource={data}
         columns={columns}
-        rowKey={record => record.unitID}
+        rowKey={record => record.unitId}
         pagination={pagination}
         scroll={{ y: 500, x: 1000 }}
         onChange={(pagination: PaginationConfig, filters, sorter) =>

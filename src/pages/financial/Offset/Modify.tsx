@@ -51,7 +51,7 @@ const Modify = (props: ModifyProps) => {
   // }
 
   //明细表数据
-  const loadNoticeData = (search, organizeID, paginationConfig?: PaginationConfig, sorter?) => {
+  const loadNoticeData = (search, organizeId, paginationConfig?: PaginationConfig, sorter?) => {
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: pagination.pageSize,
@@ -61,7 +61,7 @@ const Modify = (props: ModifyProps) => {
       pageIndex,
       pageSize,
       total,
-      queryJson: { keyword: '', billid: infoDetail.billID },
+      queryJson: { keyword: '', billid: infoDetail.billId },
     };
     if (sorter) {
       let { field, order } = sorter;
@@ -104,7 +104,7 @@ const Modify = (props: ModifyProps) => {
           //feeitemid: infoDetail.feeitemid
         };
 
-        SaveForm(infoDetail.organizeID, newData).then((res) => {
+        SaveForm(newData).then((res) => {
           close();
         });
       }
@@ -286,7 +286,7 @@ const Modify = (props: ModifyProps) => {
               size="middle"
               columns={columns}
               dataSource={noticeData}
-              rowKey="billID"
+              rowKey="billd"
               pagination={pagination}
               scroll={{ y: 500, x: 1620 }}
               loading={loading}

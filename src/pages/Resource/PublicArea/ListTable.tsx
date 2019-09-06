@@ -23,7 +23,7 @@ function ListTable(props: ListTableProps) {
       title: '请确认',
       content: `您是否要删除${record.name}吗`,
       onOk: () => {
-        RemoveForm(record.pCode)
+        RemoveForm(record.id)
           .then(() => {
             message.success('删除成功');
             reload();
@@ -135,7 +135,7 @@ function ListTable(props: ListTableProps) {
         size="middle"
         dataSource={data}
         columns={columns}
-        rowKey={record => record.pCode}
+        rowKey={record => record.id}
         pagination={pagination}
         scroll={{ x: 1200 }}
         onChange={(pag: PaginationConfig, filters, sorter) => changePage(pag, filters, sorter)}

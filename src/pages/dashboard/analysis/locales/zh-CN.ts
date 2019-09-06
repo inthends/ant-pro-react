@@ -10,6 +10,7 @@ export default {
   'dashboard-analysis.analysis.week': '月同比',
   'dashboard-analysis.analysis.day': '日同比',
   'dashboard-analysis.analysis.payments': '完成工单量',
+  'dashboard-analysis.analysis.traffic': '新增工单量',
   'dashboard-analysis.analysis.conversion-rate': '完成率',
   'dashboard-analysis.analysis.operational-effect': '年收缴率',
   'dashboard-analysis.analysis.sales-trend': '收款趋势',
@@ -26,7 +27,7 @@ export default {
   'dashboard-analysis.channel.online': '线上',
   'dashboard-analysis.channel.stores': '线下',
   'dashboard-analysis.analysis.sales': '收款额',
-  'dashboard-analysis.analysis.traffic': '新增工单量',
+
   'dashboard-analysis.table.rank': '排名',
   'dashboard-analysis.table.search-keyword': '搜索关键词',
   'dashboard-analysis.table.users': '用户数',

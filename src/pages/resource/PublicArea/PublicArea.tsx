@@ -92,7 +92,7 @@ function PublicArea() {
     if (sorter) {
       const { field, order } = sorter;
       searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'pCode';
+      searchCondition.sidx = field ? field : 'id';
     }
 
     return load(searchCondition).then(res => {
@@ -101,7 +101,7 @@ function PublicArea() {
   };
   const load = formData => {
     setLoading(true);
-    formData.sidx = formData.sidx || 'pCode';
+    formData.sidx = formData.sidx || 'id';
     formData.sord = formData.sord || 'asc';
     return GetPublicAreas(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -128,7 +128,7 @@ function PublicArea() {
       TreeTypeId: org.id,
       TreeType: org.type,
     };
-    const sidx = 'pCode';
+    const sidx = 'id';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {

@@ -58,7 +58,7 @@ const Vertify = (props: VertifyProps) => {
           // verifyPerson: localStorage.getItem('userid'),
           // verifyDate: moment(new Date).format('YYYY-MM-DD'),
           verifyMemo: values.verifyMemo,
-          keyValue: infoDetail.billID,
+          keyValue: infoDetail.billId,
           billDate: moment(values.billDate).format('YYYY-MM-DD'),
           status: ifVertify ? 1 : 2//，已收未审核1，已审核2，已冲红3
         });

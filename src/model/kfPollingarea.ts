@@ -86,7 +86,7 @@ export interface KfPollingarea {
     /**
      * Desc:  Default:  Nullable:False
      */
-    pCode?: string;
+    id?: string;
     /**
      * Desc:  Default:  Nullable:True
      */

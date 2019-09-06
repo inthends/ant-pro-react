@@ -62,7 +62,7 @@ const Modify = (props: ModifyProps) => {
       if (!errors) {
         const newData = data ? { ...data, ...values } : values;
         //doSave(newData);
-        //newData.keyValue = newData.pCode;
+        //newData.keyValue = newData.id;
         Project({ ...newData, keyValue: newData.id }).then(res => {
           message.success('立项成功！');
           closeDrawer();
@@ -77,7 +77,7 @@ const Modify = (props: ModifyProps) => {
       if (!errors) {
         const newData = data ? { ...data, ...values } : values;
         //doSave(newData);
-        //newData.keyValue = newData.pCode;
+        //newData.keyValue = newData.id;
         Handle({ ...newData, keyValue: newData.id }).then(res => {
           message.success('处理成功！');
           closeDrawer();
@@ -92,7 +92,7 @@ const Modify = (props: ModifyProps) => {
       if (!errors) {
         const newData = data ? { ...data, ...values } : values;
         //doSave(newData);
-        //newData.keyValue = newData.pCode;
+        //newData.keyValue = newData.id;
         Visit({ ...newData, keyValue: newData.id }).then(res => {
           message.success('回访成功！');
           closeDrawer();
@@ -107,7 +107,7 @@ const Modify = (props: ModifyProps) => {
       if (!errors) {
         const newData = data ? { ...data, ...values } : values;
         //doSave(newData);
-        //newData.keyValue = newData.pCode;
+        //newData.keyValue = newData.id;
         Approve({ ...newData, keyValue: newData.id }).then(res => {
           message.success('审核成功！');
           closeDrawer();
@@ -118,7 +118,7 @@ const Modify = (props: ModifyProps) => {
   };
 
   // const doSave = dataDetail => {
-  //   dataDetail.keyValue = dataDetail.pCode;
+  //   dataDetail.keyValue = dataDetail.id;
   //   SaveForm({ ...dataDetail, type: 5 }).then(res => {
   //     message.success('保存成功');
   //     closeDrawer();
@@ -280,8 +280,8 @@ const Modify = (props: ModifyProps) => {
                       initialValue: infoDetail.handleCharger,
                       rules: [{ required: true, message: '请选择处理负责人' }],
                     })(<Input placeholder="请选择处理负责人" />)}
-                    {getFieldDecorator('handleChargerID', {
-                      initialValue: infoDetail.handleChargerID
+                    {getFieldDecorator('handleChargerId', {
+                      initialValue: infoDetail.handleChargerId
                     })(<Input type='hidden' />)}
                   </Form.Item>
                 </Col>

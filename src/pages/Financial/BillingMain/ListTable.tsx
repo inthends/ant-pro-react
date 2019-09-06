@@ -1,6 +1,6 @@
 //计费单列表
 import Page from '@/components/Common/Page';
-import { Divider, Form, Table } from 'antd';
+import { message, Dropdown, Menu, Icon, Modal, Divider, Form, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState } from 'react';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
@@ -15,13 +15,50 @@ interface ListTableProps {
   data: any[];
   reload(): void;
   showModify(id?, isedit?): void;
+  showVerify(id?, flag?): void;
   form: WrappedFormUtils;
   getRowSelect(record): void;
 }
 
 function ListTable(props: ListTableProps) {
-  const { onchange, loading, pagination, data, reload, showModify, getRowSelect } = props;
+  const { onchange, loading, pagination, data, reload, showModify, getRowSelect, showVerify } = props;
   const [selectedRowKey, setSelectedRowKey] = useState([]);
+
+
+  const MoreBtn: React.FC<{
+    item: any;
+  }> = ({ item }) => (
+    <Dropdown
+      overlay={
+        <Menu onClick={({ key }) => editAndDelete(key, item)}>
+          <Menu.Item key="redflush">权责摊销</Menu.Item>
+          <Menu.Item key="delete">删除</Menu.Item>
+        </Menu>}>
+      <a>
+        更多<Icon type="down" />
+      </a>
+    </Dropdown>
+  );
+
+  const editAndDelete = (key: string, currentItem: any) => {
+    if (key === 'redflush') {
+      //this.showEditModal(currentItem); 
+
+    }
+    else if (key === 'delete') {
+      Modal.confirm({
+        title: '请确认',
+        content: `您是否要删除${currentItem.billCode}`,
+        onOk: () => {
+          RemoveForm(currentItem.billId).then(() => {
+            message.success('删除成功');
+            reload();
+          });
+        },
+      });
+    }
+  };
+
   const columns = [
     {
       title: '单号',
@@ -38,9 +75,9 @@ function ListTable(props: ListTableProps) {
       sorter: true,
       render: val => {
         if (val == null) {
-          return <span></span>
+          return ''
         } else {
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
+          return moment(val).format('YYYY-MM-DD')
         }
       }
     },
@@ -96,7 +133,7 @@ function ListTable(props: ListTableProps) {
     {
       title: '备注',
       dataIndex: 'memo',
-      key: 'memo', 
+      key: 'memo',
       sorter: true
     },
     {
@@ -105,17 +142,27 @@ function ListTable(props: ListTableProps) {
       key: 'operation',
       align: 'center',
       fixed: 'right',
-      width: 95,
+      width: 150,
       render: (text, record) => {
+        // return [
+        //   <span>
+        //     <a onClick={() => showModify(record.billId, record.ifVerifyName == "已审核" || record.billSource == "水电气生成" ? false : true)} key="modify">{record.ifVerifyName == "已审核" || record.billSource == "水电气生成" ? "查看" : "修改"}</a>
+        //     <Divider type="vertical" />
+        //     <a onClick={() => {
+        //       RemoveForm(record.billId).then(res => {
+        //         if (res.code != 0) { reload(); }
+        //       })
+        //     }} key="delete">删除</a>
+        //   </span>
+        // ];
+
         return [
           <span>
-            <a onClick={() => showModify(record.billID, record.ifVerifyName == "已审核" || record.billSource == "水电气生成" ? false : true)} key="modify">{record.ifVerifyName == "已审核" || record.billSource == "水电气生成" ? "查看" : "修改"}</a>
+            <a onClick={() => showModify(record.billId, record.ifVerifyName == "已审核" || record.billSource == "水电气生成" ? false : true)} key="modify">{record.ifVerifyName == "已审核" || record.billSource == "水电气生成" ? "查看" : "修改"}</a>
             <Divider type="vertical" />
-            <a onClick={() => {
-              RemoveForm(record.billID).then(res => {
-                if (res.code != 0) { reload(); }
-              })
-            }} key="delete">删除</a>
+            {record.status == 1 ? <a onClick={() => showVerify(record.billId, false)} key="app">审核</a> : <a onClick={() => showVerify(record.id, true)} key="unapp">反审</a>}
+            <Divider type="vertical" />
+            <MoreBtn key="more" item={record} />
           </span>
         ];
       },
@@ -123,7 +170,7 @@ function ListTable(props: ListTableProps) {
   ] as ColumnProps<any>[];
 
   const setClassName = (record, index) => {
-    if (record.billID === selectedRowKey) {
+    if (record.billId === selectedRowKey) {
       return styles.rowSelect;
     } else {
       if (record.status == 3) {
@@ -137,7 +184,7 @@ function ListTable(props: ListTableProps) {
   const onRow = (record) => {
     return {
       onClick: event => {
-        setSelectedRowKey(record.billID);
+        setSelectedRowKey(record.billId);
         getRowSelect(record);
       }
     };

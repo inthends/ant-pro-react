@@ -1,12 +1,12 @@
 //计费明细
 //装表列表
 import Page from '@/components/Common/Page';
-import {  Form, Table } from 'antd';
+import { Form, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
-import React  from 'react';
+import React from 'react';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import {  } from './BillingMain.service'; 
-import  moment from 'moment';
+import { } from './BillingMain.service';
+import moment from 'moment';
 
 interface UnitTableProps {
   onchange(page: any, filter: any, sort: any): any;
@@ -18,7 +18,7 @@ interface UnitTableProps {
 }
 
 function UnitTable(props: UnitTableProps) {
-  const { onchange, loading, pagination, data } = props; 
+  const { onchange, loading, pagination, data } = props;
   const columns = [
     {
       title: '计费单号',
@@ -45,8 +45,11 @@ function UnitTable(props: UnitTableProps) {
       title: '应收期间',
       dataIndex: 'period',
       key: 'period',
-      width: 150,
+      width: 120,
       sorter: true,
+      render: val => {
+        return moment(val).format('YYYY-MM-DD')
+      }
     },
     {
       title: '数量',
@@ -88,34 +91,26 @@ function UnitTable(props: UnitTableProps) {
       key: 'beginDate',
       dataIndex: 'beginDate',
       sorter: true,
-      width: 200,
-      render: val =>{
-        if(val==null){
-          return <span></span>
-        }else{
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
-        }
+      width: 120,
+      render: val => {
+        return moment(val).format('YYYY-MM-DD')
       }
-    }, {
-      title: '备注',
-      dataIndex: 'memo',
-      key: 'memo',
-      width: 200,
-      sorter: true
     },
     {
       title: '终止日期',
       key: 'endDate',
       dataIndex: 'endDate',
       sorter: true,
-      width: 200,
-      render: val =>{
-        if(val==null){
-          return <span></span>
-        }else{
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
-        }
+      width: 120,
+      render: val => {
+        return moment(val).format('YYYY-MM-DD')
       }
+    },
+    {
+      title: '备注',
+      dataIndex: 'memo',
+      key: 'memo',
+      sorter: true
     }
   ] as ColumnProps<any>[];
 
@@ -128,7 +123,7 @@ function UnitTable(props: UnitTableProps) {
         dataSource={data}
         rowKey="id"
         pagination={pagination}
-        scroll={{ y: 500 }}
+        scroll={{ y: 500, x: 1200 }}
         loading={loading}
         onChange={onchange}
       />

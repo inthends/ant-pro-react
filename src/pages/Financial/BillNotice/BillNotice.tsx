@@ -60,7 +60,7 @@ function BillNotice() {
       total,
       queryJson: {
         keyword: billCheckSearchParams.search,
-        TemplateID: templateID,
+        TemplateId: templateId,
         BillType: billType,
         TreeTypeId: organize.id,
         TreeType: organize.type,
@@ -147,7 +147,7 @@ function BillNotice() {
     //console.log(org);
     setBillCheckSearch(searchText);
     const queryJson = {
-      TemplateID: templateID,
+      TemplateId: templateId,
       BillType: billType,
       keyword: searchText,
       TreeTypeId: org.id,
@@ -215,7 +215,7 @@ function BillNotice() {
   const [billCheckSearchParams, setBillCheckSearchParams] = useState<any>({});
   const [isEdit, setIsEdit] = useState<boolean>(false);
   // const [divideVisible,setDivideVisible]=useState<boolean>(false);
-  const [templateID, setTemplateID] = useState<string>('');
+  const [templateId, setTemplateId] = useState<string>('');
   const [billType, setBillType] = useState<string>('');
 
   const handleMenuClick = (e) => {
@@ -309,7 +309,7 @@ function BillNotice() {
               </Select>
               <Select placeholder="==模版类型==" style={{ width: '150px', marginRight: '5px' }}
                 onChange={(value: string) => {
-                  setTemplateID(value);
+                  setTemplateId(value);
                 }}
               >
                 {

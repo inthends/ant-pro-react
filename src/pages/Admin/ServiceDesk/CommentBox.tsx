@@ -37,7 +37,7 @@ function CommentBox(props: CommentBoxProps) {
     setIsSubmit(true);
     //提交评论 
     var postData = {
-      ServiceDeskID: data.id,
+      ServiceDeskId: data.id,
       Receiver: data.contactName,
       ReceiverCustId: data.custId,
       Content: commentValue,
