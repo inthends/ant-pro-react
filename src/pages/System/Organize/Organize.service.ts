@@ -1,4 +1,4 @@
-// import { PStructsData, ResponseObject, TreeEntity } from '@/model/models';
+// import { GmPstructure, ResponseObject, TreeEntity } from '@/model/models';
 import { getResult, objToFormdata, objToUrl } from '@/utils/networkUtils';
 import request from '@/utils/request';
 // export function GetTreeJsonById(): Promise<TreeEntity[]> {
