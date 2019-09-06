@@ -8,7 +8,7 @@ const { TreeNode } = Tree;
 interface LeftSelectTreeProps {
   treeData: TreeEntity[];
   selectTree(treeNode, item?: any): void;
-  getCheckedKeys(keys):string[];
+  getCheckedKeys(keys):void;
 
 }
 function LeftSelectTree(props: LeftSelectTreeProps) {
@@ -81,8 +81,9 @@ function LeftSelectTree(props: LeftSelectTreeProps) {
         onCheck={onCheck}
         expandedKeys={expanded}
         showLine onSelect={onSelect}
-        onExpand={clickExpend}>
-        {renderTree(treeData, '0')}
+        onExpand={clickExpend}
+        treeData={treeData}>
+       {/*renderTree(treeData, '0')*/}
       </Tree>
     </Page>
   );
