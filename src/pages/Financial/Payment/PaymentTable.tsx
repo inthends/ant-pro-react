@@ -132,10 +132,10 @@ function PaymentTable(props: PaymentTableProps) {
       render: (text, record) => {
         return [
           <span>
-            <a onClick={() => showModify(record.billID,record.ifVerifyName=="已审核"?false:true)} key="modify">{record.ifVerifyName=="已审核"||record.billSource=="水电气生成"?"查看":"修改"}</a>
+            <a onClick={() => showModify(record.billId,record.ifVerifyName=="已审核"?false:true)} key="modify">{record.ifVerifyName=="已审核"||record.billSource=="水电气生成"?"查看":"修改"}</a>
             <Divider type="vertical" />
             <a onClick={() => {
-              RemoveForm(record.billID).then(res => {
+              RemoveForm(record.billId).then(res => {
                 if (res.code != 0) { reload(); }
               })
             }} key="delete">删除</a>
@@ -146,7 +146,7 @@ function PaymentTable(props: PaymentTableProps) {
   ] as ColumnProps<any>[];
 
   const setClassName=(record,index)=>{
-    if(record.billID === selectedRowKey)
+    if(record.billId === selectedRowKey)
     {
       return  styles.rowSelect ;
     }else{
@@ -161,7 +161,7 @@ function PaymentTable(props: PaymentTableProps) {
   const onRow=(record)=>{
     return {
       onClick: event => {
-        setSelectedRowKey(record.billID);
+        setSelectedRowKey(record.billId);
         getRowSelect(record);
       }
     };
@@ -175,7 +175,7 @@ function PaymentTable(props: PaymentTableProps) {
         size="middle"
         columns={columns}
         dataSource={data}
-        rowKey="billID"
+        rowKey="billId"
         pagination={pagination}
         scroll={{ y: 500  }}
         loading={loading}

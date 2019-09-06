@@ -87,7 +87,7 @@ function Payment() {
       total,
       queryJson: {
         keyword: search,
-        UnitID: organize.id==null?"":organize.id,
+        UnitId: organize.id==null?"":organize.id,
        // TreeType: organize.type
       }
     };
@@ -161,7 +161,7 @@ const [isEdit,setIsEdit]=useState<boolean>(false);
     setNotPaymentSearchParams(Object.assign({},notPaymentSearchParams,{search:searchText}));
     const queryJson = {
       keyword: searchText,
-      UnitID: org.id==null?"":org.id,
+      UnitId: org.id==null?"":org.id,
     };
     const sidx = 'id';
     const sord = 'asc';
@@ -293,7 +293,7 @@ const [isEdit,setIsEdit]=useState<boolean>(false);
               }}
               reload={() => initNotPaymentLoadData('', paymentSearchParams.search)}
               rowSelect={(record)=>{
-                setId(record.billID);
+                setId(record.billId);
                 if(record.ifVerify==1)
                 {
                   setIfVerify(true);
@@ -381,7 +381,7 @@ const [isEdit,setIsEdit]=useState<boolean>(false);
               reload={() => initPaymentLoadData('',paymentSearchParams.search)}
 
               getRowSelect={(record)=>{
-                setId(record.billID);
+                setId(record.billId);
                 if(record.ifVerify==1)
                 {
                   setIfVerify(true);

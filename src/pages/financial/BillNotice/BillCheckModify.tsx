@@ -163,8 +163,8 @@ const BillCheckModify = (props: BillCheckModifyProps) => {
               <Row>
                 <Col span={24}>
                     <Form.Item required label="打印模板"  >
-                      {getFieldDecorator('templateID', {
-                        initialValue: infoDetail.templateID,
+                      {getFieldDecorator('templateId', {
+                        initialValue: infoDetail.templateId,
                       })(
                         <Select placeholder="==请选择==" style={{width:'100%'}}  disabled={!isEdit} >
                           {
@@ -247,7 +247,7 @@ const BillCheckModify = (props: BillCheckModifyProps) => {
                           EndDate:moment( values.endDate).format('YYYY-MM-DD'),
                           BillType:"通知单",
                           Status:values.status,
-                          TemplateId:values.templateID,
+                          TemplateId:values.templateId,
                           IncludeBefore:values.includeBefore,
                           CalType:values.calType,
                           Memo:values.memo,
@@ -309,7 +309,7 @@ const BillCheckModify = (props: BillCheckModifyProps) => {
                         EndDate:moment( values.endDate).format('YYYY-MM-DD'),
                         BillType:"通知单",
                         Status:values.status,
-                        TemplateId:values.templateID,
+                        TemplateId:values.templateId,
                         IncludeBefore:values.includeBefore,
                         CalType:values.calType,
                         Memo:values.memo,

@@ -114,14 +114,14 @@ function BillCheckTable(props: BillCheckTableProps) {
             //   type="primary"
             //   key="modify"
             //   style={{ marginRight: '10px' }}
-            //   onClick={() => showModify(record.billID)}  >
+            //   onClick={() => showModify(record.billId)}  >
             //   查看
             // </Button>,
             // <Button
             //   type="primary"
             //   key="verify"
             //   style={{ marginRight: '10px' }}
-            //   onClick={() => showVertify(record.billID, false)}
+            //   onClick={() => showVertify(record.billId, false)}
             // >
             //   反审
             // </Button>,
@@ -132,9 +132,9 @@ function BillCheckTable(props: BillCheckTableProps) {
             //   删除
             // </Button>
             <span>
-              <a onClick={() => showModify(record.billID)} key="modify">查看</a>
+              <a onClick={() => showModify(record.billId)} key="modify">查看</a>
               <Divider type="vertical" />
-              <a onClick={() => showVertify(record.billID, false)} key="modify">反审</a> 
+              <a onClick={() => showVertify(record.billId, false)} key="modify">反审</a> 
             </span>
           ];
         }
@@ -144,26 +144,26 @@ function BillCheckTable(props: BillCheckTableProps) {
             //     type="primary"
             //     key="modify"
             //     style={{ marginRight: '10px' }}
-            //     onClick={() => showModify(record.billID)} >
+            //     onClick={() => showModify(record.billId)} >
             //     编辑
             //   </Button>,
             //   <Button
             //     type="primary"
             //     key="verify"
             //     style={{ marginRight: '10px' }}
-            //     onClick={() => showVertify(record.billID, true)}   >
+            //     onClick={() => showVertify(record.billId, true)}   >
             //     审核
             //     </Button>,
             //      <Button type="danger"
-            //      key="delete" onClick={() =>  deleteData(record.billID)}>
+            //      key="delete" onClick={() =>  deleteData(record.billId)}>
             //      删除
             //  </Button>,  
             <span>
-              <a onClick={() => showModify(record.billID)} key="modify">编辑</a>
+              <a onClick={() => showModify(record.billId)} key="modify">编辑</a>
               <Divider type="vertical" />
-              <a onClick={() => showVertify(record.billID, true)} key="verify">审核</a>
+              <a onClick={() => showVertify(record.billId, true)} key="verify">审核</a>
               <Divider type="vertical" />
-              <a onClick={() => deleteData(record.billID)} key="delete">删除</a>
+              <a onClick={() => deleteData(record.billId)} key="delete">删除</a>
             </span>
 
           ];
@@ -179,7 +179,7 @@ function BillCheckTable(props: BillCheckTableProps) {
         size="middle"
         columns={columns}
         dataSource={data}
-        rowKey="billID"
+        rowKey="billId"
         pagination={pagination}
         scroll={{ y: 500, x: 1500 }}
         loading={loading}

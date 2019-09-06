@@ -196,8 +196,8 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
     if (id != null || id != '') {
       keyvalue = id;
     }
-    if (infoDetail != null && infoDetail.BillID != null) {
-      keyvalue = infoDetail.BillID;
+    if (infoDetail != null && infoDetail.BillId != null) {
+      keyvalue = infoDetail.BillId;
     }
     let searchCondition: any = {
       pageIndex,
@@ -348,7 +348,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
           endDate: values.endDate.format('YYYY-MM-DD HH:mm:ss')
         };
 
-        /*SaveForm(infoDetail.organizeID,newData).then((res)=>{
+        /*SaveForm(infoDetail.organizeId,newData).then((res)=>{
           close();
         });*/
       }
@@ -610,7 +610,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
         let guid = getGuid();
         if (id == null || id == '') {
           var info = Object.assign({}, infoDetail, {
-            BillID: guid
+            BillId: guid
           })
           setInfoDetail(info)
         }
@@ -644,7 +644,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
         let guid = getGuid();
         if (id == null || id == '') {
           var info = Object.assign({}, infoDetail, {
-            BillID: guid
+            BillId: guid
           })
           setInfoDetail(info)
         }
@@ -819,7 +819,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
               </Col>
               <Col span={8}>
                 <Form.Item  required={true} label="审核时间">
-                  {getFieldDecorator('feeItemID', {
+                  {getFieldDecorator('feeItemId', {
                       initialValue:infoDetail.verifyDate
                   })(
                     <Input style={{width:'100%'}}   placeholder="自动获取时间" disabled={true}/>
@@ -869,7 +869,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                           let guid = getGuid();
                           var meterEntity = {
                             keyValue: id == null || id == '' ? guid : id,
-                            BillID: id == null || id == '' ? guid : id,
+                            BillId: id == null || id == '' ? guid : id,
                             BatchCode: values.batchCode,
                             MeterCode: moment(values.meterCode).format('YYYYMM'),
                             ReadDate: moment(values.readDate).format('YYYY-MM-DD'),
@@ -934,7 +934,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                           let guid = getGuid();
                           var meterEntity = {
                             keyValue: id == null || id == '' ? guid : id,
-                            BillID: id == null || id == '' ? guid : id,
+                            BillId: id == null || id == '' ? guid : id,
                             BatchCode: values.batchCode,
                             MeterCode: moment(values.meterCode).format('YYYYMM'),
                             ReadDate: moment(values.readDate).format('YYYY-MM-DD'),
@@ -997,7 +997,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                           let guid = getGuid();
                           var meterEntity = {
                             keyValue: id == null || id == '' ? guid : id,
-                            BillID: id == null || id == '' ? guid : id,
+                            BillId: id == null || id == '' ? guid : id,
                             BatchCode: values.batchCode,
                             MeterCode: moment(values.meterCode).format('YYYYMM'),
                             ReadDate: moment(values.readDate).format('YYYY-MM-DD'),

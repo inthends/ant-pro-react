@@ -10,9 +10,9 @@ interface ListTableProps {
   loading: boolean;
   pagination:  PaginationConfig;
   data: any[];
-  detail(id: string,chargeID:string ): void;
+  detail(id: string,chargeId:string ): void;
   reload(): void;
-}
+};
 
 function ListTable(props: ListTableProps) {
   const { onchange, loading, pagination, data, detail, reload } = props;
@@ -168,7 +168,7 @@ function ListTable(props: ListTableProps) {
           //   type="primary"
           //   key="detail"
           //   style={{ marginRight: '10px' }}
-          //   onClick={() => detail(record.id,record.chargeID)}
+          //   onClick={() => detail(record.id,record.chargeId)}
           // >
           //   查看
           // </Button>,
@@ -176,7 +176,7 @@ function ListTable(props: ListTableProps) {
           //   删除
           // </Button>,
           <span>
-          <a onClick={() => detail(record.id,record.chargeID)} key="detail">查看</a>
+          <a onClick={() => detail(record.id,record.chargeId)} key="detail">查看</a>
           <Divider type="vertical" />
           <a onClick={() => doDelete(record)} key="delete">删除</a>
         </span>

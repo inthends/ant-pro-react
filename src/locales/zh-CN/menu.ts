@@ -40,7 +40,7 @@ export default {
   'menu.financial.reduction': '费用减免',
   'menu.financial.billnotice': '通知单',
   'menu.financial.billingmain': '周期费计算',
-
+  'menu.financial.payment': '付款管理',
 
   'menu.admin': '物业管理',
   'menu.admin.servicedesk': '服务总台',

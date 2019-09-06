@@ -106,7 +106,7 @@ function Main() {
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'BillID';
+      searchCondition.sidx = field ? field : 'BillId';
     }
     return load(searchCondition).then(res => {
       return res;
@@ -115,7 +115,7 @@ function Main() {
 
   const load = data => {
     setLoading(true);
-    data.sidx = data.sidx || 'BillID';
+    data.sidx = data.sidx || 'BillId';
     data.sord = data.sord || 'asc';
     return GetPageListJson(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -156,7 +156,7 @@ function Main() {
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'billID';
+      searchCondition.sidx = field ? field : 'billId';
     }
     return loadCharge(searchCondition).then(res => {
       return res;
@@ -165,7 +165,7 @@ function Main() {
 
   const loadCharge = data => {
     setLoading(true);
-    data.sidx = data.sidx || 'BillID';
+    data.sidx = data.sidx || 'BillId';
     data.sord = data.sord || 'asc';
     return ChargeFeePageData(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -187,7 +187,7 @@ function Main() {
     setSearch(search);
     // setShowCustomerFee(showCustomerFee);
     const queryJson = { keyword: search, roomid: roomid, showCustomerFee: showCustomerFee };
-    const sidx = 'BillID';
+    const sidx = 'BillId';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
@@ -205,7 +205,7 @@ function Main() {
       StartDate: chargedSearchParams.startDate ? chargedSearchParams.startDate : '',
       EndDate: chargedSearchParams.endDate ? chargedSearchParams.endDate : ''
     };
-    const sidx = 'BillID';
+    const sidx = 'BillId';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = paginationCharge;
     return loadCharge({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
@@ -268,7 +268,7 @@ function Main() {
       title: '请确认',
       content: `您是否要作废？`,
       onOk: () => {
-        InvalidForm(chargedRowSelectedKey.billID).then(res => {
+        InvalidForm(chargedRowSelectedKey.billId).then(res => {
           initChargeLoadData(organizeId);
         });
       },
@@ -284,9 +284,9 @@ function Main() {
       title: '请确认',
       content: `您是否要冲红？`,
       onOk: () => {
-        CheckRedFlush(chargedRowSelectedKey.billID).then(res => {
+        CheckRedFlush(chargedRowSelectedKey.billId).then(res => {
           if (res == "1") {
-            RedFlush(chargedRowSelectedKey.billID).then(res => {
+            RedFlush(chargedRowSelectedKey.billId).then(res => {
               initChargeLoadData(organizeId);
             });
           } else {
@@ -496,12 +496,12 @@ function Main() {
       <Show
         showVisible={showVisible}
         closeShow={closeDetail}
-        id={chargedRowSelectedKey.billID}
+        id={chargedRowSelectedKey.billId}
       />
       <Vertify
         vertifyVisible={vertifyVisible}
         closeVertify={closeVertify}
-        id={chargedRowSelectedKey.billID}
+        id={chargedRowSelectedKey.billId}
         ifVertify={ifVertify}
         reload={() => initChargeLoadData(organizeId)}
       />
@@ -520,5 +520,4 @@ function Main() {
     </Layout>
   );
 }
-
 export default Main;

@@ -100,7 +100,7 @@ const MeterModify = (props: MeterModifyProps) => {
       pageIndex,
       pageSize,
       total,
-      queryJson: { keyword: meterSearchParams.search == null ? '' : meterSearchParams.search, MeterID: id }
+      queryJson: { keyword: meterSearchParams.search == null ? '' : meterSearchParams.search, MeterId: id }
     };
 
     if (sorter) {
@@ -140,7 +140,7 @@ const MeterModify = (props: MeterModifyProps) => {
         let guid = getGuid();
         var meterEntity = {
           keyValue: id == null || id == '' ? guid : id,
-          MeterID: id == null || id == '' ? guid : id,
+          MeterId: id == null || id == '' ? guid : id,
           OrganizeId: infoDetail.organizeId,
           MeterType: values.meterType,
           MeterKind: values.meterKind,
@@ -153,7 +153,7 @@ const MeterModify = (props: MeterModifyProps) => {
           Calculation: values.calculation,
           MeterAddress: values.meterAddress,
           Memo: values.memo,
-          FeeItemID: infoDetail.feeItemId,
+          FeeItemId: infoDetail.feeItemId,
           FeeItemName: infoDetail.feeItemName,
           IsStop: values.isStop==null?false:true
         }
@@ -239,10 +239,10 @@ const MeterModify = (props: MeterModifyProps) => {
           // </Button>
 
           <span>
-            <a onClick={() => { setHouseFeeItemId(record.unitMeterID); setEditHouseFeeItemVisible(true); }} key="modify">编辑</a>
+            <a onClick={() => { setHouseFeeItemId(record.unitMeterId); setEditHouseFeeItemVisible(true); }} key="modify">编辑</a>
             <Divider type="vertical" />
             <a onClick={() => {
-              RemoveUnitForm(record.unitMeterID).then(res => {
+              RemoveUnitForm(record.unitMeterId).then(res => {
                 initMeterLoadData();
               })
             }} key="delete">删除</a>
@@ -364,7 +364,7 @@ const MeterModify = (props: MeterModifyProps) => {
               </Col>
               <Col span={8}>
                 <Form.Item required label="关联收费项目"   >
-                  {getFieldDecorator('feeItemID', {
+                  {getFieldDecorator('feeItemId', {
                     initialValue: infoDetail.feeItemName,
                     rules: [{ required: true, message: '请选择关联收费项目' }],
                   })(
@@ -550,7 +550,7 @@ const MeterModify = (props: MeterModifyProps) => {
                 let guid = getGuid();
                 var meterEntity = {
                   keyValue: id == null || id == '' ? '' : id,
-                  MeterID: id == null || id == '' ? guid : id,
+                  MeterId: id == null || id == '' ? guid : id,
                   OrganizeId: infoDetail.organizeId,
                   MeterType: values.meterType,
                   MeterKind: values.meterKind,
@@ -563,7 +563,7 @@ const MeterModify = (props: MeterModifyProps) => {
                   Calculation: values.calculation,
                   MeterAddress: values.meterAddress,
                   Memo: values.memo,
-                  FeeItemID: infoDetail.feeItemID,
+                  FeeItemId: infoDetail.feeItemId,
                   FeeItemName: infoDetail.feeItemName,
                   IsStop: values.isStop==null?false:true,
                   type: isAdd ? 1 : 0

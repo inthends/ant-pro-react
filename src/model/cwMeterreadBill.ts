@@ -18,7 +18,7 @@ export interface CwMeterreadBill {
     /**
      * Desc:  Default:  Nullable:False
      */
-    billID?: string;
+    billId?: string;
     /**
      * Desc:  Default:b'0'  Nullable:True
      */

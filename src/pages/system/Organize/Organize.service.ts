@@ -1,4 +1,4 @@
-// import { PStructsData, ResponseObject, TreeEntity } from '@/model/models';
+// import { GmPstructure, ResponseObject, TreeEntity } from '@/model/models';
 import { getResult, objToFormdata, objToUrl } from '@/utils/networkUtils';
 import request from '@/utils/request';
 // export function GetTreeJsonById(): Promise<TreeEntity[]> {
@@ -49,5 +49,5 @@ export function searchTypes(): Promise<any[]> {
 
 // 查询上级机构
 export function searchOrgs(): Promise<any[]> {
-  return request.get(process.env.basePath + `/Common/GetOrgTree2`).then(getResult as any);
+  return request.get(process.env.basePath + `/Common/GetOrgTreeOnly`).then(getResult as any);
 }

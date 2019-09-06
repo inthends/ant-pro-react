@@ -95,8 +95,8 @@ const AddFee = (props: AddFeeProps) => {
           <Form hideRequiredMark>
             <Row>
               <Form.Item label="加费对象" required labelCol={{span:4}} wrapperCol={{span:20}} >
-                {getFieldDecorator('relatrionID', {
-                  initialValue: infoDetail.relatrionID,
+                {getFieldDecorator('relatrionId', {
+                  initialValue: infoDetail.relatrionId,
                   rules: [{ required: true, message: '请选择加费对象' }]
                 })(
                   <Select placeholder="=请选择=">
@@ -111,8 +111,8 @@ const AddFee = (props: AddFeeProps) => {
             </Row>
             <Row>
               <Form.Item label="选择房屋" required  labelCol={{span:4}} wrapperCol={{span:20}} >
-                {getFieldDecorator('unitID', {
-                  initialValue: infoDetail.unitID,
+                {getFieldDecorator('unitId', {
+                  initialValue: infoDetail.unitId,
                   rules: [{ required: true, message: '请选择房屋' }]
                 })(
                   <Select placeholder="=请选择=">

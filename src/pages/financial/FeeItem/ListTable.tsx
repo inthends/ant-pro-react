@@ -24,7 +24,7 @@ function ListTable(props: ListTableProps) {
       title: '请确认',
       content: `您是否要删除${record.feeName}`,
       onOk: () => {
-        RemoveForm(record.feeItemID).then(() => {
+        RemoveForm(record.feeItemId).then(() => {
           message.success('保存成功');
           reload();
         });
@@ -92,7 +92,7 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'operation',
       align: 'center',
       key: 'operation',
-      width: 95,
+      width: 80,
       render: (text, record) => {
         return [
           // <Button
@@ -106,8 +106,8 @@ function ListTable(props: ListTableProps) {
           // <Button type="danger" key="delete" onClick={() => doDelete(record)}>
           //   删除
           // </Button>,
-          <span>
-            <a onClick={() => modify(record.feeItemID)} key="modify">修改</a>
+          <span key='buttons'>
+            <a onClick={() => modify(record.feeItemId)} key="modify">修改</a>
             <Divider type="vertical" key='divider' />
             <a onClick={() => doDelete(record)} key="delete">删除</a>
           </span>
@@ -119,12 +119,13 @@ function ListTable(props: ListTableProps) {
   return (
     <Page>
       <Table
+        key='list'
         style={{ border: 'none' }}
         bordered={false}
         size="middle"
         dataSource={data}
         columns={columns}
-        rowKey={record => record.feeitemid}
+        rowKey={record => record.feeItemId}
         pagination={pagination}
         scroll={{ y: 420 }}
         onChange={(pagination: PaginationConfig, filters, sorter) =>

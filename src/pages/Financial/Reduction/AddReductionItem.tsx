@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import AsynSelectTree from '../AsynSelectTree';
 import LeftTree from '../LeftTree';
 import { TreeEntity } from '@/model/models';
-import { GetFeeTreeListExpand } from './Main.service';
-import { getResult } from '@/utils/networkUtils';
+import { GetReceivablesTree } from './Main.service';
+// import { getResult } from '@/utils/networkUtils';
 import moment from 'moment';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 
@@ -73,11 +73,11 @@ const AddReductionItem = (props: AddReductionItemProps) => {
     //   const rootOrg = root.length === 1 ? root[0] : undefined;
     // });
 
-    getFeeTreeData().then(res => {
+    GetReceivablesTree().then(res => {
+      setFeeTreeData(res || []);
       // const root = res.filter(item => item.parentId === '0');
       // const rootOrg = root.length === 1 ? root[0] : undefined;
-    });
-
+    }); 
   }, []);
 
   // 获取属性数据
@@ -122,16 +122,16 @@ const AddReductionItem = (props: AddReductionItemProps) => {
 
 
   //获取所有费项
-  const getFeeTreeData = () => {
-    return GetFeeTreeListExpand()
-      .then(getResult)
-      .then((res: TreeEntity[]) => {
-        //  console.log(res);
-        var newData = GetAllTreeNode(res);
-        setFeeTreeData(newData || []);
-        return newData || [];
-      });
-  };
+  // const getFeeTreeData = () => {
+  //   return GetFeeTreeListExpand()
+  //     .then(getResult)
+  //     .then((res: TreeEntity[]) => {
+  //       //  console.log(res);
+  //       var newData = GetAllTreeNode(res);
+  //       setFeeTreeData(newData || []);
+  //       return newData || [];
+  //     });
+  // };
 
   //获取当前月份第一天
   const getCurrentMonthFirstDay = () => {

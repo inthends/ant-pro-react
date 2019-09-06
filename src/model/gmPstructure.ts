@@ -149,7 +149,7 @@ export interface GmPstructure {
      */
     modifyDate?: Date;
     /**
-     * 修改人ID
+     * 修改人Id
      */
     modifyUserId?: string;
     /**

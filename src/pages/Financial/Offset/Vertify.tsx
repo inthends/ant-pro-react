@@ -1,4 +1,4 @@
-import { TreeEntity } from '@/model/models';
+ 
 import {
   Button,
   Col,
@@ -11,10 +11,9 @@ import {
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetRoomTreeListExpand,GetBillTreeListExpand,GetCheckTreeListExpand,SaveForm,Audit,GetFormJson,GetCustomInfo,GetUserInfo} from './Offset.service';
+import {  Audit,GetFormJson,GetCustomInfo } from './Offset.service';
 import './style.less';
-import  moment from 'moment';
-import LeftTree from '../LeftTree';
+import  moment from 'moment'; 
 
 interface VertifyProps {
   vertifyVisible: boolean;
@@ -26,7 +25,7 @@ interface VertifyProps {
 }
 
 const Vertify = (props: VertifyProps) => {
-  const { vertifyVisible, closeVertify, form, id,organizeId,ifVertify } = props;
+  const { vertifyVisible, closeVertify, form, id, ifVertify } = props;
   const title = id === undefined ? '新增冲抵单' : '修改冲抵单';
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -41,12 +40,12 @@ const Vertify = (props: VertifyProps) => {
        // setInfoDetail(res);
         return res;
       }).then((res)=>{
-        if(res.customerID){
-          GetCustomInfo(res.customerID).then(customInfo=>{
+        if(res.customerId){
+          GetCustomInfo(res.customerId).then(customInfo=>{
             setInfoDetail({
               ...res,
-              keyValue:res.billID,
-              customerName:customInfo.customerInfo.name
+              keyValue:res.billId,
+              customerName:customInfo.name
             });
             setLoading(false);
           });
@@ -70,9 +69,9 @@ const Vertify = (props: VertifyProps) => {
     form.validateFields((errors, values) => {
       if (!errors) {
         let newData={  ...infoDetail,
-          verifyPerson:ifVertify?localStorage.getItem('userid'):'',
+          // verifyPerson:ifVertify?localStorage.getItem('userid'):'',
           ifVerify:ifVertify,
-          verifyDate:ifVertify?moment(new Date()).format('YYYY-MM-DD HH:mm:ss'):''
+          // verifyDate:ifVertify?moment(new Date()).format('YYYY-MM-DD HH:mm:ss'):''
         };
         Audit(newData).then(()=>{
           closeVertify(true);

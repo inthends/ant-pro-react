@@ -34,34 +34,34 @@ function Main() {
   // };
 
   const selectTree = (item, search) => {
-
-    var feeKind = "", feeType = "";
-    switch (item.value) {
+    var value = item.node.props.value; 
+    var title = item.node.props.title;
+    var feeKind = "", feeType = ""; 
+    switch (value) {
       case "All":
         feeKind = "";
         feeType = "";
         break;
       case "FeeType":
-        feeType = item.text;
-        feeKind = item.AttributeValue;
+        feeType = title;
+        feeKind = item.node.props.AttributeA;
         break;
       case "PaymentItem":
-        feeKind = item.text;
+        feeKind = title;
         feeType = "";
         break;
       case "ReceivablesItem":
-        feeKind = item.text;
+        feeKind = title;
         feeType = "";
         break;
       default:
-        feeKind = item.text;
+        feeKind = title;
         feeType = "";
         break;
     }
-
-    SetFeeKind(feeKind);
-    SetFeeType(feeType);
     initLoadData(feeKind, feeType, search);
+    SetFeeKind(feeKind);
+    SetFeeType(feeType); 
   };
 
   useEffect(() => {
@@ -75,7 +75,7 @@ function Main() {
       setTreeData(res || []);
     });
 
-    //initLoadData('', '', '');
+    initLoadData('', '', '');
 
   }, []);
 
@@ -142,7 +142,7 @@ function Main() {
   const initLoadData = (FeeKind, FeeType, search) => {
     setSearch(search);
     const queryJson = { FeeKind: FeeKind, FeeType: FeeType, keyword: search };
-    const sidx = 'feeitemid';
+    const sidx = 'feeitemId';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
@@ -153,11 +153,10 @@ function Main() {
   return (
     <Layout style={{ height: '100%' }}>
       <Sider theme="light" style={{ overflow: 'hidden', height: '1000px' }} width="245px"> 
-
         {treeData != null && treeData.length > 0 ?
           (<LeftTree
             key='lefttree'
-            treeData={treeData} 
+            treeData={treeData}
             selectTree={(id, item) => {
               selectTree(item, search);
             }}
@@ -184,6 +183,7 @@ function Main() {
             </div>
 
             <ListTable
+              key='ListTable'
               onchange={(paginationConfig, filters, sorter) =>
                 loadData(search, paginationConfig, sorter)
               }
@@ -192,8 +192,7 @@ function Main() {
               data={data}
               modify={showDrawer}
               reload={() => initLoadData(FeeKind, FeeType, search)}
-            />
-
+            /> 
           </TabPane>
           <TabPane tab="房屋费项列表" key="2">
           </TabPane>

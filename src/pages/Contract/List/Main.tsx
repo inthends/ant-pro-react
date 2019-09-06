@@ -21,7 +21,7 @@ function Main() {
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [data, setData] = useState<any[]>([]);
   const [id, setId] = useState<string>();
-  const [chargeID, setChargeID] = useState<string>();
+  const [chargeId, setChargeId] = useState<string>();
   const [search, setSearch] = useState<string>('');
   const [treeData, setTreeData] = useState<any[]>([]);
 
@@ -37,10 +37,10 @@ function Main() {
     setDetailVisible(false);
   };
 
-  const showDetailDrawer = (id?, chargeID?) => {
+  const showDetailDrawer = (id?, chargeId?) => {
     setDetailVisible(true);
     setId(id);
-    setChargeID(chargeID);
+    setChargeId(chargeId);
   };
 
   const loadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
@@ -151,7 +151,7 @@ function Main() {
         modifyVisible={detailVisible}
         closeDrawer={closeDetailDrawer}
         id={id}
-        chargeID={chargeID}
+        chargeId={chargeId}
         reload={() => initLoadData(search)}
       />
     </Layout>

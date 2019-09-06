@@ -64,8 +64,9 @@ export function GetOrgTree(): Promise<TreeEntity[]> {
     .then(getResult as any);
 }
 
-export function GetOrgTree2(): Promise<TreeEntity[]> {
-  return request.get(process.env.basePath + `/Common/GetOrgTree2`, {}).then(getResult);
+//只加载到管理处，项目管理模块左侧树使用
+export function GetOrgTreeOnly(): Promise<TreeEntity[]> {
+  return request.get(process.env.basePath + `/Common/GetOrgTreeOnly`, {}).then(getResult);
 }
 
 //获取组织父子节点id

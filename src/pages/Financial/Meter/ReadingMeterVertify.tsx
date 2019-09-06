@@ -45,9 +45,9 @@ const ReadingMeterVertify = (props: ReadingMeterVertifyProps) => {
     form.validateFields((errors, values) => {
       if (!errors) {
         let newData={
-          keyValue:infoDetail.billID,
-          BillID:infoDetail.billID,
-          OrganizeID:infoDetail.organizeID,
+          keyValue:infoDetail.billId,
+          BillId:infoDetail.billId,
+          OrganizeId:infoDetail.organizeId,
           BillCode:infoDetail.billCode,
           BatchCode:infoDetail.batchCode,
           MeterCode:infoDetail.meterCode,

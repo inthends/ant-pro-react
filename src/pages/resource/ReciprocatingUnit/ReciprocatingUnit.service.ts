@@ -1,8 +1,8 @@
-import { PStructsData, ResponseObject, TreeEntity } from '@/model/models';
+import { GmPstructure, ResponseObject, TreeEntity } from '@/model/models';
 import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
-export function GetOrgTree2(): Promise<TreeEntity[]> {
-  return request.get(process.env.basePath + `/Common/GetOrgTree2`, {}).then(getResult);
+export function GetOrgTreeOnly(): Promise<TreeEntity[]> {
+  return request.get(process.env.basePath + `/Common/GetOrgTreeOnly`, {}).then(getResult);
 }
 export function GetStatisticsTotal(): Promise<ResponseObject<any>> {
   return request.post(process.env.basePath + `/PStructs/GetStatisticsTotal`, {});
@@ -25,7 +25,7 @@ export function GetProjectType(): Promise<TreeEntity[]> {
 }
 
 // 获取房产信息
-export function GetFormInfoJson(keyValue): Promise<PStructsData> {
+export function GetFormInfoJson(keyValue): Promise<GmPstructure> {
   return request
     .get(process.env.basePath + `/PStructs/GetFormInfoJson?keyValue=${keyValue}`)
     .then(getResult as any);

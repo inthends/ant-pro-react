@@ -4,8 +4,13 @@ import request from '@/utils/request';
 import { CwReductionmain } from '@/model/cwReductionmain'; 
 
 //加载收款费项
-export function GetFeeTreeListExpand(): Promise<ResponseObject<TreeEntity[]>> {
-  return request.get(process.env.basePath + `/FeeItems/GetReceivablesFeeItemTreeJson`, {});
+// export function GetFeeTreeListExpand(): Promise<ResponseObject<TreeEntity[]>> {
+//   return request.get(process.env.basePath + `/FeeItems/GetReceivablesFeeItemTreeJson`, {});
+// }
+
+//获取收款费项
+export function GetReceivablesTree(): Promise<TreeEntity[]> {
+  return request.get(process.env.basePath + `/FeeItems/GetReceivablesFeeItemTreeJson`, {}).then(getResult as any);
 }
 
 //加载房间树
@@ -64,7 +69,7 @@ export function GetUnitBillDetail(data): Promise<any> {
 }
 
 //审核减免单
-export function AuditBill(data): Promise<any> {
+export function Audit(data): Promise<any> {
   return request
     .post(process.env.basePath + `/Reduction/Audit`, {data:objToFormdata(data)})
     .then(getResult as any);

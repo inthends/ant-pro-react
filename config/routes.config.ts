@@ -154,7 +154,7 @@ export default [
             component: './Financial/ChargeBill/Main',
           },
           {
-            name: '付款管理',
+            name: 'payment',
             path: '/financial/payment',
             component: './Financial/Payment/Payment',
           },

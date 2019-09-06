@@ -1,10 +1,9 @@
 //通知单
-//周期费计算
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { Tabs, Button, Icon, Input, Layout ,Modal,Select,message} from 'antd';
+import { message,Dropdown, Menu, Tabs, Button, Icon, Input, Layout, Modal, Select } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
-import React, {   useEffect, useState } from 'react';
-import { GetBillPageData, ChargeFeePageData,RemoveForm,GetTemplates,BatchAudit,Audit} from './BillNotice.service';
+import React, { useEffect, useState } from 'react';
+import { GetBillPageData, ChargeFeePageData, RemoveForm, GetTemplates,BatchAudit } from './BillNotice.service';
 import AsynLeftTree from '../AsynLeftTree';
 import BillCheckTable from './BillCheckTable';
 import BillNoticeTable from './BillNoticeTable';
@@ -14,47 +13,42 @@ import BillCheckShow from './BillCheckShow';
 const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
-const {Option} =Select;
+// const { Option } = Select;
 function BillNotice() {
   const [organize, SetOrganize] = useState<any>({});
-  const [treeSearch, SetTreeSearch] = useState<any>({});
+  // const [treeSearch, SetTreeSearch] = useState<any>({});
   const [id, setId] = useState<string>();
-  const [selectIds,setSelectIds]=useState<any>();
+  const [selectIds, setSelectIds] = useState<any>();
   const [billCheckLoading, setBillCheckLoading] = useState<boolean>(false);
   const [billNoticeLoading, setBillNoticeLoading] = useState<boolean>(false);
-
   const [billCheckData, setBillCheckData] = useState<any>();
   const [billNoticeData, setBillNoticeData] = useState<any[]>([]);
-
-
-  const [billCheckSearch,setBillCheckSearch] = useState<string>('');
-  const [billNoticeSearch,setBillNoticeSearch] = useState<string>('');
-
+  const [billCheckSearch, setBillCheckSearch] = useState<string>('');
+  const [billNoticeSearch, setBillNoticeSearch] = useState<string>('');
   const [billCheckPagination, setBillCheckPagination] = useState<DefaultPagination>(new DefaultPagination());
   const [billNoticePagination, setBillNoticePagination] = useState<DefaultPagination>(new DefaultPagination());
-
-  const [ifVerify,setIfVerify]=useState<boolean>(false);
-  const [vertifyVisible,setVerifyVisible]=useState<boolean>(false);
-  const [showCheckBillVisible,setShowCheckBillVisible]=useState<boolean>(false);
+  const [ifVerify, setIfVerify] = useState<boolean>(false);
+  const [vertifyVisible, setVerifyVisible] = useState<boolean>(false);
+  const [showCheckBillVisible, setShowCheckBillVisible] = useState<boolean>(false);
   const [tempListData, setTempListData] = useState<any[]>([]);
 
   const selectTree = (org, item, info) => {
     SetOrganize(org);
-    initBillCheckLoadData(info,'');
-    initBillNoticeLoadData(info,'');
+    initBillCheckLoadData(info, '');
+    initBillNoticeLoadData(info, '');
   };
 
   useEffect(() => {
-    GetTemplates().then(res=>{
+    GetTemplates().then(res => {
       setTempListData(res);
-    }).then(()=>{
-      initBillCheckLoadData('','');
-      initBillNoticeLoadData('','');
+    }).then(() => {
+      initBillCheckLoadData('', '');
+      initBillNoticeLoadData('', '');
     })
   }, []);
 
 
-  const loadBillCheckData=(paginationConfig?: PaginationConfig, sorter?)=>{
+  const loadBillCheckData = (paginationConfig?: PaginationConfig, sorter?) => {
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: billCheckPagination.pageSize,
@@ -65,9 +59,9 @@ function BillNotice() {
       pageSize,
       total,
       queryJson: {
-        keyword:billCheckSearchParams.search ,
-        TemplateID:templateID,
-        BillType:billType,
+        keyword: billCheckSearchParams.search,
+        TemplateId: templateId,
+        BillType: billType,
         TreeTypeId: organize.id,
         TreeType: organize.type,
       }
@@ -76,11 +70,11 @@ function BillNotice() {
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'billID';
+      searchCondition.sidx = field ? field : 'billId';
     }
     return billCheckload(searchCondition);
   }
-  const loadBillNoticeData=(search, paginationConfig?: PaginationConfig, sorter?)=>{
+  const loadBillNoticeData = (search, paginationConfig?: PaginationConfig, sorter?) => {
     setBillNoticeSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
@@ -91,7 +85,8 @@ function BillNotice() {
       pageIndex,
       pageSize,
       total,
-      queryJson: { keyword: search,
+      queryJson: {
+        keyword: search,
         TreeTypeId: organize.id,
         TreeType: organize.type
       }
@@ -102,12 +97,12 @@ function BillNotice() {
       searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
       searchCondition.sidx = field ? field : 'id';
     }
-
     return billNoticeload(searchCondition);
-  }
+  };
+
   const billCheckload = data => {
     setBillCheckLoading(true);
-    data.sidx = data.sidx || 'billID';
+    data.sidx = data.sidx || 'billId';
     data.sord = data.sord || 'asc';
     return GetBillPageData(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -122,7 +117,7 @@ function BillNotice() {
       setBillCheckData(res.data);
       setBillCheckLoading(false);
       return res;
-    }).catch(err=>{
+    }).catch(err => {
       setBillCheckLoading(false);
     });
   };
@@ -143,7 +138,7 @@ function BillNotice() {
       setBillNoticeData(res.data);
       setBillNoticeLoading(false);
       return res;
-    }).catch(err=>{
+    }).catch(err => {
       setBillNoticeLoading(false);
     });
   };
@@ -152,13 +147,13 @@ function BillNotice() {
     //console.log(org);
     setBillCheckSearch(searchText);
     const queryJson = {
-      TemplateID:templateID,
-      BillType:billType,
+      TemplateId: templateId,
+      BillType: billType,
       keyword: searchText,
       TreeTypeId: org.id,
       TreeType: org.type,
     };
-    const sidx = 'billID';
+    const sidx = 'billId';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = billCheckPagination;
     return billCheckload({ pageIndex, pageSize, sidx, sord, total, queryJson });
@@ -178,80 +173,147 @@ function BillNotice() {
 
   const closeVerify = (result?) => {
     setVerifyVisible(false);
-    if(result){
-      initBillCheckLoadData(organize,'');
+    if (result) {
+      initBillCheckLoadData(organize, '');
     }
     setId('');
   };
 
-  const showVerify = (id?,ifVerify?) => {
+  const showVerify = (id?, ifVerify?) => {
     setVerifyVisible(true);
     setIfVerify(ifVerify);
-    if(id!=null&&id!='')
+    if (id != null && id != '')
       setId(id);
   };
   const closeModify = (result?) => {
     setModifyVisible(false);
-    if(result){
+    if (result) {
       //initCheckLoadData(organize, null);
     }
   };
-  const [modifyVisible,setModifyVisible]=useState<boolean>(false);
+  const [modifyVisible, setModifyVisible] = useState<boolean>(false);
 
-  const showModify = (id?,isedit?) => {
+  const showModify = (id?, isedit?) => {
     setIsEdit(isedit);
     setModifyVisible(true);
     setId(id);
   };
-  const deleteData=(id?)=>{
+  const deleteData = (id?) => {
     Modal.confirm({
-      title: '是否确认删除该条抵冲记录?',
+      title: '是否确认删除该记录?',
       onOk() {
         RemoveForm({
-          keyValue:id
-        }).then(res=>{
+          keyValue: id
+        }).then(res => {
 
         });
       },
-      onCancel() {},
+      onCancel() { },
     });
-  }
-const [billCheckSearchParams,setBillCheckSearchParams]=useState<any>({});
-const [isEdit,setIsEdit]=useState<boolean>(false);
-const [divideVisible,setDivideVisible]=useState<boolean>(false);
-const [templateID,setTemplateID]=useState<string>('');
-const [billType,setBillType]=useState<string>('');
+  };
+
+  const [billCheckSearchParams, setBillCheckSearchParams] = useState<any>({});
+  const [isEdit, setIsEdit] = useState<boolean>(false);
+  // const [divideVisible,setDivideVisible]=useState<boolean>(false);
+  const [templateId, setTemplateId] = useState<string>('');
+  const [billType, setBillType] = useState<string>('');
+
+  const handleMenuClick = (e) => {
+    if (e.key == '1') {
+      if (selectIds&&selectIds.length > 1) {
+        Modal.confirm({
+          title: '请确认',
+          content: `您是否要取消审核这些账单?`,
+          onOk: () => {
+            BatchAudit({
+              keyValues: JSON.stringify(selectIds),
+              IfVerify: false
+            })
+              .then(() => {
+                message.success('审核成功');
+                initBillCheckLoadData('', '');
+              })
+              .catch(e => { });
+          },
+        });
+      } else {
+        if (id == null || id == '') {
+          message.warning('请先选择账单');
+        } else {
+          showVerify('', false);
+        }
+      }
+    } else if (e.key == '1') {
+
+      if (selectIds&&selectIds.length > 1) {
+        Modal.confirm({
+          title: '请确认',
+          content: `您是否要审核这些账单?`,
+          onOk: () => {
+            BatchAudit({
+              keyValues: JSON.stringify(selectIds),
+              IfVerify: true
+            })
+              .then(() => {
+                message.success('审核成功');
+                initBillCheckLoadData('', '');
+              })
+              .catch(e => { });
+          },
+        });
+      } else {
+        if (id == null || id == '') {
+          message.warning('请先选择账单');
+        } else {
+          showVerify('', true);
+        }
+      }
+
+    } else {
+
+    }
+  };
+
+  const menu = (
+    <Menu onClick={handleMenuClick}>
+      <Menu.Item key="1">批量审核</Menu.Item>
+      <Menu.Item key="2">取消审核</Menu.Item>
+      <Menu.Item key="3">批量删除</Menu.Item>
+    </Menu>
+  );
+
   return (
     <Layout>
       <AsynLeftTree
         parentid={'0'}
-        selectTree={(id, item,info) => {
+        selectTree={(id, item, info) => {
           selectTree(id, item, info);
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>
         <Tabs defaultActiveKey="1" >
-          <TabPane tab="计费单列表" key="1">
-              <div style={{ marginBottom: '20px', padding: '3px 2px' }} onChange={(value)=>{
-                var params=Object.assign({},billCheckSearchParams,{billChecktype:value});
+          <TabPane tab="账单列表" key="1">
+            <div style={{ marginBottom: '20px', padding: '3px 2px' }}
+              onChange={(value) => {
+                var params = Object.assign({}, billCheckSearchParams, { billChecktype: value });
                 setBillCheckSearchParams(params);
               }}>
-              账单类型：<Select placeholder="==请选择==" style={{width:'150px',marginRight:'5px'}}
-              onChange={(value:string)=>{
-                setBillType(value);
-              }}>
+             <Select placeholder="==账单类型==" style={{ width: '150px', marginRight: '5px' }}
+                onChange={(value: string) => {
+                  setBillType(value);
+                }}>
                 <Select.Option value="通知单">通知单</Select.Option>
                 <Select.Option value="催款单">催款单</Select.Option>
                 <Select.Option value="催缴函">催缴函</Select.Option>
                 <Select.Option value="律师函">律师函</Select.Option>
               </Select>
-              模版类型：<Select placeholder="==请选择==" style={{width:'150px',marginRight:'5px'}}
-                onChange={(value:string)=>{
-                  setTemplateID(value);
+              <Select placeholder="==模版类型==" style={{ width: '150px', marginRight: '5px' }}
+                onChange={(value: string) => {
+                  setTemplateId(value);
                 }}
               >
                 {
-                  (tempListData||[]).map(item=>{
+                  (tempListData || []).map(item => {
                     return <Select.Option value={item.value}>{item.title}</Select.Option>
                   })
                 }
@@ -260,113 +322,116 @@ const [billType,setBillType]=useState<string>('');
                 className="search-input"
                 placeholder="请输入要查询的单号"
                 style={{ width: 200 }}
-                onChange={e =>{
-                  var params=Object.assign({},billCheckSearchParams,{search:e.target.value});
+                onChange={e => {
+                  var params = Object.assign({}, billCheckSearchParams, { search: e.target.value });
                   setBillCheckSearchParams(params);
                 }}
               />
 
-              <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
+              {/* <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
                 onClick={() => {
-                  if(selectIds.length>1)
-                  {
+                  if (selectIds.length > 1) {
                     Modal.confirm({
                       title: '请确认',
                       content: `您是否要取消审核这些账单?`,
                       onOk: () => {
                         BatchAudit({
-                          keyValues:JSON.stringify(selectIds),
-                          IfVerify:false
+                          keyValues: JSON.stringify(selectIds),
+                          IfVerify: false
                         })
                           .then(() => {
                             message.success('审核成功');
-                            initBillCheckLoadData('','');
+                            initBillCheckLoadData('', '');
                           })
                           .catch(e => { });
                       },
                     });
-                  }else{
-                    if(id==null||id=='')
-                    {
+                  } else {
+                    if (id == null || id == '') {
                       message.warning('请先选择账单');
-                    }else{
-                      showVerify('',false);
+                    } else {
+                      showVerify('', false);
                     }
                   }
-                }}  disabled={ifVerify?false:true}
+                }} disabled={ifVerify ? false : true}
               >
                 <Icon type="minus-square" />
                 取消审核
               </Button>
               <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
                 onClick={() => {
-                  if(selectIds.length>1)
-                  {
+                  if (selectIds.length > 1) {
                     Modal.confirm({
                       title: '请确认',
                       content: `您是否要审核这些账单?`,
                       onOk: () => {
                         BatchAudit({
-                          keyValues:JSON.stringify(selectIds),
-                          IfVerify:true
+                          keyValues: JSON.stringify(selectIds),
+                          IfVerify: true
                         })
                           .then(() => {
                             message.success('审核成功');
-                            initBillCheckLoadData('','');
+                            initBillCheckLoadData('', '');
                           })
                           .catch(e => { });
                       },
                     });
-                  }else{
-                    if(id==null||id=='')
-                    {
+                  } else {
+                    if (id == null || id == '') {
                       message.warning('请先选择账单');
-                    }else{
-                      showVerify('',true);
+                    } else {
+                      showVerify('', true);
                     }
                   }
                 }}
-                disabled={ifVerify?true:false}
+                disabled={ifVerify ? true : false}
               >
                 <Icon type="check-square" />
                 审核
-              </Button>
-              <Button type="primary" style={{marginLeft: '10px' }}
-                onClick={() =>{loadBillCheckData()}}
+              </Button> */}
+
+              <Button type="primary" style={{ marginLeft: '10px' }}
+                onClick={() => { loadBillCheckData() }}
               >
                 <Icon type="search" />
                 查询
               </Button>
+
+              <Dropdown overlay={menu}  >
+                <Button style={{ float: 'right', marginLeft: '10px' }}>
+                  操作<Icon type="down" />
+                </Button>
+              </Dropdown>
+
               <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
-                onClick={() => {showModify(null,true)}}
+                onClick={() => { showModify(null, true) }}
               >
                 <Icon type="plus" />
                 新增
               </Button>
             </div>
+
             <BillCheckTable
-              onchange={(paginationConfig, filters, sorter) =>{
-                loadBillCheckData(paginationConfig, sorter)}
+              onchange={(paginationConfig, filters, sorter) => {
+                loadBillCheckData(paginationConfig, sorter)
+              }
               }
               loading={billCheckLoading}
               pagination={billCheckPagination}
               data={billCheckData}
-              showCheckBill={(id)=>{
-                if(id!=null&&id!='')
-                {
+              showCheckBill={(id) => {
+                if (id != null && id != '') {
                   setId(id);
                 }
                 setShowCheckBillVisible(true);
               }}
               reload={() => initBillCheckLoadData('', billCheckSearch)}
-              getRowSelect={(records)=>{
-                if(records.length==1)
-                {
-                  setId(records[0].billID);
-                  if(records[0].ifVerify==1)
-                  {
+              getRowSelect={(records) => {
+                if (records.length == 1) {
+                  setId(records[0].billId);
+                  if (records[0].ifVerify == 1) {
                     setIfVerify(true);
-                  }else{
+                  } else {
                     setIfVerify(false);
                   }
                 }
@@ -374,17 +439,17 @@ const [billType,setBillType]=useState<string>('');
               }}
             />
           </TabPane>
-          <TabPane tab="计费明细" key="2">
+          <TabPane tab="账单明细" key="2">
             <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
               <Search
                 className="search-input"
-                placeholder="请输入要查询的名称或者单元编号"
+                placeholder="请输入要查询的单号"
                 style={{ width: 280 }}
                 onSearch={value => loadBillNoticeData(value)}
               />
             </div>
             <BillNoticeTable
-              showModify={(id)=>{
+              showModify={(id) => {
                 setId(id);
               }}
               onchange={(paginationConfig, filters, sorter) =>
@@ -394,12 +459,11 @@ const [billType,setBillType]=useState<string>('');
               pagination={billNoticePagination}
               data={billNoticeData}
               reload={() => initBillNoticeLoadData('', billNoticeSearch)}
-              getRowSelect={(record)=>{
-                setId(record.billID);
-                if(record.ifVerify==1)
-                {
+              getRowSelect={(record) => {
+                setId(record.billId);
+                if (record.ifVerify == 1) {
                   setIfVerify(true);
-                }else{
+                } else {
                   setIfVerify(false);
                 }
               }}
@@ -412,11 +476,11 @@ const [billType,setBillType]=useState<string>('');
         closeDrawer={closeModify}
         id={id}
         isEdit={true}
-        reload={() => initBillCheckLoadData('','')}
+        reload={() => initBillCheckLoadData('', '')}
       />
       <BillCheckShow
         visible={showCheckBillVisible}
-        closeDrawer={()=>{
+        closeDrawer={() => {
           setShowCheckBillVisible(false);
         }}
         id={id}
@@ -426,7 +490,7 @@ const [billType,setBillType]=useState<string>('');
         closeVerify={closeVerify}
         ifVerify={ifVerify}
         id={id}
-        reload={() => initBillCheckLoadData('','')}
+        reload={() => initBillCheckLoadData('', '')}
       />
     </Layout>
   );

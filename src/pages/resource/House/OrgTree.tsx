@@ -13,7 +13,7 @@ function OrgTree(props: OrgTreeProps) {
   const [autoExpandParent, setAutoExpandParent] = useState<boolean>(true);
 
   useEffect(() => {
-    setExpandedKeys(treeData.map(item => item.id as string));
+    setExpandedKeys(treeData.map(item => item.key as string));
   }, [treeData]);
 
   const onSelect = (selectedKeys, info) => {

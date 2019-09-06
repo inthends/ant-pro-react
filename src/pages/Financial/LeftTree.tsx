@@ -18,10 +18,17 @@ function LeftTree(props: LeftTreeProps) {
   // setExpanded(treeData.map(item => item.key as string));
   //}, [treeData]);
 
-  const onSelect = (selectedKeys, info) => {
+  // const onSelect = (selectedKeys, info) => { 
+  //   if (selectedKeys.length === 1) {
+  //     const item = treeData.filter(item => item.key === selectedKeys[0])[0];
+  //     selectTree(selectedKeys[0], item);
+  //   }
+  // };
+
+  const onSelect = (selectedKeys, info) => { 
     if (selectedKeys.length === 1) {
-      const item = treeData.filter(item => item.key === selectedKeys[0])[0];
-      selectTree(selectedKeys[0], item);
+      //const item = treeData.filter(item => item.key === selectedKeys[0])[0];
+      selectTree(selectedKeys[0], info);
     }
   };
 
@@ -36,7 +43,6 @@ function LeftTree(props: LeftTreeProps) {
   //       );
   //     });
   // };
-
 
   /*const renderTree = data =>
     data.map(item => {

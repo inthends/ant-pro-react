@@ -1,11 +1,11 @@
 
-import { Modal,message, Table, Select, Button, Card, Col, Icon, DatePicker, InputNumber, Drawer, Form, Input, Row, notification } from 'antd';
+import { Modal, message, Table, Select, Button, Card, Col, Icon, DatePicker, InputNumber, Drawer, Form, Input, Row, notification } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { PaginationConfig } from 'antd/lib/table';
 import AddReductionItem from './AddReductionItem';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { RemoveFormUnitAll,GetFormJson, GetListByID, GetReductionItem, GetUseInfo, GetUnitBillDetail, SaveForm } from './Main.service';
+import { RemoveFormUnitAll, GetFormJson, GetListByID, GetReductionItem, GetUnitBillDetail, SaveForm } from './Main.service';
 import moment from 'moment';
 const { Option } = Select;
 
@@ -15,7 +15,7 @@ interface ModifyProps {
   closeDrawer(): void;
   form: WrappedFormUtils;
   id?: string;
-  organizeId?: string;
+  // organizeId?: string;
   reload(): void;
 }
 
@@ -119,7 +119,6 @@ const Modify = (props: ModifyProps) => {
   const getSelectReduction = () => {
     GetReductionItem().then(res => {
       setReductionItem(res);
-      setLoading(false);
     });
   };
 
@@ -141,7 +140,7 @@ const Modify = (props: ModifyProps) => {
         // getInfo(id).then((tempInfo: any) => {
         //    setInfoDetail(tempInfo);
         //    form.resetFields();
-        //    return GetListByID(tempInfo.billID);
+        //    return GetListByID(tempInfo.billId);
         // }).then(res => {
         //   setListData(res.data);
         // });
@@ -149,7 +148,6 @@ const Modify = (props: ModifyProps) => {
         GetFormJson(id).then(res => {
           setInfoDetail(res);
           form.resetFields();
-
           //分页查询
           const { current: pageIndex, pageSize, total } = pagination;
           const searchCondition: any = {
@@ -161,27 +159,28 @@ const Modify = (props: ModifyProps) => {
           GetListByID(searchCondition).then(res => {
             //明细
             setListData(res.data);
+            setLoading(false);
           })
         });
 
       } else {
         form.resetFields();
         //重置之前选择加载的费项类别
-        GetUseInfo(localStorage.getItem('userid')).then(res => {
-          setInfoDetail({
-            keyValue: '',
-            code: 0,
-            billId: guid(),
-            // billCode: '',
-            // billDate: '',
-            createUserName: res.name == null ? '' : res.name,
-            //createUserId: res.userid == null ? '' : res.userid,
-            // rebate: "",
-            // reductionFeeItemID: "",
-            // memo: "",
-            // reductionAmount: ""
-          })
+        // GetUseInfo(localStorage.getItem('userid')).then(res => {
+        setInfoDetail({
+          keyValue: '',
+          code: 0,
+          billId: guid(),
+          // billCode: '',
+          // billDate: '',
+          createUserName: localStorage.getItem('name')//res.name == null ? '' : res.name,
+          //createUserId: res.userid == null ? '' : res.userid,
+          // rebate: "",
+          // reductionFeeItemId: "",
+          // memo: "",
+          // reductionAmount: ""
         })
+        // })
         // setListData([]);
         // setReductionItem([]);
         // form.resetFields();
@@ -256,9 +255,9 @@ const Modify = (props: ModifyProps) => {
         /*  let newData = infoDetail ? {
             ...infoDetail,
             ...values ,
-            keyValue:infoDetail.billID,
+            keyValue:infoDetail.billId,
             billDate:moment(infoDetail.billDate).format('YYYY-MM-DD HH:mm:ss'),
-            code:infoDetail.billID==""?0:1,
+            code:infoDetail.billId==""?0:1,
             details: JSON.stringify(newListData)} : values;*/
 
         SaveForm(newData).then(res => {
@@ -277,24 +276,24 @@ const Modify = (props: ModifyProps) => {
   // const getInfo = id => {
   //   if (id) {
   //     return GetFormJson(id).then(res => {
-  //       const { billID,
+  //       const { billId,
   //         billCode,
   //         billDate,
   //         createUserName,
   //         rebate,
-  //         reductionFeeItemID,
+  //         reductionFeeItemId,
   //         memo,
   //         reductionAmount
   //       } = res || ({} as any);
   //       let info = {
-  //         keyValue: billID,
+  //         keyValue: billId,
   //         code: 1,
-  //         billID,
+  //         billId,
   //         billCode,
   //         billDate,
   //         createUserName,
   //         rebate,
-  //         reductionFeeItemID,
+  //         reductionFeeItemId,
   //         memo,
   //         reductionAmount
   //       };
@@ -497,6 +496,11 @@ const Modify = (props: ModifyProps) => {
     setListData(newData);
   };
 
+  //选择减免费项
+  const onFeeItemSelect = (value, option) => {
+    form.setFieldsValue({ reductionFeeItemName: option.key });
+  };
+
   return (
     <Drawer
       title={title}
@@ -548,14 +552,19 @@ const Modify = (props: ModifyProps) => {
                   initialValue: infoDetail.reductionFeeItemId,
                   rules: [{ required: true, message: '请选择减免项目' }],
                 })(
-                  <Select placeholder="==请选择减免项目==">
+                  <Select placeholder="==请选择减免项目=="
+                    onSelect={onFeeItemSelect}>
                     {/* {buildOption(reductionItem)} */}
-
                     {reductionItem.map(item => (
                       <Option key={item.key} value={item.value}>
                         {item.title}
                       </Option>
                     ))}
+
+                    {getFieldDecorator('reductionFeeItemName', {
+                    })(
+                      <input type='hidden' />
+                    )}
                   </Select>
                 )}
               </Form.Item>
@@ -603,7 +612,7 @@ const Modify = (props: ModifyProps) => {
                     onOk: () => {
                       if (id != null || id != "") {
                         RemoveFormUnitAll(id).then(res => {
-                          message.success('删除成功！'); 
+                          message.success('删除成功！');
                         });
                       }
                     },

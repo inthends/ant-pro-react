@@ -5,7 +5,7 @@ import { Audit,GetBilling} from './BillingMain.service';
 import './style.less';
 import  moment from 'moment';
 
-interface MeterVerifyProps {
+interface  VerifyProps {
   vertifyVisible: boolean;
   ifVerify:boolean;
   closeVerify(result?): void;
@@ -14,7 +14,7 @@ interface MeterVerifyProps {
   reload(): void;
 }
 
-const MeterVerify = (props: MeterVerifyProps) => {
+const  Verify = (props:  VerifyProps) => {
   const { vertifyVisible, closeVerify, form, id,ifVerify ,reload} = props;
   const title = id === undefined ? '抄表单审核' : '抄表单取消审核';
   const [loading, setLoading] = useState<boolean>(false);
@@ -46,7 +46,7 @@ const MeterVerify = (props: MeterVerifyProps) => {
       if (!errors) {
         console.log(infoDetail);
         let newData={
-          keyValue:infoDetail.billID,
+          keyValue:infoDetail.billId,
           billCode:values.billCode,
           billDate:moment(values.billDate).format('YYYY-MM-DD'),
           createUserName:values.createUserName,
@@ -174,5 +174,5 @@ const MeterVerify = (props: MeterVerifyProps) => {
   );
 };
 
-export default Form.create<MeterVerifyProps>()(MeterVerify);
+export default Form.create< VerifyProps>()( Verify);
 

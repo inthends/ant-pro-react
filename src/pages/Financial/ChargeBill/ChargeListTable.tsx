@@ -4,7 +4,7 @@ import { Icon, Menu, Dropdown, Divider, message, Table, Modal } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState } from 'react';
 import moment from 'moment';
-import { RemoveForm } from './Main.service';
+import { InvalidForm } from './Main.service';
 import styles from './style.less';
 
 interface ChargeListTableProps {
@@ -42,21 +42,20 @@ function ChargeListTable(props: ChargeListTableProps) {
 
   const editAndDelete = (key: string, currentItem: any) => {
     if (key === 'redflush') {
-      //this.showEditModal(currentItem);
-
+      //this.showEditModal(currentItem); 
 
     }
-    else if (key === 'delete') { 
+    else if (key === 'delete') {
       Modal.confirm({
         title: '请确认',
         content: `您是否要作废${currentItem.billCode}`,
         onOk: () => {
-          RemoveForm(currentItem.id).then(() => {
+          InvalidForm(currentItem.billId).then(() => {
             message.success('作废成功');
             reload();
           });
         },
-      }); 
+      });
     }
   };
 
@@ -74,19 +73,19 @@ function ChargeListTable(props: ChargeListTableProps) {
       key: 'billDate',
       width: 100,
       sorter: true,
-      render: val => <span> {moment(val).format('YYYY-MM-DD')} </span>
+      render: val => moment(val).format('YYYY-MM-DD')
     },
     {
       title: '房间编号',
-      dataIndex: 'unitID',
-      key: 'unitID',
+      dataIndex: 'unitId',
+      key: 'unitId',
       width: 150,
       sorter: true,
     },
     {
       title: '业户名称',
-      dataIndex: 'offsetAmount',
-      key: 'offsetAmount',
+      dataIndex: 'customerName',
+      key: 'customerName',
       width: 150,
       sorter: true,
     },
@@ -107,25 +106,24 @@ function ChargeListTable(props: ChargeListTableProps) {
       dataIndex: 'payCode',
       key: 'payCode',
       width: 80,
-    }, {
-      title: '审核日期',
-      dataIndex: 'verifyDate',
-      key: 'verifyDate',
-      width: 100,
-      render: val => val == null || val == "" ? <span></span> : <span> {moment(val).format('YYYY-MM-DD')} </span>
-    }, {
-      title: '审核人',
-      dataIndex: 'verifyPerson',
-      key: 'verifyPerson',
-      width: 80
     },
     {
       title: '状态',
       dataIndex: 'statusName',
       key: 'statusName',
       width: 80
+    }, {
+      title: '审核日期',
+      dataIndex: 'verifyDate',
+      key: 'verifyDate',
+      width: 100,
+      render: val => val == null || val == "" ? '' : moment(val).format('YYYY-MM-DD')
+    }, {
+      title: '审核人',
+      dataIndex: 'verifyPerson',
+      key: 'verifyPerson',
+      width: 80
     },
-
     {
       title: '审核情况',
       dataIndex: 'verifyMemo',
@@ -149,7 +147,7 @@ function ChargeListTable(props: ChargeListTableProps) {
           <span>
             <a onClick={() => showDetail()} key="view">查看</a>
             <Divider type="vertical" />
-            {record.status == 1 ? <a onClick={() => showVertify(record.id, false)} key="delete">审核</a> : <a onClick={() => showVertify(record.id, true)} key="delete">反审</a>}
+            {record.status == 1 ? <a onClick={() => showVertify(record.billId, false)} key="delete">审核</a> : <a onClick={() => showVertify(record.id, true)} key="delete">反审</a>}
             <Divider type="vertical" />
             <MoreBtn key="more" item={record} />
           </span>
@@ -158,33 +156,28 @@ function ChargeListTable(props: ChargeListTableProps) {
       },
     },
   ] as ColumnProps<any>[];
-
   const [selectedRowKey, setSelectedRowKey] = useState([]);
-
   const onRow = (record) => {
     return {
       onClick: event => {
-        setSelectedRowKey(record.billID);
+        setSelectedRowKey(record.billId);
         getRowSelect(record);
-        console.log(record);
+        //console.log(record);
       }, // 点击行
       onDoubleClick: event => {
-
       },
       onContextMenu: event => {
-
       },
       onMouseEnter: event => {
 
       }, // 鼠标移入行
       onMouseLeave: event => {
-
       },
     };
   }
 
   const setClassName = (record, index) => {
-    if (record.billID === selectedRowKey) {
+    if (record.billId === selectedRowKey) {
       return styles.rowSelect;
     } else {
       if (record.status == 3) {
@@ -203,7 +196,7 @@ function ChargeListTable(props: ChargeListTableProps) {
         size="middle"
         dataSource={data}
         columns={columns}
-        rowKey={record => record.billID}
+        rowKey={record => record.billId}
         pagination={pagination}
         scroll={{ y: 500, x: 1400 }}
         rowClassName={setClassName} //表格行点击高亮

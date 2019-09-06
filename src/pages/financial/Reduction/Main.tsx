@@ -7,27 +7,29 @@ import { GetPageListJson, GetDetailPageListJson } from './Main.service';
 import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
-import DetailList from './DetailList'; 
+import VerifyReductionModal from './VerifyReductionModal';
+import DetailList from './DetailList';
 const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
 
 function Main() {
-  const [modifyVisible, setModifyVisible] = useState<boolean>(false);
-  const [organize, SetOrganize] = useState<any>({});
+  const [modifyVisible, setModifyVisible] = useState<boolean>(false); 
+  const [verifyVisible, setVerifyVisible] = useState<boolean>(false); 
+  // const [organize, SetOrganize] = useState<any>({}); 
   const [loading, setLoading] = useState<boolean>(false);
   const [detailloading, setDetailLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [detailpagination, setDetailPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [data, setData] = useState<any[]>([]); const [detaildata, setDetailData] = useState<any[]>([]);
   const [id, setId] = useState<string>();
-  const [addButtonDisabled,setAddButtonDisabled]=useState<boolean>(true);
+  const [addButtonDisabled, setAddButtonDisabled] = useState<boolean>(true);
   const [search, setSearch] = useState<string>('');
   const [detailsearch, setDetailSearch] = useState<string>('');
 
   const selectTree = (org, item, searchText) => {
     initLoadData(item, '');
-    SetOrganize(item);
+    // SetOrganize(item);
   };
 
   useEffect(() => {
@@ -40,9 +42,7 @@ function Main() {
     // });
 
     initLoadData('', '');
-    initDetailLoadData('', '');
-
-
+    initDetailLoadData('', ''); 
   }, []);
   // 获取属性数据
   // const getTreeData = () => {
@@ -72,6 +72,17 @@ function Main() {
     setId(id);
   };
 
+  //审核
+  const closeVerifyDrawer = () => {
+    setVerifyVisible(false);
+    setId('');
+  };
+
+  const showVerifyDrawer = (id?) => {
+    setVerifyVisible(true);
+    setId(id);
+  };
+
   const loadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
@@ -89,7 +100,7 @@ function Main() {
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'billID';
+      searchCondition.sidx = field ? field : 'billId';
     }
 
     return load(searchCondition).then(res => {
@@ -98,7 +109,7 @@ function Main() {
   };
   const load = data => {
     setLoading(true);
-    data.sidx = data.sidx || 'billID';
+    data.sidx = data.sidx || 'billId';
     data.sord = data.sord || 'asc';
     return GetPageListJson(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -150,7 +161,7 @@ function Main() {
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'billID';
+      searchCondition.sidx = field ? field : 'billId';
     }
 
     return detailload(searchCondition).then(res => {
@@ -193,14 +204,14 @@ function Main() {
     });
   };
 
-    //页签切换刷新
-    const changeTab = key => {
-      if (key == "1") {
-        initLoadData('', search);
-      } else   {
-        initDetailLoadData('', detailsearch);
-      } 
-    };
+  //页签切换刷新
+  const changeTab = key => {
+    if (key == "1") {
+      initLoadData('', search);
+    } else {
+      initDetailLoadData('', detailsearch);
+    }
+  };
 
   return (
     <Layout style={{ height: '100%' }}>
@@ -211,9 +222,9 @@ function Main() {
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>
-        <Tabs defaultActiveKey="1"  onChange={changeTab}>
+        <Tabs defaultActiveKey="1" onChange={changeTab}>
           <TabPane tab="减免单" key="1">
-            <div style={{ marginBottom: '10px'  }}>
+            <div style={{ marginBottom: '10px' }}>
               <Search
                 className="search-input"
                 placeholder="请输入要查询的单号"
@@ -236,6 +247,7 @@ function Main() {
               pagination={pagination}
               data={data}
               modify={showDrawer}
+              verify={showVerifyDrawer}
               reload={() => initLoadData('', search)}
             />
           </TabPane>
@@ -260,14 +272,21 @@ function Main() {
           </TabPane>
         </Tabs>
       </Content>
+
       <Modify
         modifyVisible={modifyVisible}
         closeDrawer={closeDrawer}
-        organizeId={organize}
-        rowKey='billid'
         id={id}
         reload={() => initLoadData('', search)}
       />
+
+      <VerifyReductionModal
+        modalVisible={verifyVisible}
+        closeModal={closeVerifyDrawer}
+        id={id}
+        reload={() => initLoadData('', search)}
+      />
+
     </Layout>
   );
 }

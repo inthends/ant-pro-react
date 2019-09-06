@@ -36,7 +36,7 @@ function NotPaymentTable(props: NotPaymentTableProps) {
       cancelText: '取消',
       onOk: () => {
         console.log(record);
-        RemoveForm(record.billID).then(() => {
+        RemoveForm(record.billId).then(() => {
           message.success('删除成功');
           reload();
         });

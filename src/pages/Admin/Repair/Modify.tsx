@@ -111,7 +111,7 @@ const Modify = (props: ModifyProps) => {
   //选择接单人
   const onReceiverNameSelect = (value, option) => {
     //设置id
-    form.setFieldsValue({ receiverID: option.key });
+    form.setFieldsValue({ receiverId: option.key });
   };
 
   //派单
@@ -304,7 +304,7 @@ const Modify = (props: ModifyProps) => {
                           onSelect={onReceiverNameSelect}
                         />
                       )}
-                      {getFieldDecorator('receiverID', {
+                      {getFieldDecorator('receiverId', {
                       })(<Input type='hidden' />)}
                     </Form.Item>
                   </Col>
@@ -313,7 +313,7 @@ const Modify = (props: ModifyProps) => {
                     <Form.Item label="派单人" >
                       {getFieldDecorator('senderName', {
                       })(<Input placeholder="自动获取派单人" readOnly />)}
-                      {getFieldDecorator('senderID', {
+                      {getFieldDecorator('senderId', {
                       })(<Input type='hidden' />)}
                     </Form.Item>
                   </Col>

@@ -77,7 +77,7 @@ const Modify = (props: ModifyProps) => {
     });
   };
   const doSave = dataDetail => {
-    dataDetail.keyValue = dataDetail.pCode;
+    dataDetail.keyValue = dataDetail.id;
     SaveForm({ ...dataDetail, type: 5 }).then(res => {
       message.success('保存成功');
       closeDrawer();

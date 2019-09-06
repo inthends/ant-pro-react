@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import LeftTree from '../LeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
-import { GetPageListJson, GetOrgTree2 } from './ReciprocatingUnit.service';
+import { GetPageListJson, GetOrgTreeOnly } from './ReciprocatingUnit.service';
 
 const { Content } = Layout;
 const { Search } = Input;
@@ -39,7 +39,7 @@ function PublicArea() {
   }, []);
   // 获取属性数据
   const getTreeData = () => {
-    return GetOrgTree2().then((res: TreeEntity[]) => {
+    return GetOrgTreeOnly().then((res: TreeEntity[]) => {
       setTreeData(res || []);
       return res || [];
     });

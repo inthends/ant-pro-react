@@ -55,10 +55,10 @@ const Vertify = (props: VertifyProps) => {
       // console.log(values, infoDetail);
       var newData = Object.assign({}, infoDetail,
         {
-          verifyPerson: localStorage.getItem('userid'),
-          verifyDate: moment(new Date).format('YYYY-MM-DD'),
+          // verifyPerson: localStorage.getItem('userid'),
+          // verifyDate: moment(new Date).format('YYYY-MM-DD'),
           verifyMemo: values.verifyMemo,
-          keyValue: infoDetail.billID,
+          keyValue: infoDetail.billId,
           billDate: moment(values.billDate).format('YYYY-MM-DD'),
           status: ifVertify ? 1 : 2//，已收未审核1，已审核2，已冲红3
         });

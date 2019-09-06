@@ -67,8 +67,8 @@ const Modify = (props: ModifyProps) => {
         let data: LeaseContractChargeFeeEntity = {};
         //const TermJson=[];
         //const data = {}; 
-        //data["FeeItemID"] = values.feeItemID[0];
-        data.feeItemID = values.feeItemID[0];
+        //data["FeeItemId"] = values.feeItemId[0];
+        data.feeItemId = values.feeItemId[0];
         data.startDate = values.startDate[0];
         data.endDate = values.endDate[0];
         data.price = values.price[0];
@@ -87,7 +87,7 @@ const Modify = (props: ModifyProps) => {
         //动态添加的租期
         values.LeaseTerms.map(function (k, index, arr) {
           let data: LeaseContractChargeFeeEntity = {};
-          data.feeItemID = values.feeItemID[k];
+          data.feeItemId = values.feeItemId[k];
           data.startDate = values.startDate[k];
           data.endDate = values.endDate[k];
           data.price = values.price[k];
@@ -133,7 +133,7 @@ const Modify = (props: ModifyProps) => {
         //let entity = values; 
         let entity: LeaseContractChargeEntity = {};
         //费用条款-基本条款 
-        entity.depositFeeItemID = values.depositFeeItemID;
+        entity.depositFeeItemId = values.depositFeeItemId;
         entity.leaseArea = values.leaseArea;
         entity.deposit = values.deposit;
         entity.depositUnit = values.depositUnit;
@@ -184,7 +184,7 @@ const Modify = (props: ModifyProps) => {
         //保存合同数据
         let ContractCharge: LeaseContractChargeEntity = {};
         //费用条款-基本条款 
-        ContractCharge.depositFeeItemID = values.depositFeeItemID;
+        ContractCharge.depositFeeItemId = values.depositFeeItemId;
         ContractCharge.leaseArea = values.leaseArea;
         ContractCharge.deposit = values.deposit;
         ContractCharge.depositUnit = values.depositUnit;
@@ -215,7 +215,7 @@ const Modify = (props: ModifyProps) => {
           ...Contract,
           ...ContractCharge,
           keyValue: '',
-          ChargeID: '',
+          ChargeId: '',
           room: values.room,
           TermJson: TermJson,
           RateJson: RateJson,
@@ -540,7 +540,7 @@ const Modify = (props: ModifyProps) => {
                 </Col>
                 <Col lg={10}>
                   <Form.Item label="保证金关联费项" required>
-                    {getFieldDecorator('depositFeeItemID', {
+                    {getFieldDecorator('depositFeeItemId', {
                       rules: [{ required: true, message: '请选择费项' }]
                     })(
                       <Select placeholder="请选择费项">

@@ -15,56 +15,72 @@
  * 树 TreeNode props
  */
 export interface TreeEntity {
-    /**
-     * parentId
-     */
-   parentId?: string;
-    /**
-     * 主键
-     */
-    key?: string;
-    /**
-     * 标题
-     */
-    title?: string;
-
-    /**
-     * 设置为叶子节点(设置了loadData时有效)
-     */
-    isLeaf?: boolean;
-
-    /**
-         * 禁掉响应
-     */
-    disabled?: boolean;
-
-    /**
-      * 当树为 checkable 时，设置独立节点是否展示 Checkbox
-      */
-    checkable?: boolean;
-
-    /**
-   * 禁掉 checkbox
+  /**
+   * parentId
    */
-    disableCheckbox?: boolean;
+  parentId?: string;
+  /**
+   * 主键
+   */
+  key?: string;
+  /**
+   * 标题
+   */
+  title?: string;
 
-    /**
-  * 设置节点是否可被选中
-  */
-    selectable?: boolean;
+  /**
+   * 设置为叶子节点(设置了loadData时有效)
+   */
+  isLeaf?: boolean;
 
-    /**
-    * 扩展，值
+  /**
+       * 禁掉响应
+   */
+  disabled?: boolean;
+
+  /**
+    * 当树为 checkable 时，设置独立节点是否展示 Checkbox
     */
-    value?: string;
+  checkable?: boolean;
 
-    /**
-   * 扩展，类型
+  /**
+ * 禁掉 checkbox
+ */
+  disableCheckbox?: boolean;
+
+  /**
+* 设置节点是否可被选中
+*/
+  selectable?: boolean;
+
+  /**
+  * 扩展，值
+  */
+  value?: string;
+
+  /**
+ * 扩展，类型
+ */
+  type?: string;
+
+  /**
+* 扩展
+*/
+  attributeA?: string;
+
+  /**
+* 扩展
+*/
+  attributeB?: string;
+
+  /**
+* 扩展
+*/
+  attributeC?: string
+
+
+  /**
+   * 子节点
    */
-    type?: string;
-
-    /**
-     * 子节点
-     */
-    children?: Array<TreeEntity>;
+  children?: Array<TreeEntity>;
 }

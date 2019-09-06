@@ -64,7 +64,7 @@ function LeaseTerm(props: LeaseTermProps) {
         </Col> 
         <Col lg={8}>
           <Form.Item label="关联费项" required>
-            {getFieldDecorator(`feeItemID[${k}]`, {
+            {getFieldDecorator(`feeItemId[${k}]`, {
               rules: [{ required: true, message: '请选择费项'}]
             })( 
               <Select placeholder="请选择费项">
@@ -200,7 +200,7 @@ function LeaseTerm(props: LeaseTermProps) {
 
           <Col lg={8}>
             <Form.Item label="费项" required>
-              {getFieldDecorator(`feeItemID[0]`, {
+              {getFieldDecorator(`feeItemId[0]`, {
                 rules: [{ required: true, message: '请选择费项' }]
               })(
                 <Select placeholder="请选择费项">

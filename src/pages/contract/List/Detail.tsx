@@ -20,14 +20,14 @@ const { TabPane } = Tabs;
 interface DetailProps {
   modifyVisible: boolean;
   id?: string;//合同id
-  chargeID?: string;//合同条款id
+  chargeId?: string;//合同条款id
   closeDrawer(): void;
   form: WrappedFormUtils;
   reload(): void;
 }
 
 const Detail = (props: DetailProps) => {
-  const { modifyVisible, closeDrawer, id, form, chargeID } = props;
+  const { modifyVisible, closeDrawer, id, form, chargeId } = props;
   const title = '合同详情';
   //const [industryType, setIndustryType] = useState<any[]>([]); //行业  
   //const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
@@ -65,7 +65,7 @@ const Detail = (props: DetailProps) => {
         GetFormJson(id).then((tempInfo: LeaseContractDTO) => {
           setInfoDetail(tempInfo);
           //获取条款
-          GetCharge(chargeID).then((charge: ChargeDetailDTO) => {
+          GetCharge(chargeId).then((charge: ChargeDetailDTO) => {
             setContractCharge(charge.contractCharge || {});
             setChargeFeeList(charge.chargeFeeList || []);
             setChargeIncreList(charge.chargeIncreList || []);
@@ -238,7 +238,7 @@ const Detail = (props: DetailProps) => {
                 </Col>
                 <Col lg={10}>
                   <Form.Item label="保证金关联费项">
-                    {contractCharge.depositFeeItemID}
+                    {contractCharge.depositFeeItemId}
                   </Form.Item>
                 </Col>
                 <Col lg={7}>

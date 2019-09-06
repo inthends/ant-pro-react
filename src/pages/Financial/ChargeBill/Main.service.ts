@@ -64,7 +64,6 @@ export function GetTransferRoomUsers(roomid,relationid): Promise<TreeEntity[]> {
     .then(getResult as any);
 }
 //表单明细
-
 export function GetEntity(data): Promise<TreeEntity[]> {
   return request
     .get(process.env.basePath + `/Receivable/GetEntity?keyValue=${data}`)
@@ -104,12 +103,12 @@ export function TransferBilling(data): Promise<any> {
 
 //删除计费单
 export function RemoveForm(data): Promise<any> {
-  return request.post(process.env.basePath + `/BillingMain/RemoveForm?keyValue=${data}`, {data:objToFormdata(data)}).then(getResult as any);
+  return request.post(process.env.basePath + `/BillingMain/RemoveForm?keyValue=${data}`).then(getResult as any);
 }
 
 //作废收款单/
 export function InvalidForm(data): Promise<any> {
-  return request.post(process.env.basePath + `/Receivable/InvalidForm?keyValue=${data}`, {data:objToFormdata(data)}).then(getResult as any);
+  return request.post(process.env.basePath + `/Receivable/InvalidForm?keyValue=${data}`).then(getResult as any);
 }
 
 //冲红收款单/
@@ -120,7 +119,7 @@ export function RedFlush(data): Promise<any> {
 
 //验证收款单是否可以冲红
 export function CheckRedFlush(data): Promise<any> {
-  return request.get(process.env.basePath + `/Receivable/CheckRedFlush?keyValue=${data}`, {data:objToFormdata(data)}).then(getResult as any);
+  return request.get(process.env.basePath + `/Receivable/CheckRedFlush?keyValue=${data}`).then(getResult as any);
 }
 //审核接口
 export function Audit(data): Promise<any> {
@@ -130,7 +129,7 @@ export function Audit(data): Promise<any> {
 
 //获取收款单实体
 export function GetEntityShow(data): Promise<any> {
-  return request.get(process.env.basePath + `/Receivable/GetEntityShow?keyValue=${data}`, {data:objToFormdata(data)}).then(getResult as any);
+  return request.get(process.env.basePath + `/Receivable/GetEntityShow?keyValue=${data}`).then(getResult as any);
 }
 //获取费用详情
 export function ChargeFeeDetail(data): Promise<any> {
