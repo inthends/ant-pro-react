@@ -10,7 +10,7 @@ import LeftTree from '../LeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
 import AuthButton from '@/components/AuthButton/AuthButton';
-import { GetOrgTree2 } from '@/services/commonItem';
+import { GetOrgTreeOnly } from '@/services/commonItem';
 
 const { Content } = Layout;
 const { Search } = Input;
@@ -59,7 +59,7 @@ function House() {
   }, []);
   // 获取属性数据
   const getTreeData = () => {
-    return GetOrgTree2().then((res: any[]) => {
+    return GetOrgTreeOnly().then((res: any[]) => {
       setTreeData(res || []);
       return res || [];
     });

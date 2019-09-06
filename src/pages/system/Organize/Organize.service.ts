@@ -49,5 +49,5 @@ export function searchTypes(): Promise<any[]> {
 
 // 查询上级机构
 export function searchOrgs(): Promise<any[]> {
-  return request.get(process.env.basePath + `/Common/GetOrgTree2`).then(getResult as any);
+  return request.get(process.env.basePath + `/Common/GetOrgTreeOnly`).then(getResult as any);
 }
