@@ -124,7 +124,7 @@
     "webpack-theme-color-replacer": "^1.2.15"
   },
   "optionalDependencies": {
-    "puppeteer": "^1.17.0"
+    "puppeteer": "^1.19.0"
   },
   "engines": {
     "node": ">=10.0.0"

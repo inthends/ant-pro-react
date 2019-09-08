@@ -64,6 +64,7 @@ function Payment() {
         keyword:paymentSearchParams.search,
         TreeTypeId: organize.id,
         TreeType: organize.type,
+        Status:paymentStatus,StartDate:paymentStartDate,EndDate:paymentEndDate
       }
     };
 
@@ -151,6 +152,9 @@ const [isEdit,setIsEdit]=useState<boolean>(false);
       keyword: searchText,
       TreeTypeId: org.id,
       TreeType: org.type,
+
+      Status:paymentStatus,StartDate:paymentStartDate,EndDate:paymentEndDate
+
     };
     const sidx = 'id';
     const sord = 'asc';
@@ -162,6 +166,7 @@ const [isEdit,setIsEdit]=useState<boolean>(false);
     const queryJson = {
       keyword: searchText,
       UnitId: org.id==null?"":org.id,
+
     };
     const sidx = 'id';
     const sord = 'asc';
@@ -209,6 +214,9 @@ const [isEdit,setIsEdit]=useState<boolean>(false);
       onCancel() {},
     });
   }
+  const [paymentStatus,setPaymentStatus]=useState<string>('');
+  const [paymentStartDate,setPaymentStartDate]=useState<string>('');
+  const [paymentEndDate,setPaymentEndDate]=useState<string>('');
 
   return (
     <Layout>
@@ -308,15 +316,19 @@ const [isEdit,setIsEdit]=useState<boolean>(false);
             <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
             <Select placeholder="==请选择==" style={{width:'150px',marginRight:'5px'}}
               onChange={(value:string)=>{
-                //setBillType(value);
+                setPaymentStatus(value);
               }}>
-                <Select.Option value="通知单">已审核</Select.Option>
-                <Select.Option value="催款单">未审核</Select.Option>
-                <Select.Option value="催缴函">已作废</Select.Option>
+                <Select.Option value="2">已审核</Select.Option>
+                <Select.Option value="1">未审核</Select.Option>
+                <Select.Option value="-1">已作废</Select.Option>
               </Select>
-              <DatePicker/>
+              <DatePicker onChange={(date,dateStr)=>{
+                setPaymentStartDate(dateStr);
+              }}/>
               至：
-              <DatePicker/>
+              <DatePicker  onChange={(date,dateStr)=>{
+                setPaymentEndDate(dateStr);
+              }}/>
               <Search
                 className="search-input"
                 placeholder="请输入要查询的名称或者单元编号"
@@ -362,7 +374,7 @@ const [isEdit,setIsEdit]=useState<boolean>(false);
                 审核
               </Button>
               <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
-                onClick={() => {showModify(null,true)}}
+                onClick={() => {showModify(null,false)}}
               >
                 <Icon type="plus" />
                 查看
@@ -397,8 +409,8 @@ const [isEdit,setIsEdit]=useState<boolean>(false);
         visible={modifyVisible}
         closeDrawer={closeModify}
         id={id}
-        isEdit={true}
-        reload={() => initPaymentLoadData('','')}
+        isEdit={isEdit}
+        reload={() => initNotPaymentLoadData('','')}
         organize={organize}
       />
       <PaymentVerify

@@ -76,11 +76,13 @@ function LeftSelectTree(props: LeftSelectTreeProps) {
       overflowY: 'auto'
     }}>
       <Tree
-        checkable
+        defaultExpandAll={true}
+        checkable={true}
         checkedKeys={checkedKeys}
         onCheck={onCheck}
         expandedKeys={expanded}
-        showLine onSelect={onSelect}
+        showLine
+        onSelect={onSelect}
         onExpand={clickExpend}
         treeData={treeData}>
        {/*renderTree(treeData, '0')*/}

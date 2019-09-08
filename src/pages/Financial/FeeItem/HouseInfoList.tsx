@@ -5,53 +5,39 @@ import React from 'react';
 import { RemoveForm } from './Main.service';
 import moment from 'moment';
 
-interface ListTableProps {
+interface HouseInfoListProps {
   onchange(page: any, filter: any, sort: any): any;
   loading: boolean;
   pagination: PaginationConfig;
   data: any[];
-  modify(id: string): void;
   reload(): void;
 }
 
-function ListTable(props: ListTableProps) {
-  const { onchange, loading, pagination, data, modify, reload } = props;
+function HouseInfoList(props: HouseInfoListProps) {
+  const { onchange, loading, pagination, data } = props;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
   };
-  const doDelete = record => {
-    Modal.confirm({
-      title: '请确认',
-      content: `您是否要删除${record.feeName}`,
-      cancelText:'取消',
-      okText:'确定',
-      onOk: () => {
-        RemoveForm(record.feeItemId).then(() => {
-          message.success('删除成功');
-          reload();
-        });
-      },
-    });
-  };
+
   const columns = [
     {
-      title: '费项名称',
-      dataIndex: 'feeName',
-      key: 'feeName',
+      title: '房屋编号',
+      dataIndex: 'code',
+      key: 'code',
       width: 140,
       sorter: true,
     },
     {
-      title: '费项种类',
-      dataIndex: 'feeKind',
-      key: 'feeKind',
+      title: '状态',
+      dataIndex: 'state',
+      key: 'state',
       width: 80,
       sorter: true,
     },
     {
-      title: '费项类别',
-      dataIndex: 'feeType',
-      key: 'feeType',
+      title: '收费项目',
+      dataIndex: 'feeName',
+      key: 'feeName',
       width: 80,
       sorter: true,
     },
@@ -102,20 +88,11 @@ function ListTable(props: ListTableProps) {
       }
     },
     {
-      title: '操作',
-      dataIndex: 'operation',
-      align: 'center',
-      key: 'operation',
-      width: 80,
-      render: (text, record) => {
-        return [
-          <span key='buttons'>
-            <a onClick={() => modify(record.feeItemId)} key="modify">修改</a>
-            <Divider type="vertical" key='divider' />
-            <a onClick={() => doDelete(record)} key="delete">删除</a>
-          </span>
-        ];
-      },
+      title: '房屋全称',
+      dataIndex: 'allName',
+      key: 'allName',
+      width: 120,
+      sorter: true,
     },
   ] as ColumnProps<any>[];
 
@@ -139,4 +116,4 @@ function ListTable(props: ListTableProps) {
     </Page>
   );
 }
-export default ListTable;
+export default HouseInfoList;

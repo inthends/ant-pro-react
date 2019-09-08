@@ -190,6 +190,25 @@ function NotPaymentTable(props: NotPaymentTableProps) {
           cancelText: '取消',
           okText: '确定',
           onOk: () => {
+            /*roomid
+              billids
+              BillId
+              OrganizeId
+              CreateDate
+              PayAmount
+              CreateUserId
+              PayType
+              CreateUserName
+              Status
+              Memo
+              VerifyDate
+              ModifyDate
+              VerifyMemo
+              BillCode
+              ModifyUserId
+              VerifyPerson
+              BillDate
+              ModifyUserName */
             let info = Object.assign({}, values, {
               roomId: organize.code,
               ids: JSON.stringify(selectedRowKeys),

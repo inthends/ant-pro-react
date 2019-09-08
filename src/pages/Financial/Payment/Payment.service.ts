@@ -4,12 +4,12 @@ import request from '@/utils/request';
 
 //保存应付款
 export function SaveForm(data): Promise<any> {
-  return request.post(process.env.basePath + `/Payment/SaveForm`, {data:objToFormdata(data)});
+  return request.post(process.env.basePath + `/Payment/SaveForm?keyValue=${data.keyValue}`, {data:data.entity});
 }
 
 //审批
 export function Audit(data): Promise<any> {
-  return request.post(process.env.basePath + `/Payment/Audit`, {data:objToFormdata(data)});
+  return request.post(process.env.basePath + `/Payment/Audit?keyValue=${data.keyValue}`, {data:data.entity});
 }
 
 //应付列表
@@ -34,7 +34,12 @@ export function GetTempPaymentFeeItemTreeJson(code): Promise<TreeEntity[]> {
 
 //编辑和查看调用
 export function GetShowDetail(data): Promise<any> {
-  return request.get(process.env.basePath + `/Payment/GetShowDetail?keyValue=${data}`, {}).then(getResult as any);
+  return request.post(process.env.basePath + `/Payment/GetShowDetail?keyValue=${data}`, {}).then(getResult as any);
+}
+
+//作废付款单
+export function InvalidForm(data): Promise<any> {
+  return request.get(process.env.basePath + `/Payment/InvalidForm?keyValue=${data}`, {}).then(getResult as any);
 }//
 
 //审核页面获取付款单实体
@@ -51,9 +56,13 @@ export function Pay(data): Promise<any> {
 }
 //获取房间住户
 export function GetRoomUsers(data): Promise<ResponseObject<any[]>> {
-  return request.get(process.env.basePath + `/Receivable/GetRoomUsers?roomid=${data}`, {}).then(getResult as any);;
+  return request.get(process.env.basePath + `/Common/GetRoomUsers?roomid=${data}`, {}).then(getResult as any);;
 }
 //获取关联的房间
 export function GetUserRooms(data): Promise<ResponseObject<any[]>> {
-  return request.get(process.env.basePath + `/Receivable/GetUserRooms?customerid=${data}`, {}).then(getResult as any);;
+  return request.get(process.env.basePath + `/Common/GetUserRooms?customerid=${data}`, {}).then(getResult as any);;
+}
+//
+export function GetFeeItemDetail(feeitemid,roomid): Promise<ResponseObject<any>> {
+  return request.get(process.env.basePath + `/Common/GetFeeItemDetail?feeitemid=${feeitemid}&roomid=${roomid}`, {}).then(getResult as any);;
 }

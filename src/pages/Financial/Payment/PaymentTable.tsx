@@ -5,7 +5,7 @@ import { Divider, Form, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React,{ useState } from 'react';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import { RemoveForm } from './Payment.service';
+import { RemoveForm,InvalidForm } from './Payment.service';
 import  moment from 'moment';
 import styles from './style.less';
 
@@ -132,13 +132,15 @@ function PaymentTable(props: PaymentTableProps) {
       render: (text, record) => {
         return [
           <span>
-            <a onClick={() => showModify(record.billId,record.ifVerifyName=="已审核"?false:true)} key="modify">{record.ifVerifyName=="已审核"||record.billSource=="水电气生成"?"查看":"修改"}</a>
+            <a onClick={() => showModify(record.billId,false)} key="modify">{"查看"}</a>
+            <Divider type="vertical" />
+            <a onClick={() =>{}} key="vertify">{record.ifVerifyName=="已审核"?"取消审核":"审核"}</a>
             <Divider type="vertical" />
             <a onClick={() => {
-              RemoveForm(record.billId).then(res => {
+              InvalidForm(record.billId).then(res => {
                 if (res.code != 0) { reload(); }
               })
-            }} key="delete">删除</a>
+            }} key="delete">作废</a>
           </span>
         ];
       },

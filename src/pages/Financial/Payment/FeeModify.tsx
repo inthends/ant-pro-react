@@ -3,7 +3,7 @@ import {  Button,  Col,  Select,  Form,Input,  Row,Icon,Modal,InputNumber, Drawe
 import { TreeEntity } from '@/model/models';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import {GetTempPaymentFeeItemTreeJson,GetRoomUsers,GetUserRooms} from './Payment.service';
+import {GetTempPaymentFeeItemTreeJson,GetRoomUsers,GetUserRooms,GetFeeItemDetail,SaveForm} from './Payment.service';
 import './style.less';
 import LeftTree from '../LeftTree';
 import  moment from 'moment';
@@ -29,7 +29,7 @@ const FeeModify = (props: FeeModifyProps) => {
   const [relationIds,setRelationID]=useState<any[]>([]);
   const [unitIds,setUnitIds]=useState<any[]>([]);
 
-  const title=isEdit?"修改通知单":"新增通知单";
+  const title=isEdit?"修改应付费用":"新增应付费用";
   useEffect(() => {
     if(visible){
       form.resetFields();
@@ -38,6 +38,8 @@ const FeeModify = (props: FeeModifyProps) => {
       });
       if(id!=null&&id!=""){
 
+      }else{
+        setInfoDetail({});
       }
       if(organize.id)
       {
@@ -109,7 +111,7 @@ const FeeModify = (props: FeeModifyProps) => {
       >
       <Row gutter={8} style={{height:'calc(100vh - 55px)',overflow:'hidden' ,marginTop:'5px',backgroundColor:'rgb(255,255,255)'}}>
         {
-          id!=''?
+          id!=null&&id!=""?
           null:
           <Col span={8} style={{height:'calc(100vh - 100px)',overflow:'auto'}}>
             <LeftTree
@@ -117,7 +119,8 @@ const FeeModify = (props: FeeModifyProps) => {
                 selectTree={(id, item) => {
                   if(organize.id){
                     GetFeeItemDetail(id,organize.id).then(res=>{
-                      var info =Object.assign({},res,{ feeItemId:id});
+                      var amount =parseInt( res.price)*parseInt(res.number) *parseInt(res.quantity) ;
+                      var info =Object.assign({},res,{ feeItemId:id,amount:amount});
                       setInfoDetail(info);
                       return info;
                     }).then(info=>{
@@ -139,12 +142,12 @@ const FeeModify = (props: FeeModifyProps) => {
             <Spin tip="数据加载中..." spinning={loading}>
             <Col span={16}>
               <Row>
-                <Form.Item label="付款对象" required labelCol={{span:4}} wrapperCol={{span:20}} >
+                <Form.Item label="付款对象" required >
                   {getFieldDecorator('relationId', {
                     initialValue:infoDetail.relationId==null?null:infoDetail.relationId,// getRelationId(infoDetail.relationId),
                     rules: [{ required: true, message: '请选择付款对象' }]
                   })(
-                    <Select placeholder="=请选择=" disabled={isEdit?false:true} onSelect={(key)=>{
+                    <Select placeholder="=请选择=" disabled={isEdit||(id!="")?false:true} onSelect={(key)=>{
                       GetUserRooms(getRelationId(key)).then(res=>{
                         setUnitIds(res);
                         var info =Object.assign({},infoDetail,{ householdId:res[0].value});
@@ -161,12 +164,12 @@ const FeeModify = (props: FeeModifyProps) => {
                 </Form.Item>
               </Row>
               <Row>
-                <Form.Item label="选择房屋" required  labelCol={{span:4}} wrapperCol={{span:20}} >
+                <Form.Item label="选择房屋" required  >
                   {getFieldDecorator('householdId', {
                     initialValue:infoDetail.householdId==null?null:getUnitId(infoDetail.householdId),
                     rules: [{ required: true, message: '请选择房屋' }]
                   })(
-                    <Select placeholder="=请选择="  disabled={isEdit?false:true} >
+                    <Select placeholder="=请选择="  disabled={isEdit||(id!="")?false:true} >
                       {unitIds.map(item => (
                         <Select.Option  value={item.key}>
                           {item.title}
@@ -178,7 +181,7 @@ const FeeModify = (props: FeeModifyProps) => {
               </Row>
               <Row>
                 <Col span={10}>
-                  <Form.Item label="单价" required labelCol={{span:10}} wrapperCol={{span:14}} >
+                  <Form.Item label="单价" required >
                     {getFieldDecorator('price', {
                       initialValue: infoDetail.price,
                       rules: [{ required: true, message: '请输入单价' }]
@@ -187,39 +190,43 @@ const FeeModify = (props: FeeModifyProps) => {
                     )}
                   </Form.Item>
                 </Col>
-                <Col span={1}  style={{lineHeight:"32px",textAlign:'center'}}>
+                <Col span={1}  style={{marginTop:"29px",lineHeight:"32px",textAlign:'center'}}>
                 X
                 </Col>
-                <Col span={6}>
-                  <Form.Item label="" required wrapperCol={{span:24}}>
+                <Col span={6} >
+                  <Form.Item label="数量" required >
                     {getFieldDecorator('quantity', {
                       initialValue: infoDetail.quantity,
-                      rules: [{ required: true, message: '请输入质量' }]
+                      rules: [{ required: true, message: '请输入数量' }]
                     })(
-                      <InputNumber disabled={true} style={{width:'100%'}}></InputNumber>
+                      <InputNumber disabled={true} style={{width:'100%'}} ></InputNumber>
                     )}
                   </Form.Item>
                 </Col>
-                <Col span={1} style={{lineHeight:"32px",textAlign:'center'}}>
+                <Col span={1} style={{marginTop:"29px",lineHeight:"32px",textAlign:'center'}}>
                 X
                 </Col>
                 <Col span={6}>
-                  <Form.Item label="" required wrapperCol={{span:24}}>
+                  <Form.Item label="系数" required >
                     {getFieldDecorator('number', {
                       initialValue: infoDetail.number,
-                      rules: [{ required: true, message: '请输入数量' }]
+                      rules: [{ required: true, message: '请输入系数' }]
                     })(
-                      <InputNumber style={{width:'100%'}}></InputNumber>
+                      <InputNumber style={{width:'100%'}} onChange={value=>{
+                        var amount= value*infoDetail.quantity*infoDetail.price;
+                        var info = Object.assign({},infoDetail,{amount:amount});
+                        setInfoDetail(info);
+                      }}></InputNumber>
                     )}
                   </Form.Item>
                 </Col>
               </Row>
               <Row>
                 <Col span={24}>
-                  <Form.Item label="金额" required   labelCol={{span:4}} wrapperCol={{span:20}} >
+                  <Form.Item label="金额" required   >
                     {getFieldDecorator('amount', {
-                      initialValue: infoDetail.amouant,
-                      rules: [{ required: true, message: '=请选择=' }]
+                      initialValue: infoDetail.amount,
+                      rules: [{ required: true}]
                     })(
                       <InputNumber disabled={true} style={{width:'100%'}} ></InputNumber>
                     )}
@@ -228,7 +235,7 @@ const FeeModify = (props: FeeModifyProps) => {
               </Row>
               <Row gutter={8}>
                 <Col span={12}>
-                  <Form.Item label="周期" required   labelCol={{span:10}} wrapperCol={{span:14}} >
+                  <Form.Item label="周期" required   >
                     {getFieldDecorator('cycleValue', {
                       initialValue: infoDetail.cycleValue,
                       rules: [{ required: true, message: '=请选择=' }]
@@ -237,8 +244,8 @@ const FeeModify = (props: FeeModifyProps) => {
                     )}
                   </Form.Item>
                 </Col>
-                <Col span={12}>
-                  <Form.Item label="" required   labelCol={{span:0}} wrapperCol={{span:24}} >
+                <Col span={12} style={{marginTop:'29px'}}>
+                  <Form.Item label="" required    >
                     {getFieldDecorator('cycleType', {
                       initialValue: infoDetail.cycleType,
                       rules: [{ required: true, message: '请选择周期单位' }]
@@ -260,9 +267,9 @@ const FeeModify = (props: FeeModifyProps) => {
               </Row>
               <Row>
                 <Col span={12}>
-                  <Form.Item label="起始日期" required   labelCol={{span:10}} wrapperCol={{span:14}} >
+                  <Form.Item label="起始日期" required >
                     {getFieldDecorator('beginDate', {
-                      initialValue: infoDetail.beginDate,
+                      initialValue: infoDetail.beginDate?moment(infoDetail.beginDate):moment(new Date()),
                       rules: [{ required: true, message: '请选择起始日期' }]
                     })(
                       <DatePicker  style={{width:'100%'}}/>
@@ -270,9 +277,9 @@ const FeeModify = (props: FeeModifyProps) => {
                   </Form.Item>
                 </Col>
                 <Col  span={12}>
-                  <Form.Item label="结束日期" required  labelCol={{span:10}} wrapperCol={{span:14}}>
+                  <Form.Item label="结束日期" required>
                     {getFieldDecorator('endDate', {
-                      initialValue: infoDetail.endDate,
+                      initialValue: infoDetail.endDate?moment(infoDetail.endDate):moment(new Date()),
                       rules: [{ required: true, message: '请选择结束日期' }]
                     })(
                       <DatePicker  style={{width:'100%'}}/>
@@ -282,7 +289,7 @@ const FeeModify = (props: FeeModifyProps) => {
               </Row>
               <Row>
               <Col span={24}>
-                <Form.Item label="备注" required  labelCol={{span:4}} wrapperCol={{span:20}}>
+                <Form.Item label="备注" required >
                   {getFieldDecorator('memo', {
                     initialValue: infoDetail.memo,
                     rules: [{ required: false }]
@@ -298,16 +305,16 @@ const FeeModify = (props: FeeModifyProps) => {
         </Col>
       </Row>
       <div
-            style={{
-              position: 'absolute',
-              left: 0,
-              bottom: 0,
-              width: '100%',
-              borderTop: '1px solid #e9e9e9',
-              padding: '10px 16px',
-              background: '#fff',
-              textAlign: 'right',
-            }}
+          style={{
+            position: 'absolute',
+            left: 0,
+            bottom: 0,
+            width: '100%',
+            borderTop: '1px solid #e9e9e9',
+            padding: '10px 16px',
+            background: '#fff',
+            textAlign: 'right',
+          }}
           >
             <Button style={{ marginRight: 8 }}
             onClick={()=>closeDrawer()}
@@ -316,44 +323,40 @@ const FeeModify = (props: FeeModifyProps) => {
             </Button>
             <Button type="primary"
               onClick={()=>{
-                if(unitData.length==0){
-                  message.warning('请选择房间');
-                }else{
-                  if(unitData.length==0)
-                  {
-                    message.warning('请选择房屋');
-                    return;
-                  }
-                  if(selectedFeeId.length==0)
-                  {
-                    message.warning('请选择费项');
-                    return;
-                  }
                   form.validateFields((errors, values) => {
                     if (!errors) {
-                      console.log(infoDetail);
-                      let newData={
-                        BeginDate:moment( values.beginDate).format('YYYY-MM-DD'),
-                        EndDate:moment( values.endDate).format('YYYY-MM-DD'),
-                        BillType:"通知单",
-                        Status:values.status,
-                        TemplateId:values.templateId,
-                        IncludeBefore:values.includeBefore,
-                        CalType:values.calType,
-                        Memo:values.memo,
-                        MustDate:moment(values.mustDate).format('YYYY-MM-DD'),
-                        units:JSON.stringify(unitData),
-                        items:JSON.stringify(selectedFeeId)
+                      var guid = getGuid();
+                      let entity={
+                        billDate: moment( values.billDate).format('YYYY-MM-DD'),
+                        endDate: moment( values.endDate).format('YYYY-MM-DD'),
+                        billId:  id != null && id != "" ? infoDetail.billId : guid,
+                        feeItemId: infoDetail.feeItemId,
+                        price:parseInt(values.price) ,// 0,
+                        billSource: "临时付款",
+                        linkId: '',
+                        quantity: parseInt(values.quantity),//0,
+                        memo: values.memo?values.memo:'',
+                        relationId:values.relationId,// "string",
+                        status:0,
+                        unitId:values.householdId,
+                        amount: values.amount,
+                        cycleType: values.cycleType,
+                        beginDate:  moment(values.beginDate).format('YYYY-MM-DD'),
+                        cycleValue: values.cycleValue,
+                        organizeId: organize.id,
+                        period: infoDetail.period
                       }
-                      /*SaveBill(newData).then((res)=>{
-                        console.log(res);
+                      let newData={
+                        keyValue: id != null && id != "" ? infoDetail.billId : guid,
+                        entity:entity
+                      }
+                      SaveForm(newData).then((res)=>{
                         closeDrawer();
                         reload();
-                      });*/
+                      });
                     }
                   });
-                }
-              }}
+                }}
             >
               提交
             </Button>

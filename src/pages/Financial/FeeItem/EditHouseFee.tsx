@@ -2,47 +2,40 @@ import { TreeEntity } from '@/model/models';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { message,Modal, Checkbox,  Tabs,  Select, Table, Button,  Card,Icon,Divider,  Col,  DatePicker,  Drawer,  Form,  Input,  Row, InputNumber} from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import {HouseRemoveForm, OrganizeRemoveForm,GetFormJson, GetFeeType, GetAllFeeItems,GetOrganizePageList,GetUnitFeeItemData,SaveForm ,GetFeeItemName} from './Main.service';
+import {GetAllFeeItems,HouseSaveForm, GetHouseFormJson,GetFormJson, GetFeeType, GetAllFeeItems,SaveForm ,GetFeeItemName} from './Main.service';
 import styles from './style.less';
 import moment from 'moment';
 import AddFormula from './AddFormula';
-import AddOrginize from './AddOrginize';
-import EditOrginize from './EditOrginize';
-import AddHouseFee from './AddHouseFee';
-import EditHouseFee from './EditHouseFee';
+import SelectHouse from './SelectHouse';
 const Option = Select.Option;
 const { TextArea } = Input;
 const { TabPane } = Tabs;
 
-interface ModifyProps {
-  modifyVisible: boolean;
-  data?: any;
-  closeDrawer(): void;
+interface EditHouseFeeProps {
+  visible: boolean;
+  closeModal(): void;
   form: WrappedFormUtils;
-  treeData: TreeEntity[];
-  id?: string;
+  houseItemId?: string;
   reload(): void;
 }
-const Modify = (props: ModifyProps) => {
-  const { modifyVisible, closeDrawer, form, id,reload } = props;
+const EditHouseFee = (props: EditHouseFeeProps) => {
+  const { visible, closeModal, form, houseItemId,reload } = props;
   const { getFieldDecorator } = form;
-  const title = id === undefined ? '添加费项' : '修改费项';
+  const title = houseItemId === undefined ? '添加房屋费项' : '修改房屋费项';
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [feetypes, setFeetype] = useState<TreeEntity[]>([]);
   const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
 
   const [isFormula, setIsFormula] = useState<boolean>(false);
   const [addFormulaVisible, setAddFormulaVisible] = useState<boolean>(false);
-  const [selectOrgVisible, setSelectOrgVisible] = useState<boolean>(false);
   const [selectHouseVisible, setSelectHouseVisible] = useState<boolean>(false);
-  const [editOrgVisible, setEditOrgVisible] = useState<boolean>(false);
   const [feeItemNames,setFeeItemNames]=useState<any[]>([]);
-  const [editHouseVisible, setEditHouseVisible] = useState<boolean>(false);
-  const [isInit,setIsInit]=useState<boolean>(true);
+
+  const dateItems=['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31'];
   //打开抽屉时初始化
   useEffect(() => {
+
       //加载关联收费项目
       GetAllFeeItems().then(res => {
         setFeeitems(res || []);
@@ -53,34 +46,23 @@ const Modify = (props: ModifyProps) => {
   }, []);
 
   const changeFeeType = (value) => {
-    var newvalue=value == "收款费项" ? "ReceivablesItem" : "PaymentItem";
-    GetFeeType(newvalue).then(res => {
+    GetFeeType(value).then(res => {
       setFeetype(res || []);
-      if (!isInit) {
-        var info= Object.assign({},infoDetail,{feeType:undefined});
-        setInfoDetail(info);
-        //form.setFieldsValue({ feeType: undefined });
-      }
     });
   };
 
   // 打开抽屉时初始化
   useEffect(() => {
-    if (modifyVisible) {
-      if (id) {
-        getInfo(id).then((tempInfo: any) => {
+    if (visible) {
+      if (houseItemId) {
+        getInfo(houseItemId).then((tempInfo: any) => {
           if (tempInfo.feeKind) {
-           // var kind = tempInfo.feeKind == "收款费项" ? "ReceivablesItem" : "PaymentItem";
-            changeFeeType(tempInfo.feeKind);
-            setIsInit(false);
+            var kind = tempInfo.feeKind == "收款费项" ? "ReceivablesItem" : "PaymentItem";
+            changeFeeType(kind);
           }
           setInfoDetail(tempInfo);
           form.resetFields();
         });
-        if(id!==undefined){
-          initHouseLoadData('');
-          initOrgLoadData();
-        }
       } else {
         //重置之前选择加载的费项类别
         setFeetype([]);
@@ -90,127 +72,124 @@ const Modify = (props: ModifyProps) => {
     } else {
       form.setFieldsValue({});
     }
-  }, [modifyVisible]);
+  }, [visible]);
 
   const close = () => {
-    closeDrawer();
+    closeModal();
   };
-
-  const getGuid = () => {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-      return v.toString(16);
-    });
-  }
-
   const save = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-          var guid =getGuid();
           let newvalue = {
-          //SaveForm
-            keyValue:id==null||id==""? "":id,
-            //CalScaleDispose:values.CalScaleDispose,
-            //FeeCode:values.FeeCode,
-            //FeeNo:values.FeeNo,
+            keyValue:houseItemId,
+            AccBillDateNum:values.accBillDateNum,
+            //BankTransfer:tempInfo.bankTransfer,
+            //CreateDate:tempInfo.createDate,
+            EndDate:moment( values.endDate).format('YYYY-MM-DD'),
+            //InFeeMethod:tempInfo.inFeeMethod,
             IsModifyDate:infoDetail.isModifyDate?true:false,
-            MidResultScale:values.midResultScale,
-            //CreateDate:values.CreateDate,
-            //FeeEngName:values.FeeEngName,
-            FeePrice:values.feePrice,
+            LateStartDateNum:values.lateStartDateNum,
+            //ModifyUserName:tempInfo.modifyUserName,
+            PayDeadlineFixed:values.payDeadlineFixed,
+            //SplitFee:tempInfo.splitFee,
+            //UseStepPrice:tempInfo.useStepPrice,
+            AccBillDateUnit:values.accBillDateUnit,
+            BeginDate:moment( values.beginDate).format('YYYY-MM-DD'),
+            //CreateUserId:tempInfo.CreateUserId,
+            FeeApportion:values.feeApportion,
+            //InMethod:tempInfo.inMethod,
             IsNullDate:infoDetail.isNullDate?true:false,
-            MidScaleDispose:values.midScaleDispose,
-            //CreateUserId:values.createUserId,
-            FeeInvoice:values.feeInvoice,
-            FeeType:values.feeType,
-            IsTax:infoDetail.isTax?true:false,
-            //ModifyDate:tempInfo.modifyDate,
+            LateStartDateUnit:values.lateStartDateUnit,
+            //MonthAmount:tempInfo.monthAmount,
+            PayDeadlineNum:values.payDeadlineNum,
+            //StartCalDate:tempInfo.startCalDate,
+            //UseTimePrice:tempInfo.useTimePrice,
+            AccPeriodBase:values.accPeriodBase,
+            //CalResultScale:tempInfo.calResultScale,
             //CreateUserName:tempInfo.createUserName,
-            //FeeInvoiceNo:values.feeInvoiceNo,
+            FeeFormulaOne:values.feeFormulaOne,
+            //InOutDate:moment(tempInfo.inOutDate).format('YYYY-MM-DD'),
+            IsTax:infoDetail.isTax?true:false,
+            LinkFee:values.linkFee,
+            //NowCalDate:moment(tempInfo.nowCalDate).format('YYYY-MM-DD'),
+            PayDeadlineUnit:values.payDeadlineUnit,
+            //StepPriceId:tempInfo.stepPriceId,
+            AccPeriodBaseNum:values.accPeriodBaseNum,
+            //CalScaleDispose:tempInfo.calScaleDispose,
+            //Currency:tempInfo.currency,
+            //FeeFormulaTwo:tempInfo.feeFormulaTwo,
             IsCancel:infoDetail.isCancel?true:false,
             IsTemp:infoDetail.isTemp?true:false,
-            //ModifyUserId:values.ModifyUserId,
-            //Currency:values.currency,
-            FeeItemId:id==null||id==""?guid:id,//values.feeItemId,
+            Memo:values.memo,
+            //OutFeeMethod:tempInfo.outFeeMethod,
+            PayedCreateCope:values.payedCreateCope?true:false,
+            UnitFeeId:houseItemId,
+            AccPeriodBaseUnit:values.accPeriodBaseUnit,
+            //CopePersonType:tempInfo.copePersonType,
+            CycleType:values.cycleType,
+            FeeItemId:values.feeItemId,
             IsCustomizeDate:infoDetail.isCustomizeDate?true:false,
             LastResultScale:values.lastResultScale,
-            //ModifyUserName:tempInfo.id,
-            CycleType:values.cycleType,
-            FeeKind:values.feeKind,
+            MidResultScale:values.midResultScale,
+            //OutMethod:tempInfo.outMethod,
+            PayFeeItemId:values.payFeeItemId,
+            UnitId:values.unitId,
+            AccRightBase:values.accRightBase,
+            CopeRate:values.copeRate,
+            CycleValue:values.cycleValue,
+            FeePerson:values.feePerson,
             IsEditTemp:infoDetail.isEditTemp?true:false,
             LastScaleDispose:values.lastScaleDispose,
-            //SysType:values.sysType,
-            BeginDate:moment( values.beginDate).format('YYYY-MM-DD'),
-            CycleValue:values.cycleValue,
-            FeeName:values.feeName,
-            IsEnable:infoDetail.isEnable?true:false,
-            LinkFee:values.linkFee,
-           // TypeCode:values.typeCode,
-           // CalResultScale:values.calResultScale,
-            EndDate:moment( values.endDate).format('YYYY-MM-DD'),
-            //FeeNature:values.feeNature,
-            IsInContract:infoDetail.isInContract?true:false,
-            Memo:values.memo,
-            AccBillDateNum:values.accBillDateNum,
-            //BankTransfer:values.bankTransfer,
-            DelayRate:values.delayRate,
-            //InMethod:values.inMethod,
-            PayDeadlineFixed:values.payDeadlineFixed,
-            //UseInOrOut:values.useInOrOut,
-            AccBillDateUnit:values.accBillDateUnit,
-            //CopePersonType:values.copePersonType,
-            DelayType:values.delayType,
-            //InOutDate:values.inOutDate,
-            PayDeadlineNum:values.payDeadlineNum,
-            //UseStepPrice:values.useStepPrice,
-            AccPeriodBase:values.accPeriodBase,
-            CopeRate:values.copeRate,
-            FeeApportion:values.feeApportion,
-            //LateDataNotIn:values.lateDataNotIn,
-            PayDeadlineUnit:values.payDeadlineUnit,
-            AccPeriodBaseNum:values.accPeriodBaseNum,
-           //CopeUserId:values.copeUserId,
-            FeeFormulaOne:values.feeFormulaOne,
-            LateStartDateBase:values.lateStartDateBase,
-            //OutFeeMethod:values.outFeeMethod,
-            PayedCreateCope:values.payedCreateCope?true:false,
-            AccPeriodBaseUnit:values.accPeriodBaseUnit,
-            //CopeUserName:values.copeUserName,
-            //FeeFormulaTwo:values.feeFormulaTwo,
-            LateStartDateFixed:values.lateStartDateFixed,
-           // OutMethod:values.outMethod,
-            PayFeeItemId:values.payFeeItemId,
-            //AccRightBase:values.accRightBase,
-            LateStartDateNum:values.lateStartDateNum,
+            MidScaleDispose:values.midScaleDispose,
             PayDateNum:values.payDateNum,
-            //SplitFee:values.splitFee,
+            //PeriodNum:tempInfo.periodNum,
+            //UseFormulaTwo:tempInfo.useFormulaTwo,
             AccBillDateBase:values.accBillDateBase,
-            //AccRightBaseNum:values.accRightBaseNum,
-            //Id:id==null||id==''?'':id,
-            LateStartDateUnit:values.lateStartDateUnit,
+            //AccRightBaseNum:tempInfo.accRightBaseNum,
+            //CopeUserId:tempInfo.copeUserId,
+            DelayRate:values.delayRate,
+            //FeePersonType:tempInfo.feePersonType,
+            IsEnable:infoDetail.isEnable?true:false,
+            LateStartDateBase:values.lateStartDateBase,
+           // ModifyDate:tempInfo.ModifyDate,
             PayDateUnit:values.payDateUnit,
-            //StepPriceId:values.stepPriceId,
+            //PeriodUnit:tempInfo.periodUnit,
+            //UseInOrOut:tempInfo.useInOrOut,
             AccBillDateFixed:values.accBillDateFixed,
-           // AccRightBaseUnit:valuesaccRightBaseUnit,
-            //InFeeMethod:values.inFeeMethod,
+            //AccRightBaseUnit:tempInfo.accRightBaseUnit,
+            //CopeUserName:tempInfo.copeUserName,
+            DelayType:values.delayType,
+            FeePrice:values.feePrice,
+            IsInContract:infoDetail.isInContract?true:false,
+            LateStartDateFixed:values.lateStartDateFixed,
+            //ModifyUserId:tempInfo.ModifyUserId,
             PayDeadlineBase:values.payDeadlineBase,
-            //UseFormulaTwo:values.useFormulaTwo
+            PriceId:values.priceId,
+            //UseRebate:tempInfo.useRebate,
           };
-          SaveForm(newvalue).then(res=>{
+          HouseSaveForm(newvalue).then(res=>{
             reload();
-            closeDrawer();
           });
       }
     });
   };
   const getInfo = id => {
     if (id) {
-      return GetFormJson(id).then(res => {
-        const { feeItem, feeItemDetail } = res || ({} as any);
+      return GetHouseFormJson(id).then(res => {
+        const { unitData, allName } = res || ({} as any);
         let info = {
-          ...feeItem,
-          ...feeItemDetail,
+          ...unitData,
+          allName,
         };
+        if(info.accBillDateUnit=="1"){
+          setAccFixedDisabled(false);
+        }
+        if(info.payDeadlineUnit=="1"){
+          setPayFixedDisabled(false);
+        }
+        if(info.lateStartDateUnit=="1"){
+          setLateFixedDisabled(false);
+        }
         //info.id = feeItem && feeItem.feeItemId;
         return info;
       });
@@ -225,361 +204,43 @@ const Modify = (props: ModifyProps) => {
   const closeAddFormula = () => {
     setAddFormulaVisible(false);
   }
-
-  const closeOrgVisible = () => {
-    setSelectOrgVisible(false);
-  }
-  const closeHouseVisible = () => {
+  const closeSelectHouse = () => {
     setSelectHouseVisible(false);
   }
-  const closeEditHouseVisible = () => {
-    setEditHouseVisible(false);
-  }
-
-  const closeEditOrgVisible = () => {
-    setEditOrgVisible(false);
-  }
-  const [houseData,setHouseData]=useState<any[]>([]);
-  const [houseSearch,setHouseSearch]=useState<string>();
-  const [houseLoading,setHouseLoading]=useState<boolean>(false);
-  const [housePagination,setHousePagination]=useState<PaginationConfig>(new DefaultPagination());
-
-  const houseLoadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
-    setHouseSearch(search);
-    const { current: pageIndex, pageSize, total } = paginationConfig || {
-      current: 1,
-      pageSize: housePagination.pageSize,
-      total: 0,
-    };
-    let searchCondition: any = {
-      pageIndex,
-      pageSize,
-      total,
-      queryJson: {  keyword: search ,FeeItemID:id},
-    };
-
-    if (sorter) {
-      let { field, order } = sorter;
-      searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'code';
-    }
-
-    return houseLoad(searchCondition).then(res => {
-      return res;
-    });
-  };
-  const houseLoad = data => {
-    setOrgLoading(true);
-    data.sidx = data.sidx || 'unitfeeid';
-    data.sord = data.sord || 'asc';
-    return GetUnitFeeItemData(data).then(res => {
-      const { pageIndex: current, total, pageSize } = res;
-      setHousePagination(pagesetting => {
-        return {
-          ...pagesetting,
-          current,
-          total,
-          pageSize,
-        };
-      });
-      setHouseData(res.data);
-      setHouseLoading(false);
-      return res;
-    }).catch(()=>{
-      setHouseLoading(false);
-    });
-  };
-
-  const initHouseLoadData = (search) => {
-    setHouseSearch(search);
-    const queryJson = {  keyword: search ,FeeItemID:id};
-    const sidx = 'unitfeeid';
-    const sord = 'asc';
-    const { current: pageIndex, pageSize, total } = housePagination;
-    return houseLoad({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
-      return res;
-    });
-  };
-
-  const [orgData,setOrgData]=useState<any[]>([]);
-  const [orgSearch,setOrgSearch]=useState<string>();
-  const [orgLoading,setOrgLoading]=useState<boolean>(false);
-  const [orgPagination,setOrgPagination]=useState<PaginationConfig>(new DefaultPagination());
-
-  const orgLoadData = (paginationConfig?: PaginationConfig, sorter?) => {
-    //setOrgSearch(search);
-    const { current: pageIndex, pageSize, total } = paginationConfig || {
-      current: 1,
-      pageSize: orgPagination.pageSize,
-      total: 0,
-    };
-    let searchCondition: any = {
-      pageIndex,
-      pageSize,
-      total,
-      queryJson: {FeeItemID:id},
-    };
-
-    if (sorter) {
-      let { field, order } = sorter;
-      searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'allName';
-    }
-
-    return orgLoad(searchCondition).then(res => {
-      return res;
-    });
-  };
-  const orgLoad = data => {
-    setOrgLoading(true);
-    data.sidx = data.sidx || 'allName';
-    data.sord = data.sord || 'asc';
-    return GetOrganizePageList(data).then(res => {
-      const { pageIndex: current, total, pageSize } = res;
-      setOrgPagination(pagesetting => {
-        return {
-          ...pagesetting,
-          current,
-          total,
-          pageSize,
-        };
-      });
-      setOrgData(res.data);
-      setOrgLoading(false);
-      return res;
-    }).catch(()=>{
-      setOrgLoading(false);
-    });
-  };
-
-  const initOrgLoadData = () => {
-    //setOrgSearch(search);
-    const  queryJson={FeeItemID:id};
-    const sidx = 'allName';
-    const sord = 'asc';
-    const { current: pageIndex, pageSize, total } = orgPagination;
-    return orgLoad({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
-      return res;
-    });
-  };
-
-  const orgcolumns = [
-    {
-      title: '楼盘名称',
-      dataIndex: 'allName',
-      key: 'allName',
-      width: 140,
-      sorter: true,
-    },
-    {
-      title: '税率',
-      dataIndex: 'taxRate',
-      key: 'taxRate',
-      width: 80,
-      sorter: true,
-    },
-    {
-      title: '开票项目',
-      dataIndex: 'invoiceName',
-      key: 'invoiceName',
-      width: 100,
-      sorter: true,
-    },
-    {
-      title: '开票项目编号',
-      dataIndex: 'invoiceCode',
-      key: 'invoiceCode',
-      width: 100,
-      sorter: true,
-    },
-    {
-      title: '机构全称',
-      dataIndex: 'allName',
-      key: 'allName',
-      width: 100,
-      sorter: true,
-    },
-    {
-      title: '操作',
-      dataIndex: 'operation',
-      align: 'center',
-      key: 'operation',
-      width: 80,
-      render: (text, record) => {
-        return [
-          <span key='buttons'>
-            <a onClick={() => {
-              setOrgItemId(record.id);
-              setEditOrgVisible(true);
-            }} key="modify">修改</a>
-            <Divider type="vertical" key='divider' />
-            <a onClick={() => {
-              Modal.confirm({
-                title: '请确认',
-                content: `您是否要删除吗`,
-                cancelText:'取消',
-                okText:'确认',
-                onOk: () => {
-                  OrganizeRemoveForm(record.id)
-                    .then(() => {
-                      message.success('删除成功');
-                      initOrgLoadData();
-                    })
-                    .catch(e => {
-                      message.error('删除失败');
-                    });
-                },
-              });
-            }} key="delete">删除</a>
-          </span>
-        ];
-      },
-    },
-  ] as ColumnProps<any>[];
-const [orgItemId,setOrgItemId]=useState<string>("");const [houseItemId,setHouseItemId]=useState<string>("");
-  const housecolumns = [
-    {
-      title: '房屋编号',
-      dataIndex: 'code',
-      key: 'code',
-      width: 140,
-      sorter: true,
-    },
-    {
-      title: '单价',
-      dataIndex: 'feePrice',
-      key: 'feePrice',
-      width: 80,
-      sorter: true,
-    },
-    {
-      title: '周期数',
-      dataIndex: 'cycleValue',
-      key: 'cycleValue',
-      width: 80,
-      sorter: true,
-    },
-    {
-      title: '周期单位',
-      dataIndex: 'cycleType',
-      key: 'cycleType',
-      width: 100,
-      sorter: true,
-    },
-    {
-      title: '计费起始日期',
-      dataIndex: 'beginDate',
-      key: 'beginDate',
-      width: 120,
-      sorter: true,
-      render: val =>{
-        if(val==null){
-          return <span></span>
-        }else{
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
-        }
-      }
-    },{
-      title: '计费终止日期',
-      dataIndex: 'endDate',
-      key: 'endDate',
-      width: 120,
-      sorter: true,
-      render: val =>{
-        if(val==null){
-          return <span></span>
-        }else{
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
-        }
-      }
-    },{
-      title: '房屋全称',
-      dataIndex: 'allName',
-      key: 'allName',
-      width: 150,
-      sorter: true,
-    },
-    {
-      title: '操作',
-      dataIndex: 'operation',
-      align: 'center',
-      key: 'operation',
-      width: 100,
-      render: (text, record) => {
-        return [
-          <span key='buttons'>
-            <a onClick={() => {
-              setHouseItemId(record.unitFeeId);
-              setEditHouseVisible(true);
-            }} key="modify">修改</a>
-            <Divider type="vertical" key='divider' />
-            <a onClick={() => {
-              Modal.confirm({
-                title: '请确认',
-                content: `您是否要删除吗`,
-                cancelText:'取消',
-                okText:'确认',
-                onOk: () => {
-                  HouseRemoveForm(record.unitFeeId)
-                    .then(() => {
-                      message.success('删除成功');
-                      initOrgLoadData();
-                    })
-                    .catch(e => {
-                      message.error('删除失败');
-                    });
-                },
-              });
-            }} key="delete">删除</a>
-          </span>
-        ];
-      },
-    },
-  ] as ColumnProps<any>[];
-
-
   const [showFeeField,setShowFeeField]=useState<boolean>(false);
   const [accFixedDisabled, setAccFixedDisabled]=useState<boolean>(true);
   const [payFixedDisabled, setPayFixedDisabled]=useState<boolean>(true);
   const [lateFixedDisabled, setLateFixedDisabled]=useState<boolean>(true);
   return (
-    <Drawer
+    <Modal
       title={title}
-      placement="right"
-      width={780}
-      onClose={close}
-
-      visible={modifyVisible}
-      bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
+      visible={visible}
+      okText="确认"
+      cancelText="取消"
+      onCancel={() => closeModal()}
+      onOk={() => {
+        save();
+      }}
+      destroyOnClose={true}
+      bodyStyle={{ background: '#f6f7fb' }}
+      width='800px'
+    >
       <Form layout="vertical" hideRequiredMark>
         <Tabs defaultActiveKey="1" >
           <TabPane tab="基本信息" key="1">
             <Card className={styles.card} >
               <Row gutter={24}>
                 <Col lg={12}>
-
-                  <Form.Item label="费项种类" required>
-                    {getFieldDecorator('feeKind', {
-                      initialValue: infoDetail.feeKind,
-                      rules: [{ required: true, message: '请选择费项种类' }],
-                    })(<Select placeholder="请选择费项种类"
-                      onChange={changeFeeType}
-                    >
-                      <Option value="收款费项">收款费项</Option>
-                      <Option value="付款费项" >付款费项</Option>
-                    </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col lg={12}>
-                  <Form.Item label="费项类别" required>
-                    {getFieldDecorator('feeType', {
-                      initialValue: infoDetail.feeType,
-                      rules: [{ required: true, message: '请选择费项类别' }]
+                  <Form.Item label="费项名称" required>
+                    {getFieldDecorator('feeItemId', {
+                      initialValue: infoDetail.feeItemId,
+                      rules: [{ required: true, message: '请输入费项名称' }],
                     })(
-                      <Select placeholder="请选择费项类别">
-                        {feetypes.map(item => (
-                          <Option key={item.title} value={item.title}>
+                      <Select
+                        placeholder="请选择费项名称"
+                      >
+                        {feeitems.map(item => (
+                          <Option key={item.value} value={item.value}>
                             {item.title}
                           </Option>
                         ))}
@@ -587,26 +248,6 @@ const [orgItemId,setOrgItemId]=useState<string>("");const [houseItemId,setHouseI
                     )}
                   </Form.Item>
                 </Col>
-              </Row>
-              <Row gutter={24}>
-                <Col lg={12}>
-                  <Form.Item label="费项名称" required>
-                    {getFieldDecorator('feeName', {
-                      initialValue: infoDetail.feeName,
-                      rules: [{ required: true, message: '请输入费项名称' }],
-                    })(<Input placeholder="请输入费项名称" />)}
-                  </Form.Item>
-                </Col>
-                <Col lg={12}>
-                  <Form.Item label="单价">
-                    {getFieldDecorator('feePrice', {
-                      initialValue: infoDetail.feePrice,
-                      rules: [{ required: true, message: '请输入单价' }],
-                    })(<Input placeholder="请输入单价" />)}
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={24}>
                 <Col lg={12}>
                   <Form.Item label="关联收费项目" >
                     {getFieldDecorator('linkFee', {
@@ -622,6 +263,39 @@ const [orgItemId,setOrgItemId]=useState<string>("");const [houseItemId,setHouseI
                         ))}
                       </Select>
                     )}
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row gutter={24}>
+                <Col lg={12}>
+                  <Form.Item label="房屋名称" required>
+                    {getFieldDecorator('allName', {
+                      initialValue: infoDetail.allName,
+                      rules: [{ required: true, message: '请选择房屋' }],
+                    })(
+                    <Input addonAfter={<Icon type="setting"  onClick={()=>{
+                      setSelectHouseVisible(true);
+                    }}/>}/>
+                    )}
+                  </Form.Item>
+                </Col>
+                <Col lg={12}>
+                  <Form.Item label="房屋编号" >
+                    {getFieldDecorator('unitId', {
+                      initialValue: infoDetail.unitId,
+                    })(
+                    <Input disabled={true}/>
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row gutter={24}>
+                <Col lg={12}>
+                  <Form.Item label="单价">
+                    {getFieldDecorator('feePrice', {
+                      initialValue: infoDetail.feePrice,
+                      rules: [{ required: true, message: '请输入单价' }],
+                    })(<Input placeholder="请输入单价" />)}
                   </Form.Item>
                 </Col>
                 <Col lg={7}>
@@ -659,7 +333,7 @@ const [orgItemId,setOrgItemId]=useState<string>("");const [houseItemId,setHouseI
                 </Col>
                 <Col lg={12}>
                   <Form.Item label="计费终止日期">
-                    {getFieldDecorator('endDate', {
+                    {getFieldDecorator('beginDate', {
                       initialValue: infoDetail.endDate
                         ? moment(new Date(infoDetail.endDate))
                         : moment(new Date()),
@@ -716,7 +390,6 @@ const [orgItemId,setOrgItemId]=useState<string>("");const [houseItemId,setHouseI
                   </Form.Item>
                 </Col>
               </Row>
-
               <Row gutter={24}>
                 <Col lg={21}>
                   <Form.Item label="用量公式">
@@ -726,7 +399,6 @@ const [orgItemId,setOrgItemId]=useState<string>("");const [houseItemId,setHouseI
                     })(<Input placeholder="请设置用量公式" />)}
                   </Form.Item>
                 </Col>
-
                 <Col lg={3}>
                   <Form.Item label="&nbsp;">
                     <Button type="primary" onClick={() => {
@@ -754,13 +426,11 @@ const [orgItemId,setOrgItemId]=useState<string>("");const [houseItemId,setHouseI
                   </Form.Item>
                 </Col>
               </Row>
-
               <Row gutter={24}>
                 <Col lg={12}>
                   <Form.Item label="滞纳金比例(%)">
                     {getFieldDecorator('delayRate', {
                       initialValue: infoDetail.delayRate,
-                      rules: [{ required: true, message: '请输入滞纳金比例' }],
                     })(<Input placeholder="请输入滞纳金比例" />)}
                   </Form.Item>
                 </Col>
@@ -768,7 +438,6 @@ const [orgItemId,setOrgItemId]=useState<string>("");const [houseItemId,setHouseI
                   <Form.Item label="计算方法">
                     {getFieldDecorator('delayType', {
                       initialValue: infoDetail.delayType,
-                      rules: [{ required: true, message: '请选择滞纳金计算方式' }],
                     })(
                       <Select placeholder="选择滞纳金计算方式">
                       <Option value="0">按天计算（固定滞纳率）</Option>
@@ -779,7 +448,6 @@ const [orgItemId,setOrgItemId]=useState<string>("");const [houseItemId,setHouseI
                   </Form.Item>
                 </Col>
               </Row>
-
               <Row gutter={24}>
                 <Col lg={24}>
                   <Form.Item label="附加说明">
@@ -789,19 +457,15 @@ const [orgItemId,setOrgItemId]=useState<string>("");const [houseItemId,setHouseI
                   </Form.Item>
                 </Col>
               </Row>
-
             </Card>
           </TabPane>
-          {
-            id?null: <TabPane tab="高级" key="2">
-
+          <TabPane tab="高级" key="2">
             <Card title="小数精度"  >
               <Row gutter={24}>
                 <Col lg={12}>
                   <Form.Item label="中间每一步计算结果保留">
                     {getFieldDecorator('midResultScale', {
                       initialValue: infoDetail.midResultScale,
-                      rules: [{ required: true, message: '请选择小数位数' }],
                     })(
 
                       <Select placeholder="请选择单位">
@@ -818,7 +482,6 @@ const [orgItemId,setOrgItemId]=useState<string>("");const [houseItemId,setHouseI
                   <Form.Item label="对最后一位">
                     {getFieldDecorator('midScaleDispose', {
                       initialValue: infoDetail.midScaleDispose,
-                      rules: [{ required: true, message: '请选择小数处理方法' }],
                     })(
                       <Select placeholder="请选择小数处理方法">
                         <Option value="0">四舍五入</Option>
@@ -834,7 +497,6 @@ const [orgItemId,setOrgItemId]=useState<string>("");const [houseItemId,setHouseI
                   <Form.Item label="最终结果保留小数位数">
                     {getFieldDecorator('lastResultScale', {
                       initialValue: infoDetail.lastResultScale,
-                      rules: [{ required: true, message: '请选择小数位数' }],
                     })(
                       <Select placeholder="请选择单位">
                         <Option value="0">0</Option>
@@ -850,7 +512,6 @@ const [orgItemId,setOrgItemId]=useState<string>("");const [houseItemId,setHouseI
                   <Form.Item label="对最后一位">
                     {getFieldDecorator('lastScaleDispose', {
                       initialValue: infoDetail.lastScaleDispose,
-                      rules: [{ required: true, message: '请选择小数处理方法' }],
                     })(
                       <Select placeholder="请选择小数处理方法">
                         <Option value="0">四舍五入</Option>
@@ -868,7 +529,6 @@ const [orgItemId,setOrgItemId]=useState<string>("");const [houseItemId,setHouseI
                   <Form.Item label="应收期间 距">
                     {getFieldDecorator('accPeriodBase', {
                       initialValue: infoDetail.accPeriodBase? infoDetail.accPeriodBase.toString() :"2",
-                      rules: [{ required: true, message: '请选择应收期间' }],
                     })(
                       <Select placeholder="==选择应收期间==">
                         <Option value="0">同一季度费用,每季度首月为应收期间</Option>
@@ -882,7 +542,6 @@ const [orgItemId,setOrgItemId]=useState<string>("");const [houseItemId,setHouseI
                   <Form.Item>
                     {getFieldDecorator('accPeriodBaseNum', {
                       initialValue: infoDetail.accPeriodBaseNum?infoDetail.accPeriodBaseNum:7,
-                      rules: [{ required: true, message: '请输入数量' }],
                     })(
                       <Input></Input>
                     )}
@@ -892,7 +551,6 @@ const [orgItemId,setOrgItemId]=useState<string>("");const [houseItemId,setHouseI
                   <Form.Item>
                     {getFieldDecorator('accPeriodBaseUnit', {
                       initialValue: infoDetail.accPeriodBaseUnit? infoDetail.accPeriodBaseUnit.toString() :"1",
-                      rules: [{ required: true, message: '请选择单位' }],
                     })(
                       <Select placeholder="==选择单位==">
                         <Option value="0">天</Option>
@@ -907,7 +565,6 @@ const [orgItemId,setOrgItemId]=useState<string>("");const [houseItemId,setHouseI
                   <Form.Item label="账单日 距">
                     {getFieldDecorator('accBillDateBase', {
                       initialValue: infoDetail.accBillDateBase? infoDetail.accBillDateBase.toString() :"2",
-                      rules: [{ required: true, message: '请选择应收期间' }],
                     })(
                       <Select placeholder="==选择应收期间==">
                         <Option value="0">同一季度费用,每季度首月为应收期间</Option>
@@ -921,7 +578,6 @@ const [orgItemId,setOrgItemId]=useState<string>("");const [houseItemId,setHouseI
                   <Form.Item>
                     {getFieldDecorator('accBillDateNum', {
                       initialValue:  infoDetail.accBillDateNum?infoDetail.accBillDateNum:7,
-                      rules: [{ required: true, message: '请输入数量' }],
                     })(
                       <Input></Input>
                     )}
@@ -931,9 +587,8 @@ const [orgItemId,setOrgItemId]=useState<string>("");const [houseItemId,setHouseI
                   <Form.Item>
                     {getFieldDecorator('accBillDateUnit', {
                       initialValue: infoDetail.accBillDateUnit? infoDetail.accBillDateUnit.toString() :"1",
-                      rules: [{ required: true, message: '请选择单位' }],
                     })(
-                      <Select placeholder="==选择单位=="  onChange={value=>{
+                      <Select placeholder="==选择单位==" onChange={value=>{
                         if(value=="0"){
                           setAccFixedDisabled(true);
                         }else{
@@ -951,39 +606,39 @@ const [orgItemId,setOrgItemId]=useState<string>("");const [houseItemId,setHouseI
                     {getFieldDecorator('accBillDateFixed', {
                       initialValue:infoDetail.accBillDateFixed,
                     })(
-                      <Select disabled={accFixedDisabled}>
-                        <Option value="1"> 1日</Option>
-                        <Option value="2"> 2日</Option>
-                        <Option value="3"> 3日</Option>
-                        <Option value="4"> 4日</Option>
-                        <Option value="5"> 5日</Option>
-                        <Option value="6"> 6日</Option>
-                        <Option value="7"> 7日</Option>
-                        <Option value="8"> 8日</Option>
-                        <Option value="9"> 9日</Option>
-                        <Option value="10"> 10日</Option>
-                        <Option value="11"> 11日</Option>
-                        <Option value="12"> 12日</Option>
-                        <Option value="13"> 13日</Option>
-                        <Option value="14"> 14日</Option>
-                        <Option value="15"> 15日</Option>
-                        <Option value="16"> 16日</Option>
-                        <Option value="17"> 17日</Option>
-                        <Option value="18"> 18日</Option>
-                        <Option value="19"> 19日</Option>
-                        <Option value="20"> 20日</Option>
-                        <Option value="21"> 21日</Option>
-                        <Option value="22"> 22日</Option>
-                        <Option value="23"> 23日</Option>
-                        <Option value="24"> 24日</Option>
-                        <Option value="25"> 25日</Option>
-                        <Option value="26"> 26日</Option>
-                        <Option value="27"> 27日</Option>
-                        <Option value="28"> 28日</Option>
-                        <Option value="29"> 29日</Option>
-                        <Option value="30"> 30日</Option>
-                    <Option value="31"> 31日</Option>
-                    </Select>
+                      <Select  disabled={accFixedDisabled}>
+                        <Option key="1"> 1日</Option>
+                        <Option key="2"> 2日</Option>
+                        <Option key="3"> 3日</Option>
+                        <Option key="4"> 4日</Option>
+                        <Option key="5"> 5日</Option>
+                        <Option key="6"> 6日</Option>
+                        <Option key="7"> 7日</Option>
+                        <Option key="8"> 8日</Option>
+                        <Option key="9"> 9日</Option>
+                        <Option key="10"> 10日</Option>
+                        <Option key="11"> 11日</Option>
+                        <Option key="12"> 12日</Option>
+                        <Option key="13"> 13日</Option>
+                        <Option key="14"> 14日</Option>
+                        <Option key="15"> 15日</Option>
+                        <Option key="16"> 16日</Option>
+                        <Option key="17"> 17日</Option>
+                        <Option key="18"> 18日</Option>
+                        <Option key="19"> 19日</Option>
+                        <Option key="20"> 20日</Option>
+                        <Option key="21"> 21日</Option>
+                        <Option key="22"> 22日</Option>
+                        <Option key="23"> 23日</Option>
+                        <Option key="24"> 24日</Option>
+                        <Option key="25"> 25日</Option>
+                        <Option key="26"> 26日</Option>
+                        <Option key="27"> 27日</Option>
+                        <Option key="28"> 28日</Option>
+                        <Option key="29"> 29日</Option>
+                        <Option key="30"> 30日</Option>
+                        <Option key="31"> 31日</Option>
+                      </Select>
                     )}
                   </Form.Item>
                 </Col>
@@ -993,7 +648,6 @@ const [orgItemId,setOrgItemId]=useState<string>("");const [houseItemId,setHouseI
                   <Form.Item label="收款截止日 距">
                     {getFieldDecorator('payDeadlineBase', {
                       initialValue:  infoDetail.payDeadlineBase? infoDetail.payDeadlineBase.toString()   :"2",
-                      rules: [{ required: true, message: '请选择应收期间' }],
                     })(
                       <Select placeholder="==选择应收期间==">
                         <Option value="0">同一季度费用,每季度首月为应收期间</Option>
@@ -1007,7 +661,6 @@ const [orgItemId,setOrgItemId]=useState<string>("");const [houseItemId,setHouseI
                   <Form.Item>
                     {getFieldDecorator('payDeadlineNum', {
                       initialValue:  infoDetail.payDeadlineNum?infoDetail.payDeadlineNum  :10,
-                      rules: [{ required: true, message: '请输入数量' }],
                     })(
                       <Input></Input>
                     )}
@@ -1017,9 +670,8 @@ const [orgItemId,setOrgItemId]=useState<string>("");const [houseItemId,setHouseI
                   <Form.Item>
                     {getFieldDecorator('payDeadlineUnit', {
                       initialValue: infoDetail.payDeadlineUnit? infoDetail.payDeadlineUnit.toString()   :"1",
-                      rules: [{ required: true, message: '请选择单位' }],
                     })(
-                      <Select placeholder="==选择单位=="  onChange={value=>{
+                      <Select placeholder="==选择单位==" onChange={value=>{
                         if(value=="0"){
                           setPayFixedDisabled(true);
                         }else{
@@ -1038,38 +690,38 @@ const [orgItemId,setOrgItemId]=useState<string>("");const [houseItemId,setHouseI
                       initialValue:infoDetail.payDeadlineFixed,
                     })(
                       <Select  disabled={payFixedDisabled}>
-                    <Option key="1"> 1日</Option>
-                      <Option key="2"> 2日</Option>
-                      <Option key="3"> 3日</Option>
-                      <Option key="4"> 4日</Option>
-                      <Option key="5"> 5日</Option>
-                      <Option key="6"> 6日</Option>
-                      <Option key="7"> 7日</Option>
-                      <Option key="8"> 8日</Option>
-                      <Option key="9"> 9日</Option>
-                      <Option key="10"> 10日</Option>
-                      <Option key="11"> 11日</Option>
-                      <Option key="12"> 12日</Option>
-                      <Option key="13"> 13日</Option>
-                      <Option key="14"> 14日</Option>
-                      <Option key="15"> 15日</Option>
-                      <Option key="16"> 16日</Option>
-                      <Option key="17"> 17日</Option>
-                      <Option key="18"> 18日</Option>
-                      <Option key="19"> 19日</Option>
-                      <Option key="20"> 20日</Option>
-                      <Option key="21"> 21日</Option>
-                      <Option key="22"> 22日</Option>
-                      <Option key="23"> 23日</Option>
-                      <Option key="24"> 24日</Option>
-                      <Option key="25"> 25日</Option>
-                      <Option key="26"> 26日</Option>
-                      <Option key="27"> 27日</Option>
-                      <Option key="28"> 28日</Option>
-                      <Option key="29"> 29日</Option>
-                      <Option key="30"> 30日</Option>
-                    <Option key="31"> 31日</Option>
-                    </Select>
+                        <Option key="1"> 1日</Option>
+                        <Option key="2"> 2日</Option>
+                        <Option key="3"> 3日</Option>
+                        <Option key="4"> 4日</Option>
+                        <Option key="5"> 5日</Option>
+                        <Option key="6"> 6日</Option>
+                        <Option key="7"> 7日</Option>
+                        <Option key="8"> 8日</Option>
+                        <Option key="9"> 9日</Option>
+                        <Option key="10"> 10日</Option>
+                        <Option key="11"> 11日</Option>
+                        <Option key="12"> 12日</Option>
+                        <Option key="13"> 13日</Option>
+                        <Option key="14"> 14日</Option>
+                        <Option key="15"> 15日</Option>
+                        <Option key="16"> 16日</Option>
+                        <Option key="17"> 17日</Option>
+                        <Option key="18"> 18日</Option>
+                        <Option key="19"> 19日</Option>
+                        <Option key="20"> 20日</Option>
+                        <Option key="21"> 21日</Option>
+                        <Option key="22"> 22日</Option>
+                        <Option key="23"> 23日</Option>
+                        <Option key="24"> 24日</Option>
+                        <Option key="25"> 25日</Option>
+                        <Option key="26"> 26日</Option>
+                        <Option key="27"> 27日</Option>
+                        <Option key="28"> 28日</Option>
+                        <Option key="29"> 29日</Option>
+                        <Option key="30"> 30日</Option>
+                        <Option key="31"> 31日</Option>
+                      </Select>
                     )}
                   </Form.Item>
                 </Col>
@@ -1079,7 +731,6 @@ const [orgItemId,setOrgItemId]=useState<string>("");const [houseItemId,setHouseI
                   <Form.Item label="滞纳金起算日 距">
                     {getFieldDecorator('lateStartDateBase', {
                       initialValue:  infoDetail.lateStartDateBase? infoDetail.lateStartDateBase.toString() :"2",
-                      rules: [{ required: true, message: '请选择应收期间' }],
                     })(
                       <Select placeholder="==选择应收期间==">
                         <Option value="0">同一季度费用,每季度首月为应收期间</Option>
@@ -1093,7 +744,6 @@ const [orgItemId,setOrgItemId]=useState<string>("");const [houseItemId,setHouseI
                   <Form.Item>
                     {getFieldDecorator('lateStartDateNum', {
                       initialValue: infoDetail.lateStartDateNum?infoDetail.lateStartDateNum:10,
-                      rules: [{ required: true, message: '请输入数量' }],
                     })(
                       <Input></Input>
                     )}
@@ -1103,7 +753,6 @@ const [orgItemId,setOrgItemId]=useState<string>("");const [houseItemId,setHouseI
                   <Form.Item>
                     {getFieldDecorator('lateStartDateUnit', {
                       initialValue: infoDetail.lateStartDateUnit? infoDetail.lateStartDateUnit.toString() :"1",
-                      rules: [{ required: true, message: '请选择单位' }],
                     })(
                       <Select  placeholder="==选择单位=="  onChange={value=>{
                         if(value=="0"){
@@ -1124,38 +773,38 @@ const [orgItemId,setOrgItemId]=useState<string>("");const [houseItemId,setHouseI
                       initialValue:infoDetail.lateStartDateFixed,
                     })(
                       <Select  disabled={lateFixedDisabled}>
-                    <Option key="1"> 1日</Option>
-                      <Option key="2"> 2日</Option>
-                      <Option key="3"> 3日</Option>
-                      <Option key="4"> 4日</Option>
-                      <Option key="5"> 5日</Option>
-                      <Option key="6"> 6日</Option>
-                      <Option key="7"> 7日</Option>
-                      <Option key="8"> 8日</Option>
-                      <Option key="9"> 9日</Option>
-                      <Option key="10"> 10日</Option>
-                      <Option key="11"> 11日</Option>
-                      <Option key="12"> 12日</Option>
-                      <Option key="13"> 13日</Option>
-                      <Option key="14"> 14日</Option>
-                      <Option key="15"> 15日</Option>
-                      <Option key="16"> 16日</Option>
-                      <Option key="17"> 17日</Option>
-                      <Option key="18"> 18日</Option>
-                      <Option key="19"> 19日</Option>
-                      <Option key="20"> 20日</Option>
-                      <Option key="21"> 21日</Option>
-                      <Option key="22"> 22日</Option>
-                      <Option key="23"> 23日</Option>
-                      <Option key="24"> 24日</Option>
-                      <Option key="25"> 25日</Option>
-                      <Option key="26"> 26日</Option>
-                      <Option key="27"> 27日</Option>
-                      <Option key="28"> 28日</Option>
-                      <Option key="29"> 29日</Option>
-                      <Option key="30"> 30日</Option>
-                    <Option key="31"> 31日</Option>
-                    </Select>
+                        <Option key="1"> 1日</Option>
+                        <Option key="2"> 2日</Option>
+                        <Option key="3"> 3日</Option>
+                        <Option key="4"> 4日</Option>
+                        <Option key="5"> 5日</Option>
+                        <Option key="6"> 6日</Option>
+                        <Option key="7"> 7日</Option>
+                        <Option key="8"> 8日</Option>
+                        <Option key="9"> 9日</Option>
+                        <Option key="10"> 10日</Option>
+                        <Option key="11"> 11日</Option>
+                        <Option key="12"> 12日</Option>
+                        <Option key="13"> 13日</Option>
+                        <Option key="14"> 14日</Option>
+                        <Option key="15"> 15日</Option>
+                        <Option key="16"> 16日</Option>
+                        <Option key="17"> 17日</Option>
+                        <Option key="18"> 18日</Option>
+                        <Option key="19"> 19日</Option>
+                        <Option key="20"> 20日</Option>
+                        <Option key="21"> 21日</Option>
+                        <Option key="22"> 22日</Option>
+                        <Option key="23"> 23日</Option>
+                        <Option key="24"> 24日</Option>
+                        <Option key="25"> 25日</Option>
+                        <Option key="26"> 26日</Option>
+                        <Option key="27"> 27日</Option>
+                        <Option key="28"> 28日</Option>
+                        <Option key="29"> 29日</Option>
+                        <Option key="30"> 30日</Option>
+                        <Option key="31"> 31日</Option>
+                      </Select>
                     )}
                   </Form.Item>
                 </Col>
@@ -1188,11 +837,11 @@ const [orgItemId,setOrgItemId]=useState<string>("");const [houseItemId,setHouseI
                       initialValue: infoDetail.payFeeItemID,
                     })(
                       <Select placeholder="==应付款项==">
-                         {feeItemNames.map(item => (
+                        {feeItemNames.map(item => (
                           <Option value={item.key} key={item.key}>
                             {item.title}
                           </Option>
-                         ))}
+                        ))}
                       </Select>
                     )}
                   </Form.Item>
@@ -1245,83 +894,6 @@ const [orgItemId,setOrgItemId]=useState<string>("");const [houseItemId,setHouseI
               </Row>
             </Card>
           </TabPane>
-          }
-          {
-            id?
-            <TabPane tab="所属机构" key="3">
-              <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
-                <span>费项所属组织</span>
-                <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
-                  onClick={() => { setSelectOrgVisible(true) }}
-                >
-                  <Icon type="plus" />
-                  新增
-                </Button>
-                <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
-                  onClick={() => {  }}
-                >
-                  <Icon type="plus" />
-                  刷新
-                </Button>
-              </div>
-              <Table
-                key='list'
-                style={{ border: 'none' }}
-                bordered={false}
-                size="middle"
-                dataSource={orgData}
-                columns={orgcolumns}
-                rowKey={record => record.allName}
-                pagination={orgPagination}
-                scroll={{ y: 420 }}
-                onChange={(pagination: PaginationConfig, filters, sorter) =>
-                  orgLoadData(pagination, sorter)
-                }
-                loading={orgLoading}
-              />
-            </TabPane>:null
-          }
-          {
-            id?
-            <TabPane tab="设置房屋费项" key="4">
-              <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
-                <Input.Search
-                  key='search'
-                  className="search-input"
-                  placeholder="请输入要查询的名称或者编号"
-                  style={{ width: 200 }}
-                  onSearch={value => houseLoadData(value)}
-                />
-                <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
-                  onClick={() =>{setSelectHouseVisible(true);}}
-                >
-                  <Icon type="plus" />
-                  新增
-                </Button>
-                <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
-                  onClick={() => { initOrgLoadData() }}
-                >
-                  <Icon type="plus" />
-                  刷新
-                </Button>
-              </div>
-              <Table
-                key='list'
-                style={{ border: 'none' }}
-                bordered={false}
-                size="middle"
-                dataSource={houseData}
-                columns={housecolumns}
-                rowKey={record => record.code}
-                pagination={housePagination}
-                scroll={{ y: 420 ,x:920}}
-                onChange={(pagination: PaginationConfig,  filters,  sorter) =>
-                  houseLoadData(houseSearch, pagination, sorter)
-                }
-                loading={houseLoading}
-              />
-            </TabPane>:null
-          }
         </Tabs>
         <div
           style={{
@@ -1357,33 +929,18 @@ const [orgItemId,setOrgItemId]=useState<string>("");const [houseItemId,setHouseI
         }}
         isFormula={isFormula}
       />
-      <AddOrginize
-        visible={selectOrgVisible}
-        closeModal={closeOrgVisible}
-        feeId={id}
-        reload={initOrgLoadData}
+      <SelectHouse
+        visible= {selectHouseVisible}
+        closeModal={closeSelectHouse}
+        getSelectTree={(info)=>{
+          console.log(info);
+          var newInfo=Object.assign({},infoDetail,{allName:info.allname,unitId:info.key})
+          setInfoDetail(newInfo);
+        }}
       />
-      <EditOrginize
-        visible={editOrgVisible}
-        closeModal={closeEditOrgVisible}
-        orgItemId={orgItemId}
-        reload={initOrgLoadData}
-      />
-      <AddHouseFee
-        visible={selectHouseVisible}
-        closeModal={closeHouseVisible}
-        feeId={id}
-        reload={()=>initHouseLoadData(houseSearch)}
-      />
-      <EditHouseFee
-        visible={editHouseVisible}
-        closeModal={closeEditHouseVisible}
-        houseItemId={houseItemId}
-        reload={()=>initHouseLoadData(houseSearch)}
-      />
-    </Drawer>
+    </Modal>
   );
 };
 
-export default Form.create<ModifyProps>()(Modify);
+export default Form.create<EditHouseFeeProps>()(EditHouseFee);
 

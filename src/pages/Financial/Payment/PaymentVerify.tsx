@@ -1,7 +1,7 @@
 import {  Button,  Col,  DatePicker,  Drawer,  Form,  Row,  Input,  Spin} from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { Audit,GetEntityShow} from './Payment.service';
+import { Audit,GetEntity} from './Payment.service';
 import './style.less';
 import  moment from 'moment';
 
@@ -26,7 +26,7 @@ const PaymentVerify = (props: PaymentVerifyProps) => {
       form.resetFields();
       if(id!=null&&id!=''){
         setLoading(true);
-        GetEntityShow(id).then(res=>{
+        GetEntity(id).then(res=>{
           setInfoDetail(Object.assign({},res.entity,{customerName:res.name}));
           setLoading(false);
         })
@@ -46,17 +46,23 @@ const PaymentVerify = (props: PaymentVerifyProps) => {
       if (!errors) {
         let newData={
           keyValue:infoDetail.billId,
-          billCode:values.billCode,
-          billDate:moment(values.billDate).format('YYYY-MM-DD'),
-          billType:values.billType,
-          customerName:values.customerName,
-          IfVerify:!infoDetail.ifVerify,
-          VerifyDate:ifVerify?moment(new Date()).format('YYYY-MM-DD HH:mm:ss'):moment(values.verifyDate).format('YYYY-MM-DD HH:mm:ss'),
-          VerifyMemo:values.verifyMemo
+          entity:{
+            billId:id,
+            organizeId: "string",
+            payAmount: 0,
+            payType: "string",
+            status: 0,
+            memo: "string",
+            verifyDate: ifVerify?moment(new Date()).format('YYYY-MM-DD HH:mm:ss'):moment(values.verifyDate).format('YYYY-MM-DD HH:mm:ss'),
+            verifyMemo: "string",
+            billCode: values.verifyMemo,
+            billDate: moment(values.billDate).format('YYYY-MM-DD'),
+          }
+        //  IfVerify:!infoDetail.ifVerify,
         };
         Audit(newData).then(()=>{
           closeVerify(true);
-         // reload();
+          reload();
         });
       }
     });

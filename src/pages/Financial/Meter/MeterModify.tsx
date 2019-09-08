@@ -24,7 +24,7 @@ interface MeterModifyProps {
 }
 
 const MeterModify = (props: MeterModifyProps) => {
-  const { modifyVisible, closeDrawer, form, id, reload } = props; 
+  const { modifyVisible, closeDrawer, form, id, reload } = props;
   const title = id == null ? '新增费表资料' : '修改费表资料';
   const [loading, setLoading] = useState<boolean>(false);
   const { getFieldDecorator } = form;
@@ -246,7 +246,7 @@ const MeterModify = (props: MeterModifyProps) => {
                 initMeterLoadData();
               })
             }} key="delete">删除</a>
-          </span> 
+          </span>
         ];
       },
     }
@@ -508,8 +508,8 @@ const MeterModify = (props: MeterModifyProps) => {
               </div>
               <Table<any>
                 onChange={(paginationConfig, filters, sorter) => {
-                     initMeterLoadData(paginationConfig, sorter)
-                   }
+                    initMeterLoadData(paginationConfig, sorter)
+                  }
                 }
                 bordered={false}
                 size="middle"

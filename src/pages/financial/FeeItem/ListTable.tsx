@@ -23,9 +23,11 @@ function ListTable(props: ListTableProps) {
     Modal.confirm({
       title: '请确认',
       content: `您是否要删除${record.feeName}`,
+      cancelText:'取消',
+      okText:'确定',
       onOk: () => {
         RemoveForm(record.feeItemId).then(() => {
-          message.success('保存成功');
+          message.success('删除成功');
           reload();
         });
       },
@@ -79,13 +81,25 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'beginDate',
       key: 'beginDate',
       width: 85,
-      render: val => { moment(val).format('YYYY-MM-DD') }
+      render: val =>{
+        if(val==null){
+          return <span></span>
+        }else{
+          return <span> {moment(val).format('YYYY-MM-DD')} </span>
+        }
+      }
     }, {
       title: '计费终止日期',
       dataIndex: 'endDate',
       key: 'endDate',
       width: 85,
-      render: val => { moment(val).format('YYYY-MM-DD') }
+      render: val =>{
+        if(val==null){
+          return <span></span>
+        }else{
+          return <span> {moment(val).format('YYYY-MM-DD')} </span>
+        }
+      }
     },
     {
       title: '操作',
@@ -95,17 +109,6 @@ function ListTable(props: ListTableProps) {
       width: 80,
       render: (text, record) => {
         return [
-          // <Button
-          //   type="primary"
-          //   key="modify"
-          //   style={{ marginRight: '10px' }}
-          //   onClick={() => modify(record.feeitemid)}
-          // >
-          //   修改
-          // </Button>,
-          // <Button type="danger" key="delete" onClick={() => doDelete(record)}>
-          //   删除
-          // </Button>,
           <span key='buttons'>
             <a onClick={() => modify(record.feeItemId)} key="modify">修改</a>
             <Divider type="vertical" key='divider' />
