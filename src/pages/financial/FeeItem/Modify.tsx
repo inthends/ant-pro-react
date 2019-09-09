@@ -302,7 +302,7 @@ const Modify = (props: ModifyProps) => {
   };
 
   const [orgData,setOrgData]=useState<any[]>([]);
-  const [orgSearch,setOrgSearch]=useState<string>();
+  // const [orgSearch,setOrgSearch]=useState<string>();
   const [orgLoading,setOrgLoading]=useState<boolean>(false);
   const [orgPagination,setOrgPagination]=useState<PaginationConfig>(new DefaultPagination());
 
@@ -366,36 +366,36 @@ const Modify = (props: ModifyProps) => {
   const orgcolumns = [
     {
       title: '楼盘名称',
-      dataIndex: 'allName',
-      key: 'allName',
-      width: 140,
+      dataIndex: 'name',
+      key: 'name',
+      width: 120,
       sorter: true,
     },
     {
       title: '税率',
       dataIndex: 'taxRate',
       key: 'taxRate',
-      width: 80,
+      width: 60,
       sorter: true,
     },
     {
       title: '开票项目',
-      dataIndex: 'invoiceName',
-      key: 'invoiceName',
-      width: 100,
+      dataIndex: 'feeName',
+      key: 'feeName',
+      width: 120,
       sorter: true,
     },
     {
       title: '开票项目编号',
-      dataIndex: 'invoiceCode',
-      key: 'invoiceCode',
+      dataIndex: 'feeCode',
+      key: 'feeCode',
       width: 100,
       sorter: true,
     },
     {
-      title: '机构全称',
-      dataIndex: 'allName',
-      key: 'allName',
+      title: '所属管理处',
+      dataIndex: 'orgName',
+      key: 'orgName',
       width: 100,
       sorter: true,
     },
@@ -436,6 +436,7 @@ const Modify = (props: ModifyProps) => {
       },
     },
   ] as ColumnProps<any>[];
+  
 const [orgItemId,setOrgItemId]=useState<string>("");const [houseItemId,setHouseItemId]=useState<string>("");
   const housecolumns = [
     {
@@ -1249,20 +1250,19 @@ const [orgItemId,setOrgItemId]=useState<string>("");const [houseItemId,setHouseI
           {
             id?
             <TabPane tab="所属机构" key="3">
-              <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
-                <span>费项所属组织</span>
+              <div style={{ marginBottom: '20px', padding: '3px 2px' }}> 
                 <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
                   onClick={() => { setSelectOrgVisible(true) }}
                 >
                   <Icon type="plus" />
                   新增
                 </Button>
-                <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
+                {/* <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
                   onClick={() => {  }}
                 >
                   <Icon type="plus" />
                   刷新
-                </Button>
+                </Button> */}
               </div>
               <Table
                 key='list'
