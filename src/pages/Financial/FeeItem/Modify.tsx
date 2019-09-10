@@ -246,6 +246,7 @@ const Modify = (props: ModifyProps) => {
   const [houseLoading, setHouseLoading] = useState<boolean>(false);
   const [housePagination, setHousePagination] = useState<PaginationConfig>(new DefaultPagination());
 
+  
   const houseLoadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
     setHouseSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
