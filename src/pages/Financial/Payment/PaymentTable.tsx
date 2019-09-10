@@ -15,32 +15,26 @@ interface PaymentTableProps {
   pagination: PaginationConfig;
   data: any[];
   reload(): void;
-  showModify(id?,isedit?): void;
+  showBill(id?): void;
   form: WrappedFormUtils;
   getRowSelect(record):void;
 }
 
 function PaymentTable(props: PaymentTableProps) {
-  const { onchange, loading, pagination, data, reload, showModify,getRowSelect } = props;
+  const { onchange, loading, pagination, data, reload, showBill,getRowSelect } = props;
   const [selectedRowKey, setSelectedRowKey] = useState([]);
   const columns = [
     {
-      title: '单据类型',
-      dataIndex: 'billType',
-      key: 'billType',
-      width: 150,
-      sorter: true
-    },{
-      title: '单号',
+      title: '付款单编号',
       dataIndex: 'billCode',
       key: 'billCode',
       width: 150,
-      sorter: true
+      sorter: true,
     },
     {
-      title: '账单日',
-      dataIndex: 'createDate',
-      key: 'createDate',
+      title: '付款日期',
+      dataIndex: 'billDate',
+      key: 'billDate',
       width: 150,
       sorter: true,
       render: val =>{
@@ -52,25 +46,24 @@ function PaymentTable(props: PaymentTableProps) {
       }
     },
     {
-      title: '房间编号',
-      dataIndex: 'unitId',
-      key: 'unitId',
+      title: '经办人',
+      dataIndex: 'createUserName',
+      key: 'createUserName',
       width: 150,
       sorter: true,
+
     },
     {
-      title: '业户名称',
-      dataIndex: 'custName',
-      key: 'custName',
-      width: 150,
-      sorter: true,
+      title: '金额',
+      dataIndex: 'payAmount',
+      key: 'payAmount',
+      width: 150
     },
     {
-      title: '交房日期',
-      dataIndex: 'handoverDate',
-      key: 'handoverDate',
+      title: '审核日期',
+      dataIndex: 'verifyDate',
+      key: 'verifyDate',
       width: 150,
-      sorter: true,
       render: val =>{
         if(val==null){
           return <span></span>
@@ -78,49 +71,24 @@ function PaymentTable(props: PaymentTableProps) {
           return <span> {moment(val).format('YYYY-MM-DD')} </span>
         }
       }
-    },
-    {
-      title: '计费金额',
-      dataIndex: 'amount',
-      key: 'amount',
-      width: 150
-    },
-    {
-      title: '审核状态',
-      dataIndex: 'ifVerifyName',
-      key: 'ifVerifyName',
-      width: 150
     },
     {
       title: '审核人',
       dataIndex: 'verifyPerson',
       key: 'verifyPerson',
-      width: 200
+      width: 150
     },
     {
-      title: '审核时间',
-      dataIndex: 'verifyDate',
-      key: 'verifyDate',
+      title: '状态',
+      dataIndex: 'statusName',
+      key: 'statusName',
       width: 150,
-      sorter: true,
-      render: val =>{
-        if(val==null){
-          return <span></span>
-        }else{
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
-        }
-      }
+      sorter: true
     },
     {
       title: '审核情况',
       dataIndex: 'verifyMemo',
       key: 'verifyMemo',
-      width: 200,
-    },
-    {
-      title: '备注',
-      dataIndex: 'memo',
-      key: 'memo',
       width: 200,
     },
     {
@@ -132,14 +100,12 @@ function PaymentTable(props: PaymentTableProps) {
       render: (text, record) => {
         return [
           <span>
-            <a onClick={() => showModify(record.billId,false)} key="modify">{"查看"}</a>
-            <Divider type="vertical" />
-            <a onClick={() =>{}} key="vertify">{record.ifVerifyName=="已审核"?"取消审核":"审核"}</a>
+            <a onClick={() => showBill(record.billId)} key="modify">{"查看"}</a>
             <Divider type="vertical" />
             <a onClick={() => {
               InvalidForm(record.billId).then(res => {
                 if (res.code != 0) { reload(); }
-              })
+              });
             }} key="delete">作废</a>
           </span>
         ];

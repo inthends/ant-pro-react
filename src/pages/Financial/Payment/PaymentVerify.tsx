@@ -27,7 +27,7 @@ const PaymentVerify = (props: PaymentVerifyProps) => {
       if(id!=null&&id!=''){
         setLoading(true);
         GetEntity(id).then(res=>{
-          setInfoDetail(Object.assign({},res.entity,{customerName:res.name}));
+          setInfoDetail(res);
           setLoading(false);
         })
       }else{
@@ -45,20 +45,19 @@ const PaymentVerify = (props: PaymentVerifyProps) => {
     form.validateFields((errors, values) => {
       if (!errors) {
         let newData={
-          keyValue:infoDetail.billId,
+          keyValue:id,
           entity:{
             billId:id,
-            organizeId: "string",
-            payAmount: 0,
-            payType: "string",
-            status: 0,
-            memo: "string",
             verifyDate: ifVerify?moment(new Date()).format('YYYY-MM-DD HH:mm:ss'):moment(values.verifyDate).format('YYYY-MM-DD HH:mm:ss'),
-            verifyMemo: "string",
-            billCode: values.verifyMemo,
+            verifyMemo: values.verifyMemo,
+            billCode: infoDetail.billCode,
             billDate: moment(values.billDate).format('YYYY-MM-DD'),
+            status:ifVerify?0:1,//-1 已作废  0未审核  1已审核
+            payAmount:infoDetail.payAmount,
+            createDate:moment(infoDetail.createDate).format('YYYY-MM-DD'),
+            payType:infoDetail.payType,
+            organizeId: infoDetail.organizeId,
           }
-        //  IfVerify:!infoDetail.ifVerify,
         };
         Audit(newData).then(()=>{
           closeVerify(true);
@@ -96,14 +95,14 @@ const PaymentVerify = (props: PaymentVerifyProps) => {
                     initialValue: infoDetail.billDate==null?moment(new Date()):moment(infoDetail.billDate),
                     rules: [{ required: true, message: '请选择账单日期' }],
                   })(
-                    <DatePicker  disabled={true}/>
+                    <DatePicker  disabled={true} style={{width:'100%'}}/>
                   )}
                 </Form.Item>
               </Col>
               <Col span={8}>
-                <Form.Item required label="单据类型"  >
-                  {getFieldDecorator('billType', {
-                    initialValue: infoDetail.billType,
+                <Form.Item required label="经办人">
+                  {getFieldDecorator('createUserName', {
+                    initialValue: infoDetail.createUserName,
                   })(
                     <Input  disabled={true}/>
                   )}
@@ -112,9 +111,9 @@ const PaymentVerify = (props: PaymentVerifyProps) => {
             </Row>
             <Row gutter={24}>
               <Col span={8}>
-                <Form.Item required label="业户名称"   >
-                  {getFieldDecorator('customerName', {
-                    initialValue:infoDetail.customerName,
+                <Form.Item required label="本次付款"   >
+                  {getFieldDecorator('payAmount', {
+                    initialValue:infoDetail.payAmount,
                   })(
                     <Input  disabled={true}></Input>
                   )}
@@ -125,7 +124,7 @@ const PaymentVerify = (props: PaymentVerifyProps) => {
                   {getFieldDecorator('verifyDate', {
                       initialValue: infoDetail.billDate==null?moment(new Date()):moment(infoDetail.billDate),
                   })(
-                    <DatePicker disabled={true}/>
+                    <DatePicker disabled={true} style={{width:'100%'}}/>
                   )}
                 </Form.Item>
               </Col>

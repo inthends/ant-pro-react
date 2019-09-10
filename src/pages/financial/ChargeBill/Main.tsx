@@ -43,13 +43,13 @@ function Main() {
   const [vertifyVisible, setVertifyVisible] = useState<boolean>(false);
   const [ifVertify, setIfVertify] = useState<boolean>(false);
 
-  // const [flushVisible, setflushVisible] = useState<boolean>(false); 
+  // const [flushVisible, setflushVisible] = useState<boolean>(false);
   // const [chargeRowStatus, setChargeRowStatus] = useState<number>(0);
   // const [billRowKey, setBillRowKey] = useState<number>(0);
 
   const [unChargeSelectedKeys, setUnChargeSelectedKeys] = useState<any[]>([]);
   const [modifyEdit, setModifyEdit] = useState<boolean>(true);
-  // const [organize, SetOrganize] = useState<any>({}); 
+  // const [organize, SetOrganize] = useState<any>({});
   const [chargedSearchParams, setChargedSearchParams] = useState<any>({});
 
   const selectTree = (id, search) => {
@@ -312,7 +312,7 @@ function Main() {
       <AsynLeftTree
         parentid={'0'}
         selectTree={(id, type, info?) => {
-          debugger
+         // debugger
           SetOrganizeId(id);
           // SetOrganize(info);
           if (type == 5) {

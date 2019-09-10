@@ -9,6 +9,7 @@ import NotPaymentTable from './NotPaymentTable';
 import PaymentTable from './PaymentTable';
 import FeeModify from './FeeModify';import AddFee from './AddFee';
 import PaymentVerify from './PaymentVerify';
+import ShowBill from './ShowBill';
 
 const { Content } = Layout;
 const { Search } = Input;
@@ -30,11 +31,12 @@ function Payment() {
 
   const [ifVerify,setIfVerify]=useState<boolean>(false);
   const [vertifyVisible,setVerifyVisible]=useState<boolean>(false);
-
+  const [showVisible,setShowVisible]=useState<boolean>(false);
   const [addBtnDisable,setAddBtnDisable]=useState<boolean>(true);
 
   const selectTree = (org, item, info) => {
-    SetOrganize({id:org,type:item});
+    console.log(info.node.props)
+    SetOrganize(info.node.props);
     if(item==5){
       initPaymentLoadData({id:org,type:item},'');
       initNotPaymentLoadData({id:org,type:item},'');
@@ -62,8 +64,7 @@ function Payment() {
       total,
       queryJson: {
         keyword:paymentSearchParams.search,
-        TreeTypeId: organize.id,
-        TreeType: organize.type,
+        UnitId: organize.id==null?"":organize.id,
         Status:paymentStatus,StartDate:paymentStartDate,EndDate:paymentEndDate
       }
     };
@@ -147,12 +148,11 @@ const [notPaymentSearchParams,setNotPaymentSearchParams]=useState<any>({});
 const [paymentSearchParams,setPaymentSearchParams]=useState<any>({});
 const [isEdit,setIsEdit]=useState<boolean>(false);
   const initPaymentLoadData = (org, searchText) => {
+    console.log(org);
     setPaymentSearchParams(Object.assign({},paymentSearchParams,{search:searchText}));
     const queryJson = {
       keyword: searchText,
-      TreeTypeId: org.id,
-      TreeType: org.type,
-
+      UnitId: organize.id==null?"":organize.id,
       Status:paymentStatus,StartDate:paymentStartDate,EndDate:paymentEndDate
 
     };
@@ -166,7 +166,6 @@ const [isEdit,setIsEdit]=useState<boolean>(false);
     const queryJson = {
       keyword: searchText,
       UnitId: org.id==null?"":org.id,
-
     };
     const sidx = 'id';
     const sord = 'asc';
@@ -182,9 +181,18 @@ const [isEdit,setIsEdit]=useState<boolean>(false);
     setId('');
   };
 
+  const closeShowDrawer = () => {
+    setShowVisible(false);
+  };
+
   const showVerify = (id?,ifVerify?) => {
     setVerifyVisible(true);
     setIfVerify(ifVerify);
+    if(id!=null&&id!='')
+      setId(id);
+  };
+  const showBill = (id?) => {
+    setShowVisible(true);
     if(id!=null&&id!='')
       setId(id);
   };
@@ -233,7 +241,6 @@ const [isEdit,setIsEdit]=useState<boolean>(false);
                 var params=Object.assign({},paymentSearchParams,{paymenttype:value});
                 setPaymentSearchParams(params);
               }}>
-
               <Search
                 className="search-input"
                 placeholder="请输入要查询的单号"
@@ -243,34 +250,6 @@ const [isEdit,setIsEdit]=useState<boolean>(false);
                   setPaymentSearchParams(params);
                 }}
               />
-
-              <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
-                onClick={() => {
-                  if(id==null||id=='')
-                  {
-                    message.warning('请先选择账单');
-                  }else{
-                    showVerify('',false);
-                  }
-                }}  disabled={ifVerify?false:true}
-              >
-                <Icon type="minus-square" />
-                取消审核
-              </Button>
-              <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
-                onClick={() => {
-                  if(id==null||id=='')
-                  {
-                    message.warning('请先选择账单');
-                  }else{
-                    showVerify('',true);
-                  }
-                }}
-                disabled={ifVerify?true:false}
-              >
-                <Icon type="check-square" />
-                审核
-              </Button>
               <Button type="primary" style={{marginLeft: '10px' }}
                 onClick={() =>{loadPaymentData()}}
               >
@@ -368,21 +347,15 @@ const [isEdit,setIsEdit]=useState<boolean>(false);
                     showVerify('',true);
                   }
                 }}
-                disabled={ifVerify?true:false}
+                disabled={(id==null||id=='')&&ifVerify?true:false}
               >
                 <Icon type="check-square" />
                 审核
               </Button>
-              <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
-                onClick={() => {showModify(null,false)}}
-              >
-                <Icon type="plus" />
-                查看
-              </Button>
             </div>
             <PaymentTable
-              showModify={(id)=>{
-                setId(id);
+              showBill={(id)=>{
+                showBill(id)
               }}
               onchange={(paginationConfig, filters, sorter) =>
                 loadPaymentData(paginationConfig, sorter)
@@ -391,7 +364,6 @@ const [isEdit,setIsEdit]=useState<boolean>(false);
               pagination={paymentPagination}
               data={paymentData}
               reload={() => initPaymentLoadData('',paymentSearchParams.search)}
-
               getRowSelect={(record)=>{
                 setId(record.billId);
                 if(record.ifVerify==1)
@@ -410,7 +382,7 @@ const [isEdit,setIsEdit]=useState<boolean>(false);
         closeDrawer={closeModify}
         id={id}
         isEdit={isEdit}
-        reload={() => initNotPaymentLoadData('','')}
+        reload={() => initNotPaymentLoadData({id:organize.code,type:organize.type},'')}
         organize={organize}
       />
       <PaymentVerify
@@ -418,7 +390,12 @@ const [isEdit,setIsEdit]=useState<boolean>(false);
         closeVerify={closeVerify}
         ifVerify={ifVerify}
         id={id}
-        reload={() => initPaymentLoadData('','')}
+        reload={() => initPaymentLoadData({id:organize.code,type:organize.type},'')}
+      />
+      <ShowBill
+        visible={showVisible}
+        closeDrawer={closeShowDrawer}
+        id={id}
       />
     </Layout>
   );

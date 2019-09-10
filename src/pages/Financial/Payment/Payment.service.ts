@@ -34,7 +34,7 @@ export function GetTempPaymentFeeItemTreeJson(code): Promise<TreeEntity[]> {
 
 //编辑和查看调用
 export function GetShowDetail(data): Promise<any> {
-  return request.post(process.env.basePath + `/Payment/GetShowDetail?keyValue=${data}`, {}).then(getResult as any);
+  return request.get(process.env.basePath + `/Payment/GetShowDetail?keyValue=${data}`, {}).then(getResult as any);
 }
 
 //作废付款单
@@ -65,4 +65,9 @@ export function GetUserRooms(data): Promise<ResponseObject<any[]>> {
 //
 export function GetFeeItemDetail(feeitemid,roomid): Promise<ResponseObject<any>> {
   return request.get(process.env.basePath + `/Common/GetFeeItemDetail?feeitemid=${feeitemid}&roomid=${roomid}`, {}).then(getResult as any);;
+}
+
+//付款明细
+export function PaymentFeeDetail(data): Promise<any> {
+  return request.post(process.env.basePath + `/Payment/PaymentFeeDetail`, {data:objToFormdata(data)}).then(getResult as any);
 }
