@@ -278,7 +278,8 @@ function BillNotice() {
     <Menu onClick={handleMenuClick}>
       <Menu.Item key="1">批量审核</Menu.Item>
       <Menu.Item key="2">取消审核</Menu.Item>
-      <Menu.Item key="3">批量删除</Menu.Item>
+      <Menu.Item key="3">批量打印</Menu.Item>
+      <Menu.Item key="4">批量删除</Menu.Item>
     </Menu>
   );
 
