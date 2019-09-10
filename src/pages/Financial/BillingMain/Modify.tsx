@@ -1,31 +1,31 @@
 //添加编辑费项
-import { Card, Divider, Button, DatePicker,Col, Select, Modal, Drawer, Form, Row, Icon, Spin, Input, InputNumber, TreeSelect, message, Table, Checkbox } from 'antd';
+import { Card, Divider, Button, DatePicker, Col, Select, Modal, Drawer, Form, Row, Icon, Spin, Input, InputNumber, TreeSelect, message, Table, Checkbox } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import {GetPageDetailListJson , GetBilling, GetDataItemTreeJson, GetOrgTree, GetInfoFormJson, GetPageListWithMeterID, RemoveUnitForm, RemoveUnitFormAll, SaveMain } from './BillingMain.service';
+import { GetPageDetailListJson, GetBilling, GetDataItemTreeJson, GetOrgTree, GetInfoFormJson, GetPageListWithMeterID, RemoveUnitForm, RemoveUnitFormAll, SaveMain } from './BillingMain.service';
 import './style.less';
-import  moment from 'moment';
+import moment from 'moment';
 import SelectHouse from './SelectHouse';
 const Search = Input.Search;
 const Option = Select.Option;
 const { TextArea } = Input;
 
-interface  ModifyProps {
+interface ModifyProps {
   modifyVisible: boolean;
   closeDrawer(): void;
   form: WrappedFormUtils;
   id?: string;
   organizeId?: string;
-  isEdit:boolean;
+  isEdit: boolean;
   reload(): void;
 }
 
-const  Modify = (props:  ModifyProps) => {
-  const { modifyVisible, closeDrawer, form, id, reload ,isEdit} = props;
+const Modify = (props: ModifyProps) => {
+  const { modifyVisible, closeDrawer, form, id, reload, isEdit } = props;
   const title = id == undefined ? '新增计费单' : '修改计费单';
-  const [newId,setNewId]=useState<string>('');
+  const [newId, setNewId] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const { getFieldDecorator } = form;
   // const [units,setUnits] = useState<string>([]);
@@ -44,7 +44,7 @@ const  Modify = (props:  ModifyProps) => {
   useEffect(() => {
     if (modifyVisible) {
       form.resetFields();
-      if (id!=null&&id!='') {
+      if (id != null && id != '') {
         setIsAdd(false);
         setLoading(true);
         GetBilling(id).then(res => {
@@ -74,7 +74,7 @@ const  Modify = (props:  ModifyProps) => {
 
   const initUnitMeterLoadData = (org, searchText) => {
     const queryJson = {
-      keyValue:id==null||id==''?'':id,
+      keyValue: id == null || id == '' ? '' : id,
       keyword: searchText,
     };
     const sidx = 'id';
@@ -109,14 +109,14 @@ const  Modify = (props:  ModifyProps) => {
       if (!errors) {
         let guid = getGuid();
         var meterEntity = {
-          keyValue:( id == null || id == '' )? guid: id,
-         // BillId: id == null || id == '' ? guid : id,
-          BillSource:'周期费计算',
-          BillDate:moment(values.billDate).format('YYYY-MM-DD'),
-          LinkId:'',
-          IfVerify:values.ifVerify=="未审核"?false:true,
-          Status:0,
-          Memo:values.memo
+          keyValue: (id == null || id == '') ? guid : id,
+          // BillId: id == null || id == '' ? guid : id,
+          BillSource: '周期费计算',
+          BillDate: moment(values.billDate).format('YYYY-MM-DD'),
+          LinkId: '',
+          IfVerify: values.ifVerify == "未审核" ? false : true,
+          Status: 0,
+          Memo: values.memo
         }
         setMeterDetail(
           meterEntity
@@ -127,13 +127,13 @@ const  Modify = (props:  ModifyProps) => {
     });
   };
   const columns = [
-    {
-      title: '计费单号',
-      dataIndex: 'billCode',
-      key: 'billCode',
-      width: 150,
-      sorter: true
-    },
+    // {
+    //   title: '计费单号',
+    //   dataIndex: 'billCode',
+    //   key: 'billCode',
+    //   width: 150,
+    //   sorter: true
+    // },
     {
       title: '单元编号',
       dataIndex: 'unitId',
@@ -145,21 +145,21 @@ const  Modify = (props:  ModifyProps) => {
       title: '收费项目',
       dataIndex: 'feeName',
       key: 'feeName',
-      width: 150,
+      width: 100,
       sorter: true,
     },
     {
       title: '应收期间',
       dataIndex: 'period',
       key: 'period',
-      width: 150,
+      width: 120,
       sorter: true,
     },
     {
       title: '数量',
       dataIndex: 'quantity',
       key: 'quantity',
-      width: 150,
+      width: 100,
       sorter: true,
     },
     {
@@ -167,40 +167,40 @@ const  Modify = (props:  ModifyProps) => {
       dataIndex: 'price',
       key: 'price',
       sorter: true,
-      width: 150
+      width: 100
     },
     {
       title: '周期',
       key: 'cycleValue',
       dataIndex: 'cycleValue',
       sorter: true,
-      width: 150
+      width: 100
     },
     {
       title: '周期单位',
       key: 'cycleType',
       dataIndex: 'cycleType',
       sorter: true,
-      width: 150
+      width: 100
     },
     {
       title: '金额',
       key: 'amount',
       dataIndex: 'amount',
       sorter: true,
-      width: 150
+      width: 100
     },
     {
       title: '起始日期',
       key: 'beginDate',
       dataIndex: 'beginDate',
       sorter: true,
-      width: 200,
-      render: val =>{
-        if(val==null){
-          return <span></span>
-        }else{
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
+      width: 120,
+      render: val => {
+        if (val == null) {
+          return '';
+        } else {
+          return moment(val).format('YYYY-MM-DD');
         }
       }
     },
@@ -209,37 +209,37 @@ const  Modify = (props:  ModifyProps) => {
       key: 'endDate',
       dataIndex: 'endDate',
       sorter: true,
-      width: 200,
-      render: val =>{
-        if(val==null){
-          return <span></span>
-        }else{
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
+      width: 120,
+      render: val => {
+        if (val == null) {
+          return '';
+        } else {
+          return  moment(val).format('YYYY-MM-DD');
         }
       }
     }, {
       title: '备注',
       dataIndex: 'memo',
       key: 'memo',
-      width: 200,
+      width: 100,
       sorter: true
     },
     {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
-      align:'center',
+      align: 'center',
       width: 100,
       render: (text, record) => {
         return [
-          isEdit?
-          <span>
-            <a onClick={() => {
-              RemoveUnitForm(record.id).then(res => {
-                if (res.code != 0) { reload(); }
-              })
-            }} key="delete">删除</a>
-          </span>     :   <span></span>
+          isEdit ?
+            <span>
+              <a onClick={() => {
+                RemoveUnitForm(record.id).then(res => {
+                  if (res.code != 0) { reload(); }
+                })
+              }} key="delete">删除</a>
+            </span> : <span></span>
         ];
       },
     },
@@ -270,14 +270,14 @@ const  Modify = (props:  ModifyProps) => {
                   {getFieldDecorator('billCode', {
                     initialValue: infoDetail.billCode,
                   })(
-                    <Input disabled={true} placeholder="自动获取编号"/>
+                    <Input readOnly placeholder="自动获取编号" />
                   )}
                 </Form.Item>
               </Col>
               <Col span={8}>
                 <Form.Item required label="单据日期"  >
                   {getFieldDecorator('billDate', {
-                    initialValue: infoDetail.billDate==null?moment(new Date()):moment(infoDetail.billDate),
+                    initialValue: infoDetail.billDate == null ? moment(new Date()) : moment(infoDetail.billDate),
                     rules: [{ required: true, message: '请选择单据日期' }],
                   })(
                     <DatePicker disabled={!isEdit} />
@@ -287,9 +287,9 @@ const  Modify = (props:  ModifyProps) => {
               <Col span={8}>
                 <Form.Item required label="计费人"  >
                   {getFieldDecorator('createUserName', {
-                    initialValue: infoDetail.createUserName,
+                    initialValue: infoDetail.createUserName ? infoDetail.createUserName : localStorage.getItem("name"),
                   })(
-                    <Input  disabled={true}  />
+                    <Input readOnly />
                   )}
                 </Form.Item>
               </Col>
@@ -298,9 +298,9 @@ const  Modify = (props:  ModifyProps) => {
               <Col span={8}>
                 <Form.Item required label="状态"   >
                   {getFieldDecorator('ifVerify', {
-                    initialValue:infoDetail.ifVerify==null|| !infoDetail.ifVerify?'未审核':'已审核',
+                    initialValue: infoDetail.ifVerify == null || !infoDetail.ifVerify ? '未审核' : '已审核',
                   })(
-                    <Input  disabled={true}></Input>
+                    <Input readOnly></Input>
                   )}
                 </Form.Item>
               </Col>
@@ -309,16 +309,16 @@ const  Modify = (props:  ModifyProps) => {
                   {getFieldDecorator('verifyPerson', {
                     initialValue: infoDetail.verifyPerson,
                   })(
-                    <Input  disabled={true}  />
+                    <Input readOnly />
                   )}
                 </Form.Item>
               </Col>
               <Col span={8}>
                 <Form.Item required label="审核日期"   >
                   {getFieldDecorator('verifyDate', {
-                      initialValue: infoDetail.billDate==null?moment(new Date()):moment(infoDetail.billDate),
+                    initialValue: infoDetail.billDate == null ? '' : moment(infoDetail.billDate),
                   })(
-                    <DatePicker disabled={true} />
+                    <Input readOnly />
                   )}
                 </Form.Item>
               </Col>
@@ -338,7 +338,7 @@ const  Modify = (props:  ModifyProps) => {
               <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
                 <Search
                   className="search-input"
-                  placeholder="请输入要查询的费表编号"
+                  placeholder="请输入要查询的单元编号"
                   style={{ width: 280 }}
                   onSearch={(value) => {
                     var params = Object.assign({}, meterSearchParams, { search: value })
@@ -346,7 +346,7 @@ const  Modify = (props:  ModifyProps) => {
                     initMeterLoadData();
                   }}
                 />
-                <Button type="danger" style={{ float: 'right', marginLeft: '10px' }} disabled={!isEdit}
+                <Button type="link" style={{ float: 'right', marginLeft: '10px' }} disabled={!isEdit}
                   onClick={() => {
                     Modal.confirm({
                       title: '请确认',
@@ -370,7 +370,7 @@ const  Modify = (props:  ModifyProps) => {
                   <Icon type="delete" />
                   全部删除
               </Button>
-                <Button type="default" style={{ float: 'right', marginLeft: '10px' }} disabled={!isEdit}
+                <Button type="link" style={{ float: 'right', marginLeft: '10px' }} disabled={!isEdit}
                   onClick={() => {
                     checkEntity();
                   }}
@@ -379,7 +379,7 @@ const  Modify = (props:  ModifyProps) => {
                   添加
               </Button>
               </div>
-              <div style={{color:'rgb(255,0,0)'}}>点击金额列和备注列可以编辑，编辑完按回车保存。</div>
+              <div style={{ color: 'rgb(255,0,0)' }}>点击金额列和备注列可以编辑，编辑完按回车保存。</div>
               <Table<any>
                 onChange={(paginationConfig, filters, sorter) => {
                   initMeterLoadData(paginationConfig, sorter)
@@ -424,13 +424,13 @@ const  Modify = (props:  ModifyProps) => {
                 var meterEntity = {
                   keyValue: id == null || id == '' ? guid : id,
                   //BillId:'',// id == null || id == '' ? guid : id,
-                  BillSource:'周期费计算',
-                  BillDate:moment(values.billDate).format('YYYY-MM-DD'),
-                  LinkId:'',
-                  IfVerify:values.ifVerify=="未审核"?false:true,
-                  Status:0,
-                  type:1,
-                  Memo:values.memo
+                  BillSource: '周期费计算',
+                  BillDate: moment(values.billDate).format('YYYY-MM-DD'),
+                  LinkId: '',
+                  IfVerify: values.ifVerify == "未审核" ? false : true,
+                  Status: 0,
+                  type: 1,
+                  Memo: values.memo
                 }
                 SaveMain(meterEntity).then(() => {
                   closeDrawer();
@@ -447,7 +447,7 @@ const  Modify = (props:  ModifyProps) => {
         visible={selectHouseVisible}
         closeModal={closeSelectHouse}
         meterDetail={meterDetail}
-        getBillID={(billid)=>{
+        getBillID={(billid) => {
           setNewId(billid);
           /*GetBilling(billid).then(res => {
             setInfoDetail(res);
@@ -460,5 +460,5 @@ const  Modify = (props:  ModifyProps) => {
   );
 };
 
-export default Form.create< ModifyProps>()( Modify);
+export default Form.create<ModifyProps>()(Modify);
 

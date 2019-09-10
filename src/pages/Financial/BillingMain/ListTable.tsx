@@ -32,7 +32,7 @@ function ListTable(props: ListTableProps) {
       overlay={
         <Menu onClick={({ key }) => editAndDelete(key, item)}>
           <Menu.Item key="redflush">权责摊销</Menu.Item>
-          <Menu.Item key="delete">删除</Menu.Item>
+          <Menu.Item key="delete" disabled={item.billSource == "临时加费" || item.ifVerify}>删除</Menu.Item>
         </Menu>}>
       <a>
         更多<Icon type="down" />
@@ -77,7 +77,7 @@ function ListTable(props: ListTableProps) {
         if (val == null) {
           return ''
         } else {
-          return moment(val).format('YYYY-MM-DD')
+          return moment(val).format('YYYY-MM-DD');
         }
       }
     },
@@ -117,9 +117,9 @@ function ListTable(props: ListTableProps) {
       width: 120,
       render: val => {
         if (val == null) {
-          return <span></span>
+          return '';
         } else {
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
+          return moment(val).format('YYYY-MM-DD');
         }
       }
     },
@@ -158,9 +158,13 @@ function ListTable(props: ListTableProps) {
 
         return [
           <span>
-            <a onClick={() => showModify(record.billId, record.ifVerifyName == "已审核" || record.billSource == "水电气生成" ? false : true)} key="modify">{record.ifVerifyName == "已审核" || record.billSource == "水电气生成" ? "查看" : "修改"}</a>
+            <a onClick={() => showModify(record.billId, record.ifVerifyName == "已审核"
+              || record.billSource == "水电气生成" ? false : true)} key="modify">{record.ifVerifyName == "已审核"
+                || record.billSource == "水电气生成" ? "查看" : "修改"}</a>
             <Divider type="vertical" />
-            {record.status == 1 ? <a onClick={() => showVerify(record.billId, false)} key="app">审核</a> : <a onClick={() => showVerify(record.id, true)} key="unapp">反审</a>}
+            {!record.ifVerify ? <a onClick={() => showVerify(record.billId, false)} key="app">审核</a> :
+              <a  disabled={record.billSource == "临时加费"} onClick={() => showVerify(record.id, true)} key="unapp"  >反审</a>
+            }
             <Divider type="vertical" />
             <MoreBtn key="more" item={record} />
           </span>
