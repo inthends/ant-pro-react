@@ -246,7 +246,7 @@ const Modify = (props: ModifyProps) => {
   const [houseLoading, setHouseLoading] = useState<boolean>(false);
   const [housePagination, setHousePagination] = useState<PaginationConfig>(new DefaultPagination());
 
-  
+
   const houseLoadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
     setHouseSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
@@ -805,8 +805,8 @@ const Modify = (props: ModifyProps) => {
             </Card>
           </TabPane>
           {
-            id == null ? null : <TabPane tab="高级" key="2"> 
-              <Card title="小数精度"  className={styles.card}  >
+            id == null ? null : <TabPane tab="高级" key="2">
+              <Card title="小数精度" className={styles.card}  >
                 {/* <Row gutter={24}>
                   <Col lg={12}>
                     <Form.Item label="中间每一步计算结果保留">
@@ -1197,9 +1197,9 @@ const Modify = (props: ModifyProps) => {
                 </Row>
               </Card>
               <Card title="其他">
-                <Row gutter={8}>
-                  <Col span={6} style={{ marginTop: '29px' }}>
-                    <Form.Item>
+                <Row gutter={24}>
+                  <Col span={6}  >
+                    <Form.Item label='&nbsp;'>
                       {getFieldDecorator('payedCreateCope', {
                         initialValue: infoDetail.payedCreateCope,
                       })(
@@ -1217,12 +1217,12 @@ const Modify = (props: ModifyProps) => {
                       )}
                     </Form.Item>
                   </Col>
-                  <Col span={6} style={{ marginTop: '29px' }}>
-                    <Form.Item >
+                  <Col span={6}  >
+                    <Form.Item label='应付款项'>
                       {getFieldDecorator('payFeeItemID', {
                         initialValue: infoDetail.payFeeItemID,
                       })(
-                        <Select placeholder="==应付款项==">
+                        <Select placeholder="==请选择==">
                           {feeItemNames.map(item => (
                             <Option value={item.key} key={item.key}>
                               {item.title}
@@ -1241,8 +1241,8 @@ const Modify = (props: ModifyProps) => {
                       )}
                     </Form.Item>
                   </Col>
-                  <Col span={6} style={{ marginTop: '29px' }}>
-                    <Form.Item>
+                  <Col span={6}  >
+                    <Form.Item label='付款对象'>
                       {getFieldDecorator('copePersonType', {
                         initialValue: infoDetail.copePersonType,
                       })(
@@ -1255,13 +1255,13 @@ const Modify = (props: ModifyProps) => {
                     </Form.Item>
                   </Col>
                 </Row>
-                <Row gutter={8} style={{ display: showFeeField ? "" : "none" }}>
+                <Row gutter={24} style={{ display: showFeeField ? "" : "none" }}>
                   <Col span={6}>
                     <Form.Item label="应付期间距收款日">
                       {getFieldDecorator('payDateNum', {
                         initialValue: infoDetail.payDateNum,
                       })(
-                        <InputNumber style={{width:'100%'}}/>
+                        <InputNumber style={{ width: '100%' }} />
                       )}
                     </Form.Item>
                   </Col>
@@ -1332,7 +1332,7 @@ const Modify = (props: ModifyProps) => {
                     <Icon type="plus" />
                     新增
                 </Button>
-                  <Button type="link" style={{ float: 'right'  }}
+                  <Button type="link" style={{ float: 'right' }}
                     onClick={() => { initOrgLoadData() }}
                   >
                     <Icon type="reload" />

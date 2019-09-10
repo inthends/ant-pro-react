@@ -913,7 +913,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                     placeholder="请输入要查询的费表名称"
                     style={{ width: 280 }}
                   />
-                  <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
+                  <Button type="link" style={{ float: 'right', marginLeft: '10px' }}
                     onClick={() => {
                       /*var ids=[];
                       publicData.map(item=>{
@@ -927,7 +927,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                     <Icon type="delete" />
                     全部删除
                 </Button>
-                  <Button type="default" style={{ float: 'right', marginLeft: '10px' }}
+                  <Button type="link" style={{ float: 'right', marginLeft: '10px' }}
                     onClick={() => {
                       form.validateFields((errors, values) => {
                         if (!errors) {
