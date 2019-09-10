@@ -311,8 +311,7 @@ function Main() {
       {/* <Sider theme="light" style={{ overflow: 'hidden', height: '100%' }} width="245px"> */}
       <AsynLeftTree
         parentid={'0'}
-        selectTree={(id, type, info?) => {
-          debugger
+        selectTree={(id, type, info?) => { 
           SetOrganizeId(id);
           // SetOrganize(info);
           if (type == 5) {

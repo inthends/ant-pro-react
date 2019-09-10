@@ -1,17 +1,20 @@
-// import { TreeEntity } from '@/model/models';
+// import { TreeEntity } from '@/model/models'; 
+import Page from '@/components/Common/Page';
 import { DefaultPagination } from '@/utils/defaultSetting';
 // import { getResult } from '@/utils/networkUtils';
-import { Tabs, Button, Icon, Input, Layout,Select } from 'antd';
+import { Tabs, Button, Icon, Input, Layout, Select } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
-import React, { useEffect, useState } from 'react';
-import { GetFeeTreeList, GetPageListJson,GetUnitFeeItemData ,GetAllFeeItems} from './Main.service';
+import React, { useContext, useEffect, useState } from 'react';
+import { GetFeeTreeList, GetPageListJson, GetUnitFeeItemData, GetAllFeeItems } from './Main.service';
 import LeftTree from '../LeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
 import HouseInfoList from './HouseInfoList';
-const { Sider, Content } = Layout;
+import { SiderContext } from '../../SiderContext';
+const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
+const { Sider } = Layout;
 
 function Main() {
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
@@ -24,13 +27,16 @@ function Main() {
   const [FeeType, SetFeeType] = useState<string>('');
   const [search, setSearch] = useState<string>('');
 
-  const [houseSearch, setHouseSearch] = useState<string>('');
+  // const [houseSearch, setHouseSearch] = useState<string>('');
   const [houseFeeItemSearch, setHouseFeeItemSearch] = useState<string>('');
 
   const [houseLoading, setHouseLoading] = useState<boolean>(false);
   const [housePagination, setHousePagination] = useState<PaginationConfig>(new DefaultPagination());
-
   const [houseData, setHouseData] = useState<any[]>([]);
+  const [feeitems, setFeeitems] = useState<any[]>([]);
+
+  const { hideSider, setHideSider } = useContext(SiderContext);
+
   const selectTree = (item, search) => {
     var value = item.node.props.value;
     var title = item.node.props.title;
@@ -62,18 +68,19 @@ function Main() {
     SetFeeKind(feeKind);
     SetFeeType(feeType);
   };
-  const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
+
 
   useEffect(() => {
     GetFeeTreeList().then((res) => {
       setTreeData(res || []);
     });
+
     GetAllFeeItems().then(res => {
       setFeeitems(res || []);
     });
-
     initLoadData('', '', '');
-    initHouseLoadData('','','');
+    initHouseLoadData('', '', '');
+
   }, []);
 
   const closeDrawer = () => {
@@ -136,8 +143,8 @@ function Main() {
   };
 
 
-  const houseLoadData= (search, paginationConfig?: PaginationConfig, sorter?) => {
-    setHouseSearch(search);
+  const houseLoadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
+    //setHouseSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: pagination.pageSize,
@@ -147,7 +154,7 @@ function Main() {
       pageIndex,
       pageSize,
       total,
-      queryJson: { FeeKind: FeeKind, FeeType: FeeType, keyword: search ,FeeItemID:houseFeeItemSearch},
+      queryJson: { FeeKind: FeeKind, FeeType: FeeType, keyword: search, FeeItemID: houseFeeItemSearch },
     };
     if (sorter) {
       let { field, order } = sorter;
@@ -179,7 +186,7 @@ function Main() {
   };
   const initHouseLoadData = (FeeKind, FeeType, search) => {
     setSearch(search);
-    const queryJson = { FeeKind: FeeKind, FeeType: FeeType, keyword: search,FeeItemID:houseFeeItemSearch };
+    const queryJson = { FeeKind: FeeKind, FeeType: FeeType, keyword: search, FeeItemID: houseFeeItemSearch };
     const sidx = 'feeitemId';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
@@ -190,7 +197,7 @@ function Main() {
 
   return (
     <Layout style={{ height: '100%' }}>
-      <Sider theme="light" style={{ overflow: 'hidden', height: '1000px' }} width="245px">
+      {/* <Sider theme="light" style={{ overflow: 'hidden', height: '1000px' }} width="245px">
         {treeData != null && treeData.length > 0 ?
           (<LeftTree
             key='lefttree'
@@ -199,8 +206,46 @@ function Main() {
               selectTree(item, search);
             }}
           />) : null}
+      </Sider>  */}
 
+
+      <Sider
+        theme="light"
+        style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh + 10px)' }}
+        width={hideSider ? 20 : 245}
+      >
+        {hideSider ? (
+          <div style={{ position: 'absolute', top: '40%', left: 5 }}>
+            <Icon
+              type="double-right"
+              onClick={() => {
+                setHideSider(false);
+              }}
+              style={{ color: '#1890ff' }}
+            />
+          </div>
+        ) : (
+            <>
+              {treeData != null && treeData.length > 0 ?
+                (<LeftTree
+                  key='lefttree'
+                  treeData={treeData}
+                  selectTree={(id, item) => {
+                    selectTree(item, search);
+                  }}
+                />) : null}
+              <div
+                style={{ position: 'absolute', top: '40%', right: -15 }}
+                onClick={() => {
+                  setHideSider(true);
+                }}
+              >
+                <Icon type="double-left" style={{ color: '#1890ff', cursor: 'pointer' }} />
+              </div>
+            </>
+          )}
       </Sider>
+
       <Content style={{ paddingLeft: '18px' }}>
         <Tabs defaultActiveKey="1" >
           <TabPane tab="费项列表" key="1">
@@ -234,8 +279,8 @@ function Main() {
           </TabPane>
           <TabPane tab="房屋费项列表" key="2">
             <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
-              <Select style={{width:'150px',marginRight:'5px'}}
-                placeholder="请选择" onChange={(value)=>{
+              <Select style={{ width: '150px', marginRight: '5px' }}
+                placeholder="请选择" onChange={(value) => {
                   setHouseFeeItemSearch(value);
                 }}
               >
@@ -253,15 +298,15 @@ function Main() {
                 onSearch={value => houseLoadData(value)}
               />
             </div>
-              <HouseInfoList
-                key='HouseInfoList'
-                onchange={(paginationConfig, filters, sorter) =>
-                  houseLoadData(search, paginationConfig, sorter)
-                }
-                loading={houseLoading}
-                pagination={housePagination}
-                data={houseData}
-              />
+            <HouseInfoList
+              key='HouseInfoList'
+              onchange={(paginationConfig, filters, sorter) =>
+                houseLoadData(search, paginationConfig, sorter)
+              }
+              loading={houseLoading}
+              pagination={housePagination}
+              data={houseData}
+            />
           </TabPane>
         </Tabs>
       </Content>

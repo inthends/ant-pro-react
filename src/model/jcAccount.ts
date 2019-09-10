@@ -15,10 +15,7 @@
  * 
  */
 export interface JcAccount {
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    appId?: string;
+    
     /**
      * Desc:  Default:1  Nullable:True
      */
@@ -39,18 +36,12 @@ export interface JcAccount {
      * Desc:  Default:  Nullable:True
      */
     expDate?: Date;
-    /**
-     * Desc:  Default:1  Nullable:False
-     */
-    isWechat?: number;
+  
     /**
      * Desc:  Default:  Nullable:True
      */
     sourceId?: string;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    code?: string;
+   
     /**
      * Desc:  Default:1  Nullable:True
      */
@@ -67,10 +58,7 @@ export interface JcAccount {
      * Desc:  Default:  Nullable:True
      */
     createDate?: Date;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    headIcon?: string;
+ 
     /**
      * Desc:  Default:1  Nullable:True
      */
@@ -95,10 +83,7 @@ export interface JcAccount {
      * Desc:  Default:  Nullable:False
      */
     id?: string;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    openId?: string;
+   
     /**
      * Desc:  Default:  Nullable:True
      */

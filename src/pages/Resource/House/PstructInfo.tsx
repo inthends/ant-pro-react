@@ -18,20 +18,21 @@ interface PstructInfoProps {
   type?: number;
   closeDrawer(): void;
   reload(parentId, type): void;
-}
+};
 
 const PstructInfo = (props: PstructInfoProps) => {
   const { organizeId, parentId, type, modifyVisible, closeDrawer, form, data, reload } = props;
   const { getFieldDecorator } = form;
   const title = data === undefined ? '添加' : '修改';
   let formLabel = '楼栋';
-  if (data != undefined) {
-    if (data.type == 2) {
+  if (type != undefined) {
+    if (type == 1) {
       formLabel = '楼栋';
     }
-    else if (data.type == 4) {
+    else if (type == 2) {
       formLabel = '楼层';
-    } else {
+    }
+    else {
       formLabel = '房间';
     }
   }

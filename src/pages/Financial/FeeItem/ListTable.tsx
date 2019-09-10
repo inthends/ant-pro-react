@@ -23,8 +23,8 @@ function ListTable(props: ListTableProps) {
     Modal.confirm({
       title: '请确认',
       content: `您是否要删除${record.feeName}`,
-      cancelText:'取消',
-      okText:'确定',
+      cancelText: '取消',
+      okText: '确定',
       onOk: () => {
         RemoveForm(record.feeItemId).then(() => {
           message.success('删除成功');
@@ -40,7 +40,7 @@ function ListTable(props: ListTableProps) {
       key: 'feeName',
       width: 140,
       sorter: true,
-    },
+    }, 
     {
       title: '费项种类',
       dataIndex: 'feeKind',
@@ -55,6 +55,13 @@ function ListTable(props: ListTableProps) {
       width: 80,
       sorter: true,
     },
+    // {
+    //   title: '编码',
+    //   dataIndex: 'feeCode',
+    //   key: 'feeCode',
+    //   width: 100,
+    //   sorter: true,
+    // },
     {
       title: '单价',
       dataIndex: 'feePrice',
@@ -81,10 +88,10 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'beginDate',
       key: 'beginDate',
       width: 85,
-      render: val =>{
-        if(val==null){
+      render: val => {
+        if (val == null) {
           return <span></span>
-        }else{
+        } else {
           return <span> {moment(val).format('YYYY-MM-DD')} </span>
         }
       }
@@ -93,10 +100,10 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'endDate',
       key: 'endDate',
       width: 85,
-      render: val =>{
-        if(val==null){
+      render: val => {
+        if (val == null) {
           return <span></span>
-        }else{
+        } else {
           return <span> {moment(val).format('YYYY-MM-DD')} </span>
         }
       }
