@@ -18,7 +18,7 @@ const { TabPane } = Tabs;
 
 interface ModifyProps {
   modifyVisible: boolean;
-  data?: any;
+  // data?: any;
   closeDrawer(): void;
   form: WrappedFormUtils;
   treeData: TreeEntity[];
@@ -195,7 +195,10 @@ const Modify = (props: ModifyProps) => {
         //   PayDeadlineBase: values.payDeadlineBase,
         //   //UseFormulaTwo:values.useFormulaTwo
         // };
-        SaveForm(values).then(res => {
+        const newData = infoDetail ? { ...infoDetail, ...values } : values;
+        newData.beginDate = newData.beginDate.format('YYYY-MM-DD');
+        newData.endDate = newData.endDate.format('YYYY-MM-DD');
+        SaveForm(newData).then(res => {
           reload();
           closeDrawer();
         });
@@ -767,9 +770,9 @@ const Modify = (props: ModifyProps) => {
                 <Col lg={12}>
                   <Form.Item label="滞纳金比例(%)">
                     {getFieldDecorator('delayRate', {
-                      initialValue: infoDetail.delayRate,
+                      initialValue: infoDetail.delayRate ? infoDetail.delayRate : 0,
                       // rules: [{ required: true, message: '请输入滞纳金比例' }],
-                    })(<Input placeholder="请输入滞纳金比例" />)}
+                    })(<InputNumber placeholder="请输入滞纳金比例" style={{ width: '100%' }} />)}
                   </Form.Item>
                 </Col>
                 <Col lg={12}>
@@ -801,10 +804,9 @@ const Modify = (props: ModifyProps) => {
             </Card>
           </TabPane>
           {
-            id == null ? null : <TabPane tab="高级" key="2">
-
-              <Card title="小数精度"  >
-                <Row gutter={24}>
+            id == null ? null : <TabPane tab="高级" key="2"> 
+              <Card title="小数精度"  className={styles.card}  >
+                {/* <Row gutter={24}>
                   <Col lg={12}>
                     <Form.Item label="中间每一步计算结果保留">
                       {getFieldDecorator('midResultScale', {
@@ -836,8 +838,8 @@ const Modify = (props: ModifyProps) => {
                       )}
                     </Form.Item>
                   </Col>
-                </Row>
-                <Row gutter={24}>
+                </Row> */}
+                {/* <Row gutter={24}>
                   <Col lg={12}>
                     <Form.Item label="最终结果保留小数位数">
                       {getFieldDecorator('lastResultScale', {
@@ -868,9 +870,33 @@ const Modify = (props: ModifyProps) => {
                       )}
                     </Form.Item>
                   </Col>
+                </Row> */}
+
+                <Row gutter={24}>
+                  <Col lg={12}>
+                    <Form.Item label="单价保留小数点">
+                      {getFieldDecorator('precision', {
+                        initialValue: infoDetail.precision ? infoDetail.precision : 2,
+                        rules: [{ required: true, message: '请填写保留几位' }],
+                      })(<InputNumber placeholder="请填写保留几位" style={{ width: '100%' }} />)}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={12}>
+                    <Form.Item label="计算精度">
+                      {getFieldDecorator('calcPrecisionMode', {
+                        initialValue: infoDetail.calcPrecisionMode ? infoDetail.calcPrecisionMode : "最终计算结果保留2位",
+                      })(<Select>
+                        <Option value="最终计算结果保留2位" >最终计算结果保留2位</Option>
+                        <Option value="每步计算结果保留2位" >每步计算结果保留2位</Option>
+                      </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
                 </Row>
+
+
               </Card>
-              <Card title="账单日设置"  >
+              <Card title="账单日设置" className={styles.card} >
                 <Row gutter={8}>
                   <Col span={6}>
                     <Form.Item label="应收期间 距">
@@ -1216,13 +1242,13 @@ const Modify = (props: ModifyProps) => {
                   </Col>
                   <Col span={6} style={{ marginTop: '29px' }}>
                     <Form.Item>
-                      {getFieldDecorator('tdCopeUser', {
-                        initialValue: infoDetail.tdCopeUser,
+                      {getFieldDecorator('copePersonType', {
+                        initialValue: infoDetail.copePersonType,
                       })(
                         <Select placeholder="==付款对象==">
-                          <Option value="0">业主</Option>
-                          <Option value="1" >住/租户</Option>
-                          <Option value="3" >住/租户，控制室转给业主</Option>
+                          <Option value="业主">业主</Option>
+                          <Option value="住/租户" >住/租户</Option>
+                          <Option value="住/租户，空置时转给业主" >住/租户，空置时转给业主</Option>
                         </Select>
                       )}
                     </Form.Item>
@@ -1234,7 +1260,7 @@ const Modify = (props: ModifyProps) => {
                       {getFieldDecorator('payDateNum', {
                         initialValue: infoDetail.payDateNum,
                       })(
-                        <InputNumber />
+                        <InputNumber style={{width:'100%'}}/>
                       )}
                     </Form.Item>
                   </Col>
@@ -1295,20 +1321,20 @@ const Modify = (props: ModifyProps) => {
                   <Input.Search
                     key='search'
                     className="search-input"
-                    placeholder="请输入要查询的名称或者编号"
+                    placeholder="请输入要查询的房屋编号"
                     style={{ width: 200 }}
                     onSearch={value => houseLoadData(value)}
                   />
-                  <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
+                  <Button type="link" style={{ float: 'right' }}
                     onClick={() => { setSelectHouseVisible(true); }}
                   >
                     <Icon type="plus" />
                     新增
                 </Button>
-                  <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
+                  <Button type="link" style={{ float: 'right'  }}
                     onClick={() => { initOrgLoadData() }}
                   >
-                    <Icon type="plus" />
+                    <Icon type="reload" />
                     刷新
                 </Button>
                 </div>
