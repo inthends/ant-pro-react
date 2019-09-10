@@ -33,7 +33,7 @@ function BillCheckTable(props: BillCheckTableProps) {
       title: '单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 200,
+      width: 130,
       sorter: true
     },
     {
@@ -43,11 +43,7 @@ function BillCheckTable(props: BillCheckTableProps) {
       width: 120,
       sorter: true,
       render: val => {
-        if (val == null) {
-          return <span></span>
-        } else {
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
-        }
+         return moment(val).format('YYYY-MM-DD');
       }
     },
     {
@@ -72,9 +68,9 @@ function BillCheckTable(props: BillCheckTableProps) {
       sorter: true,
       render: val => {
         if (val == null) {
-          return <span></span>
+          return '';
         } else {
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
+          return  moment(val).format('YYYY-MM-DD');
         }
       }
     },
@@ -104,9 +100,9 @@ function BillCheckTable(props: BillCheckTableProps) {
       sorter: true,
       render: val => {
         if (val == null) {
-          return <span></span>
+          return '';
         } else {
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
+          return  moment(val).format('YYYY-MM-DD');
         }
       }
     },
@@ -165,7 +161,7 @@ function BillCheckTable(props: BillCheckTableProps) {
         dataSource={data}
         rowKey="billId"
         pagination={pagination}
-        scroll={{ y: 500, x: 1400 }}
+        scroll={{ y: 500, x: 1450 }}
         loading={loading}
         onChange={onchange}
         rowSelection={rowSelection}

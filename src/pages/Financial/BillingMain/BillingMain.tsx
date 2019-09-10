@@ -217,7 +217,7 @@ function BillingMain() {
             }}>
               <Search
                 className="search-input"
-                placeholder="请输入要查询的费表名称"
+                placeholder="请输入要查询的单号"
                 style={{ width: 200 }}
                 onChange={e => {
                   var params = Object.assign({}, meterSearchParams, { search: e.target.value });
@@ -301,7 +301,7 @@ function BillingMain() {
             <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
               <Search
                 className="search-input"
-                placeholder="请输入要查询的名称或者单元编号"
+                placeholder="请输入要查询的计费单号或单元编号"
                 style={{ width: 280 }}
                 onSearch={value => loadUnitMeterData(value)}
               />

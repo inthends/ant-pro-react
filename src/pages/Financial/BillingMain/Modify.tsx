@@ -24,7 +24,7 @@ interface  ModifyProps {
 
 const  Modify = (props:  ModifyProps) => {
   const { modifyVisible, closeDrawer, form, id, reload ,isEdit} = props;
-  const title = id === undefined ? '新增计费' : '修改计费单';
+  const title = id == undefined ? '新增计费' : '修改计费单';
   const [newId,setNewId]=useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const { getFieldDecorator } = form;
