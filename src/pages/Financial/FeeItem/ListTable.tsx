@@ -12,7 +12,7 @@ interface ListTableProps {
   data: any[];
   modify(id: string): void;
   reload(): void;
-}
+};
 
 function ListTable(props: ListTableProps) {
   const { onchange, loading, pagination, data, modify, reload } = props;
@@ -22,7 +22,7 @@ function ListTable(props: ListTableProps) {
   const doDelete = record => {
     Modal.confirm({
       title: '请确认',
-      content: `您是否要删除${record.feeName}`,
+      content: `您是否要删除${record.feeName}？`,
       cancelText: '取消',
       okText: '确定',
       onOk: () => {

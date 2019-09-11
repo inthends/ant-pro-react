@@ -28,7 +28,7 @@ interface ModifyProps {
 const Modify = (props: ModifyProps) => {
   const { modifyVisible, closeDrawer, form, id, reload } = props;
   const { getFieldDecorator } = form;
-  const title = id === undefined ? '添加费项' : '修改费项';
+  const title = id === undefined ? '新增费项' : '修改费项';
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [feetypes, setFeetype] = useState<TreeEntity[]>([]);
   const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
@@ -82,8 +82,8 @@ const Modify = (props: ModifyProps) => {
         }
       } else {
         //重置之前选择加载的费项类别
-        setFeetype([]);
-        setInfoDetail({});
+        // setFeetype([]);
+        // setInfoDetail({});
         form.resetFields();
       }
     } else {
@@ -561,7 +561,6 @@ const Modify = (props: ModifyProps) => {
             <Card className={styles.card} >
               <Row gutter={24}>
                 <Col lg={12}>
-
                   <Form.Item label="费项种类" required>
                     {getFieldDecorator('feeKind', {
                       initialValue: infoDetail.feeKind,
@@ -682,11 +681,13 @@ const Modify = (props: ModifyProps) => {
               </Row>
               <Row gutter={24}>
                 <Col lg={24}>
-                  <Form.Item  >
-                    <Checkbox checked={infoDetail.isNullDate ? true : false} onChange={(e) => {
-                      var info = Object.assign({}, infoDetail, { isNullDate: e.target.checked });
-                      setInfoDetail(info);
-                    }}>起止日期不允许为空</Checkbox>
+                  {/* <Form.Item  >
+                    <Checkbox
+                      checked={infoDetail.isNullDate ? true : false}
+                      onChange={(e) => {
+                        var info = Object.assign({}, infoDetail, { isNullDate: e.target.checked });
+                        setInfoDetail(info);
+                      }}>起止日期不允许为空</Checkbox> 
                     <Checkbox checked={infoDetail.isModifyDate ? true : false} onChange={(e) => {
                       var info = Object.assign({}, infoDetail, { isModifyDate: e.target.checked });
                       setInfoDetail(info);
@@ -703,12 +704,46 @@ const Modify = (props: ModifyProps) => {
                       var info = Object.assign({}, infoDetail, { isCancel: e.target.checked });
                       setInfoDetail(info);
                     }}>减免费项</Checkbox>
-                  </Form.Item>
+                  </Form.Item> */}
+
+
+                  <Form.Item  >
+                    {getFieldDecorator('isNullDate', {
+                      initialValue: infoDetail.isNullDate ? true : false,
+                    })(<Checkbox checked={form.getFieldValue('isNullDate')}>
+                      起止日期允许为空
+                      </Checkbox>
+                    )}
+                    {getFieldDecorator('isModifyDate', {
+                      initialValue: infoDetail.isModifyDate ? true : false,
+                    })(<Checkbox checked={form.getFieldValue('isModifyDate')}>
+                      允许修改起止日期
+                      </Checkbox>
+                    )}
+                    {getFieldDecorator('isCustomizeDate', {
+                      initialValue: infoDetail.isCustomizeDate ? true : false,
+                    })(<Checkbox checked={form.getFieldValue('isCustomizeDate')}>
+                      自定义起止日期
+                      </Checkbox>
+                    )}
+                    {getFieldDecorator('isTax', {
+                      initialValue: infoDetail.isTax ? true : false,
+                    })(<Checkbox checked={form.getFieldValue('isTax')}>
+                      含税单价
+                      </Checkbox>
+                    )}
+                    {getFieldDecorator('isCancel', {
+                      initialValue: infoDetail.isCancel ? true : false,
+                    })(<Checkbox checked={form.getFieldValue('isCancel')}>
+                      减免费项
+                      </Checkbox>
+                    )}
+                  </Form.Item> 
                 </Col>
               </Row>
               <Row gutter={24}>
                 <Col lg={24}>
-                  <Form.Item  >
+                  {/* <Form.Item  >
                     <Checkbox checked={infoDetail.isTemp ? true : false} onChange={(e) => {
                       var info = Object.assign({}, infoDetail, { isTemp: e.target.checked });
                       setInfoDetail(info);
@@ -725,10 +760,36 @@ const Modify = (props: ModifyProps) => {
                       var info = Object.assign({}, infoDetail, { isEnable: e.target.checked });
                       setInfoDetail(info);
                     }}>是否停用</Checkbox>
-                  </Form.Item>
-                </Col>
-              </Row>
+                  </Form.Item> */} 
 
+                  <Form.Item  >
+                    {getFieldDecorator('isInContract', {
+                      initialValue: infoDetail.isInContract ? true : false,
+                    })(<Checkbox checked={form.getFieldValue('isInContract')}>
+                      允许在合同中添加
+                      </Checkbox>
+                    )}
+                    {getFieldDecorator('isTemp', {
+                      initialValue: infoDetail.isTemp ? true : false,
+                    })(<Checkbox checked={form.getFieldValue('isTemp')}>
+                      允许临时加费
+                      </Checkbox>
+                    )}
+                    {getFieldDecorator('isEditTemp', {
+                      initialValue: infoDetail.isEditTemp ? true : false,
+                    })(<Checkbox checked={form.getFieldValue('isEditTemp')}>
+                      临时加费允许修改单价
+                      </Checkbox>
+                    )} 
+                    {getFieldDecorator('isEnable', {
+                      initialValue: infoDetail.isEnable ? true : false,
+                    })(<Checkbox checked={form.getFieldValue('isEnable')}>
+                      是否停用
+                      </Checkbox>
+                    )}
+                  </Form.Item> 
+                </Col>
+              </Row> 
               <Row gutter={24}>
                 <Col lg={21}>
                   <Form.Item label="用量公式">
@@ -738,7 +799,6 @@ const Modify = (props: ModifyProps) => {
                     })(<Input placeholder="请设置用量公式" />)}
                   </Form.Item>
                 </Col>
-
                 <Col lg={3}>
                   <Form.Item label="&nbsp;">
                     <Button type="primary" onClick={() => {
