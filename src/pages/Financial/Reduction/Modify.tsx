@@ -17,7 +17,7 @@ interface ModifyProps {
   id?: string;
   // organizeId?: string;
   reload(): void;
-}
+};
 
 /*详情可编辑单元格*/
 const EditableContext = React.createContext();
@@ -115,6 +115,7 @@ const Modify = (props: ModifyProps) => {
   const [reductionItem, setReductionItem] = useState<any[]>([]);
   // const [editItemColumn, setEditItemColumn] = useState<boolean>(false);
   const [listdata, setListData] = useState<any[]>([]);
+  const [code, setCode] = useState<number>(0);//新增还是修改
 
   const getSelectReduction = () => {
     GetReductionItem().then(res => {
@@ -133,7 +134,6 @@ const Modify = (props: ModifyProps) => {
   // 打开抽屉时初始化
   useEffect(() => {
     if (modifyVisible) {
-      setLoading(true);
       setModalVisible(false);
       getSelectReduction();
       if (id) {
@@ -146,30 +146,47 @@ const Modify = (props: ModifyProps) => {
         // });
 
         GetFormJson(id).then(res => {
+          setCode(1);
           setInfoDetail(res);
           form.resetFields();
+
           //分页查询
           const { current: pageIndex, pageSize, total } = pagination;
+          setLoading(true);
           const searchCondition: any = {
             pageIndex,
             pageSize,
             total,
             keyValue: res.billId
           };
+
           GetListByID(searchCondition).then(res => {
+            //设置查询后的分页
+            const { pageIndex: current, total, pageSize } = res;
+            setPagination(pagesetting => {
+              return {
+                ...pagesetting,
+                current,
+                total,
+                pageSize,
+              };
+            });
+
             //明细
             setListData(res.data);
             setLoading(false);
-          })
+          });
+
         });
 
       } else {
         form.resetFields();
+        setCode(0);
         //重置之前选择加载的费项类别
         // GetUseInfo(localStorage.getItem('userid')).then(res => {
         setInfoDetail({
           keyValue: '',
-          code: 0,
+          //code: 0,
           billId: guid(),
           // billCode: '',
           // billDate: '',
@@ -227,31 +244,32 @@ const Modify = (props: ModifyProps) => {
         //   newListData.push(element);
         // });
 
-        let newData = {
-          keyValue: infoDetail.billId,
-          code: infoDetail.code,
-          // code: infoDetail.billId == "" ? 0 : 1,
-          billId: infoDetail.billId,
-          organizeId: infoDetail.organizeId,
-          billCode: infoDetail.billCode,
-          billDate: moment(values.billDate).format('YYYY-MM-DD HH:mm:ss'),
-          rebate: values.rebate,
-          reductionAmount: values.reductionAmount,
-          reductionFeeItemId: values.reductionFeeItemId,
-          // ifVerify: false,
-          //  verifyPerson:'',
-          //  verifyDate:null,
-          //  verifyMemo:null,
-          // createUserName: res.name == null ? '' : res.name,
-          // createUserId: res.id == null ? '' : res.id,
-          // createDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
-          // modifyUserId: res.id == null ? '' : res.id,
-          // modifyUserName: res.name == null ? '' : res.name,
-          // modifyDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
-          // status: 0,
-          memo: values.memo,
-          details: JSON.stringify(listdata)
-        };
+        // let newData = {
+        //   keyValue: infoDetail.billId,
+        //   code: code,//infoDetail.code,
+        //   // code: infoDetail.billId == "" ? 0 : 1,
+        //   billId: infoDetail.billId,
+        //   organizeId: infoDetail.organizeId,
+        //   billCode: infoDetail.billCode,
+        //   billDate: moment(values.billDate).format('YYYY-MM-DD HH:mm:ss'),
+        //   rebate: values.rebate,
+        //   reductionAmount: values.reductionAmount,
+        //   reductionFeeItemId: values.reductionFeeItemId,
+        //   // ifVerify: false,
+        //   //  verifyPerson:'',
+        //   //  verifyDate:null,
+        //   //  verifyMemo:null,
+        //   // createUserName: res.name == null ? '' : res.name,
+        //   // createUserId: res.id == null ? '' : res.id,
+        //   // createDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+        //   // modifyUserId: res.id == null ? '' : res.id,
+        //   // modifyUserName: res.name == null ? '' : res.name,
+        //   // modifyDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+        //   // status: 0,
+        //   memo: values.memo,
+        //   details: JSON.stringify(listdata)
+        // };
+
         /*  let newData = infoDetail ? {
             ...infoDetail,
             ...values ,
@@ -259,6 +277,12 @@ const Modify = (props: ModifyProps) => {
             billDate:moment(infoDetail.billDate).format('YYYY-MM-DD HH:mm:ss'),
             code:infoDetail.billId==""?0:1,
             details: JSON.stringify(newListData)} : values;*/
+
+        let newData = infoDetail ? { ...infoDetail, ...values } : values;
+        newData.details = JSON.stringify(listdata);
+        newData.code = code;
+        newData.billDate = moment(newData.billDate).format('YYYY-MM-DD HH:mm:ss');
+        newData.keyValue = newData.billId;
 
         SaveForm(newData).then(res => {
           message.success('保存成功');
@@ -418,8 +442,7 @@ const Modify = (props: ModifyProps) => {
 
   //输入减免条件后，返回匹配的计费
   const getReducetionItem = (data?) => {
-    // console.log(data);
-
+    // console.log(data); 
     //分页查询
     const { current: pageIndex, pageSize, total } = pagination;
     const searchCondition: any = {
@@ -428,7 +451,6 @@ const Modify = (props: ModifyProps) => {
       total,
       ...data
     };
-
     GetUnitBillDetail(searchCondition).then(res => {
       if (res.data.length == 0) {
         notification['warning']({
@@ -497,8 +519,50 @@ const Modify = (props: ModifyProps) => {
   };
 
   //选择减免费项
-  const onFeeItemSelect = (value, option) => {
-    form.setFieldsValue({ reductionFeeItemName: option.key });
+  const onFeeItemSelect = (value, option) => { 
+    //减免项目名称
+    form.setFieldsValue({ reductionFeeItemName: option.props.children });
+  };
+
+  const changePage = (pagination: PaginationConfig, filters, sorter) => {
+    loadData(pagination, sorter);
+  };
+
+  const loadData = (paginationConfig?: PaginationConfig, sorter?) => {
+    const { current: pageIndex, pageSize, total } = paginationConfig || {
+      current: 1,
+      pageSize: pagination.pageSize,
+      total: 0,
+    };
+    let searchCondition: any = {
+      pageIndex,
+      pageSize,
+      total,
+      keyValue: infoDetail.billId
+    };
+
+    if (sorter) {
+      let { field, order } = sorter;
+      searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sidx = field ? field : 'billId';
+    }
+    setLoading(true);
+    return GetListByID(searchCondition).then(res => {
+      //设置查询后的分页
+      const { pageIndex: current, total, pageSize } = res;
+      setPagination(pagesetting => {
+        return {
+          ...pagesetting,
+          current,
+          total,
+          pageSize,
+        };
+      });
+      //明细
+      setListData(res.data);
+      setLoading(false);
+      return res;
+    });
   };
 
   return (
@@ -641,6 +705,9 @@ const Modify = (props: ModifyProps) => {
               pagination={pagination}
               scroll={{ x: 1150, y: 500 }}
               loading={loading}
+              onChange={(pagination: PaginationConfig, filters, sorter) =>
+                changePage(pagination, filters, sorter)
+              }
             />
           </Row>
         </Card>

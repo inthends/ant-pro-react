@@ -104,7 +104,7 @@ const FeeModify = (props: FeeModifyProps) => {
     <Drawer
         title={title}
         placement="right"
-        width={950}
+        width={850}
         onClose={closeDrawer}
         visible={visible}
         bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}

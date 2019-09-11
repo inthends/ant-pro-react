@@ -15,7 +15,7 @@ interface NotPaymentTableProps {
   loading: boolean;
   pagination: PaginationConfig;
   data: any[];
-  modify(id: string,isEdit?:boolean): void;
+  modify(id: string, isEdit: boolean): void;
   reload(): void;
   form: WrappedFormUtils;
   rowSelect(rowSelectedKeys): void;
@@ -84,7 +84,7 @@ function NotPaymentTable(props: NotPaymentTableProps) {
       sorter: true,
     },
     {
-      title: '应收金额',
+      title: '应付金额',
       dataIndex: 'amount',
       key: 'amount',
       width: 80,
@@ -98,7 +98,7 @@ function NotPaymentTable(props: NotPaymentTableProps) {
       sorter: true,
     },
     {
-      title: '未收金额',
+      title: '未付金额',
       dataIndex: 'lastAmount',
       key: 'lastAmount',
       width: 80,
@@ -109,27 +109,27 @@ function NotPaymentTable(props: NotPaymentTableProps) {
       dataIndex: 'period',
       key: 'period',
       width: 85,
-      render: val => <span> {moment(val).format('YYYY-MM-DD')} </span>
+      render: val => moment(val).format('YYYY-MM-DD')
     },
     {
       title: '计费起始日期',
       dataIndex: 'beginDate',
       key: 'beginDate',
       width: 85,
-      render: val => <span> {moment(val).format('YYYY-MM-DD')} </span>
+      render: val => moment(val).format('YYYY-MM-DD')
     }, {
       title: '计费终止日期',
       dataIndex: 'endDate',
       key: 'endDate',
       width: 85,
-      render: val => <span> {moment(val).format('YYYY-MM-DD')} </span>
+      render: val => moment(val).format('YYYY-MM-DD')
     }, {
       title: '费用来源',
       dataIndex: 'billSource',
       key: 'billSource',
       width: 85,
-      render: val => <span> {moment(val).format('YYYY-MM-DD')} </span>
-    },{
+      render: val => moment(val).format('YYYY-MM-DD')
+    }, {
       title: '备注',
       dataIndex: 'memo',
       key: 'memo',
@@ -145,7 +145,7 @@ function NotPaymentTable(props: NotPaymentTableProps) {
       render: (text, record) => {
         return [
           <span>
-            <a onClick={() => modify(record.id)} key="modify">修改</a>
+            <a onClick={() => modify(record.id, true)} key="modify">修改</a>
             <Divider type="vertical" />
             <a onClick={() => doDelete(record)} key="delete">删除</a>
             <Divider type="vertical" />
@@ -157,28 +157,29 @@ function NotPaymentTable(props: NotPaymentTableProps) {
   ] as ColumnProps<any>[];
 
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [sumEntity, setSumEntity] = useState<Number>(0);
+  const [sumEntity, setSumEntity] = useState<Number>(0);//金额累加
   const onSelectChange = (selectedRowKeys, selectedRows) => {
-    console.log(selectedRows);
+    //console.log(selectedRows);
     setSelectedRowKeys(selectedRowKeys);
     rowSelect(selectedRows);
-    //应收金额
+    //应付金额
+    let sumlastAmount = 0;
     selectedRows.map(item => {
       sumlastAmount = selectedRows.reduce((sum, row) => { return sum + row.lastAmount; }, 0);
     });
-
-    setSumEntity(sumlastAmount.toFixed(2));
+    setSumEntity(sumlastAmount);
   };
 
   const rowSelection = {
     selectedRowKeys,
     onChange: onSelectChange,
   };
-  const hasSelected = selectedRowKeys.length > 0;
+  
+  // const hasSelected = selectedRowKeys.length > 0;
   //收款
   const charge = () => {
     if (selectedRowKeys.length == 0) {
-      message.warning('请选择收款项目!');
+      message.warning('请选择应付项目!');
       return;
     }
 
@@ -186,7 +187,7 @@ function NotPaymentTable(props: NotPaymentTableProps) {
       if (!errors) {
         Modal.confirm({
           title: '请确认',
-          content: `确定要执行收款操作吗？`,
+          content: `确定要执行付款操作吗？`,
           cancelText: '取消',
           okText: '确定',
           onOk: () => {
@@ -215,7 +216,7 @@ function NotPaymentTable(props: NotPaymentTableProps) {
               billDate: values.billDate.format('YYYY-MM-DD'),
               customerName: organize.title.split(' ')[1]
             });
-            if (Number(sumEntity.sumlastAmount) != Number(info.payAmountA + info.payAmountB + info.payAmountC)) {
+            if (Number(sumEntity.sumlastAmount) != Number(info.payAmount)) {
               message.warning('本次收款金额小于本次选中未收金额合计，不允许收款，请拆费或者重新选择收款项');
               return;
             }
@@ -233,81 +234,81 @@ function NotPaymentTable(props: NotPaymentTableProps) {
     <Page>
       <Form layout="vertical" hideRequiredMark>
         <Card className={styles.card} bordered={false}  >
-          <Row gutter={27}  style={{ marginBottom:'8px'}}>
+          <Row gutter={24} style={{ marginBottom: '8px' }}>
             <Col lg={24}>
-              <span style={{ color: "red"}}>
-                {organize.type==5 ? `已选择：${organize.id} ，本次选中未付金额合计：${sumEntity}`:`已选择： 本次选中未付金额合计：`}
+              <span style={{ color: "red" }}>
+                {organize.type == 5 ? `已选择：${organize.allname} ，本次选中未付金额合计：${sumEntity}` : `已选择： 本次选中未付金额合计：`}
               </span>
             </Col>
           </Row>
-          <Row gutter={27}>
-            <Col lg={6}>
+          <Row gutter={24}>
+            <Col lg={4}>
               <Form.Item label='付款单编号'>
                 {getFieldDecorator('billCode', {
                   initialValue: ''
                 })(
-                  <Input disabled={true} placeholder="自动获取编号"/>
+                  <Input readOnly placeholder="自动获取编号" />
                 )}
 
               </Form.Item>
             </Col>
-            <Col lg={6}>
+            <Col lg={4}>
               <Form.Item required label='付款日期'>
                 {getFieldDecorator('billDate', {
-                  initialValue:  moment(new Date()),
+                  initialValue: moment(new Date()),
                   rules: [{ required: true, message: '请选择付款日期' }],
-                })(<DatePicker  style={{ width: '100%' }}/>)}
+                })(<DatePicker style={{ width: '100%' }} />)}
               </Form.Item>
             </Col>
-            <Col lg={6}>
-                <Form.Item required  label='本次付款'>
-                  {getFieldDecorator('payAmount', {
-                    initialValue: 0.0,
-                    rules: [{ required: true, message: '请输入金额' }],
-                  })(
-                    <InputNumber
-                      precision={2}
-                      min={0}
-                      max={ sumEntity}
-                      style={{ width: '100%' }}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col lg={6} >
-                <Form.Item required label='付款方式'>
-                  {getFieldDecorator('payTypeB', {
-                    initialValue: '微信'
-                  })(
-                    <Select>
-                      <Option value="现金">现金</Option>
-                      <Option value="支付宝扫码" >支付宝扫码</Option>
-                      <Option value="支付宝">支付宝</Option>
-                      <Option value="微信" >微信</Option>
-                      <Option value="微信扫码">微信扫码</Option>
-                      <Option value="刷卡">刷卡</Option>
-                      <Option value="转账">转账</Option>
-                      <Option value="抵扣卷">抵扣卷</Option>
-                    </Select>
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col lg={24}>
-                <Form.Item required label='备注'>
-                  {getFieldDecorator('memo', {
-                    initialValue: '',
-                    rules: [{ required: false}],
-                  })(
-                    <Input/>
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Button type="primary" onClick={charge}>付款确认</Button>
-            </Row>
+            <Col lg={4}>
+              <Form.Item required label='本次付款'>
+                {getFieldDecorator('payAmount', {
+                  initialValue: 0.0,
+                  rules: [{ required: true, message: '请输入金额' }],
+                })(
+                  <InputNumber
+                    precision={2}
+                    min={0}
+                    max={sumEntity}
+                    style={{ width: '100%' }}
+                  />
+                )}
+              </Form.Item>
+            </Col>
+            <Col lg={4} >
+              <Form.Item required label='付款方式'>
+                {getFieldDecorator('payType', {
+                  initialValue: '现金'
+                })(
+                  <Select>
+                    <Option value="现金">现金</Option>
+                    <Option value="支付宝扫码" >支付宝扫码</Option>
+                    <Option value="支付宝">支付宝</Option>
+                    <Option value="微信" >微信</Option>
+                    <Option value="微信扫码">微信扫码</Option>
+                    <Option value="刷卡">刷卡</Option>
+                    <Option value="转账">转账</Option>
+                    <Option value="抵扣卷">抵扣卷</Option>
+                  </Select>
+                )}
+              </Form.Item>
+            </Col>
+            <Col lg={8}>
+              <Form.Item required label='备注'>
+                {getFieldDecorator('memo', {
+                  initialValue: '',
+                  rules: [{ required: false }],
+                })(
+                  <Input />
+                )}
+              </Form.Item>
+            </Col>
+
+          </Row>
+
+          <Row>
+            <Button type="primary" onClick={charge}>付款确认</Button>
+          </Row>
         </Card>
       </Form>
       <Table

@@ -7,23 +7,27 @@ import { GetPageListJson, GetDetailPageListJson } from './Main.service';
 import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
-import VerifyReductionModal from './VerifyReductionModal';
+import Verify from './Verify';
+import Show from './Show';
 import DetailList from './DetailList';
 const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
 
 function Main() {
-  const [modifyVisible, setModifyVisible] = useState<boolean>(false); 
-  const [verifyVisible, setVerifyVisible] = useState<boolean>(false); 
+  const [modifyVisible, setModifyVisible] = useState<boolean>(false);//编辑
+  const [viewVisible, setViewVisible] = useState<boolean>(false);//查看
+  const [verifyVisible, setVerifyVisible] = useState<boolean>(false);//审批
   // const [organize, SetOrganize] = useState<any>({}); 
   const [loading, setLoading] = useState<boolean>(false);
   const [detailloading, setDetailLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [detailpagination, setDetailPagination] = useState<PaginationConfig>(new DefaultPagination());
-  const [data, setData] = useState<any[]>([]); const [detaildata, setDetailData] = useState<any[]>([]);
+  const [data, setData] = useState<any[]>([]);
+  const [detaildata, setDetailData] = useState<any[]>([]);
   const [id, setId] = useState<string>();
-  const [addButtonDisabled, setAddButtonDisabled] = useState<boolean>(true);
+  const [ifVerify, setIfVerify] = useState<boolean>(true);
+  // const [addButtonDisabled, setAddButtonDisabled] = useState<boolean>(true);
   const [search, setSearch] = useState<string>('');
   const [detailsearch, setDetailSearch] = useState<string>('');
 
@@ -42,7 +46,7 @@ function Main() {
     // });
 
     initLoadData('', '');
-    initDetailLoadData('', ''); 
+    initDetailLoadData('', '');
   }, []);
   // 获取属性数据
   // const getTreeData = () => {
@@ -62,6 +66,7 @@ function Main() {
   //     });
   // };
 
+  //编辑
   const closeDrawer = () => {
     setModifyVisible(false);
     setId('');
@@ -72,15 +77,27 @@ function Main() {
     setId(id);
   };
 
+  //查看
+  const closeViewDrawer = () => {
+    setViewVisible(false);
+    setId('');
+  };
+
+  const showViewDrawer = (id?) => {
+    setViewVisible(true);
+    setId(id);
+  };
+
   //审核
   const closeVerifyDrawer = () => {
     setVerifyVisible(false);
     setId('');
   };
 
-  const showVerifyDrawer = (id?) => {
+  const showVerifyDrawer = (id, ifVerify) => {
     setVerifyVisible(true);
     setId(id);
+    setIfVerify(ifVerify);
   };
 
   const loadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
@@ -128,7 +145,7 @@ function Main() {
   };
   const initLoadData = (org, searchText) => {
     setSearch(searchText);
-    setAddButtonDisabled(true);
+    // setAddButtonDisabled(true);
     const queryJson = {
       OrganizeId: org.organizeId,
       keyword: searchText,
@@ -139,7 +156,7 @@ function Main() {
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
-      setAddButtonDisabled(false);
+      // setAddButtonDisabled(false);
       return res;
     });
   };
@@ -233,7 +250,7 @@ function Main() {
               />
               <Button type="primary" style={{ float: 'right' }}
                 onClick={() => showDrawer()}
-                disabled={addButtonDisabled}
+              // disabled={addButtonDisabled}
               >
                 <Icon type="plus" />
                 添加
@@ -247,7 +264,8 @@ function Main() {
               pagination={pagination}
               data={data}
               modify={showDrawer}
-              verify={showVerifyDrawer}
+              show={showViewDrawer}
+              verify={(id, ifVerify) => showVerifyDrawer(id, ifVerify)}
               reload={() => initLoadData('', search)}
             />
           </TabPane>
@@ -280,10 +298,17 @@ function Main() {
         reload={() => initLoadData('', search)}
       />
 
-      <VerifyReductionModal
+      <Show
+        modalVisible={viewVisible}
+        closeModal={closeViewDrawer}
+        id={id}
+      />
+
+      <Verify
         modalVisible={verifyVisible}
         closeModal={closeVerifyDrawer}
         id={id}
+        ifVerify={ifVerify}
         reload={() => initLoadData('', search)}
       />
 

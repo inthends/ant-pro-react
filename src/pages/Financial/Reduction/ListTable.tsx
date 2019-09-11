@@ -13,13 +13,14 @@ interface ListTableProps {
   pagination: PaginationConfig;
   data: any[];
   modify(id: string): void;
+  show(id: string): void;
   reload(): void;
   form: WrappedFormUtils;
   verify(id: string, flag: boolean): void;
 }
 
 function ListTable(props: ListTableProps) {
-  const { onchange, loading, pagination, data, verify,modify, reload } = props;
+  const { onchange, loading, pagination, data, verify,modify, show, reload } = props;
   // const [verifyVisible, setVerifyVisible] = useState<boolean>(false);
   // const [id, setId] = useState<string>('');
   // const [verifyId, setVerifyId] = useState<any>('');
@@ -34,7 +35,7 @@ function ListTable(props: ListTableProps) {
       content: `您是否要删除${record.billCode}`,
       onOk: () => {
         RemoveForm(record.billId).then(() => {
-          message.success('保存成功');
+          message.success('删除成功');
           reload();
         });
       },
@@ -57,9 +58,9 @@ function ListTable(props: ListTableProps) {
       sorter: true,
       render: val => {
         if (val == null) {
-          return <span></span>
+          return '';
         } else {
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
+          return  moment(val).format('YYYY-MM-DD');
         }
       }
     },
@@ -97,13 +98,13 @@ function ListTable(props: ListTableProps) {
       width: 100,
       render: val => {
         if (val == null) {
-          return <span></span>
+          return '';
         } else {
-          return <span>{moment(val).format('YYYY-MM-DD')} </span>
+          return  moment(val).format('YYYY-MM-DD');
         }
       }
     }, {
-      title: '审核情况',
+      title: '审核意见',
       dataIndex: 'verifyMemo',
       key: 'verifyMemo'
     },
@@ -140,7 +141,7 @@ function ListTable(props: ListTableProps) {
             //       删除
             //    </Button>, 
             <span>
-              <a onClick={() => modify(record.billId)} key="modify">查看</a>
+              <a onClick={() => show(record.billId)} key="modify">查看</a>
               <Divider type="vertical" />
               <a onClick={() => verify(record.billId, false)} key="modify">反审</a>
             </span>

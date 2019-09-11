@@ -1,26 +1,25 @@
 
-import { Input, message, Table, Button, Card, Col, Drawer, Form, Row } from 'antd';
+import { Input, Table, Button, Card, Col, Drawer, Form, Row } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { PaginationConfig } from 'antd/lib/table';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetFormJson, GetListByID, Audit } from './Main.service';
+import { GetFormJson, GetListByID } from './Main.service';
 import moment from 'moment';
 const { TextArea } = Input;
 
-interface VerifyReductionModalProps {
+interface ShowProps {
   modalVisible: boolean;
   closeModal(): void;
   form: WrappedFormUtils;
   id?: string;
-  ifVerify: boolean;//审核/取消审核
-  reload(): void;
 };
 
-const VerifyReductionModal = (props: VerifyReductionModalProps) => {
-  const { modalVisible, closeModal, form, id, reload, ifVerify } = props;
+const Show = (props: ShowProps) => {
+  const { modalVisible, closeModal, form, id } = props;
   const { getFieldDecorator } = form;
-  const title = id === undefined ? '减免单审核' : '减免单审核';
+  // const title = id === undefined ? '减免单审核' : '减免单审核';
+  const title = '减免单查看';
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
@@ -37,7 +36,6 @@ const VerifyReductionModal = (props: VerifyReductionModalProps) => {
   // 打开抽屉时初始化
   useEffect(() => {
     if (modalVisible) {
-      setLoading(true);
       if (id) {
         GetFormJson(id).then(res => {
           setInfoDetail(res);
@@ -50,6 +48,7 @@ const VerifyReductionModal = (props: VerifyReductionModalProps) => {
             total,
             keyValue: res.billId
           };
+          setLoading(true);
           GetListByID(searchCondition).then(res => {
             //明细
             setListData(res.data);
@@ -62,23 +61,44 @@ const VerifyReductionModal = (props: VerifyReductionModalProps) => {
     }
   }, [modalVisible]);
 
-  //提交编辑
-  const onSave = () => {
-    form.validateFields((errors, values) => {
-      if (!errors) {
-        // const newvalue = { ...values, ifVerify: ifVerify };
-        const newData = infoDetail ? { ...infoDetail, ...values } : values;
-        newData.keyValue = infoDetail.billId;
-        newData.ifVerify = ifVerify;
-        Audit(newData).then(res => {
-          message.success('提交成功');
-          closeModal();
-          reload();
-        }); 
-        // }).then(() => {
-        //   closeDrawer();
-        // });
-      }
+  const changePage = (pagination: PaginationConfig, filters, sorter) => {
+    loadData(pagination, sorter);
+  };
+
+  const loadData = (paginationConfig?: PaginationConfig, sorter?) => {
+    const { current: pageIndex, pageSize, total } = paginationConfig || {
+      current: 1,
+      pageSize: pagination.pageSize,
+      total: 0,
+    };
+    let searchCondition: any = {
+      pageIndex,
+      pageSize,
+      total,
+      keyValue: infoDetail.billId
+    };
+
+    if (sorter) {
+      let { field, order } = sorter;
+      searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sidx = field ? field : 'billId';
+    }
+    setLoading(true);
+    return GetListByID(searchCondition).then(res => {
+      //设置查询后的分页
+      const { pageIndex: current, total, pageSize } = res;
+      setPagination(pagesetting => {
+        return {
+          ...pagesetting,
+          current,
+          total,
+          pageSize,
+        };
+      });
+      //明细
+      setListData(res.data);
+      setLoading(false);
+      return res;
     });
   };
 
@@ -214,16 +234,11 @@ const VerifyReductionModal = (props: VerifyReductionModalProps) => {
 
           <Row>
             <Col>
-              <Form.Item label="审核意见" required>
-                {getFieldDecorator('verifyMemo', {
-                  initialValue: infoDetail.verifyMemo,
-                  rules: [{ required: true, message: '请输入审核意见' }],
-                })(<TextArea rows={4} placeholder="请输入审核意见" />)}
+              <Form.Item label="审核意见">
+                {infoDetail.verifyMemo}
               </Form.Item>
             </Col>
-          </Row>
-
-
+          </Row> 
           <Row style={{ marginTop: '15px' }}>
             <Table
               bordered={false}
@@ -234,6 +249,9 @@ const VerifyReductionModal = (props: VerifyReductionModalProps) => {
               pagination={pagination}
               scroll={{ x: 1150, y: 500 }}
               loading={loading}
+              onChange={(pagination: PaginationConfig, filters, sorter) =>
+                changePage(pagination, filters, sorter)
+              }
             />
           </Row>
         </Card>
@@ -253,17 +271,12 @@ const VerifyReductionModal = (props: VerifyReductionModalProps) => {
       >
         <Button style={{ marginRight: 8 }} onClick={() => closeModal()}
         >
-          取消
-        </Button>
-        <Button type="primary"
-          onClick={() => onSave()}
-        >
-          提交
+          关闭
         </Button>
       </div>
     </Drawer>
   );
 };
 
-export default Form.create<VerifyReductionModalProps>()(VerifyReductionModal);
+export default Form.create<ShowProps>()(Show);
 
