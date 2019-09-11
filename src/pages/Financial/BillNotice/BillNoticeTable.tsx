@@ -35,11 +35,7 @@ function BillNoticeTable(props: BillNoticeTableProps) {
       width: 150,
       sorter: true,
       render: val => {
-        if (val == null) {
-          return <span></span>
-        } else {
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
-        }
+       return moment(val).format('YYYY-MM-DD');
       }
     },
     {

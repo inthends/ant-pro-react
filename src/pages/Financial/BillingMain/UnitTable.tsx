@@ -55,7 +55,7 @@ function UnitTable(props: UnitTableProps) {
       title: '数量',
       dataIndex: 'quantity',
       key: 'quantity',
-      width: 150,
+      width: 100,
       sorter: true,
     },
     {
@@ -63,28 +63,28 @@ function UnitTable(props: UnitTableProps) {
       dataIndex: 'price',
       key: 'price',
       sorter: true,
-      width: 150
+      width: 100
     },
     {
       title: '周期',
       key: 'cycleValue',
       dataIndex: 'cycleValue',
       sorter: true,
-      width: 150
+      width: 100
     },
     {
       title: '周期单位',
       key: 'cycleType',
       dataIndex: 'cycleType',
       sorter: true,
-      width: 150
+      width: 100
     },
     {
       title: '金额',
       key: 'amount',
       dataIndex: 'amount',
       sorter: true,
-      width: 150
+      width: 100
     },
     {
       title: '起始日期',
@@ -110,7 +110,8 @@ function UnitTable(props: UnitTableProps) {
       title: '备注',
       dataIndex: 'memo',
       key: 'memo',
-      sorter: true
+      sorter: true,
+      width:100
     }
   ] as ColumnProps<any>[];
 
@@ -123,7 +124,7 @@ function UnitTable(props: UnitTableProps) {
         dataSource={data}
         rowKey="id"
         pagination={pagination}
-        scroll={{ y: 500, x: 1200 }}
+        scroll={{ y: 500, x: 1300 }}
         loading={loading}
         onChange={onchange}
       />

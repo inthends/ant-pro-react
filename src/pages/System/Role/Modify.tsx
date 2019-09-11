@@ -1,9 +1,9 @@
-import { BaseModifyProvider } from '@/components/BaseModifyDrawer/BaseModifyDrawer';
-import ModifyItem, { SelectItem } from '@/components/BaseModifyDrawer/ModifyItem';
-import { Form, Row } from 'antd';
-import { WrappedFormUtils } from 'antd/lib/form/Form';
-import React, { useEffect, useState } from 'react';
-import { SaveForm, searchUser } from './Role.service';
+import { BaseModifyProvider } from "@/components/BaseModifyDrawer/BaseModifyDrawer";
+import ModifyItem from "@/components/BaseModifyDrawer/ModifyItem";
+import { Form, Row } from "antd";
+import { WrappedFormUtils } from "antd/lib/form/Form";
+import React from "react";
+import { SaveForm } from "./Role.service";
 
 interface ModifyProps {
   visible: boolean;
@@ -32,13 +32,13 @@ const Modify = (props: ModifyProps) => {
             {...baseFormProps}
             field="enCode"
             label="角色编号"
-            rules={[{ required: true, message: '请输入角色编号' }]}
+            rules={[{ required: true, message: "请输入角色编号" }]}
           ></ModifyItem>
-           <ModifyItem
+          <ModifyItem
             {...baseFormProps}
             field="fullName"
             label="角色名称"
-            rules={[{ required: true, message: '请输入角色名称' }]}
+            rules={[{ required: true, message: "请输入角色名称" }]}
           ></ModifyItem>
         </Row>
         <Row gutter={24}>

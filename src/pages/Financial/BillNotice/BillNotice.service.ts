@@ -16,7 +16,8 @@ export function GetEntityShow(data): Promise<any> {
 export function GetBillPageData(data): Promise<any> {
   return request.post(process.env.basePath + `/Notice/GetBillPageData`, {data:objToFormdata(data)}).then(getResult as any);
 }
-//获取收费明细
+
+//收费数据明细
 export function ChargeFeeDetail(data): Promise<any> {
   return request.post(process.env.basePath + `/Notice/ChargeFeeDetail`, {data:objToFormdata(data)}).then(getResult as any);
 }

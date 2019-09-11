@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 const { TreeNode } = Tree;
 
 interface LeftSelectTreeProps {
-  treeData: TreeEntity[];
+  treeData: any[];
   selectTree(treeNode, item?: any): void;
   getCheckedKeys(keys):void;
 
@@ -22,7 +22,7 @@ function LeftSelectTree(props: LeftSelectTreeProps) {
 
   const onSelect = (selectedKeys, info) => {
     if (selectedKeys.length === 1) {
-      const item = treeData.filter(item => item.id === selectedKeys[0])[0];
+      const item = treeData.filter(item => item.key === selectedKeys[0])[0];
       selectTree(selectedKeys[0], item);
     }
   };
@@ -32,8 +32,8 @@ function LeftSelectTree(props: LeftSelectTreeProps) {
       .filter(item => item.parentId === parentId)
       .map(filteditem => {
         return (
-          <TreeNode title={filteditem.title} key={filteditem.id}>
-            {renderTree(treeData, filteditem.id as string)}
+          <TreeNode title={filteditem.title} key={filteditem.key}>
+            {renderTree(treeData, filteditem.key as string)}
           </TreeNode>
         );
       });

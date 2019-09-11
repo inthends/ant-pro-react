@@ -312,7 +312,6 @@ function Main() {
       <AsynLeftTree
         parentid={'0'}
         selectTree={(id, type, info?) => {
-         // debugger
           SetOrganizeId(id);
           // SetOrganize(info);
           if (type == 5) {

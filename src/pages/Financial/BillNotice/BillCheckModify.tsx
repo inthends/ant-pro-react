@@ -25,7 +25,7 @@ const BillCheckModify = (props: BillCheckModifyProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const { getFieldDecorator } = form;
 
-  const title=isEdit?"修改通知单":"新增通知单";
+  const title=id?"修改通知单":"新增通知单";
   useEffect(() => {
     if(visible){
       form.resetFields();

@@ -1,8 +1,7 @@
 import Page from '@/components/Common/Page';
-import { Divider, message, Table, Modal } from 'antd';
+import { Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
-import React from 'react';
-import { RemoveForm } from './Main.service';
+import React from 'react'; 
 import moment from 'moment';
 
 interface HouseInfoListProps {
@@ -24,7 +23,7 @@ function HouseInfoList(props: HouseInfoListProps) {
       title: '房屋编号',
       dataIndex: 'code',
       key: 'code',
-      width: 140,
+      width: 120,
       sorter: true,
     },
     {
@@ -91,7 +90,7 @@ function HouseInfoList(props: HouseInfoListProps) {
       title: '房屋全称',
       dataIndex: 'allName',
       key: 'allName',
-      width: 120,
+      width: 180,
       sorter: true,
     },
   ] as ColumnProps<any>[];
