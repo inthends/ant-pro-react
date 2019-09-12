@@ -76,8 +76,8 @@ function BillCheckTable(props: BillCheckTableProps) {
     },
     {
       title: '计费金额',
-      dataIndex: 'amount',
-      key: 'amount',
+      dataIndex: 'allAmount',
+      key: 'allAmount',
       width: 100
     },
     {

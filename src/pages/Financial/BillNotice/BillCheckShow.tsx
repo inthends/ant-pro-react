@@ -15,7 +15,7 @@ interface BillCheckShowProps {
   visible: boolean;
   closeDrawer(): void;
   form: WrappedFormUtils;
-  id: string;
+  id?: string;
 }
 
 const BillCheckShow = (props: BillCheckShowProps) => {

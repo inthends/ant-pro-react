@@ -24,7 +24,7 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
   //动态子节点
   const [treeData, setTreeData] = useState<any[]>([]);
 
-  var keys: any[];
+  let keys: any[];
   keys = [];
   const getAllkeys = res =>
     res.forEach(item => {
@@ -40,9 +40,8 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
     GetOrgTree().then((res: any[]) => {
       setTreeData(res || []);
       getAllkeys(res || []);
-    });
-
-    setExpandedKeys(keys);
+      setExpandedKeys(keys);
+    }); 
     //setExpandedKeys(treeData.map(item => item.id as string)); 
   }, []);
 

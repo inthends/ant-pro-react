@@ -14,17 +14,30 @@ interface AsynSelectTreeProps {
 function AsynSelectTree(props: AsynSelectTreeProps) {
   const { selectTree, getCheckedKeys } = props;
   const [checkedKeys, setCheckedKeys] = useState<any[]>([]);
-  // const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
+  const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
   // const [autoExpandParent, setAutoExpandParent] = useState<boolean>(false);
   //动态子节点
   const [treeData, setTreeData] = useState<any[]>([]);
+
+  let keys: any[];
+  keys = [];
+  const getAllkeys = res =>
+    res.forEach(item => {
+      if (item.children && item.type != 'D') {
+        keys.push(getAllkeys(item.children))
+      }
+      keys.push(item.key);
+    });
 
   useEffect(() => {
     //根据父节点获取房产树
     GetOrgTree().then((res: any[]) => {
       setTreeData(res || []);
+      getAllkeys(res || []);  
+      setExpandedKeys(keys);
     });
-    //setExpandedKeys(treeData.map(item => item.id as string)); 
+    //setExpandedKeys(treeData.map(item => item.id as string));   
+
   }, []);
 
   const onCheck = (checkedKeys) => {
@@ -51,23 +64,21 @@ function AsynSelectTree(props: AsynSelectTreeProps) {
   //   }
   // };
 
-  // const clickExpend = expandedKeys => {
-  //   // if not set autoExpandParent to false, if children expanded, parent can not collapse.
-  //   // or, you can remove all expanded children keys.
-  //   setExpandedKeys(expandedKeys);
-  //   setAutoExpandParent(false);
-  // };
+  const clickExpend = expandedKeys => {
+    // if not set autoExpandParent to false, if children expanded, parent can not collapse.
+    // or, you can remove all expanded children keys.
+    setExpandedKeys(expandedKeys);
+    //setAutoExpandParent(false);
+  };
 
 
   const onLoadData = treeNode =>
     new Promise<any>(resolve => {
-
       if (treeNode.props.children &&
         treeNode.props.children.length > 0) {
         resolve();
         return;
       }
-
       setTimeout(() => {
         GetAsynChildBuildings(treeNode.props.eventKey, treeNode.props.type).then((res: any[]) => {
           treeNode.props.dataRef.children = res || [];
@@ -86,7 +97,6 @@ function AsynSelectTree(props: AsynSelectTreeProps) {
   //       );
   //     });
   // };
-
 
   const renderTreeNodes = data =>
     data.map(item => {
@@ -111,18 +121,20 @@ function AsynSelectTree(props: AsynSelectTreeProps) {
         overflowY: 'auto',
       }}
     >
-      <Tree
-        loadData={onLoadData}
-        showLine
-        checkable
-        checkedKeys={checkedKeys}
-        onCheck={onCheck}
-        // expandedKeys={expandedKeys}
-        // autoExpandParent={autoExpandParent}
-        // onExpand={clickExpend}
-        onSelect={onSelect}>
-        {renderTreeNodes(treeData)}
-      </Tree>
+      {treeData != null && treeData.length > 0 ?
+        (<Tree
+          loadData={onLoadData}
+          showLine
+          checkable
+          checkedKeys={checkedKeys}
+          onCheck={onCheck}
+          expandedKeys={expandedKeys}
+          // expandedKeys={expandedKeys}
+          // autoExpandParent={autoExpandParent}
+          onExpand={clickExpend}
+          onSelect={onSelect}>
+          {renderTreeNodes(treeData)}
+        </Tree>) : null}
     </Page>
   );
 };

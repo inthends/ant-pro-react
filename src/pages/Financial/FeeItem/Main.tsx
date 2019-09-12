@@ -1,5 +1,5 @@
 // import { TreeEntity } from '@/model/models'; 
-import Page from '@/components/Common/Page';
+// import Page from '@/components/Common/Page';
 import { DefaultPagination } from '@/utils/defaultSetting';
 // import { getResult } from '@/utils/networkUtils';
 import { Tabs, Button, Icon, Input, Layout, Select } from 'antd';
@@ -25,16 +25,13 @@ function Main() {
   const [id, setId] = useState<string>();
   const [FeeKind, SetFeeKind] = useState<string>('');
   const [FeeType, SetFeeType] = useState<string>('');
-  const [search, setSearch] = useState<string>('');
-
-  // const [houseSearch, setHouseSearch] = useState<string>('');
-  const [houseFeeItemSearch, setHouseFeeItemSearch] = useState<string>('');
-
+  const [search, setSearch] = useState<string>('');//费项搜素关键字
+  const [houseSearch, setHouseSearch] = useState<string>('');//费项房屋搜索关键字
+  const [houseFeeItemId, setHouseFeeItemId] = useState<any>('');//费项搜索id
   const [houseLoading, setHouseLoading] = useState<boolean>(false);
   const [housePagination, setHousePagination] = useState<PaginationConfig>(new DefaultPagination());
   const [houseData, setHouseData] = useState<any[]>([]);
   const [feeitems, setFeeitems] = useState<any[]>([]);
-
   const { hideSider, setHideSider } = useContext(SiderContext);
 
   const selectTree = (item, search) => {
@@ -142,8 +139,8 @@ function Main() {
     });
   };
 
-
-  const houseLoadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
+  //加载费项房屋
+  const houseLoadData = (search, feeItemId, paginationConfig?: PaginationConfig, sorter?) => {
     //setHouseSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
@@ -154,12 +151,12 @@ function Main() {
       pageIndex,
       pageSize,
       total,
-      queryJson: { FeeKind: FeeKind, FeeType: FeeType, keyword: search, FeeItemID: houseFeeItemSearch },
+      queryJson: { FeeKind: FeeKind, FeeType: FeeType, keyword: search, FeeItemID: feeItemId },
     };
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'unitfeeid';
+      searchCondition.sidx = field ? field : 'unitfeeId';
     }
     return houseLoad(searchCondition).then(res => {
       return res;
@@ -186,7 +183,7 @@ function Main() {
   };
   const initHouseLoadData = (FeeKind, FeeType, search) => {
     setSearch(search);
-    const queryJson = { FeeKind: FeeKind, FeeType: FeeType, keyword: search, FeeItemID: houseFeeItemSearch };
+    const queryJson = { FeeKind: FeeKind, FeeType: FeeType, keyword: search, FeeItemID: houseFeeItemId };
     const sidx = 'feeitemId';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
@@ -279,9 +276,12 @@ function Main() {
           </TabPane>
           <TabPane tab="房屋费项列表" key="2">
             <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
-              <Select style={{ width: '150px', marginRight: '5px' }}
-                placeholder="请选择" onChange={(value) => {
-                  setHouseFeeItemSearch(value);
+              <Select
+                allowClear={true}
+                style={{ width: '160px', marginRight: '5px' }}
+                placeholder="请选择费项" onChange={(value) => {
+                  houseLoadData(houseSearch, value);
+                  setHouseFeeItemId(value);
                 }}
               >
                 {feeitems.map(item => (
@@ -293,9 +293,12 @@ function Main() {
               <Search
                 key='search'
                 className="search-input"
-                placeholder="搜索费项名称"
+                placeholder="搜索房屋编号"
                 style={{ width: 200 }}
-                onSearch={value => houseLoadData(value)}
+                onSearch={(value) => {
+                  houseLoadData(value, houseFeeItemId);
+                  setHouseSearch(value);
+                }} 
               />
             </div>
             <HouseInfoList
@@ -306,6 +309,7 @@ function Main() {
               loading={houseLoading}
               pagination={housePagination}
               data={houseData}
+              reload={() => initHouseLoadData(FeeKind, FeeType, search)}
             />
           </TabPane>
         </Tabs>
