@@ -40,7 +40,7 @@ function BillCheckTable(props: BillCheckTableProps) {
       title: '账单日',
       dataIndex: 'createDate',
       key: 'createDate',
-      width: 120,
+      width: 100,
       sorter: true,
       render: val => {
          return moment(val).format('YYYY-MM-DD');
@@ -50,7 +50,7 @@ function BillCheckTable(props: BillCheckTableProps) {
       title: '房间编号',
       dataIndex: 'unitId',
       key: 'unitId',
-      width: 100,
+      width: 120,
       sorter: true,
     },
     {

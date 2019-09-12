@@ -3,7 +3,7 @@ import {  Button,  Col,  Select,  Form,Input,  Row,Icon,Modal,InputNumber, Drawe
 import { TreeEntity } from '@/model/models';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import {GetTempPaymentFeeItemTreeJson,GetRoomUsers,GetUserRooms,GetFeeItemDetail,SaveForm} from './Payment.service';
+import {GetTempPaymentFeeItemTreeJson,GetRoomUsers,GetUserRooms,GetFeeItemDetail,SaveForm,GetShowDetail} from './Payment.service';
 import './style.less';
 import LeftTree from '../LeftTree';
 import  moment from 'moment';
@@ -29,37 +29,58 @@ const FeeModify = (props: FeeModifyProps) => {
   const [relationIds,setRelationID]=useState<any[]>([]);
   const [unitIds,setUnitIds]=useState<any[]>([]);
 
-  const title=isEdit?"修改应付费用":"新增应付费用";
+  const title=id?"修改应付费用":"新增应付费用";
   useEffect(() => {
     if(visible){
       form.resetFields();
-      GetTempPaymentFeeItemTreeJson(organize.id).then(res=>{
+      GetTempPaymentFeeItemTreeJson(organize.code).then(res=>{
         setFeeTreeData(res);
       });
-      if(id!=null&&id!=""){
 
-      }else{
-        setInfoDetail({});
-      }
-      if(organize.id)
-      {
-        GetRoomUsers(organize.id).then(res=>{
+      if(id!=null&&id!=""){
+        GetRoomUsers(organize.code).then(res=>{
           setRelationID(res);
-          if(res.length>0){
-            var info =Object.assign({},infoDetail,{ relationId:res[0].key});
+          return res
+        }).then((relations)=>{
+          GetShowDetail(id).then(res=>{
+            var info= Object.assign({},res.entity,{number:res.number});
             setInfoDetail(info);
-          }
-          return info;
-        }).then(infoDetail=>{
-            GetUserRooms(getRelationId(infoDetail.relationId))
-            .then(res=>{
-              setUnitIds(res);
-              if(res.length>0){
-                var info =Object.assign({},infoDetail,{ householdId:res[0].value});
-                setInfoDetail(info);
+            return info.relationId
+          }).then(relationId=>{
+            var relation="";
+            for(var i =0;i<relations.length;i++)
+            {
+              if(relations[i].key==relationId){
+                relation= relations[i].value;
               }
+            }
+            return GetUserRooms(relation)
+          }).then(res=>{
+            setUnitIds(res);
           });
         });
+      }else{
+        setInfoDetail({});
+        if(organize.code)
+        {
+          GetRoomUsers(organize.code).then(res=>{
+            setRelationID(res);
+            if(res.length>0){
+              var info =Object.assign({},infoDetail,{ relationId:res[0].key});
+              setInfoDetail(info);
+            }
+            return info;
+          }).then(infoDetail=>{
+              GetUserRooms(getRelationId(infoDetail.relationId))
+              .then(res=>{
+                setUnitIds(res);
+                if(res.length>0){
+                  var info =Object.assign({},infoDetail,{ unitId:res[0].value});
+                  setInfoDetail(info);
+                }
+            });
+          });
+        }
       }
     }
   }, [visible]);
@@ -104,7 +125,7 @@ const FeeModify = (props: FeeModifyProps) => {
     <Drawer
         title={title}
         placement="right"
-        width={850}
+        width={950}
         onClose={closeDrawer}
         visible={visible}
         bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
@@ -117,8 +138,8 @@ const FeeModify = (props: FeeModifyProps) => {
             <LeftTree
                 treeData={feeTreeData}
                 selectTree={(id, item) => {
-                  if(organize.id){
-                    GetFeeItemDetail(id,organize.id).then(res=>{
+                  if(organize.code){
+                    GetFeeItemDetail(id,organize.code).then(res=>{
                       var amount =parseInt( res.price)*parseInt(res.number) *parseInt(res.quantity) ;
                       var info =Object.assign({},res,{ feeItemId:id,amount:amount});
                       setInfoDetail(info);
@@ -128,7 +149,7 @@ const FeeModify = (props: FeeModifyProps) => {
                         .then(res=>{
                           setUnitIds(res);
                           if(res.length>0)
-                            info =Object.assign({},info,{  householdId:res[0].value});
+                            info =Object.assign({},info,{  unitId:res[0].value});
                             setInfoDetail(info);
                       });
                     });
@@ -137,7 +158,7 @@ const FeeModify = (props: FeeModifyProps) => {
               />
           </Col>
         }
-        <Col span={16}  style={{height:'calc(100vh - 100px)',padding:'5px',overflow:'auto'}}>
+        <Col span={ id!=null&&id!=""?24:16}  style={{height:'calc(100vh - 100px)',padding:'5px',overflow:'auto'}}>
           <Form layout="vertical" hideRequiredMark>
             <Spin tip="数据加载中..." spinning={loading}>
             <Col span={16}>
@@ -150,8 +171,11 @@ const FeeModify = (props: FeeModifyProps) => {
                     <Select placeholder="=请选择=" disabled={isEdit||(id!="")?false:true} onSelect={(key)=>{
                       GetUserRooms(getRelationId(key)).then(res=>{
                         setUnitIds(res);
-                        var info =Object.assign({},infoDetail,{ householdId:res[0].value});
-                        setInfoDetail(info);
+                        if(infoDetail.unitId==null)
+                        {
+                          var info =Object.assign({},infoDetail,{ unitId:res[0].value});
+                          setInfoDetail(info);
+                        }
                       });
                     }}>
                       {relationIds.map(item => (
@@ -165,8 +189,8 @@ const FeeModify = (props: FeeModifyProps) => {
               </Row>
               <Row>
                 <Form.Item label="选择房屋" required  >
-                  {getFieldDecorator('householdId', {
-                    initialValue:infoDetail.householdId==null?null:getUnitId(infoDetail.householdId),
+                  {getFieldDecorator('unitId', {
+                    initialValue:infoDetail.unitId==null?null:infoDetail.unitId/*getUnitId(infoDetail.householdId)*/,
                     rules: [{ required: true, message: '请选择房屋' }]
                   })(
                     <Select placeholder="=请选择="  disabled={isEdit||(id!="")?false:true} >
@@ -265,7 +289,7 @@ const FeeModify = (props: FeeModifyProps) => {
                   </Form.Item>
                 </Col>
               </Row>
-              <Row>
+              <Row gutter={8}>
                 <Col span={12}>
                   <Form.Item label="起始日期" required >
                     {getFieldDecorator('beginDate', {
@@ -329,7 +353,7 @@ const FeeModify = (props: FeeModifyProps) => {
                       let entity={
                         billDate: moment( values.billDate).format('YYYY-MM-DD'),
                         endDate: moment( values.endDate).format('YYYY-MM-DD'),
-                        billId:  id != null && id != "" ? infoDetail.billId : guid,
+                        billId:  id != null && id != "" ? infoDetail.billId : "",
                         feeItemId: infoDetail.feeItemId,
                         price:parseInt(values.price) ,// 0,
                         billSource: "临时付款",
@@ -338,16 +362,16 @@ const FeeModify = (props: FeeModifyProps) => {
                         memo: values.memo?values.memo:'',
                         relationId:values.relationId,// "string",
                         status:0,
-                        unitId:values.householdId,
+                        unitId:values.unitId,
                         amount: values.amount,
                         cycleType: values.cycleType,
                         beginDate:  moment(values.beginDate).format('YYYY-MM-DD'),
                         cycleValue: values.cycleValue,
-                        organizeId: organize.id,
+                        organizeId: organize.code,
                         period: infoDetail.period
                       }
                       let newData={
-                        keyValue: id != null && id != "" ? infoDetail.billId : guid,
+                        keyValue: id != null && id != "" ? infoDetail.billId : "",
                         entity:entity
                       }
                       SaveForm(newData).then((res)=>{

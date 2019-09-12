@@ -6,7 +6,7 @@ import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState } from 'react';
 import moment from 'moment';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import { RemoveForm, Charge } from './Payment.service';
+import { RemoveForm, Pay } from './Payment.service';
 import styles from './style.less';
 const { Option } = Select;
 
@@ -15,7 +15,7 @@ interface NotPaymentTableProps {
   loading: boolean;
   pagination: PaginationConfig;
   data: any[];
-  modify(id: string, isEdit: boolean): void;
+  modify(id: string,isEdit?:boolean): void;
   reload(): void;
   form: WrappedFormUtils;
   rowSelect(rowSelectedKeys): void;
@@ -127,9 +127,8 @@ function NotPaymentTable(props: NotPaymentTableProps) {
       title: '费用来源',
       dataIndex: 'billSource',
       key: 'billSource',
-      width: 85,
-      render: val => moment(val).format('YYYY-MM-DD')
-    }, {
+      width: 85
+    },{
       title: '备注',
       dataIndex: 'memo',
       key: 'memo',
@@ -145,7 +144,7 @@ function NotPaymentTable(props: NotPaymentTableProps) {
       render: (text, record) => {
         return [
           <span>
-            <a onClick={() => modify(record.id, true)} key="modify">修改</a>
+            <a onClick={() => modify(record.billId)} key="modify">修改</a>
             <Divider type="vertical" />
             <a onClick={() => doDelete(record)} key="delete">删除</a>
             <Divider type="vertical" />
@@ -191,36 +190,22 @@ function NotPaymentTable(props: NotPaymentTableProps) {
           cancelText: '取消',
           okText: '确定',
           onOk: () => {
-            /*roomid
-              billids
-              BillId
-              OrganizeId
-              CreateDate
-              PayAmount
-              CreateUserId
-              PayType
-              CreateUserName
-              Status
-              Memo
-              VerifyDate
-              ModifyDate
-              VerifyMemo
-              BillCode
-              ModifyUserId
-              VerifyPerson
-              BillDate
-              ModifyUserName */
-            let info = Object.assign({}, values, {
-              roomId: organize.code,
-              ids: JSON.stringify(selectedRowKeys),
-              billDate: values.billDate.format('YYYY-MM-DD'),
-              customerName: organize.title.split(' ')[1]
+            let info = Object.assign({}, {}, {
+              BillCode:'',
+              roomid: organize.code,
+              billids: JSON.stringify(selectedRowKeys),
+              //OrganizeId:organize.organizeId,
+              BillDate: values.billDate.format('YYYY-MM-DD'),
+              PayAmount:values.payAmount,
+              PayType:values.payType,
+              Memo:values.memo,
             });
             if (Number(sumEntity.sumlastAmount) != Number(info.payAmount)) {
               message.warning('本次收款金额小于本次选中未收金额合计，不允许收款，请拆费或者重新选择收款项');
               return;
             }
-            Charge(info).then(res => {
+
+            Pay(info).then(res => {
               message.success('保存成功');
               reload();
             });

@@ -69,6 +69,6 @@ export function GetTemplates(): Promise<any> {
 }
 
 //获取所有收费列表
-export function GetReceivablesFeeItemTreeJson(): Promise<ResponseObject<TreeEntity[]>> {
+export function GetReceivablesFeeItemTreeJson(): Promise<TreeEntity[]> {
   return request.get(process.env.basePath + `/FeeItems/GetReceivablesFeeItemTreeJson`, {}).then(getResult as any);
 }

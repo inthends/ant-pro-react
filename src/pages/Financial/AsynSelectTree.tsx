@@ -1,4 +1,4 @@
-//异步树
+//checkbox异步树
 import Page from '@/components/Common/Page';
 import { Tree } from 'antd';
 import React, { useEffect, useState } from 'react';
@@ -19,8 +19,7 @@ function AsynSelectTree(props: AsynSelectTreeProps) {
   //动态子节点
   const [treeData, setTreeData] = useState<any[]>([]);
 
-  let keys: any[];
-  keys = [];
+  let keys: any[] = [];
   const getAllkeys = res =>
     res.forEach(item => {
       if (item.children && item.type != 'D') {
@@ -33,16 +32,25 @@ function AsynSelectTree(props: AsynSelectTreeProps) {
     //根据父节点获取房产树
     GetOrgTree().then((res: any[]) => {
       setTreeData(res || []);
-      getAllkeys(res || []);  
+      getAllkeys(res || []);
       setExpandedKeys(keys);
     });
     //setExpandedKeys(treeData.map(item => item.id as string));   
 
   }, []);
 
-  const onCheck = (checkedKeys) => {
-    setCheckedKeys(checkedKeys);
-    getCheckedKeys(checkedKeys);
+  const onCheck = (checkedKeys, info) => {
+    let keys: any[] = [];
+    //setCheckedKeys(checkedKeys);
+    //过滤
+    info.checkedNodes.forEach(item => { 
+      //房间或者车位
+      if (item.props.type == 5 || item.props.type == 9) {
+        keys.push(item.key);
+      }
+    });
+     
+    getCheckedKeys(keys);
   };
 
   const onSelect = (selectedKeys, info) => {
@@ -126,13 +134,14 @@ function AsynSelectTree(props: AsynSelectTreeProps) {
           loadData={onLoadData}
           showLine
           checkable
-          checkedKeys={checkedKeys}
+          // checkedKeys={checkedKeys}
           onCheck={onCheck}
           expandedKeys={expandedKeys}
           // expandedKeys={expandedKeys}
           // autoExpandParent={autoExpandParent}
           onExpand={clickExpend}
-          onSelect={onSelect}>
+          onSelect={onSelect}
+        >
           {renderTreeNodes(treeData)}
         </Tree>) : null}
     </Page>

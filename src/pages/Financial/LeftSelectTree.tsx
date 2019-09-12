@@ -10,14 +10,26 @@ interface LeftSelectTreeProps {
   selectTree(treeNode, item?: any): void;
   getCheckedKeys(keys):void;
 
-}
-function LeftSelectTree(props: LeftSelectTreeProps) {
-  const { treeData, selectTree ,getCheckedKeys} = props;
+};
 
-  const [expanded, setExpanded] = useState<string[]>([]);
+function LeftSelectTree(props: LeftSelectTreeProps) {
+  const { treeData, selectTree ,getCheckedKeys} = props; 
+  const [expandedKeys, setExpandedKeys] = useState<string[]>([]);//展开
+  let keys: any[];
+  keys = [];
+  const getAllkeys = res =>
+    res.forEach(item => {
+      if (item.children && item.type != 'D') {
+        keys.push(getAllkeys(item.children))
+      }
+      keys.push(item.key);
+    });
 
   useEffect(() => {
-    setExpanded(treeData.map(item => item.id as string));
+    // setExpanded(treeData.map(item => item.id as string));
+
+    getAllkeys(treeData);  
+    setExpandedKeys(keys); 
   }, [treeData]);
 
   const onSelect = (selectedKeys, info) => {
@@ -52,15 +64,20 @@ function LeftSelectTree(props: LeftSelectTreeProps) {
       return <TreeNode {...item} dataRef={item} />;
     });*/
 
-  const clickExpend = (expandedKeys, { expanded, node }) => {
-    const selectNode = node.props.eventKey;
+  //const clickExpend = (expandedKeys, { expanded, node }) => {
+    // const selectNode = node.props.eventKey; 
+    // if (expanded) {
+    //   setExpanded(expend => [...expend, selectNode]);
+    // } else {
+    //   setExpanded(expend => expend.filter(item => item !== selectNode));
+    // }
+  //};
 
-    if (expanded) {
-      setExpanded(expend => [...expend, selectNode]);
-    } else {
-      setExpanded(expend => expend.filter(item => item !== selectNode));
-    }
-  };
+  //展开
+  const clickExpend = expandedKeys => { 
+    setExpandedKeys(expandedKeys); 
+  }; 
+
   const onCheck=(checkedKeys)=>{
     setCheckedKeys(checkedKeys);
     getCheckedKeys(checkedKeys);
@@ -77,10 +94,10 @@ function LeftSelectTree(props: LeftSelectTreeProps) {
     }}>
       <Tree
         defaultExpandAll={true}
-        checkable={true}
+        checkable
         checkedKeys={checkedKeys}
         onCheck={onCheck}
-        expandedKeys={expanded}
+        expandedKeys={expandedKeys}
         showLine
         onSelect={onSelect}
         onExpand={clickExpend}

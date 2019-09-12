@@ -1,6 +1,6 @@
 //付款管理
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { Tabs, Button, Icon, Input, Layout,   Select, message, DatePicker } from 'antd';
+import { Tabs, Button, Icon, Input, Layout, Select, message, DatePicker } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import { NotPaymentFeeData, ChargeFeePageData } from './Payment.service';
@@ -8,28 +8,34 @@ import AsynLeftTree from '../AsynLeftTree';
 import NotPaymentTable from './NotPaymentTable';
 import PaymentTable from './PaymentTable';
 import FeeModify from './FeeModify';
-// import AddFee from './AddFee';
 import PaymentVerify from './PaymentVerify';
+import ShowBill from './ShowBill';
 
 const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
 function Payment() {
-  const [organize, setOrganize] = useState<any>({});
+  const [organize, SetOrganize] = useState<any>({});
   // const [treeSearch, SetTreeSearch] = useState<any>({});
-  const [id, setId] = useState<string>(); 
+  const [id, setId] = useState<string>();
+
   const [paymentLoading, setPaymentLoading] = useState<boolean>(false);
-  const [notPaymentLoading, setNotPaymentLoading] = useState<boolean>(false); 
+  const [notPaymentLoading, setNotPaymentLoading] = useState<boolean>(false);
+
   const [paymentData, setPaymentData] = useState<any>();
-  const [notPaymentData, setNotPaymentData] = useState<any[]>([]); 
+  const [notPaymentData, setNotPaymentData] = useState<any[]>([]);
+
   const [paymentPagination, setPaymentPagination] = useState<DefaultPagination>(new DefaultPagination());
   const [notPaymentPagination, setNotPaymentPagination] = useState<DefaultPagination>(new DefaultPagination());
+
   const [ifVerify, setIfVerify] = useState<boolean>(false);
   const [vertifyVisible, setVerifyVisible] = useState<boolean>(false);
+  const [showVisible, setShowVisible] = useState<boolean>(false);
   const [addBtnDisable, setAddBtnDisable] = useState<boolean>(true);
 
   const selectTree = (org, item, info) => {
-    setOrganize({ id: org, type: item, allname: info.node.props.allname });
+    console.log(info.node.props)
+    SetOrganize(info.node.props);
     if (item == 5) {
       initPaymentLoadData({ id: org, type: item }, '');
       initNotPaymentLoadData({ id: org, type: item }, '');
@@ -40,7 +46,7 @@ function Payment() {
   };
 
   useEffect(() => {
-    initPaymentLoadData('', '');
+    //initPaymentLoadData('','');
     //initNotPaymentLoadData('','');
   }, []);
 
@@ -57,8 +63,7 @@ function Payment() {
       total,
       queryJson: {
         keyword: paymentSearchParams.search,
-        TreeTypeId: organize.id,
-        TreeType: organize.type,
+        UnitId: organize.id == null ? "" : organize.id,
         Status: paymentStatus, StartDate: paymentStartDate, EndDate: paymentEndDate
       }
     };
@@ -93,9 +98,9 @@ function Payment() {
       searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
       searchCondition.sidx = field ? field : 'id';
     }
-    return notPaymentload(searchCondition);
-  };
 
+    return notPaymentload(searchCondition);
+  }
   const paymentload = data => {
     setPaymentLoading(true);
     data.sidx = data.sidx || 'id';
@@ -145,11 +150,10 @@ function Payment() {
     setPaymentSearchParams(Object.assign({}, paymentSearchParams, { search: searchText }));
     const queryJson = {
       keyword: searchText,
-      TreeTypeId: org.id,
-      TreeType: org.type, 
-      Status: paymentStatus, StartDate: paymentStartDate, EndDate: paymentEndDate 
-    };
+      UnitId: organize.id == null ? "" : organize.id,
+      Status: paymentStatus, StartDate: paymentStartDate, EndDate: paymentEndDate
 
+    };
     const sidx = 'id';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = paymentPagination;
@@ -160,7 +164,6 @@ function Payment() {
     const queryJson = {
       keyword: searchText,
       UnitId: org.id == null ? "" : org.id,
-
     };
     const sidx = 'id';
     const sord = 'asc';
@@ -176,13 +179,21 @@ function Payment() {
     setId('');
   };
 
+  const closeShowDrawer = () => {
+    setShowVisible(false);
+  };
+
   const showVerify = (id?, ifVerify?) => {
     setVerifyVisible(true);
     setIfVerify(ifVerify);
     if (id != null && id != '')
       setId(id);
   };
-
+  const showBill = (id?) => {
+    setShowVisible(true);
+    if (id != null && id != '')
+      setId(id);
+  };
   const closeModify = (result?) => {
     setModifyVisible(false);
     if (result) {
@@ -190,7 +201,7 @@ function Payment() {
     }
   };
 
-  const [modifyVisible, setModifyVisible] = useState<boolean>(false); 
+  const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   const showModify = (id?, isedit?) => {
     setIsEdit(isedit);
     setModifyVisible(true);
@@ -359,21 +370,15 @@ function Payment() {
                     showVerify('', true);
                   }
                 }}
-                disabled={ifVerify ? true : false}
+                disabled={(id == null || id == '') && ifVerify ? true : false}
               >
                 <Icon type="check-square" />
                 审核
               </Button>
-              <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
-                onClick={() => { showModify(null, false) }}
-              >
-                <Icon type="plus" />
-                查看
-              </Button>
             </div>
             <PaymentTable
-              showModify={(id) => {
-                setId(id);
+              showBill={(id) => {
+                showBill(id)
               }}
               onchange={(paginationConfig, filters, sorter) =>
                 loadPaymentData(paginationConfig, sorter)
@@ -382,7 +387,6 @@ function Payment() {
               pagination={paymentPagination}
               data={paymentData}
               reload={() => initPaymentLoadData('', paymentSearchParams.search)}
-
               getRowSelect={(record) => {
                 setId(record.billId);
                 if (record.ifVerify == 1) {
@@ -400,7 +404,7 @@ function Payment() {
         closeDrawer={closeModify}
         id={id}
         isEdit={isEdit}
-        reload={() => initNotPaymentLoadData('', '')}
+        reload={() => initNotPaymentLoadData({ id: organize.code, type: organize.type }, '')}
         organize={organize}
       />
       <PaymentVerify
@@ -408,7 +412,12 @@ function Payment() {
         closeVerify={closeVerify}
         ifVerify={ifVerify}
         id={id}
-        reload={() => initPaymentLoadData('', '')}
+        reload={() => initPaymentLoadData({ id: organize.code, type: organize.type }, '')}
+      />
+      <ShowBill
+        visible={showVisible}
+        closeDrawer={closeShowDrawer}
+        id={id}
       />
     </Layout>
   );

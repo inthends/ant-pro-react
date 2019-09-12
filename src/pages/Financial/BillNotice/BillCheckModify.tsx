@@ -1,6 +1,6 @@
 
 import { Card, Button, Col, Select, Form, Input, Row, Drawer, message, Spin, DatePicker, Checkbox } from 'antd';
-// import { TreeEntity } from '@/model/models';
+import { TreeEntity } from '@/model/models';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { SaveBill, GetReceivablesFeeItemTreeJson, TestCalBill, GetTemplates, GetEntityShow } from './BillNotice.service';
@@ -8,6 +8,7 @@ import './style.less';
 import AsynSelectTree from '../AsynSelectTree';
 import LeftSelectTree from '../LeftSelectTree';
 import moment from 'moment';
+const { MonthPicker } = DatePicker;
 
 interface BillCheckModifyProps {
   visible: boolean;
@@ -19,7 +20,7 @@ interface BillCheckModifyProps {
 }
 const BillCheckModify = (props: BillCheckModifyProps) => {
   const { visible, closeDrawer, form, isEdit, id, reload } = props;
-  const [feeTreeData, setFeeTreeData] = useState<any[]>([]);
+  const [feeTreeData, setFeeTreeData] = useState<TreeEntity[]>([]);
   const [tempListData, setTempListData] = useState<any[]>([]);
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [loading, setLoading] = useState<boolean>(false);
@@ -30,7 +31,7 @@ const BillCheckModify = (props: BillCheckModifyProps) => {
       form.resetFields();
       setSelectedFeeId([]);
       setUnitData([]);
-      GetReceivablesFeeItemTreeJson().then(res => {
+      GetReceivablesFeeItemTreeJson().then((res) => {
         // const treeList = (res || []).map(item => {
         //   return {
         //     ...item,
@@ -40,6 +41,7 @@ const BillCheckModify = (props: BillCheckModifyProps) => {
         //   };
         // });
         setFeeTreeData(res || []);
+
       }).then(() => {
         return GetTemplates();
       }).then(res => {
@@ -70,49 +72,49 @@ const BillCheckModify = (props: BillCheckModifyProps) => {
       visible={visible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
-      <Row gutter={24} style={{ height: 'calc(100vh - 55px)', overflow: 'hidden' }}>
-        <Col span={6} style={{ height: 'calc(100vh - 100px)', overflow: 'auto' }}>
-          <AsynSelectTree
-            parentid='0'
-            getCheckedKeys={(keys) => {
-              setUnitData(keys);
-            }}
-            selectTree={(id, type, info?) => {
-            }}
-          />
-        </Col>
-        <Col span={6} style={{ height: 'calc(100vh - 100px)', overflow: 'auto' }}>
-          <LeftSelectTree
-            treeData={feeTreeData}
-            selectTree={(id, item) => {
-              //setSelectedFeeId(id);
-            }}
-            getCheckedKeys={(keys) => {
-              console.log(keys);
-              setSelectedFeeId(keys);
-            }}
-          />
-        </Col>
-        <Col span={12} style={{ height: 'calc(100vh - 100px)', overflow: 'auto' }}>
-          <Card>
-            <Form layout="vertical" hideRequiredMark>
-              <Spin tip="数据加载中..." spinning={loading}>
+      <Spin tip="数据加载中..." spinning={loading}>
+        <Row gutter={24} style={{ height: 'calc(100vh - 55px)', overflow: 'hidden' }}>
+          <Col span={6} style={{ height: 'calc(100vh - 100px)', overflow: 'auto' }}>
+            <AsynSelectTree
+              parentid='0'
+              getCheckedKeys={(keys) => {
+                setUnitData(keys);
+              }}
+              selectTree={(id, type, info?) => {
+              }}
+            />
+          </Col>
+          <Col span={6} style={{ height: 'calc(100vh - 100px)', overflow: 'auto' }}>
+            <LeftSelectTree
+              treeData={feeTreeData}
+              selectTree={(id, item) => {
+                //setSelectedFeeId(id);
+              }}
+              getCheckedKeys={(keys) => {
+                //console.log(keys);
+                setSelectedFeeId(keys);
+              }}
+            />
+          </Col>
+          <Col span={12} style={{ height: 'calc(100vh - 100px)', overflow: 'auto' }}>
+            <Card>
+              <Form layout="vertical" hideRequiredMark>
                 <Row gutter={24}>
                   <Col span={8}>
-                    <Form.Item required label="账单日起">
+                    <Form.Item required label="计费起始日期">
                       {getFieldDecorator('beginDate', {
-                        initialValue: infoDetail.beginDate == null ? moment(new Date()) : moment(infoDetail.beginDate),
-                        rules: [{ required: true, message: '请选择账单起始日期' }],
+                        initialValue: infoDetail.beginDate == null ? moment(new Date()).startOf('month') : moment(infoDetail.beginDate),
+                        rules: [{ required: true, message: '请选择计费起始日期' }],
                       })(
                         <DatePicker style={{ width: '100%' }} disabled={!isEdit} />
                       )}
                     </Form.Item>
                   </Col>
                   <Col span={8}>
-                    <Form.Item required label="账单日止"  >
+                    <Form.Item required label="计费终止日期"  >
                       {getFieldDecorator('endDate', {
-                        initialValue: infoDetail.endDate == null ? moment(new Date()) : moment(infoDetail.endDate),
-                        rules: [{ required: true, message: '请选择账单终止日期' }],
+                        initialValue: infoDetail.endDate == null ? moment(new Date()).endOf('month') : moment(infoDetail.endDate),
+                        rules: [{ required: true, message: '请选择计费终止日期' }],
                       })(
                         <DatePicker style={{ width: '100%' }} disabled={!isEdit} />
                       )}
@@ -120,9 +122,10 @@ const BillCheckModify = (props: BillCheckModifyProps) => {
                   </Col>
 
                   <Col span={8}>
-                    <Form.Item required label="生成方式"   >
+                    <Form.Item required label="生成方式">
                       {getFieldDecorator('calType', {
-                        initialValue: infoDetail.calType,
+                        initialValue: infoDetail.calType ? infoDetail.calType : "按户生成",
+                        rules: [{ required: true, message: '请选择生成方式' }]
                       })(
                         <Select placeholder="==请选择==" style={{ width: '100%', marginRight: '5px' }}>
                           <Select.Option value="按户生成">按户生成</Select.Option>
@@ -133,15 +136,15 @@ const BillCheckModify = (props: BillCheckModifyProps) => {
                   </Col>
                 </Row>
                 <Row gutter={24}>
-
-
                   <Col span={8}>
                     <Form.Item required label="账单归属年月"  >
                       {getFieldDecorator('belongDate', {
-                        initialValue: infoDetail.belongDate == null ? moment(new Date()) : moment(infoDetail.belongDate),
+                        initialValue: infoDetail.belongDate == null ?
+                          moment(new Date()) :
+                          moment(infoDetail.belongDate),
                         rules: [{ required: true, message: '请选择账单归属年月' }],
                       })(
-                        <DatePicker style={{ width: '100%' }} disabled={!isEdit} />
+                        <MonthPicker style={{ width: '100%' }} />
                       )}
                     </Form.Item>
                   </Col>
@@ -159,6 +162,7 @@ const BillCheckModify = (props: BillCheckModifyProps) => {
                     <Form.Item required label="账单模板"  >
                       {getFieldDecorator('templateId', {
                         initialValue: infoDetail.templateId,
+                        rules: [{ required: true, message: '请选择账单模板' }]
                       })(
                         <Select placeholder="==请选择==" style={{ width: '100%' }} disabled={!isEdit} >
                           {
@@ -173,7 +177,7 @@ const BillCheckModify = (props: BillCheckModifyProps) => {
                 </Row>
                 <Row gutter={24}>
                   <Col span={24}>
-                    <Form.Item required label="房屋状态"   >
+                    <Form.Item required label="房屋状态" >
                       {getFieldDecorator('status', {
                         initialValue: infoDetail.status == null || infoDetail.status == '' ? '0,1,2,3,4,5,' : infoDetail.status
                       })(
@@ -200,7 +204,7 @@ const BillCheckModify = (props: BillCheckModifyProps) => {
                 </Row>
                 <Row gutter={24}>
                   <Col span={24}>
-                    <Form.Item required label="包含前期欠费"  >
+                    <Form.Item required label="包含前期欠费">
                       {getFieldDecorator('includeBefore', {
                         initialValue: infoDetail.includeBefore == null ? false : true,
                       })(
@@ -245,18 +249,19 @@ const BillCheckModify = (props: BillCheckModifyProps) => {
                       }
                       form.validateFields((errors, values) => {
                         if (!errors) {
-                          console.log(infoDetail);
+                          setLoading(true);
+                          // console.log(infoDetail);
                           let newData = {
                             BeginDate: moment(values.beginDate).format('YYYY-MM-DD'),
                             EndDate: moment(values.endDate).format('YYYY-MM-DD'),
+                            BelongDate: moment(values.belongDate).format('YYYY-MM-DD'),
+                            MustDate: moment(values.mustDate).format('YYYY-MM-DD'),
                             BillType: "通知单",
                             Status: values.status,
                             TemplateId: values.templateId,
                             IncludeBefore: values.includeBefore,
-                            BelongDate: moment(values.belongDate).format('YYYY-MM-DD'),
                             CalType: values.calType,
                             Memo: values.memo,
-                            MustDate: moment(values.mustDate).format('YYYY-MM-DD'),
                             units: JSON.stringify(unitData),
                             items: JSON.stringify(selectedFeeId)
                           }
@@ -264,6 +269,7 @@ const BillCheckModify = (props: BillCheckModifyProps) => {
                             var result = res.replace(/<br\/>/g, "\n")
                             var info = Object.assign({}, infoDetail, { result: result });
                             setInfoDetail(info);
+                            setLoading(false);
                           });
                         }
                       });
@@ -271,12 +277,11 @@ const BillCheckModify = (props: BillCheckModifyProps) => {
                     </Button>
                   </Col>
                 </Row>
-              </Spin>
-            </Form>
-          </Card>
-        </Col>
-      </Row>
-
+              </Form>
+            </Card>
+          </Col>
+        </Row>
+      </Spin>
       <div
         style={{
           position: 'absolute',
@@ -313,13 +318,14 @@ const BillCheckModify = (props: BillCheckModifyProps) => {
                   let newData = {
                     BeginDate: moment(values.beginDate).format('YYYY-MM-DD'),
                     EndDate: moment(values.endDate).format('YYYY-MM-DD'),
+                    MustDate: moment(values.mustDate).format('YYYY-MM-DD'),
+                    BelongDate: moment(values.belongDate).format('YYYY-MM-DD'),
                     BillType: "通知单",
                     Status: values.status,
                     TemplateId: values.templateId,
                     IncludeBefore: values.includeBefore,
                     CalType: values.calType,
                     Memo: values.memo,
-                    MustDate: moment(values.mustDate).format('YYYY-MM-DD'),
                     units: JSON.stringify(unitData),
                     items: JSON.stringify(selectedFeeId)
                   }
@@ -336,7 +342,7 @@ const BillCheckModify = (props: BillCheckModifyProps) => {
           提交
             </Button>
       </div>
-    </Drawer>
+    </Drawer >
   );
 };
 export default Form.create<BillCheckModifyProps>()(BillCheckModify);
