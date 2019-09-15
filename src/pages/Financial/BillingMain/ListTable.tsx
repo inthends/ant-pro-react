@@ -1,6 +1,6 @@
 //计费单列表
 import Page from '@/components/Common/Page';
-import { message, Dropdown, Menu, Icon, Modal, Divider, Form, Table } from 'antd';
+import { Button, message, Dropdown, Menu, Icon, Modal, Divider, Form, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState } from 'react';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
@@ -21,7 +21,7 @@ interface ListTableProps {
 }
 
 function ListTable(props: ListTableProps) {
-  const { onchange, loading, pagination, data, reload, showModify, getRowSelect, showVerify } = props;
+  const { onchange, loading, pagination, data, reload, showModify, getRowSelect,showVerify } = props;
   const [selectedRowKey, setSelectedRowKey] = useState([]);
 
 
@@ -163,7 +163,7 @@ function ListTable(props: ListTableProps) {
                 || record.billSource == "水电气生成" ? "查看" : "修改"}</a>
             <Divider type="vertical" />
             {!record.ifVerify ? <a onClick={() => showVerify(record.billId, false)} key="app">审核</a> :
-              <a  disabled={record.billSource == "临时加费"} onClick={() => showVerify(record.id, true)} key="unapp"  >反审</a>
+              <a  onClick={() => showVerify(record.id, true)} key="unapp"  >反审</a>
             }
             <Divider type="vertical" />
             <MoreBtn key="more" item={record} />

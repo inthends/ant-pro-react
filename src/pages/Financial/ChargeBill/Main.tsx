@@ -30,7 +30,7 @@ function Main() {
   const [search, setSearch] = useState<string>('');
   const [organizeId, SetOrganizeId] = useState<string>('');
   const [customerName, SetCustomerName] = useState<string>('');
-  const [showname, SetShowname] = useState<string>('');
+  const [showname, setShowname] = useState<string>('');
   const [addButtonDisable, setAddButtonDisable] = useState<boolean>(true);
   // const [showCustomerFee, setShowCustomerFee] = useState<boolean>(false)
 
@@ -317,7 +317,7 @@ function Main() {
           if (type == 5) {
             setAddButtonDisable(false);
             SetCustomerName(info.node.props.tenantname);
-            SetShowname(info.node.props.title);
+            setShowname(info.node.props.allname);
             selectTree(id, search);
           }
         }}
@@ -329,7 +329,7 @@ function Main() {
             <div style={{ marginBottom: '10px' }}>
               <Search
                 className="search-input"
-                placeholder="搜索费项名称"
+                placeholder="请输入要查询费项"
                 style={{ width: 200 }}
                 onSearch={value => loadData(value)} />
               <Checkbox style={{ marginLeft: '3px' }} onChange={onShowCustomerChange} >显示该户其他费用</Checkbox>
