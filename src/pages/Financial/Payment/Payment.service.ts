@@ -39,7 +39,7 @@ export function GetShowDetail(data): Promise<any> {
 
 //作废付款单
 export function InvalidForm(data): Promise<any> {
-  return request.get(process.env.basePath + `/Payment/InvalidForm?keyValue=${data}`, {}).then(getResult as any);
+  return request.post(process.env.basePath + `/Payment/InvalidForm?keyValue=${data}`, {}).then(getResult as any);
 }//
 
 //审核页面获取付款单实体
@@ -48,7 +48,7 @@ export function GetEntity(data): Promise<any> {
 }
 ////删除付款费用
 export function RemoveForm(data): Promise<any> {
-  return request.get(process.env.basePath + `/Payment/RemoveForm?keyValue=${data}`, {}).then(getResult as any);
+  return request.post(process.env.basePath + `/Payment/RemoveForm?keyValue=${data}`, {}).then(getResult as any);
 }
 //付款
 export function Pay(data): Promise<any> {

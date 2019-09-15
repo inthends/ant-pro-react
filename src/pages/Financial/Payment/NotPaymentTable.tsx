@@ -15,7 +15,7 @@ interface NotPaymentTableProps {
   loading: boolean;
   pagination: PaginationConfig;
   data: any[];
-  modify(id: string, isEdit: boolean): void;
+  modify(id: string,isEdit?:boolean): void;
   reload(): void;
   form: WrappedFormUtils;
   rowSelect(rowSelectedKeys): void;
@@ -127,9 +127,8 @@ function NotPaymentTable(props: NotPaymentTableProps) {
       title: '费用来源',
       dataIndex: 'billSource',
       key: 'billSource',
-      width: 85,
-      render: val => moment(val).format('YYYY-MM-DD')
-    }, {
+      width: 85
+    },{
       title: '备注',
       dataIndex: 'memo',
       key: 'memo',
@@ -145,14 +144,17 @@ function NotPaymentTable(props: NotPaymentTableProps) {
       render: (text, record) => {
         return [
           <span>
-            <a onClick={() => modify(record.id, true)} key="modify">修改</a>
+            <a onClick={() => modify(record.billId)} key="modify">修改</a>
             <Divider type="vertical" />
             <a onClick={() => doDelete(record)} key="delete">删除</a>
+           {/* <Divider type="vertical" />
+            <MoreBtn key="more" item={record} />*/}
           </span>
         ];
       },
     },
   ] as ColumnProps<any>[];
+  var [payAmount,setPayAmount]=useState<number>(0);
 
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [sumEntity, setSumEntity] = useState<Number>(0);//金额累加
@@ -165,6 +167,8 @@ function NotPaymentTable(props: NotPaymentTableProps) {
     selectedRows.map(item => {
       sumlastAmount = selectedRows.reduce((sum, row) => { return sum + row.lastAmount; }, 0);
     });
+
+    setPayAmount(sumlastAmount);
     setSumEntity(sumlastAmount);
   };
 
@@ -199,7 +203,7 @@ function NotPaymentTable(props: NotPaymentTableProps) {
               PayType:values.payType,
               Memo:values.memo,
             });
-            if (Number(sumEntity.sumlastAmount) != Number(info.payAmount)) {
+            if (Number(sumEntity) != Number(info.PayAmount)) {
               message.warning('本次收款金额小于本次选中未收金额合计，不允许收款，请拆费或者重新选择收款项');
               return;
             }
@@ -247,7 +251,7 @@ function NotPaymentTable(props: NotPaymentTableProps) {
             <Col lg={4}>
               <Form.Item required label='本次付款'>
                 {getFieldDecorator('payAmount', {
-                  initialValue: 0.0,
+                  initialValue: payAmount,
                   rules: [{ required: true, message: '请输入金额' }],
                 })(
                   <InputNumber

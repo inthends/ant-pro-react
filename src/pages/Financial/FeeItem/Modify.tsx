@@ -55,11 +55,14 @@ const Modify = (props: ModifyProps) => {
     var newvalue = value == "收款费项" ? "ReceivablesItem" : "PaymentItem";
     GetFeeType(newvalue).then(res => {
       setFeetype(res || []);
-      if (!isInit) {
-        var info = Object.assign({}, infoDetail, { feeType: undefined });
-        setInfoDetail(info);
-        //form.setFieldsValue({ feeType: undefined });
-      }
+      //清除选择的值
+      form.setFieldsValue({ feeType: '' });
+
+      //if (!isInit) {
+      // var info = Object.assign({}, infoDetail, { feeType: undefined });
+      // setInfoDetail(info);
+      //form.setFieldsValue({ feeType: undefined });
+      //}
     });
   };
 
@@ -68,11 +71,11 @@ const Modify = (props: ModifyProps) => {
     if (modifyVisible) {
       if (id) {
         getInfo(id).then((tempInfo: any) => {
-          if (tempInfo.feeKind) {
-            // var kind = tempInfo.feeKind == "收款费项" ? "ReceivablesItem" : "PaymentItem";
-            changeFeeType(tempInfo.feeKind);
-            setIsInit(false);
-          }
+          // if (tempInfo.feeKind) {
+          //   // var kind = tempInfo.feeKind == "收款费项" ? "ReceivablesItem" : "PaymentItem";
+          //   changeFeeType(tempInfo.feeKind);
+          //   setIsInit(false);
+          // }
           setInfoDetail(tempInfo);
           form.resetFields();
         });
@@ -82,8 +85,8 @@ const Modify = (props: ModifyProps) => {
         }
       } else {
         //重置之前选择加载的费项类别
-        // setFeetype([]);
-        // setInfoDetail({});
+        //设置checkbox默认值
+        setInfoDetail({ isEnable: true, isInContract: true, isTax: true });
         form.resetFields();
       }
     } else {
@@ -196,8 +199,11 @@ const Modify = (props: ModifyProps) => {
         //   //UseFormulaTwo:values.useFormulaTwo
         // };
         const newData = infoDetail ? { ...infoDetail, ...values } : values;
-        newData.beginDate = newData.beginDate.format('YYYY-MM-DD');
-        newData.endDate = newData.endDate.format('YYYY-MM-DD');
+        newData.keyValue = id == null || id == "" ? "" : id;
+        if (!newData.isNullDate) {
+          newData.beginDate = newData.beginDate.format('YYYY-MM-DD');
+          newData.endDate = newData.endDate.format('YYYY-MM-DD');
+        }
         SaveForm(newData).then(res => {
           reload();
           closeDrawer();
@@ -245,8 +251,6 @@ const Modify = (props: ModifyProps) => {
   const [houseSearch, setHouseSearch] = useState<string>();
   const [houseLoading, setHouseLoading] = useState<boolean>(false);
   const [housePagination, setHousePagination] = useState<PaginationConfig>(new DefaultPagination());
-
-
   const houseLoadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
     setHouseSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
@@ -546,13 +550,74 @@ const Modify = (props: ModifyProps) => {
   const [accFixedDisabled, setAccFixedDisabled] = useState<boolean>(true);
   const [payFixedDisabled, setPayFixedDisabled] = useState<boolean>(true);
   const [lateFixedDisabled, setLateFixedDisabled] = useState<boolean>(true);
+
+  //求自然月日期
+  const getMonthBeforeFormatAndDay = (num, format, date) => {
+
+    let day = date.get('date');
+    let month = date.get('month');
+    date.set('month', month + num * 1, 'date', 1); //周期月一号 
+    //读取日期自动会减一，所以要加一
+    let mo = date.get('month') + 1;
+    //小月
+    if (mo == 4 || mo == 6 || mo == 9 || mo == 11) {
+      if (day > 30) {
+        day = 30;
+      }
+    }
+    //2月
+    else if (mo == 2) {
+      //闰年
+      if (date.isLeapYear()) {
+        if (day > 29) {
+          day = 29;
+        } else {
+          day = 28;
+        }
+      }
+      if (day > 28) {
+        day = 28;
+      }
+    }
+    //大月
+    else {
+      if (day > 31) {
+        day = 31;
+      }
+    }
+    date.set('date', day);
+    return date;
+  };
+
+  //设置结束日期
+  const getEndDate = () => {
+    const cycle = form.getFieldValue('cycleValue');
+    const cycletype = form.getFieldValue('cycleType')
+    let d = form.getFieldValue('beginDate');
+    if (d != "") {
+      let endDate = moment(d);
+      if (cycletype == "日") {
+        //日
+        endDate.set('date', endDate.get('date') + cycle);
+      } else if (cycletype == "月") {
+        // 月
+        endDate = getMonthBeforeFormatAndDay(cycle, "-", endDate);
+      } else {
+        //年 
+        endDate.set('year', endDate.get('year') + cycle);
+      }
+      endDate.set('date', endDate.get('date') - 1);
+      return endDate;
+    }
+    return '';
+  };
+
   return (
     <Drawer
       title={title}
       placement="right"
       width={780}
       onClose={close}
-
       visible={modifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
       <Form layout="vertical" hideRequiredMark>
@@ -618,68 +683,6 @@ const Modify = (props: ModifyProps) => {
                 </Col>
               </Row>
               <Row gutter={24}>
-                <Col lg={12}>
-                  <Form.Item label="关联收费项目" >
-                    {getFieldDecorator('linkFee', {
-                      initialValue: infoDetail.linkFee,
-                    })(
-                      <Select
-                        placeholder="请选择关联收费项目"
-                      >
-                        {feeitems.map(item => (
-                          <Option key={item.value} value={item.value}>
-                            {item.title}
-                          </Option>
-                        ))}
-                      </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col lg={7}>
-                  <Form.Item label="计费周期">
-                    {getFieldDecorator('cycleValue', {
-                      initialValue: infoDetail.cycleValue,
-                      rules: [{ required: true, message: '请输入计费周期' }],
-                    })(<Input placeholder="请输入计费周期" />)}
-                  </Form.Item>
-                </Col>
-                <Col lg={5}>
-                  <Form.Item label="&nbsp;">
-                    {getFieldDecorator('cycleType', {
-                      initialValue: infoDetail.cycleType,
-                      rules: [{ required: true, message: '请选择单位' }],
-                    })(<Select placeholder="请选择单位">
-                      <Option value="日">日</Option>
-                      <Option value="月" >月</Option>
-                      <Option value="年">年</Option>
-                    </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={24}>
-                <Col lg={12}>
-                  <Form.Item label="计费起始日期">
-                    {getFieldDecorator('beginDate', {
-                      initialValue: infoDetail.beginDate
-                        ? moment(new Date(infoDetail.beginDate))
-                        : moment(new Date()),
-                      rules: [{ required: true, message: '请选择计费起始日期' }],
-                    })(<DatePicker placeholder="请选择计费起始日期" style={{ width: '100%' }} />)}
-                  </Form.Item>
-                </Col>
-                <Col lg={12}>
-                  <Form.Item label="计费终止日期">
-                    {getFieldDecorator('endDate', {
-                      initialValue: infoDetail.endDate
-                        ? moment(new Date(infoDetail.endDate))
-                        : moment(new Date()),
-                      rules: [{ required: true, message: '计费终止日期' }],
-                    })(<DatePicker placeholder="计费终止日期" style={{ width: '100%' }} />)}
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={24}>
                 <Col lg={24}>
                   {/* <Form.Item  >
                     <Checkbox
@@ -738,7 +741,7 @@ const Modify = (props: ModifyProps) => {
                       减免费项
                       </Checkbox>
                     )}
-                  </Form.Item> 
+                  </Form.Item>
                 </Col>
               </Row>
               <Row gutter={24}>
@@ -760,7 +763,7 @@ const Modify = (props: ModifyProps) => {
                       var info = Object.assign({}, infoDetail, { isEnable: e.target.checked });
                       setInfoDetail(info);
                     }}>是否停用</Checkbox>
-                  </Form.Item> */} 
+                  </Form.Item> */}
 
                   <Form.Item  >
                     {getFieldDecorator('isInContract', {
@@ -780,21 +783,80 @@ const Modify = (props: ModifyProps) => {
                     })(<Checkbox checked={form.getFieldValue('isEditTemp')}>
                       临时加费允许修改单价
                       </Checkbox>
-                    )} 
+                    )}
                     {getFieldDecorator('isEnable', {
                       initialValue: infoDetail.isEnable ? true : false,
                     })(<Checkbox checked={form.getFieldValue('isEnable')}>
-                      是否停用
+                      是否启用
                       </Checkbox>
                     )}
-                  </Form.Item> 
+                  </Form.Item>
                 </Col>
-              </Row> 
+              </Row>
+              <Row gutter={24}>
+                <Col lg={12}>
+                  <Form.Item label="关联收费项目" >
+                    {getFieldDecorator('linkFee', {
+                      initialValue: infoDetail.linkFee,
+                    })(
+                      <Select
+                        placeholder="请选择关联收费项目"
+                      >
+                        {feeitems.map(item => (
+                          <Option key={item.value} value={item.value}>
+                            {item.title}
+                          </Option>
+                        ))}
+                      </Select>
+                    )}
+                  </Form.Item>
+                </Col>
+                <Col lg={7}>
+                  <Form.Item label="计费周期">
+                    {getFieldDecorator('cycleValue', {
+                      initialValue: infoDetail.cycleValue ? infoDetail.cycleValue : 1,
+                      rules: [{ required: true, message: '请输入计费周期' }],
+                    })(<InputNumber placeholder="请输入计费周期" min={1} style={{ width: '100%' }} />)}
+                  </Form.Item>
+                </Col>
+                <Col lg={5}>
+                  <Form.Item label="单位">
+                    {getFieldDecorator('cycleType', {
+                      initialValue: infoDetail.cycleType ? infoDetail.cycleType : '月',
+                      rules: [{ required: true, message: '请选择单位' }],
+                    })(<Select placeholder="请选择单位">
+                      <Option value="日">日</Option>
+                      <Option value="月" >月</Option>
+                      <Option value="年">年</Option>
+                    </Select>
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row>
+
+              <Row gutter={24}>
+                <Col lg={12}>
+                  <Form.Item label="计费起始日期">
+                    {getFieldDecorator('beginDate', {
+                      initialValue: form.getFieldValue('isNullDate') ? null : infoDetail.beginDate ? moment(infoDetail.beginDate) : moment(new Date()),
+                      rules: [{ required: !form.getFieldValue('isNullDate'), message: '请选择计费起始日期' }],
+                    })(<DatePicker placeholder="请选择计费起始日期" style={{ width: '100%' }} />)}
+                  </Form.Item>
+                </Col>
+                <Col lg={12}>
+                  <Form.Item label="计费终止日期">
+                    {getFieldDecorator('endDate', {
+                      initialValue: form.getFieldValue('isNullDate') ? null : getEndDate(),//infoDetail.endDate ? moment(new Date(infoDetail.endDate)) : moment(getEndDate()),
+                      rules: [{ required: !form.getFieldValue('isNullDate'), message: '计费终止日期' }],
+                    })(<DatePicker disabled placeholder="计费终止日期" style={{ width: '100%' }} />)}
+                  </Form.Item>
+                </Col>
+              </Row>
               <Row gutter={24}>
                 <Col lg={21}>
                   <Form.Item label="用量公式">
                     {getFieldDecorator('feeFormulaOne', {
-                      initialValue: infoDetail.feeFormulaOne,
+                      initialValue: infoDetail.feeFormulaOne ? infoDetail.feeFormulaOne : '1',
                       rules: [{ required: true, message: '请设置用量公式' }],
                     })(<Input placeholder="请设置用量公式" />)}
                   </Form.Item>
@@ -812,7 +874,7 @@ const Modify = (props: ModifyProps) => {
                 <Col lg={21}>
                   <Form.Item label="系数公式">
                     {getFieldDecorator('feeApportion', {
-                      initialValue: infoDetail.feeApportion,
+                      initialValue: infoDetail.feeApportion ? infoDetail.feeApportion : '1',
                       rules: [{ required: true, message: '请设置系数公式' }],
                     })(<Input placeholder="请设置系数公式" />)}
                   </Form.Item>

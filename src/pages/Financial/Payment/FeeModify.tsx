@@ -121,11 +121,27 @@ const FeeModify = (props: FeeModifyProps) => {
     });
   }
 
+
+  const setEndDate=(cycleValue:number,cycleType:string)=>{
+    var startDate=moment( infoDetail.beginDate);
+    var endDate="";
+    if(cycleType=='日'){
+      endDate= startDate.add(cycleValue,'days').format('YYYY-MM-DD');
+    }else if(cycleType=='月')
+    {
+      endDate= startDate.add(cycleValue,'month').format('YYYY-MM-DD');
+    }else{
+      endDate= startDate.add(cycleValue,'years').format('YYYY-MM-DD');
+    }
+    var info=Object.assign({},infoDetail,{endDate:endDate,cycleValue:cycleValue,cycleType:cycleType});
+    setInfoDetail(info);
+  }
+
   return (
     <Drawer
         title={title}
         placement="right"
-        width={850}
+        width={id!=null&&id!=""?600:950}
         onClose={closeDrawer}
         visible={visible}
         bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
@@ -161,7 +177,6 @@ const FeeModify = (props: FeeModifyProps) => {
         <Col span={ id!=null&&id!=""?24:16}  style={{height:'calc(100vh - 100px)',padding:'5px',overflow:'auto'}}>
           <Form layout="vertical" hideRequiredMark>
             <Spin tip="数据加载中..." spinning={loading}>
-            <Col span={16}>
               <Row>
                 <Form.Item label="付款对象" required >
                   {getFieldDecorator('relationId', {
@@ -264,7 +279,9 @@ const FeeModify = (props: FeeModifyProps) => {
                       initialValue: infoDetail.cycleValue,
                       rules: [{ required: true, message: '=请选择=' }]
                     })(
-                      <InputNumber  style={{width:'100%'}}></InputNumber>
+                      <InputNumber  style={{width:'100%'}} onChange={(value:number)=>{
+                        setEndDate(value,infoDetail.cycleType);
+                      }}></InputNumber>
                     )}
                   </Form.Item>
                 </Col>
@@ -274,7 +291,9 @@ const FeeModify = (props: FeeModifyProps) => {
                       initialValue: infoDetail.cycleType,
                       rules: [{ required: true, message: '请选择周期单位' }]
                     })(
-                      <Select placeholder="=请选择="  style={{width:'100%'}}>
+                      <Select placeholder="=请选择="  style={{width:'100%'}} onChange={(value:string)=>{
+                        setEndDate(infoDetail.cycleValue,value);
+                      }}>
                         <Select.Option key='日' value='日'>
                           {'日'}
                         </Select.Option>
@@ -296,7 +315,7 @@ const FeeModify = (props: FeeModifyProps) => {
                       initialValue: infoDetail.beginDate?moment(infoDetail.beginDate):moment(new Date()),
                       rules: [{ required: true, message: '请选择起始日期' }]
                     })(
-                      <DatePicker  style={{width:'100%'}}/>
+                      <DatePicker  disabled={true}  style={{width:'100%'}}/>
                     )}
                   </Form.Item>
                 </Col>
@@ -306,7 +325,7 @@ const FeeModify = (props: FeeModifyProps) => {
                       initialValue: infoDetail.endDate?moment(infoDetail.endDate):moment(new Date()),
                       rules: [{ required: true, message: '请选择结束日期' }]
                     })(
-                      <DatePicker  style={{width:'100%'}}/>
+                      <DatePicker disabled={true}  style={{width:'100%'}}/>
                     )}
                   </Form.Item>
                 </Col>
@@ -323,7 +342,6 @@ const FeeModify = (props: FeeModifyProps) => {
                 </Form.Item>
               </Col>
             </Row>
-            </Col>
             </Spin>
           </Form>
         </Col>

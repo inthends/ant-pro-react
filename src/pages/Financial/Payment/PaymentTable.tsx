@@ -1,7 +1,7 @@
 //付款单列表
 
 import Page from '@/components/Common/Page';
-import { Divider, Form, Table } from 'antd';
+import { Divider, Form, Table ,Dropdown,Menu} from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React,{ useState } from 'react';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
@@ -112,6 +112,22 @@ function PaymentTable(props: PaymentTableProps) {
       },
     },
   ] as ColumnProps<any>[];
+
+  const editAndDelete = (key: string, currentItem: any) => {
+    if (key === 'edit') {
+      //this.showEditModal(currentItem);
+    }
+    else if (key === 'delete') {
+      Modal.confirm({
+        title: '删除任务',
+        content: '确定删除该任务吗？',
+        okText: '确认',
+        cancelText: '取消',
+        //onOk: () => this.deleteItem(currentItem.id),
+      });
+    }
+  };
+
 
   const setClassName=(record,index)=>{
     if(record.billId === selectedRowKey)

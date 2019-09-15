@@ -52,11 +52,13 @@ const PaymentVerify = (props: PaymentVerifyProps) => {
             verifyMemo: values.verifyMemo,
             billCode: infoDetail.billCode,
             billDate: moment(values.billDate).format('YYYY-MM-DD'),
-            status:ifVerify?0:1,//-1 已作废  0未审核  1已审核
+            status:ifVerify?1:0,//-1 已作废  0未审核  1已审核
             payAmount:infoDetail.payAmount,
             createDate:moment(infoDetail.createDate).format('YYYY-MM-DD'),
             payType:infoDetail.payType,
             organizeId: infoDetail.organizeId,
+            createUserId:  infoDetail.createUserId,
+            createUserName:  infoDetail.createUserName
           }
         };
         Audit(newData).then(()=>{

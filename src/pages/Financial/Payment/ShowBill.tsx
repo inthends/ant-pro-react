@@ -64,13 +64,13 @@ const ShowBill = (props: ShowBillProps) => {
       pageIndex,
       pageSize,
       total,
-      queryJson: {billId:id }
+      queryJson: {billid:id }
     };
 
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'billId';
+      searchCondition.sidx = field ? field : 'billid';
     }
 
     return load(searchCondition).then(res => {
@@ -80,7 +80,7 @@ const ShowBill = (props: ShowBillProps) => {
 
   const load = data => {
     setLoading(true);
-    data.sidx = data.sidx || 'billId';
+    data.sidx = data.sidx || 'billid';
     data.sord = data.sord || 'asc';
     return PaymentFeeDetail (data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -250,7 +250,7 @@ const ShowBill = (props: ShowBillProps) => {
                   {getFieldDecorator('verifyPerson', {
                     initialValue: infoDetail.verifyPerson
                   })(
-                    <Input />
+                    <Input  disabled={true}/>
                   )}
                 </Form.Item>
               </Col>
@@ -261,7 +261,7 @@ const ShowBill = (props: ShowBillProps) => {
                   {getFieldDecorator('memo', {
                     initialValue: infoDetail.memo
                   })(
-                    <TextArea rows={3} />
+                    <TextArea  disabled={true} rows={3} />
                   )}
                 </Form.Item>
               </Col>
