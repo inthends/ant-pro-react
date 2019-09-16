@@ -1,15 +1,15 @@
 import { BaseModifyProvider } from '@/components/BaseModifyDrawer/BaseModifyDrawer';
 import ModifyItem, { SelectItem } from '@/components/BaseModifyDrawer/ModifyItem';
-import { Form, Row } from 'antd';
+import { Card, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { SaveForm, searchUser } from './User.service';
-import { AccountEntity } from '@/model/accountEntity';
+import { JcAccount } from '@/model/jcAccount';
 
 interface ModifyProps {
   visible: boolean;
-  data?: AccountEntity;
-  form: WrappedFormUtils<AccountEntity>;
+  data?: JcAccount;
+  form: WrappedFormUtils<JcAccount>;
   closeDrawer(): void;
   reload(): void;
 }
@@ -25,13 +25,13 @@ const Modify = (props: ModifyProps) => {
 
   const baseFormProps = { form, initData };
   const expModes: SelectItem[] = [{ label: '永久有效', value: 1 }, { label: '临时', value: 2 }];
-  const accountTypes: SelectItem[] = [
-    { label: '系统初始账户', value: 1 },
-    { label: '员工账户', value: 2 },
-    { label: '客户账户', value: 3 },
-    { label: '供应商账户', value: 4 },
-    { label: '其他', value: 5 },
-  ];
+  // const accountTypes: SelectItem[] = [
+  //   { label: '系统初始账户', value: 1 },
+  //   { label: '员工账户', value: 2 },
+  //   { label: '客户账户', value: 3 },
+  //   { label: '供应商账户', value: 4 },
+  //   { label: '其他', value: 5 },
+  // ];
   const doSave = dataDetail => {
     let modifyData = { ...initData, ...dataDetail, keyValue: initData.id };
     modifyData.expDate = modifyData.expDate ? modifyData.expDate.format('YYYY-MM-DD') : undefined;
@@ -51,60 +51,63 @@ const Modify = (props: ModifyProps) => {
 
   return (
     <BaseModifyProvider {...props} name="用户" save={doSave}>
-      <Form layout="vertical" hideRequiredMark>
-        <Row gutter={24}>
-          <ModifyItem
-            {...baseFormProps}
-            field="name"
-            label="用户"
-            type="autoComplete"
-            onSearch={searchName}
-            items={names}
-          ></ModifyItem>
-        </Row>
-        <Row gutter={24}>
-          <ModifyItem
-            {...baseFormProps}
-            field="account"
-            label="账户"
-            rules={[{ required: true, message: '请输入账户' }]}
-          ></ModifyItem>
-          <ModifyItem
-            {...baseFormProps}
-            field="password"
-            label="密码"
-            rules={[{ required: true, message: '请输入密码' }]}
-          ></ModifyItem>
-        </Row>
-        <Row gutter={24}>
-          <ModifyItem
-            {...baseFormProps}
-            type="radio"
-            field="expMode"
-            label="有效期"
-            items={expModes}
-            onChange={(e) => setShowTime(e===2)}
-          ></ModifyItem>
-          {showTime ? (
+      <Card>
+        <Form layout="vertical" hideRequiredMark>
+          <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
-              field="expDate"
-              label="有效期限"
-              type="date"
+              field="account"
+              label="用户名"
+              rules={[{ required: true, message: '请输入用户名' }]}
             ></ModifyItem>
-          ) : null}
-        </Row>
+            <ModifyItem
+              {...baseFormProps}
+              field="name"
+              label="显示名"
+              type="autoComplete"
+              onSearch={searchName}
+              items={names}
+            ></ModifyItem>
 
-        <Row gutter={24}>
-          <ModifyItem
-            {...baseFormProps}
-            wholeLine={true}
-            type="textarea"
-            field="description"
-            label="备注"
-          ></ModifyItem>
-        </Row>
-      </Form>
+          </Row>
+          {/* <Row gutter={24}> 
+            <ModifyItem
+              {...baseFormProps}
+              field="password"
+              label="密码"
+              rules={[{ required: true, message: '请输入密码' }]}
+            ></ModifyItem>
+          </Row> */}
+          <Row gutter={24}>
+            <ModifyItem
+              {...baseFormProps}
+              type="radio"
+              field="expMode"
+              label="有效期"
+              items={expModes}
+              onChange={(e) => setShowTime(e === 2)}
+            ></ModifyItem>
+            {showTime ? (
+              <ModifyItem
+                {...baseFormProps}
+                field="expDate"
+                label="有效期限"
+                type="date"
+              ></ModifyItem>
+            ) : null}
+          </Row>
+
+          <Row gutter={24}>
+            <ModifyItem
+              {...baseFormProps}
+              wholeLine={true}
+              type="textarea"
+              field="description"
+              label="备注"
+            ></ModifyItem>
+          </Row>
+        </Form>
+      </Card>
     </BaseModifyProvider>
   );
 };

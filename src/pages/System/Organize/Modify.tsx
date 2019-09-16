@@ -85,7 +85,7 @@ const Modify = (props: ModifyProps) => {
       callback();
     }
     else {
-      const keyValue = initData.organizeId==undefined?'':initData.organizeId;
+      const keyValue = initData.organizeId == undefined ? '' : initData.organizeId;
       ExistEnCode(keyValue, value).then(res => {
         if (res)
           callback('机构编号重复');
@@ -136,12 +136,11 @@ const Modify = (props: ModifyProps) => {
               items={types}
               rules={[{ required: true, message: '请选择类型' }]}
             ></ModifyItem>
-          </Row>
-
+          </Row> 
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
-              field="manager"
+              field="chargeLeader"
               label="负责人"
               type="autoComplete"
               onSearch={searchManager}
@@ -155,7 +154,7 @@ const Modify = (props: ModifyProps) => {
             ></ModifyItem>
           </Row>
           <Row gutter={24}>
-            <ModifyItem {...baseFormProps} field="telPhone" label="电话"></ModifyItem>
+            <ModifyItem {...baseFormProps} field="outerPhone" label="电话"></ModifyItem>
             <ModifyItem {...baseFormProps} field="fax" label="传真"></ModifyItem>
           </Row>
 

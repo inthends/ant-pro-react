@@ -1,6 +1,6 @@
 import Page from '@/components/Common/Page';
-import { AccountEntity } from '@/model/accountEntity';
-import { Button, message, Modal, Switch, Table } from 'antd';
+import { JcAccount } from '@/model/jcAccount';
+import { Divider, message, Modal, Switch, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import { DisabledToggle, RemoveForm } from './User.service';
@@ -28,7 +28,7 @@ function ListTable(props: ListTableProps) {
             message.success('删除成功');
             reload();
           })
-          .catch(e => {});
+          .catch(e => { });
       },
     });
   };
@@ -36,35 +36,34 @@ function ListTable(props: ListTableProps) {
     modify({ ...record });
   };
   const columns = [
+    // {
+    //   title: '类别',
+    //   dataIndex: 'accountType',
+    //   key: 'accountType',
+    //   width: 100,
+    //   fixed: 'left',
+    //   render: (text: any) => {
+    //     return ACCOUNTTYPES[text];
+    //   },
+    // },
     {
-      title: '类别',
-      dataIndex: 'accountType',
-      key: 'accountType',
-      width: 150,
-      fixed: 'left',
-      render: (text: any) => {
-        return ACCOUNTTYPES[text];
-      },
-    },
-    {
-      title: '账户',
+      title: '用户名',
       dataIndex: 'account',
-      key: 'account',
-      fixed: 'left',
-      width: 150,
+      key: 'account', 
+      width: 100,
     },
     {
-      title: '姓名',
+      title: '显示名',
       dataIndex: 'name',
       key: 'name',
-      width: 150,
+      width: 100,
     },
-    {
-      title: '编号',
-      dataIndex: 'customerCode',
-      key: 'customerCode',
-      width: 200,
-    },
+    // {
+    //   title: '编号',
+    //   dataIndex: 'customerCode',
+    //   key: 'customerCode',
+    //   width: 100,
+    // },
     {
       title: '状态',
       dataIndex: 'enabledMark',
@@ -93,7 +92,7 @@ function ListTable(props: ListTableProps) {
       title: '账户有效期',
       dataIndex: 'expDate',
       key: 'expDate',
-      width: 200,
+      width: 120,
     },
     {
       title: '账户动态',
@@ -115,38 +114,44 @@ function ListTable(props: ListTableProps) {
       title: '最后一次登录时间',
       dataIndex: 'lastVisit',
       key: 'lastVisit',
-      width: 200,
+      width: 150,
     },
 
     {
       title: '备注',
       dataIndex: 'description',
       key: 'description',
-      width: 300,
+      width: 120
     },
     {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
-      width: 200,
-      fixed: 'right',
+      width: 85, 
       render: (text, record) => {
         return [
-          <Button
-            type="primary"
-            key="modify"
-            style={{ marginRight: '10px' }}
-            onClick={() => doModify(record)}
-          >
-            修改
-          </Button>,
-          <Button type="danger" key="delete" onClick={() => doDelete(record)}>
-            删除
-          </Button>,
+          // <Button
+          //   type="primary"
+          //   key="modify"
+          //   style={{ marginRight: '10px' }}
+          //   onClick={() => doModify(record)}
+          // >
+          //   修改
+          // </Button>,
+          // <Button type="danger" key="delete" onClick={() => doDelete(record)}>
+          //   删除
+          // </Button>,
+
+          <span>
+            <a onClick={() => doModify(record)} key="modify">编辑</a>
+            <Divider type="vertical" key='divider' />
+            <a onClick={() => doDelete(record)} key="delete">删除</a>
+          </span>
+
         ];
       },
     },
-  ] as ColumnProps<AccountEntity>[];
+  ] as ColumnProps<JcAccount>[];
   return (
     <Page>
       <Table
@@ -156,7 +161,7 @@ function ListTable(props: ListTableProps) {
         dataSource={data}
         columns={columns}
         rowKey={record => record.id}
-        scroll={{ x: 1850, y: 500 }}
+        scroll={{ y: 500 }}
         loading={loading}
         pagination={pagination}
       />

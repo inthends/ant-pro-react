@@ -208,7 +208,8 @@ function HouseMore(props) {
         data={currData}
         type={type}
         reload={() => {
-          initLoadData(parentId, type, search)
+          //刷新一下左侧树 to do
+          initLoadData(parentId, type, search);
         }}
       />
     </Layout>

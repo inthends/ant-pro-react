@@ -31,8 +31,7 @@ function ListTable(props: ListTableProps) {
   };
   const doModify = id => {
     GetDetailJson(id).then(res => {
-      const { customerInfo = {}, relationPC = {} } = res;
-      modify({ ...relationPC, ...customerInfo });
+      modify(res);
     });
   };
   const columns = [
@@ -63,8 +62,7 @@ function ListTable(props: ListTableProps) {
     {
       title: '备注',
       dataIndex: 'description',
-      key: 'description',
-      width: 300
+      key: 'description', 
     },
     {
       title: '操作',

@@ -66,9 +66,8 @@ const Organize = () => {
 
   return (
     <Layout style={{ height: '100%' }}>
-      <Content style={{ padding: '0 20px', overflow: 'auto' }}>
-        <div style={{ marginBottom: '20px', padding: '3px 0' }}>
-
+     <Content >
+        <div style={{ marginBottom: '20px', padding: '3px 0' }}> 
           <Search
             className="search-input"
             placeholder="请输入要查询的关键词"

@@ -93,9 +93,9 @@ const  User = () => {
 
   return (
     <Layout style={{ height: '100%' }}>
-      <Content style={{ padding: '0 20px', overflow: 'auto' }}>
+      <Content  >
         <div style={{ marginBottom: 20, padding: '3px 0' }}>
-          <Select
+          {/* <Select
             style={{ marginRight: 20, width: 100 }}
             value={search.condition}
             onChange={condition => loadData({ ...search, condition })}
@@ -109,7 +109,7 @@ const  User = () => {
             <Option value="Code" key="Code">
               用户编号
             </Option>
-          </Select>
+          </Select> */}
           <Search
             className="search-input"
             placeholder="请输入要查询的关键词"
