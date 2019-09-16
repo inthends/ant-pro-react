@@ -123,6 +123,10 @@ const Modify = (props: ModifyProps) => {
       });
     }
   };
+
+
+
+
   return (
     <Drawer
       title={title}
@@ -167,7 +171,10 @@ const Modify = (props: ModifyProps) => {
                 <Form.Item label="项目编号" required>
                   {getFieldDecorator('code', {
                     initialValue: infoDetail.code,
-                    rules: [{ required: true, message: '请输入项目编号' }],
+                    rules: [{ required: true, message: '请输入项目编号' },
+                   
+                  
+                  ],
                   })(<Input placeholder="请输入项目编号" />)}
                 </Form.Item>
               </Col>

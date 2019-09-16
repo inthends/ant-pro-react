@@ -101,9 +101,9 @@ const Organize = () => {
         visible={modifyVisible}
         closeDrawer={closeDrawer}
         data={currData}
-        reload={() => {}}
+        reload={() => initLoadData({ searchText: search }}
       />
-      
+
     </Layout>
   );
 }

@@ -3,7 +3,7 @@ import ModifyItem, { SelectItem } from '@/components/BaseModifyDrawer/ModifyItem
 import { Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useState, useEffect } from 'react';
-import { SaveForm, searchUser, searchTypes, searchOrgs } from './Organize.service';
+import { SaveForm, searchUser, ExistEnCode, searchOrgs } from './Organize.service';
 import { TreeNode } from 'antd/lib/tree-select';
 
 interface ModifyProps {
@@ -34,13 +34,10 @@ const Modify = (props: ModifyProps) => {
       value: 'D',
     },
   ]);
-  const [orgs, setOrgs] = useState<TreeNode[]>();
-
+  const [orgs, setOrgs] = useState<TreeNode[]>(); 
   let initData = data ? data : { enabledMark: 1 };
-  initData.expDate = initData.expDate ? initData.expDate : new Date();
-
+  initData.expDate = initData.expDate ? initData.expDate : new Date(); 
   const baseFormProps = { form, initData };
-
   useEffect(() => {
     // getTypes();
     searchManager('');
@@ -49,6 +46,8 @@ const Modify = (props: ModifyProps) => {
 
   const doSave = dataDetail => {
     let modifyData = { ...initData, ...dataDetail, keyValue: initData.organizeId };
+    if(modifyData.foundedTime!=null)
+      modifyData.foundedTime = modifyData.foundedTime.format('YYYY-MM-DD');
     return SaveForm(modifyData);
   };
 
@@ -81,6 +80,17 @@ const Modify = (props: ModifyProps) => {
     });
   };
 
+  const checkExist = (rule, value, callback) => {
+    if (value == undefined)
+      callback();
+    ExistEnCode(initData.organizeId, value).then(res => {
+      if (res)
+        callback('机构编号重复');
+      else
+        callback();
+    })
+  };
+
   return (
     <BaseModifyProvider {...props} name="机构" save={doSave}>
       <Form layout="vertical" hideRequiredMark>
@@ -95,7 +105,11 @@ const Modify = (props: ModifyProps) => {
             {...baseFormProps}
             field="enCode"
             label="机构编号"
-            rules={[{ required: true, message: '请输入机构编号' }]}
+            rules={[{ required: true, message: '请输入机构编号' },
+              {
+                validator: checkExist
+              } 
+           ]}
           ></ModifyItem>
         </Row>
         <Row gutter={24}>
@@ -107,7 +121,7 @@ const Modify = (props: ModifyProps) => {
             treeData={orgs}
             disabled={initData.parentId === '0'}
             rules={[{ required: true, message: '请选择隶属上级' }]}
-          ></ModifyItem>{' '}
+          ></ModifyItem>
           <ModifyItem
             {...baseFormProps}
             field="manager"
@@ -126,16 +140,16 @@ const Modify = (props: ModifyProps) => {
             type="select"
             items={types}
             rules={[{ required: true, message: '请选择类型' }]}
-          ></ModifyItem>{' '}
+          ></ModifyItem>
           <ModifyItem
             {...baseFormProps}
-            field="createDate"
+            field="foundedTime"
             label="成立时间"
             type="date"
           ></ModifyItem>
         </Row>
         <Row gutter={24}>
-          <ModifyItem {...baseFormProps} field="telPhone" label="电话"></ModifyItem>{' '}
+          <ModifyItem {...baseFormProps} field="telPhone" label="电话"></ModifyItem>
         </Row>
 
         <Row gutter={24}>

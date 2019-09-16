@@ -51,3 +51,11 @@ export function searchTypes(): Promise<any[]> {
 export function searchOrgs(): Promise<any[]> {
   return request.get(process.env.basePath + `/Common/GetOrgTreeOnly`).then(getResult as any);
 }
+
+
+// 验证code
+export function ExistEnCode(keyValue, code): Promise<any> {
+  return request
+    .get(process.env.basePath + `/Organize/ExistEnCode?keyValue=${keyValue}&code=${code}`)
+    .then(getResult as any);
+}
