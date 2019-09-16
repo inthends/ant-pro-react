@@ -90,6 +90,6 @@ export function GetCustomerList(keyword): Promise<any> {
 // 验证code
 export function ExistEnCode(keyValue, code): Promise<any> {
   return request
-    .get(process.env.basePath + `/PStructs/ExistEnCode?keyValue=${keyValue}&code=${code}`)
+    .get(process.env.basePath + `/PStructs/ExistCode?keyValue=${keyValue}&code=${code}`)
     .then(getResult as any);
 }

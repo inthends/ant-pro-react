@@ -125,14 +125,18 @@ const Modify = (props: ModifyProps) => {
   };
 
   const checkExist = (rule, value, callback) => {
-    if (value == undefined)
+    if (value == undefined) {
       callback();
-    ExistEnCode(infoDetail.pStructId, value).then(res => {
-      if (res)
-        callback('项目编号重复');
-      else
-        callback();
-    })
+    }
+    else {
+      const keyValue = infoDetail.pStructId==undefined?'':infoDetail.pStructId;
+      ExistEnCode(keyValue, value).then(res => {
+        if (res)
+          callback('项目编号重复');
+        else
+          callback();
+      })
+    }
   };
 
 

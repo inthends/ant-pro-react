@@ -14,7 +14,7 @@ interface ModifyProps {
   reload(): void;
 }
 const Modify = (props: ModifyProps) => {
-  const { data, form } = props; 
+  const { data, form } = props;
   const [managers, setManagers] = useState<SelectItem[]>([]);
   const [types, setTypes] = useState<SelectItem[]>([
     {
@@ -81,14 +81,18 @@ const Modify = (props: ModifyProps) => {
   };
 
   const checkExist = (rule, value, callback) => {
-    if (value == undefined)
+    if (value == undefined) {
       callback();
-    ExistEnCode(initData.organizeId, value).then(res => {
-      if (res)
-        callback('机构编号重复');
-      else
-        callback();
-    })
+    }
+    else {
+      const keyValue = initData.organizeId==undefined?'':initData.organizeId;
+      ExistEnCode(keyValue, value).then(res => {
+        if (res)
+          callback('机构编号重复');
+        else
+          callback();
+      })
+    }
   };
 
   return (
@@ -119,7 +123,7 @@ const Modify = (props: ModifyProps) => {
               field="parentId"
               label="隶属上级"
               type="tree"
-              treeData={orgs} 
+              treeData={orgs}
               disabled={initData.organizeId != undefined}
               rules={[{ required: true, message: '请选择隶属上级' }]}
             ></ModifyItem>
