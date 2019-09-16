@@ -2,7 +2,7 @@ import { TreeEntity } from '@/model/models';
 import { Button, Card, Col, DatePicker, Drawer, Form, Input, Row, Select, TreeSelect, message } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetFormInfoJson, GetTreeAreaJson, SaveForm } from './House.service';
+import { ExistEnCode, GetFormInfoJson, GetTreeAreaJson, SaveForm } from './House.service';
 import { getCommonItems } from '@/services/commonItem';
 import styles from './style.less';
 import moment from 'moment';
@@ -124,7 +124,16 @@ const Modify = (props: ModifyProps) => {
     }
   };
 
-
+  const checkExist = (rule, value, callback) => {
+    if (value == undefined)
+      callback();
+    ExistEnCode(infoDetail.pStructId, value).then(res => {
+      if (res)
+        callback('项目编号重复');
+      else
+        callback();
+    })
+  };
 
 
   return (
@@ -172,9 +181,11 @@ const Modify = (props: ModifyProps) => {
                   {getFieldDecorator('code', {
                     initialValue: infoDetail.code,
                     rules: [{ required: true, message: '请输入项目编号' },
-                   
-                  
-                  ],
+                    {
+                      validator: checkExist
+                    }
+
+                    ],
                   })(<Input placeholder="请输入项目编号" />)}
                 </Form.Item>
               </Col>
@@ -256,7 +267,7 @@ const Modify = (props: ModifyProps) => {
                 </Form.Item>
               </Col>
             </Row>
-            <Row gutter={24}>
+            {/* <Row gutter={24}>
               <Col lg={12}>
                 <Form.Item label="环线">
                   {getFieldDecorator('cicleLine', {
@@ -271,7 +282,7 @@ const Modify = (props: ModifyProps) => {
                   })(<Input placeholder="请输入地铁" />)}
                 </Form.Item>
               </Col>
-            </Row>
+            </Row> */}
             <Row gutter={24}>
               <Col lg={12}>
                 <Form.Item label="经度">
@@ -289,23 +300,30 @@ const Modify = (props: ModifyProps) => {
               </Col>
             </Row>
             <Row gutter={24}>
-              <Col lg={12}>
-                <Form.Item label="总建筑面积(㎡)">
-                  {console.log(infoDetail.area)}
-                  {getFieldDecorator('area', {
-                    initialValue: infoDetail.area || 0,
-                  })(<Input placeholder="请输入总建筑面积" />)}
-                </Form.Item>
-              </Col>
-              <Col lg={12}>
+              <Col lg={8}>
                 <Form.Item label="占地面积(㎡)">
                   {getFieldDecorator('coverArea', {
                     initialValue: infoDetail.coverArea || 0,
                   })(<Input placeholder="请输入占地面积" />)}
                 </Form.Item>
               </Col>
+              <Col lg={8}>
+                <Form.Item label="建筑面积(㎡)">
+                  {console.log(infoDetail.area)}
+                  {getFieldDecorator('area', {
+                    initialValue: infoDetail.area || 0,
+                  })(<Input placeholder="请输入总建筑面积" />)}
+                </Form.Item>
+              </Col>
+              <Col lg={8}>
+                <Form.Item label="产权面积(㎡)">
+                  {getFieldDecorator('billArea', {
+                    initialValue: infoDetail.billArea || 0,
+                  })(<Input placeholder="请输入产权面积" />)}
+                </Form.Item>
+              </Col>
             </Row>
-            <Row gutter={24}>
+            {/* <Row gutter={24}>
               <Col lg={12}>
                 <Form.Item label="容积率">
                   {getFieldDecorator('volumeRate', {
@@ -320,7 +338,7 @@ const Modify = (props: ModifyProps) => {
                   })(<Input placeholder="请输入绿化面积" />)}
                 </Form.Item>
               </Col>
-            </Row>
+            </Row> */}
             <Row gutter={24}>
               <Col lg={12}>
                 <Form.Item label="项目类型">
@@ -348,7 +366,7 @@ const Modify = (props: ModifyProps) => {
                 </Form.Item>
               </Col>
             </Row>
-            <Row gutter={24}>
+            {/* <Row gutter={24}>
               <Col lg={12}>
                 <Form.Item label="开发商">
                   {getFieldDecorator('developerName', {
@@ -363,7 +381,7 @@ const Modify = (props: ModifyProps) => {
                   )}
                 </Form.Item>
               </Col>
-            </Row>
+            </Row> */}
             <Row gutter={24}>
               <Col lg={12}>
                 <Form.Item label="楼栋管家">

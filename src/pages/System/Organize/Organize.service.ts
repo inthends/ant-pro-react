@@ -19,9 +19,15 @@ export function SaveForm(data): Promise<any> {
     .then(getResult as any);
 }
 // 删除
+// export function RemoveForm(keyValue): Promise<any> {
+//   return request
+//     .post(process.env.basePath + `/Organize/RemoveForm`, { data: objToFormdata({ keyValue }) })
+//     .then(getResult as any);
+// }
+
 export function RemoveForm(keyValue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Organize/RemoveForm`, { data: objToFormdata({ keyValue }) })
+    .post(process.env.basePath + `/Organize/RemoveForm?keyValue=${keyValue}`, {})
     .then(getResult as any);
 }
 

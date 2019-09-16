@@ -77,10 +77,16 @@ const Organize = () => {
             }
             style={{ width: 200 }}
           />
-          <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer({ flag: '' })}>
+          {/* <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer({ flag: '' })}>
+            <Icon type="plus" />
+            机构
+          </Button> */}
+
+          <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer()}>
             <Icon type="plus" />
             机构
           </Button>
+
         </div>
         <ListTable
           onchange={(sorter) =>
@@ -101,7 +107,7 @@ const Organize = () => {
         visible={modifyVisible}
         closeDrawer={closeDrawer}
         data={currData}
-        reload={() => initLoadData({ searchText: search }}
+        reload={() => initLoadData({ searchText: search })}
       />
 
     </Layout>

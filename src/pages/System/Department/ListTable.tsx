@@ -1,31 +1,31 @@
 import Page from '@/components/Common/Page';
-import { Button, message, Modal, Table } from 'antd';
+import { Divider, message, Modal, Table } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import React from 'react';
 import { RemoveForm, GetDetailJson } from './Main.service';
 
 interface ListTableProps {
-  loading: boolean; 
+  loading: boolean;
   data: any[];
   onchange(page: any, filter: any, sort: any): any;
   modify(data: any): void;
   reload(): void;
 }
 
-function ListTable(props: ListTableProps) { 
-  const {loading,  data, modify, reload } = props;   
+function ListTable(props: ListTableProps) {
+  const { loading, data, modify, reload } = props;
 
   const doDelete = record => {
     Modal.confirm({
       title: '请确认',
       content: `您是否要删除 ${record.name} 吗`,
       onOk: () => {
-        RemoveForm(record.id)
+        RemoveForm(record.key)
           .then(() => {
             message.success('删除成功');
             reload();
           })
-          .catch(e => {});
+          .catch(e => { });
       },
     });
   };
@@ -40,19 +40,19 @@ function ListTable(props: ListTableProps) {
       title: '部门名称',
       dataIndex: 'fullName',
       key: 'fullName',
-      width: 340, 
+      width: 340,
     },
     {
       title: '部门编号',
       dataIndex: 'enCode',
       key: 'enCode',
-      width: 200, 
+      width: 200,
     },
     {
       title: '部门简称',
       dataIndex: 'shortName',
       key: 'shortName',
-      width: 160, 
+      width: 160,
     },
     {
       title: '联系电话',
@@ -70,21 +70,27 @@ function ListTable(props: ListTableProps) {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
-      width: 155,
+      width: 90,
       fixed: 'right',
       render: (text, record) => {
         return [
-          <Button
-            type="primary"
-            key="modify"
-            style={{ marginRight: '10px' }}
-            onClick={() => doModify(record.id)}
-          >
-            修改
-          </Button>,
-          <Button type="danger" key="delete" onClick={() => doDelete(record)}>
-            删除
-          </Button>,
+          // <Button
+          //   type="primary"
+          //   key="modify"
+          //   style={{ marginRight: '10px' }}
+          //   onClick={() => doModify(record.id)}
+          // >
+          //   修改
+          // </Button>,
+          // <Button type="danger" key="delete" onClick={() => doDelete(record)}>
+          //   删除
+          // </Button>,
+          <span>
+            <a onClick={() => doModify(record.key)} key="modify">编辑</a>
+            <Divider type="vertical" key='divider' />
+            <a onClick={() => doDelete(record)} key="delete">删除</a>
+          </span>
+
         ];
       },
     },
@@ -97,8 +103,8 @@ function ListTable(props: ListTableProps) {
         size="middle"
         dataSource={data}
         columns={columns}
-        rowKey={record => record.id} 
-        scroll={{y:500}} 
+        rowKey={record => record.key}
+        scroll={{ y: 500 }}
         loading={loading}
       />
     </Page>

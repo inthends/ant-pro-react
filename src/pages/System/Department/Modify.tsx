@@ -7,7 +7,6 @@ import {
   Form,
   Input,
   message,
-  Modal,
   Row,
   Select,
   Tree,
@@ -16,8 +15,8 @@ import {
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { SaveForm, GetTreeJsonById } from './Main.service';
-import { getCommonItems } from '@/services/commonItem';
+import { SaveForm } from './Main.service';
+import { getCommonItems, GetOrgTreeOnly } from '@/services/commonItem';
 import styles from './style.less';
 
 const { Option } = Select;
@@ -37,15 +36,20 @@ const Modify = (props: ModifyProps) => {
   const title = data === undefined ? '添加住户资料' : '修改住户资料';
   const [infoDetail, setInfoDetail] = useState<any>({});
 
-  const [treeData, setTreeData] = useState<TreeEntity[]>([]); //所属机构
+  const [treeData, setTreeData] = useState<any[]>([]); //所属机构
   const [banks, setBanks] = useState<any[]>([]); // 开户银行
   // const [banks, setBanks] = useState<any[]>([]); // 证件类别
   // const [banks, setBanks] = useState<any[]>([]); // 企业性质
   // 打开抽屉时初始化
   useEffect(() => {
-    GetTreeJsonById().then((res: TreeEntity[]) => {
+    // GetTreeJsonById().then((res: TreeEntity[]) => {
+    //   setTreeData(res || []);
+    // });
+
+    GetOrgTreeOnly().then((res: any[]) => {
       setTreeData(res || []);
     });
+
     // 获取开户银行
     getCommonItems('Bank').then(res => {
       setBanks(res || []);
@@ -116,9 +120,16 @@ const Modify = (props: ModifyProps) => {
                     initialValue: infoDetail.organizeId,
                     rules: [{ required: true, message: '请选择隶属机构' }],
                   })(
-                    <TreeSelect placeholder="请选择隶属机构" allowClear treeDefaultExpandAll>
-                      {renderTree(treeData, '0')}
-                    </TreeSelect>,
+                    // <TreeSelect placeholder="请选择隶属机构" allowClear treeDefaultExpandAll>
+                    //   {renderTree(treeData, '0')}
+                    // </TreeSelect>,
+                    <TreeSelect placeholder="请选择隶属机构"
+                      treeData={treeData}
+                      dropdownStyle={{ maxHeight: 400 }}
+                      allowClear
+                      treeDefaultExpandAll>
+                      {/* {renderTree(treeData, '0')} */}
+                    </TreeSelect>
                   )}
                 </Form.Item>
               </Col>

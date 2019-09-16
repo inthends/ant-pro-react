@@ -86,3 +86,10 @@ export function GetCustomerList(keyword): Promise<any> {
     .get(process.env.basePath + `/PStructUser/GetCustomerList?keyword=${keyword}`)
     .then(getResult as any);
 }
+
+// 验证code
+export function ExistEnCode(keyValue, code): Promise<any> {
+  return request
+    .get(process.env.basePath + `/PStructs/ExistEnCode?keyValue=${keyValue}&code=${code}`)
+    .then(getResult as any);
+}
