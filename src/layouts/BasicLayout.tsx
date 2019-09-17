@@ -9,12 +9,17 @@ import SettingDrawer from '@/components/SettingDrawer';
 import { ConnectState, Dispatch } from '@/models/connect';
 import AuthPage from '@/pages/Authorized';
 import Authorized from '@/utils/Authorized';
-import ProLayout, { BasicLayoutProps as ProLayoutProps, MenuDataItem, Settings } from '@ant-design/pro-layout';
+import ProLayout, {
+  BasicLayoutProps as ProLayoutProps,
+  MenuDataItem,
+  Settings,
+} from '@ant-design/pro-layout';
 import { connect } from 'dva';
 import React, { useEffect } from 'react';
-import { formatMessage } from 'umi-plugin-react/locale';
+import { formatMessage, getLocale } from 'umi-plugin-react/locale';
 import Link from 'umi/link';
 import logo from '../assets/logo.svg';
+import { LocaleProvider } from 'antd';
 
 export interface BasicLayoutProps extends ProLayoutProps {
   breadcrumbNameMap: {
@@ -87,7 +92,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
    * constructor
    */
 
-
   useEffect(() => {
     if (dispatch) {
       dispatch({
@@ -98,10 +102,9 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
       });
       dispatch({
         type: 'auth/fetch',
-      }); 
+      });
     }
   }, []);
-
 
   /**
    * init variables
@@ -118,47 +121,58 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
       type: 'settings/changeSetting',
       payload,
     });
-
+  console.log(getLocale());
   return (
     <>
-      <ProLayout
-        logo={logo}
-        onCollapse={handleMenuCollapse}
-        menuItemRender={(menuItemProps, defaultDom) => {
-          if (menuItemProps.isUrl) {
-            return defaultDom;
-          }
-          return <Link to={menuItemProps.path}>{defaultDom}</Link>;
+      <LocaleProvider
+        locale={{
+          locale: getLocale(),
+          Modal: {
+            okText: getLocale() === 'zh-CN' ? '确定' : 'OK',
+            cancelText: getLocale() === 'zh-CN' ? '取消' : 'Cancel',
+            justOkText: '',
+          },
         }}
-        // breadcrumbRender={(routers = []) => [
-        //   {
-        //     path: '/',
-        //     breadcrumbName: formatMessage({
-        //       id: 'menu.home',
-        //       defaultMessage: 'Home',
-        //     }),
-        //   },
-        //   ...routers,
-        // ]}
-        // itemRender={(route, params, routes, paths) => {
-        //   const first = routes.indexOf(route) === 0;
-        //   return first ? (
-        //     <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
-        //   ) : (
-        //     <span>{route.breadcrumbName}</span>
-        //   );
-        // }}
-        footerRender={footerRender}
-        menuDataRender={menuList => menuDataRender(menuList, auths)}
-        formatMessage={formatMessage}
-        rightContentRender={rightProps => <RightContent {...rightProps} />}
-        {...props}
-        {...settings}
       >
-        <AuthPage>{children}</AuthPage>
-      </ProLayout>
+        <ProLayout
+          logo={logo}
+          onCollapse={handleMenuCollapse}
+          menuItemRender={(menuItemProps, defaultDom) => {
+            if (menuItemProps.isUrl) {
+              return defaultDom;
+            }
+            return <Link to={menuItemProps.path}>{defaultDom}</Link>;
+          }}
+          // breadcrumbRender={(routers = []) => [
+          //   {
+          //     path: '/',
+          //     breadcrumbName: formatMessage({
+          //       id: 'menu.home',
+          //       defaultMessage: 'Home',
+          //     }),
+          //   },
+          //   ...routers,
+          // ]}
+          // itemRender={(route, params, routes, paths) => {
+          //   const first = routes.indexOf(route) === 0;
+          //   return first ? (
+          //     <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
+          //   ) : (
+          //     <span>{route.breadcrumbName}</span>
+          //   );
+          // }}
+          footerRender={footerRender}
+          menuDataRender={menuList => menuDataRender(menuList, auths)}
+          formatMessage={formatMessage}
+          rightContentRender={rightProps => <RightContent {...rightProps} />}
+          {...props}
+          {...settings}
+        >
+          <AuthPage>{children}</AuthPage>
+        </ProLayout>
 
-      <SettingDrawer settings={settings} onSettingChange={config => setSettings(config)} />
+        <SettingDrawer settings={settings} onSettingChange={config => setSettings(config)} />
+      </LocaleProvider>
     </>
   );
 };
