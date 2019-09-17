@@ -145,7 +145,7 @@ const Detail = (props: DetailProps) => {
                   <Row gutter={24}>
                     <Col lg={12}>
                       <Form.Item label="单价保留小数点">
-                        {infoDetail.precision}
+                        {infoDetail.calcPrecision}
                       </Form.Item>
                     </Col>
                     <Col lg={12}>

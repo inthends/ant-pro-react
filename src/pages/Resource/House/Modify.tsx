@@ -124,6 +124,7 @@ const Modify = (props: ModifyProps) => {
     }
   };
 
+  //验证编码是否重复
   const checkExist = (rule, value, callback) => {
     if (value == undefined) {
       callback();
@@ -187,8 +188,7 @@ const Modify = (props: ModifyProps) => {
                     rules: [{ required: true, message: '请输入项目编号' },
                     {
                       validator: checkExist
-                    }
-
+                    } 
                     ],
                   })(<Input placeholder="请输入项目编号" />)}
                 </Form.Item>
@@ -321,8 +321,8 @@ const Modify = (props: ModifyProps) => {
               </Col>
               <Col lg={8}>
                 <Form.Item label="产权面积(㎡)">
-                  {getFieldDecorator('billArea', {
-                    initialValue: infoDetail.billArea || 0,
+                  {getFieldDecorator('propertyArea', {
+                    initialValue: infoDetail.propertyArea || 0,
                   })(<Input placeholder="请输入产权面积" />)}
                 </Form.Item>
               </Col>

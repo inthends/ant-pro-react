@@ -504,7 +504,7 @@ const Modify = (props: ModifyProps) => {
       title: '房屋全称',
       dataIndex: 'allName',
       key: 'allName',
-      width: 150,
+      width: 200,
       sorter: true,
     },
     {
@@ -512,7 +512,7 @@ const Modify = (props: ModifyProps) => {
       dataIndex: 'operation',
       align: 'center',
       key: 'operation',
-      width: 100,
+      width: 75,
       render: (text, record) => {
         return [
           <span key='buttons'>
@@ -520,7 +520,7 @@ const Modify = (props: ModifyProps) => {
               setHouseItemId(record.unitFeeId);
               setEditHouseVisible(true);
             }} key="modify">修改</a>
-            <Divider type="vertical" key='divider' />
+            {/* <Divider type="vertical" key='divider' />
             <a onClick={() => {
               Modal.confirm({
                 title: '请确认',
@@ -538,7 +538,7 @@ const Modify = (props: ModifyProps) => {
                     });
                 },
               });
-            }} key="delete">删除</a>
+            }} key="delete">删除</a> */}
           </span>
         ];
       },
@@ -998,8 +998,8 @@ const Modify = (props: ModifyProps) => {
                 <Row gutter={24}>
                   <Col lg={12}>
                     <Form.Item label="单价保留小数点">
-                      {getFieldDecorator('precision', {
-                        initialValue: infoDetail.precision ? infoDetail.precision : 2,
+                      {getFieldDecorator('calcPrecision', {
+                        initialValue: infoDetail.calcPrecision ? infoDetail.calcPrecision : 2,
                         rules: [{ required: true, message: '请填写保留几位' }],
                       })(<InputNumber placeholder="请填写保留几位" style={{ width: '100%' }} />)}
                     </Form.Item>
@@ -1407,7 +1407,7 @@ const Modify = (props: ModifyProps) => {
             id ?
               <TabPane tab="所属机构" key="3">
                 <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
-                  <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
+                  <Button type="link" style={{ float: 'right', marginLeft: '10px' }}
                     onClick={() => { setSelectOrgVisible(true) }}
                   >
                     <Icon type="plus" />
@@ -1448,29 +1448,39 @@ const Modify = (props: ModifyProps) => {
                     style={{ width: 200 }}
                     onSearch={value => houseLoadData(value)}
                   />
+                  {/* <Button type="link" style={{ float: 'right' }}
+                    onClick={() => { initOrgLoadData() }}
+                  >
+                    <Icon type="reload" />
+                    刷新
+                </Button> */}
+
+
+                  <Button type="link" style={{ float: 'right' }}
+                    onClick={() => { initOrgLoadData() }}
+                  >
+                    <Icon type="delete" />
+                    删除
+                </Button>
+
                   <Button type="link" style={{ float: 'right' }}
                     onClick={() => { setSelectHouseVisible(true); }}
                   >
                     <Icon type="plus" />
                     新增
                 </Button>
-                  <Button type="link" style={{ float: 'right' }}
-                    onClick={() => { initOrgLoadData() }}
-                  >
-                    <Icon type="reload" />
-                    刷新
-                </Button>
+
                 </div>
-                <Table
+                <Table 
                   key='list'
                   style={{ border: 'none' }}
                   bordered={false}
                   size="middle"
                   dataSource={houseData}
                   columns={housecolumns}
-                  rowKey={record => record.code}
+                  rowKey={record => record.unitFeeId}
                   pagination={housePagination}
-                  scroll={{ y: 420, x: 920 }}
+                  scroll={{ y: 420, x: 980 }}
                   onChange={(pagination: PaginationConfig, filters, sorter) =>
                     houseLoadData(houseSearch, pagination, sorter)
                   }

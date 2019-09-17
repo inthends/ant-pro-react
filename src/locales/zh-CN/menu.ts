@@ -29,7 +29,7 @@ export default {
   'menu.resource.housemore': '房产资料',
   'menu.resource.publicarea': '公共区域',
   'menu.resource.parkinglot': '车位资料',
-  'menu.resource.pstructuser': '住户资料',
+  'menu.resource.pstructuser': '客户资料',
   'menu.resource.reciprocatingunit': '往来单位',
 
   'menu.financial': '财务管理',
@@ -52,7 +52,10 @@ export default {
 
   'menu.system': '系统管理',
   'menu.system.organize': '机构设置',
-  'menu.system.department': '部门资料',
+  'menu.system.department': '部门设置',
   'menu.system.user': '用户管理',
-  'menu.system.role': '角色资料',
+  'menu.system.role': '角色管理',
+  'menu.system.code': '编码管理',
+  'menu.system.dictionary': '词典管理',
+  'menu.system.template': '模板管理',
 };

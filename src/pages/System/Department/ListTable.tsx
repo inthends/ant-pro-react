@@ -18,7 +18,7 @@ function ListTable(props: ListTableProps) {
   const doDelete = record => {
     Modal.confirm({
       title: '请确认',
-      content: `您是否要删除 ${record.name} 吗`,
+      content: `您是否要删除 ${record.fullName} 吗`,
       onOk: () => {
         RemoveForm(record.key)
           .then(() => {
@@ -62,7 +62,7 @@ function ListTable(props: ListTableProps) {
     {
       title: '备注',
       dataIndex: 'description',
-      key: 'description', 
+      key: 'description',
     },
     {
       title: '操作',
@@ -71,25 +71,30 @@ function ListTable(props: ListTableProps) {
       width: 90,
       fixed: 'right',
       render: (text, record) => {
-        return [
-          // <Button
-          //   type="primary"
-          //   key="modify"
-          //   style={{ marginRight: '10px' }}
-          //   onClick={() => doModify(record.id)}
-          // >
-          //   修改
-          // </Button>,
-          // <Button type="danger" key="delete" onClick={() => doDelete(record)}>
-          //   删除
-          // </Button>,
-          <span>
-            <a onClick={() => doModify(record.key)} key="modify">编辑</a>
-            <Divider type="vertical" key='divider' />
-            <a onClick={() => doDelete(record)} key="delete">删除</a>
-          </span>
+        if (record.type == 'Department') {
+          return [
+            // <Button
+            //   type="primary"
+            //   key="modify"
+            //   style={{ marginRight: '10px' }}
+            //   onClick={() => doModify(record.id)}
+            // >
+            //   修改
+            // </Button>,
+            // <Button type="danger" key="delete" onClick={() => doDelete(record)}>
+            //   删除
+            // </Button>,
 
-        ];
+            <span>
+              <a onClick={() => doModify(record.key)} key="modify">编辑</a>
+              <Divider type="vertical" key='divider' />
+              <a onClick={() => doDelete(record)} key="delete">删除</a>
+            </span>
+
+          ];
+        }else{
+          return '';
+        }
       },
     },
   ] as ColumnProps<any>[];

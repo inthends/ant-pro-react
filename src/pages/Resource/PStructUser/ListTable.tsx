@@ -40,35 +40,6 @@ function ListTable(props: ListTableProps) {
   };
   const columns = [
     {
-      title: '客户编号',
-      dataIndex: 'code',
-      key: 'code',
-      width: 200,
-      fixed: 'left',
-      // sorter: true,
-    },
-    {
-      title: '客户名称',
-      dataIndex: 'name',
-      key: 'name',
-      width: 200,
-      // sorter: true,
-    },
-    {
-      title: '联系电话',
-      dataIndex: 'telphonenum',
-      key: 'telphonenum',
-      width: 100,
-      // sorter: true,
-    },
-    {
-      title: '简称',
-      dataIndex: 'shortname',
-      key: 'shortname',
-      width: 100,
-      // sorter: true,
-    },
-    {
       title: '客户类别',
       dataIndex: 'flag',
       key: 'flag',
@@ -84,9 +55,45 @@ function ListTable(props: ListTableProps) {
         }
       },
     },
+    {
+      title: '客户编号',
+      dataIndex: 'code',
+      key: 'code',
+      width: 160, 
+      // sorter: true,
+    },
+    {
+      title: '客户名称',
+      dataIndex: 'name',
+      key: 'name',
+      width: 200,
+      // sorter: true,
+    },
+    {
+      title: '手机号码',
+      dataIndex: 'telphonenum',
+      key: 'telphonenum',
+      width: 100,
+      // sorter: true,
+    },
+    {
+      title: '联系电话',
+      dataIndex: 'telphonenum',
+      key: 'telphonenum',
+      width: 100,
+      // sorter: true,
+    },
+    // {
+    //   title: '简称',
+    //   dataIndex: 'shortname',
+    //   key: 'shortname',
+    //   width: 100,
+    //   // sorter: true,
+    // },
+
    
     {
-      title: '客户证件类型',
+      title: '证件类别',
       dataIndex: 'certificatetype',
       key: 'certificatetype',
       width: 100,
@@ -102,10 +109,10 @@ function ListTable(props: ListTableProps) {
       },
     },
     {
-      title: '客户证件编号',
+      title: '证件号码',
       dataIndex: 'certificateno',
       key: 'certificateno',
-      width: 100,
+      width: 180,
       // sorter: true,
     },
     {
@@ -153,7 +160,7 @@ function ListTable(props: ListTableProps) {
         columns={columns}
         rowKey={record => record.id}
         pagination={pagination}
-        scroll={{ x: 1850 }}
+        scroll={{ y: 500 }}
         onChange={(pag: PaginationConfig, filters, sorter) => changePage(pag, filters, sorter)}
         loading={loading}
       />
