@@ -32,7 +32,7 @@ function Main() {
   const [housePagination, setHousePagination] = useState<PaginationConfig>(new DefaultPagination());
   const [houseData, setHouseData] = useState<any[]>([]);
   const [feeitems, setFeeitems] = useState<any[]>([]);
-  const { hideSider, setHideSider } = useContext(SiderContext);
+  const {hideSider, setHideSider } = useContext(SiderContext);
 
   const selectTree = (item, search) => {
     var value = item.node.props.value;
