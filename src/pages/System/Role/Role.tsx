@@ -1,32 +1,32 @@
-import { DefaultPagination } from "@/utils/defaultSetting";
-import { Button, Icon, Input, Layout, Select } from "antd";
-import { PaginationConfig } from "antd/lib/table";
-import React, { useEffect, useState } from "react";
-import ChooseUser from "./ChooseUser";
-import ListTable from "./ListTable";
-import Modify from "./Modify";
-import { getDataList } from "./Role.service";
+import { DefaultPagination } from '@/utils/defaultSetting';
+import { Button, Icon, Input, Layout, Select } from 'antd';
+import { PaginationConfig } from 'antd/lib/table';
+import React, { useEffect, useState } from 'react';
+import ChooseUser from './ChooseUser';
+import RoleAuth from './RoleAuth';
+import ListTable from './ListTable';
+import Modify from './Modify';
+import { getDataList } from './Role.service';
 
 const { Option } = Select;
 const { Content } = Layout;
 const { Search } = Input;
 interface SearchParam {
-  condition: "EnCode" | "FullName";
+  condition: 'EnCode' | 'FullName';
   keyword: string;
 }
 const Role = () => {
   const [search, setSearch] = useState<SearchParam>({
-    condition: "EnCode",
-    keyword: ""
+    condition: 'EnCode',
+    keyword: '',
   });
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   const [userVisible, setUserVisible] = useState<boolean>(false);
+  const [authVisible, setAuthVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<any[]>([]);
   const [currData, setCurrData] = useState<any>();
-  const [pagination, setPagination] = useState<PaginationConfig>(
-    new DefaultPagination()
-  );
+  const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
 
   useEffect(() => {
     initLoadData(search);
@@ -43,28 +43,29 @@ const Role = () => {
     setUserVisible(true);
     setCurrData(item);
   };
-  const loadData = (
-    searchParam: any,
-    paginationConfig?: PaginationConfig,
-    sorter?
-  ) => {
+  const showAuth = (item?) => {
+    setAuthVisible(true);
+    setCurrData(item);
+  };
+
+  const loadData = (searchParam: any, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(searchParam);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: pagination.pageSize,
-      total: 0
+      total: 0,
     };
     const searchCondition: any = {
       pageIndex,
       pageSize,
       total,
-      queryJson: searchParam
+      queryJson: searchParam,
     };
 
     if (sorter) {
       const { field, order } = sorter;
-      searchCondition.order = order === "ascend" ? "asc" : "desc";
-      searchCondition.sidx = field ? field : "CreateDate";
+      searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sidx = field ? field : 'CreateDate';
     }
 
     return load(searchCondition).then(res => {
@@ -73,8 +74,8 @@ const Role = () => {
   };
   const load = formData => {
     setLoading(true);
-    formData.sidx = formData.sidx || "CreateDate";
-    formData.sord = formData.sord || "desc";
+    formData.sidx = formData.sidx || 'CreateDate';
+    formData.sord = formData.sord || 'desc';
     return getDataList(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
@@ -82,7 +83,7 @@ const Role = () => {
           ...pagesetting,
           current,
           total,
-          pageSize
+          pageSize,
         };
       });
 
@@ -95,20 +96,18 @@ const Role = () => {
   const initLoadData = (searchParam: SearchParam) => {
     setSearch(searchParam);
     const queryJson = searchParam;
-    const sidx = "CreateDate";
-    const sord = "desc";
+    const sidx = 'CreateDate';
+    const sord = 'desc';
     const { current: pageIndex, pageSize, total } = pagination;
-    return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(
-      res => {
-        return res;
-      }
-    );
+    return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
+      return res;
+    });
   };
 
   return (
-    <Layout style={{ height: "100%" }}>
-      <Content style={{ padding: "0 20px", overflow: "auto" }}>
-        <div style={{ marginBottom: 20, padding: "3px 0" }}>
+    <Layout style={{ height: '100%' }}>
+      <Content style={{ padding: '0 20px', overflow: 'auto' }}>
+        <div style={{ marginBottom: 20, padding: '3px 0' }}>
           <Select
             style={{ marginRight: 20, width: 100 }}
             value={search.condition}
@@ -127,11 +126,7 @@ const Role = () => {
             onSearch={keyword => loadData({ ...search, keyword })}
             style={{ width: 200 }}
           />
-          <Button
-            type="primary"
-            style={{ float: "right" }}
-            onClick={() => showDrawer()}
-          >
+          <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer()}>
             <Icon type="plus" />
             角色
           </Button>
@@ -145,6 +140,7 @@ const Role = () => {
           data={data}
           modify={showDrawer}
           choose={showChoose}
+          showAuth={showAuth}
           reload={() => initLoadData(search)}
           setData={setData}
         />
@@ -155,10 +151,11 @@ const Role = () => {
         data={currData}
         reload={() => initLoadData({ ...search })}
       />
-      <ChooseUser
-        visible={userVisible}
-        close={() => setUserVisible(false)}
-        data={currData}
+      <ChooseUser visible={userVisible} close={() => setUserVisible(false)} data={currData} />
+      <RoleAuth
+        visible={authVisible}
+        close={() => setAuthVisible(false)}
+        roleId={currData && currData.roleId}
       />
     </Layout>
   );

@@ -10,6 +10,8 @@
   border-radius: 3px;
   margin-bottom: 10px;
   user-select: none;
+  display: flex;
+  overflow: hidden;
   cursor: pointer;
 
   &.checked {
@@ -19,28 +21,39 @@
 
   .userImg {
     width: 60px;
-    height: 100%;
     line-height: 58px;
-    background-color: #EBEBEB;
+    background-color: #ebebeb;
     border-right: 1px solid #ccc;
     text-align: center;
-    float: left;
 
     img {
+      justify-content: center;
       border-radius: 45px;
     }
   }
 
   .userContent {
-    display: inline-block;
+    flex: 1;
     padding-left: 6px;
-    padding-top: 4px;
-    widows: 120px;
+    padding-top: 2px;
 
     p {
       margin: 0;
       font-size: 9pt;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      word-break: break-all;
+      white-space: nowrap;
     }
   }
+}
 
+.spin {
+  display: inline-block;
+  opacity: 1;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  margin-top: 50px;
 }

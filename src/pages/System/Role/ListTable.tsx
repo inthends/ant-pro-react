@@ -1,8 +1,8 @@
-import Page from "@/components/Common/Page";
-import { Button, message, Modal, Switch, Table } from "antd";
-import { ColumnProps, PaginationConfig } from "antd/lib/table";
-import React from "react";
-import { SaveForm, RemoveForm } from "./Role.service";
+import Page from '@/components/Common/Page';
+import { Button, message, Modal, Switch, Table } from 'antd';
+import { ColumnProps, PaginationConfig } from 'antd/lib/table';
+import React from 'react';
+import { SaveForm, RemoveForm } from './Role.service';
 
 interface ListTableProps {
   loading: boolean;
@@ -10,26 +10,28 @@ interface ListTableProps {
   data: any[];
   modify(record: any): void;
   choose(record: any): void;
+  showAuth(record: any): void;
+
   onchange(page: any, filter: any, sort: any): any;
   reload(): void;
   setData(data: any[]): void;
 }
 
 function ListTable(props: ListTableProps) {
-  const { loading, data, modify, reload, pagination, setData, choose } = props;
+  const { loading, data, modify, reload, pagination, setData, choose, showAuth } = props;
 
   const doDelete = record => {
     Modal.confirm({
-      title: "请确认",
+      title: '请确认',
       content: `您是否要删除 ${record.fullName} 吗`,
       onOk: () => {
         RemoveForm(record.roleId)
           .then(() => {
-            message.success("删除成功");
+            message.success('删除成功');
             reload();
           })
           .catch(e => {});
-      }
+      },
     });
   };
   const doModify = record => {
@@ -44,29 +46,29 @@ function ListTable(props: ListTableProps) {
   };
   const columns = [
     {
-      title: "角色编号",
-      dataIndex: "enCode",
-      key: "enCode",
+      title: '角色编号',
+      dataIndex: 'enCode',
+      key: 'enCode',
       width: 150,
-      fixed: "left"
+      fixed: 'left',
     },
     {
-      title: "角色名称",
-      dataIndex: "fullName",
-      key: "fullName",
-      fixed: "left",
-      width: 150
+      title: '角色名称',
+      dataIndex: 'fullName',
+      key: 'fullName',
+      fixed: 'left',
+      width: 150,
     },
     {
-      title: "创建时间",
-      dataIndex: "createDate",
-      key: "createDate",
-      width: 250
+      title: '创建时间',
+      dataIndex: 'createDate',
+      key: 'createDate',
+      width: 250,
     },
     {
-      title: "有效",
-      dataIndex: "enabledMark",
-      key: "enabledMark",
+      title: '有效',
+      dataIndex: 'enabledMark',
+      key: 'enabledMark',
       width: 100,
       render: (text: any, record, index) => {
         return (
@@ -78,47 +80,46 @@ function ListTable(props: ListTableProps) {
             onClick={() => toggleDisabled(record)}
           />
         );
-      }
+      },
     },
     {
-      title: "角色描述",
-      dataIndex: "description",
-      key: "description"
+      title: '角色描述',
+      dataIndex: 'description',
+      key: 'description',
     },
     {
-      title: "操作",
-      dataIndex: "operation",
-      key: "operation",
+      title: '操作',
+      dataIndex: 'operation',
+      key: 'operation',
       width: 400,
-      fixed: "right",
+      fixed: 'right',
       render: (text, record) => {
         return [
-          <Button
-            key="choose"
-            style={{ marginRight: "10px" }}
-            onClick={() => choose(record)}
-          >
+          <Button key="auth" style={{ marginRight: '10px' }} onClick={() => showAuth(record)}>
+            角色授权
+          </Button>,
+          <Button key="choose" style={{ marginRight: '10px' }} onClick={() => choose(record)}>
             角色成员
           </Button>,
           <Button
             type="primary"
             key="modify"
-            style={{ marginRight: "10px" }}
+            style={{ marginRight: '10px' }}
             onClick={() => doModify(record)}
           >
             修改
           </Button>,
           <Button type="danger" key="delete" onClick={() => doDelete(record)}>
             删除
-          </Button>
+          </Button>,
         ];
-      }
-    }
+      },
+    },
   ] as ColumnProps<any>[];
   return (
     <Page>
       <Table
-        style={{ border: "none" }}
+        style={{ border: 'none' }}
         bordered={false}
         size="middle"
         dataSource={data}
@@ -136,5 +137,5 @@ export default ListTable;
 
 enum ENABLEDMARKS {
   正常 = 1,
-  禁用 = 0
+  禁用 = 0,
 }
