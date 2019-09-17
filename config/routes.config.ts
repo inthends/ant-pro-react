@@ -261,31 +261,21 @@ export default [
             path: '/system/role',
             component: './System/Role/Role',
           },
-          // {
-          //   name: '用户管理',
-          //   path: '/resource/test1',
-          //   component: './Resource/Test1',
-          // },
-          // {
-          //   name: '菜单管理',
-          //   path: '/resource/test1',
-          //   component: './Resource/Test1',
-          // },
-          // {
-          //   name: '编码管理',
-          //   path: '/resource/test1',
-          //   component: './Resource/Test1',
-          // },
-          // {
-          //   name: '词典管理',
-          //   path: '/resource/test1',
-          //   component: './Resource/Test1',
-          // },
-          // {
-          //   name: '模板管理',
-          //   path: '/resource/test1',
-          //   component: './Resource/Test1',
-          // },
+          {
+            name: '编码管理',
+            path: '/system/code',
+            component: './System/Code/Code',
+          },
+          {
+            name: '词典管理',
+            path: '/system/dictionary',
+            component: './System/Dictionary/Dictionary',
+          },
+          {
+            name: '模板管理',
+            path: '/system/template',
+            component: './System/Template/Template',
+          }
           // {
           //   name: '接口管理',
           //   path: '/resource/test1',
