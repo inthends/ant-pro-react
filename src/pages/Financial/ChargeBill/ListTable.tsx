@@ -116,29 +116,29 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'beginDate',
       key: 'beginDate',
       width: 85,
-      render: val => <span> {moment(val).format('YYYY-MM-DD')} </span>
+      render: val => moment(val).format('YYYY-MM-DD')
     }, {
       title: '计费终止日期',
       dataIndex: 'endDate',
       key: 'endDate',
       width: 85,
-      render: val => <span> {moment(val).format('YYYY-MM-DD')} </span>
+      render: val => moment(val).format('YYYY-MM-DD')
     }, {
       title: '账单日',
       dataIndex: 'billDate',
       key: 'billDate',
       width: 85,
-      render: val => <span> {moment(val).format('YYYY-MM-DD')} </span>
+      render: val => moment(val).format('YYYY-MM-DD')
     }, {
       title: '房屋全称',
       dataIndex: 'allname',
       key: 'allname',
-      width: 250
+      width: 200
     }, {
       title: '备注',
       dataIndex: 'memo',
       key: 'memo',
-      width: 200
+      width: 100
     },
     {
       title: '操作',
@@ -223,7 +223,7 @@ function ListTable(props: ListTableProps) {
             let info = Object.assign({}, values, {
               // roomId: organizeId,
               ids: JSON.stringify(selectedRowKeys),
-              UnitId:organizeId,
+              UnitId: organizeId,
               CustomerName: customerName,
               billDate: values.billDate.format('YYYY-MM-DD HH:mm:ss'),
               //organize.title.split(' ')[1]
@@ -392,7 +392,7 @@ function ListTable(props: ListTableProps) {
         columns={columns}
         rowKey={record => record.id}
         pagination={pagination}
-        scroll={{ y: 500, x: 1800 }}
+        scroll={{ y: 500, x: 1500 }}
         onChange={(pagination: PaginationConfig, filters, sorter) =>
           changePage(pagination, filters, sorter)
         }

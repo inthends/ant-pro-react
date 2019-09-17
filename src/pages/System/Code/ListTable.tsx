@@ -39,7 +39,7 @@ function ListTable(props: ListTableProps) {
       title: "编号",
       dataIndex: "enCode",
       key: "enCode",
-      width: 120,
+      width: 80,
     },
     {
       title: "名称",
@@ -57,13 +57,13 @@ function ListTable(props: ListTableProps) {
       title: "创建用户",
       dataIndex: "createUserName",
       key: "createUserName",
-      width: 150
+      width: 100
     },
     {
       title: "创建时间",
       dataIndex: "createDate",
       key: "createDate",
-      width: 150
+      width: 120
     },
     // {
     //   title: "有效",
@@ -86,12 +86,13 @@ function ListTable(props: ListTableProps) {
       title: "说明",
       dataIndex: "description",
       key: "description",
-      width: 100,
+      width: 300,
     },
     {
       title: "操作",
       dataIndex: "operation",
       key: "operation",
+      align:'center',
       width: 85,
       render: (text, record) => {
         return [
@@ -112,7 +113,7 @@ function ListTable(props: ListTableProps) {
         size="middle"
         dataSource={data}
         columns={columns}
-        rowKey={record => record.roleId}
+        rowKey={record => record.ruleId}
         scroll={{ y: 500 }}
         loading={loading}
         pagination={pagination}

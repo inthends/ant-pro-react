@@ -5,7 +5,7 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import { GetPageDetailListJson, GetBilling, GetDataItemTreeJson, GetOrgTree, GetInfoFormJson, GetPageListWithMeterID, RemoveUnitForm, RemoveUnitFormAll, SaveMain } from './BillingMain.service';
-import './style.less';
+import styles from './style.less';
 import moment from 'moment';
 import SelectHouse from './SelectHouse';
 const Search = Input.Search;
@@ -20,7 +20,7 @@ interface ModifyProps {
   organizeId?: string;
   isEdit: boolean;
   reload(): void;
-}
+};
 
 const Modify = (props: ModifyProps) => {
   const { modifyVisible, closeDrawer, form, id, reload, isEdit } = props;
@@ -33,10 +33,9 @@ const Modify = (props: ModifyProps) => {
   const [meterKinds, setMeterKinds] = useState<any>([]);
   const [meterTypes, setMeterTypes] = useState<any>([]);
   const [orgTreeData, setOrgTreeData] = useState<any>({});
-  const [selectHouseVisible, setSelectHouseVisible] = useState<boolean>(false);
-
+  const [selectHouseVisible, setSelectHouseVisible] = useState<boolean>(false); 
   const [unitMeterSearchParams, setUnitMeterSearchParams] = useState<any>({});
-  const [unitMeterLoading, setUnitMeterLoading] = useState<boolean>(false);
+  // const [unitMeterLoading, setUnitMeterLoading] = useState<boolean>(false);
   const [unitMeterData, setUnitMeterData] = useState<any>();
   const [unitMeterPagination, setUnitMeterPagination] = useState<DefaultPagination>(new DefaultPagination());
 
@@ -48,9 +47,9 @@ const Modify = (props: ModifyProps) => {
         setIsAdd(false);
         setLoading(true);
         GetBilling(id).then(res => {
-          setInfoDetail(res);
-          setLoading(false);
+          setInfoDetail(res); 
           initUnitMeterLoadData();
+          setLoading(false);
         });
       } else {
         form.resetFields();
@@ -72,7 +71,7 @@ const Modify = (props: ModifyProps) => {
     });
   }
 
-  const initUnitMeterLoadData = (org, searchText) => {
+  const initUnitMeterLoadData = ( searchText) => {
     const queryJson = {
       keyValue: id == null || id == '' ? '' : id,
       keyword: searchText,
@@ -84,7 +83,7 @@ const Modify = (props: ModifyProps) => {
   };
 
   const unitMeterload = data => {
-    setUnitMeterLoading(true);
+    //setUnitMeterLoading(true);
     data.sidx = data.sidx || 'id';
     data.sord = data.sord || 'asc';
     return GetPageDetailListJson(data).then(res => {
@@ -99,7 +98,7 @@ const Modify = (props: ModifyProps) => {
       });
       console.log(res);
       setUnitMeterData(res.data);
-      setUnitMeterLoading(false);
+      //setUnitMeterLoading(false);
       return res;
     });
   };
@@ -138,7 +137,7 @@ const Modify = (props: ModifyProps) => {
       title: '单元编号',
       dataIndex: 'unitId',
       key: 'unitId',
-      width: 150,
+      width: 140,
       sorter: true
     },
     {
@@ -154,6 +153,13 @@ const Modify = (props: ModifyProps) => {
       key: 'period',
       width: 120,
       sorter: true,
+      render: val => {
+        if (val == null) {
+          return ''
+        } else {
+          return moment(val).format('YYYY年MM月');
+        }
+      }
     },
     {
       title: '数量',
@@ -167,14 +173,14 @@ const Modify = (props: ModifyProps) => {
       dataIndex: 'price',
       key: 'price',
       sorter: true,
-      width: 100
+      width: 80
     },
     {
       title: '周期',
       key: 'cycleValue',
       dataIndex: 'cycleValue',
       sorter: true,
-      width: 100
+      width: 80
     },
     {
       title: '周期单位',
@@ -229,7 +235,7 @@ const Modify = (props: ModifyProps) => {
       dataIndex: 'operation',
       key: 'operation',
       align: 'center',
-      width: 100,
+      width: 70,
       render: (text, record) => {
         return [
           isEdit ?
@@ -261,7 +267,7 @@ const Modify = (props: ModifyProps) => {
       style={{ height: 'calc(100vh-50px)' }}
       bodyStyle={{ background: '#f6f7fb', height: 'calc(100vh -50px)' }}
     >
-      <Card  >
+      <Card className={styles.card} >
         <Form layout="vertical" hideRequiredMark>
           <Spin tip="数据加载中..." spinning={loading}>
             <Row gutter={24}>
@@ -309,16 +315,16 @@ const Modify = (props: ModifyProps) => {
                   {getFieldDecorator('verifyPerson', {
                     initialValue: infoDetail.verifyPerson,
                   })(
-                    <Input readOnly />
+                    <Input readOnly placeholder="自动获取" />
                   )}
                 </Form.Item>
               </Col>
               <Col span={8}>
                 <Form.Item required label="审核日期"   >
                   {getFieldDecorator('verifyDate', {
-                    initialValue: infoDetail.billDate == null ? '' : moment(infoDetail.billDate),
+                    initialValue: infoDetail.verifyDate == null ? '' :  infoDetail.verifyDate,
                   })(
-                    <Input readOnly />
+                    <Input readOnly placeholder="自动获取" />
                   )}
                 </Form.Item>
               </Col>
@@ -346,7 +352,7 @@ const Modify = (props: ModifyProps) => {
                     initMeterLoadData();
                   }}
                 />
-                <Button type="link" style={{ float: 'right', marginLeft: '10px' }} disabled={!isEdit}
+                <Button type="link" style={{ float: 'right'  }} disabled={!isEdit}
                   onClick={() => {
                     Modal.confirm({
                       title: '请确认',
@@ -370,7 +376,7 @@ const Modify = (props: ModifyProps) => {
                   <Icon type="delete" />
                   全部删除
               </Button>
-                <Button type="link" style={{ float: 'right', marginLeft: '10px' }} disabled={!isEdit}
+                <Button type="link" style={{ float: 'right'  }} disabled={!isEdit}
                   onClick={() => {
                     checkEntity();
                   }}
@@ -391,7 +397,7 @@ const Modify = (props: ModifyProps) => {
                 dataSource={unitMeterData}
                 rowKey="unitmeterid"
                 pagination={unitMeterPagination}
-                scroll={{ y: 500, x: 2100 }}
+                scroll={{ y: 500, x: 1200 }}
                 loading={loading}
               />
             </Row>
@@ -424,7 +430,7 @@ const Modify = (props: ModifyProps) => {
                 var meterEntity = {
                   keyValue: id == null || id == '' ? guid : id,
                   //BillId:'',// id == null || id == '' ? guid : id,
-                  BillSource: '周期费计算',
+                  BillSource: '计算周期费',
                   BillDate: moment(values.billDate).format('YYYY-MM-DD'),
                   LinkId: '',
                   IfVerify: values.ifVerify == "未审核" ? false : true,

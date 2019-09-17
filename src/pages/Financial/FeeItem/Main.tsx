@@ -192,6 +192,15 @@ function Main() {
     });
   };
 
+  //页签切换刷新
+  const changeTab = key => {
+    if (key == "1") {
+      initLoadData(FeeKind, FeeType, search);
+    } else {
+      initHouseLoadData(FeeKind, FeeType, search);
+    }
+  };
+
   return (
     <Layout style={{ height: '100%' }}>
       {/* <Sider theme="light" style={{ overflow: 'hidden', height: '1000px' }} width="245px">
@@ -244,7 +253,7 @@ function Main() {
       </Sider>
 
       <Content style={{ paddingLeft: '18px' }}>
-        <Tabs defaultActiveKey="1" >
+        <Tabs defaultActiveKey="1" onChange={changeTab}>
           <TabPane tab="费项列表" key="1">
             <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
               <Search
@@ -298,7 +307,7 @@ function Main() {
                 onSearch={(value) => {
                   houseLoadData(value, houseFeeItemId);
                   setHouseSearch(value);
-                }} 
+                }}
               />
             </div>
             <HouseInfoList
