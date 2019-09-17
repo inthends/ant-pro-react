@@ -1,10 +1,11 @@
 import { BaseModifyProvider } from "@/components/BaseModifyDrawer/BaseModifyDrawer";
 import ModifyItem from "@/components/BaseModifyDrawer/ModifyItem";
-import { Modal, message, Divider, Icon, Button, Table, Card, Form, Row } from "antd";
+import { Modal, Divider, Icon, Button, Table, Card, Form, Row } from "antd";
 import { WrappedFormUtils } from "antd/lib/form/Form";
 import { ColumnProps } from "antd/lib/table";
 import React, { useEffect, useState } from "react";
 import { SaveForm } from "./Code.service";
+import RuleItem from './RuleItem';
 
 interface ModifyProps {
   visible: boolean;
@@ -14,10 +15,13 @@ interface ModifyProps {
   reload(): void;
 }
 const Modify = (props: ModifyProps) => {
-  const { data, form, visible } = props;
+  const { data, form, visible, reload } = props;
   let initData = data ? data : { enabledMark: 1 };
   initData.expDate = initData.expDate ? initData.expDate : new Date();
   const baseFormProps = { form, initData };
+
+  const [ruleItemVisible, setRuleItemVisible] = useState<boolean>(false);
+  const [ruleItem, setRuleItem] = useState<any>();
 
   const doSave = dataDetail => {
     let modifyData = { ...initData, ...dataDetail, keyValue: initData.roleId };
@@ -34,6 +38,11 @@ const Modify = (props: ModifyProps) => {
       }
     }
   }, [visible]);
+
+  //关闭弹出的规则页面
+  const closeRuleItem = () => {
+    setRuleItemVisible(false);
+  };
 
   const doModify = record => {
     //modify({ ...record });
@@ -53,9 +62,10 @@ const Modify = (props: ModifyProps) => {
     });
   };
 
-  const addRuleItem = () => {  
 
-
+  const showRuleItem = (item?) => {
+    setRuleItem(item);
+    setRuleItemVisible(true);
   };
 
   const columns = [
@@ -108,7 +118,7 @@ const Modify = (props: ModifyProps) => {
   ] as ColumnProps<any>[];
 
   return (
-    <BaseModifyProvider {...props} name="编号" save={doSave}>
+    <BaseModifyProvider {...props} name="编码" save={doSave}>
       <Card>
         <Form layout="vertical" hideRequiredMark>
           <Row gutter={24}>
@@ -137,7 +147,7 @@ const Modify = (props: ModifyProps) => {
         </Form>
 
         <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
-          <Button type="link" style={{ float: 'right', marginLeft: '10px' }} onClick={addRuleItem}  >
+          <Button type="link" style={{ float: 'right', marginLeft: '10px' }} onClick={showRuleItem}  >
             <Icon type="plus" />新增</Button>
         </div>
         <Table
@@ -154,11 +164,17 @@ const Modify = (props: ModifyProps) => {
         //   orgLoadData(pagination, sorter)
         // }
         // loading={orgLoading}
-        /> 
+        />
       </Card>
-    </BaseModifyProvider >
 
-    
+      <RuleItem
+        visible={ruleItemVisible} 
+        closeDrawer={closeRuleItem}
+        data={ruleItem}
+        reload={reload}
+      />
+
+    </BaseModifyProvider >
 
   );
 };

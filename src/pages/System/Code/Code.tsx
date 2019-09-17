@@ -36,7 +36,7 @@ const Code = () => {
     setModifyVisible(true);
   };
   const showChoose = (item?) => {
-    setUserVisible(true);
+    // setUserVisible(true);
     setCurrData(item);
   };
   const loadData = (
