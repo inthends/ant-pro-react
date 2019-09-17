@@ -25,7 +25,7 @@ const Modify = (props: ModifyProps) => {
   };
 
   return (
-    <BaseModifyProvider {...props} name="角色" save={doSave}>
+    <BaseModifyProvider {...props} name="单据编码" save={doSave}>
       <Form layout="vertical" hideRequiredMark>
         <Row gutter={24}>
           <ModifyItem

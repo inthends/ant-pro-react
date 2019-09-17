@@ -16,7 +16,7 @@ const { TabPane } = Tabs;
 const { TextArea } = Input;
 
 /*详情可编辑单元格*/
-const EditableContext = React.createContext();
+const EditableContext = React.createContext('');
 const EditableRow = ({ form, index, ...props }) => (
   <EditableContext.Provider value={form}>
     <tr {...props} />
@@ -193,7 +193,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
       pageSize: housePagination.pageSize,
       total: 0,
     };
-    var keyvalue = "";
+    let keyvalue ;
     if (id != null || id != '') {
       keyvalue = id;
     }
@@ -342,12 +342,12 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
   const onSave = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        let newData = {
-          payBeginDate: values.payBeginDate.format('YYYY-MM-DD HH:mm:ss'),
-          payEndDate: values.payEndDate.format('YYYY-MM-DD HH:mm:ss'),
-          beginDate: values.beginDate.format('YYYY-MM-DD HH:mm:ss'),
-          endDate: values.endDate.format('YYYY-MM-DD HH:mm:ss')
-        };
+        // let newData = {
+        //   payBeginDate: values.payBeginDate.format('YYYY-MM-DD HH:mm:ss'),
+        //   payEndDate: values.payEndDate.format('YYYY-MM-DD HH:mm:ss'),
+        //   beginDate: values.beginDate.format('YYYY-MM-DD HH:mm:ss'),
+        //   endDate: values.endDate.format('YYYY-MM-DD HH:mm:ss')
+        // };
 
         /*SaveForm(infoDetail.organizeId,newData).then((res)=>{
           close();
