@@ -3,7 +3,7 @@ import request from "@/utils/request";
 
 export function getDataList(data): Promise<any> {
   return request
-    .post(process.env.basePath + `/Role/GetPageListJson`, {
+    .post(process.env.basePath + `/Code/GetPageListJson`, {
       data: objToFormdata(data)
     })
     .then(getResult as any);
@@ -11,7 +11,7 @@ export function getDataList(data): Promise<any> {
 // 新增修改
 export function SaveForm(data): Promise<any> {
   return request
-    .post(process.env.basePath + `/Role/SaveForm`, {
+    .post(process.env.basePath + `/Code/SaveForm`, {
       data: objToFormdata(data)
     })
     .then(getResult as any);
@@ -29,7 +29,7 @@ export function searchUser(keyword): Promise<any[]> {
 // 删除
 export function RemoveForm(keyValue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Role/RemoveForm?keyValue=${keyValue}`, {})
+    .post(process.env.basePath + `/Code/RemoveForm?keyValue=${keyValue}`, {})
     .then(getResult as any);
 }
 export function getRoleTree(): Promise<any> {

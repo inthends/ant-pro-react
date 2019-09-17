@@ -15,7 +15,8 @@ interface ListTableProps {
   data: any[];
   reload(): void;
   showModify(id?, isedit?): void;
-  showVerify(id?, flag?): void;
+  // showVerify(id?, flag?): void;
+  showVerify(id?): void;
   form: WrappedFormUtils;
   getRowSelect(record): void;
 }
@@ -162,8 +163,8 @@ function ListTable(props: ListTableProps) {
               || record.billSource == "水电气生成" ? false : true)} key="modify">{record.ifVerifyName == "已审核"
                 || record.billSource == "水电气生成" ? "查看" : "修改"}</a>
             <Divider type="vertical" />
-            {!record.ifVerify ? <a onClick={() => showVerify(record.billId, false)} key="app">审核</a> :
-              <a  onClick={() => showVerify(record.id, true)} key="unapp"  >反审</a>
+            {!record.ifVerify ? <a onClick={() => showVerify(record.billId)} key="app">审核</a> :
+              <a  onClick={() => showVerify(record.billId)} key="unapp"  >反审</a>
             }
             <Divider type="vertical" />
             <MoreBtn key="more" item={record} />

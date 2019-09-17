@@ -1,8 +1,8 @@
 import Page from "@/components/Common/Page";
-import { Button, message, Modal, Switch, Table } from "antd";
+import { Divider, message, Modal, Table } from "antd";
 import { ColumnProps, PaginationConfig } from "antd/lib/table";
 import React from "react";
-import { SaveForm, RemoveForm } from "./Code.service";
+import { RemoveForm } from "./Code.service";
 
 interface ListTableProps {
   loading: boolean;
@@ -16,8 +16,7 @@ interface ListTableProps {
 }
 
 function ListTable(props: ListTableProps) {
-  const { loading, data, modify, reload, pagination, setData, choose } = props;
-
+  const { loading, data, modify, reload, pagination } = props; 
   const doDelete = record => {
     Modal.confirm({
       title: "请确认",
@@ -27,90 +26,81 @@ function ListTable(props: ListTableProps) {
           .then(() => {
             message.success("删除成功");
             reload();
-          })
-          .catch(e => {});
+          }).catch(e => { });
       }
     });
   };
   const doModify = record => {
     modify({ ...record });
   };
-  const toggleDisabled = record => {
-    record.enabledMark = record.enabledMark === 0 ? 1 : 0;
-    let keyValue = record.roleId;
-    SaveForm({ ...record, keyValue }).then(() => {
-      setData([...data]);
-    });
-  };
+
   const columns = [
     {
-      title: "角色编号",
+      title: "编号",
       dataIndex: "enCode",
       key: "enCode",
-      width: 150,
-      fixed: "left"
+      width: 80,
     },
     {
-      title: "角色名称",
+      title: "名称",
       dataIndex: "fullName",
       key: "fullName",
-      fixed: "left",
       width: 150
+    },
+    {
+      title: "当前流水号",
+      dataIndex: "currentNumber",
+      key: "currentNumber",
+      width: 200
+    },
+    {
+      title: "创建用户",
+      dataIndex: "createUserName",
+      key: "createUserName",
+      width: 100
     },
     {
       title: "创建时间",
       dataIndex: "createDate",
       key: "createDate",
-      width: 250
+      width: 120
     },
+    // {
+    //   title: "有效",
+    //   dataIndex: "enabledMark",
+    //   key: "enabledMark",
+    //   width: 100,
+    //   render: (text: any, record, index) => {
+    //     return (
+    //       <Switch
+    //         size="small"
+    //         checked={text === ENABLEDMARKS.正常}
+    //         checkedChildren={ENABLEDMARKS[ENABLEDMARKS.正常]}
+    //         unCheckedChildren={ENABLEDMARKS[ENABLEDMARKS.禁用]}
+    //         onClick={() => toggleDisabled(record)}
+    //       />
+    //     );
+    //   }
+    // },
     {
-      title: "有效",
-      dataIndex: "enabledMark",
-      key: "enabledMark",
-      width: 100,
-      render: (text: any, record, index) => {
-        return (
-          <Switch
-            size="small"
-            checked={text === ENABLEDMARKS.正常}
-            checkedChildren={ENABLEDMARKS[ENABLEDMARKS.正常]}
-            unCheckedChildren={ENABLEDMARKS[ENABLEDMARKS.禁用]}
-            onClick={() => toggleDisabled(record)}
-          />
-        );
-      }
-    },
-    {
-      title: "角色描述",
+      title: "说明",
       dataIndex: "description",
-      key: "description"
+      key: "description",
+      width: 300,
     },
     {
       title: "操作",
       dataIndex: "operation",
       key: "operation",
-      width: 400,
-      fixed: "right",
+      align:'center',
+      width: 85,
       render: (text, record) => {
         return [
-          <Button
-            key="choose"
-            style={{ marginRight: "10px" }}
-            onClick={() => choose(record)}
-          >
-            角色成员
-          </Button>,
-          <Button
-            type="primary"
-            key="modify"
-            style={{ marginRight: "10px" }}
-            onClick={() => doModify(record)}
-          >
-            修改
-          </Button>,
-          <Button type="danger" key="delete" onClick={() => doDelete(record)}>
-            删除
-          </Button>
+          <span>
+            <a onClick={() => doModify(record)} key="modify">编辑</a>
+            <Divider type="vertical" key='divider' />
+            <a onClick={() => doDelete(record)} key="delete">删除</a>
+          </span>
         ];
       }
     }
@@ -123,8 +113,8 @@ function ListTable(props: ListTableProps) {
         size="middle"
         dataSource={data}
         columns={columns}
-        rowKey={record => record.roleId}
-        scroll={{ x: 1350, y: 500 }}
+        rowKey={record => record.ruleId}
+        scroll={{ y: 500 }}
         loading={loading}
         pagination={pagination}
       />
@@ -133,8 +123,3 @@ function ListTable(props: ListTableProps) {
 }
 
 export default ListTable;
-
-enum ENABLEDMARKS {
-  正常 = 1,
-  禁用 = 0
-}

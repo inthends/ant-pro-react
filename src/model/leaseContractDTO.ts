@@ -51,7 +51,7 @@ export interface LeaseContractDTO {
     /**
      * 单价保留小数点位数
      */
-    precision?: number;
+    calcPrecision?: number;
     /**
      * 计算精度的方式  0-精确计算结果保留2位小数  1-每步计算保留2位小数
      */

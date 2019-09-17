@@ -22,8 +22,8 @@ function UnitTable(props: UnitTableProps) {
   const columns = [
     {
       title: '计费单号',
-      dataIndex: 'billId',
-      key: 'billId',
+      dataIndex: 'billCode',
+      key: 'billCode',
       width: 150,
       sorter: true
     },

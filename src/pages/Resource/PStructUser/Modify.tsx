@@ -21,7 +21,7 @@ interface ModifyProps {
 const Modify = (props: ModifyProps) => {
   const { modifyVisible, data, closeDrawer, form, reload } = props;
   const { getFieldDecorator } = form;
-  const title = data === undefined ? '添加住户资料' : '修改住户资料';
+  const title = data === undefined ? '添加客户' : '修改客户';
   const [infoDetail, setInfoDetail] = useState<any>({});
 
   const [treeData, setTreeData] = useState<any[]>([]); //所属机构

@@ -289,7 +289,7 @@ function BillingMain() {
               reload={() => initMeterLoadData('', meterSearch)}
               getRowSelect={(record) => {
                 setId(record.billId);
-                if (record.ifVerify == 1) {
+                if (record.ifVerify == 0) {
                   setIfVerify(true);
                 } else {
                   setIfVerify(false);

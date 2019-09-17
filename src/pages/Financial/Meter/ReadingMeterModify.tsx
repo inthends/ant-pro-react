@@ -1,28 +1,29 @@
 //新增抄表单
-import { Button, Col, DatePicker, Drawer, Tabs, Form, Row, Icon, Spin, Input, Table } from 'antd';
+import { Card, Button, Col, DatePicker, Drawer, Tabs, Form, Row, Icon, Spin, Input, Table } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import {  GetVirtualReadPageList, SaveReadPublicForm, SaveReadUnitForm, RemoveFormAll, RemoveUnitForm, RemoveReadPublicFormAll, RemoveReadPublicForm, GetPublicReadPageList, GetUnitReadPageList, GetMeterRead, RemoveReadVirtualFormAll } from './Meter.service';
+import { GetVirtualReadPageList, SaveReadPublicForm, SaveReadUnitForm, RemoveFormAll, RemoveUnitForm, RemoveReadPublicFormAll, RemoveReadPublicForm, GetPublicReadPageList, GetUnitReadPageList, GetMeterRead, RemoveReadVirtualFormAll } from './Meter.service';
 import './style.less';
 import ChargeFeeItem from './ChargeFeeItem';
 import SelectReadingMeterPublic from './SelectReadingMeterPublic';
 import SelectReadingMeterHouse from './SelectReadingMeterHouse';
 import SelectReadingMeterVirtual from './SelectReadingMeterVirtual';
-import moment from 'moment'; 
+import moment from 'moment';
 const Search = Input.Search;
 const { TabPane } = Tabs;
+const { TextArea } = Input;
 
 /*详情可编辑单元格*/
-const EditableContext = React.createContext();
+const EditableContext = React.createContext('');
 const EditableRow = ({ form, index, ...props }) => (
   <EditableContext.Provider value={form}>
     <tr {...props} />
   </EditableContext.Provider>
 );
 
-const EditableFormRow = Form.create()(EditableRow); 
+const EditableFormRow = Form.create()(EditableRow);
 class EditableCell extends React.Component {
   state = {
     editing: false,
@@ -192,7 +193,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
       pageSize: housePagination.pageSize,
       total: 0,
     };
-    var keyvalue = "";
+    let keyvalue ;
     if (id != null || id != '') {
       keyvalue = id;
     }
@@ -341,12 +342,12 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
   const onSave = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        let newData = {
-          payBeginDate: values.payBeginDate.format('YYYY-MM-DD HH:mm:ss'),
-          payEndDate: values.payEndDate.format('YYYY-MM-DD HH:mm:ss'),
-          beginDate: values.beginDate.format('YYYY-MM-DD HH:mm:ss'),
-          endDate: values.endDate.format('YYYY-MM-DD HH:mm:ss')
-        };
+        // let newData = {
+        //   payBeginDate: values.payBeginDate.format('YYYY-MM-DD HH:mm:ss'),
+        //   payEndDate: values.payEndDate.format('YYYY-MM-DD HH:mm:ss'),
+        //   beginDate: values.beginDate.format('YYYY-MM-DD HH:mm:ss'),
+        //   endDate: values.endDate.format('YYYY-MM-DD HH:mm:ss')
+        // };
 
         /*SaveForm(infoDetail.organizeId,newData).then((res)=>{
           close();
@@ -735,70 +736,71 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
       style={{ height: 'calc(100vh-50px)' }}
       bodyStyle={{ background: '#f6f7fb', height: 'calc(100vh -50px)' }}
     >
-      <Form layout="vertical" hideRequiredMark>
-        <Spin tip="数据加载中..." spinning={loading}>
-          <Row gutter={12}>
-            <Col span={8}>
-              <Form.Item required={true} label="单据编号"  >
-                {getFieldDecorator('billCode', {
-                  initialValue: infoDetail.billCode,
-                })(
-                  <Input placeholder="自动获取编号" readOnly style={{ width: '100%' }} ></Input>
-                )}
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item required={true} label="单据日期">
-                {getFieldDecorator('readDate', {
-                  initialValue: infoDetail.readDate == null ? moment(new Date()) : moment(infoDetail.readDate),
-                  rules: [{ required: true, message: '请选择单据日期' }],
-                })(
-                  <DatePicker style={{ width: '100%' }} ></DatePicker>
-                )}
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item required={true} label="抄表日期" >
-                {getFieldDecorator('meterCode', {
-                  initialValue: infoDetail.meterCode == null ? moment(new Date()) : moment(infoDetail.readDate),
-                  rules: [{ required: true, message: '请选择抄表时间' }],
-                })(
-                  <DatePicker.MonthPicker style={{ width: '100%' }}  ></DatePicker.MonthPicker>
-                )}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={12}>
-            <Col span={8}>
-              <Form.Item required={true} label="抄表人">
-                {getFieldDecorator('meterReader', {
-                  initialValue: infoDetail.meterReader,
-                })(
-                  <Input style={{ width: '100%' }} placeholder="自动获取当前用户" readOnly ></Input>
-                )}
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item required={true} label="结束抄表日期"  >
-                {getFieldDecorator('endReadDate', {
-                  initialValue: infoDetail.endReadDate == null ? moment(new Date()) : moment(infoDetail.endReadDate),
-                  rules: [{ required: true, message: '请选择结束抄表日期' }],
-                })(
-                  <DatePicker style={{ width: '100%' }} ></DatePicker>
-                )}
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item required={true} label="结束标识"  >
-                {getFieldDecorator('batchCode', {
-                  initialValue: infoDetail.batchCode == null ? "" : infoDetail.batchCode,
-                })(
-                  <Input style={{ width: '100%' }} />
-                )}
-              </Form.Item>
-            </Col>
-          </Row>
-          {/* <Row gutter={12}>
+      <Card>
+        <Form layout="vertical" hideRequiredMark>
+          <Spin tip="数据加载中..." spinning={loading}>
+            <Row gutter={12}>
+              <Col span={8}>
+                <Form.Item required={true} label="单据编号"  >
+                  {getFieldDecorator('billCode', {
+                    initialValue: infoDetail.billCode,
+                  })(
+                    <Input placeholder="自动获取编号" readOnly style={{ width: '100%' }} ></Input>
+                  )}
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item required={true} label="单据日期">
+                  {getFieldDecorator('readDate', {
+                    initialValue: infoDetail.readDate == null ? moment(new Date()) : moment(infoDetail.readDate),
+                    rules: [{ required: true, message: '请选择单据日期' }],
+                  })(
+                    <DatePicker style={{ width: '100%' }} ></DatePicker>
+                  )}
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item required={true} label="抄表日期" >
+                  {getFieldDecorator('meterCode', {
+                    initialValue: infoDetail.meterCode == null ? moment(new Date()) : moment(infoDetail.readDate),
+                    rules: [{ required: true, message: '请选择抄表时间' }],
+                  })(
+                    <DatePicker.MonthPicker style={{ width: '100%' }}  ></DatePicker.MonthPicker>
+                  )}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={12}>
+              <Col span={8}>
+                <Form.Item required={true} label="抄表人">
+                  {getFieldDecorator('meterReader', {
+                    initialValue: infoDetail.meterReader,
+                  })(
+                    <Input style={{ width: '100%' }} placeholder="自动获取当前用户" readOnly ></Input>
+                  )}
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item required={true} label="结束抄表日期"  >
+                  {getFieldDecorator('endReadDate', {
+                    initialValue: infoDetail.endReadDate == null ? moment(new Date()) : moment(infoDetail.endReadDate),
+                    rules: [{ required: true, message: '请选择结束抄表日期' }],
+                  })(
+                    <DatePicker style={{ width: '100%' }} ></DatePicker>
+                  )}
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item required={true} label="结束标识"  >
+                  {getFieldDecorator('batchCode', {
+                    initialValue: infoDetail.batchCode == null ? "" : infoDetail.batchCode,
+                  })(
+                    <Input style={{ width: '100%' }} />
+                  )}
+                </Form.Item>
+              </Col>
+            </Row>
+            {/* <Row gutter={12}>
               <Col span={8}>
                 <Form.Item  required={true} label="状态"  >
                   {getFieldDecorator('ifVerifyName', {
@@ -827,235 +829,215 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                 </Form.Item>
               </Col>
           </Row> */}
-          <Row gutter={12}>
-            <Col span={24}>
-              <Form.Item required={true} label="抄表说明">
-                {getFieldDecorator('memo', {
-                  initialValue: infoDetail.memo == null ? '' : infoDetail.memo,
-                })(
-                  <Input style={{ width: '100%' }} ></Input>
-                )}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row>
-            <Tabs >
-              <TabPane tab="房屋费表" key="1">
-                <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
-                  <Search
-                    className="search-input"
-                    placeholder="请输入要查询的费表编号"
-                    style={{ width: 280 }}
-                  />
+            <Row gutter={12}>
+              <Col span={24}>
+                <Form.Item required={true} label="抄表说明">
+                  {getFieldDecorator('memo', {
+                    initialValue: infoDetail.memo == null ? '' : infoDetail.memo,
+                  })(
+                    <TextArea rows={4} style={{ width: '100%' }} />
+                  )}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Tabs >
+                <TabPane tab="房屋费表" key="1">
+                  <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
+                    <Search
+                      className="search-input"
+                      placeholder="请输入要查询的费表编号"
+                      style={{ width: 280 }}
+                    />
 
-                  <Button type="link" style={{ float: 'right' }}
-                    onClick={() => {
-                      /*var ids=[];
-                      houseData.map(item=>{
-                        ids.push(item.id);
-                      });*/
-                      RemoveFormAll(id).then(res => {
-                        initHouseLoadData();
-                      });
-                    }}
-                  >
-                    <Icon type="delete" />
-                    全部删除
+                    <Button type="link" style={{ float: 'right' }}
+                      onClick={() => {
+                        /*var ids=[];
+                        houseData.map(item=>{
+                          ids.push(item.id);
+                        });*/
+                        RemoveFormAll(id).then(res => {
+                          initHouseLoadData();
+                        });
+                      }}
+                    >
+                      <Icon type="delete" />
+                      全部删除
                 </Button>
-                  <Button type="link" style={{ float: 'right', marginLeft: '1px' }}
-                    onClick={() => {
-                      form.validateFields((errors, values) => {
-                        if (!errors) {
-                          let guid = getGuid();
-                          var meterEntity = {
-                            keyValue: id == null || id == '' ? guid : id,
-                            BillId: id == null || id == '' ? guid : id,
-                            BatchCode: values.batchCode,
-                            MeterCode: moment(values.meterCode).format('YYYYMM'),
-                            ReadDate: moment(values.readDate).format('YYYY-MM-DD'),
-                            EndReadDate: moment(values.endReadDate).format('YYYY-MM-DD'),
-                            IfVerify: false,
-                            Memo: values.memo,
-                            //MeterReader:values.meterReader
+                    <Button type="link" style={{ float: 'right', marginLeft: '1px' }}
+                      onClick={() => {
+                        form.validateFields((errors, values) => {
+                          if (!errors) {
+                            let guid = getGuid();
+                            var meterEntity = {
+                              keyValue: id == null || id == '' ? guid : id,
+                              BillId: id == null || id == '' ? guid : id,
+                              BatchCode: values.batchCode,
+                              MeterCode: moment(values.meterCode).format('YYYYMM'),
+                              ReadDate: moment(values.readDate).format('YYYY-MM-DD'),
+                              EndReadDate: moment(values.endReadDate).format('YYYY-MM-DD'),
+                              IfVerify: false,
+                              Memo: values.memo,
+                              //MeterReader:values.meterReader
+                            }
+                            setReadingDetail(
+                              meterEntity
+                            );
+                            setUnitFeeVisible(true);
                           }
-                          setReadingDetail(
-                            meterEntity
-                          );
-                          setUnitFeeVisible(true);
-                        }
-                      });
-                    }}
-                  >
-                    <Icon type="plus" />
-                    选择房屋
+                        });
+                      }}
+                    >
+                      <Icon type="plus" />
+                      选择房屋
                 </Button>
-                </div>
-                <div style={{ color: 'rgb(255,0,0)' }}> 请仔细核对抄表度数，度数错误会影响公摊计费，点击本次读数列和备注列可以编辑，编辑完按回车保存。</div>
-                <Table<any>
-                  components={components}
-                  onChange={(paginationConfig, filters, sorter) => {
-                    initHouseLoadData(paginationConfig, sorter)
-                  }}
-                  bordered={false}
-                  size="middle"
-                  columns={houseDataColumns}
-                  dataSource={houseData}
-                  rowKey="id"
-                  pagination={pagination}
-                  scroll={{ y: 500, x: 1620 }}
-                  loading={loading}
-                />
-              </TabPane>
-              <TabPane tab="公用费表" key="2">
-                <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
-                  <Search
-                    className="search-input"
-                    placeholder="请输入要查询的费表名称"
-                    style={{ width: 280 }}
+                  </div>
+                  <div style={{ color: 'rgb(255,0,0)' }}> 请仔细核对抄表度数，度数错误会影响公摊计费，点击本次读数列和备注列可以编辑，编辑完按回车保存。</div>
+                  <Table<any>
+                    components={components}
+                    onChange={(paginationConfig, filters, sorter) => {
+                      initHouseLoadData(paginationConfig, sorter)
+                    }}
+                    bordered={false}
+                    size="middle"
+                    columns={houseDataColumns}
+                    dataSource={houseData}
+                    rowKey="id"
+                    pagination={pagination}
+                    scroll={{ y: 500, x: 1620 }}
+                    loading={loading}
                   />
-                  <Button type="link" style={{ float: 'right', marginLeft: '10px' }}
-                    onClick={() => {
-                      /*var ids=[];
-                      publicData.map(item=>{
-                        ids.push(item.id);
-                      });*/
-                      RemoveReadPublicFormAll(id).then(res => {
-                        initPublicLoadData();
-                      });
-                    }}
-                  >
-                    <Icon type="delete" />
-                    全部删除
+                </TabPane>
+                <TabPane tab="公用费表" key="2">
+                  <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
+                    <Search
+                      className="search-input"
+                      placeholder="请输入要查询的费表名称"
+                      style={{ width: 280 }}
+                    />
+                    <Button type="link" style={{ float: 'right', marginLeft: '10px' }}
+                      onClick={() => {
+                        /*var ids=[];
+                        publicData.map(item=>{
+                          ids.push(item.id);
+                        });*/
+                        RemoveReadPublicFormAll(id).then(res => {
+                          initPublicLoadData();
+                        });
+                      }}
+                    >
+                      <Icon type="delete" />
+                      全部删除
                 </Button>
-                  <Button type="link" style={{ float: 'right', marginLeft: '10px' }}
-                    onClick={() => {
-                      form.validateFields((errors, values) => {
-                        if (!errors) {
-                          let guid = getGuid();
-                          var meterEntity = {
-                            keyValue: id == null || id == '' ? guid : id,
-                            BillId: id == null || id == '' ? guid : id,
-                            BatchCode: values.batchCode,
-                            MeterCode: moment(values.meterCode).format('YYYYMM'),
-                            ReadDate: moment(values.readDate).format('YYYY-MM-DD'),
-                            EndReadDate: moment(values.endReadDate).format('YYYY-MM-DD'),
-                            IfVerify: false,
-                            Memo: values.memo,
+                    <Button type="link" style={{ float: 'right', marginLeft: '10px' }}
+                      onClick={() => {
+                        form.validateFields((errors, values) => {
+                          if (!errors) {
+                            let guid = getGuid();
+                            var meterEntity = {
+                              keyValue: id == null || id == '' ? guid : id,
+                              BillId: id == null || id == '' ? guid : id,
+                              BatchCode: values.batchCode,
+                              MeterCode: moment(values.meterCode).format('YYYYMM'),
+                              ReadDate: moment(values.readDate).format('YYYY-MM-DD'),
+                              EndReadDate: moment(values.endReadDate).format('YYYY-MM-DD'),
+                              IfVerify: false,
+                              Memo: values.memo,
+                            }
+                            setReadingDetail(meterEntity);
+                            setPublicFeeVisible(true);
                           }
-                          setReadingDetail(meterEntity);
-                          setPublicFeeVisible(true);
-                        }
-                      })
-                    }
-                    }
-                  >
-                    <Icon type="plus" />
-                    添加公用费表
+                        })
+                      }
+                      }
+                    >
+                      <Icon type="plus" />
+                      添加公用费表
                 </Button>
-                </div>
-                <div style={{ color: 'rgb(255,0,0)' }}>点击本次读数列和备注列可以编辑，编辑完按回车保存。</div>
-                <Table<any>
-                  components={components}
-                  onChange={(paginationConfig, filters, sorter) => {
-                    initPublicLoadData(paginationConfig, sorter)
-                  }}
-                  bordered={false}
-                  size="middle"
-                  columns={publicDataColumns}
-                  dataSource={publicData}
-                  rowKey="id"
-                  pagination={pagination}
-                  scroll={{ y: 500, x: 1620 }}
-                  loading={loading}
-                />
-              </TabPane>
-              <TabPane tab="虚拟费表" key="3">
-                <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
-                  <Search
-                    className="search-input"
-                    placeholder="请输入要查询的费表编号"
-                    style={{ width: 280 }}
+                  </div>
+                  <div style={{ color: 'rgb(255,0,0)' }}>点击本次读数列和备注列可以编辑，编辑完按回车保存。</div>
+                  <Table<any>
+                    components={components}
+                    onChange={(paginationConfig, filters, sorter) => {
+                      initPublicLoadData(paginationConfig, sorter)
+                    }}
+                    bordered={false}
+                    size="middle"
+                    columns={publicDataColumns}
+                    dataSource={publicData}
+                    rowKey="id"
+                    pagination={pagination}
+                    scroll={{ y: 500, x: 1620 }}
+                    loading={loading}
                   />
-                  <Button type="link" style={{ float: 'right', marginLeft: '10px' }}
-                    onClick={() => {
-                      let ids: any[] = [];
-                      virtualData.map(item => {
-                        ids.push(item.id);
-                      });
-                      RemoveReadVirtualFormAll(JSON.stringify(ids)).then(res => {
-                        if (res.code != 0) { initVirtualLoadData(); }
-                      });
-                    }}
-                  >
-                    <Icon type="delete" />
-                    全部删除
+                </TabPane>
+                <TabPane tab="虚拟费表" key="3">
+                  <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
+                    <Search
+                      className="search-input"
+                      placeholder="请输入要查询的费表编号"
+                      style={{ width: 280 }}
+                    />
+                    <Button type="link" style={{ float: 'right', marginLeft: '10px' }}
+                      onClick={() => {
+                        let ids: any[] = [];
+                        virtualData.map(item => {
+                          ids.push(item.id);
+                        });
+                        RemoveReadVirtualFormAll(JSON.stringify(ids)).then(res => {
+                          if (res.code != 0) { initVirtualLoadData(); }
+                        });
+                      }}
+                    >
+                      <Icon type="delete" />
+                      全部删除
                 </Button>
-                  <Button type="link" style={{ float: 'right', marginLeft: '10px' }}
-                    onClick={() => {
-                      form.validateFields((errors, values) => {
-                        if (!errors) {
-                          let guid = getGuid();
-                          var meterEntity = {
-                            keyValue: id == null || id == '' ? guid : id,
-                            BillId: id == null || id == '' ? guid : id,
-                            BatchCode: values.batchCode,
-                            MeterCode: moment(values.meterCode).format('YYYYMM'),
-                            ReadDate: moment(values.readDate).format('YYYY-MM-DD'),
-                            EndReadDate: moment(values.endReadDate).format('YYYY-MM-DD'),
-                            IfVerify: false,
-                            Memo: values.memo,
+                    <Button type="link" style={{ float: 'right', marginLeft: '10px' }}
+                      onClick={() => {
+                        form.validateFields((errors, values) => {
+                          if (!errors) {
+                            let guid = getGuid();
+                            var meterEntity = {
+                              keyValue: id == null || id == '' ? guid : id,
+                              BillId: id == null || id == '' ? guid : id,
+                              BatchCode: values.batchCode,
+                              MeterCode: moment(values.meterCode).format('YYYYMM'),
+                              ReadDate: moment(values.readDate).format('YYYY-MM-DD'),
+                              EndReadDate: moment(values.endReadDate).format('YYYY-MM-DD'),
+                              IfVerify: false,
+                              Memo: values.memo,
+                            }
+                            setReadingDetail(meterEntity);
+                            setVirtualFeeVisible(true);
                           }
-                          setReadingDetail(meterEntity);
-                          setVirtualFeeVisible(true);
-                        }
-                      })
-                    }}
-                  >
-                    <Icon type="plus" />
-                    添加虚拟费表
+                        })
+                      }}
+                    >
+                      <Icon type="plus" />
+                      添加虚拟费表
                 </Button>
-                </div>
-                <Table<any>
-                  onChange={(paginationConfig, filters, sorter) => {
-                    initVirtualLoadData(paginationConfig, sorter)
-                  }}
-                  bordered={false}
-                  size="middle"
-                  columns={virtualFeeColumns}
-                  dataSource={virtualData}
-                  rowKey="id"
-                  pagination={pagination}
-                  scroll={{ y: 500, x: 1620 }}
-                  loading={loading}
-                />
-              </TabPane>
-            </Tabs>
-          </Row>
-        </Spin>
-        <div
-          style={{
-            position: 'absolute',
-            left: 0,
-            bottom: 0,
-            width: '100%',
-            borderTop: '1px solid #e9e9e9',
-            padding: '10px 16px',
-            background: '#fff',
-            textAlign: 'right',
-          }}
-        >
-          <Button style={{ marginRight: 8 }}
-            onClick={() => closeDrawer()}
-          >
-            取消
-        </Button>
-          <Button type="primary"
-            onClick={() => onSave()}
-          >
-            提交
-        </Button>
-        </div>
-      </Form>
+                  </div>
+                  <Table<any>
+                    onChange={(paginationConfig, filters, sorter) => {
+                      initVirtualLoadData(paginationConfig, sorter)
+                    }}
+                    bordered={false}
+                    size="middle"
+                    columns={virtualFeeColumns}
+                    dataSource={virtualData}
+                    rowKey="id"
+                    pagination={pagination}
+                    scroll={{ y: 500, x: 1620 }}
+                    loading={loading}
+                  />
+                </TabPane>
+              </Tabs>
+            </Row>
+          </Spin>
+
+        </Form>
+
+      </Card>
       <ChargeFeeItem
         visible={chargeFeeItemVisible}
         closeModal={closeChargeFeeItem}
@@ -1097,6 +1079,33 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
         }}
         id={publicFeeItemRowId}
       />
+
+
+      <div
+        style={{
+          position: 'absolute',
+          left: 0,
+          bottom: 0,
+          width: '100%',
+          borderTop: '1px solid #e9e9e9',
+          padding: '10px 16px',
+          background: '#fff',
+          textAlign: 'right',
+          zIndex: 999
+        }}
+      >
+        <Button style={{ marginRight: 8 }}
+          onClick={() => closeDrawer()}
+        >
+          取消
+        </Button>
+        <Button type="primary"
+          onClick={() => onSave()}
+        >
+          提交
+        </Button>
+      </div>
+
     </Drawer>
   );
 };

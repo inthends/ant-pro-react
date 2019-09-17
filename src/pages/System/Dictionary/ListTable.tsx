@@ -1,5 +1,5 @@
 import Page from "@/components/Common/Page";
-import { Button, message, Modal, Switch, Table } from "antd";
+import { Divider, message, Modal, Switch, Table } from "antd";
 import { ColumnProps, PaginationConfig } from "antd/lib/table";
 import React from "react";
 import { SaveForm, RemoveForm } from "./Dictionary.service";
@@ -16,7 +16,7 @@ interface ListTableProps {
 }
 
 function ListTable(props: ListTableProps) {
-  const { loading, data, modify, reload, pagination, setData, choose } = props;
+  const { loading, data, modify, reload, pagination, setData } = props;
   const doDelete = record => {
     Modal.confirm({
       title: "请确认",
@@ -27,7 +27,7 @@ function ListTable(props: ListTableProps) {
             message.success("删除成功");
             reload();
           })
-          .catch(e => {});
+          .catch(e => { });
       }
     });
   };
@@ -43,24 +43,34 @@ function ListTable(props: ListTableProps) {
   };
   const columns = [
     {
-      title: "角色编号",
-      dataIndex: "enCode",
-      key: "enCode",
-      width: 150,
-      fixed: "left"
+      title: "词典名称",
+      dataIndex: "itemName",
+      key: "itemName",
+      width: 100,
     },
     {
-      title: "角色名称",
-      dataIndex: "fullName",
-      key: "fullName",
-      fixed: "left",
-      width: 150
+      title: "词典值",
+      dataIndex: "itemValue",
+      key: "itemValue",
+      width: 100
     },
     {
-      title: "创建时间",
-      dataIndex: "createDate",
-      key: "createDate",
-      width: 250
+      title: "简拼",
+      dataIndex: "simpleSpelling",
+      key: "simpleSpelling",
+      width: 100
+    },
+    {
+      title: "排序",
+      dataIndex: "sortCode",
+      key: "sortCode",
+      width: 80
+    },
+    {
+      title: "默认",
+      dataIndex: "isDefault",
+      key: "isDefault",
+      width: 80
     },
     {
       title: "有效",
@@ -80,36 +90,23 @@ function ListTable(props: ListTableProps) {
       }
     },
     {
-      title: "角色描述",
+      title: "备注",
       dataIndex: "description",
-      key: "description"
+      key: "description",
+      width: 100,
     },
     {
       title: "操作",
       dataIndex: "operation",
       key: "operation",
-      width: 400,
-      fixed: "right",
+      width: 85,
       render: (text, record) => {
         return [
-          <Button
-            key="choose"
-            style={{ marginRight: "10px" }}
-            onClick={() => choose(record)}
-          >
-            角色成员
-          </Button>,
-          <Button
-            type="primary"
-            key="modify"
-            style={{ marginRight: "10px" }}
-            onClick={() => doModify(record)}
-          >
-            修改
-          </Button>,
-          <Button type="danger" key="delete" onClick={() => doDelete(record)}>
-            删除
-          </Button>
+          <span>
+            <a onClick={() => doModify(record)} key="modify">编辑</a>
+            <Divider type="vertical" key='divider' />
+            <a onClick={() => doDelete(record)} key="delete">删除</a>
+          </span>
         ];
       }
     }
@@ -123,7 +120,7 @@ function ListTable(props: ListTableProps) {
         dataSource={data}
         columns={columns}
         rowKey={record => record.roleId}
-        scroll={{ x: 1350, y: 500 }}
+        scroll={{ y: 500 }}
         loading={loading}
         pagination={pagination}
       />

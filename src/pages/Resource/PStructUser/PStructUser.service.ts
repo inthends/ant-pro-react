@@ -39,7 +39,7 @@ export function SaveForm(data): Promise<any> {
 // 删除
 export function RemoveForm(keyValue): Promise<any> {
   return request
-    .post(process.env.basePath + `/PStructUser/RemoveForm`, { data: objToFormdata({ keyValue }) })
+    .post(process.env.basePath + `/PStructUser/RemoveForm?keyValue=${keyValue}`, { })
     .then(getResult as any);
 }
 

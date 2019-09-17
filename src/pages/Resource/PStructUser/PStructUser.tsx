@@ -103,7 +103,7 @@ function PublicArea() {
           />
           <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer()}>
             <Icon type="plus" />
-            住户资料
+            客户
           </Button>
         </div>
         <ListTable

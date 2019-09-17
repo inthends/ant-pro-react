@@ -1,12 +1,10 @@
 import { DefaultPagination } from "@/utils/defaultSetting";
-import { Button, Icon, Input, Layout, Select } from "antd";
+import { Button, Icon, Input, Layout } from "antd";
 import { PaginationConfig } from "antd/lib/table";
-import React, { useEffect, useState } from "react"; 
+import React, { useEffect, useState } from "react";
 import ListTable from "./ListTable";
 import Modify from "./Modify";
 import { getDataList } from "./Code.service";
-
-const { Option } = Select;
 const { Content } = Layout;
 const { Search } = Input;
 interface SearchParam {
@@ -18,7 +16,7 @@ const Code = () => {
     condition: "EnCode",
     keyword: ""
   });
-  const [modifyVisible, setModifyVisible] = useState<boolean>(false); 
+  const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<any[]>([]);
   const [currData, setCurrData] = useState<any>();
@@ -38,7 +36,7 @@ const Code = () => {
     setModifyVisible(true);
   };
   const showChoose = (item?) => {
-    setUserVisible(true);
+    // setUserVisible(true);
     setCurrData(item);
   };
   const loadData = (
@@ -105,20 +103,8 @@ const Code = () => {
 
   return (
     <Layout style={{ height: "100%" }}>
-      <Content style={{ padding: "0 20px", overflow: "auto" }}>
-        <div style={{ marginBottom: 20, padding: "3px 0" }}>
-          <Select
-            style={{ marginRight: 20, width: 100 }}
-            value={search.condition}
-            onChange={condition => loadData({ ...search, condition })}
-          >
-            <Option value="EnCode" key="EnCode">
-              角色编号
-            </Option>
-            <Option value="FullName" key="FullName">
-              角色名称
-            </Option>
-          </Select>
+      <Content  >
+        <div style={{ marginBottom: 20, padding: "3px 0" }}> 
           <Search
             className="search-input"
             placeholder="请输入要查询的关键词"
@@ -131,7 +117,7 @@ const Code = () => {
             onClick={() => showDrawer()}
           >
             <Icon type="plus" />
-            角色
+            编码
           </Button>
         </div>
         <ListTable
@@ -152,7 +138,7 @@ const Code = () => {
         closeDrawer={closeDrawer}
         data={currData}
         reload={() => initLoadData({ ...search })}
-      /> 
+      />
     </Layout>
   );
 };

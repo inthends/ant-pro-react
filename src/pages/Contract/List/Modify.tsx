@@ -152,8 +152,8 @@ const Modify = (props: ModifyProps) => {
 
         GetChargeDetail({
           ...entity,
-          leaseContractId: '',
-          Precision: values.precision,
+          LeaseContractId: '',
+          CalcPrecision: values.calcPrecision,
           CalcPrecisionMode: values.calcPrecisionMode,
           TermJson: strTermJson,
           RateJson: strRateJson,
@@ -199,7 +199,7 @@ const Modify = (props: ModifyProps) => {
         Contract.contractStartDate = values.contractStartDate.format('YYYY-MM-DD');
         Contract.billingDate = values.billingDate.format('YYYY-MM-DD');
         Contract.contractEndDate = values.contractEndDate.format('YYYY-MM-DD');
-        Contract.precision = values.precision;
+        Contract.calcPrecision = values.calcPrecision;
         Contract.calcPrecisionMode = values.calcPrecisionMode;
         Contract.customer = values.customer;
         Contract.industry = values.industry;
@@ -381,7 +381,7 @@ const Modify = (props: ModifyProps) => {
                   <Row gutter={24}>
                     <Col lg={12}>
                       <Form.Item label="单价保留小数点">
-                        {getFieldDecorator('precision', {
+                        {getFieldDecorator('calcPrecision', {
                           initialValue: 2,
                           rules: [{ required: true, message: '请填写保留几位' }],
                         })(<InputNumber placeholder="请填写保留几位" style={{ width: '100%' }} />)}

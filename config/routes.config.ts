@@ -262,17 +262,17 @@ export default [
             component: './System/Role/Role',
           },
           {
-            name: '编码管理',
+            name: 'code',
             path: '/system/code',
             component: './System/Code/Code',
           },
           {
-            name: '词典管理',
+            name: 'dictionary',
             path: '/system/dictionary',
             component: './System/Dictionary/Dictionary',
           },
           {
-            name: '模板管理',
+            name: 'template',
             path: '/system/template',
             component: './System/Template/Template',
           }
