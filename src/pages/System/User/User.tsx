@@ -1,12 +1,13 @@
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { Button, Icon, Input, Layout, Select } from 'antd';
+import { Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import ListTable from './ListTable';
 import Modify from './Modify';
-import { getDataList } from './User.service';
+import { getDataList, searchOrgs } from './User.service';
+import { TreeNode } from 'antd/lib/tree-select';
 
-const { Option } = Select;
+ 
 const { Content } = Layout;
 const { Search } = Input;
 interface SearchParam {
@@ -23,10 +24,18 @@ const  User = () => {
   const [data, setData] = useState<any[]>([]);
   const [currData, setCurrData] = useState<any>();
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
+  const [orgs, setOrgs] = useState<TreeNode[]>();
 
   useEffect(() => {
     initLoadData(search);
+    getOrgs();
   }, []);
+
+  const getOrgs = () => {
+    searchOrgs().then(res => {
+      setOrgs(res);
+    });
+  };
 
   const closeDrawer = () => {
     setModifyVisible(false);
@@ -137,6 +146,7 @@ const  User = () => {
         visible={modifyVisible}
         closeDrawer={closeDrawer}
         data={currData}
+        treeDate={orgs}
         reload={() => initLoadData({ ...search })}
       />
     </Layout>
