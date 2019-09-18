@@ -1,11 +1,9 @@
 //选择所属机构
 import { Button,Col, Form,Input,Row,Icon,Modal, message,Tree, InputNumber,Select} from 'antd';
-import { TreeEntity } from '@/model/models';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import {GetAllFeeItems, OrganizeSaveForm,GetOrgTreeOnly,GetOrganizeForm,GetOrgTaxTateFormJson,OrganizeEditForm} from './Main.service';
+import {GetAllFeeItems, GetOrgTaxTateFormJson,OrganizeEditForm} from './Main.service';
 import './style.less';
-import LeftSelectTree from '../LeftSelectTree';
 interface EditOrginizeProps {
   visible: boolean;
   closeModal(): void;
@@ -44,7 +42,6 @@ const EditOrginize = (props: EditOrginizeProps) => {
       onOk={() => {
         form.validateFields((errors, values) => {
           if (!errors) {
-            console.log(infoDetail);
             let newData={
               keyValue:infoDetail.id,
               Id:infoDetail.id,
