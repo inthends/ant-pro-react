@@ -1,4 +1,4 @@
-import { AccountEntity } from '@/model/accountEntity';
+import { JcAccount } from '@/model/jcAccount';
 import { getResult, objToFormdata, objToUrl } from '@/utils/networkUtils';
 import request from '@/utils/request';
 
@@ -8,7 +8,7 @@ export function getDataList(data): Promise<any> {
     .then(getResult as any);
 }
 // 新增修改
-export function SaveForm(data): Promise<AccountEntity> {
+export function SaveForm(data): Promise<JcAccount> {
   return request
     .post(process.env.basePath + `/Account/SaveForm`, { data: objToFormdata(data) })
     .then(getResult as any);
@@ -37,4 +37,9 @@ export function DisabledToggle(keyValue, disabled: boolean): Promise<any> {
       .post(process.env.basePath + `/Account/EnabledAccount?keyValue=${keyValue}`, {})
       .then(getResult as any);
   }
+}
+
+// 查询机构
+export function searchOrgs(): Promise<any[]> {
+  return request.get(process.env.basePath + `/Common/GetOrgTreeOnly`).then(getResult as any);
 }

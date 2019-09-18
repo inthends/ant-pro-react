@@ -1,4 +1,4 @@
-import { Modal, Tree, Input, Row, Col } from 'antd';
+import { Modal, Tree, Input, Row  } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { getRoleTree, getUserList, chooseUser } from './Role.service';
 import UserLabel from './UserLabel';
@@ -13,8 +13,7 @@ const ChooseUser = (props: ModifyProps) => {
   const { visible, data, close } = props;
   const { roleId = '' } = data || {};
   const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
-  const [treeData, setTreeData] = useState<any[]>([]);
-
+  const [treeData, setTreeData] = useState<any[]>([]); 
   const [searchText, setSearchText] = useState<string>('');
   const [depId, setDepId] = useState<string>('');
   const [userList, setUserList] = useState<any[]>([]);
@@ -29,7 +28,7 @@ const ChooseUser = (props: ModifyProps) => {
   }, [visible]);
   // 此处搜索只能做前端过滤，否则会导致其他部门有权限的员工被清空，除非保存时参数多传部门
   const searchUser = () => {
-    getUserList({ roleId, departmentId: '' }).then(res => {
+    getUserList({ roleId, departmentId: ''}).then(res => {
       setUserList(res || []);
     });
   };
@@ -117,5 +116,4 @@ const ChooseUser = (props: ModifyProps) => {
     </Modal>
   );
 };
-
 export default ChooseUser;

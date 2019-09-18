@@ -1,10 +1,9 @@
+//权限设置
 import React, { useEffect, useState, useRef } from 'react';
 import { Modal, Tree, Tabs, message, Spin } from 'antd';
 import styles from './style.less';
-
-import { GetAuths, GetDataAuths, SaveDataAuthorize, SaveModuleAuthorize } from './Role.service';
+import { GetDataHalfCheckIds, GetDataCheckIds, GetHalfCheckIds, GetCheckIds, GetAuths, GetDataAuths, SaveDataAuthorize, SaveModuleAuthorize } from './Role.service';
 const { TabPane } = Tabs;
-
 interface RoleAuthProps {
   visible: boolean;
   roleId?;
@@ -13,7 +12,6 @@ interface RoleAuthProps {
 const RoleAuth = (props: RoleAuthProps) => {
   const { visible, close, roleId } = props;
   const treeRef = useRef(null);
-
   useEffect(() => {
     if (visible) {
       changeTab(ACTIVEKEYS.功能权限);
@@ -23,34 +21,61 @@ const RoleAuth = (props: RoleAuthProps) => {
   const [auths, setAuths] = useState<any[]>([]);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [activeKey, setActiveKey] = useState<string>(ACTIVEKEYS.功能权限);
+  const [checkedKeys, setCheckedKeys] = useState<string[]>([]);//选中的模块节点 
+  const [halfCheckedKeys, setHalfCheckedKeys] = useState<string[]>([]);//半选中节点
 
   const save = (tab, treeData) => {
-    let keys = [];
-    if (treeRef.current) {
-      keys = (treeRef!.current! as any).tree.state.checkedKeys;
-    } else {
+    //let keys = checkedKeys;//[];
+    // if (treeRef.current) {
+    //   keys = (treeRef!.current! as any).tree.state.checkedKeys;
+    // } else {
+    //   return;
+    // } 
+
+    if (checkedKeys.length == 0)
       return;
-    }
+
     if (tab === ACTIVEKEYS.数据权限) {
-      SaveDataAuthorize({ roleId, authorizeDataJson: keys.join(',') }).then(() => {
-        message.success('保存成功');
+      //const halfchecks = halfCheckedKeys.join(',');//半选节点 
+      SaveDataAuthorize({ roleId, halfchecks: halfCheckedKeys.join(','), authorizeDataJson: checkedKeys.join(',') }).then(() => {
+        message.success('保存成功！');
+        close();
       });
     } else if (tab === ACTIVEKEYS.功能权限) {
-      const moduleIds = getMenu(keys, treeData, 'menu').join(',');
-      console.log(moduleIds);
-      const moduleButtonIds = getMenu(keys, treeData, 'button').join(',');
-      console.log(moduleButtonIds);
-      SaveModuleAuthorize({ roleId, moduleIds, moduleButtonIds }).then(() => {
-        message.success('保存成功');
+      const moduleIds = getMenu(checkedKeys, treeData, 'menu').join(',');
+      const moduleButtonIds = getMenu(checkedKeys, treeData, 'button').join(',');
+      const halfchecks = halfCheckedKeys.join(',');//半选节点
+      SaveModuleAuthorize({ roleId, halfchecks, moduleIds, moduleButtonIds }).then(() => {
+        message.success('保存成功！');
+        close();
       });
     }
   };
+
+  //点击事件
+  const onCheck = (checkedKeys, info) => { 
+    //let checkedKeysResult = [...checkedKeys, ...info.halfCheckedKeys];
+    setCheckedKeys(checkedKeys);
+    setHalfCheckedKeys(info.halfCheckedKeys);//半选中节点
+  };
+
   const changeTab = (e: string) => {
     setActiveKey(e);
     setIsLoaded(false);
     if (e === ACTIVEKEYS.功能权限) {
       GetAuths(roleId).then(res => {
         setAuths(res || []);
+
+        //半选
+        GetHalfCheckIds(roleId).then(res => {
+          setHalfCheckedKeys(res || []);
+        })
+
+        //全选
+        GetCheckIds(roleId).then(res => {
+          setCheckedKeys(res || []);
+        })
+
         setIsLoaded(true);
       });
       // } else if (e === ACTIVEKEYS.操作权限) {
@@ -61,8 +86,21 @@ const RoleAuth = (props: RoleAuthProps) => {
       //   });
     } else if (e === ACTIVEKEYS.数据权限) {
       GetDataAuths(roleId).then(res => {
-        console.log(JSON.parse(res));
-        setAuths(JSON.parse(res).treeJson || []);
+        //console.log(JSON.parse(res));
+
+
+        //半选
+        GetDataHalfCheckIds(roleId).then(res => {
+          setHalfCheckedKeys(res || []);
+        })
+
+        //全选
+        GetDataCheckIds(roleId).then(res => {
+          setCheckedKeys(res || []);
+        })
+
+        setAuths(res || []);
+        //setAuths(JSON.parse(res).treeJson || []);
         setIsLoaded(true);
       });
     }
@@ -82,7 +120,7 @@ const RoleAuth = (props: RoleAuthProps) => {
       onCancel={() => close()}
       onOk={() => save(activeKey, auths)}
       destroyOnClose={true}
-      bodyStyle={{ background: '#f6f7fb' }}
+      // bodyStyle={{ background: '#f6f7fb' }}
       width="500px"
     >
       {visible ? (
@@ -91,12 +129,15 @@ const RoleAuth = (props: RoleAuthProps) => {
             <Tree
               showLine
               checkable
+              // checkedKeys={checkedKeys}
+              checkedKeys={{ checked: checkedKeys, halfChecked: halfCheckedKeys }}
+              onCheck={onCheck}
               treeData={auths}
               key={activeKey}
               defaultExpandAll
               ref={treeRef}
             ></Tree>
-          ) : <Spin className={styles.spin}/>}
+          ) : <Spin className={styles.spin} />}
         </div>
       ) : null}
     </Modal>

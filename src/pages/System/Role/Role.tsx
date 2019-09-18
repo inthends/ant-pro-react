@@ -85,8 +85,7 @@ const Role = () => {
           total,
           pageSize,
         };
-      });
-
+      }); 
       setData(res.data);
       setLoading(false);
       return res;
@@ -108,7 +107,7 @@ const Role = () => {
     <Layout style={{ height: '100%' }}>
       <Content style={{ padding: '0 20px', overflow: 'auto' }}>
         <div style={{ marginBottom: 20, padding: '3px 0' }}>
-          <Select
+          {/* <Select
             style={{ marginRight: 20, width: 100 }}
             value={search.condition}
             onChange={condition => loadData({ ...search, condition })}
@@ -119,7 +118,7 @@ const Role = () => {
             <Option value="FullName" key="FullName">
               角色名称
             </Option>
-          </Select>
+          </Select> */}
           <Search
             className="search-input"
             placeholder="请输入要查询的关键词"

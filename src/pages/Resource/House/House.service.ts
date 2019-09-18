@@ -2,8 +2,8 @@ import { GmPstructure, ResponseObject, TreeEntity } from '@/model/models';
 import { getResult, objToFormdata, objToUrl } from '@/utils/networkUtils';
 import request from '@/utils/request';
 
-export function GetStatisticsTotal(): Promise<ResponseObject<any>> {
-  return request.post(process.env.basePath + `/PStructs/GetStatisticsTotal`, {});
+export function GetStatisticsTotal(data): Promise<ResponseObject<any>> {
+  return request.post(process.env.basePath + `/PStructs/GetStatisticsTotal`, { data: objToFormdata(data) });
 }
 export function GetStatistics(data): Promise<any> {
   return request

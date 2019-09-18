@@ -1,5 +1,5 @@
 import Page from '@/components/Common/Page';
-import { Button, message, Modal, Switch, Table } from 'antd';
+import { Divider, message, Modal, Switch, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import { SaveForm, RemoveForm } from './Role.service';
@@ -30,7 +30,7 @@ function ListTable(props: ListTableProps) {
             message.success('删除成功');
             reload();
           })
-          .catch(e => {});
+          .catch(e => { });
       },
     });
   };
@@ -49,27 +49,25 @@ function ListTable(props: ListTableProps) {
       title: '角色编号',
       dataIndex: 'enCode',
       key: 'enCode',
-      width: 150,
-      fixed: 'left',
+      width: 100,
     },
     {
       title: '角色名称',
       dataIndex: 'fullName',
       key: 'fullName',
-      fixed: 'left',
-      width: 150,
+      width: 100,
     },
     {
       title: '创建时间',
       dataIndex: 'createDate',
       key: 'createDate',
-      width: 250,
+      width: 120,
     },
     {
       title: '有效',
       dataIndex: 'enabledMark',
       key: 'enabledMark',
-      width: 100,
+      width: 80,
       render: (text: any, record, index) => {
         return (
           <Switch
@@ -86,32 +84,37 @@ function ListTable(props: ListTableProps) {
       title: '角色描述',
       dataIndex: 'description',
       key: 'description',
+      width: 200,
     },
     {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
-      width: 400,
-      fixed: 'right',
+      align: 'center',
+      width: 140,
       render: (text, record) => {
         return [
-          <Button key="auth" style={{ marginRight: '10px' }} onClick={() => showAuth(record)}>
-            角色授权
-          </Button>,
-          <Button key="choose" style={{ marginRight: '10px' }} onClick={() => choose(record)}>
-            角色成员
-          </Button>,
-          <Button
-            type="primary"
-            key="modify"
-            style={{ marginRight: '10px' }}
-            onClick={() => doModify(record)}
-          >
-            修改
-          </Button>,
-          <Button type="danger" key="delete" onClick={() => doDelete(record)}>
-            删除
-          </Button>,
+          <span>
+            <a
+              type="link"
+              key="modify"
+              onClick={() => doModify(record)}
+            >
+              修改
+          </a>
+            <Divider type="vertical" key='divider' />
+            <a key="choose" type='link' onClick={() => choose(record)}>
+              角色成员
+          </a> 
+          <Divider type="vertical" key='divider' /> 
+          <a key="auth" type='link' onClick={() => showAuth(record)}>
+              角色授权
+          </a> 
+            <Divider type="vertical" key='divider' />
+            <a type="link" key="delete" onClick={() => doDelete(record)}>
+              删除
+          </a>
+          </span>
         ];
       },
     },
@@ -125,7 +128,7 @@ function ListTable(props: ListTableProps) {
         dataSource={data}
         columns={columns}
         rowKey={record => record.roleId}
-        scroll={{ x: 1350, y: 500 }}
+        scroll={{ y: 500 }}
         loading={loading}
         pagination={pagination}
       />
