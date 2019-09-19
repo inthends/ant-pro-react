@@ -1,4 +1,4 @@
-import { ResponseObject, TreeEntity } from '@/model/models';
+import {  TreeEntity } from '@/model/models';
 import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
 import { CwReductionmain } from '@/model/cwReductionmain'; 
@@ -14,9 +14,9 @@ export function GetReceivablesTree(): Promise<TreeEntity[]> {
 }
 
 //加载房间树
-export function GetTreeListExpand(): Promise<ResponseObject<TreeEntity[]>> {
-  return request.get(process.env.basePath + `/Common/GetQuickPStructsTree`, {});
-}
+// export function GetTreeListExpand(): Promise<ResponseObject<TreeEntity[]>> {
+//   return request.get(process.env.basePath + `/Common/GetQuickPStructsTree`, {});
+// }
 
 // 查询明细列表
 export function GetDetailPageListJson(data): Promise<any> {

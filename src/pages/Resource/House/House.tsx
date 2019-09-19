@@ -155,7 +155,24 @@ function House() {
           <Search
             className="search-input"
             placeholder="搜索项目名称"
-            onSearch={value => loadData(value, organizeId)}
+            onSearch={value => {
+
+              //刷新统计
+              GetStatisticsTotal(
+                {
+                  queryJson:
+                  {
+                    OrganizeId: organizeId,
+                    keyword: value
+                  }
+                }
+              ).then(getResult).then(res => {
+                  setTotalData(res || []);
+              });
+
+              //查询列表
+              loadData(value, organizeId)
+            }}
             style={{ width: 200 }}
           />
           <AuthButton

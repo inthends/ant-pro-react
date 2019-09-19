@@ -19,13 +19,13 @@ const AddHouseFee = (props: AddHouseFeeProps) => {
 
  const [checkedList,setCheckedList]=useState<string[]>([]);
  const [unitData,setUnitData]=useState<string[]>([]);
-const [houseTreeData,setHouseTreeData]=useState<TreeEntity[]>([]);
+// const [houseTreeData,setHouseTreeData]=useState<TreeEntity[]>([]);
   useEffect(() => {
     if(visible){
-      var queryJson={FeeItemID:feeId}
-      GetQuickSimpleTreeAll(JSON.stringify(queryJson)).then((res) => {
-        setHouseTreeData(res || []);
-      });
+      // var queryJson={FeeItemID:feeId}
+      // GetQuickSimpleTreeAll(JSON.stringify(queryJson)).then((res) => {
+      //   setHouseTreeData(res || []);
+      // });
     }
   }, [visible]);
 

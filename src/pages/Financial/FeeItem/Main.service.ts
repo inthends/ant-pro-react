@@ -46,10 +46,10 @@ export function GetUnitFeeItemData(data): Promise<any> {
   return request.post(process.env.basePath + `/FeeItems/GetUnitFeeItemData`, {data:objToFormdata(data)}).then(getResult as any);
 }
 
-//加载房间树
-export function GetQuickSimpleTreeAll(data): Promise<TreeEntity[]> {
-  return request.get(process.env.basePath + `/Common/GetQuickSimpleTreeAll?queryJson=${data}`, {}).then(getResult as any);
-}
+// //加载房间树
+// export function GetQuickSimpleTreeAll(data): Promise<TreeEntity[]> {
+//   return request.get(process.env.basePath + `/Common/GetQuickSimpleTreeAll?queryJson=${data}`, {}).then(getResult as any);
+// }
 export function OrganizeSaveForm(data): Promise<any> {
   return request.post(process.env.basePath + `/FeeItems/OrganizeSaveForm`, {data:objToFormdata(data)}).then(getResult as any);
 }
