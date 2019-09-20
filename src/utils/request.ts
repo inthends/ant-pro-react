@@ -51,14 +51,16 @@ const request = extend({
 // @ts-ignore 异常拦截器
 request.interceptors.response.use(async response => { 
 
-  const { status, headers } = response; 
+  const { status, headers } = response;  
   if (status === 403) {
+
+debugger
+
     const redirect = headers.get('redirect') || '';
     window.location.href = redirect;
   } else if (status === 200) {
     const { code, msg } = await response.clone().json();
-
-debugger
+ 
 
     if (code !== 200) {
       notification.error({

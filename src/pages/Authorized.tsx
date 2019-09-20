@@ -16,9 +16,8 @@ const AuthComponent: React.FC<AuthComponentProps> = props => {
     auth: { authlist },
   } = props;
   //const { currentUser } = user;
-  const auths = (authlist && authlist.map(item => item.urlAddress)) || [];
-  
-  const isAuth = authlist === undefined || auths.includes(location!.pathname);
+  const auths = (authlist && authlist.map(item => item.urlAddress)) || []; 
+  const isAuth = authlist === undefined || auths.includes(location!.pathname); 
   //console.log(isAuth, currentUser);
   // const isLogin =
   //   currentUser && currentUser.name && isAuth
