@@ -48,14 +48,18 @@ const request = extend({
   credentials: 'include', // 默认请求是否带上cookie
 });
 
-// @ts-ignore
-request.interceptors.response.use(async response => {
-  const { status, headers } = response;
+// @ts-ignore 异常拦截器
+request.interceptors.response.use(async response => { 
+
+  const { status, headers } = response; 
   if (status === 403) {
     const redirect = headers.get('redirect') || '';
     window.location.href = redirect;
   } else if (status === 200) {
     const { code, msg } = await response.clone().json();
+
+debugger
+
     if (code !== 200) {
       notification.error({
         message: `请求错误`,

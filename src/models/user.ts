@@ -53,18 +53,18 @@ const UserModel: UserModelType = {
       });
     },
     *fetchCurrent(_, { call, put }) {
-      const userid = localStorage.getItem('userid');
-      const { code, data } = yield call(queryCurrent, userid);
-      if (code === 200) {
-        if (data) {
-          yield put({
-            type: 'saveCurrentUser',
-            payload: data,
-          });
+      const userid = localStorage.getItem('userid'); 
+        const { code, data } = yield call(queryCurrent, userid);
+        if (code === 200) {
+          if (data) {
+            yield put({
+              type: 'saveCurrentUser',
+              payload: data,
+            });
+          }
         } 
-      }
     },
-    
+
     *setCurrent({ payload }, { call, put }) {
       yield put({
         type: 'saveCurrentUser',
