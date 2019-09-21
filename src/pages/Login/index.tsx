@@ -19,7 +19,7 @@ function Login(props: ConnectFormProps) {
       if (!errors) {
         setLoading(true);
         loginService(values)
-          .then(({ code, msg, data }) => {
+          .then(async({ code, msg, data }) => {
             if (code === 200) {
               //console.log(data); 
               //const { token, id } = data;
@@ -30,11 +30,12 @@ function Login(props: ConnectFormProps) {
               localStorage.setItem('userid', userid);
               localStorage.setItem('name', name);
               localStorage.setItem('avatar', avatar);
-              delay(() => {
-                //router.push('/resource');
-                router.push('/dashboard');
-              }, 300);
               dispatch!({ type: 'user/setCurrent', payload: data });
+              await  dispatch!({
+                type: 'auth/fetch',
+              }).then(() => {
+                router.push('/dashboard');
+              })
             }
           })
           .finally(() => {

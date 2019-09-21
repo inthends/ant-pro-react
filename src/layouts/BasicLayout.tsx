@@ -102,7 +102,12 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
       });
       dispatch({
         type: 'auth/fetch',
+      }).then(() => {
+        dispatch({
+          type: 'menu/refresh',
+        });
       });
+    
     }
   }, []);
 
