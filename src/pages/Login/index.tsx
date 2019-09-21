@@ -12,16 +12,16 @@ const { Item: FormItem } = Form;
 function Login(props: ConnectFormProps) {
   const { form, dispatch } = props;
   const { getFieldDecorator } = form;
-  const [isLoading, setLoading] = useState<boolean>(false); 
+  const [isLoading, setLoading] = useState<boolean>(false);
   const login = (e: FormEvent) => {
     e.preventDefault();
     form.validateFields((errors, values) => {
       if (!errors) {
         setLoading(true);
         loginService(values)
-          .then(async({ code, msg, data }) => {
+          .then(async ({ code, msg, data }) => {
             if (code === 200) {
-              //console.log(data); 
+              //console.log(data);
               //const { token, id } = data;
               message.success('登录成功');
               //localStorage.setItem('token', token);
@@ -31,11 +31,8 @@ function Login(props: ConnectFormProps) {
               localStorage.setItem('name', name);
               localStorage.setItem('avatar', avatar);
               dispatch!({ type: 'user/setCurrent', payload: data });
-              await  dispatch!({
-                type: 'auth/fetch',
-              }).then(() => {
-                router.push('/dashboard');
-              })
+              await dispatch!({ type: 'auth/fetch' });
+              router.push('/dashboard');
             }
           })
           .finally(() => {
@@ -56,9 +53,7 @@ function Login(props: ConnectFormProps) {
         <FormItem label="密码" colon={false} required>
           {getFieldDecorator('password', {
             rules: [{ required: true, message: '请输入密码' }],
-          })(
-            <Input.Password size="large" placeholder="密码" allowClear />,
-          )}
+          })(<Input.Password size="large" placeholder="密码" allowClear />)}
         </FormItem>
         <FormItem>
           <Button
