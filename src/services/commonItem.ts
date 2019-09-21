@@ -17,9 +17,9 @@ export function GetUserList(keyword,type): Promise<any> {
 }
 
 //下拉房屋树
-// export function GetQuickSimpleTreeAll(): Promise<ResponseObject<any>> {
-//   return request.get(process.env.basePath + `/Common/GetQuickSimpleTreeAll`, {});
-// } 
+export function GetQuickSimpleTreeAll(): Promise<ResponseObject<any>> {
+  return request.get(process.env.basePath + `/Common/GetQuickSimpleTreeAll`, {});
+} 
 
 //合同页面调用
 export function GetQuickSimpleTreeAllForContract(): Promise<ResponseObject<any[]>> {

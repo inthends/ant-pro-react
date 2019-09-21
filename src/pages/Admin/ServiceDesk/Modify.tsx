@@ -258,10 +258,12 @@ const Modify = (props: ModifyProps) => {
                         {getFieldDecorator('billType', {
                           initialValue: infoDetail.billType === undefined ? '服务' : infoDetail.billType
                         })(
-                          <Select  >
+                          <Select>
+                            <Option value="咨询">咨询</Option>
+                            <Option value="建议">建议</Option>
                             <Option value="报修">报修</Option>
                             <Option value="投诉">投诉</Option>
-                            <Option value="服务">服务</Option>
+
                           </Select>
                         )}
                       </Form.Item>
@@ -444,9 +446,9 @@ const Modify = (props: ModifyProps) => {
           </TabPane>
           {data ? (
             <TabPane tab="留言动态" key="2">
-              <CommentBox 
-              data={data} 
-               />
+              <CommentBox
+                data={data}
+              />
             </TabPane>
           ) : null}
 

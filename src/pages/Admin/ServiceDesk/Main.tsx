@@ -7,7 +7,7 @@ import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
 import { GetPageListJson } from './Main.service';
-// import { GetQuickSimpleTreeAll } from '@/services/commonItem';
+import { GetQuickSimpleTreeAll } from '@/services/commonItem';
 import { getResult } from '@/utils/networkUtils';
 const { Content } = Layout;
 const { Search } = Input;
