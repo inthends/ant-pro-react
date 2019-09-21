@@ -7,9 +7,9 @@ import request from '@/utils/request';
 //     .then(getResult);
 // }
 
-export function GetQuickSimpleTreeAll(): Promise<ResponseObject<any[]>> {
-  return request.get(process.env.basePath + `/Common/GetQuickSimpleTreeAll`, {});
-} 
+// export function GetQuickSimpleTreeAll(): Promise<ResponseObject<any[]>> {
+//   return request.get(process.env.basePath + `/Common/GetQuickSimpleTreeAll`, {});
+// } 
 
 //获取投诉单
 export function GetPageListJson(data): Promise<any> {

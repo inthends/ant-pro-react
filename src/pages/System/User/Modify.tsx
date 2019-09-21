@@ -2,9 +2,10 @@ import { BaseModifyProvider } from '@/components/BaseModifyDrawer/BaseModifyDraw
 import ModifyItem, { SelectItem } from '@/components/BaseModifyDrawer/ModifyItem';
 import { Card, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import { SaveForm, searchUser } from './User.service';
 import { JcAccount } from '@/model/jcAccount';
+
 
 interface ModifyProps {
   visible: boolean;
@@ -12,19 +13,21 @@ interface ModifyProps {
   form: WrappedFormUtils<JcAccount>;
   closeDrawer(): void;
   reload(): void;
+  treeDate: any[];
 }
 const Modify = (props: ModifyProps) => {
-  const { data, form } = props;
-  let initData = data ? data : { accountType: 2, expMode: 1 };
-  initData.expDate = initData.expDate ? initData.expDate : new Date();
+  const { data, form, treeDate } = props;
+ let initData = data ? data : { accountType: 2, expMode: 1 };
+  // initData.expDate = initData.expDate ? initData.expDate : new Date();
   const [names, setNames] = useState<any[]>([]);
-  const [showTime, setShowTime] = useState<boolean>(true);
-  useEffect(() => {
-    setShowTime(initData.expMode === 2);
-  }, [initData]);
+  const [showTime, setShowTime] = useState<boolean>(false);
+  //useEffect(() => {
+    // setShowTime(initData.expMode === 2); 
+  //}, [initData]);
 
   const baseFormProps = { form, initData };
   const expModes: SelectItem[] = [{ label: '永久有效', value: 1 }, { label: '临时', value: 2 }];
+
   // const accountTypes: SelectItem[] = [
   //   { label: '系统初始账户', value: 1 },
   //   { label: '员工账户', value: 2 },
@@ -34,9 +37,11 @@ const Modify = (props: ModifyProps) => {
   // ];
   const doSave = dataDetail => {
     let modifyData = { ...initData, ...dataDetail, keyValue: initData.id };
-    modifyData.expDate = modifyData.expDate ? modifyData.expDate.format('YYYY-MM-DD') : undefined;
+    //modifyData.expDate = modifyData.expDate ? modifyData.expDate.format('YYYY-MM-DD') : undefined;
     return SaveForm(modifyData);
   };
+ 
+
   const searchName = value => {
     searchUser(value).then(res => {
       const users = res.map(item => {
@@ -52,7 +57,18 @@ const Modify = (props: ModifyProps) => {
   return (
     <BaseModifyProvider {...props} name="用户" save={doSave}>
       <Card>
-        <Form layout="vertical" hideRequiredMark>
+        <Form layout="vertical" hideRequiredMark> 
+          <Row gutter={24}>
+            <ModifyItem
+              {...baseFormProps}
+              field="parentId"
+              label="所属机构"
+              type="tree"
+              treeData={treeDate} 
+              rules={[{ required: true, message: '请选择所属机构' }]}
+            ></ModifyItem>
+          </Row>
+
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
@@ -63,22 +79,19 @@ const Modify = (props: ModifyProps) => {
             <ModifyItem
               {...baseFormProps}
               field="name"
-              label="显示名"
+              label="关联员工"
               type="autoComplete"
               onSearch={searchName}
               items={names}
             ></ModifyItem>
-
           </Row>
-          {/* <Row gutter={24}> 
+          <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
-              field="password"
+              field="password" 
               label="密码"
               rules={[{ required: true, message: '请输入密码' }]}
             ></ModifyItem>
-          </Row> */}
-          <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
               type="radio"
@@ -95,8 +108,7 @@ const Modify = (props: ModifyProps) => {
                 type="date"
               ></ModifyItem>
             ) : null}
-          </Row>
-
+          </Row> 
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}

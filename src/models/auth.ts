@@ -28,6 +28,7 @@ const AuthModel: AuthModelType = {
   effects: {
     *fetch(_, { call, put }) {
       let response = yield call(query);
+      //接口异常待处理
       yield put({
         type: 'save',
         payload: { authlist: response },

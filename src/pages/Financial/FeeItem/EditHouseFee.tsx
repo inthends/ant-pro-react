@@ -169,6 +169,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
           };
           HouseSaveForm(newvalue).then(res=>{
             reload();
+            closeModal();
           });
       }
     });
@@ -207,6 +208,82 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
   const closeSelectHouse = () => {
     setSelectHouseVisible(false);
   }
+
+
+  const setEndDate=(beginDate:string,cycleValue:number,cycleType:string)=>{
+    var startDate=moment(beginDate);
+    var endDate="";
+    if(cycleType=='日'){
+      endDate= startDate.add(cycleValue,'days').format('YYYY-MM-DD');
+    }else if(cycleType=='月')
+    {
+      endDate= startDate.add(cycleValue,'month').format('YYYY-MM-DD');
+    }else{
+      endDate= startDate.add(cycleValue,'years').format('YYYY-MM-DD');
+    }
+    var info=Object.assign({},infoDetail,{endDate:endDate,cycleValue:cycleValue,cycleType:cycleType});
+    setInfoDetail(info);
+  }
+  //求自然月日期
+  const getMonthBeforeFormatAndDay = (num, format, date) => {
+
+    let day = date.get('date');
+    let month = date.get('month');
+    date.set('month', month + num * 1, 'date', 1); //周期月一号
+    //读取日期自动会减一，所以要加一
+    let mo = date.get('month') + 1;
+    //小月
+    if (mo == 4 || mo == 6 || mo == 9 || mo == 11) {
+      if (day > 30) {
+        day = 30;
+      }
+    }
+    //2月
+    else if (mo == 2) {
+      //闰年
+      if (date.isLeapYear()) {
+        if (day > 29) {
+          day = 29;
+        } else {
+          day = 28;
+        }
+      }
+      if (day > 28) {
+        day = 28;
+      }
+    }
+    //大月
+    else {
+      if (day > 31) {
+        day = 31;
+      }
+    }
+    date.set('date', day);
+    return date;
+  };
+//设置结束日期
+const getEndDate = () => {
+  const cycle = form.getFieldValue('cycleValue');
+  const cycletype = form.getFieldValue('cycleType')
+  let d = form.getFieldValue('beginDate');
+  if (d != "") {
+    let endDate = moment(d);
+    if (cycletype == "日") {
+      //日
+      endDate.set('date', endDate.get('date') + cycle);
+    } else if (cycletype == "月") {
+      // 月
+      endDate = getMonthBeforeFormatAndDay(cycle, "-", endDate);
+    } else {
+      //年
+      endDate.set('year', endDate.get('year') + cycle);
+    }
+    endDate.set('date', endDate.get('date') - 1);
+    return endDate;
+  }
+  return '';
+};
+
   const [showFeeField,setShowFeeField]=useState<boolean>(false);
   const [accFixedDisabled, setAccFixedDisabled]=useState<boolean>(true);
   const [payFixedDisabled, setPayFixedDisabled]=useState<boolean>(true);
@@ -303,7 +380,9 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                     {getFieldDecorator('cycleValue', {
                       initialValue: infoDetail.cycleValue,
                       rules: [{ required: true, message: '请输入计费周期' }],
-                    })(<Input placeholder="请输入计费周期" />)}
+                    })(<InputNumber style={{width:'100%'}}  placeholder="请输入计费周期" onChange={(value:number)=>{
+                      setEndDate(infoDetail.beginDate,value,infoDetail.cycleType);
+                    }}/>)}
                   </Form.Item>
                 </Col>
                 <Col lg={5}>
@@ -311,7 +390,9 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                     {getFieldDecorator('cycleType', {
                       initialValue: infoDetail.cycleType,
                       rules: [{ required: true, message: '请选择单位' }],
-                    })(<Select placeholder="请选择单位">
+                    })(<Select placeholder="请选择单位" onChange={(value:string)=>{
+                      setEndDate(infoDetail.beginDate,infoDetail.cycleValue,value);
+                    }}>
                       <Option value="日">日</Option>
                       <Option value="月" >月</Option>
                       <Option value="年">年</Option>
@@ -328,17 +409,19 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                         ? moment(new Date(infoDetail.beginDate))
                         : moment(new Date()),
                       rules: [{ required: true, message: '请选择计费起始日期' }],
-                    })(<DatePicker placeholder="请选择计费起始日期"  style={{width:'100%'}}/>)}
+                    })(<DatePicker placeholder="请选择计费起始日期"  style={{width:'100%'}} onChange={(date, dateString)=>{
+                      setEndDate(dateString,infoDetail.cycleValue,infoDetail.cycleType);
+                    }}/>)}
                   </Form.Item>
                 </Col>
                 <Col lg={12}>
                   <Form.Item label="计费终止日期">
-                    {getFieldDecorator('beginDate', {
+                    {getFieldDecorator('endDate', {
                       initialValue: infoDetail.endDate
                         ? moment(new Date(infoDetail.endDate))
-                        : moment(new Date()),
+                        : moment(getEndDate()),
                       rules: [{ required: true, message: '计费终止日期' }],
-                    })(<DatePicker placeholder="计费终止日期" style={{width:'100%'}}/>)}
+                    })(<DatePicker disabled={true} placeholder="计费终止日期" style={{width:'100%'}}/>)}
                   </Form.Item>
                 </Col>
               </Row>

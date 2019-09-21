@@ -40,18 +40,18 @@ export function getUserList(data): Promise<any> {
     .then(getResult as any);
 }
 
-export function chooseUser(data): Promise<any> {
-  return request
-    .post(process.env.basePath + `/PermissionRole/SaveMember`, {
-      data: { ...data, userIds: data.userIds.join(',') },
-    })
-    .then(getResult as any);
-}
+// export function chooseUser(data): Promise<any> {
+//   return request
+//     .post(process.env.basePath + `/PermissionRole/SaveMember`, {
+//       data: { ...data, userIds: data.userIds.join(',') },
+//     })
+//     .then(getResult as any);
+// }
 
 // 系统功能列表
 export function GetAuths(roleId): Promise<any> {
   return request
-    .get(process.env.basePath + `/PermissionRole/ModuleTreeJson?roleId=${roleId}`)
+    .get(process.env.basePath + `/PermissionRole/GetModuleTree?roleId=${roleId}`)
     .then(getResult as any);
 }
 
@@ -65,21 +65,59 @@ export function GetAuths(roleId): Promise<any> {
 // 数据权限列表
 export function GetDataAuths(roleId): Promise<any> {
   return request
-    .get(process.env.basePath + `/PermissionRole/OrganizePstructTreeJson?roleId=${roleId}`)
+    .get(process.env.basePath + `/PermissionRole/GetPstructTree?roleId=${roleId}`)
+    .then(getResult as any);
+}
+
+//获取选中的模块节点
+export function GetCheckIds(roleId): Promise<any> {
+  return request
+    .get(process.env.basePath + `/PermissionRole/GetCheckIds?roleId=${roleId}`)
+    .then(getResult as any);
+}
+
+
+//获取半选中的模块节点
+export function GetHalfCheckIds(roleId): Promise<any> {
+  return request
+    .get(process.env.basePath + `/PermissionRole/GetHalfCheckIds?roleId=${roleId}`)
     .then(getResult as any);
 }
 
 export function SaveModuleAuthorize(data): Promise<any> {
   return request
     .post(process.env.basePath + `/PermissionRole/SaveModuleAuthorize`, {
-      data,
+      data:objToFormdata(data),
     })
     .then(getResult as any);
 }
 export function SaveDataAuthorize(data): Promise<any> {
   return request
     .post(process.env.basePath + `/PermissionRole/SaveDataAuthorize`, {
-      data,
+      data:objToFormdata(data),
     })
+    .then(getResult as any);
+}
+
+export function chooseUser(data): Promise<any> {
+  return request
+    .post(process.env.basePath + `/PermissionRole/SaveMember`, {
+      data: objToFormdata(data),
+    })
+    .then(getResult as any);
+}
+
+//获取选中的数据节点
+export function GetDataCheckIds(roleId): Promise<any> {
+  return request
+    .get(process.env.basePath + `/PermissionRole/GetDataCheckIds?roleId=${roleId}`)
+    .then(getResult as any);
+}
+
+
+//获取半选中的模数据节点
+export function GetDataHalfCheckIds(roleId): Promise<any> {
+  return request
+    .get(process.env.basePath + `/PermissionRole/GetDataHalfCheckIds?roleId=${roleId}`)
     .then(getResult as any);
 }

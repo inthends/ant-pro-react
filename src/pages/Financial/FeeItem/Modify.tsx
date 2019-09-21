@@ -19,14 +19,16 @@ const { TabPane } = Tabs;
 interface ModifyProps {
   modifyVisible: boolean;
   // data?: any;
+  selectTreeItem:any;
   closeDrawer(): void;
   form: WrappedFormUtils;
   treeData: TreeEntity[];
   id?: string;
   reload(): void;
+  isInit:boolean;
 }
 const Modify = (props: ModifyProps) => {
-  const { modifyVisible, closeDrawer, form, id, reload } = props;
+  const { modifyVisible, closeDrawer, form, id, reload,selectTreeItem ,isInit} = props;
   const { getFieldDecorator } = form;
   const title = id === undefined ? '新增费项' : '修改费项';
   const [infoDetail, setInfoDetail] = useState<any>({});
@@ -39,7 +41,10 @@ const Modify = (props: ModifyProps) => {
   const [editOrgVisible, setEditOrgVisible] = useState<boolean>(false);
   const [feeItemNames, setFeeItemNames] = useState<any[]>([]);
   const [editHouseVisible, setEditHouseVisible] = useState<boolean>(false);
-  const [isInit, setIsInit] = useState<boolean>(true);
+  const [linkFeeDisable,setLinkFeeDisable]=useState<boolean>(true);
+
+
+
   //打开抽屉时初始化
   useEffect(() => {
     //加载关联收费项目
@@ -51,18 +56,20 @@ const Modify = (props: ModifyProps) => {
     })
   }, []);
 
-  const changeFeeType = (value) => {
+  const changeFeeType = (value,info?) => {
     var newvalue = value == "收款费项" ? "ReceivablesItem" : "PaymentItem";
     GetFeeType(newvalue).then(res => {
       setFeetype(res || []);
       //清除选择的值
       form.setFieldsValue({ feeType: '' });
+      if (isInit&&selectTreeItem!=null&&selectTreeItem.feeType!='') {
+        var newInfo = Object.assign({},info, { feeType: selectTreeItem.feeType });
+        setInfoDetail(newInfo);
+        form.setFieldsValue({ feeType: selectTreeItem.feeType });
 
-      //if (!isInit) {
-      // var info = Object.assign({}, infoDetail, { feeType: undefined });
-      // setInfoDetail(info);
-      //form.setFieldsValue({ feeType: undefined });
-      //}
+      }else{
+
+      }
     });
   };
 
@@ -86,11 +93,18 @@ const Modify = (props: ModifyProps) => {
       } else {
         //重置之前选择加载的费项类别
         //设置checkbox默认值
-        setInfoDetail({ isEnable: true, isInContract: true, isTax: true });
-        form.resetFields();
+        var info = Object.assign({},infoDetail,{isEnable: true, isInContract: true, isTax: true });
+        if(isInit&&selectTreeItem!=null&&selectTreeItem.feeKind!='')
+        {
+          info = Object.assign({},info,{feeKind:selectTreeItem.feeKind });
+          setInfoDetail(info);
+          form.setFieldsValue({ feeKind: selectTreeItem.feeKind });
+          changeFeeType(selectTreeItem.feeKind,info);
+        }
       }
     } else {
       form.setFieldsValue({});
+      form.resetFields([]);
     }
   }, [modifyVisible]);
 
@@ -98,106 +112,9 @@ const Modify = (props: ModifyProps) => {
     closeDrawer();
   };
 
-  // const getGuid = () => {
-  //   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-  //     var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-  //     return v.toString(16);
-  //   });
-  // };
-
   const save = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        // var guid = getGuid();
-        // let newvalue = {
-        //   //SaveForm
-        //   keyValue: id == null || id == "" ? "" : id,
-        //   //CalScaleDispose:values.CalScaleDispose,
-        //   //FeeCode:values.FeeCode,
-        //   //FeeNo:values.FeeNo,
-        //   IsModifyDate: infoDetail.isModifyDate ? true : false,
-        //   MidResultScale: values.midResultScale,
-        //   //CreateDate:values.CreateDate,
-        //   //FeeEngName:values.FeeEngName,
-        //   FeePrice: values.feePrice,
-        //   IsNullDate: infoDetail.isNullDate ? true : false,
-        //   MidScaleDispose: values.midScaleDispose,
-        //   //CreateUserId:values.createUserId,
-        //   FeeInvoice: values.feeInvoice,
-        //   FeeType: values.feeType,
-        //   IsTax: infoDetail.isTax ? true : false,
-        //   //ModifyDate:tempInfo.modifyDate,
-        //   //CreateUserName:tempInfo.createUserName,
-        //   //FeeInvoiceNo:values.feeInvoiceNo,
-        //   IsCancel: infoDetail.isCancel ? true : false,
-        //   IsTemp: infoDetail.isTemp ? true : false,
-        //   //ModifyUserId:values.ModifyUserId,
-        //   //Currency:values.currency,
-        //   FeeItemId: id == null || id == "" ? guid : id,//values.feeItemId,
-        //   IsCustomizeDate: infoDetail.isCustomizeDate ? true : false,
-        //   LastResultScale: values.lastResultScale,
-        //   //ModifyUserName:tempInfo.id,
-        //   CycleType: values.cycleType,
-        //   FeeKind: values.feeKind,
-        //   IsEditTemp: infoDetail.isEditTemp ? true : false,
-        //   LastScaleDispose: values.lastScaleDispose,
-        //   //SysType:values.sysType,
-        //   BeginDate: moment(values.beginDate).format('YYYY-MM-DD'),
-        //   CycleValue: values.cycleValue,
-        //   FeeName: values.feeName,
-        //   IsEnable: infoDetail.isEnable ? true : false,
-        //   LinkFee: values.linkFee,
-        //   // TypeCode:values.typeCode,
-        //   // CalResultScale:values.calResultScale,
-        //   EndDate: moment(values.endDate).format('YYYY-MM-DD'),
-        //   //FeeNature:values.feeNature,
-        //   IsInContract: infoDetail.isInContract ? true : false,
-        //   Memo: values.memo,
-        //   AccBillDateNum: values.accBillDateNum,
-        //   //BankTransfer:values.bankTransfer,
-        //   DelayRate: values.delayRate,
-        //   //InMethod:values.inMethod,
-        //   PayDeadlineFixed: values.payDeadlineFixed,
-        //   //UseInOrOut:values.useInOrOut,
-        //   AccBillDateUnit: values.accBillDateUnit,
-        //   //CopePersonType:values.copePersonType,
-        //   DelayType: values.delayType,
-        //   //InOutDate:values.inOutDate,
-        //   PayDeadlineNum: values.payDeadlineNum,
-        //   //UseStepPrice:values.useStepPrice,
-        //   AccPeriodBase: values.accPeriodBase,
-        //   CopeRate: values.copeRate,
-        //   FeeApportion: values.feeApportion,
-        //   //LateDataNotIn:values.lateDataNotIn,
-        //   PayDeadlineUnit: values.payDeadlineUnit,
-        //   AccPeriodBaseNum: values.accPeriodBaseNum,
-        //   //CopeUserId:values.copeUserId,
-        //   FeeFormulaOne: values.feeFormulaOne,
-        //   LateStartDateBase: values.lateStartDateBase,
-        //   //OutFeeMethod:values.outFeeMethod,
-        //   PayedCreateCope: values.payedCreateCope ? true : false,
-        //   AccPeriodBaseUnit: values.accPeriodBaseUnit,
-        //   //CopeUserName:values.copeUserName,
-        //   //FeeFormulaTwo:values.feeFormulaTwo,
-        //   LateStartDateFixed: values.lateStartDateFixed,
-        //   // OutMethod:values.outMethod,
-        //   PayFeeItemId: values.payFeeItemId,
-        //   //AccRightBase:values.accRightBase,
-        //   LateStartDateNum: values.lateStartDateNum,
-        //   PayDateNum: values.payDateNum,
-        //   //SplitFee:values.splitFee,
-        //   AccBillDateBase: values.accBillDateBase,
-        //   //AccRightBaseNum:values.accRightBaseNum,
-        //   //Id:id==null||id==''?'':id,
-        //   LateStartDateUnit: values.lateStartDateUnit,
-        //   PayDateUnit: values.payDateUnit,
-        //   //StepPriceId:values.stepPriceId,
-        //   AccBillDateFixed: values.accBillDateFixed,
-        //   // AccRightBaseUnit:valuesaccRightBaseUnit,
-        //   //InFeeMethod:values.inFeeMethod,
-        //   PayDeadlineBase: values.payDeadlineBase,
-        //   //UseFormulaTwo:values.useFormulaTwo
-        // };
         const newData = infoDetail ? { ...infoDetail, ...values } : values;
         newData.keyValue = id == null || id == "" ? "" : id;
         if (!newData.isNullDate) {
@@ -551,12 +468,27 @@ const Modify = (props: ModifyProps) => {
   const [payFixedDisabled, setPayFixedDisabled] = useState<boolean>(true);
   const [lateFixedDisabled, setLateFixedDisabled] = useState<boolean>(true);
 
+  const setEndDate=(beginDate:string,cycleValue:number,cycleType:string)=>{
+    var startDate=moment(beginDate);
+    var endDate="";
+    if(cycleType=='日'){
+      endDate= startDate.add(cycleValue,'days').format('YYYY-MM-DD');
+    }else if(cycleType=='月')
+    {
+      endDate= startDate.add(cycleValue,'month').format('YYYY-MM-DD');
+    }else{
+      endDate= startDate.add(cycleValue,'years').format('YYYY-MM-DD');
+    }
+    var info=Object.assign({},infoDetail,{endDate:endDate,cycleValue:cycleValue,cycleType:cycleType});
+    setInfoDetail(info);
+  }
+
   //求自然月日期
   const getMonthBeforeFormatAndDay = (num, format, date) => {
 
     let day = date.get('date');
     let month = date.get('month');
-    date.set('month', month + num * 1, 'date', 1); //周期月一号 
+    date.set('month', month + num * 1, 'date', 1); //周期月一号
     //读取日期自动会减一，所以要加一
     let mo = date.get('month') + 1;
     //小月
@@ -603,7 +535,7 @@ const Modify = (props: ModifyProps) => {
         // 月
         endDate = getMonthBeforeFormatAndDay(cycle, "-", endDate);
       } else {
-        //年 
+        //年
         endDate.set('year', endDate.get('year') + cycle);
       }
       endDate.set('date', endDate.get('date') - 1);
@@ -612,6 +544,37 @@ const Modify = (props: ModifyProps) => {
     return '';
   };
 
+  const [selectedHouseRowKeys,setSelectedHouseRowKeys]=useState<string[]>([]);
+  //费项房屋选择
+  const houseRowSelection={
+    onChange: (selectedRowKeys, selectedRows) => {
+      var str=[];
+      for(var i=0;i<selectedRowKeys.length;i++)
+      {
+        str.push(selectedRowKeys[i]+'');
+      }
+      setSelectedHouseRowKeys(str);
+      //console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+    }
+  };
+
+  const deleteHouse=()=>{
+    if(selectedHouseRowKeys.length==0)
+    {
+      message.warning('请选择要删除的房屋');
+    }else{
+      Modal.confirm({
+        title: '请确认',
+        content: `您是否要删除？删除后无法恢复。`,
+        onOk: () => {
+          HouseRemoveForm({feeitemid:id,keyValues:JSON.stringify(selectedHouseRowKeys) }).then(() => {
+            message.success('删除成功');
+            houseLoadData('');
+          });
+        },
+      });
+    }
+  }
   return (
     <Drawer
       title={title}
@@ -631,7 +594,7 @@ const Modify = (props: ModifyProps) => {
                       initialValue: infoDetail.feeKind,
                       rules: [{ required: true, message: '请选择费项种类' }],
                     })(<Select placeholder="请选择费项种类"
-                      onChange={changeFeeType}
+                      onChange={value=>{changeFeeType(value)}}
                     >
                       <Option value="收款费项">收款费项</Option>
                       <Option value="付款费项" >付款费项</Option>
@@ -645,7 +608,7 @@ const Modify = (props: ModifyProps) => {
                       initialValue: infoDetail.feeType,
                       rules: [{ required: true, message: '请选择费项类别' }]
                     })(
-                      <Select placeholder="请选择费项类别">
+                      <Select placeholder="请选择费项类别" >
                         {feetypes.map(item => (
                           <Option key={item.title} value={item.title}>
                             {item.title}
@@ -690,7 +653,7 @@ const Modify = (props: ModifyProps) => {
                       onChange={(e) => {
                         var info = Object.assign({}, infoDetail, { isNullDate: e.target.checked });
                         setInfoDetail(info);
-                      }}>起止日期不允许为空</Checkbox> 
+                      }}>起止日期不允许为空</Checkbox>
                     <Checkbox checked={infoDetail.isModifyDate ? true : false} onChange={(e) => {
                       var info = Object.assign({}, infoDetail, { isModifyDate: e.target.checked });
                       setInfoDetail(info);
@@ -737,7 +700,13 @@ const Modify = (props: ModifyProps) => {
                     )}
                     {getFieldDecorator('isCancel', {
                       initialValue: infoDetail.isCancel ? true : false,
-                    })(<Checkbox checked={form.getFieldValue('isCancel')}>
+                    })(<Checkbox checked={form.getFieldValue('isCancel')} onChange={(e)=>{
+                      if(e.target.checked){
+                        setLinkFeeDisable(false);
+                      }else{
+                        setLinkFeeDisable(true);
+                      }
+                    }}>
                       减免费项
                       </Checkbox>
                     )}
@@ -800,7 +769,7 @@ const Modify = (props: ModifyProps) => {
                       initialValue: infoDetail.linkFee,
                     })(
                       <Select
-                        placeholder="请选择关联收费项目"
+                        placeholder="请选择关联收费项目" disabled={linkFeeDisable}
                       >
                         {feeitems.map(item => (
                           <Option key={item.value} value={item.value}>
@@ -816,7 +785,9 @@ const Modify = (props: ModifyProps) => {
                     {getFieldDecorator('cycleValue', {
                       initialValue: infoDetail.cycleValue ? infoDetail.cycleValue : 1,
                       rules: [{ required: true, message: '请输入计费周期' }],
-                    })(<InputNumber placeholder="请输入计费周期" min={1} style={{ width: '100%' }} />)}
+                    })(<InputNumber placeholder="请输入计费周期" min={1} style={{ width: '100%' }} onChange={(value:number)=>{
+                      setEndDate(infoDetail.beginDate,value,infoDetail.cycleType);
+                    }}/>)}
                   </Form.Item>
                 </Col>
                 <Col lg={5}>
@@ -824,7 +795,9 @@ const Modify = (props: ModifyProps) => {
                     {getFieldDecorator('cycleType', {
                       initialValue: infoDetail.cycleType ? infoDetail.cycleType : '月',
                       rules: [{ required: true, message: '请选择单位' }],
-                    })(<Select placeholder="请选择单位">
+                    })(<Select placeholder="请选择单位" onChange={(value:string)=>{
+                      setEndDate(infoDetail.beginDate,infoDetail.cycleValue,value);
+                    }}>
                       <Option value="日">日</Option>
                       <Option value="月" >月</Option>
                       <Option value="年">年</Option>
@@ -848,7 +821,9 @@ const Modify = (props: ModifyProps) => {
                     {getFieldDecorator('endDate', {
                       initialValue: form.getFieldValue('isNullDate') ? null : getEndDate(),//infoDetail.endDate ? moment(new Date(infoDetail.endDate)) : moment(getEndDate()),
                       rules: [{ required: !form.getFieldValue('isNullDate'), message: '计费终止日期' }],
-                    })(<DatePicker disabled placeholder="计费终止日期" style={{ width: '100%' }} />)}
+                    })(<DatePicker disabled placeholder="计费终止日期" style={{ width: '100%' }} onChange={(date, dateString)=>{
+                      setEndDate(dateString,infoDetail.cycleValue,infoDetail.cycleType);
+                    }} />)}
                   </Form.Item>
                 </Col>
               </Row>
@@ -1457,7 +1432,7 @@ const Modify = (props: ModifyProps) => {
 
 
                   <Button type="link" style={{ float: 'right' }}
-                    onClick={() => { initOrgLoadData() }}
+                    onClick={ deleteHouse}
                   >
                     <Icon type="delete" />
                     删除
@@ -1471,11 +1446,12 @@ const Modify = (props: ModifyProps) => {
                 </Button>
 
                 </div>
-                <Table 
+                <Table
                   key='list'
                   style={{ border: 'none' }}
                   bordered={false}
                   size="middle"
+                  rowSelection={houseRowSelection}
                   dataSource={houseData}
                   columns={housecolumns}
                   rowKey={record => record.unitFeeId}

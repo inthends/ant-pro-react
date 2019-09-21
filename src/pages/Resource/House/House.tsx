@@ -21,7 +21,7 @@ function House() {
   const [totalData, setTotalData] = useState({});
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
-  const [organizeId, SetOrganizeId] = useState<string>('');
+  const [organizeId, setOrganizeId] = useState<string>('');
   const [data, setData] = useState<any[]>([]);
   const [id, setId] = useState<string>();
   const [search, setSearch] = useState<string>('');
@@ -39,7 +39,7 @@ function House() {
 
   const setButton = (orgid, orgtype, searchText) => {
     initLoadData(orgid, searchText);
-    SetOrganizeId(orgid);
+    setOrganizeId(orgid);
     if (orgtype == 'D') {
       setIsAdd(false);
     } else {
@@ -66,7 +66,15 @@ function House() {
   };
   // 获取房产统计
   const getHouseTotal = () => {
-    GetStatisticsTotal()
+    GetStatisticsTotal(
+      {
+        queryJson:
+        {
+          OrganizeId: organizeId,
+          keyword: search
+        }
+      }
+    )
       .then(getResult)
       .then(res => {
         setTotalData(res || []);
@@ -147,14 +155,31 @@ function House() {
           <Search
             className="search-input"
             placeholder="搜索项目名称"
-            onSearch={value => loadData(value, organizeId)}
+            onSearch={value => {
+
+              //刷新统计
+              GetStatisticsTotal(
+                {
+                  queryJson:
+                  {
+                    OrganizeId: organizeId,
+                    keyword: value
+                  }
+                }
+              ).then(getResult).then(res => {
+                  setTotalData(res || []);
+              });
+
+              //查询列表
+              loadData(value, organizeId)
+            }}
             style={{ width: 200 }}
           />
           <AuthButton
             disabled={isAdd}
             style={{ float: 'right' }}
             onClick={() => showDrawer()}
-            encode="lr-add" 
+            encode="lr-add"
             btype="primary">
             <Icon type="plus" />
             项目

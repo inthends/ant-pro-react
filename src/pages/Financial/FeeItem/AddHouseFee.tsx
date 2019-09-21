@@ -1,10 +1,11 @@
 //选择所属机构
+import { TreeEntity } from '@/model/models';
 import {Checkbox, Button,Col, Form,Input,Row,Icon,Modal, message,Tree} from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import {UnitFeeSaveForm,GetOrgTreeOnly,GetOrganizeForm} from './Main.service';
+import {GetQuickSimpleTreeAll,UnitFeeSaveForm,GetOrgTreeOnly,GetOrganizeForm} from './Main.service';
 import './style.less';
-import AsynSelectTree from '../AsynSelectTree';
+import AsynSelectTree from '../AsynSelectTree';import LeftSelectTree from '../LeftSelectTree';
 interface AddHouseFeeProps {
   visible: boolean;
   closeModal(): void;
@@ -18,16 +19,19 @@ const AddHouseFee = (props: AddHouseFeeProps) => {
 
  const [checkedList,setCheckedList]=useState<string[]>([]);
  const [unitData,setUnitData]=useState<string[]>([]);
-
+// const [houseTreeData,setHouseTreeData]=useState<TreeEntity[]>([]);
   useEffect(() => {
     if(visible){
-
+      // var queryJson={FeeItemID:feeId}
+      // GetQuickSimpleTreeAll(JSON.stringify(queryJson)).then((res) => {
+      //   setHouseTreeData(res || []);
+      // });
     }
   }, [visible]);
 
   return (
     <Modal
-      title="添加机构"
+      title="添加设费房产"
       visible={visible}
       okText="确认"
       cancelText="取消"

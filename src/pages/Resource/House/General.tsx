@@ -14,7 +14,7 @@ function General(props: GeneralProps) {
         <Col sm={24}>
           <Row>
             <Col xxl={3} xl={3} md={6} sm={12} xs={24}>
-              <NumberInfo subTitle="项目总数" total={generalData.count} />
+              <NumberInfo subTitle="项目总数" total={generalData.projectcounts} />
             </Col>
             <Col xxl={3} xl={3} md={6} sm={12} xs={24}>
               <NumberInfo

@@ -122,8 +122,8 @@ const FeeModify = (props: FeeModifyProps) => {
   }
 
 
-  const setEndDate=(cycleValue:number,cycleType:string)=>{
-    var startDate=moment( infoDetail.beginDate);
+  const setEndDate=(beginDate:string,cycleValue:number,cycleType:string)=>{
+    var startDate=moment( beginDate);
     var endDate="";
     if(cycleType=='日'){
       endDate= startDate.add(cycleValue,'days').format('YYYY-MM-DD');
@@ -280,7 +280,7 @@ const FeeModify = (props: FeeModifyProps) => {
                       rules: [{ required: true, message: '=请选择=' }]
                     })(
                       <InputNumber  style={{width:'100%'}} onChange={(value:number)=>{
-                        setEndDate(value,infoDetail.cycleType);
+                        setEndDate(infoDetail.beginDate,value,infoDetail.cycleType);
                       }}></InputNumber>
                     )}
                   </Form.Item>
@@ -292,7 +292,7 @@ const FeeModify = (props: FeeModifyProps) => {
                       rules: [{ required: true, message: '请选择周期单位' }]
                     })(
                       <Select placeholder="=请选择="  style={{width:'100%'}} onChange={(value:string)=>{
-                        setEndDate(infoDetail.cycleValue,value);
+                        setEndDate(infoDetail.beginDate,infoDetail.cycleValue,value);
                       }}>
                         <Select.Option key='日' value='日'>
                           {'日'}
@@ -315,7 +315,9 @@ const FeeModify = (props: FeeModifyProps) => {
                       initialValue: infoDetail.beginDate?moment(infoDetail.beginDate):moment(new Date()),
                       rules: [{ required: true, message: '请选择起始日期' }]
                     })(
-                      <DatePicker  disabled={true}  style={{width:'100%'}}/>
+                      <DatePicker  disabled={true}  style={{width:'100%'}} onChange={(date, dateString)=>{
+                        setEndDate(dateString,infoDetail.cycleValue,infoDetail.cycleType);
+                      }}/>
                     )}
                   </Form.Item>
                 </Col>

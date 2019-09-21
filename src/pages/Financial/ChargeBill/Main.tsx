@@ -183,10 +183,11 @@ function Main() {
     });
   };
 
-  const initLoadData = (search, roomid = '', showCustomerFee = false) => {
+
+  const initLoadData = (search, unitId = '', showCustomerFee = false) => {
     setSearch(search);
     // setShowCustomerFee(showCustomerFee);
-    const queryJson = { keyword: search, roomid: roomid, showCustomerFee: showCustomerFee };
+    const queryJson = { keyword: search, unitId: unitId, showCustomerFee: showCustomerFee };
     const sidx = 'BillId';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
@@ -227,25 +228,25 @@ function Main() {
     setVertifyVisible(false);
   }
 
-  const showSplit = () => {
-    if (unChargeSelectedKeys.length != 1) {
-      message.warning('请选择一条记录!');
-      return;
-    }
-    setSplitVisible(true);
-  }
+  // const showSplit = () => {
+  //   if (unChargeSelectedKeys.length != 1) {
+  //     message.warning('请选择一条记录!');
+  //     return;
+  //   }
+  //   setSplitVisible(true);
+  // }
 
   const closeSplit = () => {
     setSplitVisible(false);
   }
 
-  const showTrans = () => {
-    if (unChargeSelectedKeys.length != 1) {
-      message.warning('请选择一条记录!');
-      return;
-    }
-    setTransVisible(true);
-  }
+  // const showTrans = () => {
+  //   if (unChargeSelectedKeys.length != 1) {
+  //     message.warning('请选择一条记录!');
+  //     return;
+  //   }
+  //   setTransVisible(true);
+  // }
 
   const closeTrans = () => {
     setTransVisible(false);

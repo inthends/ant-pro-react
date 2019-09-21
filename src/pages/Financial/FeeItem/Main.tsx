@@ -1,4 +1,4 @@
-// import { TreeEntity } from '@/model/models'; 
+// import { TreeEntity } from '@/model/models';
 // import Page from '@/components/Common/Page';
 import { DefaultPagination } from '@/utils/defaultSetting';
 // import { getResult } from '@/utils/networkUtils';
@@ -33,27 +33,37 @@ function Main() {
   const [houseData, setHouseData] = useState<any[]>([]);
   const [feeitems, setFeeitems] = useState<any[]>([]);
   const {hideSider, setHideSider } = useContext(SiderContext);
+  const [selectedTreeNode,setSelectTreeNode]=useState<any>({});
+
+  const [isInit,setIsInit]=useState<boolean>(false);
 
   const selectTree = (item, search) => {
     var value = item.node.props.value;
     var title = item.node.props.title;
+
+    console.log(item.node.props);
+
     var feeKind = "", feeType = "";
     switch (value) {
       case "All":
         feeKind = "";
         feeType = "";
+        setSelectTreeNode({feeKind:feeKind,feeType:item.node.props.title});
         break;
       case "FeeType":
         feeType = title;
-        feeKind = item.node.props.AttributeA;
+        feeKind = item.node.props.attributeA;
+        setSelectTreeNode({feeKind:item.node.props.attributeA,feeType:item.node.props.title});
         break;
       case "PaymentItem":
         feeKind = title;
         feeType = "";
+        setSelectTreeNode({feeKind:item.node.props.title,feeType:''});
         break;
       case "ReceivablesItem":
         feeKind = title;
         feeType = "";
+        setSelectTreeNode({feeKind:item.node.props.title,feeType:''});
         break;
       default:
         feeKind = title;
@@ -86,6 +96,11 @@ function Main() {
   const showDrawer = (id?) => {
     setModifyVisible(true);
     setId(id);
+    if(id){
+      setIsInit(false);
+    }else{
+      setIsInit(true);
+    }
   };
   const loadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(search);
@@ -264,7 +279,7 @@ function Main() {
                 onSearch={value => loadData(value)}
               />
               <Button type="primary" style={{ float: 'right' }} key='add'
-                onClick={() => showDrawer()}
+                onClick={() => {showDrawer();}}
               >
                 <Icon type="plus" />
                 费项
@@ -329,8 +344,10 @@ function Main() {
         modifyVisible={modifyVisible}
         closeDrawer={closeDrawer}
         treeData={treeData}
+        selectTreeItem={selectedTreeNode}
         id={id}
         reload={() => initLoadData(FeeKind, FeeType, search)}
+        isInit={isInit}
       />
     </Layout>
   );

@@ -2,14 +2,14 @@ import { ResponseObject, TreeEntity } from '@/model/models';
 import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
 
-export function GetTreeListExpand(): Promise<ResponseObject<TreeEntity[]>> {
-  return request.get(process.env.basePath + `/FeeItems/GetTreeListExpand`, {});
-}
+// export function GetTreeListExpand(): Promise<ResponseObject<TreeEntity[]>> {
+//   return request.get(process.env.basePath + `/FeeItems/GetTreeListExpand`, {});
+// }
 
-//加载房间树
-export function GetHouseTreeListExpand(): Promise<ResponseObject<TreeEntity[]>> {
-  return request.get(process.env.basePath + `/Common/GetQuickSimpleTreeAll`, {}).then(getResult as any);
-}
+// //加载房间树
+// export function GetHouseTreeListExpand(): Promise<ResponseObject<TreeEntity[]>> {
+//   return request.get(process.env.basePath + `/Common/GetQuickSimpleTreeAll`, {}).then(getResult as any);
+// }
 
 
 //费表列表

@@ -220,17 +220,16 @@ export default [
           // },
         ],
       },
-
-      {
-        name: '流程中心',
-        path: '/welcome6',
-        component: './Welcome',
-      },
-      {
-        name: '商务智能',
-        path: '/welcome7',
-        component: './Welcome',
-      },
+      // {
+      //   name: '流程中心',
+      //   path: '/welcome6',
+      //   component: './Welcome',
+      // },
+      // {
+      //   name: '商务智能',
+      //   path: '/welcome7',
+      //   component: './Welcome',
+      // },
       {
         name: 'system',
         path: '/system',

@@ -16,24 +16,24 @@ interface ModifyProps {
 const Modify = (props: ModifyProps) => {
   const { data, form } = props;
   const [managers, setManagers] = useState<SelectItem[]>([]);
-  const [types, setTypes] = useState<SelectItem[]>([
-    {
-      label: '集团',
-      value: 'A',
-    },
-    {
-      label: '区域',
-      value: 'B',
-    },
-    {
-      label: '公司',
-      value: 'C',
-    },
-    {
-      label: '管理处',
-      value: 'D',
-    },
-  ]);
+  // const [types, setTypes] = useState<SelectItem[]>([
+  //   {
+  //     label: '集团',
+  //     value: 'A',
+  //   },
+  //   {
+  //     label: '区域',
+  //     value: 'B',
+  //   },
+  //   {
+  //     label: '公司',
+  //     value: 'C',
+  //   },
+  //   {
+  //     label: '管理处',
+  //     value: 'D',
+  //   },
+  // ]);
   const [orgs, setOrgs] = useState<TreeNode[]>();
   let initData = data ? data : { enabledMark: 1 };
   initData.expDate = initData.expDate ? initData.expDate : new Date();
@@ -42,7 +42,7 @@ const Modify = (props: ModifyProps) => {
     // getTypes();
     searchManager('');
     getOrgs();
-  }, []);
+  }, [initData]);
 
   const doSave = dataDetail => {
     let modifyData = { ...initData, ...dataDetail, keyValue: initData.organizeId };
@@ -133,10 +133,27 @@ const Modify = (props: ModifyProps) => {
               label="类型"
               type="select"
               disabled={initData.parentId === '0'}
-              items={types}
+              items={[
+                {
+                  label: '集团',
+                  value: 'A',
+                },
+                {
+                  label: '区域',
+                  value: 'B',
+                },
+                {
+                  label: '公司',
+                  value: 'C',
+                },
+                {
+                  label: '管理处',
+                  value: 'D',
+                },
+              ]}
               rules={[{ required: true, message: '请选择类型' }]}
             ></ModifyItem>
-          </Row> 
+          </Row>
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
