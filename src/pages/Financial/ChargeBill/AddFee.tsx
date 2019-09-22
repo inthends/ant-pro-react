@@ -143,7 +143,7 @@ const AddFee = (props: AddFeeProps) => {
                 <Form.Item label="" required wrapperCol={{span:24}}>
                   {getFieldDecorator('quantity', {
                     initialValue: infoDetail.quantity,
-                    rules: [{ required: true, message: '请输入质量' }]
+                    rules: [{ required: true, message: '请输入数量' }]
                   })(
                     <InputNumber disabled={true} style={{width:'100%'}}></InputNumber>
                   )}
@@ -156,7 +156,7 @@ const AddFee = (props: AddFeeProps) => {
                 <Form.Item label="" required wrapperCol={{span:24}}>
                   {getFieldDecorator('number', {
                     initialValue: infoDetail.number,
-                    rules: [{ required: true, message: '请输入数量' }]
+                    rules: [{ required: true, message: '请输入系数' }]
                   })(
                     <InputNumber style={{width:'100%'}}></InputNumber>
                   )}

@@ -34,9 +34,10 @@ function BillingMain() {
   const [vertifyVisible, setVerifyVisible] = useState<boolean>(false);
 
   const selectTree = (org, item, info) => {
-    SetOrganize(org);
-    initMeterLoadData(info, '');
-    initUnitMeterLoadData(info, '');
+    console.log(org,item,info);
+    SetOrganize(info.node.props.dataRef);
+    initMeterLoadData(info.node.props.dataRef, '');
+    initUnitMeterLoadData(info.node.props.dataRef, '');
   };
 
   useEffect(() => {
@@ -133,9 +134,9 @@ function BillingMain() {
     console.log(org);
     setMeterSearch(searchText);
     const queryJson = {
-      OrganizeId: org.organizeId,
+      //OrganizeId: org.organizeId,
       keyword: searchText,
-      TreeTypeId: org.id,
+      TreeTypeId: org.key,
       TreeType: org.type,
     };
     const sidx = 'billId';
@@ -146,9 +147,9 @@ function BillingMain() {
   const initUnitMeterLoadData = (org, searchText) => {
     setUnitMeterSearch(searchText);
     const queryJson = {
-      OrganizeId: org.organizeId,
+      //OrganizeId: org.organizeId,
       keyword: searchText,
-      TreeTypeId: org.id,
+      TreeTypeId: org.key,
       TreeType: org.type,
     };
     const sidx = 'id';

@@ -20,10 +20,12 @@ interface ListTableProps {
   rowSelect(rowSelectedKeys): void;
   organizeId: string;
   customerName: string;
+  showSplit(id:string):void;
+  showTrans(id:string):void;
 }
 
 function ListTable(props: ListTableProps) {
-  const { form, onchange, loading, pagination, data, modify, reload, rowSelect, organizeId, customerName } = props;
+  const { form, onchange, loading, pagination, data, modify, reload, rowSelect, organizeId, customerName ,showSplit,showTrans} = props;
   const { getFieldDecorator } = form;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
@@ -45,17 +47,14 @@ function ListTable(props: ListTableProps) {
   };
 
   const editAndDelete = (key: string, currentItem: any) => {
-    if (key === 'edit') {
+    console.log(currentItem);
+    if (key === 'view') {
       //this.showEditModal(currentItem);
     }
-    else if (key === 'delete') {
-      Modal.confirm({
-        title: '删除任务',
-        content: '确定删除该任务吗？',
-        okText: '确认',
-        cancelText: '取消',
-        //onOk: () => this.deleteItem(currentItem.id),
-      });
+    else if (key === 'split') {
+      showSplit(currentItem.id);
+    }else if(key==='trans'){
+      showTrans(currentItem.id);
     }
   };
 
@@ -67,7 +66,7 @@ function ListTable(props: ListTableProps) {
         <Menu onClick={({ key }) => editAndDelete(key, item)}>
           <Menu.Item key="view">查看</Menu.Item>
           <Menu.Item key="split">拆费</Menu.Item>
-          <Menu.Item key="change">转费</Menu.Item>
+          <Menu.Item key="trans">转费</Menu.Item>
         </Menu>}>
       <a>
         更多 <Icon type="down" />
@@ -81,35 +80,30 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'feeName',
       key: 'feeName',
       width: 140,
-      sorter: true,
     },
     {
       title: '应收金额',
       dataIndex: 'amount',
       key: 'amount',
       width: 80,
-      sorter: true,
     },
     {
       title: '减免金额',
       dataIndex: 'reductionAmount',
       key: 'reductionAmount',
       width: 80,
-      sorter: true,
     },
     {
       title: '冲抵金额',
       dataIndex: 'offsetAmount',
       key: 'offsetAmount',
       width: 80,
-      sorter: true,
     },
     {
       title: '未收金额',
       dataIndex: 'lastAmount',
       key: 'lastAmount',
       width: 80,
-      sorter: true,
     },
     {
       title: '计费起始日期',
@@ -198,6 +192,9 @@ function ListTable(props: ListTableProps) {
     sumEntity['sumoffsetAmount'] = sumoffsetAmount.toFixed(2);
     sumEntity['sumlastAmount'] = sumlastAmount.toFixed(2);
     setSumEntity(sumEntity);
+    form.setFieldsValue({payAmountA:sumEntity['sumAmount']});
+    form.setFieldsValue({payAmountB:0});
+    form.setFieldsValue({payAmountC:0});
   };
 
   const rowSelection = {
@@ -271,11 +268,18 @@ function ListTable(props: ListTableProps) {
                 {getFieldDecorator('payAmountA', {
                   initialValue: hasSelected ? sumEntity.sumAmount : 0,
                   rules: [{ required: true, message: '请输入金额' }],
-                })(<InputNumber
+                })(<InputNumber onChange={(value) =>{
+                  if(sumEntity!=undefined&&Number(value)<sumEntity.sumAmount)
+                  {
+                    var amountB=sumEntity.sumAmount-Number(value);
+                    form.setFieldsValue({payAmountB:amountB.toFixed(2)});
+                    form.setFieldsValue({payAmountC:0.0});
+                  }
+                }}
                   precision={2}
                   min={0}
                   max={hasSelected ? sumEntity.sumAmount : 0}
-                  style={{ width: '150px' }}
+                  style={{ width: '100%' }}
                 />)}
               </Form.Item>
             </Col>
@@ -307,8 +311,16 @@ function ListTable(props: ListTableProps) {
                   <InputNumber
                     precision={2}
                     min={0}
-                    max={hasSelected ? sumEntity.sumAmount : 0}
-                    style={{ width: '150px' }}
+                    max={hasSelected ? sumEntity.sumAmount-Number(form.getFieldValue('payAmountA')) : 0}
+                    style={{width:'100%'}}
+                    onChange={(value) =>{
+                      var sumAmountA=form.getFieldValue('payAmountA');
+                      if(sumEntity!=undefined&&sumAmountA+Number(value)<sumEntity.sumAmount)
+                      {
+                        var amountC=sumEntity.sumAmount-Number(value)-sumAmountA;
+                        form.setFieldsValue({payAmountC:amountC.toFixed(2)});
+                      }
+                    }}
                   />
                 )}
 
@@ -339,10 +351,10 @@ function ListTable(props: ListTableProps) {
                   rules: [{ required: true, message: '请输入金额' }],
                 })(
                   <InputNumber
+                    style={{width:'100%'}}
                     precision={2}
                     min={0}
-                    max={hasSelected ? sumEntity.sumAmount : 0}
-                    style={{ width: '150px' }}
+                    max={hasSelected ? sumEntity.sumAmount-Number(form.getFieldValue('payAmountA'))-Number(form.getFieldValue('payAmountB')) : 0}
                   />
                 )}
 
@@ -353,7 +365,7 @@ function ListTable(props: ListTableProps) {
                 {getFieldDecorator('billDate', {
                   initialValue: moment(new Date()),
                   rules: [{ required: true, message: '请选择收款日期' }],
-                })(<DatePicker />)}
+                })(<DatePicker style={{width:'100%'}}/>)}
               </Form.Item>
             </Col>
             <Col lg={6}>

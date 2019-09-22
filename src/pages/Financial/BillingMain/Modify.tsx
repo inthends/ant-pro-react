@@ -4,13 +4,98 @@ import { DefaultPagination } from '@/utils/defaultSetting';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { GetPageDetailListJson, GetBilling, GetDataItemTreeJson, GetOrgTree, GetInfoFormJson, GetPageListWithMeterID, RemoveUnitForm, RemoveUnitFormAll, SaveMain } from './BillingMain.service';
+import { SaveForm,GetPageDetailListJson, GetBilling, GetDataItemTreeJson, GetOrgTree, GetInfoFormJson, GetPageListWithMeterID, RemoveUnitForm, RemoveUnitFormAll, SaveMain } from './BillingMain.service';
 import styles from './style.less';
 import moment from 'moment';
 import SelectHouse from './SelectHouse';
 const Search = Input.Search;
 const Option = Select.Option;
 const { TextArea } = Input;
+
+/*详情可编辑单元格*/
+const EditableContext = React.createContext('');
+const EditableRow = ({ form, index, ...props }: any) => (
+  <EditableContext.Provider value={form}>
+    <tr {...props} />
+  </EditableContext.Provider>
+);
+
+const EditableFormRow = Form.create()(EditableRow);
+class EditableCell extends React.Component {
+  state = {
+    editing: false,
+  };
+
+  toggleEdit = () => {
+    const editing = !this.state.editing;
+    this.setState({ editing }, () => {
+      if (editing) {
+        this.input.focus();
+      }
+    });
+  };
+
+  save = e => {
+    const { record, handleSave } = this.props;
+    this.form.validateFields((error, values) => {
+      if (error && error[e.currentTarget.id]) {
+        return;
+      }
+      this.toggleEdit();
+      handleSave({ ...record, ...values });
+    });
+  };
+
+  renderCell = form => {
+    var _this = this;
+    this.form = form;
+    const { children, dataIndex, record, title } = this.props;
+    const { editing } = this.state;
+    return editing ? (
+      <Form.Item style={{ margin: 0 }}>
+        {form.getFieldDecorator(dataIndex, {
+          rules: [
+            {
+              required: true,
+              message: `${title} is required.`,
+            },
+          ],
+          initialValue: record[dataIndex],
+        })(<Input ref={node => (this.input = node)} onPressEnter={this.save} onBlur={this.save} />)}
+      </Form.Item>
+    ) : (
+        <div
+          className="editable-cell-value-wrap"
+          style={{ paddingRight: 24 }}
+          onClick={_this.toggleEdit}
+        >
+          {children}
+        </div>
+      );
+  };
+
+  render() {
+    const {
+      editable,
+      dataIndex,
+      title,
+      record,
+      index,
+      handleSave,
+      children,
+      ...restProps
+    } = this.props;
+    return (
+      <td {...restProps}>
+        {editable ? (
+          <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
+        ) : (
+            children
+          )}
+      </td>
+    );
+  }
+}
 
 interface ModifyProps {
   modifyVisible: boolean;
@@ -33,11 +118,19 @@ const Modify = (props: ModifyProps) => {
   const [meterKinds, setMeterKinds] = useState<any>([]);
   const [meterTypes, setMeterTypes] = useState<any>([]);
   const [orgTreeData, setOrgTreeData] = useState<any>({});
-  const [selectHouseVisible, setSelectHouseVisible] = useState<boolean>(false); 
+  const [selectHouseVisible, setSelectHouseVisible] = useState<boolean>(false);
   const [unitMeterSearchParams, setUnitMeterSearchParams] = useState<any>({});
   // const [unitMeterLoading, setUnitMeterLoading] = useState<boolean>(false);
   const [unitMeterData, setUnitMeterData] = useState<any>();
   const [unitMeterPagination, setUnitMeterPagination] = useState<DefaultPagination>(new DefaultPagination());
+
+  const components = {
+    body: {
+      row: EditableFormRow,
+      cell: EditableCell,
+    },
+  };
+
 
   const [isAdd, setIsAdd] = useState<boolean>(true);
   useEffect(() => {
@@ -47,8 +140,8 @@ const Modify = (props: ModifyProps) => {
         setIsAdd(false);
         setLoading(true);
         GetBilling(id).then(res => {
-          setInfoDetail(res); 
-          initUnitMeterLoadData();
+          setInfoDetail(res);
+          initUnitMeterLoadData('');
           setLoading(false);
         });
       } else {
@@ -73,7 +166,7 @@ const Modify = (props: ModifyProps) => {
 
   const initUnitMeterLoadData = ( searchText) => {
     const queryJson = {
-      keyValue: id == null || id == '' ? '' : id,
+      billId: id == null || id == '' ? '' : id,
       keyword: searchText,
     };
     const sidx = 'id';
@@ -126,33 +219,23 @@ const Modify = (props: ModifyProps) => {
     });
   };
   const columns = [
-    // {
-    //   title: '计费单号',
-    //   dataIndex: 'billCode',
-    //   key: 'billCode',
-    //   width: 150,
-    //   sorter: true
-    // },
     {
       title: '单元编号',
       dataIndex: 'unitId',
       key: 'unitId',
       width: 140,
-      sorter: true
     },
     {
       title: '收费项目',
       dataIndex: 'feeName',
       key: 'feeName',
       width: 100,
-      sorter: true,
     },
     {
       title: '应收期间',
       dataIndex: 'period',
       key: 'period',
       width: 120,
-      sorter: true,
       render: val => {
         if (val == null) {
           return ''
@@ -166,41 +249,36 @@ const Modify = (props: ModifyProps) => {
       dataIndex: 'quantity',
       key: 'quantity',
       width: 100,
-      sorter: true,
     },
     {
       title: '单价',
       dataIndex: 'price',
       key: 'price',
-      sorter: true,
       width: 80
     },
     {
       title: '周期',
       key: 'cycleValue',
       dataIndex: 'cycleValue',
-      sorter: true,
       width: 80
     },
     {
       title: '周期单位',
       key: 'cycleType',
       dataIndex: 'cycleType',
-      sorter: true,
       width: 100
     },
     {
       title: '金额',
       key: 'amount',
       dataIndex: 'amount',
-      sorter: true,
-      width: 100
+      width: 100,
+      editable: true
     },
     {
       title: '起始日期',
       key: 'beginDate',
       dataIndex: 'beginDate',
-      sorter: true,
       width: 120,
       render: val => {
         if (val == null) {
@@ -214,7 +292,6 @@ const Modify = (props: ModifyProps) => {
       title: '终止日期',
       key: 'endDate',
       dataIndex: 'endDate',
-      sorter: true,
       width: 120,
       render: val => {
         if (val == null) {
@@ -228,7 +305,7 @@ const Modify = (props: ModifyProps) => {
       dataIndex: 'memo',
       key: 'memo',
       width: 100,
-      sorter: true
+      editable: true
     },
     {
       title: '操作',
@@ -250,6 +327,45 @@ const Modify = (props: ModifyProps) => {
       },
     },
   ] as ColumnProps<any>[];
+
+  const eidtColumns = columns.map(col => {
+    if (!col.editable) {
+      return col;
+    }
+    return {
+      ...col,
+      onCell: record => ({
+        record,
+        editable: col.editable,
+        dataIndex: col.dataIndex,
+        title: col.title,
+        handleSave: handleSave,
+      }),
+    };
+  });
+
+
+  const handleSave = row => {
+    form.validateFields((errors, values) => {
+      if (!errors) {
+        var newData = {
+          id: row.id,
+          amount: row.amount,
+          memo: row.memo
+        };
+        SaveForm(newData).then((res) => {
+          const newData = [...unitMeterData];
+          const index = newData.findIndex(item => row.id === item.id);
+          const item = newData[index];
+          newData.splice(index, 1, {
+            ...item,
+            ...row,
+          });
+          setUnitMeterData(newData);
+        });
+      }
+    });
+  };
 
   const [houseFeeItemId, setHouseFeeItemId] = useState<string>('');
   const closeSelectHouse = () => {
@@ -387,13 +503,14 @@ const Modify = (props: ModifyProps) => {
               </div>
               <div style={{ color: 'rgb(255,0,0)' }}>点击金额列和备注列可以编辑，编辑完按回车保存。</div>
               <Table<any>
+                components={components}
                 onChange={(paginationConfig, filters, sorter) => {
-                  initMeterLoadData(paginationConfig, sorter)
-                }
+                    initMeterLoadData(paginationConfig, sorter)
+                  }
                 }
                 bordered={false}
                 size="middle"
-                columns={columns}
+                columns={eidtColumns}
                 dataSource={unitMeterData}
                 rowKey="unitmeterid"
                 pagination={unitMeterPagination}

@@ -126,12 +126,12 @@ const FeeModify = (props: FeeModifyProps) => {
     var startDate=moment( beginDate);
     var endDate="";
     if(cycleType=='日'){
-      endDate= startDate.add(cycleValue,'days').format('YYYY-MM-DD');
+      endDate= startDate.add(cycleValue,'days').add(-1,'days').format('YYYY-MM-DD');
     }else if(cycleType=='月')
     {
-      endDate= startDate.add(cycleValue,'month').format('YYYY-MM-DD');
+      endDate= startDate.add(cycleValue,'month').add(-1,'days').format('YYYY-MM-DD');
     }else{
-      endDate= startDate.add(cycleValue,'years').format('YYYY-MM-DD');
+      endDate= startDate.add(cycleValue,'years').add(-1,'days').format('YYYY-MM-DD');
     }
     var info=Object.assign({},infoDetail,{endDate:endDate,cycleValue:cycleValue,cycleType:cycleType});
     setInfoDetail(info);

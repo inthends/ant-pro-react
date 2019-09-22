@@ -633,8 +633,6 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
         });
       }
     });
-
-
   };
 
   const handlePublicSave = row => {
