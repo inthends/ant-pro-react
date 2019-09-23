@@ -1,9 +1,8 @@
 import Page from '@/components/Common/Page';
-import { TreeEntity } from '@/model/models';
+// import { TreeEntity } from '@/model/models';
 import { Tree } from 'antd';
 import React, { useEffect, useState } from 'react';
-
-const { TreeNode } = Tree;
+// const { TreeNode } = Tree;
 
 interface LeftSelectTreeProps {
   treeData: any[];
@@ -26,8 +25,7 @@ function LeftSelectTree(props: LeftSelectTreeProps) {
     });
 
   useEffect(() => {
-    // setExpanded(treeData.map(item => item.id as string));
-
+    // setExpanded(treeData.map(item => item.id as string)); 
     getAllkeys(treeData);  
     setExpandedKeys(keys); 
   }, [treeData]);
@@ -39,18 +37,17 @@ function LeftSelectTree(props: LeftSelectTreeProps) {
     }
   };
 
-  const renderTree = (treeData: TreeEntity[], parentId: string) => {
-    return treeData
-      .filter(item => item.parentId === parentId)
-      .map(filteditem => {
-        return (
-          <TreeNode title={filteditem.title} key={filteditem.key}>
-            {renderTree(treeData, filteditem.key as string)}
-          </TreeNode>
-        );
-      });
-  };
-
+  // const renderTree = (treeData: TreeEntity[], parentId: string) => {
+  //   return treeData
+  //     .filter(item => item.parentId === parentId)
+  //     .map(filteditem => {
+  //       return (
+  //         <TreeNode title={filteditem.title} key={filteditem.key}>
+  //           {renderTree(treeData, filteditem.key as string)}
+  //         </TreeNode>
+  //       );
+  //     });
+  // };
 
   /*const renderTree = data =>
     data.map(item => {

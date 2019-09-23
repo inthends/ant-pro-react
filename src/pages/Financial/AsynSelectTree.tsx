@@ -13,7 +13,7 @@ interface AsynSelectTreeProps {
 
 function AsynSelectTree(props: AsynSelectTreeProps) {
   const { selectTree, getCheckedKeys } = props;
-  const [checkedKeys, setCheckedKeys] = useState<any[]>([]);
+  // const [checkedKeys, setCheckedKeys] = useState<any[]>([]);
   const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
   // const [autoExpandParent, setAutoExpandParent] = useState<boolean>(false);
   //动态子节点
@@ -39,19 +39,25 @@ function AsynSelectTree(props: AsynSelectTreeProps) {
 
   }, []);
 
-  const onCheck = (checkedKeys, info) => {
-    let keys: any[] = [];
-    //setCheckedKeys(checkedKeys);
-    //过滤
-    info.checkedNodes.forEach(item => { 
-      //房间或者车位
-      if (item.props.type == 5 || item.props.type == 9) {
-        keys.push(item.key);
-      }
-    });
-     
-    getCheckedKeys(keys);
+  //选择事件
+  // const onCheck = (checkedKeys, info) => {  
+  //   let keys: any[] = [];
+  //   //setCheckedKeys(checkedKeys);
+  //   //过滤
+  //   info.checkedNodes.forEach(item => { 
+  //     //房间或者车位
+  //     if (item.props.type == 5 || item.props.type == 9) {
+  //       keys.push(item.key);
+  //     }
+  //   }); 
+  //   getCheckedKeys(keys);
+  // };
+
+  const onCheck = (checkedKeys, e) => {
+    //先调用展开
+    getCheckedKeys(checkedKeys);
   };
+
 
   const onSelect = (selectedKeys, info) => {
     if (selectedKeys.length === 1) {
@@ -93,7 +99,7 @@ function AsynSelectTree(props: AsynSelectTreeProps) {
           setTreeData([...treeData]);
         });
         resolve();
-      }, 500);
+      }, 100);
     });
 
   // const renderTree = (tree: any[], parentId: string) => {
@@ -139,6 +145,7 @@ function AsynSelectTree(props: AsynSelectTreeProps) {
           expandedKeys={expandedKeys}
           // expandedKeys={expandedKeys}
           // autoExpandParent={autoExpandParent}
+          autoExpandParent
           onExpand={clickExpend}
           onSelect={onSelect}
         >
