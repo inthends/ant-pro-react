@@ -360,7 +360,7 @@ const Modify = (props: ModifyProps) => {
                           onChange={handleChange}
                           onRemove={handleRemove}
                         >
-                          {fileList.length >= 12 ? null : (infoDetail.billStatus && infoDetail.billStatus == 1) ? uploadButton : null}
+                          {fileList.length >= 4 ? null : uploadButton }
                         </Upload>
                         <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
                           <img alt="example" style={{ width: '100%' }} src={previewImage} />

@@ -1,10 +1,10 @@
-// import {  ResponseObject } from '@/model/models';
+import { ResponseObject } from '@/model/models';
 import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
  
-// export function GetQuickSimpleTreeAll(): Promise<ResponseObject<any[]>> {
-//   return request.get(process.env.basePath + `/Common/GetQuickSimpleTreeAll`, {});
-// } 
+export function GetQuickSimpleTreeAll(): Promise<ResponseObject<any[]>> {
+  return request.get(process.env.basePath + `/Common/GetQuickSimpleTreeAll`, {});
+} 
 
 //获取服务单
 export function GetPageListJson(data): Promise<any> {
