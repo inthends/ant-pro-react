@@ -38,7 +38,10 @@ export function SaveUnitFee(data): Promise<any> {
 export function SaveMain(data): Promise<any> {
   return request.post(process.env.basePath + `/BillingMain/SaveMain`, {data:objToFormdata(data)});
 }
-
+//计费保存
+export function SaveForm(data): Promise<any> {
+  return request.post(process.env.basePath + `/BillingMain/SaveForm`, {data:objToFormdata(data)});
+}
 //保存计费主单
 export function RemoveForm(data): Promise<any> {
   return request.post(process.env.basePath + `/BillingMain/RemoveForm?keyValue=${data}`, {});

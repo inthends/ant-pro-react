@@ -43,13 +43,13 @@ function Main() {
   const [vertifyVisible, setVertifyVisible] = useState<boolean>(false);
   const [ifVertify, setIfVertify] = useState<boolean>(false);
 
-  // const [flushVisible, setflushVisible] = useState<boolean>(false); 
+  // const [flushVisible, setflushVisible] = useState<boolean>(false);
   // const [chargeRowStatus, setChargeRowStatus] = useState<number>(0);
   // const [billRowKey, setBillRowKey] = useState<number>(0);
 
   const [unChargeSelectedKeys, setUnChargeSelectedKeys] = useState<any[]>([]);
   const [modifyEdit, setModifyEdit] = useState<boolean>(true);
-  // const [organize, SetOrganize] = useState<any>({}); 
+  // const [organize, SetOrganize] = useState<any>({});
   const [chargedSearchParams, setChargedSearchParams] = useState<any>({});
 
   const selectTree = (id, search) => {
@@ -227,28 +227,25 @@ function Main() {
   const closeVertify = () => {
     setVertifyVisible(false);
   }
-
-  // const showSplit = () => {
-  //   if (unChargeSelectedKeys.length != 1) {
-  //     message.warning('请选择一条记录!');
-  //     return;
-  //   }
-  //   setSplitVisible(true);
-  // }
-
-  const closeSplit = () => {
-    setSplitVisible(false);
+  const [splitId,setSplitId]=useState<string>('');
+  const showSplit = (id) => {
+    console.log(id);
+    setSplitId(id);
+    setSplitVisible(true);
   }
 
-  // const showTrans = () => {
-  //   if (unChargeSelectedKeys.length != 1) {
-  //     message.warning('请选择一条记录!');
-  //     return;
-  //   }
-  //   setTransVisible(true);
-  // }
+  const closeSplit = () => {
+    setSplitId('');
+    setSplitVisible(false);
+  }
+  const [transId,setTransId]=useState<string>('');
+  const showTrans = (id) => {
+    setTransId(id);
+    setTransVisible(true);
+  }
 
   const closeTrans = () => {
+    setTransId('');
     setTransVisible(false);
   }
 
@@ -312,7 +309,7 @@ function Main() {
       {/* <Sider theme="light" style={{ overflow: 'hidden', height: '100%' }} width="245px"> */}
       <AsynLeftTree
         parentid={'0'}
-        selectTree={(id, type, info?) => { 
+        selectTree={(id, type, info?) => {
           SetOrganizeId(id);
           // SetOrganize(info);
           if (type == 5) {
@@ -386,6 +383,8 @@ function Main() {
               rowSelect={GetUnChargeSelectedKeys}
               organizeId={organizeId}
               customerName={customerName}
+              showSplit={showSplit}
+              showTrans={showTrans}
             />
           </TabPane>
           <TabPane tab="收款单列表" key="2">
@@ -508,13 +507,13 @@ function Main() {
       <Split
         splitVisible={splitVisible}
         closeSplit={closeSplit}
-        id={unChargeSelectedKeys.length > 0 ? unChargeSelectedKeys[0].id : null}
+        id={splitId}
         reload={() => initLoadData(search, organizeId)}
       />
       <Transform
         transVisible={transVisible}
         closeTrans={closeTrans}
-        id={unChargeSelectedKeys.length > 0 ? unChargeSelectedKeys[0].id : null}
+        id={transId}
         reload={() => initLoadData(search, organizeId)}
       />
     </Layout>
