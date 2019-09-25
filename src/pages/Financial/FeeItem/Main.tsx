@@ -6,11 +6,14 @@ import { Tabs, Button, Icon, Input, Layout, Select } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useContext, useEffect, useState } from 'react';
 import { GetFeeTreeList, GetPageListJson, GetUnitFeeItemData, GetAllFeeItems } from './Main.service';
+//获取全部房间树
+import { GetUnitTreeAll } from '@/services/commonItem';
 import LeftTree from '../LeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
 import HouseInfoList from './HouseInfoList';
 import { SiderContext } from '../../SiderContext';
+import { getResult } from '@/utils/networkUtils';
 const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
@@ -32,38 +35,38 @@ function Main() {
   const [housePagination, setHousePagination] = useState<PaginationConfig>(new DefaultPagination());
   const [houseData, setHouseData] = useState<any[]>([]);
   const [feeitems, setFeeitems] = useState<any[]>([]);
-  const {hideSider, setHideSider } = useContext(SiderContext);
-  const [selectedTreeNode,setSelectTreeNode]=useState<any>({});
-
-  const [isInit,setIsInit]=useState<boolean>(false);
+  const { hideSider, setHideSider } = useContext(SiderContext);
+  const [selectedTreeNode, setSelectTreeNode] = useState<any>({});
+  const [isInit, setIsInit] = useState<boolean>(false);
+  const [unitTreeData, setUnitTreeData] = useState<any[]>([]);
 
   const selectTree = (item, search) => {
     var value = item.node.props.value;
     var title = item.node.props.title;
 
-    console.log(item.node.props);
+    //console.log(item.node.props);
 
     var feeKind = "", feeType = "";
     switch (value) {
       case "All":
         feeKind = "";
         feeType = "";
-        setSelectTreeNode({feeKind:feeKind,feeType:item.node.props.title});
+        setSelectTreeNode({ feeKind: feeKind, feeType: item.node.props.title });
         break;
       case "FeeType":
         feeType = title;
         feeKind = item.node.props.attributeA;
-        setSelectTreeNode({feeKind:item.node.props.attributeA,feeType:item.node.props.title});
+        setSelectTreeNode({ feeKind: item.node.props.attributeA, feeType: item.node.props.title });
         break;
       case "PaymentItem":
         feeKind = title;
         feeType = "";
-        setSelectTreeNode({feeKind:item.node.props.title,feeType:''});
+        setSelectTreeNode({ feeKind: item.node.props.title, feeType: '' });
         break;
       case "ReceivablesItem":
         feeKind = title;
         feeType = "";
-        setSelectTreeNode({feeKind:item.node.props.title,feeType:''});
+        setSelectTreeNode({ feeKind: item.node.props.title, feeType: '' });
         break;
       default:
         feeKind = title;
@@ -85,6 +88,15 @@ function Main() {
     GetAllFeeItems().then(res => {
       setFeeitems(res || []);
     });
+
+    //获取房产树
+    GetUnitTreeAll()
+      .then(getResult)
+      .then((res: any[]) => {
+        setUnitTreeData(res || []);
+        return res || [];
+      });
+
     initLoadData('', '', '');
     initHouseLoadData('', '', '');
 
@@ -96,9 +108,9 @@ function Main() {
   const showDrawer = (id?) => {
     setModifyVisible(true);
     setId(id);
-    if(id){
+    if (id) {
       setIsInit(false);
-    }else{
+    } else {
       setIsInit(true);
     }
   };
@@ -279,7 +291,7 @@ function Main() {
                 onSearch={value => loadData(value)}
               />
               <Button type="primary" style={{ float: 'right' }} key='add'
-                onClick={() => {showDrawer();}}
+                onClick={() => { showDrawer(); }}
               >
                 <Icon type="plus" />
                 费项
@@ -343,7 +355,7 @@ function Main() {
       <Modify
         modifyVisible={modifyVisible}
         closeDrawer={closeDrawer}
-        treeData={treeData}
+        treeData={unitTreeData}
         selectTreeItem={selectedTreeNode}
         id={id}
         reload={() => initLoadData(FeeKind, FeeType, search)}

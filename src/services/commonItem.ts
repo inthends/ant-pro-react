@@ -73,3 +73,8 @@ export function GetOrgTreeOnly(): Promise<TreeEntity[]> {
 export function GetAllOrgIds(pstructid): Promise<string[]> {
   return request.get(process.env.basePath + `/Common/GetAllOrgIds?pstructid=${pstructid}`, {}).then(getResult);
 }
+
+//加载全部checkbox房间树
+export function GetUnitTreeAll(): Promise<ResponseObject<any>> {
+  return request.get(process.env.basePath + `/Common/GetUnitTreeAll`, {});
+} 

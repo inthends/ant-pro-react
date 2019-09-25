@@ -3,6 +3,7 @@ import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
 import { FeeItemData } from '@/model/feeItemData';
 
+//获取全部费项
 export function GetFeeTreeList(): Promise<TreeEntity[]> {
   return request.get(process.env.basePath + `/FeeItems/GetFeeTreeList`, {}).then(getResult as any);
 }

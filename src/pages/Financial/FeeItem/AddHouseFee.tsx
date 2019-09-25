@@ -1,11 +1,11 @@
-//选择所属机构
+//选择费项房屋
 // import { TreeEntity } from '@/model/models';
 import { Checkbox, Col, Form, Row, Modal, message } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useState } from 'react';
 import { UnitFeeSaveForm } from './Main.service';
 import SelectTree from '../SelectTree';
-import './style.less'; 
+import './style.less';
 
 interface AddHouseFeeProps {
   visible: boolean;
@@ -13,10 +13,11 @@ interface AddHouseFeeProps {
   form: WrappedFormUtils;
   feeId?: string;
   reload(): void;
+  treeData: any[];
 }
 
 const AddHouseFee = (props: AddHouseFeeProps) => {
-  const { visible, closeModal, feeId, reload } = props;
+  const { visible, closeModal, feeId, reload, treeData } = props; 
   const [checkedList, setCheckedList] = useState<any[]>([]);
   const [unitData, setUnitData] = useState<string[]>([]);
   // const [houseTreeData,setHouseTreeData]=useState<TreeEntity[]>([]);
@@ -56,7 +57,7 @@ const AddHouseFee = (props: AddHouseFeeProps) => {
       <Row style={{ height: '400px', overflow: 'hidden', marginTop: '5px', backgroundColor: 'rgb(255,255,255)' }}>
         <Col span={12} style={{ height: '400px', overflow: 'auto' }}>
           <SelectTree
-            treeData={[]}
+            treeData={treeData}
             getCheckedKeys={(keys) => {
               setUnitData(keys);
             }}

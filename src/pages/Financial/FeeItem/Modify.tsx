@@ -1,3 +1,4 @@
+// 费项编辑页面
 import { TreeEntity } from '@/model/models';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { message, Modal, Checkbox, Tabs, Select, Table, Button, Card, Icon, Divider, Col, DatePicker, Drawer, Form, Input, Row, InputNumber } from 'antd';
@@ -19,16 +20,16 @@ const { TabPane } = Tabs;
 interface ModifyProps {
   modifyVisible: boolean;
   // data?: any;
-  selectTreeItem:any;
+  selectTreeItem: any;
   closeDrawer(): void;
   form: WrappedFormUtils;
   treeData: TreeEntity[];
   id?: string;
   reload(): void;
-  isInit:boolean;
+  isInit: boolean;
 }
 const Modify = (props: ModifyProps) => {
-  const { modifyVisible, closeDrawer, form, id, reload,selectTreeItem ,isInit} = props;
+  const { treeData, modifyVisible, closeDrawer, form, id, reload, selectTreeItem, isInit } = props;
   const { getFieldDecorator } = form;
   const title = id === undefined ? '新增费项' : '修改费项';
   const [infoDetail, setInfoDetail] = useState<any>({});
@@ -41,9 +42,7 @@ const Modify = (props: ModifyProps) => {
   const [editOrgVisible, setEditOrgVisible] = useState<boolean>(false);
   const [feeItemNames, setFeeItemNames] = useState<any[]>([]);
   const [editHouseVisible, setEditHouseVisible] = useState<boolean>(false);
-  const [linkFeeDisable,setLinkFeeDisable]=useState<boolean>(true);
-
-
+  const [linkFeeDisable, setLinkFeeDisable] = useState<boolean>(true);
 
   //打开抽屉时初始化
   useEffect(() => {
@@ -56,18 +55,18 @@ const Modify = (props: ModifyProps) => {
     })
   }, []);
 
-  const changeFeeType = (value,info?) => {
+  const changeFeeType = (value, info?) => {
     var newvalue = value == "收款费项" ? "ReceivablesItem" : "PaymentItem";
     GetFeeType(newvalue).then(res => {
       setFeetype(res || []);
       //清除选择的值
       form.setFieldsValue({ feeType: '' });
-      if (isInit&&selectTreeItem!=null&&selectTreeItem.feeType!='') {
-        var newInfo = Object.assign({},info, { feeType: selectTreeItem.feeType });
+      if (isInit && selectTreeItem != null && selectTreeItem.feeType != '') {
+        var newInfo = Object.assign({}, info, { feeType: selectTreeItem.feeType });
         setInfoDetail(newInfo);
         form.setFieldsValue({ feeType: selectTreeItem.feeType });
 
-      }else{
+      } else {
 
       }
     });
@@ -93,13 +92,12 @@ const Modify = (props: ModifyProps) => {
       } else {
         //重置之前选择加载的费项类别
         //设置checkbox默认值
-        var info = Object.assign({},infoDetail,{isEnable: true, isInContract: true, isTax: true });
-        if(isInit&&selectTreeItem!=null&&selectTreeItem.feeKind!='')
-        {
-          info = Object.assign({},info,{feeKind:selectTreeItem.feeKind });
+        var info = Object.assign({}, infoDetail, { isEnable: true, isInContract: true, isTax: true });
+        if (isInit && selectTreeItem != null && selectTreeItem.feeKind != '') {
+          info = Object.assign({}, info, { feeKind: selectTreeItem.feeKind });
           setInfoDetail(info);
           form.setFieldsValue({ feeKind: selectTreeItem.feeKind });
-          changeFeeType(selectTreeItem.feeKind,info);
+          changeFeeType(selectTreeItem.feeKind, info);
         }
       }
     } else {
@@ -468,18 +466,17 @@ const Modify = (props: ModifyProps) => {
   const [payFixedDisabled, setPayFixedDisabled] = useState<boolean>(true);
   const [lateFixedDisabled, setLateFixedDisabled] = useState<boolean>(true);
 
-  const setEndDate=(beginDate:string,cycleValue:number,cycleType:string)=>{
-    var startDate=moment(beginDate);
-    var endDate="";
-    if(cycleType=='日'){
-      endDate= startDate.add(cycleValue,'days').add(-1,'days').format('YYYY-MM-DD');
-    }else if(cycleType=='月')
-    {
-      endDate= startDate.add(cycleValue,'month').add(-1,'days').format('YYYY-MM-DD');
-    }else{
-      endDate= startDate.add(cycleValue,'years').add(-1,'days').format('YYYY-MM-DD');
+  const setEndDate = (beginDate: string, cycleValue?: number, cycleType?: string) => {
+    var startDate = moment(beginDate);
+    var endDate = "";
+    if (cycleType == '日') {
+      endDate = startDate.add(cycleValue, 'days').add(-1, 'days').format('YYYY-MM-DD');
+    } else if (cycleType == '月') {
+      endDate = startDate.add(cycleValue, 'month').add(-1, 'days').format('YYYY-MM-DD');
+    } else {
+      endDate = startDate.add(cycleValue, 'years').add(-1, 'days').format('YYYY-MM-DD');
     }
-    var info=Object.assign({},infoDetail,{endDate:endDate,cycleValue:cycleValue,cycleType:cycleType});
+    var info = Object.assign({}, infoDetail, { endDate: endDate, cycleValue: cycleValue, cycleType: cycleType });
     setInfoDetail(info);
   }
 
@@ -544,30 +541,28 @@ const Modify = (props: ModifyProps) => {
     return '';
   };
 
-  const [selectedHouseRowKeys,setSelectedHouseRowKeys]=useState<string[]>([]);
+  const [selectedHouseRowKeys, setSelectedHouseRowKeys] = useState<string[]>([]);
   //费项房屋选择
-  const houseRowSelection={
-    onChange: (selectedRowKeys, selectedRows) => {
-      var str=[];
-      for(var i=0;i<selectedRowKeys.length;i++)
-      {
-        str.push(selectedRowKeys[i]+'');
+  const houseRowSelection = {
+    onChange: (selectedRowKeys, selectedRows) => { 
+      let str: any[]; str = [];
+      for (var i = 0; i < selectedRowKeys.length; i++) {
+        str.push(selectedRowKeys[i] + '');
       }
       setSelectedHouseRowKeys(str);
       //console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
     }
   };
 
-  const deleteHouse=()=>{
-    if(selectedHouseRowKeys.length==0)
-    {
+  const deleteHouse = () => {
+    if (selectedHouseRowKeys.length == 0) {
       message.warning('请选择要删除的房屋');
-    }else{
+    } else {
       Modal.confirm({
         title: '请确认',
         content: `您是否要删除？删除后无法恢复。`,
         onOk: () => {
-          HouseRemoveForm({feeitemid:id,keyValues:JSON.stringify(selectedHouseRowKeys) }).then(() => {
+          HouseRemoveForm({ feeitemid: id, keyValues: JSON.stringify(selectedHouseRowKeys) }).then(() => {
             message.success('删除成功');
             houseLoadData('');
           });
@@ -594,7 +589,7 @@ const Modify = (props: ModifyProps) => {
                       initialValue: infoDetail.feeKind,
                       rules: [{ required: true, message: '请选择费项种类' }],
                     })(<Select placeholder="请选择费项种类"
-                      onChange={value=>{changeFeeType(value)}}
+                      onChange={value => { changeFeeType(value) }}
                     >
                       <Option value="收款费项">收款费项</Option>
                       <Option value="付款费项" >付款费项</Option>
@@ -700,10 +695,10 @@ const Modify = (props: ModifyProps) => {
                     )}
                     {getFieldDecorator('isCancel', {
                       initialValue: infoDetail.isCancel ? true : false,
-                    })(<Checkbox checked={form.getFieldValue('isCancel')} onChange={(e)=>{
-                      if(e.target.checked){
+                    })(<Checkbox checked={form.getFieldValue('isCancel')} onChange={(e) => {
+                      if (e.target.checked) {
                         setLinkFeeDisable(false);
-                      }else{
+                      } else {
                         setLinkFeeDisable(true);
                       }
                     }}>
@@ -785,9 +780,10 @@ const Modify = (props: ModifyProps) => {
                     {getFieldDecorator('cycleValue', {
                       initialValue: infoDetail.cycleValue ? infoDetail.cycleValue : 1,
                       rules: [{ required: true, message: '请输入计费周期' }],
-                    })(<InputNumber placeholder="请输入计费周期" min={1} style={{ width: '100%' }} onChange={(value:number)=>{
-                      setEndDate(infoDetail.beginDate,value,infoDetail.cycleType);
-                    }}/>)}
+                    })(<InputNumber placeholder="请输入计费周期" min={1} style={{ width: '100%' }}
+                      onChange={value => {
+                        setEndDate(infoDetail.beginDate, value, infoDetail.cycleType);
+                      }} />)}
                   </Form.Item>
                 </Col>
                 <Col lg={5}>
@@ -795,8 +791,8 @@ const Modify = (props: ModifyProps) => {
                     {getFieldDecorator('cycleType', {
                       initialValue: infoDetail.cycleType ? infoDetail.cycleType : '月',
                       rules: [{ required: true, message: '请选择单位' }],
-                    })(<Select placeholder="请选择单位" onChange={(value:string)=>{
-                      setEndDate(infoDetail.beginDate,infoDetail.cycleValue,value);
+                    })(<Select placeholder="请选择单位" onChange={(value: string) => {
+                      setEndDate(infoDetail.beginDate, infoDetail.cycleValue, value);
                     }}>
                       <Option value="日">日</Option>
                       <Option value="月" >月</Option>
@@ -821,8 +817,8 @@ const Modify = (props: ModifyProps) => {
                     {getFieldDecorator('endDate', {
                       initialValue: form.getFieldValue('isNullDate') ? null : getEndDate(),//infoDetail.endDate ? moment(new Date(infoDetail.endDate)) : moment(getEndDate()),
                       rules: [{ required: !form.getFieldValue('isNullDate'), message: '计费终止日期' }],
-                    })(<DatePicker disabled placeholder="计费终止日期" style={{ width: '100%' }} onChange={(date, dateString)=>{
-                      setEndDate(dateString,infoDetail.cycleValue,infoDetail.cycleType);
+                    })(<DatePicker disabled placeholder="计费终止日期" style={{ width: '100%' }} onChange={(date, dateString) => {
+                      setEndDate(dateString, infoDetail.cycleValue, infoDetail.cycleType);
                     }} />)}
                   </Form.Item>
                 </Col>
@@ -1432,7 +1428,7 @@ const Modify = (props: ModifyProps) => {
 
 
                   <Button type="link" style={{ float: 'right' }}
-                    onClick={ deleteHouse}
+                    onClick={deleteHouse}
                   >
                     <Icon type="delete" />
                     删除
@@ -1512,6 +1508,7 @@ const Modify = (props: ModifyProps) => {
         reload={initOrgLoadData}
       />
       <AddHouseFee
+        treeData={treeData}
         visible={selectHouseVisible}
         closeModal={closeHouseVisible}
         feeId={id}

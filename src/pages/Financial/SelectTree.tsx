@@ -1,19 +1,19 @@
-//checkbox树
+//checkbox选择房产树 
 import Page from '@/components/Common/Page';
 import { Tree } from 'antd';
-import React, {  useState } from 'react';  
+import React, { useState } from 'react';
 interface SelectTreeProps {
   treeData: any[];
   selectTree(item, type): void;
   getCheckedKeys(keys): void;
 }
 
-function SelectTree(props: SelectTreeProps) { 
+function SelectTree(props: SelectTreeProps) {
   const { treeData, selectTree } = props;
   const [checkedKeys, setCheckedKeys] = useState<any[]>([]);
   const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
 
-  const onCheck = (checkedKeys, e) => { 
+  const onCheck = (checkedKeys, e) => {
     setCheckedKeys(checkedKeys);
   };
 
@@ -32,7 +32,7 @@ function SelectTree(props: SelectTreeProps) {
     // or, you can remove all expanded children keys.
     setExpandedKeys(expandedKeys);
     //setAutoExpandParent(false);
-  }; 
+  };
 
   return (
     <Page
@@ -45,16 +45,17 @@ function SelectTree(props: SelectTreeProps) {
       }}
     >
       {treeData != null && treeData.length > 0 ?
-        (<Tree 
+        (<Tree
+          treeData={treeData}
           showLine
           checkable
           checkedKeys={checkedKeys}
           onCheck={onCheck}
-          expandedKeys={expandedKeys} 
+          expandedKeys={expandedKeys}
           autoExpandParent
           onExpand={clickExpend}
           onSelect={onSelect}
-        > 
+        >
         </Tree>) : null}
     </Page>
   );
