@@ -8,14 +8,11 @@ interface CommentBoxProps {
   data?: any;
 }
 
-
 function CommentBox(props: CommentBoxProps) {
   const { data } = props;
   const [commentValue, setCommentValuee] = useState<string>('');
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
   const [comments, setComments] = useState<any[]>([]);
-
-
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -28,7 +25,6 @@ function CommentBox(props: CommentBoxProps) {
   const handleChange = e => {
     setCommentValuee(e.target.value);
   };
-
 
   const handleSubmit = () => {
     if (!commentValue) {
@@ -77,8 +73,9 @@ function CommentBox(props: CommentBoxProps) {
       <Comment
         avatar={
           <Avatar
-            src="https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png"
-            alt="system"
+            // src="https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png"
+            src={`${localStorage.getItem('avatar')}`}
+            alt={`${localStorage.getItem('name')}`} 
           />
         }
         content={

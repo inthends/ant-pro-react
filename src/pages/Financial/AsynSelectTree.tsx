@@ -53,8 +53,7 @@ function AsynSelectTree(props: AsynSelectTreeProps) {
   //   getCheckedKeys(keys);
   // };
 
-  const onCheck = (checkedKeys, e) => {
-    //先调用展开
+  const onCheck = (checkedKeys, e) => { 
     getCheckedKeys(checkedKeys);
   };
 

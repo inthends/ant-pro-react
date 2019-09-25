@@ -1,5 +1,5 @@
 import Page from '@/components/Common/Page';
-import { Divider, Tag, Button, message, Modal, Table } from 'antd';
+import { Divider, Tag, message, Modal, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import moment from 'moment';
@@ -59,11 +59,11 @@ function ListTable(props: ListTableProps) {
           case 1:
             return <Tag color="#e4aa5b">待处理</Tag>;
           case 2:
-            return <Tag color="#19d54e">进行中</Tag>;
+            return <Tag color="#19d54e">待完成</Tag>;
           case 3:
-            return <Tag color="#5FB878">待毕单</Tag>;
+            return <Tag color="#5FB878">待评价</Tag>;
           case 4:
-            return <Tag color="#009688">已归档</Tag>;
+            return <Tag color="#009688">已评价</Tag>;
           default:
             return '';
         }

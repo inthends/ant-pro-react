@@ -37,17 +37,15 @@ const Modify = (props: ModifyProps) => {
   const [previewImage, setPreviewImage] = useState<string>('');
 
   // 打开抽屉时初始化
-  useEffect(() => {
-
-    //获取房产树
-    // GetQuickSimpleTreeAll()
-    //   .then(getResult)
-    //   .then((res: TreeEntity[]) => {
-    //     setTreeData(res || []);
-    //     return res || [];
-    //   }); 
-
-  }, []);
+  // useEffect(() => { 
+  //获取房产树
+  // GetQuickSimpleTreeAll()
+  //   .then(getResult)
+  //   .then((res: TreeEntity[]) => {
+  //     setTreeData(res || []);
+  //     return res || [];
+  //   }); 
+  // }, []);
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -93,7 +91,8 @@ const Modify = (props: ModifyProps) => {
   };
 
   const doSave = dataDetail => {
-    dataDetail.keyValue = keyValue;//dataDetail.id ? dataDetail.id : guid();
+    dataDetail.keyValue = keyValue;//dataDetail.id ? dataDetail.id : guid(); 
+    dataDetail.isAdd = dataDetail.billCode == undefined ? true : false;
     SaveForm({ ...dataDetail }).then(res => {
       message.success('保存成功');
       closeDrawer();
@@ -109,11 +108,13 @@ const Modify = (props: ModifyProps) => {
         form.setFieldsValue({ address: extr.triggerNode.props.allname });
         form.setFieldsValue({ contactName: res.contactName });
         form.setFieldsValue({ contactPhone: res.contactPhone });
+        form.setFieldsValue({ contactId: res.custId });
       });
     } else {
       form.setFieldsValue({ address: '' });
       form.setFieldsValue({ contactName: '' });
       form.setFieldsValue({ contactPhone: '' });
+      form.setFieldsValue({ contactId: '' });
     }
   };
 
@@ -151,8 +152,8 @@ const Modify = (props: ModifyProps) => {
     <Menu onClick={handleMenuClick}>
       <Menu.Item key="1">转报修</Menu.Item>
       <Menu.Item key="2">转投诉</Menu.Item>
-      <Menu.Item key="3">毕单</Menu.Item>
-      <Menu.Item key="4">归档</Menu.Item>
+      {/* <Menu.Item key="3">毕单</Menu.Item> 
+      <Menu.Item key="4">归档</Menu.Item> */}
     </Menu>
   );
 
@@ -165,7 +166,6 @@ const Modify = (props: ModifyProps) => {
       reader.onerror = error => reject(error);
     });
   }
-
 
   const uploadButton = (
     <div>
@@ -256,7 +256,7 @@ const Modify = (props: ModifyProps) => {
                     <Col lg={8}>
                       <Form.Item label="业务类型">
                         {getFieldDecorator('billType', {
-                          initialValue: infoDetail.billType === undefined ? '服务' : infoDetail.billType
+                          initialValue: infoDetail.billType === undefined ? '咨询' : infoDetail.billType
                         })(
                           <Select>
                             <Option value="咨询">咨询</Option>
@@ -318,6 +318,18 @@ const Modify = (props: ModifyProps) => {
                         {getFieldDecorator('contactName', {
                           initialValue: infoDetail.contactName
                         })(<Input placeholder="自动获取联系人" readOnly />)}
+
+                        {getFieldDecorator('contactId', {
+                          initialValue: infoDetail.contactId,
+                        })(
+                          <input type='hidden' />
+                        )}
+
+                        {getFieldDecorator('organizeId', {
+                          initialValue: infoDetail.organizeId,
+                        })(
+                          <input type='hidden' />
+                        )} 
                       </Form.Item>
                     </Col>
 
@@ -340,9 +352,10 @@ const Modify = (props: ModifyProps) => {
                   </Row>
                   <Row gutter={24}>
                     <Col lg={24}>
-                      <Form.Item label="内容">
+                      <Form.Item label="内容" required>
                         {getFieldDecorator('contents', {
                           initialValue: infoDetail.contents,
+                          rules: [{ required: true, message: '请输入内容' }],
                         })(<TextArea rows={4} placeholder="请输入内容" />)}
                       </Form.Item>
                     </Col>
@@ -360,7 +373,7 @@ const Modify = (props: ModifyProps) => {
                           onChange={handleChange}
                           onRemove={handleRemove}
                         >
-                          {fileList.length >= 4 ? null : uploadButton }
+                          {fileList.length >= 4 ? null : uploadButton}
                         </Upload>
                         <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
                           <img alt="example" style={{ width: '100%' }} src={previewImage} />
@@ -468,7 +481,7 @@ const Modify = (props: ModifyProps) => {
       >
         <Button onClick={close} style={{ marginRight: 8 }}>
           取消
-           </Button>
+        </Button>
 
         {data === undefined ? (
           <Button onClick={save} type="primary">

@@ -261,10 +261,10 @@ const Modify = (props: ModifyProps) => {
       <PageHeader
         title={infoDetail.billCode}
         subTitle={GetStatus(infoDetail)}
-        // extra={[
-        //   <Button key="3">附件</Button>,
-        // ]}
-        >
+      // extra={[
+      //   <Button key="3">附件</Button>,
+      // ]}
+      >
         <Paragraph>
           {infoDetail.address}，{infoDetail.contactName}，电话：<a>{infoDetail.contactLink}</a>，在 {infoDetail.billDate} 报修，内容如下
         </Paragraph>
@@ -541,14 +541,14 @@ const Modify = (props: ModifyProps) => {
                   <Col lg={6}>
                     <Form.Item label="客户评价" required>
                       {getFieldDecorator('custEvaluate', {
-                        initialValue: '满意'
+                        initialValue: '4'
                       })(
                         <Select >
-                          <Option value="非常满意">非常满意</Option>
-                          <Option value="满意">满意</Option>
-                          <Option value="一般">一般</Option>
-                          <Option value="不满意">不满意</Option>
-                          <Option value="非常不满意">非常不满意</Option>
+                          <Option value="5">非常满意</Option>
+                          <Option value="4">满意</Option>
+                          <Option value="3">一般</Option>
+                          <Option value="2">不满意</Option>
+                          <Option value="1">非常不满意</Option>
                         </Select>
                       )}
                     </Form.Item>
@@ -636,12 +636,12 @@ const Modify = (props: ModifyProps) => {
                   <Col lg={5}>
                     <Form.Item label="检验结果" required>
                       {getFieldDecorator('testResult', {
-                        initialValue: '合格',
+                        initialValue: '1',
                         rules: [{ required: true, message: '请选择检验结果' }],
                       })(
                         <Select >
-                          <Option value="合格">合格</Option>
-                          <Option value="不合格">不合格</Option>
+                          <Option value="1">合格</Option>
+                          <Option value="0">不合格</Option>
                         </Select>
                       )}
                     </Form.Item>

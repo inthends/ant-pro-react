@@ -9,12 +9,21 @@ interface SelectTreeProps {
 }
 
 function SelectTree(props: SelectTreeProps) {
-  const { treeData, selectTree } = props;
-  const [checkedKeys, setCheckedKeys] = useState<any[]>([]);
+  const { treeData, selectTree,getCheckedKeys } = props;
+  //const [checkedKeys, setCheckedKeys] = useState<any[]>([]);
   const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
 
   const onCheck = (checkedKeys, e) => {
-    setCheckedKeys(checkedKeys);
+    //setCheckedKeys(checkedKeys);
+    let keys: any[] = [];
+    //只选中房屋和车位
+      e.checkedNodes.forEach(item => { 
+      //房间或者车位
+      if (item.props.type == 5 || item.props.type == 9) {
+        keys.push(item.key);
+      }
+    }); 
+    getCheckedKeys(keys);
   };
 
   const onSelect = (selectedKeys, info) => {
@@ -49,7 +58,7 @@ function SelectTree(props: SelectTreeProps) {
           treeData={treeData}
           showLine
           checkable
-          checkedKeys={checkedKeys}
+          //checkedKeys={checkedKeys}
           onCheck={onCheck}
           expandedKeys={expandedKeys}
           autoExpandParent

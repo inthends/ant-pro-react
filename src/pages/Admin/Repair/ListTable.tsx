@@ -70,19 +70,15 @@ function ListTable(props: ListTableProps) {
           case 3:
             return <Tag color="#e4aa5b">待开工</Tag>
           case 4:
-            return <Tag color="#61c33a">处理中</Tag>
+            return <Tag color="#61c33a">待完成</Tag>
           case 5:
-            return <Tag color="#ff5722">暂停</Tag>
+            return <Tag color="#ff5722">待回访</Tag>
           case 6:
-            return <Tag color="#5fb878">待回访</Tag>
+            return <Tag color="#5fb878">待检验</Tag>
           case 7:
-            return <Tag color="#29cc63">待检验</Tag>
+            return <Tag color="#29cc63">待审核</Tag>
           case 8:
-            return <Tag color="#e48f27">待审核</Tag>
-          case 9:
-            return <Tag color="#c31818">已退单</Tag>
-          case 10:
-            return <Tag color="#009688">已归档</Tag>
+            return <Tag color="#e48f27">已审核</Tag> 
           case -1:
             return <Tag color="#d82d2d">已作废</Tag>
           default:
