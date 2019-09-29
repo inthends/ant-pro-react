@@ -1,8 +1,8 @@
 //明细
 import Page from '@/components/Common/Page';
-import { Divider, Form, Table } from 'antd';
+import {  Form, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
-import React, { useState } from 'react';
+import React  from 'react';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import moment from 'moment';
 
@@ -18,21 +18,21 @@ interface BillNoticeTableProps {
 }
 
 function BillNoticeTable(props: BillNoticeTableProps) {
-  const { onchange, loading, pagination, data, reload, showModify, getRowSelect } = props;
+  const { onchange, loading, pagination, data } = props;
   // const [selectedRowKey, setSelectedRowKey] = useState([]);
   const columns = [
     {
       title: '单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 150,
+      width: 120,
       sorter: true
     },
     {
       title: '账单日',
       dataIndex: 'billDate',
       key: 'billDate',
-      width: 150,
+      width: 120,
       sorter: true,
       render: val => {
        return moment(val).format('YYYY-MM-DD');
@@ -49,7 +49,7 @@ function BillNoticeTable(props: BillNoticeTableProps) {
       title: '房屋名称',
       dataIndex: 'allName',
       key: 'allName',
-      width: 150,
+      width: 180,
       sorter: true,
     },
     {
@@ -64,41 +64,40 @@ function BillNoticeTable(props: BillNoticeTableProps) {
       dataIndex: 'amount',
       key: 'amount',
       sorter: true,
-      width: 150
+      width: 100
     },
     {
       title: '冲抵金额',
       dataIndex: 'offesetAmount',
       key: 'offesetAmount',
       sorter: true,
-      width: 150,
-      render: val => {
-        if (val == null) {
-          return <span></span>
-        } else {
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
-        }
-      }
+      width: 100
     },
     {
       title: '减免金额',
       dataIndex: 'reductionAmount',
       key: 'reductionAmount',
-      width: 200,
+      width: 100,
       sorter: true
     },
     {
       title: '计费起始日期',
       dataIndex: 'beginDate',
       key: 'beginDate',
-      width: 200,
-      sorter: true
+      width: 120,
+      sorter: true,
+      render: val => {
+        return moment(val).format('YYYY-MM-DD');
+       }
     }, {
       title: '计费结束日期',
       dataIndex: 'enDate',
       key: 'enDate',
-      width: 200,
-      sorter: true
+      width: 120,
+      sorter: true,
+      render: val => {
+        return moment(val).format('YYYY-MM-DD');
+       }
     }
   ] as ColumnProps<any>[];
 
@@ -111,7 +110,7 @@ function BillNoticeTable(props: BillNoticeTableProps) {
         dataSource={data}
         rowKey="billId"
         pagination={pagination}
-        scroll={{ y: 500, x: 1100 }}
+        scroll={{ y: 500, x: 1300 }}
         loading={loading}
         onChange={onchange}
       />

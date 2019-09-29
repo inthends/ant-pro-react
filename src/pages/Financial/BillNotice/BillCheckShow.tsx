@@ -1,7 +1,6 @@
 //查看通知单
 
-import { Card, Button,   Col, Drawer, Form, Row, Spin,  Table } from 'antd';
-
+import { Card, Button, Col, Drawer, Form, Row, Spin, Table } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
@@ -24,7 +23,7 @@ const BillCheckShow = (props: BillCheckShowProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   // const { getFieldDecorator } = form;
   // const [units,setUnits] = useState<string>([]);
-  const [infoDetail, setInfoDetail] = useState<any>({}); 
+  const [infoDetail, setInfoDetail] = useState<any>({});
   const [billCheckLoading, setBillCheckLoading] = useState<boolean>(false);
   const [billCheckData, setBillCheckData] = useState<any>();
   const [billCheckPagination, setBillCheckPagination] = useState<DefaultPagination>(new DefaultPagination());
@@ -115,7 +114,7 @@ const BillCheckShow = (props: BillCheckShowProps) => {
       title: '房屋名称',
       dataIndex: 'allName',
       key: 'allName',
-      width: 150,
+      width: 180,
       sorter: true,
     },
     {
@@ -191,72 +190,73 @@ const BillCheckShow = (props: BillCheckShowProps) => {
       style={{ height: 'calc(100vh-50px)' }}
       bodyStyle={{ background: '#f6f7fb', height: 'calc(100vh -50px)' }}
     >
-      <Card  >
+      <Card>
         <Form layout="vertical" hideRequiredMark>
-          <Spin tip="数据加载中..." spinning={loading}>
-            <Row gutter={24}>
-              <Col span={6}>
-                <Form.Item required label="通知单号">
-                  <a>{infoDetail.billCode}</a>
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item required label="通知单日期"  >
-                  {String(infoDetail.beginDate).substr(0, 10)}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item required label="缴费日期"  >
-                  {String(infoDetail.mustDate).substr(0, 10)}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item required label="类型"   >
-                  {infoDetail.billType}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={24}>
-              <Col span={6}>
-                <Form.Item required label="业户名称"  >
-                  {infoDetail.customer}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item required label="打印模板"   >
-                  {infoDetail.templateName}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item label="审核人"  >
-                  {infoDetail.verifyPerson}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item label="审核情况"  >
-                  {infoDetail.verifyMemo}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Table<any>
-                onChange={(paginationConfig, filters, sorter) => {
-                  initBillCheckLoadData(paginationConfig, sorter)
-                }
-                }
-                bordered={false}
-                size="middle"
-                columns={columns}
-                dataSource={billCheckData}
-                rowKey="billId"
-                pagination={billCheckPagination}
-                scroll={{ y: 500, x: 2100 }}
-                loading={billCheckLoading}
-              />
-            </Row>
-          </Spin>
+
+          <Row gutter={24}>
+            <Col span={6}>
+              <Form.Item required label="通知单号">
+                <a>{infoDetail.billCode}</a>
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item required label="通知单日期"  >
+                {String(infoDetail.beginDate).substr(0, 10)}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item required label="缴费日期"  >
+                {String(infoDetail.mustDate).substr(0, 10)}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item required label="类型"   >
+                {infoDetail.billType}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={24}>
+            <Col span={6}>
+              <Form.Item required label="业户名称"  >
+                {infoDetail.customer}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item required label="打印模板"   >
+                {infoDetail.templateName}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item label="审核人"  >
+                {infoDetail.verifyPerson}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item label="审核情况"  >
+                {infoDetail.verifyMemo}
+              </Form.Item>
+            </Col>
+          </Row> 
         </Form>
       </Card>
+
+      <Spin tip="数据加载中..." spinning={loading}>
+        <Table<any>
+          onChange={(paginationConfig, filters, sorter) => {
+            initBillCheckLoadData(paginationConfig, sorter)
+          }
+          }
+          bordered={false}
+          size="middle"
+          columns={columns}
+          dataSource={billCheckData}
+          rowKey="billId"
+          pagination={billCheckPagination}
+          scroll={{ y: 500, x: 1200 }}
+          loading={billCheckLoading}
+        />
+      </Spin>
+
       <div
         style={{
           position: 'absolute',
@@ -283,7 +283,7 @@ const BillCheckShow = (props: BillCheckShowProps) => {
           打印
         </Button>
       </div>
-    </Drawer>
+    </Drawer >
   );
 };
 

@@ -38,13 +38,16 @@ function House() {
   // };
 
   const setButton = (orgid, orgtype, searchText) => {
-    initLoadData(orgid, searchText);
     setOrganizeId(orgid);
     if (orgtype == 'D') {
       setIsAdd(false);
     } else {
       setIsAdd(true);
     }
+
+    initLoadData(orgid, searchText);
+    initHouseTotal(orgid, searchText);
+
   };
 
   useEffect(() => {
@@ -54,7 +57,7 @@ function House() {
       //SetOrganizeId(key);
       //initLoadData(rootOrg as string, '');
       initLoadData('', '');
-      getHouseTotal();
+      initHouseTotal('', '');
     });
   }, []);
   // 获取属性数据
@@ -65,16 +68,10 @@ function House() {
     });
   };
   // 获取房产统计
-  const getHouseTotal = () => {
-    GetStatisticsTotal(
-      {
-        queryJson:
-        {
-          OrganizeId: organizeId,
-          keyword: search
-        }
-      }
-    )
+  const initHouseTotal = (orgId: string, searchText) => { 
+    setSearch(searchText);
+    const queryJson = { OrganizeId: orgId, keyword: searchText }; 
+    GetStatisticsTotal({ queryJson: queryJson })
       .then(getResult)
       .then(res => {
         setTotalData(res || []);
@@ -167,7 +164,7 @@ function House() {
                   }
                 }
               ).then(getResult).then(res => {
-                  setTotalData(res || []);
+                setTotalData(res || []);
               });
 
               //查询列表
