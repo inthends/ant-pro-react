@@ -16,14 +16,14 @@ function General(props: GeneralProps) {
             <Col xxl={3} xl={3} md={6} sm={12} xs={24}>
               <NumberInfo subTitle="项目总数" total={generalData.projectcounts} />
             </Col>
-            <Col xxl={3} xl={3} md={6} sm={12} xs={24}>
+            <Col xxl={4} xl={4} md={6} sm={12} xs={24}>
               <NumberInfo
                 subTitle="总建筑面积"
                 total={((generalData.areasum || 0) / 10000).toFixed(4)}
                 suffix="万m²"
               />
             </Col>
-            <Col xxl={3} xl={3} md={6} sm={12} xs={24}>
+            <Col xxl={4} xl={4} md={6} sm={12} xs={24}>
               <NumberInfo
                 subTitle="入住面积"
                 total={((generalData.checkroom || 0) / 10000).toFixed(4)}
@@ -31,7 +31,7 @@ function General(props: GeneralProps) {
               />
             </Col>
 
-            <Col xxl={3} xl={3} md={6} sm={12} xs={24}>
+            <Col xxl={4} xl={4} md={6} sm={12} xs={24}>
               <NumberInfo
                 subTitle="空置面积"
                 total={(((generalData.areasum || 0) - (generalData.checkroom || 0)) / 10000).toFixed(
