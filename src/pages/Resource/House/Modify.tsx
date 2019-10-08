@@ -191,12 +191,12 @@ const Modify = (props: ModifyProps) => {
   };
 
   //验证编码是否重复
-  const checkExist = (rule, value, callback) => {
+  const checkExist = (rule, value, callback) => { 
     if (value == undefined) {
       callback();
     }
     else {
-      const keyValue = infoDetail.Id == undefined ? '' : infoDetail.Id;
+      const keyValue = infoDetail.id == undefined ? '' : infoDetail.id;
       ExistEnCode(keyValue, value).then(res => {
         if (res)
           callback('项目编号重复');
