@@ -165,7 +165,7 @@ const Modify = (props: ModifyProps) => {
       reader.onload = () => resolve(reader.result);
       reader.onerror = error => reject(error);
     });
-  }
+  };
 
   const uploadButton = (
     <div>

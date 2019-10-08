@@ -1,9 +1,10 @@
+//项目修改
 import { TreeEntity } from '@/model/models';
-import { Button, Card, Col, DatePicker, Drawer, Form, Input, Row, Select, TreeSelect, message } from 'antd';
+import { AutoComplete, Upload, Modal, Icon, Button, Card, Col, DatePicker, Drawer, Form, Input, Row, Select, TreeSelect, message } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { ExistEnCode, GetFormInfoJson, GetTreeAreaJson, SaveForm } from './House.service';
-import { getCommonItems } from '@/services/commonItem';
+import { GetUserList, getCommonItems } from '@/services/commonItem';
 import styles from './style.less';
 import moment from 'moment';
 
@@ -30,6 +31,11 @@ const Modify = (props: ModifyProps) => {
   const [area, setArea] = useState<TreeEntity[]>([]);
   const [project, setProject] = useState<TreeEntity[]>([]);
   const [infoDetail, setInfoDetail] = useState<any>({});
+  const [userSource, setUserSource] = useState<any[]>([]);
+
+  const [previewVisible, setPreviewVisible] = useState<boolean>(false);
+  const [fileList, setFileList] = useState<any[]>([]);
+  const [previewImage, setPreviewImage] = useState<string>('');
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -57,6 +63,49 @@ const Modify = (props: ModifyProps) => {
       }
     });
   };
+
+  const uploadButton = (
+    <div>
+      <Icon type="plus" />
+      <div className="ant-upload-text">点击上传图片</div>
+    </div>
+  );
+
+  //图片上传
+  const getBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
+  };
+
+  const handleCancel = () => setPreviewVisible(false);
+  const handlePreview = async file => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewVisible(true);
+  };
+  const handleRemove = (file) => {
+    // const fileid = file.fileid || file.response.fileid;
+    // RemoveFile(fileid).then(res => {
+    // });
+
+    //清空图片
+    form.setFieldsValue({ mainPic: '' });
+  };
+
+  //重新设置state
+  const handleChange = ({ fileList }) => {
+    setFileList([...fileList]);
+    //设置项目图片
+    debugger
+    form.setFieldsValue({ mainPic: '' });
+  };
+  //图片上传结束
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -99,6 +148,23 @@ const Modify = (props: ModifyProps) => {
     });
   };
 
+  const handleSearch = value => {
+    if (value == '')
+      return;
+    GetUserList(value, '员工').then(res => {
+      setUserSource(res || []);
+    })
+  };
+
+  const userList = userSource.map
+    (item => <Option key={item.id} value={item.name}>{item.name}</Option>);
+
+  //选择楼栋管家
+  const onHousekeeperNameSelect = (value, option) => {
+    //设置id
+    form.setFieldsValue({ housekeeperId: option.key });
+  };
+
   const getInfo = orgId => {
     if (orgId) {
       return GetFormInfoJson(orgId).then(res => {
@@ -130,7 +196,7 @@ const Modify = (props: ModifyProps) => {
       callback();
     }
     else {
-      const keyValue = infoDetail.pStructId==undefined?'':infoDetail.pStructId;
+      const keyValue = infoDetail.Id == undefined ? '' : infoDetail.Id;
       ExistEnCode(keyValue, value).then(res => {
         if (res)
           callback('项目编号重复');
@@ -188,7 +254,7 @@ const Modify = (props: ModifyProps) => {
                     rules: [{ required: true, message: '请输入项目编号' },
                     {
                       validator: checkExist
-                    } 
+                    }
                     ],
                   })(<Input placeholder="请输入项目编号" />)}
                 </Form.Item>
@@ -214,7 +280,7 @@ const Modify = (props: ModifyProps) => {
                               {item.title}
                             </Option>
                           ))}
-                        </Select>,
+                        </Select>
                       )}
                     </Form.Item>
                   </Col>
@@ -235,7 +301,7 @@ const Modify = (props: ModifyProps) => {
                               {item.title}
                             </Option>
                           ))}
-                        </Select>,
+                        </Select>
                       )}
                     </Form.Item>
                   </Col>
@@ -255,7 +321,7 @@ const Modify = (props: ModifyProps) => {
                               {item.title}
                             </Option>
                           ))}
-                        </Select>,
+                        </Select>
                       )}
                     </Form.Item>
                   </Col>
@@ -355,7 +421,7 @@ const Modify = (props: ModifyProps) => {
                           {item.title}
                         </Option>
                       ))}
-                    </Select>,
+                    </Select>
                   )}
                 </Form.Item>
               </Col>
@@ -389,9 +455,23 @@ const Modify = (props: ModifyProps) => {
             <Row gutter={24}>
               <Col lg={12}>
                 <Form.Item label="楼栋管家">
-                  {getFieldDecorator('housekeeper', {
-                    initialValue: infoDetail.housekeeper,
-                  })(<Input placeholder="请输入楼栋管家" />)}
+                  {getFieldDecorator('housekeeperName', {
+                    initialValue: infoDetail.housekeeperName,
+                  })(
+                    <AutoComplete
+                      dataSource={userList}
+                      onSearch={handleSearch}
+                      placeholder="请选择楼栋管家"
+                      onSelect={onHousekeeperNameSelect}
+                    />
+                  )}
+
+                  {getFieldDecorator('housekeeperId', {
+                    initialValue: infoDetail.housekeeperId,
+                  })(
+                    <input type='hidden' />
+                  )}
+
                 </Form.Item>
               </Col>
               <Col lg={12}>
@@ -408,9 +488,39 @@ const Modify = (props: ModifyProps) => {
                   {getFieldDecorator('memo', {
                     initialValue: infoDetail.memo,
                   })(<TextArea rows={4} placeholder="请输入附加说明" />)}
+
+                  {getFieldDecorator('mainPic', {
+                    initialValue: infoDetail.mainPic,
+                  })(
+                    <input type='hidden' />
+                  )}
                 </Form.Item>
               </Col>
             </Row>
+
+            <Row gutter={24}>
+              <Col lg={24}>
+
+
+                <div className="clearfix">
+                  <Upload
+                    accept='image/*'
+                    action={process.env.basePath + '/PStructs/Upload'}
+                    listType="picture-card"
+                    fileList={fileList}
+                    onPreview={handlePreview}
+                    onChange={handleChange}
+                    onRemove={handleRemove}
+                  >
+                    {fileList.length > 1 ? null : uploadButton}
+                  </Upload>
+                  <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
+                    <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                  </Modal>
+                </div>
+              </Col>
+            </Row>
+
           </Form>
         ) : null}
       </Card>
