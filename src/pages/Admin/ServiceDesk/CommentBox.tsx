@@ -37,7 +37,7 @@ function CommentBox(props: CommentBoxProps) {
       Receiver: data.contactName,
       ReceiverCustId: data.custId,
       Content: commentValue,
-      ComType: 'B'
+      ComType: 'PC'
     };
     SendCommunicate(postData).then(res => {
       setIsSubmit(false);
