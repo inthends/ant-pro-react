@@ -1,6 +1,6 @@
 //账单 
 import Page from '@/components/Common/Page';
-import { Divider, Form, Table } from 'antd';
+import { Modal, message, Divider, Form, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState } from 'react';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
@@ -43,7 +43,7 @@ function BillCheckTable(props: BillCheckTableProps) {
       width: 100,
       sorter: true,
       render: val => {
-         return moment(val).format('YYYY-MM-DD');
+        return moment(val).format('YYYY-MM-DD');
       }
     },
     {
@@ -70,7 +70,7 @@ function BillCheckTable(props: BillCheckTableProps) {
         if (val == null) {
           return '';
         } else {
-          return  moment(val).format('YYYY-MM-DD');
+          return moment(val).format('YYYY-MM-DD');
         }
       }
     },
@@ -102,7 +102,7 @@ function BillCheckTable(props: BillCheckTableProps) {
         if (val == null) {
           return '';
         } else {
-          return  moment(val).format('YYYY-MM-DD');
+          return moment(val).format('YYYY-MM-DD');
         }
       }
     },
@@ -129,10 +129,20 @@ function BillCheckTable(props: BillCheckTableProps) {
           <span>
             <a onClick={() => showCheckBill(record.billId)} key="show">{"查看"}</a>
             <Divider type="vertical" />
-            <a onClick={() => {
-              RemoveForm(record.billId).then(res => {
-                reload();
-              })
+            <a onClick={() => { 
+              Modal.confirm({
+                title: '请确认',
+                content: `您是否要删除${record.billCode}`,
+                okText: '确认',
+                cancelText: '取消',
+                onOk: () => {
+                  RemoveForm(record.billId).then(res => {
+                    message.success('删除成功');
+                    reload();
+                  })
+                },
+              }); 
+
             }} key="delete">删除</a>
           </span>
         ];

@@ -1,7 +1,5 @@
 import { TreeEntity } from '@/model/models';
-import {
-  Checkbox,
-  Tabs,
+import {  
   Select,
   Button,
   Col,
@@ -13,14 +11,9 @@ import {
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetFormJson,GetFeeType,GetAllFeeItems ,GetReceivablesFeeItemTreeJson} from './Main.service';
-import styles from './style.less';
-import LeftTree from '../LeftTree';
-import   moment from 'moment';
-
-const { Option } = Select;
-const { TextArea } = Input;
-const{TabPane} = Tabs;
+import {  GetReceivablesFeeItemTreeJson} from './Main.service'; 
+import LeftTree from '../LeftTree';  
+const { Option } = Select; 
 
 interface AddFeeProps {
   addFeeVisible: boolean;

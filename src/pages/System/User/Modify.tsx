@@ -1,8 +1,9 @@
 import { BaseModifyProvider } from '@/components/BaseModifyDrawer/BaseModifyDrawer';
-import ModifyItem, { SelectItem } from '@/components/BaseModifyDrawer/ModifyItem';
+// import ModifyItem, { SelectItem } from '@/components/BaseModifyDrawer/ModifyItem';
+import ModifyItem  from '@/components/BaseModifyDrawer/ModifyItem';
 import { Card, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import React, {  useState } from 'react';
+import React, { useState } from 'react';
 import { SaveForm, searchUser } from './User.service';
 import { JcAccount } from '@/model/jcAccount';
 
@@ -17,17 +18,16 @@ interface ModifyProps {
 }
 const Modify = (props: ModifyProps) => {
   const { data, form, treeDate } = props;
- let initData = data ? data : { accountType: 2, expMode: 1 };
+  let initData = data ? data : { accountType: 2, expMode: 1 };
   // initData.expDate = initData.expDate ? initData.expDate : new Date();
   const [names, setNames] = useState<any[]>([]);
-  const [showTime, setShowTime] = useState<boolean>(false);
+  // const [showTime, setShowTime] = useState<boolean>(false);
   //useEffect(() => {
-    // setShowTime(initData.expMode === 2); 
+  // setShowTime(initData.expMode === 2); 
   //}, [initData]);
 
   const baseFormProps = { form, initData };
-  const expModes: SelectItem[] = [{ label: '永久有效', value: 1 }, { label: '临时', value: 2 }];
-
+  // const expModes: SelectItem[] = [{ label: '永久有效', value: 1 }, { label: '临时', value: 2 }]; 
   // const accountTypes: SelectItem[] = [
   //   { label: '系统初始账户', value: 1 },
   //   { label: '员工账户', value: 2 },
@@ -40,7 +40,6 @@ const Modify = (props: ModifyProps) => {
     //modifyData.expDate = modifyData.expDate ? modifyData.expDate.format('YYYY-MM-DD') : undefined;
     return SaveForm(modifyData);
   };
- 
 
   const searchName = value => {
     searchUser(value).then(res => {
@@ -57,25 +56,17 @@ const Modify = (props: ModifyProps) => {
   return (
     <BaseModifyProvider {...props} name="用户" save={doSave}>
       <Card>
-        <Form layout="vertical" hideRequiredMark> 
+        <Form layout="vertical" hideRequiredMark>
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
               field="parentId"
               label="所属机构"
               type="tree"
-              treeData={treeDate} 
+              treeData={treeDate}
               rules={[{ required: true, message: '请选择所属机构' }]}
             ></ModifyItem>
-          </Row>
 
-          <Row gutter={24}>
-            <ModifyItem
-              {...baseFormProps}
-              field="account"
-              label="用户名"
-              rules={[{ required: true, message: '请输入用户名' }]}
-            ></ModifyItem>
             <ModifyItem
               {...baseFormProps}
               field="name"
@@ -85,7 +76,24 @@ const Modify = (props: ModifyProps) => {
               items={names}
             ></ModifyItem>
           </Row>
+
           <Row gutter={24}>
+            <ModifyItem
+              {...baseFormProps}
+              field="account"
+              label="用户名"
+              rules={[{ required: true, message: '请输入用户名' }]}
+            ></ModifyItem> 
+            <ModifyItem
+              {...baseFormProps}
+              field="password"
+              type="password"
+              label="密码"
+              rules={[{ required: true, message: '请输入密码' }]}
+            ></ModifyItem>
+
+          </Row>
+          {/* <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
               field="password" 
@@ -108,12 +116,12 @@ const Modify = (props: ModifyProps) => {
                 type="date"
               ></ModifyItem>
             ) : null}
-          </Row> 
+          </Row>  */}
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
               wholeLine={true}
-              type="textarea"
+              type="textarea" 
               field="description"
               label="备注"
             ></ModifyItem>

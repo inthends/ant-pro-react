@@ -15,7 +15,7 @@ interface BillCheckVerifyProps {
 }
 
 const BillCheckVerify = (props: BillCheckVerifyProps) => {
-  const { vertifyVisible, closeVerify, form, id,ifVerify ,reload} = props;
+  const { vertifyVisible, closeVerify, form, id } = props;
   const title = id === undefined ? '账单审核' : '账单取消审核';
   const [loading, setLoading] = useState<boolean>(false);
   const { getFieldDecorator } = form;
@@ -44,17 +44,21 @@ const BillCheckVerify = (props: BillCheckVerifyProps) => {
   const onSave=()=>{
     form.validateFields((errors, values) => {
       if (!errors) {
-        let newData={
-          keyValue:infoDetail.billId,
-          billCode:values.billCode,
-          billDate:moment(values.billDate).format('YYYY-MM-DD'),
-          billType:values.billType,
-          customerName:values.customerName,
+        // let newData={
+        //   keyValue:infoDetail.billId,
+        //   billCode:values.billCode,
+        //   billDate:moment(values.billDate).format('YYYY-MM-DD'),
+        //   billType:values.billType,
+        //   customerName:values.customerName,
+        //   IfVerify:!infoDetail.ifVerify,
+        //   VerifyDate:ifVerify?moment(new Date()).format('YYYY-MM-DD HH:mm:ss'):moment(values.verifyDate).format('YYYY-MM-DD HH:mm:ss'),
+        //   VerifyMemo:values.verifyMemo
+        // };
+
+        const newData = { ...values, 
           IfVerify:!infoDetail.ifVerify,
-          VerifyDate:ifVerify?moment(new Date()).format('YYYY-MM-DD HH:mm:ss'):moment(values.verifyDate).format('YYYY-MM-DD HH:mm:ss'),
-          VerifyMemo:values.verifyMemo
-        };
-        Audit(newData).then(()=>{
+          VerifyDate: values.verifyDate.format('YYYY-MM-DD HH:mm:ss') }; 
+          Audit(newData).then(()=>{
           closeVerify(true);
          // reload();
         });

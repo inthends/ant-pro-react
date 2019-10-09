@@ -16,22 +16,23 @@ interface ListTableProps {
 }
 
 function ListTable(props: ListTableProps) {
-  const { loading, data, modify, reload, pagination, setData } = props;
+  const { loading, data, modify,  pagination, setData } = props;
 
-  const doDelete = record => {
-    Modal.confirm({
-      title: '请确认',
-      content: `您是否要删除 ${record.name} 吗`,
-      onOk: () => {
-        RemoveForm(record.id)
-          .then(() => {
-            message.success('删除成功');
-            reload();
-          })
-          .catch(e => { });
-      },
-    });
-  };
+  // const doDelete = record => {
+  //   Modal.confirm({
+  //     title: '请确认',
+  //     content: `您是否要删除 ${record.name} 吗`,
+  //     onOk: () => {
+  //       RemoveForm(record.id)
+  //         .then(() => {
+  //           message.success('删除成功');
+  //           reload();
+  //         })
+  //         .catch(e => { });
+  //     },
+  //   });
+  // };
+
   const doModify = record => {
     modify({ ...record });
   };
@@ -50,13 +51,13 @@ function ListTable(props: ListTableProps) {
       title: '用户名',
       dataIndex: 'account',
       key: 'account', 
-      width: 100,
+      width: 150,
     },
     {
       title: '显示名',
       dataIndex: 'name',
       key: 'name',
-      width: 100,
+      width: 200,
     },
     // {
     //   title: '编号',
@@ -88,12 +89,12 @@ function ListTable(props: ListTableProps) {
         );
       },
     },
-    {
-      title: '账户有效期',
-      dataIndex: 'expDate',
-      key: 'expDate',
-      width: 120,
-    },
+    // {
+    //   title: '账户有效期',
+    //   dataIndex: 'expDate',
+    //   key: 'expDate',
+    //   width: 120,
+    // },
     {
       title: '账户动态',
       dataIndex: 'userOnLine',
@@ -121,13 +122,13 @@ function ListTable(props: ListTableProps) {
       title: '备注',
       dataIndex: 'description',
       key: 'description',
-      width: 120
+      width: 200
     },
     {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
-      width: 85, 
+      width: 45, 
       render: (text, record) => {
         return [
           // <Button
@@ -144,8 +145,8 @@ function ListTable(props: ListTableProps) {
 
           <span>
             <a onClick={() => doModify(record)} key="modify">编辑</a>
-            <Divider type="vertical" key='divider' />
-            <a onClick={() => doDelete(record)} key="delete">删除</a>
+            {/* <Divider type="vertical" key='divider' />
+            <a onClick={() => doDelete(record)} key="delete">删除</a> */}
           </span>
 
         ];
@@ -171,13 +172,14 @@ function ListTable(props: ListTableProps) {
 
 export default ListTable;
 
-enum ACCOUNTTYPES {
-  系统初始账户 = 1,
-  员工账户 = 2,
-  客户账户 = 3,
-  供应商账户 = 4,
-  其他 = 5,
-}
+// enum ACCOUNTTYPES {
+//   系统初始账户 = 1,
+//   员工账户 = 2,
+//   客户账户 = 3,
+//   供应商账户 = 4,
+//   其他 = 5,
+// }
+
 enum ENABLEDMARKS {
   正常 = 1,
   禁用 = 0,
