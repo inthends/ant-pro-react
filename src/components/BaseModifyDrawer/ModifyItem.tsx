@@ -11,6 +11,8 @@ interface ModifyItemProps {
   label: React.ReactNode;
   initData?: any;
   disabled?: boolean;
+  readOnly?: boolean;
+  visibilityToggle?: boolean;
   wholeLine?: boolean;
   form: WrappedFormUtils;
   rules?: ValidationRule[];
@@ -33,6 +35,8 @@ const ModifyItem = (props: ModifyItemProps) => {
     treeData,
     onSearch,
     disabled,
+    readOnly,
+    visibilityToggle
   } = props;
   const { getFieldDecorator } = form;
   const inner = { disabled };
@@ -82,7 +86,9 @@ const ModifyItem = (props: ModifyItemProps) => {
           <Password
             {...inner}
             placeholder={`请输入${label as string}`}
-            onChange={onChange}
+            onChange={onChange} 
+            readOnly={readOnly}
+            visibilityToggle={visibilityToggle}
           ></Password>
         );
       case 'radio':

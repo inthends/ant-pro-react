@@ -1,9 +1,9 @@
 import Page from '@/components/Common/Page';
 import { JcAccount } from '@/model/jcAccount';
-import { Divider, message, Modal, Switch, Table } from 'antd';
+import { Switch, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
-import { DisabledToggle, RemoveForm } from './User.service';
+import { DisabledToggle } from './User.service';
 
 interface ListTableProps {
   loading: boolean;
@@ -16,7 +16,7 @@ interface ListTableProps {
 }
 
 function ListTable(props: ListTableProps) {
-  const { loading, data, modify,  pagination, setData } = props;
+  const { loading, data, modify, pagination, setData } = props;
 
   // const doDelete = record => {
   //   Modal.confirm({
@@ -36,6 +36,7 @@ function ListTable(props: ListTableProps) {
   const doModify = record => {
     modify({ ...record });
   };
+
   const columns = [
     // {
     //   title: '类别',
@@ -50,7 +51,7 @@ function ListTable(props: ListTableProps) {
     {
       title: '用户名',
       dataIndex: 'account',
-      key: 'account', 
+      key: 'account',
       width: 150,
     },
     {
@@ -128,7 +129,7 @@ function ListTable(props: ListTableProps) {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
-      width: 45, 
+      width: 45,
       render: (text, record) => {
         return [
           // <Button

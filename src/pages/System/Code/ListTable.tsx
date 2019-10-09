@@ -22,7 +22,7 @@ function ListTable(props: ListTableProps) {
       title: "请确认",
       content: `您是否要删除 ${record.fullName} 吗`,
       onOk: () => {
-        RemoveForm(record.roleId)
+        RemoveForm(record.ruleId)
           .then(() => {
             message.success("删除成功");
             reload();

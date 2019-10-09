@@ -20,9 +20,9 @@ function ListTable(props: ListTableProps) {
   const doDelete = record => {
     Modal.confirm({
       title: "请确认",
-      content: `您是否要删除 ${record.fullName} 吗`,
+      content: `您是否要删除 ${record.itemName} 吗`,
       onOk: () => {
-        RemoveForm(record.roleId)
+        RemoveForm(record.itemDetailId)
           .then(() => {
             message.success("删除成功");
             reload();
@@ -36,7 +36,7 @@ function ListTable(props: ListTableProps) {
   };
   const toggleDisabled = record => {
     record.enabledMark = record.enabledMark === 0 ? 1 : 0;
-    let keyValue = record.roleId;
+    let keyValue = record.itemDetailId;
     SaveForm({ ...record, keyValue }).then(() => {
       setData([...data]);
     });
@@ -99,7 +99,7 @@ function ListTable(props: ListTableProps) {
       title: "操作",
       dataIndex: "operation",
       key: "operation",
-      width: 85,
+      width: 70,
       render: (text, record) => {
         return [
           <span>

@@ -1,13 +1,7 @@
 import { getResult, objToFormdata, objToUrl } from "@/utils/networkUtils";
 import request from "@/utils/request";
+import { TreeEntity } from '@/model/models';
 
-export function getDataList(data): Promise<any> {
-  return request
-    .post(process.env.basePath + `/Role/GetPageListJson`, {
-      data: objToFormdata(data)
-    })
-    .then(getResult as any);
-}
 // 新增修改
 export function SaveForm(data): Promise<any> {
   return request
@@ -32,11 +26,7 @@ export function RemoveForm(keyValue): Promise<any> {
     .post(process.env.basePath + `/Role/RemoveForm?keyValue=${keyValue}`, {})
     .then(getResult as any);
 }
-export function getRoleTree(): Promise<any> {
-  return request
-    .get(process.env.basePath + `/PermissionRole/GetDepartmentTreeJson`)
-    .then(getResult as any);
-}
+ 
 export function getUserList(data): Promise<any> {
   return request
     .get(
@@ -44,3 +34,17 @@ export function getUserList(data): Promise<any> {
     )
     .then(getResult as any);
 }
+
+//获取模板分类
+export function GetDataItemTreeList(): Promise<TreeEntity[]> {
+  return request.get(process.env.basePath + `/Template/GetDataItemTreeList`, {}).then(getResult as any);
+}
+
+export function GetDataList(data): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Template/GetPageListJson`, {
+      data: objToFormdata(data)
+    })
+    .then(getResult as any);
+}
+

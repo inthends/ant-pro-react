@@ -1,5 +1,5 @@
 import { DefaultPagination } from "@/utils/defaultSetting";
-import { Button, Icon, Input, Layout } from "antd";
+import {  Icon, Input, Layout } from "antd";
 import { PaginationConfig } from "antd/lib/table";
 import React, { useContext, useEffect, useState } from "react";
 import ListTable from "./ListTable";
@@ -10,8 +10,6 @@ import LeftTree from '../LeftTree';
 const { Sider } = Layout;
 const { Content } = Layout;
 const { Search } = Input;
-
-
 
 const Dictionary = () => {
   const [itemId, setItemId] = useState<string>();
@@ -156,14 +154,14 @@ const Dictionary = () => {
             style={{ width: 200 }} 
           />
 
-          <Button
+          {/* <Button
             type="primary"
             style={{ float: "right" }}
             onClick={() => showDrawer()}
           >
             <Icon type="plus" />
             分类
-          </Button>
+          </Button> */}
         </div>
         <ListTable
           onchange={(paginationConfig, filters, sorter) =>

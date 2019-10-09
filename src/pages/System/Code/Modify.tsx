@@ -118,7 +118,10 @@ const Modify = (props: ModifyProps) => {
   ] as ColumnProps<any>[];
 
   return (
-    <BaseModifyProvider {...props} name="编码" save={doSave}>
+    <BaseModifyProvider {...props}
+      name="编码"
+      width={700}
+      save={doSave}>
       <Card>
         <Form layout="vertical" hideRequiredMark>
           <Row gutter={24}>
@@ -168,7 +171,7 @@ const Modify = (props: ModifyProps) => {
       </Card>
 
       <RuleItem
-        visible={ruleItemVisible} 
+        visible={ruleItemVisible}
         closeDrawer={closeRuleItem}
         data={ruleItem}
         reload={reload}

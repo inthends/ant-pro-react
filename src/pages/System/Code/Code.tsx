@@ -134,7 +134,7 @@ const Code = () => {
         />
       </Content>
       <Modify
-        visible={modifyVisible}
+        visible={modifyVisible} 
         closeDrawer={closeDrawer}
         data={currData}
         reload={() => initLoadData({ ...search })}

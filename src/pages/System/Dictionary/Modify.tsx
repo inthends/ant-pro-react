@@ -22,20 +22,20 @@ const Modify = (props: ModifyProps) => {
     return SaveForm(modifyData);
   };
   return (
-    <BaseModifyProvider {...props} name="角色" save={doSave}>
+    <BaseModifyProvider {...props} name="词典" save={doSave}>
       <Form layout="vertical" hideRequiredMark>
         <Row gutter={24}>
           <ModifyItem
             {...baseFormProps}
-            field="enCode"
-            label="角色编号"
-            rules={[{ required: true, message: "请输入角色编号" }]}
+            field="itemName"
+            label="名称"
+            rules={[{ required: true, message: "请输入名称" }]}
           ></ModifyItem>
           <ModifyItem
             {...baseFormProps}
-            field="fullName"
-            label="角色名称"
-            rules={[{ required: true, message: "请输入角色名称" }]}
+            field="itemValue"
+            label="值"
+            rules={[{ required: true, message: "请输入值" }]}
           ></ModifyItem>
         </Row>
         <Row gutter={24}>

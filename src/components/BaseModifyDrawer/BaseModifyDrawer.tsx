@@ -10,6 +10,7 @@ interface BaseModifyProps {
   data?: any;
   children?: React.ReactNode;
   form: WrappedFormUtils;
+  width?: number;
 }
 interface BaseModifyStates {
   saveSuccess?(): void;
@@ -17,9 +18,9 @@ interface BaseModifyStates {
 const BaseModify = React.createContext<BaseModifyStates>({});
 
 const BaseModifyProvider = (props: BaseModifyProps) => {
-  const { closeDrawer, reload, children, data, name, visible, form, save } = props;
+  const { width, closeDrawer, reload, children, data, name, visible, form, save } = props;
+  const mywidth = width === undefined ? 600 : width;
   const title = data === undefined ? `添加${name}` : `修改${name}`;
-
   const saveSuccess = () => {
     message.success('保存成功');
     closeDrawer();
@@ -38,7 +39,7 @@ const BaseModifyProvider = (props: BaseModifyProps) => {
       <Drawer
         title={title}
         placement="right"
-        width={600}
+        width={mywidth}
         onClose={closeDrawer}
         visible={visible}
         style={{ height: 'calc(100vh-50px)' }}

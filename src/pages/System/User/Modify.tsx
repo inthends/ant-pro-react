@@ -1,6 +1,6 @@
 import { BaseModifyProvider } from '@/components/BaseModifyDrawer/BaseModifyDrawer';
 // import ModifyItem, { SelectItem } from '@/components/BaseModifyDrawer/ModifyItem';
-import ModifyItem  from '@/components/BaseModifyDrawer/ModifyItem';
+import ModifyItem from '@/components/BaseModifyDrawer/ModifyItem';
 import { Card, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useState } from 'react';
@@ -60,7 +60,7 @@ const Modify = (props: ModifyProps) => {
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
-              field="parentId"
+              field="organizeId"
               label="所属机构"
               type="tree"
               treeData={treeDate}
@@ -83,13 +83,15 @@ const Modify = (props: ModifyProps) => {
               field="account"
               label="用户名"
               rules={[{ required: true, message: '请输入用户名' }]}
-            ></ModifyItem> 
+            ></ModifyItem>
             <ModifyItem
               {...baseFormProps}
               field="password"
               type="password"
               label="密码"
-              rules={[{ required: true, message: '请输入密码' }]}
+              rules={[{ required: true, message: '请输入密码' }]} 
+              readOnly={initData.id != undefined} 
+              visibilityToggle={initData.id == undefined}  
             ></ModifyItem>
 
           </Row>
@@ -121,7 +123,7 @@ const Modify = (props: ModifyProps) => {
             <ModifyItem
               {...baseFormProps}
               wholeLine={true}
-              type="textarea" 
+              type="textarea"
               field="description"
               label="备注"
             ></ModifyItem>

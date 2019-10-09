@@ -9,6 +9,7 @@ export function GetDataList(data): Promise<any> {
     })
     .then(getResult as any);
 }
+
 // 新增修改
 export function SaveForm(data): Promise<any> {
   return request
