@@ -13,7 +13,7 @@ function Main() {
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<any[]>([]);
-  const [currData, setCurrData] = useState<any>();
+  const [currData, setCurrData] = useState<any>(); 
 
   useEffect(() => {
     initLoadData({ searchText: '' });
@@ -23,6 +23,9 @@ function Main() {
     setModifyVisible(false);
   };
   const showDrawer = (item?) => {
+
+    
+
     setCurrData(item);
     setModifyVisible(true);
   };
@@ -44,6 +47,7 @@ function Main() {
       return res;
     });
   };
+
   const load = formData => {
     setLoading(true);
     formData.sidx = formData.sidx || 'id';
@@ -63,6 +67,7 @@ function Main() {
       return res;
     });
   };
+ 
 
   return (
     <Layout style={{ height: '100%' }}>
@@ -76,7 +81,9 @@ function Main() {
             }
             style={{ width: 200 }}
           />
-          <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer()}>
+          <Button type="primary" 
+            style={{ float: 'right' }}
+            onClick={() => showDrawer()}>
             <Icon type="plus" />
             部门
           </Button>

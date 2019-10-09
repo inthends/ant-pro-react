@@ -26,7 +26,7 @@ function House() {
   const [id, setId] = useState<string>();
   const [search, setSearch] = useState<string>('');
   //是否能新增
-  const [isAdd, setIsAdd] = useState<boolean>(true);
+  const [isDisabled, setIsDisabled] = useState<boolean>(true);
 
   // const disabledCreate = (tree: any[], orgId: string) => {
   //   for (const item of tree) {
@@ -40,14 +40,13 @@ function House() {
   const setButton = (orgid, orgtype, searchText) => {
     setOrganizeId(orgid);
     if (orgtype == 'D') {
-      setIsAdd(false);
+      setIsDisabled(false);
     } else {
-      setIsAdd(true);
+      setIsDisabled(true);
     }
 
     initLoadData(orgid, searchText);
-    initHouseTotal(orgid, searchText);
-
+    initHouseTotal(orgid, searchText); 
   };
 
   useEffect(() => {
@@ -173,7 +172,7 @@ function House() {
             style={{ width: 200 }}
           />
           <AuthButton
-            disabled={isAdd}
+            disabled={isDisabled}
             style={{ float: 'right' }}
             onClick={() => showDrawer()}
             encode="lr-add"

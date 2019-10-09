@@ -40,9 +40,9 @@ const ModifyItem = (props: ModifyItemProps) => {
   const getFormItem = () => {
     switch (type) {
       case 'tree':
-        return <TreeSelect {...inner} style={{ width: '100%' }} treeData={treeData || []} />;
+        return <TreeSelect {...inner} style={{ width: '100%' }} treeData={treeData || []} onChange={onChange} />;
       case 'date':
-        return <DatePicker {...inner} style={{ width: '100%' }} />;
+        return <DatePicker {...inner} style={{ width: '100%' }} placeholder={`请选择${label as string}`} />;
       case 'autoComplete':
         return (
           <AutoComplete
@@ -55,7 +55,7 @@ const ModifyItem = (props: ModifyItemProps) => {
             style={{ width: '100%' }}
             onSearch={onSearch}
             placeholder={`请输入${label as string}`}
-            // onSelect={onOwnerSelect}
+          // onSelect={onOwnerSelect}
           />
         );
       case 'textarea':

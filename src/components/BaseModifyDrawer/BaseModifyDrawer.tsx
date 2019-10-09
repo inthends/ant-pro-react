@@ -41,7 +41,8 @@ const BaseModifyProvider = (props: BaseModifyProps) => {
         width={600}
         onClose={closeDrawer}
         visible={visible}
-        bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
+        style={{ height: 'calc(100vh-50px)' }}
+        bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 50px)' }}
       >
         {visible ? children : null}
         <div

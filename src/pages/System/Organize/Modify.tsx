@@ -5,6 +5,7 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useState, useEffect } from 'react';
 import { SaveForm, searchUser, ExistEnCode, searchOrgs } from './Organize.service';
 import { TreeNode } from 'antd/lib/tree-select';
+import styles from './style.less';
 
 interface ModifyProps {
   visible: boolean;
@@ -97,26 +98,8 @@ const Modify = (props: ModifyProps) => {
 
   return (
     <BaseModifyProvider {...props} name="机构" save={doSave}>
-      <Card>
-        <Form layout="vertical" hideRequiredMark>
-          <Row gutter={24}>
-            <ModifyItem
-              {...baseFormProps}
-              field="fullName"
-              label="机构名称"
-              rules={[{ required: true, message: '请输入机构名称' }]}
-            ></ModifyItem>
-            <ModifyItem
-              {...baseFormProps}
-              field="enCode"
-              label="机构编号"
-              rules={[{ required: true, message: '请输入机构编号' },
-              {
-                validator: checkExist
-              }
-              ]}
-            ></ModifyItem>
-          </Row>
+      <Card className={styles.card}>
+        <Form layout="vertical" hideRequiredMark> 
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
@@ -154,6 +137,26 @@ const Modify = (props: ModifyProps) => {
               rules={[{ required: true, message: '请选择类型' }]}
             ></ModifyItem>
           </Row>
+
+          <Row gutter={24}>
+            <ModifyItem
+              {...baseFormProps}
+              field="fullName"
+              label="机构名称"
+              rules={[{ required: true, message: '请输入机构名称' }]}
+            ></ModifyItem>
+            <ModifyItem
+              {...baseFormProps}
+              field="enCode"
+              label="机构编号"
+              rules={[{ required: true, message: '请输入机构编号' },
+              {
+                validator: checkExist
+              }
+              ]}
+            ></ModifyItem>
+          </Row>
+
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}

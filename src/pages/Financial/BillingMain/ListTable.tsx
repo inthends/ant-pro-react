@@ -24,8 +24,6 @@ interface ListTableProps {
 function ListTable(props: ListTableProps) {
   const { onchange, loading, pagination, data, reload, showModify, getRowSelect,showVerify } = props;
   const [selectedRowKey, setSelectedRowKey] = useState([]);
-
-
   const MoreBtn: React.FC<{
     item: any;
   }> = ({ item }) => (
@@ -184,8 +182,8 @@ function ListTable(props: ListTableProps) {
         return '';
       }
     }
-
-  }
+  };
+  
   const onRow = (record) => {
     return {
       onClick: event => {

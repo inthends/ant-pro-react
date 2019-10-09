@@ -1,9 +1,9 @@
 import Page from '@/components/Common/Page';
 import { Divider, message, Modal, Table } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
-import React from 'react';
+import React, { useState } from 'react';
 import { RemoveForm, GetDetailJson } from './Main.service';
-
+import styles from './style.less';
 interface ListTableProps {
   loading: boolean;
   data: any[];
@@ -14,7 +14,7 @@ interface ListTableProps {
 
 function ListTable(props: ListTableProps) {
   const { loading, data, modify, reload } = props;
-
+  const [selectedRowKey, setSelectedRowKey] = useState([]);
   const doDelete = record => {
     Modal.confirm({
       title: '请确认',
@@ -34,6 +34,33 @@ function ListTable(props: ListTableProps) {
       modify(res);
     });
   };
+
+  const setClassName = (record, index) => {
+
+    if (record.key === selectedRowKey) {
+      return styles.rowSelect;
+    } 
+    // else {
+    //   if (record.type == 'Department' || record.type == 'D') {
+    //     return styles.rowFlush
+    //   } else {
+    //     return '';
+    //   }
+    // }
+
+  };
+
+  const onRow = (record) => {
+    return {
+      onClick: event => {
+        //if (record.type == 'Department' || record.type == 'D') {
+          setSelectedRowKey(record.key);
+        //}
+        //getRowSelect(record);
+      }
+    };
+  }
+
   const columns = [
     {
       title: '部门名称',
@@ -92,7 +119,7 @@ function ListTable(props: ListTableProps) {
             </span>
 
           ];
-        }else{
+        } else {
           return '';
         }
       },
@@ -101,6 +128,7 @@ function ListTable(props: ListTableProps) {
   return (
     <Page>
       <Table
+        className={styles.Table}
         style={{ border: 'none' }}
         bordered={false}
         size="middle"
@@ -109,6 +137,8 @@ function ListTable(props: ListTableProps) {
         rowKey={record => record.key}
         scroll={{ y: 500 }}
         loading={loading}
+        onRow={onRow}
+        rowClassName={setClassName} //表格行点击高亮
       />
     </Page>
   );

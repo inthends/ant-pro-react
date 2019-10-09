@@ -3,8 +3,9 @@ import ModifyItem, { SelectItem } from '@/components/BaseModifyDrawer/ModifyItem
 import { Card, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useState, useEffect } from 'react';
-import { SaveForm, searchUser, ExistEnCode, searchOrgs } from './Main.service';
+import { SaveForm, searchUser, ExistEnCode, ExistName, searchOrgs, GetDepartmentTree } from './Main.service';
 import { TreeNode } from 'antd/lib/tree-select';
+import styles from './style.less';
 
 interface ModifyProps {
   visible: boolean;
@@ -12,46 +13,68 @@ interface ModifyProps {
   form: WrappedFormUtils<any>;
   closeDrawer(): void;
   reload(): void;
-}
+};
+
 const Modify = (props: ModifyProps) => {
   const { data, form } = props;
   const [managers, setManagers] = useState<SelectItem[]>([]);
-  const [types, setTypes] = useState<SelectItem[]>([
-    {
-      label: '集团',
-      value: 'A',
-    },
-    {
-      label: '区域',
-      value: 'B',
-    },
-    {
-      label: '公司',
-      value: 'C',
-    },
-    {
-      label: '管理处',
-      value: 'D',
-    },
-  ]);
+  // const [types, setTypes] = useState<SelectItem[]>([
+  //   {
+  //     label: '集团',
+  //     value: 'A',
+  //   },
+  //   {
+  //     label: '区域',
+  //     value: 'B',
+  //   },
+  //   {
+  //     label: '公司',
+  //     value: 'C',
+  //   },
+  //   {
+  //     label: '管理处',
+  //     value: 'D',
+  //   },
+  // ]);
   const [orgs, setOrgs] = useState<TreeNode[]>();
+  const [depts, setDepts] = useState<TreeNode[]>();
   let initData = data ? data : { enabledMark: 1 };
   initData.expDate = initData.expDate ? initData.expDate : new Date();
   const baseFormProps = { form, initData };
-  useEffect(() => { 
 
+  const getOrgs = () => {
+    searchOrgs().then(res => {
+      setOrgs(res);
+    });
+  };
+
+  useEffect(() => {
+    getOrgs();
   }, []);
 
+  const searchManager = value => {
+    searchUser(value).then(res => {
+      const users = res.map(item => {
+        return {
+          label: item.name,
+          value: item.name,
+        };
+      });
+      setManagers(users);
+    });
+  };
+
+  //数据保存
   const doSave = dataDetail => {
     let modifyData = { ...initData, ...dataDetail, keyValue: initData.organizeId };
     if (modifyData.foundedTime != null)
       modifyData.foundedTime = modifyData.foundedTime.format('YYYY-MM-DD');
+    if (modifyData.parentId === undefined)
+      modifyData.parentId = 0;
     return SaveForm(modifyData);
   };
 
- 
-
-  const checkExist = (rule, value, callback) => {
+  const checkCodeExist = (rule, value, callback) => {
     if (value == undefined) {
       callback();
     }
@@ -59,35 +82,39 @@ const Modify = (props: ModifyProps) => {
       const keyValue = initData.organizeId == undefined ? '' : initData.organizeId;
       ExistEnCode(keyValue, value).then(res => {
         if (res)
-          callback('机构编号重复');
+          callback('部门编号重复');
         else
           callback();
       })
     }
   };
 
+  const checkNameExist = (rule, value, callback) => {
+    if (value == undefined) {
+      callback();
+    }
+    else {
+      const keyValue = initData.organizeId == undefined ? '' : initData.organizeId;
+      ExistName(keyValue, value).then(res => {
+        if (res)
+          callback('部门名称重复');
+        else
+          callback();
+      })
+    }
+  };
+
+  const getDepts = (value) => {
+    GetDepartmentTree(value).then(res => {
+      setDepts(res || []);
+    });
+  };
+
   return (
     <BaseModifyProvider {...props} name="部门" save={doSave}>
-      <Card>
+      <Card className={styles.card}>
         <Form layout="vertical" hideRequiredMark>
-          <Row gutter={24}>
-            <ModifyItem
-              {...baseFormProps}
-              field="fullName"
-              label="部门名称"
-              rules={[{ required: true, message: '请输入部门名称' }]}
-            ></ModifyItem>
-            <ModifyItem
-              {...baseFormProps}
-              field="enCode"
-              label="部门编号"
-              rules={[{ required: true, message: '请输入部门编号' },
-              {
-                validator: checkExist
-              }
-              ]}
-            ></ModifyItem>
-          </Row>
+
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
@@ -97,6 +124,7 @@ const Modify = (props: ModifyProps) => {
               treeData={orgs}
               disabled={initData.organizeId != undefined}
               rules={[{ required: true, message: '请选择所属机构' }]}
+              onChange={getDepts}
             ></ModifyItem>
             <ModifyItem
               {...baseFormProps}
@@ -104,30 +132,51 @@ const Modify = (props: ModifyProps) => {
               label="上级部门"
               type="tree"
               disabled={initData.parentId === '0'}
-              items={types}
-              rules={[{ required: true, message: '请选择上级部门' }]}
+              treeData={depts}
+            //  rules={[{ required: true, message: '请选择上级部门' }]}
             ></ModifyItem>
           </Row>
-
+          <Row gutter={24}>
+            <ModifyItem
+              {...baseFormProps}
+              field="fullName"
+              label="部门名称"
+              rules={[{ required: true, message: '请输入部门名称' },
+              {
+                validator: checkNameExist
+              }
+              ]}
+            ></ModifyItem>
+            <ModifyItem
+              {...baseFormProps}
+              field="enCode"
+              label="部门编号"
+              rules={[{ required: true, message: '请输入部门编号' },
+              {
+                validator: checkCodeExist
+              }
+              ]}
+            ></ModifyItem>
+          </Row>
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
               field="manager"
               label="负责人"
-              type="autoComplete" 
+              onSearch={searchManager}
+              type="autoComplete"
               items={managers}
             ></ModifyItem>
             <ModifyItem
               {...baseFormProps}
               field="email"
-              label="邮箱" 
+              label="邮箱"
             ></ModifyItem>
           </Row>
           <Row gutter={24}>
             <ModifyItem {...baseFormProps} field="outerPhone" label="电话"></ModifyItem>
             <ModifyItem {...baseFormProps} field="fax" label="传真"></ModifyItem>
           </Row>
-
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
