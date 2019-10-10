@@ -17,8 +17,7 @@ export function objToFormdata(data): FormData {
       formData.append(k, JSON.stringify(value));
     } else {
       formData.append(k, value);
-    }
-    
+    } 
   }
   return formData;
 }
