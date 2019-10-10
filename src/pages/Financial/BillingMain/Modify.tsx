@@ -185,7 +185,10 @@ const Modify = (props: ModifyProps) => {
       pageIndex,
       pageSize,
       total,
-      queryJson: { keyword: search }
+      queryJson: { 
+        billId: id == null || id == '' ? newId : id,//新增时候处理
+        keyword: search
+       }
     };
 
     if (sorter) {
@@ -197,7 +200,7 @@ const Modify = (props: ModifyProps) => {
     //return unitFeeload({ pageIndex, pageSize, sidx, sord, total, queryJson });
   };
 
-  const unitFeeload = data => {
+  const unitFeeload = data => { 
     setLoading(true);
     data.sidx = data.sidx || 'id';
     data.sord = data.sord || 'asc';

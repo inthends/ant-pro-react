@@ -1,8 +1,7 @@
 //添加编辑费项
 import {
   Button,
-  Col,
-  Select,
+  Col, 
   Form,Input,
   Row,Icon,Modal,
 } from 'antd';
@@ -12,7 +11,7 @@ import React, { useEffect, useState } from 'react';
 import {GetReceivablesFeeItemTreeJson } from './Meter.service';
 import './style.less';
 import LeftTree from '../LeftTree';
-const Option = Select.Option;
+// const Option = Select.Option;
 
 interface ChargeFeeItemProps {
   visible: boolean;
@@ -53,14 +52,14 @@ const ChargeFeeItem = (props: ChargeFeeItemProps) => {
       bodyStyle={{ background: '#f6f7fb' }}
       width='400px'
     >
-      <Row gutter={8}>
-        <Col span={8}>
+      <Row gutter={24}>
+        {/* <Col span={8}>
           <Select placeholder="=请选择=" style={{width:'100%'}}>
             <Option value="Code">编号</Option>
             <Option value="Name">名称</Option>
           </Select>
-        </Col>
-        <Col span={10}>
+        </Col> */}
+        <Col span={18}>
           <Input placeholder="请输入要查询的关键字"/>
         </Col>
         <Col span={6}>
@@ -71,10 +70,10 @@ const ChargeFeeItem = (props: ChargeFeeItemProps) => {
       <Row style={{height:'400px',marginTop:'5px',overflow:'auto'}}>
         <Col span={24}>
           <LeftTree
-            treeData={treeData}
-              selectTree={(id, item) => {
-                console.log(item);
-                setSelectId({id:id,name:item.title});
+            treeData={treeData} 
+              selectTree={(id, item) => {  
+                //console.log(item);
+                setSelectId({id:id,name: item.selectedNodes[0].props.title  });
             }}
           />
         </Col>
@@ -82,6 +81,5 @@ const ChargeFeeItem = (props: ChargeFeeItemProps) => {
     </Modal>
   );
 };
-
 export default Form.create<ChargeFeeItemProps>()(ChargeFeeItem);
 
