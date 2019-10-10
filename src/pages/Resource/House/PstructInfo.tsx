@@ -144,7 +144,7 @@ const PstructInfo = (props: PstructInfoProps) => {
       callback();
     }
     else {
-      const keyValue = infoDetail.pStructId == undefined ? '' : infoDetail.pStructId;
+      const keyValue = infoDetail.id == undefined ? '' : infoDetail.id;
       ExistEnCode(keyValue, value).then(res => {
         if (res)
           callback('编号重复');
