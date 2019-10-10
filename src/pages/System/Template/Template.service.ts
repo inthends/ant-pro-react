@@ -1,4 +1,4 @@
-import { getResult, objToFormdata, objToUrl } from "@/utils/networkUtils";
+import { getResult, objToFormdata } from "@/utils/networkUtils";
 import request from "@/utils/request";
 import { TreeEntity } from '@/model/models';
 
@@ -10,16 +10,7 @@ export function SaveForm(data): Promise<any> {
     })
     .then(getResult as any);
 }
-// 查询用户
-export function searchUser(keyword): Promise<any[]> {
-  const type = "员工";
-  return request
-    .get(
-      process.env.basePath +
-        `/Common/GetUserList?${objToUrl({ keyword, type })}`
-    )
-    .then(getResult as any);
-}
+ 
 // 删除
 export function RemoveForm(keyValue): Promise<any> {
   return request
@@ -27,12 +18,9 @@ export function RemoveForm(keyValue): Promise<any> {
     .then(getResult as any);
 }
  
-export function getUserList(data): Promise<any> {
-  return request
-    .get(
-      process.env.basePath + `/PermissionRole/GetUserListJson?${objToUrl(data)}`
-    )
-    .then(getResult as any);
+ // 查询机构
+export function searchOrgs(): Promise<any[]> {
+  return request.get(process.env.basePath + `/Common/GetOrgTreeOnly`).then(getResult as any);
 }
 
 //获取模板分类

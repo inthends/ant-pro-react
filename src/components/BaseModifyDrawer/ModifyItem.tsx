@@ -1,4 +1,4 @@
-import { AutoComplete, Col, DatePicker, Form, Input, Radio, Select, TreeSelect } from 'antd';
+import { InputNumber, Checkbox, AutoComplete, Col, DatePicker, Form, Input, Radio, Select, TreeSelect } from 'antd';
 import { ValidationRule, WrappedFormUtils } from 'antd/lib/form/Form';
 import moment from 'moment';
 import React from 'react';
@@ -6,7 +6,7 @@ import { TreeNode } from 'antd/lib/tree-select';
 const { TextArea, Password } = Input;
 const { Option } = Select;
 interface ModifyItemProps {
-  type?: 'select' | 'textarea' | 'password' | 'radio' | 'autoComplete' | 'date' | 'tree';
+  type?: 'select' | 'textarea' | 'password' | 'radio' | 'autoComplete' | 'date' | 'tree' | 'checkbox' | 'inputNumber';
   field: string;
   label: React.ReactNode;
   initData?: any;
@@ -19,7 +19,7 @@ interface ModifyItemProps {
   items?: SelectItem[];
   treeData?: TreeNode[];
   onChange?(value): void;
-  onSearch?(value): void;
+  onSearch?(value): void; 
 }
 const ModifyItem = (props: ModifyItemProps) => {
   const {
@@ -86,7 +86,7 @@ const ModifyItem = (props: ModifyItemProps) => {
           <Password
             {...inner}
             placeholder={`请输入${label as string}`}
-            onChange={onChange} 
+            onChange={onChange}
             readOnly={readOnly}
             visibilityToggle={visibilityToggle}
           ></Password>
@@ -101,6 +101,25 @@ const ModifyItem = (props: ModifyItemProps) => {
             ))}
           </Radio.Group>
         );
+
+      case 'checkbox':
+        return (
+          <Checkbox
+            {...inner}
+            onChange={onChange}
+          ></Checkbox>
+        );
+ 
+      case 'inputNumber':
+        return (
+          <InputNumber
+            {...inner}
+            placeholder={`请输入${label as string}`}
+            style={{ width: '100%' }}
+            onChange={onChange}
+          ></InputNumber>
+        );
+
       default:
         return (
           <Input {...inner} placeholder={`请输入${label as string}`} onChange={onChange}></Input>

@@ -171,8 +171,7 @@ const Template = () => {
           data={data}
           modify={showDrawer}
           choose={showChoose}
-          reload={() => initLoadData(itemId)}
-          setData={setData}
+          reload={() => initLoadData(itemId)} 
         />
       </Content>
       <Modify

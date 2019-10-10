@@ -101,8 +101,7 @@ const Modify = (props: ModifyProps) => {
   //重新设置state
   const handleChange = ({ fileList }) => {
     setFileList([...fileList]);
-    //设置项目图片
-    debugger
+    //设置项目图片 
     form.setFieldsValue({ mainPic: '' });
   };
   //图片上传结束
@@ -499,9 +498,7 @@ const Modify = (props: ModifyProps) => {
             </Row>
 
             <Row gutter={24}>
-              <Col lg={24}>
-
-
+              <Col lg={24}> 
                 <div className="clearfix">
                   <Upload
                     accept='image/*'
