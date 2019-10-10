@@ -31,7 +31,7 @@ const PstructInfo = (props: PstructInfoProps) => {
  const [previewImage, setPreviewImage] = useState<string>('');
 
   const title = data === undefined ? '添加' : '修改';
-  let formLabel = '楼栋';
+  let formLabel = '楼栋'; 
   if (type != undefined) {
     if (type == 1) {
       formLabel = '楼栋';

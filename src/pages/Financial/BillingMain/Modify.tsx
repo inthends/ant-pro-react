@@ -189,7 +189,7 @@ const Modify = (props: ModifyProps) => {
           pageSize,
         };
       });
-      console.log(res);
+      //console.log(res);
       setUnitMeterData(res.data);
       //setUnitMeterLoading(false);
       return res;
@@ -572,11 +572,11 @@ const Modify = (props: ModifyProps) => {
         meterDetail={meterDetail}
         getBillID={(billid) => {
           setNewId(billid);
-          /*GetBilling(billid).then(res => {
-            setInfoDetail(res);
-            setLoading(false);
+          GetBilling(billid).then(res => {
+            setInfoDetail(res); 
             initUnitMeterLoadData();
-          });*/
+            setLoading(false);
+          });
         }}
       />
     </Drawer>

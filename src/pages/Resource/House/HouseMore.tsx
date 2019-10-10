@@ -31,8 +31,7 @@ function HouseMore(props) {
   const selectTree = (parentId, type, searchText) => {
     //初始化页码
     const page = new DefaultPagination();
-    refresh(parentId, type, searchText, page);//, pstructId);
-    setType(type);
+    refresh(parentId, type, searchText, page);//, pstructId); 
     setParentId(parentId);
     setPagination(page);
   };
@@ -47,7 +46,7 @@ function HouseMore(props) {
     //setPstructId(psid);
     // GetBuildings(psid).then((res: any[]) => {
     //   setTreeData(res || []);
-    // });
+    // }); 
     initLoadData(pid, type, '');//, psid);
   }, []);
 
@@ -126,7 +125,7 @@ function HouseMore(props) {
   };
 
   //点击树刷新列表
-  const refresh = (parentId, type, searchText, page) => {
+  const refresh = (parentId, type, searchText, page) => { 
     setSearch(searchText);
     const queryJson = {
       keyword: search,
@@ -186,7 +185,8 @@ function HouseMore(props) {
               data={data}
               selectId={selectId}
               modify={showDrawer}
-              reload={(id, selecttype) => {
+              reload={(id, selecttype) => { 
+                setType(selecttype || type);
                 setSelectId(id);
                 initLoadData(id || parentId, selecttype || type, search)
               }}
