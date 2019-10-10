@@ -1,6 +1,6 @@
 //房产信息
 
-import { Select, AutoComplete, Button, Card, Col, Drawer, Form, Input, Row, message, InputNumber } from 'antd';
+import { Icon, Upload, Modal, Select, AutoComplete, Button, Card, Col, Drawer, Form, Input, Row, message, InputNumber } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { ExistEnCode, SaveForm, GetCustomerList } from './House.service';
@@ -25,6 +25,11 @@ const PstructInfo = (props: PstructInfoProps) => {
   const { getFieldDecorator } = form;
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [userSource, setUserSource] = useState<any[]>([]);
+ //图片上传
+ const [previewVisible, setPreviewVisible] = useState<boolean>(false);
+ const [fileList, setFileList] = useState<any[]>([]);
+ const [previewImage, setPreviewImage] = useState<string>('');
+
   const title = data === undefined ? '添加' : '修改';
   let formLabel = '楼栋';
   if (type != undefined) {
@@ -149,6 +154,51 @@ const PstructInfo = (props: PstructInfoProps) => {
     }
   };
 
+      //图片上传begin
+      const uploadButton = (
+        <div>
+          <Icon type="plus" />
+          <div className="ant-upload-text">点击上传图片</div>
+        </div>
+      );
+    
+      const getBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = error => reject(error);
+        });
+      };
+    
+      const handleCancel = () => setPreviewVisible(false);
+      const handlePreview = async file => {
+        if (!file.url && !file.preview) {
+          file.preview = await getBase64(file.originFileObj);
+        }
+        setPreviewImage(file.url || file.preview);
+        setPreviewVisible(true);
+      };
+      const handleRemove = (file) => {
+        // const fileid = file.fileid || file.response.fileid;
+        // RemoveFile(fileid).then(res => {
+        // });
+    
+        //清空图片
+        form.setFieldsValue({ mainPic: '' });
+      };
+    
+      //重新设置state
+      const handleChange = ({ fileList }) => {
+        setFileList([...fileList]);
+        let url = '';
+        if (fileList.length > 0)
+          url = fileList[0].response;
+        //设置项目图片 
+        form.setFieldsValue({ mainPic: url }); 
+      };
+      //图片上传end
+
   return (
     <Drawer
       title={title + formLabel}
@@ -271,7 +321,6 @@ const PstructInfo = (props: PstructInfoProps) => {
                   </Row>
                 )
             }
- 
             {type == 1 ? (<Row gutter={24}>
               <Col lg={8}>
                 <Form.Item label="业态">
@@ -359,6 +408,28 @@ const PstructInfo = (props: PstructInfoProps) => {
                 </Form.Item>
               </Col>
             </Row>
+
+            <Row gutter={24}>
+              <Col lg={24}>
+                <div className="clearfix">
+                  <Upload
+                    accept='image/*'
+                    action={process.env.basePath + '/PStructs/Upload'}
+                    listType="picture-card"
+                    fileList={fileList}
+                    onPreview={handlePreview}
+                    onChange={handleChange}
+                    onRemove={handleRemove}
+                  >
+                    {fileList.length > 1 ? null : uploadButton}
+                  </Upload>
+                  <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
+                    <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                  </Modal>
+                </div>
+              </Col>
+            </Row>
+
           </Form>
         ) : null}
       </Card>

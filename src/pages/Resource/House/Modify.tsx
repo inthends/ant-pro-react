@@ -32,6 +32,7 @@ const Modify = (props: ModifyProps) => {
   const [project, setProject] = useState<TreeEntity[]>([]);
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [userSource, setUserSource] = useState<any[]>([]);
+  //图片上传
   const [previewVisible, setPreviewVisible] = useState<boolean>(false);
   const [fileList, setFileList] = useState<any[]>([]);
   const [previewImage, setPreviewImage] = useState<string>('');
@@ -63,6 +64,7 @@ const Modify = (props: ModifyProps) => {
     });
   };
 
+  //图片上传begin
   const uploadButton = (
     <div>
       <Icon type="plus" />
@@ -70,7 +72,6 @@ const Modify = (props: ModifyProps) => {
     </div>
   );
 
-  //图片上传
   const getBase64 = (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -106,7 +107,7 @@ const Modify = (props: ModifyProps) => {
     //设置项目图片 
     form.setFieldsValue({ mainPic: url }); 
   };
-  //图片上传结束
+  //图片上传end
 
   // 打开抽屉时初始化
   useEffect(() => {
