@@ -15,8 +15,7 @@ interface AsynLeftTreeProps {
   parentid: string;
 }
 
-function AsynLeftTree(props: AsynLeftTreeProps) {
-
+function AsynLeftTree(props: AsynLeftTreeProps) { 
   const { selectTree } = props;
   const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
   // const [autoExpandParent, setAutoExpandParent] = useState<boolean>(false);
