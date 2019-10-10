@@ -24,7 +24,7 @@ interface AddFeeProps {
   reload(): void;
 }
 const AddFee = (props: AddFeeProps) => {
-  const { addFeeVisible, closeAddDrawer, form, organizeId, id } = props;
+  const { addFeeVisible, closeAddDrawer, form  } = props;
   const { getFieldDecorator } = form;
   const title = '新增费用';
   const [infoDetail, setInfoDetail] = useState<any>({});

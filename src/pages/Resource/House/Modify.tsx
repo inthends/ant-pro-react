@@ -105,7 +105,7 @@ const Modify = (props: ModifyProps) => {
     if (fileList.length > 0)
       url = fileList[0].response;
     //设置项目图片 
-    form.setFieldsValue({ mainPic: url }); 
+    form.setFieldsValue({ mainPic: url });
   };
   //图片上传end
 
@@ -121,6 +121,19 @@ const Modify = (props: ModifyProps) => {
             getArea(tempInfo.city, true);
           }
           setInfoDetail(tempInfo);
+
+          //加载图片
+          let files: any[]; files = [];
+          if (tempInfo.mainPic != null) { 
+            const filedate = {
+              url: tempInfo.mainPic,
+              uid:tempInfo.id//必须
+            } 
+            files.push(filedate);
+          } 
+          setFileList(files);
+          //加载图片
+          
           form.resetFields();
         });
       } else {

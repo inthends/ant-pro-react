@@ -1,16 +1,13 @@
 //添加编辑费项
 import {
   Button,
-  Col,
-  Select,
+  Col, 
   Form,Input,
-  Row,Icon,Modal,Tabs,Table
+  Row,Modal,Tabs
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import React, { useEffect, useState } from 'react';
-import {GetReceivablesFeeItemTreeJson } from './Meter.service';
-import './style.less';
-import { ColumnProps} from 'antd/lib/table';
+import React, { useEffect  } from 'react'; 
+import './style.less'; 
 
 const {TabPane}=Tabs;
 interface AddFormulaProps {

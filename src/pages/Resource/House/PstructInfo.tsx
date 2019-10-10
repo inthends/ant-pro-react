@@ -54,6 +54,17 @@ const PstructInfo = (props: PstructInfoProps) => {
     if (modifyVisible) {
       if (data) {
         setInfoDetail(data);
+         //加载图片
+         let files: any[]; files = [];
+         if (data.mainPic != null) { 
+           const filedate = {
+             url: data.mainPic,
+             uid:data.id//必须
+           } 
+           files.push(filedate);
+         } 
+         setFileList(files);
+         //加载图片
         form.resetFields();
       } else {
         setInfoDetail({});
