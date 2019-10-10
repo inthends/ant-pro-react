@@ -459,8 +459,7 @@ const Modify = (props: ModifyProps) => {
       },
     },
   ] as ColumnProps<any>[];
-
-
+ 
   const [showFeeField, setShowFeeField] = useState<boolean>(false);
   const [accFixedDisabled, setAccFixedDisabled] = useState<boolean>(true);
   const [payFixedDisabled, setPayFixedDisabled] = useState<boolean>(true);

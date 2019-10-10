@@ -194,6 +194,7 @@ const Modify = (props: ModifyProps) => {
                   accept='.doc,.docx'
                   action={process.env.basePath + '/Template/Upload'} 
                   fileList={fileList}
+                  listType="picture-card" 
                   onChange={handleChange}
                   onRemove={handleRemove}
                 >

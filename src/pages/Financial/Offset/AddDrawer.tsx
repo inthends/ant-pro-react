@@ -204,8 +204,7 @@ const AddDrawer = (props: AddDrawerProps) => {
       bodyStyle={{ background: '#f6f7fb', height: 'calc(100vh -50px)' }}
     >
       <Form layout='vertical' hideRequiredMark >
-        <Spin tip="数据加载中..." spinning={loading}>
-
+        <Spin tip="数据加载中..." spinning={loading}> 
           <Row gutter={24}>
             <Col lg={6}>
               <Form.Item label="应付起始日" required>
@@ -257,7 +256,7 @@ const AddDrawer = (props: AddDrawerProps) => {
             </Col>
           </Row>
 
-          <Row gutter={12}>
+          <Row gutter={24}>
             <Col span={8} style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh - 240px)' }}
             >
               <AsynSelectTree
@@ -268,7 +267,6 @@ const AddDrawer = (props: AddDrawerProps) => {
                 }}
               />
             </Col>
-
             <Col span={8} style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh - 240px)' }}>
               <LeftTree
                 treeData={checkTreeData}
