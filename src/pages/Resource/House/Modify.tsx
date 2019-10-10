@@ -32,7 +32,6 @@ const Modify = (props: ModifyProps) => {
   const [project, setProject] = useState<TreeEntity[]>([]);
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [userSource, setUserSource] = useState<any[]>([]);
-
   const [previewVisible, setPreviewVisible] = useState<boolean>(false);
   const [fileList, setFileList] = useState<any[]>([]);
   const [previewImage, setPreviewImage] = useState<string>('');
@@ -101,8 +100,11 @@ const Modify = (props: ModifyProps) => {
   //重新设置state
   const handleChange = ({ fileList }) => {
     setFileList([...fileList]);
+    let url = '';
+    if (fileList.length > 0)
+      url = fileList[0].response;
     //设置项目图片 
-    form.setFieldsValue({ mainPic: '' });
+    form.setFieldsValue({ mainPic: url }); 
   };
   //图片上传结束
 
@@ -190,7 +192,7 @@ const Modify = (props: ModifyProps) => {
   };
 
   //验证编码是否重复
-  const checkExist = (rule, value, callback) => { 
+  const checkExist = (rule, value, callback) => {
     if (value == undefined) {
       callback();
     }
@@ -498,7 +500,7 @@ const Modify = (props: ModifyProps) => {
             </Row>
 
             <Row gutter={24}>
-              <Col lg={24}> 
+              <Col lg={24}>
                 <div className="clearfix">
                   <Upload
                     accept='image/*'

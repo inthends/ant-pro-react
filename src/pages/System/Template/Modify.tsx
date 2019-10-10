@@ -54,17 +54,19 @@ const Modify = (props: ModifyProps) => {
   const handleRemove = (file) => {
     // const fileid = file.fileid || file.response.fileid;
     // RemoveFile(fileid).then(res => {
-    // });
-
-    //清空图片
-    form.setFieldsValue({ mainPic: '' });
+    // }); 
+    //清空
+    form.setFieldsValue({ fileUrl: '' });
   };
 
   //重新设置state
   const handleChange = ({ fileList }) => {
     setFileList([...fileList]);
-    //设置项目图片 
-    form.setFieldsValue({ mainPic: '' });
+    let url = '';
+    if (fileList.length > 0)
+      url = fileList[0].response;
+    //设置
+    form.setFieldsValue({ fileUrl: url });
   };
 
   //关键词复制
@@ -189,9 +191,8 @@ const Modify = (props: ModifyProps) => {
             <Col lg={24}>
               <div className="clearfix">
                 <Upload
-                  accept='image/*'
-                  action={process.env.basePath + '/PStructs/Upload'}
-                  listType="picture-card"
+                  accept='.doc,.docx'
+                  action={process.env.basePath + '/Template/Upload'} 
                   fileList={fileList}
                   onChange={handleChange}
                   onRemove={handleRemove}
