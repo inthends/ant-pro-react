@@ -5,7 +5,7 @@ import { TreeEntity } from '@/model/models';
 // 新增修改
 export function SaveForm(data): Promise<any> {
   return request
-    .post(process.env.basePath + `/Role/SaveForm`, {
+    .post(process.env.basePath + `/Template/SaveForm`, {
       data: objToFormdata(data)
     })
     .then(getResult as any);
@@ -14,7 +14,7 @@ export function SaveForm(data): Promise<any> {
 // 删除
 export function RemoveForm(keyValue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Role/RemoveForm?keyValue=${keyValue}`, {})
+    .post(process.env.basePath + `/Template/RemoveForm?keyValue=${keyValue}`, {})
     .then(getResult as any);
 }
  
