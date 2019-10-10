@@ -148,49 +148,49 @@ const AddDrawer = (props: AddDrawerProps) => {
   };
 
   //获取当前月份第一天
-  const getCurrentMonthFirstDay = () => {
-    var monthStr = '';
-    var dayStr = '';
-    var date = new Date();
-    date.setDate(1);
-    var month = date.getMonth() + 1;
-    var day = date.getDate();
-    if (month < 10) {
-      monthStr = '0' + month;
-    } else {
-      monthStr = '' + month;
+  // const getCurrentMonthFirstDay = () => {
+  //   var monthStr = '';
+  //   var dayStr = '';
+  //   var date = new Date();
+  //   date.setDate(1);
+  //   var month = date.getMonth() + 1;
+  //   var day = date.getDate();
+  //   if (month < 10) {
+  //     monthStr = '0' + month;
+  //   } else {
+  //     monthStr = '' + month;
 
-    }
-    if (day < 10) {
-      dayStr = '0' + day;
-    } else {
-      dayStr = '' + day;
-    }
-    return date.getFullYear() + '-' + monthStr + '-' + dayStr;
-  }
+  //   }
+  //   if (day < 10) {
+  //     dayStr = '0' + day;
+  //   } else {
+  //     dayStr = '' + day;
+  //   }
+  //   return date.getFullYear() + '-' + monthStr + '-' + dayStr;
+  // }
 
 
   //获取当前月份最后
-  const getCurrentMonthLastDay = () => {
-    var monthStr = '';
-    var dayStr = '';
-    var date = new Date();
-    var currentMonth = date.getMonth();
-    var nextMonth = ++currentMonth;
-    var nextMonthFirstDay = new Date(date.getFullYear(), nextMonth, 1);
-    var oneDay = 1000 * 60 * 60 * 24;
-    var lastTime = new Date(nextMonthFirstDay - oneDay);
-    var month = lastTime.getMonth() + 1;
-    var day = lastTime.getDate();
-    var dayStr = '' + day;
-    if (month < 10) {
-      monthStr = '0' + month;
-    }
-    if (day < 10) {
-      dayStr = '0' + day;
-    }
-    return date.getFullYear() + '-' + monthStr + '-' + dayStr;
-  };
+  // const getCurrentMonthLastDay = () => {
+  //   var monthStr = '';
+  //   var dayStr = '';
+  //   var date = new Date();
+  //   var currentMonth = date.getMonth();
+  //   var nextMonth = ++currentMonth;
+  //   var nextMonthFirstDay = new Date(date.getFullYear(), nextMonth, 1);
+  //   var oneDay = 1000 * 60 * 60 * 24;
+  //   var lastTime = new Date(nextMonthFirstDay - oneDay);
+  //   var month = lastTime.getMonth() + 1;
+  //   var day = lastTime.getDate();
+  //   var dayStr = '' + day;
+  //   if (month < 10) {
+  //     monthStr = '0' + month;
+  //   }
+  //   if (day < 10) {
+  //     dayStr = '0' + day;
+  //   }
+  //   return date.getFullYear() + '-' + monthStr + '-' + dayStr;
+  // };
 
 
   return (
@@ -212,7 +212,7 @@ const AddDrawer = (props: AddDrawerProps) => {
                 {getFieldDecorator('payBeginDate', {
                   initialValue: infoDetail.payBeginDate != null
                     ? moment(new Date(infoDetail.payBeginDate))
-                    : moment(getCurrentMonthFirstDay()),
+                    : moment(new Date()),
                   rules: [{ required: true, message: '请选择应付起始日' }],
                 })(
                   <DatePicker />
@@ -224,7 +224,7 @@ const AddDrawer = (props: AddDrawerProps) => {
                 {getFieldDecorator('payEndDate', {
                   initialValue: infoDetail.payEndDate != null
                     ? moment(new Date(infoDetail.payEndDate))
-                    : moment(getCurrentMonthLastDay()),
+                    : moment(new Date()).add(1, 'month').add(-1, 'days'),
                   rules: [{ required: true, message: '请选择应付截止日' }],
                 })(
                   <DatePicker />
@@ -237,7 +237,7 @@ const AddDrawer = (props: AddDrawerProps) => {
                 {getFieldDecorator('beginDate', {
                   initialValue: infoDetail.beginDate != null
                     ? moment(new Date(infoDetail.beginDate))
-                    : moment(getCurrentMonthFirstDay()),
+                    : moment(new Date()),
                   rules: [{ required: true, message: '请选择账单起始日' }],
                 })(
                   <DatePicker />
@@ -248,7 +248,7 @@ const AddDrawer = (props: AddDrawerProps) => {
                 {getFieldDecorator('endDate', {
                   initialValue: infoDetail.endDate != null
                     ? moment(new Date(infoDetail.endDate))
-                    : moment(getCurrentMonthLastDay()),
+                    : moment(new Date()).add(1, 'month').add(-1, 'days'),
                   rules: [{ required: true, message: '请选择账单截止日' }],
                 })(
                   <DatePicker />
