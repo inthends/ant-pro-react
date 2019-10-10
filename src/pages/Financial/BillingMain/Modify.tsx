@@ -1,15 +1,17 @@
 //添加编辑费项
-import { Card, Divider, Button, DatePicker, Col, Select, Modal, Drawer, Form, Row, Icon, Spin, Input, InputNumber, TreeSelect, message, Table, Checkbox } from 'antd';
+import { Card, Button, DatePicker, Col, Modal, Drawer, Form, Row, Icon, Spin, Input, message, Table } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { SaveForm,GetPageDetailListJson, GetBilling, GetDataItemTreeJson, GetOrgTree, GetInfoFormJson, GetPageListWithMeterID, RemoveUnitForm, RemoveUnitFormAll, SaveMain } from './BillingMain.service';
+import {
+  SaveForm, GetPageDetailListJson, GetBilling,
+  RemoveUnitForm, RemoveUnitFormAll, SaveMain
+} from './BillingMain.service';
 import styles from './style.less';
 import moment from 'moment';
 import SelectHouse from './SelectHouse';
 const Search = Input.Search;
-const Option = Select.Option;
 const { TextArea } = Input;
 
 /*详情可编辑单元格*/
@@ -115,14 +117,14 @@ const Modify = (props: ModifyProps) => {
   const { getFieldDecorator } = form;
   // const [units,setUnits] = useState<string>([]);
   const [infoDetail, setInfoDetail] = useState<any>({});
-  const [meterKinds, setMeterKinds] = useState<any>([]);
-  const [meterTypes, setMeterTypes] = useState<any>([]);
-  const [orgTreeData, setOrgTreeData] = useState<any>({});
+  // const [feeKinds, setFeeKinds] = useState<any>([]);
+  // const [feeTypes, setFeeTypes] = useState<any>([]);
+  // const [orgTreeData, setOrgTreeData] = useState<any>({});
   const [selectHouseVisible, setSelectHouseVisible] = useState<boolean>(false);
-  const [unitMeterSearchParams, setUnitMeterSearchParams] = useState<any>({});
-  // const [unitMeterLoading, setUnitMeterLoading] = useState<boolean>(false);
-  const [unitMeterData, setUnitMeterData] = useState<any>();
-  const [unitMeterPagination, setUnitMeterPagination] = useState<DefaultPagination>(new DefaultPagination());
+  const [unitFeeSearchParams, setUnitFeeSearchParams] = useState<any>({});
+  // const [unitFeeLoading, setUnitFeeLoading] = useState<boolean>(false);
+  const [unitFeeData, setUnitFeeData] = useState<any>();
+  const [unitFeePagination, setUnitFeePagination] = useState<DefaultPagination>(new DefaultPagination());
 
   const components = {
     body: {
@@ -132,22 +134,22 @@ const Modify = (props: ModifyProps) => {
   };
 
 
-  const [isAdd, setIsAdd] = useState<boolean>(true);
+  // const [isAdd, setIsAdd] = useState<boolean>(true);
   useEffect(() => {
     if (modifyVisible) {
       form.resetFields();
       if (id != null && id != '') {
-        setIsAdd(false);
+        // setIsAdd(false);
         setLoading(true);
         GetBilling(id).then(res => {
           setInfoDetail(res);
-          initUnitMeterLoadData('');
+          initUnitFeeLoadData('');
           setLoading(false);
         });
       } else {
         form.resetFields();
         setInfoDetail({});
-        setUnitMeterData([]);
+        setUnitFeeData([]);
         setLoading(false);
       }
     }
@@ -164,24 +166,44 @@ const Modify = (props: ModifyProps) => {
     });
   }
 
-  const initUnitMeterLoadData = ( searchText) => {
-    const queryJson = {
-      billId: id == null || id == '' ? '' : id,
-      keyword: searchText,
+  const initUnitFeeLoadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
+    setUnitFeeSearchParams(search); 
+    const { current: pageIndex, pageSize, total } = paginationConfig || {
+      current: 1,
+      pageSize: unitFeePagination.pageSize,
+      total: 0,
     };
-    const sidx = 'id';
-    const sord = 'asc';
-    const { current: pageIndex, pageSize, total } = unitMeterPagination;
-    return unitMeterload({ pageIndex, pageSize, sidx, sord, total, queryJson });
+
+    // const queryJson = {
+    //   billId: id == null || id == '' ? newId : id,//新增时候处理
+    //   keyword: searchText,
+    // };
+    // const sidx = 'id';
+    // const sord = 'asc';
+
+    let searchCondition: any = {
+      pageIndex,
+      pageSize,
+      total,
+      queryJson: { keyword: search }
+    };
+
+    if (sorter) {
+      let { field, order } = sorter;
+      searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sidx = field ? field : 'id';
+    }
+    return unitFeeload(searchCondition);
+    //return unitFeeload({ pageIndex, pageSize, sidx, sord, total, queryJson });
   };
 
-  const unitMeterload = data => {
-    //setUnitMeterLoading(true);
+  const unitFeeload = data => {
+    setLoading(true);
     data.sidx = data.sidx || 'id';
     data.sord = data.sord || 'asc';
     return GetPageDetailListJson(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
-      setUnitMeterPagination(pagesetting => {
+      setUnitFeePagination(pagesetting => {
         return {
           ...pagesetting,
           current,
@@ -190,17 +212,17 @@ const Modify = (props: ModifyProps) => {
         };
       });
       //console.log(res);
-      setUnitMeterData(res.data);
-      //setUnitMeterLoading(false);
+      setUnitFeeData(res.data);
+      setLoading(false);
       return res;
     });
   };
-  const [meterDetail, setMeterDetail] = useState<any>({});
+  const [feeDetail, setFeeDetail] = useState<any>({});
   const checkEntity = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
         let guid = getGuid();
-        var meterEntity = {
+        var feeEntity = {
           keyValue: (id == null || id == '') ? guid : id,
           // BillId: id == null || id == '' ? guid : id,
           BillSource: '周期费计算',
@@ -210,10 +232,10 @@ const Modify = (props: ModifyProps) => {
           Status: 0,
           Memo: values.memo
         }
-        setMeterDetail(
-          meterEntity
+        setFeeDetail(
+          feeEntity
         );
-        //console.log(meterEntity);
+        //console.log(feeEntity);
         setSelectHouseVisible(true);
       }
     });
@@ -297,7 +319,7 @@ const Modify = (props: ModifyProps) => {
         if (val == null) {
           return '';
         } else {
-          return  moment(val).format('YYYY-MM-DD');
+          return moment(val).format('YYYY-MM-DD');
         }
       }
     }, {
@@ -354,25 +376,25 @@ const Modify = (props: ModifyProps) => {
           memo: row.memo
         };
         SaveForm(newData).then((res) => {
-          const newData = [...unitMeterData];
+          const newData = [...unitFeeData];
           const index = newData.findIndex(item => row.id === item.id);
           const item = newData[index];
           newData.splice(index, 1, {
             ...item,
             ...row,
           });
-          setUnitMeterData(newData);
+          setUnitFeeData(newData);
         });
       }
     });
   };
 
-  const [houseFeeItemId, setHouseFeeItemId] = useState<string>('');
+  // const [houseFeeItemId, setHouseFeeItemId] = useState<string>('');
   const closeSelectHouse = () => {
     setSelectHouseVisible(false);
   }
 
-  const [isFormula, setIsFormula] = useState<boolean>(false);
+  // const [isFormula, setIsFormula] = useState<boolean>(false);
   return (
     <Drawer
       title={title}
@@ -438,7 +460,7 @@ const Modify = (props: ModifyProps) => {
               <Col span={8}>
                 <Form.Item required label="审核日期"   >
                   {getFieldDecorator('verifyDate', {
-                    initialValue: infoDetail.verifyDate == null ? '' :  infoDetail.verifyDate,
+                    initialValue: infoDetail.verifyDate == null ? '' : infoDetail.verifyDate,
                   })(
                     <Input readOnly placeholder="自动获取" />
                   )}
@@ -463,26 +485,28 @@ const Modify = (props: ModifyProps) => {
                   placeholder="请输入要查询的单元编号"
                   style={{ width: 280 }}
                   onSearch={(value) => {
-                    var params = Object.assign({}, meterSearchParams, { search: value })
-                    setMeterSearchParams(params);
-                    initMeterLoadData();
+                    var params = Object.assign({}, unitFeeSearchParams, { search: value })
+                    setUnitFeeSearchParams(params);
+                    initUnitFeeLoadData('');
                   }}
                 />
-                <Button type="link" style={{ float: 'right'  }} disabled={!isEdit}
+                <Button type="link" style={{ float: 'right' }} disabled={!isEdit}
                   onClick={() => {
                     Modal.confirm({
                       title: '请确认',
                       content: `您是否确定删除？`,
                       onOk: () => {
-                        if (id != null || id != "") {
-                          RemoveUnitFormAll(id).then(res => {
-                            message.success('删除成功！');
-                            initMeterLoadData();
-                          });
-                        }/*else if(newId != null || newId != ""){
+                        const billId = id == null || id == '' ? newId : id;//新增时候处理
+                        //if (id != null || id != "") {
+                        RemoveUnitFormAll(billId).then(res => {
+                          message.success('删除成功！');
+                          initUnitFeeLoadData('');
+                        });
+                        //}
+                        /*else if(newId != null || newId != ""){
                           RemoveUnitFormAll(newId).then(res => {
                             message.success('删除成功！');
-                            initMeterLoadData();
+                            initUnitFeeLoadData();
                           });
                         }*/
                       },
@@ -492,7 +516,7 @@ const Modify = (props: ModifyProps) => {
                   <Icon type="delete" />
                   全部删除
               </Button>
-                <Button type="link" style={{ float: 'right'  }} disabled={!isEdit}
+                <Button type="link" style={{ float: 'right' }} disabled={!isEdit}
                   onClick={() => {
                     checkEntity();
                   }}
@@ -505,17 +529,17 @@ const Modify = (props: ModifyProps) => {
               <Table<any>
                 components={components}
                 onChange={(paginationConfig, filters, sorter) => {
-                    initMeterLoadData(paginationConfig, sorter)
-                  }
+                  initUnitFeeLoadData('', paginationConfig, sorter)
+                }
                 }
                 bordered={false}
                 size="middle"
                 columns={eidtColumns}
-                dataSource={unitMeterData}
-                rowKey="unitmeterid"
-                pagination={unitMeterPagination}
+                dataSource={unitFeeData}
+                rowKey="id" 
+                pagination={unitFeePagination}
                 scroll={{ y: 500, x: 1200 }}
-                loading={loading}
+                // loading={loading}
               />
             </Row>
           </Spin>
@@ -544,7 +568,7 @@ const Modify = (props: ModifyProps) => {
             form.validateFields((errors, values) => {
               if (!errors) {
                 let guid = getGuid();
-                var meterEntity = {
+                var feeEntity = {
                   keyValue: id == null || id == '' ? guid : id,
                   //BillId:'',// id == null || id == '' ? guid : id,
                   BillSource: '计算周期费',
@@ -555,7 +579,7 @@ const Modify = (props: ModifyProps) => {
                   type: 1,
                   Memo: values.memo
                 }
-                SaveMain(meterEntity).then(() => {
+                SaveMain(feeEntity).then(() => {
                   closeDrawer();
                   reload();
                 });
@@ -569,12 +593,12 @@ const Modify = (props: ModifyProps) => {
       <SelectHouse
         visible={selectHouseVisible}
         closeModal={closeSelectHouse}
-        meterDetail={meterDetail}
+        feeDetail={feeDetail}
         getBillID={(billid) => {
           setNewId(billid);
           GetBilling(billid).then(res => {
-            setInfoDetail(res); 
-            initUnitMeterLoadData();
+            setInfoDetail(res);
+            initUnitFeeLoadData('');
             setLoading(false);
           });
         }}

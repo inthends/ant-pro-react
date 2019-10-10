@@ -21,12 +21,12 @@ export function GetBilling(data): Promise<any> {
   return request.get(process.env.basePath + `/BillingMain/GetBilling?keyValue=${data}`, {}).then(getResult as any);
 }
 //删除费项明细
-export function RemoveUnitForm(data): Promise<any> {
-  return request.get(process.env.basePath + `/BillingMain/RemoveUnitForm?keyValue=${data}`, {}).then(getResult as any);
+export function RemoveUnitForm(keyValue): Promise<any> {
+  return request.post(process.env.basePath + `/BillingMain/RemoveUnitForm?keyValue=${keyValue}`, {}).then(getResult as any);
 }
 //删除全部计费明细
-export function RemoveUnitFormAll(data): Promise<any> {
-  return request.get(process.env.basePath + `/BillingMain/RemoveUnitFormAll?keyValue=${data}`, {}).then(getResult as any);
+export function RemoveUnitFormAll(keyValue): Promise<any> {
+  return request.post(process.env.basePath + `/BillingMain/RemoveUnitFormAll?keyValue=${keyValue}`, {}).then(getResult as any);
 }
 
 //保存周期费数据

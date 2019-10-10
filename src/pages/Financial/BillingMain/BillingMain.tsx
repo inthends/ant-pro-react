@@ -1,9 +1,9 @@
 //周期费计算
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { Tabs, Button, Icon, Input, Layout, Modal } from 'antd';
+import { Tabs, Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { GetPageListJson, GetPageDetailListJson, RemoveForm } from './BillingMain.service';
+import { GetPageListJson, GetPageDetailListJson } from './BillingMain.service';
 import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
 import UnitTable from './UnitTable';
@@ -15,15 +15,11 @@ const { TabPane } = Tabs;
 function BillingMain() {
   const [organize, SetOrganize] = useState<any>({});
   // const [treeSearch, SetTreeSearch] = useState<any>({});
-  const [id, setId] = useState<string>();
-
+  const [id, setId] = useState<string>(); 
   const [meterLoading, setMeterLoading] = useState<boolean>(false);
-  const [unitMeterLoading, setUnitMeterLoading] = useState<boolean>(false);
-
+  const [unitMeterLoading, setUnitMeterLoading] = useState<boolean>(false); 
   const [meterData, setMeterData] = useState<any>();
-  const [unitMeterData, setUnitMeterData] = useState<any[]>([]);
-
-
+  const [unitMeterData, setUnitMeterData] = useState<any[]>([]);  
   const [meterSearch, setMeterSearch] = useState<string>('');
   const [unitMeterSearch, setUnitMeterSearch] = useState<string>('');
 
@@ -34,7 +30,7 @@ function BillingMain() {
   const [vertifyVisible, setVerifyVisible] = useState<boolean>(false);
 
   const selectTree = (org, item, info) => {
-    console.log(org,item,info);
+    //console.log(org,item,info);
     SetOrganize(info.node.props.dataRef);
     initMeterLoadData(info.node.props.dataRef, '');
     initUnitMeterLoadData(info.node.props.dataRef, '');
@@ -85,7 +81,6 @@ function BillingMain() {
       searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
       searchCondition.sidx = field ? field : 'id';
     }
-
     return unitMeterload(searchCondition);
   }
   const meterload = data => {

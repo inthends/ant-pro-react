@@ -1,9 +1,9 @@
 //添加编辑费项
-import {   Col,    Form,  Row, Modal, message,} from 'antd';
+import { Col, Form, Row, Modal, message, } from 'antd';
 import { TreeEntity } from '@/model/models';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import {SaveUnitFee,GetReceivablesFeeItemTreeJson} from './BillingMain.service';
+import { SaveUnitFee, GetReceivablesFeeItemTreeJson } from './BillingMain.service';
 import './style.less';
 import AsynSelectTree from '../AsynSelectTree';
 import LeftTree from '../LeftTree';
@@ -11,18 +11,18 @@ import LeftTree from '../LeftTree';
 interface SelectHouseProps {
   visible: boolean;
   closeModal(): void;
-  getBillID(billid):void;
+  getBillID(billid): void;
   //getSelectTree(id):void;
   form: WrappedFormUtils;
-  meterDetail:any;
+  feeDetail: any;
 }
 
 const SelectHouse = (props: SelectHouseProps) => {
-  const { visible, closeModal,meterDetail ,getBillID} = props;
+  const { visible, closeModal, feeDetail, getBillID } = props;
   const [feeTreeData, setFeeTreeData] = useState<TreeEntity[]>([]);
   useEffect(() => {
-    if(visible){
-      GetReceivablesFeeItemTreeJson().then(res=>{
+    if (visible) {
+      GetReceivablesFeeItemTreeJson().then(res => {
         const treeList = (res || []).map(item => {
           return {
             ...item,
@@ -36,8 +36,8 @@ const SelectHouse = (props: SelectHouseProps) => {
     }
   }, [visible]);
 
-  const [unitData,setUnitData]=useState<string[]>([]);
-  const [selectedFeeId,setSelectedFeeId]=useState<string>('');
+  const [unitData, setUnitData] = useState<string[]>([]);
+  const [selectedFeeId, setSelectedFeeId] = useState<string>('');
 
   return (
     <Modal
@@ -47,19 +47,18 @@ const SelectHouse = (props: SelectHouseProps) => {
       cancelText="取消"
       onCancel={() => closeModal()}
       onOk={() => {
-        if(unitData.length==0){
+        if (unitData.length == 0) {
           message.warning('请选择房间');
-        }else{
-          if(selectedFeeId==null||selectedFeeId=='')
-          {
+        } else {
+          if (selectedFeeId == null || selectedFeeId == '') {
             message.warning('请选择费项');
-          }else{
-            var newdata=Object.assign({},meterDetail,{units:JSON.stringify(unitData),feeitemid:selectedFeeId});
-            SaveUnitFee(newdata).then(res=>{
+          } else {
+            var newdata = Object.assign({}, feeDetail, { units: JSON.stringify(unitData), feeitemid: selectedFeeId });
+            SaveUnitFee(newdata).then(res => {
               closeModal();
               message.success('数据保存成功');
-              getBillID(meterDetail.keyValue);
-            }).catch(()=>{
+              getBillID(feeDetail.keyValue);
+            }).catch(() => {
               message.warning('数据保存错误');
             });
           }
@@ -69,19 +68,18 @@ const SelectHouse = (props: SelectHouseProps) => {
       bodyStyle={{ background: '#f6f7fb' }}
       width='600px'
     >
-      <Row style={{height:'600px',overflow:'hidden' ,marginTop:'5px',backgroundColor:'rgb(255,255,255)'}}>
-        <Col span={12} style={{height:'600px',overflow:'auto'}}>
+      <Row style={{ height: '600px', overflow: 'hidden', marginTop: '5px', backgroundColor: 'rgb(255,255,255)' }}>
+        <Col span={12} style={{ height: '600px', overflow: 'auto' }}>
           <AsynSelectTree
             parentid='0'
-            getCheckedKeys={(keys)=>{
+            getCheckedKeys={(keys) => {
               setUnitData(keys);
             }}
-            selectTree={(id, type,info?) => {
-
+            selectTree={(id, type, info?) => { 
             }}
           />
         </Col>
-        <Col span={12} style={{height:'600px',overflow:'auto'}}>
+        <Col span={12} style={{ height: '600px', overflow: 'auto' }}>
           <LeftTree
             treeData={feeTreeData}
             selectTree={(id, item) => {
