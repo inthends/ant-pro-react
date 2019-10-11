@@ -107,10 +107,11 @@ interface ModifyProps {
   organizeId?: string;
   isEdit: boolean;
   reload(): void;
+  treeData: any[];
 };
 
 const Modify = (props: ModifyProps) => {
-  const { modifyVisible, closeDrawer, form, id, reload, isEdit } = props;
+  const { modifyVisible, closeDrawer, form, id, reload, isEdit,treeData } = props;
   const title = id == undefined ? '新增计费单' : '修改计费单';
   const [newId, setNewId] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -132,7 +133,6 @@ const Modify = (props: ModifyProps) => {
       cell: EditableCell,
     },
   };
-
 
   // const [isAdd, setIsAdd] = useState<boolean>(true);
   useEffect(() => {
@@ -167,7 +167,7 @@ const Modify = (props: ModifyProps) => {
   }
 
   const initUnitFeeLoadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
-    setUnitFeeSearchParams(search); 
+    setUnitFeeSearchParams(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: unitFeePagination.pageSize,
@@ -185,10 +185,10 @@ const Modify = (props: ModifyProps) => {
       pageIndex,
       pageSize,
       total,
-      queryJson: { 
+      queryJson: {
         billId: id == null || id == '' ? newId : id,//新增时候处理
         keyword: search
-       }
+      }
     };
 
     if (sorter) {
@@ -200,7 +200,7 @@ const Modify = (props: ModifyProps) => {
     //return unitFeeload({ pageIndex, pageSize, sidx, sord, total, queryJson });
   };
 
-  const unitFeeload = data => { 
+  const unitFeeload = data => {
     setLoading(true);
     data.sidx = data.sidx || 'id';
     data.sord = data.sord || 'asc';
@@ -221,6 +221,7 @@ const Modify = (props: ModifyProps) => {
     });
   };
   const [feeDetail, setFeeDetail] = useState<any>({});
+  //添加费项房屋
   const checkEntity = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
@@ -234,10 +235,14 @@ const Modify = (props: ModifyProps) => {
           IfVerify: values.ifVerify == "未审核" ? false : true,
           Status: 0,
           Memo: values.memo
-        }
+        };
+
+        //设置新id
+        setNewId(feeEntity.keyValue); 
         setFeeDetail(
           feeEntity
         );
+        
         //console.log(feeEntity);
         setSelectHouseVisible(true);
       }
@@ -505,6 +510,7 @@ const Modify = (props: ModifyProps) => {
                           message.success('删除成功！');
                           initUnitFeeLoadData('');
                         });
+
                         //}
                         /*else if(newId != null || newId != ""){
                           RemoveUnitFormAll(newId).then(res => {
@@ -539,10 +545,10 @@ const Modify = (props: ModifyProps) => {
                 size="middle"
                 columns={eidtColumns}
                 dataSource={unitFeeData}
-                rowKey="id" 
+                rowKey="id"
                 pagination={unitFeePagination}
                 scroll={{ y: 500, x: 1200 }}
-                // loading={loading}
+              // loading={loading}
               />
             </Row>
           </Spin>
@@ -597,6 +603,7 @@ const Modify = (props: ModifyProps) => {
         visible={selectHouseVisible}
         closeModal={closeSelectHouse}
         feeDetail={feeDetail}
+        treeData={treeData}
         getBillID={(billid) => {
           setNewId(billid);
           GetBilling(billid).then(res => {

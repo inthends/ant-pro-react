@@ -6,8 +6,7 @@ import { Tabs, Button, Icon, Input, Layout, Select } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useContext, useEffect, useState } from 'react';
 import { GetFeeTreeList, GetPageListJson, GetUnitFeeItemData, GetAllFeeItems } from './Main.service';
-//获取全部房间树
-import { GetUnitTreeAll } from '@/services/commonItem';
+import { GetUnitTreeAll } from '@/services/commonItem';//获取全部房间树
 import LeftTree from '../LeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
@@ -35,7 +34,7 @@ function Main() {
   const [housePagination, setHousePagination] = useState<PaginationConfig>(new DefaultPagination());
   const [houseData, setHouseData] = useState<any[]>([]);
   const [feeitems, setFeeitems] = useState<any[]>([]);
-  const { hideSider, setHideSider } = useContext(SiderContext);
+  const {hideSider, setHideSider } = useContext(SiderContext);
   const [selectedTreeNode, setSelectTreeNode] = useState<any>({});
   const [isInit, setIsInit] = useState<boolean>(false);
   const [unitTreeData, setUnitTreeData] = useState<any[]>([]);
@@ -95,7 +94,7 @@ function Main() {
       .then((res: any[]) => {
         setUnitTreeData(res || []);
         return res || [];
-      });
+    });
 
     initLoadData('', '', '');
     initHouseLoadData('', '', '');

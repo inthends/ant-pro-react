@@ -40,8 +40,7 @@ const BillCheckModify = (props: BillCheckModifyProps) => {
         //     parentId: item.parentId,
         //   };
         // });
-        setFeeTreeData(res || []);
-
+        setFeeTreeData(res || []); 
       }).then(() => {
         return GetTemplates();
       }).then(res => {

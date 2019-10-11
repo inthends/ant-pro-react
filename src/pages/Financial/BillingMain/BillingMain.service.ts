@@ -1,4 +1,4 @@
-import { ResponseObject, TreeEntity } from '@/model/models';
+import { TreeEntity } from '@/model/models';
 import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
 
@@ -13,9 +13,14 @@ export function GetPageDetailListJson(data): Promise<any> {
 }
 
 //获取所有收费列表
-export function GetReceivablesFeeItemTreeJson(): Promise<ResponseObject<TreeEntity[]>> {
+// export function GetReceivablesFeeItemTreeJson(): Promise<ResponseObject<TreeEntity[]>> {
+//   return request.get(process.env.basePath + `/FeeItems/GetReceivablesFeeItemTreeJson`, {}).then(getResult as any);
+// }
+
+export function GetReceivablesFeeItemTreeJson(): Promise<TreeEntity[]> {
   return request.get(process.env.basePath + `/FeeItems/GetReceivablesFeeItemTreeJson`, {}).then(getResult as any);
 }
+
 //表单明细
 export function GetBilling(data): Promise<any> {
   return request.get(process.env.basePath + `/BillingMain/GetBilling?keyValue=${data}`, {}).then(getResult as any);

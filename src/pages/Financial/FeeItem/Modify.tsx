@@ -66,8 +66,7 @@ const Modify = (props: ModifyProps) => {
         setInfoDetail(newInfo);
         form.setFieldsValue({ feeType: selectTreeItem.feeType });
 
-      } else {
-
+      } else { 
       }
     });
   };
@@ -87,7 +86,7 @@ const Modify = (props: ModifyProps) => {
         });
         if (id !== undefined) {
           initHouseLoadData('');
-          initOrgLoadData();
+          initOrgLoadData('');
         }
       } else {
         //重置之前选择加载的费项类别
@@ -224,12 +223,12 @@ const Modify = (props: ModifyProps) => {
   };
 
   const [orgData, setOrgData] = useState<any[]>([]);
-  // const [orgSearch,setOrgSearch]=useState<string>();
+  const [orgSearch,setOrgSearch]=useState<string>();
   const [orgLoading, setOrgLoading] = useState<boolean>(false);
   const [orgPagination, setOrgPagination] = useState<PaginationConfig>(new DefaultPagination());
 
-  const orgLoadData = (paginationConfig?: PaginationConfig, sorter?) => {
-    //setOrgSearch(search);
+  const orgLoadData = (search,paginationConfig?: PaginationConfig, sorter?) => {
+    setOrgSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: orgPagination.pageSize,
@@ -239,7 +238,7 @@ const Modify = (props: ModifyProps) => {
       pageIndex,
       pageSize,
       total,
-      queryJson: { FeeItemID: id },
+      queryJson: { keyword: search, FeeItemID: id },
     };
 
     if (sorter) {
@@ -274,8 +273,8 @@ const Modify = (props: ModifyProps) => {
     });
   };
 
-  const initOrgLoadData = () => {
-    //setOrgSearch(search);
+  const initOrgLoadData = (search) => {
+    setOrgSearch(search);
     const queryJson = { FeeItemID: id };
     const sidx = 'allName';
     const sord = 'asc';
@@ -345,7 +344,7 @@ const Modify = (props: ModifyProps) => {
                   OrganizeRemoveForm(record.id)
                     .then(() => {
                       message.success('删除成功');
-                      initOrgLoadData();
+                      initOrgLoadData('');
                     })
                     .catch(e => {
                       message.error('删除失败');
@@ -459,7 +458,7 @@ const Modify = (props: ModifyProps) => {
       },
     },
   ] as ColumnProps<any>[];
- 
+
   const [showFeeField, setShowFeeField] = useState<boolean>(false);
   const [accFixedDisabled, setAccFixedDisabled] = useState<boolean>(true);
   const [payFixedDisabled, setPayFixedDisabled] = useState<boolean>(true);
@@ -543,7 +542,7 @@ const Modify = (props: ModifyProps) => {
   const [selectedHouseRowKeys, setSelectedHouseRowKeys] = useState<string[]>([]);
   //费项房屋选择
   const houseRowSelection = {
-    onChange: (selectedRowKeys, selectedRows) => { 
+    onChange: (selectedRowKeys, selectedRows) => {
       let str: any[]; str = [];
       for (var i = 0; i < selectedRowKeys.length; i++) {
         str.push(selectedRowKeys[i] + '');
@@ -635,7 +634,7 @@ const Modify = (props: ModifyProps) => {
                     {getFieldDecorator('feePrice', {
                       initialValue: infoDetail.feePrice,
                       rules: [{ required: true, message: '请输入单价' }],
-                    })(<Input placeholder="请输入单价" />)}
+                    })(<InputNumber placeholder="请输入单价" style={{ width: '100%' }} />)}
                   </Form.Item>
                 </Col>
               </Row>
@@ -665,7 +664,6 @@ const Modify = (props: ModifyProps) => {
                       setInfoDetail(info);
                     }}>减免费项</Checkbox>
                   </Form.Item> */}
-
 
                   <Form.Item  >
                     {getFieldDecorator('isNullDate', {
@@ -898,7 +896,7 @@ const Modify = (props: ModifyProps) => {
           </TabPane>
           {
             id == null ? null : <TabPane tab="高级" key="2">
-              <Card title="小数精度" className={styles.card}  >
+              <Card title="小数精度" className={styles.card2}  >
                 {/* <Row gutter={24}>
                   <Col lg={12}>
                     <Form.Item label="中间每一步计算结果保留">
@@ -989,7 +987,7 @@ const Modify = (props: ModifyProps) => {
 
 
               </Card>
-              <Card title="账单日设置" className={styles.card} >
+              <Card title="账单日设置" className={styles.card2} >
                 <Row gutter={8}>
                   <Col span={6}>
                     <Form.Item label="应收期间 距">
@@ -1288,7 +1286,7 @@ const Modify = (props: ModifyProps) => {
                   </Col>
                 </Row>
               </Card>
-              <Card title="其他">
+              <Card title="其他" className={styles.card}>
                 <Row gutter={24}>
                   <Col span={6}  >
                     <Form.Item label='&nbsp;'>
@@ -1375,16 +1373,23 @@ const Modify = (props: ModifyProps) => {
           }
           {
             id ?
-              <TabPane tab="所属机构" key="3">
-                <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
-                  <Button type="link" style={{ float: 'right', marginLeft: '10px' }}
+              <TabPane tab="所属机构" key="3" style={{ marginBottom: '20px' }}>
+                <div style={{ marginBottom: '5px', padding: '3px 2px' }}>
+                <Input.Search
+                    key='orgsearch'
+                    className="search-input"
+                    placeholder="请输入要查询的机构名称"
+                    style={{ width: 200 }}
+                    onSearch={value => orgLoadData(value)}
+                  />
+                  <Button type="link" style={{ float: 'right' }}
                     onClick={() => { setSelectOrgVisible(true) }}
                   >
                     <Icon type="plus" />
                     新增
                 </Button>
                   {/* <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
-                  onClick={() => {  }}
+                  onClick={() => {}}
                 >
                   <Icon type="plus" />
                   刷新
@@ -1399,9 +1404,9 @@ const Modify = (props: ModifyProps) => {
                   columns={orgcolumns}
                   rowKey={record => record.allName}
                   pagination={orgPagination}
-                  scroll={{ y: 420 }}
+                  // scroll={{ y: 330 }}
                   onChange={(pagination: PaginationConfig, filters, sorter) =>
-                    orgLoadData(pagination, sorter)
+                    orgLoadData(orgSearch,pagination, sorter)
                   }
                   loading={orgLoading}
                 />
@@ -1409,8 +1414,8 @@ const Modify = (props: ModifyProps) => {
           }
           {
             id ?
-              <TabPane tab="设置房屋费项" key="4">
-                <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
+              <TabPane tab="设置房屋费项" key="4" style={{ marginBottom: '20px' }}>
+                <div style={{ marginBottom: '5px', padding: '3px 2px' }}>
                   <Input.Search
                     key='search'
                     className="search-input"
@@ -1498,13 +1503,15 @@ const Modify = (props: ModifyProps) => {
         visible={selectOrgVisible}
         closeModal={closeOrgVisible}
         feeId={id}
-        reload={initOrgLoadData}
+        // reload={initOrgLoadData}
+        reload={() => initOrgLoadData(orgSearch)}
       />
       <EditOrginize
         visible={editOrgVisible}
         closeModal={closeEditOrgVisible}
         orgItemId={orgItemId}
-        reload={initOrgLoadData}
+        // reload={initOrgLoadData}
+        reload={() => initOrgLoadData(orgSearch)}
       />
       <AddHouseFee
         treeData={treeData}

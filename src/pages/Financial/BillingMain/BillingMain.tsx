@@ -4,6 +4,8 @@ import { Tabs, Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import { GetPageListJson, GetPageDetailListJson } from './BillingMain.service';
+import { GetUnitTreeAll } from '@/services/commonItem';//获取全部房间树
+import { getResult } from '@/utils/networkUtils';
 import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
 import UnitTable from './UnitTable';
@@ -15,19 +17,18 @@ const { TabPane } = Tabs;
 function BillingMain() {
   const [organize, SetOrganize] = useState<any>({});
   // const [treeSearch, SetTreeSearch] = useState<any>({});
-  const [id, setId] = useState<string>(); 
+  const [id, setId] = useState<string>();
   const [meterLoading, setMeterLoading] = useState<boolean>(false);
-  const [unitMeterLoading, setUnitMeterLoading] = useState<boolean>(false); 
+  const [unitMeterLoading, setUnitMeterLoading] = useState<boolean>(false);
   const [meterData, setMeterData] = useState<any>();
-  const [unitMeterData, setUnitMeterData] = useState<any[]>([]);  
+  const [unitMeterData, setUnitMeterData] = useState<any[]>([]);
   const [meterSearch, setMeterSearch] = useState<string>('');
   const [unitMeterSearch, setUnitMeterSearch] = useState<string>('');
-
   const [meterPagination, setMeterPagination] = useState<DefaultPagination>(new DefaultPagination());
   const [unitMeterPagination, setUnitMeterPagination] = useState<DefaultPagination>(new DefaultPagination());
-
   const [ifVerify, setIfVerify] = useState<boolean>(false);
   const [vertifyVisible, setVerifyVisible] = useState<boolean>(false);
+  const [unitTreeData, setUnitTreeData] = useState<any[]>([]);
 
   const selectTree = (org, item, info) => {
     //console.log(org,item,info);
@@ -37,6 +38,13 @@ function BillingMain() {
   };
 
   useEffect(() => {
+    //获取房产树
+    GetUnitTreeAll()
+      .then(getResult)
+      .then((res: any[]) => {
+        setUnitTreeData(res || []);
+        return res || [];
+      });
     initMeterLoadData('', '');
     initUnitMeterLoadData('', '');
   }, []);
@@ -321,6 +329,7 @@ function BillingMain() {
         id={id}
         isEdit={isEdit}
         reload={() => initMeterLoadData('', '')}
+        treeData={unitTreeData}
       />
       <Verify
         vertifyVisible={vertifyVisible}

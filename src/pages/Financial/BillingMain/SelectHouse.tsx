@@ -5,7 +5,7 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { SaveUnitFee, GetReceivablesFeeItemTreeJson } from './BillingMain.service';
 import './style.less';
-import AsynSelectTree from '../AsynSelectTree';
+import SelectTree from '../SelectTree';
 import LeftTree from '../LeftTree';
 
 interface SelectHouseProps {
@@ -15,23 +15,24 @@ interface SelectHouseProps {
   //getSelectTree(id):void;
   form: WrappedFormUtils;
   feeDetail: any;
+  treeData: any[];
 }
 
 const SelectHouse = (props: SelectHouseProps) => {
-  const { visible, closeModal, feeDetail, getBillID } = props;
+  const { visible, closeModal, feeDetail, getBillID,treeData } = props;
   const [feeTreeData, setFeeTreeData] = useState<TreeEntity[]>([]);
   useEffect(() => {
     if (visible) {
-      GetReceivablesFeeItemTreeJson().then(res => {
-        const treeList = (res || []).map(item => {
-          return {
-            ...item,
-            id: item.key,
-            text: item.text,
-            parentId: item.parentId,
-          };
-        });
-        setFeeTreeData(treeList);
+      GetReceivablesFeeItemTreeJson().then((res) => { 
+        // const treeList = (res || []).map(item => {
+        //   return {
+        //     ...item,
+        //     id: item.key,
+        //     text: item.text,
+        //     parentId: item.parentId,
+        //   };
+        // });
+        setFeeTreeData(res);
       });
     }
   }, [visible]);
@@ -70,12 +71,12 @@ const SelectHouse = (props: SelectHouseProps) => {
     >
       <Row style={{ height: '600px', overflow: 'hidden', marginTop: '5px', backgroundColor: 'rgb(255,255,255)' }}>
         <Col span={12} style={{ height: '600px', overflow: 'auto' }}>
-          <AsynSelectTree
-            parentid='0'
+          <SelectTree
+            treeData={treeData}
             getCheckedKeys={(keys) => {
               setUnitData(keys);
             }}
-            selectTree={(id, type, info?) => { 
+            selectTree={(id, type, info?) => {
             }}
           />
         </Col>
