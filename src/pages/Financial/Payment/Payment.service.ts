@@ -55,15 +55,15 @@ export function Pay(data): Promise<any> {
   return request.post(process.env.basePath + `/Payment/Pay`, {data:objToFormdata(data)}).then(getResult as any);
 }
 //获取房间住户
-export function GetRoomUsers(data): Promise<ResponseObject<any[]>> {
+export function GetRoomUsers(data): Promise< any[]> {
   return request.get(process.env.basePath + `/Common/GetRoomUsers?roomid=${data}`, {}).then(getResult as any);;
 }
 //获取关联的房间
-export function GetUserRooms(data): Promise<ResponseObject<any[]>> {
+export function GetUserRooms(data): Promise< any[]> {
   return request.get(process.env.basePath + `/Common/GetUserRooms?customerid=${data}`, {}).then(getResult as any);;
 }
 //
-export function GetFeeItemDetail(feeitemid,roomid): Promise<ResponseObject<any>> {
+export function GetFeeItemDetail(feeitemid,roomid): Promise< any > {
   return request.get(process.env.basePath + `/Common/GetFeeItemDetail?feeitemid=${feeitemid}&roomid=${roomid}`, {}).then(getResult as any);;
 }
 

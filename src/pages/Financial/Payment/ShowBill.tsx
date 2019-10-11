@@ -1,12 +1,12 @@
-//添加编辑费项
-import { Card, Button, Col, DatePicker, Drawer, Form, Row, Spin, Input, Table} from 'antd';
+//查看付款单
+import { Card, Button, Col, DatePicker, Drawer, Form, Row, Spin, Input, Table } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import {GetEntity, PaymentFeeDetail } from './Payment.service';
+import { GetEntity, PaymentFeeDetail } from './Payment.service';
 import './style.less';
-import  moment from 'moment';
+import moment from 'moment';
 
 const { TextArea } = Input;
 
@@ -16,11 +16,11 @@ interface ShowBillProps {
   form: WrappedFormUtils;
   id?: string;
   organizeId?: string;
-  reload(): void;
+  // reload(): void;
 }
 
 const ShowBill = (props: ShowBillProps) => {
-  const { visible, closeDrawer, form, id, reload } = props;
+  const { visible, closeDrawer, form, id } = props;
   const title = '查看付款单';
   const [loading, setLoading] = useState<boolean>(false);
   const { getFieldDecorator } = form;
@@ -32,12 +32,12 @@ const ShowBill = (props: ShowBillProps) => {
     if (visible) {
       form.resetFields();
       if (id) {
-        GetEntity(id).then(res=>{
+        GetEntity(id).then(res => {
           setInfoDetail(res);
           setLoading(false);
-        }).then(()=>{
+        }).then(() => {
           initPaymentFeeDetail();
-        }).catch(()=>{
+        }).catch(() => {
           setLoading(false);
         });
       } else {
@@ -64,7 +64,7 @@ const ShowBill = (props: ShowBillProps) => {
       pageIndex,
       pageSize,
       total,
-      queryJson: {billid:id }
+      queryJson: { billid: id }
     };
 
     if (sorter) {
@@ -82,7 +82,7 @@ const ShowBill = (props: ShowBillProps) => {
     setLoading(true);
     data.sidx = data.sidx || 'billid';
     data.sord = data.sord || 'asc';
-    return PaymentFeeDetail (data).then(res => {
+    return PaymentFeeDetail(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
         return {
@@ -95,7 +95,7 @@ const ShowBill = (props: ShowBillProps) => {
       setData(res.data);
       setLoading(false);
       return res;
-    }).catch(()=>{
+    }).catch(() => {
       setLoading(false);
     });
   };
@@ -118,11 +118,11 @@ const ShowBill = (props: ShowBillProps) => {
       dataIndex: 'period',
       key: 'period',
       width: 150,
-      render: val =>{
-        if(val==null){
-          return <span></span>
-        }else{
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
+      render: val => {
+        if (val == null) {
+          return ''
+        } else {
+          return moment(val).format('YYYY-MM-DD');
         }
       }
     },
@@ -155,11 +155,11 @@ const ShowBill = (props: ShowBillProps) => {
       dataIndex: 'beginDate',
       key: 'beginDate',
       width: 80,
-      render: val =>{
-        if(val==null){
-          return <span></span>
-        }else{
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
+      render: val => {
+        if (val == null) {
+          return ''
+        } else {
+          return moment(val).format('YYYY-MM-DD');
         }
       }
     },
@@ -168,11 +168,11 @@ const ShowBill = (props: ShowBillProps) => {
       dataIndex: 'endDate',
       key: 'endDate',
       width: 80,
-      render: val =>{
-        if(val==null){
-          return <span></span>
-        }else{
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
+      render: val => {
+        if (val == null) {
+          return ''
+        } else {
+          return moment(val).format('YYYY-MM-DD');
         }
       }
     },
@@ -188,7 +188,7 @@ const ShowBill = (props: ShowBillProps) => {
     <Drawer
       title={title}
       placement="right"
-      width={800}
+      width={700}
       onClose={close}
       visible={visible}
       style={{ height: 'calc(100vh-50px)' }}
@@ -210,9 +210,9 @@ const ShowBill = (props: ShowBillProps) => {
               <Col span={8}>
                 <Form.Item required label="付款日期"  >
                   {getFieldDecorator('billDate', {
-                    initialValue: infoDetail.endDate?moment(infoDetail.billDate):moment(new Date())
+                    initialValue: infoDetail.endDate ? moment(infoDetail.billDate) : moment(new Date())
                   })(
-                    <DatePicker  disabled={true} style={{width:'100%'}}/>
+                    <DatePicker disabled={true} style={{ width: '100%' }} />
                   )}
                 </Form.Item>
               </Col>
@@ -221,7 +221,7 @@ const ShowBill = (props: ShowBillProps) => {
                   {getFieldDecorator('createUserName', {
                     initialValue: infoDetail.createUserName
                   })(
-                    <Input disabled={true}/>
+                    <Input disabled={true} />
                   )}
                 </Form.Item>
               </Col>
@@ -232,7 +232,7 @@ const ShowBill = (props: ShowBillProps) => {
                   {getFieldDecorator('payAmount', {
                     initialValue: infoDetail.payAmount
                   })(
-                    <Input disabled={true}/>
+                    <Input disabled={true} />
                   )}
                 </Form.Item>
               </Col>
@@ -241,7 +241,7 @@ const ShowBill = (props: ShowBillProps) => {
                   {getFieldDecorator('payType', {
                     initialValue: infoDetail.payType
                   })(
-                    <Input disabled={true}/>
+                    <Input disabled={true} />
                   )}
                 </Form.Item>
               </Col>
@@ -250,7 +250,7 @@ const ShowBill = (props: ShowBillProps) => {
                   {getFieldDecorator('verifyPerson', {
                     initialValue: infoDetail.verifyPerson
                   })(
-                    <Input  disabled={true}/>
+                    <Input disabled={true} />
                   )}
                 </Form.Item>
               </Col>
@@ -261,7 +261,7 @@ const ShowBill = (props: ShowBillProps) => {
                   {getFieldDecorator('memo', {
                     initialValue: infoDetail.memo
                   })(
-                    <TextArea  disabled={true} rows={3} />
+                    <TextArea disabled={true} rows={3} />
                   )}
                 </Form.Item>
               </Col>
@@ -277,7 +277,7 @@ const ShowBill = (props: ShowBillProps) => {
                 scroll={{ y: 500, x: 800 }}
                 loading={loading}
                 onChange={(pagination: PaginationConfig, filters, sorter) =>
-                  initPaymentFeeDetail(pagination,  sorter)
+                  initPaymentFeeDetail(pagination, sorter)
                 }
               />
             </Row>

@@ -2,7 +2,7 @@
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { Tabs, Button, Icon, Input, Layout, Select, message, DatePicker } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NotPaymentFeeData, ChargeFeePageData } from './Payment.service';
 import AsynLeftTree from '../AsynLeftTree';
 import NotPaymentTable from './NotPaymentTable';
@@ -19,8 +19,8 @@ function Payment() {
   // const [treeSearch, SetTreeSearch] = useState<any>({});
   const [id, setId] = useState<string>();
 
-  const [paymentLoading, setPaymentLoading] = useState<boolean>(false);
   const [notPaymentLoading, setNotPaymentLoading] = useState<boolean>(false);
+  const [paymentLoading, setPaymentLoading] = useState<boolean>(false);
 
   const [paymentData, setPaymentData] = useState<any>();
   const [notPaymentData, setNotPaymentData] = useState<any[]>([]);
@@ -34,11 +34,12 @@ function Payment() {
   const [addBtnDisable, setAddBtnDisable] = useState<boolean>(true);
 
   const selectTree = (org, item, info) => {
-    console.log(info.node.props)
+    //console.log(info.node.props)
+
     SetOrganize(info.node.props);
     if (item == 5) {
-      initPaymentLoadData({ id: org, type: item }, '');
       initNotPaymentLoadData({ id: org, type: item }, '');
+      initPaymentLoadData({ id: org, type: item }, '');
       setAddBtnDisable(false);
     } else {
       setAddBtnDisable(true);
@@ -46,10 +47,9 @@ function Payment() {
   };
 
   useEffect(() => {
-    //initPaymentLoadData('','');
-    //initNotPaymentLoadData('','');
+    initPaymentLoadData('', '');
+    // initNotPaymentLoadData('','');
   }, []);
-
 
   const loadPaymentData = (paginationConfig?: PaginationConfig, sorter?) => {
     const { current: pageIndex, pageSize, total } = paginationConfig || {
@@ -123,7 +123,7 @@ function Payment() {
     });
   };
   const notPaymentload = data => {
-    setPaymentLoading(true);
+    setNotPaymentLoading(true);
     data.sidx = data.sidx || 'id';
     data.sord = data.sord || 'asc';
     return NotPaymentFeeData(data).then(res => {
@@ -152,7 +152,6 @@ function Payment() {
       keyword: searchText,
       UnitId: organize.id == null ? "" : organize.id,
       Status: paymentStatus, StartDate: paymentStartDate, EndDate: paymentEndDate
-
     };
     const sidx = 'id';
     const sord = 'asc';
@@ -227,7 +226,7 @@ function Payment() {
   const [paymentStatus, setPaymentStatus] = useState<string>('');
   const [paymentStartDate, setPaymentStartDate] = useState<string>('');
   const [paymentEndDate, setPaymentEndDate] = useState<string>('');
-  const [billStatus,setBillStatus]=useState<number>(-1);
+  const [billStatus, setBillStatus] = useState<number>(-1);
   return (
     <Layout>
       <AsynLeftTree
@@ -284,7 +283,8 @@ function Payment() {
                 查询
               </Button>
               <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
-                onClick={() => { showModify(null, true) }} disabled={addBtnDisable}
+                onClick={() => { showModify(null, true) }}
+                disabled={addBtnDisable}
               >
                 <Icon type="plus" />
                 加费
@@ -308,7 +308,6 @@ function Payment() {
               reload={() => initNotPaymentLoadData({ id: organize.code, type: organize.type }, paymentSearchParams.search)}
               rowSelect={(record) => {
                 setId(record.billId);
-
               }}
               organize={organize}
             />
@@ -323,17 +322,21 @@ function Payment() {
                 <Select.Option value="1">未审核</Select.Option>
                 <Select.Option value="-1">已作废</Select.Option>
               </Select>
-              <DatePicker style={{marginRight:'5px'}} onChange={(date, dateStr) => {
-                setPaymentStartDate(dateStr);
-              }} />
+              <DatePicker style={{ marginRight: '5px' }}
+                placeholder='请选择付款日期'
+                onChange={(date, dateStr) => {
+                  setPaymentStartDate(dateStr);
+                }} />
               至：
-              <DatePicker style={{marginRight:'5px'}}  onChange={(date, dateStr) => {
-                setPaymentEndDate(dateStr);
-              }} />
+              <DatePicker style={{ marginRight: '5px' }}
+                placeholder='请选择付款日期'
+                onChange={(date, dateStr) => {
+                  setPaymentEndDate(dateStr);
+                }} />
               <Search
                 className="search-input"
-                placeholder="请输入要查询的名称或者单元编号"
-                style={{ width: 280 }}
+                placeholder="请输入付款单号"
+                style={{ width: 200 }}
                 onSearch={value => {
                   setPaymentSearchParams(Object.assign({}, paymentSearchParams, { search: value }));
                   loadPaymentData();
@@ -346,7 +349,7 @@ function Payment() {
                   } else {
                     showVerify(id, false);
                   }
-                }} disabled={billStatus==1 ? false : true}
+                }} disabled={billStatus == 1 ? false : true}
               >
                 <Icon type="minus-square" />
                 取消审核
@@ -359,7 +362,7 @@ function Payment() {
                     showVerify(id, true);
                   }
                 }}
-                disabled={billStatus==0 ? false : true}
+                disabled={billStatus == 0 ? false : true}
               >
                 <Icon type="check-square" />
                 审核

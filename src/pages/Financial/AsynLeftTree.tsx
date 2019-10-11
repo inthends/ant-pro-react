@@ -85,7 +85,7 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
           setTreeData([...treeData]);
         });
         resolve();
-      }, 500);
+      }, 100);
     });
 
   // const renderTree = (tree: any[], parentId: string) => {

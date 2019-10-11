@@ -1,7 +1,6 @@
 //应付列表
-//未收列表
 import Page from '@/components/Common/Page';
-import { Menu, Dropdown, Icon, Divider, InputNumber, Input, Select, Col, Row, Form, DatePicker, Card, Button, message, Table, Modal } from 'antd';
+import { Divider, InputNumber, Input, Select, Col, Row, Form, DatePicker, Card, Button, message, Table, Modal } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState } from 'react';
 import moment from 'moment';
@@ -15,7 +14,7 @@ interface NotPaymentTableProps {
   loading: boolean;
   pagination: PaginationConfig;
   data: any[];
-  modify(id: string,isEdit?:boolean): void;
+  modify(id: string, isEdit: boolean): void;
   reload(): void;
   form: WrappedFormUtils;
   rowSelect(rowSelectedKeys): void;
@@ -44,95 +43,94 @@ function NotPaymentTable(props: NotPaymentTableProps) {
     });
   };
 
-  const editAndDelete = (key: string, currentItem: any) => {
-    if (key === 'edit') {
-      //this.showEditModal(currentItem);
-    }
-    else if (key === 'delete') {
-      Modal.confirm({
-        title: '删除任务',
-        content: '确定删除该任务吗？',
-        okText: '确认',
-        cancelText: '取消',
-        //onOk: () => this.deleteItem(currentItem.id),
-      });
-    }
-  };
+  // const editAndDelete = (key: string, currentItem: any) => {
+  //   if (key === 'edit') {
+  //     //this.showEditModal(currentItem);
+  //   }
+  //   else if (key === 'delete') {
+  //     Modal.confirm({
+  //       title: '删除任务',
+  //       content: '确定删除该任务吗？',
+  //       okText: '确认',
+  //       cancelText: '取消',
+  //       //onOk: () => this.deleteItem(currentItem.id),
+  //     });
+  //   }
+  // };
 
-  const MoreBtn: React.FC<{
-    item: any;
-  }> = ({ item }) => (
-    <Dropdown
-      overlay={
-        <Menu onClick={({ key }) => editAndDelete(key, item)}>
-          <Menu.Item key="view">查看</Menu.Item>
-          <Menu.Item key="split">拆费</Menu.Item>
-          <Menu.Item key="change">转费</Menu.Item>
-        </Menu>}>
-      <a>
-        更多 <Icon type="down" />
-      </a>
-    </Dropdown>
-  );
+  // const MoreBtn: React.FC<{
+  //   item: any;
+  // }> = ({ item }) => (
+  //   <Dropdown
+  //     overlay={
+  //       <Menu onClick={({ key }) => editAndDelete(key, item)}>
+  //         <Menu.Item key="view">查看</Menu.Item>
+  //         <Menu.Item key="split">拆费</Menu.Item>
+  //         <Menu.Item key="change">转费</Menu.Item>
+  //       </Menu>}>
+  //     <a>
+  //       更多 <Icon type="down" />
+  //     </a>
+  //   </Dropdown>
+  // );
 
   const columns = [
     {
-      title: '应付项目',
+      title: '应付费项',
       dataIndex: 'feeName',
       key: 'feeName',
-      width: 140,
+      width: 120,
       sorter: true,
     },
     {
       title: '应付金额',
       dataIndex: 'amount',
       key: 'amount',
-      width: 80,
+      width: 100,
       sorter: true,
     },
     {
       title: '冲抵金额',
       dataIndex: 'offsetAmount',
       key: 'offsetAmount',
-      width: 80,
+      width: 100,
       sorter: true,
     },
     {
       title: '未付金额',
       dataIndex: 'lastAmount',
       key: 'lastAmount',
-      width: 80,
+      width: 100,
       sorter: true,
     },
     {
       title: '应付日期',
       dataIndex: 'period',
       key: 'period',
-      width: 85,
+      width: 100,
       render: val => moment(val).format('YYYY-MM-DD')
     },
     {
       title: '计费起始日期',
       dataIndex: 'beginDate',
       key: 'beginDate',
-      width: 85,
+      width: 100,
       render: val => moment(val).format('YYYY-MM-DD')
     }, {
       title: '计费终止日期',
       dataIndex: 'endDate',
       key: 'endDate',
-      width: 85,
+      width: 100,
       render: val => moment(val).format('YYYY-MM-DD')
     }, {
       title: '费用来源',
       dataIndex: 'billSource',
       key: 'billSource',
       width: 85
-    },{
+    }, {
       title: '备注',
       dataIndex: 'memo',
-      key: 'memo',
-      width: 200
+      key: 'memo'
     },
     {
       title: '操作',
@@ -140,24 +138,24 @@ function NotPaymentTable(props: NotPaymentTableProps) {
       key: 'operation',
       fixed: 'right',
       align: 'center',
-      width: 150,
+      width: 120,
       render: (text, record) => {
         return [
           <span>
-            <a onClick={() => modify(record.billId)} key="modify">修改</a>
+            <a onClick={() => modify(record.billId, true)} key="modify">修改</a>
             <Divider type="vertical" />
             <a onClick={() => doDelete(record)} key="delete">删除</a>
-           {/* <Divider type="vertical" />
+            {/* <Divider type="vertical" />
             <MoreBtn key="more" item={record} />*/}
           </span>
         ];
       },
     },
   ] as ColumnProps<any>[];
-  var [payAmount,setPayAmount]=useState<number>(0);
+  var [payAmount, setPayAmount] = useState<number>(0);
 
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [sumEntity, setSumEntity] = useState<Number>(0);//金额累加
+  const [sumEntity, setSumEntity] = useState<number>(0);//金额累加
   const onSelectChange = (selectedRowKeys, selectedRows) => {
     //console.log(selectedRows);
     setSelectedRowKeys(selectedRowKeys);
@@ -194,22 +192,22 @@ function NotPaymentTable(props: NotPaymentTableProps) {
           okText: '确定',
           onOk: () => {
             let info = Object.assign({}, {}, {
-              BillCode:'',
+              BillCode: '',
               roomid: organize.code,
               billids: JSON.stringify(selectedRowKeys),
               //OrganizeId:organize.organizeId,
               BillDate: values.billDate.format('YYYY-MM-DD'),
-              PayAmount:values.payAmount,
-              PayType:values.payType,
-              Memo:values.memo,
+              PayAmount: values.payAmount,
+              PayType: values.payType,
+              Memo: values.memo,
             });
             if (Number(sumEntity) != Number(info.PayAmount)) {
-              message.warning('本次收款金额小于本次选中未收金额合计，不允许收款，请拆费或者重新选择收款项');
+              message.warning('本次付款金额小于本次选中未付金额合计，不允许付款，请拆费或者重新选择付款项');
               return;
             }
 
             Pay(info).then(res => {
-              message.success('保存成功');
+              message.success('付款成功');
               reload();
             });
           }
@@ -291,9 +289,7 @@ function NotPaymentTable(props: NotPaymentTableProps) {
                 )}
               </Form.Item>
             </Col>
-
           </Row>
-
           <Row>
             <Button type="primary" onClick={charge}>付款确认</Button>
           </Row>
@@ -306,7 +302,7 @@ function NotPaymentTable(props: NotPaymentTableProps) {
         columns={columns}
         rowKey={record => record.billId}
         pagination={pagination}
-        scroll={{ y: 500, x: 1800 }}
+        scroll={{ y: 500, x: 1200 }}
         onChange={(pagination: PaginationConfig, filters, sorter) =>
           changePage(pagination, filters, sorter)
         }

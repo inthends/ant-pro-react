@@ -37,8 +37,8 @@ const Modify = (props: ModifyProps) => {
   const [fileList, setFileList] = useState<any[]>([]);
   const [previewImage, setPreviewImage] = useState<string>('');
 
-  // 打开抽屉时初始化
-  useEffect(() => {
+  //打开抽屉时初始化
+  useEffect(() => { 
     GetTreeAreaJson('100000').then(res => {
       setPro(res || []);
     });

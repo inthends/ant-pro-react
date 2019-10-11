@@ -169,7 +169,6 @@ const AddDrawer = (props: AddDrawerProps) => {
   //   return date.getFullYear() + '-' + monthStr + '-' + dayStr;
   // }
 
-
   //获取当前月份最后
   // const getCurrentMonthLastDay = () => {
   //   var monthStr = '';
@@ -194,7 +193,7 @@ const AddDrawer = (props: AddDrawerProps) => {
 
 
   return (
-    <Drawer className="offsetModify"
+    <Drawer 
       title={title}
       placement="right"
       width={900}
@@ -256,7 +255,7 @@ const AddDrawer = (props: AddDrawerProps) => {
             </Col>
           </Row>
 
-          <Row gutter={24}>
+          <Row gutter={16}>
             <Col span={8} style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh - 240px)' }}
             >
               <AsynSelectTree

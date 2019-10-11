@@ -57,7 +57,7 @@ const Modify = (props: ModifyProps) => {
           }
           setInfoDetail(infoTemp);
           return res;
-        }).then((relations) => {
+        }).then(relations => {
           if (infoTemp.relationId) {
             var selectId = '';
             for (var i = 0; i < relations.length; i++) {
@@ -229,7 +229,7 @@ const Modify = (props: ModifyProps) => {
     });
   }
 
-  const setEndDate = (beginDate: string, cycleValue?: number, cycleType?: string) => {
+  const setEndDate = (beginDate: string, cycleValue: number, cycleType: string) => {
     var startDate = moment(beginDate);
     var endDate = "";
     if (cycleType == '日') {
@@ -310,7 +310,7 @@ const Modify = (props: ModifyProps) => {
       width={id != '' ? 488 : 780}
       onClose={() => close(false)}
       visible={modifyVisible}
-      bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
+      bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 50px)' }}
     >
       <Row>
         {
@@ -452,11 +452,13 @@ const Modify = (props: ModifyProps) => {
                 <Form.Item label="周期" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
                   {getFieldDecorator('cycleValue', {
                     initialValue: infoDetail.cycleValue,
-                    rules: [{ required: true, message: '=请选择=' }]
+                    rules: [{ required: true, message: '请输入周期' }]
                   })(
                     <InputNumber disabled={edit ? false : true} style={{ width: '100%' }}
-                      onChange={(value) => {
-                        setEndDate(infoDetail.beginDate, value, infoDetail.cycleType);
+                      onChange={value => {
+                        if (value != undefined) {
+                          setEndDate(infoDetail.beginDate, value, infoDetail.cycleType);
+                        }
                       }}></InputNumber>
                   )}
                 </Form.Item>
@@ -535,7 +537,7 @@ const Modify = (props: ModifyProps) => {
                     initialValue: infoDetail.memo,
                     rules: [{ required: false }]
                   })(
-                    <Input.TextArea disabled={edit ? false : true} rows={4} />
+                    <Input.TextArea disabled={edit ? false : true} rows={3} />
                   )}
                 </Form.Item>
               </Col>

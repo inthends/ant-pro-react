@@ -1,12 +1,12 @@
 //付款单列表
 
 import Page from '@/components/Common/Page';
-import { Divider, Form, Table ,Dropdown,Menu} from 'antd';
+import { Divider, Form, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
-import React,{ useState } from 'react';
+import React, { useState } from 'react';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import { RemoveForm,InvalidForm } from './Payment.service';
-import  moment from 'moment';
+import { InvalidForm } from './Payment.service';
+import moment from 'moment';
 import styles from './style.less';
 
 interface PaymentTableProps {
@@ -17,11 +17,11 @@ interface PaymentTableProps {
   reload(): void;
   showBill(id?): void;
   form: WrappedFormUtils;
-  getRowSelect(record):void;
+  getRowSelect(record): void;
 }
 
 function PaymentTable(props: PaymentTableProps) {
-  const { onchange, loading, pagination, data, reload, showBill,getRowSelect } = props;
+  const { onchange, loading, pagination, data, reload, showBill, getRowSelect } = props;
   const [selectedRowKey, setSelectedRowKey] = useState([]);
   const columns = [
     {
@@ -35,13 +35,13 @@ function PaymentTable(props: PaymentTableProps) {
       title: '付款日期',
       dataIndex: 'billDate',
       key: 'billDate',
-      width: 150,
+      width: 120,
       sorter: true,
-      render: val =>{
-        if(val==null){
-          return <span></span>
-        }else{
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
+      render: val => {
+        if (val == null) {
+          return ''
+        } else {
+          return moment(val).format('YYYY-MM-DD');
         }
       }
     },
@@ -49,7 +49,7 @@ function PaymentTable(props: PaymentTableProps) {
       title: '经办人',
       dataIndex: 'createUserName',
       key: 'createUserName',
-      width: 150,
+      width: 80,
       sorter: true,
 
     },
@@ -57,18 +57,18 @@ function PaymentTable(props: PaymentTableProps) {
       title: '金额',
       dataIndex: 'payAmount',
       key: 'payAmount',
-      width: 150
+      width: 100
     },
     {
       title: '审核日期',
       dataIndex: 'verifyDate',
       key: 'verifyDate',
-      width: 150,
-      render: val =>{
-        if(val==null){
-          return <span></span>
-        }else{
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
+      width: 120,
+      render: val => {
+        if (val == null) {
+          return ''
+        } else {
+          return  moment(val).format('YYYY-MM-DD');
         }
       }
     },
@@ -76,13 +76,13 @@ function PaymentTable(props: PaymentTableProps) {
       title: '审核人',
       dataIndex: 'verifyPerson',
       key: 'verifyPerson',
-      width: 150
+      width: 80
     },
     {
       title: '状态',
       dataIndex: 'statusName',
       key: 'statusName',
-      width: 150,
+      width: 80,
       sorter: true
     },
     {
@@ -95,8 +95,8 @@ function PaymentTable(props: PaymentTableProps) {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
-      align:'center',
-      width: 95,
+      align: 'center',
+      width: 120,
       render: (text, record) => {
         return [
           <span>
@@ -113,36 +113,34 @@ function PaymentTable(props: PaymentTableProps) {
     },
   ] as ColumnProps<any>[];
 
-  const editAndDelete = (key: string, currentItem: any) => {
-    if (key === 'edit') {
-      //this.showEditModal(currentItem);
-    }
-    else if (key === 'delete') {
-      Modal.confirm({
-        title: '删除任务',
-        content: '确定删除该任务吗？',
-        okText: '确认',
-        cancelText: '取消',
-        //onOk: () => this.deleteItem(currentItem.id),
-      });
-    }
-  };
+  // const editAndDelete = (key: string, currentItem: any) => {
+  //   if (key === 'edit') {
+  //     //this.showEditModal(currentItem);
+  //   }
+  //   else if (key === 'delete') {
+  //     Modal.confirm({
+  //       title: '删除任务',
+  //       content: '确定删除该任务吗？',
+  //       okText: '确认',
+  //       cancelText: '取消',
+  //       //onOk: () => this.deleteItem(currentItem.id),
+  //     });
+  //   }
+  // };
 
 
-  const setClassName=(record,index)=>{
-    if(record.billId === selectedRowKey)
-    {
-      return  styles.rowSelect ;
-    }else{
-      if(record.status==3)
-      {
+  const setClassName = (record, index) => {
+    if (record.billId === selectedRowKey) {
+      return styles.rowSelect;
+    } else {
+      if (record.status == 3) {
         return styles.rowFlush
-      }else{
+      } else {
         return '';
       }
     }
   }
-  const onRow=(record)=>{
+  const onRow = (record) => {
     return {
       onClick: event => {
         setSelectedRowKey(record.billId);
@@ -161,7 +159,7 @@ function PaymentTable(props: PaymentTableProps) {
         dataSource={data}
         rowKey="billId"
         pagination={pagination}
-        scroll={{ y: 500  }}
+        scroll={{ y: 500 }}
         loading={loading}
         onChange={onchange}
         rowClassName={setClassName} //表格行点击高亮
