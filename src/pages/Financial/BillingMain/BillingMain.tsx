@@ -11,6 +11,7 @@ import ListTable from './ListTable';
 import UnitTable from './UnitTable';
 import Modify from './Modify';
 import Verify from './Verify';
+import Divide from './Divide';
 const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
@@ -29,6 +30,7 @@ function BillingMain() {
   const [ifVerify, setIfVerify] = useState<boolean>(false);
   const [vertifyVisible, setVerifyVisible] = useState<boolean>(false);
   const [unitTreeData, setUnitTreeData] = useState<any[]>([]);
+  const [divideVisible, setDivideVisible] = useState<boolean>(false);
 
   const selectTree = (org, item, info) => {
     //console.log(org,item,info);
@@ -161,6 +163,14 @@ function BillingMain() {
     return unitMeterload({ pageIndex, pageSize, sidx, sord, total, queryJson });
   };
 
+  const closeDivide = () => {
+    setDivideVisible(false);
+  };
+
+  const showDivide = () => {
+    setDivideVisible(true);
+  };
+
   const closeVerify = (result?) => {
     setVerifyVisible(false);
     if (result) {
@@ -276,9 +286,10 @@ function BillingMain() {
             </div>
             <ListTable
               onchange={(paginationConfig, filters, sorter) => {
-                loadMeterData(paginationConfig, sorter)
+                  loadMeterData(paginationConfig, sorter)
+                }
               }
-              }
+              showDivide={showDivide}
               loading={meterLoading}
               pagination={meterPagination}
               data={meterData}
@@ -337,6 +348,11 @@ function BillingMain() {
         ifVerify={ifVerify}
         id={id}
         reload={() => initMeterLoadData('', '')}
+      />
+      <Divide
+        visible={divideVisible}
+        closeModal={closeDivide}
+        treeData={unitTreeData}
       />
     </Layout>
   );

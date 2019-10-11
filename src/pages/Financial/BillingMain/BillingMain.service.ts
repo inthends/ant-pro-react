@@ -39,6 +39,11 @@ export function SaveUnitFee(data): Promise<any> {
   return request.post(process.env.basePath + `/BillingMain/SaveUnitFee`, {data:objToFormdata(data)});
 }
 
+//权责摊销
+export function SaveDivide(data): Promise<any> {
+  return request.post(process.env.basePath + `/BillingMain/Divide`, {data:objToFormdata(data)});
+}
+
 //保存计费主单
 export function SaveMain(data): Promise<any> {
   return request.post(process.env.basePath + `/BillingMain/SaveMain`, {data:objToFormdata(data)});

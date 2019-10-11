@@ -220,6 +220,33 @@ function BillNotice() {
 
   const handleMenuClick = (e) => {
     if (e.key == '1') {
+      //如果选择了多条 在批量审核
+      if (selectIds&&selectIds.length > 1) {
+        Modal.confirm({
+          title: '请确认',
+          content: `您是否要审核这些账单?`,
+          onOk: () => {
+            BatchAudit({
+              keyValues: JSON.stringify(selectIds),
+              IfVerify: true
+            })
+              .then(() => {
+                message.success('审核成功');
+                initBillCheckLoadData('', '');
+              })
+              .catch(e => { });
+          },
+        });
+      }
+      //如果仅选择一条 则显示账单
+      else {
+       /* if (id == null || id == '') {
+          message.warning('请先选择账单');
+        } else {*/
+          showVerify(selectIds[0], true);
+        //}
+      }
+    } else if (e.key == '2') {
       if (selectIds&&selectIds.length > 1) {
         Modal.confirm({
           title: '请确认',
@@ -237,38 +264,12 @@ function BillNotice() {
           },
         });
       } else {
-        if (id == null || id == '') {
+       /* if (id == null || id == '') {
           message.warning('请先选择账单');
-        } else {
-          showVerify('', false);
-        }
+        } else {*/
+          showVerify(id, true);
+       // }
       }
-    } else if (e.key == '1') {
-
-      if (selectIds&&selectIds.length > 1) {
-        Modal.confirm({
-          title: '请确认',
-          content: `您是否要审核这些账单?`,
-          onOk: () => {
-            BatchAudit({
-              keyValues: JSON.stringify(selectIds),
-              IfVerify: true
-            })
-              .then(() => {
-                message.success('审核成功');
-                initBillCheckLoadData('', '');
-              })
-              .catch(e => { });
-          },
-        });
-      } else {
-        if (id == null || id == '') {
-          message.warning('请先选择账单');
-        } else {
-          showVerify('', true);
-        }
-      }
-
     } else {
 
     }
@@ -436,7 +437,11 @@ function BillNotice() {
                     setIfVerify(false);
                   }
                 }
-                setSelectIds(records);
+                var recordList:Array<string> =[];
+                records.forEach(record=>{
+                  recordList.push(record.billId)
+                })
+                setSelectIds(recordList);
               }}
             />
           </TabPane>

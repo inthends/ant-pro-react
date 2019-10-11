@@ -1,37 +1,26 @@
-//添加编辑费项
+//权责摊销
 import { Col, Form, Row, Modal, message, } from 'antd';
 import { TreeEntity } from '@/model/models';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { SaveUnitFee, GetReceivablesFeeItemTreeJson } from './BillingMain.service';
+import {SaveDivide , GetReceivablesFeeItemTreeJson } from './BillingMain.service';
 import './style.less';
 import SelectTree from '../SelectTree';
 import LeftTree from '../LeftTree';
 
-interface SelectHouseProps {
+interface DivideProps {
   visible: boolean;
   closeModal(): void;
-  getBillID(billid): void;
-  //getSelectTree(id):void;
   form: WrappedFormUtils;
-  feeDetail: any;
   treeData: any[];
 }
 
-const SelectHouse = (props: SelectHouseProps) => {
-  const { visible, closeModal, feeDetail, getBillID,treeData } = props;
+const Divide = (props: DivideProps) => {
+  const { visible, closeModal,treeData } = props;
   const [feeTreeData, setFeeTreeData] = useState<TreeEntity[]>([]);
   useEffect(() => {
     if (visible) {
       GetReceivablesFeeItemTreeJson().then((res) => {
-        // const treeList = (res || []).map(item => {
-        //   return {
-        //     ...item,
-        //     id: item.key,
-        //     text: item.text,
-        //     parentId: item.parentId,
-        //   };
-        // });
         setFeeTreeData(res);
       });
     }
@@ -42,7 +31,7 @@ const SelectHouse = (props: SelectHouseProps) => {
 
   return (
     <Modal
-      title="选择需要计费的房屋"
+      title="权责摊销"
       visible={visible}
       okText="确认"
       cancelText="取消"
@@ -54,11 +43,10 @@ const SelectHouse = (props: SelectHouseProps) => {
           if (selectedFeeId == null || selectedFeeId == '') {
             message.warning('请选择费项');
           } else {
-            var newdata = Object.assign({}, feeDetail, { units: JSON.stringify(unitData), feeitemid: selectedFeeId });
-            SaveUnitFee(newdata).then(res => {
+            var newdata = Object.assign({},  { units: JSON.stringify(unitData), feeitemid: selectedFeeId });
+            SaveDivide(newdata).then(res => {
               closeModal();
-              //message.success('数据保存成功');
-              getBillID(feeDetail.keyValue);
+              message.success('数据保存成功');
             }).catch(() => {
               message.warning('数据保存错误');
             });
@@ -93,5 +81,5 @@ const SelectHouse = (props: SelectHouseProps) => {
   );
 };
 
-export default Form.create<SelectHouseProps>()(SelectHouse);
+export default Form.create<DivideProps>()(Divide);
 

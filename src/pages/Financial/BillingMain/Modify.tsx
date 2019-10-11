@@ -238,11 +238,11 @@ const Modify = (props: ModifyProps) => {
         };
 
         //设置新id
-        setNewId(feeEntity.keyValue); 
+        setNewId(feeEntity.keyValue);
         setFeeDetail(
           feeEntity
         );
-        
+
         //console.log(feeEntity);
         setSelectHouseVisible(true);
       }
@@ -349,7 +349,7 @@ const Modify = (props: ModifyProps) => {
             <span>
               <a onClick={() => {
                 RemoveUnitForm(record.id).then(res => {
-                  if (res.code != 0) { reload(); }
+                  initUnitFeeLoadData();
                 })
               }} key="delete">删除</a>
             </span> : <span></span>
@@ -577,15 +577,36 @@ const Modify = (props: ModifyProps) => {
             form.validateFields((errors, values) => {
               if (!errors) {
                 let guid = getGuid();
+
+                var keyValue="";
+                var type=1;
+                if( id == null || id == '' ){
+                  if(newId==null&&newId == '')
+                  {
+                    keyValue=guid;
+                  }else{
+                    keyValue=newId;
+                    type=0;
+                  }
+                }else{
+                  if(newId==null&&newId == '')
+                  {
+                    keyValue=guid;
+                  }else{
+                    keyValue=id;
+                    type=0;
+                  }
+                }
+
                 var feeEntity = {
-                  keyValue: id == null || id == '' ? guid : id,
+                  keyValue: keyValue,//id == null || id == '' ? guid : id,
                   //BillId:'',// id == null || id == '' ? guid : id,
                   BillSource: '计算周期费',
                   BillDate: moment(values.billDate).format('YYYY-MM-DD'),
                   LinkId: '',
                   IfVerify: values.ifVerify == "未审核" ? false : true,
                   Status: 0,
-                  type: 1,
+                  type: type,
                   Memo: values.memo
                 }
                 SaveMain(feeEntity).then(() => {
@@ -607,9 +628,16 @@ const Modify = (props: ModifyProps) => {
         getBillID={(billid) => {
           setNewId(billid);
           GetBilling(billid).then(res => {
-            setInfoDetail(res);
-            initUnitFeeLoadData('');
-            setLoading(false);
+            if(res!=null)
+            {
+              message.success('数据保存成功');
+              setInfoDetail(res);
+              initUnitFeeLoadData('');
+              setLoading(false);
+            }else{
+              message.warning('数据保存失败');
+              setNewId('');
+            }
           });
         }}
       />

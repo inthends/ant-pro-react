@@ -17,12 +17,14 @@ interface ListTableProps {
   showModify(id?, isedit?): void;
   // showVerify(id?, flag?): void;
   showVerify(id?): void;
+
+  showDivide():void;
   form: WrappedFormUtils;
   getRowSelect(record): void;
 }
 
 function ListTable(props: ListTableProps) {
-  const { onchange, loading, pagination, data, reload, showModify, getRowSelect,showVerify } = props;
+  const { onchange, loading, pagination, data, reload, showModify, getRowSelect,showVerify,showDivide } = props;
   const [selectedRowKey, setSelectedRowKey] = useState([]);
   const MoreBtn: React.FC<{
     item: any;
@@ -41,8 +43,8 @@ function ListTable(props: ListTableProps) {
 
   const editAndDelete = (key: string, currentItem: any) => {
     if (key === 'redflush') {
-      //this.showEditModal(currentItem); 
-
+      //this.showEditModal(currentItem);
+      showDivide();
     }
     else if (key === 'delete') {
       Modal.confirm({
@@ -183,7 +185,7 @@ function ListTable(props: ListTableProps) {
       }
     }
   };
-  
+
   const onRow = (record) => {
     return {
       onClick: event => {
