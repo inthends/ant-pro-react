@@ -8,26 +8,30 @@ import { FeeItemData } from '@/model/feeItemData';
 // }
 
 //获取所有收费列表
-export function GetReceivablesFeeItemTreeJson(): Promise<ResponseObject<TreeEntity[]>> {
+export function GetReceivablesFeeItemTreeJson(): Promise<TreeEntity[]> {
   return request.get(process.env.basePath + `/FeeItems/GetReceivablesFeeItemTreeJson`, {}).then(getResult as any);;
 }
 
 //获取房间住户
-export function GetRoomUsers(data): Promise<ResponseObject<any[]>> {
+export function GetRoomUsers(data): Promise<any[]> {
   return request.get(process.env.basePath + `/Common/GetRoomUsers?roomid=${data}`, {}).then(getResult as any);;
 }
 
 //获取关联的房间
-export function GetUserRooms(data): Promise<ResponseObject<any[]>> {
+// export function GetUserRooms(data): Promise<ResponseObject<any[]>> {
+//   return request.get(process.env.basePath + `/Common/GetUserRooms?customerid=${data}`, {}).then(getResult as any);;
+// }
+
+export function GetUserRooms(data): Promise<any[]> {
   return request.get(process.env.basePath + `/Common/GetUserRooms?customerid=${data}`, {}).then(getResult as any);;
 }
-//
-export function GetFeeItemDetail(feeitemid,roomid): Promise<ResponseObject<any>> {
+
+export function GetFeeItemDetail(feeitemid, roomid): Promise<any> {
   return request.get(process.env.basePath + `/Common/GetFeeItemDetail?feeitemid=${feeitemid}&roomid=${roomid}`, {}).then(getResult as any);;
 }
 //未收
 export function GetPageListJson(data): Promise<any> {
-  return request.post(process.env.basePath + `/Receivable/NotChargeFeeData`, {data:objToFormdata(data)}).then(getResult as any);
+  return request.post(process.env.basePath + `/Receivable/NotChargeFeeData`, { data: objToFormdata(data) }).then(getResult as any);
 }
 
 // 获取费项信息
@@ -52,13 +56,13 @@ export function GetAllFeeItems(): Promise<TreeEntity[]> {
 }
 
 //编辑和查看调用
-export function GetShowDetail(data): Promise<TreeEntity[]> {
+export function GetShowDetail(data): Promise<any> {
   return request
     .get(process.env.basePath + `/BillingMain/GetShowDetail?keyvalue=${data}`)
     .then(getResult as any);
 }
 //获取转费时候历史的房间住户
-export function GetTransferRoomUsers(roomid,relationid): Promise<TreeEntity[]> {
+export function GetTransferRoomUsers(roomid, relationid): Promise<TreeEntity[]> {
   return request
     .get(process.env.basePath + `/Receivable/GetTransferRoomUsers?roomId=${roomid}&relationId=${relationid}`)
     .then(getResult as any);
@@ -78,27 +82,27 @@ export function Charge(data): Promise<any> {
 
 //已收
 export function ChargeFeePageData(data): Promise<any> {
-  return request.post(process.env.basePath + `/Receivable/ChargeFeePageData`, {data:objToFormdata(data)}).then(getResult as any);
+  return request.post(process.env.basePath + `/Receivable/ChargeFeePageData`, { data: objToFormdata(data) }).then(getResult as any);
 }
 
 //修改计费明细
 export function SaveDetail(data): Promise<any> {
-  return request.post(process.env.basePath + `/BillingMain/SaveDetail`, {data:objToFormdata(data)}).then(getResult as any);
+  return request.post(process.env.basePath + `/BillingMain/SaveDetail`, { data: objToFormdata(data) }).then(getResult as any);
 }
 
 //保存临时加费计费单
 export function SaveBilling(data): Promise<any> {
-  return request.post(process.env.basePath + `/BillingMain/SaveBilling`, {data:objToFormdata(data)}).then(getResult as any);
+  return request.post(process.env.basePath + `/BillingMain/SaveBilling`, { data: objToFormdata(data) }).then(getResult as any);
 }
 
 //拆费
 export function SplitBilling(data): Promise<any> {
-  return request.post(process.env.basePath + `/BillingMain/SplitBilling`, {data:objToFormdata(data)}).then(getResult as any);
+  return request.post(process.env.basePath + `/BillingMain/SplitBilling`, { data: objToFormdata(data) }).then(getResult as any);
 }
 
 //转费
 export function TransferBilling(data): Promise<any> {
-  return request.post(process.env.basePath + `/BillingMain/TransferBilling`, {data:objToFormdata(data)}).then(getResult as any);
+  return request.post(process.env.basePath + `/BillingMain/TransferBilling`, { data: objToFormdata(data) }).then(getResult as any);
 }
 
 //删除计费单
@@ -123,7 +127,7 @@ export function CheckRedFlush(data): Promise<any> {
 }
 //审核接口
 export function Audit(data): Promise<any> {
-  return request.post(process.env.basePath + `/Receivable/Audit`, {data:objToFormdata(data)}).then(getResult as any);
+  return request.post(process.env.basePath + `/Receivable/Audit`, { data: objToFormdata(data) }).then(getResult as any);
 }
 
 
@@ -133,5 +137,5 @@ export function GetEntityShow(data): Promise<any> {
 }
 //获取费用详情
 export function ChargeFeeDetail(data): Promise<any> {
-  return request.post(process.env.basePath + `/Receivable/ChargeFeeDetail`, {data:objToFormdata(data)}).then(getResult as any);
+  return request.post(process.env.basePath + `/Receivable/ChargeFeeDetail`, { data: objToFormdata(data) }).then(getResult as any);
 }

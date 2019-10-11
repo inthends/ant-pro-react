@@ -1,6 +1,5 @@
 import { TreeEntity } from '@/model/models';
 import {
-  Tabs,
   Select,
   Button,
   Col,
@@ -13,7 +12,10 @@ import {
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { SaveDetail,GetReceivablesFeeItemTreeJson, GetRoomUsers, GetUserRooms, GetFeeItemDetail,   SaveBilling, GetShowDetail } from './Main.service';
+import {
+  SaveDetail, GetReceivablesFeeItemTreeJson, GetRoomUsers,
+  GetUserRooms, GetFeeItemDetail, SaveBilling, GetShowDetail
+} from './Main.service';
 
 import LeftTree from '../LeftTree';
 import moment from 'moment';
@@ -44,6 +46,7 @@ const Modify = (props: ModifyProps) => {
     if (modifyVisible) {
       if (id != null && id != "") {
         var infoTemp = {};
+
         GetShowDetail(id).then(res => {
           infoTemp = Object.assign({}, res.entity, { number: res.number });
           return GetRoomUsers(res.entity.unitId);
@@ -55,11 +58,11 @@ const Modify = (props: ModifyProps) => {
           setInfoDetail(infoTemp);
           return res;
         }).then((relations) => {
-          if (infoTemp.relationId){
-            var selectId='';
+          if (infoTemp.relationId) {
+            var selectId = '';
             for (var i = 0; i < relations.length; i++) {
               if (relations[i].key == infoTemp.relationId) {
-                selectId= relations[i].value;
+                selectId = relations[i].value;
               }
             }
             return GetUserRooms(selectId);
@@ -71,6 +74,21 @@ const Modify = (props: ModifyProps) => {
             setInfoDetail(infoTemp);
           }
         });
+
+        //加载数据
+        // GetShowDetail(id).then(res => {
+        //   infoTemp = Object.assign({}, res.entity, { number: res.number });
+        //   GetRoomUsers(res.entity.unitId).then(ru=>{
+        //     setRelationIds(ru);
+        //     if (res.length > 0) {
+        //           infoTemp = Object.assign({}, infoTemp, { relationId: ru[0].key });
+        //         }
+        //   }); 
+        //   setInfoDetail(infoTemp);
+        //   form.resetFields();
+        // });
+
+
       } else {
         if (organizeId) {
           GetRoomUsers(organizeId).then(res => {
@@ -95,14 +113,14 @@ const Modify = (props: ModifyProps) => {
           setInfoDetail({});
         }
         GetReceivablesFeeItemTreeJson().then(res => {
-          const treeList = (res || []).map(item => {
-            return Object.assign({}, item, {
-              id: item.key,
-              text: item.text,
-              parentId: item.parentId
-            });
-          });
-          setFeeTreeData(treeList);
+          // const treeList = (res || []).map(item => {
+          //   return Object.assign({}, item, {
+          //     id: item.key,
+          //     text: item.text,
+          //     parentId: item.parentId
+          //   });
+          // });
+          setFeeTreeData(res);
         });
         //重置之前选择加载的费项类别
         setInfoDetail({});
@@ -157,8 +175,8 @@ const Modify = (props: ModifyProps) => {
       if (!errors) {
         var guid = getGuid();
 
-        var unit={
-          BillId: id != null && id != "" ?  infoDetail.billId : guid,
+        var unit = {
+          BillId: id != null && id != "" ? infoDetail.billId : guid,
           UnitId: values.householdId,
           FeeItemId: infoDetail.feeItemId,
           Quantity: "" + values.quantity,
@@ -173,15 +191,15 @@ const Modify = (props: ModifyProps) => {
           CycleType: values.cycleType,
           BillDate: moment(values.billDate).format("YYYY-MM-DD")
         }
-        if(id!=null && id != "")
-        {
-          unit=Object.assign({},unit,{Id: id,keyValue:id});
-          SaveDetail(unit).then(res=>{
+        if (id != null && id != "") {
+          unit = Object.assign({}, unit, { Id: id, keyValue: id });
+          SaveDetail(unit).then(res => {
             close(true);
 
           })
-        }else{
-          let units = [];
+        } else {
+          let units: any[];
+          units = [];
           units.push(unit);
           let newData = {
             BillId: id != null && id != "" ? infoDetail.billId : guid,
@@ -211,21 +229,20 @@ const Modify = (props: ModifyProps) => {
     });
   }
 
-  const setEndDate=(beginDate:string,cycleValue:number,cycleType:string)=>{
-    var startDate=moment(beginDate);
-    var endDate="";
-    if(cycleType=='日'){
-      endDate= startDate.add(cycleValue,'days').add(-1,'days').format('YYYY-MM-DD');
-    }else if(cycleType=='月')
-    {
-      endDate= startDate.add(cycleValue,'month').add(-1,'days').format('YYYY-MM-DD');
-    }else{
-      endDate= startDate.add(cycleValue,'years').add(-1,'days').format('YYYY-MM-DD');
+  const setEndDate = (beginDate: string, cycleValue?: number, cycleType?: string) => {
+    var startDate = moment(beginDate);
+    var endDate = "";
+    if (cycleType == '日') {
+      endDate = startDate.add(cycleValue, 'days').add(-1, 'days').format('YYYY-MM-DD');
+    } else if (cycleType == '月') {
+      endDate = startDate.add(cycleValue, 'month').add(-1, 'days').format('YYYY-MM-DD');
+    } else {
+      endDate = startDate.add(cycleValue, 'years').add(-1, 'days').format('YYYY-MM-DD');
     }
-    var info=Object.assign({},infoDetail,{endDate:endDate,cycleValue:cycleValue,cycleType:cycleType});
+    var info = Object.assign({}, infoDetail, { endDate: endDate, cycleValue: cycleValue, cycleType: cycleType });
     setInfoDetail(info);
   }
- //求自然月日期
+  //求自然月日期
   const getMonthBeforeFormatAndDay = (num, format, date) => {
 
     let day = date.get('date');
@@ -305,27 +322,25 @@ const Modify = (props: ModifyProps) => {
                   // setFeeItemId(id);
                   if (organizeId) {
                     GetFeeItemDetail(id, organizeId).then(res => {
-                      if(res.relationId!=null)
-                      {
+                      if (res.relationId != null) {
                         var info = Object.assign({}, res, { feeItemId: id });
                         // console.log(info);
                         setInfoDetail(info);
                         return info;
                       }
-                      else{
+                      else {
                         message.warning(res);
                         return null;
                       }
                     }).then(info => {
-                      if(info!==null)
-                      {
+                      if (info !== null) {
                         GetUserRooms(getRelationId(info.relationId))
-                        .then(res => {
-                          setUnitIds(res);
-                          if (res.length > 0)
-                            info = Object.assign({}, info, { householdId: res[0].value });
-                          setInfoDetail(info);
-                        });
+                          .then(res => {
+                            setUnitIds(res);
+                            if (res.length > 0)
+                              info = Object.assign({}, info, { householdId: res[0].value });
+                            setInfoDetail(info);
+                          });
                       }
                     });
                   }
@@ -342,7 +357,7 @@ const Modify = (props: ModifyProps) => {
                   initialValue: infoDetail.relationId == null ? null : infoDetail.relationId,// getRelationId(infoDetail.relationId),
                   rules: [{ required: true, message: '请选择加费对象' }]
                 })(
-                  <Select placeholder="=请选择=" disabled={id ==='' &&edit ? false : true} onSelect={(key) => {
+                  <Select placeholder="=请选择=" disabled={id === '' && edit ? false : true} onSelect={(key) => {
                     //debugger;
                     GetUserRooms(getRelationId(key)).then(res => {
                       setUnitIds(res);
@@ -365,7 +380,7 @@ const Modify = (props: ModifyProps) => {
                   initialValue: infoDetail.householdId == null ? null : getUnitId(infoDetail.householdId),
                   rules: [{ required: true, message: '请选择房屋' }]
                 })(
-                  <Select placeholder="=请选择=" disabled={id ==='' &&edit ? false : true} >
+                  <Select placeholder="=请选择=" disabled={id === '' && edit ? false : true} >
                     {unitIds.map(item => (
                       <Option value={item.key}>
                         {item.title}
@@ -382,7 +397,7 @@ const Modify = (props: ModifyProps) => {
                     initialValue: infoDetail.price,
                     rules: [{ required: true, message: '请输入单价' }]
                   })(
-                    <InputNumber min={0} disabled={true} style={{ width: '100%' }} ></InputNumber>
+                    <Input min={0} readOnly style={{ width: '100%' }} ></Input>
                   )}
                 </Form.Item>
               </Col>
@@ -395,7 +410,7 @@ const Modify = (props: ModifyProps) => {
                     initialValue: infoDetail.quantity,
                     rules: [{ required: true, message: '请输入数量' }]
                   })(
-                    <InputNumber  min={0}  disabled={true} style={{ width: '100%' }} ></InputNumber>
+                    <Input min={0} readOnly style={{ width: '100%' }} ></Input>
                   )}
                 </Form.Item>
               </Col>
@@ -408,11 +423,14 @@ const Modify = (props: ModifyProps) => {
                     initialValue: infoDetail.number,
                     rules: [{ required: true, message: '请输入系数' }]
                   })(
-                    <InputNumber  min={0}  style={{ width: '100%' }} disabled={edit ? false : true} onChange={(value: number) => {
-                      var amount = infoDetail.price * infoDetail.quantity * value;
-                      var info = Object.assign({}, infoDetail, { number: value, amount: amount });
-                      setInfoDetail(info);
-                    }}></InputNumber>
+                    <InputNumber min={0} style={{ width: '100%' }} disabled={edit ? false : true}
+                      onChange={(value) => {
+                        if (value != undefined) {
+                          var amount = infoDetail.price * infoDetail.quantity * value;
+                          var info = Object.assign({}, infoDetail, { number: value, amount: amount });
+                          setInfoDetail(info);
+                        }
+                      }}></InputNumber>
                   )}
                 </Form.Item>
               </Col>
@@ -424,7 +442,7 @@ const Modify = (props: ModifyProps) => {
                     initialValue: infoDetail.price == null || infoDetail.quantity == null || infoDetail.number == null ? 0 : infoDetail.price * infoDetail.quantity * infoDetail.number,
                     rules: [{ required: true, message: '=请选择=' }]
                   })(
-                    <InputNumber precision={2} disabled={true} style={{ width: '100%' }} ></InputNumber>
+                    <InputNumber precision={2} readOnly style={{ width: '100%' }} ></InputNumber>
                   )}
                 </Form.Item>
               </Col>
@@ -436,20 +454,21 @@ const Modify = (props: ModifyProps) => {
                     initialValue: infoDetail.cycleValue,
                     rules: [{ required: true, message: '=请选择=' }]
                   })(
-                    <InputNumber disabled={edit ? false : true} style={{ width: '100%' }}  onChange={(value:number)=>{
-                      setEndDate(infoDetail.beginDate,value,infoDetail.cycleType);
-                    }}></InputNumber>
+                    <InputNumber disabled={edit ? false : true} style={{ width: '100%' }}
+                      onChange={(value) => {
+                        setEndDate(infoDetail.beginDate, value, infoDetail.cycleType);
+                      }}></InputNumber>
                   )}
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label="" required labelCol={{ span: 0 }} wrapperCol={{ span: 24 }} >
                   {getFieldDecorator('cycleType', {
-                    initialValue: infoDetail.cycleType===null?"月":infoDetail.cycleType,
+                    initialValue: infoDetail.cycleType === null ? "月" : infoDetail.cycleType,
                     rules: [{ required: true, message: '请选择周期单位' }]
                   })(
-                    <Select placeholder="=请选择=" disabled={edit ? false : true} style={{ width: '100%' }}  onChange={(value:string)=>{
-                      setEndDate(infoDetail.beginDate,infoDetail.cycleValue,value);
+                    <Select placeholder="=请选择=" disabled={edit ? false : true} style={{ width: '100%' }} onChange={(value: string) => {
+                      setEndDate(infoDetail.beginDate, infoDetail.cycleValue, value);
                     }}>
                       <Option key='日' value='日'>
                         {'日'}
@@ -479,7 +498,7 @@ const Modify = (props: ModifyProps) => {
               <Col span={12}>
                 <Form.Item label="结束日期" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
                   {getFieldDecorator('endDate', {
-                    initialValue: infoDetail.endDate == null ?  moment(getEndDate()) : moment(infoDetail.endDate) ,
+                    initialValue: infoDetail.endDate == null ? moment(getEndDate()) : moment(infoDetail.endDate),
                     rules: [{ required: true, message: '请选择结束日期' }]
                   })(
                     <DatePicker disabled={true} style={{ width: '100%' }} />
@@ -516,7 +535,7 @@ const Modify = (props: ModifyProps) => {
                     initialValue: infoDetail.memo,
                     rules: [{ required: false }]
                   })(
-                    <Input.TextArea disabled={edit ? false : true} rows={8} />
+                    <Input.TextArea disabled={edit ? false : true} rows={4} />
                   )}
                 </Form.Item>
               </Col>
