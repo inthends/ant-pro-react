@@ -16,7 +16,7 @@ function Main() {
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
-  // const [organize, SetOrganize] = useState<any>({});
+  const [organizeId, setOrganizeId] = useState<string>('');
   const [data, setData] = useState<any[]>([]);
   const [currData, setCurrData] = useState<any>();
   const [search, setSearch] = useState<string>('');
@@ -135,6 +135,7 @@ function Main() {
   };
 
   const selectTreeLoad = (orgid, orgtype, searchText) => { 
+    setOrganizeId(orgid);
     initLoadData(orgid, searchText);
   };
 
@@ -151,7 +152,7 @@ function Main() {
           <Search
             className="search-input"
             placeholder="搜索关键字"
-            onSearch={value => loadData(value, organize)}
+            onSearch={value => loadData(value, organizeId)}
             style={{ width: 200 }}
           />
           <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer()}>
@@ -161,13 +162,13 @@ function Main() {
         </div>
         <ListTable
           onchange={(paginationConfig, filters, sorter) =>
-            loadData(search, organize, paginationConfig, sorter)
+            loadData(search, organizeId, paginationConfig, sorter)
           }
           loading={loading}
           pagination={pagination}
           data={data}
           modify={showDrawer}
-          reload={() => initLoadData(organize, search)}
+          reload={() => initLoadData(organizeId, search)}
         />
       </Content>
 
@@ -176,7 +177,7 @@ function Main() {
         closeDrawer={closeDrawer}
         treeData={treeData}
         data={currData}
-        reload={() => initLoadData(organize, search)}
+        reload={() => initLoadData(organizeId, search)}
       />
     </Layout>
   );
