@@ -42,10 +42,14 @@ export default {
   'menu.financial.billingmain': '周期费计算',
   'menu.financial.payment': '付款管理',
 
-  'menu.admin': '物业管理',
-  'menu.admin.servicedesk': '服务总台',
-  'menu.admin.repair': '报修管理',
-  'menu.admin.complaint': '投诉管理',
+  'menu.estate': '物业管理',
+  'menu.estate.servicedesk': '服务总台',
+  'menu.estate.repair': '报修管理',
+  'menu.estate.complaint': '投诉管理', 
+
+
+  'menu.admin': '行政管理',
+  'menu.admin.warehouse': '仓库管理', 
 
   'menu.contract': '资产运营',
   'menu.contract.list': '合同管理',

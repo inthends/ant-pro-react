@@ -50,22 +50,26 @@ function House() {
   };
 
   useEffect(() => {
-    getTreeData().then(res => {
+    GetOrgTreeOnly().then(res => {
       // const root = res.filter(item => item.parentId === '0');
       // const key = root.length === 1 ? root[0].key : '';
       //SetOrganizeId(key);
       //initLoadData(rootOrg as string, '');
+      setTreeData(res || []);
       initLoadData('', '');
       initHouseTotal('', '');
     });
+
   }, []);
+
   // 获取属性数据
-  const getTreeData = () => {
-    return GetOrgTreeOnly().then((res: any[]) => {
-      setTreeData(res || []);
-      return res || [];
-    });
-  };
+  // const getTreeData = () => {
+  //   return GetOrgTreeOnly().then((res: any[]) => {
+  //     setTreeData(res || []);
+  //     return res || [];
+  //   });
+  // };
+
   // 获取房产统计
   const initHouseTotal = (orgId: string, searchText) => { 
     setSearch(searchText);

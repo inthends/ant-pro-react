@@ -173,31 +173,48 @@ export default [
       {
         name: 'admin',
         path: '/admin',
-        icon: 'security-scan',
+        icon: 'reconciliation',
         component: './Admin/Admin',
         routes: [
           {
             path: '/admin',
-            redirect: '/admin/servicedesk',
+            redirect: '/admin/warehouse',
           },
           {
-            name: 'servicedesk',
-            path: '/admin/servicedesk',
-            component: './Admin/ServiceDesk/Main',
-          },
-          {
-            name: 'repair',
-            path: '/admin/repair',
-            component: './Admin/Repair/Main',
-          },
-          {
-            name: 'complaint',
-            path: '/admin/complaint',
-            component: './Admin/Complaint/Main',
-          },
+            name: 'warehouse',
+            path: '/admin/warehouse',
+            component: './Admin/Warehouse/Main',
+          }, 
         ],
       },
 
+      {
+        name: 'estate',
+        path: '/estate',
+        icon: 'security-scan',
+        component: './Estate/Estate',
+        routes: [
+          {
+            path: '/estate',
+            redirect: '/estate/servicedesk',
+          },
+          {
+            name: 'servicedesk',
+            path: '/estate/servicedesk',
+            component: './Estate/ServiceDesk/Main',
+          },
+          {
+            name: 'repair',
+            path: '/estate/repair',
+            component: './Estate/Repair/Main',
+          },
+          {
+            name: 'complaint',
+            path: '/estate/complaint',
+            component: './Estate/Complaint/Main',
+          }
+        ],
+      },
       {
         name: 'contract',
         path: '/contract',
@@ -224,12 +241,7 @@ export default [
       //   name: '流程中心',
       //   path: '/welcome6',
       //   component: './Welcome',
-      // },
-      // {
-      //   name: '商务智能',
-      //   path: '/welcome7',
-      //   component: './Welcome',
-      // },
+      // }, 
       {
         name: 'system',
         path: '/system',
