@@ -1,5 +1,5 @@
  
-import { getResult, objToFormdata,ResponseObject } from '@/utils/networkUtils';
+import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
 // export function GetQuickPStructsTree(): Promise<any[]> {
 //   return request

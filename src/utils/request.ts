@@ -52,9 +52,7 @@ const request = extend({
 request.interceptors.response.use(async response => { 
 
   const { status, headers } = response;  
-  if (status === 403) {
-
-debugger
+  if (status === 403) { 
 
     const redirect = headers.get('redirect') || '';
     window.location.href = redirect;
