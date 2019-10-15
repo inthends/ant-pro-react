@@ -57,7 +57,7 @@ const Divide = (props: DivideProps) => {
       bodyStyle={{ background: '#f6f7fb' }}
       width='600px'
     >
-      <Row style={{ height: '600px', overflow: 'hidden', marginTop: '5px', backgroundColor: 'rgb(255,255,255)' }}>
+      <Row gutter={12} >
         <Col span={12} style={{ height: '600px', overflow: 'auto' }}>
           <SelectTree
             treeData={treeData}

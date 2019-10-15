@@ -16,8 +16,7 @@ interface ListTableProps {
   reload(): void;
   showModify(id?, isedit?): void;
   // showVerify(id?, flag?): void;
-  showVerify(id?): void;
-
+  showVerify(id?): void; 
   showDivide():void;
   form: WrappedFormUtils;
   getRowSelect(record): void;

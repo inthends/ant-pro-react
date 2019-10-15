@@ -1,4 +1,4 @@
-//checkbox选择房产树 
+//checkbox选择房产树,同步树
 import Page from '@/components/Common/Page';
 import { Tree } from 'antd';
 import React, { useState } from 'react';

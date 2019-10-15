@@ -1,7 +1,7 @@
 //付款单列表
 
 import Page from '@/components/Common/Page';
-import { Divider, Form, Table } from 'antd';
+import { Modal, Divider, Form, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState } from 'react';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
@@ -18,10 +18,11 @@ interface PaymentTableProps {
   showBill(id?): void;
   form: WrappedFormUtils;
   getRowSelect(record): void;
+  showVerify(id?): void;
 }
 
 function PaymentTable(props: PaymentTableProps) {
-  const { onchange, loading, pagination, data, reload, showBill, getRowSelect } = props;
+  const { onchange, loading, pagination, data, reload, showBill, getRowSelect, showVerify } = props;
   const [selectedRowKey, setSelectedRowKey] = useState([]);
   const columns = [
     {
@@ -68,7 +69,7 @@ function PaymentTable(props: PaymentTableProps) {
         if (val == null) {
           return ''
         } else {
-          return  moment(val).format('YYYY-MM-DD');
+          return moment(val).format('YYYY-MM-DD');
         }
       }
     },
@@ -96,15 +97,29 @@ function PaymentTable(props: PaymentTableProps) {
       dataIndex: 'operation',
       key: 'operation',
       align: 'center',
-      width: 120,
+      width: 150,
       render: (text, record) => {
         return [
           <span>
             <a onClick={() => showBill(record.billId)} key="modify">{"查看"}</a>
             <Divider type="vertical" />
+
+            {record.status == 0 ? <a onClick={() => showVerify(record.billId)} key="app">审核</a> :
+              <a onClick={() => showVerify(record.billId)} key="unapp"  >反审</a>
+            }
+            <Divider type="vertical" />
+
             <a onClick={() => {
-              InvalidForm(record.billId).then(res => {
-                if (res.code != 0) { reload(); }
+              Modal.confirm({
+                title: '请确认',
+                content: `您是否要作废${record.feeName}`,
+                okText: '确认',
+                cancelText: '取消',
+                onOk: () => {
+                  InvalidForm(record.billId).then(res => {
+                    if (res.code != 0) { reload(); }
+                  });
+                }
               });
             }} key="delete">作废</a>
           </span>

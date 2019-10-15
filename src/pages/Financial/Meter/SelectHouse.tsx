@@ -1,28 +1,29 @@
-//费表装表选择房间
-import { Button,Col, Form,Input,Row,Icon,Modal, message} from 'antd';
+//费表装表选择房间，修改为同步树
+import { Button, Col, Form, Input, Row, Icon, Modal, message } from 'antd';
 // import { TreeEntity } from '@/model/models';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { UnitMeterSaveForm} from './Meter.service';
+import { UnitMeterSaveForm } from './Meter.service';
 import './style.less';
-import AsynSelectTree from '../AsynSelectTree'; 
+import SelectTree from '../SelectTree';
 // const Option = Select.Option;
 interface SelectHouseProps {
   visible: boolean;
   closeModal(): void;
   //getSelectTree(id):void;
   form: WrappedFormUtils;
-  feeDetail:any;
+  feeDetail: any;
+  treeData: any[];
 }
 
 const SelectHouse = (props: SelectHouseProps) => {
-  const { visible, closeModal,feeDetail } = props;
+  const { visible, closeModal, feeDetail,treeData } = props;
   useEffect(() => {
-    if(visible){ 
+    if (visible) {
     }
   }, [visible]);
 
-  const [unitData,setUnitData]=useState<any[]>([]);
+  const [unitData, setUnitData] = useState<any[]>([]);
 
   return (
     <Modal
@@ -32,16 +33,17 @@ const SelectHouse = (props: SelectHouseProps) => {
       cancelText="取消"
       onCancel={() => closeModal()}
       onOk={() => {
-        if(unitData.length==0){
+        if (unitData.length == 0) {
           message.warning('请选择房间');
-        }else{
-          var newdata=Object.assign({},feeDetail,{units:JSON.stringify(unitData)});
-          UnitMeterSaveForm(newdata).then(res=>{
+        } else {
+          var newdata = Object.assign({}, feeDetail, { units: JSON.stringify(unitData) });
+          UnitMeterSaveForm(newdata).then(res => {
             closeModal();
             message.success('数据保存成功');
-          }).catch(()=>{
-            message.warning('数据保存错误');
-          });
+          })
+          //.catch(() => {
+            //message.warning('数据保存错误');
+          //});
         }
       }}
       destroyOnClose={true}
@@ -50,16 +52,16 @@ const SelectHouse = (props: SelectHouseProps) => {
     >
       <Row gutter={8}>
         <Col span={18}>
-          <Input placeholder="请输入要查询的关键字"/>
+          <Input placeholder="请输入要查询的关键字" />
         </Col>
         <Col span={6}>
-          <Button style={{width:'100%'}}>
-          <Icon type="search" />查询</Button>
+          <Button style={{ width: '100%' }}>
+            <Icon type="search" />查询</Button>
         </Col>
       </Row>
-      <Row style={{height:'400px',overflow:'auto' ,marginTop:'5px',backgroundColor:'rgb(255,255,255)'}}>
+      <Row style={{ height: '400px', overflow: 'auto', marginTop: '5px', backgroundColor: 'rgb(255,255,255)' }}>
         <Col span={24}>
-          <AsynSelectTree
+          {/* <AsynSelectTree
             parentid={'0'}
             getCheckedKeys={(keys)=>{
               setUnitData(keys);
@@ -67,7 +69,17 @@ const SelectHouse = (props: SelectHouseProps) => {
             
             selectTree={(id, type, info?) => {
             }}
+          /> */}
+ 
+          <SelectTree
+            treeData={treeData}
+            getCheckedKeys={(keys) => {
+              setUnitData(keys);
+            }}
+            selectTree={(id, type, info?) => {
+            }}
           />
+
         </Col>
       </Row>
     </Modal>

@@ -1,9 +1,9 @@
 //水电费管理
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { Tabs, Button, Icon, Input, Layout, Select, message } from 'antd';
+import { Tabs, Button, Icon, Input, Layout, Select } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { GetDataItemTreeJson, GetMeterPageList, GetUnitMeterPageList, GetReadingMeterPageList, GetMeterFormsPageList } from './Meter.service';
+import { GetMeterPageList, GetUnitMeterPageList, GetReadingMeterPageList, GetMeterFormsPageList } from './Meter.service';
 import AsynLeftTree from '../AsynLeftTree';
 import MeterTable from './MeterTable';
 import MeterFormsTable from './MeterFormsTable';
@@ -12,13 +12,15 @@ import UnitMeterTable from './UnitMeterTable';
 import MeterModify from './MeterModify';
 import ReadingMeterModify from './ReadingMeterModify';
 import ReadingMeterVertify from './ReadingMeterVertify';
+import { GetUnitTreeAll } from '@/services/commonItem';//获取全部房间树
+import { getResult } from '@/utils/networkUtils';
 const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
 const { Option } = Select;
 function Meter() {
   const [organize, SetOrganize] = useState<any>({});
-  const [treeSearch, SetTreeSearch] = useState<any>({});
+  // const [treeSearch, SetTreeSearch] = useState<any>({});
   const [id, setId] = useState<string>();
 
   const [readingMeterId, setReadingMeterId] = useState<string>();
@@ -33,7 +35,6 @@ function Meter() {
   const [readingMeterData, setReadingMeterData] = useState<any>();
   const [meterFormsData, setMeterFormsData] = useState<any>();
 
-
   const [meterSearch, setMeterSearch] = useState<string>('');
   const [unitMeterSearch, setUnitMeterSearch] = useState<string>('');
   const [readingMeterSearch, setReadingMeterSearch] = useState<string>('');
@@ -44,8 +45,10 @@ function Meter() {
   const [readingMeterPagination, setReadingMeterPagination] = useState<DefaultPagination>(new DefaultPagination());
   const [meterFormsPagination, setMeterFormsPagination] = useState<DefaultPagination>(new DefaultPagination());
 
-  const [meterKinds, setMeterKinds] = useState<any>([]);
-  const [meterTypes, setMeterTypes] = useState<any>([]);
+  const [unitTreeData, setUnitTreeData] = useState<any[]>([]);
+
+  // const [meterKinds, setMeterKinds] = useState<any>([]);
+  // const [meterTypes, setMeterTypes] = useState<any>([]);
 
   const [ifVertify, setIfVertify] = useState<boolean>(false);
   const [vertifyVisible, setVertifyVisible] = useState<boolean>(false);
@@ -57,27 +60,38 @@ function Meter() {
     initMeterFormsLoadData(item, '');
     initUnitMeterLoadData(item, '');
   };
-  let meterKind = [];
-  let meterType = [];
+
+  // let meterKind = [];
+  // let meterType = [];
+
   useEffect(() => {
+
+    //获取房产树
+    GetUnitTreeAll()
+      .then(getResult)
+      .then((res: any[]) => {
+        setUnitTreeData(res || []);
+        return res || [];
+      });
+
     //获取费表类型
-    GetDataItemTreeJson('EnergyMeterKind').then(res => {
-      setMeterKinds(res);
-      meterKind = res;
-      return;
-    }).then(() => {
-      //获取费表种类
-      return GetDataItemTreeJson('EnergyMeterType')
-    }).then(res => {
-      setMeterTypes(res);
-      meterType = res;
-      return;
-    }).then(() => {
-      initMeterLoadData('', '');
-      initUnitMeterLoadData('', '');
-      initMeterFormsLoadData('', '');
-      initReadingMeterLoadData('', '')
-    })
+    // GetDataItemTreeJson('EnergyMeterKind').then(res => {
+    //   setMeterKinds(res);
+    //   meterKind = res;
+    //   return;
+    // }).then(() => {
+    //   //获取费表种类
+    //   return GetDataItemTreeJson('EnergyMeterType')
+    // }).then(res => {
+    //   setMeterTypes(res);
+    //   meterType = res;
+    //   return;
+    // }).then(() => {
+    initMeterLoadData('', '');
+    initUnitMeterLoadData('', '');
+    initMeterFormsLoadData('', '');
+    initReadingMeterLoadData('', '')
+    // })
   }, []);
 
 
@@ -175,106 +189,106 @@ function Meter() {
     data.sord = data.sord || 'asc';
 
     //获取费表类型
-    GetDataItemTreeJson('EnergyMeterKind').then(res => {
-      setMeterKinds(res);
-      meterKind = res;
-      return;
-    }).then(() => {
-      //获取费表种类
-      return GetDataItemTreeJson('EnergyMeterType')
-    }).then(res => {
-      setMeterTypes(res);
-      meterType = res;
-      return;
-    }).then(() => {
-      return GetMeterPageList(data).then(res => {
-        const { pageIndex: current, total, pageSize } = res;
-        setMeterPagination(pagesetting => {
-          return {
-            ...pagesetting,
-            current,
-            total,
-            pageSize,
-          };
-        });
-        /*var newData=[];
-        res.data.map(item=>{
-          var meterkindname="";
-          var metertypename="";
-
-          meterKind.map(i=>{
-            if(item.meterkind==i.key){
-              meterkindname=i.title;
-            }
-          });
-          meterType.map(i=>{
-            if(item.metertype==i.key){
-              metertypename=i.title;
-            }
-          });
-          var d=Object.assign({},item,{meterkindname,metertypename});
-          newData.push(d);
-        })
-        console.log(newData);*/
-        setMeterData(res.data);
-        setMeterLoading(false);
-        return res;
+    // GetDataItemTreeJson('EnergyMeterKind').then(res => {
+    //   setMeterKinds(res);
+    //   meterKind = res;
+    //   return;
+    // }).then(() => {
+    //   //获取费表种类
+    //   return GetDataItemTreeJson('EnergyMeterType')
+    // }).then(res => {
+    //   setMeterTypes(res);
+    //   meterType = res;
+    //   return;
+    // }).then(() => {
+    return GetMeterPageList(data).then(res => {
+      const { pageIndex: current, total, pageSize } = res;
+      setMeterPagination(pagesetting => {
+        return {
+          ...pagesetting,
+          current,
+          total,
+          pageSize,
+        };
       });
+      /*var newData=[];
+      res.data.map(item=>{
+        var meterkindname="";
+        var metertypename="";
+
+        meterKind.map(i=>{
+          if(item.meterkind==i.key){
+            meterkindname=i.title;
+          }
+        });
+        meterType.map(i=>{
+          if(item.metertype==i.key){
+            metertypename=i.title;
+          }
+        });
+        var d=Object.assign({},item,{meterkindname,metertypename});
+        newData.push(d);
+      })
+      console.log(newData);*/
+      setMeterData(res.data);
+      setMeterLoading(false);
+      return res;
     });
-
-
+    // }); 
   };
+
+
   const unitMeterload = data => {
     setUnitMeterLoading(true);
     data.sidx = data.sidx || 'unitmeterid';
     data.sord = data.sord || 'asc';
     //获取费表类型
-    GetDataItemTreeJson('EnergyMeterKind').then(res => {
-      setMeterKinds(res);
-      meterKind = res;
-      return;
-    }).then(() => {
-      //获取费表种类
-      return GetDataItemTreeJson('EnergyMeterType')
-    }).then(res => {
-      setMeterTypes(res);
-      meterType = res;
-      return;
-    }).then(() => {
-      return GetUnitMeterPageList(data).then(res => {
-        const { pageIndex: current, total, pageSize } = res;
-        setUnitMeterPagination(pagesetting => {
-          return {
-            ...pagesetting,
-            current,
-            total,
-            pageSize,
-          };
-        });
-
-        /*var newData=[];
-        res.data.map(item=>{
-          var meterkindname="";
-          var metertypename="";
-          meterKind.map(i=>{
-            if(item.meterkind==i.key){
-              meterkindname=i.title;
-            }
-          });
-          meterType.map(i=>{
-            if(item.metertype==i.key){
-              metertypename=i.title;
-            }
-          });
-          var d=Object.assign({},item,{meterkindname,metertypename});
-          newData.push(d);
-        })*/
-        // console.log(meterKind,meterType,newData);
-        setUnitMeterData(res.data);
-        setUnitMeterLoading(false);
-        return res;
+    // GetDataItemTreeJson('EnergyMeterKind').then(res => {
+    //   setMeterKinds(res);
+    //   meterKind = res;
+    //   return;
+    // }).then(() => {
+    //   //获取费表种类
+    //   return GetDataItemTreeJson('EnergyMeterType')
+    // }).then(res => {
+    //   setMeterTypes(res);
+    //   meterType = res;
+    //   return;
+    // }).then(() => {
+    return GetUnitMeterPageList(data).then(res => {
+      const { pageIndex: current, total, pageSize } = res;
+      setUnitMeterPagination(pagesetting => {
+        return {
+          ...pagesetting,
+          current,
+          total,
+          pageSize,
+        };
       });
+
+      /*var newData=[];
+      res.data.map(item=>{
+        var meterkindname="";
+        var metertypename="";
+        meterKind.map(i=>{
+          if(item.meterkind==i.key){
+            meterkindname=i.title;
+          }
+        });
+        meterType.map(i=>{
+          if(item.metertype==i.key){
+            metertypename=i.title;
+          }
+        });
+        var d=Object.assign({},item,{meterkindname,metertypename});
+        newData.push(d);
+      })*/
+      // console.log(meterKind,meterType,newData);
+      setUnitMeterData(res.data);
+      setUnitMeterLoading(false);
+      return res;
     });
+    // });
   };
 
   const readingMeterload = data => {
@@ -386,7 +400,7 @@ function Meter() {
     setIfVertify(ifVertify);
     setId(id);
   };
-  
+
   const closeModify = (result?) => {
     setModifyVisible(false);
     if (result) {
@@ -445,7 +459,7 @@ function Meter() {
       <AsynLeftTree
         parentid={'0'}
         selectTree={(id, item) => {
-          selectTree(id, item, treeSearch);
+          selectTree(id, item, '');
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>
@@ -611,7 +625,7 @@ function Meter() {
               pagination={meterFormsPagination}
               data={meterFormsData}
               reload={() => initMeterFormsLoadData('', meterFormsSearch)}
-            /> 
+            />
           </TabPane>
         </Tabs>
       </Content>
@@ -620,6 +634,7 @@ function Meter() {
         closeDrawer={closeModify}
         organizeId={organize}
         id={id}
+        treeData={unitTreeData}
         reload={() => loadMeterData()}
       />
       <ReadingMeterModify

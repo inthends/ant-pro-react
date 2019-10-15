@@ -105,19 +105,19 @@ const ShowBill = (props: ShowBillProps) => {
       title: '单元编号',
       dataIndex: 'code',
       key: 'code',
-      width: 150
+      width: 120
     },
     {
       title: '付款项目',
       dataIndex: 'feeName',
       key: 'feeName',
-      width: 150
+      width: 120
     },
     {
       title: '应付期间',
       dataIndex: 'period',
       key: 'period',
-      width: 150,
+      width: 120,
       render: val => {
         if (val == null) {
           return ''
@@ -154,7 +154,7 @@ const ShowBill = (props: ShowBillProps) => {
       title: '计费起始日期',
       dataIndex: 'beginDate',
       key: 'beginDate',
-      width: 80,
+      width: 120,
       render: val => {
         if (val == null) {
           return ''
@@ -167,7 +167,7 @@ const ShowBill = (props: ShowBillProps) => {
       title: '计费终止日期',
       dataIndex: 'endDate',
       key: 'endDate',
-      width: 80,
+      width: 120,
       render: val => {
         if (val == null) {
           return ''
@@ -179,8 +179,7 @@ const ShowBill = (props: ShowBillProps) => {
     {
       title: '备注',
       dataIndex: 'memo',
-      key: 'memo',
-      width: 80
+      key: 'memo'
     }
   ] as ColumnProps<any>[];
 
@@ -200,69 +199,45 @@ const ShowBill = (props: ShowBillProps) => {
             <Row gutter={24}>
               <Col span={8}>
                 <Form.Item required label="付款单号">
-                  {getFieldDecorator('billCode', {
-                    initialValue: infoDetail.billCode
-                  })(
-                    <Input disabled={true} />
-                  )}
+                  {infoDetail.billCode}
                 </Form.Item>
               </Col>
               <Col span={8}>
                 <Form.Item required label="付款日期"  >
-                  {getFieldDecorator('billDate', {
-                    initialValue: infoDetail.endDate ? moment(infoDetail.billDate) : moment(new Date())
-                  })(
-                    <DatePicker disabled={true} style={{ width: '100%' }} />
-                  )}
+                  {infoDetail.billDate}
                 </Form.Item>
               </Col>
               <Col span={8}>
                 <Form.Item required label="经办人"  >
-                  {getFieldDecorator('createUserName', {
-                    initialValue: infoDetail.createUserName
-                  })(
-                    <Input disabled={true} />
-                  )}
+                  {infoDetail.createUserName}
+
                 </Form.Item>
               </Col>
             </Row>
             <Row gutter={24}>
               <Col span={8}>
                 <Form.Item required label="本次付款"   >
-                  {getFieldDecorator('payAmount', {
-                    initialValue: infoDetail.payAmount
-                  })(
-                    <Input disabled={true} />
-                  )}
+                  {infoDetail.payAmount}
+
                 </Form.Item>
               </Col>
               <Col span={8}>
                 <Form.Item required label="付款方式"  >
-                  {getFieldDecorator('payType', {
-                    initialValue: infoDetail.payType
-                  })(
-                    <Input disabled={true} />
-                  )}
+                  {infoDetail.payType}
+
                 </Form.Item>
               </Col>
               <Col span={8}>
                 <Form.Item required label="审核人"   >
-                  {getFieldDecorator('verifyPerson', {
-                    initialValue: infoDetail.verifyPerson
-                  })(
-                    <Input disabled={true} />
-                  )}
+                  {infoDetail.verifyPerson}
+
                 </Form.Item>
               </Col>
             </Row>
             <Row>
               <Col span={24}>
                 <Form.Item label="备注"  >
-                  {getFieldDecorator('memo', {
-                    initialValue: infoDetail.memo
-                  })(
-                    <TextArea disabled={true} rows={3} />
-                  )}
+                  {infoDetail.memo} 
                 </Form.Item>
               </Col>
             </Row>
@@ -274,7 +249,7 @@ const ShowBill = (props: ShowBillProps) => {
                 dataSource={data}
                 rowKey="billId"
                 pagination={pagination}
-                scroll={{ y: 500, x: 800 }}
+                scroll={{ y: 500, x: 1000 }}
                 loading={loading}
                 onChange={(pagination: PaginationConfig, filters, sorter) =>
                   initPaymentFeeDetail(pagination, sorter)

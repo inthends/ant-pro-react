@@ -1,9 +1,9 @@
 //通知单
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { message,Dropdown, Menu, Tabs, Button, Icon, Input, Layout, Modal, Select } from 'antd';
+import { message, Dropdown, Menu, Tabs, Button, Icon, Input, Layout, Modal, Select } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { GetBillPageData, ChargeFeePageData, RemoveForm, GetTemplates,BatchAudit } from './BillNotice.service';
+import { GetBillPageData, ChargeFeePageData, RemoveForm, GetTemplates, BatchAudit } from './BillNotice.service';
 import AsynLeftTree from '../AsynLeftTree';
 import BillCheckTable from './BillCheckTable';
 import BillNoticeTable from './BillNoticeTable';
@@ -185,6 +185,7 @@ function BillNotice() {
     if (id != null && id != '')
       setId(id);
   };
+
   const closeModify = (result?) => {
     setModifyVisible(false);
     if (result) {
@@ -194,60 +195,68 @@ function BillNotice() {
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
 
   const showModify = (id?, isedit?) => {
-    setIsEdit(isedit);
+    // setIsEdit(isedit);
     setModifyVisible(true);
     setId(id);
   };
-  const deleteData = (id?) => {
-    Modal.confirm({
-      title: '是否确认删除该记录?',
-      onOk() {
-        RemoveForm({
-          keyValue: id
-        }).then(res => {
 
-        });
-      },
-      onCancel() { },
-    });
-  };
+  // const deleteData = (id?) => {
+  //   Modal.confirm({
+  //     title: '是否确认删除该记录?',
+  //     onOk() {
+  //       RemoveForm({
+  //         keyValue: id
+  //       }).then(res => {
+
+  //       });
+  //     },
+  //     onCancel() { },
+  //   });
+  // };
 
   const [billCheckSearchParams, setBillCheckSearchParams] = useState<any>({});
-  const [isEdit, setIsEdit] = useState<boolean>(false);
+  // const [isEdit, setIsEdit] = useState<boolean>(false);
   // const [divideVisible,setDivideVisible]=useState<boolean>(false);
   const [templateId, setTemplateId] = useState<string>('');
   const [billType, setBillType] = useState<string>('');
 
   const handleMenuClick = (e) => {
     if (e.key == '1') {
-      //如果选择了多条 在批量审核
-      if (selectIds&&selectIds.length > 1) {
-        Modal.confirm({
-          title: '请确认',
-          content: `您是否要审核这些账单?`,
-          onOk: () => {
-            BatchAudit({
-              keyValues: JSON.stringify(selectIds),
-              IfVerify: true
-            })
-              .then(() => {
-                message.success('审核成功');
-                initBillCheckLoadData('', '');
+
+      if (selectIds == undefined) {
+        message.error('请选择需要审核的账单！');
+      } else {
+
+        //如果选择了多条 在批量审核
+        if (selectIds && selectIds.length > 1) {
+          Modal.confirm({
+            title: '请确认',
+            content: `您是否要审核这些账单?`,
+            onOk: () => {
+              BatchAudit({
+                keyValues: JSON.stringify(selectIds),
+                IfVerify: true
               })
-              .catch(e => { });
-          },
-        });
-      }
-      //如果仅选择一条 则显示账单
-      else {
-       /* if (id == null || id == '') {
-          message.warning('请先选择账单');
-        } else {*/
+                .then(() => {
+                  message.success('审核成功');
+                  initBillCheckLoadData('', '');
+                })
+                .catch(e => { });
+            },
+          });
+        }
+        //如果仅选择一条 则显示账单
+        else {
+          /* if (id == null || id == '') {
+             message.warning('请先选择账单');
+           } else {*/
           showVerify(selectIds[0], true);
-        //}
+          //}
+        }
       }
-    } else if (e.key == '2') {
-      if (selectIds&&selectIds.length > 1) {
+    }
+    else if (e.key == '2') {
+      if (selectIds && selectIds.length > 1) {
         Modal.confirm({
           title: '请确认',
           content: `您是否要取消审核这些账单?`,
@@ -264,23 +273,42 @@ function BillNotice() {
           },
         });
       } else {
-       /* if (id == null || id == '') {
-          message.warning('请先选择账单');
-        } else {*/
-          showVerify(id, true);
-       // }
+        /* if (id == null || id == '') {
+           message.warning('请先选择账单');
+         } else {*/
+        showVerify(id, false);
+        // }
       }
     } else {
+      //打印
 
     }
+    // else {
+    //   //删除
+    //   if (selectIds == undefined) {
+    //     message.error('请选择需要删除的账单！');
+    //   } else { 
+    //     Modal.confirm({
+    //       title: '是否确认删除?',
+    //       onOk() {
+    //         RemoveForm({
+    //           keyValue: id
+    //         }).then(res => {
+
+    //         });
+    //       },
+    //       onCancel() { },
+    //     });
+    //   }
+    // }
   };
 
   const menu = (
     <Menu onClick={handleMenuClick}>
-      <Menu.Item key="1">批量审核</Menu.Item>
-      <Menu.Item key="2">取消审核</Menu.Item>
-      <Menu.Item key="3">批量打印</Menu.Item>
-      <Menu.Item key="4">批量删除</Menu.Item>
+      <Menu.Item key="1">审核</Menu.Item>
+      <Menu.Item key="2">反审</Menu.Item>
+      <Menu.Item key="3">打印</Menu.Item>
+      {/* <Menu.Item key="4">删除</Menu.Item> */}
     </Menu>
   );
 
@@ -300,7 +328,7 @@ function BillNotice() {
                 var params = Object.assign({}, billCheckSearchParams, { billChecktype: value });
                 setBillCheckSearchParams(params);
               }}>
-             <Select placeholder="==账单类型==" style={{ width: '150px', marginRight: '5px' }}
+              <Select placeholder="==账单类型==" style={{ width: '150px', marginRight: '5px' }}
                 onChange={(value: string) => {
                   setBillType(value);
                 }}>
@@ -437,8 +465,8 @@ function BillNotice() {
                     setIfVerify(false);
                   }
                 }
-                var recordList:Array<string> =[];
-                records.forEach(record=>{
+                var recordList: Array<string> = [];
+                records.forEach(record => {
                   recordList.push(record.billId)
                 })
                 setSelectIds(recordList);

@@ -389,7 +389,7 @@ function Main() {
           </TabPane>
           <TabPane tab="收款单列表" key="2">
             <div style={{ marginBottom: '10px' }}>
-              <Select placeholder="=请选择=" style={{ width: '110px', marginRight: '5px' }} onChange={(value) => {
+              <Select placeholder="=请选择=" style={{ width: '120px', marginRight: '5px' }} onChange={(value) => {
                 var params = Object.assign({}, chargedSearchParams, { status: value });
                 setChargedSearchParams(params);
               }} >
@@ -406,19 +406,23 @@ function Main() {
                   {'已作废'}
                 </Option>
               </Select>
-              <DatePicker onChange={(date, dateStr) => {
+              <DatePicker 
+                placeholder='请选择收款日期'
+              onChange={(date, dateStr) => {
                 var params = Object.assign({}, chargedSearchParams, { startDate: dateStr });
                 setChargedSearchParams(params);
-              }} style={{ marginRight: '5px', width: '120px' }} />
+              }} style={{ marginRight: '5px' }} />
               至
-              <DatePicker onChange={(date, dateStr) => {
+              <DatePicker 
+               placeholder='请选择收款日期'
+              onChange={(date, dateStr) => {
                 var params = Object.assign({}, chargedSearchParams, { endDate: dateStr });
                 setChargedSearchParams(params);
-              }} style={{ marginLeft: '5px', marginRight: '5px', width: '120px' }} />
+              }} style={{ marginLeft: '5px', marginRight: '5px'  }} />
               <Search
                 className="search-input"
-                placeholder="请输入关键字"
-                style={{ width: 140 }}
+                placeholder="请输入收款单号"
+                style={{ width: 200 }}
                 onChange={e => {
                   var params = Object.assign({}, chargedSearchParams, { search: e.target.value });
                   setChargedSearchParams(params);

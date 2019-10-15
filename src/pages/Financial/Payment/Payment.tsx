@@ -226,7 +226,7 @@ function Payment() {
   const [paymentStatus, setPaymentStatus] = useState<string>('');
   const [paymentStartDate, setPaymentStartDate] = useState<string>('');
   const [paymentEndDate, setPaymentEndDate] = useState<string>('');
-  const [billStatus, setBillStatus] = useState<number>(-1);
+  // const [billStatus, setBillStatus] = useState<number>(-1);
   return (
     <Layout>
       <AsynLeftTree
@@ -327,7 +327,7 @@ function Payment() {
                 onChange={(date, dateStr) => {
                   setPaymentStartDate(dateStr);
                 }} />
-              至：
+              至
               <DatePicker style={{ marginRight: '5px' }}
                 placeholder='请选择付款日期'
                 onChange={(date, dateStr) => {
@@ -342,7 +342,7 @@ function Payment() {
                   loadPaymentData();
                 }}
               />
-              <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
+              {/* <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
                 onClick={() => {
                   if (id == null || id == '') {
                     message.warning('请先选择账单');
@@ -366,7 +366,7 @@ function Payment() {
               >
                 <Icon type="check-square" />
                 审核
-              </Button>
+              </Button> */}
             </div>
             <PaymentTable
               showBill={(id) => {
@@ -381,8 +381,15 @@ function Payment() {
               reload={() => initPaymentLoadData('', paymentSearchParams.search)}
               getRowSelect={(record) => {
                 setId(record.billId);
-                setBillStatus(record.status);
+                // setBillStatus(record.status); 
+                if (record.status == 0) {
+                  setIfVerify(true);
+                } else {
+                  setIfVerify(false);
+                }
+
               }}
+              showVerify={showVerify}
             />
           </TabPane>
         </Tabs>

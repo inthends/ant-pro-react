@@ -16,7 +16,7 @@ interface PaymentVerifyProps {
 
 const PaymentVerify = (props: PaymentVerifyProps) => {
   const { vertifyVisible, closeVerify, form, id,ifVerify ,reload} = props;
-  const title = id === undefined ? '账单审核' : '账单取消审核';
+  const title = id === undefined ? '付款单审核' : '付款单取消审核';
   const [loading, setLoading] = useState<boolean>(false);
   const { getFieldDecorator } = form;
   const [infoDetail, setInfoDetail] = useState<any>({});
@@ -70,8 +70,7 @@ const PaymentVerify = (props: PaymentVerifyProps) => {
   };
 
   return (
-      <Drawer
-        className="offsetVerify"
+      <Drawer 
         title={title}
         placement="right"
         width={880}

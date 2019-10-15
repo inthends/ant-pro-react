@@ -21,10 +21,11 @@ interface MeterModifyProps {
   id?: string;
   organizeId?: string;
   reload(): void;
+  treeData: any[];
 }
 
 const MeterModify = (props: MeterModifyProps) => {
-  const { modifyVisible, closeDrawer, form, id, reload } = props;
+  const { modifyVisible, closeDrawer, form, id, reload,treeData } = props;
   const title = id == null ? '新增费表资料' : '修改费表资料';
   const [loading, setLoading] = useState<boolean>(false);
   const { getFieldDecorator } = form;
@@ -40,7 +41,7 @@ const MeterModify = (props: MeterModifyProps) => {
 
 
   const [meterSearchParams, setMeterSearchParams] = useState<any>({});
-  const [meterLoading, setMeterLoading] = useState<boolean>(false);
+  // const [meterLoading, setMeterLoading] = useState<boolean>(false);
   const [meterData, setMeterData] = useState<any>();
   // const [meterSearch, setMeterSearch] = useState<string>('');
   const [meterPagination, setMeterPagination] = useState<DefaultPagination>(new DefaultPagination());
@@ -115,7 +116,7 @@ const MeterModify = (props: MeterModifyProps) => {
   }
 
   const meterload = data => {
-    setMeterLoading(true);
+    // setMeterLoading(true);
     data.sidx = data.sidx || 'metercode';
     data.sord = data.sord || 'asc';
     return GetPageListWithMeterID(data).then(res => {
@@ -129,7 +130,7 @@ const MeterModify = (props: MeterModifyProps) => {
         };
       });
       setMeterData(res.data);
-      setMeterLoading(false);
+      // setMeterLoading(false);
       return res;
     });
   };
@@ -155,7 +156,7 @@ const MeterModify = (props: MeterModifyProps) => {
           Memo: values.memo,
           FeeItemId: infoDetail.feeItemId,
           FeeItemName: infoDetail.feeItemName,
-          IsStop: values.isStop==null?false:true
+          IsStop: values.isStop == null ? false : true
         }
         setFeeDetail(
           meterEntity
@@ -421,7 +422,7 @@ const MeterModify = (props: MeterModifyProps) => {
               <Col span={4}>
                 <Form.Item required label="是否停用"   >
                   {getFieldDecorator('isStop', {
-                    initialValue: infoDetail.isStop==null?false:true
+                    initialValue: infoDetail.isStop == null ? false : true
                   })(
                     <Checkbox />
                   )}
@@ -481,7 +482,7 @@ const MeterModify = (props: MeterModifyProps) => {
                     initMeterLoadData();
                   }}
                 />
-                <Button type="link"  style={{ float: 'right'  }}
+                <Button type="link" style={{ float: 'right' }}
                   onClick={() => {
                     Modal.confirm({
                       title: '请确认',
@@ -497,7 +498,7 @@ const MeterModify = (props: MeterModifyProps) => {
                     });
                   }}
                 > <Icon type="delete" />全部删除</Button>
-                <Button type="link"   style={{ float: 'right', marginLeft: '1px' }}
+                <Button type="link" style={{ float: 'right', marginLeft: '1px' }}
                   onClick={() => {
                     checkEntity();
                   }}
@@ -508,8 +509,8 @@ const MeterModify = (props: MeterModifyProps) => {
               </div>
               <Table<any>
                 onChange={(paginationConfig, filters, sorter) => {
-                    initMeterLoadData(paginationConfig, sorter)
-                  }
+                  initMeterLoadData(paginationConfig, sorter)
+                }
                 }
                 bordered={false}
                 size="middle"
@@ -549,7 +550,7 @@ const MeterModify = (props: MeterModifyProps) => {
               if (!errors) {
                 let guid = getGuid();
                 var meterEntity = {
-                  keyValue: id == null || id == '' ? '' : id,
+                  keyValue: id == null || id == '' ? guid : id,
                   MeterId: id == null || id == '' ? guid : id,
                   OrganizeId: infoDetail.organizeId,
                   MeterType: values.meterType,
@@ -565,7 +566,7 @@ const MeterModify = (props: MeterModifyProps) => {
                   Memo: values.memo,
                   FeeItemId: infoDetail.feeItemId,
                   FeeItemName: infoDetail.feeItemName,
-                  IsStop: values.isStop==null?false:true,
+                  IsStop: values.isStop == null ? false : true,
                   type: isAdd ? 1 : 0
                 }
                 SaveForm(meterEntity).then(() => {
@@ -583,7 +584,8 @@ const MeterModify = (props: MeterModifyProps) => {
         visible={chargeFeeItemVisible}
         closeModal={closeChargeFeeItem}
         getSelectTree={(item) => {
-          var info = Object.assign({}, infoDetail, { feeItemName: item.name, feeItemID: item.id });
+          debugger
+          var info = Object.assign({}, infoDetail, { feeItemName: item.name, feeItemId: item.id });
           setInfoDetail(info);
         }}
       />
@@ -605,6 +607,7 @@ const MeterModify = (props: MeterModifyProps) => {
         visible={selectHouseVisible}
         closeModal={closeSelectHouse}
         feeDetail={feeDetail}
+        treeData={treeData}
       />
       <EditHouseFeeItem
         modifyVisible={editHouseFeeItemVisible}

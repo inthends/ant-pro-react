@@ -28,7 +28,7 @@ const Verify = (props: VerifyProps) => {
 
   useEffect(() => {
     if (vertifyVisible) {
-      form.resetFields();
+      form.resetFields(); 
       if (id != null && id != '') {
         setLoading(true);
         GetBilling(id).then(res => {
@@ -50,7 +50,7 @@ const Verify = (props: VerifyProps) => {
 
   const initUnitFeeLoadData = (searchText) => {
     const queryJson = {
-      keyValue: id == null || id == '' ? '' : id,
+      billId: id == null || id == '' ? '' : id,
       keyword: searchText,
     };
     const sidx = 'id';
