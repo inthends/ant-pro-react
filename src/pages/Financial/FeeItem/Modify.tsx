@@ -125,6 +125,12 @@ const Modify = (props: ModifyProps) => {
           newData.beginDate = newData.beginDate.format('YYYY-MM-DD');
           newData.endDate = newData.endDate.format('YYYY-MM-DD');
         }
+        else {
+          //存在日期输入的情况
+          debugger
+          newData.beginDate = newData.beginDate ? newData.beginDate.format('YYYY-MM-DD') : null;
+          newData.endDate = newData.endDate ? newData.endDate.format('YYYY-MM-DD') : null;
+        }
         SaveForm(newData).then(res => {
           reload();
           closeDrawer();
@@ -820,7 +826,9 @@ const Modify = (props: ModifyProps) => {
                 <Col lg={12}>
                   <Form.Item label="计费终止日期">
                     {getFieldDecorator('endDate', {
-                      initialValue: form.getFieldValue('isNullDate') ? null : getEndDate(),//infoDetail.endDate ? moment(new Date(infoDetail.endDate)) : moment(getEndDate()),
+                      initialValue: form.getFieldValue('beginDate') ? getEndDate() : null,
+                      // initialValue: form.getFieldValue('isNullDate') ? null : getEndDate(),
+                      //infoDetail.endDate ? moment(new Date(infoDetail.endDate)) : moment(getEndDate()),
                       rules: [{ required: !form.getFieldValue('isNullDate'), message: '计费终止日期' }],
                     })(<DatePicker disabled placeholder="计费终止日期" style={{ width: '100%' }} onChange={(date, dateString) => {
                       setEndDate(dateString, infoDetail.cycleValue, infoDetail.cycleType);
@@ -1408,7 +1416,7 @@ const Modify = (props: ModifyProps) => {
                   columns={orgcolumns}
                   rowKey={record => record.allName}
                   pagination={orgPagination}
-                  // scroll={{ y: 330 }}
+                  scroll={{ y: 420 }}
                   onChange={(pagination: PaginationConfig, filters, sorter) =>
                     orgLoadData(orgSearch, pagination, sorter)
                   }

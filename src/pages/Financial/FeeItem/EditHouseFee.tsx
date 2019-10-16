@@ -586,8 +586,8 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                 </Col>
                 <Col lg={12}>
                   <Form.Item label="计算方法">
-                    {getFieldDecorator('delayType', {
-                      initialValue: infoDetail.delayType,
+                    {getFieldDecorator('delayType', { 
+                      initialValue: infoDetail.delayType ? infoDetail.delayType : 1,
                     })(
                       <Select placeholder="选择滞纳金计算方式">
                         <Option value={1}>按天计算（固定滞纳率）</Option>
