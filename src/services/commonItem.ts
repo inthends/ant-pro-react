@@ -78,3 +78,8 @@ export function GetAllOrgIds(pstructid): Promise<string[]> {
 export function GetUnitTreeAll(): Promise<ResponseObject<any>> {
   return request.get(process.env.basePath + `/Common/GetUnitTreeAll`, {});
 } 
+
+// 查询机构
+export function searchOrgs(): Promise<any[]> {
+  return request.get(process.env.basePath + `/Common/GetOrgTreeOnly`).then(getResult as any);
+}

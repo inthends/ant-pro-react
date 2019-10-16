@@ -1,6 +1,6 @@
 import { BaseModifyProvider } from "@/components/BaseModifyDrawer/BaseModifyDrawer";
 import ModifyItem from "@/components/BaseModifyDrawer/ModifyItem";
-import { Form, Row } from "antd";
+import { Form, Row, Card } from "antd";
 import { WrappedFormUtils } from "antd/lib/form/Form";
 import React from "react";
 import { SaveForm } from "./Role.service";
@@ -26,31 +26,33 @@ const Modify = (props: ModifyProps) => {
 
   return (
     <BaseModifyProvider {...props} name="角色" save={doSave}>
-      <Form layout="vertical" hideRequiredMark>
-        <Row gutter={24}>
-          <ModifyItem
-            {...baseFormProps}
-            field="enCode"
-            label="角色编号"
-            rules={[{ required: true, message: "请输入角色编号" }]}
-          ></ModifyItem>
-          <ModifyItem
-            {...baseFormProps}
-            field="fullName"
-            label="角色名称"
-            rules={[{ required: true, message: "请输入角色名称" }]}
-          ></ModifyItem>
-        </Row>
-        <Row gutter={24}>
-          <ModifyItem
-            {...baseFormProps}
-            wholeLine={true}
-            type="textarea"
-            field="description"
-            label="备注"
-          ></ModifyItem>
-        </Row>
-      </Form>
+      <Card>
+        <Form layout="vertical" hideRequiredMark>
+          <Row gutter={24}>
+            <ModifyItem
+              {...baseFormProps}
+              field="enCode"
+              label="角色编号"
+              rules={[{ required: true, message: "请输入角色编号" }]}
+            ></ModifyItem>
+            <ModifyItem
+              {...baseFormProps}
+              field="fullName"
+              label="角色名称"
+              rules={[{ required: true, message: "请输入角色名称" }]}
+            ></ModifyItem>
+          </Row>
+          <Row gutter={24}>
+            <ModifyItem
+              {...baseFormProps}
+              wholeLine={true}
+              type="textarea"
+              field="description"
+              label="备注"
+            ></ModifyItem>
+          </Row>
+        </Form>
+      </Card>
     </BaseModifyProvider>
   );
 };

@@ -64,11 +64,13 @@ function Main() {
   const closeDrawer = () => {
     setModifyVisible(false);
   };
+
   const showDrawer = (item?) => {
     setCurrData(item);
     setModifyVisible(true);
   };
-  const loadData = (searchText, org, paginationConfig?: PaginationConfig, sorter?) => {
+
+  const loadData = (searchText, organizeId, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(searchText);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
@@ -81,9 +83,7 @@ function Main() {
       total,
       queryJson: {
         keyword: searchText,
-        OrganizeId: org.organizeId,
-        TreeTypeId: org.id,
-        TreeType: org.type,
+        OrganizeId: organizeId, 
       },
     };
 
@@ -118,13 +118,11 @@ function Main() {
     });
   };
 
-  const initLoadData = (org, searchText) => {
+  const initLoadData = (organizeId, searchText) => {
     setSearch(searchText);
     const queryJson = {
-      OrganizeId: org.organizeId,
-      keyword: searchText,
-      TreeTypeId: org.id,
-      TreeType: org.type,
+      OrganizeId: organizeId,
+      keyword: searchText, 
     };
     const sidx = 'id';
     const sord = 'asc';
@@ -173,9 +171,9 @@ function Main() {
       </Content>
 
       <Modify
-        modifyVisible={modifyVisible}
+        visible={modifyVisible}
         closeDrawer={closeDrawer}
-        treeData={treeData}
+        // treeData={treeData}
         data={currData}
         reload={() => initLoadData(organizeId, search)}
       />

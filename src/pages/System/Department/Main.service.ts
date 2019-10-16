@@ -32,11 +32,6 @@ export function GetDetailJson(keyValue): Promise<any> {
     .then(getResult as any);
 }
 
-// 查询机构
-export function searchOrgs(): Promise<any[]> {
-  return request.get(process.env.basePath + `/Common/GetOrgTreeOnly`).then(getResult as any);
-}
-
 // 查询用户
 export function searchUser(keyword): Promise<any[]> {
   const type = '员工';

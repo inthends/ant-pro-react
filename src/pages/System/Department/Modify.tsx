@@ -3,7 +3,10 @@ import ModifyItem, { SelectItem } from '@/components/BaseModifyDrawer/ModifyItem
 import { Card, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useState, useEffect } from 'react';
-import { SaveForm, searchUser, ExistEnCode, ExistName, searchOrgs, GetDepartmentTree } from './Main.service';
+import { SaveForm, searchUser, ExistEnCode, ExistName, GetDepartmentTree } from './Main.service';
+import { searchOrgs } from '@/services/commonItem';
+
+
 import { TreeNode } from 'antd/lib/tree-select';
 import styles from './style.less';
 

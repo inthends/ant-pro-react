@@ -1,5 +1,5 @@
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { Button, Icon, Input, Layout, Select } from 'antd';
+import { Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import ChooseUser from './ChooseUser';
@@ -8,7 +8,7 @@ import ListTable from './ListTable';
 import Modify from './Modify';
 import { getDataList } from './Role.service';
 
-const { Option } = Select;
+// const { Option } = Select;
 const { Content } = Layout;
 const { Search } = Input;
 interface SearchParam {
