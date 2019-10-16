@@ -66,7 +66,7 @@ const Modify = (props: ModifyProps) => {
         setInfoDetail(newInfo);
         form.setFieldsValue({ feeType: selectTreeItem.feeType });
 
-      } else { 
+      } else {
       }
     });
   };
@@ -80,8 +80,15 @@ const Modify = (props: ModifyProps) => {
           //   // var kind = tempInfo.feeKind == "收款费项" ? "ReceivablesItem" : "PaymentItem";
           //   changeFeeType(tempInfo.feeKind);
           //   setIsInit(false);
-          // }
+          // } 
+
           setInfoDetail(tempInfo);
+
+          //设置状态
+          tempInfo.accBillDateUnit == 2 ? setAccFixedDisabled(false) : setAccFixedDisabled(true);
+          tempInfo.payDeadlineUnit == 2 ? setPayFixedDisabled(false) : setPayFixedDisabled(true);
+          tempInfo.lateStartDateUnit == 2 ? setLateFixedDisabled(false) : setLateFixedDisabled(true);
+
           form.resetFields();
         });
         if (id !== undefined) {
@@ -223,11 +230,11 @@ const Modify = (props: ModifyProps) => {
   };
 
   const [orgData, setOrgData] = useState<any[]>([]);
-  const [orgSearch,setOrgSearch]=useState<string>();
+  const [orgSearch, setOrgSearch] = useState<string>();
   const [orgLoading, setOrgLoading] = useState<boolean>(false);
   const [orgPagination, setOrgPagination] = useState<PaginationConfig>(new DefaultPagination());
 
-  const orgLoadData = (search,paginationConfig?: PaginationConfig, sorter?) => {
+  const orgLoadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
     setOrgSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
@@ -587,6 +594,7 @@ const Modify = (props: ModifyProps) => {
                       initialValue: infoDetail.feeKind,
                       rules: [{ required: true, message: '请选择费项种类' }],
                     })(<Select placeholder="请选择费项种类"
+                      disabled={infoDetail.feeKind ? true : false}
                       onChange={value => { changeFeeType(value) }}
                     >
                       <Option value="收款费项">收款费项</Option>
@@ -869,19 +877,18 @@ const Modify = (props: ModifyProps) => {
                 <Col lg={12}>
                   <Form.Item label="计算方法">
                     {getFieldDecorator('delayType', {
-                      initialValue: infoDetail.delayType,
+                      initialValue: infoDetail.delayType ? infoDetail.delayType : 1,
                       // rules: [{ required: true, message: '请选择滞纳金计算方式' }],
                     })(
                       <Select placeholder="选择滞纳金计算方式">
-                        <Option value="按天计算（固定滞纳率）">按天计算（固定滞纳率）</Option>
-                        <Option value="按月计算（固定滞纳率）" >按月计算（固定滞纳率）</Option>
-                        <Option value="按季计算（固定滞纳率）">按季计算（固定滞纳率）</Option>
+                        <Option value={1}>按天计算（固定滞纳率）</Option>
+                        <Option value={2}>按月计算（固定滞纳率）</Option>
+                        <Option value={3}>按季计算（固定滞纳率）</Option>
                       </Select>
                     )}
                   </Form.Item>
                 </Col>
               </Row>
-
               <Row gutter={24}>
                 <Col lg={24}>
                   <Form.Item label="附加说明">
@@ -904,7 +911,6 @@ const Modify = (props: ModifyProps) => {
                         initialValue: infoDetail.midResultScale,
                         rules: [{ required: true, message: '请选择小数位数' }],
                       })(
-
                         <Select placeholder="请选择单位">
                           <Option value="0">0</Option>
                           <Option value="1" >1</Option>
@@ -984,21 +990,19 @@ const Modify = (props: ModifyProps) => {
                     </Form.Item>
                   </Col>
                 </Row>
-
-
               </Card>
               <Card title="账单日设置" className={styles.card2} >
                 <Row gutter={8}>
                   <Col span={6}>
                     <Form.Item label="应收期间 距">
                       {getFieldDecorator('accPeriodBase', {
-                        initialValue: infoDetail.accPeriodBase ? infoDetail.accPeriodBase.toString() : "2",
+                        initialValue: infoDetail.accPeriodBase,//? infoDetail.accPeriodBase : 2,
                         rules: [{ required: true, message: '请选择应收期间' }],
                       })(
                         <Select placeholder="==选择应收期间==">
-                          <Option value="0">同一季度费用,每季度首月为应收期间</Option>
-                          <Option value="1" >计费起始日期</Option>
-                          <Option value="2">计费终止日期</Option>
+                          <Option value={1}>同一季度费用,每季度首月为应收期间</Option>
+                          <Option value={2} >计费起始日期</Option>
+                          <Option value={3}>计费终止日期</Option>
                         </Select>
                       )}
                     </Form.Item>
@@ -1009,19 +1013,19 @@ const Modify = (props: ModifyProps) => {
                         initialValue: infoDetail.accPeriodBaseNum ? infoDetail.accPeriodBaseNum : 7,
                         rules: [{ required: true, message: '请输入数量' }],
                       })(
-                        <Input></Input>
+                        <InputNumber style={{ width: '100%' }} />
                       )}
                     </Form.Item>
                   </Col>
                   <Col span={6} style={{ marginTop: '29px' }}>
                     <Form.Item>
                       {getFieldDecorator('accPeriodBaseUnit', {
-                        initialValue: infoDetail.accPeriodBaseUnit ? infoDetail.accPeriodBaseUnit.toString() : "1",
+                        initialValue: infoDetail.accPeriodBaseUnit,//? infoDetail.accPeriodBaseUnit : "1",
                         rules: [{ required: true, message: '请选择单位' }],
                       })(
                         <Select placeholder="==选择单位==">
-                          <Option value="0">天</Option>
-                          <Option value="1" >月</Option>
+                          <Option value={1}>天</Option>
+                          <Option value={2} >月</Option>
                         </Select>
                       )}
                     </Form.Item>
@@ -1031,13 +1035,13 @@ const Modify = (props: ModifyProps) => {
                   <Col span={6}>
                     <Form.Item label="账单日 距">
                       {getFieldDecorator('accBillDateBase', {
-                        initialValue: infoDetail.accBillDateBase ? infoDetail.accBillDateBase.toString() : "2",
+                        initialValue: infoDetail.accBillDateBase,// ? infoDetail.accBillDateBase : "2",
                         rules: [{ required: true, message: '请选择应收期间' }],
                       })(
                         <Select placeholder="==选择应收期间==">
-                          <Option value="0">同一季度费用,每季度首月为应收期间</Option>
-                          <Option value="1" >计费起始日期</Option>
-                          <Option value="2">计费终止日期</Option>
+                          <Option value={1}>同一季度费用,每季度首月为应收期间</Option>
+                          <Option value={2} >计费起始日期</Option>
+                          <Option value={3}>计费终止日期</Option>
                         </Select>
                       )}
                     </Form.Item>
@@ -1048,25 +1052,25 @@ const Modify = (props: ModifyProps) => {
                         initialValue: infoDetail.accBillDateNum ? infoDetail.accBillDateNum : 7,
                         rules: [{ required: true, message: '请输入数量' }],
                       })(
-                        <Input></Input>
+                        <InputNumber style={{ width: '100%' }} />
                       )}
                     </Form.Item>
                   </Col>
                   <Col span={6} style={{ marginTop: '29px' }}>
                     <Form.Item>
                       {getFieldDecorator('accBillDateUnit', {
-                        initialValue: infoDetail.accBillDateUnit ? infoDetail.accBillDateUnit.toString() : "1",
+                        initialValue: infoDetail.accBillDateUnit,//? infoDetail.accBillDateUnit : "1",
                         rules: [{ required: true, message: '请选择单位' }],
                       })(
                         <Select placeholder="==选择单位==" onChange={value => {
-                          if (value == "0") {
+                          if (value == 1) {
                             setAccFixedDisabled(true);
                           } else {
                             setAccFixedDisabled(false);
                           }
                         }}>
-                          <Option value="0">天</Option>
-                          <Option value="1" >月</Option>
+                          <Option value={1}>天</Option>
+                          <Option value={2}>月</Option>
                         </Select>
                       )}
                     </Form.Item>
@@ -1102,12 +1106,12 @@ const Modify = (props: ModifyProps) => {
                           <Option value="23"> 23日</Option>
                           <Option value="24"> 24日</Option>
                           <Option value="25"> 25日</Option>
-                          <Option value="26"> 26日</Option>
-                          <Option value="27"> 27日</Option>
-                          <Option value="28"> 28日</Option>
-                          <Option value="29"> 29日</Option>
-                          <Option value="30"> 30日</Option>
-                          <Option value="31"> 31日</Option>
+                          <Option value="26">26日</Option>
+                          <Option value="27">27日</Option>
+                          <Option value="28">28日</Option>
+                          <Option value="29">29日</Option>
+                          <Option value="30">30日</Option>
+                          <Option value="31">31日</Option>
                         </Select>
                       )}
                     </Form.Item>
@@ -1117,13 +1121,13 @@ const Modify = (props: ModifyProps) => {
                   <Col span={6}>
                     <Form.Item label="收款截止日 距">
                       {getFieldDecorator('payDeadlineBase', {
-                        initialValue: infoDetail.payDeadlineBase ? infoDetail.payDeadlineBase.toString() : "2",
+                        initialValue: infoDetail.payDeadlineBase,//? infoDetail.payDeadlineBase.toString() : "2",
                         rules: [{ required: true, message: '请选择应收期间' }],
                       })(
                         <Select placeholder="==选择应收期间==">
-                          <Option value="0">同一季度费用,每季度首月为应收期间</Option>
-                          <Option value="1" >计费起始日期</Option>
-                          <Option value="2">计费终止日期</Option>
+                          <Option value={1}>同一季度费用,每季度首月为应收期间</Option>
+                          <Option value={2} >计费起始日期</Option>
+                          <Option value={3}>计费终止日期</Option>
                         </Select>
                       )}
                     </Form.Item>
@@ -1134,25 +1138,25 @@ const Modify = (props: ModifyProps) => {
                         initialValue: infoDetail.payDeadlineNum ? infoDetail.payDeadlineNum : 10,
                         rules: [{ required: true, message: '请输入数量' }],
                       })(
-                        <Input></Input>
+                        <InputNumber style={{ width: '100%' }} />
                       )}
                     </Form.Item>
                   </Col>
                   <Col span={6} style={{ marginTop: '29px' }}>
                     <Form.Item>
                       {getFieldDecorator('payDeadlineUnit', {
-                        initialValue: infoDetail.payDeadlineUnit ? infoDetail.payDeadlineUnit.toString() : "1",
+                        initialValue: infoDetail.payDeadlineUnit,//? infoDetail.payDeadlineUnit.toString() : "1",
                         rules: [{ required: true, message: '请选择单位' }],
                       })(
                         <Select placeholder="==选择单位==" onChange={value => {
-                          if (value == "0") {
+                          if (value == 1) {
                             setPayFixedDisabled(true);
                           } else {
                             setPayFixedDisabled(false);
                           }
                         }}>
-                          <Option value="0">天</Option>
-                          <Option value="1" >月</Option>
+                          <Option value={1}>天</Option>
+                          <Option value={2} >月</Option>
                         </Select>
                       )}
                     </Form.Item>
@@ -1203,13 +1207,13 @@ const Modify = (props: ModifyProps) => {
                   <Col span={6}>
                     <Form.Item label="滞纳金起算日 距">
                       {getFieldDecorator('lateStartDateBase', {
-                        initialValue: infoDetail.lateStartDateBase ? infoDetail.lateStartDateBase.toString() : "2",
+                        initialValue: infoDetail.lateStartDateBase,//? infoDetail.lateStartDateBase.toString() : "2",
                         rules: [{ required: true, message: '请选择应收期间' }],
                       })(
                         <Select placeholder="==选择应收期间==">
-                          <Option value="0">同一季度费用,每季度首月为应收期间</Option>
-                          <Option value="1" >计费起始日期</Option>
-                          <Option value="2">计费终止日期</Option>
+                          <Option value={1}>同一季度费用,每季度首月为应收期间</Option>
+                          <Option value={2}>计费起始日期</Option>
+                          <Option value={3}>计费终止日期</Option>
                         </Select>
                       )}
                     </Form.Item>
@@ -1220,25 +1224,25 @@ const Modify = (props: ModifyProps) => {
                         initialValue: infoDetail.lateStartDateNum ? infoDetail.lateStartDateNum : 10,
                         rules: [{ required: true, message: '请输入数量' }],
                       })(
-                        <Input></Input>
+                        <InputNumber style={{ width: '100%' }} />
                       )}
                     </Form.Item>
                   </Col>
                   <Col span={6} style={{ marginTop: '29px' }}>
                     <Form.Item>
                       {getFieldDecorator('lateStartDateUnit', {
-                        initialValue: infoDetail.lateStartDateUnit ? infoDetail.lateStartDateUnit.toString() : "1",
+                        initialValue: infoDetail.lateStartDateUnit,//? infoDetail.lateStartDateUnit.toString() : "1",
                         rules: [{ required: true, message: '请选择单位' }],
                       })(
                         <Select placeholder="==选择单位==" onChange={value => {
-                          if (value == "0") {
+                          if (value == 1) {
                             setLateFixedDisabled(true);
                           } else {
                             setLateFixedDisabled(false);
                           }
                         }}>
-                          <Option value="0">天</Option>
-                          <Option value="1" >月</Option>
+                          <Option value={1}>天</Option>
+                          <Option value={2} >月</Option>
                         </Select>
                       )}
                     </Form.Item>
@@ -1309,8 +1313,8 @@ const Modify = (props: ModifyProps) => {
                   </Col>
                   <Col span={6}  >
                     <Form.Item label='应付款项'>
-                      {getFieldDecorator('payFeeItemID', {
-                        initialValue: infoDetail.payFeeItemID,
+                      {getFieldDecorator('payFeeItemId', {
+                        initialValue: infoDetail.payFeeItemId,
                       })(
                         <Select placeholder="==请选择==">
                           {feeItemNames.map(item => (
@@ -1337,9 +1341,9 @@ const Modify = (props: ModifyProps) => {
                         initialValue: infoDetail.copePersonType,
                       })(
                         <Select placeholder="==付款对象==">
-                          <Option value="业主">业主</Option>
-                          <Option value="住/租户" >住/租户</Option>
-                          <Option value="住/租户，空置时转给业主" >住/租户，空置时转给业主</Option>
+                          <Option value={1}>业主</Option>
+                          <Option value={2}>住/租户</Option>
+                          <Option value={3}>住/租户，空置时转给业主</Option>
                         </Select>
                       )}
                     </Form.Item>
@@ -1361,8 +1365,8 @@ const Modify = (props: ModifyProps) => {
                         initialValue: infoDetail.payDateUnit,
                       })(
                         <Select placeholder="==请选择单位==">
-                          <Option value="0">天</Option>
-                          <Option value="1" >月</Option>
+                          <Option value={1}>天</Option>
+                          <Option value={2}>月</Option>
                         </Select>
                       )}
                     </Form.Item>
@@ -1375,7 +1379,7 @@ const Modify = (props: ModifyProps) => {
             id ?
               <TabPane tab="所属机构" key="3" style={{ marginBottom: '20px' }}>
                 <div style={{ marginBottom: '5px', padding: '3px 2px' }}>
-                <Input.Search
+                  <Input.Search
                     key='orgsearch'
                     className="search-input"
                     placeholder="请输入要查询的机构名称"
@@ -1406,14 +1410,14 @@ const Modify = (props: ModifyProps) => {
                   pagination={orgPagination}
                   // scroll={{ y: 330 }}
                   onChange={(pagination: PaginationConfig, filters, sorter) =>
-                    orgLoadData(orgSearch,pagination, sorter)
+                    orgLoadData(orgSearch, pagination, sorter)
                   }
                   loading={orgLoading}
                 />
               </TabPane> : null
           }
           {
-            id ?
+            id && infoDetail.feeKind == '收款费项' ?
               <TabPane tab="设置房屋费项" key="4" style={{ marginBottom: '20px' }}>
                 <div style={{ marginBottom: '5px', padding: '3px 2px' }}>
                   <Input.Search
@@ -1429,17 +1433,22 @@ const Modify = (props: ModifyProps) => {
                     <Icon type="reload" />
                     刷新
                 </Button> */}
-
-
                   <Button type="link" style={{ float: 'right' }}
                     onClick={deleteHouse}
                   >
                     <Icon type="delete" />
                     删除
                 </Button>
-
                   <Button type="link" style={{ float: 'right' }}
-                    onClick={() => { setSelectHouseVisible(true); }}
+                    onClick={() => {
+                      //请选择费项所属的组织机构！
+                      if (orgData == null || orgData.length == 0) {
+                        message.error('请选择费项所属的组织机构！');
+                      }
+                      else {
+                        setSelectHouseVisible(true);
+                      }
+                    }}
                   >
                     <Icon type="plus" />
                     新增

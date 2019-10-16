@@ -1,5 +1,4 @@
 //房产信息
-
 import { Icon, Upload, Modal, Select, AutoComplete, Button, Card, Col, Drawer, Form, Input, Row, message, InputNumber } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
@@ -30,7 +29,7 @@ const PstructInfo = (props: PstructInfoProps) => {
   const [fileList, setFileList] = useState<any[]>([]);
   const [previewImage, setPreviewImage] = useState<string>('');
 
-  const title = data === undefined ? '添加' : '修改';
+  const title = data === undefined ? '添加' : '修改'; 
   let formLabel = '楼栋';
   if (type != undefined) {
     if (type == 1) {
@@ -133,7 +132,7 @@ const PstructInfo = (props: PstructInfoProps) => {
   const handleSearch = value => {
     if (value == '')
       return;
-    GetCustomerList(value).then(res => {
+    GetCustomerList(value,organizeId).then(res => {
       setUserSource(res || []);
     })
   };

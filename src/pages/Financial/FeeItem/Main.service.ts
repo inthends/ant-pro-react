@@ -19,7 +19,7 @@ export function GetFormJson(keyValue): Promise<FeeItemData> {
 }
 
 // 获取房屋费项信息
-export function GetHouseFormJson(keyValue): Promise<FeeItemData> {
+export function GetHouseFormJson(keyValue): Promise<any> {
   return request
     .get(process.env.basePath + `/FeeItems/GetHouseFormJson?keyValue=${keyValue}`)
     .then(getResult as any);

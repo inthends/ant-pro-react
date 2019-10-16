@@ -283,7 +283,7 @@ const Modify = (props: ModifyProps) => {
                           {item.text}
                         </Option>
                       ))}
-                    </Select>,
+                    </Select>
                   )}
                 </Form.Item>
               </Col>

@@ -81,9 +81,9 @@ export function GetRoomData(keyValue): Promise<any> {
 // }
 
 //查询客户数据
-export function GetCustomerList(keyword): Promise<any> {
+export function GetCustomerList(keyword,organizeId): Promise<any> {
   return request
-    .get(process.env.basePath + `/PStructUser/GetCustomerList?keyword=${keyword}`)
+    .get(process.env.basePath + `/PStructUser/GetCustomerList?keyword=${keyword}&organizeId=${organizeId}`)
     .then(getResult as any);
 }
 

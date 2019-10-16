@@ -79,7 +79,7 @@ function NotPaymentTable(props: NotPaymentTableProps) {
       title: '应付费项',
       dataIndex: 'feeName',
       key: 'feeName',
-      width: 120,
+      width: 160,
       sorter: true,
     },
     {

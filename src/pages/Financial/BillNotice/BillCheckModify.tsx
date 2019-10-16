@@ -100,17 +100,17 @@ const BillCheckModify = (props: BillCheckModifyProps) => {
               <Form layout="vertical" hideRequiredMark>
                 <Row gutter={24}>
                   <Col span={8}>
-                    <Form.Item required label="计费起始日期">
+                    <Form.Item required label="账单日起">
                       {getFieldDecorator('beginDate', {
                         initialValue: infoDetail.beginDate == null ? moment(new Date()).startOf('month') : moment(infoDetail.beginDate),
-                        rules: [{ required: true, message: '请选择计费起始日期' }],
+                        rules: [{ required: true, message: '请选择账单日起' }],
                       })(
                         <DatePicker style={{ width: '100%' }} disabled={!isEdit} />
                       )}
                     </Form.Item>
                   </Col>
                   <Col span={8}>
-                    <Form.Item required label="计费终止日期"  >
+                    <Form.Item required label="账单日止"  >
                       {getFieldDecorator('endDate', {
                         initialValue: infoDetail.endDate == null ? moment(new Date()).endOf('month') : moment(infoDetail.endDate),
                         rules: [{ required: true, message: '请选择计费终止日期' }],
@@ -147,7 +147,7 @@ const BillCheckModify = (props: BillCheckModifyProps) => {
                       )}
                     </Form.Item>
                   </Col>
-                  <Col span={8}>
+                  {/* <Col span={8}>
                     <Form.Item required label="最后缴费期限"  >
                       {getFieldDecorator('mustDate', {
                         initialValue: infoDetail.mustDate == null ? moment(new Date()) : moment(infoDetail.mustDate),
@@ -156,8 +156,8 @@ const BillCheckModify = (props: BillCheckModifyProps) => {
                         <DatePicker style={{ width: '100%' }} disabled={!isEdit} />
                       )}
                     </Form.Item>
-                  </Col>
-                  <Col span={8}>
+                  </Col> */}
+                  <Col span={16}>
                     <Form.Item required label="账单模板"  >
                       {getFieldDecorator('templateId', {
                         initialValue: infoDetail.templateId,
@@ -254,7 +254,7 @@ const BillCheckModify = (props: BillCheckModifyProps) => {
                             BeginDate: moment(values.beginDate).format('YYYY-MM-DD'),
                             EndDate: moment(values.endDate).format('YYYY-MM-DD'),
                             BelongDate: moment(values.belongDate).format('YYYY-MM-DD'),
-                            MustDate: moment(values.mustDate).format('YYYY-MM-DD'),
+                            // MustDate: moment(values.mustDate).format('YYYY-MM-DD'),
                             BillType: "通知单",
                             Status: values.status,
                             TemplateId: values.templateId,

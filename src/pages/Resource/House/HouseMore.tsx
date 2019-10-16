@@ -28,12 +28,15 @@ function HouseMore(props) {
   const [selectId, setSelectId] = useState<string>(''); //列表选中的节点id  
   const [organizeId, setOrganizeId] = useState<string>(''); //列表选中的节点组织id  
 
-  const selectTree = (parentId, type, searchText) => {
+  const selectTree = (parentId, type, searchText) => { 
+
     //初始化页码
     const page = new DefaultPagination();
     refresh(parentId, type, searchText, page);//, pstructId); 
     setParentId(parentId);
     setPagination(page);
+    setType(type);
+    
   };
 
   useEffect(() => {
@@ -162,7 +165,8 @@ function HouseMore(props) {
                 onSearch={value => loadData(value, parentId, type)}
                 style={{ width: 200 }}
               />
-              <Button key='add' type="primary" style={{ float: 'right', marginLeft: '10px' }} onClick={() => showDrawer()}>
+              <Button key='add' type="primary" style={{ float: 'right', marginLeft: '10px' }}
+               onClick={() => showDrawer()}>
                 <Icon type="plus" />
                 新增
               </Button>
