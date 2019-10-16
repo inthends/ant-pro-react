@@ -26,9 +26,9 @@ export function ChargeFeePageData(data): Promise<any> {
   return request.post(process.env.basePath + `/Payment/PaymentFeePageData`, {data:objToFormdata(data)}).then(getResult as any);
 }
 //获取付款费项
-export function GetTempPaymentFeeItemTreeJson(code): Promise<TreeEntity[]> {
+export function GetTempPaymentFeeItemTreeJson(roomId): Promise<TreeEntity[]> {
   return request
-    .get(process.env.basePath + `/FeeItems/GetPaymentFeeItemTreeJson?roomid=` + code)
+    .get(process.env.basePath + `/FeeItems/GetPaymentFeeItemTreeJson?roomId=` + roomId)
     .then(getResult as any);
 }
 

@@ -1,4 +1,4 @@
-import { ResponseObject, TreeEntity } from '@/model/models';
+import { TreeEntity } from '@/model/models';
 import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
 import { FeeItemData } from '@/model/feeItemData';
@@ -8,8 +8,8 @@ import { FeeItemData } from '@/model/feeItemData';
 // }
 
 //获取所有收费列表
-export function GetReceivablesFeeItemTreeJson(): Promise<TreeEntity[]> {
-  return request.get(process.env.basePath + `/FeeItems/GetReceivablesFeeItemTreeJson`, {}).then(getResult as any);;
+export function GetReceivablesFeeItemTreeJson(roomId): Promise<TreeEntity[]> {
+  return request.get(process.env.basePath + `/FeeItems/GetReceivablesFeeItemTreeJson?roomId=` + roomId, {}).then(getResult as any);;
 }
 
 //获取房间住户

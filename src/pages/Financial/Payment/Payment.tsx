@@ -1,6 +1,6 @@
 //付款管理
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { Tabs, Button, Icon, Input, Layout, Select, message, DatePicker } from 'antd';
+import { Tabs, Button, Icon, Input, Layout, Select, DatePicker } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useState, useEffect } from 'react';
 import { NotPaymentFeeData, ChargeFeePageData } from './Payment.service';
@@ -15,10 +15,9 @@ const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
 function Payment() {
-  const [organize, SetOrganize] = useState<any>({});
+  
   // const [treeSearch, SetTreeSearch] = useState<any>({});
-  const [id, setId] = useState<string>();
-
+  const [id, setId] = useState<string>(); 
   const [notPaymentLoading, setNotPaymentLoading] = useState<boolean>(false);
   const [paymentLoading, setPaymentLoading] = useState<boolean>(false);
 
@@ -33,13 +32,13 @@ function Payment() {
   const [showVisible, setShowVisible] = useState<boolean>(false);
   const [addBtnDisable, setAddBtnDisable] = useState<boolean>(true);
 
-  const selectTree = (org, item, info) => {
-    //console.log(info.node.props)
+  const [organize, setOrganize] = useState<any>({});
 
-    SetOrganize(info.node.props);
-    if (item == 5) {
-      initNotPaymentLoadData({ id: org, type: item }, '');
-      initPaymentLoadData({ id: org, type: item }, '');
+  const selectTree = (id, type, info) => {  
+    setOrganize(info.node.props);
+    if (type == 5) {
+      initNotPaymentLoadData({ id: id, type: type }, '');
+      initPaymentLoadData({ id: id, type: type }, '');
       setAddBtnDisable(false);
     } else {
       setAddBtnDisable(true);
@@ -231,8 +230,8 @@ function Payment() {
     <Layout>
       <AsynLeftTree
         parentid={'0'}
-        selectTree={(id, item, info) => {
-          selectTree(id, item, info);
+        selectTree={(id, type, info) => {
+          selectTree(id, type, info);
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>

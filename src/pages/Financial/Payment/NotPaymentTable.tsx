@@ -205,7 +205,6 @@ function NotPaymentTable(props: NotPaymentTableProps) {
               message.warning('本次付款金额小于本次选中未付金额合计，不允许付款，请拆费或者重新选择付款项');
               return;
             }
-
             Pay(info).then(res => {
               message.success('付款成功');
               reload();

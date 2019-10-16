@@ -38,15 +38,15 @@ const AddFee = (props: AddFeeProps) => {
   useEffect(() => {
     if (addFeeVisible) {
       GetReceivablesFeeItemTreeJson().then(res => {
-        const treeList = (res || []).map(item => {
-          return {
-            ...item,
-            id: item.key,
-            text: item.text,
-            parentId: item.parentId,
-          };
-        });
-        setFeeTreeData(treeList);
+        // const treeList = (res || []).map(item => {
+        //   return {
+        //     ...item,
+        //     id: item.key,
+        //     text: item.text,
+        //     parentId: item.parentId,
+        //   };
+        // });
+        setFeeTreeData(res);
       });
       //重置之前选择加载的费项类别
       setInfoDetail({});

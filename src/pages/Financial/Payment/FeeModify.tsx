@@ -30,7 +30,7 @@ const FeeModify = (props: FeeModifyProps) => {
   useEffect(() => {
     if (visible) {
 
-      GetTempPaymentFeeItemTreeJson(organize.code).then(res => {
+      GetTempPaymentFeeItemTreeJson(organize.eventKey).then(res => {
         setFeeTreeData(res);
       });
 
@@ -58,7 +58,7 @@ const FeeModify = (props: FeeModifyProps) => {
         //   });
         // }); 
 
-        GetRoomUsers(organize.code).then(res => {
+        GetRoomUsers(organize.eventKey).then(res => {
           setRelationID(res);
           GetShowDetail(id).then(value => {
             let info = value.entity;
@@ -73,16 +73,15 @@ const FeeModify = (props: FeeModifyProps) => {
             GetUserRooms(customerid).then(urooms => {
               setUnitIds(urooms);
             });
-
           })
-        })
+        });
 
       } else {
         // setInfoDetail({});
-        // if (organize.code) {
+        // if (organize.eventKey) {
         //获取客户 
 
-        GetRoomUsers(organize.code).then(res => {
+        GetRoomUsers(organize.eventKey).then(res => {
           setRelationID(res);
           if (res.length > 0) {
             // var info = Object.assign({}, infoDetail, { relationId: res[0].key });
@@ -172,9 +171,9 @@ const FeeModify = (props: FeeModifyProps) => {
               <LeftTree
                 treeData={feeTreeData}
                 selectTree={(id, item) => {
-                  if (organize.code) {
+                  if (organize.eventKey) {
                     setLoading(true);
-                    GetFeeItemDetail(id, organize.code).then(res => {
+                    GetFeeItemDetail(id, organize.eventKey).then(res => {
                       let amount = parseInt(res.price) * parseInt(res.number) * parseInt(res.quantity);
                       // var info = Object.assign({}, res, { feeItemId: id, amount: amount });
                       res.feeItemId = id;
@@ -233,7 +232,7 @@ const FeeModify = (props: FeeModifyProps) => {
                   <Col>
                     <Form.Item label="选择房屋" required labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} >
                       {getFieldDecorator('unitId', {
-                        initialValue: infoDetail.unitId == null ? null : infoDetail.unitId/*getUnitId(infoDetail.householdId)*/,
+                        initialValue: infoDetail.unitId == null ? null : infoDetail.unitId,/*getUnitId(infoDetail.householdId)*/
                         rules: [{ required: true, message: '请选择房屋' }]
                       })(
                         <Select placeholder="=请选择=" disabled={isEdit || (id != "") ? false : true} >
@@ -426,7 +425,7 @@ const FeeModify = (props: FeeModifyProps) => {
                   cycleType: values.cycleType,
                   beginDate: moment(values.beginDate).format('YYYY-MM-DD'),
                   cycleValue: values.cycleValue,
-                  organizeId: organize.code,
+                  organizeId: organize.eventKey,
                   period: infoDetail.period
                 }
                 let newData = {

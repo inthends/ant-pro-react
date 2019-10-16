@@ -1,15 +1,6 @@
+//新增临时收费，ok
 import { TreeEntity } from '@/model/models';
-import {
-  Select,
-  Button,
-  Col,
-  DatePicker,
-  Drawer,
-  Form,
-  Input, InputNumber,
-  Row,
-  message,
-} from 'antd';
+import { Select, Button, Col, DatePicker, Drawer, Form, Input, InputNumber, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import {
@@ -19,7 +10,6 @@ import {
 
 import LeftTree from '../LeftTree';
 import moment from 'moment';
-
 const { Option } = Select;
 
 interface ModifyProps {
@@ -42,93 +32,120 @@ const Modify = (props: ModifyProps) => {
 
   // 打开抽屉时初始化
   useEffect(() => {
-    form.resetFields();
-    if (modifyVisible) {
-      if (id != null && id != "") {
-        var infoTemp = {};
+    // form.resetFields();
+    if (modifyVisible) { 
+      GetReceivablesFeeItemTreeJson(organizeId).then(res => {
+        setFeeTreeData(res);
+      });
 
-        GetShowDetail(id).then(res => {
-          infoTemp = Object.assign({}, res.entity, { number: res.number });
-          return GetRoomUsers(res.entity.unitId);
-        }).then(res => {
-          setRelationIds(res);
-          if (res.length > 0) {
-            infoTemp = Object.assign({}, infoTemp, { relationId: res[0].key });
-          }
-          setInfoDetail(infoTemp);
-          return res;
-        }).then(relations => {
-          if (infoTemp.relationId) {
-            var selectId = '';
-            for (var i = 0; i < relations.length; i++) {
-              if (relations[i].key == infoTemp.relationId) {
-                selectId = relations[i].value;
-              }
-            }
-            return GetUserRooms(selectId);
-          }
-        }).then(res => {
-          setUnitIds(res);
-          if (res.length > 0) {
-            infoTemp = Object.assign({}, infoTemp, { householdId: res[0].value })
-            setInfoDetail(infoTemp);
-          }
-        });
-
-        //加载数据
+      // if (id != null && id != "") {
+      if (id) {
+        // var infoTemp = {}; 
         // GetShowDetail(id).then(res => {
         //   infoTemp = Object.assign({}, res.entity, { number: res.number });
-        //   GetRoomUsers(res.entity.unitId).then(ru=>{
-        //     setRelationIds(ru);
-        //     if (res.length > 0) {
-        //           infoTemp = Object.assign({}, infoTemp, { relationId: ru[0].key });
-        //         }
-        //   }); 
+        //   return GetRoomUsers(res.entity.unitId);
+        // }).then(res => {
+        //   setRelationIds(res);
+        //   if (res.length > 0) {
+        //     infoTemp = Object.assign({}, infoTemp, { relationId: res[0].key });
+        //   }
         //   setInfoDetail(infoTemp);
-        //   form.resetFields();
+        //   return res;
+        // }).then(relations => {
+        //   if (infoTemp.relationId) {
+        //     var selectId = '';
+        //     for (var i = 0; i < relations.length; i++) {
+        //       if (relations[i].key == infoTemp.relationId) {
+        //         selectId = relations[i].value;
+        //       }
+        //     }
+        //     return GetUserRooms(selectId);
+        //   }
+        // }).then(res => {
+        //   setUnitIds(res);
+        //   if (res.length > 0) {
+        //     infoTemp = Object.assign({}, infoTemp, { householdId: res[0].value })
+        //     setInfoDetail(infoTemp);
+        //   }
         // });
+
+        //加载数据
+        GetRoomUsers(organizeId).then(res => {
+          setRelationIds(res);
+          GetShowDetail(id).then(value => {
+            let info = value.entity;
+            info.number = value.number;
+            setInfoDetail(info);
+            let customerid = "";
+            for (var i = 0; i < res.length; i++) {
+              if (res[i].key == info.relationId) {
+                customerid = res[i].attributeA;
+              }
+            }
+            GetUserRooms(customerid).then(urooms => {
+              setUnitIds(urooms);
+            });
+          })
+        });
 
 
       } else {
-        if (organizeId) {
-          GetRoomUsers(organizeId).then(res => {
-            setRelationIds(res);
-            if (res.length > 0) {
-              var info = Object.assign({}, infoDetail, { relationId: res[0].key });
-              setInfoDetail(info);
-            }
-            return info;
-          }).then(infoDetail => {
-            GetUserRooms(getRelationId(infoDetail.relationId))
+
+        GetRoomUsers(organizeId).then(res => {
+          setRelationIds(res);
+          if (res.length > 0) {
+            //var info = Object.assign({}, infoDetail, { relationId: res[0].key });
+            let info = Object.assign({ relationId: res[0].key });
+            // setInfoDetail(info);
+
+            GetUserRooms(res[0].attributeA)//customerid
               .then(res => {
                 setUnitIds(res);
                 if (res.length > 0) {
-                  var info = Object.assign({}, infoDetail, { householdId: res[0].value });
-                  setInfoDetail(info);
+                  //var info = Object.assign({}, infoDetail, { unitId: res[0].key });
+                  info.unitId = res[0].key
                 }
               });
-          });
-        }
-        if (relationIds == null) {
-          setInfoDetail({});
-        }
-        GetReceivablesFeeItemTreeJson().then(res => {
-          // const treeList = (res || []).map(item => {
-          //   return Object.assign({}, item, {
-          //     id: item.key,
-          //     text: item.text,
-          //     parentId: item.parentId
-          //   });
-          // });
-          setFeeTreeData(res);
+            setInfoDetail(info);
+            form.resetFields();
+          }
+          // return info;
         });
+
+
+        // .then(infoDetail => {
+        //   GetUserRooms(getRelationId(infoDetail.relationId))
+        //     .then(res => {
+        //       setUnitIds(res);
+        //       if (res.length > 0) {
+        //         var info = Object.assign({}, infoDetail, { householdId: res[0].value });
+        //         setInfoDetail(info);
+        //       }
+        //     });
+        // });
+
+        // if (relationIds == null) {
+        //   setInfoDetail({});
+        // }
+
+        // GetReceivablesFeeItemTreeJson().then(res => {
+        // const treeList = (res || []).map(item => {
+        //   return Object.assign({}, item, {
+        //     id: item.key,
+        //     text: item.text,
+        //     parentId: item.parentId
+        //   });
+        // });
+        //   setFeeTreeData(res);
+        // });
         //重置之前选择加载的费项类别
-        setInfoDetail({});
-        form.resetFields();
+        // setInfoDetail({});
+        // form.resetFields();
       }
-    } else {
-      form.setFieldsValue({});
     }
+    // else {
+    //   form.setFieldsValue({});
+    // }
   }, [modifyVisible]);
 
   const close = (refresh: boolean) => {
@@ -138,34 +155,34 @@ const Modify = (props: ModifyProps) => {
     closeDrawer();
   };
 
+  // const getRelationId = (key) => {
+  //   if (relationIds == null) {
+  //     return null
+  //   }
+  //   for (var i = 0; i < relationIds.length; i++) {
+  //     if (relationIds[i].key == key) {
+  //       return relationIds[i].value;
+  //     }
+  //   }
+  // }
 
-  const getRelationId = (key) => {
-    if (relationIds == null) {
-      return null
-    }
-    for (var i = 0; i < relationIds.length; i++) {
-      if (relationIds[i].key == key) {
-        return relationIds[i].value;
-      }
-    }
-  }
+  // const getUnitId = (value) => {
+  //   if (unitIds == null) {
+  //     return null
+  //   }
+  //   for (var i = 0; i < unitIds.length; i++) {
+  //     if (unitIds[i].value == value) {
+  //       return unitIds[i].key;
+  //     }
+  //   }
+  // }
 
-  const getUnitId = (value) => {
-    if (unitIds == null) {
-      return null
-    }
-    for (var i = 0; i < unitIds.length; i++) {
-      if (unitIds[i].value == value) {
-        return unitIds[i].key;
-      }
-    }
-  }
   const getGuid = () => {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
       var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
       return v.toString(16);
     });
-  }
+  };
 
   const onSave = () => {
     form.validateFields((errors, values) => {
@@ -322,27 +339,29 @@ const Modify = (props: ModifyProps) => {
                   // setFeeItemId(id);
                   if (organizeId) {
                     GetFeeItemDetail(id, organizeId).then(res => {
-                      if (res.relationId != null) {
-                        var info = Object.assign({}, res, { feeItemId: id });
-                        // console.log(info);
-                        setInfoDetail(info);
-                        return info;
-                      }
-                      else {
-                        message.warning(res);
-                        return null;
-                      }
-                    }).then(info => {
-                      if (info !== null) {
-                        GetUserRooms(getRelationId(info.relationId))
-                          .then(res => {
-                            setUnitIds(res);
-                            if (res.length > 0)
-                              info = Object.assign({}, info, { householdId: res[0].value });
-                            setInfoDetail(info);
-                          });
-                      }
+                      // if (res.relationId != null) {
+                      // var info = Object.assign({}, res, { feeItemId: id });
+                      // console.log(info);
+                      res.feeItemId = id;
+                      setInfoDetail(res);
+                      // return info;
+                      // }
+                      // else {
+                      //   message.warning(res);
+                      //   return null;
+                      // }
                     });
+                    // .then(info => {
+                    //   if (info !== null) {
+                    //     GetUserRooms(getRelationId(info.relationId))
+                    //       .then(res => {
+                    //         setUnitIds(res);
+                    //         if (res.length > 0)
+                    //           info = Object.assign({}, info, { householdId: res[0].value });
+                    //         setInfoDetail(info);
+                    //       });
+                    //   }
+                    // });
                   }
                 }}
               />
@@ -359,10 +378,10 @@ const Modify = (props: ModifyProps) => {
                 })(
                   <Select placeholder="=请选择=" disabled={id === '' && edit ? false : true} onSelect={(key) => {
                     //debugger;
-                    GetUserRooms(getRelationId(key)).then(res => {
+                    GetUserRooms(key).then(res => {
                       setUnitIds(res);
-                      var info = Object.assign({}, infoDetail, { householdId: res[0].value });
-                      setInfoDetail(info);
+                      // var info = Object.assign({}, infoDetail, { householdId: res[0].value });
+                      // setInfoDetail(info);
                     });
                   }}>
                     {relationIds.map(item => (
@@ -377,7 +396,8 @@ const Modify = (props: ModifyProps) => {
             <Row>
               <Form.Item label="选择房屋" required labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} >
                 {getFieldDecorator('householdId', {
-                  initialValue: infoDetail.householdId == null ? null : getUnitId(infoDetail.householdId),
+                  // initialValue: infoDetail.householdId == null ? null : getUnitId(infoDetail.householdId),
+                  initialValue: infoDetail.unitId == null ? null : infoDetail.unitId,
                   rules: [{ required: true, message: '请选择房屋' }]
                 })(
                   <Select placeholder="=请选择=" disabled={id === '' && edit ? false : true} >
