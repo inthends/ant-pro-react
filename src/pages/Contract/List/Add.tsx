@@ -236,6 +236,7 @@ const Add = (props: AddProps) => {
 
   //打开抽屉时初始化
   useEffect(() => {
+    
     getCommonItems('IndustryType').then(res => {
       setIndustryType(res || []);
     });

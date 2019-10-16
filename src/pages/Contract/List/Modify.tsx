@@ -1,7 +1,8 @@
 
-import { Divider, PageHeader, message, AutoComplete, Modal, InputNumber, TreeSelect, Tabs, Select, Button, Card, Col, DatePicker, Drawer, Form, Input, Row } from 'antd';
+import { Divider, PageHeader, AutoComplete, InputNumber, TreeSelect, Tabs, Select, Button, Card, Col, DatePicker, Drawer, Form, Input, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import {
+  TreeEntity,
   LeaseContractChargeEntity,
   LeaseContractChargeFeeEntity,
   LeaseContractChargeIncreEntity,
@@ -45,24 +46,23 @@ const Modify = (props: ModifyProps) => {
   const [userSource, setUserSource] = useState<any[]>([]);
   const [industryType, setIndustryType] = useState<any[]>([]); //行业  
   const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
-  
+
   const close = () => {
     closeDrawer();
   };
 
   //打开抽屉时初始化
   useEffect(() => {
-    // getCommonItems('IndustryType').then(res => {
-    //   setIndustryType(res || []);
-    // });
+    getCommonItems('IndustryType').then(res => {
+      setIndustryType(res || []);
+    });
 
     //加载关联收费项目
-    // GetAllFeeItems().then(res => {
-    //   setFeeitems(res || []);
-    // });
+    GetAllFeeItems().then(res => {
+      setFeeitems(res || []);
+    });
 
   }, []);
-
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -77,8 +77,7 @@ const Modify = (props: ModifyProps) => {
             setChargeIncreList(charge.chargeIncreList || []);
             setChargeOfferList(charge.chargeFeeOfferList || []);
             setDepositData(charge.depositFeeResultList || []);//保证金明细
-            setChargeData(charge.chargeFeeResultList || []);//租金明细   
-
+            setChargeData(charge.chargeFeeResultList || []);//租金明细    
           })
           form.resetFields();
         });
@@ -89,8 +88,6 @@ const Modify = (props: ModifyProps) => {
       form.setFieldsValue({});
     }
   }, [visible]);
-
-
 
   const handleSearch = value => {
     if (value == '')
@@ -142,7 +139,7 @@ const Modify = (props: ModifyProps) => {
       // ]}
       />
       <Divider dashed />
-      <Form layout="vertical">
+      <Form layout="vertical" hideRequiredMark>
         <Tabs defaultActiveKey="1" >
 
           <TabPane tab="基本信息" key="1">
@@ -153,6 +150,7 @@ const Modify = (props: ModifyProps) => {
                     <Col lg={24}>
                       <Form.Item label="模板选择">
                         {getFieldDecorator('template', {
+                          initialValue: infoDetail.template
                         })(<Select placeholder="请选择模板" />)}
                       </Form.Item>
                     </Col>
@@ -161,6 +159,7 @@ const Modify = (props: ModifyProps) => {
                     <Col lg={12}>
                       <Form.Item label="合同编号" required>
                         {getFieldDecorator('no', {
+                          initialValue: infoDetail.no,
                           rules: [{ required: true, message: '未选择模版时，请输入编号' }],
                         })(<Input placeholder="如不填写系统将自动生成" />)}
                       </Form.Item>
@@ -168,6 +167,7 @@ const Modify = (props: ModifyProps) => {
                     <Col lg={12}>
                       <Form.Item label="跟进人" >
                         {getFieldDecorator('follower', {
+                          initialValue: infoDetail.follower
                         })(
                           <AutoComplete
                             dataSource={userList}
@@ -187,6 +187,7 @@ const Modify = (props: ModifyProps) => {
                     <Col lg={12}>
                       <Form.Item label="租赁数量（m²)">
                         {getFieldDecorator('leaseSize', {
+                          initialValue: infoDetail.leaseSize,
                           rules: [{ required: true, message: '请输入租赁数量' }],
                         })(<InputNumber placeholder="请输入租赁数量" style={{ width: '100%' }} />)}
                       </Form.Item>
@@ -194,18 +195,21 @@ const Modify = (props: ModifyProps) => {
                     <Col lg={12}>
                       <Form.Item label="合同签订时间" required>
                         {getFieldDecorator('contractStartDate', {
-                          initialValue: moment(new Date()),
+                          initialValue: infoDetail.contractStartDate
+                            ? moment(new Date(infoDetail.contractStartDate))
+                            : moment(new Date()),
                           rules: [{ required: true, message: '请选择合同签订时间' }],
                         })(<DatePicker placeholder="请选择合同签订时间" style={{ width: '100%' }} />)}
                       </Form.Item>
                     </Col>
                   </Row>
-
                   <Row gutter={24}>
                     <Col lg={12}>
                       <Form.Item label="合同计租时间">
                         {getFieldDecorator('billingDate', {
-                          initialValue: moment(new Date()),
+                          initialValue: infoDetail.billingDate
+                            ? moment(new Date(infoDetail.billingDate))
+                            : moment(new Date()),
                           rules: [{ required: true, message: '请选择合同计租时间' }],
                         })(<DatePicker placeholder="请选择合同计租时间" style={{ width: '100%' }} />)}
                       </Form.Item>
@@ -213,7 +217,9 @@ const Modify = (props: ModifyProps) => {
                     <Col lg={12}>
                       <Form.Item label="合同失效时间" required>
                         {getFieldDecorator('contractEndDate', {
-                          initialValue: moment(new Date()).add(1, 'years').add(-1, 'days'),
+                          initialValue: infoDetail.contractEndDate
+                            ? moment(new Date(infoDetail.contractEndDate))
+                            : moment(new Date()).add(1, 'years').add(-1, 'days'),
                           rules: [{ required: true, message: '请选择合同失效时间' }],
                         })(<DatePicker placeholder="请选择合同失效时间" style={{ width: '100%' }} />)}
                       </Form.Item>
@@ -223,7 +229,7 @@ const Modify = (props: ModifyProps) => {
                     <Col lg={12}>
                       <Form.Item label="单价保留小数点">
                         {getFieldDecorator('calcPrecision', {
-                          initialValue: 2,
+                          initialValue: infoDetail.calcPrecision ? infoDetail.calcPrecision : 2,
                           rules: [{ required: true, message: '请填写保留几位' }],
                         })(<InputNumber placeholder="请填写保留几位" style={{ width: '100%' }} />)}
                       </Form.Item>
@@ -231,7 +237,7 @@ const Modify = (props: ModifyProps) => {
                     <Col lg={12}>
                       <Form.Item label="计算精度">
                         {getFieldDecorator('calcPrecisionMode', {
-                          initialValue: "最终计算结果保留2位"
+                          initialValue: infoDetail.calcPrecisionMode ? infoDetail.calcPrecisionMode : "最终计算结果保留2位"
                         })(<Select>
                           <Option value="最终计算结果保留2位" >最终计算结果保留2位</Option>
                           <Option value="每步计算结果保留2位" >每步计算结果保留2位</Option>
@@ -249,6 +255,7 @@ const Modify = (props: ModifyProps) => {
                     <Col lg={24}>
                       <Form.Item label="房源选择" required>
                         {getFieldDecorator('room', {
+                          initialValue: infoDetail.houseList,
                           rules: [{ required: true, message: '请选择房源' }],
                         })(
                           <TreeSelect
@@ -268,6 +275,7 @@ const Modify = (props: ModifyProps) => {
                     <Col lg={12}>
                       <Form.Item label="租客" required>
                         {getFieldDecorator('customer', {
+                          initialValue: infoDetail.customer,
                           rules: [{ required: true, message: '请填写姓名或公司' }],
                         })(<Input placeholder="请填写姓名或公司" />)}
                       </Form.Item>
@@ -275,6 +283,7 @@ const Modify = (props: ModifyProps) => {
                     <Col lg={12}>
                       <Form.Item label="行业" required>
                         {getFieldDecorator('industryId', {
+                          initialValue: infoDetail.industryId,
                           rules: [{ required: true, message: '请选择行业' }],
                         })(
                           <Select placeholder="请选择行业"
@@ -288,6 +297,7 @@ const Modify = (props: ModifyProps) => {
                           </Select>
                         )}
                         {getFieldDecorator('industry', {
+                          initialValue: infoDetail.industry
                         })(
                           <input type='hidden' />
                         )}
@@ -299,6 +309,7 @@ const Modify = (props: ModifyProps) => {
                     <Col lg={12}>
                       <Form.Item label="法人" required>
                         {getFieldDecorator('legalPerson', {
+                          initialValue: infoDetail.legalPerson,
                           rules: [{ required: true, message: '请填写法人' }],
                         })(<Input placeholder="请填写法人" />)}
                       </Form.Item>
@@ -306,6 +317,7 @@ const Modify = (props: ModifyProps) => {
                     <Col lg={12}>
                       <Form.Item label="签订人" required>
                         {getFieldDecorator('signer', {
+                          initialValue: infoDetail.signer,
                           rules: [{ required: true, message: '请输入签订人' }],
                         })(
                           <AutoComplete
@@ -316,6 +328,7 @@ const Modify = (props: ModifyProps) => {
                           />
                         )}
                         {getFieldDecorator('signerId', {
+                          initialValue: infoDetail.signerId,
                         })(
                           <input type='hidden' />
                         )}
@@ -326,6 +339,7 @@ const Modify = (props: ModifyProps) => {
                     <Col lg={24}>
                       <Form.Item label="租客联系人">
                         {getFieldDecorator('customerContact', {
+                          initialValue: infoDetail.customerContact,
                           rules: [{ required: true, message: '请输入租客联系人' }],
                         })(<Input placeholder="请输入租客联系人" />)}
                       </Form.Item>
@@ -335,13 +349,14 @@ const Modify = (props: ModifyProps) => {
                     <Col lg={6}>
                       <Form.Item label="滞纳金比例" >
                         {getFieldDecorator('lateFee', {
+                          initialValue: infoDetail.lateFee
                         })(<InputNumber placeholder="请输入" />)}
                       </Form.Item>
                     </Col>
                     <Col lg={6}>
                       <Form.Item label="&nbsp;" >
                         {getFieldDecorator('lateFeeUnit', {
-                          initialValue: "%/天"
+                          initialValue: infoDetail.lateFeeUnit ? infoDetail.lateFeeUnit : "%/天"
                         })(
                           <Select>
                             <Option value="%/天">%/天</Option>
@@ -351,13 +366,14 @@ const Modify = (props: ModifyProps) => {
                     <Col lg={7}>
                       <Form.Item label="滞纳金上限" >
                         {getFieldDecorator('maxLateFee', {
+                          initialValue: infoDetail.maxLateFee
                         })(<InputNumber placeholder="请输入" />)}
                       </Form.Item>
                     </Col>
                     <Col lg={5}>
                       <Form.Item label="&nbsp;" >
                         {getFieldDecorator('maxLateFeeUnit', {
-                          initialValue: "%"
+                          initialValue: infoDetail.maxLateFeeUnit ? infoDetail.maxLateFeeUnit : "%"
                         })(<Select>
                           <Option value="%">%</Option>
                         </Select>)}
