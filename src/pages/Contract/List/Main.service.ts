@@ -7,7 +7,6 @@ export function GetPageListJson(data): Promise<any> {
   return request.post(process.env.basePath + `/Contract/GetPageListJson`, {data:objToFormdata(data)}).then(getResult as any);
 }
 
-
 // //获取费项类型
 // export function GetFeeType(code): Promise<TreeEntity[]> {
 //   return request

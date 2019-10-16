@@ -53,12 +53,6 @@ export function searchTypes(): Promise<any[]> {
     .then(getResult as any);
 }
 
-// 查询机构
-export function searchOrgs(): Promise<any[]> {
-  return request.get(process.env.basePath + `/Common/GetOrgTreeOnly`).then(getResult as any);
-}
-
-
 // 验证code
 export function ExistEnCode(keyValue, code): Promise<any> {
   return request

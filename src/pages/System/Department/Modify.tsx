@@ -4,7 +4,7 @@ import { Card, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useState, useEffect } from 'react';
 import { SaveForm, searchUser, ExistEnCode, ExistName, GetDepartmentTree } from './Main.service';
-import { searchOrgs } from '@/services/commonItem';
+import { GetOrgs } from '@/services/commonItem';
 
 
 import { TreeNode } from 'antd/lib/tree-select';
@@ -46,7 +46,7 @@ const Modify = (props: ModifyProps) => {
   const baseFormProps = { form, initData };
 
   const getOrgs = () => {
-    searchOrgs().then(res => {
+    GetOrgs().then(res => {
       setOrgs(res);
     });
   };

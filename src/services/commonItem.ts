@@ -64,10 +64,10 @@ export function GetOrgTree(): Promise<TreeEntity[]> {
     .then(getResult as any);
 }
 
-//只加载到管理处，项目管理模块左侧树使用
-export function GetOrgTreeOnly(): Promise<TreeEntity[]> {
-  return request.get(process.env.basePath + `/Common/GetOrgTreeOnly`, {}).then(getResult);
-}
+// //只加载到管理处，项目管理模块左侧树使用
+// export function GetOrgTreeOnly(): Promise<TreeEntity[]> {
+//   return request.get(process.env.basePath + `/Common/GetOrgTreeOnly`, {}).then(getResult);
+// }
 
 //获取组织父子节点id
 export function GetAllOrgIds(pstructid): Promise<string[]> {
@@ -79,7 +79,7 @@ export function GetUnitTreeAll(): Promise<ResponseObject<any>> {
   return request.get(process.env.basePath + `/Common/GetUnitTreeAll`, {});
 } 
 
-// 查询机构
-export function searchOrgs(): Promise<any[]> {
+// 查询机构管理处
+export function GetOrgs(): Promise<any[]> {
   return request.get(process.env.basePath + `/Common/GetOrgTreeOnly`).then(getResult as any);
 }

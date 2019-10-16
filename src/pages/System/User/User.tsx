@@ -4,17 +4,17 @@ import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import ListTable from './ListTable';
 import Modify from './Modify';
-import { getDataList, searchOrgs } from './User.service';
 import { TreeNode } from 'antd/lib/tree-select';
+import { getDataList } from './User.service';
+import { GetOrgs } from '@/services/commonItem';
 
- 
 const { Content } = Layout;
 const { Search } = Input;
 interface SearchParam {
   condition: 'Account' | 'Name' | 'Code';
   keyword: string;
 }
-const  User = () => {
+const User = () => {
   const [search, setSearch] = useState<SearchParam>({
     condition: 'Account',
     keyword: '',
@@ -28,14 +28,12 @@ const  User = () => {
 
   useEffect(() => {
     initLoadData(search);
-    getOrgs();
-  }, []);
-
-  const getOrgs = () => {
-    searchOrgs().then(res => {
+    GetOrgs().then(res => {
       setOrgs(res);
     });
-  };
+
+  }, []);
+
 
   const closeDrawer = () => {
     setModifyVisible(false);

@@ -3,7 +3,8 @@ import ModifyItem, { SelectItem } from '@/components/BaseModifyDrawer/ModifyItem
 import { Card, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useState, useEffect } from 'react';
-import { SaveForm, searchUser, ExistEnCode, searchOrgs } from './Organize.service';
+import { SaveForm, searchUser, ExistEnCode } from './Organize.service';
+import { GetOrgs } from '@/services/commonItem';
 import { TreeNode } from 'antd/lib/tree-select';
 import styles from './style.less';
 
@@ -76,7 +77,7 @@ const Modify = (props: ModifyProps) => {
   // };
 
   const getOrgs = () => {
-    searchOrgs().then(res => {
+    GetOrgs().then(res => {
       setOrgs(res);
     });
   };

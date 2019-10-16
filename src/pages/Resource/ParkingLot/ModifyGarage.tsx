@@ -1,36 +1,37 @@
-import { ParkingData, TreeEntity } from '@/model/models';
-import { Button, Card, Col, Drawer, Form, Input, message, Row, Tree, TreeSelect, InputNumber } from 'antd';
+import { ParkingData  } from '@/model/models';
+import { Button, Card, Col, Drawer, Form, Input, message, Row, TreeSelect, InputNumber } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import {  GetQuickParkingTree, SaveGarageForm } from './ParkingLot.service';
+import { SaveGarageForm } from './ParkingLot.service';
 import styles from './style.less';
 
 const { TextArea } = Input;
-const { TreeNode } = Tree;
+// const { TreeNode } = Tree;
 
 interface ModifyGarageProps {
   modifyVisible: boolean;
   data?: ParkingData;
   form: WrappedFormUtils;
   organizeId: string;
-  treeData: TreeEntity[];
+  treeData: any[];
   closeDrawer(): void;
   reload(): void;
 }
 const ModifyGarage = (props: ModifyGarageProps) => {
-  const { modifyVisible, data, closeDrawer, form, reload } = props;
+  const { modifyVisible, data, closeDrawer, form, reload, treeData } = props;
   const { getFieldDecorator } = form;
   const title = data === undefined ? '添加车库' : '修改车库';
   const [infoDetail, setInfoDetail] = useState<any>({});
-  const [orgTree, setOrgTree] = useState<any[]>([]);
+  // const [orgTree, setOrgTree] = useState<any[]>([]);
   // const [estateTree, setEstateTree] = useState<any[]>([]);
 
   // 打开抽屉时初始化
-  useEffect(() => {
-    GetQuickParkingTree('8').then(res => {
-      setOrgTree(res || []);
-    });
-  }, []);
+  // useEffect(() => {
+  //   GetQuickParkingTree('8').then(res => {
+  //     setOrgTree(res || []);
+  //   });
+  // }, []);
+
   useEffect(() => {
     if (form.getFieldValue('organizeId') === undefined) {
       return;
@@ -70,7 +71,7 @@ const ModifyGarage = (props: ModifyGarageProps) => {
   const doSave = dataDetail => {
     dataDetail.keyValue = dataDetail.id;
     SaveGarageForm({ ...dataDetail, type: 8 }).then(res => {
-      message.success('保存成功');
+      message.success('保存成功！');
       closeDrawer();
       reload();
     });
@@ -95,11 +96,11 @@ const ModifyGarage = (props: ModifyGarageProps) => {
                     initialValue: infoDetail.organizeId,
                     rules: [{ required: true, message: '请选择隶属机构' }],
                   })(
-                    <TreeSelect placeholder="请选择隶属机构" 
-                    allowClear 
-                    treeData={orgTree} 
-                    treeDefaultExpandAll
-                    dropdownStyle={{ maxHeight: 300 }}
+                    <TreeSelect placeholder="请选择隶属机构"
+                      allowClear
+                      treeData={treeData}
+                      treeDefaultExpandAll
+                      dropdownStyle={{ maxHeight: 300 }}
                     >
                       {/* {renderTree(orgTree, '0')} */}
                     </TreeSelect>,
@@ -162,7 +163,7 @@ const ModifyGarage = (props: ModifyGarageProps) => {
                 <Form.Item label="建筑面积(㎡)">
                   {getFieldDecorator('area', {
                     initialValue: infoDetail.area || 0,
-                  })(<InputNumber placeholder="请输入建筑面积(㎡)" style={{ width: '100%' }}/>)}
+                  })(<InputNumber placeholder="请输入建筑面积(㎡)" style={{ width: '100%' }} />)}
                 </Form.Item>
               </Col>
 
@@ -170,7 +171,7 @@ const ModifyGarage = (props: ModifyGarageProps) => {
                 <Form.Item label="占地面积(㎡)">
                   {getFieldDecorator('coverArea', {
                     initialValue: infoDetail.coverArea || 0,
-                  })(<InputNumber placeholder="请输入占地面积(㎡)" style={{ width: '100%' }}/>)}
+                  })(<InputNumber placeholder="请输入占地面积(㎡)" style={{ width: '100%' }} />)}
                 </Form.Item>
               </Col>
             </Row>
@@ -211,14 +212,14 @@ const ModifyGarage = (props: ModifyGarageProps) => {
 
 export default Form.create<ModifyGarageProps>()(ModifyGarage);
 
-const renderTree = (treeData: TreeEntity[], parentId: string) => {
-  return treeData
-    .filter(item => item.parentId === parentId)
-    .map(filteditem => {
-      return (
-        <TreeNode title={filteditem.text} key={filteditem.id} value={filteditem.id}>
-          {renderTree(treeData, filteditem.id as string)}
-        </TreeNode>
-      );
-    });
-};
+// const renderTree = (treeData: TreeEntity[], parentId: string) => {
+//   return treeData
+//     .filter(item => item.parentId === parentId)
+//     .map(filteditem => {
+//       return (
+//         <TreeNode title={filteditem.text} key={filteditem.id} value={filteditem.id}>
+//           {renderTree(treeData, filteditem.id as string)}
+//         </TreeNode>
+//       );
+//     });
+// };

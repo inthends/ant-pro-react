@@ -6,7 +6,8 @@ import React, { useEffect, useState } from 'react';
 import LeftTree from '../LeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
-import { GetPageListJson, GetOrgTreeOnly } from './ReciprocatingUnit.service';
+import { GetPageListJson } from './ReciprocatingUnit.service';
+import { GetOrgs } from '@/services/commonItem';
 
 const { Content } = Layout;
 const { Search } = Input;
@@ -30,20 +31,21 @@ function PublicArea() {
   };
 
   useEffect(() => {
-    getTreeData().then(res => {
+    GetOrgs().then(res => {
       // const root = res.filter(item => item.parentId === '0');
       // const rootOrg = root.length === 1 ? root[0] : undefined;
       // SetOrganize(rootOrg);
+      setTreeData(res || []);
       initLoadData('', '', '');
     });
   }, []);
   // 获取属性数据
-  const getTreeData = () => {
-    return GetOrgTreeOnly().then((res: TreeEntity[]) => {
-      setTreeData(res || []);
-      return res || [];
-    });
-  };
+  // const getTreeData = () => {
+  //   return GetOrgTreeOnly().then((res: TreeEntity[]) => {
+  //     setTreeData(res || []);
+  //     return res || [];
+  //   });
+  // };
 
   const closeDrawer = () => {
     setModifyVisible(false);

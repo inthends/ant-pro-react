@@ -7,7 +7,7 @@ import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
 import { GetPageListJson } from './Main.service'; 
-import { GetOrgTreeOnly } from '@/services/commonItem';
+import { GetOrgs } from '@/services/commonItem';
  
 const { Content } = Layout;
 const { Search } = Input;
@@ -28,7 +28,7 @@ function Main() {
   };
 
   useEffect(() => {
-    GetOrgTreeOnly().then(res => {
+    GetOrgs().then(res => {
       // const root = res.filter(item => item.parentId === '0');
       // const rootOrg = root.length === 1 ? root[0] : undefined;
       // SetOrganize(rootOrg);

@@ -3,10 +3,11 @@ import ModifyItem from '@/components/BaseModifyDrawer/ModifyItem';
 import {message, Tooltip, Button, Icon, Col, Upload, Card, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useState, useEffect } from 'react';
-import { SaveForm, searchOrgs } from './Template.service';
+import { SaveForm } from './Template.service';
 import { TreeNode } from 'antd/lib/tree-select';
 import styles from './style.less'; 
 import copy from 'copy-to-clipboard';
+import { GetOrgs } from '@/services/commonItem';
 
 interface ModifyProps {
   visible: boolean;
@@ -24,7 +25,7 @@ const Modify = (props: ModifyProps) => {
   const baseFormProps = { form, initData };
   const [fileList, setFileList] = useState<any[]>([]);
   const getOrgs = () => {
-    searchOrgs().then(res => {
+    GetOrgs().then(res => {
       setOrgs(res);
     });
   };

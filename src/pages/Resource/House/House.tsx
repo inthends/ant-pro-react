@@ -10,7 +10,7 @@ import LeftTree from '../LeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
 import AuthButton from '@/components/AuthButton/AuthButton';
-import { GetOrgTreeOnly } from '@/services/commonItem';
+import { GetOrgs } from '@/services/commonItem';
 
 const { Content } = Layout;
 const { Search } = Input;
@@ -50,7 +50,7 @@ function House() {
   };
 
   useEffect(() => {
-    GetOrgTreeOnly().then(res => {
+    GetOrgs().then(res => {
       // const root = res.filter(item => item.parentId === '0');
       // const key = root.length === 1 ? root[0].key : '';
       //SetOrganizeId(key);

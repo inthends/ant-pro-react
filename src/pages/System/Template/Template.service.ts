@@ -18,10 +18,10 @@ export function RemoveForm(keyValue): Promise<any> {
     .then(getResult as any);
 }
  
- // 查询机构
-export function searchOrgs(): Promise<any[]> {
-  return request.get(process.env.basePath + `/Common/GetOrgTreeOnly`).then(getResult as any);
-}
+// 查询机构
+// export function searchOrgs(): Promise<any[]> {
+//   return request.get(process.env.basePath + `/Common/GetOrgTreeOnly`).then(getResult as any);
+// }
 
 //获取模板分类
 export function GetDataItemTreeList(): Promise<TreeEntity[]> {

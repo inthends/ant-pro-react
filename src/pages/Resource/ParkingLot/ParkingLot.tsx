@@ -7,7 +7,9 @@ import LeftTree from '../LeftTree';
 import ListTable from './ListTable';
 import ModifyGarage from './ModifyGarage';
 import ModifyParking from './ModifyParking';
+import { TreeNode } from 'antd/lib/tree-select';
 import { GetPublicAreas, GetQuickParkingTree } from './ParkingLot.service';
+import { GetOrgs } from '@/services/commonItem';
 const { Content } = Layout;
 const { Search } = Input;
 
@@ -16,13 +18,14 @@ function ParkingLot() {
   const [treeData, setTreeData] = useState<TreeEntity[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
-  const [orgid, SetOrgid] = useState<string>('');
-  const [orgtype, SetOrgtype] = useState<string>('');
+  const [orgid, setOrgid] = useState<string>('');
+  const [orgtype, setOrgtype] = useState<string>('');
   const [data, setData] = useState<any[]>([]);
   const [currData, setCurrData] = useState<ParkingData>();
   const [search, setSearch] = useState<string>('');
   //是否能新增
   const [isAdd, setIsAdd] = useState<boolean>(true);
+  const [orgs, setOrgs] = useState<TreeNode[]>();
 
   const selectTree = (id, type, searchText) => {
     initLoadData(id, type, searchText);
@@ -30,26 +33,32 @@ function ParkingLot() {
       setIsAdd(false);
     } else {
       setIsAdd(true);
-    }
-
-    SetOrgid(id);
-    SetOrgtype(type);
-
+    } 
+    setOrgid(id);
+    setOrgtype(type); 
   };
 
   useEffect(() => {
-    getTreeData().then(res => {
+    GetQuickParkingTree('').then(res => {
       // const root = res.filter(item => item.parentId === '0');
       // const rootOrg = root.length === 1 ? root[0] : undefined;
       // SetOrganize(rootOrg);
+      setTreeData(res || []);
+
+      //加载管理处
+      GetOrgs().then(res => {
+        setOrgs(res);
+      });
+
       initLoadData('', '', '');
     });
   }, []);
+
   // 获取属性数据
-  const getTreeData = () => {
-    return GetQuickParkingTree('').then((res: any[]) => {
-      setTreeData(res || []);
-      return res || [];
+  // const getTreeData = () => {
+  //   return GetQuickParkingTree('').then((res: any[]) => {
+  //     setTreeData(res || []);
+  //     return res || [];
       // const treeList = (res || []).map(item => {
       //   return {
       //     ...item,
@@ -60,8 +69,8 @@ function ParkingLot() {
       // });
       // setTreeData(treeList);
       // return treeList;
-    });
-  };
+  //   });
+  // };
 
   const closeDrawer = () => {
     setModifyVisible(false);
@@ -199,7 +208,7 @@ function ParkingLot() {
         <ModifyGarage
           modifyVisible={modifyVisible}
           closeDrawer={closeDrawer}
-          treeData={treeData}
+          treeData={orgs}
           organizeId={orgid}
           data={currData}
           reload={() => initLoadData(orgid, orgtype, search)}

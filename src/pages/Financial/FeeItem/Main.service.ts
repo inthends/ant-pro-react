@@ -84,11 +84,12 @@ export function HouseSaveForm(data): Promise<any> {
   return request.post(process.env.basePath + `/FeeItems/HouseSaveForm`, {data:objToFormdata(data)}).then(getResult as any);
 }
 //加载管理处
-export function GetOrgTreeOnly(): Promise<TreeEntity[]> {
-  return request
-    .get(process.env.basePath + `/Common/GetOrgTreeOnly`)
-    .then(getResult as any);
-}
+// export function GetOrgTreeOnly(): Promise<TreeEntity[]> {
+//   return request
+//     .get(process.env.basePath + `/Common/GetOrgTreeOnly`)
+//     .then(getResult as any);
+// }
+
 //加载税项
 export function GetOrgTaxTateFormJson(data): Promise<TreeEntity[]> {
   return request

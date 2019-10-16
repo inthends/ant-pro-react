@@ -1,11 +1,11 @@
 // import { TreeEntity } from '@/model/models';
 import {
-  Button, Card, Col, Drawer, Form, Input, message, Row, Select, Tree, TreeSelect, Checkbox,
+  Button, Card, Col, Drawer, Form, Input, message, Row, Select,  TreeSelect, Checkbox,
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { SaveForm } from './PStructUser.service';
-import { getCommonItems,GetOrgTreeOnly } from '@/services/commonItem';
+import { getCommonItems,GetOrgs } from '@/services/commonItem';
 import styles from './style.less';
 
 const { Option } = Select;
@@ -30,7 +30,7 @@ const Modify = (props: ModifyProps) => {
   // const [banks, setBanks] = useState<any[]>([]); // 企业性质
   // 打开抽屉时初始化
   useEffect(() => {
-    GetOrgTreeOnly().then((res: any[]) => {
+    GetOrgs().then((res: any[]) => {
       setTreeData(res || []);
     });
     // 获取开户银行

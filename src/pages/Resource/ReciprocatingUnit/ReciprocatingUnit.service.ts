@@ -1,9 +1,9 @@
 import { GmPstructure, ResponseObject, TreeEntity } from '@/model/models';
 import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
-export function GetOrgTreeOnly(): Promise<TreeEntity[]> {
-  return request.get(process.env.basePath + `/Common/GetOrgTreeOnly`, {}).then(getResult);
-}
+// export function GetOrgTreeOnly(): Promise<TreeEntity[]> {
+//   return request.get(process.env.basePath + `/Common/GetOrgTreeOnly`, {}).then(getResult);
+// }
 export function GetStatisticsTotal(): Promise<ResponseObject<any>> {
   return request.post(process.env.basePath + `/PStructs/GetStatisticsTotal`, {});
 }
