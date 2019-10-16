@@ -18,7 +18,7 @@ import styles from './style.less';
 const { TabPane } = Tabs;
 
 interface DetailProps {
-  modifyVisible: boolean;
+  visible: boolean;
   id?: string;//合同id
   chargeId?: string;//合同条款id
   closeDrawer(): void;
@@ -27,7 +27,7 @@ interface DetailProps {
 }
 
 const Detail = (props: DetailProps) => {
-  const { modifyVisible, closeDrawer, id, form, chargeId } = props;
+  const { visible, closeDrawer, id, form, chargeId } = props;
   const title = '合同详情';
   //const [industryType, setIndustryType] = useState<any[]>([]); //行业  
   //const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
@@ -60,7 +60,7 @@ const Detail = (props: DetailProps) => {
 
   // 打开抽屉时初始化
   useEffect(() => {
-    if (modifyVisible) {
+    if (visible) {
       if (id) {
         GetFormJson(id).then((tempInfo: LeaseContractDTO) => {
           setInfoDetail(tempInfo);
@@ -82,7 +82,7 @@ const Detail = (props: DetailProps) => {
     } else {
       form.setFieldsValue({});
     }
-  }, [modifyVisible]);
+  }, [visible]);
 
   return (
     <Drawer
@@ -90,7 +90,7 @@ const Detail = (props: DetailProps) => {
       placement="right"
       width={1000}
       onClose={close}
-      visible={modifyVisible}
+      visible={visible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
       <PageHeader title={infoDetail.state}
         // extra={[

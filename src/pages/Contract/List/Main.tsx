@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { GetPageListJson } from './Main.service';
 import ListTable from './ListTable';
 import { getResult } from '@/utils/networkUtils';
+import Add from './Add';
 import Modify from './Modify';
 import Detail from './Detail';
 import { GetQuickSimpleTreeAllForContract } from '@/services/commonItem';
@@ -14,6 +15,7 @@ const { Content } = Layout;
 const { Search } = Input;
 
 function Main() {
+  const [addVisible, setAddVisible] = useState<boolean>(false);
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   const [detailVisible, setDetailVisible] = useState<boolean>(false);
 
@@ -25,12 +27,22 @@ function Main() {
   const [search, setSearch] = useState<string>('');
   const [treeData, setTreeData] = useState<any[]>([]);
 
-  const closeDrawer = () => {
+  const closeAddDrawer = () => {
+    setAddVisible(false);
+  };
+  const showAddDrawer = (id?, chargeId?) => {
+    setAddVisible(true);
+    setId(id);
+    setChargeId(chargeId);
+  };
+
+  const closeModifyDrawer = () => {
     setModifyVisible(false);
   };
-  const showDrawer = (id?) => {
+  const showModifyDrawer = (id?, chargeId?) => {
     setModifyVisible(true);
     setId(id);
+    setChargeId(chargeId);
   };
 
   const closeDetailDrawer = () => {
@@ -120,7 +132,7 @@ function Main() {
             onSearch={value => loadData(value)}
           />
           <Button type="primary" style={{ float: 'right' }}
-            onClick={() => showDrawer()}
+            onClick={() => showAddDrawer()}
           >
             <Icon type="plus" />
             合同
@@ -135,20 +147,29 @@ function Main() {
           pagination={pagination}
           data={data}
           detail={showDetailDrawer}
+          modify={showModifyDrawer}
           reload={() => initLoadData(search)} />
       </Content>
 
-
-      <Modify
-        modifyVisible={modifyVisible}
-        closeDrawer={closeDrawer}
+      <Add
+        visible={addVisible}
+        closeDrawer={closeAddDrawer}
         treeData={treeData}
         id={id}
         reload={() => initLoadData(search)}
       />
 
+      <Modify
+        visible={modifyVisible}
+        closeDrawer={closeModifyDrawer}
+        treeData={treeData}
+        id={id}
+        chargeId={chargeId}
+        reload={() => initLoadData(search)}
+      />
+
       <Detail
-        modifyVisible={detailVisible}
+        visible={detailVisible}
         closeDrawer={closeDetailDrawer}
         id={id}
         chargeId={chargeId}
