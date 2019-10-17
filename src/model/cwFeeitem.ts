@@ -18,7 +18,7 @@ export interface CwFeeitem {
     /**
      * Desc:  Default:0  Nullable:True
      */
-    calScaleDispose?: number;
+    // calScaleDispose?: number;
     /**
      * Desc:  Default:  Nullable:True
      */
@@ -42,7 +42,7 @@ export interface CwFeeitem {
     /**
      * Desc:  Default:  Nullable:True
      */
-    feeEngName?: string;
+    // feeEngName?: string;
     /**
      * Desc:  Default:  Nullable:True
      */
@@ -131,7 +131,7 @@ export interface CwFeeitem {
     /**
      * Desc:  Default:  Nullable:True
      */
-    sysType?: string;
+    // sysType?: string;
     /**
      * Desc:计费起始日期  Default:  Nullable:True
      */
@@ -155,11 +155,11 @@ export interface CwFeeitem {
     /**
      * Desc:  Default:  Nullable:True
      */
-    typeCode?: string;
+    // typeCode?: string;
     /**
      * Desc:  Default:0  Nullable:True
      */
-    calResultScale?: number;
+    // calResultScale?: number;
     /**
      * Desc:计费终止日期  Default:  Nullable:True
      */

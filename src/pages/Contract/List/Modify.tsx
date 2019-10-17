@@ -110,7 +110,7 @@ const Modify = (props: ModifyProps) => {
 
   const onRoomChange = (value, label, extra) => {
     //选择房源,计算面积
-    //["101 158.67㎡", "102 156.21㎡"] 
+    //["101 158.67㎡", "102 156.21㎡"]
     let area = 0;
     label.forEach((val, idx, arr) => {
       area += parseFloat(val.split(' ')[1].replace('㎡', ''));

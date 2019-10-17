@@ -110,8 +110,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
           PayDeadlineNum: values.payDeadlineNum,
           //StartCalDate:tempInfo.startCalDate,
           //UseTimePrice:tempInfo.useTimePrice,
-          AccPeriodBase: values.accPeriodBase,
-          //CalResultScale:tempInfo.calResultScale,
+          AccPeriodBase: values.accPeriodBase, 
           //CreateUserName:tempInfo.createUserName,
           FeeFormulaOne: values.feeFormulaOne,
           //InOutDate:moment(tempInfo.inOutDate).format('YYYY-MM-DD'),
@@ -121,6 +120,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
           PayDeadlineUnit: values.payDeadlineUnit,
           //StepPriceId:tempInfo.stepPriceId,
           AccPeriodBaseNum: values.accPeriodBaseNum,
+          //CalResultScale:tempInfo.calResultScale,
           //CalScaleDispose:tempInfo.calScaleDispose,
           //Currency:tempInfo.currency,
           //FeeFormulaTwo:tempInfo.feeFormulaTwo,
@@ -135,8 +135,10 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
           CycleType: values.cycleType,
           FeeItemId: values.feeItemId,
           IsCustomizeDate: infoDetail.isCustomizeDate ? true : false,
-          LastResultScale: values.lastResultScale,
+          MidScaleDispose: values.midScaleDispose,
           MidResultScale: values.midResultScale,
+          LastScaleDispose: values.lastScaleDispose,
+          LastResultScale: values.lastResultScale, 
           //OutMethod:tempInfo.outMethod,
           PayFeeItemId: values.payFeeItemId,
           UnitId: values.unitId,
@@ -144,9 +146,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
           CopeRate: values.copeRate,
           CycleValue: values.cycleValue,
           FeePerson: values.feePerson,
-          IsEditTemp: infoDetail.isEditTemp ? true : false,
-          LastScaleDispose: values.lastScaleDispose,
-          MidScaleDispose: values.midScaleDispose,
+          IsEditTemp: infoDetail.isEditTemp ? true : false, 
           PayDateNum: values.payDateNum,
           //PeriodNum:tempInfo.periodNum,
           //UseFormulaTwo:tempInfo.useFormulaTwo,
@@ -586,7 +586,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                 </Col>
                 <Col lg={12}>
                   <Form.Item label="计算方法">
-                    {getFieldDecorator('delayType', { 
+                    {getFieldDecorator('delayType', {
                       initialValue: infoDetail.delayType ? infoDetail.delayType : 1,
                     })(
                       <Select placeholder="选择滞纳金计算方式">
@@ -611,7 +611,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
           </TabPane>
           <TabPane tab="高级" key="2">
             <Card title="小数精度"  >
-              <Row gutter={24}>
+              {/* <Row gutter={24}>
                 <Col lg={12}>
                   <Form.Item label="单价保留小数点">
                     {getFieldDecorator('calcPrecision', {
@@ -631,20 +631,20 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                     )}
                   </Form.Item>
                 </Col>
-              </Row>
+              </Row> */}
 
-              {/* <Row gutter={24}>
+              <Row gutter={24}>
                 <Col lg={12}>
                   <Form.Item label="中间每一步计算结果保留">
                     {getFieldDecorator('midResultScale', {
                       initialValue: infoDetail.midResultScale,
-                    })( 
+                    })(
                       <Select placeholder="请选择单位">
-                        <Option value="0">0</Option>
-                        <Option value="1" >1</Option>
-                        <Option value="2">2</Option>
-                        <Option value="3" >3</Option>
-                        <Option value="4">4</Option>
+                        <Option value={0}>0</Option>
+                        <Option value={1}>1</Option>
+                        <Option value={2}>2</Option>
+                        <Option value={3}>3</Option>
+                        <Option value={4}>4</Option>
                       </Select>
                     )}
                   </Form.Item>
@@ -655,14 +655,14 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                       initialValue: infoDetail.midScaleDispose,
                     })(
                       <Select placeholder="请选择小数处理方法">
-                        <Option value="0">四舍五入</Option>
-                        <Option value="1" >直接舍去</Option>
-                        <Option value="2">有数进一</Option>
+                        <Option value={1}>四舍五入</Option>
+                        <Option value={2}>直接舍去</Option>
+                        <Option value={3}>有数进一</Option>
                       </Select>
                     )}
                   </Form.Item>
                 </Col>
-              </Row> 
+              </Row>
               <Row gutter={24}>
                 <Col lg={12}>
                   <Form.Item label="最终结果保留小数位数">
@@ -670,11 +670,11 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                       initialValue: infoDetail.lastResultScale,
                     })(
                       <Select placeholder="请选择单位">
-                        <Option value="0">0</Option>
-                        <Option value="1" >1</Option>
-                        <Option value="2">2</Option>
-                        <Option value="3" >3</Option>
-                        <Option value="4">4</Option>
+                        <Option value={0}>0</Option>
+                        <Option value={1}>1</Option>
+                        <Option value={2}>2</Option>
+                        <Option value={3}>3</Option>
+                        <Option value={4}>4</Option>
                       </Select>
                     )}
                   </Form.Item>
@@ -685,14 +685,14 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                       initialValue: infoDetail.lastScaleDispose,
                     })(
                       <Select placeholder="请选择小数处理方法">
-                        <Option value="0">四舍五入</Option>
-                        <Option value="1" >直接舍去</Option>
-                        <Option value="2">有数进一</Option>
+                        <Option value={1}>四舍五入</Option>
+                        <Option value={2}>直接舍去</Option>
+                        <Option value={3}>有数进一</Option>
                       </Select>
                     )}
                   </Form.Item>
                 </Col>
-              </Row> */}
+              </Row>
             </Card>
             <Card title="账单日设置"  >
               <Row gutter={8}>
@@ -1056,8 +1056,8 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                       initialValue: infoDetail.payDateUnit,
                     })(
                       <Select placeholder="==请选择单位==">
-                         <Option value={1}>天</Option>
-                          <Option value={2}>月</Option>
+                        <Option value={1}>天</Option>
+                        <Option value={2}>月</Option>
                       </Select>
                     )}
                   </Form.Item>

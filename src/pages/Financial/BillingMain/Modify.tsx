@@ -349,7 +349,7 @@ const Modify = (props: ModifyProps) => {
             <span>
               <a onClick={() => {
                 RemoveUnitForm(record.id).then(res => {
-                  initUnitFeeLoadData();
+                  initUnitFeeLoadData(unitFeeSearchParams);
                 })
               }} key="delete">删除</a>
             </span> : <span></span>
@@ -400,7 +400,7 @@ const Modify = (props: ModifyProps) => {
   // const [houseFeeItemId, setHouseFeeItemId] = useState<string>('');
   const closeSelectHouse = () => {
     setSelectHouseVisible(false);
-  }
+  };
 
   // const [isFormula, setIsFormula] = useState<boolean>(false);
   return (
@@ -477,7 +477,7 @@ const Modify = (props: ModifyProps) => {
             </Row>
             <Row>
               <Col span={24}>
-                <Form.Item label="备注"  >
+                <Form.Item label="备注">
                   {getFieldDecorator('memo', {
                     initialValue: infoDetail.memo
                   })(
@@ -576,8 +576,7 @@ const Modify = (props: ModifyProps) => {
           onClick={() => {
             form.validateFields((errors, values) => {
               if (!errors) {
-                let guid = getGuid();
-
+                let guid = getGuid(); 
                 var keyValue="";
                 var type=1;
                 if( id == null || id == '' ){
@@ -606,6 +605,7 @@ const Modify = (props: ModifyProps) => {
                   LinkId: '',
                   IfVerify: values.ifVerify == "未审核" ? false : true,
                   Status: 0,
+                  BillCode:values.billCode,
                   type: type,
                   Memo: values.memo
                 }

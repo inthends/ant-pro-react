@@ -65,8 +65,6 @@ const Modify = (props: ModifyProps) => {
         var newInfo = Object.assign({}, info, { feeType: selectTreeItem.feeType });
         setInfoDetail(newInfo);
         form.setFieldsValue({ feeType: selectTreeItem.feeType });
-
-      } else {
       }
     });
   };
@@ -80,25 +78,22 @@ const Modify = (props: ModifyProps) => {
           //   // var kind = tempInfo.feeKind == "收款费项" ? "ReceivablesItem" : "PaymentItem";
           //   changeFeeType(tempInfo.feeKind);
           //   setIsInit(false);
-          // } 
-
+          // }
           setInfoDetail(tempInfo);
-
           //设置状态
           tempInfo.accBillDateUnit == 2 ? setAccFixedDisabled(false) : setAccFixedDisabled(true);
           tempInfo.payDeadlineUnit == 2 ? setPayFixedDisabled(false) : setPayFixedDisabled(true);
-          tempInfo.lateStartDateUnit == 2 ? setLateFixedDisabled(false) : setLateFixedDisabled(true);
-
+          tempInfo.lateStartDateUnit == 2 ? setLateFixedDisabled(false) : setLateFixedDisabled(true); 
           form.resetFields();
         });
-        if (id !== undefined) {
-          initHouseLoadData('');
-          initOrgLoadData('');
-        }
-      } else {
-        //重置之前选择加载的费项类别
+        //if (id !== undefined) {
+        initHouseLoadData('');
+        initOrgLoadData('');
+        //}
+      } else { 
+        form.resetFields();
         //设置checkbox默认值
-        var info = Object.assign({}, infoDetail, { isEnable: true, isInContract: true, isTax: true });
+        var info = Object.assign({}, { isEnable: true, isInContract: true, isTax: true });
         if (isInit && selectTreeItem != null && selectTreeItem.feeKind != '') {
           info = Object.assign({}, info, { feeKind: selectTreeItem.feeKind });
           setInfoDetail(info);
@@ -107,8 +102,9 @@ const Modify = (props: ModifyProps) => {
         }
       }
     } else {
-      form.setFieldsValue({});
-      form.resetFields([]);
+      // form.setFieldsValue({});
+      // form.resetFields([]);
+      form.resetFields();
     }
   }, [modifyVisible]);
 
@@ -912,19 +908,19 @@ const Modify = (props: ModifyProps) => {
           {
             id == null ? null : <TabPane tab="高级" key="2">
               <Card title="小数精度" className={styles.card2}  >
-                {/* <Row gutter={24}>
+                <Row gutter={24}>
                   <Col lg={12}>
                     <Form.Item label="中间每一步计算结果保留">
                       {getFieldDecorator('midResultScale', {
                         initialValue: infoDetail.midResultScale,
                         rules: [{ required: true, message: '请选择小数位数' }],
                       })(
-                        <Select placeholder="请选择单位">
-                          <Option value="0">0</Option>
-                          <Option value="1" >1</Option>
-                          <Option value="2">2</Option>
-                          <Option value="3" >3</Option>
-                          <Option value="4">4</Option>
+                        <Select placeholder="请选择小数位数">
+                          <Option value={0}>0</Option>
+                          <Option value={1}>1</Option>
+                          <Option value={2}>2</Option>
+                          <Option value={3}>3</Option>
+                          <Option value={4}>4</Option>
                         </Select>
                       )}
                     </Form.Item>
@@ -936,27 +932,27 @@ const Modify = (props: ModifyProps) => {
                         rules: [{ required: true, message: '请选择小数处理方法' }],
                       })(
                         <Select placeholder="请选择小数处理方法">
-                          <Option value="0">四舍五入</Option>
-                          <Option value="1" >直接舍去</Option>
-                          <Option value="2">有数进一</Option>
+                          <Option value={1}>四舍五入</Option>
+                          <Option value={2}>直接舍去</Option>
+                          <Option value={3}>有数进一</Option>
                         </Select>
                       )}
                     </Form.Item>
                   </Col>
-                </Row> */}
-                {/* <Row gutter={24}>
+                </Row>
+                <Row gutter={24}>
                   <Col lg={12}>
                     <Form.Item label="最终结果保留小数位数">
                       {getFieldDecorator('lastResultScale', {
                         initialValue: infoDetail.lastResultScale,
                         rules: [{ required: true, message: '请选择小数位数' }],
                       })(
-                        <Select placeholder="请选择单位">
-                          <Option value="0">0</Option>
-                          <Option value="1" >1</Option>
-                          <Option value="2">2</Option>
-                          <Option value="3" >3</Option>
-                          <Option value="4">4</Option>
+                        <Select placeholder="请选择小数位数">
+                          <Option value={0}>0</Option>
+                          <Option value={1}>1</Option>
+                          <Option value={2}>2</Option>
+                          <Option value={3}>3</Option>
+                          <Option value={4}>4</Option>
                         </Select>
                       )}
                     </Form.Item>
@@ -968,16 +964,16 @@ const Modify = (props: ModifyProps) => {
                         rules: [{ required: true, message: '请选择小数处理方法' }],
                       })(
                         <Select placeholder="请选择小数处理方法">
-                          <Option value="0">四舍五入</Option>
-                          <Option value="1" >直接舍去</Option>
-                          <Option value="2">有数进一</Option>
+                          <Option value={1}>四舍五入</Option>
+                          <Option value={2}>直接舍去</Option>
+                          <Option value={3}>有数进一</Option>
                         </Select>
                       )}
                     </Form.Item>
                   </Col>
-                </Row> */}
+                </Row>
 
-                <Row gutter={24}>
+                {/* <Row gutter={24}>
                   <Col lg={12}>
                     <Form.Item label="单价保留小数点">
                       {getFieldDecorator('calcPrecision', {
@@ -991,13 +987,14 @@ const Modify = (props: ModifyProps) => {
                       {getFieldDecorator('calcPrecisionMode', {
                         initialValue: infoDetail.calcPrecisionMode ? infoDetail.calcPrecisionMode : "最终计算结果保留2位",
                       })(<Select>
-                        <Option value="最终计算结果保留2位" >最终计算结果保留2位</Option>
-                        <Option value="每步计算结果保留2位" >每步计算结果保留2位</Option>
+                        <Option value="每步计算结果保留2位">每步计算结果保留2位</Option>
+                        <Option value="最终计算结果保留2位">最终计算结果保留2位</Option> 
                       </Select>
                       )}
                     </Form.Item>
                   </Col>
-                </Row>
+                </Row> */}
+
               </Card>
               <Card title="账单日设置" className={styles.card2} >
                 <Row gutter={8}>
@@ -1492,6 +1489,7 @@ const Modify = (props: ModifyProps) => {
             padding: '10px 16px',
             background: '#fff',
             textAlign: 'right',
+            zIndex:999
           }}
         >
           <Button onClick={close} style={{ marginRight: 8 }}>

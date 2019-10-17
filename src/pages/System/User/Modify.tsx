@@ -87,7 +87,7 @@ const Modify = (props: ModifyProps) => {
             <ModifyItem
               {...baseFormProps}
               field="password"
-              type="password"
+              // type="password"
               label="密码"
               rules={[{ required: true, message: '请输入密码' }]} 
               readOnly={initData.id != undefined} 
