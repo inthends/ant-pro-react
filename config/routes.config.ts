@@ -263,6 +263,11 @@ export default [
             component: './System/Department/Main',
           },
           {
+            name: 'worker',
+            path: '/system/worker',
+            component: './System/Worker/Worker',
+          },
+          {
             name: 'user',
             path: '/system/user',
             component: './System/User/User',
