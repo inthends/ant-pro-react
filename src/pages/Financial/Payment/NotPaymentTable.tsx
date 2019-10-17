@@ -2,7 +2,7 @@
 import Page from '@/components/Common/Page';
 import { Divider, InputNumber, Input, Select, Col, Row, Form, DatePicker, Card, Button, message, Table, Modal } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { RemoveForm, Pay } from './Payment.service';
@@ -42,6 +42,13 @@ function NotPaymentTable(props: NotPaymentTableProps) {
       },
     });
   };
+
+  useEffect(()=>{
+    setSelectedRowKeys([]);
+    setSumEntity(0);
+    form.setFieldsValue({ payAmount: 0 });
+  },[data]);
+
 
   // const editAndDelete = (key: string, currentItem: any) => {
   //   if (key === 'edit') {
@@ -165,7 +172,7 @@ function NotPaymentTable(props: NotPaymentTableProps) {
     selectedRows.map(item => {
       sumlastAmount = selectedRows.reduce((sum, row) => { return sum + row.lastAmount; }, 0);
     });
-
+    form.setFieldsValue({ payAmount:sumlastAmount });
     setPayAmount(sumlastAmount);
     setSumEntity(sumlastAmount);
   };
@@ -222,7 +229,7 @@ function NotPaymentTable(props: NotPaymentTableProps) {
           <Row gutter={24} style={{ marginBottom: '8px' }}>
             <Col lg={24}>
               <span style={{ color: "red" }}>
-                {organize.type == 5 ? `已选择：${organize.allname} ，本次选中未付金额合计：${sumEntity}` : `已选择： 本次选中未付金额合计：`}
+                {organize.type == 5 ? `已选择：${organize.allname} ，本次选中未付金额合计：${sumEntity}元` : `已选择： 本次选中未付金额合计：`}
               </span>
             </Col>
           </Row>
