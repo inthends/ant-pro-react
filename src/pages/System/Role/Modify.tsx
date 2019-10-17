@@ -31,16 +31,17 @@ const Modify = (props: ModifyProps) => {
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
-              field="enCode"
-              label="角色编号"
-              rules={[{ required: true, message: "请输入角色编号" }]}
-            ></ModifyItem>
-            <ModifyItem
-              {...baseFormProps}
               field="fullName"
               label="角色名称"
               rules={[{ required: true, message: "请输入角色名称" }]}
             ></ModifyItem>
+            <ModifyItem
+              {...baseFormProps}
+              field="enCode"
+              label="角色编号"
+              rules={[{ required: true, message: "请输入角色编号" }]}
+            ></ModifyItem>
+
           </Row>
           <Row gutter={24}>
             <ModifyItem

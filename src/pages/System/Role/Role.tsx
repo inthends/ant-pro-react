@@ -12,12 +12,13 @@ import { getDataList } from './Role.service';
 const { Content } = Layout;
 const { Search } = Input;
 interface SearchParam {
-  condition: 'EnCode' | 'FullName';
+  // condition: 'EnCode' | 'FullName';
   keyword: string;
-}
+};
+
 const Role = () => {
   const [search, setSearch] = useState<SearchParam>({
-    condition: 'EnCode',
+    // condition: 'EnCode',
     keyword: '',
   });
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
@@ -85,7 +86,7 @@ const Role = () => {
           total,
           pageSize,
         };
-      }); 
+      });
       setData(res.data);
       setLoading(false);
       return res;

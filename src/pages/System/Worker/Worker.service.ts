@@ -5,7 +5,7 @@ import { TreeEntity } from '@/model/models';
 // 新增修改
 export function SaveForm(data): Promise<any> {
   return request
-    .post(process.env.basePath + `/Template/SaveForm`, {
+    .post(process.env.basePath + `/Worker/SaveForm`, {
       data: objToFormdata(data)
     })
     .then(getResult as any);
@@ -14,25 +14,25 @@ export function SaveForm(data): Promise<any> {
 // 删除
 export function RemoveForm(keyValue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Template/RemoveForm?keyValue=${keyValue}`, {})
+    .post(process.env.basePath + `/Worker/RemoveForm?keyValue=${keyValue}`, {})
     .then(getResult as any);
 }
- 
-// 查询机构
-// export function searchOrgs(): Promise<any[]> {
-//   return request.get(process.env.basePath + `/Common/GetOrgTreeOnly`).then(getResult as any);
-// }
 
-//获取模板分类
-export function GetDataItemTreeList(): Promise<TreeEntity[]> {
-  return request.get(process.env.basePath + `/Template/GetDataItemTreeList`, {}).then(getResult as any);
+//获取部门树
+export function GetDepartmentTree(): Promise<TreeEntity[]> {
+  return request.get(process.env.basePath + `/Worker/GetDepartmentTree`, {}).then(getResult as any);
 }
 
 export function GetDataList(data): Promise<any> {
   return request
-    .post(process.env.basePath + `/Template/GetPageListJson`, {
+    .post(process.env.basePath + `/Worker/GetPageListJson`, {
       data: objToFormdata(data)
     })
     .then(getResult as any);
 }
 
+// 查询部门
+export function GetDepartmentTreeByOrgId(OrganizeId): Promise<any[]> {
+  return request.get(process.env.basePath + `/Department/GetDepartmentTree?OrganizeId=${OrganizeId}`)
+    .then(getResult as any);
+}

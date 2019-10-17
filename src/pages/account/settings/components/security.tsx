@@ -52,36 +52,36 @@ class SecurityView extends Component {
         </a>,
       ],
     },
-    {
-      title: formatMessage({ id: 'account-settings.security.question' }, {}),
-      description: formatMessage({ id: 'account-settings.security.question-description' }, {}),
-      actions: [
-        <a key="Set">
-          <FormattedMessage id="account-settings.security.set" defaultMessage="Set" />
-        </a>,
-      ],
-    },
-    {
-      title: formatMessage({ id: 'account-settings.security.email' }, {}),
-      description: `${formatMessage(
-        { id: 'account-settings.security.email-description' },
-        {},
-      )}：ant***sign.com`,
-      actions: [
-        <a key="Modify">
-          <FormattedMessage id="account-settings.security.modify" defaultMessage="Modify" />
-        </a>,
-      ],
-    },
-    {
-      title: formatMessage({ id: 'account-settings.security.mfa' }, {}),
-      description: formatMessage({ id: 'account-settings.security.mfa-description' }, {}),
-      actions: [
-        <a key="bind">
-          <FormattedMessage id="account-settings.security.bind" defaultMessage="Bind" />
-        </a>,
-      ],
-    },
+    // {
+    //   title: formatMessage({ id: 'account-settings.security.question' }, {}),
+    //   description: formatMessage({ id: 'account-settings.security.question-description' }, {}),
+    //   actions: [
+    //     <a key="Set">
+    //       <FormattedMessage id="account-settings.security.set" defaultMessage="Set" />
+    //     </a>,
+    //   ],
+    // },
+    // {
+    //   title: formatMessage({ id: 'account-settings.security.email' }, {}),
+    //   description: `${formatMessage(
+    //     { id: 'account-settings.security.email-description' },
+    //     {},
+    //   )}：ant***sign.com`,
+    //   actions: [
+    //     <a key="Modify">
+    //       <FormattedMessage id="account-settings.security.modify" defaultMessage="Modify" />
+    //     </a>,
+    //   ],
+    // },
+    // {
+    //   title: formatMessage({ id: 'account-settings.security.mfa' }, {}),
+    //   description: formatMessage({ id: 'account-settings.security.mfa-description' }, {}),
+    //   actions: [
+    //     <a key="bind">
+    //       <FormattedMessage id="account-settings.security.bind" defaultMessage="Bind" />
+    //     </a>,
+    //   ],
+    // },
   ];
 
   render() {

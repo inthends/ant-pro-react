@@ -2,7 +2,7 @@
 import { Button, Icon, Input, Layout } from 'antd';
 import React, { useEffect, useState } from 'react';
 import ListTable from './ListTable';
-import { GetTreeListJson } from './Organize.service';
+import { GetTreeListJson } from './Organize.service'; 
 import Modify from './Modify';
 
 const { Content } = Layout;

@@ -54,7 +54,7 @@ export function ExistName(keyValue, name): Promise<any> {
     .then(getResult as any);
 }
 
-// 查询机构
+// 查询部门
 export function GetDepartmentTree(OrganizeId): Promise<any[]> {
   return request.get(process.env.basePath + `/Department/GetDepartmentTree?OrganizeId=${OrganizeId}`)
     .then(getResult as any);

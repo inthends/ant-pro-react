@@ -4,15 +4,26 @@ import { PaginationConfig } from "antd/lib/table";
 import React, { useContext, useEffect, useState } from "react";
 import ListTable from "./ListTable";
 import Modify from "./Modify";
-import { GetDataItemTreeList, GetDataList } from "./Template.service";
+import { GetDepartmentTree, GetDataList } from "./Worker.service";
 import { SiderContext } from '../../SiderContext';
 import LeftTree from '../LeftTree';
 const { Sider } = Layout;
 const { Content } = Layout;
 const { Search } = Input;
 
+interface SearchParam {
+  // condition: 'EnCode' | 'FullName';
+  orgId: string;
+  type: string;
+  keyword: string;
+};
+
 const Worker = () => {
-  const [itemId, setItemId] = useState<string>();
+  const [search, setSearch] = useState<SearchParam>({
+    orgId: '',
+    type: '',
+    keyword: '',
+  });
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<any[]>([]);
@@ -22,10 +33,10 @@ const Worker = () => {
   const [treeData, setTreeData] = useState<any[]>([]);
 
   useEffect(() => {
-    GetDataItemTreeList().then((res) => {
+    GetDepartmentTree().then((res) => {
       setTreeData(res || []);
     });
-    initLoadData(itemId);
+    initLoadData(search);
   }, []);
 
   const closeDrawer = () => {
@@ -39,11 +50,11 @@ const Worker = () => {
     setCurrData(item);
   };
   const loadData = (
-    itemId: any,
+    searchParam: any,
     paginationConfig?: PaginationConfig,
     sorter?
   ) => {
-    setItemId(itemId);
+    setSearch(searchParam);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: pagination.pageSize,
@@ -53,7 +64,7 @@ const Worker = () => {
       pageIndex,
       pageSize,
       total,
-      itemId: itemId
+      queryJson: searchParam
     };
 
     if (sorter) {
@@ -65,6 +76,7 @@ const Worker = () => {
       return res;
     });
   };
+
   const load = formData => {
     setLoading(true);
     formData.sidx = formData.sidx || "CreateDate";
@@ -86,13 +98,13 @@ const Worker = () => {
     });
   };
 
-  const initLoadData = (itemId) => {
-    setItemId(itemId);
-    //const queryJson = searchParam;
+  const initLoadData = (searchParam: SearchParam) => {
+    setSearch(searchParam);
+    const queryJson = searchParam;
     const sidx = "CreateDate";
     const sord = "desc";
     const { current: pageIndex, pageSize, total } = pagination;
-    return load({ pageIndex, pageSize, sidx, sord, total, itemId }).then(
+    return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(
       res => {
         return res;
       }
@@ -100,13 +112,13 @@ const Worker = () => {
   };
 
   const selectTree = (item) => {
-    var value = item.node.props.value;
-    initLoadData(value);
-    setItemId(itemId);
+    let orgId = item.node.props.value;
+    let type = item.node.props.type; 
+    initLoadData({ ...search, orgId, type })
   };
 
   return (
-    <Layout style={{ height: "100%" }}> 
+    <Layout style={{ height: "100%" }}>
       <Sider
         theme="light"
         style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh + 10px)' }}
@@ -145,12 +157,13 @@ const Worker = () => {
       </Sider>
 
       <Content style={{ paddingLeft: '18px' }}>
-        <div style={{ marginBottom: 20, padding: "3px 0" }}> 
+        <div style={{ marginBottom: 20, padding: "3px 0" }}>
           <Search
             key='search'
             className="search-input"
             placeholder="搜索名称"
-            style={{ width: 200 }} 
+            style={{ width: 200 }}
+            onSearch={keyword => loadData({ ...search, keyword })}
           />
 
           <Button
@@ -159,30 +172,28 @@ const Worker = () => {
             onClick={() => showDrawer()}
           >
             <Icon type="plus" />
-            模板
+            员工
           </Button>
         </div>
         <ListTable
           onchange={(paginationConfig, filters, sorter) =>
-            loadData(itemId, paginationConfig, sorter)
+            loadData(search, paginationConfig, sorter)
           }
           loading={loading}
           pagination={pagination}
           data={data}
           modify={showDrawer}
           choose={showChoose}
-          reload={() => initLoadData(itemId)} 
+          reload={() => initLoadData(search)}
         />
       </Content>
       <Modify
         visible={modifyVisible}
         closeDrawer={closeDrawer}
         data={currData}
-        reload={() => initLoadData(itemId)}
+        reload={() => initLoadData({ ...search })}
       />
-
     </Layout>
   );
 };
-
 export default Worker;

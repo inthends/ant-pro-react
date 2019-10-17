@@ -16,8 +16,6 @@ export async function loginService(data: any): Promise<any> {
 // }
 
 //退出
-export async function logoutService(data:any): Promise<any> { 
-
-  return request.get(process.env.basePath + `/Login/Logout?userid=${data.userid}`, { });
-
+export async function logoutService(data:any): Promise<any> {  
+  return request.get(process.env.basePath + `/Login/Logout?userid=${data.userid}`, {}); 
 }

@@ -1065,7 +1065,7 @@ const Modify = (props: ModifyProps) => {
                   <Col span={6} style={{ marginTop: '29px' }}>
                     <Form.Item>
                       {getFieldDecorator('accBillDateUnit', {
-                        initialValue: infoDetail.accBillDateUnit,//? infoDetail.accBillDateUnit : "1",
+                        initialValue: infoDetail.accBillDateUnit,//? infoDetail.accBillDateUnit : 1,
                         rules: [{ required: true, message: '请选择单位' }],
                       })(
                         <Select placeholder="==选择单位==" onChange={value => {
@@ -1127,7 +1127,7 @@ const Modify = (props: ModifyProps) => {
                   <Col span={6}>
                     <Form.Item label="收款截止日 距">
                       {getFieldDecorator('payDeadlineBase', {
-                        initialValue: infoDetail.payDeadlineBase,//? infoDetail.payDeadlineBase.toString() : "2",
+                        initialValue: infoDetail.payDeadlineBase,//? infoDetail.payDeadlineBase.toString() : 2,
                         rules: [{ required: true, message: '请选择应收期间' }],
                       })(
                         <Select placeholder="==选择应收期间==">
@@ -1151,7 +1151,7 @@ const Modify = (props: ModifyProps) => {
                   <Col span={6} style={{ marginTop: '29px' }}>
                     <Form.Item>
                       {getFieldDecorator('payDeadlineUnit', {
-                        initialValue: infoDetail.payDeadlineUnit,//? infoDetail.payDeadlineUnit.toString() : "1",
+                        initialValue: infoDetail.payDeadlineUnit,//? infoDetail.payDeadlineUnit.toString() : 1,
                         rules: [{ required: true, message: '请选择单位' }],
                       })(
                         <Select placeholder="==选择单位==" onChange={value => {
@@ -1213,7 +1213,7 @@ const Modify = (props: ModifyProps) => {
                   <Col span={6}>
                     <Form.Item label="滞纳金起算日 距">
                       {getFieldDecorator('lateStartDateBase', {
-                        initialValue: infoDetail.lateStartDateBase,//? infoDetail.lateStartDateBase.toString() : "2",
+                        initialValue: infoDetail.lateStartDateBase,//? infoDetail.lateStartDateBase.toString() : 2,
                         rules: [{ required: true, message: '请选择应收期间' }],
                       })(
                         <Select placeholder="==选择应收期间==">
@@ -1237,7 +1237,7 @@ const Modify = (props: ModifyProps) => {
                   <Col span={6} style={{ marginTop: '29px' }}>
                     <Form.Item>
                       {getFieldDecorator('lateStartDateUnit', {
-                        initialValue: infoDetail.lateStartDateUnit,//? infoDetail.lateStartDateUnit.toString() : "1",
+                        initialValue: infoDetail.lateStartDateUnit,//? infoDetail.lateStartDateUnit.toString() : 1,
                         rules: [{ required: true, message: '请选择单位' }],
                       })(
                         <Select placeholder="==选择单位==" onChange={value => {

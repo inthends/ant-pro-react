@@ -34,8 +34,7 @@ export interface ModelType {
 }
 
 const Model: ModelType = {
-  namespace: 'accountSettings',
-
+  namespace: 'accountSettings', 
   state: {
     currentUser: {},
     province: [],
@@ -52,7 +51,8 @@ const Model: ModelType = {
       });
     },
     *fetchCurrent(_, { call, put }) {
-      const response = yield call(queryCurrent);
+      const userid = localStorage.getItem('userid'); 
+      const response = yield call(queryCurrent,userid); 
       yield put({
         type: 'saveCurrentUser',
         payload: response,

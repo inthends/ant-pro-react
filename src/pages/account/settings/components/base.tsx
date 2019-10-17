@@ -1,16 +1,14 @@
-import { Button, Form, Input, Select, Upload, message } from 'antd';
+import { Button, Form, Input, Upload, message } from 'antd';
 import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
 import React, { Component, Fragment } from 'react';
-
 import { FormComponentProps } from 'antd/es/form';
 import { connect } from 'dva';
 import { CurrentUser } from '../data.d';
-import GeographicView from './GeographicView';
-import PhoneView from './PhoneView';
+// import GeographicView from './GeographicView';
+// import PhoneView from './PhoneView';
 import styles from './BaseView.less';
-
 const FormItem = Form.Item;
-const { Option } = Select;
+// const { Option } = Select;
 
 // 头像组件 方便以后独立，增加裁剪之类的功能
 const AvatarView = ({ avatar }: { avatar: string }) => (
@@ -30,45 +28,47 @@ const AvatarView = ({ avatar }: { avatar: string }) => (
     </Upload>
   </Fragment>
 );
-interface SelectItem {
-  label: string;
-  key: string;
-}
 
-const validatorGeographic = (
-  _: any,
-  value: {
-    province: SelectItem;
-    city: SelectItem;
-  },
-  callback: (message?: string) => void,
-) => {
-  const { province, city } = value;
-  if (!province.key) {
-    callback('Please input your province!');
-  }
-  if (!city.key) {
-    callback('Please input your city!');
-  }
-  callback();
-};
+// interface SelectItem {
+//   label: string;
+//   key: string;
+// }
 
-const validatorPhone = (rule: any, value: string, callback: (message?: string) => void) => {
-  const values = value.split('-');
-  if (!values[0]) {
-    callback('Please input your area code!');
-  }
-  if (!values[1]) {
-    callback('Please input your phone number!');
-  }
-  callback();
-};
+// const validatorGeographic = (
+//   _: any,
+//   value: {
+//     province: SelectItem;
+//     city: SelectItem;
+//   },
+//   callback: (message?: string) => void,
+// ) => {
+//   const { province, city } = value;
+//   if (!province.key) {
+//     callback('Please input your province!');
+//   }
+//   if (!city.key) {
+//     callback('Please input your city!');
+//   }
+//   callback();
+// };
+
+// const validatorPhone = (rule: any, value: string, callback: (message?: string) => void) => {
+//   const values = value.split('-');
+//   if (!values[0]) {
+//     callback('Please input your area code!');
+//   }
+//   if (!values[1]) {
+//     callback('Please input your phone number!');
+//   }
+//   callback();
+// };
 
 interface BaseViewProps extends FormComponentProps {
   currentUser?: CurrentUser;
 }
 
 @connect(({ accountSettings }: { accountSettings: { currentUser: CurrentUser } }) => ({
+  
   currentUser: accountSettings.currentUser,
 }))
 class BaseView extends Component<BaseViewProps> {
@@ -76,10 +76,10 @@ class BaseView extends Component<BaseViewProps> {
 
   componentDidMount() {
     this.setBaseInfo();
-  }
+  };
 
-  setBaseInfo = () => {
-    const { currentUser, form } = this.props;
+  setBaseInfo = () => { 
+    const { currentUser, form } = this.props; 
     if (currentUser) {
       Object.keys(form.getFieldsValue()).forEach(key => {
         const obj = {};
@@ -123,17 +123,17 @@ class BaseView extends Component<BaseViewProps> {
       <div className={styles.baseView} ref={this.getViewDom}>
         <div className={styles.left}>
           <Form layout="vertical" hideRequiredMark>
-            <FormItem label={formatMessage({ id: 'account-settings.basic.email' })}>
-              {getFieldDecorator('email', {
+            <FormItem label='用户名'>
+              {getFieldDecorator('account', {
                 rules: [
                   {
                     required: true,
                     message: formatMessage({ id: 'account-settings.basic.email-message' }, {}),
                   },
                 ],
-              })(<Input />)}
+              })(<Input readOnly/>)}
             </FormItem>
-            <FormItem label={formatMessage({ id: 'account-settings.basic.nickname' })}>
+            <FormItem label='姓名'>
               {getFieldDecorator('name', {
                 rules: [
                   {
@@ -141,10 +141,10 @@ class BaseView extends Component<BaseViewProps> {
                     message: formatMessage({ id: 'account-settings.basic.nickname-message' }, {}),
                   },
                 ],
-              })(<Input />)}
+              })(<Input readOnly/>)}
             </FormItem>
-            <FormItem label={formatMessage({ id: 'account-settings.basic.profile' })}>
-              {getFieldDecorator('profile', {
+            <FormItem label='备注'>
+              {getFieldDecorator('description', {
                 rules: [
                   {
                     required: true,
@@ -153,12 +153,12 @@ class BaseView extends Component<BaseViewProps> {
                 ],
               })(
                 <Input.TextArea
-                  placeholder={formatMessage({ id: 'account-settings.basic.profile-placeholder' })}
-                  rows={4}
+                  placeholder='备注'
+                  rows={5}
                 />,
               )}
             </FormItem>
-            <FormItem label={formatMessage({ id: 'account-settings.basic.country' })}>
+            {/* <FormItem label={formatMessage({ id: 'account-settings.basic.country' })}>
               {getFieldDecorator('country', {
                 rules: [
                   {
@@ -205,10 +205,10 @@ class BaseView extends Component<BaseViewProps> {
                   { validator: validatorPhone },
                 ],
               })(<PhoneView />)}
-            </FormItem>
+            </FormItem> 
             <Button type="primary" onClick={this.handlerSubmit}>
               <FormattedMessage id="account-settings.basic.update" defaultMessage="Update Information" />
-            </Button>
+            </Button>*/}
           </Form>
         </div>
         <div className={styles.right}>

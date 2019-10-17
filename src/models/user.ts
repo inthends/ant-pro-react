@@ -53,7 +53,7 @@ const UserModel: UserModelType = {
       });
     },
     *fetchCurrent(_, { call, put }) {
-      const userid = localStorage.getItem('userid'); 
+        const userid = localStorage.getItem('userid'); 
         const { code, data } = yield call(queryCurrent, userid);
         if (code === 200) {
           if (data) {

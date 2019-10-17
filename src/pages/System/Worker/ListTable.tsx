@@ -1,8 +1,8 @@
 import Page from "@/components/Common/Page";
-import { Divider, message, Modal,  Table } from "antd";
+import { Divider, message, Modal, Table } from "antd";
 import { ColumnProps, PaginationConfig } from "antd/lib/table";
 import React from "react";
-import { RemoveForm } from "./Template.service";
+import { RemoveForm } from "./Worker.service";
 
 interface ListTableProps {
   loading: boolean;
@@ -11,7 +11,7 @@ interface ListTableProps {
   modify(record: any): void;
   choose(record: any): void;
   onchange(page: any, filter: any, sort: any): any;
-  reload(): void; 
+  reload(): void;
 }
 
 function ListTable(props: ListTableProps) {
@@ -33,42 +33,75 @@ function ListTable(props: ListTableProps) {
   const doModify = record => {
     modify({ ...record });
   };
- 
+
   const columns = [
     {
-      title: "模板名称",
-      dataIndex: "templateName",
-      key: "templateName",
-      width: 200,
+      title: "工号",
+      dataIndex: "code",
+      key: "code",
+      width: 100,
     },
     {
-      title: "文件名称",
-      dataIndex: "fileName",
-      key: "fileName",
-      width: 200
-    },
-    {
-      title: "创建人",
-      dataIndex: "createUserName",
-      key: "createUserName",
+      title: "名称",
+      dataIndex: "name",
+      key: "name",
       width: 100
     },
     {
-      title: "创建时间",
-      dataIndex: "createDate",
-      key: "createDate",
-      width: 120
-    },  
+      title: "性别",
+      dataIndex: "gender",
+      key: "gender",
+      width: 60,
+      render: (value, record) => {
+        if (value == 1)
+          return '男';
+        else
+          return '女';
+      }
+    },
+    {
+      title: "手机",
+      dataIndex: "phoneNum",
+      key: "phoneNum",
+      width: 100
+    },
+    {
+      title: "电话",
+      dataIndex: "telPhoneNum",
+      key: "telPhoneNum",
+      width: 100
+    },
+
+
+    {
+      title: "职位",
+      dataIndex: "dutyName",
+      key: "dutyName",
+      width: 100
+    },
+    {
+      title: "岗位",
+      dataIndex: "postName",
+      key: "postName",
+      width: 100
+    },
+
+    {
+      title: "备注",
+      dataIndex: "description",
+      key: "description",
+      width: 100
+    }, 
     {
       title: "操作",
       dataIndex: "operation",
       key: "operation",
-      width: 70,
+      width: 80,
       render: (text, record) => {
         return [
           <span>
             <a onClick={() => doModify(record)} key="modify">编辑</a>
-            <Divider type="vertical" key='divider' />
+            <Divider type="vertical" key='divider'/>
             <a onClick={() => doDelete(record)} key="delete">删除</a>
           </span>
         ];
@@ -94,4 +127,3 @@ function ListTable(props: ListTableProps) {
 
 export default ListTable;
 
- 

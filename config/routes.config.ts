@@ -45,7 +45,7 @@ export default [
         routes: [
           {
             name: 'settings',
-            path: '/account/settings',
+            path: '/account/settings', 
             component: './account/settings',
           },
         ],

@@ -57,7 +57,7 @@ export function GetAllFeeItems(): Promise<TreeEntity[]> {
 //获取当前用户信息
 export function GetUseInfo(userid): Promise<any> {
   return request
-    .get(process.env.basePath + `/Login/GetUserInfo?userid=${userid}`)
+    .get(process.env.basePath + `/Setting/GetUserInfo?userid=${userid}`)
     .then(getResult as any);
 }
 

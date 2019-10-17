@@ -46,8 +46,7 @@ export default {
   'menu.estate.servicedesk': '服务总台',
   'menu.estate.repair': '报修管理',
   'menu.estate.complaint': '投诉管理', 
-
-
+ 
   'menu.admin': '行政管理',
   'menu.admin.warehouse': '仓库管理', 
 
@@ -57,6 +56,7 @@ export default {
   'menu.system': '系统管理',
   'menu.system.organize': '机构设置',
   'menu.system.department': '部门设置',
+  'menu.system.worker': '员工管理',
   'menu.system.user': '用户管理',
   'menu.system.role': '角色管理',
   'menu.system.code': '编码管理',

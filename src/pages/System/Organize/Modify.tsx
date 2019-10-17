@@ -16,7 +16,7 @@ interface ModifyProps {
   reload(): void;
 }
 const Modify = (props: ModifyProps) => {
-  const { data, form } = props;
+  const { data, form, visible } = props;
   const [managers, setManagers] = useState<SelectItem[]>([]);
   // const [types, setTypes] = useState<SelectItem[]>([
   //   {
@@ -43,8 +43,11 @@ const Modify = (props: ModifyProps) => {
   useEffect(() => {
     // getTypes();
     searchManager('');
-    getOrgs();
-  }, [initData]);
+    // getOrgs(); 
+    GetOrgs().then(res => {
+      setOrgs(res);
+    }); 
+  }, []);
 
   const doSave = dataDetail => {
     let modifyData = { ...initData, ...dataDetail, keyValue: initData.organizeId };
@@ -76,11 +79,11 @@ const Modify = (props: ModifyProps) => {
   //   });
   // };
 
-  const getOrgs = () => {
-    GetOrgs().then(res => {
-      setOrgs(res);
-    });
-  };
+  // const getOrgs = () => {
+  //   GetOrgs().then(res => {
+  //     setOrgs(res);
+  //   });
+  // };
 
   const checkExist = (rule, value, callback) => {
     if (value == undefined) {
@@ -100,7 +103,7 @@ const Modify = (props: ModifyProps) => {
   return (
     <BaseModifyProvider {...props} name="机构" save={doSave}>
       <Card className={styles.card}>
-        <Form layout="vertical" hideRequiredMark> 
+        <Form layout="vertical" hideRequiredMark>
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}

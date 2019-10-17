@@ -1,23 +1,21 @@
 import React, { Component } from 'react';
-
 import { Dispatch } from 'redux';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import { GridContent } from '@ant-design/pro-layout';
 import { Menu } from 'antd';
 import { connect } from 'dva';
 import BaseView from './components/base';
-import BindingView from './components/binding';
+// import BindingView from './components/binding';
 import { CurrentUser } from './data.d';
-import NotificationView from './components/notification';
+// import NotificationView from './components/notification';
 import SecurityView from './components/security';
 import styles from './style.less';
-
 const { Item } = Menu;
 
 interface SettingsProps {
   dispatch: Dispatch<any>;
-  currentUser: CurrentUser;
-}
+  currentUser:  CurrentUser;
+};
 
 type SettingsStateKeys = 'base' | 'security' | 'binding' | 'notification';
 interface SettingsState {
@@ -27,9 +25,15 @@ interface SettingsState {
   };
   selectKey: SettingsStateKeys;
 }
-@connect(({ accountSettings }: { accountSettings: { currentUser: CurrentUser } }) => ({
+
+@connect(({ accountSettings }: { accountSettings: { currentUser: CurrentUser 
+
+} }) => ({
+
   currentUser: accountSettings.currentUser,
+
 }))
+
 class Settings extends Component<
   SettingsProps,
   SettingsState
@@ -43,16 +47,17 @@ class Settings extends Component<
       security: (
         <FormattedMessage id="account-settings.menuMap.security" defaultMessage="Security Settings" />
       ),
-      binding: (
-        <FormattedMessage id="account-settings.menuMap.binding" defaultMessage="Account Binding" />
-      ),
-      notification: (
-        <FormattedMessage
-          id="account-settings.menuMap.notification"
-          defaultMessage="New Message Notification"
-        />
-      ),
+      // binding: (
+      //   <FormattedMessage id="account-settings.menuMap.binding" defaultMessage="Account Binding" />
+      // ),
+      // notification: (
+      //   <FormattedMessage
+      //     id="account-settings.menuMap.notification"
+      //     defaultMessage="New Message Notification"
+      //   />
+      // ),
     };
+
     this.state = {
       mode: 'inline',
       menuMap,
@@ -118,19 +123,18 @@ class Settings extends Component<
         return <BaseView />;
       case 'security':
         return <SecurityView />;
-      case 'binding':
-        return <BindingView />;
-      case 'notification':
-        return <NotificationView />;
+      // case 'binding':
+      //   return <BindingView />;
+      // case 'notification':
+      //   return <NotificationView />;
       default:
         break;
-    }
-
+    } 
     return null;
   };
 
-  render() {
-    const { currentUser } = this.props;
+  render() { 
+    const { currentUser } = this.props;  
     if (!currentUser.userid) {
       return '';
     }
