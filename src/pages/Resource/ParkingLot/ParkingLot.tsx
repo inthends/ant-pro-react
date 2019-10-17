@@ -7,7 +7,7 @@ import LeftTree from '../LeftTree';
 import ListTable from './ListTable';
 import ModifyGarage from './ModifyGarage';
 import ModifyParking from './ModifyParking';
-import { TreeNode } from 'antd/lib/tree-select';
+// import { TreeNode } from 'antd/lib/tree-select';
 import { GetPublicAreas, GetQuickParkingTree } from './ParkingLot.service';
 import { GetOrgs } from '@/services/commonItem';
 const { Content } = Layout;
@@ -19,13 +19,14 @@ function ParkingLot() {
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [orgid, setOrgid] = useState<string>('');
-  const [orgtype, setOrgtype] = useState<string>('');
+  const [orgtype, setOrgtype] = useState<string>('1');
   const [data, setData] = useState<any[]>([]);
   const [currData, setCurrData] = useState<ParkingData>();
   const [search, setSearch] = useState<string>('');
   //是否能新增
   const [isAdd, setIsAdd] = useState<boolean>(true);
-  const [orgs, setOrgs] = useState<TreeNode[]>();
+  // const [orgs, setOrgs] = useState<TreeNode[]>();
+  const [orgs, setOrgs] = useState<any[]>([]);
 
   const selectTree = (id, type, searchText) => {
     initLoadData(id, type, searchText);
@@ -47,7 +48,7 @@ function ParkingLot() {
 
       //加载管理处
       GetOrgs().then(res => {
-        setOrgs(res);
+        setOrgs(res|| []);
       });
 
       initLoadData('', '', '');

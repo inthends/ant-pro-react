@@ -57,9 +57,12 @@ const BillCheckVerify = (props: BillCheckVerifyProps) => {
 
         const newData = {
           ...values,
-          IfVerify: !infoDetail.ifVerify,
-          VerifyDate: values.verifyDate.format('YYYY-MM-DD HH:mm:ss')
+          ...infoDetail,
+          keyValue: infoDetail.billId,
+          ifVerify: !infoDetail.ifVerify,
+          verifyDate: values.verifyDate.format('YYYY-MM-DD HH:mm:ss')
         };
+
         Audit(newData).then(() => {
           closeVerify(true);
           // reload();
@@ -73,7 +76,7 @@ const BillCheckVerify = (props: BillCheckVerifyProps) => {
       className="offsetVerify"
       title={title}
       placement="right"
-      width={880}
+      width={600}
       onClose={close}
       visible={vertifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
