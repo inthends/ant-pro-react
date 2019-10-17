@@ -83,14 +83,14 @@ const Modify = (props: ModifyProps) => {
           //设置状态
           tempInfo.accBillDateUnit == 2 ? setAccFixedDisabled(false) : setAccFixedDisabled(true);
           tempInfo.payDeadlineUnit == 2 ? setPayFixedDisabled(false) : setPayFixedDisabled(true);
-          tempInfo.lateStartDateUnit == 2 ? setLateFixedDisabled(false) : setLateFixedDisabled(true); 
+          tempInfo.lateStartDateUnit == 2 ? setLateFixedDisabled(false) : setLateFixedDisabled(true);
           form.resetFields();
         });
         //if (id !== undefined) {
         initHouseLoadData('');
         initOrgLoadData('');
         //}
-      } else { 
+      } else {
         form.resetFields();
         //设置checkbox默认值
         var info = Object.assign({}, { isEnable: true, isInContract: true, isTax: true });
@@ -122,8 +122,7 @@ const Modify = (props: ModifyProps) => {
           newData.endDate = newData.endDate.format('YYYY-MM-DD');
         }
         else {
-          //存在日期输入的情况
-          debugger
+          //存在日期输入的情况 
           newData.beginDate = newData.beginDate ? newData.beginDate.format('YYYY-MM-DD') : null;
           newData.endDate = newData.endDate ? newData.endDate.format('YYYY-MM-DD') : null;
         }
@@ -814,17 +813,19 @@ const Modify = (props: ModifyProps) => {
                 <Col lg={12}>
                   <Form.Item label="计费起始日期">
                     {getFieldDecorator('beginDate', {
-                      initialValue: form.getFieldValue('isNullDate') ? null : infoDetail.beginDate ? moment(infoDetail.beginDate) : moment(new Date()),
+                      // initialValue: form.getFieldValue('isNullDate') ? null : infoDetail.beginDate ? moment(infoDetail.beginDate) : moment(new Date()),
+                      initialValue: infoDetail.beginDate ? moment(infoDetail.beginDate) : moment(new Date()),
                       rules: [{ required: !form.getFieldValue('isNullDate'), message: '请选择计费起始日期' }],
                     })(<DatePicker placeholder="请选择计费起始日期" style={{ width: '100%' }} />)}
                   </Form.Item>
                 </Col>
                 <Col lg={12}>
                   <Form.Item label="计费终止日期">
-                    {getFieldDecorator('endDate', {
+                    {getFieldDecorator('endDate', { 
                       initialValue: form.getFieldValue('beginDate') ? getEndDate() : null,
+                      // initialValue: form.getFieldValue('beginDate') ? getEndDate() : null,
                       // initialValue: form.getFieldValue('isNullDate') ? null : getEndDate(),
-                      //infoDetail.endDate ? moment(new Date(infoDetail.endDate)) : moment(getEndDate()),
+                      // infoDetail.endDate ? moment(new Date(infoDetail.endDate)) : moment(getEndDate()),
                       rules: [{ required: !form.getFieldValue('isNullDate'), message: '计费终止日期' }],
                     })(<DatePicker disabled placeholder="计费终止日期" style={{ width: '100%' }} onChange={(date, dateString) => {
                       setEndDate(dateString, infoDetail.cycleValue, infoDetail.cycleType);
@@ -1489,7 +1490,7 @@ const Modify = (props: ModifyProps) => {
             padding: '10px 16px',
             background: '#fff',
             textAlign: 'right',
-            zIndex:999
+            zIndex: 999
           }}
         >
           <Button onClick={close} style={{ marginRight: 8 }}>

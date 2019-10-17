@@ -83,6 +83,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
   const close = () => {
     closeModal();
   };
+
   const save = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
@@ -90,8 +91,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
           keyValue: houseItemId,
           AccBillDateNum: values.accBillDateNum,
           //BankTransfer:tempInfo.bankTransfer,
-          //CreateDate:tempInfo.createDate,
-          EndDate: moment(values.endDate).format('YYYY-MM-DD'),
+          //CreateDate:tempInfo.createDate, 
           //InFeeMethod:tempInfo.inFeeMethod,
           IsModifyDate: infoDetail.isModifyDate ? true : false,
           LateStartDateNum: values.lateStartDateNum,
@@ -100,7 +100,8 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
           //SplitFee:tempInfo.splitFee,
           //UseStepPrice:tempInfo.useStepPrice,
           AccBillDateUnit: values.accBillDateUnit,
-          BeginDate: moment(values.beginDate).format('YYYY-MM-DD'),
+          EndDate: values.beginDate ? values.beginDate.format('YYYY-MM-DD') : null,
+          BeginDate: values.endDate ? values.endDate.format('YYYY-MM-DD') : null, 
           //CreateUserId:tempInfo.CreateUserId,
           FeeApportion: values.feeApportion,
           //InMethod:tempInfo.inMethod,
@@ -110,7 +111,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
           PayDeadlineNum: values.payDeadlineNum,
           //StartCalDate:tempInfo.startCalDate,
           //UseTimePrice:tempInfo.useTimePrice,
-          AccPeriodBase: values.accPeriodBase, 
+          AccPeriodBase: values.accPeriodBase,
           //CreateUserName:tempInfo.createUserName,
           FeeFormulaOne: values.feeFormulaOne,
           //InOutDate:moment(tempInfo.inOutDate).format('YYYY-MM-DD'),
@@ -138,7 +139,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
           MidScaleDispose: values.midScaleDispose,
           MidResultScale: values.midResultScale,
           LastScaleDispose: values.lastScaleDispose,
-          LastResultScale: values.lastResultScale, 
+          LastResultScale: values.lastResultScale,
           //OutMethod:tempInfo.outMethod,
           PayFeeItemId: values.payFeeItemId,
           UnitId: values.unitId,
@@ -146,7 +147,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
           CopeRate: values.copeRate,
           CycleValue: values.cycleValue,
           FeePerson: values.feePerson,
-          IsEditTemp: infoDetail.isEditTemp ? true : false, 
+          IsEditTemp: infoDetail.isEditTemp ? true : false,
           PayDateNum: values.payDateNum,
           //PeriodNum:tempInfo.periodNum,
           //UseFormulaTwo:tempInfo.useFormulaTwo,
@@ -229,10 +230,10 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
     }
     var info = Object.assign({}, infoDetail, { endDate: endDate, cycleValue: cycleValue, cycleType: cycleType });
     setInfoDetail(info);
-  }
-  //求自然月日期
-  const getMonthBeforeFormatAndDay = (num, format, date) => {
+  };
 
+  //求自然月日期
+  const getMonthBeforeFormatAndDay = (num, format, date) => { 
     let day = date.get('date');
     let month = date.get('month');
     date.set('month', month + num * 1, 'date', 1); //周期月一号
@@ -267,6 +268,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
     date.set('date', day);
     return date;
   };
+
   //设置结束日期
   const getEndDate = () => {
     const cycle = form.getFieldValue('cycleValue');
@@ -301,7 +303,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
         save();
       }}
       destroyOnClose={true}
-      bodyStyle={{ background: '#f6f7fb' }}
+      bodyStyle={{ background: '#f6f7fb' }} 
       width='800px'
     >
       <Form layout="vertical" hideRequiredMark>
@@ -369,66 +371,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                   </Form.Item>
                 </Col>
               </Row>
-              <Row gutter={24}>
-                <Col lg={12}>
-                  <Form.Item label="单价">
-                    {getFieldDecorator('feePrice', {
-                      initialValue: infoDetail.feePrice,
-                      rules: [{ required: true, message: '请输入单价' }],
-                    })(<Input placeholder="请输入单价" />)}
-                  </Form.Item>
-                </Col>
-                <Col lg={7}>
-                  <Form.Item label="计费周期">
-                    {getFieldDecorator('cycleValue', {
-                      initialValue: infoDetail.cycleValue,
-                      rules: [{ required: true, message: '请输入计费周期' }],
-                    })(<InputNumber style={{ width: '100%' }} placeholder="请输入计费周期"
-                      onChange={value => {
-                        setEndDate(infoDetail.beginDate, value, infoDetail.cycleType);
-                      }} />)}
-                  </Form.Item>
-                </Col>
-                <Col lg={5}>
-                  <Form.Item label="&nbsp;">
-                    {getFieldDecorator('cycleType', {
-                      initialValue: infoDetail.cycleType,
-                      rules: [{ required: true, message: '请选择单位' }],
-                    })(<Select placeholder="请选择单位" onChange={(value: string) => {
-                      setEndDate(infoDetail.beginDate, infoDetail.cycleValue, value);
-                    }}>
-                      <Option value="日">日</Option>
-                      <Option value="月" >月</Option>
-                      <Option value="年">年</Option>
-                    </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={24}>
-                <Col lg={12}>
-                  <Form.Item label="计费起始日期">
-                    {getFieldDecorator('beginDate', {
-                      initialValue: infoDetail.beginDate
-                        ? moment(new Date(infoDetail.beginDate))
-                        : moment(new Date()),
-                      rules: [{ required: true, message: '请选择计费起始日期' }],
-                    })(<DatePicker placeholder="请选择计费起始日期" style={{ width: '100%' }} onChange={(date, dateString) => {
-                      setEndDate(dateString, infoDetail.cycleValue, infoDetail.cycleType);
-                    }} />)}
-                  </Form.Item>
-                </Col>
-                <Col lg={12}>
-                  <Form.Item label="计费终止日期">
-                    {getFieldDecorator('endDate', {
-                      initialValue: infoDetail.endDate
-                        ? moment(new Date(infoDetail.endDate))
-                        : moment(getEndDate()),
-                      rules: [{ required: true, message: '计费终止日期' }],
-                    })(<DatePicker disabled={true} placeholder="计费终止日期" style={{ width: '100%' }} />)}
-                  </Form.Item>
-                </Col>
-              </Row>
+
               <Row gutter={24}>
                 <Col lg={24}>
                   <Form.Item  >
@@ -540,6 +483,92 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                   </Form.Item>
                 </Col>
               </Row>
+
+              <Row gutter={24}>
+                <Col lg={12}>
+                  <Form.Item label="单价">
+                    {getFieldDecorator('feePrice', {
+                      initialValue: infoDetail.feePrice,
+                      rules: [{ required: true, message: '请输入单价' }],
+                    })(<Input placeholder="请输入单价" />)}
+                  </Form.Item>
+                </Col>
+                <Col lg={7}>
+                  <Form.Item label="计费周期">
+                    {getFieldDecorator('cycleValue', {
+                      initialValue: infoDetail.cycleValue,
+                      rules: [{ required: true, message: '请输入计费周期' }],
+                    })(<InputNumber style={{ width: '100%' }} placeholder="请输入计费周期"
+                      onChange={value => {
+                        setEndDate(infoDetail.beginDate, value, infoDetail.cycleType);
+                      }} />)}
+                  </Form.Item>
+                </Col>
+                <Col lg={5}>
+                  <Form.Item label="&nbsp;">
+                    {getFieldDecorator('cycleType', {
+                      initialValue: infoDetail.cycleType,
+                      rules: [{ required: true, message: '请选择单位' }],
+                    })(<Select placeholder="请选择单位" onChange={(value: string) => {
+                      setEndDate(infoDetail.beginDate, infoDetail.cycleValue, value);
+                    }}>
+                      <Option value="日">日</Option>
+                      <Option value="月" >月</Option>
+                      <Option value="年">年</Option>
+                    </Select>
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row>
+              {/* <Row gutter={24}>
+                <Col lg={12}>
+                  <Form.Item label="计费起始日期">
+                    {getFieldDecorator('beginDate', {
+                      initialValue: infoDetail.beginDate
+                        ? moment(new Date(infoDetail.beginDate))
+                        : moment(new Date()),
+                      rules: [{ required: true, message: '请选择计费起始日期' }],
+                    })(<DatePicker placeholder="请选择计费起始日期" style={{ width: '100%' }} onChange={(date, dateString) => {
+                      setEndDate(dateString, infoDetail.cycleValue, infoDetail.cycleType);
+                    }} />)}
+                  </Form.Item>
+                </Col>
+                <Col lg={12}>
+                  <Form.Item label="计费终止日期">
+                    {getFieldDecorator('endDate', {
+                      initialValue: infoDetail.endDate
+                        ? moment(new Date(infoDetail.endDate))
+                        : moment(getEndDate()),
+                      rules: [{ required: true, message: '计费终止日期' }],
+                    })(<DatePicker disabled={true} placeholder="计费终止日期" style={{ width: '100%' }} />)}
+                  </Form.Item>
+                </Col>
+              </Row> */}
+
+              <Row gutter={24}>
+                <Col lg={12}>
+                  <Form.Item label="计费起始日期">
+                    {getFieldDecorator('beginDate', {
+                      initialValue:  infoDetail.beginDate ? moment(infoDetail.beginDate) : moment(new Date()),
+                      rules: [{ required: !form.getFieldValue('isNullDate'), message: '请选择计费起始日期' }],
+                    })(<DatePicker placeholder="请选择计费起始日期" style={{ width: '100%' }} />)}
+                  </Form.Item>
+                </Col>
+                <Col lg={12}>
+                  <Form.Item label="计费终止日期">
+                    {getFieldDecorator('endDate', {
+                      initialValue: form.getFieldValue('beginDate') ? getEndDate() : null,
+                      // initialValue: form.getFieldValue('isNullDate') ? null : getEndDate(),
+                      //infoDetail.endDate ? moment(new Date(infoDetail.endDate)) : moment(getEndDate()),
+                      rules: [{ required: !form.getFieldValue('isNullDate'), message: '计费终止日期' }],
+                    })(<DatePicker disabled placeholder="计费终止日期"
+                      style={{ width: '100%' }} onChange={(date, dateString) => {
+                        setEndDate(dateString, infoDetail.cycleValue, infoDetail.cycleType);
+                      }} />)}
+                  </Form.Item>
+                </Col>
+              </Row>
+
               <Row gutter={24}>
                 <Col lg={21}>
                   <Form.Item label="用量公式">

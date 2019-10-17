@@ -20,12 +20,12 @@ interface ListTableProps {
   rowSelect(rowSelectedKeys): void;
   organizeId: string;
   customerName: string;
-  showSplit(id:string):void;
-  showTrans(id:string):void;
+  showSplit(id: string): void;
+  showTrans(id: string): void;
 }
 
 function ListTable(props: ListTableProps) {
-  const { form, onchange, loading, pagination, data, modify, reload, rowSelect, organizeId, customerName ,showSplit,showTrans} = props;
+  const { form, onchange, loading, pagination, data, modify, reload, rowSelect, organizeId, customerName, showSplit, showTrans } = props;
   const { getFieldDecorator } = form;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
@@ -53,7 +53,7 @@ function ListTable(props: ListTableProps) {
     }
     else if (key === 'split') {
       showSplit(currentItem.id);
-    }else if(key==='trans'){
+    } else if (key === 'trans') {
       showTrans(currentItem.id);
     }
   };
@@ -192,9 +192,9 @@ function ListTable(props: ListTableProps) {
     sumEntity['sumoffsetAmount'] = sumoffsetAmount.toFixed(2);
     sumEntity['sumlastAmount'] = sumlastAmount.toFixed(2);
     setSumEntity(sumEntity);
-    form.setFieldsValue({payAmountA:sumEntity['sumAmount']});
-    form.setFieldsValue({payAmountB:0});
-    form.setFieldsValue({payAmountC:0});
+    form.setFieldsValue({ payAmountA: sumEntity['sumAmount'] });
+    form.setFieldsValue({ payAmountB: 0 });
+    form.setFieldsValue({ payAmountC: 0 });
   };
 
   const rowSelection = {
@@ -225,6 +225,8 @@ function ListTable(props: ListTableProps) {
               billDate: values.billDate.format('YYYY-MM-DD HH:mm:ss'),
               //organize.title.split(' ')[1]
             });
+
+
             if (Number(sumEntity.sumlastAmount) != Number(info.payAmountA + info.payAmountB + info.payAmountC)) {
               message.warning('本次收款金额小于本次选中未收金额合计，不允许收款，请拆费或者重新选择收款项');
               return;
@@ -268,12 +270,12 @@ function ListTable(props: ListTableProps) {
                 {getFieldDecorator('payAmountA', {
                   initialValue: hasSelected ? sumEntity.sumAmount : 0,
                   rules: [{ required: true, message: '请输入金额' }],
-                })(<InputNumber onChange={(value) =>{
-                  if(sumEntity!=undefined&&Number(value)<sumEntity.sumAmount)
-                  {
-                    var amountB=sumEntity.sumAmount-Number(value);
-                    form.setFieldsValue({payAmountB:amountB.toFixed(2)});
-                    form.setFieldsValue({payAmountC:0.0});
+                })(<InputNumber onChange={(value) => {
+                  if (sumEntity != undefined && Number(value) < sumEntity.sumAmount) {
+                    var amountB = sumEntity.sumAmount - Number(value);
+                    // form.setFieldsValue({payAmountB:amountB.toFixed(2)});
+                    form.setFieldsValue({ payAmountB: amountB });
+                    form.setFieldsValue({ payAmountC: 0.00 });
                   }
                 }}
                   precision={2}
@@ -311,14 +313,13 @@ function ListTable(props: ListTableProps) {
                   <InputNumber
                     precision={2}
                     min={0}
-                    max={hasSelected ? sumEntity.sumAmount-Number(form.getFieldValue('payAmountA')) : 0}
-                    style={{width:'100%'}}
-                    onChange={(value) =>{
-                      var sumAmountA=form.getFieldValue('payAmountA');
-                      if(sumEntity!=undefined&&sumAmountA+Number(value)<sumEntity.sumAmount)
-                      {
-                        var amountC=sumEntity.sumAmount-Number(value)-sumAmountA;
-                        form.setFieldsValue({payAmountC:amountC.toFixed(2)});
+                    max={hasSelected ? sumEntity.sumAmount - Number(form.getFieldValue('payAmountA')) : 0}
+                    style={{ width: '100%' }}
+                    onChange={(value) => {
+                      var sumAmountA = form.getFieldValue('payAmountA');
+                      if (sumEntity != undefined && sumAmountA + Number(value) < sumEntity.sumAmount) {
+                        var amountC = sumEntity.sumAmount - Number(value) - sumAmountA;
+                        form.setFieldsValue({ payAmountC: amountC });
                       }
                     }}
                   />
@@ -351,10 +352,12 @@ function ListTable(props: ListTableProps) {
                   rules: [{ required: true, message: '请输入金额' }],
                 })(
                   <InputNumber
-                    style={{width:'100%'}}
+                    style={{ width: '100%' }}
                     precision={2}
                     min={0}
-                    max={hasSelected ? sumEntity.sumAmount-Number(form.getFieldValue('payAmountA'))-Number(form.getFieldValue('payAmountB')) : 0}
+                    max={hasSelected ? sumEntity.sumAmount -
+                      Number(form.getFieldValue('payAmountA')) -
+                      Number(form.getFieldValue('payAmountB')) : 0}
                   />
                 )}
 
@@ -365,7 +368,7 @@ function ListTable(props: ListTableProps) {
                 {getFieldDecorator('billDate', {
                   initialValue: moment(new Date()),
                   rules: [{ required: true, message: '请选择收款日期' }],
-                })(<DatePicker style={{width:'100%'}}/>)}
+                })(<DatePicker style={{ width: '100%' }} />)}
               </Form.Item>
             </Col>
             <Col lg={6}>
