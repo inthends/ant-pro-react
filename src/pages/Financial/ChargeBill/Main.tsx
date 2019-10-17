@@ -257,47 +257,47 @@ function Main() {
     setShowVisible(false);
   }
 
-  const onInvalid = () => {
-    if (chargedRowSelectedKey == null || chargedRowSelectedKey == {}) {
-      message.warning("请选择要作废的表单");
-      return;
-    }
-    Modal.confirm({
-      title: '请确认',
-      content: `您是否要作废？`,
-      onOk: () => {
-        InvalidForm(chargedRowSelectedKey.billId).then(res => {
-          initChargeLoadData(organizeId);
-        });
-      },
-    });
-  }
+  // const onInvalid = () => {
+  //   if (chargedRowSelectedKey == null || chargedRowSelectedKey == {}) {
+  //     message.warning("请选择要作废的表单");
+  //     return;
+  //   }
+  //   Modal.confirm({
+  //     title: '请确认',
+  //     content: `您是否要作废？`,
+  //     onOk: () => {
+  //       InvalidForm(chargedRowSelectedKey.billId).then(res => {
+  //         initChargeLoadData(organizeId);
+  //       });
+  //     },
+  //   });
+  // }
 
-  const onRedFlush = () => {
-    if (chargedRowSelectedKey == null || chargedRowSelectedKey == {}) {
-      message.warning("请选择要冲红表单");
-      return;
-    }
-    Modal.confirm({
-      title: '请确认',
-      content: `您是否要冲红？`,
-      onOk: () => {
-        CheckRedFlush(chargedRowSelectedKey.billId).then(res => {
-          if (res == "1") {
-            RedFlush(chargedRowSelectedKey.billId).then(res => {
-              initChargeLoadData(organizeId);
-            });
-          } else {
-            message.warning("当前表单无法冲红。");
-          }
-        })
-      },
-    });
-  }
+  // const onRedFlush = () => {
+  //   if (chargedRowSelectedKey == null || chargedRowSelectedKey == {}) {
+  //     message.warning("请选择要冲红表单");
+  //     return;
+  //   }
+  //   Modal.confirm({
+  //     title: '请确认',
+  //     content: `您是否要冲红？`,
+  //     onOk: () => {
+  //       CheckRedFlush(chargedRowSelectedKey.billId).then(res => {
+  //         if (res == "1") {
+  //           RedFlush(chargedRowSelectedKey.billId).then(res => {
+  //             initChargeLoadData(organizeId);
+  //           });
+  //         } else {
+  //           message.warning("当前表单无法冲红。");
+  //         }
+  //       })
+  //     },
+  //   });
+  // }
 
   const GetUnChargeSelectedKeys = (rowSelectedKeys?) => {
     setUnChargeSelectedKeys(rowSelectedKeys);
-    console.log(rowSelectedKeys);
+    // console.log(rowSelectedKeys);
   }
   const [chargedRowSelectedKey, setChargedRowSelectedKey] = useState<any>({});
   const GetChargedSelectedKey = (record) => {
@@ -316,6 +316,8 @@ function Main() {
             setAddButtonDisable(false);
             SetCustomerName(info.node.props.tenantname);
             setShowname(info.node.props.allname);
+            //清空之前的收款信息
+
             selectTree(id, search);
           }
         }}

@@ -21,15 +21,19 @@ interface ListTableProps {
   organizeId: string;
   customerName: string;
   showSplit(id: string): void;
-  showTrans(id: string): void;
+  showTrans(id: string): void; 
 }
 
-function ListTable(props: ListTableProps) {
-  const { form, onchange, loading, pagination, data, modify, reload, rowSelect, organizeId, customerName, showSplit, showTrans } = props;
+function ListTable(props: ListTableProps) { 
+
+  const { form, onchange, loading, pagination, data, modify, reload, 
+    rowSelect, organizeId, customerName, showSplit, showTrans } = props;
+    
   const { getFieldDecorator } = form;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
   };
+
   const doDelete = record => {
     Modal.confirm({
       title: '请确认',
@@ -173,8 +177,8 @@ function ListTable(props: ListTableProps) {
   // const [unitId, setUnitId] = useState();
   // const [customerName, setCustomerName] = useState();
 
-  const onSelectChange = (selectedRowKeys, selectedRows) => {
-    console.log(selectedRows);
+  const onSelectChange = (selectedRowKeys, selectedRows) => { 
+    // console.log(selectedRows);
     setSelectedRowKeys(selectedRowKeys);
     rowSelect(selectedRows);
     //应收金额
@@ -196,6 +200,8 @@ function ListTable(props: ListTableProps) {
     form.setFieldsValue({ payAmountB: 0 });
     form.setFieldsValue({ payAmountC: 0 });
   };
+
+  
 
   const rowSelection = {
     selectedRowKeys,
