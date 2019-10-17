@@ -272,7 +272,25 @@ function BillNotice() {
               .catch(e => { });
           },
         });
-      } else {
+      } else if (e.key == '4') {
+        if (selectIds&&selectIds.length >= 1) {
+          Modal.confirm({
+            title: '请确认',
+            content: `您是否要删除这些账单?`,
+            onOk: () => {
+
+              selectIds.forEach(idstr=>{
+                RemoveForm({
+                  keyValue: idstr
+                }).then(res => {
+
+                });
+              });
+              initBillCheckLoadData('', '');
+            },
+          });
+        }
+      }else {
         /* if (id == null || id == '') {
            message.warning('请先选择账单');
          } else {*/
@@ -287,7 +305,7 @@ function BillNotice() {
     //   //删除
     //   if (selectIds == undefined) {
     //     message.error('请选择需要删除的账单！');
-    //   } else { 
+    //   } else {
     //     Modal.confirm({
     //       title: '是否确认删除?',
     //       onOk() {
