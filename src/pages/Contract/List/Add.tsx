@@ -38,8 +38,7 @@ const Add = (props: AddProps) => {
   const { visible, closeDrawer, form, reload, treeData } = props;
   const { getFieldDecorator } = form; 
   const [industryType, setIndustryType] = useState<any[]>([]); //行业  
-  const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
-
+  const [feeitems, setFeeitems] = useState<TreeEntity[]>([]); 
   //租金计算结果
   const [depositData, setDepositData] = useState<ChargeFeeResultEntity[]>([]);//保证金
   const [chargeData, setChargeData] = useState<ChargeFeeResultEntity[]>([]);//租金 
@@ -235,8 +234,7 @@ const Add = (props: AddProps) => {
   };
 
   //打开抽屉时初始化
-  useEffect(() => {
-    
+  useEffect(() => { 
     getCommonItems('IndustryType').then(res => {
       setIndustryType(res || []);
     });
@@ -308,7 +306,7 @@ const Add = (props: AddProps) => {
           <TabPane tab="基本信息" key="1">
             <Row gutter={24}>
               <Col span={12}>
-                <Card title="基本信息" className={styles.card}>
+                <Card title="基本信息" className={styles.addcard}>
                   <Row gutter={24}>
                     <Col lg={24}>
                       <Form.Item label="模板选择">
@@ -359,8 +357,7 @@ const Add = (props: AddProps) => {
                         })(<DatePicker placeholder="请选择合同签订时间" style={{ width: '100%' }} />)}
                       </Form.Item>
                     </Col>
-                  </Row>
-
+                  </Row> 
                   <Row gutter={24}>
                     <Col lg={12}>
                       <Form.Item label="合同计租时间">
@@ -399,12 +396,11 @@ const Add = (props: AddProps) => {
                         )}
                       </Form.Item>
                     </Col>
-                  </Row>
-
+                  </Row> 
                 </Card>
               </Col>
               <Col span={12}>
-                <Card title="租赁信息">
+                <Card title="租赁信息" className={styles.addcard}>
                   <Row gutter={24}>
                     <Col lg={24}>
                       <Form.Item label="房源选择" required>
@@ -529,8 +525,7 @@ const Add = (props: AddProps) => {
             </Row>
 
           </TabPane>
-          <TabPane tab="费用条款" key="2">
-
+          <TabPane tab="费用条款" key="2"> 
             <Card title="基本条款" className={styles.card} >
               <Row gutter={24}>
                 <Col lg={4}>

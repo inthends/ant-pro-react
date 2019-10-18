@@ -17,13 +17,13 @@ const EditOrginize = (props: EditOrginizeProps) => {
   const { getFieldDecorator } = form;
   const [infoDetail, setInfoDetail] = useState<any>({});
   // const [orgTreeData,setOrgTreeData]=useState<any[]>([]);
-  const [invoiceItems, setInvoiceItems] = useState<any[]>([])
+  // const [invoiceItems, setInvoiceItems] = useState<any[]>([]);
   useEffect(() => {
     if (visible) {
       if (orgItemId != null) {
-        GetAllFeeItems().then(res => {
-          setInvoiceItems(res);
-        });
+        // GetAllFeeItems().then(res => {
+        //   setInvoiceItems(res);
+        // });
         GetOrgTaxTateFormJson(orgItemId).then(res => {
           setInfoDetail(res);
         })
@@ -67,7 +67,7 @@ const EditOrginize = (props: EditOrginizeProps) => {
         <Form layout="vertical" hideRequiredMark>
           <Row  >
             <Col span={24}>
-              <Form.Item label="税控项目" required>
+              {/* <Form.Item label="税控项目" required>
                 {getFieldDecorator('invoiceId', {
                   initialValue: infoDetail.invoiceId,
                   rules: [{ required: true, message: '请选择税控项目' }],
@@ -79,7 +79,17 @@ const EditOrginize = (props: EditOrginizeProps) => {
                   ))}
                 </Select>
                 )}
+              </Form.Item> */}
+
+              <Form.Item label="税控项目" required>
+                {getFieldDecorator('invoiceId', {
+                  initialValue: infoDetail.invoiceId,
+                  rules: [{ required: true, message: '请输入税控项目' }],
+                })(
+                  <Input />
+                )}
               </Form.Item>
+
             </Col>
           </Row>
 
@@ -90,7 +100,7 @@ const EditOrginize = (props: EditOrginizeProps) => {
                   initialValue: infoDetail.invoiceCode,
                   rules: [{ required: true, message: '请输入税控项目编号' }],
                 })(
-                  <Input /> 
+                  <Input />
                 )}
               </Form.Item>
             </Col>

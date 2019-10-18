@@ -1,7 +1,7 @@
 import { TreeEntity } from '@/model/models';
 import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
-import { FeeItemData } from '@/model/feeItemData';
+import { CwFeeitem } from '@/model/cwFeeitem';
 
 //获取全部费项
 export function GetFeeTreeList(): Promise<TreeEntity[]> {
@@ -12,7 +12,7 @@ export function GetPageListJson(data): Promise<any> {
 }
 
 // 获取费项信息
-export function GetFormJson(keyValue): Promise<FeeItemData> {
+export function GetFormJson(keyValue): Promise<CwFeeitem> {
   return request
     .get(process.env.basePath + `/FeeItems/GetFormJson?keyValue=${keyValue}`)
     .then(getResult as any);

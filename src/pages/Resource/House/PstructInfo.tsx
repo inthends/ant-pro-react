@@ -28,8 +28,7 @@ const PstructInfo = (props: PstructInfoProps) => {
   const [previewVisible, setPreviewVisible] = useState<boolean>(false);
   const [fileList, setFileList] = useState<any[]>([]);
   const [previewImage, setPreviewImage] = useState<string>('');
-
-  const title = data === undefined ? '添加' : '修改'; 
+  const title = data === undefined ? '添加' : '修改';
   let formLabel = '楼栋';
   if (type != undefined) {
     if (type == 1) {
@@ -53,17 +52,17 @@ const PstructInfo = (props: PstructInfoProps) => {
     if (modifyVisible) {
       if (data) {
         setInfoDetail(data);
-         //加载图片
-         let files: any[]; files = [];
-         if (data.mainPic != null) { 
-           const filedate = {
-             url: data.mainPic,
-             uid:data.id//必须
-           } 
-           files.push(filedate);
-         } 
-         setFileList(files);
-         //加载图片
+        //加载图片
+        let files: any[]; files = [];
+        if (data.mainPic != null) {
+          const filedate = {
+            url: data.mainPic,
+            uid: data.id//必须
+          }
+          files.push(filedate);
+        }
+        setFileList(files);
+        //加载图片
         form.resetFields();
       } else {
         setInfoDetail({});
@@ -132,7 +131,7 @@ const PstructInfo = (props: PstructInfoProps) => {
   const handleSearch = value => {
     if (value == '')
       return;
-    GetCustomerList(value,organizeId).then(res => {
+    GetCustomerList(value, organizeId).then(res => {
       setUserSource(res || []);
     })
   };
@@ -367,7 +366,7 @@ const PstructInfo = (props: PstructInfoProps) => {
 
             </Row>) : null}
 
-            {type == 4 ? (
+            {type == 4 || type == 5 ? (
               <Row gutter={24}>
                 <Col lg={12}>
                   <Form.Item label="业主">

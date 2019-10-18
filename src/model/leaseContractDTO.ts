@@ -68,6 +68,10 @@ export interface LeaseContractDTO {
      * 行业
      */
     industry?: string;
+      /**
+     * 行业
+     */
+    industryId?: string;
     /**
      * 法人
      */

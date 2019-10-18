@@ -1,5 +1,5 @@
 
-//租期条款动态组件 
+//租期条款动态组件，新增
 import { TreeEntity } from '@/model/models';
 import { InputNumber, Select, DatePicker, Card, Col, Row, Icon, Form, Button } from 'antd';
 import React, { useState } from 'react';
@@ -19,11 +19,11 @@ function LeaseTerm(props: LeaseTermProps) {
   const { form, feeitems } = props;
   const { getFieldDecorator, getFieldValue, setFieldsValue } = form;
   const [priceUnit, setPriceUnit] = useState<number>(2);//单价单位
-  
+
   //单位切换
   const changeUnit = value => {
     setPriceUnit(value);
-  }; 
+  };
 
   const remove = k => {
     const keys = getFieldValue('LeaseTerms');
@@ -39,11 +39,11 @@ function LeaseTerm(props: LeaseTermProps) {
     setFieldsValue({
       LeaseTerms: nextKeys,
     });
-  }; 
+  };
 
   //初始化 租赁条款 
-  getFieldDecorator('LeaseTerms', { initialValue: [] });  
-  const keys = getFieldValue('LeaseTerms'); 
+  getFieldDecorator('LeaseTerms', { initialValue: [] });
+  const keys = getFieldValue('LeaseTerms');
   const formItems = keys.map((k, index) => (
     <Card key={k} className={styles.card}
       extra={<Icon type="minus-circle-o" onClick={() => remove(k)} />}>
@@ -52,37 +52,37 @@ function LeaseTerm(props: LeaseTermProps) {
           <Form.Item label="开始时间" required >
             {getFieldDecorator(`startDate[${k}]`, {
               rules: [{ required: true, message: '请选择开始时间' }],
-            })(<DatePicker />)}
+            })(<DatePicker placeholder='请选择开始时间'/>)}
           </Form.Item>
-        </Col> 
+        </Col>
         <Col lg={4}>
           <Form.Item label="结束时间" required>
             {getFieldDecorator(`endDate[${k}]`, {
               rules: [{ required: true, message: '请选择结束时间' }],
-            })(<DatePicker />)}
+            })(<DatePicker placeholder='请选择结束时间'/>)}
           </Form.Item>
-        </Col> 
+        </Col>
         <Col lg={8}>
           <Form.Item label="关联费项" required>
             {getFieldDecorator(`feeItemId[${k}]`, {
-              rules: [{ required: true, message: '请选择费项'}]
-            })( 
+              rules: [{ required: true, message: '请选择费项' }]
+            })(
               <Select placeholder="请选择费项">
                 {feeitems.map(item => (
                   <Option value={item.value} >
                     {item.title}
                   </Option>
                 ))}
-              </Select> 
+              </Select>
             )}
           </Form.Item>
         </Col>
 
         <Col lg={4}>
           <Form.Item label="合同单价" required>
-            {getFieldDecorator(`price[${k}]`, { 
+            {getFieldDecorator(`price[${k}]`, {
               rules: [{ required: true, message: '请输入合同单价' }],
-            })(<InputNumber placeholder="请输入合同单价" />)}
+            })(<InputNumber placeholder="请输入合同单价" style={{ width: '100%' }}/>)}
           </Form.Item>
         </Col>
         <Col lg={4}>
@@ -90,7 +90,7 @@ function LeaseTerm(props: LeaseTermProps) {
             {getFieldDecorator(`priceUnit[${k}]`, {
               initialValue: '元/m²·天'
             })(
-              <Select>
+              <Select onChange={changeUnit}>
                 <Option value="元/m²·月">元/m²·月</Option>
                 <Option value="元/m²·天" >元/m²·天</Option>
                 <Option value="元/月" >元/月</Option>
@@ -103,9 +103,9 @@ function LeaseTerm(props: LeaseTermProps) {
         <Col lg={4}>
           <Form.Item label="提前付款时间">
             {getFieldDecorator(`advancePayTime[${k}]`, {
-               initialValue:1,
+              initialValue: 1,
               rules: [{ required: true, message: '请输入提前付款时间' }],
-            })(<InputNumber placeholder="请输入" />)}
+            })(<InputNumber placeholder="请输入" style={{ width: '100%' }}/>)}
           </Form.Item>
         </Col>
         <Col lg={4}>
@@ -131,7 +131,7 @@ function LeaseTerm(props: LeaseTermProps) {
               </Select>)}
           </Form.Item>
         </Col>
-        <Col lg={4}>
+        {/* <Col lg={4}>
           <Form.Item label="天单价换算规则">
             {getFieldDecorator(`dayPriceConvertRule[${k}]`, {
               initialValue: '按年换算',
@@ -142,13 +142,29 @@ function LeaseTerm(props: LeaseTermProps) {
               </Select>
             )}
           </Form.Item>
-        </Col>
+        </Col> */}
+        {
+          (priceUnit == 1 || priceUnit == 3) ?
+            <Col lg={4}>
+              <Form.Item label="天单价换算规则">
+                {getFieldDecorator(`dayPriceConvertRule[${k}]`, {
+                  initialValue: '按年换算',
+                })(
+                  <Select>
+                    <Option value="按自然月换算">按自然月换算</Option>
+                    <Option value="按年换算" >按年换算</Option>
+                  </Select>
+                )}
+              </Form.Item>
+            </Col>
+            : null}
+
         <Col lg={4}>
           <Form.Item label="年天数">
             {getFieldDecorator(`yearDays[${k}]`, {
               initialValue: 365,
               rules: [{ required: true, message: '请输入年天数' }],
-            })(<InputNumber placeholder="请输入年天数" />)}
+            })(<InputNumber placeholder="请输入年天数" style={{ width: '100%' }}/>)}
           </Form.Item>
         </Col>
         <Col lg={4}>
@@ -156,7 +172,7 @@ function LeaseTerm(props: LeaseTermProps) {
             {getFieldDecorator(`payCycle[${k}]`, {
               rules: [{ required: true, message: '请填写付款周期' }]
             })(
-              <InputNumber placeholder="请填写付款周期" />
+              <InputNumber placeholder="请填写付款周期" style={{ width: '100%' }}/>
             )}
           </Form.Item>
         </Col>
@@ -168,7 +184,7 @@ function LeaseTerm(props: LeaseTermProps) {
               <Select  >
                 <Option value="按起始日划分">按起始日划分</Option>
                 <Option value="次月按自然月划分(仅一月一付有效)">次月按自然月划分(仅一月一付有效)</Option>
-                <Option value="按自然月划分(首月非整自然月划入第一期)">按自然月划分(首月非整自然月划入第一期)</Option> 
+                <Option value="按自然月划分(首月非整自然月划入第一期)">按自然月划分(首月非整自然月划入第一期)</Option>
                 <Option value="按自然月划分(首月非整自然月算一个月)">按自然月划分(首月非整自然月算一个月)</Option>
               </Select>)}
           </Form.Item>
@@ -186,7 +202,7 @@ function LeaseTerm(props: LeaseTermProps) {
               {getFieldDecorator(`startDate[0]`, {
                 initialValue: moment(new Date()),
                 rules: [{ required: true, message: '请选择开始时间' }],
-              })(<DatePicker />)}
+              })(<DatePicker placeholder='请选择开始时间'/>)}
             </Form.Item>
           </Col>
           <Col lg={4}>
@@ -194,7 +210,7 @@ function LeaseTerm(props: LeaseTermProps) {
               {getFieldDecorator(`endDate[0]`, {
                 initialValue: moment(new Date()).add(1, 'years').add(-1, 'days'),
                 rules: [{ required: true, message: '请选择结束时间' }],
-              })(<DatePicker />)}
+              })(<DatePicker placeholder='请选择结束时间'/>)}
             </Form.Item>
           </Col>
 
@@ -210,13 +226,13 @@ function LeaseTerm(props: LeaseTermProps) {
                     </Option>
                   ))}
                 </Select>
-              )} 
+              )}
             </Form.Item>
           </Col>
 
           <Col lg={4}>
             <Form.Item label='合同单价' required>
-              {getFieldDecorator(`price[0]`, { 
+              {getFieldDecorator(`price[0]`, {
                 rules: [{ required: true, message: '请输入合同单价' }],
               })(<InputNumber placeholder="请输入合同单价" style={{ width: '100%' }} />)}
             </Form.Item>
@@ -239,7 +255,7 @@ function LeaseTerm(props: LeaseTermProps) {
           <Col lg={4}>
             <Form.Item label="提前付款时间">
               {getFieldDecorator(`advancePayTime[0]`, {
-                initialValue:1,
+                initialValue: 1,
                 rules: [{ required: true, message: '请输入提前付款时间' }],
               })(<InputNumber placeholder="请输入" style={{ width: '100%' }} />)}
             </Form.Item>
@@ -295,7 +311,7 @@ function LeaseTerm(props: LeaseTermProps) {
           <Col lg={4}>
             <Form.Item label="付款周期（月）" required>
               {getFieldDecorator(`payCycle[0]`, {
-                initialValue:1,
+                initialValue: 1,
                 rules: [{ required: true, message: '请输入付款周期' }]
               })(
                 <InputNumber placeholder="请输入付款周期" style={{ width: '100%' }} />
@@ -310,7 +326,7 @@ function LeaseTerm(props: LeaseTermProps) {
                 <Select  >
                   <Option value="按起始日划分">按起始日划分</Option>
                   <Option value="次月按自然月划分(仅一月一付有效)">次月按自然月划分(仅一月一付有效)</Option>
-                  <Option value="按自然月划分(首月非整自然月划入第一期)">按自然月划分(首月非整自然月划入第一期)</Option> 
+                  <Option value="按自然月划分(首月非整自然月划入第一期)">按自然月划分(首月非整自然月划入第一期)</Option>
                   <Option value="按自然月划分(首月非整自然月算一个月)">按自然月划分(首月非整自然月算一个月)</Option>
                 </Select>)}
             </Form.Item>
@@ -319,7 +335,7 @@ function LeaseTerm(props: LeaseTermProps) {
       </Card>
       {formItems}
       <Button type="dashed" onClick={add}>
-        <Icon type="plus"/>添加租期条款
+        <Icon type="plus" />添加租期条款
         </Button>
     </div>
   );

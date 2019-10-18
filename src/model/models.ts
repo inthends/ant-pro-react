@@ -9,7 +9,7 @@ export * from './cwMeter';
 export * from './cwMeterreadBill';
 export * from './cwOffsetmain';
 export * from './cwReductionmain';
-export * from './feeItemData';
+// export * from './feeItemData';
 export * from './gmCustomerinfo';
 export * from './gmParkingdetail';
 export * from './gmPstructfile';
