@@ -2,7 +2,7 @@
 import Page from '@/components/Common/Page';
 import { Menu, Dropdown, Icon, Divider, InputNumber, Input, Select, Col, Row, Form, DatePicker, Card, Button, message, Table, Modal } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { RemoveForm, Charge } from './Main.service';
@@ -33,6 +33,14 @@ function ListTable(props: ListTableProps) {
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
   };
+const [hasSelected,setHasSelected]=useState<boolean>();
+  useEffect(()=>{
+    setSelectedRowKeys([]);
+    setHasSelected(false);
+    form.setFieldsValue({ payAmountA: 0});
+    form.setFieldsValue({ payAmountB: 0 });
+    form.setFieldsValue({ payAmountC: 0 });
+  },[data])
 
   const doDelete = record => {
     Modal.confirm({
@@ -177,8 +185,9 @@ function ListTable(props: ListTableProps) {
   // const [unitId, setUnitId] = useState();
   // const [customerName, setCustomerName] = useState();
 
-  const onSelectChange = (selectedRowKeys, selectedRows) => { 
-    // console.log(selectedRows);
+  const onSelectChange = (selectedRowKeys, selectedRows) => {
+    setHasSelected(selectedRowKeys.length > 0);
+    console.log(selectedRows);
     setSelectedRowKeys(selectedRowKeys);
     rowSelect(selectedRows);
     //应收金额
@@ -207,7 +216,7 @@ function ListTable(props: ListTableProps) {
     selectedRowKeys,
     onChange: onSelectChange,
   };
-  const hasSelected = selectedRowKeys.length > 0;
+
   //收款
   const charge = () => {
     if (selectedRowKeys.length == 0) {
