@@ -139,7 +139,7 @@ const PstructInfo = (props: PstructInfoProps) => {
   const userList = userSource.map
     (item => <Option key={item.id} value={item.name}>{item.name}</Option>);
 
-  const onOwnerSelect = (value, option) => {
+  const onOwnerSelect = (value, option) => { 
     form.setFieldsValue({ ownerId: option.key });
   };
 

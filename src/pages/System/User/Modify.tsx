@@ -6,7 +6,7 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useState } from 'react';
 import { SaveForm, searchUser } from './User.service';
 import { JcAccount } from '@/model/jcAccount';
-
+import md5 from 'blueimp-md5';
 
 interface ModifyProps {
   visible: boolean;
@@ -18,6 +18,7 @@ interface ModifyProps {
 }
 const Modify = (props: ModifyProps) => {
   const { data, form, treeDate } = props;
+  const { getFieldDecorator } = form;
   let initData = data ? data : { accountType: 2, expMode: 1 };
   // initData.expDate = initData.expDate ? initData.expDate : new Date();
   const [names, setNames] = useState<any[]>([]);
@@ -38,6 +39,8 @@ const Modify = (props: ModifyProps) => {
   const doSave = dataDetail => {
     let modifyData = { ...initData, ...dataDetail, keyValue: initData.id };
     //modifyData.expDate = modifyData.expDate ? modifyData.expDate.format('YYYY-MM-DD') : undefined;
+    //密码前端加密
+    modifyData.password = md5(modifyData.password);
     return SaveForm(modifyData);
   };
 
@@ -47,10 +50,15 @@ const Modify = (props: ModifyProps) => {
         return {
           label: item.name,
           value: item.name,
+          key: item.id,
         };
       });
       setNames(users);
     });
+  };
+
+  const onSelect = (value, option) => { 
+    form.setFieldsValue({ sourceId: option.key });
   };
 
   return (
@@ -74,7 +82,14 @@ const Modify = (props: ModifyProps) => {
               type="autoComplete"
               onSearch={searchName}
               items={names}
+              onSelect={onSelect}
             ></ModifyItem>
+
+            {getFieldDecorator('sourceId', {
+              initialValue: initData.sourceId,
+            })(
+              <input type='hidden' />
+            )}
           </Row>
 
           <Row gutter={24}>
@@ -84,15 +99,17 @@ const Modify = (props: ModifyProps) => {
               label="用户名"
               rules={[{ required: true, message: '请输入用户名' }]}
             ></ModifyItem>
-            <ModifyItem
-              {...baseFormProps}
-              field="password"
-              // type="password"
-              label="密码"
-              rules={[{ required: true, message: '请输入密码' }]} 
-              readOnly={initData.id != undefined} 
-              visibilityToggle={initData.id == undefined}  
-            ></ModifyItem>
+
+
+            {initData.id == undefined ?
+              <ModifyItem
+                {...baseFormProps}
+                field="password"
+                // type="password"
+                label="密码"
+                rules={[{ required: true, message: '请输入密码' }]}
+                visibilityToggle={initData.id == undefined}
+              ></ModifyItem> : null}
 
           </Row>
           {/* <Row gutter={24}>

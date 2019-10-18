@@ -19,7 +19,8 @@ interface ModifyItemProps {
   items?: SelectItem[];
   treeData?: TreeNode[];
   onChange?(value): void;
-  onSearch?(value): void; 
+  onSearch?(value): void;
+  onSelect?(value, option): void; //autoComplete
 }
 const ModifyItem = (props: ModifyItemProps) => {
   const {
@@ -29,14 +30,16 @@ const ModifyItem = (props: ModifyItemProps) => {
     initData,
     wholeLine,
     form,
-    rules,
-    onChange,
+    rules, 
     items,
-    treeData,
-    onSearch,
+    treeData, 
     disabled,
     readOnly,
-    visibilityToggle
+    visibilityToggle,
+    
+    onSearch,
+    onChange,
+    onSelect
   } = props;
   const { getFieldDecorator } = form;
   const inner = { disabled };
@@ -52,14 +55,14 @@ const ModifyItem = (props: ModifyItemProps) => {
           <AutoComplete
             {...inner}
             dataSource={(items || []).map((item: SelectItem) => (
-              <Option value={item.value} key={item.value}>
+              <Option value={item.value} key={item.key}>
                 {item.label}
               </Option>
             ))}
             style={{ width: '100%' }}
             onSearch={onSearch}
             placeholder={`请输入${label as string}`}
-          // onSelect={onOwnerSelect}
+            onSelect={onSelect}
           />
         );
       case 'textarea':
@@ -109,7 +112,7 @@ const ModifyItem = (props: ModifyItemProps) => {
             onChange={onChange}
           ></Checkbox>
         );
- 
+
       case 'inputNumber':
         return (
           <InputNumber
@@ -153,9 +156,10 @@ const ModifyItem = (props: ModifyItemProps) => {
   );
 };
 export default ModifyItem;
-interface SelectItem {
+interface SelectItem { 
   label;
   value;
+  key;
   title?;
 }
 export { SelectItem };

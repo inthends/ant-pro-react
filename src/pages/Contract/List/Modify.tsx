@@ -86,8 +86,8 @@ const Modify = (props: ModifyProps) => {
             tempInfo.houseList.forEach(item => {
               rooms.push(item.roomId);
             });
-          }
-          setRooms(rooms);
+          } 
+
           //获取条款
           GetCharge(chargeId).then((charge: ChargeDetailDTO) => {
             setContractCharge(charge.contractCharge || {});
@@ -565,7 +565,7 @@ const Modify = (props: ModifyProps) => {
                 </Card>
               </Col>
             </Row>
-          </TabPane> 
+          </TabPane>
           <TabPane tab="租赁条款" key="2">
             <Card title="基本条款" className={styles.card} >
               <Row gutter={24}>
@@ -631,7 +631,7 @@ const Modify = (props: ModifyProps) => {
             <RebateModify
               form={form}
               chargeOfferList={chargeOfferList}
-            ></RebateModify> 
+            ></RebateModify>
             <Button style={{ width: '100%', marginBottom: '10px' }}
               onClick={calculation}>点击生成租金明细</Button>
             <ResultList

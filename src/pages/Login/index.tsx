@@ -5,8 +5,7 @@ import React, { FormEvent, useState } from 'react';
 import styles from './index.less';
 import router from 'umi/router';
 // import { delay } from 'lodash';
-import { loginService } from '@/services/login';
-
+import { loginService } from '@/services/login'; 
 const { Item: FormItem } = Form;
 
 function Login(props: ConnectFormProps) {
