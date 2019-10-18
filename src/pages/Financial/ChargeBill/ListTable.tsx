@@ -21,14 +21,11 @@ interface ListTableProps {
   organizeId: string;
   customerName: string;
   showSplit(id: string): void;
-  showTrans(id: string): void; 
+  showTrans(id: string): void;
 }
 
-function ListTable(props: ListTableProps) { 
-
-  const { form, onchange, loading, pagination, data, modify, reload, 
-    rowSelect, organizeId, customerName, showSplit, showTrans } = props;
-    
+function ListTable(props: ListTableProps) {
+  const { form, onchange, loading, pagination, data, modify, reload, rowSelect, organizeId, customerName, showSplit, showTrans } = props;
   const { getFieldDecorator } = form;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
@@ -209,8 +206,6 @@ const [hasSelected,setHasSelected]=useState<boolean>();
     form.setFieldsValue({ payAmountB: 0 });
     form.setFieldsValue({ payAmountC: 0 });
   };
-
-  
 
   const rowSelection = {
     selectedRowKeys,

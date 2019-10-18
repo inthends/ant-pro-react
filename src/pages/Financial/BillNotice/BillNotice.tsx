@@ -18,6 +18,7 @@ function BillNotice() {
   const [organize, SetOrganize] = useState<any>({});
   // const [treeSearch, SetTreeSearch] = useState<any>({});
   const [id, setId] = useState<string>();
+  const [selectRecords, setSelectRecords] = useState<any>();
   const [selectIds, setSelectIds] = useState<any>();
   const [billCheckLoading, setBillCheckLoading] = useState<boolean>(false);
   const [billNoticeLoading, setBillNoticeLoading] = useState<boolean>(false);
@@ -272,7 +273,7 @@ function BillNotice() {
               .catch(e => { });
           },
         });
-      } else {
+      }else {
         /* if (id == null || id == '') {
            message.warning('请先选择账单');
          } else {*/
@@ -287,7 +288,7 @@ function BillNotice() {
     //   //删除
     //   if (selectIds == undefined) {
     //     message.error('请选择需要删除的账单！');
-    //   } else { 
+    //   } else {
     //     Modal.confirm({
     //       title: '是否确认删除?',
     //       onOk() {
@@ -457,6 +458,7 @@ function BillNotice() {
               }}
               reload={() => initBillCheckLoadData('', billCheckSearch)}
               getRowSelect={(records) => {
+                setSelectRecords(records);
                 if (records.length == 1) {
                   setId(records[0].billId);
                   if (records[0].ifVerify == 1) {

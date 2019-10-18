@@ -1,4 +1,4 @@
-//账单 
+//账单
 import Page from '@/components/Common/Page';
 import { Modal, message, Divider, Form, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
@@ -129,7 +129,7 @@ function BillCheckTable(props: BillCheckTableProps) {
           <span>
             <a onClick={() => showCheckBill(record.billId)} key="show">{"查看"}</a>
             <Divider type="vertical" />
-            <a onClick={() => { 
+            <a onClick={() => {
               Modal.confirm({
                 title: '请确认',
                 content: `您是否要删除${record.billCode}`,
@@ -141,9 +141,9 @@ function BillCheckTable(props: BillCheckTableProps) {
                     reload();
                   })
                 },
-              }); 
+              });
 
-            }} key="delete">删除</a>
+            }} key="delete" disabled= {record.ifVerify==1?true:false}>删除</a>
           </span>
         ];
       },
@@ -181,4 +181,3 @@ function BillCheckTable(props: BillCheckTableProps) {
 }
 
 export default Form.create<BillCheckTableProps>()(BillCheckTable);
-
