@@ -189,7 +189,7 @@ const Modify = (props: ModifyProps) => {
 
     if (sorter) {
       let { field, order } = sorter;
-      searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
       searchCondition.sidx = field ? field : 'code';
     }
 
@@ -251,7 +251,7 @@ const Modify = (props: ModifyProps) => {
 
     if (sorter) {
       let { field, order } = sorter;
-      searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
       searchCondition.sidx = field ? field : 'allName';
     }
 
@@ -549,18 +549,19 @@ const Modify = (props: ModifyProps) => {
 
   const [selectedHouseRowKeys, setSelectedHouseRowKeys] = useState<string[]>([]);
   //费项房屋选择
-  const houseRowSelection = {
-    onChange: (selectedRowKeys, selectedRows) => {
+  const houseRowSelection = { 
+    onChange: (selectedRowKeys, selectedRows) => {   
       let str: any[]; str = [];
-      for (var i = 0; i < selectedRowKeys.length; i++) {
-        str.push(selectedRowKeys[i] + '');
+      for (var i = 0; i < selectedRows.length; i++) {
+        str.push(selectedRows[i].unitFeeId + '');
       }
       setSelectedHouseRowKeys(str);
       //console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
     }
   };
 
-  const deleteHouse = () => {
+  //删除
+  const deleteHouse = () => { 
     if (selectedHouseRowKeys.length == 0) {
       message.warning('请选择要删除的房屋');
     } else {
@@ -570,7 +571,7 @@ const Modify = (props: ModifyProps) => {
         onOk: () => {
           HouseRemoveForm({ feeitemid: id, keyValues: JSON.stringify(selectedHouseRowKeys) }).then(() => {
             message.success('删除成功');
-            houseLoadData('');
+            houseLoadData(''); 
           });
         },
       });
@@ -821,7 +822,7 @@ const Modify = (props: ModifyProps) => {
                 </Col>
                 <Col lg={12}>
                   <Form.Item label="计费终止日期">
-                    {getFieldDecorator('endDate', { 
+                    {getFieldDecorator('endDate', {
                       initialValue: form.getFieldValue('beginDate') ? getEndDate() : null,
                       // initialValue: form.getFieldValue('beginDate') ? getEndDate() : null,
                       // initialValue: form.getFieldValue('isNullDate') ? null : getEndDate(),
@@ -1016,10 +1017,10 @@ const Modify = (props: ModifyProps) => {
                   <Col span={6} style={{ marginTop: '29px' }}>
                     <Form.Item>
                       {getFieldDecorator('accPeriodBaseNum', {
-                        initialValue: infoDetail.accPeriodBaseNum ? infoDetail.accPeriodBaseNum : 7,
+                        initialValue: infoDetail.accPeriodBaseNum,//? infoDetail.accPeriodBaseNum : 7,
                         rules: [{ required: true, message: '请输入数量' }],
                       })(
-                        <InputNumber style={{ width: '100%' }} />
+                        <InputNumber style={{ width: '100%' }} min={0} precision={0}  />
                       )}
                     </Form.Item>
                   </Col>
@@ -1055,10 +1056,10 @@ const Modify = (props: ModifyProps) => {
                   <Col span={6} style={{ marginTop: '29px' }}>
                     <Form.Item>
                       {getFieldDecorator('accBillDateNum', {
-                        initialValue: infoDetail.accBillDateNum ? infoDetail.accBillDateNum : 7,
+                        initialValue: infoDetail.accBillDateNum,//? infoDetail.accBillDateNum : 7,
                         rules: [{ required: true, message: '请输入数量' }],
                       })(
-                        <InputNumber style={{ width: '100%' }} />
+                        <InputNumber style={{ width: '100%' }} min={0} precision={0} />
                       )}
                     </Form.Item>
                   </Col>
@@ -1141,10 +1142,10 @@ const Modify = (props: ModifyProps) => {
                   <Col span={6} style={{ marginTop: '29px' }}>
                     <Form.Item>
                       {getFieldDecorator('payDeadlineNum', {
-                        initialValue: infoDetail.payDeadlineNum ? infoDetail.payDeadlineNum : 10,
+                        initialValue: infoDetail.payDeadlineNum,//? infoDetail.payDeadlineNum : 10,
                         rules: [{ required: true, message: '请输入数量' }],
                       })(
-                        <InputNumber style={{ width: '100%' }} />
+                        <InputNumber style={{ width: '100%' }} min={0} precision={0} />
                       )}
                     </Form.Item>
                   </Col>
@@ -1227,10 +1228,10 @@ const Modify = (props: ModifyProps) => {
                   <Col span={6} style={{ marginTop: '29px' }}>
                     <Form.Item>
                       {getFieldDecorator('lateStartDateNum', {
-                        initialValue: infoDetail.lateStartDateNum ? infoDetail.lateStartDateNum : 10,
+                        initialValue: infoDetail.lateStartDateNum ,//? infoDetail.lateStartDateNum : 10,
                         rules: [{ required: true, message: '请输入数量' }],
                       })(
-                        <InputNumber style={{ width: '100%' }} />
+                        <InputNumber style={{ width: '100%' }} min={0} precision={0} />
                       )}
                     </Form.Item>
                   </Col>

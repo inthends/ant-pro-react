@@ -101,7 +101,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
           //UseStepPrice:tempInfo.useStepPrice,
           AccBillDateUnit: values.accBillDateUnit,
           EndDate: values.beginDate ? values.beginDate.format('YYYY-MM-DD') : null,
-          BeginDate: values.endDate ? values.endDate.format('YYYY-MM-DD') : null, 
+          BeginDate: values.endDate ? values.endDate.format('YYYY-MM-DD') : null,
           //CreateUserId:tempInfo.CreateUserId,
           FeeApportion: values.feeApportion,
           //InMethod:tempInfo.inMethod,
@@ -233,7 +233,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
   };
 
   //求自然月日期
-  const getMonthBeforeFormatAndDay = (num, format, date) => { 
+  const getMonthBeforeFormatAndDay = (num, format, date) => {
     let day = date.get('date');
     let month = date.get('month');
     date.set('month', month + num * 1, 'date', 1); //周期月一号
@@ -303,7 +303,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
         save();
       }}
       destroyOnClose={true}
-      bodyStyle={{ background: '#f6f7fb' }} 
+      bodyStyle={{ background: '#f6f7fb' }}
       width='800px'
     >
       <Form layout="vertical" hideRequiredMark>
@@ -549,7 +549,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                 <Col lg={12}>
                   <Form.Item label="计费起始日期">
                     {getFieldDecorator('beginDate', {
-                      initialValue:  infoDetail.beginDate ? moment(infoDetail.beginDate) : moment(new Date()),
+                      initialValue: infoDetail.beginDate ? moment(infoDetail.beginDate) : moment(new Date()),
                       rules: [{ required: !form.getFieldValue('isNullDate'), message: '请选择计费起始日期' }],
                     })(<DatePicker placeholder="请选择计费起始日期" style={{ width: '100%' }} />)}
                   </Form.Item>
@@ -741,9 +741,9 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                 <Col span={6} style={{ marginTop: '29px' }}>
                   <Form.Item>
                     {getFieldDecorator('accPeriodBaseNum', {
-                      initialValue: infoDetail.accPeriodBaseNum ? infoDetail.accPeriodBaseNum : 7,
+                      initialValue: infoDetail.accPeriodBaseNum,// ? infoDetail.accPeriodBaseNum : 7,
                     })(
-                      <InputNumber style={{ width: '100%' }} />
+                      <InputNumber style={{ width: '100%' }} min={0} precision={0} />
                     )}
                   </Form.Item>
                 </Col>
@@ -777,9 +777,9 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                 <Col span={6} style={{ marginTop: '29px' }}>
                   <Form.Item>
                     {getFieldDecorator('accBillDateNum', {
-                      initialValue: infoDetail.accBillDateNum ? infoDetail.accBillDateNum : 7,
+                      initialValue: infoDetail.accBillDateNum,//? infoDetail.accBillDateNum : 7,
                     })(
-                      <InputNumber style={{ width: '100%' }} />
+                      <InputNumber style={{ width: '100%' }} min={0} precision={0} />
                     )}
                   </Form.Item>
                 </Col>
@@ -860,9 +860,9 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                 <Col span={6} style={{ marginTop: '29px' }}>
                   <Form.Item>
                     {getFieldDecorator('payDeadlineNum', {
-                      initialValue: infoDetail.payDeadlineNum ? infoDetail.payDeadlineNum : 10,
+                      initialValue: infoDetail.payDeadlineNum,//? infoDetail.payDeadlineNum : 10,
                     })(
-                      <InputNumber style={{ width: '100%' }} />
+                      <InputNumber style={{ width: '100%' }} min={0} precision={0} />
                     )}
                   </Form.Item>
                 </Col>
@@ -943,9 +943,9 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                 <Col span={6} style={{ marginTop: '29px' }}>
                   <Form.Item>
                     {getFieldDecorator('lateStartDateNum', {
-                      initialValue: infoDetail.lateStartDateNum ? infoDetail.lateStartDateNum : 10,
+                      initialValue: infoDetail.lateStartDateNum,//? infoDetail.lateStartDateNum : 10,
                     })(
-                      <InputNumber style={{ width: '100%' }} />
+                      <InputNumber style={{ width: '100%' }} min={0} precision={0} />
                     )}
                   </Form.Item>
                 </Col>

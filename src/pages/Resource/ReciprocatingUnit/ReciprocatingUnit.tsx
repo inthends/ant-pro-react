@@ -73,7 +73,7 @@ function PublicArea() {
 
     if (sorter) {
       const { field, order } = sorter;
-      searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
       searchCondition.sidx = field ? field : 'EnCode';
     }
 

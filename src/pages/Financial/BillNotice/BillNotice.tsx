@@ -70,7 +70,7 @@ function BillNotice() {
 
     if (sorter) {
       let { field, order } = sorter;
-      searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
       searchCondition.sidx = field ? field : 'billId';
     }
     return billCheckload(searchCondition);
@@ -95,7 +95,7 @@ function BillNotice() {
 
     if (sorter) {
       let { field, order } = sorter;
-      searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
       searchCondition.sidx = field ? field : 'id';
     }
     return billNoticeload(searchCondition);

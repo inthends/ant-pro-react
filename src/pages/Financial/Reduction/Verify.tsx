@@ -102,7 +102,7 @@ const Verify= (props: VerifyProps) => {
 
     if (sorter) {
       let { field, order } = sorter;
-      searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
       searchCondition.sidx = field ? field : 'billId';
     }
     setLoading(true);

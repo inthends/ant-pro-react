@@ -69,7 +69,7 @@ function Payment() {
 
     if (sorter) {
       let { field, order } = sorter;
-      searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
       searchCondition.sidx = field ? field : 'id';
     }
     return paymentload(searchCondition);
@@ -94,7 +94,7 @@ function Payment() {
 
     if (sorter) {
       let { field, order } = sorter;
-      searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
       searchCondition.sidx = field ? field : 'id';
     }
 

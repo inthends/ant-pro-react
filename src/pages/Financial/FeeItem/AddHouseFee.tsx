@@ -1,6 +1,6 @@
 //选择费项房屋
 // import { TreeEntity } from '@/model/models';
-import { Checkbox, Col, Form, Row, Modal, message } from 'antd';
+import { Checkbox, Col, Form, Row, Modal, message, Card } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useState } from 'react';
 import { UnitFeeSaveForm } from './Main.service';
@@ -17,7 +17,7 @@ interface AddHouseFeeProps {
 }
 
 const AddHouseFee = (props: AddHouseFeeProps) => {
-  const { visible, closeModal, feeId, reload, treeData } = props; 
+  const { visible, closeModal, feeId, reload, treeData } = props;
   const [checkedList, setCheckedList] = useState<any[]>([]);
   const [unitData, setUnitData] = useState<string[]>([]);
   // const [houseTreeData,setHouseTreeData]=useState<TreeEntity[]>([]);
@@ -54,8 +54,10 @@ const AddHouseFee = (props: AddHouseFeeProps) => {
       bodyStyle={{ background: '#f6f7fb' }}
       width='600px'
     >
-      <Row style={{ height: '400px', overflow: 'hidden', marginTop: '5px', backgroundColor: 'rgb(255,255,255)' }}>
-        <Col span={12} style={{ height: '400px', overflow: 'auto' }}>
+      {/* <Row style={{ height: '400px', overflow: 'hidden', marginTop: '5px', backgroundColor: 'rgb(255,255,255)' }}> */}
+
+      <Row gutter={8}>
+        <Col span={12} style={{ height: '420px', overflow: 'auto' }}>
           <SelectTree
             treeData={treeData}
             getCheckedKeys={(keys) => {
@@ -65,17 +67,16 @@ const AddHouseFee = (props: AddHouseFeeProps) => {
             }}
           />
         </Col>
-        <Col span={12} style={{ padding: '5px 10px' }}>
-          <div style={{ paddingTop: '10px' }}>
-            选择房屋状态
-          </div>
-          <Checkbox.Group
-            options={["入住", "空置"]}
-            value={checkedList}
-            onChange={(checkedList) => {
-              setCheckedList(checkedList);
-            }}
-          />
+        <Col span={12}  >
+          <Card > 
+            <Checkbox.Group
+              options={["入住", "空置"]}
+              value={checkedList}
+              onChange={(checkedList) => {
+                setCheckedList(checkedList);
+              }}
+            />
+          </Card>
         </Col>
       </Row>
     </Modal>

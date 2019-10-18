@@ -42,14 +42,16 @@ function ListTable(props: ListTableProps) {
       sorter: true,
       render: (text, record) => {
         //return <Link to={`housemore?pstructid=${record.id}&type=2`}>{record.name}</Link>   
-        return <Link key='linkto' to={{ pathname: 'housemore', state: {organizeid:record.organizeid, pstructid: record.id } }}>{record.name}</Link>
-      }
+        return <Link key='linkto' to={{ pathname: 'housemore', state: { organizeid: record.organizeid, pstructid: record.id } }}>{record.name}</Link>
+      },
+
     },
     {
       title: '总建筑面积',
       dataIndex: 'area',
       key: 'area',
       width: 120,
+      // sorter: (a, b) => a.area - b.area
       sorter: true,
     },
     {
@@ -68,12 +70,12 @@ function ListTable(props: ListTableProps) {
     },
     {
       title: '空置面积',
-      dataIndex: 'area2',
-      key: 'area2',
+      dataIndex: 'emptyarea',
+      key: 'emptyarea',
       width: 100,
-      render: (text, record) => {
-        return record.area - record.checkarea;
-      },
+      // render: (text, record) => {
+      //   return record.area - record.checkarea;
+      // },
       sorter: true,
     },
     {
@@ -92,14 +94,17 @@ function ListTable(props: ListTableProps) {
     },
     {
       title: '入驻率',
-      dataIndex: 'rate',
+      dataIndex: 'checkrate',
       sorter: true,
-      key: 'rate',
+      key: 'checkrate',
+      // render: (text, record) => {
+      //   return (
+      //     (record.roomcount ? (record.checkroom / record.roomcount) * 100 : 0).toFixed(2) + '%'
+      //   );
+      // },
       render: (text, record) => {
-        return (
-          (record.roomcount ? (record.checkroom / record.roomcount) * 100 : 0).toFixed(2) + '%'
-        );
-      },
+        return text + '%';
+      }
     },
     {
       title: '操作',
@@ -123,7 +128,7 @@ function ListTable(props: ListTableProps) {
             <a onClick={() => modify(record.id)} key="modify">修改</a>
             <Divider type="vertical" key="split" />
             <a onClick={() => doDelete(record)} key="delete">删除</a>
-          </span> 
+          </span>
         ];
       },
     },

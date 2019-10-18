@@ -111,7 +111,7 @@ function Meter() {
 
     if (sorter) {
       let { field, order } = sorter;
-      searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
       searchCondition.sidx = field ? field : 'meterkind';
     }
 
@@ -133,7 +133,7 @@ function Meter() {
 
     if (sorter) {
       let { field, order } = sorter;
-      searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
       searchCondition.sidx = field ? field : 'unitmeterid';
     }
     return unitMeterload(searchCondition);
@@ -155,7 +155,7 @@ function Meter() {
 
     if (sorter) {
       let { field, order } = sorter;
-      searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
       searchCondition.sidx = field ? field : 'billcode';
     }
 
@@ -177,7 +177,7 @@ function Meter() {
 
     if (sorter) {
       let { field, order } = sorter;
-      searchCondition.order = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
       searchCondition.sidx = field ? field : 'billcode';
     }
 

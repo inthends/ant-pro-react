@@ -69,7 +69,7 @@ const Worker = () => {
 
     if (sorter) {
       const { field, order } = sorter;
-      searchCondition.order = order === "ascend" ? "asc" : "desc";
+      searchCondition.sord = order === "ascend" ? "asc" : "desc";
       searchCondition.sidx = field ? field : "CreateDate";
     }
     return load(searchCondition).then(res => {
