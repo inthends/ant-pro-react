@@ -59,3 +59,10 @@ export function ExistEnCode(keyValue, code): Promise<any> {
     .get(process.env.basePath + `/Organize/ExistEnCode?keyValue=${keyValue}&code=${code}`)
     .then(getResult as any);
 }
+
+// 验证机构是否能删除
+export function CheckOrg(keyValue): Promise<any> {
+  return request
+    .get(process.env.basePath + `/Organize/CheckOrg?keyValue=${keyValue}`)
+    .then(getResult as any);
+}

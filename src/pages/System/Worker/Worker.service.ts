@@ -36,3 +36,10 @@ export function GetDepartmentTreeByOrgId(OrganizeId): Promise<any[]> {
   return request.get(process.env.basePath + `/Department/GetDepartmentTree?OrganizeId=${OrganizeId}`)
     .then(getResult as any);
 }
+
+// 验证code
+export function ExistCode(keyValue, code): Promise<any> {
+  return request
+    .get(process.env.basePath + `/Worker/ExistCode?keyValue=${keyValue}&code=${code}`)
+    .then(getResult as any);
+}

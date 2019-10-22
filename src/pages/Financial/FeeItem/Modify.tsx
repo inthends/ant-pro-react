@@ -1018,7 +1018,7 @@ const Modify = (props: ModifyProps) => {
                       initialValue: infoDetail.accPeriodBaseNum ? infoDetail.accPeriodBaseNum : 7,
                       rules: [{ required: true, message: '请输入数量' }],
                     })(
-                      <InputNumber style={{ width: '100%' }} min={0} precision={0} />
+                      <InputNumber style={{ width: '100%' }}   precision={0} />
                     )}
                   </Form.Item>
                 </Col>
@@ -1057,7 +1057,7 @@ const Modify = (props: ModifyProps) => {
                       initialValue: infoDetail.accBillDateNum ? infoDetail.accBillDateNum : 7,
                       rules: [{ required: true, message: '请输入数量' }],
                     })(
-                      <InputNumber style={{ width: '100%' }} min={0} precision={0} />
+                      <InputNumber style={{ width: '100%' }}  precision={0} />
                     )}
                   </Form.Item>
                 </Col>
@@ -1143,7 +1143,7 @@ const Modify = (props: ModifyProps) => {
                       initialValue: infoDetail.payDeadlineNum ? infoDetail.payDeadlineNum : 10,
                       rules: [{ required: true, message: '请输入数量' }],
                     })(
-                      <InputNumber style={{ width: '100%' }} min={0} precision={0} />
+                      <InputNumber style={{ width: '100%' }}   precision={0} />
                     )}
                   </Form.Item>
                 </Col>
@@ -1229,7 +1229,7 @@ const Modify = (props: ModifyProps) => {
                       initialValue: infoDetail.lateStartDateNum ? infoDetail.lateStartDateNum : 10,
                       rules: [{ required: true, message: '请输入数量' }],
                     })(
-                      <InputNumber style={{ width: '100%' }} min={0} precision={0} />
+                      <InputNumber style={{ width: '100%' }}   precision={0} />
                     )}
                   </Form.Item>
                 </Col>

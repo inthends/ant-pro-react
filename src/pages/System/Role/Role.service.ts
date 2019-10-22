@@ -121,3 +121,10 @@ export function GetDataHalfCheckIds(roleId): Promise<any> {
     .get(process.env.basePath + `/PermissionRole/GetDataHalfCheckIds?roleId=${roleId}`)
     .then(getResult as any);
 }
+
+// 验证机构是否能删除
+export function CheckRole(keyValue): Promise<any> {
+  return request
+    .get(process.env.basePath + `/PermissionRole/CheckRole?keyValue=${keyValue}`)
+    .then(getResult as any);
+}

@@ -4,7 +4,7 @@ import { Card, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useState, useEffect } from 'react';
 import { SaveForm, searchUser, ExistEnCode } from './Organize.service';
-import { GetOrgs } from '@/services/commonItem';
+import { GetOrgsWithNoGLC } from '@/services/commonItem';
 import { TreeNode } from 'antd/lib/tree-select';
 import styles from './style.less';
 
@@ -16,7 +16,8 @@ interface ModifyProps {
   reload(): void;
 }
 const Modify = (props: ModifyProps) => {
-  const { data, form, visible } = props;
+  const { data, form } = props;
+  const { getFieldDecorator } = form;
   const [managers, setManagers] = useState<SelectItem[]>([]);
   // const [types, setTypes] = useState<SelectItem[]>([
   //   {
@@ -38,22 +39,31 @@ const Modify = (props: ModifyProps) => {
   // ]);
   const [orgs, setOrgs] = useState<TreeNode[]>();
   let initData = data ? data : { enabledMark: 1 };
-  initData.expDate = initData.expDate ? initData.expDate : new Date();
+  // initData.expDate = initData.expDate ? initData.expDate : new Date();
   const baseFormProps = { form, initData };
   useEffect(() => {
     // getTypes();
     searchManager('');
     // getOrgs(); 
-    GetOrgs().then(res => {
+    GetOrgsWithNoGLC().then(res => {
       setOrgs(res);
-    }); 
+    });
   }, []);
 
   const doSave = dataDetail => {
     let modifyData = { ...initData, ...dataDetail, keyValue: initData.organizeId };
     if (modifyData.foundedTime != null)
       modifyData.foundedTime = modifyData.foundedTime.format('YYYY-MM-DD');
-    return SaveForm(modifyData);
+    //return SaveForm(modifyData);
+
+    //刷新隶属上级
+    return SaveForm(modifyData).then(() => {
+      GetOrgsWithNoGLC().then(res => {
+        setOrgs(res);
+      });
+
+    })
+
   };
 
   const searchManager = value => {
@@ -67,6 +77,7 @@ const Modify = (props: ModifyProps) => {
       setManagers(users);
     });
   };
+
   // const getTypes = () => {
   //   searchTypes().then(res => {
   //     const temp = res.map(item => {
@@ -98,6 +109,11 @@ const Modify = (props: ModifyProps) => {
           callback();
       })
     }
+  };
+
+  //设置负责人
+  const onSelect = (value, option) => { 
+    form.setFieldsValue({ chargeLeaderId: option.key });
   };
 
   return (
@@ -169,7 +185,15 @@ const Modify = (props: ModifyProps) => {
               type="autoComplete"
               onSearch={searchManager}
               items={managers}
+              onSelect={onSelect}
             ></ModifyItem>
+
+            {getFieldDecorator('chargeLeaderId', {
+              initialValue: initData.chargeLeaderId,
+            })(
+              <input type='hidden' />
+            )}
+
             <ModifyItem
               {...baseFormProps}
               field="foundedTime"

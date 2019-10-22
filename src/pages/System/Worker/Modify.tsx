@@ -3,7 +3,7 @@ import ModifyItem, { SelectItem } from '@/components/BaseModifyDrawer/ModifyItem
 import { Card, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useState, useEffect } from 'react';
-import { GetDepartmentTreeByOrgId, SaveForm } from './Worker.service';
+import {ExistCode,  GetDepartmentTreeByOrgId, SaveForm } from './Worker.service';
 import { TreeNode } from 'antd/lib/tree-select';
 import styles from './style.less';
 import { GetOrgs } from '@/services/commonItem';
@@ -53,6 +53,21 @@ const Modify = (props: ModifyProps) => {
 
   const genderItems: SelectItem[] = [{ label: '男', value: 1 }, { label: '女', value: 0 }];
 
+  const checkCodeExist = (rule, value, callback) => {
+    if (value == undefined) {
+      callback();
+    }
+    else {
+      const keyValue = initData.id == undefined ? '' : initData.id;
+      ExistCode(keyValue, value).then(res => {
+        if (res)
+          callback('工号重复');
+        else
+          callback();
+      })
+    }
+  };
+
   return (
     <BaseModifyProvider {...props} name="员工" save={doSave} >
       <Form layout="vertical" hideRequiredMark>
@@ -68,7 +83,13 @@ const Modify = (props: ModifyProps) => {
               {...baseFormProps}
               field="code"
               label="工号"
-              rules={[{ required: true, message: '请输入工号' }]}
+              // rules={[{ required: true, message: '请输入工号' }]} 
+              rules={[{ required: true, message: '请输入工号' },
+              {
+                validator: checkCodeExist
+              }
+              ]}
+
             ></ModifyItem>
           </Row>
 

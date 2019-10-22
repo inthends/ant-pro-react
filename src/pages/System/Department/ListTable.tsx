@@ -2,7 +2,7 @@ import Page from '@/components/Common/Page';
 import { Divider, message, Modal, Table } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import React, { useState } from 'react';
-import { RemoveForm, GetDetailJson } from './Main.service';
+import { CheckDepartment, RemoveForm, GetDetailJson } from './Main.service';
 import styles from './style.less';
 interface ListTableProps {
   loading: boolean;
@@ -20,12 +20,22 @@ function ListTable(props: ListTableProps) {
       title: '请确认',
       content: `您是否要删除 ${record.fullName} 吗`,
       onOk: () => {
-        RemoveForm(record.key)
-          .then(() => {
-            message.success('删除成功');
-            reload();
-          })
-          .catch(e => { });
+
+        CheckDepartment(record.key).then((res) => {
+          if (res) {
+            message.error('存在下级，不允许删除！');
+            return;
+          }
+
+          RemoveForm(record.key)
+            .then(() => {
+              message.success('删除成功');
+              reload();
+            })
+            .catch(e => { });
+
+        }); 
+
       },
     });
   };
@@ -39,7 +49,7 @@ function ListTable(props: ListTableProps) {
 
     if (record.key === selectedRowKey) {
       return styles.rowSelect;
-    } 
+    }
     // else {
     //   if (record.type == 'Department' || record.type == 'D') {
     //     return styles.rowFlush
@@ -54,7 +64,7 @@ function ListTable(props: ListTableProps) {
     return {
       onClick: event => {
         //if (record.type == 'Department' || record.type == 'D') {
-          setSelectedRowKey(record.key);
+        setSelectedRowKey(record.key);
         //}
         //getRowSelect(record);
       }

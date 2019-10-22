@@ -1,12 +1,12 @@
 
-import { Button, Icon, Input, Layout } from 'antd';
+import { Button, Icon,  Layout } from 'antd';
 import React, { useEffect, useState } from 'react';
 import ListTable from './ListTable';
 import { GetTreeListJson } from './Main.service';
 import Modify from './Modify';
 
 const { Content } = Layout;
-const { Search } = Input;
+// const { Search } = Input;
 
 function Main() {
   const [search, setSearch] = useState<string>('');
@@ -23,8 +23,6 @@ function Main() {
     setModifyVisible(false);
   };
   const showDrawer = (item?) => {
-
-    
 
     setCurrData(item);
     setModifyVisible(true);
@@ -72,15 +70,15 @@ function Main() {
   return (
     <Layout style={{ height: '100%' }}>
       <Content  >
-        <div style={{ marginBottom: '20px', padding: '3px 0' }}>
-          <Search
+        <div style={{ marginBottom: '40px', padding: '3px 0' }}>
+          {/* <Search
             className="search-input"
             placeholder="请输入要查询的关键词"
             onSearch={value =>
               loadData({ searchText: value })
             }
             style={{ width: 200 }}
-          />
+          /> */}
           <Button type="primary" 
             style={{ float: 'right' }}
             onClick={() => showDrawer()}>

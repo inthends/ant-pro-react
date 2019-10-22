@@ -21,7 +21,7 @@ export function SaveForm(data): Promise<any> {
 // 删除
 export function RemoveForm(keyValue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Department/RemoveForm`, { data: objToFormdata({ keyValue }) })
+    .post(process.env.basePath + `/Department/RemoveForm?keyValue=${keyValue}`, {})
     .then(getResult as any);
 }
 
@@ -57,5 +57,12 @@ export function ExistName(keyValue, name): Promise<any> {
 // 查询部门
 export function GetDepartmentTree(OrganizeId): Promise<any[]> {
   return request.get(process.env.basePath + `/Department/GetDepartmentTree?OrganizeId=${OrganizeId}`)
+    .then(getResult as any);
+}
+
+// 验证是否能删除
+export function CheckDepartment(keyValue): Promise<any> {
+  return request
+    .get(process.env.basePath + `/Department/CheckDepartment?keyValue=${keyValue}`)
     .then(getResult as any);
 }

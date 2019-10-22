@@ -2,7 +2,7 @@ import Page from '@/components/Common/Page';
 import { Divider, message, Modal, Table } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import React from 'react';
-import { RemoveForm, GetDetailJson } from './Organize.service';
+import { CheckOrg, RemoveForm, GetDetailJson } from './Organize.service';
 import moment from 'moment';
 
 interface ListTableProps {
@@ -18,23 +18,32 @@ function ListTable(props: ListTableProps) {
   const doDelete = record => {
     Modal.confirm({
       title: '请确认',
-      content: `您是否要删除 ${record.fullName} 吗`,
+      content: `您是否要删除 ${record.fullName} 吗？`,
       onOk: () => {
-        RemoveForm(record.key)
-          .then(() => {
-            message.success('删除成功');
-            reload();
-          })
-          .catch(e => { });
+        //check 
+        CheckOrg(record.key).then((res) => { 
+          if (res) {
+            message.error('存在下级，不允许删除！');
+            return;
+          }
+          RemoveForm(record.key)
+            .then(() => {
+              message.success('删除成功！');
+              reload();
+            })
+            .catch(e => { });
+        })
       },
     });
   };
+
   const doModify = id => {
     GetDetailJson(id).then(res => {
       //console.log(res)
       modify(res);
     });
   };
+
   const columns = [
     {
       title: '机构名称',

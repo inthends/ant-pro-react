@@ -1,12 +1,12 @@
 
-import { Button, Icon, Input, Layout } from 'antd';
+import { Button, Icon,  Layout } from 'antd';
 import React, { useEffect, useState } from 'react';
 import ListTable from './ListTable';
-import { GetTreeListJson } from './Organize.service'; 
+import { GetTreeListJson } from './Organize.service';
 import Modify from './Modify';
 
 const { Content } = Layout;
-const { Search } = Input;
+// const { Search } = Input;
 
 const Organize = () => {
   const [search, setSearch] = useState<string>('');
@@ -66,16 +66,19 @@ const Organize = () => {
 
   return (
     <Layout style={{ height: '100%' }}>
-     <Content >
-        <div style={{ marginBottom: '20px', padding: '3px 0' }}> 
-          <Search
+      <Content >
+        <div style={{ marginBottom: '40px', padding: '3px 0' }}>
+          {/* <Search
+            hidden
             className="search-input"
             placeholder="请输入要查询的关键词"
             onSearch={value =>
               loadData({ searchText: value })
             }
             style={{ width: 200 }}
-          />
+          /> */}
+
+
           {/* <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer({ flag: '' })}>
             <Icon type="plus" />
             机构

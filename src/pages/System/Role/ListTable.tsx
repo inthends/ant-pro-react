@@ -2,7 +2,7 @@ import Page from '@/components/Common/Page';
 import { Divider, message, Modal, Switch, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
-import { SaveForm, RemoveForm } from './Role.service';
+import { CheckRole, SaveForm, RemoveForm } from './Role.service';
 
 interface ListTableProps {
   loading: boolean;
@@ -23,14 +23,24 @@ function ListTable(props: ListTableProps) {
   const doDelete = record => {
     Modal.confirm({
       title: '请确认',
-      content: `您是否要删除 ${record.fullName} 吗`,
+      content: `您是否要删除 ${record.fullName} 吗？`,
       onOk: () => {
-        RemoveForm(record.roleId)
-          .then(() => {
-            message.success('删除成功');
-            reload();
-          })
-          .catch(e => { });
+ 
+        CheckRole(record.roleId).then((res) => {
+          if (res) {
+            message.error('包含用户，不允许删除！');
+            return;
+          }
+
+          RemoveForm(record.roleId)
+            .then(() => {
+              message.success('删除成功！');
+              reload();
+            })
+            .catch(e => { });
+
+        })
+
       },
     });
   };
@@ -105,11 +115,11 @@ function ListTable(props: ListTableProps) {
             <Divider type="vertical" key='divider' />
             <a key="choose" type='link' onClick={() => choose(record)}>
               角色成员
-          </a> 
-          <Divider type="vertical" key='divider' /> 
-          <a key="auth" type='link' onClick={() => showAuth(record)}>
+          </a>
+            <Divider type="vertical" key='divider' />
+            <a key="auth" type='link' onClick={() => showAuth(record)}>
               角色授权
-          </a> 
+          </a>
             <Divider type="vertical" key='divider' />
             <a type="link" key="delete" onClick={() => doDelete(record)}>
               删除

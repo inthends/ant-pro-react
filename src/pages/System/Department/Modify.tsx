@@ -20,6 +20,7 @@ interface ModifyProps {
 
 const Modify = (props: ModifyProps) => {
   const { data, form } = props;
+  const { getFieldDecorator } = form;
   const [managers, setManagers] = useState<SelectItem[]>([]);
   // const [types, setTypes] = useState<SelectItem[]>([
   //   {
@@ -42,7 +43,7 @@ const Modify = (props: ModifyProps) => {
   const [orgs, setOrgs] = useState<TreeNode[]>();
   const [depts, setDepts] = useState<TreeNode[]>();
   let initData = data ? data : { enabledMark: 1 };
-  initData.expDate = initData.expDate ? initData.expDate : new Date();
+  // initData.expDate = initData.expDate ? initData.expDate : new Date();
   const baseFormProps = { form, initData };
 
   const getOrgs = () => {
@@ -61,6 +62,7 @@ const Modify = (props: ModifyProps) => {
         return {
           label: item.name,
           value: item.name,
+          key: item.id,
         };
       });
       setManagers(users);
@@ -69,7 +71,7 @@ const Modify = (props: ModifyProps) => {
 
   //数据保存
   const doSave = dataDetail => {
-    let modifyData = { ...initData, ...dataDetail, keyValue: initData.organizeId };
+    let modifyData = { ...initData, ...dataDetail, keyValue: initData.departmentId };
     if (modifyData.foundedTime != null)
       modifyData.foundedTime = modifyData.foundedTime.format('YYYY-MM-DD');
     if (modifyData.parentId === undefined)
@@ -82,7 +84,7 @@ const Modify = (props: ModifyProps) => {
       callback();
     }
     else {
-      const keyValue = initData.organizeId == undefined ? '' : initData.organizeId;
+      const keyValue = initData.departmentId == undefined ? '' : initData.departmentId;
       ExistEnCode(keyValue, value).then(res => {
         if (res)
           callback('部门编号重复');
@@ -97,7 +99,7 @@ const Modify = (props: ModifyProps) => {
       callback();
     }
     else {
-      const keyValue = initData.organizeId == undefined ? '' : initData.organizeId;
+      const keyValue = initData.departmentId == undefined ? '' : initData.departmentId;
       ExistName(keyValue, value).then(res => {
         if (res)
           callback('部门名称重复');
@@ -113,10 +115,15 @@ const Modify = (props: ModifyProps) => {
     });
   };
 
+  //设置负责人
+  const onSelect = (value, option) => { 
+    form.setFieldsValue({ chargeLeaderId: option.key });
+  };
+
   return (
     <BaseModifyProvider {...props} name="部门" save={doSave}>
       <Card className={styles.card}>
-        <Form layout="vertical" hideRequiredMark> 
+        <Form layout="vertical" hideRequiredMark>
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
@@ -163,12 +170,20 @@ const Modify = (props: ModifyProps) => {
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
-              field="manager"
+              field="chargeLeader"
               label="负责人"
               onSearch={searchManager}
               type="autoComplete"
               items={managers}
+              onSelect={onSelect}
             ></ModifyItem>
+
+            {getFieldDecorator('chargeLeaderId', {
+              initialValue: initData.chargeLeaderId,
+            })(
+              <input type='hidden' />
+            )}
+
             <ModifyItem
               {...baseFormProps}
               field="email"

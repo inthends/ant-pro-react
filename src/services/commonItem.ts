@@ -83,3 +83,8 @@ export function GetUnitTreeAll(): Promise<ResponseObject<any>> {
 export function GetOrgs(): Promise<any[]> {
   return request.get(process.env.basePath + `/Common/GetOrgTreeOnly`).then(getResult as any);
 }
+
+// 查询机构不带管理处
+export function GetOrgsWithNoGLC(): Promise<any[]> {
+  return request.get(process.env.basePath + `/Common/GetOrgsWithNoGLC`).then(getResult as any);
+}

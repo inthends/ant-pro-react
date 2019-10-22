@@ -99,8 +99,7 @@ const Modify = (props: ModifyProps) => {
               label="用户名"
               rules={[{ required: true, message: '请输入用户名' }]}
             ></ModifyItem>
-
-
+ 
             {initData.id == undefined ?
               <ModifyItem
                 {...baseFormProps}

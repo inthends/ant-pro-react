@@ -743,7 +743,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                     {getFieldDecorator('accPeriodBaseNum', {
                       initialValue: infoDetail.accPeriodBaseNum,// ? infoDetail.accPeriodBaseNum : 7,
                     })(
-                      <InputNumber style={{ width: '100%' }} min={0} precision={0} />
+                      <InputNumber style={{ width: '100%' }}   precision={0} />
                     )}
                   </Form.Item>
                 </Col>
@@ -779,7 +779,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                     {getFieldDecorator('accBillDateNum', {
                       initialValue: infoDetail.accBillDateNum,//? infoDetail.accBillDateNum : 7,
                     })(
-                      <InputNumber style={{ width: '100%' }} min={0} precision={0} />
+                      <InputNumber style={{ width: '100%' }}   precision={0} />
                     )}
                   </Form.Item>
                 </Col>
@@ -862,7 +862,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                     {getFieldDecorator('payDeadlineNum', {
                       initialValue: infoDetail.payDeadlineNum,//? infoDetail.payDeadlineNum : 10,
                     })(
-                      <InputNumber style={{ width: '100%' }} min={0} precision={0} />
+                      <InputNumber style={{ width: '100%' }}  precision={0} />
                     )}
                   </Form.Item>
                 </Col>
@@ -945,7 +945,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                     {getFieldDecorator('lateStartDateNum', {
                       initialValue: infoDetail.lateStartDateNum,//? infoDetail.lateStartDateNum : 10,
                     })(
-                      <InputNumber style={{ width: '100%' }} min={0} precision={0} />
+                      <InputNumber style={{ width: '100%' }}   precision={0} />
                     )}
                   </Form.Item>
                 </Col>
