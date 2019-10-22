@@ -1,8 +1,8 @@
 //编辑税率
-import { Card, Col, Form, Input, Row, Modal, InputNumber, Select } from 'antd';
+import { Card, Col, Form, Input, Row, Modal, InputNumber  } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetAllFeeItems, GetOrgTaxTateFormJson, OrganizeEditForm } from './Main.service';
+import { GetOrgTaxTateFormJson, OrganizeEditForm } from './Main.service';
 import './style.less';
 interface EditOrginizeProps {
   visible: boolean;

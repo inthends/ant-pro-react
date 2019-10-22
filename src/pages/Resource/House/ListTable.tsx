@@ -103,7 +103,10 @@ function ListTable(props: ListTableProps) {
       //   );
       // },
       render: (text, record) => {
-        return text + '%';
+        if (text != null)
+          return text + '%';
+        else
+          return '';
       }
     },
     {

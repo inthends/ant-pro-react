@@ -49,3 +49,10 @@ export function GetDetailJson(keyValue): Promise<any> {
     .get(process.env.basePath + `/PStructUser/GetFormJson?keyValue=${keyValue}`)
     .then(getResult as any);
 }
+
+// 验证是否能删除
+export function CheckRelation(keyValue): Promise<any> {
+  return request
+    .get(process.env.basePath + `/PStructUser/CheckRelation?keyValue=${keyValue}`)
+    .then(getResult as any);
+}

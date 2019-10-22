@@ -175,5 +175,170 @@ export interface CwFeeitem {
     /**
      * Desc:  Default:  Nullable:True
      */
-    memo?: string;
+    memo?: string; 
+
+ /**
+     * Desc:  Default:0  Nullable:False
+     */
+    accBillDateNum?: number;
+    /**
+     * Desc:  Default:b'0'  Nullable:False
+     */
+    bankTransfer?: boolean;
+    /**
+     * Desc:  Default:0.0000  Nullable:False
+     */
+    delayRate?: number;
+    /**
+     * Desc:  Default:0  Nullable:False
+     */
+    inMethod?: number; 
+    /**
+     * Desc:  Default:0  Nullable:True
+     */
+    payDeadlineFixed?: number;
+    /**
+     * Desc:  Default:b'0'  Nullable:False
+     */
+    useInOrOut?: boolean;
+    /**
+     * Desc:  Default:0  Nullable:False
+     */
+    accBillDateUnit?: number;
+    /**
+     * Desc:  Default:0  Nullable:False
+     */
+    copePersonType?: number;
+    /**
+     * Desc:  Default:0  Nullable:True
+     */
+    delayType?: number;
+    /**
+     * Desc:  Default:0  Nullable:False
+     */
+    inOutDate?: number; 
+    /**
+     * Desc:  Default:0  Nullable:False
+     */
+    payDeadlineNum?: number;
+    /**
+     * Desc:  Default:b'0'  Nullable:False
+     */
+    useStepPrice?: boolean;
+    /**
+     * Desc:  Default:1  Nullable:False
+     */
+    accPeriodBase?: number;
+    /**
+     * Desc:  Default:1.0000  Nullable:False
+     */
+    copeRate?: number;
+    /**
+     * Desc:  Default:  Nullable:True
+     */
+    feeApportion?: string;
+    /**
+     * Desc:  Default:b'0'  Nullable:False
+     */
+    lateDataNotIn?: boolean; 
+    /**
+     * Desc:  Default:0  Nullable:False
+     */
+    payDeadlineUnit?: number;
+    /**
+     * Desc:  Default:0  Nullable:False
+     */
+    accPeriodBaseNum?: number;
+    copeUserId?: string;
+    /**
+     * Desc:  Default:  Nullable:True
+     */
+    feeFormulaOne?: string;
+    /**
+     * Desc:  Default:1  Nullable:False
+     */
+    lateStartDateBase?: number;
+    /**
+     * Desc:  Default:0  Nullable:False
+     */
+    outFeeMethod?: number;
+    /**
+     * Desc:  Default:b'0'  Nullable:False
+     */
+    payedCreateCope?: boolean;
+    /**
+     * Desc:  Default:0  Nullable:False
+     */
+    accPeriodBaseUnit?: number;
+    /**
+     * Desc:指定对象名称  Default:  Nullable:True
+     */
+    copeUserName?: string;
+    /**
+     * Desc:  Default:  Nullable:True
+     */
+    feeFormulaTwo?: string;
+    /**
+     * Desc:  Default:0  Nullable:True
+     */
+    lateStartDateFixed?: number;
+    /**
+     * Desc:  Default:0  Nullable:False
+     */
+    outMethod?: number;
+    payFeeItemId?: string;
+    /**
+     * Desc:  Default:1  Nullable:False
+     */
+    accRightBase?: number; 
+    /**
+     * Desc:  Default:0  Nullable:False
+     */
+    lateStartDateNum?: number;
+    /**
+     * Desc:  Default:1  Nullable:True
+     */
+    payDateNum?: number;
+    /**
+     * Desc:  Default:b'0'  Nullable:False
+     */
+    splitFee?: boolean;
+    /**
+     * Desc:  Default:1  Nullable:False
+     */
+    accBillDateBase?: number;
+    /**
+     * Desc:  Default:0  Nullable:False
+     */
+    accRightBaseNum?: number;  
+    /**
+     * Desc:  Default:0  Nullable:False
+     */
+    lateStartDateUnit?: number;
+    /**
+     * Desc:  Default:0  Nullable:True
+     */
+    payDateUnit?: number;
+    stepPriceId?: string;
+    /**
+     * Desc:  Default:0  Nullable:True
+     */
+    accBillDateFixed?: number;
+    /**
+     * Desc:  Default:0  Nullable:False
+     */
+    accRightBaseUnit?: number; 
+    /**
+     * Desc:  Default:0  Nullable:False
+     */
+    inFeeMethod?: number; 
+    /**
+     * Desc:  Default:1  Nullable:False
+     */
+    payDeadlineBase?: number;
+    /**
+     * Desc:  Default:0  Nullable:False
+     */
+    useFormulaTwo?: number;
+
 }

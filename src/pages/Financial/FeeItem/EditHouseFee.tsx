@@ -309,7 +309,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
       <Form layout="vertical" hideRequiredMark>
         <Tabs defaultActiveKey="1" >
           <TabPane tab="基本信息" key="1">
-            <Card className={styles.card} >
+            <Card className={styles.card}  >
               <Row gutter={24}>
                 <Col lg={12}>
                   <Form.Item label="费项名称" required>
@@ -639,7 +639,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
             </Card>
           </TabPane>
           <TabPane tab="高级" key="2">
-            <Card title="小数精度"  >
+            <Card title="小数精度"  className={styles.card2}>
               {/* <Row gutter={24}>
                 <Col lg={12}>
                   <Form.Item label="单价保留小数点">
@@ -723,12 +723,12 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                 </Col>
               </Row>
             </Card>
-            <Card title="账单日设置"  >
+            <Card title="账单日设置" className={styles.card2} >
               <Row gutter={8}>
                 <Col span={6}>
                   <Form.Item label="应收期间 距">
                     {getFieldDecorator('accPeriodBase', {
-                      initialValue: infoDetail.accPeriodBase,//? infoDetail.accPeriodBase.toString() : "2",
+                      initialValue: infoDetail.accPeriodBase ? infoDetail.accPeriodBase : 2,
                     })(
                       <Select placeholder="==选择应收期间==">
                         <Option value={1}>同一季度费用,每季度首月为应收期间</Option>
@@ -741,16 +741,16 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                 <Col span={6} style={{ marginTop: '29px' }}>
                   <Form.Item>
                     {getFieldDecorator('accPeriodBaseNum', {
-                      initialValue: infoDetail.accPeriodBaseNum,// ? infoDetail.accPeriodBaseNum : 7,
+                      initialValue: infoDetail.accPeriodBaseNum ? infoDetail.accPeriodBaseNum : 0,
                     })(
-                      <InputNumber style={{ width: '100%' }}   precision={0} />
+                      <InputNumber style={{ width: '100%' }} precision={0} />
                     )}
                   </Form.Item>
                 </Col>
                 <Col span={6} style={{ marginTop: '29px' }}>
                   <Form.Item>
                     {getFieldDecorator('accPeriodBaseUnit', {
-                      initialValue: infoDetail.accPeriodBaseUnit,//? infoDetail.accPeriodBaseUnit.toString() : "1",
+                      initialValue: infoDetail.accPeriodBaseUnit ? infoDetail.accPeriodBaseUnit : 2,
                     })(
                       <Select placeholder="==选择单位==">
                         <Option value={1}>天</Option>
@@ -764,7 +764,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                 <Col span={6}>
                   <Form.Item label="账单日 距">
                     {getFieldDecorator('accBillDateBase', {
-                      initialValue: infoDetail.accBillDateBase,//? infoDetail.accBillDateBase.toString() : "2",
+                      initialValue: infoDetail.accBillDateBase ? infoDetail.accBillDateBase : 2,
                     })(
                       <Select placeholder="==选择应收期间==">
                         <Option value={1}>同一季度费用,每季度首月为应收期间</Option>
@@ -777,16 +777,16 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                 <Col span={6} style={{ marginTop: '29px' }}>
                   <Form.Item>
                     {getFieldDecorator('accBillDateNum', {
-                      initialValue: infoDetail.accBillDateNum,//? infoDetail.accBillDateNum : 7,
+                      initialValue: infoDetail.accBillDateNum ? infoDetail.accBillDateNum : 0,
                     })(
-                      <InputNumber style={{ width: '100%' }}   precision={0} />
+                      <InputNumber style={{ width: '100%' }} precision={0} />
                     )}
                   </Form.Item>
                 </Col>
                 <Col span={6} style={{ marginTop: '29px' }}>
                   <Form.Item>
                     {getFieldDecorator('accBillDateUnit', {
-                      initialValue: infoDetail.accBillDateUnit,// ? infoDetail.accBillDateUnit.toString() : "1",
+                      initialValue: infoDetail.accBillDateUnit ? infoDetail.accBillDateUnit : 1,
                     })(
                       <Select placeholder="==选择单位==" onChange={value => {
                         if (value == 1) {
@@ -847,7 +847,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                 <Col span={6}>
                   <Form.Item label="收款截止日 距">
                     {getFieldDecorator('payDeadlineBase', {
-                      initialValue: infoDetail.payDeadlineBase,//? infoDetail.payDeadlineBase.toString() : "2",
+                      initialValue: infoDetail.payDeadlineBase ? infoDetail.payDeadlineBase : 3,
                     })(
                       <Select placeholder="==选择应收期间==">
                         <Option value={1}>同一季度费用,每季度首月为应收期间</Option>
@@ -860,16 +860,16 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                 <Col span={6} style={{ marginTop: '29px' }}>
                   <Form.Item>
                     {getFieldDecorator('payDeadlineNum', {
-                      initialValue: infoDetail.payDeadlineNum,//? infoDetail.payDeadlineNum : 10,
+                      initialValue: infoDetail.payDeadlineNum ? infoDetail.payDeadlineNum : 0,
                     })(
-                      <InputNumber style={{ width: '100%' }}  precision={0} />
+                      <InputNumber style={{ width: '100%' }} precision={0} />
                     )}
                   </Form.Item>
                 </Col>
                 <Col span={6} style={{ marginTop: '29px' }}>
                   <Form.Item>
                     {getFieldDecorator('payDeadlineUnit', {
-                      initialValue: infoDetail.payDeadlineUnit,//? infoDetail.payDeadlineUnit.toString() : "1",
+                      initialValue: infoDetail.payDeadlineUnit ? infoDetail.payDeadlineUnit : 1,
                     })(
                       <Select placeholder="==选择单位==" onChange={value => {
                         if (value == 1) {
@@ -930,7 +930,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                 <Col span={6}>
                   <Form.Item label="滞纳金起算日 距">
                     {getFieldDecorator('lateStartDateBase', {
-                      initialValue: infoDetail.lateStartDateBase,//? infoDetail.lateStartDateBase.toString() : "2",
+                      initialValue: infoDetail.lateStartDateBase ? infoDetail.lateStartDateBase : 3,
                     })(
                       <Select placeholder="==选择应收期间==">
                         <Option value={1}>同一季度费用,每季度首月为应收期间</Option>
@@ -943,16 +943,16 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                 <Col span={6} style={{ marginTop: '29px' }}>
                   <Form.Item>
                     {getFieldDecorator('lateStartDateNum', {
-                      initialValue: infoDetail.lateStartDateNum,//? infoDetail.lateStartDateNum : 10,
+                      initialValue: infoDetail.lateStartDateNum ? infoDetail.lateStartDateNum : 1,
                     })(
-                      <InputNumber style={{ width: '100%' }}   precision={0} />
+                      <InputNumber style={{ width: '100%' }} precision={0} />
                     )}
                   </Form.Item>
                 </Col>
                 <Col span={6} style={{ marginTop: '29px' }}>
                   <Form.Item>
                     {getFieldDecorator('lateStartDateUnit', {
-                      initialValue: infoDetail.lateStartDateUnit,//? infoDetail.lateStartDateUnit.toString() : "1",
+                      initialValue: infoDetail.lateStartDateUnit ? infoDetail.lateStartDateUnit : 1,
                     })(
                       <Select placeholder="==选择单位==" onChange={value => {
                         if (value == 1) {
@@ -1010,7 +1010,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                 </Col>
               </Row>
             </Card>
-            <Card title="其他">
+            <Card title="其他" className={styles.card2}>
               <Row gutter={8}>
                 <Col span={6} style={{ marginTop: '29px' }}>
                   <Form.Item>

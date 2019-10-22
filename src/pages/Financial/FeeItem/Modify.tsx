@@ -1,5 +1,5 @@
 // 费项编辑页面
-import { TreeEntity } from '@/model/models';
+import { CwFeeitem, TreeEntity } from '@/model/models';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { message, Modal, Checkbox, Tabs, Select, Table, Button, Card, Icon, Divider, Col, DatePicker, Drawer, Form, Input, Row, InputNumber } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
@@ -69,11 +69,39 @@ const Modify = (props: ModifyProps) => {
     });
   };
 
+
+  // const getInfo = id => {
+  //   if (id) {
+  //     return GetFormJson(id).then(res => {
+  //       // const { feeItem, feeItemDetail } = res || ({} as any);
+  //       // let info = {
+  //       //   ...feeItem,
+  //       //   ...feeItemDetail,
+  //       // };
+  //       //info.id = feeItem && feeItem.feeItemId;
+  //       return res;
+  //     });
+  //   } else {
+      
+  //     return Promise.resolve({
+  //       parentId: 0,
+  //       type: 1,
+  //     });
+     
+  //   }
+  // };
+
+
   // 打开抽屉时初始化
   useEffect(() => {
     if (modifyVisible) {
       if (id) {
-        getInfo(id).then((tempInfo: any) => {
+        GetFormJson(id).then((tempInfo: CwFeeitem) => {
+
+
+debugger
+
+
           // if (tempInfo.feeKind) {
           //   // var kind = tempInfo.feeKind == "收款费项" ? "ReceivablesItem" : "PaymentItem";
           //   changeFeeType(tempInfo.feeKind);
@@ -86,6 +114,7 @@ const Modify = (props: ModifyProps) => {
           tempInfo.lateStartDateUnit == 2 ? setLateFixedDisabled(false) : setLateFixedDisabled(true);
           form.resetFields();
         });
+
         //if (id !== undefined) {
         initHouseLoadData('');
         initOrgLoadData('');
@@ -133,24 +162,7 @@ const Modify = (props: ModifyProps) => {
       }
     });
   };
-  const getInfo = id => {
-    if (id) {
-      return GetFormJson(id).then(res => {
-        // const { feeItem, feeItemDetail } = res || ({} as any);
-        // let info = {
-        //   ...feeItem,
-        //   ...feeItemDetail,
-        // };
-        //info.id = feeItem && feeItem.feeItemId;
-        return res;
-      });
-    } else {
-      return Promise.resolve({
-        parentId: 0,
-        type: 1,
-      });
-    }
-  };
+
 
   const closeAddFormula = () => {
     setAddFormulaVisible(false);
@@ -1015,17 +1027,17 @@ const Modify = (props: ModifyProps) => {
                 <Col span={6} style={{ marginTop: '29px' }}>
                   <Form.Item>
                     {getFieldDecorator('accPeriodBaseNum', {
-                      initialValue: infoDetail.accPeriodBaseNum ? infoDetail.accPeriodBaseNum : 7,
+                      initialValue: infoDetail.accPeriodBaseNum ? infoDetail.accPeriodBaseNum : 0,
                       rules: [{ required: true, message: '请输入数量' }],
                     })(
-                      <InputNumber style={{ width: '100%' }}   precision={0} />
+                      <InputNumber style={{ width: '100%' }} precision={0} />
                     )}
                   </Form.Item>
                 </Col>
                 <Col span={6} style={{ marginTop: '29px' }}>
                   <Form.Item>
                     {getFieldDecorator('accPeriodBaseUnit', {
-                      initialValue: infoDetail.accPeriodBaseUnit ? infoDetail.accPeriodBaseUnit : 1,
+                      initialValue: infoDetail.accPeriodBaseUnit ? infoDetail.accPeriodBaseUnit : 2,
                       rules: [{ required: true, message: '请选择单位' }],
                     })(
                       <Select placeholder="==选择单位==">
@@ -1054,10 +1066,10 @@ const Modify = (props: ModifyProps) => {
                 <Col span={6} style={{ marginTop: '29px' }}>
                   <Form.Item>
                     {getFieldDecorator('accBillDateNum', {
-                      initialValue: infoDetail.accBillDateNum ? infoDetail.accBillDateNum : 7,
+                      initialValue: infoDetail.accBillDateNum ? infoDetail.accBillDateNum : 0,
                       rules: [{ required: true, message: '请输入数量' }],
                     })(
-                      <InputNumber style={{ width: '100%' }}  precision={0} />
+                      <InputNumber style={{ width: '100%' }} precision={0} />
                     )}
                   </Form.Item>
                 </Col>
@@ -1126,7 +1138,7 @@ const Modify = (props: ModifyProps) => {
                 <Col span={6}>
                   <Form.Item label="收款截止日 距">
                     {getFieldDecorator('payDeadlineBase', {
-                      initialValue: infoDetail.payDeadlineBase ? infoDetail.payDeadlineBase.toString() : 2,
+                      initialValue: infoDetail.payDeadlineBase ? infoDetail.payDeadlineBase: 3,
                       rules: [{ required: true, message: '请选择应收期间' }],
                     })(
                       <Select placeholder="==选择应收期间==">
@@ -1140,17 +1152,17 @@ const Modify = (props: ModifyProps) => {
                 <Col span={6} style={{ marginTop: '29px' }}>
                   <Form.Item>
                     {getFieldDecorator('payDeadlineNum', {
-                      initialValue: infoDetail.payDeadlineNum ? infoDetail.payDeadlineNum : 10,
+                      initialValue: infoDetail.payDeadlineNum ? infoDetail.payDeadlineNum : 0,
                       rules: [{ required: true, message: '请输入数量' }],
                     })(
-                      <InputNumber style={{ width: '100%' }}   precision={0} />
+                      <InputNumber style={{ width: '100%' }} precision={0} />
                     )}
                   </Form.Item>
                 </Col>
                 <Col span={6} style={{ marginTop: '29px' }}>
                   <Form.Item>
                     {getFieldDecorator('payDeadlineUnit', {
-                      initialValue: infoDetail.payDeadlineUnit ? infoDetail.payDeadlineUnit.toString() : 1,
+                      initialValue: infoDetail.payDeadlineUnit ? infoDetail.payDeadlineUnit : 1,
                       rules: [{ required: true, message: '请选择单位' }],
                     })(
                       <Select placeholder="==选择单位==" onChange={value => {
@@ -1212,7 +1224,7 @@ const Modify = (props: ModifyProps) => {
                 <Col span={6}>
                   <Form.Item label="滞纳金起算日 距">
                     {getFieldDecorator('lateStartDateBase', {
-                      initialValue: infoDetail.lateStartDateBase ? infoDetail.lateStartDateBase.toString() : 2,
+                      initialValue: infoDetail.lateStartDateBase ? infoDetail.lateStartDateBase  : 3,
                       rules: [{ required: true, message: '请选择应收期间' }],
                     })(
                       <Select placeholder="==选择应收期间==">
@@ -1226,17 +1238,17 @@ const Modify = (props: ModifyProps) => {
                 <Col span={6} style={{ marginTop: '29px' }}>
                   <Form.Item>
                     {getFieldDecorator('lateStartDateNum', {
-                      initialValue: infoDetail.lateStartDateNum ? infoDetail.lateStartDateNum : 10,
+                      initialValue: infoDetail.lateStartDateNum ? infoDetail.lateStartDateNum : 1,
                       rules: [{ required: true, message: '请输入数量' }],
                     })(
-                      <InputNumber style={{ width: '100%' }}   precision={0} />
+                      <InputNumber style={{ width: '100%' }} precision={0} />
                     )}
                   </Form.Item>
                 </Col>
                 <Col span={6} style={{ marginTop: '29px' }}>
                   <Form.Item>
                     {getFieldDecorator('lateStartDateUnit', {
-                      initialValue: infoDetail.lateStartDateUnit ? infoDetail.lateStartDateUnit.toString() : 1,
+                      initialValue: infoDetail.lateStartDateUnit ? infoDetail.lateStartDateUnit  : 1,
                       rules: [{ required: true, message: '请选择单位' }],
                     })(
                       <Select placeholder="==选择单位==" onChange={value => {

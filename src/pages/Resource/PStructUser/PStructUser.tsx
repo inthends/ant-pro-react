@@ -10,7 +10,7 @@ const { Content } = Layout;
 const { Search } = Input;
 
 function PublicArea() {
-   
+
   const [search, setSearch] = useState<string>('');
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -45,7 +45,7 @@ function PublicArea() {
       pageIndex,
       pageSize,
       total,
-      queryJson: { keyword: search },
+      queryJson: { keyword: searchText },
     };
 
     if (sorter) {
@@ -97,7 +97,7 @@ function PublicArea() {
             className="search-input"
             placeholder="请输入要查询的关键词"
             onSearch={value =>
-              loadData({ value })
+              loadData(value)
             }
             style={{ width: 200 }}
           />

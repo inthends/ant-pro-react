@@ -2,7 +2,7 @@ import Page from '@/components/Common/Page';
 import { Divider, message, Modal, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
-import { RemoveForm, GetDetailJson } from './PStructUser.service';
+import { CheckRelation, RemoveForm, GetDetailJson } from './PStructUser.service';
 
 interface ListTableProps {
   loading: boolean;
@@ -21,14 +21,23 @@ function ListTable(props: ListTableProps) {
   const doDelete = record => {
     Modal.confirm({
       title: '请确认',
-      content: `您是否要删除 ${record.name} 吗`,
+      content: `您是否要删除 ${record.name} 吗？`,
       onOk: () => {
-        RemoveForm(record.id)
-          .then(() => {
-            message.success('删除成功');
-            reload();
-          })
-          .catch(e => {});
+        //判断是否关联房间
+        CheckRelation(record.key).then((res) => {
+          if (res) {
+            message.error('已经关联房间，不允许删除！');
+            return;
+          }
+
+          RemoveForm(record.id)
+            .then(() => {
+              message.success('删除成功！');
+              reload();
+            })
+            .catch(e => { });
+
+        });
       },
     });
   };
@@ -43,7 +52,7 @@ function ListTable(props: ListTableProps) {
       title: '客户类别',
       dataIndex: 'flag',
       key: 'flag',
-      width: 100,
+      width: 80,
       render: (text, record) => {
         switch (text) {
           case '1':
@@ -51,7 +60,7 @@ function ListTable(props: ListTableProps) {
           case '2':
             return '单位';
           default:
-            return null;
+            return '个人';
         }
       },
     },
@@ -59,7 +68,7 @@ function ListTable(props: ListTableProps) {
       title: '客户编号',
       dataIndex: 'code',
       key: 'code',
-      width: 160, 
+      width: 160,
       // sorter: true,
     },
     {
@@ -91,7 +100,7 @@ function ListTable(props: ListTableProps) {
     //   // sorter: true,
     // },
 
-   
+
     {
       title: '证件类别',
       dataIndex: 'certificatetype',
@@ -124,7 +133,7 @@ function ListTable(props: ListTableProps) {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
-      align:'center',
+      align: 'center',
       width: 95,
       fixed: 'right',
       render: (text, record) => {
@@ -141,10 +150,10 @@ function ListTable(props: ListTableProps) {
           //   删除
           // </Button>, 
           <span>
-          <a onClick={() => doModify(record.id)} key="modify">修改</a>
-          <Divider type="vertical" />
-          <a onClick={() => doDelete(record)} key="delete">删除</a>
-        </span>
+            <a onClick={() => doModify(record.id)} key="modify">修改</a>
+            <Divider type="vertical" />
+            <a onClick={() => doDelete(record)} key="delete">删除</a>
+          </span>
 
         ];
       },

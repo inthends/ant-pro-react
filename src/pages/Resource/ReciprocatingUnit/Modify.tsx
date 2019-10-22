@@ -1,4 +1,4 @@
- 
+
 import {
   Button,
   Card,
@@ -8,7 +8,7 @@ import {
   Input,
   message,
   Row,
-  Select, 
+  Select,
   TreeSelect
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
@@ -30,7 +30,7 @@ interface ModifyProps {
   reload(): void;
 }
 const Modify = (props: ModifyProps) => {
-  const { treeData, modifyVisible, data, closeDrawer, form,  reload } = props;
+  const { treeData, modifyVisible, data, closeDrawer, form, reload } = props;
   const { getFieldDecorator } = form;
   const title = data === undefined ? '添加往来单位' : '修改往来单位';
   const [infoDetail, setInfoDetail] = useState<any>({});
@@ -38,7 +38,8 @@ const Modify = (props: ModifyProps) => {
   const [venderTypes, setVenderTypes] = useState<any[]>([]); // 所属类别
   const [banks, setBanks] = useState<any[]>([]); // 开户银行
   const [states, setStates] = useState<any[]>([]); // 状态
-  const [creditLevels, setCreditLevels] = useState<any[]>([]); // 信誉等级
+  const [creditLevels, setCreditLevels] = useState<any[]>([]); // 信誉等级 
+  const [natures, setNatures] = useState<any[]>([]); 
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -58,6 +59,12 @@ const Modify = (props: ModifyProps) => {
     getCommonItems('TypeState').then(res => {
       setStates(res || []);
     });
+
+    // 单位性质
+    getCommonItems('Bank').then(res => {
+      setNatures(res || []);
+    });
+
   }, []);
 
   // 打开抽屉时初始化
@@ -115,12 +122,12 @@ const Modify = (props: ModifyProps) => {
                     initialValue: infoDetail.organizeId,
                     rules: [{ required: true, message: '请选择隶属机构' }],
                   })(
-                    <TreeSelect 
-                    placeholder="请选择隶属机构" 
-                    dropdownStyle={{ maxHeight: 350 }}
-                    treeData={treeData}
-                    allowClear 
-                    treeDefaultExpandAll>
+                    <TreeSelect
+                      placeholder="请选择隶属机构"
+                      dropdownStyle={{ maxHeight: 350 }}
+                      treeData={treeData}
+                      allowClear
+                      treeDefaultExpandAll>
                       {/* {renderTree(treeData)} */}
                     </TreeSelect>,
                   )}
@@ -169,15 +176,29 @@ const Modify = (props: ModifyProps) => {
               </Col>
             </Row>
             <Row gutter={24}>
-              
+
               <Col lg={8}>
                 <Form.Item label="单位性质">
+                  {/* {getFieldDecorator('nature', {
+                    initialValue: infoDetail.nature,
+                  })(<Input placeholder="请输入单位性质" />)} */}
+
                   {getFieldDecorator('nature', {
                     initialValue: infoDetail.nature,
-                  })(<Input placeholder="请输入单位性质" />)}
+                  })(
+                    <Select placeholder="请选择开户银行">
+                      {natures.map(item => (
+                        <Option value={item.value} key={item.key}>
+                          {item.title}
+                        </Option>
+                      ))}
+                    </Select>,
+                  )}
+
+
                 </Form.Item>
               </Col>
-           
+
               <Col lg={8}>
                 <Form.Item label="经营范围">
                   {getFieldDecorator('businessScope', {
@@ -217,7 +238,7 @@ const Modify = (props: ModifyProps) => {
               </Col>
             </Row>
             <Row gutter={24}>
-            
+
               <Col lg={8}>
                 <Form.Item label="邮政编码">
                   {getFieldDecorator('postalcode', {
@@ -225,7 +246,7 @@ const Modify = (props: ModifyProps) => {
                   })(<Input placeholder="请输入邮政编码" />)}
                 </Form.Item>
               </Col>
-           
+
               <Col lg={8}>
                 <Form.Item label="税务地址">
                   {getFieldDecorator('taxAddress', {
@@ -273,14 +294,14 @@ const Modify = (props: ModifyProps) => {
               </Col>
             </Row>
             <Row gutter={24}>
-             
+
               <Col lg={8}>
                 <Form.Item label="银行账号">
                   {getFieldDecorator('bankCcount', {
                     initialValue: infoDetail.bankCcount,
                   })(<Input placeholder="请输入银行账号" />)}
                 </Form.Item>
-              </Col> 
+              </Col>
               <Col lg={8}>
                 <Form.Item label="信誉等级">
                   {getFieldDecorator('creditLevel', {
