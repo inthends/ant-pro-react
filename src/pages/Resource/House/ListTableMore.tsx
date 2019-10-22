@@ -74,6 +74,7 @@ function ListTableMore(props: ListTableMoreProps) {
       title: '全称',
       dataIndex: 'allName',
       key: 'allName',
+      align:'center',
       sorter: true,
     },
     {

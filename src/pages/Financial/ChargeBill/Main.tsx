@@ -227,7 +227,7 @@ function Main() {
   const closeVertify = () => {
     setVertifyVisible(false);
   }
-  const [splitId,setSplitId]=useState<string>('');
+  const [splitId, setSplitId] = useState<string>('');
   const showSplit = (id) => {
     console.log(id);
     setSplitId(id);
@@ -238,7 +238,7 @@ function Main() {
     setSplitId('');
     setSplitVisible(false);
   }
-  const [transId,setTransId]=useState<string>('');
+  const [transId, setTransId] = useState<string>('');
   const showTrans = (id) => {
     setTransId(id);
     setTransVisible(true);
@@ -314,8 +314,9 @@ function Main() {
           // SetOrganize(info);
           if (type == 5) {
             setAddButtonDisable(false);
-            SetCustomerName(info.node.props.tenantname);
-            setShowname(info.node.props.allname);
+            var cusname = info.node.props.tenantname;
+            SetCustomerName(cusname);
+            setShowname(info.node.props.allname + ' ' + cusname);
             //清空之前的收款信息
 
             selectTree(id, search);
@@ -408,19 +409,19 @@ function Main() {
                   {'已作废'}
                 </Option>
               </Select>
-              <DatePicker 
+              <DatePicker
                 placeholder='请选择收款日期'
-              onChange={(date, dateStr) => {
-                var params = Object.assign({}, chargedSearchParams, { startDate: dateStr });
-                setChargedSearchParams(params);
-              }} style={{ marginRight: '5px' }} />
+                onChange={(date, dateStr) => {
+                  var params = Object.assign({}, chargedSearchParams, { startDate: dateStr });
+                  setChargedSearchParams(params);
+                }} style={{ marginRight: '5px' }} />
               至
-              <DatePicker 
-               placeholder='请选择收款日期'
-              onChange={(date, dateStr) => {
-                var params = Object.assign({}, chargedSearchParams, { endDate: dateStr });
-                setChargedSearchParams(params);
-              }} style={{ marginLeft: '5px', marginRight: '5px'  }} />
+              <DatePicker
+                placeholder='请选择收款日期'
+                onChange={(date, dateStr) => {
+                  var params = Object.assign({}, chargedSearchParams, { endDate: dateStr });
+                  setChargedSearchParams(params);
+                }} style={{ marginLeft: '5px', marginRight: '5px' }} />
               <Search
                 className="search-input"
                 placeholder="请输入收款单号"

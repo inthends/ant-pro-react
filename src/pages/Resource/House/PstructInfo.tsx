@@ -81,7 +81,7 @@ const PstructInfo = (props: PstructInfoProps) => {
   const save = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        //const newData = data ? { ...data.vendor, ...values } : values;
+        //const newData = data ? { ...data.vendor, ...values } : values; 
         const newData = data ? { ...data, ...values } : values;
         doSave(newData);
       }
@@ -91,7 +91,7 @@ const PstructInfo = (props: PstructInfoProps) => {
   const doSave = dataDetail => {
     dataDetail.keyValue = dataDetail.id;
     dataDetail.organizeId = organizeId;
-    dataDetail.parentId = parentId;
+    dataDetail.parentId = dataDetail.parentId ? dataDetail.parentId : parentId;
     //设置房产类型
     if (type == 1)
       dataDetail.type = 2;
@@ -139,7 +139,7 @@ const PstructInfo = (props: PstructInfoProps) => {
   const userList = userSource.map
     (item => <Option key={item.id} value={item.name}>{item.name}</Option>);
 
-  const onOwnerSelect = (value, option) => { 
+  const onOwnerSelect = (value, option) => {
     form.setFieldsValue({ ownerId: option.key });
   };
 

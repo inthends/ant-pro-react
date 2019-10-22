@@ -45,7 +45,8 @@ const EditOrginize = (props: EditOrginizeProps) => {
             let newData = {
               keyValue: infoDetail.id,
               Id: infoDetail.id,
-              InvoiceId: values.invoiceId,
+              InvoiceName: values.invoiceName,
+              InvoiceCode: values.invoiceCode,
               PStructId: infoDetail.pStructId,
               TaxRate: values.taxRate,
               AllCode: infoDetail.allCode,
@@ -82,8 +83,8 @@ const EditOrginize = (props: EditOrginizeProps) => {
               </Form.Item> */}
 
               <Form.Item label="税控项目" required>
-                {getFieldDecorator('invoiceId', {
-                  initialValue: infoDetail.invoiceId,
+                {getFieldDecorator('invoiceName', {
+                  initialValue: infoDetail.invoiceName,
                   rules: [{ required: true, message: '请输入税控项目' }],
                 })(
                   <Input />

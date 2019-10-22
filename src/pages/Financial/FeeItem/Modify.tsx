@@ -309,15 +309,15 @@ const Modify = (props: ModifyProps) => {
     },
     {
       title: '开票项目',
-      dataIndex: 'feeName',
-      key: 'feeName',
+      dataIndex: 'invoiceName',
+      key: 'invoiceName',
       width: 120,
       sorter: true,
     },
     {
       title: '开票项目编号',
-      dataIndex: 'feeCode',
-      key: 'feeCode',
+      dataIndex: 'invoiceCode',
+      key: 'invoiceCode',
       width: 100,
       sorter: true,
     },
@@ -1358,7 +1358,7 @@ const Modify = (props: ModifyProps) => {
                 <Col span={6}>
                   <Form.Item label="应付期间距收款日">
                     {getFieldDecorator('payDateNum', {
-                      initialValue: infoDetail.payDateNum,
+                      initialValue: infoDetail.payDateNum ? infoDetail.payDateNum : 0,
                     })(
                       <InputNumber style={{ width: '100%' }} />
                     )}
@@ -1367,7 +1367,7 @@ const Modify = (props: ModifyProps) => {
                 <Col span={6} style={{ marginTop: '29px' }}>
                   <Form.Item>
                     {getFieldDecorator('payDateUnit', {
-                      initialValue: infoDetail.payDateUnit,
+                      initialValue: infoDetail.payDateUnit ? infoDetail.payDateUnit : 1,
                     })(
                       <Select placeholder="==请选择单位==">
                         <Option value={1}>天</Option>
