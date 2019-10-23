@@ -88,3 +88,8 @@ export function GetOrgs(): Promise<any[]> {
 export function GetOrgsWithNoGLC(): Promise<any[]> {
   return request.get(process.env.basePath + `/Common/GetOrgsWithNoGLC`).then(getResult as any);
 }
+
+// 查询机构管理处和小区
+export function GetOrgEsates(): Promise<any[]> {
+  return request.get(process.env.basePath + `/Common/GetOrgEsates`).then(getResult as any);
+}

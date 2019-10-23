@@ -96,11 +96,7 @@ const Modify = (props: ModifyProps) => {
   useEffect(() => {
     if (modifyVisible) {
       if (id) {
-        GetFormJson(id).then((tempInfo: CwFeeitem) => {
-
-
-debugger
-
+        GetFormJson(id).then((tempInfo: CwFeeitem) => { 
 
           // if (tempInfo.feeKind) {
           //   // var kind = tempInfo.feeKind == "收款费项" ? "ReceivablesItem" : "PaymentItem";
@@ -112,7 +108,7 @@ debugger
           tempInfo.accBillDateUnit == 2 ? setAccFixedDisabled(false) : setAccFixedDisabled(true);
           tempInfo.payDeadlineUnit == 2 ? setPayFixedDisabled(false) : setPayFixedDisabled(true);
           tempInfo.lateStartDateUnit == 2 ? setLateFixedDisabled(false) : setLateFixedDisabled(true);
-          form.resetFields();
+          form.resetFields();  
         });
 
         //if (id !== undefined) {

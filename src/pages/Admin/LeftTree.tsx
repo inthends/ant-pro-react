@@ -59,11 +59,12 @@ function LeftTree(props: LeftTreeProps) {
     //   const item = treeData.filter(treeItem => treeItem.key === selectedKeys[0])[0];
     //   selectTree(selectedKeys[0], item);
     // }  
-
+ 
     if (selectedKeys.length === 1) {
       selectTree(selectedKeys[0], info.node.props.type);
-    }
-
+    }else{
+      selectTree('', '');
+    } 
   };
 
   // const renderTree = (tree: any[], parentId: string) => {
@@ -139,7 +140,8 @@ function LeftTree(props: LeftTreeProps) {
                 treeData={treeData}
                 expandedKeys={expandedKeys}
                 onExpand={clickExpend}
-                onSelect={onSelect}
+                onSelect={onSelect} 
+                
               >
 
               </Tree>

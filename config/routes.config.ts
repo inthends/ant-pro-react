@@ -178,8 +178,13 @@ export default [
         routes: [
           {
             path: '/admin',
-            redirect: '/admin/warehouse',
+            redirect: '/admin/news',
           },
+          {
+            name: 'news',
+            path: '/admin/news',
+            component: './Admin/News/Main',
+          }, 
           {
             name: 'warehouse',
             path: '/admin/warehouse',

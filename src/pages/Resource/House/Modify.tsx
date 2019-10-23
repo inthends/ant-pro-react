@@ -99,7 +99,8 @@ const Modify = (props: ModifyProps) => {
   };
 
   //重新设置state
-  const handleChange = ({ fileList }) => {
+  const handleChange = ({ fileList }) => { 
+
     setFileList([...fileList]);
     let url = '';
     if (fileList.length > 0)

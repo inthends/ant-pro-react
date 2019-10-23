@@ -86,6 +86,8 @@ const Modify = (props: ModifyProps) => {
             tempInfo.houseList.forEach(item => {
               rooms.push(item.roomId);
             });
+
+            setRooms(rooms);
           } 
 
           //获取条款

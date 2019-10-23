@@ -48,6 +48,7 @@ export default {
   'menu.estate.complaint': '投诉管理', 
  
   'menu.admin': '行政管理',
+  'menu.admin.news': '社区公告', 
   'menu.admin.warehouse': '仓库管理', 
 
   'menu.contract': '资产运营',

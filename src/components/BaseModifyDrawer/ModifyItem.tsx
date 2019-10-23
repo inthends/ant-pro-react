@@ -10,6 +10,7 @@ interface ModifyItemProps {
   field: string;
   label: React.ReactNode;
   initData?: any;
+  dropdownStyle?: any;
   disabled?: boolean;
   readOnly?: boolean;
   visibilityToggle?: boolean;
@@ -18,7 +19,9 @@ interface ModifyItemProps {
   rules?: ValidationRule[];
   items?: SelectItem[];
   treeData?: TreeNode[];
-  onChange?(value): void;
+  multiple?: boolean;
+  onChange?(value?, label?, extra?): void;
+  checked?: boolean;
   onSearch?(value): void;
   onSelect?(value, option): void; //autoComplete
 }
@@ -29,17 +32,19 @@ const ModifyItem = (props: ModifyItemProps) => {
     label,
     initData,
     wholeLine,
+    multiple,
     form,
-    rules, 
+    rules,
     items,
-    treeData, 
+    treeData,
     disabled,
     readOnly,
     visibilityToggle,
-    
     onSearch,
     onChange,
-    onSelect
+    onSelect,
+    checked,
+    dropdownStyle
   } = props;
   const { getFieldDecorator } = form;
   const inner = { disabled };
@@ -47,7 +52,12 @@ const ModifyItem = (props: ModifyItemProps) => {
   const getFormItem = () => {
     switch (type) {
       case 'tree':
-        return <TreeSelect {...inner} style={{ width: '100%' }} treeData={treeData || []} onChange={onChange} />;
+        return <TreeSelect {...inner} style={{ width: '100%' }}
+          treeData={treeData || []}
+          onChange={onChange}
+          dropdownStyle={dropdownStyle}
+          multiple={multiple}
+        />;
       case 'date':
         return <DatePicker {...inner} style={{ width: '100%' }} placeholder={`请选择${label as string}`} />;
       case 'autoComplete':
@@ -110,6 +120,7 @@ const ModifyItem = (props: ModifyItemProps) => {
           <Checkbox
             {...inner}
             onChange={onChange}
+            checked={checked}
           ></Checkbox>
         );
 
@@ -156,7 +167,7 @@ const ModifyItem = (props: ModifyItemProps) => {
   );
 };
 export default ModifyItem;
-interface SelectItem { 
+interface SelectItem {
   label;
   value;
   key?;

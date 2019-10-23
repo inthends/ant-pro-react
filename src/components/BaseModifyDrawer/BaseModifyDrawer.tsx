@@ -56,6 +56,7 @@ const BaseModifyProvider = (props: BaseModifyProps) => {
             padding: '10px 16px',
             background: '#fff',
             textAlign: 'right',
+            zIndex:999,
           }}
         >
           <Button onClick={closeDrawer} style={{ marginRight: 8 }}>
