@@ -60,19 +60,17 @@ function ListTable(props: ListTableProps) {
       }
     },
     {
-      title: "手机",
+      title: "电话号码",
       dataIndex: "phoneNum",
       key: "phoneNum",
       width: 100
     },
-    {
-      title: "电话",
-      dataIndex: "telPhoneNum",
-      key: "telPhoneNum",
-      width: 100
-    },
-
-
+    // {
+    //   title: "电话",
+    //   dataIndex: "telPhoneNum",
+    //   key: "telPhoneNum",
+    //   width: 100
+    // },  
     {
       title: "职位",
       dataIndex: "dutyName",

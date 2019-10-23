@@ -126,7 +126,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
       type: 'settings/changeSetting',
       payload,
     });
-  console.log(getLocale());
+  //console.log(getLocale());
   return (
     <>
       <LocaleProvider

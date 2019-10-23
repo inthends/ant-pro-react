@@ -84,7 +84,7 @@ const Add = (props: AddProps) => {
         TermJson.push(data);
 
         //动态添加的租期
-        values.LeaseTerms.map(function (k, index, arr) {
+        values.LeaseTerms.map(function (k, index, arr) {  
           let data: LeaseContractChargeFeeEntity = {};
           data.feeItemId = values.feeItemId[k];
           data.startDate = values.startDate[k];
@@ -192,8 +192,9 @@ const Add = (props: AddProps) => {
         ContractCharge.payDate = values.contractStartDate.format('YYYY-MM-DD');
 
         let Contract: LeaseContractDTO = {};
-        Contract.no = values.no;
+        Contract.no = values.no; 
         Contract.follower = values.follower;
+        Contract.followerId = values.followerId;
         Contract.leaseSize = values.leaseSize;
         Contract.contractStartDate = values.contractStartDate.format('YYYY-MM-DD');
         Contract.billingDate = values.billingDate.format('YYYY-MM-DD');
@@ -201,12 +202,16 @@ const Add = (props: AddProps) => {
         Contract.calcPrecision = values.calcPrecision;
         Contract.calcPrecisionMode = values.calcPrecisionMode;
         Contract.customer = values.customer;
+        Contract.customerId = values.customerId;
         Contract.industry = values.industry;
+        Contract.industryId = values.industryId;
         Contract.legalPerson = values.legalPerson;
         Contract.signer = values.signer;
+        Contract.signerId = values.signerId; 
         Contract.customerContact = values.customerContact;
+        Contract.customerContactId = values.customerContactId;
         Contract.lateFee = values.lateFee;
-        Contract.lateFeeUnit = values.lateFeeUnit;
+        Contract.lateFeeUnit = values.lateFeeUnit; 
         Contract.maxLateFee = values.maxLateFee;
         Contract.maxLateFeeUnit = values.maxLateFeeUnit;
 

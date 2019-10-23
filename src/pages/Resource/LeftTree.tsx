@@ -62,6 +62,9 @@ function LeftTree(props: LeftTreeProps) {
 
     if (selectedKeys.length === 1) {
       selectTree(selectedKeys[0], info.node.props.type);
+    } else {
+      //恢复查询
+      selectTree('', '');
     }
 
   };

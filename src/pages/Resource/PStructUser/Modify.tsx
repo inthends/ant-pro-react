@@ -240,13 +240,13 @@ const Modify = (props: ModifyProps) => {
             )} */}
 
             <Row gutter={24}>
-              <Col lg={12}>
+              {/* <Col lg={12}>
                 <Form.Item label="联系电话">
                   {getFieldDecorator('telPhoneNum', {
                     initialValue: infoDetail.telPhoneNum,
                   })(<Input placeholder="请输入联系电话" />)}
                 </Form.Item>
-              </Col>
+              </Col> */}
               <Col lg={12}>
                 <Form.Item label="手机号码">
                   {getFieldDecorator('phoneNum', {

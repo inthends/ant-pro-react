@@ -1,5 +1,5 @@
 import Page from '@/components/Common/Page';
-import { Divider, message, Table, Modal } from 'antd';
+import { Tag, Divider, message, Table, Modal } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import { RemoveForm } from './Main.service';
@@ -35,8 +35,8 @@ function ListTable(props: ListTableProps) {
   const columns = [
     {
       title: '房号',
-      dataIndex: 'no',
-      key: 'no',
+      dataIndex: 'id',
+      key: 'id',
       width: 200,
       render: (text, row, index) => {
         var house = "";
@@ -87,8 +87,8 @@ function ListTable(props: ListTableProps) {
 
     {
       title: '总计租金',
-      dataIndex: 'leasesize',
-      key: 'leasesize',
+      dataIndex: 'leaseAmount',
+      key: 'leaseAmount',
       width: 100,
     },
 
@@ -100,7 +100,6 @@ function ListTable(props: ListTableProps) {
       render: val => moment(val).format('YYYY-MM-DD')
     },
 
-
     {
       title: '租赁数(㎡)',
       dataIndex: 'leaseSize',
@@ -109,22 +108,28 @@ function ListTable(props: ListTableProps) {
     },
 
     {
-      title: '租赁数押金',
-      dataIndex: 'leaseSize',
-      key: 'leaseSize',
+      title: '保证金',
+      dataIndex: 'leaseDeposit',
+      key: 'leaseDeposit',
       width: 100,
     },
 
     {
       title: '租赁条款单价',
-      dataIndex: 'leaseSize',
-      key: 'leaseSize',
+      dataIndex: 'leasePrice',
+      key: 'leasePrice',
       width: 100,
+      render: (text, record) => {
+        return text + ' ' + record.leasePriceUnit;
+      }
     },
-
     {
       title: '是否续租',
       width: 100,
+      dataIndex: 'isRenewal',
+      key: 'isRenewal',
+      render: val => val == 1 ? <Tag color="#19d54e">是</Tag> : <Tag color="#e4aa5b">否</Tag>
+
     },
 
     {
@@ -177,9 +182,9 @@ function ListTable(props: ListTableProps) {
           // </Button>,
           <span>
             <a onClick={() => modify(record.id, record.chargeId)} key="modify">修改</a>
-            <Divider type="vertical" /> 
+            <Divider type="vertical" key='spilt1' />
             <a onClick={() => detail(record.id, record.chargeId)} key="detail">查看</a>
-            <Divider type="vertical" />
+            <Divider type="vertical" key='spilt2' />
             <a onClick={() => doDelete(record)} key="delete">删除</a>
           </span>
         ];
@@ -189,6 +194,7 @@ function ListTable(props: ListTableProps) {
   return (
     <Page>
       <Table
+        key='listTable'
         style={{ border: 'none' }}
         bordered={false}
         size="middle"

@@ -35,10 +35,10 @@ export interface GmCustomerinfo {
      * Desc:  Default:  Nullable:True
      */
     nature?: string;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    telPhoneNum?: string;
+    // /**
+    //  * Desc:  Default:  Nullable:True
+    //  */
+    // telPhoneNum?: string;
     /**
      * Desc:  Default:  Nullable:True
      */
