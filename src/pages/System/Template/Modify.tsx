@@ -182,7 +182,8 @@ const Modify = (props: ModifyProps) => {
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
-              wholeLine={true}
+              lg={24}
+              // wholeLine={true}
               type="textarea"
               field="sQL"
               label="SQL(存储过程和SQL语句必须声明单据BillID参数)"

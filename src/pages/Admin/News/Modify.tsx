@@ -24,7 +24,7 @@ interface ModifyProps {
 
 const Modify = (props: ModifyProps) => {
   const { data, form, visible } = props;
-  let initData = data ? data : { isPublish: false, isDistinguish: false };
+  let initData = data ? data : { isPublish: false, isDistinguish: false, participants: 0, type: '资讯' };
   const { getFieldDecorator } = form;
   const baseFormProps = { form, initData };
   const [orgs, setOrgs] = useState<TreeNode[]>();
@@ -163,7 +163,8 @@ const Modify = (props: ModifyProps) => {
     let modifyData = { ...initData, ...dataDetail, keyValue: initData.id };
     modifyData.description = dataDetail.description.toHTML();//toRAW();  
     modifyData.isDistinguish = modifyData.isDistinguish == 0 ? false : true;
-    modifyData.isPublish = modifyData.isPublish == 0 ? false : true;
+    modifyData.isPublish = modifyData.isPublish == 0 ? false : true; 
+    modifyData.deadline = modifyData.deadline ? modifyData.deadline.format('YYYY-MM-DD') : null; 
     return SaveForm(modifyData);
   };
 
@@ -188,25 +189,70 @@ const Modify = (props: ModifyProps) => {
               field="title"
               label="标题"
               rules={[{ required: true, message: "请输入标题" }]}
-              wholeLine={true}
+              // wholeLine={true}
+              lg={24}
             ></ModifyItem>
           </Row>
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
+              field="type"
+              type='select'
+              label="类型"
+              items={[
+                { label: '通知', value: '通知' },
+                { label: '公告', value: '公告' },
+                { label: '资讯', value: '资讯' },
+                { label: '活动', value: '活动' }
+              ]}
+              // onChange={value => form.setFieldsValue({ isPublish: value })}
+              rules={[{ required: true, message: "请选择类型" }]}
+              lg={10}
+            ></ModifyItem>
+            <ModifyItem
+              {...baseFormProps}
+              type='inputNumber'
+              field="sortCode"
+              label="排序"
+              // rules={[{ required: true, message: "请输入排序" }]}
+              // wholeLine={true} 
+              lg={6}
+            ></ModifyItem>
+            <ModifyItem
+              {...baseFormProps}
               field="isDistinguish"
-              type='checkbox'
+              // type='checkbox'
+              type='switch'
               label="不区分小区"
               onChange={value => form.setFieldsValue({ isDistinguish: value })}
               checked={form.getFieldValue('isDistinguish')}
+              lg={4}
             ></ModifyItem>
             <ModifyItem
               {...baseFormProps}
               field="isPublish"
-              type='checkbox'
+              type='switch'
               label="是否发布"
               onChange={value => form.setFieldsValue({ isPublish: value })}
               checked={form.getFieldValue('isPublish')}
+              lg={4}
+            ></ModifyItem>
+          </Row>
+
+          <Row gutter={24} hidden={form.getFieldValue('type') == '活动' ? false : true} >
+            <ModifyItem
+              {...baseFormProps}
+              type='date'
+              field="deadline"
+              label="截止日期"
+              rules={[{ required: form.getFieldValue('type') == '活动', message: "请选择截止日期" }]}
+            ></ModifyItem>
+            <ModifyItem
+              {...baseFormProps}
+              type='inputNumber'
+              field="participants"
+              label="参加人数"
+              rules={[{ required: form.getFieldValue('type') == '活动', message: "请输入参加人数" }]}
             ></ModifyItem>
           </Row>
 
@@ -224,25 +270,23 @@ const Modify = (props: ModifyProps) => {
               // disabled={initData.estateName != undefined}
               rules={[{ required: !form.getFieldValue('isDistinguish'), message: '请选择所属小区' }]} 
             ></ModifyItem> */}
-
-            <Form.Item label="所属小区" required>
-              {getFieldDecorator('estateId', {
-                initialValue: initData.estateId ? initData.estateId.split(',') : null,
-                rules: [{ required: !form.getFieldValue('isDistinguish'), message: '请选择所属小区' }],
-              })(
-                <TreeSelect
-                  placeholder="请选择房源"
-                  allowClear
-                  dropdownStyle={{ maxHeight: 280 }}
-                  treeData={orgs}
-                  onChange={onRoomChange}
-
-                  multiple={true}>
-                </TreeSelect>
-              )}
-            </Form.Item>
-
-
+            <Col>
+              <Form.Item label="所属小区" required>
+                {getFieldDecorator('estateId', {
+                  initialValue: initData.estateId ? initData.estateId.split(',') : null,
+                  rules: [{ required: form.getFieldValue('isDistinguish'), message: '请选择所属小区' }],
+                })(
+                  <TreeSelect
+                    placeholder="请选择房源"
+                    allowClear
+                    dropdownStyle={{ maxHeight: 280 }}
+                    treeData={orgs}
+                    onChange={onRoomChange}
+                    multiple={true}>
+                  </TreeSelect>
+                )}
+              </Form.Item>
+            </Col>
           </Row>
 
           <Row gutter={24}>

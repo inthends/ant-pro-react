@@ -99,8 +99,8 @@ function Main() {
   };
   const load = formData => {
     setLoading(true);
-    formData.sidx = formData.sidx || 'id';
-    formData.sord = formData.sord || 'asc';
+    formData.sidx = formData.sidx || 'createDate';
+    formData.sord = formData.sord || 'desc';
     return GetPageListJson(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
@@ -132,8 +132,7 @@ function Main() {
     });
   };
 
-  const selectTreeLoad = (orgid, orgtype, searchText) => { 
- 
+  const selectTreeLoad = (orgid, orgtype, searchText) => {  
     setOrganizeId(orgid);
     initLoadData(orgid, searchText);
   };
@@ -159,7 +158,7 @@ function Main() {
           />
           <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer()}>
             <Icon type="plus" />
-            公告
+            添加
           </Button>
         </div>
         <ListTable

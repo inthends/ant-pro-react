@@ -1,4 +1,4 @@
-import { InputNumber, Checkbox, AutoComplete, Col, DatePicker, Form, Input, Radio, Select, TreeSelect } from 'antd';
+import { Switch, InputNumber, Checkbox, AutoComplete, Col, DatePicker, Form, Input, Radio, Select, TreeSelect } from 'antd';
 import { ValidationRule, WrappedFormUtils } from 'antd/lib/form/Form';
 import moment from 'moment';
 import React from 'react';
@@ -6,7 +6,7 @@ import { TreeNode } from 'antd/lib/tree-select';
 const { TextArea, Password } = Input;
 const { Option } = Select;
 interface ModifyItemProps {
-  type?: 'select' | 'textarea' | 'password' | 'radio' | 'autoComplete' | 'date' | 'tree' | 'checkbox' | 'inputNumber';
+  type?: 'switch' | 'select' | 'textarea' | 'password' | 'radio' | 'autoComplete' | 'date' | 'tree' | 'checkbox' | 'inputNumber';
   field: string;
   label: React.ReactNode;
   initData?: any;
@@ -14,7 +14,7 @@ interface ModifyItemProps {
   disabled?: boolean;
   readOnly?: boolean;
   visibilityToggle?: boolean;
-  wholeLine?: boolean;
+  // wholeLine?: boolean;
   form: WrappedFormUtils;
   rules?: ValidationRule[];
   items?: SelectItem[];
@@ -24,6 +24,7 @@ interface ModifyItemProps {
   checked?: boolean;
   onSearch?(value): void;
   onSelect?(value, option): void; //autoComplete
+  lg?: any;
 }
 const ModifyItem = (props: ModifyItemProps) => {
   const {
@@ -31,7 +32,8 @@ const ModifyItem = (props: ModifyItemProps) => {
     field,
     label,
     initData,
-    wholeLine,
+    // wholeLine,
+    lg,
     multiple,
     form,
     rules,
@@ -60,6 +62,14 @@ const ModifyItem = (props: ModifyItemProps) => {
         />;
       case 'date':
         return <DatePicker {...inner} style={{ width: '100%' }} placeholder={`请选择${label as string}`} />;
+
+      case 'switch':
+        return <Switch {...inner} 
+          onChange={onChange}
+          checked={checked}
+          checkedChildren="是"
+          unCheckedChildren="否" />;
+
       case 'autoComplete':
         return (
           <AutoComplete
@@ -156,7 +166,8 @@ const ModifyItem = (props: ModifyItemProps) => {
     }
   };
   return (
-    <Col lg={wholeLine ? 24 : 12}>
+    // <Col lg={wholeLine ? 24 : 12}>
+    <Col lg={lg == undefined ? 12 : lg}>
       <Form.Item label={label} required>
         {getFieldDecorator(field, {
           initialValue: getInitValue(),

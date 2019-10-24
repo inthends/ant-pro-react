@@ -46,7 +46,8 @@ const Modify = (props: ModifyProps) => {
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
-              wholeLine={true}
+              // wholeLine={true}
+              lg={24}
               type="textarea"
               field="description"
               label="备注"

@@ -1,5 +1,5 @@
 import Page from '@/components/Common/Page';
-import { Tag,Divider, message, Modal, Table } from 'antd';
+import { Tag, Divider, message, Modal, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import { RemoveForm } from './Main.service';
@@ -34,12 +34,17 @@ function ListTable(props: ListTableProps) {
   };
   const columns = [
     {
+      title: '类型',
+      dataIndex: 'type',
+      key: 'type',
+      width: 60,
+    },
+    {
       title: '标题',
       dataIndex: 'title',
       key: 'title',
       width: 200,
-    },
-
+    }, 
     {
       title: '所属小区',
       dataIndex: 'estateName',
