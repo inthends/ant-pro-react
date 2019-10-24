@@ -163,8 +163,8 @@ const Modify = (props: ModifyProps) => {
     let modifyData = { ...initData, ...dataDetail, keyValue: initData.id };
     modifyData.description = dataDetail.description.toHTML();//toRAW();  
     modifyData.isDistinguish = modifyData.isDistinguish == 0 ? false : true;
-    modifyData.isPublish = modifyData.isPublish == 0 ? false : true; 
-    modifyData.deadline = modifyData.deadline ? modifyData.deadline.format('YYYY-MM-DD') : null; 
+    modifyData.isPublish = modifyData.isPublish == 0 ? false : true;
+    modifyData.deadline = modifyData.deadline ? modifyData.deadline.format('YYYY-MM-DD') : null;
     return SaveForm(modifyData);
   };
 
@@ -203,6 +203,7 @@ const Modify = (props: ModifyProps) => {
                 { label: '通知', value: '通知' },
                 { label: '公告', value: '公告' },
                 { label: '资讯', value: '资讯' },
+                { label: '广告', value: '广告' },
                 { label: '活动', value: '活动' }
               ]}
               // onChange={value => form.setFieldsValue({ isPublish: value })}
@@ -287,20 +288,28 @@ const Modify = (props: ModifyProps) => {
                 )}
               </Form.Item>
             </Col>
-          </Row>
-
+          </Row> 
+          <Row gutter={24} hidden={form.getFieldValue('type') == '广告' ? false : true} >
+            <ModifyItem
+              {...baseFormProps}
+              field="linkUrl"
+              label="链接地址"
+              rules={[{ required: form.getFieldValue('type') == '广告', message: "请输入链接地址" }]} 
+              lg={24}
+            ></ModifyItem>
+          </Row> 
           <Row gutter={24}>
             <Col>
               <Form.Item required label="">
                 {getFieldDecorator('description', {
-                  rules: [{ required: true, message: '请输入正文内容' }]
+                  rules: [{ required: true, message: '请输入内容' }]
                 })(
                   <BraftEditor
                     // value={state.editorState}
                     onChange={handleEditorChange}
                     controls={controls}
                     extendControls={extendControls}
-                    placeholder="请输入正文内容"
+                    placeholder="请输入内容"
                   />
                 )}
               </Form.Item>

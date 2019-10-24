@@ -22,7 +22,11 @@ export default {
 
   //菜单
   'menu.dashboard': '数据中心',
-  'menu.dashboard.analysis': '数据分析',
+  'menu.dashboard.analysis': '数据分析', 
+  'menu.dashboard.reconciliation': '对账单', 
+  'menu.dashboard.billdetails': '对账明细',
+  'menu.dashboard.receiptdetails': '实收明细',
+  
 
   'menu.resource': '资源管理',
   'menu.resource.house': '项目资料',

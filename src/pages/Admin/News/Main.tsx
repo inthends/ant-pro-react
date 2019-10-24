@@ -1,6 +1,6 @@
 
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { Button, Icon, Input, Layout } from 'antd';
+import { Select, Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import LeftTree from '../LeftTree';
@@ -19,7 +19,8 @@ function Main() {
   const [organizeId, setOrganizeId] = useState<string>('');
   const [data, setData] = useState<any[]>([]);
   const [currData, setCurrData] = useState<any>();
-  const [search, setSearch] = useState<string>('');
+  const [search, setSearch] = useState<string>('');//查询关键字
+  const [type, setType] = useState<string>('');//类型
   const [treeData, setTreeData] = useState<any[]>([]);
 
   // const selectTree = (org, item, searchText) => {
@@ -70,8 +71,10 @@ function Main() {
     setModifyVisible(true);
   };
 
-  const loadData = (searchText, organizeId, paginationConfig?: PaginationConfig, sorter?) => {
+  const loadData = (type, searchText, organizeId, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(searchText);
+    setType(type);
+
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: pagination.pageSize,
@@ -83,7 +86,8 @@ function Main() {
       total,
       queryJson: {
         keyword: searchText,
-        OrganizeId: organizeId, 
+        OrganizeId: organizeId,
+        Type: type,
       },
     };
 
@@ -97,6 +101,7 @@ function Main() {
       return res;
     });
   };
+
   const load = formData => {
     setLoading(true);
     formData.sidx = formData.sidx || 'createDate';
@@ -122,7 +127,7 @@ function Main() {
     setSearch(searchText);
     const queryJson = {
       OrganizeId: organizeId,
-      keyword: searchText, 
+      keyword: searchText,
     };
     const sidx = 'id';
     const sord = 'asc';
@@ -132,7 +137,7 @@ function Main() {
     });
   };
 
-  const selectTreeLoad = (orgid, orgtype, searchText) => {  
+  const selectTreeLoad = (orgid, orgtype, searchText) => {
     setOrganizeId(orgid);
     initLoadData(orgid, searchText);
   };
@@ -144,16 +149,29 @@ function Main() {
         selectTree={(orgid, orgtype) => {
           selectTreeLoad(orgid, orgtype, search);
         }}
-
-        
-
       />
       <Content style={{ paddingLeft: '18px' }}>
         <div style={{ marginBottom: '10px' }}>
+
+          <Select
+            allowClear={true}
+            style={{ width: '160px', marginRight: '5px' }}
+            placeholder="请选择类型"
+            onChange={(value) => {
+              loadData(value, search, organizeId);
+            }}
+          >
+            <Select.Option key='通知' value='通知'>通知</Select.Option>
+            <Select.Option key='公告' value='公告'>公告</Select.Option>
+            <Select.Option key='资讯' value='资讯'>资讯</Select.Option>
+            <Select.Option key='广告' value='广告'>广告</Select.Option>
+            <Select.Option key='活动' value='活动'>活动</Select.Option>
+          </Select>
+
           <Search
             className="search-input"
             placeholder="搜索关键字"
-            onSearch={value => loadData(value, organizeId)}
+            onSearch={value => loadData(type, value, organizeId)}
             style={{ width: 200 }}
           />
           <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer()}>
@@ -163,7 +181,7 @@ function Main() {
         </div>
         <ListTable
           onchange={(paginationConfig, filters, sorter) =>
-            loadData(search, organizeId, paginationConfig, sorter)
+            loadData(type, search, organizeId, paginationConfig, sorter)
           }
           loading={loading}
           pagination={pagination}

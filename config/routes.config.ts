@@ -66,11 +66,30 @@ export default [
             path: '/dashboard/analysis',
             component: './dashboard/analysis',
           },
+          // {
+          //   name: 'workplace',
+          //   path: '/dashboard/workplace',
+          //   component: './dashboard/workplace',
+          // },
+
           {
-            name: 'workplace',
-            path: '/dashboard/workplace',
-            component: './dashboard/workplace',
-          },
+            name: 'reconciliation',
+            path: '/dashboard/reconciliation',
+            component: './dashboard/Reconciliation/Reconciliation',
+          }, 
+
+          {
+            name: 'billdetails',
+            path: '/dashboard/billdetails',
+            component: './dashboard/BillDetails/BillDetails',
+          }, 
+
+          {
+            name: 'receiptdetails',
+            path: '/dashboard/receiptdetails',
+            component: './dashboard/ReceiptDetails/ReceiptDetails',
+          }, 
+
         ],
       },
 
