@@ -15,9 +15,9 @@ const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
 function Payment() {
-  
+
   // const [treeSearch, SetTreeSearch] = useState<any>({});
-  const [id, setId] = useState<string>(); 
+  const [id, setId] = useState<string>();
   const [notPaymentLoading, setNotPaymentLoading] = useState<boolean>(false);
   const [paymentLoading, setPaymentLoading] = useState<boolean>(false);
 
@@ -34,7 +34,7 @@ function Payment() {
 
   const [organize, setOrganize] = useState<any>({});
 
-  const selectTree = (id, type, info) => {  
+  const selectTree = (id, type, info) => {
     setOrganize(info.node.props);
     if (type == 5) {
       initNotPaymentLoadData({ id: id, type: type }, '');
@@ -321,17 +321,15 @@ function Payment() {
                 <Select.Option value="1">未审核</Select.Option>
                 <Select.Option value="-1">已作废</Select.Option>
               </Select>
-              <DatePicker style={{ marginRight: '5px' }}
+              <DatePicker
                 placeholder='请选择付款日期'
                 onChange={(date, dateStr) => {
                   setPaymentStartDate(dateStr);
-                }} />
-              至
-              <DatePicker style={{ marginRight: '5px' }}
-                placeholder='请选择付款日期'
-                onChange={(date, dateStr) => {
-                  setPaymentEndDate(dateStr);
-                }} />
+                }} /> 至 <DatePicker style={{ marginRight: '5px' }}
+                  placeholder='请选择付款日期'
+                  onChange={(date, dateStr) => {
+                    setPaymentEndDate(dateStr);
+                  }} />
               <Search
                 className="search-input"
                 placeholder="请输入付款单号"
@@ -341,6 +339,16 @@ function Payment() {
                   loadPaymentData();
                 }}
               />
+
+              <Button type="primary" style={{ marginLeft: '3px' }}
+                onClick={() => {
+                  loadPaymentData();
+                }}
+              >
+                <Icon type="search" />
+                搜索
+              </Button>
+
               {/* <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
                 onClick={() => {
                   if (id == null || id == '') {

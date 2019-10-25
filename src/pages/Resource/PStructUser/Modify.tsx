@@ -1,15 +1,15 @@
 // import { TreeEntity } from '@/model/models';
 import {
-  Button, Card, Col, Drawer, Form, Input, message, Row, Select,  TreeSelect, Checkbox,
+  Button, Card, Col, Drawer, Form, Input, message, Row, Select, TreeSelect, Checkbox,
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { SaveForm } from './PStructUser.service';
-import { getCommonItems,GetOrgs } from '@/services/commonItem';
+import { getCommonItems, GetOrgs } from '@/services/commonItem';
 import styles from './style.less';
 
 const { Option } = Select;
-const { TextArea } = Input; 
+const { TextArea } = Input;
 
 interface ModifyProps {
   modifyVisible: boolean;
@@ -103,12 +103,12 @@ const Modify = (props: ModifyProps) => {
                     initialValue: infoDetail.organizeId,
                     rules: [{ required: true, message: '请选择隶属机构' }],
                   })(
-                    <TreeSelect 
-                    placeholder="请选择隶属机构" 
-                    treeData={treeData}
-                    allowClear 
-                    treeDefaultExpandAll
-                    dropdownStyle={{ maxHeight: 350 }}
+                    <TreeSelect
+                      placeholder="请选择隶属机构"
+                      treeData={treeData}
+                      allowClear
+                      treeDefaultExpandAll
+                      dropdownStyle={{ maxHeight: 350 }}
                     >
                       {/* {renderTree(treeData)} */}
                     </TreeSelect>,
@@ -134,7 +134,7 @@ const Modify = (props: ModifyProps) => {
               </Col>
             </Row>
             <Row gutter={24}>
-            <Col lg={12}>
+              <Col lg={12}>
                 <Form.Item label="客户名称" required>
                   {getFieldDecorator('name', {
                     initialValue: infoDetail.name,
@@ -149,7 +149,7 @@ const Modify = (props: ModifyProps) => {
                     rules: [{ required: true, message: '请输入客户编号' }],
                   })(<Input placeholder="请输入客户编号" />)}
                 </Form.Item>
-              </Col> 
+              </Col>
             </Row>
             <Row gutter={24}>
               <Col lg={12}>
@@ -159,13 +159,16 @@ const Modify = (props: ModifyProps) => {
                   })(<Input placeholder="请输入客户简称" />)}
                 </Form.Item>
               </Col>
+
               <Col lg={12}>
-                <Form.Item label="加入黑名单">
-                  {getFieldDecorator('auditMark', {
-                    initialValue: infoDetail.isBlackName,
-                  })(<Checkbox checked={form.getFieldValue('auditMark')} />)}
+                <Form.Item label="手机号码">
+                  {getFieldDecorator('phoneNum', {
+                    initialValue: infoDetail.phoneNum,
+                  })(<Input placeholder="请输入手机号码" />)}
                 </Form.Item>
               </Col>
+
+
             </Row>
             {/* {form.getFieldValue('flag') === '1' ? (
               <>
@@ -239,14 +242,14 @@ const Modify = (props: ModifyProps) => {
               </>
             )} */}
 
-            <Row gutter={24}>
-              {/* <Col lg={12}>
+            {/* <Row gutter={24}>
+              <Col lg={12}>
                 <Form.Item label="联系电话">
                   {getFieldDecorator('telPhoneNum', {
                     initialValue: infoDetail.telPhoneNum,
                   })(<Input placeholder="请输入联系电话" />)}
                 </Form.Item>
-              </Col> */}
+              </Col>
               <Col lg={12}>
                 <Form.Item label="手机号码">
                   {getFieldDecorator('phoneNum', {
@@ -254,7 +257,7 @@ const Modify = (props: ModifyProps) => {
                   })(<Input placeholder="请输入手机号码" />)}
                 </Form.Item>
               </Col>
-            </Row>
+            </Row> */}
             <Row gutter={24}>
               <Col lg={12}>
                 <Form.Item label="传真号码">
@@ -279,8 +282,8 @@ const Modify = (props: ModifyProps) => {
                   })(
                     <Select placeholder="请选择开户银行">
                       {banks.map(item => (
-                        <Option value={item.id} key={item.id}>
-                          {item.text}
+                        <Option value={item.value} key={item.key}>
+                          {item.title}
                         </Option>
                       ))}
                     </Select>
@@ -295,7 +298,7 @@ const Modify = (props: ModifyProps) => {
                 </Form.Item>
               </Col>
             </Row>
-            <Row gutter={24}>
+            {/* <Row gutter={24}>
               <Col lg={12}>
                 <Form.Item label="经营业态">
                   {getFieldDecorator('businessFormat', {
@@ -326,7 +329,7 @@ const Modify = (props: ModifyProps) => {
                   })(<Input placeholder="请输入品牌级别" />)}
                 </Form.Item>
               </Col>
-            </Row>
+            </Row> */}
             <Row gutter={24}>
               <Col lg={24}>
                 <Form.Item label="附加说明">
@@ -336,6 +339,17 @@ const Modify = (props: ModifyProps) => {
                 </Form.Item>
               </Col>
             </Row>
+
+            <Row>
+              <Col lg={12}>
+                <Form.Item label="加入黑名单">
+                  {getFieldDecorator('auditMark', {
+                    initialValue: infoDetail.isBlackName,
+                  })(<Checkbox checked={form.getFieldValue('auditMark')} />)}
+                </Form.Item>
+              </Col>
+            </Row>
+
           </Form>
         ) : null}
       </Card>

@@ -7,6 +7,8 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { RemoveFormUnitAll, GetFormJson, GetListByID, GetReductionItem, GetUnitBillDetail, SaveForm } from './Main.service';
 import moment from 'moment';
+import styles from './style.less';
+
 const { Option } = Select;
 
 interface ModifyProps {
@@ -20,7 +22,7 @@ interface ModifyProps {
 };
 
 /*详情可编辑单元格*/
-const EditableContext = React.createContext();
+const EditableContext = React.createContext('');
 const EditableRow = ({ form, index, ...props }) => (
   <EditableContext.Provider value={form}>
     <tr {...props} />
@@ -519,7 +521,7 @@ const Modify = (props: ModifyProps) => {
   };
 
   //选择减免费项
-  const onFeeItemSelect = (value, option) => { 
+  const onFeeItemSelect = (value, option) => {
     //减免项目名称
     form.setFieldsValue({ reductionFeeItemName: option.props.children });
   };
@@ -575,7 +577,7 @@ const Modify = (props: ModifyProps) => {
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
       <Form layout="vertical" hideRequiredMark>
-        <Card  >
+        <Card className={styles.card} >
           <Row gutter={24}>
             <Col lg={8}>
               <Form.Item label="单据编号">

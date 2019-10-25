@@ -379,8 +379,8 @@ const Modify = (props: ModifyProps) => {
               </Col>
               <Col lg={12}>
                 <Form.Item label="纬度">
-                  {getFieldDecorator('lng', {
-                    initialValue: infoDetail.lng,
+                  {getFieldDecorator('lon', {
+                    initialValue: infoDetail.lon,
                   })(<Input placeholder="请输入纬度" />)}
                 </Form.Item>
               </Col>

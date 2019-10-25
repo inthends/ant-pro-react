@@ -26,6 +26,15 @@ export function RemoveForm(keyValue): Promise<any> {
     .post(process.env.basePath + `/Account/RemoveForm?keyValue=${keyValue}`, {})
     .then(getResult as any);
 }
+
+
+//重置密码
+export function ResetPwd(keyValue): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Account/ResetPwd?keyValue=${keyValue}`, {})
+    .then(getResult as any);
+}
+ 
 // 禁用切换
 export function DisabledToggle(keyValue, disabled: boolean): Promise<any> {
   if (disabled) {

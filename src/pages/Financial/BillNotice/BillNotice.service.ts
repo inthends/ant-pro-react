@@ -42,6 +42,12 @@ export function BatchAudit(data): Promise<any> {
   return request.post(process.env.basePath + `/Notice/BatchAudit`, {data:objToFormdata(data)}).then(getResult as any);
 }
 
+//批量删除
+export function BatchRemoveForm(data): Promise<any> {
+  return request.post(process.env.basePath + `/Notice/BatchRemoveForm`, {data:objToFormdata(data)}).then(getResult as any);
+}
+
+
 //打印
 export function Print(data): Promise<any> {
   return request.post(process.env.basePath + `/Notice/Print`, {data:objToFormdata(data)}).then(getResult as any);
@@ -51,9 +57,10 @@ export function Print(data): Promise<any> {
 export function GetBillCheck(data): Promise<any> {
   return request.get(process.env.basePath + `/Notice/GetBillCheck?keyValue=${data}`, {}).then(getResult as any);
 }
+
 //删除通知单
 export function RemoveForm(data): Promise<any> {
-  return request.get(process.env.basePath + `/Notice/RemoveForm?keyValue=${data}`, {}).then(getResult as any);
+  return request.post(process.env.basePath + `/Notice/RemoveForm?keyValue=${data}`, {}).then(getResult as any);
 }
 //
 export function GetInfoFormJson(data): Promise<any> {

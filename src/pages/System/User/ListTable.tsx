@@ -1,9 +1,9 @@
 import Page from '@/components/Common/Page';
 import { JcAccount } from '@/model/jcAccount';
-import { Switch, Table } from 'antd';
+import { message, Modal, Divider, Switch, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
-import { DisabledToggle } from './User.service';
+import { DisabledToggle, ResetPwd } from './User.service';
 
 interface ListTableProps {
   loading: boolean;
@@ -33,6 +33,22 @@ function ListTable(props: ListTableProps) {
   //   });
   // };
 
+
+  //重置密码
+  const resetPwd = id => {
+    Modal.confirm({
+      title: '请确认',
+      content: `您是否要重置密码吗？`,
+      onOk: () => {
+        ResetPwd(id)
+          .then(() => {
+            message.success('密码已经重置，默认密码111111');
+          })
+          .catch(e => { });
+      },
+    });
+  };
+ 
   const doModify = record => {
     modify({ ...record });
   };
@@ -129,7 +145,7 @@ function ListTable(props: ListTableProps) {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
-      width: 45,
+      width: 100,
       render: (text, record) => {
         return [
           // <Button
@@ -146,8 +162,8 @@ function ListTable(props: ListTableProps) {
 
           <span>
             <a onClick={() => doModify(record)} key="modify">编辑</a>
-            {/* <Divider type="vertical" key='divider' />
-            <a onClick={() => doDelete(record)} key="delete">删除</a> */}
+            <Divider type="vertical" key='divider' />
+            <a onClick={() => resetPwd(record.id)} key="delete">重置密码</a>
           </span>
 
         ];

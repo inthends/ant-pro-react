@@ -1,11 +1,11 @@
 import { BaseModifyProvider } from '@/components/BaseModifyDrawer/BaseModifyDrawer';
 import ModifyItem from '@/components/BaseModifyDrawer/ModifyItem';
-import {message, Tooltip, Button, Icon, Col, Upload, Card, Form, Row } from 'antd';
+import { message, Tooltip, Button, Icon, Col, Upload, Card, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useState, useEffect } from 'react';
 import { SaveForm } from './Template.service';
 import { TreeNode } from 'antd/lib/tree-select';
-import styles from './style.less'; 
+import styles from './style.less';
 import copy from 'copy-to-clipboard';
 import { GetOrgs } from '@/services/commonItem';
 
@@ -17,8 +17,9 @@ interface ModifyProps {
   reload(): void;
 };
 
-const Modify = (props: ModifyProps) => { 
-  const { data, form } = props;
+const Modify = (props: ModifyProps) => {
+  const { data, form, visible } = props;
+  const { getFieldDecorator } = form;
   const [orgs, setOrgs] = useState<TreeNode[]>();
   let initData = data ? data : { enabledMark: 1 };
   initData.expDate = initData.expDate ? initData.expDate : new Date();
@@ -34,13 +35,25 @@ const Modify = (props: ModifyProps) => {
     getOrgs();
   }, []);
 
+
+  useEffect(() => {
+    //加载图片
+    let files: any[]; files = [];
+    if (data != null && data.fileUrl != null) {
+      const filedate = {
+        url: data.fileUrl,
+        uid: data.id//必须
+      }
+      files.push(filedate);
+    }
+    setFileList(files);
+
+  }, [visible]);
+
+
   //数据保存
   const doSave = dataDetail => {
-    let modifyData = { ...initData, ...dataDetail, keyValue: initData.organizeId };
-    if (modifyData.foundedTime != null)
-      modifyData.foundedTime = modifyData.foundedTime.format('YYYY-MM-DD');
-    if (modifyData.parentId === undefined)
-      modifyData.parentId = 0;
+    let modifyData = { ...initData, ...dataDetail, keyValue: initData.id };
     return SaveForm(modifyData);
   };
 
@@ -71,14 +84,14 @@ const Modify = (props: ModifyProps) => {
   };
 
   //关键词复制
-  const clipcopy = (e) => {  
-    copy(e.target.dataset.clipboardText);  
+  const clipcopy = (e) => {
+    copy(e.target.dataset.clipboardText);
     message.success('复制成功');
   };
 
   //图片上传结束 
   return (
-    <BaseModifyProvider {...props} name="模板" save={doSave} > 
+    <BaseModifyProvider {...props} name="模板" save={doSave} >
       <Form layout="vertical" hideRequiredMark>
         <Card className={styles.card}>
           <Row gutter={24}>
@@ -194,15 +207,22 @@ const Modify = (props: ModifyProps) => {
               <div className="clearfix">
                 <Upload
                   accept='.doc,.docx'
-                  action={process.env.basePath + '/Template/Upload'} 
+                  action={process.env.basePath + '/Template/Upload'}
                   fileList={fileList}
-                  listType="picture-card" 
+                  listType="picture-card"
                   onChange={handleChange}
                   onRemove={handleRemove}
                 >
                   {fileList.length > 1 ? null : uploadButton}
                 </Upload>
               </div>
+
+              {getFieldDecorator('fileUrl', {
+                initialValue: initData.fileUrl,
+              })(
+                <input type='hidden' />
+              )}
+
             </Col>
           </Row>
         </Card>
