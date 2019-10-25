@@ -23,7 +23,7 @@ function BillingMain() {
   const [unitMeterLoading, setUnitMeterLoading] = useState<boolean>(false);
   const [meterData, setMeterData] = useState<any>();
   const [unitMeterData, setUnitMeterData] = useState<any[]>([]);
-  const [meterSearch, setMeterSearch] = useState<string>('');
+  const [search, setSearch] = useState<string>('');
   const [unitMeterSearch, setUnitMeterSearch] = useState<string>('');
   const [meterPagination, setMeterPagination] = useState<DefaultPagination>(new DefaultPagination());
   const [unitMeterPagination, setUnitMeterPagination] = useState<DefaultPagination>(new DefaultPagination());
@@ -52,7 +52,9 @@ function BillingMain() {
   }, []);
 
 
-  const loadMeterData = (paginationConfig?: PaginationConfig, sorter?) => {
+  const loadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
+    //赋值,必须，否则查询条件会不起作用
+    setSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: meterPagination.pageSize,
@@ -62,13 +64,13 @@ function BillingMain() {
       pageIndex,
       pageSize,
       total,
-      queryJson: { keyword: meterSearchParams.search }
+      queryJson: { keyword: search }
     };
 
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'billId';
+      searchCondition.sidx = field ? field : 'billCode';
     }
     return meterload(searchCondition);
   }
@@ -95,7 +97,7 @@ function BillingMain() {
   }
   const meterload = data => {
     setMeterLoading(true);
-    data.sidx = data.sidx || 'billId';
+    data.sidx = data.sidx || 'billCode';
     data.sord = data.sord || 'asc';
 
     return GetPageListJson(data).then(res => {
@@ -136,15 +138,15 @@ function BillingMain() {
   };
 
   const initMeterLoadData = (org, searchText) => {
-    console.log(org);
-    setMeterSearch(searchText);
+    // console.log(org);
+    // setMeterSearch(searchText);
     const queryJson = {
       //OrganizeId: org.organizeId,
       keyword: searchText,
       TreeTypeId: org.key,
       TreeType: org.type,
     };
-    const sidx = 'billId';
+    const sidx = 'billCode';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = meterPagination;
     return meterload({ pageIndex, pageSize, sidx, sord, total, queryJson });
@@ -233,10 +235,12 @@ function BillingMain() {
                 className="search-input"
                 placeholder="请输入要查询的单号"
                 style={{ width: 200 }}
-                onChange={e => {
-                  var params = Object.assign({}, meterSearchParams, { search: e.target.value });
-                  setMeterSearchParams(params);
-                }}
+                // onChange={e => {
+                //   var params = Object.assign({}, meterSearchParams, { search: e.target.value });
+                //   setMeterSearchParams(params);
+                // }}
+                onSearch={value => loadData(value)}
+
               />
               {/* <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
                 onClick={() => {}}  disabled={ifVerify?false:true}
@@ -271,12 +275,12 @@ function BillingMain() {
                 <Icon type="check-square" />
                 审核
               </Button> */}
-              <Button type="primary" style={{ marginLeft: '10px' }}
+              {/* <Button type="primary" style={{ marginLeft: '10px' }}
                 onClick={() => { loadMeterData() }}
               >
                 <Icon type="search" />
                 查询
-              </Button>
+              </Button> */}
               <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
                 onClick={() => { showModify(null, true) }}
               >
@@ -286,8 +290,8 @@ function BillingMain() {
             </div>
             <ListTable
               onchange={(paginationConfig, filters, sorter) => {
-                  loadMeterData(paginationConfig, sorter)
-                }
+                loadData(search, paginationConfig, sorter)
+              }
               }
               showDivide={showDivide}
               loading={meterLoading}
@@ -301,7 +305,7 @@ function BillingMain() {
                 setIsEdit(isedit);
                 setModifyVisible(true);
               }}
-              reload={() => initMeterLoadData('', meterSearch)}
+              reload={() => initMeterLoadData(organize, search)}
               getRowSelect={(record) => {
                 setId(record.billId);
                 if (record.ifVerify == 0) {

@@ -25,14 +25,14 @@ interface MeterModifyProps {
 }
 
 const MeterModify = (props: MeterModifyProps) => {
-  const { modifyVisible, closeDrawer, form, id, reload,treeData } = props;
+  const { modifyVisible, closeDrawer, form, id, reload, treeData } = props;
   const title = id == null ? '新增费表资料' : '修改费表资料';
   const [loading, setLoading] = useState<boolean>(false);
   const { getFieldDecorator } = form;
   // const [units,setUnits] = useState<string>([]);
   const [infoDetail, setInfoDetail] = useState<any>({});
 
-  const [meterKinds, setMeterKinds] = useState<any>([]);
+  // const [meterKinds, setMeterKinds] = useState<any>([]);
   const [meterTypes, setMeterTypes] = useState<any>([]);
   const [orgTreeData, setOrgTreeData] = useState<any>({});
   const [chargeFeeItemVisible, setChargeFeeItemVisible] = useState<boolean>(false);
@@ -52,9 +52,10 @@ const MeterModify = (props: MeterModifyProps) => {
     if (modifyVisible) {
       form.resetFields();
       //获取费表类型
-      GetDataItemTreeJson('EnergyMeterKind').then(res => {
-        setMeterKinds(res);
-      })
+      // GetDataItemTreeJson('EnergyMeterKind').then(res => {
+      //   setMeterKinds(res);
+      // });
+
       //获取费表种类
       GetDataItemTreeJson('EnergyMeterType').then(res => {
         setMeterTypes(res);
@@ -305,11 +306,16 @@ const MeterModify = (props: MeterModifyProps) => {
                     rules: [{ required: true, message: '请选择费表类型' }],
                   })(
                     <Select placeholder="=请选择=" style={{ width: '100%', marginRight: '5px' }}>
-                      {
+                      {/* {
                         meterKinds.map(item => {
                           return <Option value={item.title}>{item.title}</Option>
                         })
-                      }
+                      } */}
+
+                      <Option value="单元表">单元表</Option>
+                      <Option value="公用表" >公用表</Option>
+                      <Option value="虚拟表">虚拟表</Option>
+
                     </Select>
                   )}
                 </Form.Item>

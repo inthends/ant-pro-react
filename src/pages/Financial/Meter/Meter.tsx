@@ -36,6 +36,8 @@ function Meter() {
   const [meterFormsData, setMeterFormsData] = useState<any>();
 
   const [meterSearch, setMeterSearch] = useState<string>('');
+  const [meterKind, setMeterKind] = useState<string>('');
+
   const [unitMeterSearch, setUnitMeterSearch] = useState<string>('');
   const [readingMeterSearch, setReadingMeterSearch] = useState<string>('');
   const [meterFormsSearch, setMeterFormsSearch] = useState<string>('');
@@ -54,8 +56,7 @@ function Meter() {
   const [vertifyVisible, setVertifyVisible] = useState<boolean>(false);
   const selectTree = (org, item, searchText) => {
     SetOrganize(item);
-
-    initMeterLoadData(item, '');
+    initMeterLoadData(item, '', '');
     initReadingMeterLoadData(item, '');
     initMeterFormsLoadData(item, '');
     initUnitMeterLoadData(item, '');
@@ -65,7 +66,6 @@ function Meter() {
   // let meterType = [];
 
   useEffect(() => {
-
     //获取房产树
     GetUnitTreeAll()
       .then(getResult)
@@ -87,16 +87,17 @@ function Meter() {
     //   meterType = res;
     //   return;
     // }).then(() => {
-    initMeterLoadData('', '');
+    initMeterLoadData('', '', '');
     initUnitMeterLoadData('', '');
     initMeterFormsLoadData('', '');
     initReadingMeterLoadData('', '')
     // })
   }, []);
 
-
-  const loadMeterData = (paginationConfig?: PaginationConfig, sorter?) => {
-    //setMeterSearch(search);
+  const loadMeterData = (meterSearch, meterKind, paginationConfig?: PaginationConfig, sorter?) => {
+    //赋值,必须，否则查询条件会不起作用 
+    setMeterSearch(meterSearch);
+    setMeterKind(meterKind);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: meterPagination.pageSize,
@@ -106,18 +107,24 @@ function Meter() {
       pageIndex,
       pageSize,
       total,
-      queryJson: { keyword: meterSearchParams.search }
+      queryJson: {
+        keyword: meterSearch,
+        meterType: meterKind,
+        TreeTypeId: organize.id,
+        TreeType: organize.type,
+      }
     };
 
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'meterkind';
+      searchCondition.sidx = field ? field : 'meterName';
     }
-
     return meterload(searchCondition);
-  }
+  };
+
   const loadUnitMeterData = (search, paginationConfig?: PaginationConfig, sorter?) => {
+    //赋值,必须，否则查询条件会不起作用 
     setUnitMeterSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
@@ -140,6 +147,7 @@ function Meter() {
   };
 
   const loadReadingMeterData = (search, paginationConfig?: PaginationConfig, sorter?) => {
+    //赋值,必须，否则查询条件会不起作用 
     setReadingMeterSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
@@ -182,10 +190,11 @@ function Meter() {
     }
 
     return meterFormsload(searchCondition);
-  }
+  };
+
   const meterload = data => {
     setMeterLoading(true);
-    data.sidx = data.sidx || 'meterkind';
+    data.sidx = data.sidx || 'meterName';
     data.sord = data.sord || 'asc';
 
     //获取费表类型
@@ -330,15 +339,17 @@ function Meter() {
     });
   };
 
-  const initMeterLoadData = (org, searchText) => {
-    setMeterSearch(searchText);
+  const initMeterLoadData = (org, searchText, meterType) => {
+    // setMeterSearch(searchText);
+    // setMeterKind(meterType); 
     const queryJson = {
-      OrganizeId: org.organizeId,
+      // OrganizeId: org.organizeId,
+      meterType: meterType,
       keyword: searchText,
       TreeTypeId: org.id,
       TreeType: org.type,
     };
-    const sidx = 'meterkind';
+    const sidx = 'meterName';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = meterPagination;
     //setAddButtonDisable(true);
@@ -389,9 +400,9 @@ function Meter() {
 
   const closeVertify = (result?) => {
     setVertifyVisible(false);
-    if (result) {
-      loadReadingMeterData(organize);
-    }
+    // if (result) {
+    //   loadReadingMeterData(readingMeterSearch);
+    // }
     setId('');
   };
 
@@ -403,9 +414,9 @@ function Meter() {
 
   const closeModify = (result?) => {
     setModifyVisible(false);
-    if (result) {
-      //initCheckLoadData(organize, null);
-    }
+    // if (result) {
+    //initCheckLoadData(organize, null);
+    // }
   };
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   const [modifyReadingMeterVisible, setModifyReadingMeterVisible] = useState<boolean>(false);
@@ -413,13 +424,16 @@ function Meter() {
     setModifyReadingMeterVisible(true);
     setReadingMeterId(id);
   }
+
   const closeReadingMeterModify = (result?) => {
     setModifyReadingMeterVisible(false);
     setReadingMeterId('');
-    if (result) {
-      initReadingMeterLoadData(organize.id, '');
-    }
+    // if (result) {
+    // initReadingMeterLoadData('');
+    //   loadReadingMeterData
+    // }
   }
+  
   const showModify = (id?) => {
     setModifyVisible(true);
     setId(id);
@@ -443,17 +457,18 @@ function Meter() {
   //页签切换刷新
   const changeTab = key => {
     if (key == "1") {
-      initMeterLoadData('', meterSearch);
+      initMeterLoadData(organize, meterSearch, meterKind);
     } else if (key == "2") {
-      initUnitMeterLoadData('', unitMeterSearch);
+      initUnitMeterLoadData(organize, unitMeterSearch);
     } else if (key == "3") {
-      initReadingMeterLoadData('', readingMeterSearch);
+      initReadingMeterLoadData(organize, readingMeterSearch);
     } else {
-      initMeterFormsLoadData('', meterFormsSearch);
+      initMeterFormsLoadData(organize, meterFormsSearch);
     }
   };
 
-  const [meterSearchParams, setMeterSearchParams] = useState<any>({});
+  // const [meterSearchParams, setMeterSearchParams] = useState<any>({});
+
   return (
     <Layout>
       <AsynLeftTree
@@ -465,33 +480,40 @@ function Meter() {
       <Content style={{ paddingLeft: '18px' }}>
         <Tabs defaultActiveKey="1" onChange={changeTab}>
           <TabPane tab="费表列表" key="1">
-            <div style={{ marginBottom: '20px', padding: '3px 2px' }} onChange={(value) => {
-              var params = Object.assign({}, meterSearchParams, { metertype: value });
-              setMeterSearchParams(params);
-            }}>
-              <Select placeholder="=请选择=" style={{ width: '120px', marginRight: '5px' }} onChange={value => {
-                var params = Object.assign({}, meterSearchParams, { meterkind: value });
-                setMeterSearchParams(params);
-              }}>
-                <Option value="private">单元表</Option>
-                <Option value="public" >公用表</Option>
-                <Option value="virtual">虚拟表</Option>
+            <div style={{ marginBottom: '20px', padding: '3px 2px' }}
+            // onChange={(value) => {
+            //   var params = Object.assign({}, meterSearchParams, { metertype: value });
+            //   setMeterSearchParams(params);
+            // }}
+            >
+              <Select placeholder="=请选择="
+                allowClear={true}
+                style={{ width: '120px', marginRight: '5px' }}
+                onChange={value => {
+                  // var params = Object.assign({}, meterSearchParams, { meterkind: value });
+                  // setMeterSearchParams(params); 
+                  loadMeterData(meterSearch, value);
+                }}>
+                <Option value="单元表">单元表</Option>
+                <Option value="公用表" >公用表</Option>
+                <Option value="虚拟表">虚拟表</Option>
               </Select>
               <Search
                 className="search-input"
                 placeholder="请输入要查询的费表名称"
                 style={{ width: 200 }}
-                onChange={e => {
-                  var params = Object.assign({}, meterSearchParams, { search: e.target.value });
-                  setMeterSearchParams(params);
+                onSearch={value => {
+                  // var params = Object.assign({}, meterSearchParams, { search: e.target.value });
+                  // setMeterSearchParams(params); 
+                  loadMeterData(value, meterKind);
                 }}
               />
-              <Button type="primary" style={{ marginLeft: '10px' }}
+              {/* <Button type="primary" style={{ marginLeft: '10px' }}
                 onClick={() => { loadMeterData() }}
               >
                 <Icon type="search" />
                 查询
-              </Button>
+              </Button> */}
               <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
                 onClick={() => { showModify(null) }}
               >
@@ -507,7 +529,7 @@ function Meter() {
             </div>
             <MeterTable
               onchange={(paginationConfig, filters, sorter) => {
-                loadMeterData(paginationConfig, sorter)
+                loadMeterData(meterSearch, meterKind, paginationConfig, sorter)
               }
               }
               loading={meterLoading}
@@ -517,7 +539,7 @@ function Meter() {
                 setId(id);
                 setModifyVisible(true);
               }}
-              reload={() => initMeterLoadData('', meterSearch)}
+              reload={() => initMeterLoadData(organize, meterSearch, meterKind)}
             />
           </TabPane>
           <TabPane tab="装表列表" key="2">
@@ -629,13 +651,14 @@ function Meter() {
           </TabPane>
         </Tabs>
       </Content>
+
       <MeterModify
         modifyVisible={modifyVisible}
         closeDrawer={closeModify}
         organizeId={organize}
         id={id}
         treeData={unitTreeData}
-        reload={() => loadMeterData()}
+        reload={() => initMeterLoadData(organize, meterSearch, meterKind)}
       />
       <ReadingMeterModify
         modifyVisible={modifyReadingMeterVisible}

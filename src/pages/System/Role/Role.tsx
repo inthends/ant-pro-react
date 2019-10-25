@@ -49,6 +49,19 @@ const Role = () => {
     setCurrData(item);
   };
 
+  //初始化
+  const initLoadData = (searchParam: SearchParam) => {
+    // setSearch(searchParam);
+    const queryJson = searchParam;
+    const sidx = 'CreateDate';
+    const sord = 'desc';
+    const { current: pageIndex, pageSize, total } = pagination;
+    return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
+      return res;
+    });
+  };
+
+  //刷新
   const loadData = (searchParam: any, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(searchParam);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
@@ -73,6 +86,7 @@ const Role = () => {
       return res;
     });
   };
+
   const load = formData => {
     setLoading(true);
     formData.sidx = formData.sidx || 'CreateDate';
@@ -89,17 +103,6 @@ const Role = () => {
       });
       setData(res.data);
       setLoading(false);
-      return res;
-    });
-  };
-
-  const initLoadData = (searchParam: SearchParam) => {
-    setSearch(searchParam);
-    const queryJson = searchParam;
-    const sidx = 'CreateDate';
-    const sord = 'desc';
-    const { current: pageIndex, pageSize, total } = pagination;
-    return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
       return res;
     });
   };
@@ -149,7 +152,8 @@ const Role = () => {
         visible={modifyVisible}
         closeDrawer={closeDrawer}
         data={currData}
-        reload={() => initLoadData({ ...search })}
+        // reload={() => initLoadData({ ...search })}
+        reload={() => initLoadData(search)}
       />
       <ChooseUser visible={userVisible} close={() => setUserVisible(false)} data={currData} />
       <RoleAuth

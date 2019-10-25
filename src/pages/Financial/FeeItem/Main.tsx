@@ -28,13 +28,14 @@ function Main() {
   const [FeeKind, SetFeeKind] = useState<string>('');
   const [FeeType, SetFeeType] = useState<string>('');
   const [search, setSearch] = useState<string>('');//费项搜素关键字
+
   const [houseSearch, setHouseSearch] = useState<string>('');//费项房屋搜索关键字
   const [houseFeeItemId, setHouseFeeItemId] = useState<any>('');//费项搜索id
   const [houseLoading, setHouseLoading] = useState<boolean>(false);
   const [housePagination, setHousePagination] = useState<PaginationConfig>(new DefaultPagination());
   const [houseData, setHouseData] = useState<any[]>([]);
   const [feeitems, setFeeitems] = useState<any[]>([]);
-  const {hideSider, setHideSider } = useContext(SiderContext);
+  const { hideSider, setHideSider } = useContext(SiderContext);
   const [selectedTreeNode, setSelectTreeNode] = useState<any>({});
   const [isInit, setIsInit] = useState<boolean>(false);
   const [unitTreeData, setUnitTreeData] = useState<any[]>([]);
@@ -74,10 +75,10 @@ function Main() {
     }
     initLoadData(feeKind, feeType, search);
     initHouseLoadData(feeKind, feeType, search);
+
     SetFeeKind(feeKind);
     SetFeeType(feeType);
   };
-
 
   useEffect(() => {
     GetFeeTreeList().then((res) => {
@@ -94,11 +95,10 @@ function Main() {
       .then((res: any[]) => {
         setUnitTreeData(res || []);
         return res || [];
-    });
+      });
 
     initLoadData('', '', '');
     initHouseLoadData('', '', '');
-
   }, []);
 
   const closeDrawer = () => {
@@ -113,8 +113,23 @@ function Main() {
       setIsInit(true);
     }
   };
+
+  const initLoadData = (feeKind, feeType, search) => {
+    // setSearch(search);
+    const queryJson = { FeeKind: feeKind, FeeType: feeType, keyword: search };
+    const sidx = 'feeName';
+    const sord = 'asc';
+    const { current: pageIndex, pageSize, total } = pagination;
+    return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
+      return res;
+    });
+  };
+
   const loadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
+
+    //赋值,必须，否则查询条件会不起作用
     setSearch(search);
+
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: pagination.pageSize,
@@ -129,15 +144,16 @@ function Main() {
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'feeitemid';
+      searchCondition.sidx = field ? field : 'feeName';
     }
     return load(searchCondition).then(res => {
       return res;
     });
   };
+
   const load = data => {
     setLoading(true);
-    data.sidx = data.sidx || 'feeitemid';
+    data.sidx = data.sidx || 'feeName';
     data.sord = data.sord || 'asc';
     return GetPageListJson(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -154,23 +170,16 @@ function Main() {
       return res;
     });
   };
-  const initLoadData = (FeeKind, FeeType, search) => {
-    setSearch(search);
-    const queryJson = { FeeKind: FeeKind, FeeType: FeeType, keyword: search };
-    const sidx = 'feeitemId';
-    const sord = 'asc';
-    const { current: pageIndex, pageSize, total } = pagination;
-    return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
-      return res;
-    });
-  };
+
 
   //加载费项房屋
   const houseLoadData = (search, feeItemId, paginationConfig?: PaginationConfig, sorter?) => {
-    //setHouseSearch(search);
+    setHouseSearch(search);
+    setHouseFeeItemId(feeItemId);
+
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
-      pageSize: pagination.pageSize,
+      pageSize: housePagination.pageSize,
       total: 0,
     };
     let searchCondition: any = {
@@ -182,15 +191,16 @@ function Main() {
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'unitfeeId';
+      searchCondition.sidx = field ? field : 'unitFeeId';
     }
     return houseLoad(searchCondition).then(res => {
       return res;
     });
   };
+
   const houseLoad = data => {
     setHouseLoading(true);
-    data.sidx = data.sidx || 'unitfeeid';
+    data.sidx = data.sidx || 'unitFeeId';
     data.sord = data.sord || 'asc';
     return GetUnitFeeItemData(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -210,9 +220,9 @@ function Main() {
   const initHouseLoadData = (FeeKind, FeeType, search) => {
     setSearch(search);
     const queryJson = { FeeKind: FeeKind, FeeType: FeeType, keyword: search, FeeItemID: houseFeeItemId };
-    const sidx = 'feeitemId';
+    const sidx = 'unitFeeId';
     const sord = 'asc';
-    const { current: pageIndex, pageSize, total } = pagination;
+    const { current: pageIndex, pageSize, total } = housePagination;
     return houseLoad({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
       return res;
     });
@@ -239,7 +249,6 @@ function Main() {
             }}
           />) : null}
       </Sider>  */}
-
 
       <Sider
         theme="light"
@@ -300,6 +309,7 @@ function Main() {
             <ListTable
               key='ListTable'
               onchange={(paginationConfig, filters, sorter) =>
+
                 loadData(search, paginationConfig, sorter)
               }
               loading={loading}
@@ -314,10 +324,8 @@ function Main() {
               <Select
                 allowClear={true}
                 style={{ width: '160px', marginRight: '5px' }}
-                placeholder="请选择费项" onChange={(value) => {
-                  houseLoadData(houseSearch, value);
-                  setHouseFeeItemId(value);
-                }}
+                placeholder="请选择费项"
+                onChange={(value) => houseLoadData(houseSearch, value)}
               >
                 {feeitems.map(item => (
                   <Select.Option key={item.value} value={item.value}>
@@ -330,16 +338,13 @@ function Main() {
                 className="search-input"
                 placeholder="搜索房屋编号"
                 style={{ width: 200 }}
-                onSearch={(value) => {
-                  houseLoadData(value, houseFeeItemId);
-                  setHouseSearch(value);
-                }}
+                onSearch={(value) => houseLoadData(value, houseFeeItemId)}
               />
             </div>
             <HouseInfoList
               key='HouseInfoList'
               onchange={(paginationConfig, filters, sorter) =>
-                houseLoadData(search, paginationConfig, sorter)
+                houseLoadData(search, houseFeeItemId, paginationConfig, sorter)
               }
               loading={houseLoading}
               pagination={housePagination}

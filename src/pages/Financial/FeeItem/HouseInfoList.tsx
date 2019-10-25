@@ -37,7 +37,7 @@ function HouseInfoList(props: HouseInfoListProps) {
       title: '收费项目',
       dataIndex: 'feeName',
       key: 'feeName',
-      width: 80,
+      width: 100,
       sorter: true,
     },
     {
@@ -51,15 +51,13 @@ function HouseInfoList(props: HouseInfoListProps) {
       title: '计费周期',
       dataIndex: 'cycleValue',
       key: 'cycleValue',
-      width: 80,
-      sorter: true,
+      width: 70, 
     },
     {
       title: '周期单位',
       dataIndex: 'cycleType',
       key: 'cycleType',
-      width: 80,
-      sorter: true,
+      width: 70, 
     },
     {
       title: '计费起始日期',
@@ -68,9 +66,9 @@ function HouseInfoList(props: HouseInfoListProps) {
       width: 85,
       render: val =>{
         if(val==null){
-          return <span></span>
+          return ''
         }else{
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
+          return  moment(val).format('YYYY-MM-DD');
         }
       }
     }, {
@@ -80,9 +78,9 @@ function HouseInfoList(props: HouseInfoListProps) {
       width: 85,
       render: val =>{
         if(val==null){
-          return <span></span>
+          return ''
         }else{
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
+          return  moment(val).format('YYYY-MM-DD');
         }
       }
     },
@@ -90,8 +88,7 @@ function HouseInfoList(props: HouseInfoListProps) {
       title: '房屋全称',
       dataIndex: 'allName',
       key: 'allName',
-      width: 180,
-      sorter: true,
+      width: 180, 
     },
   ] as ColumnProps<any>[];
 

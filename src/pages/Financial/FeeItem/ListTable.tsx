@@ -27,7 +27,7 @@ function ListTable(props: ListTableProps) {
       okText: '确定',
       onOk: () => {
         RemoveForm(record.feeItemId).then(() => {
-          message.success('删除成功');
+          message.success('删除成功！');
           reload();
         });
       },
@@ -40,7 +40,7 @@ function ListTable(props: ListTableProps) {
       key: 'feeName',
       width: 140,
       sorter: true,
-    }, 
+    },
     {
       title: '费项种类',
       dataIndex: 'feeKind',
@@ -73,15 +73,13 @@ function ListTable(props: ListTableProps) {
       title: '计费周期',
       dataIndex: 'cycleValue',
       key: 'cycleValue',
-      width: 80,
-      sorter: true,
+      width: 80, 
     },
     {
       title: '周期单位',
       dataIndex: 'cycleType',
       key: 'cycleType',
-      width: 80,
-      sorter: true,
+      width: 80, 
     },
     {
       title: '计费起始日期',
@@ -90,9 +88,9 @@ function ListTable(props: ListTableProps) {
       width: 85,
       render: val => {
         if (val == null) {
-          return <span></span>
+          return '';
         } else {
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
+          return moment(val).format('YYYY-MM-DD');
         }
       }
     }, {
@@ -102,9 +100,9 @@ function ListTable(props: ListTableProps) {
       width: 85,
       render: val => {
         if (val == null) {
-          return <span></span>
+          return '';
         } else {
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
+          return moment(val).format('YYYY-MM-DD');
         }
       }
     },
