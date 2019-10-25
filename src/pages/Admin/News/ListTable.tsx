@@ -34,91 +34,62 @@ function ListTable(props: ListTableProps) {
   };
   const columns = [
     {
-      title: '管理处名称',
+      title: '类型',
       dataIndex: 'type',
       key: 'type',
       width: 60,
     },
     {
-      title: '楼盘名称',
+      title: '标题',
       dataIndex: 'title',
       key: 'title',
       width: 200,
-    },
+    }, 
     {
-      title: '楼栋名称',
+      title: '所属小区',
       dataIndex: 'estateName',
       key: 'estateName',
       width: 300,
     },
     {
-      title: '房屋名称',
+      title: '点击率',
       dataIndex: 'clickCounts',
       key: 'clickCounts',
     },
     {
-      title: '订单编号',
+      title: '是否发布',
       dataIndex: 'isPublish',
-      key: 'isPublish', 
+      key: 'isPublish',
+      render: val => val == 1 ? <Tag color="#19d54e">已发布</Tag> : <Tag color="#e4aa5b">未发布</Tag>
     },
     {
-      title: '订单日期',
+      title: '添加人',
       dataIndex: 'createUserName',
       key: 'createUserName'
     },
     {
-      title: '订单来源',
+      title: '添加时间',
       dataIndex: 'createDate',
       key: 'createDate',
       sorter: true
     },
-
     {
-      title: '订单状态',
-      dataIndex: 'createDate',
-      key: 'createDate',
-      sorter: true
+      title: '操作',
+      dataIndex: 'operation',
+      key: 'operation',
+      align: 'center',
+      width: 120,
+      fixed: 'right',
+      render: (text, record) => {
+        return [
+          <span>
+            <a onClick={() => modify(record)} key="modify">修改</a>
+            <Divider type="vertical" />
+            <a onClick={() => doDelete(record)} key="delete">删除</a>
+          </span>
+        ];
+      },
     },
-
-
-    {
-      title: '订单金额',
-      dataIndex: 'createDate',
-      key: 'createDate',
-      sorter: true
-    },
-
-    {
-      title: '收款单编号',
-      dataIndex: 'createDate',
-      key: 'createDate',
-      sorter: true
-    },
-
-    {
-      title: '收款单日期',
-      dataIndex: 'createDate',
-      key: 'createDate',
-      sorter: true
-    },
-
-
-    {
-      title: '收款方式',
-      dataIndex: 'createDate',
-      key: 'createDate',
-      sorter: true
-    },
-
-    {
-      title: '收款金额',
-      dataIndex: 'createDate',
-      key: 'createDate',
-      sorter: true
-    },
-
-    //动态费项统计列
-
   ] as ColumnProps<any>[];
   return (
     <Page>

@@ -18,54 +18,90 @@ function ListTable(props: ListTableProps) {
 
   const columns = [
     {
-      title: '费表类型',
-      dataIndex: 'meterKind',
-      key: 'meterKind',
-      width: 100,
-      sorter: true
+      title: '管理处名称',
+      dataIndex: 'type',
+      key: 'type',
+      width: 60,
     },
     {
-      title: '费表种类',
-      dataIndex: 'meterType',
-      key: 'meterType',
-      width: 100,
-      sorter: true
-    },
-    {
-      title: '费表名称',
-      dataIndex: 'meterName',
-      key: 'meterName',
+      title: '楼盘名称',
+      dataIndex: 'title',
+      key: 'title',
       width: 200,
-      sorter: true,
     },
     {
-      title: '倍率',
-      dataIndex: 'meterZoom',
-      key: 'meterZoom',
-      width: 80,
-      sorter: true,
+      title: '楼栋名称',
+      dataIndex: 'estateName',
+      key: 'estateName',
+      width: 300,
     },
     {
-      title: '量程',
-      dataIndex: 'meterRange',
-      key: 'meterRange',
-      width: 80,
-      sorter: true,
+      title: '房屋名称',
+      dataIndex: 'clickCounts',
+      key: 'clickCounts',
     },
     {
-      title: '关联收费项目',
-      dataIndex: 'feeItemname',
-      key: 'feeItemname',
-      sorter: true,
-      width: 150
+      title: '订单编号',
+      dataIndex: 'isPublish',
+      key: 'isPublish', 
     },
     {
-      title: '所属机构',
-      dataIndex: 'fullName',
-      key: 'fullName',
+      title: '订单日期',
+      dataIndex: 'createUserName',
+      key: 'createUserName'
+    },
+    {
+      title: '订单来源',
+      dataIndex: 'createDate',
+      key: 'createDate',
       sorter: true
-    }
-    
+    },
+
+    {
+      title: '订单状态',
+      dataIndex: 'createDate',
+      key: 'createDate',
+      sorter: true
+    },
+
+
+    {
+      title: '订单金额',
+      dataIndex: 'createDate',
+      key: 'createDate',
+      sorter: true
+    },
+
+    {
+      title: '收款单编号',
+      dataIndex: 'createDate',
+      key: 'createDate',
+      sorter: true
+    },
+
+    {
+      title: '收款单日期',
+      dataIndex: 'createDate',
+      key: 'createDate',
+      sorter: true
+    },
+ 
+    {
+      title: '收款方式',
+      dataIndex: 'createDate',
+      key: 'createDate',
+      sorter: true
+    },
+
+    {
+      title: '收款金额',
+      dataIndex: 'createDate',
+      key: 'createDate',
+      sorter: true
+    },
+
+    //动态费项统计列
+
   ] as ColumnProps<any>[];
 
   return (

@@ -47,17 +47,14 @@ function BillDetails() {
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
       searchCondition.sidx = field ? field : 'meterkind';
     }
-
     return meterload(searchCondition);
-  }
+  };
 
 
   const meterload = data => {
     setMeterLoading(true);
     data.sidx = data.sidx || 'meterkind';
     data.sord = data.sord || 'asc';
-
-
     return GetBillDetailsPageList(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setMeterPagination(pagesetting => {
@@ -68,13 +65,11 @@ function BillDetails() {
           pageSize,
         };
       });
-
       setMeterData(res.data);
       setMeterLoading(false);
       return res;
     });
   };
-
 
   const initMeterLoadData = (org, searchText) => {
     setMeterSearch(searchText);
