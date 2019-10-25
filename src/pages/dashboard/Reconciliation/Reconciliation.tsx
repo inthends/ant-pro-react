@@ -3,8 +3,7 @@ import { DefaultPagination } from '@/utils/defaultSetting';
 import {   Button, Icon, Input, Layout, Select } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { GetMeterPageList }
- from './Reconciliation.service';
+import { GetReconciliationPageList } from './Reconciliation.service';
 import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';   
 const { Content } = Layout;
@@ -59,7 +58,7 @@ function Reconciliation() {
     data.sord = data.sord || 'asc';
 
      
-    return GetMeterPageList(data).then(res => {
+    return GetReconciliationPageList(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setMeterPagination(pagesetting => {
         return {
