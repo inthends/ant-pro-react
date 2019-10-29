@@ -166,6 +166,7 @@ function Main() {
             <Select.Option key='资讯' value='资讯'>资讯</Select.Option>
             <Select.Option key='广告' value='广告'>广告</Select.Option>
             <Select.Option key='活动' value='活动'>活动</Select.Option>
+            <Select.Option key='关于我们' value='关于我们'>关于我们</Select.Option>
           </Select>
 
           <Search

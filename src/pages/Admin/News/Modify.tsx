@@ -156,8 +156,8 @@ const Modify = (props: ModifyProps) => {
       )
     }
   ];
-
   //文本编辑器结束
+
   const doSave = dataDetail => {
     let modifyData = { ...initData, ...dataDetail, keyValue: initData.id };
     modifyData.description = dataDetail.description.toHTML();//toRAW();  
@@ -203,7 +203,8 @@ const Modify = (props: ModifyProps) => {
                 { label: '公告', value: '公告' },
                 { label: '资讯', value: '资讯' },
                 { label: '广告', value: '广告' },
-                { label: '活动', value: '活动' }
+                { label: '活动', value: '活动' },
+                { label: '关于我们', value: '关于我们' }
               ]}
               // onChange={value => form.setFieldsValue({ isPublish: value })}
               rules={[{ required: true, message: "请选择类型" }]}

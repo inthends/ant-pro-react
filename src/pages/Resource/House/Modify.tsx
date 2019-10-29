@@ -9,7 +9,15 @@ import styles from './style.less';
 import moment from 'moment';
 
 const { Option } = Select;
-const { TextArea } = Input;
+// const { TextArea } = Input;
+
+// 引入编辑器组件
+import BraftEditor from 'braft-editor'
+import { ContentUtils } from 'braft-utils'
+// 引入编辑器样式
+import 'braft-editor/dist/index.css'
+//使用antd upload
+
 
 interface ModifyProps {
   modifyVisible: boolean;
@@ -38,7 +46,7 @@ const Modify = (props: ModifyProps) => {
   const [previewImage, setPreviewImage] = useState<string>('');
 
   //打开抽屉时初始化
-  useEffect(() => { 
+  useEffect(() => {
     GetTreeAreaJson('100000').then(res => {
       setPro(res || []);
     });
@@ -55,6 +63,7 @@ const Modify = (props: ModifyProps) => {
       }
     });
   };
+
   const getArea = (areaId: string, init = false) => {
     GetTreeAreaJson(areaId).then(res => {
       setArea(res || []);
@@ -99,7 +108,7 @@ const Modify = (props: ModifyProps) => {
   };
 
   //重新设置state
-  const handleChange = ({ fileList }) => { 
+  const handleChange = ({ fileList }) => {
 
     setFileList([...fileList]);
     let url = '';
@@ -125,16 +134,27 @@ const Modify = (props: ModifyProps) => {
 
           //加载图片
           let files: any[]; files = [];
-          if (tempInfo.mainPic != null) { 
+          if (tempInfo.mainPic != null) {
             const filedate = {
               url: tempInfo.mainPic,
-              uid:tempInfo.id//必须
-            } 
+              uid: tempInfo.id//必须
+            }
             files.push(filedate);
-          } 
+          }
           setFileList(files);
           //加载图片
-          
+
+
+          //给文本编辑器赋值
+          setTimeout(() => {
+            form.setFieldsValue({
+              description: BraftEditor.createEditorState(
+                tempInfo.memo
+              )
+            })
+          }, 500)
+
+
           form.resetFields();
         });
       } else {
@@ -223,11 +243,63 @@ const Modify = (props: ModifyProps) => {
   };
 
 
+
+  //文本编辑器开始
+  const [state, setState] = useState<any>(
+    {
+      editorState: BraftEditor.createEditorState(null)
+    }
+  );
+
+  const handleEditorChange = (editorState) => {
+    setState({ editorState });
+  };
+
+  //文本编辑上传change
+  const handleEditorUploadChange = ({ file }) => {
+    let url = '';
+    if (file.response != null && file.response != undefined) {
+      url = file.response;
+      const editorState = ContentUtils.insertMedias(state.editorState, [{
+        type: 'IMAGE',
+        url: url
+      }]);
+      //赋值
+      form.setFieldsValue({ memo: BraftEditor.createEditorState(editorState) });
+      setState(editorState);
+    }
+  };
+
+  let controls: any[];
+  controls = ['bold', 'italic', 'underline', 'text-color', 'separator', 'link', 'separator'];
+  let extendControls: any[];
+  extendControls = [
+    {
+      key: 'antd-uploader',
+      type: 'component',
+      component: (
+        <Upload
+          accept="image/*"
+          showUploadList={false}
+          action={process.env.basePath + '/PStructs/Upload'}
+          onChange={handleEditorUploadChange}
+        >
+          {/* 这里的按钮最好加上type="button"，以避免在表单容器中触发表单提交，用Antd的Button组件则无需如此 */}
+          <button type="button" className="control-item button upload-button" data-title="插入图片">
+            <Icon type="picture" theme="filled" />
+          </button>
+        </Upload>
+      )
+    }
+  ];
+  //文本编辑器结束
+
+
   return (
     <Drawer
       title={title}
       placement="right"
-      width={600}
+      width={700}
       onClose={close}
       visible={modifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
@@ -469,7 +541,7 @@ const Modify = (props: ModifyProps) => {
               </Col>
             </Row> */}
             <Row gutter={24}>
-              <Col lg={12}>
+              <Col lg={8}>
                 <Form.Item label="楼栋管家">
                   {getFieldDecorator('housekeeperName', {
                     initialValue: infoDetail.housekeeperName,
@@ -490,17 +562,29 @@ const Modify = (props: ModifyProps) => {
 
                 </Form.Item>
               </Col>
-              <Col lg={12}>
+              <Col lg={8}>
                 <Form.Item label="电子发票">
                   {getFieldDecorator('invoiceTitle', {
                     initialValue: infoDetail.invoiceTitle,
                   })(<Input placeholder="请输入电子发票" />)}
                 </Form.Item>
               </Col>
+
+
+              <Col lg={8}>
+                <Form.Item label="项目风采">
+
+                  
+
+                </Form.Item>
+              </Col>
+
+
+
             </Row>
             <Row gutter={24}>
               <Col lg={24}>
-                <Form.Item label="附加说明">
+                {/* <Form.Item label="附加说明">
                   {getFieldDecorator('memo', {
                     initialValue: infoDetail.memo,
                   })(<TextArea rows={4} placeholder="请输入附加说明" />)}
@@ -510,7 +594,23 @@ const Modify = (props: ModifyProps) => {
                   })(
                     <input type='hidden' />
                   )}
+                </Form.Item> */}
+
+
+                <Form.Item required label="">
+                  {getFieldDecorator('memo', {
+                    rules: [{ required: true, message: '请输入内容' }]
+                  })(
+                    <BraftEditor
+                      // value={state.editorState}
+                      onChange={handleEditorChange}
+                      controls={controls}
+                      extendControls={extendControls}
+                      placeholder="请输入内容"
+                    />
+                  )}
                 </Form.Item>
+
               </Col>
             </Row>
 
