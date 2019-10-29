@@ -1063,10 +1063,10 @@ const Modify = (props: ModifyProps) => {
                   <Form.Item label="账单日 距">
                     {getFieldDecorator('accBillDateBase', {
                       initialValue: infoDetail.accBillDateBase ? infoDetail.accBillDateBase : 2,
-                      rules: [{ required: true, message: '请选择应收期间' }],
+                      rules: [{ required: true, message: '请选择账单日' }],
                     })(
-                      <Select placeholder="==选择应收期间==">
-                        <Option value={1}>同一季度费用,每季度首月为应收期间</Option>
+                      <Select placeholder="==选择账单日==">
+                        <Option value={1}>同一季度费用,每季度首月为账单期间</Option>
                         <Option value={2} >计费起始日期</Option>
                         <Option value={3}>计费终止日期</Option>
                       </Select>
@@ -1108,31 +1108,31 @@ const Modify = (props: ModifyProps) => {
                       initialValue: infoDetail.accBillDateFixed,
                     })(
                       <Select disabled={accFixedDisabled}>
-                        <Option value="1"> 1日</Option>
-                        <Option value="2"> 2日</Option>
-                        <Option value="3"> 3日</Option>
-                        <Option value="4"> 4日</Option>
-                        <Option value="5"> 5日</Option>
-                        <Option value="6"> 6日</Option>
-                        <Option value="7"> 7日</Option>
-                        <Option value="8"> 8日</Option>
-                        <Option value="9"> 9日</Option>
-                        <Option value="10"> 10日</Option>
-                        <Option value="11"> 11日</Option>
-                        <Option value="12"> 12日</Option>
-                        <Option value="13"> 13日</Option>
-                        <Option value="14"> 14日</Option>
-                        <Option value="15"> 15日</Option>
-                        <Option value="16"> 16日</Option>
-                        <Option value="17"> 17日</Option>
-                        <Option value="18"> 18日</Option>
-                        <Option value="19"> 19日</Option>
-                        <Option value="20"> 20日</Option>
-                        <Option value="21"> 21日</Option>
-                        <Option value="22"> 22日</Option>
-                        <Option value="23"> 23日</Option>
-                        <Option value="24"> 24日</Option>
-                        <Option value="25"> 25日</Option>
+                        <Option value="1">1日</Option>
+                        <Option value="2">2日</Option>
+                        <Option value="3">3日</Option>
+                        <Option value="4">4日</Option>
+                        <Option value="5">5日</Option>
+                        <Option value="6">6日</Option>
+                        <Option value="7">7日</Option>
+                        <Option value="8">8日</Option>
+                        <Option value="9">9日</Option>
+                        <Option value="10">10日</Option>
+                        <Option value="11">11日</Option>
+                        <Option value="12">12日</Option>
+                        <Option value="13">13日</Option>
+                        <Option value="14">14日</Option>
+                        <Option value="15">15日</Option>
+                        <Option value="16">16日</Option>
+                        <Option value="17">17日</Option>
+                        <Option value="18">18日</Option>
+                        <Option value="19">19日</Option>
+                        <Option value="20">20日</Option>
+                        <Option value="21">21日</Option>
+                        <Option value="22">22日</Option>
+                        <Option value="23">23日</Option>
+                        <Option value="24">24日</Option>
+                        <Option value="25">25日</Option>
                         <Option value="26">26日</Option>
                         <Option value="27">27日</Option>
                         <Option value="28">28日</Option>
@@ -1149,11 +1149,11 @@ const Modify = (props: ModifyProps) => {
                   <Form.Item label="收款截止日 距">
                     {getFieldDecorator('payDeadlineBase', {
                       initialValue: infoDetail.payDeadlineBase ? infoDetail.payDeadlineBase : 3,
-                      rules: [{ required: true, message: '请选择应收期间' }],
+                      rules: [{ required: true, message: '请选择收款截止日' }],
                     })(
-                      <Select placeholder="==选择应收期间==">
-                        <Option value={1}>同一季度费用,每季度首月为应收期间</Option>
-                        <Option value={2} >计费起始日期</Option>
+                      <Select placeholder="==选择收款截止日==">
+                        <Option value={1}>同一季度费用,每季度首月</Option>
+                        <Option value={2}>计费起始日期</Option>
                         <Option value={3}>计费终止日期</Option>
                       </Select>
                     )}
@@ -1235,10 +1235,10 @@ const Modify = (props: ModifyProps) => {
                   <Form.Item label="滞纳金起算日 距">
                     {getFieldDecorator('lateStartDateBase', {
                       initialValue: infoDetail.lateStartDateBase ? infoDetail.lateStartDateBase : 3,
-                      rules: [{ required: true, message: '请选择应收期间' }],
+                      rules: [{ required: true, message: '请选择滞纳金起算日' }],
                     })(
-                      <Select placeholder="==选择应收期间==">
-                        <Option value={1}>同一季度费用,每季度首月为应收期间</Option>
+                      <Select placeholder="==选择滞纳金起算日==">
+                        <Option value={1}>同一季度费用,每季度首月</Option>
                         <Option value={2}>计费起始日期</Option>
                         <Option value={3}>计费终止日期</Option>
                       </Select>
@@ -1289,28 +1289,28 @@ const Modify = (props: ModifyProps) => {
                         <Option key="7"> 7日</Option>
                         <Option key="8"> 8日</Option>
                         <Option key="9"> 9日</Option>
-                        <Option key="10"> 10日</Option>
-                        <Option key="11"> 11日</Option>
-                        <Option key="12"> 12日</Option>
-                        <Option key="13"> 13日</Option>
-                        <Option key="14"> 14日</Option>
-                        <Option key="15"> 15日</Option>
-                        <Option key="16"> 16日</Option>
-                        <Option key="17"> 17日</Option>
-                        <Option key="18"> 18日</Option>
-                        <Option key="19"> 19日</Option>
-                        <Option key="20"> 20日</Option>
-                        <Option key="21"> 21日</Option>
-                        <Option key="22"> 22日</Option>
-                        <Option key="23"> 23日</Option>
-                        <Option key="24"> 24日</Option>
-                        <Option key="25"> 25日</Option>
-                        <Option key="26"> 26日</Option>
-                        <Option key="27"> 27日</Option>
-                        <Option key="28"> 28日</Option>
-                        <Option key="29"> 29日</Option>
-                        <Option key="30"> 30日</Option>
-                        <Option key="31"> 31日</Option>
+                        <Option key="10">10日</Option>
+                        <Option key="11">11日</Option>
+                        <Option key="12">12日</Option>
+                        <Option key="13">13日</Option>
+                        <Option key="14">14日</Option>
+                        <Option key="15">15日</Option>
+                        <Option key="16">16日</Option>
+                        <Option key="17">17日</Option>
+                        <Option key="18">18日</Option>
+                        <Option key="19">19日</Option>
+                        <Option key="20">20日</Option>
+                        <Option key="21">21日</Option>
+                        <Option key="22">22日</Option>
+                        <Option key="23">23日</Option>
+                        <Option key="24">24日</Option>
+                        <Option key="25">25日</Option>
+                        <Option key="26">26日</Option>
+                        <Option key="27">27日</Option>
+                        <Option key="28">28日</Option>
+                        <Option key="29">29日</Option>
+                        <Option key="30">30日</Option>
+                        <Option key="31">31日</Option>
                       </Select>
                     )}
                   </Form.Item>

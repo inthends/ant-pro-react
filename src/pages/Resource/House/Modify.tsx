@@ -1,6 +1,6 @@
 //项目修改
 import { TreeEntity } from '@/model/models';
-import { AutoComplete, Upload, Modal, Icon, Button, Card, Col, DatePicker, Drawer, Form, Input, Row, Select, TreeSelect, message } from 'antd';
+import { Switch, AutoComplete, Upload, Modal, Icon, Button, Card, Col, DatePicker, Drawer, Form, Input, Row, Select, TreeSelect, message } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { ExistEnCode, GetFormInfoJson, GetTreeAreaJson, SaveForm } from './House.service';
@@ -148,7 +148,7 @@ const Modify = (props: ModifyProps) => {
           //给文本编辑器赋值
           setTimeout(() => {
             form.setFieldsValue({
-              description: BraftEditor.createEditorState(
+              memo: BraftEditor.createEditorState(
                 tempInfo.memo
               )
             })
@@ -174,6 +174,7 @@ const Modify = (props: ModifyProps) => {
       if (!errors) {
         getInfo(id).then(tempInfo => {
           const newvalue = { ...values, date: values.date.format('YYYY-MM-DD') };
+          newvalue.memo = values.memo.toHTML();//toRAW(); 
           SaveForm({ ...tempInfo, ...newvalue, keyValue: tempInfo.id }).then(res => {
             message.success('保存成功');
             closeDrawer();
@@ -541,7 +542,7 @@ const Modify = (props: ModifyProps) => {
               </Col>
             </Row> */}
             <Row gutter={24}>
-              <Col lg={8}>
+              <Col lg={10}>
                 <Form.Item label="楼栋管家">
                   {getFieldDecorator('housekeeperName', {
                     initialValue: infoDetail.housekeeperName,
@@ -562,7 +563,7 @@ const Modify = (props: ModifyProps) => {
 
                 </Form.Item>
               </Col>
-              <Col lg={8}>
+              <Col lg={10}>
                 <Form.Item label="电子发票">
                   {getFieldDecorator('invoiceTitle', {
                     initialValue: infoDetail.invoiceTitle,
@@ -571,10 +572,18 @@ const Modify = (props: ModifyProps) => {
               </Col>
 
 
-              <Col lg={8}>
-                <Form.Item label="项目风采">
+              <Col lg={4}>
+                <Form.Item label="项目风采"> 
+                  {getFieldDecorator('isPublish', {
+                    initialValue: infoDetail.isPublish,
+                  })(
+                    <Switch
+                      onChange={value => form.setFieldsValue({ isPublish: value })}
+                      checked={form.getFieldValue('isPublish')}
+                    ></Switch>
 
-                  
+
+                  )}
 
                 </Form.Item>
               </Col>

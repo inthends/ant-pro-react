@@ -1,8 +1,8 @@
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { Checkbox, Tabs, Button, Icon, Input, Layout, Select, DatePicker, message, Modal } from 'antd';
+import { Checkbox, Tabs, Button, Icon, Input, Layout, Select, DatePicker, message } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { GetPageListJson, ChargeFeePageData, InvalidForm, RedFlush, CheckRedFlush } from './Main.service';
+import { GetPageListJson, ChargeFeePageData } from './Main.service';
 import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
 import ChargeListTable from './ChargeListTable';
@@ -436,7 +436,7 @@ function Main() {
                   initChargeLoadData(organizeId);
                 }}
               >
-                <Icon type="search" />
+              <Icon type="search" />
                 搜索
               </Button>
 
@@ -476,6 +476,7 @@ function Main() {
                 查看
               </Button> */}
             </div>
+
             <ChargeListTable
               onchange={(paginationConfig, filters, sorter) =>
                 loadChargeData(paginationConfig, sorter)

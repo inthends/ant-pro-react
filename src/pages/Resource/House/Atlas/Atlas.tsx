@@ -3,8 +3,10 @@ import styles from './index.less';
 import Block from './Block';
 import Room from './Room';
 import { Icon, Spin } from 'antd';
+import {
+  GetFloorData//, GetRoomData
+} from '../House.service';
 
-import { GetFloorData, GetRoomData } from '../House.service';
 interface AtlasProps {
   parentId?: string;
   showDrawer(item): void;
@@ -19,20 +21,24 @@ const Atlas = (props: AtlasProps) => {
     // 获取楼层信息
     GetFloorData(parentId).then(res => {
       const floors = res || [];
-      const promises = floors.map(item => {
-        // 获取房间信息
-        return GetRoomData(item.id).then(rooms => {
-          item.rooms = rooms || [];
-          return rooms;
-        });
-      });
-      if (floors.length === 0) {
-        setLoading(false);
-      }
-      Promise.all(promises).then(() => {
-        setData(floors);
-        setLoading(false);
-      });
+      // const promises = floors.map(item => {
+      //   // 获取房间信息
+      //   return GetRoomData(item.id).then(rooms => {
+      //     item.rooms = rooms || [];
+      //     return rooms;
+      //   });
+      // }); 
+      // if (floors.length === 0) {
+      //   setLoading(false);
+      // }
+      // Promise.all(promises).then(() => {
+      //   setData(floors);
+      //   setLoading(false);
+      // });
+
+      setData(floors);
+      setLoading(false);
+
     });
   }, [parentId]);
   return (
@@ -51,41 +57,49 @@ const Atlas = (props: AtlasProps) => {
             onClick={() => setInline(!inline)}
           />
         ) : (
-          <Icon
-            type="fullscreen-exit"
-            className={styles.buildingIcon}
-            onClick={() => setInline(!inline)}
-          />
-        )}
+            <Icon
+              type="fullscreen-exit"
+              className={styles.buildingIcon}
+              onClick={() => setInline(!inline)}
+            />
+          )}
       </div>
-      {loading ? (
+
+      {/* {loading ? (
         <div style={{ textAlign: 'center' }}>
           <Spin size="large" style={{ marginTop: 200 }} />
         </div>
-      ) : null}
-      <div style={{ paddingTop: 20 }}>
-        <div className={styles.buildingTable}>
-          {data.map(floor => (
-            <div className={styles.buildingRow}>
-              <div className={styles.buildingTtitle}>{floor.name}</div>
-              <div style={{ flexGrow: 1 }}>
-                <div
-                  className={styles.buildingRooms}
-                  style={inline ? undefined : { flexFlow: 'row wrap' }}
-                >
-                  {floor.rooms.map(room => (
-                    <Room inline={inline} state={room.state} onClick={() => showDrawer(room)}>
-                      <div>{room.name}</div>
-                      <div>{room.area}㎡</div>
-                      <div>{room.tenantName}</div>
-                    </Room>
-                  ))}
+      ) : null} */}
+
+
+      <Spin spinning={loading}>
+
+        <div style={{ paddingTop: 20 }}>
+          <div className={styles.buildingTable}>
+            {data.map(floor => (
+              <div className={styles.buildingRow}>
+                <div className={styles.buildingTtitle}>{floor.item.name}</div>
+                <div style={{ flexGrow: 1 }}>
+                  <div
+                    className={styles.buildingRooms}
+                    style={inline ? undefined : { flexFlow: 'row wrap' }}
+                  >
+                    {floor.rooms.map(room => (
+                      <Room inline={inline} state={room.state} onClick={() => showDrawer(room)}>
+                        <div>{room.name}</div>
+                        <div>{room.area}㎡</div>
+                        <div>{room.tenantName}</div>
+                      </Room>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
+
+      </Spin>
+
     </>
   );
 };

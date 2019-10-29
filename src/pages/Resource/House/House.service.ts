@@ -51,27 +51,36 @@ export function GetPageListJson(data): Promise<any> {
     .then(getResult as any);
 }
 
-//获取房态图楼层数据
+// export function GetFloorData(keyValue): Promise<any> {
+//   const data = {
+//     keyValue
+//   };
+//   return request
+//     .get(process.env.basePath + `/PStructs/GetFloorData?${objToUrl(data)}`)
+//     .then(getResult as any);
+// }
+
+//获取房态图楼层和房间数据
 export function GetFloorData(keyValue): Promise<any> {
-  const data = {
-    keyValue,
-    type: 4,
-  };
+  // const data = {
+  //   keyValue
+  // };
   return request
-    .get(process.env.basePath + `/PStructs/GetPStructs?${objToUrl(data)}`)
+    .get(process.env.basePath + `/PStructs/GetFloorData?keyValue=${keyValue}`)
     .then(getResult as any);
 }
 
+
 //获取房态图房间数据
-export function GetRoomData(keyValue): Promise<any> {
-  const data = {
-    keyValue,
-    type: 5,
-  };
-  return request
-    .get(process.env.basePath + `/PStructs/GetPStructs?${objToUrl(data)}`)
-    .then(getResult as any);
-}
+// export function GetRoomData(keyValue): Promise<any> {
+//   const data = {
+//     keyValue,
+//     type: 5,
+//   };
+//   return request
+//     .get(process.env.basePath + `/PStructs/GetPStructs?${objToUrl(data)}`)
+//     .then(getResult as any);
+// }
 
 // //获取小区房间
 // export function GetBuildings(pstructid): Promise<any[]> {

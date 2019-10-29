@@ -767,7 +767,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                       initialValue: infoDetail.accBillDateBase ? infoDetail.accBillDateBase : 2,
                     })(
                       <Select placeholder="==选择应收期间==">
-                        <Option value={1}>同一季度费用,每季度首月为应收期间</Option>
+                        <Option value={1}>同一季度费用,每季度首月为账单期间</Option>
                         <Option value={2}>计费起始日期</Option>
                         <Option value={3}>计费终止日期</Option>
                       </Select>
@@ -796,7 +796,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                         }
                       }}>
                         <Option value={1}>天</Option>
-                        <Option value={2} >月</Option>
+                        <Option value={2}>月</Option>
                       </Select>
                     )}
                   </Form.Item>
@@ -848,9 +848,10 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                   <Form.Item label="收款截止日 距">
                     {getFieldDecorator('payDeadlineBase', {
                       initialValue: infoDetail.payDeadlineBase ? infoDetail.payDeadlineBase : 3,
+                      rules: [{ required: true, message: '请选择收款截止日' }],
                     })(
-                      <Select placeholder="==选择应收期间==">
-                        <Option value={1}>同一季度费用,每季度首月为应收期间</Option>
+                      <Select placeholder="==选择收款截止日==">
+                        <Option value={1}>同一季度费用,每季度首月</Option>
                         <Option value={2}>计费起始日期</Option>
                         <Option value={3}>计费终止日期</Option>
                       </Select>
@@ -931,9 +932,10 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                   <Form.Item label="滞纳金起算日 距">
                     {getFieldDecorator('lateStartDateBase', {
                       initialValue: infoDetail.lateStartDateBase ? infoDetail.lateStartDateBase : 3,
+                      rules: [{ required: true, message: '请选择滞纳金起算日' }],
                     })(
-                      <Select placeholder="==选择应收期间==">
-                        <Option value={1}>同一季度费用,每季度首月为应收期间</Option>
+                      <Select placeholder="==选择滞纳金起算日==">
+                        <Option value={1}>同一季度费用,每季度首月</Option>
                         <Option value={2}>计费起始日期</Option>
                         <Option value={3}>计费终止日期</Option>
                       </Select>

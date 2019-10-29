@@ -33,7 +33,7 @@ const Modify = (props: ModifyProps) => {
   // 打开抽屉时初始化
   useEffect(() => {
     // form.resetFields();
-    if (modifyVisible) { 
+    if (modifyVisible) {
       GetReceivablesFeeItemTreeJson(organizeId).then(res => {
         setFeeTreeData(res);
       });
@@ -191,7 +191,6 @@ const Modify = (props: ModifyProps) => {
       }
       if (!errors) {
         var guid = getGuid();
-
         var unit = {
           BillId: id != null && id != "" ? infoDetail.billId : guid,
           UnitId: values.householdId,
@@ -206,7 +205,8 @@ const Modify = (props: ModifyProps) => {
           RelationId: values.relationId,//getRelationId(values.relationId),
           CycleValue: "" + values.cycleValue,
           CycleType: values.cycleType,
-          BillDate: moment(values.billDate).format("YYYY-MM-DD")
+          BillDate: moment(values.billDate).format("YYYY-MM-DD"),
+          Deadline: moment(values.deadline).format("YYYY-MM-DD")
         }
         if (id != null && id != "") {
           unit = Object.assign({}, unit, { Id: id, keyValue: id });
@@ -324,7 +324,7 @@ const Modify = (props: ModifyProps) => {
     <Drawer
       title={title}
       placement="right"
-      width={id != '' ? 488 : 780}
+      width={id != '' ? 500 : 840}
       onClose={() => close(false)}
       visible={modifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 50px)' }}
@@ -332,7 +332,7 @@ const Modify = (props: ModifyProps) => {
       <Row>
         {
           id != '' ?
-            null : <Col span={8} style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh - 140px)' }}>
+            null : <Col span={7} style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh - 140px)' }}>
               <LeftTree
                 treeData={feeTreeData}
                 selectTree={(id, item) => {
@@ -368,7 +368,7 @@ const Modify = (props: ModifyProps) => {
             </Col>
         }
 
-        <Col span={id != '' ? 24 : 16}>
+        <Col span={id != '' ? 24 : 17}>
           <Form hideRequiredMark>
             <Row>
               <Form.Item label="加费对象" required labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} >
@@ -467,8 +467,9 @@ const Modify = (props: ModifyProps) => {
                 </Form.Item>
               </Col>
             </Row>
-            <Row gutter={8}>
-              <Col span={12}>
+            <Row> 
+
+            <Col span={12}>
                 <Form.Item label="周期" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
                   {getFieldDecorator('cycleValue', {
                     initialValue: infoDetail.cycleValue,
@@ -483,15 +484,19 @@ const Modify = (props: ModifyProps) => {
                   )}
                 </Form.Item>
               </Col>
+
               <Col span={12}>
-                <Form.Item label="" required labelCol={{ span: 0 }} wrapperCol={{ span: 24 }} >
+                <Form.Item label="周期单位" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
                   {getFieldDecorator('cycleType', {
                     initialValue: infoDetail.cycleType === null ? "月" : infoDetail.cycleType,
                     rules: [{ required: true, message: '请选择周期单位' }]
                   })(
-                    <Select placeholder="=请选择=" disabled={edit ? false : true} style={{ width: '100%' }} onChange={(value: string) => {
-                      setEndDate(infoDetail.beginDate, infoDetail.cycleValue, value);
-                    }}>
+                    <Select placeholder="=请选择="
+                      disabled={edit ? false : true}
+                      style={{ width: '100%' }}
+                      onChange={(value: string) => {
+                        setEndDate(infoDetail.beginDate, infoDetail.cycleValue, value);
+                      }}>
                       <Option key='日' value='日'>
                         {'日'}
                       </Option>
@@ -505,6 +510,8 @@ const Modify = (props: ModifyProps) => {
                   )}
                 </Form.Item>
               </Col>
+
+ 
             </Row>
             <Row>
               <Col span={12}>
@@ -540,14 +547,31 @@ const Modify = (props: ModifyProps) => {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="应收期间" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
+                {/* <Form.Item label="应收期间" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
                   {getFieldDecorator('period', {
                     initialValue: infoDetail.period == null ? moment(new Date()) : moment(infoDetail.period),
                     rules: [{ required: true, message: '请选择应收期间' }]
                   })(
                     <DatePicker disabled={true} style={{ width: '100%' }} />
                   )}
+                </Form.Item> */}
+
+                {getFieldDecorator('period', {
+                  initialValue: infoDetail.period,
+                })(
+                  <input type='hidden' />
+                )}
+
+                <Form.Item label="收款截止日" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
+                  {getFieldDecorator('deadline', {
+                    initialValue: infoDetail.deadline == null ? moment(new Date()) : moment(infoDetail.deadline),
+                    rules: [{ required: true, message: '请选择收款截止日期' }]
+                  })(
+                    <DatePicker disabled={true} style={{ width: '100%' }} />
+                  )}
                 </Form.Item>
+
+
               </Col>
             </Row>
             <Row>
