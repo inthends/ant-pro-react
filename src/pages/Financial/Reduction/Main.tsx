@@ -4,7 +4,9 @@ import { Tabs, Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import { GetPageListJson, GetDetailPageListJson } from './Main.service';
-import AsynLeftTree from '../AsynLeftTree';
+import { GetUnitTreeAll } from '@/services/commonItem';//获取全部房间树
+import { getResult } from '@/utils/networkUtils';
+import AsynLeftTree from '../AsynLeftTree'; 
 import ListTable from './ListTable';
 import Modify from './Modify';
 import Verify from './Verify';
@@ -30,6 +32,7 @@ function Main() {
   // const [addButtonDisabled, setAddButtonDisabled] = useState<boolean>(true);
   const [search, setSearch] = useState<string>('');
   const [detailsearch, setDetailSearch] = useState<string>('');
+  const [unitTreeData, setUnitTreeData] = useState<any[]>([]);
 
   const selectTree = (org, item, searchText) => {
     initLoadData(item, '');
@@ -45,9 +48,18 @@ function Main() {
     //   initDetailLoadData(rootOrg, '');
     // });
 
+    //获取房产树
+    GetUnitTreeAll()
+      .then(getResult)
+      .then((res: any[]) => {
+        setUnitTreeData(res || []);
+        return res || [];
+      });
+
     initLoadData('', '');
     initDetailLoadData('', '');
   }, []);
+
   // 获取属性数据
   // const getTreeData = () => {
   //   return GetTreeListExpand()
@@ -143,11 +155,12 @@ function Main() {
       return res;
     });
   };
+
   const initLoadData = (org, searchText) => {
     setSearch(searchText);
     // setAddButtonDisabled(true);
     const queryJson = {
-      OrganizeId: org.organizeId,
+      // OrganizeId: org.organizeId,
       keyword: searchText,
       TreeTypeId: org.id,
       TreeType: org.type,
@@ -224,7 +237,7 @@ function Main() {
   //页签切换刷新
   const changeTab = key => {
     if (key == "1") {
-      initLoadData('', search);
+      initLoadData('',   search);
     } else {
       initDetailLoadData('', detailsearch);
     }
@@ -238,6 +251,14 @@ function Main() {
           selectTree(id, item, search);
         }}
       />
+
+      {/* <SynLeftTree
+        treeData={unitTreeData} 
+        selectTree={(id, type, info?) => {
+          initLoadData(id, type, '');
+        }}
+      /> */}
+
       <Content style={{ paddingLeft: '18px' }}>
         <Tabs defaultActiveKey="1" onChange={changeTab}>
           <TabPane tab="减免单" key="1">
@@ -266,7 +287,7 @@ function Main() {
               modify={showDrawer}
               show={showViewDrawer}
               verify={(id, ifVerify) => showVerifyDrawer(id, ifVerify)}
-              reload={() => initLoadData('', search)}
+              reload={() => initLoadData('',  search)}
             />
           </TabPane>
           <TabPane tab="明细" key="2">
@@ -292,10 +313,11 @@ function Main() {
       </Content>
 
       <Modify
+        treeData={unitTreeData}
         modifyVisible={modifyVisible}
         closeDrawer={closeDrawer}
         id={id}
-        reload={() => initLoadData('', search)}
+        reload={() => initLoadData('',   search)}
       />
 
       <Show
@@ -309,9 +331,8 @@ function Main() {
         closeModal={closeVerifyDrawer}
         id={id}
         ifVerify={ifVerify}
-        reload={() => initLoadData('', search)}
+        reload={() => initLoadData('',  search)}
       />
-
     </Layout>
   );
 }

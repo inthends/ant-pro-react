@@ -62,10 +62,12 @@ export function SaveForm(data): Promise<any> {
 export function OrganizeEditForm(data): Promise<any> {
   return request.post(process.env.basePath + `/FeeItems/OrganizeEditForm`, {data:objToFormdata(data)}).then(getResult as any);
 }
+
 //删除费项组织机构
 export function OrganizeRemoveForm(data): Promise<any> {
   return request.post(process.env.basePath + `/FeeItems/OrganizeRemoveForm?keyValue=${data}`, {}).then(getResult as any);
 }
+
 //删除已设费房屋/FeeItems/
 export function HouseRemoveForm(data: any): Promise<any> {
   return request.post(process.env.basePath + `/FeeItems/HouseRemoveForm`,  {data:objToFormdata(data)}).then(getResult as any);
@@ -115,4 +117,10 @@ export function GetOrgAndBulidingTree(): Promise<TreeEntity[]> {
   return request
     .get(process.env.basePath + `/FeeItems/GetOrgAndBulidingTree`)
     .then(getResult as any);
+}
+
+ 
+//删除已设费房屋/FeeItems/
+export function HouseAllRemoveForm(data: any): Promise<any> {
+  return request.post(process.env.basePath + `/FeeItems/HouseAllRemoveForm`,  {data:objToFormdata(data)}).then(getResult as any);
 }

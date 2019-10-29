@@ -1,6 +1,8 @@
-import { Form, Row, Col, DatePicker, Modal } from 'antd';
+import { Spin, message, Form, Row, Col, DatePicker, Modal } from 'antd';
 import React, { useEffect, useState } from 'react';
-import AsynSelectTree from '../AsynSelectTree';
+// import AsynSelectTree from '../AsynSelectTree';
+import SelectTree from '../SelectTree';
+
 import LeftTree from '../LeftTree';
 import { TreeEntity } from '@/model/models';
 import { GetReceivablesTree } from './Main.service';
@@ -13,18 +15,20 @@ interface AddReductionItemProps {
   getReducetionItem(data?): void;
   closeModal(): void;
   form: WrappedFormUtils;
+  treeData: any[];
 }
 
 const AddReductionItem = (props: AddReductionItemProps) => {
-  const { form, visible, getReducetionItem, closeModal } = props;
+  const { form, visible, getReducetionItem, closeModal, treeData } = props;
   const { getFieldDecorator } = form;
   const [feetreeData, setFeeTreeData] = useState<TreeEntity[]>([]);
   //单元选择多选
   const [unitData, setUnitData] = useState<string[]>([]);
   //费项选择
-  const [feeData, setFeeData] = useState<string>();
+  const [feeItemId, setFeeItemId] = useState<string>();
   const [startDate, setStartDate] = useState<string>();
   const [endDate, setEndDate] = useState<string>();
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (visible) {
@@ -42,27 +46,41 @@ const AddReductionItem = (props: AddReductionItemProps) => {
   }
 
   //选择房源
-  const selectUnitTree = (id) => {
-    //setUnitData([...unitData,id]);
-  };
+  // const selectUnitTree = (id) => {
+  //   setUnitData([...unitData, id]);
+  // };
 
   const selectFeeTree = (id) => {
-    setFeeData(id);
+    setFeeItemId(id);
   };
 
   const onOk = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
+
+        //验证房屋和费项
+        if (unitData.length == 0) {
+          message.warning('请选择房屋！');
+          return;
+        }
+
+        if (feeItemId == undefined) {
+          message.warning('请选择费项！');
+          return;
+        }
+
+        setLoading(true);
         var data = {
           // units: '["' + unitData + '"]', 
-          units:JSON.stringify(unitData), 
-          feeitemid: feeData,
+          units: JSON.stringify(unitData),
+          feeitemid: feeItemId,
           begin: moment(startDate).format('YYYY-MM-DD'),
           end: moment(endDate).format('YYYY-MM-DD'),
-          Rebate: 1,
-          ReductionAmount: 1
+          // Rebate: 1,
+          // ReductionAmount: 1
         };
         getReducetionItem(data);
+        setLoading(false);
       }
     });
   }
@@ -77,7 +95,7 @@ const AddReductionItem = (props: AddReductionItemProps) => {
       setFeeTreeData(res || []);
       // const root = res.filter(item => item.parentId === '0');
       // const rootOrg = root.length === 1 ? root[0] : undefined;
-    }); 
+    });
   }, []);
 
   // 获取属性数据
@@ -154,6 +172,7 @@ const AddReductionItem = (props: AddReductionItemProps) => {
     }
     return date.getFullYear() + '-' + monthStr + '-' + dayStr
   }
+
   //获取当前月份第一天
   const getCurrentDay = () => {
     var monthStr = '';
@@ -176,9 +195,9 @@ const AddReductionItem = (props: AddReductionItemProps) => {
     return date.getFullYear() + '-' + monthStr + '-' + dayStr
   }
 
-  const getCheckedKeys = (keys) => {
-    setUnitData(keys);
-  }
+  // const getCheckedKeys = (keys) => {
+  //   setUnitData(keys);
+  // }
 
   return (
     <Modal
@@ -191,54 +210,65 @@ const AddReductionItem = (props: AddReductionItemProps) => {
       destroyOnClose={true}
       bodyStyle={{ background: '#f6f7fb' }}
       width='700px' >
-      <Form layout='inline' hideRequiredMark >
-        <Row gutter={24}>
-          <Col lg={12}>
-            <Form.Item label="账单起始日" required >
-              {getFieldDecorator('startDate', {
-                initialValue: moment(startDate),
-                rules: [{ required: true, message: '请选择账单起始日' }],
-              })(
-                <DatePicker onChange={(date, dateString) => selectStartDate(dateString)} />
-              )}
-            </Form.Item>
+      <Spin tip="数据处理中..." spinning={loading}>
+        <Form layout='inline' hideRequiredMark >
+          <Row gutter={24}>
+            <Col lg={12}>
+              <Form.Item label="账单起始日" required >
+                {getFieldDecorator('startDate', {
+                  initialValue: moment(startDate),
+                  rules: [{ required: true, message: '请选择账单起始日' }],
+                })(
+                  <DatePicker onChange={(date, dateString) => selectStartDate(dateString)} />
+                )}
+              </Form.Item>
 
-          </Col> <Col lg={12}>
-            <Form.Item label="账单截止日" required >
-              {getFieldDecorator('endDate', {
-                initialValue: moment(endDate),
-                rules: [{ required: true, message: '请选择账单截止日' }],
-              })(
-                <DatePicker onChange={(date, dateString) => selectEndDate(dateString)} />
-              )}
-            </Form.Item>
-          </Col>
-
-        </Row>
-      </Form>
-      <Row  >
-        <Col lg={10} style={{ height: 'calc(70vh)' }} >
-          <AsynSelectTree
-            parentid={'0'}
-            getCheckedKeys={getCheckedKeys}
-            selectTree={(parentId) => {
-              selectUnitTree(parentId);
-            }} />
-        </Col>
-        <Col lg={14}  >
-
-          <Row gutter={24} >
-            <Col lg={24} style={{ height: 'calc(70vh)' }}>
-              <LeftTree
-                selectTree={(id, item) => {
-                  selectFeeTree(id);
-                }}
-                treeData={feetreeData}
-              />
+            </Col> <Col lg={12}>
+              <Form.Item label="账单截止日" required >
+                {getFieldDecorator('endDate', {
+                  initialValue: moment(endDate),
+                  rules: [{ required: true, message: '请选择账单截止日' }],
+                })(
+                  <DatePicker onChange={(date, dateString) => selectEndDate(dateString)} />
+                )}
+              </Form.Item>
             </Col>
+
           </Row>
-        </Col>
-      </Row>
+        </Form>
+        <Row  >
+          <Col lg={10} style={{ height: 'calc(70vh)' }} >
+            {/* <AsynSelectTree
+              parentid={'0'}
+              getCheckedKeys={getCheckedKeys}
+              selectTree={(parentId) => {
+                selectUnitTree(parentId);
+              }} /> */}
+
+            <SelectTree
+              treeData={treeData}
+              getCheckedKeys={(keys) => {
+                setUnitData(keys);
+              }}
+              selectTree={(id, type, info?) => {
+              }}
+            />
+
+          </Col>
+          <Col lg={14}>
+            <Row gutter={24} >
+              <Col lg={24} style={{ height: 'calc(70vh)' }}>
+                <LeftTree
+                  selectTree={(id, item) => {
+                    selectFeeTree(id);
+                  }}
+                  treeData={feetreeData}
+                />
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </Spin>
     </Modal >
   );
 };

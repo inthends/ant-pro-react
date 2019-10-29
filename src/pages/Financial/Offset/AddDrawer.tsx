@@ -1,11 +1,12 @@
+//新增冲抵单
 import { TreeEntity } from '@/model/models';
-import {message,Button,Col,DatePicker,Drawer,Form,Row,Spin} from 'antd';
+import { message, notification, Button, Col, DatePicker, Drawer, Form, Row, Spin } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { GetReceivablesTree, GetPaymentTree, SaveForm, GetFormJson } from './Offset.service';
 import './style.less';
 import moment from 'moment';
-import AsynSelectTree from '../AsynSelectTree';
+import SelectTree from '../SelectTree';
 import LeftTree from '../LeftTree';
 
 interface AddDrawerProps {
@@ -16,10 +17,11 @@ interface AddDrawerProps {
   id?: string;
   organizeId?: string;
   reload(): void;
+  treeData: any[];
 };
 
 const AddDrawer = (props: AddDrawerProps) => {
-  const { addDrawerVisible, closeDrawer, form, id } = props;
+  const { treeData, addDrawerVisible, closeDrawer, form, id } = props;
   const title = id === undefined ? '新增冲抵单' : '修改冲抵单';
   const [loading, setLoading] = useState<boolean>(false);
   const { getFieldDecorator } = form;
@@ -112,9 +114,10 @@ const AddDrawer = (props: AddDrawerProps) => {
   //setUnits([...units,org]);
   //};
 
-  const getCheckedKeys = (keys) => {
-    setUnits(keys);
-  };
+  // const getCheckedKeys = (keys) => {
+  //   setUnits(keys);
+  // };
+
   const selectBillTree = (org, item) => {
     setFeeItemId(org);
   };
@@ -125,6 +128,24 @@ const AddDrawer = (props: AddDrawerProps) => {
   const onSave = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
+
+        //验证房屋和费项
+        if (units.length == 0) {
+          message.warning('请选择房屋！');
+          return;
+        }
+
+        if (payfeeitemid == '') {
+          message.warning('请选择付款费项！');
+          return;
+        }
+
+        if (feeitemid == '') {
+          message.warning('请选择收款费项！');
+          return;
+        }
+
+
         let newData = {
           payBeginDate: values.payBeginDate.format('YYYY-MM-DD'),//"2019-07-01",//
           payEndDate: values.payEndDate.format('YYYY-MM-DD'),
@@ -140,8 +161,15 @@ const AddDrawer = (props: AddDrawerProps) => {
         // });
         // unitsStr = unitsStr.substring(0, unitsStr.length - 3) + "%5D"; 
         SaveForm(newData).then((res) => {
-          message.success('保存成功');
-          close();
+          if (!res) {
+            notification['warning']({
+              message: '系统提示',
+              description:
+                '没有找到要冲抵的费用！'
+            });
+          } else {
+            close();
+          }
         })
       }
     });
@@ -193,7 +221,7 @@ const AddDrawer = (props: AddDrawerProps) => {
 
 
   return (
-    <Drawer 
+    <Drawer
       title={title}
       placement="right"
       width={900}
@@ -203,7 +231,7 @@ const AddDrawer = (props: AddDrawerProps) => {
       bodyStyle={{ background: '#f6f7fb', height: 'calc(100vh -50px)' }}
     >
       <Form layout='vertical' hideRequiredMark >
-        <Spin tip="数据加载中..." spinning={loading}> 
+        <Spin tip="数据加载中..." spinning={loading}>
           <Row gutter={24}>
             <Col lg={6}>
               <Form.Item label="应付起始日" required>
@@ -258,13 +286,23 @@ const AddDrawer = (props: AddDrawerProps) => {
           <Row gutter={16}>
             <Col span={8} style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh - 240px)' }}
             >
-              <AsynSelectTree
+              {/* <AsynSelectTree
                 parentid={'0'}
                 getCheckedKeys={getCheckedKeys}
                 selectTree={(id, item) => {
                   //selectRoomTree(id, item);
                 }}
+              /> */}
+
+              <SelectTree
+                treeData={treeData}
+                getCheckedKeys={(keys) => {
+                  setUnits(keys);
+                }}
+                selectTree={(id, type, info?) => {
+                }}
               />
+
             </Col>
             <Col span={8} style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh - 240px)' }}>
               <LeftTree

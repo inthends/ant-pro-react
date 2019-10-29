@@ -19,6 +19,7 @@ interface ModifyProps {
   id?: string;
   // organizeId?: string;
   reload(): void;
+  treeData: TreeEntity[];
 };
 
 /*详情可编辑单元格*/
@@ -107,7 +108,7 @@ class EditableCell extends React.Component {
 /*详情可编辑单元格*/
 
 const Modify = (props: ModifyProps) => {
-  const { modifyVisible, closeDrawer, form, id, reload } = props;
+  const { treeData, modifyVisible, closeDrawer, form, id, reload } = props;
   const { getFieldDecorator } = form;
   const title = id === undefined ? '新增减免单' : '修改减免单';
   const [infoDetail, setInfoDetail] = useState<any>({});
@@ -200,7 +201,7 @@ const Modify = (props: ModifyProps) => {
           // reductionAmount: ""
         })
         // })
-        // setListData([]);
+        setListData([]);
         // setReductionItem([]);
         // form.resetFields();
       }
@@ -357,9 +358,9 @@ const Modify = (props: ModifyProps) => {
       sorter: true,
       render: val => {
         if (val == null) {
-          return <span></span>
+          return '';
         } else {
-          return <span> {moment(val).format('YYYY年MM月')} </span>
+          return moment(val).format('YYYY年MM月');
         }
       }
     },
@@ -371,9 +372,9 @@ const Modify = (props: ModifyProps) => {
       sorter: true,
       render: val => {
         if (val == null) {
-          return <span></span>
+          return '';
         } else {
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
+          return moment(val).format('YYYY-MM-DD');
         }
       }
     },
@@ -385,9 +386,9 @@ const Modify = (props: ModifyProps) => {
       sorter: true,
       render: val => {
         if (val == null) {
-          return <span></span>
+          return '';
         } else {
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
+          return moment(val).format('YYYY-MM-DD');
         }
       }
     },
@@ -402,37 +403,19 @@ const Modify = (props: ModifyProps) => {
       dataIndex: 'sumReductionAmount',
       width: '100px',
       key: 'sumReductionAmount',
-      render: val => {
-        if (val == null)
-          return <span>0.0</span>
-        else
-          return <span>{val}</span>
-      }
     }, {
       title: '本次减免',
       dataIndex: 'reductionAmount',
       width: '100px',
       key: 'reductionAmount',
       editable: true,
-      //onChange={(id,item)=>,
-      render: val => {
-        if (val == null)
-          return <span>0.0</span>
-        else
-          return <span>{val}</span>
-      }
+      //onChange={(id,item)=>, 
     },
     {
       title: '减免后金额',
       dataIndex: 'lastAmount',
       width: '100px',
       key: 'lastAmount',
-      render: val => {
-        if (val == null)
-          return <span>0.0</span>
-        else
-          return <span>{val}</span>
-      }
     }, {
       title: '备注',
       width: '150px',
@@ -451,7 +434,9 @@ const Modify = (props: ModifyProps) => {
       pageIndex,
       pageSize,
       total,
-      ...data
+      ...data,
+      Rebate: form.getFieldValue('rebate') / 10,//折扣转换
+      ReductionAmount: form.getFieldValue('reductionAmount')
     };
     GetUnitBillDetail(searchCondition).then(res => {
       if (res.data.length == 0) {
@@ -636,19 +621,19 @@ const Modify = (props: ModifyProps) => {
               </Form.Item>
             </Col>
             <Col lg={8}>
-              <Form.Item label="折扣">
+              <Form.Item label="批量折扣">
                 {getFieldDecorator('rebate', {
-                  initialValue: infoDetail.rebate,
+                  initialValue: infoDetail.rebate ? infoDetail.rebate : 1,
                   rules: [{ required: true, message: '请输入批量折扣' }],
                 })(
-                  <InputNumber step={0.1} style={{ width: '100%' }}></InputNumber>
+                  <InputNumber step={0.1} style={{ width: '100%' }} max={10} ></InputNumber>
                 )}
               </Form.Item>
             </Col>
             <Col lg={8}>
               <Form.Item label="减免金额">
                 {getFieldDecorator('reductionAmount', {
-                  initialValue: infoDetail.reductionAmount,
+                  initialValue: infoDetail.reductionAmount ? infoDetail.reductionAmount : 0,
                   rules: [{ required: true, message: '请输入减免金额' }],
                 })(
                   <InputNumber step={0.1} style={{ width: '100%' }}></InputNumber>
@@ -738,6 +723,7 @@ const Modify = (props: ModifyProps) => {
         </div>
       </Form>
       <AddReductionItem
+        treeData={treeData}
         visible={modalvisible}
         getReducetionItem={getReducetionItem}
         closeModal={closeModal}

@@ -1,4 +1,5 @@
-import { Button, Col, DatePicker, Drawer, Form, Row, Spin, Input, Table } from 'antd';
+//修改冲抵单
+import { notification, Button, Col, DatePicker, Drawer, Form, Row, Spin, Input, Table } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
@@ -104,8 +105,16 @@ const Modify = (props: ModifyProps) => {
           //feeitemid: infoDetail.feeitemid
         };
 
-        SaveForm(newData).then((res) => {
-          close();
+        SaveForm(newData).then((res) => { 
+          if (res.data) {
+            notification['warning']({
+              message: '系统提示',
+              description:
+                '没有找到要冲抵的费用！'
+            });
+          } else {
+            close();
+          }
         });
       }
     });

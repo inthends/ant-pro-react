@@ -1,15 +1,16 @@
 //添加编辑费项
-import { Card, Divider, Button, Col, Select, Modal, Drawer, Form, Row, Icon, Spin, Input, InputNumber, TreeSelect, message, Table, Checkbox } from 'antd';
+import { Tabs, Card, Divider, Button, Col, Select, Modal, Drawer, Form, Row, Icon, Input, InputNumber, TreeSelect, message, Table, Checkbox } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import { GetDataItemTreeJson, GetOrgTree, GetInfoFormJson, GetPageListWithMeterID, RemoveUnitForm, RemoveFormAll, SaveForm } from './Meter.service';
-import './style.less';
+import styles from './style.less';
 import ChargeFeeItem from './ChargeFeeItem';
 import AddFormula from './AddFormula';
 import SelectHouse from './SelectHouse';
 import EditHouseFeeItem from './EditHouseFeeItem';
+const { TabPane } = Tabs;
 const Search = Input.Search;
 const Option = Select.Option;
 const { TextArea } = Input;
@@ -38,7 +39,6 @@ const MeterModify = (props: MeterModifyProps) => {
   const [chargeFeeItemVisible, setChargeFeeItemVisible] = useState<boolean>(false);
   const [selectHouseVisible, setSelectHouseVisible] = useState<boolean>(false);
   const [editHouseFeeItemVisible, setEditHouseFeeItemVisible] = useState<boolean>(false);
-
 
   const [meterSearchParams, setMeterSearchParams] = useState<any>({});
   // const [meterLoading, setMeterLoading] = useState<boolean>(false);
@@ -285,253 +285,265 @@ const MeterModify = (props: MeterModifyProps) => {
       style={{ height: 'calc(100vh-50px)' }}
       bodyStyle={{ background: '#f6f7fb', height: 'calc(100vh -50px)' }}
     >
-      <Card  >
-        <Form layout="vertical" hideRequiredMark>
-          <Spin tip="数据加载中..." spinning={loading}>
-            <Row gutter={24}>
-              <Col span={8}>
-                <Form.Item required label="费表名称">
-                  {getFieldDecorator('meterName', {
-                    initialValue: infoDetail.meterName,
-                    rules: [{ required: true, message: '请输入费表名称' }],
-                  })(
-                    <Input />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item required label="费表类型"  >
-                  {getFieldDecorator('meterKind', {
-                    initialValue: infoDetail.meterKind,
-                    rules: [{ required: true, message: '请选择费表类型' }],
-                  })(
-                    <Select placeholder="=请选择=" style={{ width: '100%', marginRight: '5px' }}>
-                      {/* {
+
+      <Form layout="vertical" hideRequiredMark>
+        <Tabs defaultActiveKey="1" >
+
+
+          <TabPane tab="基本信息" key="1">
+            <Card className={styles.card} >
+              <Row gutter={24}>
+                <Col span={8}>
+                  <Form.Item required label="费表名称">
+                    {getFieldDecorator('meterName', {
+                      initialValue: infoDetail.meterName,
+                      rules: [{ required: true, message: '请输入费表名称' }],
+                    })(
+                      <Input />
+                    )}
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item required label="费表类型"  >
+                    {getFieldDecorator('meterKind', {
+                      initialValue: infoDetail.meterKind,
+                      rules: [{ required: true, message: '请选择费表类型' }],
+                    })(
+                      <Select placeholder="=请选择=" style={{ width: '100%', marginRight: '5px' }}>
+                        {/* {
                         meterKinds.map(item => {
                           return <Option value={item.title}>{item.title}</Option>
                         })
                       } */}
 
-                      <Option value="单元表">单元表</Option>
-                      <Option value="公用表" >公用表</Option>
-                      <Option value="虚拟表">虚拟表</Option>
+                        <Option value="单元表">单元表</Option>
+                        <Option value="公用表" >公用表</Option>
+                        <Option value="虚拟表">虚拟表</Option>
 
-                    </Select>
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item required label="费表种类"  >
-                  {getFieldDecorator('meterType', {
-                    initialValue: infoDetail.meterType,
-                    rules: [{ required: true, message: '请选择费表种类' }],
-                  })(
-                    <Select placeholder="=请选择=" style={{ width: '100%', marginRight: '5px' }}>
-                      {
-                        meterTypes.map(item => {
-                          return <Option value={item.title}>{item.title}</Option>
-                        })
-                      }
-                    </Select>
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={24}>
-              <Col span={8}>
-                <Form.Item required label="费表编号"   >
-                  {getFieldDecorator('meterCode', {
-                    initialValue: infoDetail.meterCode,
-                    rules: [{ required: true, message: '请输入费表编号' }],
-                  })(
-                    <Input></Input>
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item required label="所属机构"  >
-                  {getFieldDecorator('organieId', {
-                    initialValue: infoDetail.organizeId,
-                    rules: [{ required: true, message: '请选择所属机构' }],
-                  })(
-                    <TreeSelect
-                      style={{ width: '100%' }}
-                      dropdownStyle={{ maxHeight: 380, overflow: 'auto' }}
-                      treeData={orgTreeData}
-                      placeholder="=请选择="
-                      treeDefaultExpandAll
-                      onChange={(value => {
-                        var info = Object.assign({}, infoDetail, { organizeId: value });
-                        console.log(value);
-                        setInfoDetail(info);
-                      })}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item required label="关联收费项目"   >
-                  {getFieldDecorator('feeItemId', {
-                    initialValue: infoDetail.feeItemName,
-                    rules: [{ required: true, message: '请选择关联收费项目' }],
-                  })(
-                    <Input addonAfter={<Icon type="setting" onClick={() => {
-                      setChargeFeeItemVisible(true);
-                    }} />} />
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={24}>
-              <Col span={8}>
-                <Form.Item required label="单价"  >
-                  {getFieldDecorator('meterPrice', {
-                    initialValue: infoDetail.meterPrice,
-                    rules: [{ required: true, message: '请输入单价' }],
-                  })(
-                    <InputNumber style={{ width: '100%' }} ></InputNumber>
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item required label="倍率"  >
-                  {getFieldDecorator('meterZoom', {
-                    initialValue: infoDetail.meterZoom == null ? 1 : infoDetail.meterZoom,
-                    rules: [{ required: true, message: '请输入倍率' }],
-                  })(
-                    <InputNumber style={{ width: '100%' }} ></InputNumber>
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item required label="量程" >
-                  {getFieldDecorator('meterRange', {
-                    initialValue: infoDetail.meterRange == null ? 9999 : infoDetail.meterRange,
-                    rules: [{ required: true, message: '请输入量程' }],
-                  })(
-                    <InputNumber style={{ width: '100%' }} ></InputNumber>
-                  )}
-                </Form.Item>
-              </Col>
-
-            </Row>
-            <Row gutter={24}>
-              <Col span={20}>
-                <Form.Item required label="表位置">
-                  {getFieldDecorator('meterAddress', {
-                    initialValue: infoDetail.meterAddress,
-                  })(
-                    <Input></Input>
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={4}>
-                <Form.Item required label="是否停用"   >
-                  {getFieldDecorator('isStop', {
-                    initialValue: infoDetail.isStop == null ? false : true
-                  })(
-                    <Checkbox />
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={24}>
-                <Form.Item required label="分摊系数"   >
-                  {getFieldDecorator('formula', {
-                    initialValue: infoDetail.formula == null ? '<建筑面积>/<单据总建筑面积>' : infoDetail.formula,
-                    rules: [{ required: true, message: '请输入分摊系数' }],
-                  })(
-                    <Input addonAfter={<Icon type="setting" onClick={() => {
-                      setAddFormulaVisible(true);
-                      setIsFormula(true);
-                    }} />} />
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={24}>
-                <Form.Item required label="计算公式">
-                  {getFieldDecorator('calculation', {
-                    initialValue: infoDetail.calculation == null ? 1 : infoDetail.calculation,
-                  })(
-                    <Input addonAfter={<Icon type="setting" onClick={() => {
-                      setAddFormulaVisible(true);
-                      setIsFormula(false);
-                    }} />} />
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-
-            <Row>
-              <Col span={24}>
-                <Form.Item label="附加说明"  >
-                  {getFieldDecorator('memo', {
-                    initialValue: infoDetail.memo
-                  })(
-                    <TextArea rows={3} placeholder="请输入附加说明" />
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
-                <Search
-                  className="search-input"
-                  placeholder="请输入要查询的费表编号"
-                  style={{ width: 280 }}
-                  onSearch={(value) => {
-                    var params = Object.assign({}, meterSearchParams, { search: value })
-                    setMeterSearchParams(params);
-                    initMeterLoadData();
-                  }}
-                />
-                <Button type="link" style={{ float: 'right' }}
-                  onClick={() => {
-                    Modal.confirm({
-                      title: '请确认',
-                      content: `您是否确定删除？`,
-                      onOk: () => {
-                        if (id != null || id != "") {
-                          RemoveFormAll(id).then(res => {
-                            message.success('删除成功！');
-                            initMeterLoadData();
-                          });
+                      </Select>
+                    )}
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item required label="费表种类"  >
+                    {getFieldDecorator('meterType', {
+                      initialValue: infoDetail.meterType,
+                      rules: [{ required: true, message: '请选择费表种类' }],
+                    })(
+                      <Select placeholder="=请选择=" style={{ width: '100%', marginRight: '5px' }}>
+                        {
+                          meterTypes.map(item => {
+                            return <Option value={item.title}>{item.title}</Option>
+                          })
                         }
-                      },
-                    });
-                  }}
-                > <Icon type="delete" />全部删除</Button>
-                <Button type="link" style={{ float: 'right', marginLeft: '1px' }}
-                  onClick={() => {
-                    checkEntity();
-                  }}
-                >
-                  <Icon type="plus" />
-                  添加房屋
+                      </Select>
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row gutter={24}>
+                <Col span={8}>
+                  <Form.Item required label="费表编号"   >
+                    {getFieldDecorator('meterCode', {
+                      initialValue: infoDetail.meterCode,
+                      rules: [{ required: true, message: '请输入费表编号' }],
+                    })(
+                      <Input></Input>
+                    )}
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item required label="所属机构"  >
+                    {getFieldDecorator('organieId', {
+                      initialValue: infoDetail.organizeId,
+                      rules: [{ required: true, message: '请选择所属机构' }],
+                    })(
+                      <TreeSelect
+                        style={{ width: '100%' }}
+                        dropdownStyle={{ maxHeight: 380, overflow: 'auto' }}
+                        treeData={orgTreeData}
+                        placeholder="=请选择="
+                        treeDefaultExpandAll
+                        onChange={(value => {
+                          var info = Object.assign({}, infoDetail, { organizeId: value });
+                          console.log(value);
+                          setInfoDetail(info);
+                        })}
+                      />
+                    )}
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item required label="关联收费项目"   >
+                    {getFieldDecorator('feeItemId', {
+                      initialValue: infoDetail.feeItemName,
+                      rules: [{ required: true, message: '请选择关联收费项目' }],
+                    })(
+                      <Input addonAfter={<Icon type="setting" onClick={() => {
+                        setChargeFeeItemVisible(true);
+                      }} />} />
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row gutter={24}>
+                <Col span={8}>
+                  <Form.Item required label="单价"  >
+                    {getFieldDecorator('meterPrice', {
+                      initialValue: infoDetail.meterPrice,
+                      rules: [{ required: true, message: '请输入单价' }],
+                    })(
+                      <InputNumber style={{ width: '100%' }} ></InputNumber>
+                    )}
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item required label="倍率"  >
+                    {getFieldDecorator('meterZoom', {
+                      initialValue: infoDetail.meterZoom == null ? 1 : infoDetail.meterZoom,
+                      rules: [{ required: true, message: '请输入倍率' }],
+                    })(
+                      <InputNumber style={{ width: '100%' }} ></InputNumber>
+                    )}
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item required label="量程" >
+                    {getFieldDecorator('meterRange', {
+                      initialValue: infoDetail.meterRange == null ? 9999 : infoDetail.meterRange,
+                      rules: [{ required: true, message: '请输入量程' }],
+                    })(
+                      <InputNumber style={{ width: '100%' }} ></InputNumber>
+                    )}
+                  </Form.Item>
+                </Col>
+
+              </Row>
+              <Row gutter={24}>
+                <Col span={20}>
+                  <Form.Item required label="表位置">
+                    {getFieldDecorator('meterAddress', {
+                      initialValue: infoDetail.meterAddress,
+                    })(
+                      <Input></Input>
+                    )}
+                  </Form.Item>
+                </Col>
+                <Col span={4}>
+                  <Form.Item required label="是否停用"   >
+                    {getFieldDecorator('isStop', {
+                      initialValue: infoDetail.isStop == null ? false : true
+                    })(
+                      <Checkbox />
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row>
+                <Col span={24}>
+                  <Form.Item required label="分摊系数"   >
+                    {getFieldDecorator('formula', {
+                      initialValue: infoDetail.formula == null ? '<建筑面积>/<单据总建筑面积>' : infoDetail.formula,
+                      rules: [{ required: true, message: '请输入分摊系数' }],
+                    })(
+                      <Input addonAfter={<Icon type="setting" onClick={() => {
+                        setAddFormulaVisible(true);
+                        setIsFormula(true);
+                      }} />} />
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row>
+                <Col span={24}>
+                  <Form.Item required label="计算公式">
+                    {getFieldDecorator('calculation', {
+                      initialValue: infoDetail.calculation == null ? 1 : infoDetail.calculation,
+                    })(
+                      <Input addonAfter={<Icon type="setting" onClick={() => {
+                        setAddFormulaVisible(true);
+                        setIsFormula(false);
+                      }} />} />
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row>
+                <Col span={24}>
+                  <Form.Item label="附加说明"  >
+                    {getFieldDecorator('memo', {
+                      initialValue: infoDetail.memo
+                    })(
+                      <TextArea rows={3} placeholder="请输入附加说明" />
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row>
+            </Card>
+          </TabPane>
+          <TabPane tab="装表房屋" key="2">
+            <Card className={styles.card}>
+              <Row>
+                <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
+                  <Search
+                    className="search-input"
+                    placeholder="请输入要查询的费表编号"
+                    style={{ width: 280 }}
+                    onSearch={(value) => {
+                      var params = Object.assign({}, meterSearchParams, { search: value })
+                      setMeterSearchParams(params);
+                      initMeterLoadData();
+                    }}
+                  />
+                  <Button type="link" style={{ float: 'right' }}
+                    onClick={() => {
+                      Modal.confirm({
+                        title: '请确认',
+                        content: `您是否确定删除？`,
+                        onOk: () => {
+                          if (id != null || id != "") {
+                            RemoveFormAll(id).then(res => {
+                              message.success('删除成功！');
+                              initMeterLoadData();
+                            });
+                          }
+                        },
+                      });
+                    }}
+                  > <Icon type="delete" />全部删除</Button>
+                  <Button type="link" style={{ float: 'right', marginLeft: '1px' }}
+                    onClick={() => {
+                      checkEntity();
+                    }}
+                  >
+                    <Icon type="plus" />
+                    添加房屋
               </Button>
-              </div>
-              <Table<any>
-                onChange={(paginationConfig, filters, sorter) => {
-                  initMeterLoadData(paginationConfig, sorter)
-                }
-                }
-                bordered={false}
-                size="middle"
-                columns={columns}
-                dataSource={meterData}
-                rowKey="unitmeterid"
-                pagination={meterPagination}
-                scroll={{ y: 500, x: 800 }}
-                loading={loading}
-              /*rowSelection={rowSelection}*/
-              />
-            </Row>
-          </Spin>
-        </Form>
-      </Card>
+                </div>
+                <Table<any>
+                  onChange={(paginationConfig, filters, sorter) => {
+                    initMeterLoadData(paginationConfig, sorter)
+                  }
+                  }
+                  bordered={false}
+                  size="middle"
+                  columns={columns}
+                  dataSource={meterData}
+                  rowKey="unitmeterid"
+                  pagination={meterPagination}
+                  scroll={{ y: 500, x: 800 }}
+                  loading={loading}
+                /*rowSelection={rowSelection}*/
+                />
+              </Row>
+
+            </Card>
+
+          </TabPane>
+
+        </Tabs>
+      </Form>
+
       <div
         style={{
           position: 'absolute',

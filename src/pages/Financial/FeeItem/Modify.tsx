@@ -5,7 +5,7 @@ import { message, Modal, Checkbox, Tabs, Select, Table, Button, Card, Icon, Divi
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { HouseRemoveForm, OrganizeRemoveForm, GetFormJson, GetFeeType, GetAllFeeItems, GetOrganizePageList, GetUnitFeeItemData, SaveForm, GetFeeItemName } from './Main.service';
+import { HouseRemoveForm, HouseAllRemoveForm, OrganizeRemoveForm, GetFormJson, GetFeeType, GetAllFeeItems, GetOrganizePageList, GetUnitFeeItemData, SaveForm, GetFeeItemName } from './Main.service';
 import styles from './style.less';
 import moment from 'moment';
 import AddFormula from './AddFormula';
@@ -94,7 +94,7 @@ const Modify = (props: ModifyProps) => {
   useEffect(() => {
     if (modifyVisible) {
       if (id) {
-        GetFormJson(id).then((tempInfo: CwFeeitem) => { 
+        GetFormJson(id).then((tempInfo: CwFeeitem) => {
 
           // if (tempInfo.feeKind) {
           //   // var kind = tempInfo.feeKind == "收款费项" ? "ReceivablesItem" : "PaymentItem";
@@ -106,7 +106,7 @@ const Modify = (props: ModifyProps) => {
           tempInfo.accBillDateUnit == 2 ? setAccFixedDisabled(false) : setAccFixedDisabled(true);
           tempInfo.payDeadlineUnit == 2 ? setPayFixedDisabled(false) : setPayFixedDisabled(true);
           tempInfo.lateStartDateUnit == 2 ? setLateFixedDisabled(false) : setLateFixedDisabled(true);
-          form.resetFields();  
+          form.resetFields();
         });
 
         //if (id !== undefined) {
@@ -582,7 +582,23 @@ const Modify = (props: ModifyProps) => {
         },
       });
     }
-  }
+  };
+
+
+  //全部删除
+  const deleteAllHouse = () => {
+    Modal.confirm({
+      title: '请确认',
+      content: `您是否要全部删除？删除后无法恢复。`,
+      onOk: () => {
+        HouseAllRemoveForm({ feeitemid: id }).then(() => {
+          message.success('删除成功');
+          houseLoadData('');
+        });
+      },
+    });
+  };
+
   return (
     <Drawer
       title={title}
@@ -1132,7 +1148,7 @@ const Modify = (props: ModifyProps) => {
                 <Col span={6}>
                   <Form.Item label="收款截止日 距">
                     {getFieldDecorator('payDeadlineBase', {
-                      initialValue: infoDetail.payDeadlineBase ? infoDetail.payDeadlineBase: 3,
+                      initialValue: infoDetail.payDeadlineBase ? infoDetail.payDeadlineBase : 3,
                       rules: [{ required: true, message: '请选择应收期间' }],
                     })(
                       <Select placeholder="==选择应收期间==">
@@ -1218,7 +1234,7 @@ const Modify = (props: ModifyProps) => {
                 <Col span={6}>
                   <Form.Item label="滞纳金起算日 距">
                     {getFieldDecorator('lateStartDateBase', {
-                      initialValue: infoDetail.lateStartDateBase ? infoDetail.lateStartDateBase  : 3,
+                      initialValue: infoDetail.lateStartDateBase ? infoDetail.lateStartDateBase : 3,
                       rules: [{ required: true, message: '请选择应收期间' }],
                     })(
                       <Select placeholder="==选择应收期间==">
@@ -1242,7 +1258,7 @@ const Modify = (props: ModifyProps) => {
                 <Col span={6} style={{ marginTop: '29px' }}>
                   <Form.Item>
                     {getFieldDecorator('lateStartDateUnit', {
-                      initialValue: infoDetail.lateStartDateUnit ? infoDetail.lateStartDateUnit  : 1,
+                      initialValue: infoDetail.lateStartDateUnit ? infoDetail.lateStartDateUnit : 1,
                       rules: [{ required: true, message: '请选择单位' }],
                     })(
                       <Select placeholder="==选择单位==" onChange={value => {
@@ -1443,6 +1459,14 @@ const Modify = (props: ModifyProps) => {
                     <Icon type="reload" />
                     刷新
                 </Button> */}
+
+                  <Button type="link" style={{ float: 'right' }}
+                    onClick={deleteAllHouse}
+                  >
+                    <Icon type="delete" />
+                    全部删除
+                </Button>
+
                   <Button type="link" style={{ float: 'right' }}
                     onClick={deleteHouse}
                   >

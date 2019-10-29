@@ -1,6 +1,6 @@
 //选择费项房屋
 // import { TreeEntity } from '@/model/models';
-import { Checkbox, Col, Form, Row, Modal, message, Card } from 'antd';
+import { Spin, Checkbox, Col, Form, Row, Modal, message, Card } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useState } from 'react';
 import { UnitFeeSaveForm } from './Main.service';
@@ -20,6 +20,7 @@ const AddHouseFee = (props: AddHouseFeeProps) => {
   const { visible, closeModal, feeId, reload, treeData } = props;
   const [checkedList, setCheckedList] = useState<any[]>([]);
   const [unitData, setUnitData] = useState<string[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   // const [houseTreeData,setHouseTreeData]=useState<TreeEntity[]>([]);
   // useEffect(() => {
   //   if(visible){
@@ -36,18 +37,26 @@ const AddHouseFee = (props: AddHouseFeeProps) => {
       visible={visible}
       okText="确认"
       cancelText="取消"
-      onCancel={() => closeModal()}
+      confirmLoading={loading}
+      closable={!loading}
+      onCancel={() => {
+        setLoading(false);
+        closeModal();
+      }}
       onOk={() => {
         if (unitData.length == 0) {
-          message.warning('请选择房屋');
+          message.warning('请选择房屋！');
         } else {
+          setLoading(true); 
           UnitFeeSaveForm({ FeeItemID: feeId, JsonFeeIdArray: JSON.stringify(unitData) }).then(res => {
+            message.success('添加成功！');
+            setLoading(false);
             closeModal();
             reload();
-            message.success('数据保存成功');
           }).catch(() => {
-            message.warning('数据保存错误');
+            message.warning('添加失败！');
           });
+
         }
       }}
       destroyOnClose={true}
@@ -56,29 +65,33 @@ const AddHouseFee = (props: AddHouseFeeProps) => {
     >
       {/* <Row style={{ height: '400px', overflow: 'hidden', marginTop: '5px', backgroundColor: 'rgb(255,255,255)' }}> */}
 
-      <Row gutter={8}>
-        <Col span={12} style={{ height: '420px', overflow: 'auto' }}>
-          <SelectTree
-            treeData={treeData}
-            getCheckedKeys={(keys) => {
-              setUnitData(keys);
-            }}
-            selectTree={(id, type, info?) => {
-            }}
-          />
-        </Col>
-        <Col span={12}  >
-          <Card > 
-            <Checkbox.Group
-              options={["入住", "空置"]}
-              value={checkedList}
-              onChange={(checkedList) => {
-                setCheckedList(checkedList);
+      <Spin tip="数据处理中..." spinning={loading}>
+
+        <Row gutter={8}>
+          <Col span={12} style={{ height: '420px', overflow: 'auto' }}>
+            <SelectTree
+              treeData={treeData}
+              getCheckedKeys={(keys) => {
+                setUnitData(keys);
+              }}
+              selectTree={(id, type, info?) => {
               }}
             />
-          </Card>
-        </Col>
-      </Row>
+          </Col>
+          <Col span={12}  >
+            <Card >
+              <Checkbox.Group
+                options={["入住", "空置"]}
+                value={checkedList}
+                onChange={(checkedList) => {
+                  setCheckedList(checkedList);
+                }}
+              />
+            </Card>
+          </Col>
+        </Row>
+      </Spin>
+
     </Modal>
   );
 };

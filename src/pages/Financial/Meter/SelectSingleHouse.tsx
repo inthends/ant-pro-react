@@ -6,7 +6,7 @@ import {
   Row,Icon,Modal,
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './style.less';
 import AsynLeftTree from '../AsynLeftTree';
 
@@ -19,12 +19,13 @@ interface SelectSingleHouseProps {
 
 const SelectSingleHouse = (props: SelectSingleHouseProps) => {
   const { visible, closeModal,getSelectTree} = props;
-  useEffect(() => {
-    if(visible){
+  // useEffect(() => {
+  //   if(visible){ 
+  //   }
+  // }, [visible]);
 
-    }
-  }, [visible]);
   const [treeNodeInfo,setTreeNodeInfo]=useState<string[]>([]);
+
   return (
     <Modal
       title="选择收费项目"
