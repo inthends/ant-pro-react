@@ -4,6 +4,7 @@ import { Form, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
+import moment from 'moment';
 
 interface ListTableProps {
   onchange(page: any, filter: any, sort: any): any;
@@ -19,65 +20,72 @@ function ListTable(props: ListTableProps) {
   const columns = [
     {
       title: '管理处名称',
-      dataIndex: 'type',
-      key: 'type',
+      dataIndex: '管理处',
+      key: '管理处',
       width: 100,
     },
     {
       title: '楼盘名称',
-      dataIndex: 'title',
-      key: 'title',
+      dataIndex: '楼盘',
+      key: '楼盘',
       width: 100,
     },
     {
       title: '楼栋名称',
-      dataIndex: 'estateName',
-      key: 'estateName',
-      width: 100,
+      dataIndex: '楼栋',
+      key: '楼栋',
+      width: 80,
     },
     {
       title: '房屋编号',
-      dataIndex: 'clickCounts',
-      key: 'clickCounts',
-      width: 100,
+      dataIndex: '房屋编号',
+      key: '房屋编号',
+      width: 120,
     },
     {
       title: '房屋名称',
-      dataIndex: 'clickCounts',
-      key: 'clickCounts',
-      width: 100,
+      dataIndex: '房屋',
+      key: '房屋',
+      width: 80,
     },
     {
       title: '业户名称',
-      dataIndex: 'isPublish',
-      key: 'isPublish',
+      dataIndex: '客户名称',
+      key: '客户名称',
       width: 100,
     },
     {
       title: '状态',
-      dataIndex: 'createUserName',
-      key: 'createUserName',
+      dataIndex: '是否审核',
+      key: '是否审核',
       width: 60,
     },
     {
       title: '收费项目',
-      dataIndex: 'createDate',
-      key: 'createDate',
+      dataIndex: '收费项目',
+      key: '收费项目',
       width: 100,
       sorter: true
     },
 
     {
       title: '期间',
-      dataIndex: 'createDate',
-      key: 'createDate',
+      dataIndex: '计费起始日期',
+      key: '计费起始日期',
       width: 100,
-      sorter: true
+      align: 'center',
+      render: (text, record) => {
+        if (text != null) {
+          return moment(text).format('YYYY-MM-DD') + '至' + moment(record['计费终止日期']).format('YYYY-MM-DD');
+        }
+        else
+          return '';
+      },
     },
     {
       title: '应收',
-      dataIndex: 'createDate',
-      key: 'createDate',
+      dataIndex: '应收',
+      key: '应收',
       width: 100,
       sorter: true
     },
@@ -116,8 +124,8 @@ function ListTable(props: ListTableProps) {
 
     {
       title: '账单日期',
-      dataIndex: 'createDate',
-      key: 'createDate',
+      dataIndex: '账单日',
+      key: '账单日',
       width: 100,
       sorter: true
     },
@@ -137,11 +145,10 @@ function ListTable(props: ListTableProps) {
     },
     {
       title: '费用备注',
-      dataIndex: 'createDate',
-      key: 'createDate',
-      width: 100, 
+      dataIndex: '备注',
+      key: '备注',
+      width: 100,
     }
-
   ] as ColumnProps<any>[];
 
   return (
@@ -151,7 +158,7 @@ function ListTable(props: ListTableProps) {
         size="middle"
         columns={columns}
         dataSource={data}
-        rowKey="meterid"
+        rowKey="feeId"
         pagination={pagination}
         scroll={{ y: 500, x: 1800 }}
         loading={loading}

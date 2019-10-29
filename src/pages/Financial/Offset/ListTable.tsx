@@ -1,13 +1,13 @@
 //账单
 import Page from '@/components/Common/Page';
-import { Divider, Form,   Table } from 'antd';
+import { message, Modal, Divider, Form, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import moment from 'moment';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import { } from './Offset.service';
+import { RemoveForm } from './Offset.service';
 
-interface BillCheckTableProps {
+interface ListTableProps {
   onchange(page: any, filter: any, sort: any): any;
   loading: boolean;
   pagination: PaginationConfig;
@@ -15,35 +15,49 @@ interface BillCheckTableProps {
   // modify(id: string): void;
   reload(): void;
   form: WrappedFormUtils;
-  deleteData(id): void;
+  // deleteData(id): void;
   showVertify(id?, ifVertify?): any;
   closeVertify(result?): any;
   showModify(id?): any;
   closeModify(result?): any;
-}
+};
 
-function BillCheckTable(props: BillCheckTableProps) {
-  const { deleteData, loading, pagination, data, showVertify, showModify } = props;
+
+function ListTable(props: ListTableProps) {
+  const { reload, loading, pagination, data, showVertify, showModify } = props;
+
+  const doDelete = record => {
+    Modal.confirm({
+      title: '请确认',
+      content: `您是否要删除${record.billCode}？`,
+      onOk: () => {
+        RemoveForm(record.billId).then(() => {
+          message.success('删除成功！');
+          reload();
+        });
+      },
+    });
+  };
 
   const columns = [
     {
       title: '单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 180,
+      width: 130,
       sorter: true
     },
     {
       title: '单据日期',
       dataIndex: 'billDate',
       key: 'billDate',
-      width: 180,
+      width: 120,
       sorter: true,
       render: val => {
         if (val == null) {
-          return <span></span>
+          return '';
         } else {
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
+          return moment(val).format('YYYY-MM-DD');
         }
       }
     },
@@ -51,15 +65,15 @@ function BillCheckTable(props: BillCheckTableProps) {
       title: '业户名称',
       dataIndex: 'custName',
       key: 'custName',
-      width: 180,
+      width: 120,
       sorter: true,
-      render: val => {
-        if (val == null) {
-          return <span></span>
-        } else {
-          return <span> {val} </span>
-        }
-      }
+      // render: val => {
+      //   if (val == null) {
+      //     return <span></span>
+      //   } else {
+      //     return <span> {val} </span>
+      //   }
+      // }
     },
     {
       title: '审核状态',
@@ -72,20 +86,20 @@ function BillCheckTable(props: BillCheckTableProps) {
       title: '审核人',
       dataIndex: 'verifyPerson',
       key: 'verifyPerson',
-      width: 100,
+      width: 80,
       sorter: true
     },
     {
       title: '审核日期',
       dataIndex: 'verifyDate',
       key: 'verifyDate',
-      width: 180,
+      width: 120,
       sorter: true,
       render: val => {
         if (val == null) {
-          return <span></span>
+          return '';
         } else {
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
+          return moment(val).format('YYYY-MM-DD');
         }
       }
     },
@@ -94,7 +108,7 @@ function BillCheckTable(props: BillCheckTableProps) {
       dataIndex: 'verifyMemo',
       key: 'verifyMemo',
       sorter: true,
-      width: 160
+      width: 100
     }, {
       title: '备注',
       dataIndex: 'memo',
@@ -105,7 +119,7 @@ function BillCheckTable(props: BillCheckTableProps) {
       dataIndex: 'operation',
       key: 'operation',
       fixed: 'right',
-      align:'center',
+      align: 'center',
       width: 155,
       render: (text, record) => {
         if (record.ifVerify) {
@@ -134,7 +148,7 @@ function BillCheckTable(props: BillCheckTableProps) {
             <span>
               <a onClick={() => showModify(record.billId)} key="modify">查看</a>
               <Divider type="vertical" />
-              <a onClick={() => showVertify(record.billId, false)} key="modify">反审</a> 
+              <a onClick={() => showVertify(record.billId, false)} key="modify">反审</a>
             </span>
           ];
         }
@@ -163,7 +177,7 @@ function BillCheckTable(props: BillCheckTableProps) {
               <Divider type="vertical" />
               <a onClick={() => showVertify(record.billId, true)} key="verify">审核</a>
               <Divider type="vertical" />
-              <a onClick={() => deleteData(record.billId)} key="delete">删除</a>
+              <a onClick={() => doDelete(record)} key="delete">删除</a>
             </span>
 
           ];
@@ -181,11 +195,10 @@ function BillCheckTable(props: BillCheckTableProps) {
         dataSource={data}
         rowKey="billId"
         pagination={pagination}
-        scroll={{ y: 500, x: 1500 }}
+        scroll={{ y: 500 }}
         loading={loading}
       />
     </Page>
   );
 }
-
-export default Form.create<BillCheckTableProps>()(BillCheckTable);
+export default Form.create<ListTableProps>()(ListTable);

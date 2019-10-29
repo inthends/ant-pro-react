@@ -29,8 +29,7 @@ const Modify = (props: ModifyProps) => {
   const baseFormProps = { form, initData };
   const [orgs, setOrgs] = useState<TreeNode[]>();
 
-  useEffect(() => {
-
+  useEffect(() => { 
     GetOrgEsates().then(res => {
       setOrgs(res);
     });

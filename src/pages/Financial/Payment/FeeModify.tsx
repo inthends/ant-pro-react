@@ -1,4 +1,4 @@
-
+//新增应付费用
 import { Card, Button, Col, Select, Form, Input, Row, InputNumber, Drawer, Spin, DatePicker } from 'antd';
 import { TreeEntity } from '@/model/models';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
@@ -21,7 +21,7 @@ const FeeModify = (props: FeeModifyProps) => {
   const { visible, closeDrawer, form, isEdit, id, reload, organize } = props;
   const [feeTreeData, setFeeTreeData] = useState<TreeEntity[]>([]);
   const [infoDetail, setInfoDetail] = useState<any>({});
-  const [loading, setLoading] = useState<boolean>(false);
+  // const [loading, setLoading] = useState<boolean>(false);
   const { getFieldDecorator } = form;
   const [relationIds, setRelationID] = useState<any[]>([]);
   const [unitIds, setUnitIds] = useState<any[]>([]);
@@ -30,7 +30,12 @@ const FeeModify = (props: FeeModifyProps) => {
   useEffect(() => {
     if (visible) {
 
-      GetTempPaymentFeeItemTreeJson(organize.eventKey).then(res => {
+      // GetTempPaymentFeeItemTreeJson(organize.eventKey).then(res => {
+      //   setFeeTreeData(res);
+      // });
+
+      //付款费项不控制房间
+      GetTempPaymentFeeItemTreeJson().then(res => {
         setFeeTreeData(res);
       });
 
@@ -172,14 +177,14 @@ const FeeModify = (props: FeeModifyProps) => {
                 treeData={feeTreeData}
                 selectTree={(id, item) => {
                   if (organize.eventKey) {
-                    setLoading(true);
+                    // setLoading(true);
                     GetFeeItemDetail(id, organize.eventKey).then(res => {
                       let amount = parseInt(res.price) * parseInt(res.number) * parseInt(res.quantity);
                       // var info = Object.assign({}, res, { feeItemId: id, amount: amount });
                       res.feeItemId = id;
                       res.amount = amount;
                       setInfoDetail(res);
-                      setLoading(false);
+                      // setLoading(false);
                       // return info;
                     })
                     //.then(info => {
@@ -202,7 +207,7 @@ const FeeModify = (props: FeeModifyProps) => {
         <Col span={id != null && id != "" ? 24 : 16} style={{ height: 'calc(100vh - 20px)', overflow: 'visible', position: 'relative' }}>
           <Card   >
             <Form hideRequiredMark>
-              <Spin tip="数据加载中..." spinning={loading}>
+              {/* <Spin tip="数据加载中..." spinning={loading}> */}
                 <Row> <Col>
                   <Form.Item label="付款对象" required labelCol={{ span: 4 }} wrapperCol={{ span: 20 }}>
                     {getFieldDecorator('relationId', {
@@ -381,7 +386,7 @@ const FeeModify = (props: FeeModifyProps) => {
                     </Form.Item>
                   </Col>
                 </Row>
-              </Spin>
+              {/* </Spin> */}
             </Form>
           </Card>
         </Col>

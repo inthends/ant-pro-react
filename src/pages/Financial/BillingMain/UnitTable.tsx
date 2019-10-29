@@ -24,7 +24,7 @@ function UnitTable(props: UnitTableProps) {
       title: '计费单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 150,
+      width: 100,
       sorter: true
     },
     {
@@ -70,7 +70,7 @@ function UnitTable(props: UnitTableProps) {
       key: 'cycleValue',
       dataIndex: 'cycleValue',
       sorter: true,
-      width: 100
+      width: 80
     },
     {
       title: '周期单位',
@@ -91,7 +91,7 @@ function UnitTable(props: UnitTableProps) {
       key: 'beginDate',
       dataIndex: 'beginDate',
       sorter: true,
-      width: 120,
+      width: 100,
       render: val => {
         return moment(val).format('YYYY-MM-DD')
       }
@@ -101,7 +101,7 @@ function UnitTable(props: UnitTableProps) {
       key: 'endDate',
       dataIndex: 'endDate',
       sorter: true,
-      width: 120,
+      width: 100,
       render: val => {
         return moment(val).format('YYYY-MM-DD')
       }

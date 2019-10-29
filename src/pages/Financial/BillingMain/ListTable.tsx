@@ -64,14 +64,14 @@ function ListTable(props: ListTableProps) {
       title: '单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 150,
+      width: 100,
       sorter: true
     },
     {
       title: '单据日期',
       dataIndex: 'billDate',
       key: 'billDate',
-      width: 120,
+      width: 100,
       sorter: true,
       render: val => {
         if (val == null) {
@@ -85,7 +85,7 @@ function ListTable(props: ListTableProps) {
       title: '计费人',
       dataIndex: 'createUserName',
       key: 'createUserName',
-      width: 100,
+      width: 80,
       sorter: true,
     },
     {
@@ -107,14 +107,14 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'verifyPerson',
       key: 'verifyPerson',
       sorter: true,
-      width: 100
+      width: 80
     },
     {
       title: '审核日期',
       dataIndex: 'verifyDate',
       key: 'verifyDate',
       sorter: true,
-      width: 120,
+      width: 100,
       render: val => {
         if (val == null) {
           return '';

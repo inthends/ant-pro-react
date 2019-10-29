@@ -82,7 +82,7 @@ function ListTable(props: ListTableProps) {
       key: 'billDate',
       width: 120,
       sorter: true,
-      render: val => <span> {moment(val).format('YYYY-MM-DD')} </span>
+      render: val => moment(val).format('YYYY-MM-DD')
     },
     {
       title: '联系地点',

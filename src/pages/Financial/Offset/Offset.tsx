@@ -1,10 +1,10 @@
 //费用冲抵
 import { DefaultPagination } from '@/utils/defaultSetting';
 // import { getResult } from '@/utils/networkUtils';
-import { Tabs, Button, Icon, Input, Layout, Modal } from 'antd';
+import { Tabs, Button, Icon, Input, Layout  } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { GetOffsetPageDetailData, GetOffsetPageData, RemoveForm } from './Offset.service';
+import { GetOffsetPageDetailData, GetOffsetPageData } from './Offset.service';
 import AsynLeftTree from '../AsynLeftTree';
 import { GetUnitTreeAll } from '@/services/commonItem';//获取全部房间树
 import { getResult } from '@/utils/networkUtils';
@@ -13,8 +13,8 @@ import { getResult } from '@/utils/networkUtils';
 import AddDrawer from './AddDrawer';
 import Vertify from './Vertify';
 import Modify from './Modify';
-import BillCheckTable from './BillCheckTable';
-import BillNoticeTable from './BillNoticeTable';
+import ListTable from './ListTable';
+import DetailTable from './DetailTable';
 
 const { Content } = Layout;
 const { Search } = Input;
@@ -245,20 +245,21 @@ function Offset() {
     setModifyVisible(true);
     setId(id);
   };
-  //删除冲抵单
-  const deleteData = (id?) => {
-    Modal.confirm({
-      title: '是否确认删除该条抵冲记录?',
-      onOk() {
-        RemoveForm({
-          keyValue: id
-        }).then(res => {
 
-        });
-      },
-      onCancel() { },
-    });
-  }
+  //删除冲抵单
+  // const deleteData = (id?) => {
+  //   Modal.confirm({
+  //     title: '是否确认删除该条抵冲记录?',
+  //     onOk() {
+  //       RemoveForm({
+  //         keyValue: id
+  //       }).then(res => {
+
+  //       });
+  //     },
+  //     onCancel() { },
+  //   });
+  // }
 
   return (
     <Layout className="offsetMain">
@@ -291,7 +292,7 @@ function Offset() {
                 添加
               </Button>
             </div>
-            <BillCheckTable
+            <ListTable
               onchange={(paginationConfig, filters, sorter) =>
                 loadDetailData(search, paginationConfig, sorter)
               }
@@ -300,7 +301,7 @@ function Offset() {
               data={checkdata}
               showVertify={showVertify}
               closeVertify={closeVertify}
-              deleteData={deleteData}
+              // deleteData={deleteData}
               showModify={showModify}
               closeModify={closeModify}
               reload={() => initLoadData('', search)}
@@ -315,7 +316,7 @@ function Offset() {
                 onSearch={value => loadDetailData(value)}
               />
             </div>
-            <BillNoticeTable
+            <DetailTable
               onchange={(paginationConfig, filters, sorter) =>
                 loadDetailData(noticesearch, paginationConfig, sorter)
               }
@@ -352,5 +353,4 @@ function Offset() {
     </Layout>
   );
 }
-
 export default Offset;

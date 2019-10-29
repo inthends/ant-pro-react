@@ -1,5 +1,5 @@
 //修改冲抵单
-import { notification, Button, Col, DatePicker, Drawer, Form, Row, Spin, Input, Table } from 'antd';
+import { message, notification, Button, Col, DatePicker, Drawer, Form, Row, Spin, Input, Table } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
@@ -18,7 +18,7 @@ interface ModifyProps {
 }
 
 const Modify = (props: ModifyProps) => {
-  const { modifyVisible, closeDrawer, form, id } = props;
+  const { reload, modifyVisible, closeDrawer, form, id } = props;
   const title = id === undefined ? '新增冲抵单' : '修改冲抵单';
   const [loading, setLoading] = useState<boolean>(false);
   const { getFieldDecorator } = form;
@@ -40,9 +40,9 @@ const Modify = (props: ModifyProps) => {
     }
   }, [modifyVisible]);
 
-  const close = () => {
-    closeDrawer();
-  };
+  // const close = () => {
+  //   closeDrawer();
+  // };
 
   // const guid=()=> {
   //   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -105,7 +105,7 @@ const Modify = (props: ModifyProps) => {
           //feeitemid: infoDetail.feeitemid
         };
 
-        SaveForm(newData).then((res) => { 
+        SaveForm(newData).then((res) => {
           if (res.data) {
             notification['warning']({
               message: '系统提示',
@@ -113,7 +113,10 @@ const Modify = (props: ModifyProps) => {
                 '没有找到要冲抵的费用！'
             });
           } else {
-            close();
+            // close();
+            message.success('保存成功');
+            reload();
+            closeDrawer();
           }
         });
       }
@@ -169,13 +172,13 @@ const Modify = (props: ModifyProps) => {
       sorter: true,
       key: 'lastAmount',
       width: 180,
-      render: val => {
-        if (val == null) {
-          return <span></span>
-        } else {
-          return <span> {val} </span>
-        }
-      }
+      // render: val => {
+      //   if (val == null) {
+      //     return <span></span>
+      //   } else {
+      //     return <span> {val} </span>
+      //   }
+      // }
     },
     {
       title: '计费起始日期',
@@ -185,9 +188,9 @@ const Modify = (props: ModifyProps) => {
       width: 180,
       render: val => {
         if (val == null) {
-          return <span></span>
+          return ''
         } else {
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
+          return moment(val).format('YYYY-MM-DD');
         }
       }
     }, {
@@ -198,14 +201,13 @@ const Modify = (props: ModifyProps) => {
       width: 180,
       render: val => {
         if (val == null) {
-          return <span></span>
+          return '';
         } else {
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
+          return moment(val).format('YYYY-MM-DD');
         }
       }
     }
   ] as ColumnProps<any>[];
-
 
   return (
     <Drawer className="offsetModify"
@@ -218,90 +220,90 @@ const Modify = (props: ModifyProps) => {
       bodyStyle={{ background: '#f6f7fb', height: 'calc(100vh -50px)' }}
     >
       <Form hideRequiredMark>
-        <Spin tip="数据加载中..." spinning={loading}>
-          <Row gutter={12}>
-            <Col span={8}>
-              <Form.Item className="vertifyItem" label="单号" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} >
-                {getFieldDecorator('billCode', {
-                  initialValue: infoDetail.billCode,
-                  rules: [{ required: true, message: '请输入单号' }],
-                })(
-                  <Input disabled={true}></Input>
-                )}
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item label="单据日期" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} >
-                {getFieldDecorator('billDate', {
-                  initialValue: infoDetail.billDate != null
-                    ? moment(new Date(infoDetail.billDate))
-                    : moment(new Date()),
-                  rules: [{ required: true, message: '请选择单据日期' }],
-                })(
-                  <DatePicker></DatePicker>
-                )}
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item label="冲抵人" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} >
-                {getFieldDecorator('createUserName', {
-                  initialValue: infoDetail.createUserName,
-                  rules: [{ required: true, message: '请输入冲抵人' }],
-                })(
-                  <Input disabled={true}></Input>
-                )}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={12}>
-            <Col span={8}>
-              <Form.Item label="状态" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} >
-                {getFieldDecorator('createUserName', {
-                  initialValue: infoDetail.createUserName,
-                  rules: [{ required: true, message: '请输入冲抵人' }],
-                })(
-                  <Input disabled={true}></Input>
-                )}
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item label="审核日期" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} >
-                {getFieldDecorator('verifyDate', {
-                  initialValue: infoDetail.verifyDate != null
-                    ? moment(new Date(infoDetail.verifyDate))
-                    : moment(new Date()),
-                  rules: [{ required: true, message: '请选择审核日期' }],
-                })(
-                  <DatePicker disabled={true}></DatePicker>
-                )}
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item label="审核日期" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} >
-                {getFieldDecorator('verifyDate', {
-                  initialValue: infoDetail.verifyDate != null
-                    ? moment(new Date(infoDetail.verifyDate))
-                    : moment(new Date()),
-                  rules: [{ required: true, message: '请选择审核日期' }],
-                })(
-                  <DatePicker disabled={true}></DatePicker>
-                )}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row>
-            <Table<any>
-              bordered={false}
-              size="middle"
-              columns={columns}
-              dataSource={noticeData}
-              rowKey="billd"
-              pagination={pagination}
-              scroll={{ y: 500, x: 1620 }}
-              loading={loading}
-            />
-          </Row>
-        </Spin>
+        {/* <Spin tip="数据加载中..." spinning={loading}> */}
+        <Row gutter={12}>
+          <Col span={8}>
+            <Form.Item className="vertifyItem" label="单号" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} >
+              {getFieldDecorator('billCode', {
+                initialValue: infoDetail.billCode,
+                rules: [{ required: true, message: '请输入单号' }],
+              })(
+                <Input disabled={true}></Input>
+              )}
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item label="单据日期" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} >
+              {getFieldDecorator('billDate', {
+                initialValue: infoDetail.billDate != null
+                  ? moment(new Date(infoDetail.billDate))
+                  : moment(new Date()),
+                rules: [{ required: true, message: '请选择单据日期' }],
+              })(
+                <DatePicker></DatePicker>
+              )}
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item label="冲抵人" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} >
+              {getFieldDecorator('createUserName', {
+                initialValue: infoDetail.createUserName,
+                rules: [{ required: true, message: '请输入冲抵人' }],
+              })(
+                <Input disabled={true}></Input>
+              )}
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={12}>
+          <Col span={8}>
+            <Form.Item label="状态" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} >
+              {getFieldDecorator('createUserName', {
+                initialValue: infoDetail.createUserName,
+                rules: [{ required: true, message: '请输入冲抵人' }],
+              })(
+                <Input disabled={true}></Input>
+              )}
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item label="审核日期" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} >
+              {getFieldDecorator('verifyDate', {
+                initialValue: infoDetail.verifyDate != null
+                  ? moment(new Date(infoDetail.verifyDate))
+                  : moment(new Date()),
+                rules: [{ required: true, message: '请选择审核日期' }],
+              })(
+                <DatePicker disabled={true}></DatePicker>
+              )}
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item label="审核日期" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} >
+              {getFieldDecorator('verifyDate', {
+                initialValue: infoDetail.verifyDate != null
+                  ? moment(new Date(infoDetail.verifyDate))
+                  : moment(new Date()),
+                rules: [{ required: true, message: '请选择审核日期' }],
+              })(
+                <DatePicker disabled={true}></DatePicker>
+              )}
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row>
+          <Table<any>
+            bordered={false}
+            size="middle"
+            columns={columns}
+            dataSource={noticeData}
+            rowKey="billd"
+            pagination={pagination}
+            scroll={{ y: 500, x: 1620 }}
+            loading={loading}
+          />
+        </Row>
+        {/* </Spin> */}
         <div
           style={{
             position: 'absolute',
