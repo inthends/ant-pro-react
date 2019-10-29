@@ -202,10 +202,9 @@ const Modify = (props: ModifyProps) => {
             ></ModifyItem>
           </Row>
           <Row gutter={24}>
-            <ModifyItem {...baseFormProps} field="outerPhone" label="电话"></ModifyItem>
+            <ModifyItem {...baseFormProps} field="phoneNum" label="联系电话"></ModifyItem>
             <ModifyItem {...baseFormProps} field="fax" label="传真"></ModifyItem>
           </Row>
-
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}

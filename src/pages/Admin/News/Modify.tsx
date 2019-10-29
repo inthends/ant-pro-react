@@ -224,7 +224,7 @@ const Modify = (props: ModifyProps) => {
               field="isDistinguish"
               // type='checkbox'
               type='switch'
-              label="不区分小区"
+              label="区分小区"
               onChange={value => form.setFieldsValue({ isDistinguish: value })}
               checked={form.getFieldValue('isDistinguish')}
               lg={4}

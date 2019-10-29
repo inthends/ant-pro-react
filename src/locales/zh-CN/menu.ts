@@ -24,7 +24,7 @@ export default {
   'menu.dashboard': '数据中心',
   'menu.dashboard.analysis': '数据分析', 
   'menu.dashboard.reconciliation': '对账单', 
-  'menu.dashboard.billdetails': '对账明细',
+  'menu.dashboard.billdetails': '账单明细',
   'menu.dashboard.receiptdetails': '实收明细',
   
 
