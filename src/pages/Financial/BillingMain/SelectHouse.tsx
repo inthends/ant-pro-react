@@ -19,7 +19,7 @@ interface SelectHouseProps {
 }
 
 const SelectHouse = (props: SelectHouseProps) => {
-  const { visible, closeModal, feeDetail, getBillID,treeData } = props;
+  const { visible, closeModal, feeDetail, getBillID, treeData } = props;
   const [feeTreeData, setFeeTreeData] = useState<TreeEntity[]>([]);
   useEffect(() => {
     if (visible) {
@@ -69,7 +69,9 @@ const SelectHouse = (props: SelectHouseProps) => {
       bodyStyle={{ background: '#f6f7fb' }}
       width='600px'
     >
-      <Row style={{ height: '600px', overflow: 'hidden', marginTop: '5px', backgroundColor: 'rgb(255,255,255)' }}>
+      {/* <Row style={{ height: '600px', overflow: 'hidden', marginTop: '5px', backgroundColor: 'rgb(255,255,255)' }}> */}
+
+      <Row gutter={8}> 
         <Col span={12} style={{ height: '600px', overflow: 'auto' }}>
           <SelectTree
             treeData={treeData}

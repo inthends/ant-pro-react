@@ -1,5 +1,5 @@
 //选择房间
-import { Button,Col, Form,Input,Row,Icon,Modal, message} from 'antd';
+import { Button, Col, Form, Input, Row, Icon, Modal, message } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import './style.less';
@@ -7,18 +7,18 @@ import AsynLeftTree from '../AsynLeftTree';
 interface SelectHouseProps {
   visible: boolean;
   closeModal(): void;
-  getSelectTree(id):void;
+  getSelectTree(id): void;
   form: WrappedFormUtils;
 }
 
 const SelectHouse = (props: SelectHouseProps) => {
-  const { visible, closeModal,getSelectTree} = props;
+  const { visible, closeModal, getSelectTree } = props;
   useEffect(() => {
-    if(visible){
+    if (visible) {
     }
   }, [visible]);
 
-  const [unitData,setUnitData]=useState<any[]>([]);
+  const [unitData, setUnitData] = useState<any[]>([]);
 
   return (
     <Modal
@@ -28,9 +28,10 @@ const SelectHouse = (props: SelectHouseProps) => {
       cancelText="取消"
       onCancel={() => closeModal()}
       onOk={() => {
-        if(unitData.length==0||unitData.isLeaf!=1){
+        if (unitData.length == 0)//||unitData.isLeaf!=1){
+        {
           message.warning('请选择房间');
-        }else{
+        } else {
           getSelectTree(unitData);
           closeModal();
         }
@@ -41,14 +42,14 @@ const SelectHouse = (props: SelectHouseProps) => {
     >
       <Row gutter={8}>
         <Col span={18}>
-          <Input placeholder="请输入要查询的关键字"/>
+          <Input placeholder="请输入要查询的关键字" />
         </Col>
         <Col span={6}>
-          <Button style={{width:'100%'}}>
-          <Icon type="search" />查询</Button>
+          <Button style={{ width: '100%' }}>
+            <Icon type="search" />查询</Button>
         </Col>
       </Row>
-      <Row style={{height:'400px',overflow:'auto' ,marginTop:'5px',backgroundColor:'rgb(255,255,255)'}}>
+      <Row style={{ height: '400px', overflow: 'auto', marginTop: '5px', backgroundColor: 'rgb(255,255,255)' }}>
         <Col span={24}>
           <AsynLeftTree
             parentid={'0'}
