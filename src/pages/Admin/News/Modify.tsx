@@ -177,7 +177,7 @@ const Modify = (props: ModifyProps) => {
 
   return (
     <BaseModifyProvider {...props}
-      name="公告"
+      name="信息"
       width={700}
       save={doSave}>
       <Card>

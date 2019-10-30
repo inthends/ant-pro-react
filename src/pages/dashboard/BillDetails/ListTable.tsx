@@ -19,19 +19,19 @@ function ListTable(props: ListTableProps) {
 
   const columns = [
     {
-      title: '管理处名称',
+      title: '管理处',
       dataIndex: '管理处',
       key: '管理处',
-      width: 100,
+      width: 120,
     },
     {
-      title: '楼盘名称',
+      title: '楼盘',
       dataIndex: '楼盘',
       key: '楼盘',
       width: 100,
     },
     {
-      title: '楼栋名称',
+      title: '楼栋',
       dataIndex: '楼栋',
       key: '楼栋',
       width: 80,
@@ -40,25 +40,25 @@ function ListTable(props: ListTableProps) {
       title: '房屋编号',
       dataIndex: '房屋编号',
       key: '房屋编号',
-      width: 120,
+      width: 140,
     },
     {
       title: '房屋名称',
-      dataIndex: '房屋',
-      key: '房屋',
+      dataIndex: '房屋名称',
+      key: '房屋名称',
       width: 80,
     },
     {
-      title: '业户名称',
+      title: '客户名称',
       dataIndex: '客户名称',
       key: '客户名称',
       width: 100,
     },
     {
-      title: '状态',
+      title: '是否审核',
       dataIndex: '是否审核',
       key: '是否审核',
-      width: 60,
+      width: 80,
     },
     {
       title: '收费项目',
@@ -72,7 +72,7 @@ function ListTable(props: ListTableProps) {
       title: '期间',
       dataIndex: '计费起始日期',
       key: '计费起始日期',
-      width: 100,
+      width: 200,
       align: 'center',
       render: (text, record) => {
         if (text != null) {
@@ -88,63 +88,62 @@ function ListTable(props: ListTableProps) {
       key: '应收',
       width: 100,
       sorter: true
-    },
-
+    }, 
     {
       title: '减免',
-      dataIndex: 'createDate',
-      key: 'createDate',
+      dataIndex: '减免',
+      key: '减免',
       width: 100,
       sorter: true
     },
 
     {
       title: '冲抵',
-      dataIndex: 'createDate',
-      key: 'createDate',
+      dataIndex: '冲抵',
+      key: '冲抵',
       width: 100,
       sorter: true
     },
 
     {
       title: '已收',
-      dataIndex: 'createDate',
-      key: 'createDate',
+      dataIndex: '已收',
+      key: '已收',
       width: 100,
       sorter: true
-    },
-
+    }, 
     {
-      title: '未收金额',
-      dataIndex: 'createDate',
-      key: 'createDate',
+      title: '未收',
+      dataIndex: '未收',
+      key: '未收',
       width: 100,
       sorter: true
-    },
-
+    }, 
     {
       title: '账单日期',
-      dataIndex: '账单日',
-      key: '账单日',
+      dataIndex: '账单日期',
+      key: '账单日期',
       width: 100,
-      sorter: true
+      sorter: true,
+      render: val => moment(val).format('YYYY-MM-DD') 
     },
     {
       title: '收款截止日期',
-      dataIndex: 'createDate',
-      key: 'createDate',
-      width: 120,
-      sorter: true
+      dataIndex: '收款截止日期',
+      key: '收款截止日期',
+      width: 130,
+      sorter: true,
+      render: val => moment(val).format('YYYY-MM-DD') 
     },
     {
       title: '是否逾期',
-      dataIndex: 'createDate',
-      key: 'createDate',
+      dataIndex: '是否逾期',
+      key: '是否逾期',
       width: 100,
       sorter: true
     },
     {
-      title: '费用备注',
+      title: '备注',
       dataIndex: '备注',
       key: '备注',
       width: 100,
@@ -160,7 +159,7 @@ function ListTable(props: ListTableProps) {
         dataSource={data}
         rowKey="feeId"
         pagination={pagination}
-        scroll={{ y: 500, x: 1800 }}
+        scroll={{ y: 500, x: 1900 }}
         loading={loading}
         onChange={onchange}
       />
