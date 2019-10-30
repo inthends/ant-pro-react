@@ -16,14 +16,15 @@ interface ListTableProps {
   reload(): void;
   showModify(id?, isedit?): void;
   // showVerify(id?, flag?): void;
-  showVerify(id?): void; 
-  showDivide():void;
+  showVerify(id?): void;
+  showDivide(): void;
+  showFee(id?): void;
   form: WrappedFormUtils;
   getRowSelect(record): void;
 }
 
 function ListTable(props: ListTableProps) {
-  const { onchange, loading, pagination, data, reload, showModify, getRowSelect,showVerify,showDivide } = props;
+  const { onchange, loading, pagination, data, reload, showModify, getRowSelect, showVerify, showDivide,showFee } = props;
   const [selectedRowKey, setSelectedRowKey] = useState([]);
   const MoreBtn: React.FC<{
     item: any;
@@ -127,7 +128,7 @@ function ListTable(props: ListTableProps) {
       title: '审核情况',
       dataIndex: 'verifyMemo',
       key: 'verifyMemo',
-      width: 160, 
+      width: 160,
     },
     {
       title: '备注',
@@ -157,12 +158,17 @@ function ListTable(props: ListTableProps) {
 
         return [
           <span>
-            <a onClick={() => showModify(record.billId, record.ifVerifyName == "已审核"
-              || record.billSource == "水电气生成" ? false : true)} key="modify">{record.ifVerifyName == "已审核"
-                || record.billSource == "水电气生成" ? "查看" : "修改"}</a>
+
+
+            {/* <a onClick={() => showModify(record.billId, record.ifVerifyName == "已审核"
+              || record.billSource == "水电气生成" ? false : true)} key="modify">
+              {record.ifVerifyName == "已审核" || record.billSource == "水电气生成" ? "查看" : "修改"}</a> */}
+ 
+            {record.ifVerify ? <a onClick={() => showFee(record.billId)}>查看</a> : <a onClick={() => showModify(record.billId, record.billSource == "水电气生成" ? false : true)}>修改</a>}
+ 
             <Divider type="vertical" />
             {!record.ifVerify ? <a onClick={() => showVerify(record.billId)} key="app">审核</a> :
-              <a  onClick={() => showVerify(record.billId)} key="unapp"  >反审</a>
+              <a onClick={() => showVerify(record.billId)} key="unapp"  >反审</a>
             }
             <Divider type="vertical" />
             <MoreBtn key="more" item={record} />

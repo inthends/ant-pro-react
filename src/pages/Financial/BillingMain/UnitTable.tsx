@@ -1,5 +1,4 @@
 //计费明细
-//装表列表
 import Page from '@/components/Common/Page';
 import { Form, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
@@ -45,7 +44,7 @@ function UnitTable(props: UnitTableProps) {
       title: '应收期间',
       dataIndex: 'period',
       key: 'period',
-      width: 120,
+      width: 100,
       sorter: true,
       render: val => {
         return moment(val).format('YYYY-MM-DD')
@@ -63,7 +62,7 @@ function UnitTable(props: UnitTableProps) {
       dataIndex: 'price',
       key: 'price',
       sorter: true,
-      width: 100
+      width: 80
     },
     {
       title: '周期',

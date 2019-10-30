@@ -12,6 +12,7 @@ import UnitTable from './UnitTable';
 import Modify from './Modify';
 import Verify from './Verify';
 import Divide from './Divide';
+import Show from './Show';
 const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
@@ -31,6 +32,8 @@ function BillingMain() {
   const [vertifyVisible, setVerifyVisible] = useState<boolean>(false);
   const [unitTreeData, setUnitTreeData] = useState<any[]>([]);
   const [divideVisible, setDivideVisible] = useState<boolean>(false);
+
+  const [showVisible, setShowVisible] = useState<boolean>(false);
 
   const selectTree = (org, item, info) => {
     //console.log(org,item,info);
@@ -181,6 +184,11 @@ function BillingMain() {
     setId('');
   };
 
+  const closeShow = (result?) => {
+    setShowVisible(false);
+    setId('');
+  };
+
   const showVerify = (id?, ifVerify?) => {
     setVerifyVisible(true);
     setIfVerify(ifVerify);
@@ -200,6 +208,15 @@ function BillingMain() {
     setModifyVisible(true);
     setId(id);
   };
+
+  //查看费用
+  const showFee = (id?) => {
+    setShowVisible(true);
+    if (id != null && id != '')
+      setId(id);
+  };
+
+
   // const deleteData = (id?) => {
   //   Modal.confirm({
   //     title: '是否确认删除该条抵冲记录?',
@@ -298,6 +315,7 @@ function BillingMain() {
               pagination={meterPagination}
               data={meterData}
               showVerify={showVerify}
+              showFee={showFee}
               showModify={(id, isedit) => {
                 if (id != null && id != '') {
                   setId(id);
@@ -353,6 +371,14 @@ function BillingMain() {
         id={id}
         reload={() => initMeterLoadData('', '')}
       />
+
+      <Show
+        visible={showVisible}
+        close={closeShow}
+        id={id}
+      />
+
+
       <Divide
         visible={divideVisible}
         closeModal={closeDivide}

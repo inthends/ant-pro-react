@@ -9,7 +9,7 @@ import styles from './style.less';
 import moment from 'moment';
 
 const { Option } = Select;
-// const { TextArea } = Input;
+const { TextArea } = Input;
 
 // 引入编辑器组件
 import BraftEditor from 'braft-editor'
@@ -148,8 +148,8 @@ const Modify = (props: ModifyProps) => {
           //给文本编辑器赋值
           setTimeout(() => {
             form.setFieldsValue({
-              memo: BraftEditor.createEditorState(
-                tempInfo.memo
+              description: BraftEditor.createEditorState(
+                tempInfo.description
               )
             })
           }, 500)
@@ -174,7 +174,7 @@ const Modify = (props: ModifyProps) => {
       if (!errors) {
         getInfo(id).then(tempInfo => {
           const newvalue = { ...values, date: values.date.format('YYYY-MM-DD') };
-          newvalue.memo = values.memo.toHTML();//toRAW(); 
+          newvalue.description = values.description.toHTML();//toRAW(); 
           SaveForm({ ...tempInfo, ...newvalue, keyValue: tempInfo.id }).then(res => {
             message.success('保存成功');
             closeDrawer();
@@ -266,7 +266,7 @@ const Modify = (props: ModifyProps) => {
         url: url
       }]);
       //赋值
-      form.setFieldsValue({ memo: BraftEditor.createEditorState(editorState) });
+      form.setFieldsValue({ description: BraftEditor.createEditorState(editorState) });
       setState(editorState);
     }
   };
@@ -506,7 +506,7 @@ const Modify = (props: ModifyProps) => {
                   })(
                     <Select placeholder="请选择项目类型">
                       {project.map(item => (
-                        <Option key={item.key} >
+                        <Option key={item.key} value={item.title}>
                           {item.title}
                         </Option>
                       ))}
@@ -573,7 +573,7 @@ const Modify = (props: ModifyProps) => {
 
 
               <Col lg={4}>
-                <Form.Item label="项目风采"> 
+                <Form.Item label="项目风采">
                   {getFieldDecorator('isPublish', {
                     initialValue: infoDetail.isPublish,
                   })(
@@ -581,45 +581,43 @@ const Modify = (props: ModifyProps) => {
                       onChange={value => form.setFieldsValue({ isPublish: value })}
                       checked={form.getFieldValue('isPublish')}
                     ></Switch>
-
-
                   )}
 
                 </Form.Item>
               </Col>
-
-
-
             </Row>
+
             <Row gutter={24}>
               <Col lg={24}>
-                {/* <Form.Item label="附加说明">
+                <Form.Item label="备注">
                   {getFieldDecorator('memo', {
                     initialValue: infoDetail.memo,
-                  })(<TextArea rows={4} placeholder="请输入附加说明" />)}
-
-                  {getFieldDecorator('mainPic', {
-                    initialValue: infoDetail.mainPic,
-                  })(
-                    <input type='hidden' />
-                  )}
-                </Form.Item> */}
-
-
+                  })(<TextArea rows={4} placeholder="请输入备注" maxLength={500} />)}
+                </Form.Item>
+              </Col>
+            </Row> 
+            <Row gutter={24}>
+              <Col lg={24}>
                 <Form.Item required label="">
-                  {getFieldDecorator('memo', {
-                    rules: [{ required: true, message: '请输入内容' }]
+                  {getFieldDecorator('description', {
+                    rules: [{ required: true, message: '请输入详细介绍' }]
                   })(
                     <BraftEditor
                       // value={state.editorState}
                       onChange={handleEditorChange}
                       controls={controls}
                       extendControls={extendControls}
-                      placeholder="请输入内容"
+                      placeholder="请输入详细介绍"
                     />
                   )}
-                </Form.Item>
 
+                  {/* 首页图片 */}
+                  {getFieldDecorator('mainPic', {
+                    initialValue: infoDetail.mainPic,
+                  })(
+                    <input type='hidden' />
+                  )}
+                </Form.Item>
               </Col>
             </Row>
 

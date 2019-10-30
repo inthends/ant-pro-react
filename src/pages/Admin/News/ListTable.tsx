@@ -37,7 +37,7 @@ function ListTable(props: ListTableProps) {
       title: '类型',
       dataIndex: 'type',
       key: 'type',
-      width: 60,
+      width: 80,
     },
     {
       title: '标题',

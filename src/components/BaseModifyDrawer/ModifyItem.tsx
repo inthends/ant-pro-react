@@ -25,6 +25,7 @@ interface ModifyItemProps {
   onSearch?(value): void;
   onSelect?(value, option): void; //autoComplete
   lg?: any;
+  maxLength?: any;
 }
 const ModifyItem = (props: ModifyItemProps) => {
   const {
@@ -34,6 +35,7 @@ const ModifyItem = (props: ModifyItemProps) => {
     initData,
     // wholeLine,
     lg,
+    maxLength,
     multiple,
     form,
     rules,
@@ -64,7 +66,7 @@ const ModifyItem = (props: ModifyItemProps) => {
         return <DatePicker {...inner} style={{ width: '100%' }} placeholder={`请选择${label as string}`} />;
 
       case 'switch':
-        return <Switch {...inner} 
+        return <Switch {...inner}
           onChange={onChange}
           checked={checked}
           checkedChildren="是"
@@ -92,6 +94,7 @@ const ModifyItem = (props: ModifyItemProps) => {
             rows={4}
             placeholder={`请输入${label as string}`}
             onChange={onChange}
+            maxLength={maxLength}
           ></TextArea>
         );
       case 'select':

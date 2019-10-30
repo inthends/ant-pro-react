@@ -111,7 +111,7 @@ interface ModifyProps {
 };
 
 const Modify = (props: ModifyProps) => {
-  const { modifyVisible, closeDrawer, form, id, reload, isEdit,treeData } = props;
+  const { modifyVisible, closeDrawer, form, id, reload, isEdit, treeData } = props;
   const title = id == undefined ? '新增计费单' : '修改计费单';
   const [newId, setNewId] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -407,7 +407,7 @@ const Modify = (props: ModifyProps) => {
     <Drawer
       title={title}
       placement="right"
-      width={700}
+      width={750}
       onClose={close}
       visible={modifyVisible}
       style={{ height: 'calc(100vh-50px)' }}
@@ -576,40 +576,45 @@ const Modify = (props: ModifyProps) => {
           onClick={() => {
             form.validateFields((errors, values) => {
               if (!errors) {
-                let guid = getGuid(); 
-                var keyValue="";
-                var type=1;
-                if( id == null || id == '' ){
-                  if(newId==null&&newId == '')
-                  {
-                    keyValue=guid;
-                  }else{
-                    keyValue=newId;
-                    type=0;
+                let guid = getGuid();
+                var keyValue = "";
+                var type = 1;
+                if (id == null || id == '') {
+                  if (newId == null && newId == '') {
+                    keyValue = guid;
+                  } else {
+                    keyValue = newId;
+                    type = 0;
                   }
-                }else{
-                  if(newId==null&&newId == '')
-                  {
-                    keyValue=guid;
-                  }else{
-                    keyValue=id;
-                    type=0;
+                } else {
+                  if (newId == null && newId == '') {
+                    keyValue = guid;
+                  } else {
+                    keyValue = id;
+                    type = 0;
                   }
                 }
 
-                var feeEntity = {
-                  keyValue: keyValue,//id == null || id == '' ? guid : id,
-                  //BillId:'',// id == null || id == '' ? guid : id,
-                  BillSource: '计算周期费',
-                  BillDate: moment(values.billDate).format('YYYY-MM-DD'),
-                  LinkId: '',
-                  IfVerify: values.ifVerify == "未审核" ? false : true,
-                  Status: 0,
-                  BillCode:values.billCode,
-                  type: type,
-                  Memo: values.memo
-                }
-                SaveMain(feeEntity).then(() => {
+                // var feeEntity = {
+                //   keyValue: keyValue,//id == null || id == '' ? guid : id,
+                //   //BillId:'',// id == null || id == '' ? guid : id,
+                //   BillSource: '计算周期费',
+                //   BillDate: moment(values.billDate).format('YYYY-MM-DD'),
+                //   LinkId: '',
+                //   IfVerify: values.ifVerify == "未审核" ? false : true,
+                //   Status: 0,
+                //   BillCode: values.billCode,
+                //   type: type,
+                //   Memo: values.memo
+                // }
+
+                //赋值
+                const newData = infoDetail ? { ...infoDetail, ...values } : values;
+                newData.keyValue = keyValue;
+                newData.billDate = moment(newData.billDate).format('YYYY-MM-DD');
+                newData.ifVerify = newData.ifVerify == "未审核" ? false : true;
+                newData.type = type;
+                SaveMain(newData).then(() => {
                   closeDrawer();
                   reload();
                 });
@@ -628,14 +633,13 @@ const Modify = (props: ModifyProps) => {
         getBillID={(billid) => {
           setNewId(billid);
           GetBilling(billid).then(res => {
-            if(res!=null)
-            {
-              message.success('数据保存成功');
+            if (res != null) {
+              message.success('添加成功！');
               setInfoDetail(res);
               initUnitFeeLoadData('');
               setLoading(false);
-            }else{
-              message.warning('数据保存失败');
+            } else {
+              message.warning('添加失败！');
               setNewId('');
             }
           });

@@ -29,7 +29,7 @@ const Modify = (props: ModifyProps) => {
   const baseFormProps = { form, initData };
   const [orgs, setOrgs] = useState<TreeNode[]>();
 
-  useEffect(() => { 
+  useEffect(() => {
     GetOrgEsates().then(res => {
       setOrgs(res);
     });
@@ -288,13 +288,23 @@ const Modify = (props: ModifyProps) => {
                 )}
               </Form.Item>
             </Col>
-          </Row> 
+          </Row>
           <Row gutter={24} hidden={form.getFieldValue('type') == '广告' ? false : true} >
             <ModifyItem
               {...baseFormProps}
               field="linkUrl"
               label="链接地址"
-              rules={[{ required: form.getFieldValue('type') == '广告', message: "请输入链接地址" }]} 
+              rules={[{ required: form.getFieldValue('type') == '广告', message: "请输入链接地址" }]}
+              lg={24}
+            ></ModifyItem>
+          </Row> 
+          <Row gutter={24}>
+            <ModifyItem
+              {...baseFormProps}
+              type='textarea'
+              field="memo"
+              label="备注"
+              maxLength={500}
               lg={24}
             ></ModifyItem>
           </Row> 
