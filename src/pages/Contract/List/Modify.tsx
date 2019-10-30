@@ -234,13 +234,9 @@ const Modify = (props: ModifyProps) => {
         setTermJson(strTermJson);
 
         let strRateJson = JSON.stringify(RateJson);
-        setRateJson(strRateJson);
-
+        setRateJson(strRateJson); 
         let strRebateJson = JSON.stringify(RebateJson);
-        setRebateJson(strRebateJson);
-
-
-
+        setRebateJson(strRebateJson);  
         GetChargeDetail({
           ...entity,
           LeaseContractId: '',

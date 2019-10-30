@@ -14,6 +14,8 @@ import { ContentUtils } from 'braft-utils'
 import 'braft-editor/dist/index.css'
 //使用antd upload
 
+import styles from './style.less';
+
 interface ModifyProps {
   visible: boolean;
   data?: any;
@@ -180,7 +182,7 @@ const Modify = (props: ModifyProps) => {
       name="信息"
       width={700}
       save={doSave}>
-      <Card>
+      <Card className={styles.card}>
         <Form layout="vertical" hideRequiredMark>
           <Row gutter={24}>
             <ModifyItem

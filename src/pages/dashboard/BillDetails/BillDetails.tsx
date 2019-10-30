@@ -1,9 +1,9 @@
 //账单明细
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { Button, Icon, Input, Layout } from 'antd';
+import { Modal, Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { GetBillDetailsPageList } from './BillDetails.service';
+import { GetBillDetailsPageList, ExportBillDetails } from './BillDetails.service';
 import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
 const { Content } = Layout;
@@ -83,6 +83,30 @@ function BillDetails() {
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson });
   };
 
+  //导出
+  const doExport = (org, searchText) => {
+    Modal.confirm({
+      title: '请确认',
+      content: `您是否要导出吗？`,
+      onOk: () => {
+        const queryJson = {
+          // OrganizeId: org.organizeId,
+          // keyword: searchText,
+          // TreeTypeId: org.id,
+          // TreeType: org.type,
+        };
+        ExportBillDetails(queryJson).then(res => {
+
+          //window.open(res); 
+
+          window.location.href = res;
+
+
+        });
+      },
+    });
+  };
+
   return (
     <Layout>
       <AsynLeftTree
@@ -107,9 +131,11 @@ function BillDetails() {
           >
             <Icon type="search" />
             查询
-              </Button>
+          </Button>
 
-          <Button type="primary" style={{ float: 'right' }}>
+          <Button type="primary" style={{ float: 'right' }}
+            onClick={() => { doExport() }}
+          >
             <Icon type="export" />
             导出
           </Button>
@@ -125,7 +151,7 @@ function BillDetails() {
           data={listData}
         />
       </Content>
-    </Layout>
+    </Layout >
   );
 }
 
