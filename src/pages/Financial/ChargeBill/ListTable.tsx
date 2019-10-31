@@ -30,14 +30,14 @@ function ListTable(props: ListTableProps) {
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
   };
-const [hasSelected,setHasSelected]=useState<boolean>();
-  useEffect(()=>{
+  const [hasSelected, setHasSelected] = useState<boolean>();
+  useEffect(() => {
     setSelectedRowKeys([]);
     setHasSelected(false);
-    form.setFieldsValue({ payAmountA: 0});
+    form.setFieldsValue({ payAmountA: 0 });
     form.setFieldsValue({ payAmountB: 0 });
     form.setFieldsValue({ payAmountC: 0 });
-  },[data])
+  }, [data])
 
   const doDelete = record => {
     Modal.confirm({
@@ -56,11 +56,12 @@ const [hasSelected,setHasSelected]=useState<boolean>();
   };
 
   const editAndDelete = (key: string, currentItem: any) => {
-    console.log(currentItem);
-    if (key === 'view') {
-      //this.showEditModal(currentItem);
-    }
-    else if (key === 'split') {
+    //console.log(currentItem);
+    //if (key === 'view') {
+    //this.showEditModal(currentItem);
+    //}
+    //else
+    if (key === 'split') {
       showSplit(currentItem.id);
     } else if (key === 'trans') {
       showTrans(currentItem.id);
@@ -73,7 +74,7 @@ const [hasSelected,setHasSelected]=useState<boolean>();
     <Dropdown
       overlay={
         <Menu onClick={({ key }) => editAndDelete(key, item)}>
-          <Menu.Item key="view">查看</Menu.Item>
+          {/* <Menu.Item key="view">查看</Menu.Item> */}
           <Menu.Item key="split">拆费</Menu.Item>
           <Menu.Item key="trans">转费</Menu.Item>
         </Menu>}>

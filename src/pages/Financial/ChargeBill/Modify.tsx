@@ -326,6 +326,7 @@ const Modify = (props: ModifyProps) => {
       width={id != '' ? 500 : 840}
       onClose={() => close(false)}
       visible={modifyVisible}
+      destroyOnClose={true}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 50px)' }}
     >
       <Row gutter={8}>

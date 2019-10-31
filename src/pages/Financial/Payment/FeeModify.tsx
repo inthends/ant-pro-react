@@ -162,6 +162,7 @@ const FeeModify = (props: FeeModifyProps) => {
       width={id != null && id != "" ? 600 : 780}
       // width={780}
       onClose={closeDrawer}
+      destroyOnClose={true}
       visible={visible}
       style={{ height: 'calc(100vh-50px)' }}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 50px)' }}
@@ -173,7 +174,7 @@ const FeeModify = (props: FeeModifyProps) => {
             null :
             // <Col span={8} style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh - 140px)' }}>
             <Col span={8} style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh - 77px)' }}>
-              <LeftTree 
+              <LeftTree
                 treeData={feeTreeData}
                 selectTree={(id, item) => {
                   if (organize.eventKey) {
@@ -258,7 +259,16 @@ const FeeModify = (props: FeeModifyProps) => {
                       initialValue: infoDetail.price,
                       rules: [{ required: true, message: '请输入单价' }]
                     })(
-                      <Input readOnly={!infoDetail.isEditTemp} style={{ width: '100%' }}></Input>
+                      <InputNumber readOnly={!infoDetail.isEditTemp}
+                        min={0}
+                        precision={4}
+                        style={{ width: '100%' }}
+                        onChange={value => {
+                          const quantity = Number(form.getFieldValue('quantity'));
+                          const number = Number(form.getFieldValue('number'));
+                          form.setFieldsValue({ amount: quantity * number * Number(value) });
+                        }}
+                      ></InputNumber>
                     )}
                   </Form.Item>
                 </Col>
@@ -287,13 +297,18 @@ const FeeModify = (props: FeeModifyProps) => {
                     })(
                       <InputNumber style={{ width: '100%' }}
                         placeholder='系数'
+                        min={0}
                         onChange={value => {
-                          if (value != undefined) {
-                            const amount = value * infoDetail.quantity * infoDetail.price;
-                            // const info = Object.assign({}, infoDetail, { amount: amount });
-                            infoDetail.amount = amount;
-                            setInfoDetail(infoDetail);
-                          }
+                          // if (value != undefined) {
+                          // const amount = value * infoDetail.quantity * infoDetail.price;
+                          // // const info = Object.assign({}, infoDetail, { amount: amount });
+                          // infoDetail.amount = amount;
+                          // setInfoDetail(infoDetail);
+                          // } 
+                          const price = Number(form.getFieldValue('price'));
+                          const quantity = Number(form.getFieldValue('quantity'));
+                          form.setFieldsValue({ amount: price * quantity * Number(value) });
+
                         }}></InputNumber>
                     )}
                   </Form.Item>
@@ -306,7 +321,7 @@ const FeeModify = (props: FeeModifyProps) => {
                       initialValue: infoDetail.amount,
                       rules: [{ required: true, message: '请输入金额' }]
                     })(
-                      <Input readOnly style={{ width: '100%' }} ></Input>
+                      <InputNumber readOnly style={{ width: '100%' }} precision={2}></InputNumber>
                     )}
                   </Form.Item>
                 </Col>
