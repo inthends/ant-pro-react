@@ -30,7 +30,7 @@ class SecurityView extends Component {
       title: formatMessage({ id: 'account-settings.security.password' }, {}),
       description: (
         <Fragment>
-          {formatMessage({ id: 'account-settings.security.password-description' })}：
+          {formatMessage({ id: 'account-settings.security.password-description' })}
           {passwordStrength.strong}
         </Fragment>
       ),
@@ -45,7 +45,7 @@ class SecurityView extends Component {
       description: `${formatMessage(
         { id: 'account-settings.security.phone-description' },
         {},
-      )}：138****8293`,
+      )}138****8293`,
       actions: [
         <a key="Modify">
           <FormattedMessage id="account-settings.security.modify" defaultMessage="Modify" />

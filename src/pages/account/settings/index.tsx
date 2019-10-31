@@ -44,9 +44,9 @@ class Settings extends Component<
     super(props);
     const menuMap = {
       base: <FormattedMessage id="account-settings.menuMap.basic" defaultMessage="Basic Settings" />,
-      security: (
-        <FormattedMessage id="account-settings.menuMap.security" defaultMessage="Security Settings" />
-      ),
+      // security: (
+      //   <FormattedMessage id="account-settings.menuMap.security" defaultMessage="Security Settings" />
+      // ),
       // binding: (
       //   <FormattedMessage id="account-settings.menuMap.binding" defaultMessage="Account Binding" />
       // ),
@@ -121,8 +121,8 @@ class Settings extends Component<
     switch (selectKey) {
       case 'base':
         return <BaseView />;
-      case 'security':
-        return <SecurityView />;
+      // case 'security':
+      //   return <SecurityView />;
       // case 'binding':
       //   return <BindingView />;
       // case 'notification':

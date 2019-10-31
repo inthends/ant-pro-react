@@ -21,7 +21,7 @@ const AvatarView = ({ avatar }: { avatar: string }) => (
     </div>
     <Upload fileList={[]}>
       <div className={styles.button_view}>
-        <Button icon="upload">
+        <Button icon="upload"   >
           <FormattedMessage id="account-settings.basic.change-avatar" defaultMessage="Change avatar" />
         </Button>
       </div>
@@ -65,12 +65,12 @@ const AvatarView = ({ avatar }: { avatar: string }) => (
 
 interface BaseViewProps extends FormComponentProps {
   currentUser?: CurrentUser;
-}
+};
 
 @connect(({ accountSettings }: { accountSettings: { currentUser: CurrentUser } }) => ({
-  
   currentUser: accountSettings.currentUser,
 }))
+
 class BaseView extends Component<BaseViewProps> {
   view: HTMLDivElement | undefined = undefined;
 
@@ -95,8 +95,10 @@ class BaseView extends Component<BaseViewProps> {
       if (currentUser.avatar) {
         return currentUser.avatar;
       }
-      const url = 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png';
-      return url;
+      //默认头像
+      // const url = 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png';
+      // return url;
+      return '';
     }
     return '';
   }
@@ -155,6 +157,7 @@ class BaseView extends Component<BaseViewProps> {
                 <Input.TextArea
                   placeholder='备注'
                   rows={5}
+                  readOnly
                 />,
               )}
             </FormItem>

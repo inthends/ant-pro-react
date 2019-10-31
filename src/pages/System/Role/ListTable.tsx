@@ -24,26 +24,23 @@ function ListTable(props: ListTableProps) {
     Modal.confirm({
       title: '请确认',
       content: `您是否要删除 ${record.fullName} 吗？`,
-      onOk: () => {
- 
+      onOk: () => { 
         CheckRole(record.roleId).then((res) => {
           if (res) {
             message.error('包含用户，不允许删除！');
             return;
-          }
-
+          } 
           RemoveForm(record.roleId)
             .then(() => {
               message.success('删除成功！');
               reload();
             })
-            .catch(e => { });
-
-        })
-
+            .catch(e => { }); 
+        }) 
       },
     });
   };
+
   const doModify = record => {
     modify({ ...record });
   };

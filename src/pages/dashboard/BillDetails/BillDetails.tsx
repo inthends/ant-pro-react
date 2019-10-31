@@ -134,7 +134,7 @@ function BillDetails() {
           </Button>
 
           <Button type="primary" style={{ float: 'right' }}
-            onClick={() => { doExport() }}
+            onClick={() => { doExport('','') }}
           >
             <Icon type="export" />
             导出
