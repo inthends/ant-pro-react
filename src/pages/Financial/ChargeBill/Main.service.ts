@@ -62,7 +62,7 @@ export function GetShowDetail(data): Promise<any> {
     .then(getResult as any);
 }
 //获取转费时候历史的房间住户
-export function GetTransferRoomUsers(roomid, relationid): Promise<TreeEntity[]> {
+export function GetTransferRoomUsers(roomid, relationid): Promise<any[]> {
   return request
     .get(process.env.basePath + `/Receivable/GetTransferRoomUsers?roomId=${roomid}&relationId=${relationid}`)
     .then(getResult as any);
@@ -125,6 +125,7 @@ export function RedFlush(data): Promise<any> {
 export function CheckRedFlush(data): Promise<any> {
   return request.get(process.env.basePath + `/Receivable/CheckRedFlush?keyValue=${data}`).then(getResult as any);
 }
+
 //审核接口
 export function Audit(data): Promise<any> {
   return request.post(process.env.basePath + `/Receivable/Audit`, { data: objToFormdata(data) }).then(getResult as any);

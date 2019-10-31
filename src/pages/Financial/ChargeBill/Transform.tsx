@@ -1,52 +1,49 @@
 //转费
 import {
-  Checkbox,
-  Tabs,
+  Card,
   Select,
-  Button,Table,
+  Button,
   Col,
-  DatePicker,
   Drawer,
   Form,
-  Input,InputNumber,
+  Input,
   Row,
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetShowDetail,TransferBilling,GetTransferRoomUsers} from './Main.service';
+import { GetShowDetail, TransferBilling, GetTransferRoomUsers } from './Main.service';
 import styles from './style.less';
-import  moment from 'moment';
+const { Option } = Select;
 
 interface TransfromProps {
   transVisible: boolean;
   closeTrans(): void;
   form: WrappedFormUtils;
-  id?:string;
-reload():void;
+  id?: string;
+  reload(): void;
 
 }
-const Transfrom = (props:  TransfromProps) => {
-  const { transVisible, closeTrans, id,form,reload} = props;
+const Transfrom = (props: TransfromProps) => {
+  const { transVisible, closeTrans, id, form, reload } = props;
   const { getFieldDecorator } = form;
-  const title="拆分费用";
+  const title = "转费";
   const [infoDetail, setInfoDetail] = useState<any>({});
-
   const [relationIds, setRelationIds] = useState<any>([]);
 
   // 打开抽屉时初始化
   useEffect(() => {
     if (transVisible) {
-      if(id){
-        GetShowDetail(id).then(res=>{
-          var infoTemp =Object.assign({},res.entity,
-            { feeName:res.feeName, customerName:res.customerName, unitName:res.unitName});
+      if (id) {
+        GetShowDetail(id).then(res => {
+          var infoTemp = Object.assign({}, res.entity,
+            { feeName: res.feeName, customerName: res.customerName, unitName: res.unitName });
           setInfoDetail(infoTemp);
-          return  GetTransferRoomUsers(res.entity.UnitId, res.entity.RelationId);
-        }).then(res=>{
-          setRelationIds(res);
-        });
-      }else{
-        setInfoDetail({  });
+          GetTransferRoomUsers(res.entity.UnitId, res.entity.RelationId).then(res => {
+            setRelationIds(res || []);
+          });
+        })
+      } else {
+        setInfoDetail({});
       }
     } else {
 
@@ -57,101 +54,91 @@ const Transfrom = (props:  TransfromProps) => {
     closeTrans();
   };
 
-  const save=()=>{
-    form.validateFields((errors, values) =>{
-      var data= {
-        RelationId:values.relationId,
-        Memo:values.memo
-      };
+  const save = () => {
+    form.validateFields((errors, values) => {
+      if (!errors) {
+        var data = {
+          RelationId: values.relationId,
+          Memo: values.memo
+        };
 
-      var splitData={
-        Data:JSON.stringify(data),
-        keyValue:id
-      };
-      TransferBilling(splitData).then(res=>{
-        reload();
-        close();
-      });
+        var splitData = {
+          Data: JSON.stringify(data),
+          keyValue: id
+        };
+
+        TransferBilling(splitData).then(res => {
+          reload();
+          close();
+        });
+      }
     });
-  }
+  };
+
   return (
     <Drawer
       title={title}
       placement="right"
-      width={800}
+      width={700}
       onClose={close}
       visible={transVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
-      <Form hideRequiredMark>
-
-        <Row gutter={4}>
-          <Col span={24}>
-            <Form.Item label="收费房屋"  labelCol={{span:2}} wrapperCol={{span:22}}>
-              {getFieldDecorator('unitName', {
-                initialValue: infoDetail.unitName,
-              })(
-                <Input disabled={true} style={{width:'100%'}}/>
-              )}
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={4}>
-          <Col span={24}>
-            <Form.Item label="收费项目" labelCol={{span:2}} wrapperCol={{span:22}}>
-              {getFieldDecorator('feeName', {
-                initialValue: infoDetail.feeName,
-              })(
-                <Input disabled={true} style={{width:'100%'}}/>
-              )}
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={4}>
-          <p style={{fontSize:'18px',fontWeight:'bold'}}>拆分前</p>
-        </Row>
-        <Row gutter={4}>
-          <Col span={24}>
-            <Form.Item label="收费对象"  labelCol={{span:2}} wrapperCol={{span:22}} >
-              {getFieldDecorator('customerName', {
-                initialValue: infoDetail.customerName,
-              })(
-                <Input disabled={true} style={{width:'100%'}}/>
-              )}
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={4}>
-            <p style={{fontSize:'18px',fontWeight:'bold'}}>拆分为</p>
+      <Form layout="vertical" hideRequiredMark>
+        <Card className={styles.card} >
+          <Row>
+            <p style={{ fontSize: '18px', fontWeight: 'bold' }}>转费前</p>
           </Row>
-          <Row gutter={4}>
-          <Col span={24}>
-            <Form.Item label="新收费对象"  labelCol={{span:3}} wrapperCol={{span:21}} >
-              {getFieldDecorator('relationId', {
-                initialValue: infoDetail.relationId,
-              })(
-                <Select placeholder="=请选择=">
-                {relationIds.map(item => (
-                  <Option value={item.key}>
-                    {item.title}
-                  </Option>
-                ))}
-              </Select>
-              )}
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={4}>
-          <Col span={24}>
-          <Form.Item label="审核情况" labelCol={{span:3}} wrapperCol={{span:21}}>
-              {getFieldDecorator('memo', {
-                initialValue: infoDetail.memo,
-              })(
-                <Input.TextArea rows={6} disabled={true} style={{width:'100%'}}/>
-              )}
-            </Form.Item>
-          </Col>
-        </Row>
+          <Row gutter={24}>
+            <Col span={8}>
+              <Form.Item label="收费房屋"  >
+                {infoDetail.unitName}
+              </Form.Item>
+            </Col>
+
+            <Col span={8}>
+              <Form.Item label="收费项目"  >
+                {infoDetail.feeName}
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="收费对象"  >
+                {infoDetail.customerName}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row >
+            <p style={{ fontSize: '18px', fontWeight: 'bold' }}>转给</p>
+          </Row>
+          <Row gutter={24}>
+            <Col span={18}>
+              <Form.Item label="新收费对象"   >
+                {getFieldDecorator('relationId', {
+                  // initialValue: infoDetail.relationId,
+                })(
+                  <Select placeholder="=请选择=">
+                    {relationIds.map(item => (
+                      <Option value={item.key}>
+                        {item.title}
+                      </Option>
+                    ))}
+                  </Select>
+                )}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={24}>
+            <Col span={24}>
+              <Form.Item label="备注" >
+                {getFieldDecorator('memo', {
+                  // initialValue: infoDetail.memo,
+                })(
+                  <Input.TextArea rows={6} style={{ width: '100%' }} />
+                )}
+              </Form.Item>
+            </Col>
+          </Row>
+        </Card>
       </Form>
       <div
         style={{
@@ -175,5 +162,5 @@ const Transfrom = (props:  TransfromProps) => {
     </Drawer>
   );
 };
-export default Form.create< TransfromProps>()(Transfrom);
+export default Form.create<TransfromProps>()(Transfrom);
 

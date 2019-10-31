@@ -7,27 +7,40 @@ import { CurrentUser } from '../data.d';
 // import GeographicView from './GeographicView';
 // import PhoneView from './PhoneView';
 import styles from './BaseView.less';
+import { saveCurrent } from './../service';
+
 const FormItem = Form.Item;
 // const { Option } = Select;
 
 // 头像组件 方便以后独立，增加裁剪之类的功能
-const AvatarView = ({ avatar }: { avatar: string }) => (
-  <Fragment>
-    <div className={styles.avatar_title}>
-      <FormattedMessage id="account-settings.basic.avatar" defaultMessage="Avatar" />
-    </div>
-    <div className={styles.avatar}>
-      <img src={avatar} alt="avatar" />
-    </div>
-    <Upload fileList={[]}>
-      <div className={styles.button_view}>
-        <Button icon="upload"   >
-          <FormattedMessage id="account-settings.basic.change-avatar" defaultMessage="Change avatar" />
-        </Button>
-      </div>
-    </Upload>
-  </Fragment>
-);
+// const AvatarView = ({ avatar }: { avatar: string }) => ( 
+
+// const AvatarView = ({ current }: { current: any }) => ( 
+//   <Fragment>
+//     <div className={styles.avatar_title}>
+//       <FormattedMessage id="account-settings.basic.avatar" defaultMessage="Avatar" />
+//     </div>
+//     <div className={styles.avatar}>
+//       <img src={current.avatar} alt="avatar" />
+//     </div>
+//     <Upload
+//       //fileList={[]} 
+//       accept='image/*'
+//       showUploadList={false}
+//       action={process.env.basePath + '/Account/Upload'}
+//       onChange={info => { 
+//         if (info.file.status === 'done') {   
+//         }
+//       }}
+//     >
+//       <div className={styles.button_view}>
+//         <Button icon="upload">
+//           <FormattedMessage id="account-settings.basic.change-avatar" defaultMessage="Change avatar" />
+//         </Button>
+//       </div>
+//     </Upload>
+//   </Fragment>
+// );
 
 // interface SelectItem {
 //   label: string;
@@ -64,7 +77,7 @@ const AvatarView = ({ avatar }: { avatar: string }) => (
 // };
 
 interface BaseViewProps extends FormComponentProps {
-  currentUser?: CurrentUser;
+  currentUser: CurrentUser;
 };
 
 @connect(({ accountSettings }: { accountSettings: { currentUser: CurrentUser } }) => ({
@@ -78,8 +91,8 @@ class BaseView extends Component<BaseViewProps> {
     this.setBaseInfo();
   };
 
-  setBaseInfo = () => { 
-    const { currentUser, form } = this.props; 
+  setBaseInfo = () => {
+    const { currentUser, form } = this.props;
     if (currentUser) {
       Object.keys(form.getFieldsValue()).forEach(key => {
         const obj = {};
@@ -90,18 +103,22 @@ class BaseView extends Component<BaseViewProps> {
   };
 
   getAvatarURL() {
-    const { currentUser } = this.props;
-    if (currentUser) {
-      if (currentUser.avatar) {
-        return currentUser.avatar;
-      }
-      //默认头像
-      // const url = 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png';
-      // return url;
-      return '';
-    }
-    return '';
-  }
+
+    // const { currentUser } = this.props;
+    // if (currentUser) {
+    //   if (currentUser.avatar) {
+    //     return currentUser.avatar;
+    //   }
+    //   //默认头像
+    //   // const url = 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png';
+    //   // return url;
+    //   return '';
+    // }
+    // return '';
+    const { form } = this.props;
+    return form.getFieldValue('avatar');
+
+  };
 
   getViewDom = (ref: HTMLDivElement) => {
     this.view = ref;
@@ -109,18 +126,32 @@ class BaseView extends Component<BaseViewProps> {
 
   handlerSubmit = (event: React.MouseEvent) => {
     event.preventDefault();
-    const { form } = this.props;
-    form.validateFields(err => {
-      if (!err) {
-        message.success(formatMessage({ id: 'account-settings.basic.update.success' }));
-      }
+    const { form, currentUser } = this.props;
+    form.validateFields((errors, values) => {
+      if (!errors) {  
+        //save 
+        saveCurrent({
+          //...values,
+          description: values.description,
+          headImg: values.avatar,
+          keyValue: currentUser.userid
+        }
+        ).then((res) => {
+          message.success(formatMessage({ id: 'account-settings.basic.update.success' }));
+        })
+      } 
     });
   };
 
+  setAvatar = (avatar) => {
+    const { form } = this.props;
+    form.setFieldsValue({ avatar: avatar });
+  };
+
+
   render() {
-    const {
-      form: { getFieldDecorator },
-    } = this.props;
+    const { form: { getFieldDecorator } } = this.props;
+
     return (
       <div className={styles.baseView} ref={this.getViewDom}>
         <div className={styles.left}>
@@ -133,7 +164,7 @@ class BaseView extends Component<BaseViewProps> {
                     message: formatMessage({ id: 'account-settings.basic.email-message' }, {}),
                   },
                 ],
-              })(<Input readOnly/>)}
+              })(<Input readOnly />)}
             </FormItem>
             <FormItem label='姓名'>
               {getFieldDecorator('name', {
@@ -143,7 +174,7 @@ class BaseView extends Component<BaseViewProps> {
                     message: formatMessage({ id: 'account-settings.basic.nickname-message' }, {}),
                   },
                 ],
-              })(<Input readOnly/>)}
+              })(<Input readOnly />)}
             </FormItem>
             <FormItem label='备注'>
               {getFieldDecorator('description', {
@@ -157,8 +188,12 @@ class BaseView extends Component<BaseViewProps> {
                 <Input.TextArea
                   placeholder='备注'
                   rows={5}
-                  readOnly
                 />,
+              )}
+
+              {getFieldDecorator('avatar', {
+              })(
+                <input type='hidden' />
               )}
             </FormItem>
             {/* <FormItem label={formatMessage({ id: 'account-settings.basic.country' })}>
@@ -208,14 +243,45 @@ class BaseView extends Component<BaseViewProps> {
                   { validator: validatorPhone },
                 ],
               })(<PhoneView />)}
-            </FormItem> 
+            </FormItem> */}
             <Button type="primary" onClick={this.handlerSubmit}>
               <FormattedMessage id="account-settings.basic.update" defaultMessage="Update Information" />
-            </Button>*/}
+            </Button>
           </Form>
         </div>
         <div className={styles.right}>
-          <AvatarView avatar={this.getAvatarURL()} />
+          {/* <AvatarView
+            avatar={this.getAvatarURL()}
+            current={this.props.currentUser}
+          /> */}
+
+          <Fragment>
+            <div className={styles.avatar_title}>
+              <FormattedMessage id="account-settings.basic.avatar" defaultMessage="Avatar" />
+            </div>
+            <div className={styles.avatar}>
+              <img src={this.getAvatarURL()} alt="avatar" />
+            </div>
+            <Upload
+              //fileList={[]} 
+              accept='image/*'
+              showUploadList={false}
+              action={process.env.basePath + '/Account/Upload'}
+              onChange={info => {
+                if (info.file.status === 'done') {
+                  this.setAvatar(info.file.response);
+                }
+              }}
+            >
+              <div className={styles.button_view}>
+                <Button icon="upload">
+                  <FormattedMessage id="account-settings.basic.change-avatar" defaultMessage="Change avatar" />
+                </Button>
+              </div>
+            </Upload>
+          </Fragment>
+
+
         </div>
       </div>
     );

@@ -8,13 +8,13 @@ import BaseView from './components/base';
 // import BindingView from './components/binding';
 import { CurrentUser } from './data.d';
 // import NotificationView from './components/notification';
-import SecurityView from './components/security';
+// import SecurityView from './components/security';
 import styles from './style.less';
 const { Item } = Menu;
 
 interface SettingsProps {
   dispatch: Dispatch<any>;
-  currentUser:  CurrentUser;
+  currentUser: CurrentUser;
 };
 
 type SettingsStateKeys = 'base' | 'security' | 'binding' | 'notification';
@@ -26,17 +26,20 @@ interface SettingsState {
   selectKey: SettingsStateKeys;
 }
 
-@connect(({ accountSettings }: { accountSettings: { currentUser: CurrentUser 
+@connect(({ accountSettings }: {
+  accountSettings: {
+    currentUser: CurrentUser
 
-} }) => ({
+  }
+}) => ({
 
   currentUser: accountSettings.currentUser,
 
 }))
 
 class Settings extends Component<
-  SettingsProps,
-  SettingsState
+SettingsProps,
+SettingsState
 > {
   main: HTMLDivElement | undefined = undefined;
 
@@ -129,12 +132,12 @@ class Settings extends Component<
       //   return <NotificationView />;
       default:
         break;
-    } 
+    }
     return null;
   };
 
-  render() { 
-    const { currentUser } = this.props;  
+  render() {
+    const { currentUser } = this.props;
     if (!currentUser.userid) {
       return '';
     }

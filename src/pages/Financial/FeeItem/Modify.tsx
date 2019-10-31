@@ -157,7 +157,6 @@ const Modify = (props: ModifyProps) => {
     });
   };
 
-
   const closeAddFormula = () => {
     setAddFormulaVisible(false);
   };
@@ -175,6 +174,7 @@ const Modify = (props: ModifyProps) => {
   const closeEditOrgVisible = () => {
     setEditOrgVisible(false);
   };
+
   const [houseData, setHouseData] = useState<any[]>([]);
   const [houseSearch, setHouseSearch] = useState<string>();
   const [houseLoading, setHouseLoading] = useState<boolean>(false);
@@ -203,6 +203,7 @@ const Modify = (props: ModifyProps) => {
       return res;
     });
   };
+
   const houseLoad = data => {
     setOrgLoading(true);
     data.sidx = data.sidx || 'unitfeeid';
@@ -265,6 +266,7 @@ const Modify = (props: ModifyProps) => {
       return res;
     });
   };
+
   const orgLoad = data => {
     setOrgLoading(true);
     data.sidx = data.sidx || 'allName';
@@ -372,7 +374,9 @@ const Modify = (props: ModifyProps) => {
     },
   ] as ColumnProps<any>[];
 
-  const [orgItemId, setOrgItemId] = useState<string>(""); const [houseItemId, setHouseItemId] = useState<string>("");
+  const [orgItemId, setOrgItemId] = useState<string>(''); 
+  const [houseItemId, setHouseItemId] = useState<string>('');
+
   const housecolumns = [
     {
       title: '房屋编号',
@@ -410,9 +414,9 @@ const Modify = (props: ModifyProps) => {
       sorter: true,
       render: val => {
         if (val == null) {
-          return <span></span>
+          return '';
         } else {
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
+          return  moment(val).format('YYYY-MM-DD');
         }
       }
     }, {
@@ -423,9 +427,9 @@ const Modify = (props: ModifyProps) => {
       sorter: true,
       render: val => {
         if (val == null) {
-          return <span></span>
+          return '';
         } else {
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
+          return moment(val).format('YYYY-MM-DD');
         }
       }
     }, {
@@ -493,8 +497,7 @@ const Modify = (props: ModifyProps) => {
   }
 
   //求自然月日期
-  const getMonthBeforeFormatAndDay = (num, format, date) => {
-
+  const getMonthBeforeFormatAndDay = (num, format, date) => { 
     let day = date.get('date');
     let month = date.get('month');
     date.set('month', month + num * 1, 'date', 1); //周期月一号
@@ -573,10 +576,10 @@ const Modify = (props: ModifyProps) => {
     } else {
       Modal.confirm({
         title: '请确认',
-        content: `您是否要删除？删除后无法恢复。`,
+        content: `您是否要删除？删除后无法恢复！`,
         onOk: () => {
           HouseRemoveForm({ feeitemid: id, keyValues: JSON.stringify(selectedHouseRowKeys) }).then(() => {
-            message.success('删除成功');
+            message.success('删除成功！');
             houseLoadData('');
           });
         },
@@ -589,10 +592,10 @@ const Modify = (props: ModifyProps) => {
   const deleteAllHouse = () => {
     Modal.confirm({
       title: '请确认',
-      content: `您是否要全部删除？删除后无法恢复。`,
+      content: `您是否要全部删除？删除后无法恢复！`,
       onOk: () => {
         HouseAllRemoveForm({ feeitemid: id }).then(() => {
-          message.success('删除成功');
+          message.success('删除成功！');
           houseLoadData('');
         });
       },

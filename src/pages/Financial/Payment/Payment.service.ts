@@ -62,9 +62,10 @@ export function GetRoomUsers(data): Promise< any[]> {
 export function GetUserRooms(data): Promise< any[]> {
   return request.get(process.env.basePath + `/Common/GetUserRooms?customerid=${data}`, {}).then(getResult as any);;
 }
-//
-export function GetFeeItemDetail(feeitemid,roomid): Promise< any > {
-  return request.get(process.env.basePath + `/Common/GetFeeItemDetail?feeitemid=${feeitemid}&roomid=${roomid}`, {}).then(getResult as any);;
+
+//付款费项
+export function GetPayFeeItemDetail(feeitemid,roomid): Promise< any > {
+  return request.get(process.env.basePath + `/Common/GetPayFeeItemDetail?feeitemid=${feeitemid}&roomid=${roomid}`, {}).then(getResult as any);;
 }
 
 //付款明细

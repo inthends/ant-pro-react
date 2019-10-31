@@ -4,7 +4,7 @@ import { Icon, Menu, Dropdown, Divider, message, Table, Modal } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState } from 'react';
 import moment from 'moment';
-import { InvalidForm } from './Main.service';
+import { InvalidForm, RedFlush, CheckRedFlush } from './Main.service';
 import styles from './style.less';
 
 interface ChargeListTableProps {
@@ -32,7 +32,7 @@ function ChargeListTable(props: ChargeListTableProps) {
       overlay={
         <Menu onClick={({ key }) => editAndDelete(key, item)}>
           <Menu.Item key="redflush">冲红</Menu.Item>
-          <Menu.Item key="delete">作废</Menu.Item>
+          <Menu.Item key="invalid">作废</Menu.Item>
         </Menu>}>
       <a>
         更多<Icon type="down" />
@@ -42,10 +42,37 @@ function ChargeListTable(props: ChargeListTableProps) {
 
   const editAndDelete = (key: string, currentItem: any) => {
     if (key === 'redflush') {
-      //this.showEditModal(currentItem); 
+      //this.showEditModal(currentItem);  
+      //check
+      CheckRedFlush(currentItem.billId).then((res) => {
+
+        if (res.flag) {
+          Modal.confirm({
+            title: '请确认',
+            content: `您确定要冲红该收款单${currentItem.billCode}`,
+            onOk: () => {
+              RedFlush(currentItem.billId).then(() => {
+                message.success('冲红成功');
+                reload();
+              });
+            },
+          });
+        } else {
+
+          Modal.confirm({
+            title: '请确认',
+            content: `该收款单已经生成付款单${res.billCode}不允许冲红！`,
+            onOk: () => { 
+              //to do
+            },
+          });
+
+        }
+
+      });
 
     }
-    else if (key === 'delete') {
+    else if (key === 'invalid') {
       Modal.confirm({
         title: '请确认',
         content: `您是否要作废${currentItem.billCode}`,
@@ -147,7 +174,7 @@ function ChargeListTable(props: ChargeListTableProps) {
           <span>
             <a onClick={() => showDetail()} key="view">查看</a>
             <Divider type="vertical" />
-            {record.status == 1 ? <a onClick={() => showVertify(record.billId, false)} key="delete">审核</a> : <a onClick={() => showVertify(record.id, true)} key="delete">反审</a>}
+            {record.status == 1 ? <a onClick={() => showVertify(record.billId, false)} key="approve">审核</a> : <a onClick={() => showVertify(record.id, true)} key="unapprove">反审</a>}
             <Divider type="vertical" />
             <MoreBtn key="more" item={record} />
           </span>
@@ -169,7 +196,6 @@ function ChargeListTable(props: ChargeListTableProps) {
       onContextMenu: event => {
       },
       onMouseEnter: event => {
-
       }, // 鼠标移入行
       onMouseLeave: event => {
       },

@@ -1,7 +1,7 @@
 import Page from '@/components/Common/Page';
 //import { TreeEntity } from '@/model/models';
 import { Tree } from 'antd';
-import React  from 'react';
+import React, { useEffect, useState } from 'react';
 
 // const { TreeNode } = Tree;
 
@@ -12,11 +12,25 @@ interface LeftTreeProps {
 function LeftTree(props: LeftTreeProps) {
   const { treeData, selectTree } = props;
 
-  // const [expanded, setExpanded] = useState<string[]>([]);
+  const [expanded, setExpanded] = useState<string[]>([]);
 
-  //useEffect(() => {
-  // setExpanded(treeData.map(item => item.key as string));
-  //}, [treeData]);
+  let keys: any[];
+  keys = [];
+  const getAllkeys = res =>
+    res.forEach(item => {
+      if (item.children) {
+        keys.push(getAllkeys(item.children))
+      }
+      keys.push(item.key);
+    });
+
+  useEffect(() => {
+    //setExpanded(treeData.map(item => item.key as string));
+
+    getAllkeys(treeData || []);
+    setExpanded(keys);
+
+  }, [treeData]);
 
   // const onSelect = (selectedKeys, info) => { 
   //   if (selectedKeys.length === 1) {
@@ -25,7 +39,7 @@ function LeftTree(props: LeftTreeProps) {
   //   }
   // };
 
-  const onSelect = (selectedKeys, info) => { 
+  const onSelect = (selectedKeys, info) => {
     if (selectedKeys.length === 1) {
       //const item = treeData.filter(item => item.key === selectedKeys[0])[0];
       selectTree(selectedKeys[0], info);
@@ -74,11 +88,12 @@ function LeftTree(props: LeftTreeProps) {
       overflowY: 'auto'
     }}>
       <Tree
-        //expandedKeys={expanded}
+        expandedKeys={expanded}
         showLine
         onSelect={onSelect}
         treeData={treeData}
-        defaultExpandAll={true}
+
+      // defaultExpandAll={true}
       // onExpand={clickExpend}
       >
         {/* {renderTree(treeData, '0')} */}
