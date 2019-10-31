@@ -392,10 +392,12 @@ function Main() {
           </TabPane>
           <TabPane tab="收款单列表" key="2">
             <div style={{ marginBottom: '10px' }}>
-              <Select placeholder="=请选择=" style={{ width: '120px', marginRight: '5px' }} onChange={(value) => {
-                var params = Object.assign({}, chargedSearchParams, { status: value });
-                setChargedSearchParams(params);
-              }} >
+              <Select placeholder="=请选择="
+                allowClear={true}
+                style={{ width: '120px', marginRight: '5px' }} onChange={(value) => {
+                  var params = Object.assign({}, chargedSearchParams, { status: value });
+                  setChargedSearchParams(params);
+                }} >
                 <Option key='2' value='2'>
                   {'已审核'}
                 </Option>
@@ -436,7 +438,7 @@ function Main() {
                   initChargeLoadData(organizeId);
                 }}
               >
-              <Icon type="search" />
+                <Icon type="search" />
                 搜索
               </Button>
 

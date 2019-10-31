@@ -319,6 +319,7 @@ function Meter() {
       return res;
     });
   };
+
   const meterFormsload = data => {
     setMeterFormsLoading(true);
     data.sidx = data.sidx || 'billcode';
@@ -355,6 +356,7 @@ function Meter() {
     //setAddButtonDisable(true);
     return meterload({ pageIndex, pageSize, sidx, sord, total, queryJson });
   };
+
   const initUnitMeterLoadData = (org, searchText) => {
     setUnitMeterSearch(searchText);
     const queryJson = {
@@ -369,6 +371,7 @@ function Meter() {
     //setAddButtonDisable(true);
     return unitMeterload({ pageIndex, pageSize, sidx, sord, total, queryJson });
   };
+
   const initReadingMeterLoadData = (org, searchText) => {
     setReadingMeterSearch(searchText);
     const queryJson = {
@@ -383,6 +386,7 @@ function Meter() {
     //setAddButtonDisable(true);
     return readingMeterload({ pageIndex, pageSize, sidx, sord, total, queryJson });
   };
+  
   const initMeterFormsLoadData = (org, searchText) => {
     setMeterFormsSearch(searchText);
     const queryJson = {

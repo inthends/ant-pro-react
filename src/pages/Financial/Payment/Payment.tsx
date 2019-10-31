@@ -47,7 +47,7 @@ function Payment() {
 
   useEffect(() => {
     initPaymentLoadData('', '');
-    // initNotPaymentLoadData('','');
+    initNotPaymentLoadData('', '');
   }, []);
 
   const loadPaymentData = (paginationConfig?: PaginationConfig, sorter?) => {
@@ -220,12 +220,22 @@ function Payment() {
   //   });
   // };
 
-
-
   const [paymentStatus, setPaymentStatus] = useState<string>('');
   const [paymentStartDate, setPaymentStartDate] = useState<string>('');
   const [paymentEndDate, setPaymentEndDate] = useState<string>('');
   // const [billStatus, setBillStatus] = useState<number>(-1);
+
+
+  //页签切换刷新
+  const changeTab = key => {
+    if (key == "1") {
+      initPaymentLoadData(organize, '');
+    } else {
+      initPaymentLoadData(organize, '');
+    }
+  };
+
+
   return (
     <Layout>
       <AsynLeftTree
@@ -235,7 +245,7 @@ function Payment() {
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>
-        <Tabs defaultActiveKey="1" >
+        <Tabs defaultActiveKey="1" onChange={changeTab}>
           <TabPane tab="应付列表" key="1">
             <div style={{ marginBottom: '20px', padding: '3px 2px' }} onChange={(value) => {
               var params = Object.assign({}, paymentSearchParams, { paymenttype: value });
@@ -313,7 +323,9 @@ function Payment() {
           </TabPane>
           <TabPane tab="付款单列表" key="2">
             <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
-              <Select placeholder="==请选择==" style={{ width: '150px', marginRight: '5px' }}
+              <Select placeholder="==请选择=="
+                allowClear={true}
+                style={{ width: '150px', marginRight: '5px' }}
                 onChange={(value: string) => {
                   setPaymentStatus(value);
                 }}>

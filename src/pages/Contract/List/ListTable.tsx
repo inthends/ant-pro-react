@@ -128,6 +128,7 @@ function ListTable(props: ListTableProps) {
       width: 100,
       dataIndex: 'isRenewal',
       key: 'isRenewal',
+      align:'center',
       render: val => val == 1 ? <Tag color="#19d54e">是</Tag> : <Tag color="#e4aa5b">否</Tag>
 
     },

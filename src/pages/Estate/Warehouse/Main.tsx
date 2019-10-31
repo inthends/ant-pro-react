@@ -146,7 +146,7 @@ function Main() {
         <div style={{ marginBottom: '10px' }}>
           <Search
             className="search-input"
-            placeholder="搜索关键字"
+            placeholder="请输入要查询的关键词"
             onSearch={value => loadData(value, organize)}
             style={{ width: 200 }}
           />

@@ -213,20 +213,19 @@ const Show = (props: ShowProps) => {
                 {`${infoDetail.payAmountA + infoDetail.payAmountB + infoDetail.payAmountC}元,其中${infoDetail.payTypeA} ${infoDetail.payAmountA}元，${infoDetail.payTypeB} ${infoDetail.payAmountB}元， ${infoDetail.payTypeC} ${infoDetail.payAmountC}元`}
               </Form.Item>
             </Col>
-          </Row>
+          </Row> 
+          <Table
+            // title={() => '费用明细'}
+            size="middle"
+            dataSource={chargeBillData}
+            columns={columns}
+            rowKey={record => record.billId}
+            pagination={pagination}
+            scroll={{ y: 500, x: 1150 }}
+            loading={loading}
+          />
         </Form>
-      </Card> 
-      <Table 
-        // title={() => '费用明细'}
-        size="middle"
-        dataSource={chargeBillData}
-        columns={columns}
-        rowKey={record => record.billId}
-        pagination={pagination}
-        scroll={{ y: 500, x: 1150 }}
-        loading={loading}
-      />
-      
+      </Card>
       <div
         style={{
           position: 'absolute',
@@ -240,7 +239,7 @@ const Show = (props: ShowProps) => {
         }}
       >
         <Button onClick={close} style={{ marginRight: 8 }}>
-          取消
+        关闭
            </Button>
       </div>
 

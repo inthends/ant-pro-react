@@ -171,7 +171,7 @@ function Main() {
 
           <Search
             className="search-input"
-            placeholder="搜索关键字"
+            placeholder="请输入要查询的关键词"
             onSearch={value => loadData(type, value, organizeId)}
             style={{ width: 200 }}
           />

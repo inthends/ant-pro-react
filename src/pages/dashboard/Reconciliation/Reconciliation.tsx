@@ -1,45 +1,44 @@
-//水电费管理
+//账单明细
 import { DefaultPagination } from '@/utils/defaultSetting';
-import {   Button, Icon, Input, Layout, Select } from 'antd';
+import { Modal, Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { GetReconciliationPageList } from './Reconciliation.service';
+import { GetBillDetailsPageList, ExportBillDetails } from './Reconciliation.service';
 import AsynLeftTree from '../AsynLeftTree';
-import ListTable from './ListTable';   
+import ListTable from './ListTable';
 const { Content } = Layout;
-const { Search } = Input; 
-const { Option } = Select;
+const { Search } = Input;
 
-function Reconciliation() {  
- 
-  const [meterLoading, setMeterLoading] = useState<boolean>(false);  
-  const [meterData, setMeterData] = useState<any>();  
-  const [meterSearch, setMeterSearch] = useState<string>('');  
-  const [meterPagination, setMeterPagination] = useState<DefaultPagination>(new DefaultPagination());
-  const [organize, SetOrganize] = useState<any>({});
-  const selectTree = (org, item, searchText) => {
-    SetOrganize(item); 
-    initMeterLoadData(item, ''); 
+function Reconciliation() {
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const [listData, setListData] = useState<any>();
+  const [search, setSearch] = useState<string>('');
+  const [organize, setOrganize] = useState<any>({});
+  const [pagination, setPagination] = useState<DefaultPagination>(new DefaultPagination());
+
+  const selectTree = (id, item, searchText) => {
+    setOrganize(item);
+    initLoadData(item, '');
   };
- 
 
-  useEffect(() => { 
-    initMeterLoadData('', '');  
+  useEffect(() => {
+    initLoadData('', '');
   }, []);
 
-
-  const loadMeterData = (paginationConfig?: PaginationConfig, sorter?) => {
+  const loadData = (paginationConfig?: PaginationConfig, sorter?) => {
     //setMeterSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
-      pageSize: meterPagination.pageSize,
+      pageSize: pagination.pageSize,
       total: 0,
     };
+
     let searchCondition: any = {
       pageIndex,
       pageSize,
       total,
-      queryJson: { keyword: meterSearchParams.search }
+      queryJson: { keyword: search }
     };
 
     if (sorter) {
@@ -47,20 +46,16 @@ function Reconciliation() {
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
       searchCondition.sidx = field ? field : 'meterkind';
     }
+    return load(searchCondition);
+  };
 
-    return meterload(searchCondition);
-  }
-    
-  
-  const meterload = data => {
-    setMeterLoading(true);
+  const load = data => {
+    setLoading(true);
     data.sidx = data.sidx || 'meterkind';
     data.sord = data.sord || 'asc';
-
-     
-    return GetReconciliationPageList(data).then(res => {
+    return GetBillDetailsPageList(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
-      setMeterPagination(pagesetting => {
+      setPagination(pagesetting => {
         return {
           ...pagesetting,
           current,
@@ -68,30 +63,46 @@ function Reconciliation() {
           pageSize,
         };
       });
-      
-      setMeterData(res.data);
-      setMeterLoading(false);
+      setListData(res.data);
+      setLoading(false);
       return res;
-    }); 
+    });
   };
 
- 
-  const initMeterLoadData = (org, searchText) => {
-    setMeterSearch(searchText);
+  const initLoadData = (org, searchText) => {
+    setSearch(searchText);
     const queryJson = {
       OrganizeId: org.organizeId,
       keyword: searchText,
       TreeTypeId: org.id,
       TreeType: org.type,
     };
-    const sidx = 'meterkind';
+    const sidx = 'feeId';
     const sord = 'asc';
-    const { current: pageIndex, pageSize, total } = meterPagination; 
-    return meterload({ pageIndex, pageSize, sidx, sord, total, queryJson });
+    const { current: pageIndex, pageSize, total } = pagination;
+    return load({ pageIndex, pageSize, sidx, sord, total, queryJson });
   };
-    
-  const [meterSearchParams, setMeterSearchParams] = useState<any>({});
-  
+
+  //导出
+  const doExport = (org, searchText) => {
+    Modal.confirm({
+      title: '请确认',
+      content: `您是否要导出吗？`,
+      onOk: () => {
+        const queryJson = {
+          // OrganizeId: org.organizeId,
+          // keyword: searchText,
+          // TreeTypeId: org.id,
+          // TreeType: org.type,
+        };
+        ExportBillDetails(queryJson).then(res => { 
+          //window.open(res);  
+          window.location.href = res; 
+        });
+      },
+    });
+  };
+
   return (
     <Layout>
       <AsynLeftTree
@@ -100,48 +111,41 @@ function Reconciliation() {
           selectTree(id, item, '');
         }}
       />
-      <Content style={{ paddingLeft: '18px' }}>
-       
-            <div style={{ marginBottom: '20px', padding: '3px 2px' }} onChange={(value) => {
-              var params = Object.assign({}, meterSearchParams, { metertype: value });
-              setMeterSearchParams(params);
-            }}>
-              <Select placeholder="=请选择=" style={{ width: '120px', marginRight: '5px' }} onChange={value => {
-                var params = Object.assign({}, meterSearchParams, { meterkind: value });
-                setMeterSearchParams(params);
-              }}>
-                <Option value="private">单元表</Option>
-                <Option value="public" >公用表</Option>
-                <Option value="virtual">虚拟表</Option>
-              </Select>
-              <Search
-                className="search-input"
-                placeholder="请输入要查询的费表名称"
-                style={{ width: 200 }}
-                onChange={e => {
-                  var params = Object.assign({}, meterSearchParams, { search: e.target.value });
-                  setMeterSearchParams(params);
-                }}
-              />
-              <Button type="primary" style={{ marginLeft: '10px' }}
-                onClick={() => { loadMeterData() }}
-              >
-                <Icon type="search" />
-                查询
-              </Button>
-             
-            </div>
-            <ListTable
-              onchange={(paginationConfig, filters, sorter) => {
-                loadMeterData(paginationConfig, sorter)
-              }
-              }
-              loading={meterLoading}
-              pagination={meterPagination}
-              data={meterData}  
-            /> 
-      </Content> 
-    </Layout>
+      <Content style={{ paddingLeft: '18px' }}> 
+        <div style={{ marginBottom: '20px', padding: '3px 2px' }} > 
+          <Search
+            className="search-input"
+            placeholder="请输入要查询的关键词"
+            style={{ width: 200 }}
+            onChange={e => {
+            }}
+          />
+          <Button type="primary" style={{ marginLeft: '10px' }}
+            onClick={() => { loadData() }}
+          >
+            <Icon type="search" />
+            查询
+          </Button>
+
+          <Button type="primary" style={{ float: 'right' }}
+            onClick={() => { doExport('','') }}
+          >
+            <Icon type="export" />
+            导出
+          </Button>
+
+        </div>
+        <ListTable
+          onchange={(paginationConfig, filters, sorter) => {
+            loadData(paginationConfig, sorter)
+          }
+          }
+          loading={loading}
+          pagination={pagination}
+          data={listData}
+        />
+      </Content>
+    </Layout >
   );
 }
 

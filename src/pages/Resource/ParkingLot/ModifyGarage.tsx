@@ -86,7 +86,7 @@ const ModifyGarage = (props: ModifyGarageProps) => {
       visible={modifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
-      <Card title="基本信息" className={styles.card} >
+      <Card className={styles.card} >
         {modifyVisible ? (
           <Form layout="vertical" hideRequiredMark>
             <Row gutter={24}>

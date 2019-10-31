@@ -95,13 +95,9 @@ function BillDetails() {
           // TreeTypeId: org.id,
           // TreeType: org.type,
         };
-        ExportBillDetails(queryJson).then(res => {
-
-          //window.open(res); 
-
-          window.location.href = res;
-
-
+        ExportBillDetails(queryJson).then(res => { 
+          //window.open(res);  
+          window.location.href = res; 
         });
       },
     });
@@ -115,13 +111,11 @@ function BillDetails() {
           selectTree(id, item, '');
         }}
       />
-      <Content style={{ paddingLeft: '18px' }}>
-
-        <div style={{ marginBottom: '20px', padding: '3px 2px' }} >
-
+      <Content style={{ paddingLeft: '18px' }}> 
+        <div style={{ marginBottom: '20px', padding: '3px 2px' }} > 
           <Search
             className="search-input"
-            placeholder="请输入要查询的关键字"
+            placeholder="请输入要查询的关键词"
             style={{ width: 200 }}
             onChange={e => {
             }}

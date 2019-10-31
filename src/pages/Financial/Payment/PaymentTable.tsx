@@ -102,17 +102,15 @@ function PaymentTable(props: PaymentTableProps) {
         return [
           <span>
             <a onClick={() => showBill(record.billId)} key="modify">{"查看"}</a>
-            <Divider type="vertical" />
-
+            <Divider type="vertical" /> 
             {record.status == 0 ? <a onClick={() => showVerify(record.billId)} key="app">审核</a> :
               <a onClick={() => showVerify(record.billId)} key="unapp"  >反审</a>
             }
-            <Divider type="vertical" />
-
+            <Divider type="vertical" /> 
             <a onClick={() => {
               Modal.confirm({
                 title: '请确认',
-                content: `您是否要作废${record.feeName}`,
+                content: `您是否要作废${record.billCode}`,
                 okText: '确认',
                 cancelText: '取消',
                 onOk: () => {

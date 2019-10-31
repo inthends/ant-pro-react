@@ -149,7 +149,7 @@ const Template = () => {
           <Search
             key='search'
             className="search-input"
-            placeholder="搜索名称"
+            placeholder="请输入要查询的关键词"
             style={{ width: 200 }} 
           />
 
