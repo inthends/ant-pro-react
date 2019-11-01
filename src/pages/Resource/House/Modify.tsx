@@ -143,8 +143,7 @@ const Modify = (props: ModifyProps) => {
           }
           setFileList(files);
           //加载图片
-
-
+ 
           //给文本编辑器赋值
           setTimeout(() => {
             form.setFieldsValue({
@@ -176,7 +175,7 @@ const Modify = (props: ModifyProps) => {
           const newvalue = { ...values, date: values.date.format('YYYY-MM-DD') };
           newvalue.description = values.description.toHTML();//toRAW(); 
           SaveForm({ ...tempInfo, ...newvalue, keyValue: tempInfo.id }).then(res => {
-            message.success('保存成功');
+            message.success('保存成功！');
             closeDrawer();
             reload();
           });

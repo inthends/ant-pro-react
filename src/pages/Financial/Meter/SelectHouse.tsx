@@ -1,10 +1,10 @@
 //费表装表选择房间，修改为同步树
-import { Button, Col, Form, Input, Row, Icon, Modal, message } from 'antd';
+import { Col, Form, Row, Modal, message } from 'antd';
 // import { TreeEntity } from '@/model/models';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { UnitMeterSaveForm } from './Meter.service';
-import './style.less';
+// import './style.less';
 import SelectTree from '../SelectTree';
 // const Option = Select.Option;
 interface SelectHouseProps {
@@ -14,10 +14,11 @@ interface SelectHouseProps {
   form: WrappedFormUtils;
   feeDetail: any;
   treeData: any[];
+  reload(): void;
 }
 
 const SelectHouse = (props: SelectHouseProps) => {
-  const { visible, closeModal, feeDetail,treeData } = props;
+  const { reload, visible, closeModal, feeDetail, treeData } = props;
   useEffect(() => {
     if (visible) {
     }
@@ -27,7 +28,7 @@ const SelectHouse = (props: SelectHouseProps) => {
 
   return (
     <Modal
-      title="选择单元"
+      title="选择房屋"
       visible={visible}
       okText="确认"
       cancelText="取消"
@@ -39,10 +40,11 @@ const SelectHouse = (props: SelectHouseProps) => {
           var newdata = Object.assign({}, feeDetail, { units: JSON.stringify(unitData) });
           UnitMeterSaveForm(newdata).then(res => {
             closeModal();
-            message.success('数据保存成功');
+            message.success('添加成功！');
+            reload();
           })
           //.catch(() => {
-            //message.warning('数据保存错误');
+          //message.warning('数据保存错误');
           //});
         }
       }}
@@ -50,7 +52,7 @@ const SelectHouse = (props: SelectHouseProps) => {
       bodyStyle={{ background: '#f6f7fb' }}
       width='400px'
     >
-      <Row gutter={8}>
+      {/* <Row gutter={8}>
         <Col span={18}>
           <Input placeholder="请输入要查询的关键字" />
         </Col>
@@ -58,19 +60,20 @@ const SelectHouse = (props: SelectHouseProps) => {
           <Button style={{ width: '100%' }}>
             <Icon type="search" />查询</Button>
         </Col>
-      </Row>
-      <Row style={{ height: '400px', overflow: 'auto', marginTop: '5px', backgroundColor: 'rgb(255,255,255)' }}>
-        <Col span={24}>
+      </Row> */}
+      {/* <Row style={{ height: '400px', overflow: 'auto', marginTop: '5px', backgroundColor: 'rgb(255,255,255)' }}> */}
+
+      <Row>
+        <Col style={{ height: '420px', overflow: 'auto' }}>
           {/* <AsynSelectTree
             parentid={'0'}
             getCheckedKeys={(keys)=>{
               setUnitData(keys);
-            }}
-            
+            }} 
             selectTree={(id, type, info?) => {
             }}
           /> */}
- 
+
           <SelectTree
             treeData={treeData}
             getCheckedKeys={(keys) => {

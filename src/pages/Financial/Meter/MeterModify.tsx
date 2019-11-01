@@ -32,22 +32,20 @@ const MeterModify = (props: MeterModifyProps) => {
   const { getFieldDecorator } = form;
   // const [units,setUnits] = useState<string>([]);
   const [infoDetail, setInfoDetail] = useState<any>({});
-
   // const [meterKinds, setMeterKinds] = useState<any>([]);
   const [meterTypes, setMeterTypes] = useState<any>([]);
   const [orgTreeData, setOrgTreeData] = useState<any>({});
   const [chargeFeeItemVisible, setChargeFeeItemVisible] = useState<boolean>(false);
   const [selectHouseVisible, setSelectHouseVisible] = useState<boolean>(false);
   const [editHouseFeeItemVisible, setEditHouseFeeItemVisible] = useState<boolean>(false);
-
   const [meterSearchParams, setMeterSearchParams] = useState<any>({});
   // const [meterLoading, setMeterLoading] = useState<boolean>(false);
   const [meterData, setMeterData] = useState<any>();
   // const [meterSearch, setMeterSearch] = useState<string>('');
   const [meterPagination, setMeterPagination] = useState<DefaultPagination>(new DefaultPagination());
-
   const [addFormulaVisible, setAddFormulaVisible] = useState<boolean>(false);
   const [isAdd, setIsAdd] = useState<boolean>(true);
+
   useEffect(() => {
     if (modifyVisible) {
       form.resetFields();
@@ -108,7 +106,7 @@ const MeterModify = (props: MeterModifyProps) => {
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'metercode';
+      searchCondition.sidx = field ? field : 'meterCode';
     }
 
     return meterload(searchCondition).then(res => {
@@ -118,7 +116,7 @@ const MeterModify = (props: MeterModifyProps) => {
 
   const meterload = data => {
     // setMeterLoading(true);
-    data.sidx = data.sidx || 'metercode';
+    data.sidx = data.sidx || 'meterCode';
     data.sord = data.sord || 'asc';
     return GetPageListWithMeterID(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -135,6 +133,7 @@ const MeterModify = (props: MeterModifyProps) => {
       return res;
     });
   };
+
   const [feeDetail, setFeeDetail] = useState<any>({});
   const checkEntity = () => {
     form.validateFields((errors, values) => {
@@ -241,11 +240,21 @@ const MeterModify = (props: MeterModifyProps) => {
           // </Button>
 
           <span>
-            <a onClick={() => { setHouseFeeItemId(record.unitMeterId); setEditHouseFeeItemVisible(true); }} key="modify">编辑</a>
+            <a onClick={() => {
+              setHouseFeeItemId(record.unitMeterId); setEditHouseFeeItemVisible(true);
+            }} key="modify">编辑</a>
             <Divider type="vertical" />
             <a onClick={() => {
-              RemoveUnitForm(record.unitMeterId).then(res => {
-                initMeterLoadData();
+              Modal.confirm({
+                title: '请确认',
+                content: `您是否要删除${record.meterCode}？`,
+                cancelText: '取消',
+                okText: '确定',
+                onOk: () => {
+                  RemoveUnitForm(record.unitMeterId).then(res => {
+                    initMeterLoadData();
+                  })
+                }
               })
             }} key="delete">删除</a>
           </span>
@@ -264,7 +273,8 @@ const MeterModify = (props: MeterModifyProps) => {
   }
   const closeSelectHouse = () => {
     setSelectHouseVisible(false);
-  }
+  };
+
   // const rowSelection = {
   //   onChange: (selectedRowKeys, selectedRows) => {
   //     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
@@ -279,17 +289,13 @@ const MeterModify = (props: MeterModifyProps) => {
     <Drawer
       title={title}
       placement="right"
-      width={800}
+      width={700}
       onClose={close}
       visible={modifyVisible}
       style={{ height: 'calc(100vh-50px)' }}
-      bodyStyle={{ background: '#f6f7fb', height: 'calc(100vh -50px)' }}
-    >
-
+      bodyStyle={{ background: '#f6f7fb', height: 'calc(100vh -50px)' }}>
       <Form layout="vertical" hideRequiredMark>
         <Tabs defaultActiveKey="1" >
-
-
           <TabPane tab="基本信息" key="1">
             <Card className={styles.card} >
               <Row gutter={24}>
@@ -317,7 +323,7 @@ const MeterModify = (props: MeterModifyProps) => {
                       } */}
 
                         <Option value="单元表">单元表</Option>
-                        <Option value="公用表" >公用表</Option>
+                        <Option value="公用表">公用表</Option>
                         <Option value="虚拟表">虚拟表</Option>
 
                       </Select>
@@ -474,7 +480,7 @@ const MeterModify = (props: MeterModifyProps) => {
                     {getFieldDecorator('memo', {
                       initialValue: infoDetail.memo
                     })(
-                      <TextArea rows={3} placeholder="请输入附加说明" />
+                      <TextArea rows={5} placeholder="请输入附加说明" />
                     )}
                   </Form.Item>
                 </Col>
@@ -487,8 +493,8 @@ const MeterModify = (props: MeterModifyProps) => {
                 <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
                   <Search
                     className="search-input"
-                    placeholder="请输入要查询的费表编号"
-                    style={{ width: 280 }}
+                    placeholder="请输入要查询的表编号"
+                    style={{ width: 200 }}
                     onSearch={(value) => {
                       var params = Object.assign({}, meterSearchParams, { search: value })
                       setMeterSearchParams(params);
@@ -499,9 +505,9 @@ const MeterModify = (props: MeterModifyProps) => {
                     onClick={() => {
                       Modal.confirm({
                         title: '请确认',
-                        content: `您是否确定删除？`,
+                        content: `您是否确定全部删除？`,
                         onOk: () => {
-                          if (id != null || id != "") {
+                          if (id != null || id != '') {
                             RemoveFormAll(id).then(res => {
                               message.success('删除成功！');
                               initMeterLoadData();
@@ -533,7 +539,7 @@ const MeterModify = (props: MeterModifyProps) => {
                   pagination={meterPagination}
                   scroll={{ y: 500, x: 800 }}
                   loading={loading}
-                /*rowSelection={rowSelection}*/
+                //rowSelection={rowSelection}
                 />
               </Row>
 
@@ -626,15 +632,22 @@ const MeterModify = (props: MeterModifyProps) => {
         closeModal={closeSelectHouse}
         feeDetail={feeDetail}
         treeData={treeData}
+        reload={() => {
+          //刷新数据
+          initMeterLoadData();
+          setIsAdd(false);
+        }}
       />
       <EditHouseFeeItem
+        treeData={treeData}
         modifyVisible={editHouseFeeItemVisible}
         closeModal={() => {
           setEditHouseFeeItemVisible(false);
         }}
         id={houseFeeItemId}
-        meterinfo={infoDetail}
+        // meterinfo={infoDetail}
         reload={() => {
+          //刷新数据
           initMeterLoadData();
           setIsAdd(false);
         }}

@@ -8,7 +8,7 @@ export function GetFeeTreeList(): Promise<TreeEntity[]> {
   return request.get(process.env.basePath + `/FeeItems/GetFeeTreeList`, {}).then(getResult as any);
 }
 export function GetPageListJson(data): Promise<any> {
-  return request.post(process.env.basePath + `/FeeItems/GetPageListJson`, {data:objToFormdata(data)}).then(getResult as any);
+  return request.post(process.env.basePath + `/FeeItems/GetPageListJson`, { data: objToFormdata(data) }).then(getResult as any);
 }
 
 // 获取费项信息
@@ -40,11 +40,11 @@ export function GetAllFeeItems(): Promise<TreeEntity[]> {
 }
 
 export function GetOrganizePageList(data): Promise<any> {
-  return request.post(process.env.basePath + `/FeeItems/GetOrganizePageList`, {data:objToFormdata(data)}).then(getResult as any);
+  return request.post(process.env.basePath + `/FeeItems/GetOrganizePageList`, { data: objToFormdata(data) }).then(getResult as any);
 }
 
 export function GetUnitFeeItemData(data): Promise<any> {
-  return request.post(process.env.basePath + `/FeeItems/GetUnitFeeItemData`, {data:objToFormdata(data)}).then(getResult as any);
+  return request.post(process.env.basePath + `/FeeItems/GetUnitFeeItemData`, { data: objToFormdata(data) }).then(getResult as any);
 }
 
 // //加载房间树
@@ -52,15 +52,15 @@ export function GetUnitFeeItemData(data): Promise<any> {
 //   return request.get(process.env.basePath + `/Common/GetQuickSimpleTreeAll?queryJson=${data}`, {}).then(getResult as any);
 // }
 export function OrganizeSaveForm(data): Promise<any> {
-  return request.post(process.env.basePath + `/FeeItems/OrganizeSaveForm`, {data:objToFormdata(data)}).then(getResult as any);
+  return request.post(process.env.basePath + `/FeeItems/OrganizeSaveForm`, { data: objToFormdata(data) }).then(getResult as any);
 }
 //费项保存
 export function SaveForm(data): Promise<any> {
-  return request.post(process.env.basePath + `/FeeItems/SaveForm`, {data:objToFormdata(data)}).then(getResult as any);
+  return request.post(process.env.basePath + `/FeeItems/SaveForm`, { data: objToFormdata(data) }).then(getResult as any);
 }
 //开票项目保存
 export function OrganizeEditForm(data): Promise<any> {
-  return request.post(process.env.basePath + `/FeeItems/OrganizeEditForm`, {data:objToFormdata(data)}).then(getResult as any);
+  return request.post(process.env.basePath + `/FeeItems/OrganizeEditForm`, { data: objToFormdata(data) }).then(getResult as any);
 }
 
 //删除费项组织机构
@@ -70,7 +70,7 @@ export function OrganizeRemoveForm(data): Promise<any> {
 
 //删除已设费房屋/FeeItems/
 export function HouseRemoveForm(data: any): Promise<any> {
-  return request.post(process.env.basePath + `/FeeItems/HouseRemoveForm`,  {data:objToFormdata(data)}).then(getResult as any);
+  return request.post(process.env.basePath + `/FeeItems/HouseRemoveForm`, { data: objToFormdata(data) }).then(getResult as any);
 }
 //删除费项/FeeItems/
 
@@ -79,11 +79,11 @@ export function RemoveForm(data: any): Promise<any> {
 }
 //房屋费项保存
 export function UnitFeeSaveForm(data): Promise<any> {
-  return request.post(process.env.basePath + `/FeeItems/UnitFeeSaveForm`, {data:objToFormdata(data)}).then(getResult as any);
+  return request.post(process.env.basePath + `/FeeItems/UnitFeeSaveForm`, { data: objToFormdata(data) }).then(getResult as any);
 }
 //费项已设房屋保存
 export function HouseSaveForm(data): Promise<any> {
-  return request.post(process.env.basePath + `/FeeItems/HouseSaveForm`, {data:objToFormdata(data)}).then(getResult as any);
+  return request.post(process.env.basePath + `/FeeItems/HouseSaveForm`, { data: objToFormdata(data) }).then(getResult as any);
 }
 //加载管理处
 // export function GetOrgTreeOnly(): Promise<TreeEntity[]> {
@@ -100,7 +100,7 @@ export function GetOrgTaxTateFormJson(data): Promise<TreeEntity[]> {
 }
 
 //费项机构已选ID
-export function GetOrganizeForm(data): Promise<TreeEntity[]> {
+export function GetOrganizeForm(data): Promise<any[]> {
   return request
     .get(process.env.basePath + `/FeeItems/GetOrganizeForm?FeeItemID=${data}`)
     .then(getResult as any);
@@ -119,8 +119,8 @@ export function GetOrgAndBulidingTree(): Promise<TreeEntity[]> {
     .then(getResult as any);
 }
 
- 
+
 //删除已设费房屋/FeeItems/
 export function HouseAllRemoveForm(data: any): Promise<any> {
-  return request.post(process.env.basePath + `/FeeItems/HouseAllRemoveForm`,  {data:objToFormdata(data)}).then(getResult as any);
+  return request.post(process.env.basePath + `/FeeItems/HouseAllRemoveForm`, { data: objToFormdata(data) }).then(getResult as any);
 }

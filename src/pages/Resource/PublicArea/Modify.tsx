@@ -78,7 +78,7 @@ const Modify = (props: ModifyProps) => {
     form.validateFields((errors, values) => {
       if (!errors) {
         const newData = data ? { ...data, ...values } : values;
-        console.log(newData.auditMark);
+        //console.log(newData.auditMark);
         if (newData.auditMark) {
           Modal.confirm({
             title: '警告',

@@ -4,12 +4,13 @@ import { Tree } from 'antd';
 import React, { useState } from 'react';
 interface SelectTreeProps {
   treeData: any[];
-  selectTree(item, type): void;
+  selectTree(item, type, allname?): void;
   getCheckedKeys(keys): void;
+  checkable: boolean;
 }
 
 function SelectTree(props: SelectTreeProps) {
-  const { treeData, selectTree,getCheckedKeys } = props;
+  const { checkable, treeData, selectTree, getCheckedKeys } = props;
   //const [checkedKeys, setCheckedKeys] = useState<any[]>([]);
   const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
 
@@ -17,12 +18,12 @@ function SelectTree(props: SelectTreeProps) {
     //setCheckedKeys(checkedKeys);
     let keys: any[] = [];
     //只选中房屋和车位
-      e.checkedNodes.forEach(item => { 
+    e.checkedNodes.forEach(item => {
       //房间或者车位
       if (item.props.type == 5 || item.props.type == 9) {
         keys.push(item.key);
       }
-    }); 
+    });
     getCheckedKeys(keys);
   };
 
@@ -31,8 +32,9 @@ function SelectTree(props: SelectTreeProps) {
       //const item = treeData.filter(treeItem => treeItem.key === selectedKeys[0])[0];
       const type = info.node.props.type;
       if ('ABCD'.indexOf(type) != -1)
-        return;
-      selectTree(selectedKeys[0], type);
+        return; 
+      const allname = info.node.props.attributeA;
+      selectTree(selectedKeys[0], type, allname);
     }
   };
 
@@ -57,7 +59,7 @@ function SelectTree(props: SelectTreeProps) {
         (<Tree
           treeData={treeData}
           showLine
-          checkable
+          checkable={checkable}
           //checkedKeys={checkedKeys}
           onCheck={onCheck}
           expandedKeys={expandedKeys}

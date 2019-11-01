@@ -5,7 +5,7 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useState } from 'react';
 import { UnitFeeSaveForm } from './Main.service';
 import SelectTree from '../SelectTree';
-import './style.less';
+// import './style.less';
 
 interface AddHouseFeeProps {
   visible: boolean;
@@ -14,7 +14,7 @@ interface AddHouseFeeProps {
   feeId?: string;
   reload(): void;
   treeData: any[];
-}
+};
 
 const AddHouseFee = (props: AddHouseFeeProps) => {
   const { visible, closeModal, feeId, reload, treeData } = props;
@@ -65,8 +65,7 @@ const AddHouseFee = (props: AddHouseFeeProps) => {
     >
       {/* <Row style={{ height: '400px', overflow: 'hidden', marginTop: '5px', backgroundColor: 'rgb(255,255,255)' }}> */}
 
-      <Spin tip="数据处理中..." spinning={loading}>
-
+      <Spin tip="数据处理中..." spinning={loading}> 
         <Row gutter={8}>
           <Col span={12} style={{ height: '420px', overflow: 'auto' }}>
             <SelectTree
@@ -90,8 +89,7 @@ const AddHouseFee = (props: AddHouseFeeProps) => {
             </Card>
           </Col>
         </Row>
-      </Spin>
-
+      </Spin> 
     </Modal>
   );
 };

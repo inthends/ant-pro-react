@@ -22,7 +22,7 @@ const SelectHouse = (props: SelectHouseProps) => {
 
   return (
     <Modal
-      title="选择单元"
+      title="选择房屋"
       visible={visible}
       okText="确认"
       cancelText="取消"
