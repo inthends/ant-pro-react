@@ -236,7 +236,7 @@ const AddReductionItem = (props: AddReductionItemProps) => {
 
           </Row>
         </Form>
-        <Row  >
+        <Row>
           <Col lg={10} style={{ height: 'calc(70vh)' }} >
             {/* <AsynSelectTree
               parentid={'0'}
@@ -246,14 +246,14 @@ const AddReductionItem = (props: AddReductionItemProps) => {
               }} /> */}
 
             <SelectTree
+              checkable={true}
               treeData={treeData}
               getCheckedKeys={(keys) => {
                 setUnitData(keys);
               }}
               selectTree={(id, type, info?) => {
               }}
-            />
-
+            /> 
           </Col>
           <Col lg={14}>
             <Row gutter={24} >

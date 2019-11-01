@@ -1,11 +1,14 @@
 //新增抄表单
-import { Card, Button, Col, DatePicker, Drawer, Tabs, Form, Row, Icon, Spin, Input, Table } from 'antd';
+import { Modal, message, Card, Button, Col, DatePicker, Drawer, Tabs, Form, Row, Icon, Spin, Input, Table } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { GetVirtualReadPageList, SaveReadPublicForm, SaveReadUnitForm, RemoveFormAll, RemoveUnitForm, RemoveReadPublicFormAll, RemoveReadPublicForm, GetPublicReadPageList, GetUnitReadPageList, GetMeterRead, RemoveReadVirtualFormAll } from './Meter.service';
-import './style.less';
+import {
+  SaveMainForm, GetVirtualReadPageList, SaveReadPublicForm, SaveReadUnitForm, RemoveFormAll, RemoveReadingUnitForm, RemoveReadPublicFormAll,
+  RemoveReadPublicForm, GetPublicReadPageList, GetUnitReadPageList, GetMeterRead, RemoveReadVirtualFormAll
+} from './Meter.service';
+import styles from './style.less';
 import ChargeFeeItem from './ChargeFeeItem';
 import SelectReadingMeterPublic from './SelectReadingMeterPublic';
 import SelectReadingMeterHouse from './SelectReadingMeterHouse';
@@ -15,90 +18,6 @@ const Search = Input.Search;
 const { TabPane } = Tabs;
 const { TextArea } = Input;
 
-/*详情可编辑单元格*/
-const EditableContext = React.createContext('');
-const EditableRow = ({ form, index, ...props }) => (
-  <EditableContext.Provider value={form}>
-    <tr {...props} />
-  </EditableContext.Provider>
-);
-
-const EditableFormRow = Form.create()(EditableRow);
-class EditableCell extends React.Component {
-  state = {
-    editing: false,
-  };
-
-  toggleEdit = () => {
-    const editing = !this.state.editing;
-    this.setState({ editing }, () => {
-      if (editing) {
-        this.input.focus();
-      }
-    });
-  };
-
-  save = e => {
-    const { record, handleSave } = this.props;
-    this.form.validateFields((error, values) => {
-      if (error && error[e.currentTarget.id]) {
-        return;
-      }
-      this.toggleEdit();
-      handleSave({ ...record, ...values });
-    });
-  };
-
-  renderCell = form => {
-    var _this = this;
-    this.form = form;
-    const { children, dataIndex, record, title } = this.props;
-    const { editing } = this.state;
-    return editing ? (
-      <Form.Item style={{ margin: 0 }}>
-        {form.getFieldDecorator(dataIndex, {
-          rules: [
-            {
-              required: true,
-              message: `${title} is required.`,
-            },
-          ],
-          initialValue: record[dataIndex],
-        })(<Input ref={node => (this.input = node)} onPressEnter={this.save} onBlur={this.save} />)}
-      </Form.Item>
-    ) : (
-        <div
-          className="editable-cell-value-wrap"
-          style={{ paddingRight: 24 }}
-          onClick={_this.toggleEdit}
-        >
-          {children}
-        </div>
-      );
-  };
-
-  render() {
-    const {
-      editable,
-      dataIndex,
-      title,
-      record,
-      index,
-      handleSave,
-      children,
-      ...restProps
-    } = this.props;
-    return (
-      <td {...restProps}>
-        {editable ? (
-          <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
-        ) : (
-            children
-          )}
-      </td>
-    );
-  }
-}
 interface ReadingMeterModifyProps {
   modifyVisible: boolean;
   closeDrawer(): void;
@@ -106,28 +25,28 @@ interface ReadingMeterModifyProps {
   id?: string;
   organizeId?: string;
   reload(): void;
-}
+  treeData: any[];
+};
 
 const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
-  const { modifyVisible, closeDrawer, form, id } = props;
+  const { reload, treeData, modifyVisible, closeDrawer, form, id } = props;
   const title = id == undefined ? '新增抄表单' : '修改抄表单';
+
+  const getGuid = () => {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+  };
+
   const [loading, setLoading] = useState<boolean>(false);
   const { getFieldDecorator } = form;
-  // const [units, setUnits] = useState<string>('');
   const [infoDetail, setInfoDetail] = useState<any>({});
-  // const [noticeData, setNoticeData] = useState<any>([]);
-  const [pagination, setPagination] = useState<DefaultPagination>(new DefaultPagination());
-
-  // const [meterKinds, setMeterKinds] = useState<any>([]);
-  // const [meterTypes, setMeterTypes] = useState<any>([]);
-  // const [orgTreeData, setOrgTreeData] = useState<any>({});
   const [chargeFeeItemVisible, setChargeFeeItemVisible] = useState<boolean>(false);
-  // const [selectHouseVisible, setSelectHouseVisible] = useState<boolean>(false);
-
   const [unitFeeVisible, setUnitFeeVisible] = useState<boolean>(false);
   const [virtualFeeVisible, setVirtualFeeVisible] = useState<boolean>(false);
+  
   const [publicFeeVisible, setPublicFeeVisible] = useState<boolean>(false);
-
   const [houseSearchParams, setHouseSearchParams] = useState<any>({});
   // const [houseLoading, setHouseLoading] = useState<boolean>(false);
   const [houseData, setHouseData] = useState<any>();
@@ -146,12 +65,9 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
   // const [addFormulaVisible, setAddFormulaVisible] = useState<boolean>(false);
   const [houseFeeItemRowId, setHouseFeeItemRowId] = useState<string>('');
   const [publicFeeItemRowId, setPublicFeeItemRowId] = useState<string>('');
-  const components = {
-    body: {
-      row: EditableFormRow,
-      cell: EditableCell,
-    },
-  };
+
+  let keyValue = ''
+  let isAdd = false;//是否新增
 
   useEffect(() => {
     if (modifyVisible) {
@@ -167,6 +83,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
       //   setOrgTreeData(res);
       // })
       if (id) {
+        keyValue = id;
         //setIsAdd(false);
         setLoading(true);
         GetMeterRead(id).then(res => {
@@ -177,6 +94,8 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
           initVirtualLoadData();
         });
       } else {
+        keyValue = getGuid();
+        isAdd = true;
         form.resetFields();
         setInfoDetail({});
         //setMeterData([]);
@@ -193,18 +112,23 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
       pageSize: housePagination.pageSize,
       total: 0,
     };
-    let keyvalue ;
-    if (id != null || id != '') {
-      keyvalue = id;
-    }
-    if (infoDetail != null && infoDetail.BillId != null) {
-      keyvalue = infoDetail.BillId;
-    }
+
+    // let keyvalue;
+    // if (id != null || id != '') {
+    //   keyvalue = id;
+    // }
+    // if (infoDetail != null && infoDetail.BillId != null) {
+    //   keyvalue = infoDetail.BillId;
+    // }
+
     let searchCondition: any = {
       pageIndex,
       pageSize,
       total,
-      queryJson: { keyword: houseSearchParams.search == null ? '' : houseSearchParams.search, keyValue: keyvalue }
+      queryJson: {
+        keyword: houseSearchParams.search == null ? '' : houseSearchParams.search,
+        keyValue: keyValue
+      }
     };
 
     if (sorter) {
@@ -212,14 +136,12 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
       searchCondition.sidx = field ? field : 'billcode';
     }
-
     return houseload(searchCondition).then(res => {
       return res;
     });
-  }
+  };
 
   const houseload = data => {
-
     data.sidx = data.sidx || 'billcode';
     data.sord = data.sord || 'asc';
     return GetUnitReadPageList(data).then(res => {
@@ -238,6 +160,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
   };
 
 
+  //公共
   const initPublicLoadData = (paginationConfig?: PaginationConfig, sorter?) => {
     //setMeterSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
@@ -328,8 +251,15 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
     });
   };
 
+  //关闭
   const close = () => {
     closeDrawer();
+    reload();
+  };
+
+  const [readingDetail, setReadingDetail] = useState<any>({});
+  const closeChargeFeeItem = () => {
+    setChargeFeeItemVisible(false);
   };
 
   // const guid=()=> {
@@ -342,6 +272,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
   const onSave = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
+
         // let newData = {
         //   payBeginDate: values.payBeginDate.format('YYYY-MM-DD HH:mm:ss'),
         //   payEndDate: values.payEndDate.format('YYYY-MM-DD HH:mm:ss'),
@@ -349,11 +280,113 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
         //   endDate: values.endDate.format('YYYY-MM-DD HH:mm:ss')
         // };
 
-        /*SaveForm(infoDetail.organizeId,newData).then((res)=>{
+        const newData = infoDetail ? { ...infoDetail, ...values } : values;
+        newData.keyValue = keyValue;
+        newData.isAdd = isAdd;
+        newData.endReadDate = newData.endReadDate.format('YYYY-MM-DD');
+        newData.readDate = newData.readDate.format('YYYY-MM-DD');
+        SaveMainForm(newData).then((res) => {
           close();
-        });*/
+          message.success('保存成功！');
+          reload();
+        });
+
       }
     });
+  };
+
+
+  /*详情可编辑单元格*/
+  const EditableContext = React.createContext('');
+  const EditableRow = ({ form, index, ...props }) => (
+    <EditableContext.Provider value={form}>
+      <tr {...props} />
+    </EditableContext.Provider>
+  );
+
+  const EditableFormRow = Form.create()(EditableRow);
+
+  class EditableCell extends React.Component {
+    state = {
+      editing: false,
+    };
+
+    toggleEdit = () => {
+      const editing = !this.state.editing;
+      this.setState({ editing }, () => {
+        if (editing) {
+          this.input.focus();
+        }
+      });
+    };
+
+    save = e => {
+      const { record, handleSave } = this.props;
+      this.form.validateFields((error, values) => {
+        if (error && error[e.currentTarget.id]) {
+          return;
+        }
+        this.toggleEdit();
+        handleSave({ ...record, ...values });
+      });
+    };
+
+    renderCell = form => {
+      var _this = this;
+      this.form = form;
+      const { children, dataIndex, record, title } = this.props;
+      const { editing } = this.state;
+      return editing ? (
+        <Form.Item style={{ margin: 0 }}>
+          {form.getFieldDecorator(dataIndex, {
+            rules: [
+              {
+                required: true,
+                message: `${title} is required.`,
+              },
+            ],
+            initialValue: record[dataIndex],
+          })(<Input ref={node => (this.input = node)} onPressEnter={this.save} onBlur={this.save} />)}
+        </Form.Item>
+      ) : (
+          <div
+            className="editable-cell-value-wrap"
+            style={{ paddingRight: 24 }}
+            onClick={_this.toggleEdit}
+          >
+            {children}
+          </div>
+        );
+    };
+
+    render() {
+      const {
+        editable,
+        dataIndex,
+        title,
+        record,
+        index,
+        handleSave,
+        children,
+        ...restProps
+      } = this.props;
+      return (
+        <td {...restProps}>
+          {editable ? (
+            <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
+          ) : (
+              children
+            )}
+        </td>
+      );
+    }
+  };
+
+  const components = {
+    body: {
+      row: EditableFormRow,
+      cell: EditableCell,
+    },
   };
 
   const publicFeeColumns = [
@@ -361,28 +394,28 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
       title: '种类',
       dataIndex: 'meterkind',
       key: 'meterkind',
-      width: 200,
+      width: 60,
       sorter: false
     },
     {
       title: '表名称',
       dataIndex: 'metername',
       key: 'metername',
-      width: 200,
+      width: 120,
       sorter: false
     },
     {
       title: '表编号',
       dataIndex: 'metercode',
       key: 'metercode',
-      width: 200,
+      width: 150,
       sorter: false,
     },
     {
       title: '上次读数',
       dataIndex: 'lastreading',
       key: 'lastreading',
-      width: 200,
+      width: 100,
       sorter: false,
     },
     {
@@ -390,7 +423,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
       dataIndex: 'nowreading',
       key: 'nowreading',
       sorter: false,
-      width: 200,
+      width: 100,
       editable: true
     },
     {
@@ -398,62 +431,62 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
       dataIndex: 'meterzoom',
       key: 'meterzoom',
       sorter: false,
-      width: 200
+      width: 60
     },
     {
       title: '用量',
       dataIndex: 'baseusage',
       key: 'baseusage',
       sorter: false,
-      width: 200
+      width: 100
     },
     {
       title: '单价',
       dataIndex: 'meterprice',
       key: 'meterprice',
       sorter: false,
-      width: 200
+      width: 100
     },
     {
       title: '金额',
       dataIndex: 'amount',
       key: 'amount',
       sorter: false,
-      width: 200
+      width: 100
     },
     {
       title: '录入人',
       dataIndex: 'createusername',
       key: 'createusername',
       sorter: false,
-      width: 200
+      width: 80
     },
     {
       title: '录入时间',
       dataIndex: 'createdate',
       key: 'createdate',
       sorter: false,
-      width: 200
+      width: 120
     },
     {
       title: '备注',
       dataIndex: 'memo',
       key: 'memo',
       sorter: false,
-      width: 200,
+      width: 100,
       editable: true
     }, {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
       align: 'center',
-      width: 95,
+      width: 75,
       render: (text, record) => {
         return [
           <span>
             <a onClick={() => {
               RemoveReadPublicForm(record.id).then(res => {
-                if (res.code != 0) { initPublicLoadData(); }
+                initPublicLoadData();
               })
             }} key="delete">删除</a>
           </span>
@@ -461,7 +494,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
         ];
       },
     }
-  ] as ColumnProps<any>[];
+  ];// as ColumnProps<any>[];
 
   const publicDataColumns = publicFeeColumns.map(col => {
     if (!col.editable) {
@@ -477,35 +510,35 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
         handleSave: handlePublicSave,
       }),
     };
-  });
+  }) as ColumnProps<any>[];
 
   const houseFeeColumns = [
     {
       title: '种类',
       dataIndex: 'meterType',
       key: 'meterType',
-      width: 120,
+      width: 60,
       sorter: false
     },
     {
       title: '表名称',
       dataIndex: 'meterName',
       key: 'meterName',
-      width: 120,
+      width: 80,
       sorter: false
     },
     {
       title: '表编号',
       dataIndex: 'meterCode',
       key: 'meterCode',
-      width: 250,
+      width: 140,
       sorter: false,
     },
     {
       title: '上次读数',
       dataIndex: 'lastReading',
       key: 'lastReading',
-      width: 120,
+      width: 80,
       sorter: false,
     },
     {
@@ -513,7 +546,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
       dataIndex: 'nowReading',
       key: 'nowReading',
       sorter: false,
-      width: 120,
+      width: 100,
       editable: true
     },
     {
@@ -521,70 +554,78 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
       dataIndex: 'meterZoom',
       key: 'meterZoom',
       sorter: false,
-      width: 100
+      width: 60
     },
     {
       title: '用量',
       dataIndex: 'baseUsage',
       key: 'baseUsage',
       sorter: false,
-      width: 100
+      width: 80
     },
     {
       title: '单价',
       dataIndex: 'meterPrice',
       key: 'meterPrice',
       sorter: false,
-      width: 100
+      width: 80
     },
     {
       title: '金额',
       dataIndex: 'amount',
       key: 'amount',
       sorter: false,
-      width: 120
+      width: 80
     },
     {
       title: '录入人',
       dataIndex: 'createUserName',
       key: 'createUserName',
       sorter: false,
-      width: 100
+      width: 60
     },
     {
       title: '录入时间',
       dataIndex: 'createDate',
       key: 'createDate',
       sorter: false,
-      width: 150
+      width: 130
     },
     {
       title: '备注',
       dataIndex: 'memo',
       key: 'memo',
       sorter: false,
-      width: 200,
+      width: 100,
       editable: true
     }, {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
       align: 'center',
-      width: 95,
+      width: 60,
       render: (text, record) => {
         return [
           <span>
             <a onClick={() => {
-              RemoveUnitForm(record.id).then(res => {
-                if (res.code != 0) { initHouseLoadData(); }
-              });
+              Modal.confirm({
+                title: '请确认',
+                content: `您是否要删除？`,
+                cancelText: '取消',
+                okText: '确定',
+                onOk: () => {
+                  RemoveReadingUnitForm(record.id).then(res => {
+                    initHouseLoadData();
+                  });
+                }
+              })
             }} key="delete">删除</a>
-          </span>
+          </span >
 
         ];
       },
     }
-  ] as ColumnProps<any>[];
+  ]; //as ColumnProps<any>[];
 
   const houseDataColumns = houseFeeColumns.map(col => {
     if (!col.editable) {
@@ -600,24 +641,24 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
         handleSave: handleHouseSave,
       }),
     };
-  });
+  }) as ColumnProps<any>[];
 
   const handleHouseSave = row => {
-    row.baseusage = (row.nowreading - row.lastreading);
-    row.amount = (row.nowreading - row.lastreading) * row.meterprice;
-
+    row.baseUsage = (row.nowReading - row.lastReading);
+    row.amount = (row.nowReading - row.lastReading) * row.meterPrice;
     form.validateFields((errors, values) => {
       if (!errors) {
-        let guid = getGuid();
-        if (id == null || id == '') {
-          var info = Object.assign({}, infoDetail, {
-            BillId: guid
-          })
-          setInfoDetail(info)
-        }
+        // let guid = getGuid();
+        // if (id == null || id == '') {
+        //   var info = Object.assign({}, infoDetail, {
+        //     BillId: guid
+        //   })
+        //   setInfoDetail(info)
+        // }
+
         var newHouseData = {
-          id: id == null || id == '' ? guid : id,
-          nowreading: row.nowreading,
+          id: row.id,//id == null || id == '' ? guid : id,
+          nowReading: row.nowReading,
           memo: row.memo
         };
         //SaveReadPublicForm ,
@@ -664,8 +705,6 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
         });
       }
     });
-
-
   };
 
   const virtualFeeColumns = [
@@ -712,29 +751,20 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
       width: 200
     }
   ] as ColumnProps<any>[];
-  const closeChargeFeeItem = () => {
-    setChargeFeeItemVisible(false);
-  }
-  const getGuid = () => {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-      return v.toString(16);
-    });
-  }
 
-  const [readingDetail, setReadingDetail] = useState<any>({});
+
   // const [isFormula, setIsFormula] = useState<boolean>(false);
   return (
     <Drawer
       title={title}
       placement="right"
-      width={880}
+      width={700}
       onClose={close}
       visible={modifyVisible}
       style={{ height: 'calc(100vh-50px)' }}
       bodyStyle={{ background: '#f6f7fb', height: 'calc(100vh -50px)' }}
     >
-      <Card>
+      <Card className={styles.card}>
         <Form layout="vertical" hideRequiredMark>
           <Spin tip="数据加载中..." spinning={loading}>
             <Row gutter={12}>
@@ -758,10 +788,10 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                 </Form.Item>
               </Col>
               <Col span={8}>
-                <Form.Item required={true} label="抄表日期" >
+                <Form.Item required={true} label="抄表月份" >
                   {getFieldDecorator('meterCode', {
                     initialValue: infoDetail.meterCode == null ? moment(new Date()) : moment(infoDetail.readDate),
-                    rules: [{ required: true, message: '请选择抄表时间' }],
+                    rules: [{ required: true, message: '请选择抄表月份' }],
                   })(
                     <DatePicker.MonthPicker style={{ width: '100%' }}  ></DatePicker.MonthPicker>
                   )}
@@ -833,7 +863,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                   {getFieldDecorator('memo', {
                     initialValue: infoDetail.memo == null ? '' : infoDetail.memo,
                   })(
-                    <TextArea rows={4} style={{ width: '100%' }} />
+                    <TextArea rows={3} style={{ width: '100%' }} />
                   )}
                 </Form.Item>
               </Col>
@@ -845,7 +875,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                     <Search
                       className="search-input"
                       placeholder="请输入要查询的费表编号"
-                      style={{ width: 280 }}
+                      style={{ width: 200 }}
                     />
 
                     <Button type="link" style={{ float: 'right' }}
@@ -866,10 +896,10 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                       onClick={() => {
                         form.validateFields((errors, values) => {
                           if (!errors) {
-                            let guid = getGuid();
+                            // let guid = getGuid();
                             var meterEntity = {
-                              keyValue: id == null || id == '' ? guid : id,
-                              BillId: id == null || id == '' ? guid : id,
+                              keyValue: keyValue,//== null || id == '' ? guid : id,
+                              BillId: keyValue,//== null || id == '' ? guid : id,
                               BatchCode: values.batchCode,
                               MeterCode: moment(values.meterCode).format('YYYYMM'),
                               ReadDate: moment(values.readDate).format('YYYY-MM-DD'),
@@ -890,8 +920,8 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                       选择房屋
                 </Button>
                   </div>
-                  <div style={{ color: 'rgb(255,0,0)' }}> 请仔细核对抄表度数，度数错误会影响公摊计费，点击本次读数列和备注列可以编辑，编辑完按回车保存。</div>
-                  <Table<any>
+                  <div style={{ color: 'rgb(255,0,0)' }}> 请核对抄表度数，度数错误会影响计费，点击本次读数列和备注列可以编辑，按回车保存。</div>
+                  <Table
                     components={components}
                     onChange={(paginationConfig, filters, sorter) => {
                       initHouseLoadData(paginationConfig, sorter)
@@ -901,8 +931,8 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                     columns={houseDataColumns}
                     dataSource={houseData}
                     rowKey="id"
-                    pagination={pagination}
-                    scroll={{ y: 500, x: 1620 }}
+                    pagination={housePagination}
+                    scroll={{ y: 500, x: 1300 }}
                     loading={loading}
                   />
                 </TabPane>
@@ -911,7 +941,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                     <Search
                       className="search-input"
                       placeholder="请输入要查询的费表名称"
-                      style={{ width: 280 }}
+                      style={{ width: 200 }}
                     />
                     <Button type="link" style={{ float: 'right', marginLeft: '10px' }}
                       onClick={() => {
@@ -931,10 +961,10 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                       onClick={() => {
                         form.validateFields((errors, values) => {
                           if (!errors) {
-                            let guid = getGuid();
+                            // let guid = getGuid();
                             var meterEntity = {
-                              keyValue: id == null || id == '' ? guid : id,
-                              BillId: id == null || id == '' ? guid : id,
+                              keyValue: keyValue,//== null || id == '' ? guid : id,
+                              BillId: keyValue,//== null || id == '' ? guid : id,
                               BatchCode: values.batchCode,
                               MeterCode: moment(values.meterCode).format('YYYYMM'),
                               ReadDate: moment(values.readDate).format('YYYY-MM-DD'),
@@ -953,8 +983,8 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                       添加公用费表
                 </Button>
                   </div>
-                  <div style={{ color: 'rgb(255,0,0)' }}>点击本次读数列和备注列可以编辑，编辑完按回车保存。</div>
-                  <Table<any>
+                  <div style={{ color: 'rgb(255,0,0)' }}>点击本次读数列和备注列可以编辑，按回车保存。</div>
+                  <Table
                     components={components}
                     onChange={(paginationConfig, filters, sorter) => {
                       initPublicLoadData(paginationConfig, sorter)
@@ -964,7 +994,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                     columns={publicDataColumns}
                     dataSource={publicData}
                     rowKey="id"
-                    pagination={pagination}
+                    pagination={publicPagination}
                     scroll={{ y: 500, x: 1620 }}
                     loading={loading}
                   />
@@ -974,7 +1004,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                     <Search
                       className="search-input"
                       placeholder="请输入要查询的费表编号"
-                      style={{ width: 280 }}
+                      style={{ width: 200 }}
                     />
                     <Button type="link" style={{ float: 'right', marginLeft: '10px' }}
                       onClick={() => {
@@ -994,10 +1024,10 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                       onClick={() => {
                         form.validateFields((errors, values) => {
                           if (!errors) {
-                            let guid = getGuid();
+                            // let guid = getGuid();
                             var meterEntity = {
-                              keyValue: id == null || id == '' ? guid : id,
-                              BillId: id == null || id == '' ? guid : id,
+                              keyValue: keyValue,//== null || id == '' ? guid : id,
+                              BillId: keyValue,//== null || id == '' ? guid : id,
                               BatchCode: values.batchCode,
                               MeterCode: moment(values.meterCode).format('YYYYMM'),
                               ReadDate: moment(values.readDate).format('YYYY-MM-DD'),
@@ -1024,7 +1054,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                     columns={virtualFeeColumns}
                     dataSource={virtualData}
                     rowKey="id"
-                    pagination={pagination}
+                    pagination={virtualPagination}
                     scroll={{ y: 500, x: 1620 }}
                     loading={loading}
                   />
@@ -1054,6 +1084,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
           initHouseLoadData();
         }}
         id={houseFeeItemRowId}
+        treeData={treeData}
       />
       <SelectReadingMeterPublic
         visible={publicFeeVisible}
@@ -1077,8 +1108,6 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
         }}
         id={publicFeeItemRowId}
       />
-
-
       <div
         style={{
           position: 'absolute',
@@ -1093,7 +1122,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
         }}
       >
         <Button style={{ marginRight: 8 }}
-          onClick={() => closeDrawer()}
+          onClick={() => { closeDrawer(); reload(); }}
         >
           取消
         </Button>
@@ -1104,7 +1133,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
         </Button>
       </div>
 
-    </Drawer>
+    </Drawer >
   );
 };
 

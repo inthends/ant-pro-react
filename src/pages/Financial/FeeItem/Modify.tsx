@@ -587,7 +587,6 @@ const Modify = (props: ModifyProps) => {
     }
   };
 
-
   //全部删除
   const deleteAllHouse = () => {
     Modal.confirm({

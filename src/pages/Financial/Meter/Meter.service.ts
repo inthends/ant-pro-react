@@ -74,9 +74,15 @@ export function GetInfoFormJson(data): Promise<ResponseObject<TreeEntity[]>> {
 export function GetUnitMeterInfoFormJson(data): Promise<any> {
   return request.get(process.env.basePath + `/Meter/GetUnitMeterInfoFormJson?keyValue=${data}`, {}).then(getResult as any);;
 }
+
 //删除房屋表
 export function RemoveUnitForm(data): Promise<any> {
   return request.post(process.env.basePath + `/Meter/RemoveUnitForm?keyValue=${data}`, {}).then(getResult as any);;
+}
+
+//删除房屋抄表明细
+export function RemoveReadingUnitForm(data): Promise<any> {
+  return request.post(process.env.basePath + `/Meter/RemoveReadingUnitForm?keyValue=${data}`, {}).then(getResult as any);;
 }
 
 //获取费项实体
@@ -110,13 +116,15 @@ export function SaveUnitForm(data): Promise<any> {
 export function GetVirtualReadPageList(data): Promise<any> {
   return request.post(process.env.basePath + `/Meter/GetVirtualReadPageList`, { data: objToFormdata(data) }).then(getResult as any);;
 }
+
 // 抄表单保存
 export function SaveMainForm(data): Promise<any> {
   return request.post(process.env.basePath + `/Meter/SaveMainForm`, { data: objToFormdata(data) }).then(getResult as any);;
 }
+
 //获取水电表
-export function GetDataItemTreeJsonNew(data): Promise<any> {
-  return request.get(process.env.basePath + `/Meter/GetDataItemTreeJsonNew?EnCode=${data}`, {}).then(getResult as any);;
+export function GetMeterTreeJson(data): Promise<any> {
+  return request.get(process.env.basePath + `/Meter/GetMeterTreeJson?EnCode=${data}`, {}).then(getResult as any);;
 }
 
 //公用表抄表明细列表

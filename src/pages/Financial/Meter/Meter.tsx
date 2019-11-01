@@ -570,7 +570,7 @@ function Meter() {
               <Search
                 className="search-input"
                 placeholder="请输入要查询的单号"
-                style={{ width: 280 }}
+                style={{ width: 200 }}
                 onSearch={value => loadReadingMeterData(value)}
               />
               {/* <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
@@ -637,7 +637,7 @@ function Meter() {
               <Search
                 className="search-input"
                 placeholder="请输入要查询的单号"
-                style={{ width: 280 }}
+                style={{ width: 200 }}
                 onSearch={value => loadUnitMeterData(value)}
               />
             </div>
@@ -670,6 +670,7 @@ function Meter() {
         organizeId={organize}
         id={readingMeterId}
         reload={() => loadReadingMeterData('')}
+        treeData={unitTreeData}
       />
       <ReadingMeterVertify
         vertifyVisible={vertifyVisible}

@@ -295,6 +295,7 @@ const AddDrawer = (props: AddDrawerProps) => {
               /> */}
 
               <SelectTree
+                checkable={true}
                 treeData={treeData}
                 getCheckedKeys={(keys) => {
                   setUnits(keys);

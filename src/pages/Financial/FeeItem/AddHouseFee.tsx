@@ -47,7 +47,7 @@ const AddHouseFee = (props: AddHouseFeeProps) => {
         if (unitData.length == 0) {
           message.warning('请选择房屋！');
         } else {
-          setLoading(true); 
+          setLoading(true);
           UnitFeeSaveForm({ FeeItemID: feeId, JsonFeeIdArray: JSON.stringify(unitData) }).then(res => {
             message.success('添加成功！');
             setLoading(false);
@@ -65,10 +65,11 @@ const AddHouseFee = (props: AddHouseFeeProps) => {
     >
       {/* <Row style={{ height: '400px', overflow: 'hidden', marginTop: '5px', backgroundColor: 'rgb(255,255,255)' }}> */}
 
-      <Spin tip="数据处理中..." spinning={loading}> 
+      <Spin tip="数据处理中..." spinning={loading}>
         <Row gutter={8}>
           <Col span={12} style={{ height: '420px', overflow: 'auto' }}>
             <SelectTree
+              checkable={true}
               treeData={treeData}
               getCheckedKeys={(keys) => {
                 setUnitData(keys);
@@ -89,7 +90,7 @@ const AddHouseFee = (props: AddHouseFeeProps) => {
             </Card>
           </Col>
         </Row>
-      </Spin> 
+      </Spin>
     </Modal>
   );
 };

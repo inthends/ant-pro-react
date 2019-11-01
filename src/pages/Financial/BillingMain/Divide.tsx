@@ -3,7 +3,7 @@ import { Col, Form, Row, Modal, message, } from 'antd';
 import { TreeEntity } from '@/model/models';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import {SaveDivide , GetReceivablesFeeItemTreeJson } from './BillingMain.service';
+import { SaveDivide, GetReceivablesFeeItemTreeJson } from './BillingMain.service';
 import './style.less';
 import SelectTree from '../SelectTree';
 import LeftTree from '../LeftTree';
@@ -16,7 +16,7 @@ interface DivideProps {
 }
 
 const Divide = (props: DivideProps) => {
-  const { visible, closeModal,treeData } = props;
+  const { visible, closeModal, treeData } = props;
   const [feeTreeData, setFeeTreeData] = useState<TreeEntity[]>([]);
   useEffect(() => {
     if (visible) {
@@ -43,7 +43,7 @@ const Divide = (props: DivideProps) => {
           if (selectedFeeId == null || selectedFeeId == '') {
             message.warning('请选择费项');
           } else {
-            var newdata = Object.assign({},  { units: JSON.stringify(unitData), feeitemid: selectedFeeId });
+            var newdata = Object.assign({}, { units: JSON.stringify(unitData), feeitemid: selectedFeeId });
             SaveDivide(newdata).then(res => {
               closeModal();
               message.success('数据保存成功');
@@ -60,6 +60,7 @@ const Divide = (props: DivideProps) => {
       <Row gutter={12} >
         <Col span={12} style={{ height: '600px', overflow: 'auto' }}>
           <SelectTree
+            checkable={true}
             treeData={treeData}
             getCheckedKeys={(keys) => {
               setUnitData(keys);

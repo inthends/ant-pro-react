@@ -75,6 +75,7 @@ const SelectHouse = (props: SelectHouseProps) => {
           /> */}
 
           <SelectTree
+            checkable={true}
             treeData={treeData}
             getCheckedKeys={(keys) => {
               setUnitData(keys);

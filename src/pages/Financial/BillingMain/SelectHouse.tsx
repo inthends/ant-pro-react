@@ -60,7 +60,7 @@ const SelectHouse = (props: SelectHouseProps) => {
               //message.success('数据保存成功');
               getBillID(feeDetail.keyValue);
             }).catch(() => {
-              message.warning('数据保存错误');
+              message.warning('保存失败！');
             });
           }
         }
@@ -71,9 +71,10 @@ const SelectHouse = (props: SelectHouseProps) => {
     >
       {/* <Row style={{ height: '600px', overflow: 'hidden', marginTop: '5px', backgroundColor: 'rgb(255,255,255)' }}> */}
 
-      <Row gutter={8}> 
+      <Row gutter={8}>
         <Col span={12} style={{ height: '600px', overflow: 'auto' }}>
           <SelectTree
+            checkable={true}
             treeData={treeData}
             getCheckedKeys={(keys) => {
               setUnitData(keys);
