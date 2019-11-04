@@ -17,10 +17,16 @@ export function GetRoomUsers(data): Promise<any[]> {
   return request.get(process.env.basePath + `/Common/GetRoomUsers?roomid=${data}`, {}).then(getResult as any);;
 }
 
+
+
 //获取关联的房间
 // export function GetUserRooms(data): Promise<ResponseObject<any[]>> {
 //   return request.get(process.env.basePath + `/Common/GetUserRooms?customerid=${data}`, {}).then(getResult as any);;
 // }
+
+export function GetUserRoomsByRelationId(data): Promise<any[]> {
+  return request.get(process.env.basePath + `/Common/GetUserRoomsByRelationId?relationId=${data}`, {}).then(getResult as any);;
+}
 
 export function GetUserRooms(data): Promise<any[]> {
   return request.get(process.env.basePath + `/Common/GetUserRooms?customerid=${data}`, {}).then(getResult as any);;

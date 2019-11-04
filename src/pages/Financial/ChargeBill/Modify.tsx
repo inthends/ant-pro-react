@@ -3,7 +3,7 @@ import { TreeEntity } from '@/model/models';
 import { Card, Select, Button, Col, DatePicker, Drawer, Form, Input, InputNumber, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { SaveDetail, GetReceivablesFeeItemTreeJson, GetRoomUsers, GetUserRooms, GetFeeItemDetail, SaveBilling, GetShowDetail } from './Main.service';
+import { GetUserRoomsByRelationId,SaveDetail, GetReceivablesFeeItemTreeJson, GetRoomUsers, GetUserRooms, GetFeeItemDetail, SaveBilling, GetShowDetail } from './Main.service';
 import LeftTree from '../LeftTree';
 import moment from 'moment';
 import styles from './style.less';
@@ -382,16 +382,17 @@ const Modify = (props: ModifyProps) => {
                     initialValue: infoDetail.relationId == null ? null : infoDetail.relationId,// getRelationId(infoDetail.relationId),
                     rules: [{ required: true, message: '请选择加费对象' }]
                   })(
-                    <Select placeholder="=请选择=" disabled={id === '' && edit ? false : true} onSelect={(key) => {
-                      //debugger;
-                      GetUserRooms(key).then(res => {
+                    <Select placeholder="=请选择=" disabled={id === '' && edit ? false : true} 
+                    onSelect={(key) => {    
+                      GetUserRoomsByRelationId(key).then(res => {
                         setUnitIds(res);
                         // var info = Object.assign({}, infoDetail, { householdId: res[0].value });
                         // setInfoDetail(info);
                       });
                     }}>
                       {relationIds.map(item => (
-                        <Option value={item.key}>
+                        <Option value={item.key}
+                        >
                           {item.title}
                         </Option>
                       ))}

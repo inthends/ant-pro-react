@@ -3,7 +3,7 @@ import { Card, Button, Col, Select, Form, Input, Row, InputNumber, Drawer, DateP
 import { TreeEntity } from '@/model/models';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetTempPaymentFeeItemTreeJson, GetRoomUsers, GetUserRooms, GetPayFeeItemDetail, SaveForm, GetShowDetail } from './Payment.service';
+import { GetUserRoomsByRelationId,GetTempPaymentFeeItemTreeJson, GetRoomUsers, GetUserRooms, GetPayFeeItemDetail, SaveForm, GetShowDetail } from './Payment.service';
 import LeftTree from '../LeftTree';
 import moment from 'moment';
 
@@ -215,18 +215,22 @@ const FeeModify = (props: FeeModifyProps) => {
                     initialValue: infoDetail.relationId == null ? null : infoDetail.relationId,// getRelationId(infoDetail.relationId),
                     rules: [{ required: true, message: '请选择付款对象' }]
                   })(
-                    <Select placeholder="=请选择=" disabled={isEdit || (id != "") ? false : true} onSelect={(key) => {
-                      GetUserRooms(key).then(res => {
-                        //加载房间列表
-                        setUnitIds(res);
-                        // if (infoDetail.unitId == null) {
-                        //   var info = Object.assign({}, infoDetail, { unitId: res[0].value });
-                        //   setInfoDetail(info);
-                        // }
-                      });
-                    }}>
+                    <Select placeholder="=请选择=" disabled={isEdit || (id != "") ? false : true}
+                      onSelect={(key) => { 
+                        GetUserRoomsByRelationId(key).then(res => {
+                          //加载房间列表
+                          setUnitIds(res);
+                          // if (infoDetail.unitId == null) {
+                          //   var info = Object.assign({}, infoDetail, { unitId: res[0].value });
+                          //   setInfoDetail(info);
+                          // }
+                        });
+                      }}>
                       {relationIds.map(item => (
-                        <Select.Option value={item.key}>
+                        <Select.Option value={item.key} 
+                         
+                        
+                        >
                           {item.title}
                         </Select.Option>
                       ))}
