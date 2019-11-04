@@ -111,8 +111,11 @@ function HouseMore(props) {
     });
   };
 
-  const initLoadData = (parentId, type, searchText) => {
+  const initLoadData = (parentId, type, searchText) => { 
+    
     setSearch(searchText);
+    setParentId(parentId);
+
     const queryJson = {
       keyword: search,
       //PStructId: psid,
