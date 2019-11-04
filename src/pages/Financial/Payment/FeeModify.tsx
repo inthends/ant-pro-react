@@ -281,7 +281,7 @@ const FeeModify = (props: FeeModifyProps) => {
                       initialValue: infoDetail.quantity,
                       rules: [{ required: true, message: '请输入数量' }]
                     })(
-                      <Input readOnly placeholder='数量' style={{ width: '100%' }} ></Input>
+                      <InputNumber readOnly placeholder='数量' style={{ width: '100%' }} ></InputNumber>
                     )}
                   </Form.Item>
                 </Col>

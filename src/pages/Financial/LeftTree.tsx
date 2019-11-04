@@ -11,7 +11,7 @@ interface LeftTreeProps {
 }
 function LeftTree(props: LeftTreeProps) {
   const { treeData, selectTree } = props;
-
+  // const [expanded, setExpanded] = useState<any[]>([]); 
   const [expanded, setExpanded] = useState<string[]>([]);
 
   let keys: any[];
@@ -71,13 +71,20 @@ function LeftTree(props: LeftTreeProps) {
     });*/
 
   // const clickExpend = (expandedKeys, { expanded, node }) => {
-  //   const selectNode = node.props.eventKey; 
+  //   const selectNode = node.props.eventKey;
   //   if (expanded) {
   //     setExpanded(expend => [...expend, selectNode]);
   //   } else {
   //     setExpanded(expend => expend.filter(item => item !== selectNode));
   //   }
   // };
+
+  const clickExpend = expandedKeys => {
+    // if not set autoExpandParent to false, if children expanded, parent can not collapse.
+    // or, you can remove all expanded children keys.
+    setExpanded(expandedKeys);
+    //setAutoExpandParent(false);
+  };
 
   return (
     <Page style={{
@@ -92,9 +99,8 @@ function LeftTree(props: LeftTreeProps) {
         showLine
         onSelect={onSelect}
         treeData={treeData}
-
-      // defaultExpandAll={true}
-      // onExpand={clickExpend}
+        // defaultExpandAll={true}
+        onExpand={clickExpend}
       >
         {/* {renderTree(treeData, '0')} */}
       </Tree>

@@ -72,12 +72,13 @@ const Modify = (props: ModifyProps) => {
         GetRoomUsers(organizeId).then(res => {
           setRelationIds(res);
           GetShowDetail(id).then(value => {
-            let info = value.entity;
-            info.number = value.number;
-            setInfoDetail(info);
-            let customerid = "";
+            // let info = value.entity;
+            // info.number = value.number; 
+            //追加
+            setInfoDetail(value);
+            let customerid = '';
             for (var i = 0; i < res.length; i++) {
-              if (res[i].key == info.relationId) {
+              if (res[i].key == value.relationId) {
                 customerid = res[i].attributeA;
               }
             }
@@ -323,7 +324,7 @@ const Modify = (props: ModifyProps) => {
     <Drawer
       title={title}
       placement="right"
-      width={id != '' ? 500 : 840}
+      width={id != '' ? 600 : 840}
       onClose={() => close(false)}
       visible={modifyVisible}
       destroyOnClose={true}
@@ -416,33 +417,43 @@ const Modify = (props: ModifyProps) => {
                 </Form.Item>
               </Row>
               <Row>
-                <Col span={10}>
-                  <Form.Item label="单价" required labelCol={{ span: 9 }} wrapperCol={{ span: 15 }} >
+                <Col span={12}>
+                  <Form.Item label="单价" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
                     {getFieldDecorator('price', {
                       initialValue: infoDetail.price,
                       rules: [{ required: true, message: '请输入单价' }]
                     })(
-                      <Input min={0} readOnly style={{ width: '100%' }} ></Input>
+                      <InputNumber
+                        style={{ width: '100%' }}
+                        readOnly={!infoDetail.isEditTemp}
+                        min={0}
+                        precision={4}
+                        onChange={value => {
+                          const quantity = Number(form.getFieldValue('quantity'));
+                          const number = Number(form.getFieldValue('number'));
+                          form.setFieldsValue({ amount: quantity * number * Number(value) });
+                        }}
+                      ></InputNumber>
                     )}
                   </Form.Item>
                 </Col>
                 <Col span={1} style={{ lineHeight: "32px", textAlign: 'center' }}>
                   X
               </Col>
-                <Col span={6}>
+                <Col span={5}>
                   <Form.Item label="" required wrapperCol={{ span: 24 }}>
                     {getFieldDecorator('quantity', {
                       initialValue: infoDetail.quantity,
                       rules: [{ required: true, message: '请输入数量' }]
                     })(
-                      <Input min={0} readOnly style={{ width: '100%' }} ></Input>
+                      <InputNumber min={0} readOnly style={{ width: '100%' }} ></InputNumber>
                     )}
                   </Form.Item>
                 </Col>
                 <Col span={1} style={{ lineHeight: "32px", textAlign: 'center' }}>
                   X
               </Col>
-                <Col span={6}>
+                <Col span={5}>
                   <Form.Item label="" required wrapperCol={{ span: 24 }}>
                     {getFieldDecorator('number', {
                       initialValue: infoDetail.number,
@@ -450,11 +461,16 @@ const Modify = (props: ModifyProps) => {
                     })(
                       <InputNumber min={0} style={{ width: '100%' }} disabled={edit ? false : true}
                         onChange={(value) => {
-                          if (value != undefined) {
-                            var amount = infoDetail.price * infoDetail.quantity * value;
-                            var info = Object.assign({}, infoDetail, { number: value, amount: amount });
-                            setInfoDetail(info);
-                          }
+                          // if (value != undefined) {
+                          //   var amount = infoDetail.price * infoDetail.quantity * value;
+                          //   var info = Object.assign({}, infoDetail, { number: value, amount: amount });
+                          //   setInfoDetail(info);
+                          // }
+
+                          const price = Number(form.getFieldValue('price'));
+                          const quantity = Number(form.getFieldValue('quantity'));
+                          form.setFieldsValue({ amount: price * quantity * Number(value) });
+
                         }}></InputNumber>
                     )}
                   </Form.Item>
