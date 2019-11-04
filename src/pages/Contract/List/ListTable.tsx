@@ -145,9 +145,7 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'follower',
       key: 'follower',
       width: 100,
-    },
-
-
+    }, 
     {
       title: '法人',
       dataIndex: 'legalPerson',

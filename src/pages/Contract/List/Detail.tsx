@@ -35,7 +35,7 @@ const Detail = (props: DetailProps) => {
   const [contractCharge, setContractCharge] = useState<LeaseContractChargeEntity>({});
   const [chargeFeeList, setChargeFeeList] = useState<LeaseContractChargeFeeEntity[]>([]);
   const [chargeIncreList, setChargeIncreList] = useState<LeaseContractChargeIncreEntity[]>([]);
-  const [chargeOfferList, setChargeOfferList] = useState<LeaseContractChargeFeeOfferEntity[]>([]); 
+  const [chargeOfferList, setChargeOfferList] = useState<LeaseContractChargeFeeOfferEntity[]>([]);
 
   const [depositData, setDepositData] = useState<any[]>([]);//保证金
   const [chargeData, setChargeData] = useState<any[]>([]);//租金
@@ -69,7 +69,7 @@ const Detail = (props: DetailProps) => {
             setContractCharge(charge.contractCharge || {});
             setChargeFeeList(charge.chargeFeeList || []);
             setChargeIncreList(charge.chargeIncreList || []);
-            setChargeOfferList(charge.chargeFeeOfferList || []); 
+            setChargeOfferList(charge.chargeFeeOfferList || []);
             setDepositData(charge.depositFeeResultList || []);//保证金明细
             setChargeData(charge.chargeFeeResultList || []);//租金明细   
 
@@ -93,10 +93,10 @@ const Detail = (props: DetailProps) => {
       visible={visible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
       <PageHeader title={infoDetail.state}
-        // extra={[
-        //   <Button key="1">附件</Button>, 
-        //   <Button key="2">打印</Button>,
-        // ]}
+      // extra={[
+      //   <Button key="1">附件</Button>, 
+      //   <Button key="2">打印</Button>,
+      // ]}
       />
       <Divider dashed />
       <Form layout="vertical">
@@ -156,7 +156,7 @@ const Detail = (props: DetailProps) => {
                   </Row>
                 </Card>
 
-                <Card title="滞纳金" className={styles.card}>
+                <Card title="滞纳金" className={styles.addcard}>
                   <Row gutter={24}>
                     <Col lg={12}>
                       <Form.Item label="滞纳金比例" >
@@ -177,7 +177,7 @@ const Detail = (props: DetailProps) => {
                 <Card title="房源信息" className={styles.card}>
                   <Row gutter={24}>
                     <Col lg={24}>
-                      <List  
+                      <List
                         dataSource={infoDetail.houseList}
                         renderItem={item =>
                           <List.Item  >
@@ -298,11 +298,15 @@ const Detail = (props: DetailProps) => {
                         {k.rentalPeriodDivided}
                       </Form.Item>
                     </Col>
-                    <Col lg={4}>
-                      <Form.Item label="天单价换算规则">
-                        {k.dayPriceConvertRule}
-                      </Form.Item>
-                    </Col>
+
+                    {(k.priceUnit == 1 || k.priceUnit == 3) ?
+                      <Col lg={4}>
+                        <Form.Item label="天单价换算规则">
+                          {k.dayPriceConvertRule}
+                        </Form.Item>
+                      </Col>
+                      : null}
+
                     <Col lg={4}>
                       <Form.Item label="年天数">
                         {k.yearDays}
@@ -392,7 +396,7 @@ const Detail = (props: DetailProps) => {
           </TabPane>
           <TabPane tab="租金明细" key="3">
 
-          <ResultList
+            <ResultList
               depositData={depositData}
               chargeData={chargeData}
             ></ResultList>

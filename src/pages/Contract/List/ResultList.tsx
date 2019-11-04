@@ -71,7 +71,7 @@ function ResultList(props: ResultListProps) {
           columns={columns}
           dataSource={depositData} />
       </Card> 
-      <Card title="租金" className={styles.card} >
+      <Card title="租金" className={styles.addcard} >
         <Table
           style={{ border: 'none' }}
           bordered={false}

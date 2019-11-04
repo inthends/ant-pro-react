@@ -36,9 +36,9 @@ interface AddProps {
 const Add = (props: AddProps) => {
   const title = '添加合同';
   const { visible, closeDrawer, form, reload, treeData } = props;
-  const { getFieldDecorator } = form; 
+  const { getFieldDecorator } = form;
   const [industryType, setIndustryType] = useState<any[]>([]); //行业  
-  const [feeitems, setFeeitems] = useState<TreeEntity[]>([]); 
+  const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
   //租金计算结果
   const [depositData, setDepositData] = useState<ChargeFeeResultEntity[]>([]);//保证金
   const [chargeData, setChargeData] = useState<ChargeFeeResultEntity[]>([]);//租金 
@@ -84,7 +84,7 @@ const Add = (props: AddProps) => {
         TermJson.push(data);
 
         //动态添加的租期
-        values.LeaseTerms.map(function (k, index, arr) {  
+        values.LeaseTerms.map(function (k, index, arr) {
           let data: LeaseContractChargeFeeEntity = {};
           data.feeItemId = values.feeItemId[k];
           data.startDate = values.startDate[k];
@@ -177,6 +177,7 @@ const Add = (props: AddProps) => {
           Modal.warning({
             title: '提示',
             content: '请生成租金明细！',
+            okText: '确认'
           });
           return;
         }
@@ -192,7 +193,7 @@ const Add = (props: AddProps) => {
         ContractCharge.payDate = values.contractStartDate.format('YYYY-MM-DD');
 
         let Contract: LeaseContractDTO = {};
-        Contract.no = values.no; 
+        Contract.no = values.no;
         Contract.follower = values.follower;
         Contract.followerId = values.followerId;
         Contract.leaseSize = values.leaseSize;
@@ -204,14 +205,14 @@ const Add = (props: AddProps) => {
         Contract.customer = values.customer;
         Contract.customerId = values.customerId;
         Contract.industry = values.industry;
-        Contract.industryId = values.industryId;
+        //Contract.industryId = values.industryId;
         Contract.legalPerson = values.legalPerson;
         Contract.signer = values.signer;
-        Contract.signerId = values.signerId; 
+        Contract.signerId = values.signerId;
         Contract.customerContact = values.customerContact;
         Contract.customerContactId = values.customerContactId;
         Contract.lateFee = values.lateFee;
-        Contract.lateFeeUnit = values.lateFeeUnit; 
+        Contract.lateFeeUnit = values.lateFeeUnit;
         Contract.maxLateFee = values.maxLateFee;
         Contract.maxLateFeeUnit = values.maxLateFeeUnit;
 
@@ -239,7 +240,7 @@ const Add = (props: AddProps) => {
   };
 
   //打开抽屉时初始化
-  useEffect(() => { 
+  useEffect(() => {
     getCommonItems('IndustryType').then(res => {
       setIndustryType(res || []);
     });
@@ -292,10 +293,10 @@ const Add = (props: AddProps) => {
     form.setFieldsValue({ leaseArea: area.toFixed(2) });
   };
 
-  const onIndustrySelect = (value, option) => {
-    //设置行业名称
-    form.setFieldsValue({ industry: option.props.children });
-  };
+  // const onIndustrySelect = (value, option) => { 
+  //   //设置行业名称
+  //   form.setFieldsValue({ industry: option.props.children });
+  // };
 
 
   return (
@@ -362,7 +363,7 @@ const Add = (props: AddProps) => {
                         })(<DatePicker placeholder="请选择合同签订时间" style={{ width: '100%' }} />)}
                       </Form.Item>
                     </Col>
-                  </Row> 
+                  </Row>
                   <Row gutter={24}>
                     <Col lg={12}>
                       <Form.Item label="合同计租时间">
@@ -401,7 +402,7 @@ const Add = (props: AddProps) => {
                         )}
                       </Form.Item>
                     </Col>
-                  </Row> 
+                  </Row>
                 </Card>
               </Col>
               <Col span={12}>
@@ -439,13 +440,20 @@ const Add = (props: AddProps) => {
                           rules: [{ required: true, message: '请选择行业' }],
                         })(
                           <Select placeholder="请选择行业"
-                            onSelect={onIndustrySelect}
+                            // onSelect={onIndustrySelect}
                           >
-                            {industryType.map(item => (
+                            {/* {industryType.map(item => (
                               <Option value={item.value} key={item.key}>
                                 {item.title}
                               </Option>
+                            ))} */}
+
+                            {industryType.map(item => (
+                              <Option value={item.title} key={item.title}>
+                                {item.title}
+                              </Option>
                             ))}
+
                           </Select>
                         )}
                         {getFieldDecorator('industry', {
@@ -530,7 +538,7 @@ const Add = (props: AddProps) => {
             </Row>
 
           </TabPane>
-          <TabPane tab="费用条款" key="2"> 
+          <TabPane tab="费用条款" key="2">
             <Card title="基本条款" className={styles.card} >
               <Row gutter={24}>
                 <Col lg={4}>

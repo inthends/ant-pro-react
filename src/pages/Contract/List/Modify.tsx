@@ -281,6 +281,7 @@ const Modify = (props: ModifyProps) => {
 
         //合同信息
         let Contract: LeaseContractDTO = {};
+
         Contract.id = id;
         Contract.no = values.no; 
         Contract.follower = values.follower;
@@ -292,9 +293,9 @@ const Modify = (props: ModifyProps) => {
         Contract.calcPrecision = values.calcPrecision;
         Contract.calcPrecisionMode = values.calcPrecisionMode;
         Contract.customer = values.customer;
-        Contract.customerId = values.customerId;
+        Contract.customerId = values.customerId; 
         Contract.industry = values.industry;
-        Contract.industryId = values.industryId;
+        //Contract.industryId = values.industryId; 
         Contract.legalPerson = values.legalPerson;
         Contract.signer = values.signer;
         Contract.signerId = values.signerId; 
@@ -514,7 +515,7 @@ const Modify = (props: ModifyProps) => {
                             rules: [{ required: true, message: '请选择行业' }],
                           })(
                             <Select placeholder="请选择行业"
-                              onSelect={onIndustrySelect}
+                              // onSelect={onIndustrySelect}
                             >
                               {industryType.map(item => (
                                 <Option value={item.value} key={item.key}>
