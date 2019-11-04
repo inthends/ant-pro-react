@@ -19,10 +19,11 @@ interface NotPaymentTableProps {
   form: WrappedFormUtils;
   rowSelect(rowSelectedKeys): void;
   organize?: any;
+  showDetail(billId: string): void;//打开查看页面
 }
 
 function NotPaymentTable(props: NotPaymentTableProps) {
-  const { form, onchange, loading, pagination, data, modify, reload, rowSelect, organize } = props;
+  const { showDetail, form, onchange, loading, pagination, data, modify, reload, rowSelect, organize } = props;
   const { getFieldDecorator } = form;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
@@ -43,11 +44,11 @@ function NotPaymentTable(props: NotPaymentTableProps) {
     });
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     setSelectedRowKeys([]);
     setSumEntity(0);
     form.setFieldsValue({ payAmount: 0 });
-  },[data]);
+  }, [data]);
 
 
   // const editAndDelete = (key: string, currentItem: any) => {
@@ -172,7 +173,7 @@ function NotPaymentTable(props: NotPaymentTableProps) {
     selectedRows.map(item => {
       sumlastAmount = selectedRows.reduce((sum, row) => { return sum + row.lastAmount; }, 0);
     });
-    form.setFieldsValue({ payAmount:sumlastAmount });
+    form.setFieldsValue({ payAmount: sumlastAmount });
     setPayAmount(sumlastAmount);
     setSumEntity(sumlastAmount);
   };
@@ -186,7 +187,7 @@ function NotPaymentTable(props: NotPaymentTableProps) {
   //收款
   const charge = () => {
     if (selectedRowKeys.length == 0) {
-      message.warning('请选择应付项目!');
+      message.warning('请选择应付项目！');
       return;
     }
 
@@ -215,6 +216,8 @@ function NotPaymentTable(props: NotPaymentTableProps) {
             Pay(info).then(res => {
               message.success('付款成功');
               reload();
+              //弹出查看页面
+              showDetail(res);
             });
           }
         });

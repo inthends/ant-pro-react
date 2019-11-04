@@ -19,7 +19,7 @@ interface ModifyProps {
   id?: string;
   // organizeId?: string;
   reload(): void;
-  treeData: TreeEntity[];
+  treeData: any[];
 };
 
 /*详情可编辑单元格*/
@@ -398,18 +398,22 @@ const Modify = (props: ModifyProps) => {
       key: 'amount',
       width: '100px',
       sorter: true,
-    }, {
-      title: '累计减免',
-      dataIndex: 'sumReductionAmount',
-      width: '100px',
-      key: 'sumReductionAmount',
-    }, {
+    },
+
+    {
       title: '本次减免',
       dataIndex: 'reductionAmount',
       width: '100px',
       key: 'reductionAmount',
       editable: true,
       //onChange={(id,item)=>, 
+    },
+
+    {
+      title: '累计减免',
+      dataIndex: 'sumReductionAmount',
+      width: '100px',
+      key: 'sumReductionAmount',
     },
     {
       title: '减免后金额',

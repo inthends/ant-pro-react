@@ -9,7 +9,7 @@ import NotPaymentTable from './NotPaymentTable';
 import PaymentTable from './PaymentTable';
 import FeeModify from './FeeModify';
 import PaymentVerify from './PaymentVerify';
-import ShowBill from './ShowBill';
+import Show from './Show';
 
 const { Content } = Layout;
 const { Search } = Input;
@@ -187,11 +187,13 @@ function Payment() {
     if (id != null && id != '')
       setId(id);
   };
+
   const showBill = (id?) => {
     setShowVisible(true);
     if (id != null && id != '')
       setId(id);
   };
+
   const closeModify = (result?) => {
     setModifyVisible(false);
     if (result) {
@@ -318,7 +320,8 @@ function Payment() {
               rowSelect={(record) => {
                 setId(record.billId);
               }}
-              organize={organize}
+              organize={organize} 
+              showDetail={(billId) => showBill(billId)} 
             />
           </TabPane>
           <TabPane tab="付款单列表" key="2">
@@ -428,7 +431,7 @@ function Payment() {
         id={id}
         reload={() => initPaymentLoadData({ id: organize.code, type: organize.type }, '')}
       />
-      <ShowBill
+      <Show
         visible={showVisible}
         closeDrawer={closeShowDrawer}
         id={id}

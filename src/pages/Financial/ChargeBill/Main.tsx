@@ -73,7 +73,7 @@ function Main() {
     setModifyEdit(edit);
     if (!edit) {
       if (unChargeSelectedKeys.length != 1) {
-        message.warning("请选择一条记录查看");
+        message.warning("请选择一条记录查看！");
         return;
       }
       setModifyVisible(true);
@@ -87,8 +87,8 @@ function Main() {
         setId('');
       }
     }
-
   };
+
   const loadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
@@ -106,7 +106,7 @@ function Main() {
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'BillId';
+      searchCondition.sidx = field ? field : 'billDate';
     }
     return load(searchCondition).then(res => {
       return res;
@@ -115,8 +115,8 @@ function Main() {
 
   const load = data => {
     setLoading(true);
-    data.sidx = data.sidx || 'BillId';
-    data.sord = data.sord || 'asc';
+    data.sidx = data.sidx || 'billDate';
+    data.sord = data.sord || 'desc';
     return GetPageListJson(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
@@ -133,6 +133,20 @@ function Main() {
     });
   };
 
+
+  const initLoadData = (search, unitId = '', showCustomerFee = false) => {
+    setSearch(search);
+    // setShowCustomerFee(showCustomerFee);
+    const queryJson = { keyword: search, unitId: unitId, showCustomerFee: showCustomerFee };
+    const sidx = 'billDate';
+    const sord = 'desc';
+    const { current: pageIndex, pageSize, total } = pagination;
+    return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
+      return res;
+    });
+  };
+
+  //已收款
   const loadChargeData = (paginationConfig?: PaginationConfig, sorter?) => {
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
@@ -156,7 +170,7 @@ function Main() {
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'billId';
+      searchCondition.sidx = field ? field : 'billCode';
     }
     return loadCharge(searchCondition).then(res => {
       return res;
@@ -165,8 +179,8 @@ function Main() {
 
   const loadCharge = data => {
     setLoading(true);
-    data.sidx = data.sidx || 'BillId';
-    data.sord = data.sord || 'asc';
+    data.sidx = data.sidx || 'billCode';
+    data.sord = data.sord || 'desc';
     return ChargeFeePageData(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPaginationCharge(pagesetting => {
@@ -183,20 +197,6 @@ function Main() {
     });
   };
 
-
-  const initLoadData = (search, unitId = '', showCustomerFee = false) => {
-    setSearch(search);
-    // setShowCustomerFee(showCustomerFee);
-    const queryJson = { keyword: search, unitId: unitId, showCustomerFee: showCustomerFee };
-    const sidx = 'BillId';
-    const sord = 'asc';
-    const { current: pageIndex, pageSize, total } = pagination;
-    return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
-      return res;
-    });
-  };
-
-  //已收款
   const initChargeLoadData = (id) => {
     const queryJson = {
       keyword: chargedSearchParams.search ? chargedSearchParams.search : '',
@@ -206,8 +206,8 @@ function Main() {
       StartDate: chargedSearchParams.startDate ? chargedSearchParams.startDate : '',
       EndDate: chargedSearchParams.endDate ? chargedSearchParams.endDate : ''
     };
-    const sidx = 'BillId';
-    const sord = 'asc';
+    const sidx = 'billCode';
+    const sord = 'desc';
     const { current: pageIndex, pageSize, total } = paginationCharge;
     return loadCharge({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
       return res;
@@ -388,6 +388,7 @@ function Main() {
               customerName={customerName}
               showSplit={showSplit}
               showTrans={showTrans}
+              showDetail={(billId) => { chargedRowSelectedKey.billId = billId; showDetail(); }}
             />
           </TabPane>
           <TabPane tab="收款单列表" key="2">

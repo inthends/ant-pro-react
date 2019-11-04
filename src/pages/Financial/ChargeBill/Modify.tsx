@@ -71,14 +71,14 @@ const Modify = (props: ModifyProps) => {
         //加载数据
         GetRoomUsers(organizeId).then(res => {
           setRelationIds(res);
-          GetShowDetail(id).then(value => {
+          GetShowDetail(id).then(info => {
             // let info = value.entity;
             // info.number = value.number; 
             //追加
-            setInfoDetail(value);
+            setInfoDetail(info);
             let customerid = '';
             for (var i = 0; i < res.length; i++) {
-              if (res[i].key == value.relationId) {
+              if (res[i].key == info.relationId) {
                 customerid = res[i].attributeA;
               }
             }

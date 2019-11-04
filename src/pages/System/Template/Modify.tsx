@@ -15,14 +15,15 @@ interface ModifyProps {
   form: WrappedFormUtils<any>;
   closeDrawer(): void;
   reload(): void;
+  typeId: string;
 };
 
 const Modify = (props: ModifyProps) => {
-  const { data, form, visible } = props;
+  const { typeId, data, form, visible } = props;
   const { getFieldDecorator } = form;
   const [orgs, setOrgs] = useState<TreeNode[]>();
-  let initData = data ? data : { enabledMark: 1 };
-  initData.expDate = initData.expDate ? initData.expDate : new Date();
+  let initData = data ? data : { fixTable: false, rowNumbers: 0 };
+  // initData.expDate = initData.expDate ? initData.expDate : new Date();
   const baseFormProps = { form, initData };
   const [fileList, setFileList] = useState<any[]>([]);
   const getOrgs = () => {
@@ -54,6 +55,7 @@ const Modify = (props: ModifyProps) => {
   //数据保存
   const doSave = dataDetail => {
     let modifyData = { ...initData, ...dataDetail, keyValue: initData.id };
+    modifyData.categoryId = typeId;
     return SaveForm(modifyData);
   };
 
@@ -91,18 +93,15 @@ const Modify = (props: ModifyProps) => {
 
   //图片上传结束 
   return (
-    <BaseModifyProvider {...props} name="模板" save={doSave} >
+    <BaseModifyProvider {...props} name="模板" save={doSave}
+      width={750}
+    >
       <Form layout="vertical" hideRequiredMark>
         <Card className={styles.card}>
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
-              field="templateName"
-              label="模板名称"
-              rules={[{ required: true, message: '请输入模板名称' }]}
-            ></ModifyItem>
-            <ModifyItem
-              {...baseFormProps}
+              lg={8}
               field="organizeId"
               label="所属机构"
               type="tree"
@@ -112,15 +111,25 @@ const Modify = (props: ModifyProps) => {
             ></ModifyItem>
             <ModifyItem
               {...baseFormProps}
-              type='checkbox'
-              field="fixTable"
-              label="固定表格"
+              lg={8}
+              field="templateName"
+              label="模板名称"
+              rules={[{ required: true, message: '请输入模板名称' }]}
             ></ModifyItem>
             <ModifyItem
               {...baseFormProps}
+              lg={3}
+              type='checkbox'
+              field="fixTable"
+              label="固定表格"
+              checked={form.getFieldValue('fixTable')}
+            ></ModifyItem>
+            <ModifyItem
+              {...baseFormProps}
+              lg={5}
               field="rowNumbers"
               type='inputNumber'
-              label="表格行数"
+              label="行数"
             ></ModifyItem>
           </Row>
         </Card>
@@ -191,7 +200,7 @@ const Modify = (props: ModifyProps) => {
             >收款明细</Button></Tooltip>
           </Row>
         </Card>
-        <Card className={styles.card}>
+        <Card className={styles.card2}>
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
@@ -222,12 +231,10 @@ const Modify = (props: ModifyProps) => {
               })(
                 <input type='hidden' />
               )}
-
             </Col>
           </Row>
         </Card>
       </Form>
-
     </BaseModifyProvider>
   );
 };

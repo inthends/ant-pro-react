@@ -56,9 +56,9 @@ export function GetAllFeeItems(): Promise<TreeEntity[]> {
 }
 
 //编辑和查看调用
-export function GetShowDetail(data): Promise<any> {
+export function GetShowDetail(keyValue): Promise<any> {
   return request
-    .get(process.env.basePath + `/BillingMain/GetShowDetail?keyvalue=${data}`)
+    .get(process.env.basePath + `/BillingMain/GetShowDetail?keyvalue=${keyValue}`)
     .then(getResult as any);
 }
 //获取转费时候历史的房间住户
@@ -68,9 +68,9 @@ export function GetTransferRoomUsers(roomid, relationid): Promise<any[]> {
     .then(getResult as any);
 }
 //表单明细
-export function GetEntity(data): Promise<TreeEntity[]> {
+export function GetEntity(keyValue): Promise<TreeEntity[]> {
   return request
-    .get(process.env.basePath + `/Receivable/GetEntity?keyValue=${data}`)
+    .get(process.env.basePath + `/Receivable/GetEntity?keyValue=${keyValue}`)
     .then(getResult as any);
 }
 // 收款
@@ -106,24 +106,24 @@ export function TransferBilling(data): Promise<any> {
 }
 
 //删除计费单
-export function RemoveForm(data): Promise<any> {
-  return request.post(process.env.basePath + `/BillingMain/RemoveForm?keyValue=${data}`).then(getResult as any);
+export function RemoveForm(keyValue): Promise<any> {
+  return request.post(process.env.basePath + `/BillingMain/RemoveForm?keyValue=${keyValue}`).then(getResult as any);
 }
 
 //作废收款单/
-export function InvalidForm(data): Promise<any> {
-  return request.post(process.env.basePath + `/Receivable/InvalidForm?keyValue=${data}`).then(getResult as any);
+export function InvalidForm(keyValue): Promise<any> {
+  return request.post(process.env.basePath + `/Receivable/InvalidForm?keyValue=${keyValue}`).then(getResult as any);
 }
 
 //冲红收款单/
 
-export function RedFlush(data): Promise<any> {
-  return request.post(process.env.basePath + `/Receivable/RedFlush?keyValue=${data}`).then(getResult as any);
+export function RedFlush(keyValue): Promise<any> {
+  return request.post(process.env.basePath + `/Receivable/RedFlush?keyValue=${keyValue}`).then(getResult as any);
 }
 
 //验证收款单是否可以冲红
-export function CheckRedFlush(data): Promise<any> {
-  return request.get(process.env.basePath + `/Receivable/CheckRedFlush?keyValue=${data}`).then(getResult as any);
+export function CheckRedFlush(keyValue): Promise<any> {
+  return request.get(process.env.basePath + `/Receivable/CheckRedFlush?keyValue=${keyValue}`).then(getResult as any);
 }
 
 //审核接口
@@ -133,10 +133,15 @@ export function Audit(data): Promise<any> {
 
 
 //获取收款单实体
-export function GetEntityShow(data): Promise<any> {
-  return request.get(process.env.basePath + `/Receivable/GetEntityShow?keyValue=${data}`).then(getResult as any);
+export function GetEntityShow(keyValue): Promise<any> {
+  return request.get(process.env.basePath + `/Receivable/GetEntityShow?keyValue=${keyValue}`).then(getResult as any);
 }
 //获取费用详情
 export function ChargeFeeDetail(data): Promise<any> {
   return request.post(process.env.basePath + `/Receivable/ChargeFeeDetail`, { data: objToFormdata(data) }).then(getResult as any);
+}
+
+//打印
+export function Print(keyValue): Promise<any> {
+  return request.post(process.env.basePath + `/Receivable/Print?keyValue=${keyValue}`).then(getResult as any);
 }

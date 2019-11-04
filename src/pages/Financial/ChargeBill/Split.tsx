@@ -35,8 +35,8 @@ const Split = (props: SplitProps) => {
       form.resetFields();
       if (id != null && id != "") {
         GetShowDetail(id).then(res => {
-          var infoTemp = Object.assign({}, res.entity, { number: res.number, feeName: res.feeName, customerName: res.customerName, unitName: res.unitName });
-          setInfoDetail(infoTemp);
+          // var infoTemp = Object.assign({}, res.entity, { number: res.number, feeName: res.feeName, customerName: res.customerName, unitName: res.unitName });
+          setInfoDetail(res);
           // setMaxAmount(res.entity.amount);
         });
       }

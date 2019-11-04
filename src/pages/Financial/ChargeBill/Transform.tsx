@@ -35,10 +35,9 @@ const Transfrom = (props: TransfromProps) => {
     if (transVisible) {
       if (id) {
         GetShowDetail(id).then(res => {
-          var infoTemp = Object.assign({}, res.entity,
-            { feeName: res.feeName, customerName: res.customerName, unitName: res.unitName });
-          setInfoDetail(infoTemp);
-          GetTransferRoomUsers(res.entity.UnitId, res.entity.RelationId).then(res => {
+          // var infoTemp = Object.assign({}, res.entity,  { feeName: res.feeName, customerName: res.customerName, unitName: res.unitName });
+          setInfoDetail(res);
+          GetTransferRoomUsers(res.unitId, res.relationId).then(res => {
             setRelationIds(res || []);
           });
         })
@@ -90,18 +89,18 @@ const Transfrom = (props: TransfromProps) => {
             <p style={{ fontSize: '18px', fontWeight: 'bold' }}>转费前</p>
           </Row>
           <Row gutter={24}>
-            <Col span={8}>
+            <Col span={10}>
               <Form.Item label="收费房屋"  >
                 {infoDetail.unitName}
               </Form.Item>
             </Col>
 
-            <Col span={8}>
+            <Col span={9}>
               <Form.Item label="收费项目"  >
                 {infoDetail.feeName}
               </Form.Item>
             </Col>
-            <Col span={8}>
+            <Col span={5}>
               <Form.Item label="收费对象"  >
                 {infoDetail.customerName}
               </Form.Item>
@@ -111,7 +110,7 @@ const Transfrom = (props: TransfromProps) => {
             <p style={{ fontSize: '18px', fontWeight: 'bold' }}>转给</p>
           </Row>
           <Row gutter={24}>
-            <Col span={18}>
+            <Col span={24}>
               <Form.Item label="新收费对象"   >
                 {getFieldDecorator('relationId', {
                   // initialValue: infoDetail.relationId,
@@ -133,7 +132,7 @@ const Transfrom = (props: TransfromProps) => {
                 {getFieldDecorator('memo', {
                   // initialValue: infoDetail.memo,
                 })(
-                  <Input.TextArea rows={6} style={{ width: '100%' }} />
+                  <Input.TextArea rows={4} style={{ width: '100%' }} />
                 )}
               </Form.Item>
             </Col>

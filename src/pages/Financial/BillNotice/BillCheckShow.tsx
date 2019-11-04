@@ -194,44 +194,44 @@ const BillCheckShow = (props: BillCheckShowProps) => {
         <Form layout="vertical" hideRequiredMark>
 
           <Row gutter={24}>
-            <Col span={6}>
+            <Col span={8}>
               <Form.Item required label="通知单号">
                 <a>{infoDetail.billCode}</a>
               </Form.Item>
             </Col>
-            <Col span={6}>
+            <Col span={8}>
               <Form.Item required label="通知单日期"  >
                 {String(infoDetail.beginDate).substr(0, 10)}
               </Form.Item>
             </Col>
-            <Col span={6}>
+            {/* <Col span={6}>
               <Form.Item required label="缴费日期"  >
                 {String(infoDetail.mustDate).substr(0, 10)}
               </Form.Item>
-            </Col>
-            <Col span={6}>
+            </Col> */}
+            <Col span={8}>
               <Form.Item required label="类型"   >
                 {infoDetail.billType}
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={24}>
-            <Col span={6}>
+            <Col span={8}>
               <Form.Item required label="业户名称"  >
                 {infoDetail.customer}
               </Form.Item>
             </Col>
-            <Col span={6}>
-              <Form.Item required label="打印模板"   >
+            {/* <Col span={6}>
+              <Form.Item required label="打印模板" >
                 {infoDetail.templateName}
               </Form.Item>
-            </Col>
-            <Col span={6}>
+            </Col> */}
+            <Col span={8}>
               <Form.Item label="审核人"  >
                 {infoDetail.verifyPerson}
               </Form.Item>
             </Col>
-            <Col span={6}>
+            <Col span={8}>
               <Form.Item label="审核情况"  >
                 {infoDetail.verifyMemo}
               </Form.Item>

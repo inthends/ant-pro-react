@@ -1,10 +1,10 @@
 //查看收款单
-import { Button, Card, Table, Col, Drawer, Form, Row } from 'antd';
+import { Spin, Modal, Button, Card, Table, Col, Drawer, Form, Row } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetEntityShow, ChargeFeeDetail } from './Main.service';
+import { GetEntityShow, ChargeFeeDetail, Print } from './Main.service';
 import moment from 'moment';
 import styles from './style.less';
 
@@ -152,6 +152,24 @@ const Show = (props: ShowProps) => {
   const close = () => {
     closeShow();
   };
+
+
+  const onPrint = () => {
+    //打印
+    Modal.confirm({
+      title: '请确认',
+      content: `您是否要打印吗？`,
+      onOk: () => {
+        setLoading(true);
+        Print(id).then(res => {
+          //window.location.href = res;
+          window.open(res);
+          setLoading(false);
+        });
+      },
+    }); 
+  };
+
   return (
     <Drawer
       title={title}
@@ -161,71 +179,73 @@ const Show = (props: ShowProps) => {
       visible={showVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
-      <Card className={styles.card}>
-        <Form layout="vertical" >
-          <Row gutter={24}>
-            <Col span={6}>
-              <Form.Item label="收款单号"  >
-                {infoDetail.billCode}
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item label="收款日期" >
-                {infoDetail.billDate}
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item label="发票编号"  >
-                {infoDetail.invoiceCdde}
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item label="收款编号"  >
-                {infoDetail.payCode}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={24}>
-            <Col span={6}>
-              <Form.Item label="冲红单号" >
-                {infoDetail.linkId}
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item label="收款人"  >
-                {infoDetail.createUserName}
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item label="审核人"   >
-                {infoDetail.verifyPerson}
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item label="审核情况"   >
-                {infoDetail.verifyMemo}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={24}>
-            <Col span={24}>
-              <Form.Item label="收款金额" >
-                {`${infoDetail.payAmountA + infoDetail.payAmountB + infoDetail.payAmountC}元,其中${infoDetail.payTypeA} ${infoDetail.payAmountA}元，${infoDetail.payTypeB} ${infoDetail.payAmountB}元， ${infoDetail.payTypeC} ${infoDetail.payAmountC}元`}
-              </Form.Item>
-            </Col>
-          </Row> 
-          <Table
-            // title={() => '费用明细'}
-            size="middle"
-            dataSource={chargeBillData}
-            columns={columns}
-            rowKey={record => record.billId}
-            pagination={pagination}
-            scroll={{ y: 500, x: 1150 }}
-            loading={loading}
-          />
-        </Form>
-      </Card>
+      <Spin tip="数据加载中..." spinning={loading}>
+        <Card className={styles.card}>
+          <Form layout="vertical" >
+            <Row gutter={24}>
+              <Col span={6}>
+                <Form.Item label="收款单号"  >
+                  {infoDetail.billCode}
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item label="收款日期" >
+                  {infoDetail.billDate}
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item label="发票编号"  >
+                  {infoDetail.invoiceCdde}
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item label="收款编号"  >
+                  {infoDetail.payCode}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={24}>
+              <Col span={6}>
+                <Form.Item label="冲红单号" >
+                  {infoDetail.linkId}
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item label="收款人"  >
+                  {infoDetail.createUserName}
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item label="审核人"   >
+                  {infoDetail.verifyPerson}
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item label="审核情况"   >
+                  {infoDetail.verifyMemo}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={24}>
+              <Col span={24}>
+                <Form.Item label="收款金额" >
+                  {`${infoDetail.payAmountA + infoDetail.payAmountB + infoDetail.payAmountC}元,其中${infoDetail.payTypeA} ${infoDetail.payAmountA}元，${infoDetail.payTypeB} ${infoDetail.payAmountB}元， ${infoDetail.payTypeC} ${infoDetail.payAmountC}元`}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Table
+              // title={() => '费用明细'}
+              size="middle"
+              dataSource={chargeBillData}
+              columns={columns}
+              rowKey={record => record.billId}
+              pagination={pagination}
+              scroll={{ y: 500, x: 1150 }}
+              loading={loading}
+            />
+          </Form>
+        </Card>
+      </Spin>
       <div
         style={{
           position: 'absolute',
@@ -239,8 +259,11 @@ const Show = (props: ShowProps) => {
         }}
       >
         <Button onClick={close} style={{ marginRight: 8 }}>
-        关闭
+          关闭
            </Button>
+        <Button onClick={onPrint} type="primary">
+          打印
+        </Button>
       </div>
 
     </Drawer>

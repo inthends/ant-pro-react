@@ -24,7 +24,7 @@ function ParkingLot() {
   const [currData, setCurrData] = useState<ParkingData>();
   const [search, setSearch] = useState<string>('');
   //是否能新增
-  const [isAdd, setIsAdd] = useState<boolean>(true);
+  const [isAdd, setIsAdd] = useState<boolean>(false);
   // const [orgs, setOrgs] = useState<TreeNode[]>();
   const [orgs, setOrgs] = useState<any[]>([]);
 

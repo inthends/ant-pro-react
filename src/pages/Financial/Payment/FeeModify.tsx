@@ -65,9 +65,9 @@ const FeeModify = (props: FeeModifyProps) => {
 
         GetRoomUsers(organize.eventKey).then(res => {
           setRelationID(res);
-          GetShowDetail(id).then(value => {
-            let info = value.entity;
-            info.number = value.number;
+          GetShowDetail(id).then(info => {
+            // let info = value.entity;
+            // info.number = value.number;
             setInfoDetail(info);
             let customerid = "";
             for (var i = 0; i < res.length; i++) {

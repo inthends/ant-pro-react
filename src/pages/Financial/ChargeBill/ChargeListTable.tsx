@@ -52,7 +52,7 @@ function ChargeListTable(props: ChargeListTableProps) {
             content: `您确定要冲红该收款单${currentItem.billCode}`,
             onOk: () => {
               RedFlush(currentItem.billId).then(() => {
-                message.success('冲红成功');
+                message.success('冲红成功！');
                 reload();
               });
             },
@@ -75,10 +75,10 @@ function ChargeListTable(props: ChargeListTableProps) {
     else if (key === 'invalid') {
       Modal.confirm({
         title: '请确认',
-        content: `您是否要作废${currentItem.billCode}`,
+        content: `您是否要作废${currentItem.billCode}？`,
         onOk: () => {
           InvalidForm(currentItem.billId).then(() => {
-            message.success('作废成功');
+            message.success('作废成功！');
             reload();
           });
         },
@@ -138,7 +138,7 @@ function ChargeListTable(props: ChargeListTableProps) {
       title: '状态',
       dataIndex: 'statusName',
       key: 'statusName',
-      width: 80
+      width: 60
     }, {
       title: '审核日期',
       dataIndex: 'verifyDate',

@@ -22,10 +22,12 @@ interface ListTableProps {
   customerName: string;
   showSplit(id: string): void;
   showTrans(id: string): void;
-}
+  showDetail(billId: string): void;//打开查看页面
+};
 
 function ListTable(props: ListTableProps) {
-  const { form, onchange, loading, pagination, data, modify, reload, rowSelect, organizeId, customerName, showSplit, showTrans } = props;
+  const { form, onchange, loading, pagination, data, modify, reload,
+    rowSelect, organizeId, customerName, showSplit, showTrans, showDetail } = props;
   const { getFieldDecorator } = form;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
@@ -42,13 +44,13 @@ function ListTable(props: ListTableProps) {
   const doDelete = record => {
     Modal.confirm({
       title: '请确认',
-      content: `您是否要删除${record.feeName}`,
+      content: `您是否要删除${record.feeName}？`,
       okText: '确认',
       cancelText: '取消',
       onOk: () => {
         //console.log(record);
         RemoveForm(record.billId).then(() => {
-          message.success('删除成功');
+          message.success('删除成功！');
           reload();
         });
       },
@@ -216,7 +218,7 @@ function ListTable(props: ListTableProps) {
   //收款
   const charge = () => {
     if (selectedRowKeys.length == 0) {
-      message.warning('请选择收款项目!');
+      message.warning('请选择收款项目！');
       return;
     }
 
@@ -244,7 +246,10 @@ function ListTable(props: ListTableProps) {
             }
             Charge(info).then(res => {
               message.success('收款成功！');
-              reload();
+              reload(); 
+              //弹出查看页面
+              showDetail(res);
+
             });
           }
         });

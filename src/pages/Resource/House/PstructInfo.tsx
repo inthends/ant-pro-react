@@ -83,6 +83,7 @@ const PstructInfo = (props: PstructInfoProps) => {
       if (!errors) {
         //const newData = data ? { ...data.vendor, ...values } : values; 
         const newData = data ? { ...data, ...values } : values;
+        newData.isPublish = true;
         doSave(newData);
       }
     });
@@ -337,13 +338,13 @@ const PstructInfo = (props: PstructInfoProps) => {
                     initialValue: infoDetail.buildingFormat ? '多层' : infoDetail.buildingFormat,
                   })(
                     <Select>
-                      <Option value="多层" >多层</Option>
+                      <Option value="多层">多层</Option>
                       <Option value="小高层">小高层</Option>
-                      <Option value="高层" >高层</Option>
-                      <Option value="超高层" >超高层</Option>
-                      <Option value="联排别墅" >联排别墅</Option>
-                      <Option value="独栋别墅" >独栋别墅</Option>
-                      <Option value="叠加别墅" >叠加别墅</Option>
+                      <Option value="高层">高层</Option>
+                      <Option value="超高层">超高层</Option>
+                      <Option value="联排别墅">联排别墅</Option>
+                      <Option value="独栋别墅">独栋别墅</Option>
+                      <Option value="叠加别墅">叠加别墅</Option>
                     </Select>
                   )}
                 </Form.Item>
@@ -386,6 +387,7 @@ const PstructInfo = (props: PstructInfoProps) => {
                     })(
                       <input type='hidden' />
                     )}
+
                   </Form.Item>
                 </Col>
                 <Col lg={12}>

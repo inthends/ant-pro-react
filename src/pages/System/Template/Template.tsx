@@ -11,8 +11,20 @@ const { Sider } = Layout;
 const { Content } = Layout;
 const { Search } = Input;
 
+interface SearchParam {
+  typeId: string;
+  type: string;
+  keyword: string;
+}
+
 const Template = () => {
-  const [itemId, setItemId] = useState<string>();
+  // const [itemId, setItemId] = useState<string>(); 
+  const [search, setSearch] = useState<SearchParam>({
+    typeId: '',
+    type: '',
+    keyword: '',
+  });
+
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<any[]>([]);
@@ -21,11 +33,14 @@ const Template = () => {
   const { hideSider, setHideSider } = useContext(SiderContext);
   const [treeData, setTreeData] = useState<any[]>([]);
 
+  //是否能新增
+  const [isDisabled, setDisabled] = useState<boolean>(true);
+
   useEffect(() => {
     GetDataItemTreeList().then((res) => {
       setTreeData(res || []);
     });
-    initLoadData(itemId);
+    initLoadData(search);
   }, []);
 
   const closeDrawer = () => {
@@ -39,11 +54,11 @@ const Template = () => {
     setCurrData(item);
   };
   const loadData = (
-    itemId: any,
+    searchParam: any,
     paginationConfig?: PaginationConfig,
     sorter?
   ) => {
-    setItemId(itemId);
+    setSearch(searchParam);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: pagination.pageSize,
@@ -53,7 +68,7 @@ const Template = () => {
       pageIndex,
       pageSize,
       total,
-      itemId: itemId
+      queryJson: searchParam
     };
 
     if (sorter) {
@@ -86,13 +101,13 @@ const Template = () => {
     });
   };
 
-  const initLoadData = (itemId) => {
-    setItemId(itemId);
-    //const queryJson = searchParam;
+  const initLoadData = (searchParam: SearchParam) => {
+    setSearch(searchParam);
+    const queryJson = searchParam;
     const sidx = "CreateDate";
     const sord = "desc";
     const { current: pageIndex, pageSize, total } = pagination;
-    return load({ pageIndex, pageSize, sidx, sord, total, itemId }).then(
+    return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(
       res => {
         return res;
       }
@@ -100,13 +115,23 @@ const Template = () => {
   };
 
   const selectTree = (item) => {
-    var value = item.node.props.value;
-    initLoadData(value);
-    setItemId(itemId);
+    var type = item.node.props.type;
+    if (type == '1') {
+      setDisabled(true);
+      type = '';
+    }
+    else if (type == '2') {
+      setDisabled(true);
+    } else {
+      setDisabled(false);
+    }
+
+    var typeId = item.node.props.value;
+    initLoadData({ ...search, typeId, type });
   };
 
   return (
-    <Layout style={{ height: "100%" }}> 
+    <Layout style={{ height: "100%" }}>
       <Sider
         theme="light"
         style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh + 10px)' }}
@@ -145,18 +170,20 @@ const Template = () => {
       </Sider>
 
       <Content style={{ paddingLeft: '18px' }}>
-        <div style={{ marginBottom: 20, padding: "3px 0" }}> 
+        <div style={{ marginBottom: 20, padding: "3px 0" }}>
           <Search
             key='search'
             className="search-input"
             placeholder="请输入要查询的关键词"
-            style={{ width: 200 }} 
+            style={{ width: 200 }}
+            onSearch={keyword => loadData({ ...search, keyword })}
           />
 
           <Button
             type="primary"
             style={{ float: "right" }}
             onClick={() => showDrawer()}
+            disabled={isDisabled}
           >
             <Icon type="plus" />
             模板
@@ -164,21 +191,22 @@ const Template = () => {
         </div>
         <ListTable
           onchange={(paginationConfig, filters, sorter) =>
-            loadData(itemId, paginationConfig, sorter)
+            loadData(search, paginationConfig, sorter)
           }
           loading={loading}
           pagination={pagination}
           data={data}
           modify={showDrawer}
           choose={showChoose}
-          reload={() => initLoadData(itemId)} 
+          reload={() => initLoadData(search)}
         />
       </Content>
       <Modify
         visible={modifyVisible}
         closeDrawer={closeDrawer}
+        typeId={search.typeId}
         data={currData}
-        reload={() => initLoadData(itemId)}
+        reload={() => initLoadData(search)}
       />
 
     </Layout>

@@ -1,5 +1,5 @@
 import Page from "@/components/Common/Page";
-import { Divider, message, Modal,  Table } from "antd";
+import { Tag, Divider, message, Modal, Table } from "antd";
 import { ColumnProps, PaginationConfig } from "antd/lib/table";
 import React from "react";
 import { RemoveForm } from "./Template.service";
@@ -11,7 +11,7 @@ interface ListTableProps {
   modify(record: any): void;
   choose(record: any): void;
   onchange(page: any, filter: any, sort: any): any;
-  reload(): void; 
+  reload(): void;
 }
 
 function ListTable(props: ListTableProps) {
@@ -19,11 +19,11 @@ function ListTable(props: ListTableProps) {
   const doDelete = record => {
     Modal.confirm({
       title: "请确认",
-      content: `您是否要删除 ${record.templateName} 吗`,
+      content: `您是否要删除 ${record.templateName} 吗？`,
       onOk: () => {
         RemoveForm(record.id)
           .then(() => {
-            message.success("删除成功");
+            message.success("删除成功！");
             reload();
           })
           .catch(e => { });
@@ -33,36 +33,52 @@ function ListTable(props: ListTableProps) {
   const doModify = record => {
     modify({ ...record });
   };
- 
+
   const columns = [
     {
       title: "模板名称",
       dataIndex: "templateName",
       key: "templateName",
-      width: 200,
+      width: 250,
     },
+    // {
+    //   title: "文件名称",
+    //   dataIndex: "fileName",
+    //   key: "fileName",
+    //   width: 250
+    // },
+
     {
-      title: "文件名称",
-      dataIndex: "fileName",
-      key: "fileName",
-      width: 200
+      title: '固定表格',
+      dataIndex: 'fixTable',
+      key: 'fixTable',
+      width: 100,
+      render: val => val == 1 ? <Tag color="#19d54e">是</Tag> : <Tag color="#e4aa5b">否</Tag>
+    },
+
+    {
+      title: "表格行数",
+      dataIndex: "rowNumbers",
+      key: "rowNumbers",
+      width: 100
     },
     {
       title: "创建人",
       dataIndex: "createUserName",
       key: "createUserName",
-      width: 100
+      width: 80
     },
     {
       title: "创建时间",
       dataIndex: "createDate",
       key: "createDate",
       width: 120
-    },  
+    },
     {
       title: "操作",
       dataIndex: "operation",
       key: "operation",
+      align: 'center',
       width: 70,
       render: (text, record) => {
         return [
@@ -94,4 +110,3 @@ function ListTable(props: ListTableProps) {
 
 export default ListTable;
 
- 

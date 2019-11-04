@@ -1,13 +1,13 @@
 //查看付款单
-import { Card, Button, Col,   Drawer, Form, Row,  Table } from 'antd';
+import { Modal,Card, Button, Col, Drawer, Form, Row, Table } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { GetEntity, PaymentFeeDetail } from './Payment.service';
+import { Print, GetEntity, PaymentFeeDetail } from './Payment.service';
 import styles from './style.less';
-import moment from 'moment'; 
-interface ShowBillProps {
+import moment from 'moment';
+interface ShowProps {
   visible: boolean;
   closeDrawer(): void;
   form: WrappedFormUtils;
@@ -16,10 +16,10 @@ interface ShowBillProps {
   // reload(): void;
 }
 
-const ShowBill = (props: ShowBillProps) => {
+const Show = (props: ShowProps) => {
   const { visible, closeDrawer, form, id } = props;
   const title = '查看付款单';
-  const [loading, setLoading] = useState<boolean>(false); 
+  const [loading, setLoading] = useState<boolean>(false);
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [data, setData] = useState<any>();
   const [pagination, setPagination] = useState<DefaultPagination>(new DefaultPagination());
@@ -93,6 +93,22 @@ const ShowBill = (props: ShowBillProps) => {
       return res;
     }).catch(() => {
       setLoading(false);
+    });
+  };
+
+  const onPrint = () => {
+    //打印
+    Modal.confirm({
+      title: '请确认',
+      content: `您是否要打印吗？`,
+      onOk: () => {
+        setLoading(true);
+        Print(id).then(res => {
+          //window.location.href = res;
+          window.open(res);
+          setLoading(false);
+        });
+      },
     });
   };
 
@@ -192,61 +208,61 @@ const ShowBill = (props: ShowBillProps) => {
       <Card className={styles.card}>
         <Form layout="vertical" >
           {/* <Spin tip="数据加载中..." spinning={loading}> */}
-            <Row gutter={24}>
-              <Col span={8}>
-                <Form.Item  label="付款单号">
-                  {infoDetail.billCode}
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item  label="付款日期"  >
+          <Row gutter={24}>
+            <Col span={8}>
+              <Form.Item label="付款单号">
+                {infoDetail.billCode}
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="付款日期"  >
                 {String(infoDetail.billDate).substr(0, 10)}
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item  label="经办人"  >
-                  {infoDetail.createUserName} 
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={24}>
-              <Col span={8}>
-                <Form.Item  label="本次付款"   >
-                  {infoDetail.payAmount} 
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item  label="付款方式"  >
-                  {infoDetail.payType} 
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item  label="审核人"   >
-                  {infoDetail.verifyPerson} 
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={24}>
-                <Form.Item label="备注"  >
-                  {infoDetail.memo} 
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Table<any>  
-                size="middle"  
-                columns={columns}
-                dataSource={data}
-                rowKey="billId"
-                pagination={pagination}
-                scroll={{ y: 500, x: 1000 }}
-                loading={loading}
-                onChange={(pagination: PaginationConfig, filters, sorter) =>
-                  initPaymentFeeDetail(pagination, sorter)
-                }
-              />
-            </Row>
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="经办人"  >
+                {infoDetail.createUserName}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={24}>
+            <Col span={8}>
+              <Form.Item label="本次付款"   >
+                {infoDetail.payAmount}
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="付款方式"  >
+                {infoDetail.payType}
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="审核人"   >
+                {infoDetail.verifyPerson}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={24}>
+              <Form.Item label="备注"  >
+                {infoDetail.memo}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <Table<any>
+              size="middle"
+              columns={columns}
+              dataSource={data}
+              rowKey="billId"
+              pagination={pagination}
+              scroll={{ y: 500, x: 1000 }}
+              loading={loading}
+              onChange={(pagination: PaginationConfig, filters, sorter) =>
+                initPaymentFeeDetail(pagination, sorter)
+              }
+            />
+          </Row>
           {/* </Spin> */}
         </Form>
       </Card>
@@ -268,10 +284,13 @@ const ShowBill = (props: ShowBillProps) => {
         >
           关闭
         </Button>
+        <Button onClick={onPrint} type="primary">
+          打印
+        </Button>
       </div>
     </Drawer>
   );
 };
 
-export default Form.create<ShowBillProps>()(ShowBill);
+export default Form.create<ShowProps>()(Show);
 

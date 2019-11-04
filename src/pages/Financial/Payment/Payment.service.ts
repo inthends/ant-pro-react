@@ -72,3 +72,8 @@ export function GetPayFeeItemDetail(feeitemid,roomid): Promise< any > {
 export function PaymentFeeDetail(data): Promise<any> {
   return request.post(process.env.basePath + `/Payment/PaymentFeeDetail`, {data:objToFormdata(data)}).then(getResult as any);
 }
+
+//打印
+export function Print(keyValue): Promise<any> {
+  return request.post(process.env.basePath + `/Payment/Print?keyValue=${keyValue}`).then(getResult as any);
+}
