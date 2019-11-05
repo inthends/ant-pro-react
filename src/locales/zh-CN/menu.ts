@@ -22,11 +22,11 @@ export default {
 
   //菜单
   'menu.dashboard': '数据中心',
-  'menu.dashboard.analysis': '数据分析', 
-  'menu.dashboard.reconciliation': '对账单', 
+  'menu.dashboard.analysis': '数据分析',
+  'menu.dashboard.reconciliation': '对账单',
   'menu.dashboard.billdetails': '账单明细',
   'menu.dashboard.receiptdetails': '实收明细',
-  
+
 
   'menu.resource': '资源管理',
   'menu.resource.house': '项目资料',
@@ -49,14 +49,18 @@ export default {
   'menu.estate': '物业管理',
   'menu.estate.servicedesk': '服务总台',
   'menu.estate.repair': '报修管理',
-  'menu.estate.complaint': '投诉管理', 
- 
+  'menu.estate.complaint': '投诉管理',
+
   'menu.admin': '行政管理',
-  'menu.admin.news': '信息发布', 
-  'menu.admin.warehouse': '仓库管理', 
+  'menu.admin.news': '信息发布',
+  'menu.admin.warehouse': '仓库管理',
 
   'menu.contract': '资产运营',
   'menu.contract.list': '合同管理',
+
+  //workflow
+  'menu.workflow': '流程中心',
+  'menu.workflow.flow': '流程设置', 
 
   'menu.system': '系统管理',
   'menu.system.organize': '机构设置',

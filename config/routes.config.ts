@@ -54,7 +54,7 @@ export default [
       {
         name: 'dashboard',
         path: '/dashboard',
-        component: './dashboard/dashboard',
+        // component: './dashboard/dashboard',
         icon: 'dashboard',
         routes: [
           {
@@ -88,8 +88,7 @@ export default [
             name: 'receiptdetails',
             path: '/dashboard/receiptdetails',
             component: './dashboard/ReceiptDetails/ReceiptDetails',
-          }, 
-
+          },  
         ],
       },
 
@@ -261,11 +260,30 @@ export default [
           // },
         ],
       },
-      // {
-      //   name: '流程中心',
-      //   path: '/welcome6',
-      //   component: './Welcome',
-      // }, 
+      {
+        name: 'workflow',
+        path: '/workflow',
+        // component: './workflow/editormain',
+        icon: 'highlight', 
+        routes: [
+          {
+            name: 'flow',
+            path: '/workflow/flow',
+            component: './workflow/flow',
+          },
+          // {
+          //   name: 'mind',
+          //   path: '/editor/mind',
+          //   component: './editor/mind',
+          // },
+          // {
+          //   name: 'koni',
+          //   path: '/editor/koni',
+          //   component: './editor/koni',
+          // },
+        ],
+      },
+
       {
         name: 'system',
         path: '/system',

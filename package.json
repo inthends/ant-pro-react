@@ -60,6 +60,7 @@
     "braft-editor": "^2.3.8",
     "classnames": "^2.2.6",
     "dva": "^2.4.1",
+    "gg-editor": "^2.0.2",
     "ifanrx-react-ueditor": "^2.3.0",
     "lodash": "^4.17.15",
     "lodash-decorators": "^6.0.1",

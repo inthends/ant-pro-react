@@ -11,7 +11,7 @@ interface ModifyProps {
 }
 const ChooseUser = (props: ModifyProps) => {
   const { visible, data, close } = props;
-  const { roleId = '' } = data || {};
+  // const { roleId = '' } = data || {};
   const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
   const [treeData, setTreeData] = useState<any[]>([]); 
   const [searchText, setSearchText] = useState<string>('');
@@ -28,7 +28,7 @@ const ChooseUser = (props: ModifyProps) => {
   }, [visible]);
   // 此处搜索只能做前端过滤，否则会导致其他部门有权限的员工被清空，除非保存时参数多传部门
   const searchUser = () => {
-    GetUserList({ roleId, departmentId: ''}).then(res => {
+    GetUserList('').then(res => {
       setUserList(res || []);
     });
   };
@@ -95,7 +95,7 @@ const ChooseUser = (props: ModifyProps) => {
               className="search-input"
               placeholder="请输入要查询的关键词"
               onSearch={setSearchText}
-              style={{ width: 240 }}
+              style={{ width: 200 }}
             />
           </div>
           <div style={{ paddingTop: 24 }}>
