@@ -9,6 +9,7 @@ import { getResult } from '@/utils/networkUtils';
 import Add from './Add';
 import Modify from './Modify';
 import Detail from './Detail';
+import ChooseUser from './ChooseUser';
 import { GetQuickSimpleTreeAllForContract } from '@/services/commonItem';
 
 const { Content } = Layout;
@@ -18,7 +19,6 @@ function Main() {
   const [addVisible, setAddVisible] = useState<boolean>(false);
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   const [detailVisible, setDetailVisible] = useState<boolean>(false);
-
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [data, setData] = useState<any[]>([]);
@@ -26,6 +26,9 @@ function Main() {
   const [chargeId, setChargeId] = useState<string>();
   const [search, setSearch] = useState<string>('');
   const [treeData, setTreeData] = useState<any[]>([]);
+
+  const [userVisible, setUserVisible] = useState<boolean>(false);
+
 
   const closeAddDrawer = () => {
     setAddVisible(false);
@@ -121,6 +124,11 @@ function Main() {
     initLoadData('');
   }, []);
 
+  const showChoose = () => {
+    setUserVisible(true);
+    // setCurrData(item);
+  };
+
   return (
     <Layout style={{ height: '100%' }}>
       <Content  >
@@ -166,6 +174,7 @@ function Main() {
         id={id}
         chargeId={chargeId}
         reload={() => initLoadData(search)}
+        choose={showChoose}
       />
 
       <Detail
@@ -175,6 +184,12 @@ function Main() {
         chargeId={chargeId}
         reload={() => initLoadData(search)}
       />
+
+      <ChooseUser
+        visible={userVisible}
+        close={() => setUserVisible(false)}
+      />
+
     </Layout>
   );
 }

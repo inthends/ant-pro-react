@@ -436,7 +436,7 @@ const Add = (props: AddProps) => {
                     </Col>
                     <Col lg={12}>
                       <Form.Item label="行业" required>
-                        {getFieldDecorator('industryId', {
+                        {getFieldDecorator('industry', {
                           rules: [{ required: true, message: '请选择行业' }],
                         })(
                           <Select placeholder="请选择行业"

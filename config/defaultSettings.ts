@@ -54,7 +54,7 @@ export default {
   menu: {
     locale: true,
   },
-  title: 'A6物业管理系统',
+  title: 'A6资产管理系统',
   pwa: false,
   iconfontUrl: '',
 } as DefaultSettings;

@@ -74,7 +74,8 @@ function ListTable(props: ListTableProps) {
     {
       title: '合同状态',
       dataIndex: 'state',
-      key: 'state',
+      align:'center',
+      key: 'state', 
       width: 100,
     },
     {

@@ -34,11 +34,12 @@ interface ModifyProps {
   form: WrappedFormUtils;
   reload(): void;
   treeData: any[];
+  choose(): void;
 };
 
 const Modify = (props: ModifyProps) => {
   const title = '修改合同';
-  const { visible, closeDrawer, id, form, chargeId, treeData, reload } = props;
+  const { visible, closeDrawer, id, form, chargeId, treeData, reload, choose } = props;
   const { getFieldDecorator } = form;
   //const [industryType, setIndustryType] = useState<any[]>([]); //行业  
   //const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
@@ -57,7 +58,6 @@ const Modify = (props: ModifyProps) => {
   const [RebateJson, setRebateJson] = useState<string>();
   const [userSource, setUserSource] = useState<any[]>([]);
   const [rooms, setRooms] = useState<any[]>([]);
-
   const [loading, setLoading] = useState<boolean>(false);
 
   const close = () => {
@@ -171,8 +171,7 @@ const Modify = (props: ModifyProps) => {
         // data.payCycle = values.payCycle[0];
         // data.rentalPeriodDivided = values.rentalPeriodDivided[0];
         // TermJson.push(data); 
-
-
+ 
         //动态添加的租期
         values.LeaseTerms.map(function (k, index, arr) {
           let data: LeaseContractChargeFeeEntity = {};
@@ -234,9 +233,9 @@ const Modify = (props: ModifyProps) => {
         setTermJson(strTermJson);
 
         let strRateJson = JSON.stringify(RateJson);
-        setRateJson(strRateJson); 
+        setRateJson(strRateJson);
         let strRebateJson = JSON.stringify(RebateJson);
-        setRebateJson(strRebateJson);  
+        setRebateJson(strRebateJson);
         GetChargeDetail({
           ...entity,
           LeaseContractId: '',
@@ -256,6 +255,16 @@ const Modify = (props: ModifyProps) => {
       }
     });
   };
+
+
+  const approve = () => {
+
+    //弹出选人
+    choose();
+    //save(); 
+
+  };
+
 
   const save = () => {
     form.validateFields((errors, values) => {
@@ -281,9 +290,8 @@ const Modify = (props: ModifyProps) => {
 
         //合同信息
         let Contract: LeaseContractDTO = {};
-
         Contract.id = id;
-        Contract.no = values.no; 
+        Contract.no = values.no;
         Contract.follower = values.follower;
         Contract.followerId = values.followerId;
         Contract.leaseSize = values.leaseSize;
@@ -293,16 +301,16 @@ const Modify = (props: ModifyProps) => {
         Contract.calcPrecision = values.calcPrecision;
         Contract.calcPrecisionMode = values.calcPrecisionMode;
         Contract.customer = values.customer;
-        Contract.customerId = values.customerId; 
+        Contract.customerId = values.customerId;
         Contract.industry = values.industry;
         //Contract.industryId = values.industryId; 
         Contract.legalPerson = values.legalPerson;
         Contract.signer = values.signer;
-        Contract.signerId = values.signerId; 
+        Contract.signerId = values.signerId;
         Contract.customerContact = values.customerContact;
         Contract.customerContactId = values.customerContactId;
         Contract.lateFee = values.lateFee;
-        Contract.lateFeeUnit = values.lateFeeUnit; 
+        Contract.lateFeeUnit = values.lateFeeUnit;
         Contract.maxLateFee = values.maxLateFee;
         Contract.maxLateFeeUnit = values.maxLateFeeUnit;
 
@@ -510,12 +518,12 @@ const Modify = (props: ModifyProps) => {
                       </Col>
                       <Col lg={12}>
                         <Form.Item label="行业" required>
-                          {getFieldDecorator('industryId', {
-                            initialValue: infoDetail.industryId,
+                          {getFieldDecorator('industry', {
+                            initialValue: infoDetail.industry,
                             rules: [{ required: true, message: '请选择行业' }],
                           })(
                             <Select placeholder="请选择行业"
-                              // onSelect={onIndustrySelect}
+                            // onSelect={onIndustrySelect}
                             >
                               {industryType.map(item => (
                                 <Option value={item.value} key={item.key}>
@@ -668,10 +676,13 @@ const Modify = (props: ModifyProps) => {
         }}
       >
         <Button onClick={close} style={{ marginRight: 8 }}>
-          取消
+          关闭
           </Button>
-        <Button onClick={save} type="primary">
-          确定
+        <Button onClick={save} style={{ marginRight: 8 }}>
+          保存
+          </Button>
+        <Button onClick={approve} type="primary">
+          提交
           </Button>
       </div>
     </Drawer >

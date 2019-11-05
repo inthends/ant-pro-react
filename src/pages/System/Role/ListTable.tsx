@@ -10,8 +10,7 @@ interface ListTableProps {
   data: any[];
   modify(record: any): void;
   choose(record: any): void;
-  showAuth(record: any): void;
-
+  showAuth(record: any): void; 
   onchange(page: any, filter: any, sort: any): any;
   reload(): void;
   setData(data: any[]): void;

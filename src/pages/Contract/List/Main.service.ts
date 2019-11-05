@@ -51,3 +51,15 @@ export function GetCharge(keyValue): Promise<ChargeDetailDTO> {
     .get(process.env.basePath + `/Contract/GetCharge?keyValue=${keyValue}`)
     .then(getResult as any);
 }
+
+export function GetDepartmentTreeJson(): Promise<any> {
+  return request
+    .get(process.env.basePath + `/PermissionRole/GetDepartmentTreeJson`)
+    .then(getResult as any);
+}
+
+export function GetUserList(data): Promise<any> {
+  return request
+    .get(process.env.basePath + `/PermissionRole/GetUserListJson?${objToUrl(data)}`)
+    .then(getResult as any);
+}

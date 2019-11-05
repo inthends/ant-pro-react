@@ -29,12 +29,14 @@ export function RemoveForm(keyValue): Promise<any> {
     .post(process.env.basePath + `/Role/RemoveForm?keyValue=${keyValue}`, {})
     .then(getResult as any);
 }
-export function getRoleTree(): Promise<any> {
+
+export function GetDepartmentTreeJson(): Promise<any> {
   return request
     .get(process.env.basePath + `/PermissionRole/GetDepartmentTreeJson`)
     .then(getResult as any);
 }
-export function getUserList(data): Promise<any> {
+
+export function GetUserList(data): Promise<any> {
   return request
     .get(process.env.basePath + `/PermissionRole/GetUserListJson?${objToUrl(data)}`)
     .then(getResult as any);

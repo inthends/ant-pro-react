@@ -1,6 +1,6 @@
 import { Modal, Tree, Input, Row  } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { GetDepartmentTreeJson, GetUserList, chooseUser } from './Role.service';
+import { GetDepartmentTreeJson, GetUserList, chooseUser } from './Main.service';
 import UserLabel from './UserLabel';
 
 const { Search } = Input;
@@ -58,15 +58,14 @@ const ChooseUser = (props: ModifyProps) => {
   };
   return (
     <Modal
-      title="选择角色成员"
+      title="选择人员"
       maskClosable={false}
       visible={visible}
       onOk={() => okHandler(userList)}
       onCancel={close}
       width={850}
       bodyStyle={{ padding: 0 }}
-      confirmLoading={loading}>
-        
+      confirmLoading={loading}> 
       <div style={{ height: 500, display: 'flex' }}>
         <div
           style={{
