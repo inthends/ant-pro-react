@@ -10,7 +10,7 @@ interface ListTableProps {
   data: any[];
   modify(record: any): void;
   choose(record: any): void;
-  showAuth(record: any): void; 
+  showAuth(record: any): void;
   onchange(page: any, filter: any, sort: any): any;
   reload(): void;
   setData(data: any[]): void;
@@ -23,19 +23,19 @@ function ListTable(props: ListTableProps) {
     Modal.confirm({
       title: '请确认',
       content: `您是否要删除 ${record.fullName} 吗？`,
-      onOk: () => { 
+      onOk: () => {
         CheckRole(record.roleId).then((res) => {
           if (res) {
             message.error('包含用户，不允许删除！');
             return;
-          } 
+          }
           RemoveForm(record.roleId)
             .then(() => {
               message.success('删除成功！');
               reload();
             })
-            .catch(e => { }); 
-        }) 
+            .catch(e => { });
+        })
       },
     });
   };
@@ -100,7 +100,7 @@ function ListTable(props: ListTableProps) {
       width: 140,
       render: (text, record) => {
         return [
-          <span>
+          <span key='span'>
             <a
               type="link"
               key="modify"
@@ -108,16 +108,16 @@ function ListTable(props: ListTableProps) {
             >
               修改
           </a>
-            <Divider type="vertical" key='divider' />
+            <Divider type="vertical" key='divider1' />
             <a key="choose" type='link' onClick={() => choose(record)}>
               角色成员
           </a>
-            <Divider type="vertical" key='divider' />
+            <Divider type="vertical" key='divider2' />
             <a key="auth" type='link' onClick={() => showAuth(record)}>
               角色授权
           </a>
-            <Divider type="vertical" key='divider' />
-            <a type="link" key="delete" onClick={() => doDelete(record)}>
+            <Divider type="vertical" key='divider3' />
+            <a key="delete" type="link" onClick={() => doDelete(record)}>
               删除
           </a>
           </span>
@@ -125,9 +125,11 @@ function ListTable(props: ListTableProps) {
       },
     },
   ] as ColumnProps<any>[];
+
   return (
     <Page>
       <Table
+        key='list'
         style={{ border: 'none' }}
         bordered={false}
         size="middle"

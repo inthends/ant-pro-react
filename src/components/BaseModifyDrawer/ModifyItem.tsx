@@ -149,7 +149,9 @@ const ModifyItem = (props: ModifyItemProps) => {
 
       default:
         return (
-          <Input {...inner} placeholder={`请输入${label as string}`} onChange={onChange}></Input>
+          <Input {...inner} placeholder={`请输入${label as string}`} 
+            readOnly={readOnly}
+            onChange={onChange}></Input>
         );
     }
   };

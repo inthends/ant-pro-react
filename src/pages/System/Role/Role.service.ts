@@ -1,6 +1,7 @@
 import { getResult, objToFormdata, objToUrl } from '@/utils/networkUtils';
 import request from '@/utils/request';
 
+
 export function getDataList(data): Promise<any> {
   return request
     .post(process.env.basePath + `/Role/GetPageListJson`, {
@@ -8,6 +9,7 @@ export function getDataList(data): Promise<any> {
     })
     .then(getResult as any);
 }
+
 // 新增修改
 export function SaveForm(data): Promise<any> {
   return request
@@ -89,14 +91,14 @@ export function GetHalfCheckIds(roleId): Promise<any> {
 export function SaveModuleAuthorize(data): Promise<any> {
   return request
     .post(process.env.basePath + `/PermissionRole/SaveModuleAuthorize`, {
-      data:objToFormdata(data),
+      data: objToFormdata(data),
     })
     .then(getResult as any);
 }
 export function SaveDataAuthorize(data): Promise<any> {
   return request
     .post(process.env.basePath + `/PermissionRole/SaveDataAuthorize`, {
-      data:objToFormdata(data),
+      data: objToFormdata(data),
     })
     .then(getResult as any);
 }

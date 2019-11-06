@@ -1147,7 +1147,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
         visible={selectHouseVisible}
         closeModal={closeSelectHouse}
         getSelectTree={(info) => {
-          console.log(info);
+          // console.log(info);
           var newInfo = Object.assign({}, infoDetail, { allName: info.allname, unitId: info.key })
           setInfoDetail(newInfo);
         }}

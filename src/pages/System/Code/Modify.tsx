@@ -17,9 +17,8 @@ interface ModifyProps {
 const Modify = (props: ModifyProps) => {
   const { data, form, visible, reload } = props;
   let initData = data ? data : { enabledMark: 1 };
-  initData.expDate = initData.expDate ? initData.expDate : new Date();
-  const baseFormProps = { form, initData };
-
+  // initData.expDate = initData.expDate ? initData.expDate : new Date();
+  const baseFormProps = { form, initData }; 
   const [ruleItemVisible, setRuleItemVisible] = useState<boolean>(false);
   const [ruleItem, setRuleItem] = useState<any>();
 

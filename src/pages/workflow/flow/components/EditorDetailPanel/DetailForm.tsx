@@ -62,9 +62,9 @@ class DetailForm extends React.Component<DetailFormProps> {
 
   renderEdgeShapeSelect = () => (
     <Select onChange={this.handleSubmit}>
-      <Option value="flow-smooth">Smooth</Option>
-      <Option value="flow-polyline">Polyline</Option>
-      <Option value="flow-polyline-round">Polyline Round</Option>
+      <Option value="flow-polyline">折线</Option>
+      <Option value="flow-smooth">平滑</Option>
+      <Option value="flow-polyline-round">圆折线</Option>
     </Select>
   );
 
@@ -73,7 +73,7 @@ class DetailForm extends React.Component<DetailFormProps> {
     const { label } = this.item.getModel();
 
     return (
-      <Item label="Label" {...inlineFormItemLayout}>
+      <Item label="名称" {...inlineFormItemLayout}>
         {form.getFieldDecorator('label', {
           initialValue: label,
         })(<Input onBlur={this.handleSubmit} />)}
@@ -83,16 +83,17 @@ class DetailForm extends React.Component<DetailFormProps> {
 
   renderEdgeDetail = () => {
     const { form } = this.props;
-    const { label = '', shape = 'flow-smooth' } = this.item.getModel();
+    // const { label = '', shape = 'flow-smooth' } = this.item.getModel(); 
+    const { label = '', shape = 'flow-polyline' } = this.item.getModel();
 
     return (
       <Fragment>
-        <Item label="Label" {...inlineFormItemLayout}>
+        <Item label="名称" {...inlineFormItemLayout}>
           {form.getFieldDecorator('label', {
             initialValue: label,
           })(<Input onBlur={this.handleSubmit} />)}
         </Item>
-        <Item label="Shape" {...inlineFormItemLayout}>
+        <Item label="连线" {...inlineFormItemLayout}>
           {form.getFieldDecorator('shape', {
             initialValue: shape,
           })(this.renderEdgeShapeSelect())}
@@ -106,7 +107,7 @@ class DetailForm extends React.Component<DetailFormProps> {
     const { label = '新建分组' } = this.item.getModel();
 
     return (
-      <Item label="Label" {...inlineFormItemLayout}>
+      <Item label="名称" {...inlineFormItemLayout}>
         {form.getFieldDecorator('label', {
           initialValue: label,
         })(<Input onBlur={this.handleSubmit} />)}

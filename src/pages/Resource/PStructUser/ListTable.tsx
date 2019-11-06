@@ -21,7 +21,7 @@ function ListTable(props: ListTableProps) {
   const doDelete = record => {
     Modal.confirm({
       title: '请确认',
-      content: `您是否要删除 ${record.name} 吗？`,
+      content: `您是否要删除${record.name}吗？`,
       onOk: () => {
         //判断是否关联房间
         CheckRelation(record.key).then((res) => {
@@ -85,13 +85,14 @@ function ListTable(props: ListTableProps) {
       width: 100,
       // sorter: true,
     },
-    {
-      title: '联系电话',
-      dataIndex: 'telphonenum',
-      key: 'telphonenum',
-      width: 100,
-      // sorter: true,
-    },
+
+    // {
+    //   title: '联系电话',
+    //   dataIndex: 'telphonenum',
+    //   key: 'telphonenum',
+    //   width: 100,
+    //   // sorter: true,
+    // },
     // {
     //   title: '简称',
     //   dataIndex: 'shortname',
@@ -113,7 +114,7 @@ function ListTable(props: ListTableProps) {
           case '2':
             return '护照';
           default:
-            return null;
+            return '';
         }
       },
     },
@@ -149,9 +150,9 @@ function ListTable(props: ListTableProps) {
           // <Button type="danger" key="delete" onClick={() => doDelete(record)}>
           //   删除
           // </Button>, 
-          <span>
+          <span key="span">
             <a onClick={() => doModify(record.id)} key="modify">修改</a>
-            <Divider type="vertical" />
+            <Divider type="vertical" key="divider" />
             <a onClick={() => doDelete(record)} key="delete">删除</a>
           </span>
 

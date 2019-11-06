@@ -1,7 +1,7 @@
 import { Command } from 'gg-editor';
 import React from 'react';
-import { Tooltip } from 'antd';
-import IconFont from '../../common/IconFont';
+import { Icon, Tooltip } from 'antd';
+// import IconFont from '../../common/IconFont';
 import styles from './index.less';
 
 const upperFirst = (str: string) =>
@@ -22,7 +22,7 @@ const ToolbarButton: React.FC<ToolbarButtonProps> = props => {
         placement="bottom"
         overlayClassName={styles.tooltip}
       >
-        <IconFont type={`icon-${icon || command}`} />
+        <Icon type={icon} />
       </Tooltip>
     </Command>
   );

@@ -16,7 +16,6 @@ interface BaseModifyStates {
   saveSuccess?(): void;
 }
 const BaseModify = React.createContext<BaseModifyStates>({});
-
 const BaseModifyProvider = (props: BaseModifyProps) => {
   const { width, closeDrawer, reload, children, data, name, visible, form, save } = props;
   const mywidth = width === undefined ? 600 : width;
@@ -56,7 +55,7 @@ const BaseModifyProvider = (props: BaseModifyProps) => {
             padding: '10px 16px',
             background: '#fff',
             textAlign: 'right',
-            zIndex:999,
+            zIndex: 999,
           }}
         >
           <Button onClick={closeDrawer} style={{ marginRight: 8 }}>

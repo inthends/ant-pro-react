@@ -6,7 +6,7 @@ import ChooseUser from './ChooseUser';
 import RoleAuth from './RoleAuth';
 import ListTable from './ListTable';
 import Modify from './Modify';
-import { getDataList } from './Role.service';
+import { getDataList } from './Role.service'; 
 
 // const { Option } = Select;
 const { Content } = Layout;
@@ -135,6 +135,7 @@ const Role = () => {
           </Button>
         </div>
         <ListTable
+          key='ListTable'
           onchange={(paginationConfig, filters, sorter) =>
             loadData(search, paginationConfig, sorter)
           }

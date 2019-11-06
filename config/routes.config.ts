@@ -269,7 +269,7 @@ export default [
           {
             name: 'flow',
             path: '/workflow/flow',
-            component: './workflow/flow',
+            component: './workflow/flow/Flow',
           },
           // {
           //   name: 'mind',
