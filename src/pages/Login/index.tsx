@@ -43,13 +43,18 @@ function Login(props: ConnectFormProps) {
 
   return (
     <div className={styles.main}>
-      <Form onSubmit={login} hideRequiredMark>
+      <Form onSubmit={login} hideRequiredMark> 
+      <FormItem label="产品编号" colon={false} required>
+          {getFieldDecorator('usercode', {
+            rules: [{ required: true, message: '请输入产品编号' }],
+          })(<Input size="large" placeholder="产品编号" allowClear />)}
+        </FormItem> 
         <FormItem label="账号" colon={false} required>
           {getFieldDecorator('username', {
             rules: [{ required: true, message: '请输入用户名' }],
           })(<Input size="large" placeholder="账号" allowClear />)}
         </FormItem>
-        <FormItem label="密码" colon={false} required>
+        <FormItem label="密码" colon={false} required style={{marginBottom:'25px'}}>
           {getFieldDecorator('password', {
             rules: [{ required: true, message: '请输入密码' }],
           })(<Input.Password size="large" placeholder="密码" allowClear />)}
