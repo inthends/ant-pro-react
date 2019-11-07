@@ -1,6 +1,5 @@
 import { Card, Form, Input, Select } from 'antd';
 import React, { Fragment } from 'react';
-
 import { FormComponentProps } from 'antd/es/form';
 import { withPropsAPI } from 'gg-editor';
 
@@ -26,8 +25,7 @@ interface DetailFormProps extends FormComponentProps {
 
 class DetailForm extends React.Component<DetailFormProps> {
   get item() {
-    const { propsAPI } = this.props;
-
+    const { propsAPI } = this.props; 
     return propsAPI.getSelected()[0];
   }
 
@@ -73,11 +71,18 @@ class DetailForm extends React.Component<DetailFormProps> {
     const { label } = this.item.getModel();
 
     return (
-      <Item label="名称" {...inlineFormItemLayout}>
-        {form.getFieldDecorator('label', {
-          initialValue: label,
-        })(<Input onBlur={this.handleSubmit} />)}
-      </Item>
+      <Fragment>
+        <Item label="名称" {...inlineFormItemLayout}>
+          {form.getFieldDecorator('label', {
+            initialValue: label,
+          })(<Input onBlur={this.handleSubmit} />)}
+        </Item>
+        <Item label="审批人" {...inlineFormItemLayout}>
+          {form.getFieldDecorator('label', {
+            initialValue: label,
+          })(<Select onBlur={this.handleSubmit} />)}
+        </Item> 
+      </Fragment>
     );
   };
 

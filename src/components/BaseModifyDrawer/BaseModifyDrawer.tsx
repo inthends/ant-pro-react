@@ -21,7 +21,7 @@ const BaseModifyProvider = (props: BaseModifyProps) => {
   const mywidth = width === undefined ? 600 : width;
   const title = data === undefined ? `添加${name}` : `修改${name}`;
   const saveSuccess = () => {
-    message.success('保存成功');
+    message.success('保存成功！');
     closeDrawer();
     reload();
   };

@@ -7,7 +7,7 @@ import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
 import { GetPageListJson } from './Main.service';
-import { GetQuickSimpleTreeAll } from '@/services/commonItem';
+import { GetQuickSimpleTreeAllForDeskService } from '@/services/commonItem';
 import { getResult } from '@/utils/networkUtils';
 const { Content } = Layout;
 const { Search } = Input;
@@ -37,7 +37,7 @@ function Main() {
 
 
     //获取房产树
-    GetQuickSimpleTreeAll()
+    GetQuickSimpleTreeAllForDeskService()
       .then(getResult)
       .then((res: any[]) => {
         setTreeData(res || []);
@@ -92,7 +92,7 @@ function Main() {
     if (sorter) {
       const { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'id';
+      searchCondition.sidx = field ? field : 'createDate';
     }
 
     return load(searchCondition).then(res => {
@@ -101,8 +101,8 @@ function Main() {
   };
   const load = formData => {
     setLoading(true);
-    formData.sidx = formData.sidx || 'id';
-    formData.sord = formData.sord || 'asc';
+    formData.sidx = formData.sidx || 'createDate';
+    formData.sord = formData.sord || 'desc';
     return GetPageListJson(formData).then(res => {  
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
@@ -128,8 +128,8 @@ function Main() {
       TreeTypeId: org.id,
       TreeType: org.type,
     };
-    const sidx = 'id';
-    const sord = 'asc';
+    const sidx = 'createDate';
+    const sord = 'desc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
       return res;

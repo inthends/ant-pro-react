@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { GetFilesData, RemoveFile, GetRoomUser, SaveForm, ChangeToRepair, ChangeToComplaint } from './Main.service';
 import styles from './style.less';
 import CommentBox from './CommentBox';
-
+import AddMemo from './AddMemo';
 const { Option } = Select;
 const { TextArea } = Input;
 const { TabPane } = Tabs;
@@ -31,10 +31,11 @@ const Modify = (props: ModifyProps) => {
   // const [treeData, setTreeData] = useState<any[]>([]);
   //const [roomUser, setRoomUser] = useState<any>(); 
   const [keyValue, setkeyValue] = useState<any>();
-
   const [previewVisible, setPreviewVisible] = useState<boolean>(false);
   const [fileList, setFileList] = useState<any[]>([]);
   const [previewImage, setPreviewImage] = useState<string>('');
+
+  const [addMemoVisible, setAddMemoVisible] = useState<boolean>(false);
 
   // 打开抽屉时初始化
   // useEffect(() => { 
@@ -104,11 +105,13 @@ const Modify = (props: ModifyProps) => {
     //加载房间联系人以及联系电话 
     if (value) {
       GetRoomUser(value).then((res: any) => {
-        //setRoomUser(res || null);
+        //setRoomUser(res || null); 
         form.setFieldsValue({ address: extr.triggerNode.props.allname });
-        form.setFieldsValue({ contactName: res.contactName });
-        form.setFieldsValue({ contactPhone: res.contactPhone });
-        form.setFieldsValue({ contactId: res.custId });
+        if (res != null) {
+          form.setFieldsValue({ contactName: res.contactName });
+          form.setFieldsValue({ contactPhone: res.contactPhone });
+          form.setFieldsValue({ contactId: res.custId });
+        }
       });
     } else {
       form.setFieldsValue({ address: '' });
@@ -121,29 +124,35 @@ const Modify = (props: ModifyProps) => {
   const handleMenuClick = (e) => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        const title = e.item.props.children;
-        Modal.confirm({
-          title: '请确认',
-          content: `确定要` + title + `吗？`,
-          onOk: () => {
-            const newData = data ? { ...data, ...values } : values;
-            newData.keyValue = newData.id;
-            if (e.key == '1') {
-              ChangeToRepair({ ...newData }).then(res => {
-                message.success('操作成功');
-                closeDrawer();
-                reload();
-              });
+        if (e.key != '3') {
+          const title = e.item.props.children;
+          Modal.confirm({
+            title: '请确认',
+            content: `确定要` + title + `吗？`,
+            onOk: () => {
+              const newData = data ? { ...data, ...values } : values;
+              newData.keyValue = newData.id;
+              if (e.key == '1') {
+                ChangeToRepair({ ...newData }).then(res => {
+                  message.success('操作成功！');
+                  closeDrawer();
+                  reload();
+                });
+              }
+              else if (e.key == '2') {
+                ChangeToComplaint({ ...newData }).then(res => {
+                  message.success('操作成功！');
+                  closeDrawer();
+                  reload();
+                });
+              }
             }
-            else if (e.key == '2') {
-              ChangeToComplaint({ ...newData }).then(res => {
-                message.success('操作成功');
-                closeDrawer();
-                reload();
-              });
-            }
-          }
-        });
+          });
+        }
+        else {
+          //闭单，弹出备注页面
+          setAddMemoVisible(true);
+        }
       }
     });
   };
@@ -152,8 +161,8 @@ const Modify = (props: ModifyProps) => {
     <Menu onClick={handleMenuClick}>
       <Menu.Item key="1">转报修</Menu.Item>
       <Menu.Item key="2">转投诉</Menu.Item>
-      {/* <Menu.Item key="3">毕单</Menu.Item> 
-      <Menu.Item key="4">归档</Menu.Item> */}
+      <Menu.Item key="3">闭单</Menu.Item>
+      {/* <Menu.Item key="4">归档</Menu.Item> */}
     </Menu>
   );
 
@@ -208,6 +217,11 @@ const Modify = (props: ModifyProps) => {
     });
   };
   //图片上传结束
+
+
+  const closeAddMemo = () => {
+    setAddMemoVisible(false);
+  };
 
   return (
     <Drawer
@@ -295,6 +309,34 @@ const Modify = (props: ModifyProps) => {
                       </Form.Item>
                     </Col>
                   </Row>
+                  {form.getFieldValue('billType') == '报修' ?
+                    <Row gutter={24}>
+                      <Col lg={8}>
+                        <Form.Item label="维修区域">
+                          {getFieldDecorator('repairArea', {
+                            initialValue: infoDetail.repairArea == undefined ? '客户区域' : infoDetail.repairArea
+                          })(
+                            <Select  >
+                              <Option value="客户区域">客户区域</Option>
+                              <Option value="公共区域">公共区域</Option>
+                            </Select>
+                          )}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={8}>
+                        <Form.Item label="是否有偿">
+                          {getFieldDecorator('isPaid', {
+                            initialValue: infoDetail.isPaid == undefined ? '否' : infoDetail.isPaid
+                          })(
+                            <Select  >
+                              <Option value="否">否</Option>
+                              <Option value="是">是</Option>
+                            </Select>
+                          )}
+                        </Form.Item>
+                      </Col>
+                    </Row> : null}
+
                   <Row gutter={24}>
                     <Col lg={8}>
                       <Form.Item label="房号" required>
@@ -324,12 +366,11 @@ const Modify = (props: ModifyProps) => {
                         })(
                           <input type='hidden' />
                         )}
-
                         {getFieldDecorator('organizeId', {
                           initialValue: infoDetail.organizeId,
                         })(
                           <input type='hidden' />
-                        )} 
+                        )}
                       </Form.Item>
                     </Col>
 
@@ -346,7 +387,7 @@ const Modify = (props: ModifyProps) => {
                       <Form.Item label="详细地址">
                         {getFieldDecorator('address', {
                           initialValue: infoDetail.address
-                        })(<Input placeholder="自动获取详细地址" readOnly />)}
+                        })(<Input placeholder="请输入详细地址" />)}
                       </Form.Item>
                     </Col>
                   </Row>
@@ -466,6 +507,15 @@ const Modify = (props: ModifyProps) => {
           ) : null}
 
         </Tabs>) : null}
+
+      <AddMemo
+        visible={addMemoVisible}
+        closeModal={closeAddMemo}
+        reload={reload}
+        closeDrawer={closeDrawer}
+        keyValue={keyValue}
+      />
+
 
       <div
         style={{

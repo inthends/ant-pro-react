@@ -21,6 +21,11 @@ export function GetQuickSimpleTreeAll(): Promise<ResponseObject<any>> {
   return request.get(process.env.basePath + `/Common/GetQuickSimpleTreeAll`, {});
 } 
 
+//服务单下拉房屋树，可以选择小区，楼栋，楼层和房间
+export function GetQuickSimpleTreeAllForDeskService(): Promise<ResponseObject<any>> {
+  return request.get(process.env.basePath + `/Common/GetQuickSimpleTreeAllForDeskService`, {});
+} 
+
 //合同页面调用
 export function GetQuickSimpleTreeAllForContract(): Promise<ResponseObject<any[]>> {
   return request.get(process.env.basePath + `/Common/GetQuickSimpleTreeAllForContract`, {});

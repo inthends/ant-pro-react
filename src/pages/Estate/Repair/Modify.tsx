@@ -1,5 +1,5 @@
 
-import {DatePicker,AutoComplete,Select,Typography,Tag,Divider, PageHeader,Button,Card,Col,Drawer,Form,Input,message,Row} from 'antd';
+import { DatePicker, AutoComplete, Select, Typography, Tag, Divider, PageHeader, Button, Card, Col, Drawer, Form, Input, message, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { Dispatch, Change, Receive, Start, Handle, Visit, Check } from './Main.service';
@@ -56,27 +56,23 @@ const Modify = (props: ModifyProps) => {
   const GetStatus = (infoDetail) => {
     switch (infoDetail.status) {
       case 1:
-        return <Tag color="#e4aa5b">待派单</Tag>
+        return <Tag color="#e4aa5b">待派单</Tag>;
       case 2:
-        return <Tag color="#19d54e">待接单</Tag>
+        return <Tag color="#19d54e">待接单</Tag>;
       case 3:
-        return <Tag color="#e4aa5b">待开工</Tag>
+        return <Tag color="#e4aa5b">待开工</Tag>;
       case 4:
-        return <Tag color="#61c33a">处理中</Tag>
+        return <Tag color="#61c33a">待完成</Tag>;
       case 5:
-        return <Tag color="#ff5722">暂停</Tag>
+        return <Tag color="#ff5722">待回访</Tag>;
       case 6:
-        return <Tag color="#5fb878">待回访</Tag>
+        return <Tag color="#5fb878">待检验</Tag>;
       case 7:
-        return <Tag color="#29cc63">待检验</Tag>
+        return <Tag color="#29cc63">待审核</Tag>;
       case 8:
-        return <Tag color="#e48f27">待审核</Tag>
+        return <Tag color="#e48f27">已审核</Tag>;
       case 9:
-        return <Tag color="#c31818">已退单</Tag>
-      case 10:
-        return <Tag color="#009688">已归档</Tag>
-      case -1:
-        return <Tag color="#d82d2d">已作废</Tag>
+        return <Tag color="#c31818">已作废</Tag>;
       default:
         return '';
     }
@@ -251,7 +247,9 @@ const Modify = (props: ModifyProps) => {
       // ]}
       >
         <Paragraph>
-          {infoDetail.address}，{infoDetail.contactName}，电话：<a>{infoDetail.contactLink}</a>，在 {infoDetail.billDate} 报修，内容如下
+         {infoDetail.repairArea}，{infoDetail.address}，{infoDetail.contactName}，电话：<a>{infoDetail.contactLink}</a>，在 {infoDetail.billDate} 报修，
+         {infoDetail.isPaid=='是'?'有偿服务':'无偿服务'}
+         ，内容如下
         </Paragraph>
         {infoDetail.repairContent}
       </PageHeader>

@@ -260,7 +260,7 @@ function ListTable(props: ListTableProps) {
   return (
     <Page>
       <Form layout="vertical" hideRequiredMark>
-        <Card className={styles.card} bordered={false}  >
+        <Card  bordered={false}  >
           <Row gutter={27}>
             <Col lg={4}>
               <Form.Item >
@@ -277,8 +277,7 @@ function ListTable(props: ListTableProps) {
                     <Option value="转账">转账</Option>
                     <Option value="抵扣卷">抵扣卷</Option>
                   </Select>
-                )}
-
+                )} 
               </Form.Item>
             </Col>
             <Col lg={4}>
@@ -412,8 +411,7 @@ function ListTable(props: ListTableProps) {
           <Button type="primary" onClick={charge}>收款确认</Button>
           <span style={{ marginLeft: 8, color: "red" }}>
             {hasSelected ? `应收金额：${sumEntity.sumAmount} ，减免金额：${sumEntity.sumreductionAmount}，冲抵金额：${sumEntity.sumoffsetAmount}，未收金额：${sumEntity.sumlastAmount}` : ''}
-          </span>
-
+          </span> 
         </Card>
       </Form>
       <Table

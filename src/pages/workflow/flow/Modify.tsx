@@ -138,7 +138,7 @@ const Modify = (props: ModifyProps) => {
           </Col>
         </Row>
         <Row type="flex" className={styles.editorBd}>
-          <Col span={4} className={styles.editorSidebar}>
+          <Col span={3} className={styles.editorSidebar}>
             <FlowItemPanel />
           </Col>
           <Col span={16} className={styles.editorContent}>
@@ -150,7 +150,7 @@ const Modify = (props: ModifyProps) => {
               data={GetData()}
             />
           </Col>
-          <Col span={4} className={styles.editorSidebar}>
+          <Col span={5} className={styles.editorSidebar}>
             <FlowDetailPanel />
             <EditorMinimap />
           </Col>

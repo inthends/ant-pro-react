@@ -77,3 +77,10 @@ export function ChangeToComplaint(data): Promise<any> {
     .then(getResult as any);
 }
 
+
+// 闭单
+export function Finish(data): Promise<any> { 
+  return request
+    .post(process.env.basePath + `/ServiceDesk/Finish`, { data:objToFormdata(data) })
+    .then(getResult as any);
+}
