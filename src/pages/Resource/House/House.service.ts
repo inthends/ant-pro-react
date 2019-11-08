@@ -1,5 +1,5 @@
 import { GmPstructure, ResponseObject, TreeEntity } from '@/model/models';
-import { getResult, objToFormdata, objToUrl } from '@/utils/networkUtils';
+import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
 
 export function GetStatisticsTotal(data): Promise<ResponseObject<any>> {

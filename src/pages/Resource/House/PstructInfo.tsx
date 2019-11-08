@@ -43,9 +43,8 @@ const PstructInfo = (props: PstructInfoProps) => {
   }
 
   // 打开抽屉时初始化
-  useEffect(() => {
-  }, []);
-
+  // useEffect(() => {
+  // }, []);
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -101,7 +100,7 @@ const PstructInfo = (props: PstructInfoProps) => {
     else
       dataDetail.type = 5;
     SaveForm({ ...dataDetail }).then(res => {
-      message.success('保存成功');
+      message.success('保存成功！');
       closeDrawer();
       reload(parentId, type);
     });

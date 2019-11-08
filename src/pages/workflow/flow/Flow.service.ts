@@ -23,7 +23,7 @@ export function RemoveForm(keyValue): Promise<any> {
 //   return request.get(process.env.basePath + `/Common/GetOrgTreeOnly`).then(getResult as any);
 // }
 
-//获取模板分类
+//获取分类
 export function GetDataItemTreeList(): Promise<TreeEntity[]> {
   return request.get(process.env.basePath + `/FlowDesigner/GetDataItemTreeList`, {}).then(getResult as any);
 }
@@ -36,3 +36,9 @@ export function GetDataList(data): Promise<any> {
     .then(getResult as any);
 }
  
+//获取角色
+export function GetTreeRoleJson(): Promise<any[]> { 
+  return request
+    .get(process.env.basePath + `/FlowDesigner/GetTreeRoleJson`)
+    .then(getResult as any);
+}

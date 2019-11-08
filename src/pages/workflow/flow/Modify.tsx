@@ -2,9 +2,8 @@ import { BaseModifyProvider } from '@/components/BaseModifyDrawer/BaseModifyDraw
 import ModifyItem from '@/components/BaseModifyDrawer/ModifyItem';
 import { Col, Card, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import React, { useEffect, useState } from 'react';
-import { SaveForm } from './Flow.service';
-
+import React from 'react';
+import { SaveForm } from './Flow.service'; 
 import GGEditor, { Flow } from 'gg-editor';
 import { FlowContextMenu } from './components/EditorContextMenu';
 import { FlowDetailPanel } from './components/EditorDetailPanel';
@@ -21,11 +20,12 @@ interface ModifyProps {
   closeDrawer(): void;
   reload(): void;
   typeId: string;
-  typeName: string;
+  typeName: string; 
+  roles:any[];
 };
 
 const Modify = (props: ModifyProps) => {
-  const { typeName, typeId, data, form } = props;
+  const {  roles, typeName, typeId, data, form } = props;
   let initData = data ? data : { flowTypeName: typeName, flowType: typeId };
   // initData.expDate = initData.expDate ? initData.expDate : new Date();
   const baseFormProps = { form, initData };
@@ -151,7 +151,7 @@ const Modify = (props: ModifyProps) => {
             />
           </Col>
           <Col span={5} className={styles.editorSidebar}>
-            <FlowDetailPanel />
+            <FlowDetailPanel roles={roles}/>
             <EditorMinimap />
           </Col>
         </Row>

@@ -37,6 +37,12 @@ export function SaveForm(data): Promise<any> {
     .then(getResult as any);
 }
 
+//提交
+export function ApproveForm(data): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Contract/SaveForm`, { data: objToFormdata(data) })
+    .then(getResult as any);
+}
 
 // 获取合同信息
 export function GetFormJson(keyValue): Promise<LeaseContractDTO> {

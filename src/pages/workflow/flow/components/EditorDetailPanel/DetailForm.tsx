@@ -21,11 +21,12 @@ const inlineFormItemLayout = {
 interface DetailFormProps extends FormComponentProps {
   type: string;
   propsAPI?: any;
+  roles: any;
 }
 
 class DetailForm extends React.Component<DetailFormProps> {
   get item() {
-    const { propsAPI } = this.props; 
+    const { propsAPI } = this.props;
     return propsAPI.getSelected()[0];
   }
 
@@ -42,13 +43,10 @@ class DetailForm extends React.Component<DetailFormProps> {
         if (err) {
           return;
         }
-
         const item = getSelected()[0];
-
         if (!item) {
           return;
         }
-
         executeCommand(() => {
           update(item, {
             ...values,
@@ -67,9 +65,8 @@ class DetailForm extends React.Component<DetailFormProps> {
   );
 
   renderNodeDetail = () => {
-    const { form } = this.props;
-    const { label } = this.item.getModel();
-
+    const { form, roles } = this.props;
+    const { label, user } = this.item.getModel();
     return (
       <Fragment>
         <Item label="名称" {...inlineFormItemLayout}>
@@ -78,10 +75,17 @@ class DetailForm extends React.Component<DetailFormProps> {
           })(<Input onBlur={this.handleSubmit} />)}
         </Item>
         <Item label="审批人" {...inlineFormItemLayout}>
-          {form.getFieldDecorator('label', {
-            initialValue: label,
-          })(<Select onBlur={this.handleSubmit} />)}
-        </Item> 
+          {form.getFieldDecorator('user', {
+            initialValue: user,
+          })(<Select onChange={this.handleSubmit} >
+            {roles.roles.map(item => (
+              <Option key={item.roleId} value={item.roleId}>
+                {item.fullName}
+              </Option>
+            ))}
+          </Select>
+          )}
+        </Item>
       </Fragment>
     );
   };

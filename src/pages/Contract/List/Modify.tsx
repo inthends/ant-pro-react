@@ -15,7 +15,7 @@ import {
 } from '@/model/models';
 import React, { useEffect, useState } from 'react';
 import ResultList from './ResultList';
-import { SaveForm, GetAllFeeItems, GetCharge, GetFormJson, GetChargeDetail } from './Main.service';
+import { ApproveForm, SaveForm, GetAllFeeItems, GetCharge, GetFormJson, GetChargeDetail } from './Main.service';
 import { getCommonItems, GetUserList } from '@/services/commonItem';
 import moment from 'moment';
 import styles from './style.less';
@@ -260,8 +260,11 @@ const Modify = (props: ModifyProps) => {
   const approve = () => {
 
     //弹出选人
-    choose();
+    //choose();
     //save(); 
+
+    //发起审批
+    save();
 
   };
 
