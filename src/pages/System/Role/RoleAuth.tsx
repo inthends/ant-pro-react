@@ -135,9 +135,9 @@ const RoleAuth = (props: RoleAuthProps) => {
               treeData={auths}
               key={activeKey}
               defaultExpandAll
-              ref={treeRef}
+              ref={treeRef} 
             ></Tree>
-          ) : <Spin className={styles.spin} />}
+          ) : <Spin className={styles.spin}   />}
         </div>
       ) : null}
     </Modal>

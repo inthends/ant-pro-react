@@ -21,7 +21,7 @@ function Login(props: ConnectFormProps) {
           if (code === 200) {
             //console.log(data);
             //const { token, id } = data;
-            message.success('登录成功！');
+            message.success('登录成功');
             //localStorage.setItem('token', token);
             const { userid, name, avatar } = data;
             //全局记录用户id,name,src头像

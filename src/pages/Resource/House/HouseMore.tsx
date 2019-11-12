@@ -28,15 +28,13 @@ function HouseMore(props) {
   const [selectId, setSelectId] = useState<string>(''); //列表选中的节点id  
   const [organizeId, setOrganizeId] = useState<string>(''); //列表选中的节点组织id  
 
-  const selectTree = (parentId, type, searchText) => { 
-
+  const selectTree = (parentId, type, searchText) => {  
     //初始化页码
     const page = new DefaultPagination();
     refresh(parentId, type, searchText, page);//, pstructId); 
     setParentId(parentId);
     setPagination(page);
-    setType(type);
-    
+    setType(type); 
   };
 
   useEffect(() => {
@@ -61,7 +59,11 @@ function HouseMore(props) {
     setModifyVisible(true);
   };
   const loadData = (searchText, parentId, type, paginationConfig?: PaginationConfig, sorter?) => {
+ 
+    //刷新值，必须
     setSearch(searchText);
+    setParentId(parentId);
+
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: pagination.pageSize,
@@ -73,7 +75,7 @@ function HouseMore(props) {
       pageSize,
       total,
       queryJson: {
-        ParentId: selectId,
+        ParentId: parentId, //selectId,
         keyword: searchText,
         //PStructId: pstructId,
         Type: type,
