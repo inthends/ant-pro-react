@@ -4,7 +4,7 @@ export async function query(): Promise<any> {
   return request('/api/users');
 }
 
-export async function queryCurrent(id): Promise<any> {
+export async function queryCurrent(id): Promise<any> { 
   return request(process.env.basePath + `/Setting/GetUserInfo?userid=${id}`);
 }
 
