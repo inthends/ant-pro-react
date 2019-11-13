@@ -78,9 +78,17 @@ export function ChangeToComplaint(data): Promise<any> {
 }
 
 
-// 闭单
+// 毕单
 export function Finish(data): Promise<any> { 
   return request
     .post(process.env.basePath + `/ServiceDesk/Finish`, { data:objToFormdata(data) })
     .then(getResult as any);
 }
+
+//回访
+export function Visit(data): Promise<any> {
+  return request
+    .post(process.env.basePath + `/ServiceDesk/Visit`, { data: objToFormdata(data) })
+    .then(getResult as any);
+}
+

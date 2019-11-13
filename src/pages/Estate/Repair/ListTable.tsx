@@ -60,7 +60,7 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'status',
       key: 'status',
       width: 80,
-      align:'center',
+      align: 'center',
       sorter: true,
       render: (text, record) => {
         switch (text) {
@@ -86,7 +86,7 @@ function ListTable(props: ListTableProps) {
             return '';
         }
       }
-    }, 
+    },
     {
       title: '单据日期',
       dataIndex: 'billDate',
@@ -95,7 +95,7 @@ function ListTable(props: ListTableProps) {
       sorter: true,
       render: val => moment(val).format('YYYY-MM-DD')
     },
-    
+
     {
       title: '联系人',
       dataIndex: 'contactName',
@@ -106,12 +106,12 @@ function ListTable(props: ListTableProps) {
     {
       title: '联系方式',
       dataIndex: 'contactLink',
-      key: 'contactLink', 
+      key: 'contactLink',
     },
     {
       title: '关联地址',
       dataIndex: 'address',
-      key: 'address',  
+      key: 'address',
     },
     {
       title: '操作',
@@ -121,23 +121,33 @@ function ListTable(props: ListTableProps) {
       width: 95,
       fixed: 'right',
       render: (text, record) => {
-        return [
-          // <Button
-          //   type="primary"
-          //   key="modify"
-          //   style={{ marginRight: '10px' }}
-          //   onClick={() => modify(record)}>
-          //   修改
-          // </Button>,
-          // <Button type="danger" key="delete" onClick={() => doDelete(record)}>
-          //   删除
-          // </Button>
-          <span>
-            <a onClick={() => modify(record)} key="modify">修改</a>
+
+        if (record.status != 8) {
+          return [
+            // <Button
+            //   type="primary"
+            //   key="modify"
+            //   style={{ marginRight: '10px' }}
+            //   onClick={() => modify(record)}>
+            //   修改
+            // </Button>,
+            // <Button type="danger" key="delete" onClick={() => doDelete(record)}>
+            //   删除
+            // </Button>
+            <span>
+              <a onClick={() => modify(record)} key="modify">修改</a>
+              <Divider type="vertical" />
+              <a onClick={() => doInvalid(record)} key="invalid">作废</a>
+            </span>
+          ];
+        } else {
+          return [<span>
+            <a onClick={() => modify(record)} key="modify">查看</a>
             <Divider type="vertical" />
             <a onClick={() => doInvalid(record)} key="invalid">作废</a>
           </span>
-        ];
+          ];
+        }
       },
     },
   ] as ColumnProps<any>[];

@@ -56,12 +56,6 @@ export function Handle(data): Promise<any> {
     .then(getResult as any);
 }
 
-//回访
-export function Visit(data): Promise<any> {
-  return request
-    .post(process.env.basePath + `/Repair/Visit`, { data: objToFormdata(data) })
-    .then(getResult as any);
-}
 
 //转单
 export function Change(data): Promise<any> {
@@ -74,6 +68,13 @@ export function Change(data): Promise<any> {
 export function Check(data): Promise<any> {
   return request
     .post(process.env.basePath + `/Repair/Check`, { data: objToFormdata(data) })
+    .then(getResult as any);
+}
+
+//审核
+export function Approve(data): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Repair/Approve`, { data: objToFormdata(data) })
     .then(getResult as any);
 }
 

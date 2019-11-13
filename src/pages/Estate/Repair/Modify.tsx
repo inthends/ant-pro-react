@@ -2,7 +2,7 @@
 import { DatePicker, AutoComplete, Select, Typography, Tag, Divider, PageHeader, Button, Card, Col, Drawer, Form, Input, message, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { Dispatch, Change, Receive, Start, Handle, Visit, Check } from './Main.service';
+import { Dispatch, Change, Receive, Start, Handle, Check, Approve } from './Main.service';
 import { GetUserList, getCommonItems } from '@/services/commonItem';
 import moment from 'moment';
 import styles from './style.less';
@@ -20,7 +20,7 @@ interface ModifyProps {
 const Modify = (props: ModifyProps) => {
   const { modifyVisible, data, closeDrawer, form, reload } = props;
   const { getFieldDecorator } = form;
-  const title = data === undefined ? '添加维修单' : '修改维修单';
+  const title = data === undefined ? '添加维修单' : data.status == 8 ? '查看维修单' : '修改维修单';
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [repairMajors, setRepairMajors] = useState<any[]>([]); // 维修专业
   const [userSource, setUserSource] = useState<any[]>([]);
@@ -53,8 +53,8 @@ const Modify = (props: ModifyProps) => {
   };
 
   //转换状态
-  const GetStatus = (infoDetail) => {
-    switch (infoDetail.status) {
+  const GetStatus = (status) => {
+    switch (status) {
       case 1:
         return <Tag color="#e4aa5b">待派单</Tag>;
       case 2:
@@ -71,13 +71,13 @@ const Modify = (props: ModifyProps) => {
         return <Tag color="#29cc63">待审核</Tag>;
       case 8:
         return <Tag color="#e48f27">已审核</Tag>;
-      case 9:
+      case -1:
         return <Tag color="#c31818">已作废</Tag>;
       default:
         return '';
     }
   };
-
+ 
   const handleSearch = value => {
     if (value == '')
       return;
@@ -157,21 +157,7 @@ const Modify = (props: ModifyProps) => {
         const newData = data ? { ...data, ...values } : values;
         newData.endDate = values.endDate.format('YYYY-MM-DD HH:mm');
         Handle({ ...newData, keyValue: newData.id }).then(res => {
-          message.success('处理完成');
-          closeDrawer();
-          reload();
-        });
-      }
-    });
-  };
-
-  //回访
-  const visit = () => {
-    form.validateFields((errors, values) => {
-      if (!errors) {
-        const newData = data ? { ...data, ...values } : values;
-        Visit({ ...newData, keyValue: newData.id }).then(res => {
-          message.success('回访完成');
+          message.success('处理完成！');
           closeDrawer();
           reload();
         });
@@ -186,7 +172,21 @@ const Modify = (props: ModifyProps) => {
         const newData = data ? { ...data, ...values } : values;
         newData.testDate = values.testDate.format('YYYY-MM-DD HH:mm');
         Check({ ...newData, keyValue: newData.id }).then(res => {
-          message.success('检验完成');
+          message.success('检验完成！');
+          closeDrawer();
+          reload();
+        });
+      }
+    });
+  };
+
+  //审核
+  const approve = () => {
+    form.validateFields((errors, values) => {
+      if (!errors) {
+        const newData = data ? { ...data, ...values } : values;
+        Approve({ ...newData, keyValue: newData.id }).then(res => {
+          message.success('审核完成！');
           closeDrawer();
           reload();
         });
@@ -240,16 +240,15 @@ const Modify = (props: ModifyProps) => {
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
       <PageHeader
+
         title={infoDetail.billCode}
-        subTitle={GetStatus(infoDetail)}
+        subTitle={GetStatus(infoDetail.status)}
       // extra={[
       //   <Button key="3">附件</Button>,
       // ]}
       >
         <Paragraph>
-         {infoDetail.repairArea}，{infoDetail.address}，{infoDetail.contactName}，电话：<a>{infoDetail.contactLink}</a>，在 {infoDetail.billDate} 报修，
-         {infoDetail.isPaid=='是'?'有偿服务':'无偿服务'}
-         ，内容如下
+          来自{infoDetail.repairArea}，联系人：{infoDetail.contactName}，地址：{infoDetail.address}，电话：<a>{infoDetail.contactLink}</a>，属于{infoDetail.isPaid == '是' ? '有偿服务' : '无偿服务'}，报修时间：{infoDetail.billDate}，内容如下
         </Paragraph>
         {infoDetail.repairContent}
       </PageHeader>
@@ -265,7 +264,7 @@ const Modify = (props: ModifyProps) => {
                       {getFieldDecorator('repairMajor', {
                         rules: [{ required: true, message: '请选择维修专业' }],
                       })(
-                        <Select placeholder="请选择维修专业">
+                        <Select placeholder="请选择">
                           {repairMajors.map(item => (
                             <Option value={item.title} key={item.key}>
                               {item.title}
@@ -303,7 +302,7 @@ const Modify = (props: ModifyProps) => {
                   <Col lg={4}>
                     <Form.Item label="派单时间"  >
                       {getFieldDecorator('sendDate', {
-                      })(<Input placeholder="自动获取时间" readOnly />)}
+                      })(<Input placeholder="自动获取" readOnly />)}
                     </Form.Item>
                   </Col>
 
@@ -372,12 +371,12 @@ const Modify = (props: ModifyProps) => {
             ) : infoDetail.status > 3 ? (
               <Card title="开工" className={styles.card}  >
                 <Row gutter={24}>
-                  <Col lg={5}>
+                  <Col lg={6}>
                     <Form.Item label="开工时间"  >
                       {infoDetail.beginDate}
                     </Form.Item>
                   </Col>
-                  <Col lg={19}>
+                  <Col lg={18}>
                     <Form.Item label="故障判断">
                       {infoDetail.faultJudgement}
                     </Form.Item>
@@ -457,46 +456,47 @@ const Modify = (props: ModifyProps) => {
                   </Col>
                 </Row>
               </Card>
-            ) : infoDetail.status > 4 ? (<Card title="完成情况" className={styles.card}  >
+            ) : infoDetail.status > 4 ? (<Card title="完成情况" className={infoDetail.status == 5 ? styles.card2 : styles.card} >
               <Row gutter={24}>
-                <Col lg={5}>
-                  <Form.Item label="完成时间">
-                    {infoDetail.endDate}
-                  </Form.Item>
-                </Col>
-                <Col lg={5}>
+
+                <Col lg={6}>
                   <Form.Item label="用时(分钟)">
                     {infoDetail.useTime}
                   </Form.Item>
                 </Col>
-                <Col lg={5}>
+                <Col lg={6}>
                   <Form.Item label="人工费"  >
                     {infoDetail.laborFee}
                   </Form.Item>
                 </Col>
-                <Col lg={5}>
+                <Col lg={6}>
                   <Form.Item label="材料费"  >
                     {infoDetail.stuffFee}
                   </Form.Item>
                 </Col>
-                <Col lg={4}>
+                <Col lg={6}>
                   <Form.Item label="费用合计">
                     {infoDetail.totalFee}
                   </Form.Item>
                 </Col>
               </Row>
               <Row gutter={24}>
-                <Col lg={8}>
+                <Col lg={6}>
+                  <Form.Item label="完成时间">
+                    {infoDetail.endDate}
+                  </Form.Item>
+                </Col>
+                <Col lg={6}>
                   <Form.Item label="完成情况" >
                     {infoDetail.achieved}
                   </Form.Item>
                 </Col>
-                <Col lg={8}>
+                <Col lg={6}>
                   <Form.Item label="现场评价"  >
                     {infoDetail.fieldEvaluation}
                   </Form.Item>
                 </Col>
-                <Col lg={8}>
+                <Col lg={6}>
                   <Form.Item label="业主意见"  >
                     {infoDetail.ownerOpinion}
                   </Form.Item>
@@ -504,7 +504,7 @@ const Modify = (props: ModifyProps) => {
               </Row>
             </Card>) : null}
 
-            {infoDetail.status == 6 ? (
+            {/* {infoDetail.status == 5 ? (
               <Card title="回访情况" className={styles.card}  >
                 <Row gutter={24}>
                   <Col lg={6}>
@@ -558,7 +558,7 @@ const Modify = (props: ModifyProps) => {
                   </Col>
                 </Row>
               </Card>
-            ) : (infoDetail.status > 6 && infoDetail.repairArea == '客户区域') ? (<Card title="回访情况" className={styles.card}  >
+            ) : (infoDetail.status > 6 && infoDetail.repairArea == '客户区域') ? (<Card title="回访情况" className={styles.card2}  >
               <Row gutter={24}>
                 <Col lg={6}>
                   <Form.Item label="回访方式"  >
@@ -567,7 +567,7 @@ const Modify = (props: ModifyProps) => {
                 </Col>
                 <Col lg={6}>
                   <Form.Item label="客户评价"  >
-                    {infoDetail.custEvaluate}
+                    {GetCustEvaluate(infoDetail.custEvaluate)}
                   </Form.Item>
                 </Col>
                 <Col lg={6}>
@@ -588,9 +588,9 @@ const Modify = (props: ModifyProps) => {
                   </Form.Item>
                 </Col>
               </Row>
-            </Card>) : null}
+            </Card>) : null} */}
 
-            {infoDetail.status == 7 ? (
+            {infoDetail.status == 6 ? (
               <Card title="检验情况" className={styles.card}  >
                 <Row gutter={24}>
                   <Col lg={7}>
@@ -664,7 +664,6 @@ const Modify = (props: ModifyProps) => {
                 </Row>
               </Card>
             ) : null}
-
           </Form>
         ) : null
       }
@@ -731,18 +730,19 @@ const Modify = (props: ModifyProps) => {
         </Button></div>
         ) : null}
 
-        {infoDetail.status == 6 ? (
+        {infoDetail.status == 5 ? (
           <div>
             <Button onClick={close} style={{ marginRight: 8 }}>
-              取消
+            关闭
         </Button>
-            <Button onClick={visit} type="primary">
+            {/* <Button onClick={visit} type="primary">
               回访
-        </Button></div>
+        </Button> */}
+          </div>
         ) : null}
 
 
-        {infoDetail.status == 7 ? (
+        {infoDetail.status == 6 ? (
           <div>
             <Button onClick={close} style={{ marginRight: 8 }}>
               取消
@@ -752,14 +752,22 @@ const Modify = (props: ModifyProps) => {
         </Button></div>
         ) : null}
 
-        {infoDetail.status == 8 ? (
+        {infoDetail.status == 7 ? (
           <div>
             <Button onClick={close} style={{ marginRight: 8 }}>
               取消
           </Button>
-            <Button onClick={visit} type="primary">
+            <Button onClick={approve} type="primary">
               通过
         </Button></div>
+        ) : null}
+
+        {infoDetail.status == 8 ? (
+          <div>
+            <Button onClick={close} style={{ marginRight: 8 }}>
+              关闭
+          </Button>
+          </div>
         ) : null}
 
       </div>

@@ -66,10 +66,12 @@ function Main() {
   const closeDrawer = () => {
     setModifyVisible(false);
   };
+  
   const showDrawer = (item?) => {
     setCurrData(item);
     setModifyVisible(true);
   };
+
   const loadData = (searchText, org, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(searchText);
     const { current: pageIndex, pageSize, total } = paginationConfig || {

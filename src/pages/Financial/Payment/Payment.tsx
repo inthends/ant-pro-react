@@ -371,7 +371,7 @@ function Payment() {
                   } else {
                     showVerify(id, false);
                   }
-                }} disabled={billStatus == 1 ? false : true}
+                }} disabled={status == 1 ? false : true}
               >
                 <Icon type="minus-square" />
                 取消审核
@@ -384,7 +384,7 @@ function Payment() {
                     showVerify(id, true);
                   }
                 }}
-                disabled={billStatus == 0 ? false : true}
+                disabled={status == 0 ? false : true}
               >
                 <Icon type="check-square" />
                 审核

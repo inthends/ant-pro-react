@@ -22,7 +22,7 @@ const Modify = (props: ModifyProps) => {
   const { modifyVisible, data, closeDrawer, form, reload, treeData } = props;
   const { getFieldDecorator } = form;
   var title = data === undefined ? '添加服务单' : '修改服务单';
-  if (data && data.billStatus != '1') {
+  if (data && data.status != '1') {
     title = '查看服务单';
   }
 
@@ -221,7 +221,7 @@ const Modify = (props: ModifyProps) => {
         <Tabs defaultActiveKey="1" >
           <TabPane tab="基础信息" key="1">
             <Form layout="vertical" hideRequiredMark>
-              {infoDetail.billStatus != 2 ? (
+              {infoDetail.status != 2 ? (
                 <Card className={styles.card}  >
                   <Row gutter={24}>
                     <Col lg={8}>
@@ -481,7 +481,7 @@ const Modify = (props: ModifyProps) => {
             保存
             </Button>) : null}
 
-        {(infoDetail.billStatus && infoDetail.billStatus == 1) ? (
+        {(infoDetail.status && infoDetail.status == 1) ? (
           <span>
             <Dropdown overlay={menu} >
               <Button style={{ marginRight: 8 }}>
@@ -493,7 +493,7 @@ const Modify = (props: ModifyProps) => {
            </Button></span>) : null}
 
 
-        {(infoDetail.billStatus && infoDetail.billStatus == 3) ? (
+        {(infoDetail.status && infoDetail.status == 3) ? (
           <Button onClick={close} type="primary">
             毕单
            </Button>) : null}

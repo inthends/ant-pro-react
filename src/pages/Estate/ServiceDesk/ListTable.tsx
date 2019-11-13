@@ -50,9 +50,9 @@ function ListTable(props: ListTableProps) {
     },
     {
       title: '单据状态',
-      dataIndex: 'billStatus',
-      key: 'billStatus',
-      align:'center',
+      dataIndex: 'status',
+      key: 'status',
+      align: 'center',
       width: 100,
       sorter: true,
       render: (text, record) => {
@@ -112,7 +112,7 @@ function ListTable(props: ListTableProps) {
       title: '是否回复',
       dataIndex: 'isApply',
       key: 'isApply',
-      align:'center',
+      align: 'center',
       width: 100,
       render: (text, record) => {
         if (text == 0)
@@ -141,7 +141,7 @@ function ListTable(props: ListTableProps) {
       fixed: 'right',
       render: (text, record) => {
         //新增
-        if (record.billStatus == 1) {
+        if (record.status == 1 || record.status == 3) {
           return [
             //   <Button
             //     type="primary"
