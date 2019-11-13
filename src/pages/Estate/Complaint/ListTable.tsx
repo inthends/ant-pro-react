@@ -3,7 +3,7 @@ import { Tag, Divider, message, Modal, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import moment from 'moment';
-import { RemoveForm } from './Main.service';
+import { InvalidForm } from './Main.service';
 
 interface ListTableProps {
   loading: boolean;
@@ -20,14 +20,14 @@ function ListTable(props: ListTableProps) {
   const changePage = (pag: PaginationConfig, filters, sorter) => {
     onchange(pag, filters, sorter);
   };
-  const doDelete = record => {
+  const doInvalid = record => {
     Modal.confirm({
       title: '请确认',
-      content: `您是否要删除${record.billCode}吗`,
+      content: `您是否要作废${record.billCode}吗？`,
       onOk: () => {
-        RemoveForm(record.id)
+        InvalidForm(record.id)
           .then(() => {
-            message.success('删除成功');
+            message.success('作废成功！');
             reload();
           })
           .catch(e => { });
@@ -72,29 +72,21 @@ function ListTable(props: ListTableProps) {
             case 5:
               return <Tag color="#40A9FF">已审核</Tag>
             case -1:
-                return <Tag color="#40A9FF">已作废</Tag>
+              return <Tag color="#40A9FF">已作废</Tag>
             default:
               return '';
           }
         }
       }
-    },
-
+    }, 
     {
       title: '单据日期',
       dataIndex: 'billDate',
       key: 'billDate',
       width: 120,
       sorter: true,
-      render: val => <span> {moment(val).format('YYYY-MM-DD')} </span>
-    },
-    {
-      title: '关联地址',
-      dataIndex: 'complaintAddress',
-      key: 'complaintAddress',
-      width: 250,
-      sorter: true,
-    },
+      render: val =>  moment(val).format('YYYY-MM-DD') 
+    }, 
     {
       title: '联系人',
       dataIndex: 'complaintUser',
@@ -105,8 +97,12 @@ function ListTable(props: ListTableProps) {
     {
       title: '联系方式',
       dataIndex: 'complaintLink',
-      key: 'complaintLink',
-      sorter: true,
+      key: 'complaintLink', 
+    },
+    {
+      title: '关联地址',
+      dataIndex: 'complaintAddress',
+      key: 'complaintAddress', 
     },
     {
       title: '操作',
@@ -131,7 +127,7 @@ function ListTable(props: ListTableProps) {
             <span>
               <a onClick={() => modify(record)} key="modify">修改</a>
               <Divider type="vertical" key='split' />
-              <a onClick={() => doDelete(record)} key="delete">删除</a>
+              <a onClick={() => doInvalid(record)} key="invalid">作废</a>
             </span>
           ];
         } else {

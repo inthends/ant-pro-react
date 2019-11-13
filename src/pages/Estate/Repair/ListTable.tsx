@@ -3,7 +3,7 @@ import { Tag, Divider, message, Modal, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import moment from 'moment';
-import { RemoveForm } from './Main.service';
+import { InvalidForm } from './Main.service';
 
 interface ListTableProps {
   loading: boolean;
@@ -19,14 +19,14 @@ function ListTable(props: ListTableProps) {
   const changePage = (pag: PaginationConfig, filters, sorter) => {
     onchange(pag, filters, sorter);
   };
-  const doDelete = record => {
+  const doInvalid = record => {
     Modal.confirm({
       title: '请确认',
-      content: `您是否要删除${record.billCode}吗`,
+      content: `您是否要作废${record.billCode}吗？`,
       onOk: () => {
-        RemoveForm(record.id)
+        InvalidForm(record.id)
           .then(() => {
-            message.success('删除成功');
+            message.success('作废成功！');
             reload();
           })
           .catch(e => { });
@@ -59,7 +59,8 @@ function ListTable(props: ListTableProps) {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
-      width: 100,
+      width: 80,
+      align:'center',
       sorter: true,
       render: (text, record) => {
         switch (text) {
@@ -78,48 +79,45 @@ function ListTable(props: ListTableProps) {
           case 7:
             return <Tag color="#29cc63">待审核</Tag>
           case 8:
-            return <Tag color="#e48f27">已审核</Tag> 
+            return <Tag color="#e48f27">已审核</Tag>
           case -1:
             return <Tag color="#d82d2d">已作废</Tag>
           default:
             return '';
         }
       }
-    },
-
+    }, 
     {
       title: '单据日期',
       dataIndex: 'billDate',
       key: 'billDate',
       width: 120,
       sorter: true,
-      render: val => <span> {moment(val).format('YYYY-MM-DD')} </span>
+      render: val => moment(val).format('YYYY-MM-DD')
     },
-    {
-      title: '关联地址',
-      dataIndex: 'address',
-      key: 'address',
-      width: 200,
-      sorter: true,
-    },
+    
     {
       title: '联系人',
       dataIndex: 'contactName',
       key: 'contactName',
-      width: 100,
+      width: 180,
       sorter: true,
     },
     {
       title: '联系方式',
       dataIndex: 'contactLink',
-      key: 'contactLink',
-      sorter: true,
+      key: 'contactLink', 
+    },
+    {
+      title: '关联地址',
+      dataIndex: 'address',
+      key: 'address',  
     },
     {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
-      align:'center',
+      align: 'center',
       width: 95,
       fixed: 'right',
       render: (text, record) => {
@@ -137,7 +135,7 @@ function ListTable(props: ListTableProps) {
           <span>
             <a onClick={() => modify(record)} key="modify">修改</a>
             <Divider type="vertical" />
-            <a onClick={() => doDelete(record)} key="delete">删除</a>
+            <a onClick={() => doInvalid(record)} key="invalid">作废</a>
           </span>
         ];
       },

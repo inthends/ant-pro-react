@@ -3,7 +3,7 @@ import { Divider, Tag, message, Modal, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import moment from 'moment';
-import { RemoveForm } from './Main.service';
+import { InvalidForm } from './Main.service';
 
 interface ListTableProps {
   loading: boolean;
@@ -19,14 +19,14 @@ function ListTable(props: ListTableProps) {
   const changePage = (pag: PaginationConfig, filters, sorter) => {
     onchange(pag, filters, sorter);
   };
-  const doDelete = record => {
+  const doInvalid = record => {
     Modal.confirm({
       title: '请确认',
-      content: `您是否要删除${record.billCode}吗？`,
+      content: `您是否要作废${record.billCode}吗？`,
       onOk: () => {
-        RemoveForm(record.id)
+        InvalidForm(record.id)
           .then(() => {
-            message.success('删除成功！');
+            message.success('作废成功！');
             reload();
           })
           .catch(e => { });
@@ -52,6 +52,7 @@ function ListTable(props: ListTableProps) {
       title: '单据状态',
       dataIndex: 'billStatus',
       key: 'billStatus',
+      align:'center',
       width: 100,
       sorter: true,
       render: (text, record) => {
@@ -64,6 +65,8 @@ function ListTable(props: ListTableProps) {
             return <Tag color="#5FB878">待评价</Tag>;
           case 4:
             return <Tag color="#009688">已评价</Tag>;
+          case -1:
+            return <Tag color="#d82d2d">已作废</Tag>
           default:
             return '';
         }
@@ -109,6 +112,7 @@ function ListTable(props: ListTableProps) {
       title: '是否回复',
       dataIndex: 'isApply',
       key: 'isApply',
+      align:'center',
       width: 100,
       render: (text, record) => {
         if (text == 0)
@@ -151,7 +155,7 @@ function ListTable(props: ListTableProps) {
             <span>
               <a onClick={() => modify(record)} key="modify">修改</a>
               <Divider type="vertical" />
-              <a onClick={() => doDelete(record)} key="delete">删除</a>
+              <a onClick={() => doInvalid(record)} key="invalid">作废</a>
             </span>
           ];
         } else {

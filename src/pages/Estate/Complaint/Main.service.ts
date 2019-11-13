@@ -26,10 +26,10 @@ export function GetPageListJson(data): Promise<any> {
 //     .then(getResult as any);
 // }
 
-// 删除
-export function RemoveForm(keyValue): Promise<any> {
+// 作废
+export function InvalidForm(keyValue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Complaint/RemoveForm?keyValue=${keyValue}`, {})
+    .post(process.env.basePath + `/Complaint/InvalidForm?keyValue=${keyValue}`, {})
     .then(getResult as any);
 }
 
