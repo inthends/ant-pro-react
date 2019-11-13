@@ -3,7 +3,7 @@ import { TreeEntity } from '@/model/models';
 import { Card, Select, Button, Col, DatePicker, Drawer, Form, Input, InputNumber, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetUserRoomsByRelationId,SaveDetail, GetReceivablesFeeItemTreeJson, GetRoomUsers, GetUserRooms, GetFeeItemDetail, SaveBilling, GetShowDetail } from './Main.service';
+import { GetUserRoomsByRelationId, SaveDetail, GetReceivablesFeeItemTreeJson, GetRoomUsers, GetUserRooms, GetFeeItemDetail, SaveBilling, GetShowDetail } from './Main.service';
 import LeftTree from '../LeftTree';
 import moment from 'moment';
 import styles from './style.less';
@@ -382,14 +382,14 @@ const Modify = (props: ModifyProps) => {
                     initialValue: infoDetail.relationId == null ? null : infoDetail.relationId,// getRelationId(infoDetail.relationId),
                     rules: [{ required: true, message: '请选择加费对象' }]
                   })(
-                    <Select placeholder="=请选择=" disabled={id === '' && edit ? false : true} 
-                    onSelect={(key) => {    
-                      GetUserRoomsByRelationId(key).then(res => {
-                        setUnitIds(res);
-                        // var info = Object.assign({}, infoDetail, { householdId: res[0].value });
-                        // setInfoDetail(info);
-                      });
-                    }}>
+                    <Select placeholder="=请选择=" disabled={id === '' && edit ? false : true}
+                      onSelect={(key) => {
+                        GetUserRoomsByRelationId(key).then(res => {
+                          setUnitIds(res);
+                          // var info = Object.assign({}, infoDetail, { householdId: res[0].value });
+                          // setInfoDetail(info);
+                        });
+                      }}>
                       {relationIds.map(item => (
                         <Option value={item.key}
                         >
@@ -559,16 +559,6 @@ const Modify = (props: ModifyProps) => {
               </Row>
               <Row>
                 <Col span={12}>
-                  <Form.Item label="账单日" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
-                    {getFieldDecorator('billDate', {
-                      initialValue: infoDetail.billDate == null ? moment(new Date()) : moment(infoDetail.billDate),
-                      rules: [{ required: true, message: '请选择账单日' }]
-                    })(
-                      <DatePicker disabled={true} style={{ width: '100%' }} />
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
                   {/* <Form.Item label="应收期间" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
                   {getFieldDecorator('period', {
                     initialValue: infoDetail.period == null ? moment(new Date()) : moment(infoDetail.period),
@@ -577,7 +567,6 @@ const Modify = (props: ModifyProps) => {
                     <DatePicker disabled={true} style={{ width: '100%' }} />
                   )}
                 </Form.Item> */}
-
                   {getFieldDecorator('period', {
                     initialValue: infoDetail.period,
                   })(
@@ -592,8 +581,16 @@ const Modify = (props: ModifyProps) => {
                       <DatePicker disabled={true} style={{ width: '100%' }} />
                     )}
                   </Form.Item>
-
-
+                </Col>
+                <Col span={12}>
+                  <Form.Item label="账单日" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
+                    {getFieldDecorator('billDate', {
+                      initialValue: infoDetail.billDate == null ? moment(new Date()) : moment(infoDetail.billDate),
+                      rules: [{ required: true, message: '请选择账单日' }]
+                    })(
+                      <DatePicker disabled={true} style={{ width: '100%' }} />
+                    )}
+                  </Form.Item>
                 </Col>
               </Row>
               <Row>

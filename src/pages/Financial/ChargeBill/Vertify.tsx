@@ -11,7 +11,7 @@ import {
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetEntityShow, ChargeFeeDetail,Audit } from './Main.service';
+import { GetEntityShow, ChargeFeeDetail, Audit } from './Main.service';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import styles from './style.less';
@@ -29,11 +29,11 @@ const Vertify = (props: VertifyProps) => {
   const { vertifyVisible, closeVertify, id, form, ifVertify, reload } = props;
   const { getFieldDecorator } = form;
   const title = ifVertify ? "收款单取消审核" : "收款单审核";
-  const [infoDetail, setInfoDetail] = useState<any>({}); 
+  const [infoDetail, setInfoDetail] = useState<any>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [chargeBillData, setChargeBillData] = useState<any[]>([]);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
-
+  const [linkno, setLinkno] = useState<any>('');
   // 打开抽屉时初始化
   useEffect(() => {
     form.resetFields();
@@ -44,13 +44,12 @@ const Vertify = (props: VertifyProps) => {
             /*  var infoTemp =Object.assign({},res.entity,
                 { feeName:res.feeName, customerName:res.customerName, unitName:res.unitName});*/
             setInfoDetail(res.entity);
-            initLoadFeeDetail(res.entity.billId);
+          setLinkno(res.linkno);
+          initLoadFeeDetail(res.entity.billId);
         });
       } else {
         setInfoDetail({});
       }
-    } else {
-
     }
   }, [vertifyVisible]);
 
@@ -58,7 +57,7 @@ const Vertify = (props: VertifyProps) => {
     closeVertify();
   };
 
-  const save = () => {
+  const audit = () => {
     form.validateFields((errors, values) => {
       // console.log(values, infoDetail);
       var newData = Object.assign({}, infoDetail,
@@ -68,7 +67,8 @@ const Vertify = (props: VertifyProps) => {
           verifyMemo: values.verifyMemo,
           keyValue: infoDetail.billId,
           billDate: moment(values.billDate).format('YYYY-MM-DD'),
-          status: ifVertify ? 1 : 2//，已收未审核1，已审核2，已冲红3
+          //status: ifVertify ? 1 : 2//，已收未审核1，已审核2，已冲红3
+          ifVerify: ifVertify
         });
       Audit(newData).then(res => {
         reload();
@@ -77,6 +77,22 @@ const Vertify = (props: VertifyProps) => {
     });
   };
 
+
+
+  const GetStatus = (status) => {
+    switch (status) {
+      case 0:
+        return '未收';
+      case 1:
+        return '已收';
+      case 2:
+        return '冲红';
+      case -1:
+        return '作废';
+      default:
+        return '';
+    }
+  };
 
   const columns = [
     {
@@ -106,14 +122,12 @@ const Vertify = (props: VertifyProps) => {
       dataIndex: 'quantity',
       key: 'quantity',
       width: 100,
-      sorter: true,
     },
     {
       title: '单价',
       dataIndex: 'price',
       key: 'price',
       width: 100,
-      sorter: true,
     },
     {
       title: '应收金额',
@@ -268,11 +282,13 @@ const Vertify = (props: VertifyProps) => {
                 {infoDetail.billDate}
               </Form.Item>
             </Col>
+
             <Col span={6}>
-              <Form.Item label="发票编号"  >
-                {infoDetail.invoiceCdde}
+              <Form.Item label="收款人"  >
+                {infoDetail.createUserName}
               </Form.Item>
             </Col>
+
             <Col span={6}>
               <Form.Item label="收款编号"  >
                 {infoDetail.payCode}
@@ -281,33 +297,38 @@ const Vertify = (props: VertifyProps) => {
           </Row>
           <Row gutter={24}>
             <Col span={6}>
+              <Form.Item label="发票编号"  >
+                {infoDetail.invoiceCdde}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
               <Form.Item label="冲红单号" >
-                {infoDetail.linkId}
+                {linkno}
               </Form.Item>
             </Col>
             <Col span={6}>
-              <Form.Item label="收款人"  >
-                {infoDetail.createUserName}
+              <Form.Item label="单据状态"   >
+                {GetStatus(infoDetail.status)}
               </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item label="审核人"   >
-                {infoDetail.verifyPerson}
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item label="审核情况"   >
-                {infoDetail.verifyMemo}
-              </Form.Item>
-            </Col>
-          </Row>
+            </Col> 
+          </Row> 
+
           <Row gutter={24}>
             <Col span={24}>
-              <Form.Item label="收款金额" >
-                {`${infoDetail.payAmountA + infoDetail.payAmountB + infoDetail.payAmountC}元,其中${infoDetail.payTypeA} ${infoDetail.payAmountA}元，${infoDetail.payTypeB} ${infoDetail.payAmountB}元， ${infoDetail.payTypeC} ${infoDetail.payAmountC}元`}
+              <Form.Item label="收款金额" style={{ color: "green" }}>
+                {`${infoDetail.payAmountA + infoDetail.payAmountB + infoDetail.payAmountC}元，其中${infoDetail.payTypeA}${infoDetail.payAmountA}元，${infoDetail.payTypeB}${infoDetail.payAmountB}元，${infoDetail.payTypeC}${infoDetail.payAmountC}元`}
               </Form.Item>
             </Col>
           </Row>
+
+          <Row gutter={24}>
+              <Col span={24}>
+                <Form.Item label="备注"   >
+                  {infoDetail.memo}
+                </Form.Item>
+              </Col> 
+            </Row>
+
           <Table
             // title={() => '费用明细'}
             size="middle"
@@ -317,7 +338,7 @@ const Vertify = (props: VertifyProps) => {
             pagination={pagination}
             scroll={{ y: 500, x: 1150 }}
             loading={loading}
-          /> 
+          />
           <Row gutter={24}>
             <Col span={24}>
               <Form.Item label="审核情况" >
@@ -346,7 +367,7 @@ const Vertify = (props: VertifyProps) => {
         <Button onClick={close} style={{ marginRight: 8 }}>
           取消
         </Button>
-        <Button onClick={save} type="primary">
+        <Button onClick={audit} type="primary">
           提交
         </Button>
       </div>

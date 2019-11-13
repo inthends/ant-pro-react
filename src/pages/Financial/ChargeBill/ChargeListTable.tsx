@@ -31,13 +31,13 @@ function ChargeListTable(props: ChargeListTableProps) {
     <Dropdown
       overlay={
         <Menu onClick={({ key }) => editAndDelete(key, item)}>
-          <Menu.Item key="redflush">冲红</Menu.Item>
+          {item.status == 1 && item.linkId == null ? < Menu.Item key="redflush">冲红</Menu.Item> : null}
           <Menu.Item key="invalid">作废</Menu.Item>
-        </Menu>}>
+        </Menu >}>
       <a>
         更多<Icon type="down" />
       </a>
-    </Dropdown>
+    </Dropdown >
   );
 
   const editAndDelete = (key: string, currentItem: any) => {
@@ -62,7 +62,7 @@ function ChargeListTable(props: ChargeListTableProps) {
           Modal.confirm({
             title: '请确认',
             content: `该收款单已经生成付款单${res.billCode}不允许冲红！`,
-            onOk: () => { 
+            onOk: () => {
               //to do
             },
           });
@@ -88,7 +88,7 @@ function ChargeListTable(props: ChargeListTableProps) {
 
   const columns = [
     {
-      title: '收款单编号',
+      title: '收款单号',
       dataIndex: 'billCode',
       key: 'billCode',
       width: 120,
@@ -138,13 +138,24 @@ function ChargeListTable(props: ChargeListTableProps) {
       title: '状态',
       dataIndex: 'statusName',
       key: 'statusName',
+      align: 'center',
       width: 60
-    }, {
+    },
+    {
+      title: '是否审核',
+      dataIndex: 'ifVerify',
+      key: 'ifVerify',
+      align: 'center',
+      width: 80,
+      render: val => val ? '已审核' : '未审核'
+    },
+
+    {
       title: '审核日期',
       dataIndex: 'verifyDate',
       key: 'verifyDate',
-      width: 100,
-      render: val => val == null || val == "" ? '' : moment(val).format('YYYY-MM-DD')
+      width: 160,
+      // render: val => val == null || val == "" ? '' : moment(val).format('YYYY-MM-DD')
     }, {
       title: '审核人',
       dataIndex: 'verifyPerson',
@@ -174,7 +185,7 @@ function ChargeListTable(props: ChargeListTableProps) {
           <span>
             <a onClick={() => showDetail()} key="view">查看</a>
             <Divider type="vertical" />
-            {record.status == 1 ? <a onClick={() => showVertify(record.billId, false)} key="approve">审核</a> : <a onClick={() => showVertify(record.id, true)} key="unapprove">反审</a>}
+            {!record.ifVerify ? <a onClick={() => showVertify(record.billId, false)} key="approve">审核</a> : <a onClick={() => showVertify(record.id, true)} key="unapprove">反审</a>}
             <Divider type="vertical" />
             <MoreBtn key="more" item={record} />
           </span>
@@ -206,7 +217,7 @@ function ChargeListTable(props: ChargeListTableProps) {
     if (record.billId === selectedRowKey) {
       return styles.rowSelect;
     } else {
-      if (record.status == 3) {
+      if (record.status == 2) {
         return styles.rowFlush
       } else {
         return '';
@@ -224,7 +235,7 @@ function ChargeListTable(props: ChargeListTableProps) {
         columns={columns}
         rowKey={record => record.billId}
         pagination={pagination}
-        scroll={{ y: 500, x: 1400 }}
+        scroll={{ y: 500, x: 1500 }}
         rowClassName={setClassName} //表格行点击高亮
         loading={loading}
         onRow={onRow}

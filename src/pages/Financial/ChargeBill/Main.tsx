@@ -2,7 +2,7 @@ import { DefaultPagination } from '@/utils/defaultSetting';
 import { Checkbox, Tabs, Button, Icon, Input, Layout, Select, DatePicker, message } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { GetPageListJson, ChargeFeePageData } from './Main.service';
+import { NotChargeFeeData, ChargeFeePageData } from './Main.service';
 import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
 import ChargeListTable from './ChargeListTable';
@@ -117,7 +117,7 @@ function Main() {
     setLoading(true);
     data.sidx = data.sidx || 'billDate';
     data.sord = data.sord || 'desc';
-    return GetPageListJson(data).then(res => {
+    return NotChargeFeeData(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
         return {
@@ -355,7 +355,7 @@ function Main() {
                 查看
               </Button> */}
 
-              <span style={{ marginLeft: 8, color: "red" }}>
+              <span style={{ marginLeft: 8, color: "green" }}>
                 已选择：{showname}
               </span>
 
@@ -413,14 +413,14 @@ function Main() {
                 </Option>
               </Select>
               <DatePicker
-                placeholder='请选择收款日期'
+                placeholder='收款日期'
                 onChange={(date, dateStr) => {
                   var params = Object.assign({}, chargedSearchParams, { startDate: dateStr });
                   setChargedSearchParams(params);
                 }} style={{ marginRight: '5px' }} />
               至
               <DatePicker
-                placeholder='请选择收款日期'
+                placeholder='收款日期'
                 onChange={(date, dateStr) => {
                   var params = Object.assign({}, chargedSearchParams, { endDate: dateStr });
                   setChargedSearchParams(params);

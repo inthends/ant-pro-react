@@ -21,6 +21,7 @@ const Show = (props: ShowProps) => {
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [chargeBillData, setChargeBillData] = useState<any[]>([]);
+  const [linkno, setLinkno] = useState<any>('');
   // 打开抽屉时初始化
   useEffect(() => {
     form.resetFields();
@@ -29,6 +30,7 @@ const Show = (props: ShowProps) => {
         GetEntityShow(id).then(res => {
           if (res != null) {
             setInfoDetail(res.entity);
+            setLinkno(res.linkno);
             return res.entity.billId;
           }
           return '';
@@ -80,14 +82,12 @@ const Show = (props: ShowProps) => {
       dataIndex: 'quantity',
       key: 'quantity',
       width: 100,
-      sorter: true,
     },
     {
       title: '单价',
       dataIndex: 'price',
       key: 'price',
       width: 100,
-      sorter: true,
     },
     {
       title: '应收金额',
@@ -167,7 +167,22 @@ const Show = (props: ShowProps) => {
           setLoading(false);
         });
       },
-    }); 
+    });
+  };
+
+  const GetStatus = (status) => {
+    switch (status) {
+      case 0:
+        return '未收';
+      case 1:
+        return '已收';
+      case 2:
+        return '冲红';
+      case -1:
+        return '作废';
+      default:
+        return '';
+    }
   };
 
   return (
@@ -193,11 +208,13 @@ const Show = (props: ShowProps) => {
                   {infoDetail.billDate}
                 </Form.Item>
               </Col>
+
               <Col span={6}>
-                <Form.Item label="发票编号"  >
-                  {infoDetail.invoiceCdde}
+                <Form.Item label="收款人"  >
+                  {infoDetail.createUserName}
                 </Form.Item>
               </Col>
+
               <Col span={6}>
                 <Form.Item label="收款编号"  >
                   {infoDetail.payCode}
@@ -206,21 +223,39 @@ const Show = (props: ShowProps) => {
             </Row>
             <Row gutter={24}>
               <Col span={6}>
-                <Form.Item label="冲红单号" >
-                  {infoDetail.linkId}
+                <Form.Item label="发票编号"  >
+                  {infoDetail.invoiceCdde}
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item label="收款人"  >
-                  {infoDetail.createUserName}
+                <Form.Item label="冲红单号" >
+                  {linkno}
                 </Form.Item>
               </Col>
+              <Col span={6}>
+                <Form.Item label="单据状态"   >
+                  {GetStatus(infoDetail.status)}
+                </Form.Item>
+              </Col>
+
+              <Col span={6}>
+                <Form.Item label="审核状态"   >
+                  {infoDetail.ifVerify ? '已审核' : '未审核'}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={24}>
               <Col span={6}>
                 <Form.Item label="审核人"   >
                   {infoDetail.verifyPerson}
                 </Form.Item>
               </Col>
               <Col span={6}>
+                <Form.Item label="审核时间"   >
+                  {infoDetail.verifyDate}
+                </Form.Item>
+              </Col>
+              <Col span={12} >
                 <Form.Item label="审核情况"   >
                   {infoDetail.verifyMemo}
                 </Form.Item>
@@ -228,11 +263,20 @@ const Show = (props: ShowProps) => {
             </Row>
             <Row gutter={24}>
               <Col span={24}>
-                <Form.Item label="收款金额" >
-                  {`${infoDetail.payAmountA + infoDetail.payAmountB + infoDetail.payAmountC}元,其中${infoDetail.payTypeA} ${infoDetail.payAmountA}元，${infoDetail.payTypeB} ${infoDetail.payAmountB}元， ${infoDetail.payTypeC} ${infoDetail.payAmountC}元`}
+                <Form.Item label="收款金额" style={{ color: "green" }}>
+                  {`${infoDetail.payAmountA + infoDetail.payAmountB + infoDetail.payAmountC}元，其中${infoDetail.payTypeA}${infoDetail.payAmountA}元，${infoDetail.payTypeB}${infoDetail.payAmountB}元，${infoDetail.payTypeC}${infoDetail.payAmountC}元`}
                 </Form.Item>
               </Col>
             </Row>
+
+            <Row gutter={24}>
+              <Col span={24}>
+                <Form.Item label="备注"   >
+                  {infoDetail.memo}
+                </Form.Item>
+              </Col> 
+            </Row>
+
             <Table
               // title={() => '费用明细'}
               size="middle"

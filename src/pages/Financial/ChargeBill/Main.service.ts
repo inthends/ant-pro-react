@@ -35,8 +35,9 @@ export function GetUserRooms(data): Promise<any[]> {
 export function GetFeeItemDetail(feeitemid, roomid): Promise<any> {
   return request.get(process.env.basePath + `/Common/GetFeeItemDetail?feeitemid=${feeitemid}&roomid=${roomid}`, {}).then(getResult as any);;
 }
+
 //未收
-export function GetPageListJson(data): Promise<any> {
+export function NotChargeFeeData(data): Promise<any> {
   return request.post(process.env.basePath + `/Receivable/NotChargeFeeData`, { data: objToFormdata(data) }).then(getResult as any);
 }
 

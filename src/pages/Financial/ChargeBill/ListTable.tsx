@@ -121,19 +121,19 @@ function ListTable(props: ListTableProps) {
       title: '计费起始日期',
       dataIndex: 'beginDate',
       key: 'beginDate',
-      width: 85,
+      width: 120,
       render: val => moment(val).format('YYYY-MM-DD')
     }, {
       title: '计费终止日期',
       dataIndex: 'endDate',
       key: 'endDate',
-      width: 85,
+      width: 120,
       render: val => moment(val).format('YYYY-MM-DD')
     }, {
       title: '账单日',
       dataIndex: 'billDate',
       key: 'billDate',
-      width: 85,
+      width: 120,
       render: val => moment(val).format('YYYY-MM-DD')
     }, {
       title: '房屋全称',
@@ -144,7 +144,6 @@ function ListTable(props: ListTableProps) {
       title: '备注',
       dataIndex: 'memo',
       key: 'memo',
-      width: 100
     },
     {
       title: '操作',
@@ -246,7 +245,7 @@ function ListTable(props: ListTableProps) {
             }
             Charge(info).then(res => {
               message.success('收款成功！');
-              reload(); 
+              reload();
               //弹出查看页面
               showDetail(res);
 
@@ -260,7 +259,7 @@ function ListTable(props: ListTableProps) {
   return (
     <Page>
       <Form layout="vertical" hideRequiredMark>
-        <Card  bordered={false}  >
+        <Card bordered={false}  >
           <Row gutter={27}>
             <Col lg={4}>
               <Form.Item >
@@ -277,7 +276,7 @@ function ListTable(props: ListTableProps) {
                     <Option value="转账">转账</Option>
                     <Option value="抵扣卷">抵扣卷</Option>
                   </Select>
-                )} 
+                )}
               </Form.Item>
             </Col>
             <Col lg={4}>
@@ -411,7 +410,7 @@ function ListTable(props: ListTableProps) {
           <Button type="primary" onClick={charge}>收款确认</Button>
           <span style={{ marginLeft: 8, color: "red" }}>
             {hasSelected ? `应收金额：${sumEntity.sumAmount} ，减免金额：${sumEntity.sumreductionAmount}，冲抵金额：${sumEntity.sumoffsetAmount}，未收金额：${sumEntity.sumlastAmount}` : ''}
-          </span> 
+          </span>
         </Card>
       </Form>
       <Table
