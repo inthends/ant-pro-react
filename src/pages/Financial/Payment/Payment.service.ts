@@ -23,7 +23,7 @@ export function ChargeFeeDetail(data): Promise<any> {
 
 //获取收费明细
 export function ChargeFeePageData(data): Promise<any> {
-  return request.post(process.env.basePath + `/Payment/PaymentFeePageData`, {data:objToFormdata(data)}).then(getResult as any);
+  return request.post(process.env.basePath + `/Payment/GetPaymentFeePageData`, {data:objToFormdata(data)}).then(getResult as any);
 }
 //获取付款费项
 export function GetTempPaymentFeeItemTreeJson(): Promise<TreeEntity[]> {

@@ -39,11 +39,11 @@ const AddReductionItem = (props: AddReductionItemProps) => {
 
   const selectStartDate = (date) => {
     setStartDate(date);
-  }
+  };
 
   const selectEndDate = (date) => {
     setEndDate(date);
-  }
+  };
 
   //选择房源
   // const selectUnitTree = (id) => {

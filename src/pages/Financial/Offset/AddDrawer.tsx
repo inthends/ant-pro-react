@@ -4,7 +4,7 @@ import { message, notification, Button, Col, DatePicker, Drawer, Form, Row, Spin
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { GetReceivablesTree, GetPaymentTree, SaveForm, GetFormJson } from './Offset.service';
-import './style.less';
+// import './style.less';
 import moment from 'moment';
 import SelectTree from '../SelectTree';
 import LeftTree from '../LeftTree';
@@ -21,7 +21,7 @@ interface AddDrawerProps {
 };
 
 const AddDrawer = (props: AddDrawerProps) => {
-  const { treeData, addDrawerVisible, closeDrawer, form, id } = props;
+  const { treeData, addDrawerVisible, closeDrawer, form, id,reload } = props;
   const title = id === undefined ? '新增冲抵单' : '修改冲抵单';
   const [loading, setLoading] = useState<boolean>(false);
   const { getFieldDecorator } = form;
@@ -67,9 +67,9 @@ const AddDrawer = (props: AddDrawerProps) => {
     }
   }, []);
 
-  const close = () => {
-    closeDrawer();
-  };
+  // const close = () => {
+  //   closeDrawer();
+  // };
 
   // const guid = () => {
   //   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -168,7 +168,9 @@ const AddDrawer = (props: AddDrawerProps) => {
                 '没有找到要冲抵的费用！'
             });
           } else {
-            close();
+            message.success('保存成功！');
+            reload();
+            closeDrawer();
           }
         })
       }
@@ -225,7 +227,7 @@ const AddDrawer = (props: AddDrawerProps) => {
       title={title}
       placement="right"
       width={900}
-      onClose={close}
+      onClose={closeDrawer}
       visible={addDrawerVisible}
       style={{ height: 'calc(100vh-50px)' }}
       bodyStyle={{ background: '#f6f7fb', height: 'calc(100vh -50px)' }}
@@ -336,12 +338,12 @@ const AddDrawer = (props: AddDrawerProps) => {
           }}
         >
           <Button style={{ marginRight: 8 }}
-            onClick={() => close()}
+            onClick={closeDrawer}
           >
             取消
         </Button>
           <Button type="primary"
-            onClick={() => onSave()}
+            onClick={onSave}
           >
             提交
         </Button>

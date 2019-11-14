@@ -181,24 +181,36 @@ function Payment() {
     setShowVisible(false);
   };
 
-  const showVerify = (id?, ifVerify?) => {
+  // const showVerify = (id?, ifVerify?) => {
+  //   setVerifyVisible(true);
+  //   setIfVerify(ifVerify);
+  //   if (id != null && id != '')
+  //     setId(id);
+  // };
+
+  const showVerifyDrawer = (id, ifVerify) => {
     setVerifyVisible(true);
+    setId(id);
     setIfVerify(ifVerify);
-    if (id != null && id != '')
-      setId(id);
   };
 
-  const showBill = (id?) => {
+  
+  const showViewDrawer = (id?) => {
     setShowVisible(true);
-    if (id != null && id != '')
-      setId(id);
+    setId(id);
   };
+
+  // const showBill = (id?) => {
+  //   setShowVisible(true);
+  //   if (id != null && id != '')
+  //     setId(id);
+  // };
 
   const closeModify = (result?) => {
     setModifyVisible(false);
-    if (result) {
-      //initCheckLoadData(organize, null);
-    }
+    // if (result) {
+    //initCheckLoadData(organize, null);
+    // }
   };
 
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
@@ -320,8 +332,10 @@ function Payment() {
               rowSelect={(record) => {
                 setId(record.billId);
               }}
-              organize={organize} 
-              showDetail={(billId) => showBill(billId)} 
+              organize={organize}
+              // showDetail={(billId) => showBill(billId)}  
+              showDetail={(billId) => { setId(billId); setShowVisible(true); }}
+
             />
           </TabPane>
           <TabPane tab="付款单列表" key="2">
@@ -390,10 +404,14 @@ function Payment() {
                 审核
               </Button> */}
             </div>
+
             <PaymentTable
-              showBill={(id) => {
-                showBill(id)
-              }}
+
+              show={showViewDrawer}
+
+              // showBill={(id) => {
+              //   showBill(id)
+              // }}
               onchange={(paginationConfig, filters, sorter) =>
                 loadPaymentData(paginationConfig, sorter)
               }
@@ -401,17 +419,19 @@ function Payment() {
               pagination={paymentPagination}
               data={paymentData}
               reload={() => initPaymentLoadData('', paymentSearchParams.search)}
-              getRowSelect={(record) => {
-                setId(record.billId);
-                // setBillStatus(record.status); 
-                if (record.status == 0) {
-                  setIfVerify(true);
-                } else {
-                  setIfVerify(false);
-                }
+              // getRowSelect={(record) => {
+              //   setId(record.billId);
+              //   // setBillStatus(record.status); 
+              //   if (record.status == 0) {
+              //     setIfVerify(true);
+              //   } else {
+              //     setIfVerify(false);
+              //   } 
+              // }}
+              // verify={showVerify}
 
-              }}
-              showVerify={showVerify}
+              verify={(id, ifVerify) => showVerifyDrawer(id, ifVerify)}
+
             />
           </TabPane>
         </Tabs>

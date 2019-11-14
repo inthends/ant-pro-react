@@ -1,9 +1,9 @@
 //付款单列表
 
 import Page from '@/components/Common/Page';
-import { Modal, Divider, Form, Table } from 'antd';
+import { message, Modal, Divider, Form, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
-import React, { useState } from 'react';
+import React from 'react';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { InvalidForm } from './Payment.service';
 import moment from 'moment';
@@ -15,15 +15,30 @@ interface PaymentTableProps {
   pagination: PaginationConfig;
   data: any[];
   reload(): void;
-  showBill(id?): void;
+  show(id: string): void;
   form: WrappedFormUtils;
-  getRowSelect(record): void;
-  showVerify(id?): void;
+  // getRowSelect(record): void;
+  // showVerify(id?): void;
+  verify(id: string, flag: boolean): void;
 }
 
 function PaymentTable(props: PaymentTableProps) {
-  const { onchange, loading, pagination, data, reload, showBill, getRowSelect, showVerify } = props;
-  const [selectedRowKey, setSelectedRowKey] = useState([]);
+  const { onchange, loading, pagination, data, reload, show, verify } = props;
+  // const [selectedRowKey, setSelectedRowKey] = useState([]);
+
+  const doInvalid = record => {
+    Modal.confirm({
+      title: '请确认',
+      content: `您是否要作废${record.billCode}？`,
+      onOk: () => {
+        InvalidForm(record.billId).then(() => {
+          message.success('作废成功！');
+          reload();
+        });
+      },
+    });
+  };
+
   const columns = [
     {
       title: '付款单编号',
@@ -77,14 +92,20 @@ function PaymentTable(props: PaymentTableProps) {
       title: '审核人',
       dataIndex: 'verifyPerson',
       key: 'verifyPerson',
-      width: 80
+      width: 100
     },
     {
       title: '状态',
       dataIndex: 'statusName',
       key: 'statusName',
-      width: 80,
-      sorter: true
+      width: 60,
+    },
+    {
+      title: '是否审核',
+      dataIndex: 'ifVerify',
+      key: 'ifVerify',
+      width: 100,
+      render: val => val ? '已审核' : '未审核'
     },
     {
       title: '审核情况',
@@ -97,31 +118,50 @@ function PaymentTable(props: PaymentTableProps) {
       dataIndex: 'operation',
       key: 'operation',
       align: 'center',
+      fixed: 'right',
       width: 150,
       render: (text, record) => {
-        return [
-          <span>
-            <a onClick={() => showBill(record.billId)} key="modify">{"查看"}</a>
-            <Divider type="vertical" /> 
-            {record.status == 0 ? <a onClick={() => showVerify(record.billId)} key="app">审核</a> :
-              <a onClick={() => showVerify(record.billId)} key="unapp"  >反审</a>
-            }
-            <Divider type="vertical" /> 
-            <a onClick={() => {
-              Modal.confirm({
-                title: '请确认',
-                content: `您是否要作废${record.billCode}`,
-                okText: '确认',
-                cancelText: '取消',
-                onOk: () => {
-                  InvalidForm(record.billId).then(res => {
-                    if (res.code != 0) { reload(); }
+
+        if (record.ifVerify) {
+          return [
+            <span>
+              <a onClick={() => show(record.billId)} key="modify">查看</a>
+              <Divider type="vertical" />
+              <a onClick={() => verify(record.billId, false)} key="modify">反审</a>
+            </span>
+          ];
+        }
+        else {
+
+          if (record.status == -1) {
+            //作废，只能查看
+            return [<a onClick={() => show(record.billId)} key="modify">查看</a>]
+          } else {
+
+            return [
+              <span>
+                <a onClick={() => show(record.billId)} key="modify">{"查看"}</a>
+                <Divider type="vertical" />
+                <a onClick={() => verify(record.billId, true)} key="app">审核</a>
+                <Divider type="vertical" />
+                <a onClick={() => doInvalid(record)} key="invalid">作废</a>
+                {/* <a onClick={() => {
+                  Modal.confirm({
+                    title: '请确认',
+                    content: `您是否要作废${record.billCode}？`,
+                    okText: '确认',
+                    cancelText: '取消',
+                    onOk: () => {
+                      InvalidForm(record.billId).then(res => {
+                        if (res.code != 0) { reload(); }
+                      });
+                    }
                   });
-                }
-              });
-            }} key="delete">作废</a>
-          </span>
-        ];
+                }} key="delete">作废</a> */}
+              </span>
+            ];
+          }
+        }
       },
     },
   ] as ColumnProps<any>[];
@@ -142,25 +182,34 @@ function PaymentTable(props: PaymentTableProps) {
   // };
 
 
-  const setClassName = (record, index) => {
-    if (record.billId === selectedRowKey) {
-      return styles.rowSelect;
+  // const setClassName = (record, index) => {
+  //   if (record.billId === selectedRowKey) {
+  //     return styles.rowSelect;
+  //   } else {
+  //     if (record.status == 2 || record.status == -1) {
+  //       return styles.rowRed
+  //     } else {
+  //       return '';
+  //     }
+  //   }
+  // }
+
+  // const onRow = (record) => {
+  //   return {
+  //     onClick: event => {
+  //       setSelectedRowKey(record.billId);
+  //       getRowSelect(record);
+  //     }
+  //   };
+  // }
+
+  const getClassName = (record, index) => {
+    if (record.status == -1) {
+      return styles.rowRed
     } else {
-      if (record.status == 3) {
-        return styles.rowFlush
-      } else {
-        return '';
-      }
+      return '';
     }
-  }
-  const onRow = (record) => {
-    return {
-      onClick: event => {
-        setSelectedRowKey(record.billId);
-        getRowSelect(record);
-      }
-    };
-  }
+  };
 
   return (
     <Page>
@@ -172,11 +221,12 @@ function PaymentTable(props: PaymentTableProps) {
         dataSource={data}
         rowKey="billId"
         pagination={pagination}
-        scroll={{ y: 500 }}
+        scroll={{ x: 1200, y: 500 }}
         loading={loading}
         onChange={onchange}
-        rowClassName={setClassName} //表格行点击高亮
-        onRow={onRow}
+        // rowClassName={setClassName} //表格行点击高亮
+        // onRow={onRow}
+        rowClassName={getClassName} //样式
       />
     </Page>
   );

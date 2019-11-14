@@ -1,12 +1,13 @@
 
-import { Input, Table, Button, Card, Col, Drawer, Form, Row } from 'antd';
+import { Table, Button, Card, Col, Drawer, Form, Row } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { PaginationConfig } from 'antd/lib/table';
+import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { GetFormJson, GetListByID } from './Main.service';
 import moment from 'moment';
-const { TextArea } = Input;
+// const { TextArea } = Input;
+import styles from './style.less';
 
 interface ShowProps {
   modalVisible: boolean;
@@ -17,7 +18,7 @@ interface ShowProps {
 
 const Show = (props: ShowProps) => {
   const { modalVisible, closeModal, form, id } = props;
-  const { getFieldDecorator } = form;
+  // const { getFieldDecorator } = form;
   // const title = id === undefined ? '减免单审核' : '减免单审核';
   const title = '减免单查看';
   const [infoDetail, setInfoDetail] = useState<any>({});
@@ -152,7 +153,6 @@ const Show = (props: ShowProps) => {
       dataIndex: 'amount',
       key: 'amount',
       width: '100px',
-      sorter: true,
     }, {
       title: '累计减免',
       dataIndex: 'sumReductionAmount',
@@ -175,7 +175,7 @@ const Show = (props: ShowProps) => {
       dataIndex: 'memo',
       key: 'memo'
     },
-  ]; //as ColumnProps<any>[];
+  ] as ColumnProps<any>[];
 
 
   return (
@@ -189,7 +189,7 @@ const Show = (props: ShowProps) => {
     >
 
       <Form layout="vertical" hideRequiredMark>
-        <Card  >
+        <Card className={styles.card}>
           <Row gutter={24}>
             <Col lg={8}>
               <Form.Item label="单据编号">
@@ -230,22 +230,22 @@ const Show = (props: ShowProps) => {
                 {infoDetail.memo}
               </Form.Item>
             </Col>
-          </Row>
-
+          </Row> 
           <Row>
             <Col>
               <Form.Item label="审核意见">
                 {infoDetail.verifyMemo}
               </Form.Item>
             </Col>
-          </Row> 
+          </Row>
           <Row style={{ marginTop: '15px' }}>
             <Table
               bordered={false}
               size="middle"
               dataSource={listdata}
               columns={columns}
-              rowKey={record => record.id}
+              // rowKey={record => record.id}
+              rowKey="billId"
               pagination={pagination}
               scroll={{ x: 1150, y: 500 }}
               loading={loading}

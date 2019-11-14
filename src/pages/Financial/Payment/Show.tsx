@@ -26,8 +26,8 @@ const Show = (props: ShowProps) => {
 
   useEffect(() => {
     if (visible) {
-      form.resetFields();
-      if (id) {
+      form.resetFields(); 
+      if (id) { 
         GetEntity(id).then(res => {
           setInfoDetail(res);
           setLoading(false);

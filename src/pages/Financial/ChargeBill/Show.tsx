@@ -267,11 +267,10 @@ const Show = (props: ShowProps) => {
                   {`${infoDetail.payAmountA + infoDetail.payAmountB + infoDetail.payAmountC}元，其中${infoDetail.payTypeA}${infoDetail.payAmountA}元，${infoDetail.payTypeB}${infoDetail.payAmountB}元，${infoDetail.payTypeC}${infoDetail.payAmountC}元`}
                 </Form.Item>
               </Col>
-            </Row>
-
+            </Row> 
             <Row gutter={24}>
               <Col span={24}>
-                <Form.Item label="备注"   >
+                <Form.Item label="备注">
                   {infoDetail.memo}
                 </Form.Item>
               </Col> 

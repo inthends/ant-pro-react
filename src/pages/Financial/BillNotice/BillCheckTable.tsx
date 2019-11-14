@@ -82,9 +82,10 @@ function BillCheckTable(props: BillCheckTableProps) {
     },
     {
       title: '审核状态',
-      dataIndex: 'ifVerifyName',
-      key: 'ifVerifyName',
-      width: 100
+      dataIndex: 'ifVerify',
+      key: 'ifVerify',
+      width: 100,
+      render: val => val ? '已审核' : '未审核'
     },
     {
       title: '审核人',

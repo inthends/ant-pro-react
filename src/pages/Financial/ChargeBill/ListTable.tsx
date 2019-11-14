@@ -6,7 +6,7 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { RemoveForm, Charge } from './Main.service';
-import styles from './style.less';
+// import styles from './style.less';
 const { Option } = Select;
 
 interface ListTableProps {
@@ -26,8 +26,7 @@ interface ListTableProps {
 };
 
 function ListTable(props: ListTableProps) {
-  const { form, onchange, loading, pagination, data, modify, reload,
-    rowSelect, organizeId, customerName, showSplit, showTrans, showDetail } = props;
+  const { form, onchange, loading, pagination, data, modify, reload,rowSelect, organizeId, customerName, showSplit, showTrans, showDetail } = props;
   const { getFieldDecorator } = form;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);

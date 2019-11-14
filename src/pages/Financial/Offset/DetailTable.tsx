@@ -5,7 +5,7 @@ import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import moment from 'moment';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-
+import styles from './style.less';
 interface DetailTableProps {
   onchange(page: any, filter: any, sort: any): any;
   loading: boolean;
@@ -17,7 +17,13 @@ interface DetailTableProps {
 
 function DetailTable(props: DetailTableProps) {
   const { loading, pagination, data } = props;
-
+  const getClassName = (record, index) => {
+    if (record.status == -1) {
+      return styles.rowRed
+    } else {
+      return '';
+    }
+  };
   const columns = [
     {
       title: '单号',
@@ -44,8 +50,7 @@ function DetailTable(props: DetailTableProps) {
       title: '应付金额',
       dataIndex: 'payAmount',
       key: 'payAmount',
-      width: 100,
-      sorter: true,
+      width: 100, 
     },
     {
       title: '收费项目',
@@ -57,14 +62,12 @@ function DetailTable(props: DetailTableProps) {
     {
       title: '冲抵金额',
       dataIndex: 'billAmount',
-      key: 'billAmount',
-      sorter: true,
+      key: 'billAmount', 
       width: 100
     },
     {
       title: '应付余额',
-      dataIndex: 'lastAmount',
-      sorter: true,
+      dataIndex: 'lastAmount', 
       key: 'lastAmount',
       width: 100,
       // render: val => {
@@ -78,8 +81,7 @@ function DetailTable(props: DetailTableProps) {
     {
       title: '计费起始日期',
       dataIndex: 'billBeginDate',
-      key: 'billBeginDate',
-      sorter: true,
+      key: 'billBeginDate', 
       width: 120,
       render: val => {
         if (val == null) {
@@ -91,8 +93,7 @@ function DetailTable(props: DetailTableProps) {
     }, {
       title: '计费终止日期',
       dataIndex: 'billEndDate',
-      key: 'billEndDate',
-      sorter: true,
+      key: 'billEndDate', 
       width: 120,
       render: val => {
         if (val == null) {
@@ -115,6 +116,7 @@ function DetailTable(props: DetailTableProps) {
         pagination={pagination}
         scroll={{ y: 500, x: 1100 }}
         loading={loading}
+        rowClassName={getClassName} //样式
       />
     </Page>
   );

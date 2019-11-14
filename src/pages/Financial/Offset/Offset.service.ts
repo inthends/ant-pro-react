@@ -27,14 +27,19 @@ export function GetOffsetPageData(data): Promise<any> {
 export function GetOffsetPageDetailData(data): Promise<any> {
   return request.post(process.env.basePath + `/Offset/GetOffsetPageDetailData`, {data:objToFormdata(data)}).then(getResult as any);
 }
+
 //根据主单id查询冲抵明细列表
-export function GetOffsetPageDetailDataByID(data): Promise<any> {
-  return request.post(process.env.basePath + `/Offset/GetOffsetPageDetailDataByID`, {data:objToFormdata(data)}).then(getResult as any);
+export function GetListByID(data): Promise<any> {
+  return request.post(process.env.basePath + `/Offset/GetListByID`, {data:objToFormdata(data)}).then(getResult as any);
 }
-//删除冲抵单
-export function RemoveForm(data): Promise<any> {
-  return request.post(process.env.basePath + `/Offset/RemoveForm`, {data:objToFormdata(data)}).then(getResult as any);
+
+//作废冲抵单
+export function InvalidForm(keyValue): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Offset/InvalidForm?keyValue=${keyValue}`)
+    .then(getResult as any);
 }
+
 //保存冲抵单
 export function SaveForm(data): Promise<any> {
   return request.post(process.env.basePath + `/Offset/SaveForm`, {data:objToFormdata(data)}).then(getResult as any);

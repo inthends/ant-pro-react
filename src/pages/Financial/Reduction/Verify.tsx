@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { GetFormJson, GetListByID, Audit } from './Main.service';
 import moment from 'moment';
 const { TextArea } = Input;
+import styles from './style.less'
 
 interface VerifyProps {
   modalVisible: boolean;
@@ -63,7 +64,7 @@ const Verify= (props: VerifyProps) => {
     }
   }, [modalVisible]);
 
-  //提交编辑
+  //提交审核
   const onSave = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
@@ -72,7 +73,7 @@ const Verify= (props: VerifyProps) => {
         newData.keyValue = infoDetail.billId;
         newData.ifVerify = ifVerify;
         Audit(newData).then(res => {
-          message.success('提交成功');
+          message.success('提交成功！');
           closeModal();
           reload();
         }); 
@@ -211,7 +212,7 @@ const Verify= (props: VerifyProps) => {
     >
 
       <Form layout="vertical" hideRequiredMark>
-        <Card  >
+        <Card  className={styles.card}>
           <Row gutter={24}>
             <Col lg={8}>
               <Form.Item label="单据编号">
@@ -263,9 +264,7 @@ const Verify= (props: VerifyProps) => {
                 })(<TextArea rows={4} placeholder="请输入审核意见" />)}
               </Form.Item>
             </Col>
-          </Row>
-
-
+          </Row> 
           <Row style={{ marginTop: '15px' }}>
             <Table
               bordered={false}

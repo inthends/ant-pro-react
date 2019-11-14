@@ -75,10 +75,10 @@ export function Audit(data): Promise<any> {
     .then(getResult as any);
 }
 
-//删除减免单
-export function RemoveForm(keyValue): Promise<any> {
+//作废减免单
+export function InvalidForm(keyValue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Reduction/RemoveForm?keyValue=${keyValue}`)
+    .post(process.env.basePath + `/Reduction/InvalidForm?keyValue=${keyValue}`)
     .then(getResult as any);
 }
 //保存减免单

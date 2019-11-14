@@ -218,13 +218,14 @@ function ChargeListTable(props: ChargeListTableProps) {
       return styles.rowSelect;
     } else {
       if (record.status == 2) {
-        return styles.rowFlush
+        return styles.rowRed
       } else {
         return '';
       }
     }
+  };
 
-  }
+
   return (
     <Page >
       <Table

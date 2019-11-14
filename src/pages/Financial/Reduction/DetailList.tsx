@@ -3,7 +3,8 @@ import { Form, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import moment from 'moment';
-import { WrappedFormUtils } from 'antd/lib/form/Form'; 
+import { WrappedFormUtils } from 'antd/lib/form/Form';
+import styles from './style.less';
 
 interface DetailListProps {
   onchange(page: any, filter: any, sort: any): any;
@@ -15,9 +16,17 @@ interface DetailListProps {
 }
 
 function DetailList(props: DetailListProps) {
-  const {  onchange, loading, pagination, data  } = props;
+  const { onchange, loading, pagination, data } = props;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
+  };
+
+  const getClassName = (record, index) => {
+    if (record.status == -1) {
+      return styles.rowRed
+    } else {
+      return '';
+    }
   };
 
   const columns = [
@@ -25,27 +34,27 @@ function DetailList(props: DetailListProps) {
       title: '单元编号',
       dataIndex: 'unitId',
       key: 'unitId',
-      width: 100,
+      width: 120,
       sorter: true,
     },
     {
       title: '收费项目',
       dataIndex: 'feeName',
       key: 'feeName',
-      width: 80,
+      width: 100,
       sorter: true
     },
     {
       title: '应收期间',
       dataIndex: 'period',
       key: 'period',
-      width: 80,
+      width: 100,
       sorter: true,
       render: val => {
         if (val == null) {
-          return <span></span>
+          return '';
         } else {
-          return <span> {moment(val).format('YYYY年MM月')} </span>
+          return moment(val).format('YYYY年MM月');
         }
       }
     },
@@ -53,13 +62,13 @@ function DetailList(props: DetailListProps) {
       title: '计费起始日期',
       dataIndex: 'beginDate',
       key: 'beginDate',
-      width: 90,
+      width: 120,
       sorter: true,
       render: val => {
         if (val == null) {
-          return <span></span>
+          return '';
         } else {
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
+          return moment(val).format('YYYY-MM-DD');
         }
       }
     },
@@ -67,13 +76,13 @@ function DetailList(props: DetailListProps) {
       title: '计费终止日期',
       dataIndex: 'endDate',
       key: 'endDate',
-      width: 90,
+      width: 120,
       sorter: true,
       render: val => {
         if (val == null) {
-          return <span></span>
+          return '';
         } else {
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
+          return moment(val).format('YYYY-MM-DD');
         }
       }
     },
@@ -92,12 +101,20 @@ function DetailList(props: DetailListProps) {
       title: '减免后金额',
       dataIndex: 'lastAmount',
       key: 'lastAmount',
-      width: 80
-    }, {
+      width: 100
+    }, 
+    {
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      align: 'center',
+      width: 60,
+      render: val => val == 0 ? '正常' : '作废'
+    },
+    {
       title: '备注',
       dataIndex: 'memo',
-      key: 'memo',
-      width: 80
+      key: 'memo', 
     }
   ] as ColumnProps<any>[];
 
@@ -107,10 +124,11 @@ function DetailList(props: DetailListProps) {
         bordered={false}
         size="middle"
         dataSource={data}
+        rowClassName={getClassName} //样式
         columns={columns}
         rowKey={record => record.unitId}
         pagination={pagination}
-        scroll={{ y: 500, x: 1000 }}
+        scroll={{ y: 500, x: 1100 }}
         onChange={(pagination: PaginationConfig, filters, sorter) =>
           changePage(pagination, filters, sorter)
         }

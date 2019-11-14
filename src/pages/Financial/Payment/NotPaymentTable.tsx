@@ -31,13 +31,13 @@ function NotPaymentTable(props: NotPaymentTableProps) {
   const doDelete = record => {
     Modal.confirm({
       title: '请确认',
-      content: `您是否要删除${record.feeName}`,
+      content: `您是否要删除${record.feeName}？`,
       okText: '确认',
       cancelText: '取消',
       onOk: () => {
         //console.log(record);
         RemoveForm(record.billId).then(() => {
-          message.success('删除成功');
+          message.success('删除成功！');
           reload();
         });
       },
@@ -160,8 +160,7 @@ function NotPaymentTable(props: NotPaymentTableProps) {
       },
     },
   ] as ColumnProps<any>[];
-  var [payAmount, setPayAmount] = useState<number>(0);
-
+  var [payAmount, setPayAmount] = useState<number>(0); 
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [sumEntity, setSumEntity] = useState<number>(0);//金额累加
   const onSelectChange = (selectedRowKeys, selectedRows) => {
@@ -214,9 +213,9 @@ function NotPaymentTable(props: NotPaymentTableProps) {
               return;
             }
             Pay(info).then(res => {
-              message.success('付款成功');
+              message.success('付款成功！');
               reload();
-              //弹出查看页面
+              //弹出查看页面 
               showDetail(res);
             });
           }
@@ -231,7 +230,7 @@ function NotPaymentTable(props: NotPaymentTableProps) {
         <Card className={styles.card} bordered={false}  >
           <Row gutter={24} style={{ marginBottom: '8px' }}>
             <Col lg={24}>
-              <span style={{ color: "red" }}>
+              <span style={{ color: "green" }}>
                 {organize.type == 5 ? `已选择：${organize.allname} ，本次选中未付金额合计：${sumEntity}元` : `已选择： 本次选中未付金额合计：`}
               </span>
             </Col>

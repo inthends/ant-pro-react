@@ -1,11 +1,12 @@
 import Page from '@/components/Common/Page';
 import { Divider, Form, message, Table, Modal } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
-import React  from 'react';
+import React from 'react';
 import moment from 'moment';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 // import VerifyReductionModal from './VerifyReductionModal';
-import { RemoveForm } from './Main.service';
+import { InvalidForm } from './Main.service';
+import styles from './style.less';
 
 interface ListTableProps {
   onchange(page: any, filter: any, sort: any): any;
@@ -20,7 +21,7 @@ interface ListTableProps {
 }
 
 function ListTable(props: ListTableProps) {
-  const { onchange, loading, pagination, data, verify,modify, show, reload } = props;
+  const { onchange, loading, pagination, data, verify, modify, show, reload } = props;
   // const [verifyVisible, setVerifyVisible] = useState<boolean>(false);
   // const [id, setId] = useState<string>('');
   // const [verifyId, setVerifyId] = useState<any>('');
@@ -29,13 +30,13 @@ function ListTable(props: ListTableProps) {
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
   };
-  const doDelete = record => {
+  const doInvalid = record => {
     Modal.confirm({
       title: '请确认',
-      content: `您是否要删除${record.billCode}`,
+      content: `您是否要作废${record.billCode}？`,
       onOk: () => {
-        RemoveForm(record.billId).then(() => {
-          message.success('删除成功');
+        InvalidForm(record.billId).then(() => {
+          message.success('作废成功！');
           reload();
         });
       },
@@ -60,7 +61,7 @@ function ListTable(props: ListTableProps) {
         if (val == null) {
           return '';
         } else {
-          return  moment(val).format('YYYY-MM-DD');
+          return moment(val).format('YYYY-MM-DD');
         }
       }
     },
@@ -79,18 +80,25 @@ function ListTable(props: ListTableProps) {
       sorter: true,
     },
     {
-      title: '审核状态',
-      dataIndex: 'ifVerifyName',
-      key: 'ifVerifyName',
-      width: 100,
-      sorter: true,
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      align: 'center',
+      width: 60,
+      render: val => val == 0 ? '正常' : '作废'
+    },
+    {
+      title: '是否审核',
+      dataIndex: 'ifVerify',
+      key: 'ifVerify',
+      width: 100, 
+      render: val => val ? '已审核' : '未审核'
     },
     {
       title: '审核人',
       dataIndex: 'verifyPerson',
       key: 'verifyPerson',
       width: 85,
-      sorter: true,
     }, {
       title: '审核日期',
       dataIndex: 'verifyDate',
@@ -100,7 +108,7 @@ function ListTable(props: ListTableProps) {
         if (val == null) {
           return '';
         } else {
-          return  moment(val).format('YYYY-MM-DD');
+          return moment(val).format('YYYY-MM-DD');
         }
       }
     }, {
@@ -113,6 +121,7 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'operation',
       key: 'operation',
       fixed: 'right',
+      align: 'center',
       width: '135px',
       render: (text, record) => {
 
@@ -148,37 +157,41 @@ function ListTable(props: ListTableProps) {
           ];
         } else {
 
-          return [
-            //   <Button
-            //     type="primary"
-            //     key="modify"
-            //     style={{ marginRight: '10px' }}
-            //     onClick={() => modify(record.billId)}
-            //   >
-            //     编辑
-            // </Button>,
-            //   <Button
-            //     type="primary"
-            //     key="verify" 
-            //     style={{ marginRight: '10px' }}
-            //     onClick={() => showVerifyModel(record.billId, true)}
-            //   >
-            //     审核
-            // </Button>,
-            //   <Button type="danger"
-            //     key="delete" onClick={() => doDelete(record)}>
-            //     删除
-            // </Button>,
+          if (record.status == -1) {
+            //作废，只能查看
+            return [<a onClick={() => show(record.billId)} key="modify">查看</a>]
+          } else {
 
-            <span>
-              <a onClick={() => modify(record.billId)} key="modify">编辑</a>
-              <Divider type="vertical" />
-              <a onClick={() => verify(record.billId, true)} key="verify">审核</a>
-              <Divider type="vertical" />
-              <a onClick={() => doDelete(record)} key="delete">删除</a>
-            </span>
-
-          ];
+            return [
+              //   <Button
+              //     type="primary"
+              //     key="modify"
+              //     style={{ marginRight: '10px' }}
+              //     onClick={() => modify(record.billId)}
+              //   >
+              //     编辑
+              // </Button>,
+              //   <Button
+              //     type="primary"
+              //     key="verify" 
+              //     style={{ marginRight: '10px' }}
+              //     onClick={() => showVerifyModel(record.billId, true)}
+              //   >
+              //     审核
+              // </Button>,
+              //   <Button type="danger"
+              //     key="delete" onClick={() => doDelete(record)}>
+              //     删除
+              // </Button>, 
+              <span>
+                <a onClick={() => modify(record.billId)} key="modify">编辑</a>
+                <Divider type="vertical" />
+                <a onClick={() => verify(record.billId, true)} key="verify">审核</a>
+                <Divider type="vertical" />
+                <a onClick={() => doInvalid(record)} key="invalid">作废</a>
+              </span>
+            ];
+          }
         }
       },
     },
@@ -200,6 +213,14 @@ function ListTable(props: ListTableProps) {
   //   setIfVerifyModal(ifVerfy);
   // };
 
+  const getClassName = (record, index) => {
+    if (record.status == -1) {
+      return styles.rowRed
+    } else {
+      return '';
+    }
+  };
+
   return (
     <Page>
       <Table
@@ -209,12 +230,13 @@ function ListTable(props: ListTableProps) {
         columns={columns}
         rowKey={record => record.unitId}
         pagination={pagination}
-        scroll={{ y: 500 }}
+        scroll={{ x: 1100, y: 500 }}
         onChange={(pagination: PaginationConfig, filters, sorter) =>
           changePage(pagination, filters, sorter)
         }
+        rowClassName={getClassName} //样式
         loading={loading}
-      /> 
+      />
     </Page>
   );
 }

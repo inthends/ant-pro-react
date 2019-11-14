@@ -98,10 +98,10 @@ function ListTable(props: ListTableProps) {
     },
     {
       title: '审核状态',
-      dataIndex: 'ifVerifyName',
-      key: 'ifVerifyName',
+      dataIndex: 'ifVerify',
+      key: 'ifVerify',
       width: 100,
-      sorter: true,
+      render: val => val ? '已审核' : '未审核'
     },
     {
       title: '审核人',

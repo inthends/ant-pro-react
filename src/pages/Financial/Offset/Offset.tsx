@@ -11,8 +11,8 @@ import { getResult } from '@/utils/networkUtils';
 // import Page from '@/components/Common/Page';
 // import { SiderContext } from './SiderContext'; 
 import AddDrawer from './AddDrawer';
-import Vertify from './Vertify';
-import Modify from './Modify';
+import Verify from './Verify';
+import Show from './Show';
 import ListTable from './ListTable';
 import DetailTable from './DetailTable';
 
@@ -27,9 +27,9 @@ function Offset() {
   // const { hideSider, setHideSider } = useContext(SiderContext);
   const [addDrawerVisible, setAddDrawerVisible] = useState<boolean>(false);
   const [id, setId] = useState<string>(); 
-  const [vertifyVisible, setVertifyVisible] = useState<boolean>(false);
+  const [verifyVisible, setVerifyVisible] = useState<boolean>(false);
   const [modifyVisible, setModifyVisible] = useState<boolean>(false); 
-  const [ifVertify, setIfVertify] = useState<boolean>(false); 
+  const [ifVerify, setIfVerify] = useState<boolean>(false); 
   const [addButtonDisable, setAddButtonDisable] = useState<boolean>(true);
   const [checkloading, setCheckLoading] = useState<boolean>(false);
   const [checkpagination, setCheckPagination] = useState<DefaultPagination>(new DefaultPagination());
@@ -221,24 +221,29 @@ function Offset() {
     });
   };
 
-  const closeVertify = (result?) => {
-    setVertifyVisible(false);
+  const closeVerify = (result?) => {
+    setVerifyVisible(false);
     if (result) {
       initLoadData(organize, null);
     }
     setId('');
   };
 
-  const showVertify = (id?, ifVertify?) => {
-    setVertifyVisible(true);
-    setIfVertify(ifVertify);
+  const showVerify = (id?, ifVerify?) => {
+    setVerifyVisible(true);
+    setIfVerify(ifVerify);
     setId(id);
   };
-  const closeModify = (result?) => {
+  
+  // const closeModify = (result?) => {
+  //   setModifyVisible(false);
+  //   if (result) {
+  //     initLoadData(organize, null);
+  //   }
+  // };
+
+  const closeModify = () => {
     setModifyVisible(false);
-    if (result) {
-      initLoadData(organize, null);
-    }
   };
 
   const showModify = (id?) => {
@@ -276,7 +281,7 @@ function Offset() {
               <Search
                 className="search-input"
                 placeholder="请输入要查询的单号"
-                style={{ width: 280 }}
+                style={{ width: 200 }}
                 onSearch={value => loadData(value)}
               />
               {/* <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
@@ -299,8 +304,8 @@ function Offset() {
               loading={checkloading}
               pagination={checkpagination}
               data={checkdata}
-              showVertify={showVertify}
-              closeVertify={closeVertify}
+              showVerify={showVerify}
+              closeVerify={closeVerify}
               // deleteData={deleteData}
               showModify={showModify}
               closeModify={closeModify}
@@ -336,17 +341,17 @@ function Offset() {
         id={id}
         reload={() => initLoadData('', search)}
       />
-      <Modify
+      <Show
         modifyVisible={modifyVisible}
         closeDrawer={closeModify}
-        organizeId={organize}
+        // organizeId={organize}
         id={id}
-        reload={() => initLoadData('', search)}
+        // reload={() => initLoadData('', search)}
       />
-      <Vertify
-        vertifyVisible={vertifyVisible}
-        closeVertify={closeVertify}
-        ifVertify={ifVertify}
+      <Verify
+        verifyVisible={verifyVisible}
+        closeVerify={closeVerify}
+        ifVerify={ifVerify}
         id={id}
         reload={() => initLoadData('', search)}
       />

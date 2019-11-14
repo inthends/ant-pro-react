@@ -7,7 +7,6 @@ import { DefaultPagination } from '@/utils/defaultSetting';
 import { ColumnProps } from 'antd/lib/table';
 import styles from './style.less';
 import moment from 'moment';
-const { TextArea } = Input;
 const Search = Input.Search;
 interface ShowProps {
   visible: boolean;
@@ -19,7 +18,6 @@ interface ShowProps {
 const Show = (props: ShowProps) => {
   const { visible, close, form, id } = props;
   const [loading, setLoading] = useState<boolean>(false);
-  const { getFieldDecorator } = form;
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [unitFeeData, setUnitFeeData] = useState<any>();
   const [pagination, setPagination] = useState<DefaultPagination>(new DefaultPagination());
