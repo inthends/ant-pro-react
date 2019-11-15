@@ -1,14 +1,14 @@
 
-import { DatePicker, AutoComplete, Select, Tag, Typography, Row, Divider, PageHeader, Button, Card, Col, Drawer, Form, Input, message } from 'antd';
+import {   Tag, Typography, Row, Divider, PageHeader, Button, Card, Col, Drawer, Form,   message } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 // import { getResult } from '@/utils/networkUtils';
-import { Visit, Handle, Approve, Project } from './Main.service';
-import { GetUserList } from '@/services/commonItem';
+import {   Handle, Approve, Project } from './Main.service';
+// import { GetUserList } from '@/services/commonItem';
 // import { TreeEntity } from '@/model/models';
 import styles from './style.less';
 const { Paragraph } = Typography;
-const { Option } = Select;
+// const { Option } = Select;
 
 interface ShowProps {
   modifyVisible: boolean;
@@ -19,11 +19,11 @@ interface ShowProps {
 }
 const Show = (props: ShowProps) => {
   const { modifyVisible, data, closeDrawer, form, reload } = props;
-  const { getFieldDecorator } = form;
+  // const { getFieldDecorator } = form;
   const title = data === undefined ? '添加投诉单' : '查看投诉单';
   const [infoDetail, setInfoDetail] = useState<any>({});
   // const [treeData, setTreeData] = useState<any[]>([]);
-  const [userSource, setUserSource] = useState<any[]>([]);
+  // const [userSource, setUserSource] = useState<any[]>([]);
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -87,20 +87,20 @@ const Show = (props: ShowProps) => {
     });
   };
 
-  const visit = () => {
-    form.validateFields((errors, values) => {
-      if (!errors) {
-        const newData = data ? { ...data, ...values } : values;
-        //doSave(newData);
-        //newData.keyValue = newData.id;
-        Visit({ ...newData, keyValue: newData.id }).then(res => {
-          message.success('回访成功！');
-          closeDrawer();
-          reload();
-        });
-      }
-    });
-  };
+  // const visit = () => {
+  //   form.validateFields((errors, values) => {
+  //     if (!errors) {
+  //       const newData = data ? { ...data, ...values } : values;
+  //       //doSave(newData);
+  //       //newData.keyValue = newData.id;
+  //       Visit({ ...newData, keyValue: newData.id }).then(res => {
+  //         message.success('回访成功！');
+  //         closeDrawer();
+  //         reload();
+  //       });
+  //     }
+  //   });
+  // };
 
   const approve = () => {
     form.validateFields((errors, values) => {
@@ -149,37 +149,37 @@ const Show = (props: ShowProps) => {
     }
   }
 
-  const handleSearch = value => {
-    if (value == '')
-      return;
-    GetUserList(value, '业主').then(res => {
-      setUserSource(res || []);
-    })
-  };
+  // const handleSearch = value => {
+  //   if (value == '')
+  //     return;
+  //   GetUserList(value, '业主').then(res => {
+  //     setUserSource(res || []);
+  //   })
+  // };
 
   //实际处理人
-  const handleUserSearch = value => {
-    if (value == '')
-      return;
-    GetUserList(value, '员工').then(res => {
-      setUserSource(res || []);
-    })
-  };
+  // const handleUserSearch = value => {
+  //   if (value == '')
+  //     return;
+  //   GetUserList(value, '员工').then(res => {
+  //     setUserSource(res || []);
+  //   })
+  // };
 
-  const userList = userSource.map
-    (item => <Option key={item.id} value={item.name}>{item.name}</Option>);
+  // const userList = userSource.map
+  //   (item => <Option key={item.id} value={item.name}>{item.name}</Option>);
 
-  //选择投诉对象
-  const onOwnerSelect = (value, option) => {
-    //form.setFieldsValue({ownerId: option.key });
-  }
+  // //选择投诉对象
+  // const onOwnerSelect = (value, option) => {
+  //   //form.setFieldsValue({ownerId: option.key });
+  // }
 
-  //选择投诉对象类型
-  const onSelectType = (value, option) => {
-    GetUserList('', value).then(res => {
-      setUserSource(res || []);
-    })
-  }
+  // //选择投诉对象类型
+  // const onSelectType = (value, option) => {
+  //   GetUserList('', value).then(res => {
+  //     setUserSource(res || []);
+  //   })
+  // }
 
   return (
     <Drawer
@@ -215,7 +215,7 @@ const Show = (props: ShowProps) => {
               </Col>
               <Col lg={6}>
                 <Form.Item label="投诉对象"  >
-                  {infoDetail.byComplaintUser}
+                  {infoDetail.byComplaintUserName}
                 </Form.Item>
               </Col>
               <Col lg={6}>
@@ -296,7 +296,7 @@ const Show = (props: ShowProps) => {
             </Row>
           </Card>
 
-          <Card title="回访情况" className={styles.card}  >
+          <Card title="回访情况" className={styles.card2}  >
             <Row gutter={24}>
               <Col lg={6}>
                 <Form.Item label="回访方式"  >
@@ -359,11 +359,11 @@ const Show = (props: ShowProps) => {
           </Button>
         ) : null}
 
-        {infoDetail.status == 3 ? (
+        {/* {infoDetail.status == 3 ? (
           <Button onClick={visit} type="primary">
             回访
           </Button>
-        ) : null}
+        ) : null} */}
 
         {infoDetail.status == 4 ? (
           <Button onClick={approve} type="primary">

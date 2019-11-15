@@ -59,12 +59,11 @@ function ListTable(props: ListTableProps) {
         if (record.isEnable == 0) {
           return <Tag color="#d82d2d">无效投诉</Tag>
         } else {
-
           switch (text) {
             case 1:
               return <Tag color="#e4aa5b">待处理</Tag>
             case 2:
-              return <Tag color="#19d54e">待完成</Tag>
+              return <Tag color="#e2aa5c">待完成</Tag>
             case 3:
               return <Tag color="#e4aa5b">待回访</Tag>
             case 4:
@@ -78,15 +77,15 @@ function ListTable(props: ListTableProps) {
           }
         }
       }
-    }, 
+    },
     {
       title: '单据日期',
       dataIndex: 'billDate',
       key: 'billDate',
       width: 120,
       sorter: true,
-      render: val =>  moment(val).format('YYYY-MM-DD') 
-    }, 
+      render: val => moment(val).format('YYYY-MM-DD')
+    },
     {
       title: '联系人',
       dataIndex: 'complaintUser',
@@ -97,12 +96,12 @@ function ListTable(props: ListTableProps) {
     {
       title: '联系方式',
       dataIndex: 'complaintLink',
-      key: 'complaintLink', 
+      key: 'complaintLink',
     },
     {
       title: '关联地址',
       dataIndex: 'complaintAddress',
-      key: 'complaintAddress', 
+      key: 'complaintAddress',
     },
     {
       title: '操作',
@@ -112,7 +111,7 @@ function ListTable(props: ListTableProps) {
       width: 95,
       fixed: 'right',
       render: (text, record) => {
-        if (record.status == 1) {
+        if (record.status != 3 && record.status != 5) {
           return [
             // <Button
             //   type="primary"

@@ -3,7 +3,7 @@ import { DatePicker, AutoComplete, Select, Tag, Typography, Row, Divider, PageHe
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 // import { getResult } from '@/utils/networkUtils';
-import { Visit, Handle, Approve, Project } from './Main.service';
+import { GetUserByCustomerId, Visit, Handle, Approve, Project } from './Main.service';
 import { GetUserList } from '@/services/commonItem';
 // import { TreeEntity } from '@/model/models';
 import styles from './style.less';
@@ -27,7 +27,6 @@ const Modify = (props: ModifyProps) => {
 
   // 打开抽屉时初始化
   useEffect(() => {
-
     // 获取房产树
     // GetQuickSimpleTreeAll()
     //   .then(getResult)
@@ -35,7 +34,6 @@ const Modify = (props: ModifyProps) => {
     //     setTreeData(res || []);
     //     return res || [];
     //   }); 
-
   }, []);
 
   // 打开抽屉时初始化 
@@ -78,6 +76,7 @@ const Modify = (props: ModifyProps) => {
         const newData = data ? { ...data, ...values } : values;
         //doSave(newData);
         //newData.keyValue = newData.id;
+        newData.finishTime = values.finishTime.format('YYYY-MM-DD HH:mm');
         Handle({ ...newData, keyValue: newData.id }).then(res => {
           message.success('处理成功！');
           closeDrawer();
@@ -131,28 +130,40 @@ const Modify = (props: ModifyProps) => {
     if (infoDetail.isEnable == 0) {
       return <Tag color="#d82d2d">无效投诉</Tag>
     } else {
-
       switch (infoDetail.status) {
         case 1:
-          return <Tag color="#e4aa5b">待处理</Tag>
+          return <Tag color="#e4aa5b">待处理</Tag>;
         case 2:
-          return <Tag color="#19d54e">处理中</Tag>
+          return <Tag color="#e2aa5c">待完成</Tag>;
         case 3:
-          return <Tag color="#e4aa5b">待回访</Tag>
+          return <Tag color="#e4aa5b">待回访</Tag>;
         case 4:
-          return <Tag color="#61c33a">待审核</Tag>
+          return <Tag color="#61c33a">待审核</Tag>;
         case 5:
-          return <Tag color="#40A9FF">已归档</Tag>
+          return <Tag color="#40A9FF">已审核</Tag>;
+        case -1:
+          return <Tag color="#40A9FF">已作废</Tag>;
         default:
           return '';
       }
     }
   }
 
+  //投诉对象
   const handleSearch = value => {
     if (value == '')
       return;
-    GetUserList(value, '业主').then(res => {
+    var type = form.getFieldValue('byComplaintType');
+    GetUserList(value, type).then(res => {
+      setUserSource(res || []);
+    })
+  };
+
+  //处理负责人
+  const handleChargerSearch = value => {
+    if (value == '')
+      return;
+    GetUserList(value, '员工').then(res => {
       setUserSource(res || []);
     })
   };
@@ -170,16 +181,66 @@ const Modify = (props: ModifyProps) => {
     (item => <Option key={item.id} value={item.name}>{item.name}</Option>);
 
   //选择投诉对象
-  const onOwnerSelect = (value, option) => {
-    //form.setFieldsValue({ownerId: option.key });
-  }
+  const onByComplaintUserSelect = (value, option) => {
+    //form.setFieldsValue({ownerId: option.key }); 
+    //加载联系人以及联系电话 
+    if (value) {
+      var type = form.getFieldValue('byComplaintType');
+      GetUserByCustomerId(option.key, type).then((res: any) => {
+        if (res != null) {
+          form.setFieldsValue({ byComplaintUserName: res.contactName });
+          form.setFieldsValue({ byComplaintUerTel: res.contactPhone });
+          form.setFieldsValue({ byComplaintUserId: res.custId });
+          form.setFieldsValue({ byComplaintRoomAllName: res.contactAddress });
+        }
+      });
+
+    } else {
+      form.setFieldsValue({ byComplaintUserName: '' });
+      form.setFieldsValue({ byComplaintUerTel: '' });
+      form.setFieldsValue({ byComplaintUserId: '' });
+      form.setFieldsValue({ byComplaintRoomAllName: '' });
+    }
+  };
+
+  //选择处理负责人
+  const onHandleChargerSelect = (value, option) => {
+    if (value) {
+      GetUserByCustomerId(option.key, '员工').then((res: any) => {
+        if (res != null) {
+          form.setFieldsValue({ handleChargerId: res.custId });
+          form.setFieldsValue({ handleChargeTel: res.contactPhone });
+        }
+      });
+    }
+    else {
+      form.setFieldsValue({ handleChargerId: '' });
+      form.setFieldsValue({ handleChargeTel: '' });
+    }
+  };
+
+
+  //实际处理人
+  const onHandleUserSelect = (value, option) => {
+    if (value) {
+      form.setFieldsValue({ handleId: option.key });
+    }
+    else {
+      form.setFieldsValue({ handleId: '' }); 
+    }
+  };
 
   //选择投诉对象类型
   const onSelectType = (value, option) => {
+    //先清空
+    form.setFieldsValue({ byComplaintUserName: '' });
+    form.setFieldsValue({ byComplaintUerTel: '' });
+    form.setFieldsValue({ byComplaintUserId: '' });
+    form.setFieldsValue({ byComplaintRoomAllName: '' });
     GetUserList('', value).then(res => {
       setUserSource(res || []);
     })
-  }
+  };
 
   return (
     <Drawer
@@ -198,15 +259,15 @@ const Modify = (props: ModifyProps) => {
       // ]}
       >
         <Paragraph>
-          {infoDetail.complaintAddress}，{infoDetail.complaintUser}，电话：<a>{infoDetail.complaintLink}</a>，在 {infoDetail.billDate} 投诉，内容如下
+          投诉来自于{infoDetail.complaintAddress}，联系人：{infoDetail.complaintUser ? infoDetail.complaintUser : '匿名'}，电话：{infoDetail.complaintLink ? infoDetail.complaintLink : '无'}，在 {infoDetail.billDate} 投诉，内容如下
         </Paragraph>
         {infoDetail.contents}
       </PageHeader>
-      <Divider dashed /> 
+      <Divider dashed />
       {modifyVisible ? (
         <Form layout="vertical" hideRequiredMark>
           {infoDetail.status == 1 ? (
-            <Card title="立项信息" className={styles.card}  >
+            <Card title="立项信息"  className={infoDetail.status == 1 ? styles.card2 : styles.card} >
               <Row gutter={24}>
                 <Col lg={6}>
                   <Form.Item label="对象类别" required>
@@ -224,8 +285,8 @@ const Modify = (props: ModifyProps) => {
                 </Col>
                 <Col lg={6}>
                   <Form.Item label="投诉对象" required>
-                    {getFieldDecorator('byComplaintUser', {
-                      initialValue: infoDetail.byComplaintUser,
+                    {getFieldDecorator('byComplaintUserName', {
+                      initialValue: infoDetail.byComplaintUserName,
                       rules: [{ required: true, message: '请输入投诉对象' }],
                     })(
                       // <TreeSelect
@@ -238,9 +299,16 @@ const Modify = (props: ModifyProps) => {
                         dataSource={userList}
                         onSearch={handleSearch}
                         placeholder="请输入投诉对象"
-                        onSelect={onOwnerSelect}
+                        onSelect={onByComplaintUserSelect}
                       />
                     )}
+
+                    {getFieldDecorator('byComplaintUserId', {
+                      initialValue: infoDetail.byComplaintUserId,
+                    })(
+                      <input type='hidden' />
+                    )}
+
                   </Form.Item>
                 </Col>
                 <Col lg={6}>
@@ -279,7 +347,18 @@ const Modify = (props: ModifyProps) => {
                     {getFieldDecorator('handleCharger', {
                       initialValue: infoDetail.handleCharger,
                       rules: [{ required: true, message: '请选择处理负责人' }],
-                    })(<Input placeholder="请选择处理负责人" />)}
+                    })(
+
+                      // <Input placeholder="请选择处理负责人" />
+
+                      <AutoComplete
+                        dataSource={userList}
+                        onSearch={handleChargerSearch}
+                        placeholder="请选择处理负责人"
+                        onSelect={onHandleChargerSelect}
+                      />
+
+                    )}
                     {getFieldDecorator('handleChargerId', {
                       initialValue: infoDetail.handleChargerId
                     })(<Input type='hidden' />)}
@@ -330,7 +409,7 @@ const Modify = (props: ModifyProps) => {
                   </Col>
                   <Col lg={6}>
                     <Form.Item label="投诉对象"  >
-                      {infoDetail.byComplaintUser}
+                      {infoDetail.byComplaintUserName}
                     </Form.Item>
                   </Col>
                   <Col lg={6}>
@@ -368,7 +447,7 @@ const Modify = (props: ModifyProps) => {
                       {infoDetail.setUpUserName}
                     </Form.Item>
                   </Col>
-                </Row> 
+                </Row>
                 <Row gutter={24}>
                   <Col lg={6}>
                     <Form.Item label="立项时间">
@@ -385,7 +464,7 @@ const Modify = (props: ModifyProps) => {
             )}
 
           {infoDetail.status == 2 ? (
-            <Card title="处理过程" className={styles.card}  >
+            <Card title="处理过程" className={infoDetail.status == 2 ? styles.card2 : styles.card}  >
               <Row gutter={24}>
                 <Col lg={6}>
                   <Form.Item label="实际处理人" required>
@@ -397,8 +476,14 @@ const Modify = (props: ModifyProps) => {
                         dataSource={userList}
                         onSearch={handleUserSearch}
                         placeholder="请输入实际处理人"
-                      /> 
+                        onSelect={onHandleUserSelect}
+                      />
                     )}
+
+                    {getFieldDecorator('handleId', {
+                      initialValue: infoDetail.handleId
+                    })(<Input type='hidden' />)}
+
                   </Form.Item>
                 </Col>
                 <Col lg={18}>

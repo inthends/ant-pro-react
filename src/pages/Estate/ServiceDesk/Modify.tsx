@@ -92,8 +92,9 @@ const Modify = (props: ModifyProps) => {
   const doSave = dataDetail => {
     dataDetail.keyValue = keyValue;//dataDetail.id ? dataDetail.id : guid(); 
     dataDetail.isAdd = dataDetail.billCode == undefined ? true : false;
+    dataDetail.custEvaluate = 0;
     SaveForm({ ...dataDetail }).then(res => {
-      message.success('保存成功');
+      message.success('保存成功！');
       closeDrawer();
       reload();
     });
@@ -370,13 +371,13 @@ const Modify = (props: ModifyProps) => {
 
                   <Row gutter={24}>
                     <Col lg={8}>
-                      <Form.Item label="房号" required>
+                      <Form.Item label="联系位置" required>
                         {getFieldDecorator('roomId', {
                           initialValue: infoDetail.roomId,
-                          rules: [{ required: true, message: '请选择房号' }],
+                          rules: [{ required: true, message: '请选择联系位置' }],
                         })(
                           <TreeSelect
-                            placeholder="请选择房号"
+                            placeholder="请选择联系位置"
                             allowClear
                             onChange={onChange}
                             dropdownStyle={{ maxHeight: 300 }}

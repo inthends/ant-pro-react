@@ -1,4 +1,4 @@
- 
+
 import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
 // export function GetQuickPStructsTree(): Promise<any[]> {
@@ -18,7 +18,13 @@ export function GetPageListJson(data): Promise<any> {
     .then(getResult as any);
 }
 
- 
+// 获取投诉对象详细信息
+export function GetUserByCustomerId(keyValue, type): Promise<any> {
+  return request
+    .get(process.env.basePath + `/ServiceDesk/GetUserByCustomerId?keyValue=${keyValue}&type=${type}`)
+    .then(getResult as any);
+}
+
 // 新增修改
 // export function SaveForm(data): Promise<any> {
 //   return request
