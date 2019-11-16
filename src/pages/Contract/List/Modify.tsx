@@ -16,7 +16,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import ResultList from './ResultList';
 import { ApproveForm, SaveForm, GetAllFeeItems, GetCharge, GetFormJson, GetChargeDetail } from './Main.service';
-import { getCommonItems, GetUserList } from '@/services/commonItem';
+import { GetOrgTreeSimple, GetAsynChildBuildingsSimple, getCommonItems, GetUserList } from '@/services/commonItem';
 import moment from 'moment';
 import styles from './style.less';
 import LeaseTermModify from './LeaseTermModify';
@@ -33,13 +33,13 @@ interface ModifyProps {
   closeDrawer(): void;
   form: WrappedFormUtils;
   reload(): void;
-  treeData: any[];
+  // treeData: any[];
   choose(): void;
 };
 
 const Modify = (props: ModifyProps) => {
   const title = '修改合同';
-  const { visible, closeDrawer, id, form, chargeId, treeData, reload, choose } = props;
+  const { visible, closeDrawer, id, form, chargeId, reload, choose } = props;
   const { getFieldDecorator } = form;
   //const [industryType, setIndustryType] = useState<any[]>([]); //行业  
   //const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
@@ -60,6 +60,8 @@ const Modify = (props: ModifyProps) => {
   const [rooms, setRooms] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
+  const [treeData, setTreeData] = useState<any[]>([]);
+
   const close = () => {
     closeDrawer();
   };
@@ -73,6 +75,12 @@ const Modify = (props: ModifyProps) => {
     GetAllFeeItems().then(res => {
       setFeeitems(res || []);
     });
+
+    //获取房产树
+    GetOrgTreeSimple().then((res: any[]) => {
+      setTreeData(res || []);
+    });
+
   }, []);
 
   // 打开抽屉时初始化
@@ -142,15 +150,17 @@ const Modify = (props: ModifyProps) => {
     form.setFieldsValue({ leaseArea: area.toFixed(2) });
   };
 
-  const onIndustrySelect = (value, option) => {
-    //设置行业名称
-    form.setFieldsValue({ industry: option.props.children });
-  };
+  // const onIndustrySelect = (value, option) => {
+  //   //设置行业名称
+  //   form.setFieldsValue({ industry: option.props.children });
+  // };
 
   //计算租金明细
   const calculation = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
+
+        setLoading(true);
         //数据处理  
         //租赁条款     
         let TermJson: LeaseContractChargeFeeEntity[] = [];
@@ -171,7 +181,7 @@ const Modify = (props: ModifyProps) => {
         // data.payCycle = values.payCycle[0];
         // data.rentalPeriodDivided = values.rentalPeriodDivided[0];
         // TermJson.push(data); 
- 
+
         //动态添加的租期
         values.LeaseTerms.map(function (k, index, arr) {
           let data: LeaseContractChargeFeeEntity = {};
@@ -182,8 +192,8 @@ const Modify = (props: ModifyProps) => {
           data.priceUnit = k.priceUnit;
           data.advancePayTime = k.advancePayTime;
           data.advancePayTimeUnit = k.advancePayTimeUnit;
-          data.billType = k.billType[k];
-          if (data.priceUnit == "1" || data.priceUnit == "3") {
+          data.billType = k.billType;
+          if (data.priceUnit == "元/m²·天" || data.priceUnit == "元/天") {
             data.dayPriceConvertRule = k.dayPriceConvertRule;
           }
           data.yearDays = k.yearDays;
@@ -250,34 +260,27 @@ const Modify = (props: ModifyProps) => {
           setDepositData(res.depositFeeResultList);//保证金明细
           setChargeData(res.chargeFeeResultList);//租金明细  
           // setDepositResult(res.depositFeeResultList);
-          // setChargeFeeResult(res.chargeFeeResultList);
+          // setChargeFeeResult(res.chargeFeeResultList); 
+          setLoading(false);
         });
       }
     });
   };
 
-
   const approve = () => {
-
     //弹出选人
     //choose();
     //save(); 
-
     //发起审批
-    save();
-
-  };
-
-
-  const save = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
         //是否生成租金明细
         if (!isCal) {
-          Modal.warning({
-            title: '提示',
-            content: '请生成租金明细！',
-          });
+          // Modal.warning({
+          //   title: '提示',
+          //   content: '请生成租金明细！',
+          // });
+          message.warning('请生成租金明细！');
           return;
         }
         //保存合同数据
@@ -330,13 +333,103 @@ const Modify = (props: ModifyProps) => {
           ChargeFeeResult: JSON.stringify(chargeData)
 
         }).then(res => {
-          message.success('保存成功');
+          message.success('保存成功！');
           closeDrawer();
           reload();
         });
       }
     });
   };
+
+
+  const save = () => {
+    form.validateFields((errors, values) => {
+      if (!errors) {
+        //是否生成租金明细
+        if (!isCal) {
+          // Modal.warning({
+          //   title: '提示',
+          //   content: '请生成租金明细！',
+          // });
+          message.warning('请生成租金明细！');
+          return;
+        }
+        //保存合同数据
+        let ContractCharge: LeaseContractChargeEntity = {};
+        //费用条款-基本条款 
+        ContractCharge.depositFeeItemId = values.depositFeeItemId;
+        ContractCharge.leaseArea = values.leaseArea;
+        ContractCharge.deposit = values.deposit;
+        ContractCharge.depositUnit = values.depositUnit;
+        ContractCharge.startDate = values.billingDate.format('YYYY-MM-DD');
+        ContractCharge.endDate = values.contractEndDate.format('YYYY-MM-DD');
+        ContractCharge.payDate = values.contractStartDate.format('YYYY-MM-DD');
+
+        //合同信息
+        let Contract: LeaseContractDTO = {};
+        Contract.id = id;
+        Contract.no = values.no;
+        Contract.follower = values.follower;
+        Contract.followerId = values.followerId;
+        Contract.leaseSize = values.leaseSize;
+        Contract.contractStartDate = values.contractStartDate.format('YYYY-MM-DD');
+        Contract.billingDate = values.billingDate.format('YYYY-MM-DD');
+        Contract.contractEndDate = values.contractEndDate.format('YYYY-MM-DD');
+        Contract.calcPrecision = values.calcPrecision;
+        Contract.calcPrecisionMode = values.calcPrecisionMode;
+        Contract.customer = values.customer;
+        Contract.customerId = values.customerId;
+        Contract.industry = values.industry;
+        //Contract.industryId = values.industryId; 
+        Contract.legalPerson = values.legalPerson;
+        Contract.signer = values.signer;
+        Contract.signerId = values.signerId;
+        Contract.customerContact = values.customerContact;
+        Contract.customerContactId = values.customerContactId;
+        Contract.lateFee = values.lateFee;
+        Contract.lateFeeUnit = values.lateFeeUnit;
+        Contract.maxLateFee = values.maxLateFee;
+        Contract.maxLateFeeUnit = values.maxLateFeeUnit;
+
+        SaveForm({
+          ...Contract,
+          ...ContractCharge,
+          keyValue: id,
+          ChargeId: chargeId,
+          room: values.room,
+          TermJson: TermJson,
+          RateJson: RateJson,
+          RebateJson: RebateJson,
+          DepositResult: JSON.stringify(depositData),
+          ChargeFeeResult: JSON.stringify(chargeData)
+
+        }).then(res => {
+          message.success('保存成功！');
+          closeDrawer();
+          reload();
+        });
+      }
+    });
+  };
+
+  //异步加载
+  const onLoadData = treeNode =>
+    new Promise<any>(resolve => {
+      if (treeNode.props.children && treeNode.props.children.length > 0 && treeNode.props.type != 'D') {
+        resolve();
+        return;
+      }
+
+      setTimeout(() => {
+        GetAsynChildBuildingsSimple(treeNode.props.eventKey, treeNode.props.type).then((res: any[]) => {
+          // treeNode.props.children = res || [];
+          let newtree = treeData.concat(res);
+          // setTreeData([...treeData]);
+          setTreeData(newtree);
+        });
+        resolve();
+      }, 50);
+    });
 
   return (
     <Drawer
@@ -502,6 +595,7 @@ const Modify = (props: ModifyProps) => {
                               allowClear
                               dropdownStyle={{ maxHeight: 300 }}
                               treeData={treeData}
+                              loadData={onLoadData}
                               treeDataSimpleMode={true}
                               onChange={onRoomChange}
                               multiple={true}>

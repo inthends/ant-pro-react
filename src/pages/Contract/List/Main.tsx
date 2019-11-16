@@ -5,12 +5,12 @@ import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import { GetPageListJson } from './Main.service';
 import ListTable from './ListTable';
-import { getResult } from '@/utils/networkUtils';
+// import { getResult } from '@/utils/networkUtils';
 import Add from './Add';
 import Modify from './Modify';
 import Detail from './Detail';
 import ChooseUser from './ChooseUser';
-import { GetQuickSimpleTreeAllForContract } from '@/services/commonItem';
+// import { GetQuickSimpleTreeAllForContract } from '@/services/commonItem';
 
 const { Content } = Layout;
 const { Search } = Input;
@@ -25,10 +25,8 @@ function Main() {
   const [id, setId] = useState<string>();
   const [chargeId, setChargeId] = useState<string>();
   const [search, setSearch] = useState<string>('');
-  const [treeData, setTreeData] = useState<any[]>([]);
-
-  const [userVisible, setUserVisible] = useState<boolean>(false);
-
+  // const [treeData, setTreeData] = useState<any[]>([]); 
+  const [userVisible, setUserVisible] = useState<boolean>(false); 
 
   const closeAddDrawer = () => {
     setAddVisible(false);
@@ -115,12 +113,12 @@ function Main() {
 
   useEffect(() => {
     //获取房产树
-    GetQuickSimpleTreeAllForContract()
-      .then(getResult)
-      .then((res: any[]) => {
-        setTreeData(res || []);
-        return res || [];
-      });
+    // GetQuickSimpleTreeAllForContract()
+    //   .then(getResult)
+    //   .then((res: any[]) => {
+    //     setTreeData(res || []);
+    //     return res || [];
+    //   });
     initLoadData('');
   }, []);
 
@@ -162,7 +160,7 @@ function Main() {
       <Add
         visible={addVisible}
         closeDrawer={closeAddDrawer}
-        treeData={treeData}
+        // treeData={treeData}
         id={id}
         reload={() => initLoadData(search)}
       />
@@ -170,7 +168,7 @@ function Main() {
       <Modify
         visible={modifyVisible}
         closeDrawer={closeModifyDrawer}
-        treeData={treeData}
+        // treeData={treeData}
         id={id}
         chargeId={chargeId}
         reload={() => initLoadData(search)}

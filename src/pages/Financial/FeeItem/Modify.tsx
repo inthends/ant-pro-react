@@ -976,8 +976,8 @@ const Modify = (props: ModifyProps) => {
                         <Option value={0}>0</Option>
                         <Option value={1}>1</Option>
                         <Option value={2}>2</Option>
-                        <Option value={3}>3</Option>
-                        <Option value={4}>4</Option>
+                        {/* <Option value={3}>3</Option>
+                        <Option value={4}>4</Option> */}
                       </Select>
                     )}
                   </Form.Item>

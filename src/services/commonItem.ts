@@ -69,6 +69,19 @@ export function GetOrgTree(): Promise<TreeEntity[]> {
     .then(getResult as any);
 }
 
+export function GetOrgTreeSimple(): Promise<TreeEntity[]> {
+  return request
+    .get(process.env.basePath + `/Common/GetOrgTreeSimple`)
+    .then(getResult as any);
+}
+
+//获取下级
+export function GetAsynChildBuildingsSimple(pstructid,type): Promise<any[]> {
+  return request
+    .get(process.env.basePath + `/Common/GetAsynChildBuildingsSimple?parentId=${pstructid}&type=${type}`)
+    .then(getResult as any);
+}
+
 // //只加载到管理处，项目管理模块左侧树使用
 // export function GetOrgTreeOnly(): Promise<TreeEntity[]> {
 //   return request.get(process.env.basePath + `/Common/GetOrgTreeOnly`, {}).then(getResult);

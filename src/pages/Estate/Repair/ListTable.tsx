@@ -122,7 +122,7 @@ function ListTable(props: ListTableProps) {
       fixed: 'right',
       render: (text, record) => {
 
-        if (record.status != 8) {
+        if (record.status != 5 && record.status != 8) {
           return [
             // <Button
             //   type="primary"
@@ -143,8 +143,8 @@ function ListTable(props: ListTableProps) {
         } else {
           return [<span>
             <a onClick={() => modify(record)} key="modify">查看</a>
-            <Divider type="vertical" />
-            <a onClick={() => doInvalid(record)} key="invalid">作废</a>
+            {/* <Divider type="vertical" />
+            <a onClick={() => doInvalid(record)} key="invalid">作废</a> */}
           </span>
           ];
         }

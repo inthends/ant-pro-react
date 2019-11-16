@@ -1,5 +1,5 @@
 
-import { message, AutoComplete, Modal, InputNumber, TreeSelect, Tabs, Select, Button, Card, Col, DatePicker, Drawer, Form, Input, Row } from 'antd';
+import { Spin,message, AutoComplete, Modal, InputNumber, TreeSelect, Tabs, Select, Button, Card, Col, DatePicker, Drawer, Form, Input, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import {
   TreeEntity,
@@ -18,6 +18,7 @@ import ResultList from './ResultList';
 import moment from 'moment';
 import { getCommonItems, GetUserList } from '@/services/commonItem';
 import { SaveForm, GetAllFeeItems, GetChargeDetail } from './Main.service';
+import { GetOrgTreeSimple, GetAsynChildBuildingsSimple } from '@/services/commonItem';
 import styles from './style.less';
 
 const { Option } = Select;
@@ -27,7 +28,7 @@ interface AddProps {
   visible: boolean;
   id?: string;
   data?: any;
-  treeData: any[];
+  // treeData: any[];
   closeDrawer(): void;
   form: WrappedFormUtils;
   reload(): void;
@@ -35,14 +36,14 @@ interface AddProps {
 
 const Add = (props: AddProps) => {
   const title = '添加合同';
-  const { visible, closeDrawer, form, reload, treeData } = props;
+  const { visible, closeDrawer, form, reload } = props;
   const { getFieldDecorator } = form;
   const [industryType, setIndustryType] = useState<any[]>([]); //行业  
   const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
   //租金计算结果
   const [depositData, setDepositData] = useState<ChargeFeeResultEntity[]>([]);//保证金
   const [chargeData, setChargeData] = useState<ChargeFeeResultEntity[]>([]);//租金 
-  // const [treeData, setTreeData] = useState<any[]>([]);
+  const [treeData, setTreeData] = useState<any[]>([]);
   const [isCal, setIsCal] = useState<boolean>(false);
   const [TermJson, setTermJson] = useState<string>();
   const [RateJson, setRateJson] = useState<string>();
@@ -51,6 +52,9 @@ const Add = (props: AddProps) => {
 
   // const [DepositResult, setDepositResult] = useState<ChargeFeeResultEntity[]>([]);
   // const [ChargeFeeResult, setChargeFeeResult] = useState<ChargeFeeResultEntity[]>([]);
+
+  const [loading, setLoading] = useState<boolean>(false);
+
 
   const close = () => {
     closeDrawer();
@@ -62,6 +66,11 @@ const Add = (props: AddProps) => {
       if (!errors) {
         //数据处理  
         //租赁条款     
+
+        debugger
+
+        // setLoading(true);
+
         let TermJson: LeaseContractChargeFeeEntity[] = [];
         let data: LeaseContractChargeFeeEntity = {};
         //const TermJson=[];
@@ -75,7 +84,7 @@ const Add = (props: AddProps) => {
         data.advancePayTime = values.advancePayTime[0];
         data.advancePayTimeUnit = values.advancePayTimeUnit[0];
         data.billType = values.billType[0];
-        if (data.priceUnit == "1" || data.priceUnit == "3") {
+        if (data.priceUnit == "元/m²·天" || data.priceUnit == "元/天") {
           data.dayPriceConvertRule = values.dayPriceConvertRule[0];
         }
         data.yearDays = values.yearDays[0];
@@ -94,7 +103,7 @@ const Add = (props: AddProps) => {
           data.advancePayTime = values.advancePayTime[k];
           data.advancePayTimeUnit = values.advancePayTimeUnit[k];
           data.billType = values.billType[k];
-          if (data.priceUnit == "1" || data.priceUnit == "3") {
+          if (data.priceUnit == "元/m²·天" || data.priceUnit == "元/天") {
             data.dayPriceConvertRule = values.dayPriceConvertRule[k];
           }
           data.yearDays = values.yearDays[k];
@@ -164,6 +173,8 @@ const Add = (props: AddProps) => {
           setChargeData(res.chargeFeeResultList);//租金明细  
           // setDepositResult(res.depositFeeResultList);
           // setChargeFeeResult(res.chargeFeeResultList);
+
+          // setLoading(false);
         });
       }
     });
@@ -174,13 +185,15 @@ const Add = (props: AddProps) => {
       if (!errors) {
         //是否生成租金明细
         if (!isCal) {
-          Modal.warning({
-            title: '提示',
-            content: '请生成租金明细！',
-            okText: '确认'
-          });
+          // Modal.warning({
+          //   title: '提示',
+          //   content: '请生成租金明细！',
+          //   okText: '确认'
+          // }); 
+          message.warning('请生成租金明细！');
           return;
         }
+
         //保存合同数据
         let ContractCharge: LeaseContractChargeEntity = {};
         //费用条款-基本条款 
@@ -251,12 +264,10 @@ const Add = (props: AddProps) => {
     });
 
     //获取房产树
-    // GetQuickSimpleTreeAllForContract()
-    //   .then(getResult)
-    //   .then((res: TreeEntity[]) => {
-    //     setTreeData(res || []);
-    //     return res || [];
-    //   });
+    GetOrgTreeSimple().then((res: any[]) => {
+      setTreeData(res || []);
+    });
+
   }, []);
 
   // 打开抽屉时初始化
@@ -299,6 +310,26 @@ const Add = (props: AddProps) => {
   // };
 
 
+  //异步加载
+  const onLoadData = treeNode =>
+    new Promise<any>(resolve => {
+      if (treeNode.props.children && treeNode.props.children.length > 0 && treeNode.props.type != 'D') {
+        resolve();
+        return;
+      }
+
+      setTimeout(() => {
+        GetAsynChildBuildingsSimple(treeNode.props.eventKey, treeNode.props.type).then((res: any[]) => {
+          // treeNode.props.children = res || [];
+          let newtree = treeData.concat(res);
+          // setTreeData([...treeData]);
+          setTreeData(newtree);
+        });
+        resolve();
+      }, 50);
+    });
+
+
   return (
     <Drawer
       title={title}
@@ -308,298 +339,301 @@ const Add = (props: AddProps) => {
       visible={visible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
       <Form layout="vertical" hideRequiredMark>
-        <Tabs defaultActiveKey="1" >
-          <TabPane tab="基本信息" key="1">
-            <Row gutter={24}>
-              <Col span={12}>
-                <Card title="基本信息" className={styles.addcard}>
-                  <Row gutter={24}>
-                    <Col lg={24}>
-                      <Form.Item label="模板选择">
-                        {getFieldDecorator('template', {
-                        })(<Select placeholder="请选择模板" />)}
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                  <Row gutter={24}>
-                    <Col lg={12}>
-                      <Form.Item label="合同编号" required>
-                        {getFieldDecorator('no', {
-                          rules: [{ required: true, message: '未选择模版时，请输入编号' }],
-                        })(<Input placeholder="如不填写系统将自动生成" />)}
-                      </Form.Item>
-                    </Col>
-                    <Col lg={12}>
-                      <Form.Item label="跟进人" >
-                        {getFieldDecorator('follower', {
-                        })(
-                          <AutoComplete
-                            dataSource={userList}
-                            onSearch={handleSearch}
-                            placeholder="请输入跟进人"
-                            onSelect={onFollowerSelect}
-                          />
-                        )}
-                        {getFieldDecorator('followerId', {
-                        })(
-                          <input type='hidden' />
-                        )}
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                  <Row gutter={24}>
-                    <Col lg={12}>
-                      <Form.Item label="租赁数量（m²)">
-                        {getFieldDecorator('leaseSize', {
-                          rules: [{ required: true, message: '请输入租赁数量' }],
-                        })(<InputNumber placeholder="请输入租赁数量" style={{ width: '100%' }} />)}
-                      </Form.Item>
-                    </Col>
-                    <Col lg={12}>
-                      <Form.Item label="合同签订时间" required>
-                        {getFieldDecorator('contractStartDate', {
-                          initialValue: moment(new Date()),
-                          rules: [{ required: true, message: '请选择合同签订时间' }],
-                        })(<DatePicker placeholder="请选择合同签订时间" style={{ width: '100%' }} />)}
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                  <Row gutter={24}>
-                    <Col lg={12}>
-                      <Form.Item label="合同计租时间">
-                        {getFieldDecorator('billingDate', {
-                          initialValue: moment(new Date()),
-                          rules: [{ required: true, message: '请选择合同计租时间' }],
-                        })(<DatePicker placeholder="请选择合同计租时间" style={{ width: '100%' }} />)}
-                      </Form.Item>
-                    </Col>
-                    <Col lg={12}>
-                      <Form.Item label="合同失效时间" required>
-                        {getFieldDecorator('contractEndDate', {
-                          initialValue: moment(new Date()).add(1, 'years').add(-1, 'days'),
-                          rules: [{ required: true, message: '请选择合同失效时间' }],
-                        })(<DatePicker placeholder="请选择合同失效时间" style={{ width: '100%' }} />)}
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                  <Row gutter={24}>
-                    <Col lg={12}>
-                      <Form.Item label="单价保留小数点">
-                        {getFieldDecorator('calcPrecision', {
-                          initialValue: 2,
-                          rules: [{ required: true, message: '请填写保留几位' }],
-                        })(<InputNumber placeholder="请填写保留几位" style={{ width: '100%' }} />)}
-                      </Form.Item>
-                    </Col>
-                    <Col lg={12}>
-                      <Form.Item label="计算精度">
-                        {getFieldDecorator('calcPrecisionMode', {
-                          initialValue: "最终计算结果保留2位"
-                        })(<Select>
-                          <Option value="最终计算结果保留2位" >最终计算结果保留2位</Option>
-                          <Option value="每步计算结果保留2位" >每步计算结果保留2位</Option>
-                        </Select>
-                        )}
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                </Card>
-              </Col>
-              <Col span={12}>
-                <Card title="租赁信息" className={styles.addcard}>
-                  <Row gutter={24}>
-                    <Col lg={24}>
-                      <Form.Item label="房源选择" required>
-                        {getFieldDecorator('room', {
-                          rules: [{ required: true, message: '请选择房源' }],
-                        })(
-                          <TreeSelect
-                            placeholder="请选择房源"
-                            allowClear
-                            dropdownStyle={{ maxHeight: 300 }}
-                            treeData={treeData}
-                            treeDataSimpleMode={true}
-                            onChange={onRoomChange}
-                            multiple={true}>
-                          </TreeSelect>
-                        )}
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                  <Row gutter={24}>
-                    <Col lg={12}>
-                      <Form.Item label="租客" required>
-                        {getFieldDecorator('customer', {
-                          rules: [{ required: true, message: '请填写姓名或公司' }],
-                        })(<Input placeholder="请填写姓名或公司" />)}
-                      </Form.Item>
-                    </Col>
-                    <Col lg={12}>
-                      <Form.Item label="行业" required>
-                        {getFieldDecorator('industry', {
-                          rules: [{ required: true, message: '请选择行业' }],
-                        })(
-                          <Select placeholder="请选择行业"
+        <Spin tip="数据加载中..." spinning={loading}>
+          <Tabs defaultActiveKey="1" >
+            <TabPane tab="基本信息" key="1">
+              <Row gutter={24}>
+                <Col span={12}>
+                  <Card title="基本信息" className={styles.addcard}>
+                    <Row gutter={24}>
+                      <Col lg={24}>
+                        <Form.Item label="模板选择">
+                          {getFieldDecorator('template', {
+                          })(<Select placeholder="请选择模板" />)}
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row gutter={24}>
+                      <Col lg={12}>
+                        <Form.Item label="合同编号" required>
+                          {getFieldDecorator('no', {
+                            rules: [{ required: true, message: '未选择模版时，请输入编号' }],
+                          })(<Input placeholder="如不填写系统将自动生成" />)}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={12}>
+                        <Form.Item label="跟进人" >
+                          {getFieldDecorator('follower', {
+                          })(
+                            <AutoComplete
+                              dataSource={userList}
+                              onSearch={handleSearch}
+                              placeholder="请输入跟进人"
+                              onSelect={onFollowerSelect}
+                            />
+                          )}
+                          {getFieldDecorator('followerId', {
+                          })(
+                            <input type='hidden' />
+                          )}
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row gutter={24}>
+                      <Col lg={12}>
+                        <Form.Item label="租赁数量（m²)">
+                          {getFieldDecorator('leaseSize', {
+                            rules: [{ required: true, message: '请输入租赁数量' }],
+                          })(<InputNumber placeholder="请输入租赁数量" style={{ width: '100%' }} />)}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={12}>
+                        <Form.Item label="合同签订时间" required>
+                          {getFieldDecorator('contractStartDate', {
+                            initialValue: moment(new Date()),
+                            rules: [{ required: true, message: '请选择合同签订时间' }],
+                          })(<DatePicker placeholder="请选择合同签订时间" style={{ width: '100%' }} />)}
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row gutter={24}>
+                      <Col lg={12}>
+                        <Form.Item label="合同计租时间">
+                          {getFieldDecorator('billingDate', {
+                            initialValue: moment(new Date()),
+                            rules: [{ required: true, message: '请选择合同计租时间' }],
+                          })(<DatePicker placeholder="请选择合同计租时间" style={{ width: '100%' }} />)}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={12}>
+                        <Form.Item label="合同失效时间" required>
+                          {getFieldDecorator('contractEndDate', {
+                            initialValue: moment(new Date()).add(1, 'years').add(-1, 'days'),
+                            rules: [{ required: true, message: '请选择合同失效时间' }],
+                          })(<DatePicker placeholder="请选择合同失效时间" style={{ width: '100%' }} />)}
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row gutter={24}>
+                      <Col lg={12}>
+                        <Form.Item label="单价保留小数点">
+                          {getFieldDecorator('calcPrecision', {
+                            initialValue: 2,
+                            rules: [{ required: true, message: '请填写保留几位' }],
+                          })(<InputNumber placeholder="请填写保留几位" style={{ width: '100%' }} />)}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={12}>
+                        <Form.Item label="计算精度">
+                          {getFieldDecorator('calcPrecisionMode', {
+                            initialValue: "最终计算结果保留2位"
+                          })(<Select>
+                            <Option value="最终计算结果保留2位" >最终计算结果保留2位</Option>
+                            <Option value="每步计算结果保留2位" >每步计算结果保留2位</Option>
+                          </Select>
+                          )}
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                  </Card>
+                </Col>
+                <Col span={12}>
+                  <Card title="租赁信息" className={styles.addcard}>
+                    <Row gutter={24}>
+                      <Col lg={24}>
+                        <Form.Item label="房源选择" required>
+                          {getFieldDecorator('room', {
+                            rules: [{ required: true, message: '请选择房源' }],
+                          })(
+                            <TreeSelect
+                              placeholder="请选择房源"
+                              allowClear
+                              dropdownStyle={{ maxHeight: 300 }}
+                              treeData={treeData}
+                              loadData={onLoadData}
+                              treeDataSimpleMode={true}
+                              onChange={onRoomChange}
+                              multiple={true}>
+                            </TreeSelect>
+                          )}
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row gutter={24}>
+                      <Col lg={12}>
+                        <Form.Item label="租客" required>
+                          {getFieldDecorator('customer', {
+                            rules: [{ required: true, message: '请填写姓名或公司' }],
+                          })(<Input placeholder="请填写姓名或公司" />)}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={12}>
+                        <Form.Item label="行业" required>
+                          {getFieldDecorator('industry', {
+                            rules: [{ required: true, message: '请选择行业' }],
+                          })(
+                            <Select placeholder="请选择行业"
                             // onSelect={onIndustrySelect}
-                          >
-                            {/* {industryType.map(item => (
+                            >
+                              {/* {industryType.map(item => (
                               <Option value={item.value} key={item.key}>
                                 {item.title}
                               </Option>
                             ))} */}
 
-                            {industryType.map(item => (
-                              <Option value={item.title} key={item.title}>
-                                {item.title}
-                              </Option>
-                            ))}
+                              {industryType.map(item => (
+                                <Option value={item.title} key={item.title}>
+                                  {item.title}
+                                </Option>
+                              ))}
 
-                          </Select>
-                        )}
-                        {getFieldDecorator('industry', {
-                        })(
-                          <input type='hidden' />
-                        )}
+                            </Select>
+                          )}
+                          {getFieldDecorator('industry', {
+                          })(
+                            <input type='hidden' />
+                          )}
 
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                  <Row gutter={24}>
-                    <Col lg={12}>
-                      <Form.Item label="法人" required>
-                        {getFieldDecorator('legalPerson', {
-                          rules: [{ required: true, message: '请填写法人' }],
-                        })(<Input placeholder="请填写法人" />)}
-                      </Form.Item>
-                    </Col>
-                    <Col lg={12}>
-                      <Form.Item label="签订人" required>
-                        {getFieldDecorator('signer', {
-                          rules: [{ required: true, message: '请输入签订人' }],
-                        })(
-                          <AutoComplete
-                            dataSource={userList}
-                            onSearch={handleSearch}
-                            placeholder="请输入签订人"
-                            onSelect={onSignerSelect}
-                          />
-                        )}
-                        {getFieldDecorator('signerId', {
-                        })(
-                          <input type='hidden' />
-                        )}
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                  <Row gutter={24}>
-                    <Col lg={24}>
-                      <Form.Item label="租客联系人">
-                        {getFieldDecorator('customerContact', {
-                          rules: [{ required: true, message: '请输入租客联系人' }],
-                        })(<Input placeholder="请输入租客联系人" />)}
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                  <Row gutter={24}>
-                    <Col lg={6}>
-                      <Form.Item label="滞纳金比例" >
-                        {getFieldDecorator('lateFee', {
-                        })(<InputNumber placeholder="请输入" />)}
-                      </Form.Item>
-                    </Col>
-                    <Col lg={6}>
-                      <Form.Item label="&nbsp;" >
-                        {getFieldDecorator('lateFeeUnit', {
-                          initialValue: "%/天"
-                        })(
-                          <Select>
-                            <Option value="%/天">%/天</Option>
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row gutter={24}>
+                      <Col lg={12}>
+                        <Form.Item label="法人" required>
+                          {getFieldDecorator('legalPerson', {
+                            rules: [{ required: true, message: '请填写法人' }],
+                          })(<Input placeholder="请填写法人" />)}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={12}>
+                        <Form.Item label="签订人" required>
+                          {getFieldDecorator('signer', {
+                            rules: [{ required: true, message: '请输入签订人' }],
+                          })(
+                            <AutoComplete
+                              dataSource={userList}
+                              onSearch={handleSearch}
+                              placeholder="请输入签订人"
+                              onSelect={onSignerSelect}
+                            />
+                          )}
+                          {getFieldDecorator('signerId', {
+                          })(
+                            <input type='hidden' />
+                          )}
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row gutter={24}>
+                      <Col lg={24}>
+                        <Form.Item label="租客联系人">
+                          {getFieldDecorator('customerContact', {
+                            rules: [{ required: true, message: '请输入租客联系人' }],
+                          })(<Input placeholder="请输入租客联系人" />)}
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row gutter={24}>
+                      <Col lg={6}>
+                        <Form.Item label="滞纳金比例" >
+                          {getFieldDecorator('lateFee', {
+                          })(<InputNumber placeholder="请输入" />)}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={6}>
+                        <Form.Item label="&nbsp;" >
+                          {getFieldDecorator('lateFeeUnit', {
+                            initialValue: "%/天"
+                          })(
+                            <Select>
+                              <Option value="%/天">%/天</Option>
+                            </Select>)}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={7}>
+                        <Form.Item label="滞纳金上限" >
+                          {getFieldDecorator('maxLateFee', {
+                          })(<InputNumber placeholder="请输入" />)}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={5}>
+                        <Form.Item label="&nbsp;" >
+                          {getFieldDecorator('maxLateFeeUnit', {
+                            initialValue: "%"
+                          })(<Select>
+                            <Option value="%">%</Option>
                           </Select>)}
-                      </Form.Item>
-                    </Col>
-                    <Col lg={7}>
-                      <Form.Item label="滞纳金上限" >
-                        {getFieldDecorator('maxLateFee', {
-                        })(<InputNumber placeholder="请输入" />)}
-                      </Form.Item>
-                    </Col>
-                    <Col lg={5}>
-                      <Form.Item label="&nbsp;" >
-                        {getFieldDecorator('maxLateFeeUnit', {
-                          initialValue: "%"
-                        })(<Select>
-                          <Option value="%">%</Option>
-                        </Select>)}
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                </Card>
-              </Col>
-            </Row>
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                  </Card>
+                </Col>
+              </Row>
 
-          </TabPane>
-          <TabPane tab="费用条款" key="2">
-            <Card title="基本条款" className={styles.card} >
-              <Row gutter={24}>
-                <Col lg={4}>
-                  <Form.Item label="租赁数量（㎡）" required>
-                    {getFieldDecorator('leaseArea', {
-                    })(<Input readOnly />)}
-                  </Form.Item>
-                </Col>
-                <Col lg={10}>
-                  <Form.Item label="保证金关联费项" required>
-                    {getFieldDecorator('depositFeeItemId', {
-                      rules: [{ required: true, message: '请选择费项' }]
-                    })(
-                      <Select placeholder="请选择费项">
-                        {feeitems.map(item => (
-                          <Option value={item.key} key={item.key}>
-                            {item.title}
-                          </Option>
-                        ))}
-                      </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col lg={5}>
-                  <Form.Item label="保证金数量" required>
-                    {getFieldDecorator('deposit', {
-                      initialValue: 1,
-                      rules: [{ required: true, message: '请输入保证金数量' }],
-                    })(<Input placeholder="请输入保证金数量" />)}
-                  </Form.Item>
-                </Col>
-                <Col lg={5}>
-                  <Form.Item label="&nbsp;" >
-                    {getFieldDecorator('depositUnit', {
-                      initialValue: "月"
-                    })(
-                      <Select>
-                        <Option value="月">月</Option>
-                        <Option value="元">元</Option>
-                      </Select>)}
-                  </Form.Item>
-                </Col>
-                {/* <Col lg={4}>
+            </TabPane>
+            <TabPane tab="费用条款" key="2">
+              <Card title="基本条款" className={styles.card} >
+                <Row gutter={24}>
+                  <Col lg={4}>
+                    <Form.Item label="租赁数量（㎡）" required>
+                      {getFieldDecorator('leaseArea', {
+                      })(<Input readOnly />)}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={10}>
+                    <Form.Item label="保证金关联费项" required>
+                      {getFieldDecorator('depositFeeItemId', {
+                        rules: [{ required: true, message: '请选择费项' }]
+                      })(
+                        <Select placeholder="请选择费项">
+                          {feeitems.map(item => (
+                            <Option value={item.key} key={item.key}>
+                              {item.title}
+                            </Option>
+                          ))}
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={5}>
+                    <Form.Item label="保证金数量" required>
+                      {getFieldDecorator('deposit', {
+                        initialValue: 1,
+                        rules: [{ required: true, message: '请输入保证金数量' }],
+                      })(<Input placeholder="请输入保证金数量" />)}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={5}>
+                    <Form.Item label="&nbsp;" >
+                      {getFieldDecorator('depositUnit', {
+                        initialValue: "月"
+                      })(
+                        <Select>
+                          <Option value="月">月</Option>
+                          <Option value="元">元</Option>
+                        </Select>)}
+                    </Form.Item>
+                  </Col>
+                  {/* <Col lg={4}>
                   <Form.Item label="保证金金额" >
                     {getFieldDecorator('totalDeposit', {
                     })(<Input readOnly />)}
                   </Form.Item>
                 </Col> */}
-              </Row>
-            </Card>
-            <LeaseTerm form={form} feeitems={feeitems}></LeaseTerm>
-            <IncreasingRate form={form}></IncreasingRate>
-            <Rebate form={form}></Rebate>
-            <Button style={{ width: '100%', marginBottom: '10px' }} onClick={calculation}>点击生成租金明细</Button>
-            <ResultList
-              depositData={depositData}
-              chargeData={chargeData}
-            ></ResultList>
+                </Row>
+              </Card>
+              <LeaseTerm form={form} feeitems={feeitems}></LeaseTerm>
+              <IncreasingRate form={form}></IncreasingRate>
+              <Rebate form={form}></Rebate>
+              <Button style={{ width: '100%', marginBottom: '10px' }} onClick={calculation}>点击生成租金明细</Button>
+              <ResultList
+                depositData={depositData}
+                chargeData={chargeData}
+              ></ResultList>
 
-          </TabPane>
-        </Tabs>
+            </TabPane>
+          </Tabs>
+        </Spin>
       </Form>
       <div
         style={{

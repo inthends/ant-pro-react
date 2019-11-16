@@ -18,7 +18,7 @@ let index = 1;
 function LeaseTerm(props: LeaseTermProps) {
   const { form, feeitems } = props;
   const { getFieldDecorator, getFieldValue, setFieldsValue } = form;
-  const [priceUnit, setPriceUnit] = useState<number>(2);//单价单位
+  const [priceUnit, setPriceUnit] = useState<string>("元/m²·天");//单价单位
 
   //单位切换
   const changeUnit = value => {
@@ -92,9 +92,9 @@ function LeaseTerm(props: LeaseTermProps) {
             })(
               <Select onChange={changeUnit}>
                 <Option value="元/m²·月">元/m²·月</Option>
-                <Option value="元/m²·天" >元/m²·天</Option>
-                <Option value="元/月" >元/月</Option>
-                <Option value="元/天" >元/天</Option>
+                <Option value="元/m²·天">元/m²·天</Option>
+                <Option value="元/月">元/月</Option>
+                <Option value="元/天">元/天</Option>
               </Select>)}
           </Form.Item>
         </Col>
@@ -144,7 +144,7 @@ function LeaseTerm(props: LeaseTermProps) {
           </Form.Item>
         </Col> */}
         {
-          (priceUnit == 1 || priceUnit == 3) ?
+          (priceUnit == "元/m²·天" || priceUnit == "元/天") ?
             <Col lg={4}>
               <Form.Item label="天单价换算规则">
                 {getFieldDecorator(`dayPriceConvertRule[${k}]`, {
@@ -279,13 +279,13 @@ function LeaseTerm(props: LeaseTermProps) {
               })(
                 <Select>
                   <Option value="按实际天数计费">按实际天数计费</Option>
-                  <Option value="按月计费" >按月计费</Option>
+                  <Option value="按月计费">按月计费</Option>
                 </Select>)}
             </Form.Item>
           </Col>
 
           {
-            (priceUnit == 1 || priceUnit == 3) ?
+            (priceUnit == "元/m²·天" || priceUnit == "元/天") ?
               <Col lg={4}>
                 <Form.Item label="天单价换算规则">
                   {getFieldDecorator(`dayPriceConvertRule[0]`, {
