@@ -16,7 +16,7 @@ interface AsynLeftTreeProps {
 
 function AsynLeftTree(props: AsynLeftTreeProps) {
 
-  const { selectTree, parentid } = props;
+  const { selectTree } = props;
   const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
   // const [autoExpandParent, setAutoExpandParent] = useState<boolean>(false);
   const { hideSider, setHideSider } = useContext(SiderContext);

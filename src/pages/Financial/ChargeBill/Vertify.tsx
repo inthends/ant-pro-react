@@ -68,7 +68,7 @@ const Vertify = (props: VertifyProps) => {
           keyValue: infoDetail.billId,
           billDate: moment(values.billDate).format('YYYY-MM-DD'),
           //status: ifVertify ? 1 : 2//，已收未审核1，已审核2，已冲红3
-          ifVerify: ifVertify
+          ifVerify: !ifVertify
         });
       Audit(newData).then(res => {
         reload();
@@ -155,8 +155,7 @@ const Vertify = (props: VertifyProps) => {
     {
       title: '备注',
       dataIndex: 'memo',
-      key: 'memo',
-      width: 100
+      key: 'memo', 
     }
   ] as ColumnProps<any>[];
 
@@ -336,7 +335,7 @@ const Vertify = (props: VertifyProps) => {
             columns={columns}
             rowKey={record => record.billId}
             pagination={pagination}
-            scroll={{ y: 500, x: 1150 }}
+            scroll={{ y: 500, x: 1300 }}
             loading={loading}
           />
           <Row gutter={24}>

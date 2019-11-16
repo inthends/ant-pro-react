@@ -115,8 +115,7 @@ const Show = (props: ShowProps) => {
     {
       title: '备注',
       dataIndex: 'memo',
-      key: 'memo',
-      width: 100
+      key: 'memo'
     }
   ] as ColumnProps<any>[];
 
@@ -283,7 +282,7 @@ const Show = (props: ShowProps) => {
               columns={columns}
               rowKey={record => record.billId}
               pagination={pagination}
-              scroll={{ y: 500, x: 1150 }}
+              scroll={{ y: 500, x: 1300 }}
               loading={loading}
             />
           </Form>

@@ -5,7 +5,12 @@ import { message, Modal, Checkbox, Tabs, Select, Table, Button, Card, Icon, Divi
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { HouseRemoveForm, HouseAllRemoveForm, OrganizeRemoveForm, GetFormJson, GetFeeType, GetAllFeeItems, GetOrganizePageList, GetUnitFeeItemData, SaveForm, GetFeeItemName } from './Main.service';
+import {
+  HouseRemoveForm, HouseAllRemoveForm,
+  OrganizeRemoveForm, GetFormJson,
+  GetFeeType, GetAllFeeItems, GetOrganizePageList,
+  GetUnitFeeItemData, SaveForm, GetFeeItemName
+} from './Main.service';
 import styles from './style.less';
 import moment from 'moment';
 import AddFormula from './AddFormula';
@@ -95,6 +100,11 @@ const Modify = (props: ModifyProps) => {
     if (modifyVisible) {
       if (id) {
         GetFormJson(id).then((tempInfo: CwFeeitem) => {
+
+
+
+          debugger
+
 
           // if (tempInfo.feeKind) {
           //   // var kind = tempInfo.feeKind == "收款费项" ? "ReceivablesItem" : "PaymentItem";
@@ -374,7 +384,7 @@ const Modify = (props: ModifyProps) => {
     },
   ] as ColumnProps<any>[];
 
-  const [orgItemId, setOrgItemId] = useState<string>(''); 
+  const [orgItemId, setOrgItemId] = useState<string>('');
   const [houseItemId, setHouseItemId] = useState<string>('');
 
   const housecolumns = [
@@ -416,7 +426,7 @@ const Modify = (props: ModifyProps) => {
         if (val == null) {
           return '';
         } else {
-          return  moment(val).format('YYYY-MM-DD');
+          return moment(val).format('YYYY-MM-DD');
         }
       }
     }, {
@@ -436,7 +446,7 @@ const Modify = (props: ModifyProps) => {
       title: '房屋全称',
       dataIndex: 'allName',
       key: 'allName',
-      width: 200,
+      width: 220,
       sorter: true,
     },
     {
@@ -497,7 +507,7 @@ const Modify = (props: ModifyProps) => {
   }
 
   //求自然月日期
-  const getMonthBeforeFormatAndDay = (num, format, date) => { 
+  const getMonthBeforeFormatAndDay = (num, format, date) => {
     let day = date.get('date');
     let month = date.get('month');
     date.set('month', month + num * 1, 'date', 1); //周期月一号
@@ -937,7 +947,7 @@ const Modify = (props: ModifyProps) => {
                 <Col lg={12}>
                   <Form.Item label="中间每一步计算结果保留">
                     {getFieldDecorator('midResultScale', {
-                      initialValue: infoDetail.midResultScale ? infoDetail.midResultScale : 0,
+                      initialValue: infoDetail.midResultScale || infoDetail.midResultScale == 0 ? infoDetail.midResultScale : 2,
                       rules: [{ required: true, message: '请选择小数位数' }],
                     })(
                       <Select placeholder="请选择小数位数">
@@ -969,7 +979,7 @@ const Modify = (props: ModifyProps) => {
                 <Col lg={12}>
                   <Form.Item label="最终结果保留小数位数">
                     {getFieldDecorator('lastResultScale', {
-                      initialValue: infoDetail.lastResultScale ? infoDetail.lastResultScale : 2,
+                      initialValue: infoDetail.lastResultScale || infoDetail.lastResultScale == 0 ? infoDetail.lastResultScale : 2,
                       rules: [{ required: true, message: '请选择小数位数' }],
                     })(
                       <Select placeholder="请选择小数位数">
@@ -1501,7 +1511,7 @@ const Modify = (props: ModifyProps) => {
                   columns={housecolumns}
                   rowKey={record => record.unitFeeId}
                   pagination={housePagination}
-                  scroll={{ y: 420, x: 980 }}
+                  scroll={{ y: 420, x: 1000 }}
                   onChange={(pagination: PaginationConfig, filters, sorter) =>
                     houseLoadData(houseSearch, pagination, sorter)
                   }
