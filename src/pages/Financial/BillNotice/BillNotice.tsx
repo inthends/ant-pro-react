@@ -18,7 +18,7 @@ function BillNotice() {
   const [organize, SetOrganize] = useState<any>({});
   // const [treeSearch, SetTreeSearch] = useState<any>({});
   const [id, setId] = useState<string>();
-  const [selectRecords, setSelectRecords] = useState<any>();
+  // const [selectRecords, setSelectRecords] = useState<any>();
   const [selectIds, setSelectIds] = useState<any>();
   const [billCheckLoading, setBillCheckLoading] = useState<boolean>(false);
   const [billNoticeLoading, setBillNoticeLoading] = useState<boolean>(false);
@@ -460,7 +460,7 @@ return (
             }}
             reload={() => initBillCheckLoadData('', billCheckSearch)}
             getRowSelect={(records) => {
-              setSelectRecords(records);
+              // setSelectRecords(records);
               if (records.length == 1) {
                 setId(records[0].billId);
                 if (records[0].ifVerify == 1) {

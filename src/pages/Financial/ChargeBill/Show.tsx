@@ -159,7 +159,8 @@ const Show = (props: ShowProps) => {
       title: '请确认',
       content: `您是否要打印吗？`,
       onOk: () => {
-        setLoading(true);
+        setLoading(true); 
+        
         Print(id).then(res => {
           //window.location.href = res;
           window.open(res);

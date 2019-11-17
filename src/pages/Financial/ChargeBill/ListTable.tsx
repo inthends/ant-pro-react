@@ -138,7 +138,7 @@ function ListTable(props: ListTableProps) {
       title: '房屋全称',
       dataIndex: 'allname',
       key: 'allname',
-      width: 200
+      width: 240
     }, {
       title: '备注',
       dataIndex: 'memo',

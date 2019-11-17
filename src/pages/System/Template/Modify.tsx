@@ -54,8 +54,8 @@ const Modify = (props: ModifyProps) => {
 
   //数据保存
   const doSave = dataDetail => {
-    let modifyData = { ...initData, ...dataDetail, keyValue: initData.id };
-    modifyData.categoryId = typeId;
+    let modifyData = { ...initData, ...dataDetail, keyValue: initData.id }; 
+    modifyData.categoryId = modifyData.categoryId ? modifyData.categoryId : typeId;
     return SaveForm(modifyData);
   };
 
@@ -207,8 +207,8 @@ const Modify = (props: ModifyProps) => {
               lg={24}
               // wholeLine={true}
               type="textarea"
-              field="sQL"
-              label="SQL(存储过程和SQL语句必须声明单据BillID参数)"
+              field="sql"
+              label="SQL(存储过程和SQL语句必须声明单据Id参数call sp_PayNotice(@MainId);)"
             ></ModifyItem>
           </Row>
           <Row gutter={24}>

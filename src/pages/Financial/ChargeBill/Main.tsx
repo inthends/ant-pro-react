@@ -304,6 +304,8 @@ function Main() {
     setChargedRowSelectedKey(record);
   }
 
+  //tab切换
+
   return (
     <Layout style={{ height: '100%' }}>
       {/* <Sider theme="light" style={{ overflow: 'hidden', height: '100%' }} width="245px"> */}
