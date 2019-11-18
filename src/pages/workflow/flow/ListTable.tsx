@@ -15,7 +15,10 @@ interface ListTableProps {
 }
 
 function ListTable(props: ListTableProps) {
-  const { loading, data, modify, reload, pagination } = props;
+  const {  onchange, loading, data, modify, reload, pagination } = props;
+  const changePage = (pagination: PaginationConfig, filters, sorter) => {
+    onchange(pagination, filters, sorter);
+  };
   const doDelete = record => {
     Modal.confirm({
       title: "请确认",
@@ -89,6 +92,9 @@ function ListTable(props: ListTableProps) {
         scroll={{ y: 500 }}
         loading={loading}
         pagination={pagination}
+        onChange={(pagination: PaginationConfig, filters, sorter) =>
+          changePage(pagination, filters, sorter)
+        }
       />
     </Page>
   );

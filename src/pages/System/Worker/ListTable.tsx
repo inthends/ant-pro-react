@@ -15,15 +15,18 @@ interface ListTableProps {
 }
 
 function ListTable(props: ListTableProps) {
-  const { loading, data, modify, reload, pagination } = props;
+  const { onchange, loading, data, modify, reload, pagination } = props;
+  const changePage = (pagination: PaginationConfig, filters, sorter) => {
+    onchange(pagination, filters, sorter);
+  };
   const doDelete = record => {
     Modal.confirm({
       title: "请确认",
-      content: `您是否要删除 ${record.templateName} 吗`,
+      content: `您是否要删除 ${record.name} 吗？`,
       onOk: () => {
         RemoveForm(record.id)
           .then(() => {
-            message.success("删除成功");
+            message.success("删除成功！");
             reload();
           })
           .catch(e => { });
@@ -89,7 +92,7 @@ function ListTable(props: ListTableProps) {
       dataIndex: "description",
       key: "description",
       width: 100
-    }, 
+    },
     {
       title: "操作",
       dataIndex: "operation",
@@ -99,7 +102,7 @@ function ListTable(props: ListTableProps) {
         return [
           <span>
             <a onClick={() => doModify(record)} key="modify">编辑</a>
-            <Divider type="vertical" key='divider'/>
+            <Divider type="vertical" key='divider' />
             <a onClick={() => doDelete(record)} key="delete">删除</a>
           </span>
         ];
@@ -114,10 +117,13 @@ function ListTable(props: ListTableProps) {
         size="middle"
         dataSource={data}
         columns={columns}
-        rowKey={record => record.roleId}
+        rowKey={record => record.id}
         scroll={{ y: 500 }}
         loading={loading}
         pagination={pagination}
+        onChange={(pagination: PaginationConfig, filters, sorter) =>
+          changePage(pagination, filters, sorter)
+        }
       />
     </Page>
   );
