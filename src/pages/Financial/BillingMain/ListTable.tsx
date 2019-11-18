@@ -133,8 +133,7 @@ function ListTable(props: ListTableProps) {
     {
       title: '备注',
       dataIndex: 'memo',
-      key: 'memo',
-      sorter: true
+      key: 'memo', 
     },
     {
       title: '操作',
@@ -157,9 +156,7 @@ function ListTable(props: ListTableProps) {
         // ];
 
         return [
-          <span>
-
-
+          <span> 
             {/* <a onClick={() => showModify(record.billId, record.ifVerifyName == "已审核"
               || record.billSource == "水电气生成" ? false : true)} key="modify">
               {record.ifVerifyName == "已审核" || record.billSource == "水电气生成" ? "查看" : "修改"}</a> */}
@@ -209,7 +206,7 @@ function ListTable(props: ListTableProps) {
         dataSource={data}
         rowKey="billId"
         pagination={pagination}
-        scroll={{ y: 500, x: 1200 }}
+        scroll={{ y: 500, x: 1300 }}
         loading={loading}
         onChange={onchange}
         rowClassName={setClassName} //表格行点击高亮

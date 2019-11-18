@@ -86,8 +86,7 @@ const Modify = (props: ModifyProps) => {
               setUnitIds(urooms);
             });
           })
-        });
-
+        }); 
 
       } else {
 

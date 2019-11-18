@@ -22,35 +22,24 @@ const Show = (props: ShowProps) => {
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [chargeBillData, setChargeBillData] = useState<any[]>([]);
   const [linkno, setLinkno] = useState<any>('');
+
   // 打开抽屉时初始化
   useEffect(() => {
     form.resetFields();
     if (showVisible) {
-      if (id) {
+      if (id != null && id != '') {
+        setLoading(true);
         GetEntityShow(id).then(res => {
-          if (res != null) {
-            setInfoDetail(res.entity);
-            setLinkno(res.linkno);
-            return res.entity.billId;
-          }
-          return '';
-        }).then(res => {
-          if (res != '')
-            initLoadFeeDetail(res);
+          setInfoDetail(res.entity);
+          setLinkno(res.linkno);
+          initLoadFeeDetail(res.entity.billId);
+          setLoading(false);
         })
-        /*setPagination(pagesetting => {
-          return {
-            ...pagesetting,
-            current,
-            total,
-            pageSize,
-          };
-        });*/
-      } else {
-        setInfoDetail({});
       }
-    } else {
-
+      else {
+        setInfoDetail({});
+        setLoading(false);
+      }
     }
   }, [showVisible]);
 
@@ -159,8 +148,8 @@ const Show = (props: ShowProps) => {
       title: '请确认',
       content: `您是否要打印吗？`,
       onOk: () => {
-        setLoading(true); 
-        
+        setLoading(true);
+
         Print(id).then(res => {
           //window.location.href = res;
           window.open(res);
@@ -267,13 +256,13 @@ const Show = (props: ShowProps) => {
                   {`${infoDetail.payAmountA + infoDetail.payAmountB + infoDetail.payAmountC}元，其中${infoDetail.payTypeA}${infoDetail.payAmountA}元，${infoDetail.payTypeB}${infoDetail.payAmountB}元，${infoDetail.payTypeC}${infoDetail.payAmountC}元`}
                 </Form.Item>
               </Col>
-            </Row> 
+            </Row>
             <Row gutter={24}>
               <Col span={24}>
                 <Form.Item label="备注">
                   {infoDetail.memo}
                 </Form.Item>
-              </Col> 
+              </Col>
             </Row>
 
             <Table

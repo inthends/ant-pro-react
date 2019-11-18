@@ -34,28 +34,30 @@ const Vertify = (props: VertifyProps) => {
   const [chargeBillData, setChargeBillData] = useState<any[]>([]);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [linkno, setLinkno] = useState<any>('');
-  // 打开抽屉时初始化
-  useEffect(() => {
+ 
+   // 打开抽屉时初始化
+   useEffect(() => {
     form.resetFields();
     if (vertifyVisible) {
-      if (id) {
+      if (id != null && id != '') {
+        setLoading(true);
         GetEntityShow(id).then(res => {
-          if (res != null)
-            /*  var infoTemp =Object.assign({},res.entity,
-                { feeName:res.feeName, customerName:res.customerName, unitName:res.unitName});*/
-            setInfoDetail(res.entity);
+          setInfoDetail(res.entity);
           setLinkno(res.linkno);
           initLoadFeeDetail(res.entity.billId);
-        });
-      } else {
+          setLoading(false);
+        })
+      }
+      else {
         setInfoDetail({});
+        setLoading(false);
       }
     }
   }, [vertifyVisible]);
 
-  const close = () => {
-    closeVertify();
-  };
+  // const close = () => {
+  //   closeVertify();
+  // };
 
   const audit = () => {
     form.validateFields((errors, values) => {
@@ -72,7 +74,7 @@ const Vertify = (props: VertifyProps) => {
         });
       Audit(newData).then(res => {
         reload();
-        close();
+        closeVertify();
       });
     });
   };
@@ -194,7 +196,7 @@ const Vertify = (props: VertifyProps) => {
       title={title}
       placement="right"
       width={800}
-      onClose={close}
+      onClose={closeVertify}
       visible={vertifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
@@ -363,7 +365,7 @@ const Vertify = (props: VertifyProps) => {
           textAlign: 'right',
         }}
       >
-        <Button onClick={close} style={{ marginRight: 8 }}>
+        <Button onClick={closeVertify} style={{ marginRight: 8 }}>
           取消
         </Button>
         <Button onClick={audit} type="primary">
