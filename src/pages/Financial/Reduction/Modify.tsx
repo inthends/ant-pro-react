@@ -285,8 +285,7 @@ const Modify = (props: ModifyProps) => {
         newData.details = JSON.stringify(listdata);
         newData.code = code;
         newData.billDate = moment(newData.billDate).format('YYYY-MM-DD HH:mm:ss');
-        newData.keyValue = newData.billId;
-
+        newData.keyValue = newData.billId; 
         SaveForm(newData).then(res => {
           message.success('保存成功');
           closeDrawer();
@@ -396,8 +395,7 @@ const Modify = (props: ModifyProps) => {
       title: '原金额',
       dataIndex: 'amount',
       key: 'amount',
-      width: '100px',
-      sorter: true,
+      width: '100px', 
     },
 
     {
@@ -601,7 +599,7 @@ const Modify = (props: ModifyProps) => {
             </Col>
           </Row>
           <Row gutter={24}>
-            <Col lg={8}>
+            {/* <Col lg={8}>
               <Form.Item label="减免费项">
                 {getFieldDecorator('reductionFeeItemId', {
                   initialValue: infoDetail.reductionFeeItemId,
@@ -609,13 +607,12 @@ const Modify = (props: ModifyProps) => {
                 })(
                   <Select placeholder="==请选择减免项目=="
                     onSelect={onFeeItemSelect}>
-                    {/* {buildOption(reductionItem)} */}
+                    {buildOption(reductionItem)}
                     {reductionItem.map(item => (
                       <Option key={item.key} value={item.value}>
                         {item.title}
                       </Option>
-                    ))}
-
+                    ))} 
                     {getFieldDecorator('reductionFeeItemName', {
                     })(
                       <input type='hidden' />
@@ -623,7 +620,7 @@ const Modify = (props: ModifyProps) => {
                   </Select>
                 )}
               </Form.Item>
-            </Col>
+            </Col> */}
             <Col lg={8}>
               <Form.Item label="批量折扣">
                 {getFieldDecorator('rebate', {

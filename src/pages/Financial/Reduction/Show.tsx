@@ -208,11 +208,11 @@ const Show = (props: ShowProps) => {
             </Col>
           </Row>
           <Row gutter={24}>
-            <Col lg={8}>
+            {/* <Col lg={8}>
               <Form.Item label="减免费项">
                 {infoDetail.reductionFeeItemName}
               </Form.Item>
-            </Col>
+            </Col> */}
             <Col lg={8}>
               <Form.Item label="折扣">
                 {infoDetail.rebate}

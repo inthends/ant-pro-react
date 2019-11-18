@@ -65,13 +65,13 @@ function ListTable(props: ListTableProps) {
         }
       }
     },
-    {
-      title: '减免费项',
-      dataIndex: 'feeName',
-      key: 'feeName',
-      width: 150,
-      sorter: true,
-    },
+    // {
+    //   title: '减免费项',
+    //   dataIndex: 'feeName',
+    //   key: 'feeName',
+    //   width: 150,
+    //   sorter: true,
+    // },
     {
       title: '经办人',
       dataIndex: 'createUserName',

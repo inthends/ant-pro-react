@@ -31,9 +31,10 @@ function ChargeListTable(props: ChargeListTableProps) {
     <Dropdown
       overlay={
         <Menu onClick={({ key }) => editAndDelete(key, item)}>
-          {item.status == 1 && item.linkId == null ? < Menu.Item key="redflush">冲红</Menu.Item> : null}
-          <Menu.Item key="invalid">作废</Menu.Item>
-        </Menu >}>
+          < Menu.Item key="redflush">冲红</Menu.Item>
+          < Menu.Item key="invalid">作废</Menu.Item>
+        </Menu >
+      }>
       <a>
         更多<Icon type="down" />
       </a>
@@ -187,7 +188,7 @@ function ChargeListTable(props: ChargeListTableProps) {
             <Divider type="vertical" />
             {!record.ifVerify ? <a onClick={() => showVertify(record.billId, false)} key="approve">审核</a> : <a onClick={() => showVertify(record.id, true)} key="unapprove">反审</a>}
             <Divider type="vertical" />
-            <MoreBtn key="more" item={record} />
+            {record.status == 1 && record.linkId == null ? <MoreBtn key="more" item={record} /> : null}
           </span>
 
         ];
@@ -202,14 +203,14 @@ function ChargeListTable(props: ChargeListTableProps) {
         getRowSelect(record);
         //console.log(record);
       }, // 点击行
-      onDoubleClick: event => {
-      },
-      onContextMenu: event => {
-      },
-      onMouseEnter: event => {
-      }, // 鼠标移入行
-      onMouseLeave: event => {
-      },
+      // onDoubleClick: event => {
+      // },
+      // onContextMenu: event => {
+      // },
+      // onMouseEnter: event => {
+      // }, // 鼠标移入行
+      // onMouseLeave: event => {
+      // },
     };
   }
 
@@ -217,7 +218,7 @@ function ChargeListTable(props: ChargeListTableProps) {
     if (record.billId === selectedRowKey) {
       return styles.rowSelect;
     } else {
-      if (record.status == 2) {
+      if (record.status == 2 || record.status == -1) {
         return styles.rowRed
       } else {
         return '';
