@@ -20,7 +20,8 @@ const Show = (props: ShowProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
-  const [chargeBillData, setChargeBillData] = useState<any[]>([]);
+  // const [chargeBillData, setChargeBillData] = useState<any[]>([]);
+  const [chargeBillData, setChargeBillData] = useState<any>();
   const [linkno, setLinkno] = useState<any>('');
 
   // 打开抽屉时初始化
@@ -108,8 +109,8 @@ const Show = (props: ShowProps) => {
     }
   ] as ColumnProps<any>[];
 
-  const initLoadFeeDetail = (billid) => {
-    const queryJson = { billid: billid };
+  const initLoadFeeDetail = (billId) => {
+    const queryJson = { billId: billId };
     const sidx = 'beginDate';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
@@ -120,7 +121,7 @@ const Show = (props: ShowProps) => {
 
   const load = data => {
     setLoading(true);
-    data.sidx = data.sidx || 'billId';
+    data.sidx = data.sidx || 'c';
     data.sord = data.sord || 'asc';
     return ChargeFeeDetail(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -137,10 +138,9 @@ const Show = (props: ShowProps) => {
       return res;
     });
   };
-  const close = () => {
-    closeShow();
-  };
-
+  // const close = () => {
+  //   closeShow();
+  // };
 
   const onPrint = () => {
     //打印
@@ -179,7 +179,7 @@ const Show = (props: ShowProps) => {
       title={title}
       placement="right"
       width={800}
-      onClose={close}
+      onClose={closeShow}
       visible={showVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
@@ -270,7 +270,7 @@ const Show = (props: ShowProps) => {
               size="middle"
               dataSource={chargeBillData}
               columns={columns}
-              rowKey={record => record.billId}
+              rowKey={record => record.id}
               pagination={pagination}
               scroll={{ y: 500, x: 1300 }}
               loading={loading}
@@ -290,7 +290,7 @@ const Show = (props: ShowProps) => {
           textAlign: 'right',
         }}
       >
-        <Button onClick={close} style={{ marginRight: 8 }}>
+        <Button onClick={closeShow} style={{ marginRight: 8 }}>
           关闭
            </Button>
         <Button onClick={onPrint} type="primary">

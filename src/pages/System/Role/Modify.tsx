@@ -5,20 +5,20 @@ import { WrappedFormUtils } from "antd/lib/form/Form";
 import React from "react";
 import { SaveForm } from "./Role.service";
 
+
 interface ModifyProps {
   visible: boolean;
   data?: any;
   form: WrappedFormUtils<any>;
   closeDrawer(): void;
   reload(): void;
-}
+};
+
 const Modify = (props: ModifyProps) => {
   const { data, form } = props;
   let initData = data ? data : { enabledMark: 1 };
-  initData.expDate = initData.expDate ? initData.expDate : new Date();
-
-  const baseFormProps = { form, initData };
-
+  initData.expDate = initData.expDate ? initData.expDate : new Date(); 
+  const baseFormProps = { form, initData }; 
   const doSave = dataDetail => {
     let modifyData = { ...initData, ...dataDetail, keyValue: initData.roleId };
     return SaveForm(modifyData);
@@ -26,7 +26,7 @@ const Modify = (props: ModifyProps) => {
 
   return (
     <BaseModifyProvider {...props} name="角色" save={doSave}>
-      <Card>
+      <Card >
         <Form layout="vertical" hideRequiredMark>
           <Row gutter={24}>
             <ModifyItem

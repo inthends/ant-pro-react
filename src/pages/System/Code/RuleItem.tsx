@@ -2,11 +2,12 @@ import { BaseModifyProvider } from "@/components/BaseModifyDrawer/BaseModifyDraw
 import ModifyItem from "@/components/BaseModifyDrawer/ModifyItem";
 import { Card, Form, Row } from "antd";
 import { WrappedFormUtils } from "antd/lib/form/Form";
-import React from "react";
-import { SaveForm } from "./Code.service";
+import React, { useEffect, useState } from "react";
+import { SaveItemForm } from "./Code.service";
 
 interface RuleItemProps {
   visible: boolean;
+  ruleId: string;
   data?: any;
   form: WrappedFormUtils<any>;
   closeDrawer(): void;
@@ -14,13 +15,26 @@ interface RuleItemProps {
 }
 
 const RuleItem = (props: RuleItemProps) => {
-  const { data, form } = props;
-  let initData = data ? data : {};
-  // initData.expDate = initData.expDate ? initData.expDate : new Date();
+  const { data, form, ruleId, visible } = props;
+  let initData = data ? data : { itemType: '0', RuleId: ruleId };
   const baseFormProps = { form, initData };
+  const [myitemType, setMyItemType] = useState<string>('0');
+
+
+  //打开抽屉时初始化
+  useEffect(() => {
+    if (visible) {
+      if (data) { 
+        setMyItemType(data.itemType);
+      }
+    }
+  }, [visible]);
+
+  const [itemTypeName, setItemTypeName] = useState<string>('自定义');
   const doSave = dataDetail => {
-    let modifyData = { ...initData, ...dataDetail, keyValue: initData.roleId };
-    return SaveForm(modifyData);
+    let modifyData = { ...initData, ...dataDetail, keyValue: initData.id };
+    modifyData.itemTypeName = itemTypeName;
+    return SaveItemForm(modifyData);
   };
 
   return (
@@ -30,40 +44,58 @@ const RuleItem = (props: RuleItemProps) => {
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
-              field="ItemTypeName"
-              label="前缀"
-              rules={[{ required: true, message: "请选择前缀" }]}
+              field="itemType"
+              label="类型"
+              rules={[{ required: true, message: "请选择类型" }]}
               type='select'
-              items={[{ label: '日期', value: 1 }, { label: '流水号', value: 2 }]}
+              items={[
+                { label: '自定义', value: '0' },
+                { label: '日期', value: '1' },
+                { label: '流水号', value: '2' }]}
+              onChange={(value, option) => {
+                setMyItemType(value);
+                setItemTypeName(option.props.children);
+                initData.formatStr = '';
+              }}
             ></ModifyItem>
 
-            <ModifyItem
-              {...baseFormProps}
-              field="FormatStr"
-              label="格式"
-              rules={[{ required: true, message: "请选择格式" }]}
-              type='select' 
-              items={form.getFieldValue('ItemTypeName') == 1 ?
-                [{ label: 'yyyyMMdd', value: 'yyyyMMdd' }, { label: 'yyMdd', value: 'yyMdd' }, { label: 'yyyyMdd', value: 'yyyyMdd' }, { label: 'yyyy-MM-dd', value: 'yyyy-MM-dd' }, { label: 'yyMMdd', value: 'yyMMdd' }] :
-                [{ label: '000', value: '000' },{ label: '0000', value: '0000' },{ label: '00000', value: '00000' },{ label: '000000', value: '000000' }]
-              } 
-            ></ModifyItem>
+            {myitemType == '0' ?
+              <ModifyItem
+                {...baseFormProps}
+                field="formatStr"
+                label="格式"
+                rules={[{ required: true, message: "请输入格式" }]}
+              ></ModifyItem> :
+              <ModifyItem
+                {...baseFormProps}
+                field="formatStr"
+                label="格式"
+                rules={[{ required: true, message: "请选择格式" }]}
+                type='select'
+                items={myitemType == '1' ?
+                  [{ label: 'yyyyMMdd', value: 'yyyyMMdd' }, { label: 'yyMdd', value: 'yyMdd' }, { label: 'yyyyMdd', value: 'yyyyMdd' }, { label: 'yyyy-MM-dd', value: 'yyyy-MM-dd' }, { label: 'yyMMdd', value: 'yyMMdd' }] :
+                  [{ label: '000', value: '000' }, { label: '0000', value: '0000' }, { label: '00000', value: '00000' }, { label: '000000', value: '000000' }]
+                }
+              ></ModifyItem>}
           </Row>
-          <Row gutter={24}>
-            <ModifyItem
-              {...baseFormProps}
-              field="StepValue"
-              label="步长" 
-              rules={[{ required: true, message: "请输入步长" }]} 
-            ></ModifyItem>
 
-            <ModifyItem
-              {...baseFormProps}
-              field="InitValue"
-              label="初始"
-              rules={[{ required: true, message: "请输入初始" }]}
-            ></ModifyItem>
-          </Row>
+          {myitemType == '2' ?
+            < Row gutter={24} >
+              <ModifyItem
+                {...baseFormProps}
+                field="stepValue"
+                label="步长"
+                type="inputNumber"
+                rules={[{ required: true, message: "请输入步长" }]}
+              ></ModifyItem>
+              <ModifyItem
+                {...baseFormProps}
+                field="initValue"
+                label="初始"
+                rules={[{ required: true, message: "请输入初始" }]}
+              ></ModifyItem>
+            </Row> : null}
+
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}

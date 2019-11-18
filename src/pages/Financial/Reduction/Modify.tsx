@@ -1,5 +1,5 @@
 
-import { Modal, message, Table, Select, Button, Card, Col, Icon, DatePicker, InputNumber, Drawer, Form, Input, Row, notification } from 'antd';
+import { Modal, message, Table, Button, Card, Col, Icon, DatePicker, InputNumber, Drawer, Form, Input, Row, notification } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { PaginationConfig } from 'antd/lib/table';
 import AddReductionItem from './AddReductionItem';
@@ -9,7 +9,7 @@ import { RemoveFormUnitAll, GetFormJson, GetListByID, GetReductionItem, GetUnitB
 import moment from 'moment';
 import styles from './style.less';
 
-const { Option } = Select;
+// const { Option } = Select;
 
 interface ModifyProps {
   modifyVisible: boolean;
@@ -115,7 +115,7 @@ const Modify = (props: ModifyProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [modalvisible, setModalVisible] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
-  const [reductionItem, setReductionItem] = useState<any[]>([]);
+  // const [reductionItem, setReductionItem] = useState<any[]>([]);
   // const [editItemColumn, setEditItemColumn] = useState<boolean>(false);
   const [listdata, setListData] = useState<any[]>([]);
   const [code, setCode] = useState<number>(0);//新增还是修改
@@ -508,10 +508,10 @@ const Modify = (props: ModifyProps) => {
   };
 
   //选择减免费项
-  const onFeeItemSelect = (value, option) => {
-    //减免项目名称
-    form.setFieldsValue({ reductionFeeItemName: option.props.children });
-  };
+  // const onFeeItemSelect = (value, option) => {
+  //   //减免项目名称
+  //   form.setFieldsValue({ reductionFeeItemName: option.props.children });
+  // };
 
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     loadData(pagination, sorter);

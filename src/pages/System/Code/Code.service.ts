@@ -1,7 +1,7 @@
-import { getResult, objToFormdata, objToUrl } from "@/utils/networkUtils";
+import { getResult, objToFormdata } from "@/utils/networkUtils";
 import request from "@/utils/request";
 
-export function getDataList(data): Promise<any> {
+export function GetPageListJson(data): Promise<any> {
   return request
     .post(process.env.basePath + `/Code/GetPageListJson`, {
       data: objToFormdata(data)
@@ -16,31 +16,60 @@ export function SaveForm(data): Promise<any> {
     })
     .then(getResult as any);
 }
-// 查询用户
-export function searchUser(keyword): Promise<any[]> {
-  const type = "员工";
+
+export function GetPageItemListJson(data): Promise<any> {
   return request
-    .get(
-      process.env.basePath +
-        `/Common/GetUserList?${objToUrl({ keyword, type })}`
-    )
+    .post(process.env.basePath + `/Code/GetPageItemListJson`, {
+      data: objToFormdata(data)
+    })
     .then(getResult as any);
 }
+
+//保存规则
+export function SaveItemForm(data): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Code/SaveItemForm`, {
+      data: objToFormdata(data)
+    })
+    .then(getResult as any);
+}
+
+// 删除
+export function RemoveItemForm(keyValue): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Code/RemoveItemForm?keyValue=${keyValue}`, {})
+    .then(getResult as any);
+}
+
+
+// 查询用户
+// export function searchUser(keyword): Promise<any[]> {
+//   const type = "员工";
+//   return request
+//     .get(
+//       process.env.basePath +
+//         `/Common/GetUserList?${objToUrl({ keyword, type })}`
+//     )
+//     .then(getResult as any);
+// }
+
 // 删除
 export function RemoveForm(keyValue): Promise<any> {
   return request
     .post(process.env.basePath + `/Code/RemoveForm?keyValue=${keyValue}`, {})
     .then(getResult as any);
 }
-export function getRoleTree(): Promise<any> {
-  return request
-    .get(process.env.basePath + `/PermissionRole/GetDepartmentTreeJson`)
-    .then(getResult as any);
-}
-export function getUserList(data): Promise<any> {
-  return request
-    .get(
-      process.env.basePath + `/PermissionRole/GetUserListJson?${objToUrl(data)}`
-    )
-    .then(getResult as any);
-}
+
+// export function getRoleTree(): Promise<any> {
+//   return request
+//     .get(process.env.basePath + `/PermissionRole/GetDepartmentTreeJson`)
+//     .then(getResult as any);
+// }
+
+// export function getUserList(data): Promise<any> {
+//   return request
+//     .get(
+//       process.env.basePath + `/PermissionRole/GetUserListJson?${objToUrl(data)}`
+//     )
+//     .then(getResult as any);
+// }

@@ -6,7 +6,7 @@ import { TreeNode } from 'antd/lib/tree-select';
 const { TextArea, Password } = Input;
 const { Option } = Select;
 interface ModifyItemProps {
-  type?: 'switch' | 'select' | 'textarea' | 'password' | 'radio' | 'autoComplete' | 'date' | 'tree' | 'checkbox' | 'inputNumber';
+  type?:  'switch' | 'select' | 'textarea' | 'password' | 'radio' | 'autoComplete' | 'date' | 'tree' | 'checkbox' | 'inputNumber';
   field: string;
   label: React.ReactNode;
   initData?: any;
@@ -147,9 +147,11 @@ const ModifyItem = (props: ModifyItemProps) => {
           ></InputNumber>
         );
 
+     
+
       default:
         return (
-          <Input {...inner} placeholder={`请输入${label as string}`} 
+          <Input {...inner} placeholder={`请输入${label as string}`}
             readOnly={readOnly}
             onChange={onChange}></Input>
         );

@@ -9,14 +9,14 @@ interface ListTableProps {
   pagination: PaginationConfig;
   data: any[];
   modify(record: any): void;
-  choose(record: any): void;
+  // choose(record: any): void;
   onchange(page: any, filter: any, sort: any): any;
   reload(): void;
   setData(data: any[]): void;
 }
 
 function ListTable(props: ListTableProps) {
-  const { loading, data, modify, reload, pagination } = props; 
+  const { loading, data, modify, reload, pagination } = props;
   const doDelete = record => {
     Modal.confirm({
       title: "请确认",
@@ -30,6 +30,7 @@ function ListTable(props: ListTableProps) {
       }
     });
   };
+
   const doModify = record => {
     modify({ ...record });
   };
@@ -92,7 +93,7 @@ function ListTable(props: ListTableProps) {
       title: "操作",
       dataIndex: "operation",
       key: "operation",
-      align:'center',
+      align: 'center',
       width: 85,
       render: (text, record) => {
         return [

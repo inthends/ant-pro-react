@@ -1,11 +1,13 @@
 import { BaseModifyProvider } from "@/components/BaseModifyDrawer/BaseModifyDrawer";
 import ModifyItem from "@/components/BaseModifyDrawer/ModifyItem";
-import { Modal, Divider, Icon, Button, Table, Card, Form, Row } from "antd";
+import { message, Modal, Divider, Card, Form, Row, Table, Button, Icon } from "antd";
 import { WrappedFormUtils } from "antd/lib/form/Form";
-import { ColumnProps } from "antd/lib/table";
 import React, { useEffect, useState } from "react";
-import { SaveForm } from "./Code.service";
+import { SaveForm, GetPageItemListJson, RemoveItemForm } from "./Code.service";
 import RuleItem from './RuleItem';
+import { DefaultPagination } from "@/utils/defaultSetting";
+import { ColumnProps, PaginationConfig } from "antd/lib/table";
+import styles from './style.less';
 
 interface ModifyProps {
   visible: boolean;
@@ -13,89 +15,163 @@ interface ModifyProps {
   form: WrappedFormUtils<any>;
   closeDrawer(): void;
   reload(): void;
-}
+};
+
 const Modify = (props: ModifyProps) => {
-  const { data, form, visible, reload } = props;
+  const { data, form, visible } = props;
   let initData = data ? data : { enabledMark: 1 };
-  // initData.expDate = initData.expDate ? initData.expDate : new Date();
-  const baseFormProps = { form, initData }; 
+  const baseFormProps = { form, initData };
   const [ruleItemVisible, setRuleItemVisible] = useState<boolean>(false);
   const [ruleItem, setRuleItem] = useState<any>();
-
+  let ruleId = data ? data.ruleId : '';
   const doSave = dataDetail => {
-    let modifyData = { ...initData, ...dataDetail, keyValue: initData.roleId };
+    let modifyData = { ...initData, ...dataDetail, keyValue: initData.ruleId };
     return SaveForm(modifyData);
   };
 
-  const [ruleList, setRuleList] = useState<any[]>([]);
-  // 打开抽屉时初始化
+  const [loading, setLoading] = useState<boolean>(false);
+  const [itemData, setItemData] = useState<any[]>([]);
+  const [pagination, setPagination] = useState<PaginationConfig>(
+    new DefaultPagination()
+  );
+
+  //打开抽屉时初始化
   useEffect(() => {
     if (visible) {
       if (data) {
         //获取明细
-        setRuleList(JSON.parse(data.ruleFormatJson));
+        initLoadData();
       }
     }
   }, [visible]);
 
-  //关闭弹出的规则页面
-  const closeRuleItem = () => {
-    setRuleItemVisible(false);
+
+  // const loadData = (
+  //   paginationConfig?: PaginationConfig,
+  //   sorter?
+  // ) => {
+  //   const { current: pageIndex, pageSize, total } = paginationConfig || {
+  //     current: 1,
+  //     pageSize: pagination.pageSize,
+  //     total: 0
+  //   };
+  //   const searchCondition: any = {
+  //     pageIndex,
+  //     pageSize,
+  //     total,
+  //     queryJson: { ruleId: ruleId }
+  //   };
+
+  //   if (sorter) {
+  //     const { field, order } = sorter;
+  //     searchCondition.sord = order === "ascend" ? "asc" : "desc";
+  //     searchCondition.sidx = field ? field : "id";
+  //   }
+  //   return load(searchCondition).then(res => {
+  //     return res;
+  //   });
+  // };
+
+
+  const load = formData => {
+    setLoading(true);
+    formData.sidx = formData.sidx || "id";
+    formData.sord = formData.sord || "desc";
+    return GetPageItemListJson(formData).then(res => {
+      const { pageIndex: current, total, pageSize } = res;
+      setPagination(pagesetting => {
+        return {
+          ...pagesetting,
+          current,
+          total,
+          pageSize
+        };
+      });
+
+      setItemData(res.data);
+      setLoading(false);
+      return res;
+    });
   };
+
+  const initLoadData = () => {
+    const queryJson = { ruleId: ruleId };
+    const sidx = "id";
+    const sord = "desc";
+    const { current: pageIndex, pageSize, total } = pagination;
+    return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(
+      res => {
+        return res;
+      }
+    );
+  };
+
+  // //关闭弹出的规则页面
+  // const closeRuleItem = () => {
+  //   setRuleItemVisible(false);
+  // };
 
   const doModify = record => {
     //modify({ ...record });
+    setRuleItem(record);
+    setRuleItemVisible(true);
+  };
+
+  const doAdd = (record?) => {
+    //modify({ ...record }); 
+    setRuleItem(record);
+    setRuleItemVisible(true);
   };
 
   const doDelete = record => {
     Modal.confirm({
       title: "请确认",
-      content: `您确定要移除吗？`,
+      content: `您确定要删除吗？`,
       onOk: () => {
-        // RemoveForm(record.ruleId)
-        //   .then(() => {
-        //     message.success("删除成功");
-        //   })
-        //   .catch(e => { });
+        RemoveItemForm(record.id)
+          .then(() => {
+            message.success("删除成功");
+            initLoadData();
+          })
+          .catch(e => { });
       }
     });
   };
 
-
-  const showRuleItem = (item?) => {
-    setRuleItem(item);
-    setRuleItemVisible(true);
-  };
+  // const showRuleItem = (item?) => {
+  //   setRuleItem(item);
+  //   setRuleItemVisible(true);
+  // };
 
   const columns = [
     {
       title: "前缀",
-      dataIndex: "ItemTypeName",
-      key: "ItemTypeName",
-      width: 100,
+      dataIndex: "itemTypeName",
+      key: "itemTypeName",
+      width: 80,
     },
     {
       title: "格式",
-      dataIndex: "FormatStr",
-      key: "FormatStr",
+      dataIndex: "formatStr",
+      key: "formatStr",
       width: 100
     },
     {
       title: "步长",
-      dataIndex: "StepValue",
-      key: "StepValue",
-      width: 80
+      dataIndex: "stepValue",
+      key: "stepValue",
+      width: 60
     },
     {
       title: "初始值",
-      dataIndex: "InitValue",
-      key: "InitValue",
+      dataIndex: "initValue",
+      key: "initValue",
       width: 100
     },
     {
       title: "说明",
-      dataIndex: "Description",
-      key: "Description",
+      dataIndex: "description",
+      key: "description",
       width: 100,
     },
     {
@@ -121,7 +197,7 @@ const Modify = (props: ModifyProps) => {
       name="编码"
       width={700}
       save={doSave}>
-      <Card>
+      <Card className={styles.card}>
         <Form layout="vertical" hideRequiredMark>
           <Row gutter={24}>
             <ModifyItem
@@ -150,31 +226,31 @@ const Modify = (props: ModifyProps) => {
         </Form>
 
         <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
-          <Button type="link" style={{ float: 'right', marginLeft: '10px' }} onClick={showRuleItem}  >
+          <Button type="link" style={{ float: 'right', marginLeft: '10px' }}
+            onClick={() => doAdd()}  >
             <Icon type="plus" />新增</Button>
         </div>
+
         <Table
-          key='list'
           style={{ border: 'none' }}
           bordered={false}
           size="middle"
-          dataSource={ruleList}
+          dataSource={itemData}
           columns={columns}
-        // rowKey={record => record.allName}
-        // pagination={orgPagination}
-        // scroll={{ y: 420 }}
-        // onChange={(pagination: PaginationConfig, filters, sorter) =>
-        //   orgLoadData(pagination, sorter)
-        // }
-        // loading={orgLoading}
+          rowKey={record => record.id}
+          pagination={pagination}
+          scroll={{   y: 420 }}
+          loading={loading}
         />
+
       </Card>
 
       <RuleItem
         visible={ruleItemVisible}
-        closeDrawer={closeRuleItem}
+        closeDrawer={() => setRuleItemVisible(false)}
         data={ruleItem}
-        reload={reload}
+        reload={initLoadData}
+        ruleId={ruleId}
       />
 
     </BaseModifyProvider >

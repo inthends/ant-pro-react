@@ -3,20 +3,24 @@ import { Button, Icon, Input, Layout } from "antd";
 import { PaginationConfig } from "antd/lib/table";
 import React, { useEffect, useState } from "react";
 import ListTable from "./ListTable";
+import Add from "./Add";
 import Modify from "./Modify";
-import { getDataList } from "./Code.service";
+import { GetPageListJson } from "./Code.service";
 const { Content } = Layout;
 const { Search } = Input;
 interface SearchParam {
   condition: "EnCode" | "FullName";
   keyword: string;
-}
+};
+
 const Code = () => {
   const [search, setSearch] = useState<SearchParam>({
     condition: "EnCode",
     keyword: ""
   });
-  const [modifyVisible, setModifyVisible] = useState<boolean>(false);
+
+  const [modifyVisible, setModifyVisible] = useState<boolean>(false); 
+  const [addVisible, setAddVisible] = useState<boolean>(false); 
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<any[]>([]);
   const [currData, setCurrData] = useState<any>();
@@ -31,14 +35,17 @@ const Code = () => {
   const closeDrawer = () => {
     setModifyVisible(false);
   };
+
   const showDrawer = (item?) => {
     setCurrData(item);
     setModifyVisible(true);
   };
-  const showChoose = (item?) => {
-    // setUserVisible(true);
-    setCurrData(item);
-  };
+
+  // const showChoose = (item?) => {
+  //   // setUserVisible(true);
+  //   setCurrData(item);
+  // };
+
   const loadData = (
     searchParam: any,
     paginationConfig?: PaginationConfig,
@@ -71,7 +78,7 @@ const Code = () => {
     setLoading(true);
     formData.sidx = formData.sidx || "CreateDate";
     formData.sord = formData.sord || "desc";
-    return getDataList(formData).then(res => {
+    return GetPageListJson(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
         return {
@@ -104,7 +111,7 @@ const Code = () => {
   return (
     <Layout style={{ height: "100%" }}>
       <Content  >
-        <div style={{ marginBottom: 20, padding: "3px 0" }}> 
+        <div style={{ marginBottom: 20, padding: "3px 0" }}>
           <Search
             className="search-input"
             placeholder="请输入要查询的关键词"
@@ -114,7 +121,10 @@ const Code = () => {
           <Button
             type="primary"
             style={{ float: "right" }}
-            onClick={() => showDrawer()}
+            onClick={() => {
+              setCurrData(undefined);
+              setAddVisible(true);
+            }}
           >
             <Icon type="plus" />
             编码
@@ -128,13 +138,21 @@ const Code = () => {
           pagination={pagination}
           data={data}
           modify={showDrawer}
-          choose={showChoose}
+          // choose={showChoose}
           reload={() => initLoadData(search)}
           setData={setData}
         />
       </Content>
+
+      <Add
+        visible={addVisible}
+        closeDrawer={() => setAddVisible(false)}
+        data={currData}
+        reload={() => initLoadData({ ...search })}
+      />
+
       <Modify
-        visible={modifyVisible} 
+        visible={modifyVisible}
         closeDrawer={closeDrawer}
         data={currData}
         reload={() => initLoadData({ ...search })}
