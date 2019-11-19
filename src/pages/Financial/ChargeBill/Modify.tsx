@@ -16,12 +16,13 @@ interface ModifyProps {
   form: WrappedFormUtils;
   organizeId?: string;
   id?: string;
+  adminOrgId?: String;//管理处Id
   reload(): void;
   edit: boolean;
 }
 
 const Modify = (props: ModifyProps) => {
-  const { modifyVisible, closeDrawer, form, organizeId, id, reload, edit } = props;
+  const { modifyVisible, closeDrawer, form, organizeId, id, reload, edit, adminOrgId } = props;
   const { getFieldDecorator } = form;
   const title = id == "" ? '新增费用' : "修改费用";
   const [infoDetail, setInfoDetail] = useState<any>({});
@@ -86,7 +87,7 @@ const Modify = (props: ModifyProps) => {
               setUnitIds(urooms);
             });
           })
-        }); 
+        });
 
       } else {
 
@@ -219,7 +220,7 @@ const Modify = (props: ModifyProps) => {
           units.push(unit);
           let newData = {
             BillId: id != null && id != "" ? infoDetail.billId : guid,
-            OrganizeId: organizeId,
+            OrganizeId: adminOrgId,
             BillSource: "临时加费",
             Units: JSON.stringify(units),
             keyValue: id != null && id != "" ? infoDetail.billId : guid,

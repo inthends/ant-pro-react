@@ -1,7 +1,7 @@
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { Checkbox, Tabs, Button, Icon, Input, Layout, Select, DatePicker, message } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { NotChargeFeeData, ChargeFeePageData } from './Main.service';
 import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
@@ -26,10 +26,11 @@ function Main() {
   const [dataCharge, setChargeData] = useState<any[]>([]);
   const [paginationCharge, setPaginationCharge] = useState<PaginationConfig>(new DefaultPagination());
 
-  const [id, setId] = useState<string>('');
+  const [id, setId] = useState<string>('');//当前费用Id
+  const [organizeId, setOrganizeId] = useState<string>('');//左侧树选择的id
+  const [adminOrgId, setAdminOrgId] = useState<string>('');//当前房间的管理处Id
   const [search, setSearch] = useState<string>('');
-  const [organizeId, SetOrganizeId] = useState<string>('');
-  const [customerName, SetCustomerName] = useState<string>('');
+  const [customerName, setCustomerName] = useState<string>('');
   const [showname, setShowname] = useState<string>('');
   const [addButtonDisable, setAddButtonDisable] = useState<boolean>(true);
   // const [showCustomerFee, setShowCustomerFee] = useState<boolean>(false)
@@ -37,7 +38,6 @@ function Main() {
   const [splitVisible, setSplitVisible] = useState<boolean>(false);
   const [transVisible, setTransVisible] = useState<boolean>(false);
   // const [billDetailVisible, setBillDetailVisible] = useState<boolean>(false);
-
 
   const [showVisible, setShowVisible] = useState<boolean>(false);
   const [vertifyVisible, setVertifyVisible] = useState<boolean>(false);
@@ -54,16 +54,16 @@ function Main() {
 
   const selectTree = (id, search) => {
     initLoadData(search, id);
-    initChargeLoadData(id)
+    //initChargeLoadData(id)
     //loadChargeData(id);
   };
 
-  useEffect(() => {
-    //getTreeData().then(res => {
-    //initLoadData('','');
-    initChargeLoadData('');
-    //});
-  }, []);
+  // useEffect(() => {
+  //   //getTreeData().then(res => {
+  //   //initLoadData('','');
+  //   initChargeLoadData('');
+  //   //});
+  // }, []);
 
   const closeDrawer = () => {
     setModifyVisible(false);
@@ -304,7 +304,15 @@ function Main() {
     setChargedRowSelectedKey(record);
   }
 
-  //tab切换
+  //tab切换刷新数据
+  const changeTab = (e: string) => {
+    if (e === '1') { 
+      if (organizeId)
+        initLoadData(search, organizeId);
+    } else {
+      initChargeLoadData(organizeId);
+    }
+  };
 
   return (
     <Layout style={{ height: '100%' }}>
@@ -312,23 +320,23 @@ function Main() {
       <AsynLeftTree
         parentid={'0'}
         selectTree={(id, type, info?) => {
-          SetOrganizeId(id);
+          setAdminOrgId(info.node.props.organizeId);//管理处Id
+          setOrganizeId(id);
           // SetOrganize(info);
           if (type == 5) {
             setAddButtonDisable(false);
             var cusname = info.node.props.tenantname;
-            SetCustomerName(cusname);
-            setShowname(info.node.props.allname + ' ' + cusname);
-            //清空之前的收款信息
-
+            setCustomerName(cusname);
+            setShowname(info.node.props.allname + ' 当前住户 ' + cusname);
+            //清空之前的收款信息 
             selectTree(id, search);
           }
         }}
       />
       {/* </Sider> */}
       <Content style={{ paddingLeft: '18px' }}>
-        <Tabs defaultActiveKey="1" >
-          <TabPane tab="未收列表" key="1">
+        <Tabs defaultActiveKey="1" onChange={changeTab}>
+          <TabPane tab="未收列表" key="1" >
             <div style={{ marginBottom: '10px' }}>
               <Search
                 className="search-input"
@@ -502,6 +510,7 @@ function Main() {
         closeDrawer={closeDrawer}
         id={id}
         organizeId={organizeId}
+        adminOrgId={adminOrgId}
         reload={() => initLoadData(search, organizeId)}
         edit={modifyEdit}
       />

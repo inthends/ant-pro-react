@@ -1,15 +1,7 @@
 
-import { Spin,message, AutoComplete, Modal, InputNumber, TreeSelect, Tabs, Select, Button, Card, Col, DatePicker, Drawer, Form, Input, Row } from 'antd';
+import { Spin, message, AutoComplete, Modal, InputNumber, TreeSelect, Tabs, Select, Button, Card, Col, DatePicker, Drawer, Form, Input, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import {
-  TreeEntity,
-  LeaseContractChargeEntity,
-  LeaseContractChargeFeeEntity,
-  LeaseContractChargeFeeOfferEntity,
-  LeaseContractChargeIncreEntity,
-  ChargeFeeResultEntity,
-  LeaseContractDTO
-} from '@/model/models';
+import { TreeEntity, LeaseContractChargeEntity, LeaseContractChargeFeeEntity, LeaseContractChargeFeeOfferEntity, LeaseContractChargeIncreEntity, ChargeFeeResultEntity, LeaseContractDTO } from '@/model/models';
 import React, { useEffect, useState } from 'react';
 import LeaseTerm from './LeaseTerm';
 import IncreasingRate from './IncreasingRate';
@@ -32,7 +24,7 @@ interface AddProps {
   closeDrawer(): void;
   form: WrappedFormUtils;
   reload(): void;
-}
+};
 
 const Add = (props: AddProps) => {
   const title = '添加合同';
@@ -55,22 +47,16 @@ const Add = (props: AddProps) => {
 
   const [loading, setLoading] = useState<boolean>(false);
 
-
-  const close = () => {
-    closeDrawer();
-  };
+  // const close = () => {
+  //   closeDrawer();
+  // };
 
   //计算租金明细
   const calculation = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        //数据处理  
         //租赁条款     
-
-        debugger
-
-        // setLoading(true);
-
+        setLoading(true);
         let TermJson: LeaseContractChargeFeeEntity[] = [];
         let data: LeaseContractChargeFeeEntity = {};
         //const TermJson=[];
@@ -91,7 +77,6 @@ const Add = (props: AddProps) => {
         data.payCycle = values.payCycle[0];
         data.rentalPeriodDivided = values.rentalPeriodDivided[0];
         TermJson.push(data);
-
         //动态添加的租期
         values.LeaseTerms.map(function (k, index, arr) {
           let data: LeaseContractChargeFeeEntity = {};
@@ -148,16 +133,12 @@ const Add = (props: AddProps) => {
         entity.startDate = values.billingDate.format('YYYY-MM-DD');
         entity.endDate = values.contractEndDate.format('YYYY-MM-DD');
         entity.payDate = values.contractStartDate.format('YYYY-MM-DD');
-
         let strTermJson = JSON.stringify(TermJson);
         setTermJson(strTermJson);
-
         let strRateJson = JSON.stringify(RateJson);
         setRateJson(strRateJson);
-
         let strRebateJson = JSON.stringify(RebateJson);
         setRebateJson(strRebateJson);
-
         GetChargeDetail({
           ...entity,
           LeaseContractId: '',
@@ -166,15 +147,13 @@ const Add = (props: AddProps) => {
           TermJson: strTermJson,
           RateJson: strRateJson,
           RebateJson: strRebateJson
-
         }).then(res => {
           setIsCal(true);//计算了租金
           setDepositData(res.depositFeeResultList);//保证金明细
           setChargeData(res.chargeFeeResultList);//租金明细  
           // setDepositResult(res.depositFeeResultList);
-          // setChargeFeeResult(res.chargeFeeResultList);
-
-          // setLoading(false);
+          // setChargeFeeResult(res.chargeFeeResultList); 
+          setLoading(false);
         });
       }
     });
@@ -193,6 +172,7 @@ const Add = (props: AddProps) => {
           message.warning('请生成租金明细！');
           return;
         }
+ 
 
         //保存合同数据
         let ContractCharge: LeaseContractChargeEntity = {};
@@ -648,7 +628,7 @@ const Add = (props: AddProps) => {
           textAlign: 'right',
         }}
       >
-        <Button onClick={close} style={{ marginRight: 8 }}>
+        <Button onClick={closeDrawer} style={{ marginRight: 8 }}>
           取消
           </Button>
         <Button onClick={save} type="primary">

@@ -267,6 +267,7 @@ const Modify = (props: ModifyProps) => {
     });
   };
 
+  //提交审核
   const approve = () => {
     //弹出选人
     //choose();
@@ -282,7 +283,7 @@ const Modify = (props: ModifyProps) => {
           // });
           message.warning('请生成租金明细！');
           return;
-        }
+        } 
         //保存合同数据
         let ContractCharge: LeaseContractChargeEntity = {};
         //费用条款-基本条款 
@@ -333,7 +334,7 @@ const Modify = (props: ModifyProps) => {
           ChargeFeeResult: JSON.stringify(chargeData)
 
         }).then(res => {
-          message.success('保存成功！');
+          message.success('提交成功！');
           closeDrawer();
           reload();
         });
@@ -353,7 +354,7 @@ const Modify = (props: ModifyProps) => {
           // });
           message.warning('请生成租金明细！');
           return;
-        }
+        } 
         //保存合同数据
         let ContractCharge: LeaseContractChargeEntity = {};
         //费用条款-基本条款 
@@ -412,14 +413,13 @@ const Modify = (props: ModifyProps) => {
     });
   };
 
-  //异步加载
+  //异步加载房间，提高速度
   const onLoadData = treeNode =>
     new Promise<any>(resolve => {
       if (treeNode.props.children && treeNode.props.children.length > 0 && treeNode.props.type != 'D') {
         resolve();
         return;
       }
-
       setTimeout(() => {
         GetAsynChildBuildingsSimple(treeNode.props.eventKey, treeNode.props.type).then((res: any[]) => {
           // treeNode.props.children = res || [];

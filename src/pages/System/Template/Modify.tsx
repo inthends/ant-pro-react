@@ -208,7 +208,7 @@ const Modify = (props: ModifyProps) => {
               // wholeLine={true}
               type="textarea"
               field="sql"
-              label="SQL(存储过程和SQL语句必须声明单据Id参数call sp_PayNotice(@MainId);)"
+              label="SQL(存储过程和SQL语句必须声明单据Id参数call sp_PayNotice(@keyvalue);)"
             ></ModifyItem>
           </Row>
           <Row gutter={24}>
