@@ -4,7 +4,7 @@ import { message, Dropdown, Menu, Icon, Modal, Divider, Form, Table } from 'antd
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState } from 'react';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import { RemoveForm } from './BillingMain.service';
+import { InvalidForm } from './BillingMain.service';
 import moment from 'moment';
 import styles from './style.less';
 
@@ -24,7 +24,7 @@ interface ListTableProps {
 }
 
 function ListTable(props: ListTableProps) {
-  const { onchange, loading, pagination, data, reload, showModify, getRowSelect, showVerify, showDivide,showFee } = props;
+  const { onchange, loading, pagination, data, reload, showModify, getRowSelect, showVerify, showDivide, showFee } = props;
   const [selectedRowKey, setSelectedRowKey] = useState([]);
   const MoreBtn: React.FC<{
     item: any;
@@ -33,7 +33,7 @@ function ListTable(props: ListTableProps) {
       overlay={
         <Menu onClick={({ key }) => editAndDelete(key, item)}>
           <Menu.Item key="redflush">权责摊销</Menu.Item>
-          <Menu.Item key="delete" disabled={item.billSource == "临时加费" || item.ifVerify}>删除</Menu.Item>
+          <Menu.Item key="invalid" disabled={item.billSource == "临时加费" || item.ifVerify}>作废</Menu.Item>
         </Menu>}>
       <a>
         更多<Icon type="down" />
@@ -46,13 +46,13 @@ function ListTable(props: ListTableProps) {
       //this.showEditModal(currentItem);
       showDivide();
     }
-    else if (key === 'delete') {
+    else if (key === 'invalid') {
       Modal.confirm({
         title: '请确认',
-        content: `您是否要删除${currentItem.billCode}`,
+        content: `您是否要作废${currentItem.billCode}？`,
         onOk: () => {
-          RemoveForm(currentItem.billId).then(() => {
-            message.success('删除成功');
+          InvalidForm(currentItem.billId).then(() => {
+            message.success('作废成功！');
             reload();
           });
         },
@@ -97,6 +97,14 @@ function ListTable(props: ListTableProps) {
       sorter: true,
     },
     {
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      align: 'center',
+      width: 60,
+      render: val => val == 0 ? '正常' : '作废'
+    },
+    {
       title: '审核状态',
       dataIndex: 'ifVerify',
       key: 'ifVerify',
@@ -133,7 +141,7 @@ function ListTable(props: ListTableProps) {
     {
       title: '备注',
       dataIndex: 'memo',
-      key: 'memo', 
+      key: 'memo',
     },
     {
       title: '操作',
@@ -156,13 +164,13 @@ function ListTable(props: ListTableProps) {
         // ];
 
         return [
-          <span> 
+          <span>
             {/* <a onClick={() => showModify(record.billId, record.ifVerifyName == "已审核"
               || record.billSource == "水电气生成" ? false : true)} key="modify">
               {record.ifVerifyName == "已审核" || record.billSource == "水电气生成" ? "查看" : "修改"}</a> */}
- 
+
             {record.ifVerify ? <a onClick={() => showFee(record.billId)}>查看</a> : <a onClick={() => showModify(record.billId, record.billSource == "水电气生成" ? false : true)}>修改</a>}
- 
+
             <Divider type="vertical" />
             {!record.ifVerify ? <a onClick={() => showVerify(record.billId)} key="app">审核</a> :
               <a onClick={() => showVerify(record.billId)} key="unapp"  >反审</a>

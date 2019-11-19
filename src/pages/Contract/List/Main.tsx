@@ -9,7 +9,8 @@ import ListTable from './ListTable';
 import Add from './Add';
 import Modify from './Modify';
 import Detail from './Detail';
-import ChooseUser from './ChooseUser';
+import Approve from './Approve';
+// import ChooseUser from './ChooseUser';
 // import { GetQuickSimpleTreeAllForContract } from '@/services/commonItem';
 
 const { Content } = Layout;
@@ -26,11 +27,13 @@ function Main() {
   const [chargeId, setChargeId] = useState<string>();
   const [search, setSearch] = useState<string>('');
   // const [treeData, setTreeData] = useState<any[]>([]); 
-  const [userVisible, setUserVisible] = useState<boolean>(false); 
+  // const [userVisible, setUserVisible] = useState<boolean>(false); 
+  const [approveVisible, setApproveVisible] = useState<boolean>(false);
 
   const closeAddDrawer = () => {
     setAddVisible(false);
   };
+
   const showAddDrawer = (id?, chargeId?) => {
     setAddVisible(true);
     setId(id);
@@ -40,6 +43,7 @@ function Main() {
   const closeModifyDrawer = () => {
     setModifyVisible(false);
   };
+
   const showModifyDrawer = (id?, chargeId?) => {
     setModifyVisible(true);
     setId(id);
@@ -122,9 +126,19 @@ function Main() {
     initLoadData('');
   }, []);
 
-  const showChoose = () => {
-    setUserVisible(true);
-    // setCurrData(item);
+  // const showChoose = () => {
+  //   setUserVisible(true);
+  //   // setCurrData(item);
+  // };
+
+  const showApproveDrawer = (id?, chargeId?) => {
+    setApproveVisible(true);
+    setId(id);
+    setChargeId(chargeId);
+  };
+
+  const closeApproveDrawer = () => {
+    setApproveVisible(false);
   };
 
   return (
@@ -154,6 +168,7 @@ function Main() {
           data={data}
           detail={showDetailDrawer}
           modify={showModifyDrawer}
+          approve={showApproveDrawer}
           reload={() => initLoadData(search)} />
       </Content>
 
@@ -172,7 +187,7 @@ function Main() {
         id={id}
         chargeId={chargeId}
         reload={() => initLoadData(search)}
-        choose={showChoose}
+      // choose={showChoose}
       />
 
       <Detail
@@ -183,11 +198,18 @@ function Main() {
         reload={() => initLoadData(search)}
       />
 
-      <ChooseUser
-        visible={userVisible}
-        close={() => setUserVisible(false)}
+      <Approve
+        visible={approveVisible}
+        closeDrawer={closeApproveDrawer}
+        id={id}
+        chargeId={chargeId}
+        reload={() => initLoadData(search)}
       />
 
+      {/* <ChooseUser
+        visible={userVisible}
+        close={() => setUserVisible(false)}
+      /> */}
     </Layout>
   );
 }

@@ -315,7 +315,7 @@ const Add = (props: AddProps) => {
       title={title}
       placement="right"
       width={1000}
-      onClose={close}
+      onClose={closeDrawer}
       visible={visible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
       <Form layout="vertical" hideRequiredMark>

@@ -52,9 +52,15 @@ export function SaveMain(data): Promise<any> {
 export function SaveForm(data): Promise<any> {
   return request.post(process.env.basePath + `/BillingMain/SaveForm`, {data:objToFormdata(data)});
 }
-//保存计费主单
-export function RemoveForm(data): Promise<any> {
-  return request.post(process.env.basePath + `/BillingMain/RemoveForm?keyValue=${data}`, {});
+
+//删除计费单
+// export function RemoveForm(data): Promise<any> {
+//   return request.post(process.env.basePath + `/BillingMain/RemoveForm?keyValue=${data}`, {});
+// }
+
+//作废计费单
+export function InvalidForm(data): Promise<any> {
+  return request.post(process.env.basePath + `/BillingMain/InvalidForm?keyValue=${data}`, {});
 }
 
 //审核

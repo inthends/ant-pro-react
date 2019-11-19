@@ -1,5 +1,5 @@
 
-import {Tag, Divider, PageHeader, List, Tabs, Button, Card, Col, Drawer, Form, Row } from 'antd';
+import { message, Tag, Divider, PageHeader, List, Tabs, Button, Card, Col, Drawer, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import {
   LeaseContractChargeEntity,
@@ -11,13 +11,11 @@ import {
 } from '@/model/models';
 import React, { useEffect, useState } from 'react';
 import ResultList from './ResultList';
-import { GetCharge, GetFormJson } from './Main.service';
+import { ApproveForm, GetCharge, GetFormJson } from './Main.service';
 import styles from './style.less';
-
-
 const { TabPane } = Tabs;
 
-interface DetailProps {
+interface ApproveProps {
   visible: boolean;
   id?: string;//合同id
   chargeId?: string;//合同条款id
@@ -26,8 +24,8 @@ interface DetailProps {
   reload(): void;
 }
 
-const Detail = (props: DetailProps) => {
-  const { visible, closeDrawer, id, form, chargeId } = props;
+const Approve = (props: ApproveProps) => {
+  const { reload, visible, closeDrawer, id, form, chargeId } = props;
   const title = '合同详情';
   //const [industryType, setIndustryType] = useState<any[]>([]); //行业  
   //const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
@@ -47,13 +45,12 @@ const Detail = (props: DetailProps) => {
   // useEffect(() => {
   //   // getCommonItems('IndustryType').then(res => {
   //   //   setIndustryType(res || []);
-  //   // });
+  //   // }); 
   //   //加载关联收费项目
   //   // GetAllFeeItems().then(res => {
   //   //   setFeeitems(res || []);
-  //   // });
+  //   // }); 
   // }, []);
-
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -81,21 +78,36 @@ const Detail = (props: DetailProps) => {
     }
   }, [visible]);
 
-    //转换状态
-    const GetStatus = (status) => {
-      switch (status) {
-        case 0:
-          return <Tag color="#e4aa5b">新建</Tag>;
-        case 1:
-          return <Tag color="#e4aa4b">待审核</Tag>;
-        case 2:
-          return <Tag color="#19d54e">已审核</Tag>;
-        case -1:
-          return <Tag color="#d82d2d">已作废</Tag>
-        default:
-          return '';
+
+  //转换状态
+  const GetStatus = (status) => {
+    switch (status) {
+      case 0:
+        return <Tag color="#e4aa5b">新建</Tag>;
+      case 1:
+        return <Tag color="#e4aa4b">待审核</Tag>;
+      case 2:
+        return <Tag color="#19d54e">已审核</Tag>;
+      case -1:
+        return <Tag color="#d82d2d">已作废</Tag>
+      default:
+        return '';
+    }
+  };
+
+  const approve = () => {
+    form.validateFields((errors, values) => {
+      if (!errors) {
+        ApproveForm({
+          keyValue: id,
+        }).then(res => {
+          message.success('审批成功！');
+          closeDrawer();
+          reload();
+        });
       }
-    };
+    });
+  };
 
   return (
     <Drawer
@@ -182,9 +194,7 @@ const Detail = (props: DetailProps) => {
                       </Form.Item>
                     </Col>
                   </Row>
-
                 </Card>
-
               </Col>
               <Col span={12}>
                 <Card title="房源信息" className={styles.card}>
@@ -408,12 +418,10 @@ const Detail = (props: DetailProps) => {
 
           </TabPane>
           <TabPane tab="租金明细" key="3">
-
             <ResultList
               depositData={depositData}
               chargeData={chargeData}
             ></ResultList>
-
           </TabPane>
         </Tabs>
       </Form>
@@ -431,16 +439,16 @@ const Detail = (props: DetailProps) => {
         }}
       >
         <Button onClick={closeDrawer} style={{ marginRight: 8 }}>
-          关闭
+          驳回
           </Button>
-        {/* <Button type="primary">
-          确定
-          </Button> */}
+        <Button type="primary" onClick={approve}>
+          通过
+        </Button>
       </div>
     </Drawer>
   );
 
 };
 
-export default Form.create<DetailProps>()(Detail);
+export default Form.create<ApproveProps>()(Approve);
 

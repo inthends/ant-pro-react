@@ -38,9 +38,9 @@ export function SaveForm(data): Promise<any> {
 }
 
 //提交
-export function ApproveForm(data): Promise<any> {
+export function SubmitForm(data): Promise<any> {
   return request
-    .post(process.env.basePath + `/Contract/SaveForm`, { data: objToFormdata(data) })
+    .post(process.env.basePath + `/Contract/SubmitForm`, { data: objToFormdata(data) })
     .then(getResult as any);
 }
 
@@ -68,5 +68,12 @@ export function GetDepartmentTreeJson(): Promise<any> {
 export function GetUserList(DepartmentId): Promise<any> {
   return request
     .get(process.env.basePath + `/Contract/GetUserListJson?DepartmentId=${DepartmentId}`)
+    .then(getResult as any);
+}
+
+//审核
+export function ApproveForm(data): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Contract/ApproveForm`, { data: objToFormdata(data) })
     .then(getResult as any);
 }

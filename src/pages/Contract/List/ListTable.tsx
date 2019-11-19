@@ -12,21 +12,22 @@ interface ListTableProps {
   data: any[];
   detail(id: string, chargeId: string): void;
   modify(id: string, chargeId: string): void;
+  approve(id: string, chargeId: string): void;
   reload(): void;
 };
 
 function ListTable(props: ListTableProps) {
-  const { onchange, loading, pagination, data, detail, modify, reload } = props;
+  const { onchange, loading, pagination, data, detail, modify, reload, approve } = props;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
   };
   const doDelete = record => {
     Modal.confirm({
       title: '请确认',
-      content: `您是否要删除${record.name}`,
+      content: `您是否要作废${record.name}？`,
       onOk: () => {
         RemoveForm(record.id).then(() => {
-          message.success('保存成功');
+          message.success('作废成功！');
           reload();
         });
       },
@@ -73,10 +74,24 @@ function ListTable(props: ListTableProps) {
     },
     {
       title: '合同状态',
-      dataIndex: 'state',
-      align:'center',
-      key: 'state', 
+      dataIndex: 'status',
+      align: 'center',
+      key: 'status',
       width: 100,
+      render: (text, record) => {
+        switch (text) {
+          case 0:
+            return <Tag color="#e4aa5b">新建</Tag>;
+          case 1:
+            return <Tag color="#e4aa4b">待审核</Tag>;
+          case 2:
+            return <Tag color="#19d54e">已审核</Tag>;
+          case -1:
+            return <Tag color="#d82d2d">已作废</Tag>
+          default:
+            return '';
+        }
+      }
     },
     {
       title: '退租日',
@@ -114,7 +129,6 @@ function ListTable(props: ListTableProps) {
       key: 'leaseDeposit',
       width: 100,
     },
-
     {
       title: '租赁条款单价',
       dataIndex: 'leasePrice',
@@ -129,37 +143,32 @@ function ListTable(props: ListTableProps) {
       width: 100,
       dataIndex: 'isRenewal',
       key: 'isRenewal',
-      align:'center',
+      align: 'center',
       render: val => val == 1 ? <Tag color="#19d54e">是</Tag> : <Tag color="#e4aa5b">否</Tag>
-
     },
-
     {
       title: '签订人',
       dataIndex: 'signer',
       key: 'signer',
       width: 100,
     },
-
     {
       title: '跟进人',
       dataIndex: 'follower',
       key: 'follower',
       width: 100,
-    }, 
+    },
     {
       title: '法人',
       dataIndex: 'legalPerson',
       key: 'legalPerson',
       width: 100,
     },
-
     {
       title: '行业',
       dataIndex: 'industry',
       key: 'industry',
     },
-
     {
       title: '操作',
       align: 'center',
@@ -175,13 +184,16 @@ function ListTable(props: ListTableProps) {
           //   style={{ marginRight: '10px' }}
           //   onClick={() => detail(record.id,record.chargeId)}
           // >
-          //   查看
+          // 查看
           // </Button>,
           // <Button type="danger" key="delete" onClick={() => doDelete(record)}>
           //   删除
           // </Button>,
+
           <span>
-            <a onClick={() => modify(record.id, record.chargeId)} key="modify">修改</a>
+            {record.status == 1 ?
+              <a onClick={() => approve(record.id, record.chargeId)} key="modify">审核</a> :
+              <a onClick={() => modify(record.id, record.chargeId)} key="modify">修改</a>}
             <Divider type="vertical" key='spilt1' />
             <a onClick={() => detail(record.id, record.chargeId)} key="detail">查看</a>
             <Divider type="vertical" key='spilt2' />

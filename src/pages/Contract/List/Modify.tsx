@@ -1,6 +1,6 @@
 
 import {
-  Spin, Divider, PageHeader, AutoComplete, InputNumber, TreeSelect, message, Modal,
+  Tag,Spin, Divider, PageHeader, AutoComplete, InputNumber, TreeSelect, message, Modal,
   Tabs, Select, Button, Card, Col, DatePicker, Drawer, Form, Input, Row
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
@@ -15,7 +15,7 @@ import {
 } from '@/model/models';
 import React, { useEffect, useState } from 'react';
 import ResultList from './ResultList';
-import { ApproveForm, SaveForm, GetAllFeeItems, GetCharge, GetFormJson, GetChargeDetail } from './Main.service';
+import { SubmitForm, SaveForm, GetAllFeeItems, GetCharge, GetFormJson, GetChargeDetail } from './Main.service';
 import { GetOrgTreeSimple, GetAsynChildBuildingsSimple, getCommonItems, GetUserList } from '@/services/commonItem';
 import moment from 'moment';
 import styles from './style.less';
@@ -34,12 +34,12 @@ interface ModifyProps {
   form: WrappedFormUtils;
   reload(): void;
   // treeData: any[];
-  choose(): void;
+  // choose(): void;
 };
 
 const Modify = (props: ModifyProps) => {
   const title = '修改合同';
-  const { visible, closeDrawer, id, form, chargeId, reload, choose } = props;
+  const { visible, closeDrawer, id, form, chargeId, reload } = props;
   const { getFieldDecorator } = form;
   //const [industryType, setIndustryType] = useState<any[]>([]); //行业  
   //const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
@@ -59,12 +59,11 @@ const Modify = (props: ModifyProps) => {
   const [userSource, setUserSource] = useState<any[]>([]);
   const [rooms, setRooms] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-
   const [treeData, setTreeData] = useState<any[]>([]);
 
-  const close = () => {
-    closeDrawer();
-  };
+  // const close = () => {
+  //   closeDrawer();
+  // };
 
   //打开抽屉时初始化
   useEffect(() => {
@@ -96,7 +95,6 @@ const Modify = (props: ModifyProps) => {
             tempInfo.houseList.forEach(item => {
               rooms.push(item.roomId);
             });
-
             setRooms(rooms);
           }
 
@@ -268,7 +266,7 @@ const Modify = (props: ModifyProps) => {
   };
 
   //提交审核
-  const approve = () => {
+  const submit = () => {
     //弹出选人
     //choose();
     //save(); 
@@ -283,7 +281,7 @@ const Modify = (props: ModifyProps) => {
           // });
           message.warning('请生成租金明细！');
           return;
-        } 
+        }
         //保存合同数据
         let ContractCharge: LeaseContractChargeEntity = {};
         //费用条款-基本条款 
@@ -321,7 +319,7 @@ const Modify = (props: ModifyProps) => {
         Contract.maxLateFee = values.maxLateFee;
         Contract.maxLateFeeUnit = values.maxLateFeeUnit;
 
-        SaveForm({
+        SubmitForm({
           ...Contract,
           ...ContractCharge,
           keyValue: id,
@@ -354,7 +352,7 @@ const Modify = (props: ModifyProps) => {
           // });
           message.warning('请生成租金明细！');
           return;
-        } 
+        }
         //保存合同数据
         let ContractCharge: LeaseContractChargeEntity = {};
         //费用条款-基本条款 
@@ -431,15 +429,32 @@ const Modify = (props: ModifyProps) => {
       }, 50);
     });
 
+
+  //转换状态
+  const GetStatus = (status) => {
+    switch (status) {
+      case 0:
+        return <Tag color="#e4aa5b">新建</Tag>;
+      case 1:
+        return <Tag color="#e4aa4b">待审核</Tag>;
+      case 2:
+        return <Tag color="#19d54e">已审核</Tag>;
+      case -1:
+        return <Tag color="#d82d2d">已作废</Tag>
+      default:
+        return '';
+    }
+  };
+
   return (
     <Drawer
       title={title}
       placement="right"
       width={1000}
-      onClose={close}
+      onClose={closeDrawer}
       visible={visible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
-      <PageHeader title={infoDetail.state}
+      <PageHeader title={GetStatus(infoDetail.status)}
       // extra={[
       //   <Button key="1">附件</Button>, 
       //   <Button key="2">打印</Button>,
@@ -772,13 +787,13 @@ const Modify = (props: ModifyProps) => {
           textAlign: 'right',
         }}
       >
-        <Button onClick={close} style={{ marginRight: 8 }}>
+        <Button onClick={closeDrawer} style={{ marginRight: 8 }}>
           关闭
           </Button>
         <Button onClick={save} style={{ marginRight: 8 }}>
           保存
           </Button>
-        <Button onClick={approve} type="primary">
+        <Button onClick={submit} type="primary">
           提交
           </Button>
       </div>

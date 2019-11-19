@@ -113,7 +113,7 @@ export interface LeaseContractDTO {
   /**
    * 合同状态
    */
-  state?: string;
+  status?: string;
   /**
    * 条款单价
    */
