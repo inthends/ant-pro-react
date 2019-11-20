@@ -126,4 +126,14 @@ export interface LeaseContractDTO {
    * 合同条款Id
    */
   chargeId?: string;
+
+ /**
+   * 计费单元Id
+   */
+  billUnitId?: string;
+   /**
+   * 机构Id
+   */
+  organizeId?: string;
+  
 }

@@ -1,5 +1,5 @@
 
-import { Spin, message, AutoComplete, Modal, InputNumber, TreeSelect, Tabs, Select, Button, Card, Col, DatePicker, Drawer, Form, Input, Row } from 'antd';
+import { Spin, message, AutoComplete, InputNumber, TreeSelect, Tabs, Select, Button, Card, Col, DatePicker, Drawer, Form, Input, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { TreeEntity, LeaseContractChargeEntity, LeaseContractChargeFeeEntity, LeaseContractChargeFeeOfferEntity, LeaseContractChargeIncreEntity, ChargeFeeResultEntity, LeaseContractDTO } from '@/model/models';
 import React, { useEffect, useState } from 'react';
@@ -9,7 +9,7 @@ import Rebate from './Rebate';
 import ResultList from './ResultList';
 import moment from 'moment';
 import { getCommonItems, GetUserList } from '@/services/commonItem';
-import { SaveForm, GetAllFeeItems, GetChargeDetail } from './Main.service';
+import { SaveForm, GetFeeItemsByUnitId, GetChargeDetail } from './Main.service';
 import { GetOrgTreeSimple, GetAsynChildBuildingsSimple } from '@/services/commonItem';
 import styles from './style.less';
 
@@ -46,6 +46,8 @@ const Add = (props: AddProps) => {
   // const [ChargeFeeResult, setChargeFeeResult] = useState<ChargeFeeResultEntity[]>([]);
 
   const [loading, setLoading] = useState<boolean>(false);
+
+  // const [billUnitId, setBillUnitId] = useState<string>();//计费房屋Id
 
   // const close = () => {
   //   closeDrawer();
@@ -172,7 +174,6 @@ const Add = (props: AddProps) => {
           message.warning('请生成租金明细！');
           return;
         }
- 
 
         //保存合同数据
         let ContractCharge: LeaseContractChargeEntity = {};
@@ -208,6 +209,7 @@ const Add = (props: AddProps) => {
         Contract.lateFeeUnit = values.lateFeeUnit;
         Contract.maxLateFee = values.maxLateFee;
         Contract.maxLateFeeUnit = values.maxLateFeeUnit;
+        Contract.billUnitId = values.billUnitId;
 
         SaveForm({
           ...Contract,
@@ -224,7 +226,7 @@ const Add = (props: AddProps) => {
           ChargeFeeResult: JSON.stringify(chargeData)
 
         }).then(res => {
-          message.success('保存成功');
+          message.success('保存成功！');
           closeDrawer();
           reload();
         });
@@ -238,10 +240,10 @@ const Add = (props: AddProps) => {
       setIndustryType(res || []);
     });
 
-    //加载关联收费项目
-    GetAllFeeItems().then(res => {
-      setFeeitems(res || []);
-    });
+    // //加载关联收费项目
+    // GetAllFeeItems().then(res => {
+    //   setFeeitems(res || []);
+    // });
 
     //获取房产树
     GetOrgTreeSimple().then((res: any[]) => {
@@ -273,10 +275,28 @@ const Add = (props: AddProps) => {
     form.setFieldsValue({ signerId: option.key });
   };
 
+  //选择房屋
   const onRoomChange = (value, label, extra) => {
+    //多个房屋的时候，默认获取第一个房屋作为计费单元
+    if (value.length == 0) {
+      // setBillUnitId('');
+      form.setFieldsValue({ billUnitId: '' });
+      setFeeitems([]);
+    } else {
+      form.setFieldsValue({ billUnitId: value[0] });
+      // setBillUnitId(value[0]);
+      //加载房屋费项
+      //加载关联收费项目
+      GetFeeItemsByUnitId(value[0]).then(res => {
+        setFeeitems(res || []);
+      });
+    }
+
+
     //选择房源,计算面积
     //["101 158.67㎡", "102 156.21㎡"] 
     let area = 0;
+
     label.forEach((val, idx, arr) => {
       area += parseFloat(val.split(' ')[1].replace('㎡', ''));
     });
@@ -436,6 +456,13 @@ const Add = (props: AddProps) => {
                               multiple={true}>
                             </TreeSelect>
                           )}
+                          <span style={{ marginLeft: 8, color: "green" }}>多个房屋的时候，默认获取第一个房屋作为计费单元</span>
+
+                          {getFieldDecorator('billUnitId', {
+                          })(
+                            <input type='hidden' />
+                          )} 
+
                         </Form.Item>
                       </Col>
                     </Row>

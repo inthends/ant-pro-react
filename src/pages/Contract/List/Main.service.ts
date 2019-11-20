@@ -15,12 +15,17 @@ export function GetPageListJson(data): Promise<any> {
 // }
 
 //获取所有费项
-export function GetAllFeeItems(): Promise<TreeEntity[]> {
+// export function GetAllFeeItems(): Promise<TreeEntity[]> {
+//   return request
+//     .get(process.env.basePath + `/FeeItems/GetAllFeeItems`)
+//     .then(getResult as any);
+// }
+
+export function GetFeeItemsByUnitId(unitId): Promise<TreeEntity[]> {
   return request
-    .get(process.env.basePath + `/FeeItems/GetAllFeeItems`)
+    .get(process.env.basePath + `/FeeItems/GetFeeItemsByUnitId?unitId=${unitId}`)
     .then(getResult as any);
 }
-
 
 // 计算费用明细
 export function GetChargeDetail(data): Promise<any> {

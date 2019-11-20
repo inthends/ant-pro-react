@@ -1,6 +1,6 @@
 
 import {
-  Tag,Spin, Divider, PageHeader, AutoComplete, InputNumber, TreeSelect, message, Modal,
+  Tag, Spin, Divider, PageHeader, AutoComplete, InputNumber, TreeSelect, message, Modal,
   Tabs, Select, Button, Card, Col, DatePicker, Drawer, Form, Input, Row
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
@@ -15,7 +15,7 @@ import {
 } from '@/model/models';
 import React, { useEffect, useState } from 'react';
 import ResultList from './ResultList';
-import { SubmitForm, SaveForm, GetAllFeeItems, GetCharge, GetFormJson, GetChargeDetail } from './Main.service';
+import { SubmitForm, SaveForm, GetFeeItemsByUnitId, GetCharge, GetFormJson, GetChargeDetail } from './Main.service';
 import { GetOrgTreeSimple, GetAsynChildBuildingsSimple, getCommonItems, GetUserList } from '@/services/commonItem';
 import moment from 'moment';
 import styles from './style.less';
@@ -71,9 +71,9 @@ const Modify = (props: ModifyProps) => {
       setIndustryType(res || []);
     });
     //加载关联收费项目
-    GetAllFeeItems().then(res => {
-      setFeeitems(res || []);
-    });
+    // GetAllFeeItems().then(res => {
+    //   setFeeitems(res || []);
+    // });
 
     //获取房产树
     GetOrgTreeSimple().then((res: any[]) => {
@@ -87,8 +87,8 @@ const Modify = (props: ModifyProps) => {
     if (visible) {
       if (id) {
         setLoading(true);
-        GetFormJson(id).then((tempInfo: LeaseContractDTO) => {
-          setInfoDetail(tempInfo);
+        GetFormJson(id).then((tempInfo: LeaseContractDTO) => { 
+
           //处理一下房间
           let rooms: any[] = [];
           if (tempInfo != null) {
@@ -97,6 +97,12 @@ const Modify = (props: ModifyProps) => {
             });
             setRooms(rooms);
           }
+
+          GetFeeItemsByUnitId(tempInfo.billUnitId).then(res => {
+            setFeeitems(res || []);
+          });
+
+          setInfoDetail(tempInfo);
 
           //获取条款
           GetCharge(chargeId).then((charge: ChargeDetailDTO) => {
@@ -138,6 +144,19 @@ const Modify = (props: ModifyProps) => {
   };
 
   const onRoomChange = (value, label, extra) => {
+    //多个房屋的时候，默认获取第一个房屋作为计费单元
+    if (value.length == 0) {
+      form.setFieldsValue({ billUnitId: '' });
+      setFeeitems([]);
+    } else {
+      form.setFieldsValue({ billUnitId: value[0] });
+      //加载房屋费项
+      //加载关联收费项目
+      GetFeeItemsByUnitId(value[0]).then(res => {
+        setFeeitems(res || []);
+      });
+    }
+
     //选择房源,计算面积
     //["101 158.67㎡", "102 156.21㎡"]
     let area = 0;
@@ -388,8 +407,7 @@ const Modify = (props: ModifyProps) => {
         Contract.lateFee = values.lateFee;
         Contract.lateFeeUnit = values.lateFeeUnit;
         Contract.maxLateFee = values.maxLateFee;
-        Contract.maxLateFeeUnit = values.maxLateFeeUnit;
-
+        Contract.maxLateFeeUnit = values.maxLateFeeUnit;   
         SaveForm({
           ...Contract,
           ...ContractCharge,
@@ -490,6 +508,7 @@ const Modify = (props: ModifyProps) => {
                             />
                           )}
                           {getFieldDecorator('followerId', {
+                             initialValue: infoDetail.followerId
                           })(
                             <input type='hidden' />
                           )}
@@ -616,6 +635,12 @@ const Modify = (props: ModifyProps) => {
                               multiple={true}>
                             </TreeSelect>
                           )}
+                          <span style={{ marginLeft: 8, color: "green" }}>多个房屋的时候，默认获取第一个房屋作为计费单元</span> 
+                          {getFieldDecorator('billUnitId', {
+                             initialValue: infoDetail.billUnitId
+                          })(
+                            <input type='hidden' />
+                          )}
                         </Form.Item>
                       </Col>
                     </Row>
@@ -644,11 +669,11 @@ const Modify = (props: ModifyProps) => {
                               ))}
                             </Select>
                           )}
-                          {getFieldDecorator('industry', {
+                          {/* {getFieldDecorator('industry', {
                             initialValue: infoDetail.industry
                           })(
                             <input type='hidden' />
-                          )}
+                          )} */}
                         </Form.Item>
                       </Col>
                     </Row>
