@@ -1,10 +1,10 @@
-//编辑税率
+//编辑优惠政策
 import { Card, Col, Form, Input, Row, Modal, InputNumber  } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { GetOrgTaxTateFormJson, OrganizeEditForm } from './Main.service';
 import './style.less';
-interface EditOrginizeProps {
+interface EditRebateOrganizeProps {
   visible: boolean;
   closeModal(): void;
   form: WrappedFormUtils;
@@ -12,7 +12,7 @@ interface EditOrginizeProps {
   reload(): void;
 }
 
-const EditOrginize = (props: EditOrginizeProps) => {
+const EditRebateOrganize = (props: EditRebateOrganizeProps) => {
   const { visible, closeModal, orgItemId, form, reload } = props;
   const { getFieldDecorator } = form;
   const [infoDetail, setInfoDetail] = useState<any>({});
@@ -34,7 +34,7 @@ const EditOrginize = (props: EditOrginizeProps) => {
 
   return (
     <Modal
-      title="编辑税率"
+      title="编辑优惠政策"
       visible={visible}
       okText="确认"
       cancelText="取消"
@@ -63,8 +63,7 @@ const EditOrginize = (props: EditOrginizeProps) => {
       bodyStyle={{ background: '#f6f7fb' }}
       width='400px'
     >
-      <Card>
-
+      <Card> 
         <Form layout="vertical" hideRequiredMark>
           <Row  >
             <Col span={24}>
@@ -123,5 +122,5 @@ const EditOrginize = (props: EditOrginizeProps) => {
   );
 };
 
-export default Form.create<EditOrginizeProps>()(EditOrginize);
+export default Form.create<EditRebateOrganizeProps>()(EditRebateOrganize);
 

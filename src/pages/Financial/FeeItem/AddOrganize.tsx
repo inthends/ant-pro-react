@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { OrganizeSaveForm, GetOrgAndBulidingTree, GetOrganizeForm } from './Main.service';
 // import './style.less';
 // import LeftSelectTree from '../LeftSelectTree';
-interface AddOrginizeProps {
+interface AddOrganizeProps {
   visible: boolean;
   closeModal(): void;
   form: WrappedFormUtils;
@@ -15,7 +15,7 @@ interface AddOrginizeProps {
   reload(): void;
 };
 
-const AddOrginize = (props: AddOrginizeProps) => {
+const AddOrganize = (props: AddOrganizeProps) => {
   const { visible, closeModal, feeId, reload } = props;
   const [orgTreeData, setOrgTreeData] = useState<any[]>([]);
   const [orgData, setOrgData] = useState<any[]>([]);
@@ -69,7 +69,7 @@ const AddOrginize = (props: AddOrginizeProps) => {
         if (orgData.length == 0) {
           message.warning('请选择机构！');
         } else {
-          OrganizeSaveForm({ FeeItemID: feeId, JsonFeeIdArray: JSON.stringify(orgData) }).then(res => {
+          OrganizeSaveForm({ FeeItemId: feeId, JsonFeeIdArray: JSON.stringify(orgData) }).then(res => {
             closeModal();
             message.success('数据保存成功！');
             reload();
@@ -117,5 +117,5 @@ const AddOrginize = (props: AddOrginizeProps) => {
   );
 };
 
-export default Form.create<AddOrginizeProps>()(AddOrginize);
+export default Form.create<AddOrganizeProps>()(AddOrganize);
 

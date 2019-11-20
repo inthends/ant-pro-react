@@ -143,6 +143,7 @@ const Add = (props: AddProps) => {
         setRebateJson(strRebateJson);
         GetChargeDetail({
           ...entity,
+          BillUnitId: values.billUnitId,//计费单元id
           LeaseContractId: '',
           CalcPrecision: values.calcPrecision,
           CalcPrecisionMode: values.calcPrecisionMode,
@@ -461,7 +462,7 @@ const Add = (props: AddProps) => {
                           {getFieldDecorator('billUnitId', {
                           })(
                             <input type='hidden' />
-                          )} 
+                          )}
 
                         </Form.Item>
                       </Col>

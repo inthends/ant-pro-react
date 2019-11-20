@@ -65,8 +65,7 @@ const Approve = (props: ApproveProps) => {
             setChargeIncreList(charge.chargeIncreList || []);
             setChargeOfferList(charge.chargeFeeOfferList || []);
             setDepositData(charge.depositFeeResultList || []);//保证金明细
-            setChargeData(charge.chargeFeeResultList || []);//租金明细   
-
+            setChargeData(charge.chargeFeeResultList || []);//租金明细    
           })
           form.resetFields();
         });
@@ -77,7 +76,6 @@ const Approve = (props: ApproveProps) => {
       form.setFieldsValue({});
     }
   }, [visible]);
-
 
   //转换状态
   const GetStatus = (status) => {

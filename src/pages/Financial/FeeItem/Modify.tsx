@@ -6,18 +6,21 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import {
-  HouseRemoveForm, HouseAllRemoveForm,
-  OrganizeRemoveForm, GetFormJson,
-  GetFeeType, GetAllFeeItems, GetOrganizePageList,
-  GetUnitFeeItemData, SaveForm, GetFeeItemName
+  HouseRemoveForm, HouseAllRemoveForm, OrganizeRemoveForm,
+   GetFormJson, GetFeeType, GetAllFeeItems, GetOrganizePageList, 
+   GetUnitFeeItemData, SaveForm, GetFeeItemName, GetRebatePageList
 } from './Main.service';
 import styles from './style.less';
 import moment from 'moment';
 import AddFormula from './AddFormula';
-import AddOrginize from './AddOrginize';
-import EditOrginize from './EditOrginize';
+import AddOrginize from './AddOrganize';
+import EditOrginize from './EditOrganize';
 import AddHouseFee from './AddHouseFee';
 import EditHouseFee from './EditHouseFee';
+//优惠政策
+import AddRebateOrginize from './AddRebateOrganize';
+import EditRebateOrginize from './EditRebateOrganize';
+
 const Option = Select.Option;
 const { TextArea } = Input;
 const { TabPane } = Tabs;
@@ -48,6 +51,8 @@ const Modify = (props: ModifyProps) => {
   const [feeItemNames, setFeeItemNames] = useState<any[]>([]);
   const [editHouseVisible, setEditHouseVisible] = useState<boolean>(false);
   const [linkFeeDisable, setLinkFeeDisable] = useState<boolean>(true);
+  //优惠政策
+  const [selectRebateOrgVisible, setSelectRebateOrgVisible] = useState<boolean>(false);
 
   //打开抽屉时初始化
   useEffect(() => {
@@ -59,21 +64,6 @@ const Modify = (props: ModifyProps) => {
       setFeeItemNames(res || []);
     })
   }, []);
-
-  const changeFeeType = (value, info?) => {
-    var newvalue = value == "收款费项" ? "ReceivablesItem" : "PaymentItem";
-    GetFeeType(newvalue).then(res => {
-      setFeetype(res || []);
-      //清除选择的值
-      form.setFieldsValue({ feeType: '' });
-      if (isInit && selectTreeItem != null && selectTreeItem.feeType != '') {
-        var newInfo = Object.assign({}, info, { feeType: selectTreeItem.feeType });
-        setInfoDetail(newInfo);
-        form.setFieldsValue({ feeType: selectTreeItem.feeType });
-      }
-    });
-  };
-
 
   // const getInfo = id => {
   //   if (id) {
@@ -94,18 +84,11 @@ const Modify = (props: ModifyProps) => {
   //   }
   // };
 
-
   // 打开抽屉时初始化
   useEffect(() => {
     if (modifyVisible) {
       if (id) {
         GetFormJson(id).then((tempInfo: CwFeeitem) => {
-
-
-
-          debugger
-
-
           // if (tempInfo.feeKind) {
           //   // var kind = tempInfo.feeKind == "收款费项" ? "ReceivablesItem" : "PaymentItem";
           //   changeFeeType(tempInfo.feeKind);
@@ -120,8 +103,12 @@ const Modify = (props: ModifyProps) => {
         });
 
         //if (id !== undefined) {
-        initHouseLoadData('');
+        //加载所属机构
         initOrgLoadData('');
+        //加载优惠政策
+        initRebateLoadData('');
+        //加载房屋费项
+        initHouseLoadData('');
         //}
       } else {
         form.resetFields();
@@ -141,9 +128,9 @@ const Modify = (props: ModifyProps) => {
     }
   }, [modifyVisible]);
 
-  const close = () => {
-    closeDrawer();
-  };
+  // const close = () => {
+  //   closeDrawer();
+  // };
 
   const save = () => {
     form.validateFields((errors, values) => {
@@ -185,6 +172,25 @@ const Modify = (props: ModifyProps) => {
     setEditOrgVisible(false);
   };
 
+  const closeRebateOrgVisible = () => {
+    setSelectRebateOrgVisible(false);
+  };
+
+  const changeFeeType = (value, info?) => {
+    var newvalue = value == "收款费项" ? "ReceivablesItem" : "PaymentItem";
+    GetFeeType(newvalue).then(res => {
+      setFeetype(res || []);
+      //清除选择的值
+      form.setFieldsValue({ feeType: '' });
+      if (isInit && selectTreeItem != null && selectTreeItem.feeType != '') {
+        var newInfo = Object.assign({}, info, { feeType: selectTreeItem.feeType });
+        setInfoDetail(newInfo);
+        form.setFieldsValue({ feeType: selectTreeItem.feeType });
+      }
+    });
+  };
+
+  //费项房屋
   const [houseData, setHouseData] = useState<any[]>([]);
   const [houseSearch, setHouseSearch] = useState<string>();
   const [houseLoading, setHouseLoading] = useState<boolean>(false);
@@ -200,7 +206,7 @@ const Modify = (props: ModifyProps) => {
       pageIndex,
       pageSize,
       total,
-      queryJson: { keyword: search, FeeItemID: id },
+      queryJson: { keyword: search, feeItemId: id },
     };
 
     if (sorter) {
@@ -216,7 +222,7 @@ const Modify = (props: ModifyProps) => {
 
   const houseLoad = data => {
     setOrgLoading(true);
-    data.sidx = data.sidx || 'unitfeeid';
+    data.sidx = data.sidx || 'unitfeeId';
     data.sord = data.sord || 'asc';
     return GetUnitFeeItemData(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -238,154 +244,14 @@ const Modify = (props: ModifyProps) => {
 
   const initHouseLoadData = (search) => {
     setHouseSearch(search);
-    const queryJson = { keyword: search, FeeItemID: id };
-    const sidx = 'unitfeeid';
+    const queryJson = { keyword: search, feeItemId: id };
+    const sidx = 'unitfeeId';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = housePagination;
     return houseLoad({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
       return res;
     });
   };
-
-  const [orgData, setOrgData] = useState<any[]>([]);
-  const [orgSearch, setOrgSearch] = useState<string>();
-  const [orgLoading, setOrgLoading] = useState<boolean>(false);
-  const [orgPagination, setOrgPagination] = useState<PaginationConfig>(new DefaultPagination());
-
-  const orgLoadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
-    setOrgSearch(search);
-    const { current: pageIndex, pageSize, total } = paginationConfig || {
-      current: 1,
-      pageSize: orgPagination.pageSize,
-      total: 0,
-    };
-    let searchCondition: any = {
-      pageIndex,
-      pageSize,
-      total,
-      queryJson: { keyword: search, FeeItemID: id },
-    };
-
-    if (sorter) {
-      let { field, order } = sorter;
-      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'allName';
-    }
-
-    return orgLoad(searchCondition).then(res => {
-      return res;
-    });
-  };
-
-  const orgLoad = data => {
-    setOrgLoading(true);
-    data.sidx = data.sidx || 'allName';
-    data.sord = data.sord || 'asc';
-    return GetOrganizePageList(data).then(res => {
-      const { pageIndex: current, total, pageSize } = res;
-      setOrgPagination(pagesetting => {
-        return {
-          ...pagesetting,
-          current,
-          total,
-          pageSize,
-        };
-      });
-      setOrgData(res.data);
-      setOrgLoading(false);
-      return res;
-    }).catch(() => {
-      setOrgLoading(false);
-    });
-  };
-
-  const initOrgLoadData = (search) => {
-    setOrgSearch(search);
-    const queryJson = { FeeItemID: id };
-    const sidx = 'allName';
-    const sord = 'asc';
-    const { current: pageIndex, pageSize, total } = orgPagination;
-    return orgLoad({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
-      return res;
-    });
-  };
-
-  const orgcolumns = [
-    {
-      title: '楼盘名称',
-      dataIndex: 'name',
-      key: 'name',
-      width: 120,
-      sorter: true,
-    },
-    {
-      title: '税率',
-      dataIndex: 'taxRate',
-      key: 'taxRate',
-      width: 60,
-      sorter: true,
-    },
-    {
-      title: '开票项目',
-      dataIndex: 'invoiceName',
-      key: 'invoiceName',
-      width: 120,
-      sorter: true,
-    },
-    {
-      title: '开票项目编号',
-      dataIndex: 'invoiceCode',
-      key: 'invoiceCode',
-      width: 100,
-      sorter: true,
-    },
-    {
-      title: '所属管理处',
-      dataIndex: 'orgName',
-      key: 'orgName',
-      width: 100,
-      sorter: true,
-    },
-    {
-      title: '操作',
-      dataIndex: 'operation',
-      align: 'center',
-      key: 'operation',
-      width: 80,
-      render: (text, record) => {
-        return [
-          <span key='buttons'>
-            <a onClick={() => {
-              setOrgItemId(record.id);
-              setEditOrgVisible(true);
-            }} key="modify">修改</a>
-            <Divider type="vertical" key='divider' />
-            <a onClick={() => {
-              Modal.confirm({
-                title: '请确认',
-                content: `您是否要删除吗`,
-                cancelText: '取消',
-                okText: '确认',
-                onOk: () => {
-                  OrganizeRemoveForm(record.id)
-                    .then(() => {
-                      message.success('删除成功');
-                      initOrgLoadData('');
-                    })
-                    .catch(e => {
-                      message.error('删除失败');
-                    });
-                },
-              });
-            }} key="delete">删除</a>
-          </span>
-        ];
-      },
-    },
-  ] as ColumnProps<any>[];
-
-  const [orgItemId, setOrgItemId] = useState<string>('');
-  const [houseItemId, setHouseItemId] = useState<string>('');
 
   const housecolumns = [
     {
@@ -481,6 +347,290 @@ const Modify = (props: ModifyProps) => {
                 },
               });
             }} key="delete">删除</a> */}
+          </span>
+        ];
+      },
+    },
+  ] as ColumnProps<any>[];
+
+  //费项组织
+  const [orgData, setOrgData] = useState<any[]>([]);
+  const [orgSearch, setOrgSearch] = useState<string>();
+  const [orgLoading, setOrgLoading] = useState<boolean>(false);
+  const [orgPagination, setOrgPagination] = useState<PaginationConfig>(new DefaultPagination());
+
+  const orgLoadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
+    setOrgSearch(search);
+    const { current: pageIndex, pageSize, total } = paginationConfig || {
+      current: 1,
+      pageSize: orgPagination.pageSize,
+      total: 0,
+    };
+    let searchCondition: any = {
+      pageIndex,
+      pageSize,
+      total,
+      queryJson: { keyword: search, feeItemId: id },
+    };
+
+    if (sorter) {
+      let { field, order } = sorter;
+      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sidx = field ? field : 'allName';
+    }
+
+    return orgLoad(searchCondition).then(res => {
+      return res;
+    });
+  };
+
+  const orgLoad = data => {
+    setOrgLoading(true);
+    data.sidx = data.sidx || 'allName';
+    data.sord = data.sord || 'asc';
+    return GetOrganizePageList(data).then(res => {
+      const { pageIndex: current, total, pageSize } = res;
+      setOrgPagination(pagesetting => {
+        return {
+          ...pagesetting,
+          current,
+          total,
+          pageSize,
+        };
+      });
+      setOrgData(res.data);
+      setOrgLoading(false);
+      return res;
+    }).catch(() => {
+      setOrgLoading(false);
+    });
+  };
+
+  const initOrgLoadData = (search) => {
+    setOrgSearch(search);
+    const queryJson = { feeItemId: id };
+    const sidx = 'allName';
+    const sord = 'asc';
+    const { current: pageIndex, pageSize, total } = orgPagination;
+    return orgLoad({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
+      return res;
+    });
+  };
+
+  const orgcolumns = [
+    {
+      title: '管理处',
+      dataIndex: 'orgName',
+      key: 'orgName',
+      width: 100,
+      sorter: true,
+    },
+    {
+      title: '楼盘名称',
+      dataIndex: 'name',
+      key: 'name',
+      width: 120,
+      sorter: true,
+    },
+    {
+      title: '税率',
+      dataIndex: 'taxRate',
+      key: 'taxRate',
+      width: 60,
+      sorter: true,
+    },
+    {
+      title: '开票项目',
+      dataIndex: 'invoiceName',
+      key: 'invoiceName',
+      width: 120,
+      sorter: true,
+    },
+    {
+      title: '开票项目编号',
+      dataIndex: 'invoiceCode',
+      key: 'invoiceCode',
+      width: 100,
+      sorter: true,
+    },
+
+    {
+      title: '操作',
+      dataIndex: 'operation',
+      align: 'center',
+      key: 'operation',
+      width: 80,
+      render: (text, record) => {
+        return [
+          <span key='buttons'>
+            <a onClick={() => {
+              setOrgItemId(record.id);
+              setEditOrgVisible(true);
+            }} key="modify">修改</a>
+            <Divider type="vertical" key='divider' />
+            <a onClick={() => {
+              Modal.confirm({
+                title: '请确认',
+                content: `您是否要删除吗？`,
+                cancelText: '取消',
+                okText: '确认',
+                onOk: () => {
+                  OrganizeRemoveForm(record.id)
+                    .then(() => {
+                      message.success('删除成功！');
+                      initOrgLoadData('');
+                    })
+                    .catch(e => {
+                      message.error('删除失败！');
+                    });
+                },
+              });
+            }} key="delete">删除</a>
+          </span>
+        ];
+      },
+    },
+  ] as ColumnProps<any>[];
+
+  const [orgItemId, setOrgItemId] = useState<string>('');
+  const [houseItemId, setHouseItemId] = useState<string>('');
+
+
+  //优惠政策
+  const [rebateData, setRebateData] = useState<any[]>([]);
+  const [rebateSearch, setRebateSearch] = useState<string>();
+  const [rebateLoading, setRebateLoading] = useState<boolean>(false);
+  const [rebatePagination, setRebatePagination] = useState<PaginationConfig>(new DefaultPagination());
+  const rebateLoadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
+    setRebateSearch(search);
+    const { current: pageIndex, pageSize, total } = paginationConfig || {
+      current: 1,
+      pageSize: rebatePagination.pageSize,
+      total: 0,
+    };
+    let searchCondition: any = {
+      pageIndex,
+      pageSize,
+      total,
+      queryJson: { keyword: search, feeItemId: id },
+    };
+
+    if (sorter) {
+      let { field, order } = sorter;
+      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sidx = field ? field : 'id';
+    }
+
+    return rebateLoad(searchCondition).then(res => {
+      return res;
+    });
+  };
+
+  const rebateLoad = data => {
+    setRebateLoading(true);
+    data.sidx = data.sidx || 'id';
+    data.sord = data.sord || 'asc';
+    return GetRebatePageList(data).then(res => {
+      const { pageIndex: current, total, pageSize } = res;
+      setRebatePagination(pagesetting => {
+        return {
+          ...pagesetting,
+          current,
+          total,
+          pageSize,
+        };
+      });
+      setRebateData(res.data);
+      setRebateLoading(false);
+      return res;
+    }).catch(() => {
+      setRebateLoading(false);
+    });
+  };
+
+  const initRebateLoadData = (search) => {
+    setRebateSearch(search);
+    const queryJson = { feeItemId: id };
+    const sidx = 'id';
+    const sord = 'asc';
+    const { current: pageIndex, pageSize, total } = rebatePagination;
+    return rebateLoad({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
+      return res;
+    });
+  };
+
+  //优惠政策列表
+  const rebatecolumns = [
+    {
+      title: '管理处',
+      dataIndex: 'orgName',
+      key: 'orgName',
+      width: 120,
+      sorter: true,
+    },
+    {
+      title: '房产名称',
+      dataIndex: 'name',
+      key: 'name',
+      width: 100,
+      sorter: true,
+    },
+    {
+      title: '优惠政策',
+      dataIndex: 'rebateName',
+      key: 'rebateName',
+      width: 120,
+      sorter: true,
+    },
+    {
+      title: '起始日期',
+      dataIndex: 'beginDate',
+      key: 'beginDate',
+      width: 80,
+      sorter: true,
+      render: val => moment(val).format('YYYY-MM-DD')
+    },
+    {
+      title: '结束日期',
+      dataIndex: 'endDate',
+      key: 'endDate',
+      width: 80,
+      sorter: true,
+      render: val => moment(val).format('YYYY-MM-DD')
+    },
+
+    {
+      title: '操作',
+      dataIndex: 'operation',
+      align: 'center',
+      key: 'operation',
+      width: 80,
+      render: (text, record) => {
+        return [
+          <span key='buttons'>
+            <a onClick={() => {
+              setOrgItemId(record.id);
+              setEditOrgVisible(true);
+            }} key="modify">修改</a>
+            <Divider type="vertical" key='divider' />
+            <a onClick={() => {
+              Modal.confirm({
+                title: '请确认',
+                content: `您是否要删除吗？`,
+                cancelText: '取消',
+                okText: '确认',
+                onOk: () => {
+                  OrganizeRemoveForm(record.id)
+                    .then(() => {
+                      message.success('删除成功！');
+                      initRebateLoadData('');
+                    })
+                    .catch(e => {
+                      message.error('删除失败！');
+                    });
+                },
+              });
+            }} key="delete">删除</a>
           </span>
         ];
       },
@@ -616,7 +766,7 @@ const Modify = (props: ModifyProps) => {
       title={title}
       placement="right"
       width={780}
-      onClose={close}
+      onClose={closeDrawer}
       visible={modifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
       <Form layout="vertical" hideRequiredMark>
@@ -1444,7 +1594,7 @@ const Modify = (props: ModifyProps) => {
                   size="middle"
                   dataSource={orgData}
                   columns={orgcolumns}
-                  rowKey={record => record.allName}
+                  rowKey={record => record.id}
                   pagination={orgPagination}
                   scroll={{ y: 420 }}
                   onChange={(pagination: PaginationConfig, filters, sorter) =>
@@ -1452,11 +1602,56 @@ const Modify = (props: ModifyProps) => {
                   }
                   loading={orgLoading}
                 />
-              </TabPane> : null
+              </TabPane>
+              : null
           }
+
+          {
+            id ?
+              <TabPane tab="优惠政策" key="4" style={{ marginBottom: '20px' }}>
+                <div style={{ marginBottom: '5px', padding: '3px 2px' }}>
+                  <Input.Search
+                    key='rebateorgsearch'
+                    className="search-input"
+                    placeholder="请输入要查询的房产名称"
+                    style={{ width: 200 }}
+                    onSearch={value => orgLoadData(value)}
+                  />
+                  <Button type="link" style={{ float: 'right' }}
+                    onClick={() => { setSelectRebateOrgVisible(true) }}
+                  >
+                    <Icon type="plus" />
+                    新增
+                </Button>
+                  {/* <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
+                  onClick={() => {}}
+                >
+                  <Icon type="plus" />
+                  刷新
+                </Button> */}
+                </div>
+                <Table
+                  key='rebatelist'
+                  style={{ border: 'none' }}
+                  bordered={false}
+                  size="middle"
+                  dataSource={rebateData}
+                  columns={rebatecolumns}
+                  rowKey={record => record.id}
+                  pagination={rebatePagination}
+                  scroll={{ y: 420 }}
+                  onChange={(pagination: PaginationConfig, filters, sorter) =>
+                    rebateLoadData(rebateSearch, pagination, sorter)
+                  }
+                  loading={rebateLoading}
+                />
+              </TabPane>
+              : null
+          }
+
           {
             id && infoDetail.feeKind == '收款费项' ?
-              <TabPane tab="设置房屋费项" key="4" style={{ marginBottom: '20px' }}>
+              <TabPane tab="设置房屋费项" key="5" style={{ marginBottom: '20px' }}>
                 <div style={{ marginBottom: '5px', padding: '3px 2px' }}>
                   <Input.Search
                     key='search'
@@ -1533,7 +1728,7 @@ const Modify = (props: ModifyProps) => {
             zIndex: 999
           }}
         >
-          <Button onClick={close} style={{ marginRight: 8 }}>
+          <Button onClick={closeDrawer} style={{ marginRight: 8 }}>
             取消
         </Button>
           <Button onClick={save} type="primary">
@@ -1569,6 +1764,22 @@ const Modify = (props: ModifyProps) => {
         // reload={initOrgLoadData}
         reload={() => initOrgLoadData(orgSearch)}
       />
+
+      <AddRebateOrginize
+        visible={selectRebateOrgVisible}
+        closeModal={closeRebateOrgVisible}
+        feeId={id}
+        reload={() => initOrgLoadData(orgSearch)}
+      />
+
+      <EditRebateOrginize
+        visible={editOrgVisible}
+        closeModal={closeEditOrgVisible}
+        orgItemId={orgItemId}
+        // reload={initOrgLoadData}
+        reload={() => initOrgLoadData(orgSearch)}
+      />
+
       <AddHouseFee
         treeData={treeData}
         visible={selectHouseVisible}
@@ -1582,6 +1793,7 @@ const Modify = (props: ModifyProps) => {
         houseItemId={houseItemId}
         reload={() => initHouseLoadData(houseSearch)}
       />
+
     </Drawer>
   );
 };

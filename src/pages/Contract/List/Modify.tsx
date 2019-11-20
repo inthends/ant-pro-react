@@ -175,13 +175,11 @@ const Modify = (props: ModifyProps) => {
   //计算租金明细
   const calculation = () => {
     form.validateFields((errors, values) => {
-      if (!errors) {
-
+      if (!errors) { 
         setLoading(true);
         //数据处理  
         //租赁条款     
         let TermJson: LeaseContractChargeFeeEntity[] = [];
-
         // let data: LeaseContractChargeFeeEntity = {}; 
         // data.feeItemId = values.feeItemId[0];
         // data.startDate = values.startDate[0];
@@ -265,6 +263,7 @@ const Modify = (props: ModifyProps) => {
         setRebateJson(strRebateJson);
         GetChargeDetail({
           ...entity,
+          BillUnitId: values.billUnitId,//计费单元id
           LeaseContractId: '',
           CalcPrecision: values.calcPrecision,
           CalcPrecisionMode: values.calcPrecisionMode,

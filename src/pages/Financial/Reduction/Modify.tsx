@@ -120,11 +120,11 @@ const Modify = (props: ModifyProps) => {
   const [listdata, setListData] = useState<any[]>([]);
   const [code, setCode] = useState<number>(0);//新增还是修改
 
-  const getSelectReduction = () => {
-    GetReductionItem().then(res => {
-      setReductionItem(res);
-    });
-  };
+  // const getSelectReduction = () => {
+  //   GetReductionItem().then(res => {
+  //     setReductionItem(res);
+  //   });
+  // };
 
   // const buildOption=(item:any)=>{
   //   const children = [];
@@ -138,7 +138,7 @@ const Modify = (props: ModifyProps) => {
   useEffect(() => {
     if (modifyVisible) {
       setModalVisible(false);
-      getSelectReduction();
+      // getSelectReduction();
       if (id) {
         // getInfo(id).then((tempInfo: any) => {
         //    setInfoDetail(tempInfo);
