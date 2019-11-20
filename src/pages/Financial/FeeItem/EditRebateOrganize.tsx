@@ -1,36 +1,38 @@
 //编辑优惠政策
-import { Card, Col, Form, Input, Row, Modal, InputNumber  } from 'antd';
+import { Select, Card, Col, Form, DatePicker, Row, Modal, Input } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetOrgTaxTateFormJson, OrganizeEditForm } from './Main.service';
-import './style.less';
+import { GetRebateFormJson, RebateEditForm } from './Main.service';
+// import './style.less';
+const Option = Select.Option;
+const { TextArea } = Input;
+import moment from 'moment';
 interface EditRebateOrganizeProps {
   visible: boolean;
   closeModal(): void;
   form: WrappedFormUtils;
-  orgItemId?: string;
+  id?: string;
   reload(): void;
-}
+};
 
 const EditRebateOrganize = (props: EditRebateOrganizeProps) => {
-  const { visible, closeModal, orgItemId, form, reload } = props;
+  const { visible, closeModal, id, form, reload } = props;
   const { getFieldDecorator } = form;
   const [infoDetail, setInfoDetail] = useState<any>({});
-  // const [orgTreeData,setOrgTreeData]=useState<any[]>([]);
-  // const [invoiceItems, setInvoiceItems] = useState<any[]>([]);
   useEffect(() => {
     if (visible) {
-      if (orgItemId != null) {
-        // GetAllFeeItems().then(res => {
-        //   setInvoiceItems(res);
-        // });
-        GetOrgTaxTateFormJson(orgItemId).then(res => {
+      if (id != null) {
+        GetRebateFormJson(id).then(res => {
           setInfoDetail(res);
         })
       }
     }
   }, [visible]);
 
+  //选择优惠政策
+  const change = (value, option) => {
+    form.setFieldsValue({ rebateName: option.props.children });
+  };
 
   return (
     <Modal
@@ -45,14 +47,15 @@ const EditRebateOrganize = (props: EditRebateOrganizeProps) => {
             let newData = {
               keyValue: infoDetail.id,
               Id: infoDetail.id,
-              InvoiceName: values.invoiceName,
-              InvoiceCode: values.invoiceCode,
               PStructId: infoDetail.pStructId,
-              TaxRate: values.taxRate,
-              AllCode: infoDetail.allCode,
               FeeItemId: infoDetail.feeItemId,
+              RebateName: values.rebateName,
+              RebateCode: values.rebateCode,
+              BeginDate: values.beginDate.format('YYYY-MM-DD'),
+              EndDate: values.endDate.format('YYYY-MM-DD'),
+              Memo: values.memo
             }
-            OrganizeEditForm(newData).then((res) => {
+            RebateEditForm(newData).then((res) => {
               closeModal();
               reload();
             });
@@ -61,61 +64,56 @@ const EditRebateOrganize = (props: EditRebateOrganizeProps) => {
       }}
       destroyOnClose={true}
       bodyStyle={{ background: '#f6f7fb' }}
-      width='400px'
+      width='450px'
     >
-      <Card> 
+      <Card>
         <Form layout="vertical" hideRequiredMark>
-          <Row  >
-            <Col span={24}>
-              {/* <Form.Item label="税控项目" required>
-                {getFieldDecorator('invoiceId', {
-                  initialValue: infoDetail.invoiceId,
-                  rules: [{ required: true, message: '请选择税控项目' }],
-                })(<Select placeholder="请选择税控项目"              >
-                  {invoiceItems.map(item => (
-                    <Select.Option key={item.key} value={item.key}>
-                      {item.title}
-                    </Select.Option>
-                  ))}
-                </Select>
-                )}
-              </Form.Item> */}
-
-              <Form.Item label="税控项目" required>
-                {getFieldDecorator('invoiceName', {
-                  initialValue: infoDetail.invoiceName,
-                  rules: [{ required: true, message: '请输入税控项目' }],
+          <Form.Item label="优惠政策" required>
+            {getFieldDecorator('rebateCode', {
+              initialValue: infoDetail.rebateCode,
+              rules: [{ required: true, message: '请选择优惠政策' }]
+            })(
+              <Select placeholder="==请选择优惠政策=="
+                onChange={change} >
+                <Option value='1'>预缴一年赠送一个月</Option>
+                <Option value='2'>预缴一年减免一个月</Option>
+              </Select>
+            )}
+            {getFieldDecorator('rebateName', {
+              initialValue: infoDetail.rebateName,
+            })(
+              <input type='hidden' />
+            )}
+          </Form.Item>
+          <Row gutter={8}>
+            <Col span={12}>
+              <Form.Item label="起始日期" required>
+                {getFieldDecorator('beginDate', {
+                  initialValue: infoDetail.beginDate ? moment(infoDetail.beginDate) : moment(new Date()),
+                  rules: [{ required: true, message: '请选择起始日期' }]
                 })(
-                  <Input />
+                  <DatePicker placeholder="请选择起始日期" style={{ width: '100%' }} />
                 )}
               </Form.Item>
-
             </Col>
-          </Row>
-
-          <Row  >
-            <Col span={24}>
-              <Form.Item label="税控项目编号" required>
-                {getFieldDecorator('invoiceCode', {
-                  initialValue: infoDetail.invoiceCode,
-                  rules: [{ required: true, message: '请输入税控项目编号' }],
+            <Col span={12}>
+              < Form.Item label="结束日期" required >
+                {getFieldDecorator('endDate', {
+                  initialValue: infoDetail.endDate ? moment(infoDetail.endDate) : moment(new Date()),
+                  rules: [{ required: true, message: '请选择结束日期' }]
                 })(
-                  <Input />
+                  <DatePicker placeholder="请选择结束日期" style={{ width: '100%' }} />
                 )}
               </Form.Item>
             </Col>
           </Row>
-          <Row  >
-            <Col span={24}>
-              <Form.Item label="税率" required>
-                {getFieldDecorator('taxRate', {
-                  initialValue: infoDetail.taxRate ? infoDetail.taxRate : 0,
-                  rules: [{ required: true, message: '请输入税率' }],
-                })(<InputNumber style={{ width: '100%' }} />
-                )}
-              </Form.Item>
-            </Col>
-          </Row>
+          <Form.Item label="附加说明">
+            {getFieldDecorator('memo', {
+              initialValue: infoDetail.memo,
+            })(
+              <TextArea rows={4} placeholder="请输入附加说明" />
+            )}
+          </Form.Item>
         </Form>
       </Card>
     </Modal>

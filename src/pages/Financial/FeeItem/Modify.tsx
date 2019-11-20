@@ -6,9 +6,9 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import {
-  HouseRemoveForm, HouseAllRemoveForm, OrganizeRemoveForm,
-   GetFormJson, GetFeeType, GetAllFeeItems, GetOrganizePageList, 
-   GetUnitFeeItemData, SaveForm, GetFeeItemName, GetRebatePageList
+  HouseRemoveForm, HouseAllRemoveForm, OrganizeRemoveForm, RebateRemoveForm,
+  GetFormJson, GetFeeType, GetAllFeeItems, GetOrganizePageList,
+  GetUnitFeeItemData, SaveForm, GetFeeItemName, GetRebatePageList
 } from './Main.service';
 import styles from './style.less';
 import moment from 'moment';
@@ -53,6 +53,7 @@ const Modify = (props: ModifyProps) => {
   const [linkFeeDisable, setLinkFeeDisable] = useState<boolean>(true);
   //优惠政策
   const [selectRebateOrgVisible, setSelectRebateOrgVisible] = useState<boolean>(false);
+  const [editRebateVisible, setEditRebateVisible] = useState<boolean>(false);
 
   //打开抽屉时初始化
   useEffect(() => {
@@ -174,6 +175,10 @@ const Modify = (props: ModifyProps) => {
 
   const closeRebateOrgVisible = () => {
     setSelectRebateOrgVisible(false);
+  };
+
+  const closeEditRebateVisible = () => {
+    setEditRebateVisible(false);
   };
 
   const changeFeeType = (value, info?) => {
@@ -494,7 +499,7 @@ const Modify = (props: ModifyProps) => {
 
   const [orgItemId, setOrgItemId] = useState<string>('');
   const [houseItemId, setHouseItemId] = useState<string>('');
-
+  const [rebateItemId, setRebateItemId] = useState<string>('');
 
   //优惠政策
   const [rebateData, setRebateData] = useState<any[]>([]);
@@ -609,8 +614,8 @@ const Modify = (props: ModifyProps) => {
         return [
           <span key='buttons'>
             <a onClick={() => {
-              setOrgItemId(record.id);
-              setEditOrgVisible(true);
+              setRebateItemId(record.id);
+              setEditRebateVisible(true);
             }} key="modify">修改</a>
             <Divider type="vertical" key='divider' />
             <a onClick={() => {
@@ -620,7 +625,7 @@ const Modify = (props: ModifyProps) => {
                 cancelText: '取消',
                 okText: '确认',
                 onOk: () => {
-                  OrganizeRemoveForm(record.id)
+                  RebateRemoveForm(record.id)
                     .then(() => {
                       message.success('删除成功！');
                       initRebateLoadData('');
@@ -1769,15 +1774,14 @@ const Modify = (props: ModifyProps) => {
         visible={selectRebateOrgVisible}
         closeModal={closeRebateOrgVisible}
         feeId={id}
-        reload={() => initOrgLoadData(orgSearch)}
+        reload={() => initRebateLoadData(rebateSearch)}
       />
 
       <EditRebateOrginize
-        visible={editOrgVisible}
-        closeModal={closeEditOrgVisible}
-        orgItemId={orgItemId}
-        // reload={initOrgLoadData}
-        reload={() => initOrgLoadData(orgSearch)}
+        visible={editRebateVisible}
+        closeModal={closeEditRebateVisible}
+        id={rebateItemId}
+        reload={() => initRebateLoadData(rebateSearch)}
       />
 
       <AddHouseFee

@@ -172,8 +172,7 @@ const AddRebateOrganize = (props: AddRebateOrganizeProps) => {
                   </Col>
                 </Row>
                 <Form.Item label="附加说明">
-                  {getFieldDecorator('memo', {
-                    rules: [{ required: true, message: '请选择结束日期' }]
+                  {getFieldDecorator('memo', { 
                   })(
                     <TextArea rows={8} placeholder="请输入附加说明" />
                   )}

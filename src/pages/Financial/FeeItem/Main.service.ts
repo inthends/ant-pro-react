@@ -68,6 +68,11 @@ export function OrganizeRemoveForm(data): Promise<any> {
   return request.post(process.env.basePath + `/FeeItems/OrganizeRemoveForm?keyValue=${data}`, {}).then(getResult as any);
 }
 
+//删除优惠政策
+export function RebateRemoveForm(data): Promise<any> {
+  return request.post(process.env.basePath + `/FeeItems/RebateRemoveForm?keyValue=${data}`, {}).then(getResult as any);
+}
+
 //删除已设费房屋/FeeItems/
 export function HouseRemoveForm(data: any): Promise<any> {
   return request.post(process.env.basePath + `/FeeItems/HouseRemoveForm`, { data: objToFormdata(data) }).then(getResult as any);
@@ -146,4 +151,16 @@ export function GetRebateOrgId(data): Promise<any[]> {
 //保存优惠政策
 export function RebateSaveForm(data): Promise<any> {
   return request.post(process.env.basePath + `/FeeItems/RebateSaveForm`, { data: objToFormdata(data) }).then(getResult as any);
+}
+
+//加载优惠政策
+export function GetRebateFormJson(data): Promise<TreeEntity[]> {
+  return request
+    .get(process.env.basePath + `/FeeItems/GetRebateFormJson?keyValue=${data}`)
+    .then(getResult as any);
+}
+
+//编辑优惠政策
+export function RebateEditForm(data): Promise<any> {
+  return request.post(process.env.basePath + `/FeeItems/RebateEditForm`, { data: objToFormdata(data) }).then(getResult as any);
 }

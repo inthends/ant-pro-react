@@ -1,5 +1,5 @@
 //编辑税率
-import { Card, Col, Form, Input, Row, Modal, InputNumber  } from 'antd';
+import { Card, Col, Form, Input, Row, Modal, InputNumber } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { GetOrgTaxTateFormJson, OrganizeEditForm } from './Main.service';
@@ -63,11 +63,9 @@ const EditOrganize = (props: EditOrganizeProps) => {
       bodyStyle={{ background: '#f6f7fb' }}
       width='400px'
     >
-      <Card> 
-        <Form layout="vertical" hideRequiredMark>
-          <Row  >
-            <Col span={24}>
-              {/* <Form.Item label="税控项目" required>
+      <Card>
+        <Form layout="vertical" hideRequiredMark> 
+          {/* <Form.Item label="税控项目" required>
                 {getFieldDecorator('invoiceId', {
                   initialValue: infoDetail.invoiceId,
                   rules: [{ required: true, message: '请选择税控项目' }],
@@ -81,41 +79,29 @@ const EditOrganize = (props: EditOrganizeProps) => {
                 )}
               </Form.Item> */}
 
-              <Form.Item label="税控项目" required>
-                {getFieldDecorator('invoiceName', {
-                  initialValue: infoDetail.invoiceName,
-                  rules: [{ required: true, message: '请输入税控项目' }],
-                })(
-                  <Input />
-                )}
-              </Form.Item>
-
-            </Col>
-          </Row>
-
-          <Row  >
-            <Col span={24}>
-              <Form.Item label="税控项目编号" required>
-                {getFieldDecorator('invoiceCode', {
-                  initialValue: infoDetail.invoiceCode,
-                  rules: [{ required: true, message: '请输入税控项目编号' }],
-                })(
-                  <Input />
-                )}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row  >
-            <Col span={24}>
-              <Form.Item label="税率" required>
-                {getFieldDecorator('taxRate', {
-                  initialValue: infoDetail.taxRate ? infoDetail.taxRate : 0,
-                  rules: [{ required: true, message: '请输入税率' }],
-                })(<InputNumber style={{ width: '100%' }} />
-                )}
-              </Form.Item>
-            </Col>
-          </Row>
+          <Form.Item label="税控项目" required>
+            {getFieldDecorator('invoiceName', {
+              initialValue: infoDetail.invoiceName,
+              rules: [{ required: true, message: '请输入税控项目' }],
+            })(
+              <Input />
+            )}
+          </Form.Item> 
+          <Form.Item label="税控项目编号" required>
+            {getFieldDecorator('invoiceCode', {
+              initialValue: infoDetail.invoiceCode,
+              rules: [{ required: true, message: '请输入税控项目编号' }],
+            })(
+              <Input />
+            )}
+          </Form.Item> 
+          <Form.Item label="税率" required>
+            {getFieldDecorator('taxRate', {
+              initialValue: infoDetail.taxRate ? infoDetail.taxRate : 0,
+              rules: [{ required: true, message: '请输入税率' }],
+            })(<InputNumber style={{ width: '100%' }} />
+            )}
+          </Form.Item> 
         </Form>
       </Card>
     </Modal>
