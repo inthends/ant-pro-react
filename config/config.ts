@@ -7,7 +7,9 @@ import routes from './routes.config';
 import proxy from './proxy.config';
 // import theme from './theme.config';
 
-const { pwa, primaryColor } = defaultSettings;
+// const { pwa, primaryColor } = defaultSettings;
+
+const { pwa } = defaultSettings;
 
 // preview.pro.ant.design only do not use in your production ;
 // preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。

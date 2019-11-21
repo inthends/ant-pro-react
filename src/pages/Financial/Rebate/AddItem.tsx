@@ -211,10 +211,10 @@ const AddItem = (props: AddItemProps) => {
         <Form layout='inline' hideRequiredMark >
           <Row gutter={24}>
             <Col lg={12}>
-              <Form.Item label="账单起始日" required >
+              <Form.Item label="计费起始日" required >
                 {getFieldDecorator('startDate', {
                   initialValue: moment(startDate),
-                  rules: [{ required: true, message: '请选择账单起始日' }],
+                  rules: [{ required: true, message: '请选择计费起始日' }],
                 })(
                   <DatePicker onChange={(date, dateString) => selectStartDate(dateString)} />
                 )}
@@ -224,7 +224,7 @@ const AddItem = (props: AddItemProps) => {
               <Form.Item label="账单截止日" required >
                 {getFieldDecorator('endDate', {
                   initialValue: moment(endDate),
-                  rules: [{ required: true, message: '请选择账单截止日' }],
+                  rules: [{ required: true, message: '请选择计费截止日' }],
                 })(
                   <DatePicker onChange={(date, dateString) => selectEndDate(dateString)} />
                 )}

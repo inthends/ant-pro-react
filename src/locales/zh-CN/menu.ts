@@ -20,12 +20,14 @@ export default {
   'menu.account.trigger': '触发报错',
   'menu.account.logout': '退出登录',
 
-  //菜单
+  //报表
   'menu.dashboard': '数据中心',
   'menu.dashboard.analysis': '数据分析',
   'menu.dashboard.reconciliation': '对账单',
   'menu.dashboard.billdetails': '账单明细',
   'menu.dashboard.receiptdetails': '实收明细',
+  'menu.dashboard.receivabledivide': '应收权责摊销',
+  'menu.dashboard.receiveddivide': '已收权责摊销',
 
 
   'menu.resource': '资源管理',

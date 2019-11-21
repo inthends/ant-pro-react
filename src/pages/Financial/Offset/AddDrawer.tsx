@@ -261,23 +261,23 @@ const AddDrawer = (props: AddDrawerProps) => {
             </Col>
 
             <Col lg={6}>
-              <Form.Item label="账单起始日" required >
+              <Form.Item label="计费起始日" required >
                 {getFieldDecorator('beginDate', {
                   initialValue: infoDetail.beginDate != null
                     ? moment(new Date(infoDetail.beginDate))
                     : moment(new Date()),
-                  rules: [{ required: true, message: '请选择账单起始日' }],
+                  rules: [{ required: true, message: '请选择计费起始日' }],
                 })(
                   <DatePicker />
                 )}
               </Form.Item>
             </Col>  <Col lg={6}>
-              <Form.Item label="账单截止日" required >
+              <Form.Item label="计费截止日" required >
                 {getFieldDecorator('endDate', {
                   initialValue: infoDetail.endDate != null
                     ? moment(new Date(infoDetail.endDate))
                     : moment(new Date()).add(1, 'month').add(-1, 'days'),
-                  rules: [{ required: true, message: '请选择账单截止日' }],
+                  rules: [{ required: true, message: '请选择计费截止日' }],
                 })(
                   <DatePicker />
                 )}

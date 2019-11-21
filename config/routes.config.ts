@@ -89,6 +89,19 @@ export default [
             path: '/dashboard/receiptdetails',
             component: './dashboard/ReceiptDetails/ReceiptDetails',
           },  
+
+          {
+            name: 'receivabledivide',
+            path: '/dashboard/receivabledivide',
+            component: './dashboard/Receivabledivide/Receivabledivide',
+          },  
+
+          {
+            name: 'receiveddivide',
+            path: '/dashboard/receiveddivide',
+            component: './dashboard/Receiveddivide/Receiveddivide',
+          },  
+
         ],
       },
 
