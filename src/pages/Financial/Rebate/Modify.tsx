@@ -317,11 +317,9 @@ const Modify = (props: ModifyProps) => {
       width: '100px',
     },
     {
-      title: '备注',
-      width: '150px',
+      title: '备注', 
       dataIndex: 'memo',
-      key: 'memo',
-      editable: true
+      key: 'memo'
     },
   ]; //as ColumnProps<any>[];
 

@@ -6,7 +6,7 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import {
-  HouseRemoveForm, HouseAllRemoveForm, OrganizeRemoveForm, 
+  HouseRemoveForm, HouseAllRemoveForm, OrganizeRemoveForm,
   GetFormJson, GetFeeType, GetAllFeeItems, GetOrganizePageList,
   GetUnitFeeItemData, SaveForm, GetFeeItemName
 } from './Main.service';
@@ -148,6 +148,7 @@ const Modify = (props: ModifyProps) => {
           newData.endDate = newData.endDate ? newData.endDate.format('YYYY-MM-DD') : null;
         }
         SaveForm(newData).then(res => {
+          message.success('保存成功');
           reload();
           closeDrawer();
         });

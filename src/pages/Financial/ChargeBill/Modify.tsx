@@ -3,7 +3,10 @@ import { TreeEntity } from '@/model/models';
 import { Card, Select, Button, Col, DatePicker, Drawer, Form, Input, InputNumber, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetUserRoomsByRelationId, SaveDetail, GetReceivablesFeeItemTreeJson, GetRoomUsers, GetUserRooms, GetFeeItemDetail, SaveBilling, GetShowDetail } from './Main.service';
+import {
+  GetUserRoomsByRelationId, SaveDetail, GetReceivablesFeeItemTreeJson, GetRoomUsers,
+  GetUserRooms, GetFeeItemDetail, SaveTempBill, GetShowDetail
+} from './Main.service';
 import LeftTree from '../LeftTree';
 import moment from 'moment';
 import styles from './style.less';
@@ -238,7 +241,7 @@ const Modify = (props: ModifyProps) => {
             Status: 0,//0正常 1 删除
             code: id != null && id != "" ? 1 : 0
           };
-          SaveBilling(newData).then((res) => {
+          SaveTempBill(newData).then((res) => {
             close(true);
           });
         }

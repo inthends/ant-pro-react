@@ -227,10 +227,7 @@ const FeeModify = (props: FeeModifyProps) => {
                         });
                       }}>
                       {relationIds.map(item => (
-                        <Select.Option value={item.key} 
-                         
-                        
-                        >
+                        <Select.Option value={item.key}>
                           {item.title}
                         </Select.Option>
                       ))}

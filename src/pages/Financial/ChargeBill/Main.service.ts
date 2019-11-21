@@ -98,8 +98,8 @@ export function SaveDetail(data): Promise<any> {
 }
 
 //保存临时加费计费单
-export function SaveBilling(data): Promise<any> {
-  return request.post(process.env.basePath + `/BillingMain/SaveBilling`, { data: objToFormdata(data) }).then(getResult as any);
+export function SaveTempBill(data): Promise<any> {
+  return request.post(process.env.basePath + `/BillingMain/SaveTempBill`, { data: objToFormdata(data) }).then(getResult as any);
 }
 
 //拆费
@@ -151,4 +151,12 @@ export function ChargeFeeDetail(data): Promise<any> {
 //打印
 export function Print(keyValue): Promise<any> {
   return request.post(process.env.basePath + `/Receivable/Print?keyValue=${keyValue}`).then(getResult as any);
+}
+
+
+// 如果改笔费用存在优惠，则需要选中与此费项有关的全部费用，一起缴款，否则给出提示 
+export function CheckRebateFee(data): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Receivable/CheckRebateFee`, { data: objToFormdata(data) })
+    .then(getResult as any);
 }

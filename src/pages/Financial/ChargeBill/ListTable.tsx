@@ -5,7 +5,7 @@ import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import { InvalidBillForm, Charge } from './Main.service';
+import { CheckRebateFee, InvalidBillForm, Charge } from './Main.service';
 // import styles from './style.less';
 const { Option } = Select;
 
@@ -98,7 +98,7 @@ function ListTable(props: ListTableProps) {
       key: 'rmid',
       align: 'center',
       width: 80,
-      render: val => val ? <Tag color="red">是</Tag> : ''
+      render: val => val ? <Tag color="red">是</Tag> : '否'
     },
     {
       title: '应收金额',
@@ -128,28 +128,28 @@ function ListTable(props: ListTableProps) {
       title: '计费起始日期',
       dataIndex: 'beginDate',
       key: 'beginDate',
-      align:'center',
+      align: 'center',
       width: 120,
       render: val => moment(val).format('YYYY-MM-DD')
     }, {
       title: '计费终止日期',
       dataIndex: 'endDate',
       key: 'endDate',
-      align:'center',
+      align: 'center',
       width: 120,
       render: val => moment(val).format('YYYY-MM-DD')
     }, {
       title: '账单日',
       dataIndex: 'billDate',
       key: 'billDate',
-      align:'center',
+      align: 'center',
       width: 120,
       render: val => moment(val).format('YYYY-MM-DD')
     }, {
       title: '房屋全称',
       dataIndex: 'allname',
       key: 'allname',
-      align:'center',
+      align: 'center',
       width: 240
     },
 
@@ -157,14 +157,14 @@ function ListTable(props: ListTableProps) {
       title: '优惠政策',
       dataIndex: 'rebateName',
       key: 'rebateName',
-      align:'center',
+      align: 'center',
       width: 160
     },
     {
       title: '优惠期间',
       dataIndex: 'rBegin',
       key: 'rBegin',
-      align:'center',
+      align: 'center',
       width: 180,
       render: (text, record) => {
         if (record.rmid) {
@@ -219,11 +219,39 @@ function ListTable(props: ListTableProps) {
   // const [unitId, setUnitId] = useState();
   // const [customerName, setCustomerName] = useState();
 
+  const [isDisabled, setIsDisabled] = useState<boolean>(true);
+
   const onSelectChange = (selectedRowKeys, selectedRows) => {
+
+    if (selectedRowKeys.length > 0) {
+      //如果该笔费用存在优惠，则需要选中与此费项有关的全部费用，一起缴款，否则给出提示 
+      const data = {
+        mainId: selectedRows[0].rmid,
+        feeId: selectedRowKeys[0],
+        selectFeeIds: JSON.stringify(selectedRowKeys)
+      };
+      CheckRebateFee(data).then((res) => {
+        if (res.flag) {
+          //message.error('当前选中的费用还有' + res.count + '笔也是属于优惠的，请一起勾选缴费！'); 
+          // Modal.warning({
+          //   title: '提示信息',
+          //   content: '当前选中的费用包含优惠费用，还有' + res.count + '笔优惠，请一起勾选缴费！',
+          //   okText: '确定'
+          // });
+          setIsDisabled(true);
+          //收款确认不可用 
+        } else {
+          setIsDisabled(false);
+        }
+      });
+    } else {
+      setIsDisabled(true);
+    }
+
     setHasSelected(selectedRowKeys.length > 0);
-    console.log(selectedRows);
+    // console.log(selectedRows);
     setSelectedRowKeys(selectedRowKeys);
-    rowSelect(selectedRows);
+    rowSelect(selectedRows);//选中行
     //应收金额
     var sumEntity = {};
     var sumAmount = 0, sumreductionAmount = 0, sumoffsetAmount = 0, sumlastAmount = 0;
@@ -442,7 +470,7 @@ function ListTable(props: ListTableProps) {
               </Form.Item>
             </Col>
           </Row>
-          <Button type="primary" onClick={charge}>收款确认</Button>
+          <Button type="primary" disabled={isDisabled} onClick={charge}>收款确认</Button>
           <span style={{ marginLeft: 8, color: "red" }}>
             {hasSelected ? `应收金额：${sumEntity.sumAmount} ，
             减免金额：${sumEntity.sumreductionAmount}，
