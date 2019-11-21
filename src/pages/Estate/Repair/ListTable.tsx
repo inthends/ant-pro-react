@@ -120,8 +120,7 @@ function ListTable(props: ListTableProps) {
       align: 'center',
       width: 95,
       fixed: 'right',
-      render: (text, record) => {
-
+      render: (text, record) => { 
         if (record.status != 5 && record.status != 8) {
           return [
             // <Button

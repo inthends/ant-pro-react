@@ -45,6 +45,7 @@ export default {
   'menu.financial.billnotice': '通知单',
   'menu.financial.billingmain': '周期费计算',
   'menu.financial.payment': '付款管理',
+  'menu.financial.rebate': '优惠政策',
 
   'menu.estate': '物业管理',
   'menu.estate.servicedesk': '服务总台',

@@ -10,7 +10,7 @@ import { GetReceivablesTree } from './Main.service';
 import moment from 'moment';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 
-interface AddReductionItemProps {
+interface AddItemProps {
   visible: boolean;
   getReducetionItem(data?): void;
   closeModal(): void;
@@ -18,7 +18,7 @@ interface AddReductionItemProps {
   treeData: any[];
 }
 
-const AddReductionItem = (props: AddReductionItemProps) => {
+const AddItem = (props: AddItemProps) => {
   const { form, visible, getReducetionItem, closeModal, treeData } = props;
   const { getFieldDecorator } = form;
   const [feetreeData, setFeeTreeData] = useState<TreeEntity[]>([]);
@@ -56,8 +56,7 @@ const AddReductionItem = (props: AddReductionItemProps) => {
 
   const onOk = () => {
     form.validateFields((errors, values) => {
-      if (!errors) {
-
+      if (!errors) { 
         //验证房屋和费项
         if (unitData.length == 0) {
           message.warning('请选择房屋！');
@@ -74,10 +73,8 @@ const AddReductionItem = (props: AddReductionItemProps) => {
           // units: '["' + unitData + '"]', 
           units: JSON.stringify(unitData),
           feeitemid: feeItemId,
-          begin: moment(startDate).format('YYYY-MM-DD'),
-          end: moment(endDate).format('YYYY-MM-DD'),
-          // Rebate: 1,
-          // ReductionAmount: 1
+          beginDate: moment(startDate).format('YYYY-MM-DD'),
+          endDate: moment(endDate).format('YYYY-MM-DD')
         };
         getReducetionItem(data);
         setLoading(false);
@@ -201,7 +198,7 @@ const AddReductionItem = (props: AddReductionItemProps) => {
 
   return (
     <Modal
-      title="新增减免费项"
+      title="新增优惠费项"
       visible={visible}
       okText="确认"
       cancelText="取消"
@@ -274,4 +271,4 @@ const AddReductionItem = (props: AddReductionItemProps) => {
 };
 
 //export default AddReductionItem; 
-export default Form.create<AddReductionItemProps>()(AddReductionItem);
+export default Form.create<AddItemProps>()(AddItem);

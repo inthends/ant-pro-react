@@ -112,9 +112,9 @@ export function TransferBilling(data): Promise<any> {
   return request.post(process.env.basePath + `/BillingMain/TransferBilling`, { data: objToFormdata(data) }).then(getResult as any);
 }
 
-//删除计费单
-export function RemoveForm(keyValue): Promise<any> {
-  return request.post(process.env.basePath + `/BillingMain/RemoveForm?keyValue=${keyValue}`).then(getResult as any);
+//作废计费单
+export function InvalidBillForm(keyValue): Promise<any> {
+  return request.post(process.env.basePath + `/BillingMain/InvalidForm?keyValue=${keyValue}`).then(getResult as any);
 }
 
 //作废收款单/

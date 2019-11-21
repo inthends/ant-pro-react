@@ -1,11 +1,11 @@
 //未收列表
 import Page from '@/components/Common/Page';
-import { Menu, Dropdown, Icon, Divider, InputNumber, Input, Select, Col, Row, Form, DatePicker, Card, Button, message, Table, Modal } from 'antd';
+import { Tag, Menu, Dropdown, Icon, Divider, InputNumber, Input, Select, Col, Row, Form, DatePicker, Card, Button, message, Table, Modal } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import { RemoveForm, Charge } from './Main.service';
+import { InvalidBillForm, Charge } from './Main.service';
 // import styles from './style.less';
 const { Option } = Select;
 
@@ -26,7 +26,7 @@ interface ListTableProps {
 };
 
 function ListTable(props: ListTableProps) {
-  const { form, onchange, loading, pagination, data, modify, reload,rowSelect, organizeId, customerName, showSplit, showTrans, showDetail } = props;
+  const { form, onchange, loading, pagination, data, modify, reload, rowSelect, organizeId, customerName, showSplit, showTrans, showDetail } = props;
   const { getFieldDecorator } = form;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
@@ -40,16 +40,16 @@ function ListTable(props: ListTableProps) {
     form.setFieldsValue({ payAmountC: 0 });
   }, [data])
 
-  const doDelete = record => {
+  const doInvalid = record => {
     Modal.confirm({
       title: '请确认',
-      content: `您是否要删除${record.feeName}？`,
+      content: `您是否要作废${record.feeName}？`,
       okText: '确认',
       cancelText: '取消',
       onOk: () => {
         //console.log(record);
-        RemoveForm(record.billId).then(() => {
-          message.success('删除成功！');
+        InvalidBillForm(record.billId).then(() => {
+          message.success('作废成功');
           reload();
         });
       },
@@ -93,6 +93,14 @@ function ListTable(props: ListTableProps) {
       width: 140,
     },
     {
+      title: '是否优惠',
+      dataIndex: 'rmid',
+      key: 'rmid',
+      align: 'center',
+      width: 80,
+      render: val => val ? <Tag color="red">是</Tag> : ''
+    },
+    {
       title: '应收金额',
       dataIndex: 'amount',
       key: 'amount',
@@ -120,26 +128,54 @@ function ListTable(props: ListTableProps) {
       title: '计费起始日期',
       dataIndex: 'beginDate',
       key: 'beginDate',
+      align:'center',
       width: 120,
       render: val => moment(val).format('YYYY-MM-DD')
     }, {
       title: '计费终止日期',
       dataIndex: 'endDate',
       key: 'endDate',
+      align:'center',
       width: 120,
       render: val => moment(val).format('YYYY-MM-DD')
     }, {
       title: '账单日',
       dataIndex: 'billDate',
       key: 'billDate',
+      align:'center',
       width: 120,
       render: val => moment(val).format('YYYY-MM-DD')
     }, {
       title: '房屋全称',
       dataIndex: 'allname',
       key: 'allname',
+      align:'center',
       width: 240
-    }, {
+    },
+
+    {
+      title: '优惠政策',
+      dataIndex: 'rebateName',
+      key: 'rebateName',
+      align:'center',
+      width: 160
+    },
+    {
+      title: '优惠期间',
+      dataIndex: 'rBegin',
+      key: 'rBegin',
+      align:'center',
+      width: 180,
+      render: (text, record) => {
+        if (record.rmid) {
+          return moment(record.rBegin).format('YYYY-MM-DD') + '至' + moment(record.rEnd).format('YYYY-MM-DD');
+        } else {
+          return '';
+        }
+      }
+    },
+
+    {
       title: '备注',
       dataIndex: 'memo',
       key: 'memo',
@@ -168,7 +204,7 @@ function ListTable(props: ListTableProps) {
           <span>
             <a onClick={() => modify(record.id)} key="modify">修改</a>
             <Divider type="vertical" />
-            <a onClick={() => doDelete(record)} key="delete">删除</a>
+            <a onClick={() => doInvalid(record)} key="invalid">作废</a>
             <Divider type="vertical" />
             <MoreBtn key="more" item={record} />
           </span>
@@ -408,7 +444,10 @@ function ListTable(props: ListTableProps) {
           </Row>
           <Button type="primary" onClick={charge}>收款确认</Button>
           <span style={{ marginLeft: 8, color: "red" }}>
-            {hasSelected ? `应收金额：${sumEntity.sumAmount} ，减免金额：${sumEntity.sumreductionAmount}，冲抵金额：${sumEntity.sumoffsetAmount}，未收金额：${sumEntity.sumlastAmount}` : ''}
+            {hasSelected ? `应收金额：${sumEntity.sumAmount} ，
+            减免金额：${sumEntity.sumreductionAmount}，
+            冲抵金额：${sumEntity.sumoffsetAmount}，
+            未收金额：${sumEntity.sumlastAmount}` : ''}
           </span>
         </Card>
       </Form>
@@ -419,7 +458,7 @@ function ListTable(props: ListTableProps) {
         columns={columns}
         rowKey={record => record.id}
         pagination={pagination}
-        scroll={{ y: 500, x: 1500 }}
+        scroll={{ y: 500, x: 1800 }}
         onChange={(pagination: PaginationConfig, filters, sorter) =>
           changePage(pagination, filters, sorter)
         }

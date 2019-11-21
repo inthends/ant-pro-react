@@ -1,4 +1,4 @@
-//编辑优惠政策
+//编辑优惠政策，废弃
 import { Select, Card, Col, Form, DatePicker, Row, Modal, Input } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';

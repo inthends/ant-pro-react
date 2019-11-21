@@ -6,9 +6,9 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import {
-  HouseRemoveForm, HouseAllRemoveForm, OrganizeRemoveForm, RebateRemoveForm,
+  HouseRemoveForm, HouseAllRemoveForm, OrganizeRemoveForm, 
   GetFormJson, GetFeeType, GetAllFeeItems, GetOrganizePageList,
-  GetUnitFeeItemData, SaveForm, GetFeeItemName, GetRebatePageList
+  GetUnitFeeItemData, SaveForm, GetFeeItemName
 } from './Main.service';
 import styles from './style.less';
 import moment from 'moment';
@@ -18,8 +18,8 @@ import EditOrginize from './EditOrganize';
 import AddHouseFee from './AddHouseFee';
 import EditHouseFee from './EditHouseFee';
 //优惠政策
-import AddRebateOrginize from './AddRebateOrganize';
-import EditRebateOrginize from './EditRebateOrganize';
+// import AddRebateOrginize from './AddRebateOrganize';
+// import EditRebateOrginize from './EditRebateOrganize';
 
 const Option = Select.Option;
 const { TextArea } = Input;
@@ -52,8 +52,8 @@ const Modify = (props: ModifyProps) => {
   const [editHouseVisible, setEditHouseVisible] = useState<boolean>(false);
   const [linkFeeDisable, setLinkFeeDisable] = useState<boolean>(true);
   //优惠政策
-  const [selectRebateOrgVisible, setSelectRebateOrgVisible] = useState<boolean>(false);
-  const [editRebateVisible, setEditRebateVisible] = useState<boolean>(false);
+  // const [selectRebateOrgVisible, setSelectRebateOrgVisible] = useState<boolean>(false);
+  // const [editRebateVisible, setEditRebateVisible] = useState<boolean>(false);
 
   //打开抽屉时初始化
   useEffect(() => {
@@ -107,7 +107,7 @@ const Modify = (props: ModifyProps) => {
         //加载所属机构
         initOrgLoadData('');
         //加载优惠政策
-        initRebateLoadData('');
+        // initRebateLoadData('');
         //加载房屋费项
         initHouseLoadData('');
         //}
@@ -173,13 +173,13 @@ const Modify = (props: ModifyProps) => {
     setEditOrgVisible(false);
   };
 
-  const closeRebateOrgVisible = () => {
-    setSelectRebateOrgVisible(false);
-  };
+  // const closeRebateOrgVisible = () => {
+  //   setSelectRebateOrgVisible(false);
+  // };
 
-  const closeEditRebateVisible = () => {
-    setEditRebateVisible(false);
-  };
+  // const closeEditRebateVisible = () => {
+  //   setEditRebateVisible(false);
+  // };
 
   const changeFeeType = (value, info?) => {
     var newvalue = value == "收款费项" ? "ReceivablesItem" : "PaymentItem";
@@ -499,148 +499,148 @@ const Modify = (props: ModifyProps) => {
 
   const [orgItemId, setOrgItemId] = useState<string>('');
   const [houseItemId, setHouseItemId] = useState<string>('');
-  const [rebateItemId, setRebateItemId] = useState<string>('');
+  // const [rebateItemId, setRebateItemId] = useState<string>('');
 
   //优惠政策
-  const [rebateData, setRebateData] = useState<any[]>([]);
-  const [rebateSearch, setRebateSearch] = useState<string>();
-  const [rebateLoading, setRebateLoading] = useState<boolean>(false);
-  const [rebatePagination, setRebatePagination] = useState<PaginationConfig>(new DefaultPagination());
-  const rebateLoadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
-    setRebateSearch(search);
-    const { current: pageIndex, pageSize, total } = paginationConfig || {
-      current: 1,
-      pageSize: rebatePagination.pageSize,
-      total: 0,
-    };
-    let searchCondition: any = {
-      pageIndex,
-      pageSize,
-      total,
-      queryJson: { keyword: search, feeItemId: id },
-    };
+  // const [rebateData, setRebateData] = useState<any[]>([]);
+  // const [rebateSearch, setRebateSearch] = useState<string>();
+  // const [rebateLoading, setRebateLoading] = useState<boolean>(false);
+  // const [rebatePagination, setRebatePagination] = useState<PaginationConfig>(new DefaultPagination());
+  // const rebateLoadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
+  //   setRebateSearch(search);
+  //   const { current: pageIndex, pageSize, total } = paginationConfig || {
+  //     current: 1,
+  //     pageSize: rebatePagination.pageSize,
+  //     total: 0,
+  //   };
+  //   let searchCondition: any = {
+  //     pageIndex,
+  //     pageSize,
+  //     total,
+  //     queryJson: { keyword: search, feeItemId: id },
+  //   };
 
-    if (sorter) {
-      let { field, order } = sorter;
-      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'id';
-    }
+  //   if (sorter) {
+  //     let { field, order } = sorter;
+  //     searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+  //     searchCondition.sidx = field ? field : 'id';
+  //   }
 
-    return rebateLoad(searchCondition).then(res => {
-      return res;
-    });
-  };
+  //   return rebateLoad(searchCondition).then(res => {
+  //     return res;
+  //   });
+  // };
 
-  const rebateLoad = data => {
-    setRebateLoading(true);
-    data.sidx = data.sidx || 'id';
-    data.sord = data.sord || 'asc';
-    return GetRebatePageList(data).then(res => {
-      const { pageIndex: current, total, pageSize } = res;
-      setRebatePagination(pagesetting => {
-        return {
-          ...pagesetting,
-          current,
-          total,
-          pageSize,
-        };
-      });
-      setRebateData(res.data);
-      setRebateLoading(false);
-      return res;
-    }).catch(() => {
-      setRebateLoading(false);
-    });
-  };
+  // const rebateLoad = data => {
+  //   setRebateLoading(true);
+  //   data.sidx = data.sidx || 'id';
+  //   data.sord = data.sord || 'asc';
+  //   return GetRebatePageList(data).then(res => {
+  //     const { pageIndex: current, total, pageSize } = res;
+  //     setRebatePagination(pagesetting => {
+  //       return {
+  //         ...pagesetting,
+  //         current,
+  //         total,
+  //         pageSize,
+  //       };
+  //     });
+  //     setRebateData(res.data);
+  //     setRebateLoading(false);
+  //     return res;
+  //   }).catch(() => {
+  //     setRebateLoading(false);
+  //   });
+  // };
 
-  const initRebateLoadData = (search) => {
-    setRebateSearch(search);
-    const queryJson = { feeItemId: id };
-    const sidx = 'id';
-    const sord = 'asc';
-    const { current: pageIndex, pageSize, total } = rebatePagination;
-    return rebateLoad({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
-      return res;
-    });
-  };
+  // const initRebateLoadData = (search) => {
+  //   setRebateSearch(search);
+  //   const queryJson = { feeItemId: id };
+  //   const sidx = 'id';
+  //   const sord = 'asc';
+  //   const { current: pageIndex, pageSize, total } = rebatePagination;
+  //   return rebateLoad({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
+  //     return res;
+  //   });
+  // };
 
-  //优惠政策列表
-  const rebatecolumns = [
-    {
-      title: '管理处',
-      dataIndex: 'orgName',
-      key: 'orgName',
-      width: 120,
-      sorter: true,
-    },
-    {
-      title: '房产名称',
-      dataIndex: 'name',
-      key: 'name',
-      width: 100,
-      sorter: true,
-    },
-    {
-      title: '优惠政策',
-      dataIndex: 'rebateName',
-      key: 'rebateName',
-      width: 120,
-      sorter: true,
-    },
-    {
-      title: '起始日期',
-      dataIndex: 'beginDate',
-      key: 'beginDate',
-      width: 80,
-      sorter: true,
-      render: val => moment(val).format('YYYY-MM-DD')
-    },
-    {
-      title: '结束日期',
-      dataIndex: 'endDate',
-      key: 'endDate',
-      width: 80,
-      sorter: true,
-      render: val => moment(val).format('YYYY-MM-DD')
-    },
+  // //优惠政策列表
+  // const rebatecolumns = [
+  //   {
+  //     title: '管理处',
+  //     dataIndex: 'orgName',
+  //     key: 'orgName',
+  //     width: 120,
+  //     sorter: true,
+  //   },
+  //   {
+  //     title: '房产名称',
+  //     dataIndex: 'name',
+  //     key: 'name',
+  //     width: 100,
+  //     sorter: true,
+  //   },
+  //   {
+  //     title: '优惠政策',
+  //     dataIndex: 'rebateName',
+  //     key: 'rebateName',
+  //     width: 120,
+  //     sorter: true,
+  //   },
+  //   {
+  //     title: '起始日期',
+  //     dataIndex: 'beginDate',
+  //     key: 'beginDate',
+  //     width: 80,
+  //     sorter: true,
+  //     render: val => moment(val).format('YYYY-MM-DD')
+  //   },
+  //   {
+  //     title: '结束日期',
+  //     dataIndex: 'endDate',
+  //     key: 'endDate',
+  //     width: 80,
+  //     sorter: true,
+  //     render: val => moment(val).format('YYYY-MM-DD')
+  //   },
 
-    {
-      title: '操作',
-      dataIndex: 'operation',
-      align: 'center',
-      key: 'operation',
-      width: 80,
-      render: (text, record) => {
-        return [
-          <span key='buttons'>
-            <a onClick={() => {
-              setRebateItemId(record.id);
-              setEditRebateVisible(true);
-            }} key="modify">修改</a>
-            <Divider type="vertical" key='divider' />
-            <a onClick={() => {
-              Modal.confirm({
-                title: '请确认',
-                content: `您是否要删除吗？`,
-                cancelText: '取消',
-                okText: '确认',
-                onOk: () => {
-                  RebateRemoveForm(record.id)
-                    .then(() => {
-                      message.success('删除成功！');
-                      initRebateLoadData('');
-                    })
-                    .catch(e => {
-                      message.error('删除失败！');
-                    });
-                },
-              });
-            }} key="delete">删除</a>
-          </span>
-        ];
-      },
-    },
-  ] as ColumnProps<any>[];
+  //   {
+  //     title: '操作',
+  //     dataIndex: 'operation',
+  //     align: 'center',
+  //     key: 'operation',
+  //     width: 80,
+  //     render: (text, record) => {
+  //       return [
+  //         <span key='buttons'>
+  //           <a onClick={() => {
+  //             setRebateItemId(record.id);
+  //             setEditRebateVisible(true);
+  //           }} key="modify">修改</a>
+  //           <Divider type="vertical" key='divider' />
+  //           <a onClick={() => {
+  //             Modal.confirm({
+  //               title: '请确认',
+  //               content: `您是否要删除吗？`,
+  //               cancelText: '取消',
+  //               okText: '确认',
+  //               onOk: () => {
+  //                 RebateRemoveForm(record.id)
+  //                   .then(() => {
+  //                     message.success('删除成功！');
+  //                     initRebateLoadData('');
+  //                   })
+  //                   .catch(e => {
+  //                     message.error('删除失败！');
+  //                   });
+  //               },
+  //             });
+  //           }} key="delete">删除</a>
+  //         </span>
+  //       ];
+  //     },
+  //   },
+  // ] as ColumnProps<any>[];
 
   const [showFeeField, setShowFeeField] = useState<boolean>(false);
   const [accFixedDisabled, setAccFixedDisabled] = useState<boolean>(true);
@@ -1611,7 +1611,7 @@ const Modify = (props: ModifyProps) => {
               : null
           }
 
-          {
+          {/* {
             id ?
               <TabPane tab="优惠政策" key="4" style={{ marginBottom: '20px' }}>
                 <div style={{ marginBottom: '5px', padding: '3px 2px' }}>
@@ -1627,13 +1627,7 @@ const Modify = (props: ModifyProps) => {
                   >
                     <Icon type="plus" />
                     新增
-                </Button>
-                  {/* <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
-                  onClick={() => {}}
-                >
-                  <Icon type="plus" />
-                  刷新
-                </Button> */}
+                </Button> 
                 </div>
                 <Table
                   key='rebatelist'
@@ -1652,7 +1646,7 @@ const Modify = (props: ModifyProps) => {
                 />
               </TabPane>
               : null
-          }
+          } */}
 
           {
             id && infoDetail.feeKind == '收款费项' ?
@@ -1770,7 +1764,7 @@ const Modify = (props: ModifyProps) => {
         reload={() => initOrgLoadData(orgSearch)}
       />
 
-      <AddRebateOrginize
+      {/* <AddRebateOrginize
         visible={selectRebateOrgVisible}
         closeModal={closeRebateOrgVisible}
         feeId={id}
@@ -1782,7 +1776,7 @@ const Modify = (props: ModifyProps) => {
         closeModal={closeEditRebateVisible}
         id={rebateItemId}
         reload={() => initRebateLoadData(rebateSearch)}
-      />
+      /> */}
 
       <AddHouseFee
         treeData={treeData}

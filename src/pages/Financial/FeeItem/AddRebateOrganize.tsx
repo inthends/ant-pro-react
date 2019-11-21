@@ -1,4 +1,4 @@
-//选择优惠政策机构
+//选择优惠政策机构，废弃
 import { Input, DatePicker, Select, Card, Spin, Col, Form, Row, Modal, message, Tree } from 'antd';
 import Page from '@/components/Common/Page';
 // import { TreeEntity } from '@/model/models';

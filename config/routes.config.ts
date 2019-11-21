@@ -186,6 +186,11 @@ export default [
             path: '/financial/reduction',
             component: './Financial/Reduction/Main',
           },
+           {
+            name: 'rebate',
+            path: '/financial/rebate',
+            component: './Financial/Rebate/Main',
+          },
         ],
       },
       {

@@ -20,30 +20,30 @@ export function GetReceivablesTree(): Promise<TreeEntity[]> {
 
 // 查询明细列表
 export function GetDetailPageListJson(data): Promise<any> {
-  return request.post(process.env.basePath + `/Reduction/GetPageDetailListJson`, {data:objToFormdata(data)}).then(getResult as any);
+  return request.post(process.env.basePath + `/Rebate/GetPageDetailListJson`, {data:objToFormdata(data)}).then(getResult as any);
 }
 
 // 根据id查询明细列表
 export function GetListByID(data): Promise<any> {
-  return request.post(process.env.basePath + `/Reduction/GetListByID`, {data:objToFormdata(data)}).then(getResult as any);
+  return request.post(process.env.basePath + `/Rebate/GetListByID`, {data:objToFormdata(data)}).then(getResult as any);
 }
 
 // 查询列表
 export function GetPageListJson(data): Promise<any> {
-  return request.post(process.env.basePath + `/Reduction/GetPageListJson`, {data:objToFormdata(data)}).then(getResult as any);
+  return request.post(process.env.basePath + `/Rebate/GetPageListJson`, {data:objToFormdata(data)}).then(getResult as any);
 }
 
 //获取实体
-export function GetFormJson(keyValue): Promise<CwReductionmain> {
+export function GetFormJson(keyValue): Promise<any> {
   return request
-    .get(process.env.basePath + `/Reduction/GetFormJson?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/Rebate/GetFormJson?keyValue=${keyValue}`)
     .then(getResult as any);
 }
 
 //获取减免费项类型
 export function GetReductionItem(): Promise<TreeEntity[]> {
   return request
-    .get(process.env.basePath + `/Reduction/SelectReduction`)
+    .get(process.env.basePath + `/Rebate/SelectReduction`)
     .then(getResult as any);
 }
 
@@ -61,43 +61,43 @@ export function GetUseInfo(userid): Promise<any> {
     .then(getResult as any);
 }
 
-//计算房屋减免后的应收费项数据
+//获取需要优惠的费用
 export function GetUnitBillDetail(data): Promise<any> {
   return request
-    .post(process.env.basePath + `/Reduction/GetUnitBillDetail`, {data:objToFormdata(data)})
+    .post(process.env.basePath + `/Rebate/GetUnitBillDetail`, {data:objToFormdata(data)})
     .then(getResult as any);
 }
 
 //审核减免单
 export function Audit(data): Promise<any> {
   return request
-    .post(process.env.basePath + `/Reduction/Audit`, {data:objToFormdata(data)})
+    .post(process.env.basePath + `/Rebate/Audit`, {data:objToFormdata(data)})
     .then(getResult as any);
 }
 
 //作废减免单
 export function InvalidForm(keyValue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Reduction/InvalidForm?keyValue=${keyValue}`)
+    .post(process.env.basePath + `/Rebate/InvalidForm?keyValue=${keyValue}`)
     .then(getResult as any);
 }
 //保存减免单
 export function SaveForm(data): Promise<any> {
   return request
-    .post(process.env.basePath + `/Reduction/SaveForm`, {data:objToFormdata(data)})
+    .post(process.env.basePath + `/Rebate/SaveForm`, {data:objToFormdata(data)})
     .then(getResult as any);
 }
 
-//验证是否可以取消审核
+//验证计费单是否可以取消审核
 export function CheckBill(keyValue): Promise<any[]> {
   return request
-    .get(process.env.basePath + `/Reduction/CheckBill?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/Rebate/CheckBill?keyValue=${keyValue}`)
     .then(getResult as any);
 }
 
 //删除减免单里面的全部房屋
 export function RemoveFormUnitAll(keyValue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Reduction/RemoveFormUnitAll?keyValue=${keyValue}`)
+    .post(process.env.basePath + `/Rebate/RemoveFormUnitAll?keyValue=${keyValue}`)
     .then(getResult as any);
 }

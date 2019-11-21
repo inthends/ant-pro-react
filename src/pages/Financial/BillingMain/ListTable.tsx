@@ -65,7 +65,7 @@ function ListTable(props: ListTableProps) {
       title: '单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 100,
+      width: 130,
       sorter: true
     },
     {
@@ -94,35 +94,35 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'billSource',
       key: 'billSource',
       width: 100,
+      align:'center',
       sorter: true,
     },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      align: 'center',
-      width: 60,
-      render: val => val == 0 ? '正常' : '作废'
-    },
+    // {
+    //   title: '状态',
+    //   dataIndex: 'status',
+    //   key: 'status', 
+    //   align:'center',
+    //   width: 60,
+    //   render: val => val == 0 ? '正常' : '作废'
+    // },
     {
       title: '审核状态',
       dataIndex: 'ifVerify',
       key: 'ifVerify',
+      align:'center',
       width: 100,
       render: val => val ? '已审核' : '未审核'
     },
     {
       title: '审核人',
       dataIndex: 'verifyPerson',
-      key: 'verifyPerson',
-      sorter: true,
+      key: 'verifyPerson', 
       width: 80
     },
     {
       title: '审核日期',
       dataIndex: 'verifyDate',
-      key: 'verifyDate',
-      sorter: true,
+      key: 'verifyDate', 
       width: 100,
       render: val => {
         if (val == null) {
@@ -136,7 +136,7 @@ function ListTable(props: ListTableProps) {
       title: '审核情况',
       dataIndex: 'verifyMemo',
       key: 'verifyMemo',
-      width: 160,
+      width: 120,
     },
     {
       title: '备注',

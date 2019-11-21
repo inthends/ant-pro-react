@@ -215,7 +215,7 @@ const Verify = (props: VerifyProps) => {
       className="offsetVerify"
       title={title}
       placement="right"
-      width={880}
+      width={700}
       onClose={close}
       visible={vertifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
@@ -263,7 +263,7 @@ const Verify = (props: VerifyProps) => {
                   {getFieldDecorator('verifyMemo', {
                     initialValue: infoDetail.verifyMemo
                   })(
-                    <TextArea  rows={3} placeholder="请输入审核情况" />
+                    <TextArea  rows={4} placeholder="请输入审核情况" />
                   )}
                 </Form.Item>
               </Col>
