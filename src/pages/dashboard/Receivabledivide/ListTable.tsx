@@ -1,4 +1,4 @@
-//账单明细
+//应收权责摊销明细
 import Page from '@/components/Common/Page';
 import { Form, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
@@ -19,135 +19,127 @@ function ListTable(props: ListTableProps) {
 
   const columns = [
     {
-      title: '管理处',
-      dataIndex: '管理处',
-      key: '管理处',
+      title: '房屋全称',
+      dataIndex: 'allName',
+      key: 'allName',
+      width: 180,
+    },
+    {
+      title: '住户',
+      dataIndex: 'customerName',
+      key: 'customerName',
+      width: 100,
+    },
+    {
+      title: '计费单号',
+      dataIndex: 'billCode',
+      key: 'billCode',
       width: 120,
     },
     {
-      title: '楼盘',
-      dataIndex: '楼盘',
-      key: '楼盘',
-      width: 100,
-    },
-    {
-      title: '楼栋',
-      dataIndex: '楼栋',
-      key: '楼栋',
+      title: '单据日期',
+      dataIndex: 'bBillDate',
+      key: 'bBillDate',
       width: 80,
+      render: val => moment(val).format('YYYY-MM-DD')
     },
     {
-      title: '房屋编号',
-      dataIndex: '房屋编号',
-      key: '房屋编号',
-      width: 140,
-    },
-    {
-      title: '房屋名称',
-      dataIndex: '房屋名称',
-      key: '房屋名称',
-      width: 80,
-    },
-    {
-      title: '客户名称',
-      dataIndex: '客户名称',
-      key: '客户名称',
-      width: 100,
-    },
-    {
-      title: '是否审核',
-      dataIndex: '是否审核',
-      key: '是否审核',
+      title: '计费来源',
+      dataIndex: 'billSource',
+      key: 'billSource',
       width: 80,
     },
     {
       title: '收费项目',
-      dataIndex: '收费项目',
-      key: '收费项目',
-      width: 100,
-      sorter: true
+      dataIndex: 'feeName',
+      key: 'feeName',
+      width: 100, 
     },
 
     {
-      title: '期间',
-      dataIndex: '计费起始日期',
-      key: '计费起始日期',
+      title: '拆分前计费期间',
+      dataIndex: 'bBeginDate',
+      key: 'bBeginDate',
       width: 200,
       align: 'center',
       render: (text, record) => {
         if (text != null) {
-          return moment(text).format('YYYY-MM-DD') + '至' + moment(record['计费终止日期']).format('YYYY-MM-DD');
+          return moment(text).format('YYYY-MM-DD') + '至' + moment(record.bEndDate).format('YYYY-MM-DD');
         }
         else
           return '';
       },
     },
     {
-      title: '应收',
-      dataIndex: '应收',
-      key: '应收',
-      width: 100,
-      sorter: true
-    }, 
+      title: '数量',
+      dataIndex: 'quantity',
+      key: 'quantity',
+      width: 80,
+    },
     {
-      title: '减免',
-      dataIndex: '减免',
-      key: '减免',
+      title: '单价',
+      dataIndex: 'price',
+      key: 'price',
+      width: 80,
+    },
+    {
+      title: '金额',
+      dataIndex: 'amount',
+      key: 'amount',
       width: 100,
       sorter: true
+    },
+    {
+      title: '折前月度应收',
+      dataIndex: 'preDiscountAmount',
+      key: 'preDiscountAmount',
+      width: 100,
     },
 
     {
-      title: '冲抵',
-      dataIndex: '冲抵',
-      key: '冲抵',
-      width: 100,
-      sorter: true
+      title: '折后月度应收(含税)',
+      dataIndex: 'aftDiscountAmount',
+      key: 'aftDiscountAmount',
+      width: 120,
     },
 
     {
-      title: '已收',
-      dataIndex: '已收',
-      key: '已收',
-      width: 100,
-      sorter: true
-    }, 
-    {
-      title: '未收',
-      dataIndex: '未收',
-      key: '未收',
-      width: 100,
-      sorter: true
-    }, 
-    {
-      title: '账单日期',
-      dataIndex: '账单日期',
-      key: '账单日期',
-      width: 100,
-      sorter: true,
-      render: val => moment(val).format('YYYY-MM-DD') 
+      title: '折后月度应收(税后)',
+      dataIndex: 'aftTaxAmount',
+      key: 'aftTaxAmount',
+      width: 120,
     },
+
     {
-      title: '收款截止日期',
-      dataIndex: '收款截止日期',
-      key: '收款截止日期',
-      width: 130,
-      sorter: true,
-      render: val => moment(val).format('YYYY-MM-DD') 
+      title: '折后月度已收合计(含税)',
+      dataIndex: 'payAmount',
+      key: 'payAmount',
+      width: 140,
     },
+
     {
-      title: '是否逾期',
-      dataIndex: '是否逾期',
-      key: '是否逾期',
-      width: 100,
-      sorter: true
+      title: '折后月度已收合计(税后)',
+      dataIndex: 'aftTaxPayAmount',
+      key: 'aftTaxPayAmount',
+      width: 140,
     },
+
     {
-      title: '备注',
-      dataIndex: '备注',
-      key: '备注',
+      title: '计费起始日期',
+      dataIndex: 'beginDate',
+      key: 'beginDate',
       width: 100,
+      render: val => moment(val).format('YYYY-MM-DD')
+    },
+
+    {
+      title: '计费终止日期',
+      dataIndex: 'endDate',
+      key: 'endDate',
+      width: 100,
+      render: val => moment(val).format('YYYY-MM-DD')
     }
+
   ] as ColumnProps<any>[];
 
   return (
@@ -157,9 +149,9 @@ function ListTable(props: ListTableProps) {
         size="middle"
         columns={columns}
         dataSource={data}
-        rowKey="feeId"
+        rowKey="id"
         pagination={pagination}
-        scroll={{ y: 500, x: 1900 }}
+        scroll={{ y: 500, x: 2300 }}
         loading={loading}
         onChange={onchange}
       />

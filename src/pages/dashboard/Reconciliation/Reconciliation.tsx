@@ -38,7 +38,11 @@ function Reconciliation() {
       pageIndex,
       pageSize,
       total,
-      queryJson: { keyword: search }
+      queryJson: {
+        keyword: search,
+        TreeTypeId: organize.id,
+        TreeType: organize.type,
+      }
     };
 
     if (sorter) {
@@ -95,9 +99,9 @@ function Reconciliation() {
           // TreeTypeId: org.id,
           // TreeType: org.type,
         };
-        ExportBillDetails(queryJson).then(res => { 
+        ExportBillDetails(queryJson).then(res => {
           //window.open(res);  
-          window.location.href = res; 
+          window.location.href = res;
         });
       },
     });
@@ -111,8 +115,8 @@ function Reconciliation() {
           selectTree(id, item, '');
         }}
       />
-      <Content style={{ paddingLeft: '18px' }}> 
-        <div style={{ marginBottom: '20px', padding: '3px 2px' }} > 
+      <Content style={{ paddingLeft: '18px' }}>
+        <div style={{ marginBottom: '20px', padding: '3px 2px' }} >
           <Search
             className="search-input"
             placeholder="请输入要查询的关键词"
@@ -128,7 +132,7 @@ function Reconciliation() {
           </Button>
 
           <Button type="primary" style={{ float: 'right' }}
-            onClick={() => { doExport('','') }}
+            onClick={() => { doExport('', '') }}
           >
             <Icon type="export" />
             导出

@@ -157,7 +157,7 @@ function ListTable(props: ListTableProps) {
         size="middle"
         columns={columns}
         dataSource={data}
-        rowKey="feeId"
+        rowKey="id"
         pagination={pagination}
         scroll={{ y: 500, x: 1900 }}
         loading={loading}

@@ -54,7 +54,7 @@ export default [
       {
         name: 'dashboard',
         path: '/dashboard',
-        // component: './dashboard/dashboard',
+        component: './dashboard/dashboard',
         icon: 'dashboard',
         routes: [
           {

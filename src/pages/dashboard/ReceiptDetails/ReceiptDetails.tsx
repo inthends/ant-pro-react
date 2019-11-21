@@ -38,20 +38,24 @@ function ReceiptDetails() {
       pageIndex,
       pageSize,
       total,
-      queryJson: { keyword: search }
+      queryJson: {
+        keyword: search,
+        TreeTypeId: organize.id,
+        TreeType: organize.type,
+      }
     };
 
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'meterkind';
+      searchCondition.sidx = field ? field : 'id';
     }
     return load(searchCondition);
   };
 
   const load = data => {
     setLoading(true);
-    data.sidx = data.sidx || 'meterkind';
+    data.sidx = data.sidx || 'id';
     data.sord = data.sord || 'asc';
     return GetBillDetailsPageList(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -77,7 +81,7 @@ function ReceiptDetails() {
       TreeTypeId: org.id,
       TreeType: org.type,
     };
-    const sidx = 'feeId';
+    const sidx = 'id';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson });
@@ -95,9 +99,9 @@ function ReceiptDetails() {
           // TreeTypeId: org.id,
           // TreeType: org.type,
         };
-        ExportBillDetails(queryJson).then(res => { 
+        ExportBillDetails(queryJson).then(res => {
           //window.open(res);  
-          window.location.href = res; 
+          window.location.href = res;
         });
       },
     });
@@ -111,8 +115,8 @@ function ReceiptDetails() {
           selectTree(id, item, '');
         }}
       />
-      <Content style={{ paddingLeft: '18px' }}> 
-        <div style={{ marginBottom: '20px', padding: '3px 2px' }} > 
+      <Content style={{ paddingLeft: '18px' }}>
+        <div style={{ marginBottom: '20px', padding: '3px 2px' }} >
           <Search
             className="search-input"
             placeholder="请输入要查询的关键词"
@@ -128,7 +132,7 @@ function ReceiptDetails() {
           </Button>
 
           <Button type="primary" style={{ float: 'right' }}
-            onClick={() => { doExport('','') }}
+            onClick={() => { doExport('', '') }}
           >
             <Icon type="export" />
             导出
