@@ -2,7 +2,7 @@ import Page from '@/components/Common/Page';
 import { Divider, message, Modal, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
-import { CheckRelation, RemoveForm, GetDetailJson } from './PStructUser.service';
+import { CheckRelation, RemoveForm } from './PStructUser.service';
 
 interface ListTableProps {
   loading: boolean;
@@ -41,12 +41,15 @@ function ListTable(props: ListTableProps) {
       },
     });
   };
-  const doModify = id => {
-    GetDetailJson(id).then(res => {
-      const { customerInfo = {}, relationPC = {} } = res;
-      modify({ ...relationPC, ...customerInfo });
-    });
-  };
+  // const doModify = id => {
+  //   GetDetailJson(id).then(res => {
+  //     const { customerInfo = {}, relationPC = {} } = res;
+  //     modify({ ...relationPC, ...customerInfo });
+  //   });
+  // };
+
+
+
   const columns = [
     {
       title: '客户类别',
@@ -69,20 +72,20 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'code',
       key: 'code',
       width: 160,
-      // sorter: true,
+      sorter: true,
     },
     {
       title: '客户名称',
       dataIndex: 'name',
       key: 'name',
       width: 200,
-      // sorter: true,
+      sorter: true,
     },
     {
       title: '手机号码',
-      dataIndex: 'telphonenum',
-      key: 'telphonenum',
-      width: 100,
+      dataIndex: 'phoneNum',
+      key: 'phoneNum',
+      width: 200,
       // sorter: true,
     },
 
@@ -122,7 +125,7 @@ function ListTable(props: ListTableProps) {
       title: '证件号码',
       dataIndex: 'certificateno',
       key: 'certificateno',
-      width: 180,
+      width: 140,
       // sorter: true,
     },
     {
@@ -151,11 +154,10 @@ function ListTable(props: ListTableProps) {
           //   删除
           // </Button>, 
           <span key="span">
-            <a onClick={() => doModify(record.id)} key="modify">修改</a>
+            <a onClick={() => modify(record)} key="modify">修改</a>
             <Divider type="vertical" key="divider" />
             <a onClick={() => doDelete(record)} key="delete">删除</a>
-          </span>
-
+          </span> 
         ];
       },
     },

@@ -221,13 +221,13 @@ const Verify= (props: VerifyProps) => {
               </Form.Item>
             </Col>
             <Col lg={8}>
-              <Form.Item label="起始日期">
-                {infoDetail.beginDate}
+              <Form.Item label="起始日期"> 
+                {String(infoDetail.beginDate).substr(0, 10)}
               </Form.Item>
             </Col>
             <Col lg={8}>
-              <Form.Item label="结束日期">
-                {infoDetail.endDate}
+              <Form.Item label="结束日期"> 
+                {String(infoDetail.endDate).substr(0, 10)}
               </Form.Item>
             </Col>
           </Row>

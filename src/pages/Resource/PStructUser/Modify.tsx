@@ -76,7 +76,7 @@ const Modify = (props: ModifyProps) => {
     });
   };
   const doSave = dataDetail => {
-    dataDetail.keyValue = dataDetail.id;
+    dataDetail.keyValue = dataDetail.id; 
     SaveForm({ ...dataDetail }).then(res => {
       message.success('保存成功');
       closeDrawer();
@@ -338,18 +338,16 @@ const Modify = (props: ModifyProps) => {
                   })(<TextArea rows={4} placeholder="请输入附加说明" />)}
                 </Form.Item>
               </Col>
-            </Row>
-
+            </Row> 
             <Row>
               <Col lg={12}>
                 <Form.Item label="加入黑名单">
-                  {getFieldDecorator('auditMark', {
-                    initialValue: infoDetail.isBlackName,
-                  })(<Checkbox checked={form.getFieldValue('auditMark')} />)}
+                  {getFieldDecorator('isBlackName', { 
+                    initialValue: infoDetail.isBlackName ? true : false,
+                  })(<Checkbox checked={form.getFieldValue('isBlackName')} />)}
                 </Form.Item>
               </Col>
-            </Row>
-
+            </Row> 
           </Form>
         ) : null}
       </Card>

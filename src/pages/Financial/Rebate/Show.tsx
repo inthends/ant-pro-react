@@ -20,7 +20,7 @@ const Show = (props: ShowProps) => {
   const { modalVisible, closeModal, form, id } = props;
   // const { getFieldDecorator } = form;
   // const title = id === undefined ? '减免单审核' : '减免单审核';
-  const title = '减免单查看';
+  const title = '优惠单查看';
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
@@ -125,7 +125,11 @@ const Show = (props: ShowProps) => {
       width: '120px',
       sorter: true,
       render: val => {
-        return moment(val).format('YYYY年MM月')
+        if (val == null) {
+          return '';
+        } else {
+          return moment(val).format('YYYY年MM月');
+        }
       }
     },
     {
@@ -135,7 +139,11 @@ const Show = (props: ShowProps) => {
       width: '120px',
       sorter: true,
       render: val => {
-        return moment(val).format('YYYY-MM-DD')
+        if (val == null) {
+          return '';
+        } else {
+          return moment(val).format('YYYY-MM-DD');
+        }
       }
     },
     {
@@ -145,35 +153,25 @@ const Show = (props: ShowProps) => {
       width: '120px',
       sorter: true,
       render: val => {
-        return moment(val).format('YYYY-MM-DD')
+        if (val == null) {
+          return '';
+        } else {
+          return moment(val).format('YYYY-MM-DD');
+        }
       }
     },
     {
-      title: '原金额',
+      title: '金额',
       dataIndex: 'amount',
       key: 'amount',
       width: '100px',
-    }, {
-      title: '累计减免',
-      dataIndex: 'sumReductionAmount',
-      width: '100px',
-      key: 'sumReductionAmount'
-    }, {
-      title: '本次减免',
-      dataIndex: 'reductionAmount',
-      width: '100px',
-      key: 'reductionAmount'
     },
     {
-      title: '减免后金额',
-      dataIndex: 'lastAmount',
-      width: '100px',
-      key: 'lastAmount'
-    }, {
       title: '备注',
       width: '150px',
       dataIndex: 'memo',
-      key: 'memo'
+      key: 'memo',
+      editable: true
     },
   ] as ColumnProps<any>[];
 
@@ -208,19 +206,19 @@ const Show = (props: ShowProps) => {
             </Col>
           </Row>
           <Row gutter={24}>
-            {/* <Col lg={8}>
-              <Form.Item label="减免费项">
-                {infoDetail.reductionFeeItemName}
-              </Form.Item>
-            </Col> */}
             <Col lg={8}>
-              <Form.Item label="折扣">
-                {infoDetail.rebate}
+              <Form.Item label="优惠政策">
+                {infoDetail.rebateName}
               </Form.Item>
             </Col>
             <Col lg={8}>
-              <Form.Item label="减免金额">
-                {infoDetail.reductionAmount}
+              <Form.Item label="起始日期"> 
+                {String(infoDetail.beginDate).substr(0, 10)}
+              </Form.Item>
+            </Col>
+            <Col lg={8}>
+              <Form.Item label="结束日期"> 
+                {String(infoDetail.endDate).substr(0, 10)}
               </Form.Item>
             </Col>
           </Row>
@@ -243,9 +241,8 @@ const Show = (props: ShowProps) => {
               bordered={false}
               size="middle"
               dataSource={listdata}
-              columns={columns}
-              // rowKey={record => record.id}
-              rowKey="billId"
+              columns={columns} 
+              rowKey={record => record.id}
               pagination={pagination}
               scroll={{ x: 1150, y: 500 }}
               loading={loading}

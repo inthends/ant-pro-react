@@ -51,7 +51,7 @@ function PublicArea() {
     if (sorter) {
       const { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'id';
+      searchCondition.sidx = field ? field : 'code';
     }
 
     return load(searchCondition).then(res => {
@@ -60,7 +60,7 @@ function PublicArea() {
   };
   const load = formData => {
     setLoading(true);
-    formData.sidx = formData.sidx || 'id';
+    formData.sidx = formData.sidx || 'code';
     formData.sord = formData.sord || 'asc';
     return GetPageListJson(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -81,7 +81,7 @@ function PublicArea() {
 
   const initLoadData = (searchText) => {
     const queryJson = { keyword: searchText };
-    const sidx = 'id';
+    const sidx = 'code';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
