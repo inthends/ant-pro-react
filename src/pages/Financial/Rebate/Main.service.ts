@@ -95,9 +95,16 @@ export function CheckBill(keyValue): Promise<any[]> {
     .then(getResult as any);
 }
 
-//删除减免单里面的全部房屋
+//删除优惠单里面的全部房屋
 export function RemoveFormUnitAll(keyValue): Promise<any> {
   return request
     .post(process.env.basePath + `/Rebate/RemoveFormUnitAll?keyValue=${keyValue}`)
+    .then(getResult as any);
+}
+
+//判断收款单是否已经审核
+export function CheckCharge(keyValue): Promise<any> {
+  return request
+    .get(process.env.basePath + `/Rebate/CheckCharge?keyValue=${keyValue}`)
     .then(getResult as any);
 }

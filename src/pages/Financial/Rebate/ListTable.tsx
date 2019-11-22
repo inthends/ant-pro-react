@@ -5,7 +5,7 @@ import React from 'react';
 import moment from 'moment';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 // import VerifyReductionModal from './VerifyReductionModal';
-import { InvalidForm } from './Main.service';
+import { CheckCharge,InvalidForm } from './Main.service';
 import styles from './style.less';
 
 interface ListTableProps {
@@ -30,6 +30,7 @@ function ListTable(props: ListTableProps) {
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
   };
+
   const doInvalid = record => {
     Modal.confirm({
       title: '请确认',
@@ -41,6 +42,21 @@ function ListTable(props: ListTableProps) {
         });
       },
     });
+  };
+
+  const doVerify = (billId, flag) => {
+    //如果关联的计费单收款已经审核，减免单则无法反审
+    CheckCharge(billId).then((res) => {
+      if (res) { 
+        Modal.warning({
+          title: '提示信息',
+          content: '优惠单关联的收款单已经审核，无法反审！',
+          okText: '确定'
+        });
+      }else{
+        verify(billId, flag);
+      }
+    }); 
   };
 
   const columns = [
@@ -152,7 +168,7 @@ function ListTable(props: ListTableProps) {
             <span>
               <a onClick={() => show(record.billId)} key="modify">查看</a>
               <Divider type="vertical" />
-              <a onClick={() => verify(record.billId, false)} key="modify">反审</a>
+              <a onClick={() => doVerify(record.billId, false)} key="modify">反审</a>
             </span>
           ];
         } else {

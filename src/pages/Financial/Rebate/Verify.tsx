@@ -40,7 +40,8 @@ const Verify= (props: VerifyProps) => {
     if (modalVisible) {
       if (id) {
         GetFormJson(id).then(res => {
-          setInfoDetail(res);
+          var entity = { ...res.entity, receiveId: res.receiveId, receiveCode: res.receiveCode }; 
+          setInfoDetail(entity);
           form.resetFields();
           //分页查询
           const { current: pageIndex, pageSize, total } = pagination;
@@ -48,7 +49,7 @@ const Verify= (props: VerifyProps) => {
             pageIndex,
             pageSize,
             total,
-            keyValue: res.billId
+            keyValue: entity.billId
           };
           setLoading(true);
           GetListByID(searchCondition).then(res => {

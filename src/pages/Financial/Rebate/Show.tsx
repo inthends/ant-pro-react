@@ -14,10 +14,11 @@ interface ShowProps {
   closeModal(): void;
   form: WrappedFormUtils;
   id?: string;
+  showCharge(id): void;
 };
 
 const Show = (props: ShowProps) => {
-  const { modalVisible, closeModal, form, id } = props;
+  const { modalVisible, closeModal, form, id, showCharge } = props;
   // const { getFieldDecorator } = form;
   // const title = id === undefined ? '减免单审核' : '减免单审核';
   const title = '优惠单查看';
@@ -39,7 +40,8 @@ const Show = (props: ShowProps) => {
     if (modalVisible) {
       if (id) {
         GetFormJson(id).then(res => {
-          setInfoDetail(res);
+          var entity = { ...res.entity, receiveId: res.receiveId, receiveCode: res.receiveCode };
+          setInfoDetail(entity);
           form.resetFields();
           //分页查询
           const { current: pageIndex, pageSize, total } = pagination;
@@ -47,7 +49,7 @@ const Show = (props: ShowProps) => {
             pageIndex,
             pageSize,
             total,
-            keyValue: res.billId
+            keyValue: entity.billId
           };
           setLoading(true);
           GetListByID(searchCondition).then(res => {
@@ -189,36 +191,46 @@ const Show = (props: ShowProps) => {
       <Form layout="vertical" hideRequiredMark>
         <Card className={styles.card}>
           <Row gutter={24}>
-            <Col lg={8}>
+            <Col lg={6}>
               <Form.Item label="单据编号">
                 {infoDetail.billCode}
               </Form.Item>
             </Col>
-            <Col lg={8}>
+            <Col lg={6}>
               <Form.Item label="单据日期">
                 {infoDetail.billDate}
               </Form.Item>
             </Col>
-            <Col lg={8}>
+            <Col lg={6}>
               <Form.Item label="经办人">
                 {infoDetail.createUserName}
               </Form.Item>
             </Col>
-          </Row>
-          <Row gutter={24}>
-            <Col lg={8}>
+            <Col lg={6}>
               <Form.Item label="优惠政策">
                 {infoDetail.rebateName}
               </Form.Item>
             </Col>
-            <Col lg={8}>
-              <Form.Item label="起始日期"> 
+          </Row>
+          <Row gutter={24}>
+            <Col lg={6}>
+              <Form.Item label="关联收款单">
+                <a onClick={() => showCharge(infoDetail.receiveId)}> {infoDetail.receiveCode} </a>
+              </Form.Item>
+            </Col>
+            <Col lg={6}>
+              <Form.Item label="起始日期">
                 {String(infoDetail.beginDate).substr(0, 10)}
               </Form.Item>
             </Col>
-            <Col lg={8}>
-              <Form.Item label="结束日期"> 
+            <Col lg={6}>
+              <Form.Item label="结束日期">
                 {String(infoDetail.endDate).substr(0, 10)}
+              </Form.Item>
+            </Col>
+            <Col lg={6}>
+              <Form.Item label="是否审核">
+                {infoDetail.ifVerify ? '已审核' : '未审核'}
               </Form.Item>
             </Col>
           </Row>
@@ -228,7 +240,7 @@ const Show = (props: ShowProps) => {
                 {infoDetail.memo}
               </Form.Item>
             </Col>
-          </Row> 
+          </Row>
           <Row>
             <Col>
               <Form.Item label="审核意见">
@@ -241,7 +253,7 @@ const Show = (props: ShowProps) => {
               bordered={false}
               size="middle"
               dataSource={listdata}
-              columns={columns} 
+              columns={columns}
               rowKey={record => record.id}
               pagination={pagination}
               scroll={{ x: 850, y: 500 }}

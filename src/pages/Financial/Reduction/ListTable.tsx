@@ -201,7 +201,7 @@ function ListTable(props: ListTableProps) {
               <span>
                 <a onClick={() => modify(record.billId)} key="modify">编辑</a>
                 <Divider type="vertical" />
-                <a onClick={() => doVerify(record.billId, true)} key="verify">审核</a>
+                <a onClick={() => verify(record.billId, true)} key="verify">审核</a>
                 <Divider type="vertical" />
                 <a onClick={() => doInvalid(record)} key="invalid">作废</a>
               </span>
