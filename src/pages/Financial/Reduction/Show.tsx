@@ -14,10 +14,11 @@ interface ShowProps {
   closeModal(): void;
   form: WrappedFormUtils;
   id?: string;
+  showCharge(id): void;
 };
 
 const Show = (props: ShowProps) => {
-  const { modalVisible, closeModal, form, id } = props;
+  const { modalVisible, closeModal, form, id, showCharge } = props;
   // const { getFieldDecorator } = form;
   // const title = id === undefined ? '减免单审核' : '减免单审核';
   const title = '减免单查看';
@@ -39,7 +40,8 @@ const Show = (props: ShowProps) => {
     if (modalVisible) {
       if (id) {
         GetFormJson(id).then(res => {
-          setInfoDetail(res);
+          var entity = { ...res.entity, receiveId: res.receiveId, receiveCode: res.receiveCode };
+          setInfoDetail(entity);
           form.resetFields();
           //分页查询
           const { current: pageIndex, pageSize, total } = pagination;
@@ -47,7 +49,7 @@ const Show = (props: ShowProps) => {
             pageIndex,
             pageSize,
             total,
-            keyValue: res.billId
+            keyValue: entity.billId
           };
           setLoading(true);
           GetListByID(searchCondition).then(res => {
@@ -122,7 +124,7 @@ const Show = (props: ShowProps) => {
       title: '应收期间',
       dataIndex: 'period',
       key: 'period',
-      width: '120px',
+      width: '100px',
       sorter: true,
       render: val => {
         return moment(val).format('YYYY年MM月')
@@ -171,7 +173,6 @@ const Show = (props: ShowProps) => {
       key: 'lastAmount'
     }, {
       title: '备注',
-      width: '150px',
       dataIndex: 'memo',
       key: 'memo'
     },
@@ -208,11 +209,11 @@ const Show = (props: ShowProps) => {
             </Col>
           </Row>
           <Row gutter={24}>
-            {/* <Col lg={8}>
-              <Form.Item label="减免费项">
-                {infoDetail.reductionFeeItemName}
+            <Col lg={8}>
+              <Form.Item label="关联收款单">
+                <a onClick={() => showCharge(infoDetail.receiveId)}> {infoDetail.receiveCode} </a>
               </Form.Item>
-            </Col> */}
+            </Col>
             <Col lg={8}>
               <Form.Item label="折扣">
                 {infoDetail.rebate}
@@ -230,7 +231,7 @@ const Show = (props: ShowProps) => {
                 {infoDetail.memo}
               </Form.Item>
             </Col>
-          </Row> 
+          </Row>
           <Row>
             <Col>
               <Form.Item label="审核意见">
@@ -247,7 +248,7 @@ const Show = (props: ShowProps) => {
               // rowKey={record => record.id}
               rowKey="billId"
               pagination={pagination}
-              scroll={{ x: 1150, y: 500 }}
+              scroll={{ x: 1200, y: 500 }}
               loading={loading}
               onChange={(pagination: PaginationConfig, filters, sorter) =>
                 changePage(pagination, filters, sorter)

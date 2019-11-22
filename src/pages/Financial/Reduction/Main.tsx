@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { GetPageListJson, GetDetailPageListJson } from './Main.service';
 import { GetUnitTreeAll } from '@/services/commonItem';//获取全部房间树
 import { getResult } from '@/utils/networkUtils';
-import AsynLeftTree from '../AsynLeftTree'; 
+import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
 import Verify from './Verify';
@@ -15,6 +15,9 @@ import DetailList from './DetailList';
 const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
+//查看收款单
+import ChargeShow from '../ChargeBill/Show';
+
 
 function Main() {
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);//编辑
@@ -33,6 +36,10 @@ function Main() {
   const [search, setSearch] = useState<string>('');
   const [detailsearch, setDetailSearch] = useState<string>('');
   const [unitTreeData, setUnitTreeData] = useState<any[]>([]);
+
+  //收款单查看
+  const [chargeId, setChargeId] = useState<string>();
+  const [chargeVisible, setChargeVisible] = useState<boolean>(false);//查看
 
   const selectTree = (org, item, searchText) => {
     initLoadData(item, '');
@@ -110,6 +117,19 @@ function Main() {
     setVerifyVisible(true);
     setId(id);
     setIfVerify(ifVerify);
+  };
+
+
+  //查看收款单
+  const showChargeDrawer = (id) => {
+    setChargeVisible(true);
+    setChargeId(id);
+  };
+
+  //收款单关闭
+  const closeChargeDrawer = () => {
+    setChargeVisible(false);
+    setChargeId('');
   };
 
   const loadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
@@ -237,7 +257,7 @@ function Main() {
   //页签切换刷新
   const changeTab = key => {
     if (key == "1") {
-      initLoadData('',   search);
+      initLoadData('', search);
     } else {
       initDetailLoadData('', detailsearch);
     }
@@ -287,7 +307,7 @@ function Main() {
               modify={showDrawer}
               show={showViewDrawer}
               verify={(id, ifVerify) => showVerifyDrawer(id, ifVerify)}
-              reload={() => initLoadData('',  search)}
+              reload={() => initLoadData('', search)}
             />
           </TabPane>
           <TabPane tab="明细" key="2">
@@ -317,13 +337,14 @@ function Main() {
         modifyVisible={modifyVisible}
         closeDrawer={closeDrawer}
         id={id}
-        reload={() => initLoadData('',   search)}
+        reload={() => initLoadData('', search)}
       />
 
       <Show
         modalVisible={viewVisible}
         closeModal={closeViewDrawer}
         id={id}
+        showCharge={showChargeDrawer}
       />
 
       <Verify
@@ -331,8 +352,15 @@ function Main() {
         closeModal={closeVerifyDrawer}
         id={id}
         ifVerify={ifVerify}
-        reload={() => initLoadData('',  search)}
+        reload={() => initLoadData('', search)}
       />
+
+      <ChargeShow
+        showVisible={chargeVisible}
+        closeShow={closeChargeDrawer}
+        id={chargeId}
+      />
+
     </Layout>
   );
 }

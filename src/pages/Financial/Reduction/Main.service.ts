@@ -1,7 +1,7 @@
 import {  TreeEntity } from '@/model/models';
 import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
-import { CwReductionmain } from '@/model/cwReductionmain'; 
+// import { CwReductionmain } from '@/model/cwReductionmain'; 
 
 //加载收款费项
 // export function GetFeeTreeListExpand(): Promise<ResponseObject<TreeEntity[]>> {
@@ -34,7 +34,13 @@ export function GetPageListJson(data): Promise<any> {
 }
 
 //获取实体
-export function GetFormJson(keyValue): Promise<CwReductionmain> {
+// export function GetFormJson(keyValue): Promise<CwReductionmain> {
+//   return request
+//     .get(process.env.basePath + `/Reduction/GetFormJson?keyValue=${keyValue}`)
+//     .then(getResult as any);
+// }
+
+export function GetFormJson(keyValue): Promise<any> {
   return request
     .get(process.env.basePath + `/Reduction/GetFormJson?keyValue=${keyValue}`)
     .then(getResult as any);
@@ -99,5 +105,12 @@ export function CheckBill(keyValue): Promise<any[]> {
 export function RemoveFormUnitAll(keyValue): Promise<any> {
   return request
     .post(process.env.basePath + `/Reduction/RemoveFormUnitAll?keyValue=${keyValue}`)
+    .then(getResult as any);
+}
+
+//判断收款单是否已经审核
+export function CheckCharge(keyValue): Promise<any> {
+  return request
+    .get(process.env.basePath + `/Reduction/CheckCharge?keyValue=${keyValue}`)
     .then(getResult as any);
 }
