@@ -34,7 +34,7 @@ function ResultList(props: ResultListProps) {
       render: val =>  moment(val).format('YYYY-MM-DD')
     },
     {
-      title: '最终单价(元)', 
+      title: '最终单价', 
       width: 60,
       render: (text, row, index) => {   
         let unit='';
@@ -54,7 +54,7 @@ function ResultList(props: ResultListProps) {
       }
     },
     {
-      title: '最终金额(元)',
+      title: '金额',
       dataIndex: 'totalPrice',
       key: 'totalPrice',
       width: 60,
