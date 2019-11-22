@@ -336,6 +336,7 @@ const Modify = (props: ModifyProps) => {
         Contract.lateFeeUnit = values.lateFeeUnit;
         Contract.maxLateFee = values.maxLateFee;
         Contract.maxLateFeeUnit = values.maxLateFeeUnit;
+        Contract.billUnitId = values.billUnitId;
 
         SubmitForm({
           ...Contract,
@@ -350,7 +351,7 @@ const Modify = (props: ModifyProps) => {
           ChargeFeeResult: JSON.stringify(chargeData)
 
         }).then(res => {
-          message.success('提交成功！');
+          message.success('提交成功');
           closeDrawer();
           reload();
         });
@@ -407,6 +408,7 @@ const Modify = (props: ModifyProps) => {
         Contract.lateFeeUnit = values.lateFeeUnit;
         Contract.maxLateFee = values.maxLateFee;
         Contract.maxLateFeeUnit = values.maxLateFeeUnit;   
+        Contract.billUnitId = values.billUnitId;
         SaveForm({
           ...Contract,
           ...ContractCharge,
@@ -420,7 +422,7 @@ const Modify = (props: ModifyProps) => {
           ChargeFeeResult: JSON.stringify(chargeData)
 
         }).then(res => {
-          message.success('保存成功！');
+          message.success('保存成功');
           closeDrawer();
           reload();
         });

@@ -22,8 +22,8 @@ const AddFee = (props: AddFeeProps) => {
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [feeTreeData, setFeeTreeData] = useState<TreeEntity[]>([]);
 
-  const [relatrionIds, setRelatrionID] = useState<any[]>([]);
-  const [unitIds, setUnitIds] = useState<any[]>([]);
+  // const [relatrionIds, setRelatrionID] = useState<any[]>([]);
+  // const [unitIds, setUnitIds] = useState<any[]>([]);
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -79,7 +79,7 @@ const AddFee = (props: AddFeeProps) => {
           <Card>
             <Form hideRequiredMark>
               <Row>
-                <Form.Item label="加费对象" required labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} >
+                {/* <Form.Item label="加费对象" required labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} >
                   {getFieldDecorator('relatrionId', {
                     initialValue: infoDetail.relatrionId,
                     rules: [{ required: true, message: '请选择加费对象' }]
@@ -92,10 +92,10 @@ const AddFee = (props: AddFeeProps) => {
                       ))}
                     </Select>
                   )}
-                </Form.Item>
+                </Form.Item> */}
               </Row>
               <Row>
-                <Form.Item label="选择房屋" required labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} >
+                {/* <Form.Item label="选择房屋" required labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} >
                   {getFieldDecorator('unitId', {
                     initialValue: infoDetail.unitId,
                     rules: [{ required: true, message: '请选择房屋' }]
@@ -108,7 +108,7 @@ const AddFee = (props: AddFeeProps) => {
                       ))}
                     </Select>
                   )}
-                </Form.Item>
+                </Form.Item> */}
               </Row>
               <Row>
                 <Col span={10}>

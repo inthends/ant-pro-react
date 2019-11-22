@@ -5,7 +5,7 @@ import { PaginationConfig } from 'antd/lib/table';
 import AddReductionItem from './AddReductionItem';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { RemoveFormUnitAll, GetFormJson, GetListByID, GetReductionItem, GetUnitBillDetail, SaveForm } from './Main.service';
+import { RemoveFormAll, GetFormJson, GetListByID, GetUnitBillDetail, SaveForm } from './Main.service';
 import moment from 'moment';
 import styles from './style.less';
 
@@ -105,8 +105,8 @@ class EditableCell extends React.Component {
     );
   }
 };
-/*详情可编辑单元格*/
 
+/*详情可编辑单元格*/
 const Modify = (props: ModifyProps) => {
   const { treeData, modifyVisible, closeDrawer, form, id, reload } = props;
   const { getFieldDecorator } = form;
@@ -150,7 +150,7 @@ const Modify = (props: ModifyProps) => {
 
         GetFormJson(id).then(res => {
           setCode(1);
-          var entity = { ...res.entity, receiveId: res.receiveId, receiveCode: res.receiveCode }; 
+          var entity = { ...res.entity, receiveId: res.receiveId, receiveCode: res.receiveCode };
           setInfoDetail(entity);
           form.resetFields();
 
@@ -286,7 +286,7 @@ const Modify = (props: ModifyProps) => {
         newData.details = JSON.stringify(listdata);
         newData.code = code;
         newData.billDate = moment(newData.billDate).format('YYYY-MM-DD HH:mm:ss');
-        newData.keyValue = newData.billId; 
+        newData.keyValue = newData.billId;
         SaveForm(newData).then(res => {
           message.success('保存成功');
           closeDrawer();
@@ -396,7 +396,7 @@ const Modify = (props: ModifyProps) => {
       title: '原金额',
       dataIndex: 'amount',
       key: 'amount',
-      width: '100px', 
+      width: '100px',
     },
 
     {
@@ -623,9 +623,9 @@ const Modify = (props: ModifyProps) => {
               </Form.Item>
             </Col> */}
             <Col lg={8}>
-              <Form.Item label="批量折扣">
+              <Form.Item label="批量折扣(默认10不打折)">
                 {getFieldDecorator('rebate', {
-                  initialValue: infoDetail.rebate ? infoDetail.rebate : 1,
+                  initialValue: infoDetail.rebate ? infoDetail.rebate : 10,
                   rules: [{ required: true, message: '请输入批量折扣' }],
                 })(
                   <InputNumber step={0.1} style={{ width: '100%' }} max={10} ></InputNumber>
@@ -633,10 +633,10 @@ const Modify = (props: ModifyProps) => {
               </Form.Item>
             </Col>
             <Col lg={8}>
-              <Form.Item label="减免金额">
+              <Form.Item label="批量减免金额">
                 {getFieldDecorator('reductionAmount', {
                   initialValue: infoDetail.reductionAmount ? infoDetail.reductionAmount : 0,
-                  rules: [{ required: true, message: '请输入减免金额' }],
+                  rules: [{ required: true, message: '请输入批量减免金额' }],
                 })(
                   <InputNumber step={0.1} style={{ width: '100%' }}></InputNumber>
                 )}
@@ -662,11 +662,14 @@ const Modify = (props: ModifyProps) => {
                   Modal.confirm({
                     title: '请确认',
                     content: `您是否确定删除？`,
-                    onOk: () => {
-                      if (id != null || id != "") {
-                        RemoveFormUnitAll(id).then(res => {
+                    onOk: () => { 
+                      if (id && id != "") {
+                        RemoveFormAll(id).then(res => {
                           message.success('删除成功！');
+                          setListData([]);
                         });
+                      } else {
+                        setListData([]);
                       }
                     },
                   });

@@ -128,7 +128,8 @@ const Add = (props: AddProps) => {
         //let entity = values; 
         let entity: LeaseContractChargeEntity = {};
         //费用条款-基本条款 
-        entity.depositFeeItemId = values.depositFeeItemId;
+        entity.depositFeeItemId = values.depositFeeItemId; 
+        entity.depositFeeItemName = values.depositFeeItemName; 
         entity.leaseArea = values.leaseArea;
         entity.deposit = values.deposit;
         entity.depositUnit = values.depositUnit;
@@ -180,6 +181,7 @@ const Add = (props: AddProps) => {
         let ContractCharge: LeaseContractChargeEntity = {};
         //费用条款-基本条款 
         ContractCharge.depositFeeItemId = values.depositFeeItemId;
+        ContractCharge.depositFeeItemName = values.depositFeeItemName; 
         ContractCharge.leaseArea = values.leaseArea;
         ContractCharge.deposit = values.deposit;
         ContractCharge.depositUnit = values.depositUnit;
@@ -330,6 +332,14 @@ const Add = (props: AddProps) => {
       }, 50);
     });
 
+
+    //保证金单位切换
+    
+    const changeFeeItem = (value, label, extra) => {
+       
+      form.setFieldsValue({ depositFeeItemName: label });
+
+    };
 
   return (
     <Drawer
@@ -593,7 +603,9 @@ const Add = (props: AddProps) => {
                       {getFieldDecorator('depositFeeItemId', {
                         rules: [{ required: true, message: '请选择费项' }]
                       })(
-                        <Select placeholder="请选择费项">
+                        <Select placeholder="请选择费项"
+                        onChange={changeFeeItem}
+                        >
                           {feeitems.map(item => (
                             <Option value={item.key} key={item.key}>
                               {item.title}
@@ -601,6 +613,13 @@ const Add = (props: AddProps) => {
                           ))}
                         </Select>
                       )}
+
+
+                      {getFieldDecorator('depositFeeItemName', {
+                      })(
+                        <input type='hidden' />
+                      )}
+
                     </Form.Item>
                   </Col>
                   <Col lg={5}>

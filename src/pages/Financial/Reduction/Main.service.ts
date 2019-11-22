@@ -102,9 +102,9 @@ export function CheckBill(keyValue): Promise<any[]> {
 }
 
 //删除减免单里面的全部房屋
-export function RemoveFormUnitAll(keyValue): Promise<any> {
+export function RemoveFormAll(keyValue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Reduction/RemoveFormUnitAll?keyValue=${keyValue}`)
+    .post(process.env.basePath + `/Reduction/RemoveFormAll?keyValue=${keyValue}`)
     .then(getResult as any);
 }
 
