@@ -1,6 +1,6 @@
 
 //租期条款动态组件，编辑
-import { LeaseContractChargeFeeEntity, TreeEntity } from '@/model/models';
+import { HtLeasecontractchargefee, TreeEntity } from '@/model/models';
 import { InputNumber, Select, DatePicker, Card, Col, Row, Icon, Form, Button } from 'antd';
 import React, { useState } from 'react';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
@@ -11,7 +11,7 @@ const { Option } = Select;
 interface LeaseTermModifyProps {
   form: WrappedFormUtils;
   feeitems: TreeEntity[];
-  chargeFeeList: LeaseContractChargeFeeEntity[];
+  chargeFeeList: HtLeasecontractchargefee[];
 }
 
 //动态数量
@@ -40,6 +40,20 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
       LeaseTerms: nextKeys,
     });
   };
+
+  //费项选择
+  const changeFee = (value, option, index) => {
+    //更新费项id和name
+    // option._owner.pendingProps.chargeFeeList[index].feeItemName = option.props.children;
+    // option._owner.pendingProps.chargeFeeList[index].feeItemId = value;
+
+    form.setFieldsValue({
+      ['feeItemName[' + index + ']']
+        : option.props.children
+    });
+
+  };
+
 
   //初始化 租赁条款 
   getFieldDecorator('LeaseTerms', { initialValue: chargeFeeList });
@@ -75,7 +89,9 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
                 initialValue: k.feeItemId,
                 rules: [{ required: true, message: '请选择费项' }]
               })(
-                <Select placeholder="请选择费项">
+                <Select placeholder="请选择费项"
+                  onChange={(value, option) => changeFee(value, option, index)}
+                >
                   {feeitems.map(item => (
                     <Option value={item.value} >
                       {item.title}
@@ -83,6 +99,13 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
                   ))}
                 </Select>
               )}
+
+              {getFieldDecorator(`feeItemName[${index}]`, {
+                initialValue: k.feeItemName,
+              })(
+                <input type='hidden' />
+              )}
+
             </Form.Item>
           </Col>
           <Col lg={4}>

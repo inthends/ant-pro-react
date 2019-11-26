@@ -90,8 +90,7 @@ function IncreasingRate(props: IncreasingRateProps) {
       {formItems} 
             <Button type="dashed"  onClick={add}>
               <Icon type="plus" />添加递增率
-            </Button>
-          
+            </Button> 
     </div>
   );
 }

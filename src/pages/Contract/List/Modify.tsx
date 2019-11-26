@@ -1,15 +1,14 @@
-
 import {
-  Tag, Spin, Divider, PageHeader, AutoComplete, InputNumber, TreeSelect, message, Modal,
+  Tag, Spin, Divider, PageHeader, AutoComplete, InputNumber, TreeSelect, message,
   Tabs, Select, Button, Card, Col, DatePicker, Drawer, Form, Input, Row
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import {
   TreeEntity,
-  LeaseContractChargeEntity,
-  LeaseContractChargeFeeEntity,
-  LeaseContractChargeIncreEntity,
-  LeaseContractChargeFeeOfferEntity,
+  HtLeasecontractcharge,
+  HtLeasecontractchargefee,
+  HtLeasecontractchargeincre,
+  HtLeasecontractchargefeeoffer,
   LeaseContractDTO,
   ChargeDetailDTO
 } from '@/model/models';
@@ -44,10 +43,10 @@ const Modify = (props: ModifyProps) => {
   //const [industryType, setIndustryType] = useState<any[]>([]); //行业  
   //const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
   const [infoDetail, setInfoDetail] = useState<LeaseContractDTO>({});
-  const [contractCharge, setContractCharge] = useState<LeaseContractChargeEntity>({});
-  const [chargeFeeList, setChargeFeeList] = useState<LeaseContractChargeFeeEntity[]>([]);
-  const [chargeIncreList, setChargeIncreList] = useState<LeaseContractChargeIncreEntity[]>([]);
-  const [chargeOfferList, setChargeOfferList] = useState<LeaseContractChargeFeeOfferEntity[]>([]);
+  const [contractCharge, setContractCharge] = useState<HtLeasecontractcharge>({});
+  const [chargeFeeList, setChargeFeeList] = useState<HtLeasecontractchargefee[]>([]);
+  const [chargeIncreList, setChargeIncreList] = useState<HtLeasecontractchargeincre[]>([]);
+  const [chargeOfferList, setChargeOfferList] = useState<HtLeasecontractchargefeeoffer[]>([]);
   const [depositData, setDepositData] = useState<any[]>([]);//保证金
   const [chargeData, setChargeData] = useState<any[]>([]);//租金 
   const [industryType, setIndustryType] = useState<any[]>([]); //行业 
@@ -87,11 +86,11 @@ const Modify = (props: ModifyProps) => {
     if (visible) {
       if (id) {
         setLoading(true);
-        GetFormJson(id).then((tempInfo: LeaseContractDTO) => { 
+        GetFormJson(id).then((tempInfo: LeaseContractDTO) => {
 
           //处理一下房间
           let rooms: any[] = [];
-          if (tempInfo != null) {
+          if (tempInfo != null && tempInfo.houseList != null) {
             tempInfo.houseList.forEach(item => {
               rooms.push(item.roomId);
             });
@@ -175,12 +174,12 @@ const Modify = (props: ModifyProps) => {
   //计算租金明细
   const calculation = () => {
     form.validateFields((errors, values) => {
-      if (!errors) { 
+      if (!errors) {
         setLoading(true);
         //数据处理  
         //租赁条款     
-        let TermJson: LeaseContractChargeFeeEntity[] = [];
-        // let data: LeaseContractChargeFeeEntity = {}; 
+        let TermJson: HtLeasecontractchargefee[] = [];
+        // let data: HtLeasecontractchargefee = {}; 
         // data.feeItemId = values.feeItemId[0];
         // data.startDate = values.startDate[0];
         // data.endDate = values.endDate[0];
@@ -199,54 +198,72 @@ const Modify = (props: ModifyProps) => {
 
         //动态添加的租期
         values.LeaseTerms.map(function (k, index, arr) {
-          let data: LeaseContractChargeFeeEntity = {};
-          data.feeItemId = k.feeItemId;
-          data.startDate = k.startDate;
-          data.endDate = k.endDate;
-          data.price = k.price;
-          data.priceUnit = k.priceUnit;
-          data.advancePayTime = k.advancePayTime;
-          data.advancePayTimeUnit = k.advancePayTimeUnit;
-          data.billType = k.billType;
+          let data: HtLeasecontractchargefee = {};
+          // data.feeItemId = k.feeItemId;
+          // data.feeItemName = k.feeItemName;
+          // data.startDate = k.startDate;
+          // data.endDate = k.endDate;
+          // data.price = k.price;  
+          // data.priceUnit = k.priceUnit;
+          // data.advancePayTime = k.advancePayTime;
+          // data.advancePayTimeUnit = k.advancePayTimeUnit;
+          // data.billType = k.billType;
+          // if (data.priceUnit == "元/m²·天" || data.priceUnit == "元/天") {
+          //   data.dayPriceConvertRule = k.dayPriceConvertRule;
+          // }
+          // data.yearDays = k.yearDays;
+          // data.payCycle = k.payCycle;
+          // data.rentalPeriodDivided = k.rentalPeriodDivided; 
+
+          data.feeItemId = values.feeItemId[index];
+          data.feeItemName = values.feeItemName[index];
+          data.startDate = values.startDate[index];
+          data.endDate = values.endDate[index];
+          data.price = values.price[index];
+          data.priceUnit = values.priceUnit[index];
+          data.advancePayTime = values.advancePayTime[index];
+          data.advancePayTimeUnit = values.advancePayTimeUnit[index];
+          data.billType = values.billType[index]; 
           if (data.priceUnit == "元/m²·天" || data.priceUnit == "元/天") {
-            data.dayPriceConvertRule = k.dayPriceConvertRule;
+            data.dayPriceConvertRule = values.dayPriceConvertRule[index];
           }
-          data.yearDays = k.yearDays;
-          data.payCycle = k.payCycle;
-          data.rentalPeriodDivided = k.rentalPeriodDivided;
+          data.yearDays = values.yearDays[index]; 
+          data.payCycle = values.payCycle[index]; 
+          data.rentalPeriodDivided = values.rentalPeriodDivided[index];   
           TermJson.push(data);
         });
 
         //递增率
-        let RateJson: LeaseContractChargeIncreEntity[] = [];
+        let RateJson: HtLeasecontractchargeincre[] = [];
         values.IncreasingRates.map(function (k, index, arr) {
-          let rate: LeaseContractChargeIncreEntity = {};
-          rate.increDate = values.increDate[k];
-          rate.increPrice = values.increPrice[k];
-          rate.increPriceUnit = values.increPriceUnit[k];
-          rate.increDeposit = values.increDeposit[k];
-          rate.increDepositUnit = values.increDepositUnit[k];
+          let rate: HtLeasecontractchargeincre = {};
+          rate.increDate = values.increDate[index];
+          rate.increPrice = values.increPrice[index];
+          rate.increPriceUnit = values.increPriceUnit[index];
+          rate.increDeposit = values.increDeposit[index];
+          rate.increDepositUnit = values.increDepositUnit[index];
           RateJson.push(rate);
         });
 
         //优惠
-        let RebateJson: LeaseContractChargeFeeOfferEntity[] = [];
+        let RebateJson: HtLeasecontractchargefeeoffer[] = [];
         values.Rebates.map(function (k, index, arr) {
-          let rebate: LeaseContractChargeFeeOfferEntity = {};
-          rebate.type = values.rebateType[k];
-          rebate.startDate = values.rebateStartDate[k];
-          rebate.endDate = values.rebateEndDate[k];
-          rebate.startPeriod = values.startPeriod[k];
-          rebate.periodLength = values.periodLength[k];
-          rebate.discount = values.discount[k];
-          rebate.remark = values.remark[k];
+          let rebate: HtLeasecontractchargefeeoffer = {};
+          rebate.type = values.rebateType[index];
+          rebate.startDate = values.rebateStartDate[index];
+          rebate.endDate = values.rebateEndDate[index];
+          rebate.startPeriod = values.startPeriod[index];
+          rebate.periodLength = values.periodLength[index];
+          rebate.discount = values.discount[index];
+          rebate.remark = values.remark[index];
           RebateJson.push(rebate);
         });
 
         //let entity = values; 
-        let entity: LeaseContractChargeEntity = {};
+        let entity: HtLeasecontractcharge = {};
         //费用条款-基本条款 
         entity.depositFeeItemId = values.depositFeeItemId;
+        entity.depositFeeItemName = values.depositFeeItemName;
         entity.leaseArea = values.leaseArea;
         entity.deposit = values.deposit;
         entity.depositUnit = values.depositUnit;
@@ -301,9 +318,10 @@ const Modify = (props: ModifyProps) => {
           return;
         }
         //保存合同数据
-        let ContractCharge: LeaseContractChargeEntity = {};
+        let ContractCharge: HtLeasecontractcharge = {};
         //费用条款-基本条款 
         ContractCharge.depositFeeItemId = values.depositFeeItemId;
+        ContractCharge.depositFeeItemName = values.depositFeeItemName;
         ContractCharge.leaseArea = values.leaseArea;
         ContractCharge.deposit = values.deposit;
         ContractCharge.depositUnit = values.depositUnit;
@@ -373,9 +391,10 @@ const Modify = (props: ModifyProps) => {
           return;
         }
         //保存合同数据
-        let ContractCharge: LeaseContractChargeEntity = {};
+        let ContractCharge: HtLeasecontractcharge = {};
         //费用条款-基本条款 
         ContractCharge.depositFeeItemId = values.depositFeeItemId;
+        ContractCharge.depositFeeItemName = values.depositFeeItemName;
         ContractCharge.leaseArea = values.leaseArea;
         ContractCharge.deposit = values.deposit;
         ContractCharge.depositUnit = values.depositUnit;
@@ -407,7 +426,7 @@ const Modify = (props: ModifyProps) => {
         Contract.lateFee = values.lateFee;
         Contract.lateFeeUnit = values.lateFeeUnit;
         Contract.maxLateFee = values.maxLateFee;
-        Contract.maxLateFeeUnit = values.maxLateFeeUnit;   
+        Contract.maxLateFeeUnit = values.maxLateFeeUnit;
         Contract.billUnitId = values.billUnitId;
         SaveForm({
           ...Contract,
@@ -465,6 +484,11 @@ const Modify = (props: ModifyProps) => {
     }
   };
 
+  //保证金单位切换
+  const changeFeeItem = (value, option) => {
+    form.setFieldsValue({ depositFeeItemName: option.props.children });
+  };
+
   return (
     <Drawer
       title={title}
@@ -509,7 +533,7 @@ const Modify = (props: ModifyProps) => {
                             />
                           )}
                           {getFieldDecorator('followerId', {
-                             initialValue: infoDetail.followerId
+                            initialValue: infoDetail.followerId
                           })(
                             <input type='hidden' />
                           )}
@@ -636,9 +660,9 @@ const Modify = (props: ModifyProps) => {
                               multiple={true}>
                             </TreeSelect>
                           )}
-                          <span style={{ marginLeft: 8, color: "green" }}>多个房屋的时候，默认获取第一个房屋作为计费单元</span> 
+                          <span style={{ marginLeft: 8, color: "green" }}>多个房屋的时候，默认获取第一个房屋作为计费单元</span>
                           {getFieldDecorator('billUnitId', {
-                             initialValue: infoDetail.billUnitId
+                            initialValue: infoDetail.billUnitId
                           })(
                             <input type='hidden' />
                           )}
@@ -739,7 +763,9 @@ const Modify = (props: ModifyProps) => {
                         initialValue: contractCharge.depositFeeItemId,
                         rules: [{ required: true, message: '请选择费项' }]
                       })(
-                        <Select placeholder="请选择费项">
+                        <Select placeholder="请选择费项"
+                          onChange={changeFeeItem}
+                        >
                           {feeitems.map(item => (
                             <Option value={item.key} key={item.key}>
                               {item.title}
@@ -747,6 +773,13 @@ const Modify = (props: ModifyProps) => {
                           ))}
                         </Select>
                       )}
+
+                      {getFieldDecorator('depositFeeItemName', {
+                        initialValue: contractCharge.depositFeeItemName,
+                      })(
+                        <input type='hidden' />
+                      )}
+
                     </Form.Item>
                   </Col>
                   <Col lg={5}>

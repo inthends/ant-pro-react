@@ -5,12 +5,12 @@ import React from 'react';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import styles from './style.less';
 const { Option } = Select;
-import { LeaseContractChargeIncreEntity } from '@/model/models';
+import { HtLeasecontractchargeincre } from '@/model/models';
 import moment from 'moment';
 
 interface IncreasingRateModifyProps {
   form: WrappedFormUtils;
-  chargeIncreList: LeaseContractChargeIncreEntity[];
+  chargeIncreList: HtLeasecontractchargeincre[];
 }
 
 //动态数量

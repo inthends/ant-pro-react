@@ -79,6 +79,9 @@ export interface HtLeasecontractchargefee {
      * Desc:  Default:0  Nullable:True
      */
     advancePayTime?: number;
+     /**
+     * Desc:  Default:  Nullable:True
+     */
     feeItemId?: string;
     /**
      * Desc:  Default:  Nullable:True

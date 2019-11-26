@@ -5,12 +5,12 @@ import React from 'react';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import styles from './style.less';
 const { Option } = Select;
-import { LeaseContractChargeFeeOfferEntity } from '@/model/models';
+import { HtLeasecontractchargefeeoffer } from '@/model/models';
 import moment from 'moment';
 
 interface RebateModifyProps {
   form: WrappedFormUtils;
-  chargeOfferList: LeaseContractChargeFeeOfferEntity[];
+  chargeOfferList: HtLeasecontractchargefeeoffer[];
 }
 
 //动态数量

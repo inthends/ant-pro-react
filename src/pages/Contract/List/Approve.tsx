@@ -2,10 +2,10 @@
 import { message, Tag, Divider, PageHeader, List, Tabs, Button, Card, Col, Drawer, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import {
-  LeaseContractChargeEntity,
-  LeaseContractChargeFeeEntity,
-  LeaseContractChargeIncreEntity,
-  LeaseContractChargeFeeOfferEntity,
+  HtLeasecontractcharge,
+  HtLeasecontractchargefee,
+  HtLeasecontractchargeincre,
+  HtLeasecontractchargefeeoffer,
   LeaseContractDTO,
   ChargeDetailDTO
 } from '@/model/models';
@@ -30,10 +30,10 @@ const Approve = (props: ApproveProps) => {
   //const [industryType, setIndustryType] = useState<any[]>([]); //行业  
   //const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
   const [infoDetail, setInfoDetail] = useState<LeaseContractDTO>({});
-  const [contractCharge, setContractCharge] = useState<LeaseContractChargeEntity>({});
-  const [chargeFeeList, setChargeFeeList] = useState<LeaseContractChargeFeeEntity[]>([]);
-  const [chargeIncreList, setChargeIncreList] = useState<LeaseContractChargeIncreEntity[]>([]);
-  const [chargeOfferList, setChargeOfferList] = useState<LeaseContractChargeFeeOfferEntity[]>([]);
+  const [contractCharge, setContractCharge] = useState<HtLeasecontractcharge>({});
+  const [chargeFeeList, setChargeFeeList] = useState<HtLeasecontractchargefee[]>([]);
+  const [chargeIncreList, setChargeIncreList] = useState<HtLeasecontractchargeincre[]>([]);
+  const [chargeOfferList, setChargeOfferList] = useState<HtLeasecontractchargefeeoffer[]>([]);
   const [depositData, setDepositData] = useState<any[]>([]);//保证金
   const [chargeData, setChargeData] = useState<any[]>([]);//租金
 

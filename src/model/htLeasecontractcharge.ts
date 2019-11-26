@@ -31,7 +31,14 @@ export interface HtLeasecontractcharge {
      * Desc:  Default:  Nullable:True
      */
     modifyUserId?: string;
+    /**
+    * Desc:  Default:  Nullable:True
+    */
     depositFeeItemId?: string;
+    /**
+     * Desc:  Default:  Nullable:True
+     */
+    depositFeeItemName?: string;
     /**
      * Desc:  Default:  Nullable:True
      */
