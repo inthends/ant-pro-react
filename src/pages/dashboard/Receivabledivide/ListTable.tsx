@@ -22,7 +22,7 @@ function ListTable(props: ListTableProps) {
       title: '房屋全称',
       dataIndex: 'allName',
       key: 'allName',
-      width: 180,
+      width: 240,
     },
     {
       title: '住户',
@@ -151,7 +151,7 @@ function ListTable(props: ListTableProps) {
         dataSource={data}
         rowKey="id"
         pagination={pagination}
-        scroll={{ y: 500, x: 2300 }}
+        scroll={{ y: 500, x: 2400 }}
         loading={loading}
         onChange={onchange}
       />

@@ -28,7 +28,7 @@ function ListTable(props: ListTableProps) {
       title: '楼盘',
       dataIndex: '楼盘',
       key: '楼盘',
-      width: 100,
+      width: 150,
     },
     {
       title: '楼栋',
@@ -140,7 +140,7 @@ function ListTable(props: ListTableProps) {
       dataIndex: '是否逾期',
       key: '是否逾期',
       width: 100,
-      sorter: true
+      align:'center'
     },
     {
       title: '备注',
@@ -159,7 +159,7 @@ function ListTable(props: ListTableProps) {
         dataSource={data}
         rowKey="feeId"
         pagination={pagination}
-        scroll={{ y: 500, x: 1900 }}
+        scroll={{ y: 500, x: 2000 }}
         loading={loading}
         onChange={onchange}
       />

@@ -88,7 +88,7 @@ function HouseInfoList(props: HouseInfoListProps) {
       title: '房屋全称',
       dataIndex: 'allName',
       key: 'allName',
-      width: 180, 
+      width: 220, 
     },
   ] as ColumnProps<any>[];
 

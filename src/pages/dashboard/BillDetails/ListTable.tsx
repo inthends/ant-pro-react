@@ -28,7 +28,7 @@ function ListTable(props: ListTableProps) {
       title: '楼盘',
       dataIndex: '楼盘',
       key: '楼盘',
-      width: 100,
+      width: 150,
     },
     {
       title: '楼栋',
