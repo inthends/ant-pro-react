@@ -97,7 +97,8 @@ const Approve = (props: ApproveProps) => {
     form.validateFields((errors, values) => {
       if (!errors) {
         ApproveForm({
-          keyValue: id,
+          contractId: id,
+          chargeId:chargeId
         }).then(res => {
           message.success('审批成功！');
           closeDrawer();
@@ -259,7 +260,7 @@ const Approve = (props: ApproveProps) => {
                 </Col>
                 <Col lg={10}>
                   <Form.Item label="保证金关联费项">
-                    {contractCharge.depositFeeItemId}
+                    {contractCharge.depositFeeItemName}
                   </Form.Item>
                 </Col>
                 <Col lg={7}>
@@ -318,9 +319,8 @@ const Approve = (props: ApproveProps) => {
                       <Form.Item label="租期划分方式">
                         {k.rentalPeriodDivided}
                       </Form.Item>
-                    </Col>
-
-                    {(k.priceUnit == 1 || k.priceUnit == 3) ?
+                    </Col> 
+                    {(k.priceUnit == '元/m²·天' || k.priceUnit == '元/天') ?
                       <Col lg={4}>
                         <Form.Item label="天单价换算规则">
                           {k.dayPriceConvertRule}

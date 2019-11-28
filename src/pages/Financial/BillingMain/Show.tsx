@@ -264,8 +264,9 @@ const Show = (props: ShowProps) => {
                 dataSource={unitFeeData}
                 rowKey="unitmeterid"
                 pagination={pagination}
-                scroll={{ y: 500, x: 1200 }}
+                scroll={{ y: 500, x: 1100 }}
                 loading={loading}
+                onChange={onchange}
               />
             </Row>
           </Spin>

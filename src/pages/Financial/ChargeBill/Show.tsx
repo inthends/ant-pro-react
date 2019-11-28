@@ -205,7 +205,7 @@ const Show = (props: ShowProps) => {
               </Col>
 
               <Col span={6}>
-                <Form.Item label="收款编号"  >
+                <Form.Item label="付款编号"  >
                   {infoDetail.payCode}
                 </Form.Item>
               </Col>

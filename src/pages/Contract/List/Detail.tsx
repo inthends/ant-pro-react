@@ -308,16 +308,14 @@ const Detail = (props: DetailProps) => {
                       <Form.Item label="租期划分方式">
                         {k.rentalPeriodDivided}
                       </Form.Item>
-                    </Col>
-
-                    {(k.priceUnit == 1 || k.priceUnit == 3) ?
+                    </Col> 
+                    {(k.priceUnit == '元/m²·天' || k.priceUnit == '元/天') ?
                       <Col lg={4}>
                         <Form.Item label="天单价换算规则">
                           {k.dayPriceConvertRule}
                         </Form.Item>
                       </Col>
-                      : null}
-
+                      : null} 
                     <Col lg={4}>
                       <Form.Item label="年天数">
                         {k.yearDays}

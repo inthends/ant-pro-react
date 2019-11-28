@@ -177,29 +177,46 @@ function ListTable(props: ListTableProps) {
       width: 140,
       fixed: 'right',
       render: (text, record) => {
-        return [
-          // <Button
-          //   type="primary"
-          //   key="detail"
-          //   style={{ marginRight: '10px' }}
-          //   onClick={() => detail(record.id,record.chargeId)}
-          // >
-          // 查看
-          // </Button>,
-          // <Button type="danger" key="delete" onClick={() => doDelete(record)}>
-          //   删除
-          // </Button>,
 
-          <span>
-            {record.status == 1 ?
-              <a onClick={() => approve(record.id, record.chargeId)} key="modify">审核</a> :
-              <a onClick={() => modify(record.id, record.chargeId)} key="modify">修改</a>}
-            <Divider type="vertical" key='spilt1' />
-            <a onClick={() => detail(record.id, record.chargeId)} key="detail">查看</a>
-            <Divider type="vertical" key='spilt2' />
-            <a onClick={() => doDelete(record)} key="delete">删除</a>
-          </span>
-        ];
+        //新建
+        if (record.status == 0) {
+          return [
+            // <Button
+            //   type="primary"
+            //   key="detail"
+            //   style={{ marginRight: '10px' }}
+            //   onClick={() => detail(record.id,record.chargeId)}
+            // >
+            // 查看
+            // </Button>,
+            // <Button type="danger" key="delete" onClick={() => doDelete(record)}>
+            //   删除
+            // </Button>, 
+            <span>
+              <a onClick={() => modify(record.id, record.chargeId)} key="modify">修改</a>
+              <Divider type="vertical" key='spilt1' />
+              <a onClick={() => detail(record.id, record.chargeId)} key="detail">查看</a>
+              <Divider type="vertical" key='spilt2' />
+              <a onClick={() => doDelete(record)} key="delete">删除</a>
+            </span>
+          ];
+        } else if (record.status == 1) {
+          return [
+            <span>
+              <a onClick={() => approve(record.id, record.chargeId)} key="modify">审核</a>
+              <Divider type="vertical" key='spilt1' />
+              <a onClick={() => detail(record.id, record.chargeId)} key="detail">查看</a>
+            </span>
+          ];
+        } else {
+          return [
+            <span>
+              <a onClick={() => modify(record.id, record.chargeId)} key="change">变更</a>
+              <Divider type="vertical" key='spilt1' />
+              <a onClick={() => detail(record.id, record.chargeId)} key="detail">查看</a>
+            </span>
+          ];
+        }
       },
     },
   ] as ColumnProps<any>[];
