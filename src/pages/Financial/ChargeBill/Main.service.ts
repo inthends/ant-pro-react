@@ -117,6 +117,11 @@ export function InvalidBillForm(keyValue): Promise<any> {
   return request.post(process.env.basePath + `/BillingMain/InvalidForm?keyValue=${keyValue}`).then(getResult as any);
 }
 
+//作废计费明细
+export function InvalidBillDetailForm(keyValue): Promise<any> {
+  return request.post(process.env.basePath + `/BillingMain/InvalidBillDetailForm?keyValue=${keyValue}`).then(getResult as any);
+}
+
 //作废收款单/
 export function InvalidForm(keyValue): Promise<any> {
   return request.post(process.env.basePath + `/Receivable/InvalidForm?keyValue=${keyValue}`).then(getResult as any);

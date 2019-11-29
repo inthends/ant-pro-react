@@ -5,7 +5,7 @@ import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import { CheckRebateFee, InvalidBillForm, Charge } from './Main.service';
+import { CheckRebateFee, InvalidBillDetailForm, Charge } from './Main.service';
 // import styles from './style.less';
 const { Option } = Select;
 
@@ -48,7 +48,7 @@ function ListTable(props: ListTableProps) {
       cancelText: '取消',
       onOk: () => {
         //console.log(record);
-        InvalidBillForm(record.billId).then(() => {
+        InvalidBillDetailForm(record.id).then(() => {
           message.success('作废成功');
           reload();
         });
