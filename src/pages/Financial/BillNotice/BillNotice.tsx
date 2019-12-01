@@ -10,6 +10,8 @@ import BillNoticeTable from './BillNoticeTable';
 import BillCheckModify from './BillCheckModify';
 import BillCheckVerify from './BillCheckVerify';
 import BillCheckShow from './BillCheckShow';
+import {getResult } from '@/utils/networkUtils';
+import { GetUnitTreeAll } from '@/services/commonItem';//获取全部房间树
 const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
@@ -33,13 +35,23 @@ function BillNotice() {
   const [showCheckBillVisible, setShowCheckBillVisible] = useState<boolean>(false);
   const [tempListData, setTempListData] = useState<any[]>([]);
 
+  const [unitTreeData, setUnitTreeData] = useState<any[]>([]);
+
   const selectTree = (org, item, info) => {
     SetOrganize(org);
     initBillCheckLoadData(info, '');
     initBillNoticeLoadData(info, '');
   };
 
-  useEffect(() => {
+  useEffect(() => { 
+    //获取房产树
+    GetUnitTreeAll()
+      .then(getResult)
+      .then((res: any[]) => {
+        setUnitTreeData(res || []);
+        return res || [];
+      });
+
     GetTemplates().then(res => {
       setTempListData(res);
     }).then(() => {
@@ -286,82 +298,92 @@ function BillNotice() {
 
     }
     else {
-    //删除
-    if (selectIds == undefined) {
-      message.error('请选择需要删除的账单！');
-    } else {
-      Modal.confirm({
-        title: '是否确认删除?',
-        onOk() {
-          BatchRemoveForm({
-            keyValues: selectIds
-          }).then(res => {
-            message.success('删除成功');
-            initBillCheckLoadData('', '');
-          });
-        },
-        onCancel() { },
-      });
+      //删除
+      if (selectIds == undefined) {
+        message.error('请选择需要删除的账单！');
+      } else {
+        Modal.confirm({
+          title: '是否确认删除?',
+          onOk() {
+            BatchRemoveForm({
+              keyValues:  JSON.stringify(selectIds)
+            }).then(res => {
+              message.success('删除成功');
+              initBillCheckLoadData('', '');
+            });
+          },
+          onCancel() { },
+        });
+      }
     }
-  }
-};
+  };
 
-const menu = (
-  <Menu onClick={handleMenuClick}>
-    <Menu.Item key="1">审核</Menu.Item>
-    <Menu.Item key="2">反审</Menu.Item>
-    <Menu.Item key="3">打印</Menu.Item>
-    <Menu.Item key="4">删除</Menu.Item>
-  </Menu>
-);
+  const menu = (
+    <Menu onClick={handleMenuClick}>
+      <Menu.Item key="1">审核</Menu.Item>
+      <Menu.Item key="2">反审</Menu.Item>
+      <Menu.Item key="3">打印</Menu.Item>
+      <Menu.Item key="4">删除</Menu.Item>
+    </Menu>
+  );
 
-return (
-  <Layout>
-    <AsynLeftTree
-      parentid={'0'}
-      selectTree={(id, item, info) => {
-        selectTree(id, item, info);
-      }}
-    />
-    <Content style={{ paddingLeft: '18px' }}>
-      <Tabs defaultActiveKey="1" >
-        <TabPane tab="账单列表" key="1">
-          <div style={{ marginBottom: '20px', padding: '3px 2px' }}
-            onChange={(value) => {
-              var params = Object.assign({}, billCheckSearchParams, { billChecktype: value });
-              setBillCheckSearchParams(params);
-            }}>
-            <Select placeholder="==账单类型==" style={{ width: '150px', marginRight: '5px' }}
-              onChange={(value: string) => {
-                setBillType(value);
-              }}>
-              <Select.Option value="通知单">通知单</Select.Option>
-              <Select.Option value="催款单">催款单</Select.Option>
-              <Select.Option value="催缴函">催缴函</Select.Option>
-              <Select.Option value="律师函">律师函</Select.Option>
-            </Select>
-            <Select placeholder="==模版类型==" style={{ width: '150px', marginRight: '5px' }}
-              onChange={(value: string) => {
-                setTemplateId(value);
-              }}
-            >
-              {
-                (tempListData || []).map(item => {
-                  return <Select.Option value={item.value}>{item.title}</Select.Option>
-                })
-              }
-            </Select>
-            <Search
-              className="search-input"
-              placeholder="请输入要查询的单号"
-              style={{ width: 200 }}
-              onChange={e => {
-                var params = Object.assign({}, billCheckSearchParams, { search: e.target.value });
+  //tab切换刷新数据
+  const changeTab = (e: string) => {
+    if (e === '1') {
+      initBillCheckLoadData(organize, billCheckSearch);
+    } else {
+      initBillNoticeLoadData(organize, billNoticeSearch);
+    }
+  };
+
+
+  return (
+    <Layout>
+      <AsynLeftTree
+        parentid={'0'}
+        selectTree={(id, item, info) => {
+          selectTree(id, item, info);
+        }}
+      />
+      <Content style={{ paddingLeft: '18px' }}>
+        <Tabs defaultActiveKey="1" onChange={changeTab}>
+          <TabPane tab="账单列表" key="1">
+            <div style={{ marginBottom: '20px', padding: '3px 2px' }}
+              onChange={(value) => {
+                var params = Object.assign({}, billCheckSearchParams, { billChecktype: value });
                 setBillCheckSearchParams(params);
-              }}
-            />
+              }}>
+              <Select placeholder="==账单类型==" style={{ width: '150px', marginRight: '5px' }}
+                onChange={(value: string) => {
+                  setBillType(value);
+                }}>
+                <Select.Option value="通知单">通知单</Select.Option>
+                <Select.Option value="催款单">催款单</Select.Option>
+                <Select.Option value="催缴函">催缴函</Select.Option>
+                <Select.Option value="律师函">律师函</Select.Option>
+              </Select>
+              <Select placeholder="==模版类型==" style={{ width: '150px', marginRight: '5px' }}
+                onChange={(value: string) => {
+                  setTemplateId(value);
+                }}
+              >
+                {
+                  (tempListData || []).map(item => {
+                    return <Select.Option value={item.value}>{item.title}</Select.Option>
+                  })
+                }
+              </Select>
+              <Search
+                className="search-input"
+                placeholder="请输入要查询的单号"
+                style={{ width: 200 }}
+                onChange={e => {
+                  var params = Object.assign({}, billCheckSearchParams, { search: e.target.value });
+                  setBillCheckSearchParams(params);
+                }}
+              />
 
-            {/* <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
+              {/* <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
                 onClick={() => {
                   if (selectIds.length > 1) {
                     Modal.confirm({
@@ -423,114 +445,115 @@ return (
                 审核
               </Button> */}
 
-            <Button type="primary" style={{ marginLeft: '10px' }}
-              onClick={() => { loadBillCheckData() }}
-            >
-              <Icon type="search" />
-              查询
+              <Button type="primary" style={{ marginLeft: '10px' }}
+                onClick={() => { loadBillCheckData() }}
+              >
+                <Icon type="search" />
+                查询
               </Button>
 
-            <Dropdown overlay={menu}  >
-              <Button style={{ float: 'right', marginLeft: '10px' }}>
-                操作<Icon type="down" />
-              </Button>
-            </Dropdown>
+              <Dropdown overlay={menu}  >
+                <Button style={{ float: 'right', marginLeft: '10px' }}>
+                  操作<Icon type="down" />
+                </Button>
+              </Dropdown>
 
-            <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
-              onClick={() => { showModify(null, true) }}
-            >
-              <Icon type="plus" />
-              新增
+              <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
+                onClick={() => { showModify(null, true) }}
+              >
+                <Icon type="plus" />
+                新增
               </Button>
-          </div>
+            </div>
 
-          <BillCheckTable
-            onchange={(paginationConfig, filters, sorter) => {
-              loadBillCheckData(paginationConfig, sorter)
-            }
-            }
-            loading={billCheckLoading}
-            pagination={billCheckPagination}
-            data={billCheckData}
-            showCheckBill={(id) => {
-              if (id != null && id != '') {
-                setId(id);
+            <BillCheckTable
+              onchange={(paginationConfig, filters, sorter) => {
+                loadBillCheckData(paginationConfig, sorter)
               }
-              setShowCheckBillVisible(true);
-            }}
-            reload={() => initBillCheckLoadData('', billCheckSearch)}
-            getRowSelect={(records) => {
-              // setSelectRecords(records);
-              if (records.length == 1) {
-                setId(records[0].billId);
-                if (records[0].ifVerify == 1) {
+              }
+              loading={billCheckLoading}
+              pagination={billCheckPagination}
+              data={billCheckData}
+              showCheckBill={(id) => {
+                if (id != null && id != '') {
+                  setId(id);
+                }
+                setShowCheckBillVisible(true);
+              }}
+              reload={() => initBillCheckLoadData('', billCheckSearch)}
+              getRowSelect={(records) => {
+                // setSelectRecords(records);
+                if (records.length == 1) {
+                  setId(records[0].billId);
+                  if (records[0].ifVerify == 1) {
+                    setIfVerify(true);
+                  } else {
+                    setIfVerify(false);
+                  }
+                }
+                var recordList: Array<string> = [];
+                records.forEach(record => {
+                  recordList.push(record.billId)
+                })
+                setSelectIds(recordList);
+              }}
+            />
+          </TabPane>
+          <TabPane tab="账单明细" key="2">
+            <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
+              <Search
+                className="search-input"
+                placeholder="请输入要查询的单号"
+                style={{ width: 280 }}
+                onSearch={value => loadBillNoticeData(value)}
+              />
+            </div>
+            <BillNoticeTable
+              showModify={(id) => {
+                setId(id);
+              }}
+              onchange={(paginationConfig, filters, sorter) =>
+                loadBillNoticeData(billNoticeSearch, paginationConfig, sorter)
+              }
+              loading={billNoticeLoading}
+              pagination={billNoticePagination}
+              data={billNoticeData}
+              reload={() => initBillNoticeLoadData('', billNoticeSearch)}
+              getRowSelect={(record) => {
+                setId(record.billId);
+                if (record.ifVerify == 1) {
                   setIfVerify(true);
                 } else {
                   setIfVerify(false);
                 }
-              }
-              var recordList: Array<string> = [];
-              records.forEach(record => {
-                recordList.push(record.billId)
-              })
-              setSelectIds(recordList);
-            }}
-          />
-        </TabPane>
-        <TabPane tab="账单明细" key="2">
-          <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
-            <Search
-              className="search-input"
-              placeholder="请输入要查询的单号"
-              style={{ width: 280 }}
-              onSearch={value => loadBillNoticeData(value)}
+              }}
             />
-          </div>
-          <BillNoticeTable
-            showModify={(id) => {
-              setId(id);
-            }}
-            onchange={(paginationConfig, filters, sorter) =>
-              loadBillNoticeData(billNoticeSearch, paginationConfig, sorter)
-            }
-            loading={billNoticeLoading}
-            pagination={billNoticePagination}
-            data={billNoticeData}
-            reload={() => initBillNoticeLoadData('', billNoticeSearch)}
-            getRowSelect={(record) => {
-              setId(record.billId);
-              if (record.ifVerify == 1) {
-                setIfVerify(true);
-              } else {
-                setIfVerify(false);
-              }
-            }}
-          />
-        </TabPane>
-      </Tabs>
-    </Content>
-    <BillCheckModify
-      visible={modifyVisible}
-      closeDrawer={closeModify}
-      id={id}
-      isEdit={true}
-      reload={() => initBillCheckLoadData('', '')}
-    />
-    <BillCheckShow
-      visible={showCheckBillVisible}
-      closeDrawer={() => {
-        setShowCheckBillVisible(false);
-      }}
-      id={id}
-    />
-    <BillCheckVerify
-      vertifyVisible={vertifyVisible}
-      closeVerify={closeVerify}
-      ifVerify={ifVerify}
-      id={id}
-      reload={() => initBillCheckLoadData('', '')}
-    />
-  </Layout>
-);
+          </TabPane>
+        </Tabs>
+      </Content>
+      <BillCheckModify
+        visible={modifyVisible}
+        closeDrawer={closeModify}
+        id={id}
+        treeData={unitTreeData}
+        isEdit={true}
+        reload={() => initBillCheckLoadData('', '')}
+      />
+      <BillCheckShow
+        visible={showCheckBillVisible}
+        closeDrawer={() => {
+          setShowCheckBillVisible(false);
+        }}
+        id={id}
+      />
+      <BillCheckVerify
+        vertifyVisible={vertifyVisible}
+        closeVerify={closeVerify}
+        ifVerify={ifVerify}
+        id={id}
+        reload={() => initBillCheckLoadData('', '')}
+      />
+    </Layout>
+  );
 }
 export default BillNotice;

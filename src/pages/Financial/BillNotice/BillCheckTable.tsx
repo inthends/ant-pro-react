@@ -22,6 +22,24 @@ interface BillCheckTableProps {
 function BillCheckTable(props: BillCheckTableProps) {
   const { onchange, loading, pagination, data, reload, showCheckBill, getRowSelect } = props;
   // const [selectedRowKey, setSelectedRowKey] = useState([]);
+
+
+  const doDelete = (record) => {
+    Modal.confirm({
+      title: '请确认',
+      content: `您是否要删除${record.billCode}`,
+      okText: '确认',
+      cancelText: '取消',
+      onOk: () => {
+        RemoveForm(record.billId).then(res => {
+          message.success('删除成功');
+          reload();
+        })
+      },
+    });
+
+  }
+
   const columns = [
     {
       title: '单据类型',
@@ -57,7 +75,7 @@ function BillCheckTable(props: BillCheckTableProps) {
       title: '业户名称',
       dataIndex: 'custName',
       key: 'custName',
-      width: 100,
+      width: 140,
       sorter: true,
     },
     {
@@ -130,21 +148,7 @@ function BillCheckTable(props: BillCheckTableProps) {
           <span>
             <a onClick={() => showCheckBill(record.billId)} key="show">{"查看"}</a>
             <Divider type="vertical" />
-            <a onClick={() => {
-              Modal.confirm({
-                title: '请确认',
-                content: `您是否要删除${record.billCode}`,
-                okText: '确认',
-                cancelText: '取消',
-                onOk: () => {
-                  RemoveForm(record.billId).then(res => {
-                    message.success('删除成功');
-                    reload();
-                  })
-                },
-              });
-
-            }} key="delete" disabled= {record.ifVerify==1?true:false}>删除</a>
+            <a onClick={() => doDelete(record)} key="delete" disabled={record.ifVerify == 1 ? true : false}>删除</a>
           </span>
         ];
       },
@@ -172,7 +176,7 @@ function BillCheckTable(props: BillCheckTableProps) {
         dataSource={data}
         rowKey="billId"
         pagination={pagination}
-        scroll={{ y: 500, x: 1450 }}
+        scroll={{ y: 500, x: 1500 }}
         loading={loading}
         onChange={onchange}
         rowSelection={rowSelection}

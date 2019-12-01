@@ -5,8 +5,9 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { SaveBill, GetReceivablesFeeItemTreeJson, TestCalBill, GetTemplates, GetEntityShow } from './BillNotice.service';
 import './style.less';
-import AsynSelectTree from '../AsynSelectTree';
+// import AsynSelectTree from '../AsynSelectTree';
 import LeftSelectTree from '../LeftSelectTree';
+import SelectTree from '../SelectTree';
 import moment from 'moment';
 const { MonthPicker } = DatePicker;
 
@@ -16,10 +17,11 @@ interface BillCheckModifyProps {
   form: WrappedFormUtils;
   isEdit: boolean;
   id?: string;
-  reload(): void
+  reload(): void;
+  treeData: any[];
 }
 const BillCheckModify = (props: BillCheckModifyProps) => {
-  const { visible, closeDrawer, form, isEdit, id, reload } = props;
+  const { visible, closeDrawer, form, isEdit, id, reload, treeData  } = props;
   const [feeTreeData, setFeeTreeData] = useState<TreeEntity[]>([]);
   const [tempListData, setTempListData] = useState<any[]>([]);
   const [infoDetail, setInfoDetail] = useState<any>({});
@@ -40,7 +42,7 @@ const BillCheckModify = (props: BillCheckModifyProps) => {
         //     parentId: item.parentId,
         //   };
         // });
-        setFeeTreeData(res || []); 
+        setFeeTreeData(res || []);
       }).then(() => {
         return GetTemplates();
       }).then(res => {
@@ -74,14 +76,25 @@ const BillCheckModify = (props: BillCheckModifyProps) => {
       <Spin tip="数据加载中..." spinning={loading}>
         <Row gutter={24} style={{ height: 'calc(100vh - 55px)', overflow: 'hidden' }}>
           <Col span={6} style={{ height: 'calc(100vh - 100px)', overflow: 'auto' }}>
-            <AsynSelectTree
+            {/* <AsynSelectTree
               parentid='0'
               getCheckedKeys={(keys) => {
                 setUnitData(keys);
               }}
               selectTree={(id, type, info?) => {
               }}
+            /> */}
+
+            <SelectTree
+              checkable={true}
+              treeData={treeData}
+              getCheckedKeys={(keys) => {
+                setUnitData(keys);
+              }}
+              selectTree={(id, type, info?) => {
+              }}
             />
+
           </Col>
           <Col span={6} style={{ height: 'calc(100vh - 100px)', overflow: 'auto' }}>
             <LeftSelectTree

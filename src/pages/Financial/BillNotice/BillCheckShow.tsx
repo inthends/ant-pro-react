@@ -104,17 +104,17 @@ const BillCheckShow = (props: BillCheckShowProps) => {
       }
     },
     {
-      title: '业务名称',
+      title: '业户名称',
       dataIndex: 'custName',
       key: 'custName',
-      width: 100,
+      width: 140,
       sorter: true
     },
     {
       title: '房屋名称',
       dataIndex: 'allName',
       key: 'allName',
-      width: 180,
+      width: 240,
       sorter: true,
     },
     {
@@ -184,7 +184,7 @@ const BillCheckShow = (props: BillCheckShowProps) => {
     <Drawer
       title={title}
       placement="right"
-      width={700}
+      width={780}
       onClose={closeDrawer}
       visible={visible}
       style={{ height: 'calc(100vh-50px)' }}
@@ -252,7 +252,7 @@ const BillCheckShow = (props: BillCheckShowProps) => {
           dataSource={billCheckData}
           rowKey="billId"
           pagination={billCheckPagination}
-          scroll={{ y: 500, x: 1200 }}
+          scroll={{ y: 500, x: 1400 }}
           loading={billCheckLoading}
         />
       </Spin>
