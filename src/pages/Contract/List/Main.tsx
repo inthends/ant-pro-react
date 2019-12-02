@@ -10,6 +10,7 @@ import Add from './Add';
 import Modify from './Modify';
 import Detail from './Detail';
 import Approve from './Approve';
+import Change from './Change';
 // import ChooseUser from './ChooseUser';
 // import { GetQuickSimpleTreeAllForContract } from '@/services/commonItem';
 
@@ -19,7 +20,9 @@ const { Search } = Input;
 function Main() {
   const [addVisible, setAddVisible] = useState<boolean>(false);
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
-  const [detailVisible, setDetailVisible] = useState<boolean>(false);
+  const [detailVisible, setDetailVisible] = useState<boolean>(false); 
+  const [changeVisible, setChangeVisible] = useState<boolean>(false);
+
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [data, setData] = useState<any[]>([]);
@@ -56,6 +59,17 @@ function Main() {
 
   const showDetailDrawer = (id?, chargeId?) => {
     setDetailVisible(true);
+    setId(id);
+    setChargeId(chargeId);
+  };
+
+  const closeChangeDrawer = () => {
+    setChangeVisible(false);
+  };
+
+  //变更
+  const showChangeDrawer = (id?, chargeId?) => {
+    setChangeVisible(true);
     setId(id);
     setChargeId(chargeId);
   };
@@ -169,6 +183,7 @@ function Main() {
           detail={showDetailDrawer}
           modify={showModifyDrawer}
           approve={showApproveDrawer}
+          change={showChangeDrawer}
           reload={() => initLoadData(search)} />
       </Content>
 
@@ -210,6 +225,18 @@ function Main() {
         visible={userVisible}
         close={() => setUserVisible(false)}
       /> */}
+
+
+      <Change
+        visible={changeVisible}
+        closeDrawer={closeChangeDrawer}
+        // treeData={treeData}
+        id={id}
+        chargeId={chargeId}
+        reload={() => initLoadData(search)}
+      // choose={showChoose}
+      />
+
     </Layout>
   );
 }

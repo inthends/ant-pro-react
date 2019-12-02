@@ -62,8 +62,13 @@ function ListTable(props: ListTableProps) {
     //this.showEditModal(currentItem);
     //}
     //else
-    if (key === 'split') {
-      showSplit(currentItem.id);
+    if (key === 'split') { 
+      //如果设置了优惠政策，则不允许拆费
+      if (!currentItem.rmid) {
+        message.warning('设置了优惠政策，不允许拆费');
+      } else { 
+        showSplit(currentItem.id);
+      }
     } else if (key === 'trans') {
       showTrans(currentItem.id);
     }
@@ -223,13 +228,13 @@ function ListTable(props: ListTableProps) {
 
   const onSelectChange = (selectedRowKeys, selectedRows) => {
 
-    if (selectedRowKeys.length > 0) { 
+    if (selectedRowKeys.length > 0) {
       //如果该笔费用存在优惠，则需要选中与此费项有关的全部费用，一起缴款，否则给出提示 
       const data = {
         mainId: selectedRows[0].rmid,
         feeId: selectedRowKeys[0],
-        unitId:selectedRows[0].unitId,
-        selectFeeIds: JSON.stringify(selectedRowKeys)  
+        unitId: selectedRows[0].unitId,
+        selectFeeIds: JSON.stringify(selectedRowKeys)
       };
       CheckRebateFee(data).then((res) => {
         if (res.flag) {

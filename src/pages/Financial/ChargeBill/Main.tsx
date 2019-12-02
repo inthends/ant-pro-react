@@ -306,7 +306,7 @@ function Main() {
 
   //tab切换刷新数据
   const changeTab = (e: string) => {
-    if (e === '1') { 
+    if (e === '1') {
       if (organizeId)
         initLoadData(search, organizeId);
     } else {
@@ -343,7 +343,7 @@ function Main() {
                 placeholder="请输入要查询费项"
                 style={{ width: 200 }}
                 onSearch={value => loadData(value)} />
-              <Checkbox style={{ marginLeft: '3px' }} onChange={onShowCustomerChange} >显示该户其他费用</Checkbox>
+              <Checkbox style={{ marginLeft: '10px' }} onChange={onShowCustomerChange} >显示该户其他费用</Checkbox>
               {/* <Button type="primary" style={{ float: 'right', marginLeft: '3px' }}
                 onClick={() => showTrans()}
                 disabled={billRowKey == -1 ? true : false}  >

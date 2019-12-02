@@ -1,5 +1,5 @@
 import Page from '@/components/Common/Page';
-import { Tag, Divider, message, Table, Modal } from 'antd';
+import { Menu, Dropdown, Icon, Tag, Divider, message, Table, Modal } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import { RemoveForm } from './Main.service';
@@ -13,11 +13,12 @@ interface ListTableProps {
   detail(id: string, chargeId: string): void;
   modify(id: string, chargeId: string): void;
   approve(id: string, chargeId: string): void;
+  change(id: string, chargeId: string): void;
   reload(): void;
 };
 
 function ListTable(props: ListTableProps) {
-  const { onchange, loading, pagination, data, detail, modify, reload, approve } = props;
+  const { onchange, loading, pagination, data, detail, modify, reload, approve, change } = props;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
   };
@@ -33,6 +34,37 @@ function ListTable(props: ListTableProps) {
       },
     });
   };
+
+
+  //合同变更
+  const editAndDelete = (key: string, currentItem: any) => {
+    if (key === 'split') {
+
+    } else if (key === 'trans') {
+
+    }
+  };
+
+
+  const MoreBtn: React.FC<{
+    item: any;
+  }> = ({ item }) => (
+    <Dropdown
+      overlay={
+        <Menu onClick={({ key }) => editAndDelete(key, item)}>
+          <Menu.Item key="forward">结转</Menu.Item>
+          <Menu.Item key="change">变更</Menu.Item>
+          <Menu.Item key="renewal">续租</Menu.Item>
+          <Menu.Item key="withdrawal">退租</Menu.Item>
+          <Menu.Item key="invalid">作废</Menu.Item>
+        </Menu>}>
+      <a>
+        变更<Icon type="down" />
+      </a>
+    </Dropdown>
+  );
+
+
   const columns = [
     {
       title: '房号',
@@ -211,9 +243,10 @@ function ListTable(props: ListTableProps) {
         } else {
           return [
             <span>
-              <a onClick={() => modify(record.id, record.chargeId)} key="change">变更</a>
-              <Divider type="vertical" key='spilt1' />
+              {/* <a onClick={() => change(record.id, record.chargeId)} key="change">变更</a> */} 
               <a onClick={() => detail(record.id, record.chargeId)} key="detail">查看</a>
+              <Divider type="vertical" key='spilt1' />
+              <MoreBtn key="more" item={record} />  
             </span>
           ];
         }

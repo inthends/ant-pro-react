@@ -4,10 +4,11 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { GetPageDetailListJson, GetBilling } from './BillingMain.service';
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { ColumnProps } from 'antd/lib/table';
+import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import styles from './style.less';
 import moment from 'moment';
 const Search = Input.Search;
+
 interface ShowProps {
   visible: boolean;
   close(result?): void;
@@ -15,13 +16,21 @@ interface ShowProps {
   id?: string;
 }
 
+interface SearchParam {
+  // condition: 'EnCode' | 'FullName';
+  keyword: string;
+};
+
 const Show = (props: ShowProps) => {
   const { visible, close, form, id } = props;
   const [loading, setLoading] = useState<boolean>(false);
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [unitFeeData, setUnitFeeData] = useState<any>();
   const [pagination, setPagination] = useState<DefaultPagination>(new DefaultPagination());
-
+  const [search, setSearch] = useState<SearchParam>({
+    // condition: 'EnCode',
+    keyword: '',
+  });
   useEffect(() => {
     if (visible) {
       form.resetFields();
@@ -29,7 +38,8 @@ const Show = (props: ShowProps) => {
         setLoading(true);
         GetBilling(id).then(res => {
           setInfoDetail(res);
-          initUnitFeeLoadData('');
+          //initUnitFeeLoadData('');
+          initLoadData(search);
           setLoading(false);
         })
       } else {
@@ -44,21 +54,52 @@ const Show = (props: ShowProps) => {
     close(false);
   };
 
-  const initUnitFeeLoadData = (searchText) => {
-    const queryJson = {
-      billId: id == null || id == '' ? '' : id,
-      keyword: searchText,
-    };
+  // const initUnitFeeLoadData = (searchText) => {
+  //   const queryJson = {
+  //     billId: id == null || id == '' ? '' : id,
+  //     keyword: searchText,
+  //   };
+  //   const sidx = 'id';
+  //   const sord = 'asc';
+  //   const { current: pageIndex, pageSize, total } = pagination;
+  //   return load({ pageIndex, pageSize, sidx, sord, total, queryJson });
+  // };
+
+  // const unitFeeload = data => {
+  //   data.sidx = data.sidx || 'id';
+  //   data.sord = data.sord || 'asc';
+  //   return GetPageDetailListJson(data).then(res => {
+  //     const { pageIndex: current, total, pageSize } = res;
+  //     setPagination(pagesetting => {
+  //       return {
+  //         ...pagesetting,
+  //         current,
+  //         total,
+  //         pageSize,
+  //       };
+  //     });
+  //     setUnitFeeData(res.data);
+  //     return res;
+  //   });
+  // };
+
+  //初始化
+  const initLoadData = (searchParam: SearchParam) => {
+    // setSearch(searchParam);
+    const queryJson = searchParam;
     const sidx = 'id';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
-    return unitMeterload({ pageIndex, pageSize, sidx, sord, total, queryJson });
+    return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
+      return res;
+    });
   };
 
-  const unitMeterload = data => {
-    data.sidx = data.sidx || 'id';
-    data.sord = data.sord || 'asc';
-    return GetPageDetailListJson(data).then(res => {
+  const load = formData => {
+    setLoading(true);
+    formData.sidx = formData.sidx || 'id';
+    formData.sord = formData.sord || 'asc';
+    return GetPageDetailListJson(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
         return {
@@ -69,9 +110,39 @@ const Show = (props: ShowProps) => {
         };
       });
       setUnitFeeData(res.data);
+      setLoading(false);
       return res;
     });
   };
+
+
+  //刷新
+  const loadData = (searchParam: any, paginationConfig?: PaginationConfig, sorter?) => {
+    setSearch(searchParam);
+    const { current: pageIndex, pageSize, total } = paginationConfig || {
+      current: 1,
+      pageSize: pagination.pageSize,
+      total: 0,
+    };
+    const searchCondition: any = {
+      pageIndex,
+      pageSize,
+      total,
+      queryJson: searchParam,
+    };
+    if (sorter) {
+      const { field, order } = sorter;
+      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sidx = field ? field : 'id';
+    }
+    return load(searchCondition).then(res => {
+      return res;
+    });
+  };
+
+  // const changePage = (pagination: PaginationConfig, filters, sorter) => {
+  //   loadData(pagination, sorter);
+  // };
 
   const columns = [
     // {
@@ -249,11 +320,14 @@ const Show = (props: ShowProps) => {
                   className="search-input"
                   placeholder="请输入要查询的单元编号"
                   style={{ width: 280 }}
-                  onSearch={(value) => {
-                    // var params = Object.assign({}, meterSearchParams, { search: value })
-                    // setMeterSearchParams(params);
-                    initUnitFeeLoadData(value);
-                  }}
+                  //onSearch={(value) => {
+                  // var params = Object.assign({}, meterSearchParams, { search: value })
+                  // setMeterSearchParams(params);
+                  //initUnitFeeLoadData(value);
+                  //}}
+
+                  onSearch={keyword => loadData({ ...search, keyword })}
+
                 />
               </div>
 
@@ -266,7 +340,10 @@ const Show = (props: ShowProps) => {
                 pagination={pagination}
                 scroll={{ y: 500, x: 1100 }}
                 loading={loading}
-                onChange={onchange}
+                // onChange={onchange} 
+                onChange={(pagination: PaginationConfig, filters, sorter) => 
+                  loadData(search, pagination, sorter)
+                }
               />
             </Row>
           </Spin>

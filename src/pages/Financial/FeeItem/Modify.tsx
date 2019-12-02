@@ -227,7 +227,7 @@ const Modify = (props: ModifyProps) => {
   };
 
   const houseLoad = data => {
-    setOrgLoading(true);
+    setHouseLoading(true);
     data.sidx = data.sidx || 'unitfeeId';
     data.sord = data.sord || 'asc';
     return GetUnitFeeItemData(data).then(res => {

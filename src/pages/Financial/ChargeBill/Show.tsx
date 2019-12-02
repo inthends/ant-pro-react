@@ -288,6 +288,7 @@ const Show = (props: ShowProps) => {
           padding: '10px 16px',
           background: '#fff',
           textAlign: 'right',
+          zIndex: 999,
         }}
       >
         <Button onClick={closeShow} style={{ marginRight: 8 }}>
