@@ -21,6 +21,7 @@ export function GetPageListJson(data): Promise<any> {
 //     .then(getResult as any);
 // }
 
+//获取当前选中房屋的收款费项
 export function GetFeeItemsByUnitId(unitId): Promise<TreeEntity[]> {
   return request
     .get(process.env.basePath + `/FeeItems/GetFeeItemsByUnitId?unitId=${unitId}`)

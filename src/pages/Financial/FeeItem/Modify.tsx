@@ -1,7 +1,7 @@
 // 费项编辑页面
 import { CwFeeitem, TreeEntity } from '@/model/models';
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { message, Modal, Checkbox, Tabs, Select, Table, Button, Card, Icon, Divider, Col, DatePicker, Drawer, Form, Input, Row, InputNumber } from 'antd';
+import { Spin,message, Modal, Checkbox, Tabs, Select, Table, Button, Card, Icon, Divider, Col, DatePicker, Drawer, Form, Input, Row, InputNumber } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
@@ -54,6 +54,7 @@ const Modify = (props: ModifyProps) => {
   //优惠政策
   // const [selectRebateOrgVisible, setSelectRebateOrgVisible] = useState<boolean>(false);
   // const [editRebateVisible, setEditRebateVisible] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   //打开抽屉时初始化
   useEffect(() => {
@@ -89,6 +90,7 @@ const Modify = (props: ModifyProps) => {
   useEffect(() => {
     if (modifyVisible) {
       if (id) {
+        setLoading(true);
         GetFormJson(id).then((tempInfo: CwFeeitem) => {
           // if (tempInfo.feeKind) {
           //   // var kind = tempInfo.feeKind == "收款费项" ? "ReceivablesItem" : "PaymentItem";
@@ -110,17 +112,21 @@ const Modify = (props: ModifyProps) => {
         // initRebateLoadData('');
         //加载房屋费项
         initHouseLoadData('');
+        setLoading(false);
         //}
       } else {
         form.resetFields();
-        //设置checkbox默认值
+        //设置checkbox默认值 
         var info = Object.assign({}, { isEnable: true, isInContract: true, isTax: true });
         if (isInit && selectTreeItem != null && selectTreeItem.feeKind != '') {
           info = Object.assign({}, info, { feeKind: selectTreeItem.feeKind });
-          setInfoDetail(info);
           form.setFieldsValue({ feeKind: selectTreeItem.feeKind });
           changeFeeType(selectTreeItem.feeKind, info);
+        } else {
+          //清空类别
+          setFeetype([]);
         }
+        setInfoDetail(info);
       }
     } else {
       // form.setFieldsValue({});
@@ -136,6 +142,7 @@ const Modify = (props: ModifyProps) => {
   const save = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
+        setLoading(true);
         const newData = infoDetail ? { ...infoDetail, ...values } : values;
         newData.keyValue = id == null || id == "" ? "" : id;
         if (!newData.isNullDate) {
@@ -148,6 +155,7 @@ const Modify = (props: ModifyProps) => {
           newData.endDate = newData.endDate ? newData.endDate.format('YYYY-MM-DD') : null;
         }
         SaveForm(newData).then(res => {
+          setLoading(false);
           message.success('保存成功');
           reload();
           closeDrawer();
@@ -776,71 +784,72 @@ const Modify = (props: ModifyProps) => {
       visible={modifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
       <Form layout="vertical" hideRequiredMark>
-        <Tabs defaultActiveKey="1" >
-          <TabPane tab="基本信息" key="1">
-            <Card className={styles.card} >
-              <Row gutter={24}>
-                <Col lg={12}>
-                  <Form.Item label="费项种类" required>
-                    {getFieldDecorator('feeKind', {
-                      initialValue: infoDetail.feeKind,
-                      rules: [{ required: true, message: '请选择费项种类' }],
-                    })(<Select placeholder="请选择费项种类"
-                      disabled={infoDetail.feeKind ? true : false}
-                      onChange={value => { changeFeeType(value) }}
-                    >
-                      <Option value="收款费项">收款费项</Option>
-                      <Option value="付款费项" >付款费项</Option>
-                    </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col lg={12}>
-                  <Form.Item label="费项类别" required>
-                    {getFieldDecorator('feeType', {
-                      initialValue: infoDetail.feeType,
-                      rules: [{ required: true, message: '请选择费项类别' }]
-                    })(
-                      <Select placeholder="请选择费项类别" >
-                        {feetypes.map(item => (
-                          <Option key={item.title} value={item.title}>
-                            {item.title}
-                          </Option>
-                        ))}
+        <Spin tip="数据加载中..." spinning={loading}>
+          <Tabs defaultActiveKey="1" >
+            <TabPane tab="基本信息" key="1">
+              <Card className={styles.card} >
+                <Row gutter={24}>
+                  <Col lg={12}>
+                    <Form.Item label="费项种类" required>
+                      {getFieldDecorator('feeKind', {
+                        initialValue: infoDetail.feeKind,
+                        rules: [{ required: true, message: '请选择费项种类' }],
+                      })(<Select placeholder="请选择费项种类"
+                        disabled={infoDetail.feeKind ? true : false}
+                        onChange={value => { changeFeeType(value) }}
+                      >
+                        <Option value="收款费项">收款费项</Option>
+                        <Option value="付款费项" >付款费项</Option>
                       </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={24}>
-                <Col lg={12}>
-                  <Form.Item label="费项名称" required>
-                    {getFieldDecorator('feeName', {
-                      initialValue: infoDetail.feeName,
-                      rules: [{ required: true, message: '请输入费项名称' }],
-                    })(<Input placeholder="请输入费项名称" />)}
-                  </Form.Item>
-                </Col>
-                <Col lg={6}>
-                  <Form.Item label="费项编号">
-                    {getFieldDecorator('feeCode', {
-                      initialValue: infoDetail.feeCode,
-                      rules: [{ required: true, message: '请输入费项编号' }],
-                    })(<Input placeholder="请输入费项编号" />)}
-                  </Form.Item>
-                </Col>
-                <Col lg={6}>
-                  <Form.Item label="单价">
-                    {getFieldDecorator('feePrice', {
-                      initialValue: infoDetail.feePrice,
-                      rules: [{ required: true, message: '请输入单价' }],
-                    })(<InputNumber placeholder="请输入单价" style={{ width: '100%' }} />)}
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={24}>
-                <Col lg={24}>
-                  {/* <Form.Item  >
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={12}>
+                    <Form.Item label="费项类别" required>
+                      {getFieldDecorator('feeType', {
+                        initialValue: infoDetail.feeType,
+                        rules: [{ required: true, message: '请选择费项类别' }]
+                      })(
+                        <Select placeholder="请选择费项类别" >
+                          {feetypes.map(item => (
+                            <Option key={item.title} value={item.title}>
+                              {item.title}
+                            </Option>
+                          ))}
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={24}>
+                  <Col lg={12}>
+                    <Form.Item label="费项名称" required>
+                      {getFieldDecorator('feeName', {
+                        initialValue: infoDetail.feeName,
+                        rules: [{ required: true, message: '请输入费项名称' }],
+                      })(<Input placeholder="请输入费项名称" />)}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={6}>
+                    <Form.Item label="费项编号">
+                      {getFieldDecorator('feeCode', {
+                        initialValue: infoDetail.feeCode,
+                        rules: [{ required: true, message: '请输入费项编号' }],
+                      })(<Input placeholder="请输入费项编号" />)}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={6}>
+                    <Form.Item label="单价">
+                      {getFieldDecorator('feePrice', {
+                        initialValue: infoDetail.feePrice,
+                        rules: [{ required: true, message: '请输入单价' }],
+                      })(<InputNumber placeholder="请输入单价" style={{ width: '100%' }} />)}
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={24}>
+                  <Col lg={24}>
+                    {/* <Form.Item  >
                     <Checkbox
                       checked={infoDetail.isNullDate ? true : false}
                       onChange={(e) => {
@@ -865,49 +874,49 @@ const Modify = (props: ModifyProps) => {
                     }}>减免费项</Checkbox>
                   </Form.Item> */}
 
-                  <Form.Item  >
-                    {getFieldDecorator('isNullDate', {
-                      initialValue: infoDetail.isNullDate ? true : false,
-                    })(<Checkbox checked={form.getFieldValue('isNullDate')}>
-                      起止日期允许为空
+                    <Form.Item  >
+                      {getFieldDecorator('isNullDate', {
+                        initialValue: infoDetail.isNullDate ? true : false,
+                      })(<Checkbox checked={form.getFieldValue('isNullDate')}>
+                        起止日期允许为空
                       </Checkbox>
-                    )}
-                    {getFieldDecorator('isModifyDate', {
-                      initialValue: infoDetail.isModifyDate ? true : false,
-                    })(<Checkbox checked={form.getFieldValue('isModifyDate')}>
-                      允许修改起止日期
+                      )}
+                      {getFieldDecorator('isModifyDate', {
+                        initialValue: infoDetail.isModifyDate ? true : false,
+                      })(<Checkbox checked={form.getFieldValue('isModifyDate')}>
+                        允许修改起止日期
                       </Checkbox>
-                    )}
-                    {getFieldDecorator('isCustomizeDate', {
-                      initialValue: infoDetail.isCustomizeDate ? true : false,
-                    })(<Checkbox checked={form.getFieldValue('isCustomizeDate')}>
-                      自定义起止日期
+                      )}
+                      {getFieldDecorator('isCustomizeDate', {
+                        initialValue: infoDetail.isCustomizeDate ? true : false,
+                      })(<Checkbox checked={form.getFieldValue('isCustomizeDate')}>
+                        自定义起止日期
                       </Checkbox>
-                    )}
-                    {getFieldDecorator('isTax', {
-                      initialValue: infoDetail.isTax ? true : false,
-                    })(<Checkbox checked={form.getFieldValue('isTax')}>
-                      含税单价
+                      )}
+                      {getFieldDecorator('isTax', {
+                        initialValue: infoDetail.isTax ? true : false,
+                      })(<Checkbox checked={form.getFieldValue('isTax')}>
+                        含税单价
                       </Checkbox>
-                    )}
-                    {getFieldDecorator('isCancel', {
-                      initialValue: infoDetail.isCancel ? true : false,
-                    })(<Checkbox checked={form.getFieldValue('isCancel')} onChange={(e) => {
-                      if (e.target.checked) {
-                        setLinkFeeDisable(false);
-                      } else {
-                        setLinkFeeDisable(true);
-                      }
-                    }}>
-                      减免费项
+                      )}
+                      {getFieldDecorator('isCancel', {
+                        initialValue: infoDetail.isCancel ? true : false,
+                      })(<Checkbox checked={form.getFieldValue('isCancel')} onChange={(e) => {
+                        if (e.target.checked) {
+                          setLinkFeeDisable(false);
+                        } else {
+                          setLinkFeeDisable(true);
+                        }
+                      }}>
+                        减免费项
                       </Checkbox>
-                    )}
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={24}>
-                <Col lg={24}>
-                  {/* <Form.Item  >
+                      )}
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={24}>
+                  <Col lg={24}>
+                    {/* <Form.Item  >
                     <Checkbox checked={infoDetail.isTemp ? true : false} onChange={(e) => {
                       var info = Object.assign({}, infoDetail, { isTemp: e.target.checked });
                       setInfoDetail(info);
@@ -926,244 +935,244 @@ const Modify = (props: ModifyProps) => {
                     }}>是否停用</Checkbox>
                   </Form.Item> */}
 
-                  <Form.Item  >
-                    {getFieldDecorator('isInContract', {
-                      initialValue: infoDetail.isInContract ? true : false,
-                    })(<Checkbox checked={form.getFieldValue('isInContract')}>
-                      允许在合同中添加
+                    <Form.Item  >
+                      {getFieldDecorator('isInContract', {
+                        initialValue: infoDetail.isInContract ? true : false,
+                      })(<Checkbox checked={form.getFieldValue('isInContract')}>
+                        允许在合同中添加
                       </Checkbox>
-                    )}
-                    {getFieldDecorator('isTemp', {
-                      initialValue: infoDetail.isTemp ? true : false,
-                    })(<Checkbox checked={form.getFieldValue('isTemp')}>
-                      允许临时加费
+                      )}
+                      {getFieldDecorator('isTemp', {
+                        initialValue: infoDetail.isTemp ? true : false,
+                      })(<Checkbox checked={form.getFieldValue('isTemp')}>
+                        允许临时加费
                       </Checkbox>
-                    )}
-                    {getFieldDecorator('isEditTemp', {
-                      initialValue: infoDetail.isEditTemp ? true : false,
-                    })(<Checkbox checked={form.getFieldValue('isEditTemp')}>
-                      临时加费允许修改单价
+                      )}
+                      {getFieldDecorator('isEditTemp', {
+                        initialValue: infoDetail.isEditTemp ? true : false,
+                      })(<Checkbox checked={form.getFieldValue('isEditTemp')}>
+                        临时加费允许修改单价
                       </Checkbox>
-                    )}
-                    {getFieldDecorator('isEnable', {
-                      initialValue: infoDetail.isEnable ? true : false,
-                    })(<Checkbox checked={form.getFieldValue('isEnable')}>
-                      是否启用
+                      )}
+                      {getFieldDecorator('isEnable', {
+                        initialValue: infoDetail.isEnable ? true : false,
+                      })(<Checkbox checked={form.getFieldValue('isEnable')}>
+                        是否启用
                       </Checkbox>
-                    )}
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={24}>
-                <Col lg={12}>
-                  <Form.Item label="关联收费项目" >
-                    {getFieldDecorator('linkFee', {
-                      initialValue: infoDetail.linkFee,
-                    })(
-                      <Select
-                        placeholder="请选择关联收费项目" disabled={linkFeeDisable}
-                      >
-                        {feeitems.map(item => (
-                          <Option key={item.value} value={item.value}>
-                            {item.title}
-                          </Option>
-                        ))}
+                      )}
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={24}>
+                  <Col lg={12}>
+                    <Form.Item label="关联收费项目" >
+                      {getFieldDecorator('linkFee', {
+                        initialValue: infoDetail.linkFee,
+                      })(
+                        <Select
+                          placeholder="请选择关联收费项目" disabled={linkFeeDisable}
+                        >
+                          {feeitems.map(item => (
+                            <Option key={item.value} value={item.value}>
+                              {item.title}
+                            </Option>
+                          ))}
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={7}>
+                    <Form.Item label="计费周期">
+                      {getFieldDecorator('cycleValue', {
+                        initialValue: infoDetail.cycleValue ? infoDetail.cycleValue : 1,
+                        rules: [{ required: true, message: '请输入计费周期' }],
+                      })(<InputNumber placeholder="请输入计费周期" min={1} style={{ width: '100%' }}
+                        onChange={value => {
+                          setEndDate(infoDetail.beginDate, value, infoDetail.cycleType);
+                        }} />)}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={5}>
+                    <Form.Item label="单位">
+                      {getFieldDecorator('cycleType', {
+                        initialValue: infoDetail.cycleType ? infoDetail.cycleType : '月',
+                        rules: [{ required: true, message: '请选择单位' }],
+                      })(<Select placeholder="请选择单位" onChange={(value: string) => {
+                        setEndDate(infoDetail.beginDate, infoDetail.cycleValue, value);
+                      }}>
+                        <Option value="日">日</Option>
+                        <Option value="月" >月</Option>
+                        <Option value="年">年</Option>
                       </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col lg={7}>
-                  <Form.Item label="计费周期">
-                    {getFieldDecorator('cycleValue', {
-                      initialValue: infoDetail.cycleValue ? infoDetail.cycleValue : 1,
-                      rules: [{ required: true, message: '请输入计费周期' }],
-                    })(<InputNumber placeholder="请输入计费周期" min={1} style={{ width: '100%' }}
-                      onChange={value => {
-                        setEndDate(infoDetail.beginDate, value, infoDetail.cycleType);
+                      )}
+                    </Form.Item>
+                  </Col>
+                </Row>
+
+                <Row gutter={24}>
+                  <Col lg={12}>
+                    <Form.Item label="计费起始日期">
+                      {getFieldDecorator('beginDate', {
+                        // initialValue: form.getFieldValue('isNullDate') ? null : infoDetail.beginDate ? moment(infoDetail.beginDate) : moment(new Date()),
+                        initialValue: infoDetail.beginDate ? moment(infoDetail.beginDate) : moment(new Date()),
+                        rules: [{ required: !form.getFieldValue('isNullDate'), message: '请选择计费起始日期' }],
+                      })(<DatePicker placeholder="请选择计费起始日期" style={{ width: '100%' }} />)}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={12}>
+                    <Form.Item label="计费终止日期">
+                      {getFieldDecorator('endDate', {
+                        initialValue: form.getFieldValue('beginDate') ? getEndDate() : null,
+                        // initialValue: form.getFieldValue('beginDate') ? getEndDate() : null,
+                        // initialValue: form.getFieldValue('isNullDate') ? null : getEndDate(),
+                        // infoDetail.endDate ? moment(new Date(infoDetail.endDate)) : moment(getEndDate()),
+                        rules: [{ required: !form.getFieldValue('isNullDate'), message: '计费终止日期' }],
+                      })(<DatePicker disabled placeholder="计费终止日期" style={{ width: '100%' }} onChange={(date, dateString) => {
+                        setEndDate(dateString, infoDetail.cycleValue, infoDetail.cycleType);
                       }} />)}
-                  </Form.Item>
-                </Col>
-                <Col lg={5}>
-                  <Form.Item label="单位">
-                    {getFieldDecorator('cycleType', {
-                      initialValue: infoDetail.cycleType ? infoDetail.cycleType : '月',
-                      rules: [{ required: true, message: '请选择单位' }],
-                    })(<Select placeholder="请选择单位" onChange={(value: string) => {
-                      setEndDate(infoDetail.beginDate, infoDetail.cycleValue, value);
-                    }}>
-                      <Option value="日">日</Option>
-                      <Option value="月" >月</Option>
-                      <Option value="年">年</Option>
-                    </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-              </Row>
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={24}>
+                  <Col lg={21}>
+                    <Form.Item label="用量公式">
+                      {getFieldDecorator('feeFormulaOne', {
+                        initialValue: infoDetail.feeFormulaOne ? infoDetail.feeFormulaOne : '1',
+                        rules: [{ required: true, message: '请设置用量公式' }],
+                      })(<Input placeholder="请设置用量公式" />)}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={3}>
+                    <Form.Item label="&nbsp;">
+                      <Button type="primary" onClick={() => {
+                        setAddFormulaVisible(true);
+                        setIsFormula(true);
+                      }}>设置</Button>
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={24}>
+                  <Col lg={21}>
+                    <Form.Item label="系数公式">
+                      {getFieldDecorator('feeApportion', {
+                        initialValue: infoDetail.feeApportion ? infoDetail.feeApportion : '1',
+                        rules: [{ required: true, message: '请设置系数公式' }],
+                      })(<Input placeholder="请设置系数公式" />)}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={3}>
+                    <Form.Item label="&nbsp;">
+                      <Button type="primary" onClick={() => {
+                        setAddFormulaVisible(true);
+                        setIsFormula(false);
+                      }}>设置</Button>
+                    </Form.Item>
+                  </Col>
+                </Row>
 
-              <Row gutter={24}>
-                <Col lg={12}>
-                  <Form.Item label="计费起始日期">
-                    {getFieldDecorator('beginDate', {
-                      // initialValue: form.getFieldValue('isNullDate') ? null : infoDetail.beginDate ? moment(infoDetail.beginDate) : moment(new Date()),
-                      initialValue: infoDetail.beginDate ? moment(infoDetail.beginDate) : moment(new Date()),
-                      rules: [{ required: !form.getFieldValue('isNullDate'), message: '请选择计费起始日期' }],
-                    })(<DatePicker placeholder="请选择计费起始日期" style={{ width: '100%' }} />)}
-                  </Form.Item>
-                </Col>
-                <Col lg={12}>
-                  <Form.Item label="计费终止日期">
-                    {getFieldDecorator('endDate', {
-                      initialValue: form.getFieldValue('beginDate') ? getEndDate() : null,
-                      // initialValue: form.getFieldValue('beginDate') ? getEndDate() : null,
-                      // initialValue: form.getFieldValue('isNullDate') ? null : getEndDate(),
-                      // infoDetail.endDate ? moment(new Date(infoDetail.endDate)) : moment(getEndDate()),
-                      rules: [{ required: !form.getFieldValue('isNullDate'), message: '计费终止日期' }],
-                    })(<DatePicker disabled placeholder="计费终止日期" style={{ width: '100%' }} onChange={(date, dateString) => {
-                      setEndDate(dateString, infoDetail.cycleValue, infoDetail.cycleType);
-                    }} />)}
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={24}>
-                <Col lg={21}>
-                  <Form.Item label="用量公式">
-                    {getFieldDecorator('feeFormulaOne', {
-                      initialValue: infoDetail.feeFormulaOne ? infoDetail.feeFormulaOne : '1',
-                      rules: [{ required: true, message: '请设置用量公式' }],
-                    })(<Input placeholder="请设置用量公式" />)}
-                  </Form.Item>
-                </Col>
-                <Col lg={3}>
-                  <Form.Item label="&nbsp;">
-                    <Button type="primary" onClick={() => {
-                      setAddFormulaVisible(true);
-                      setIsFormula(true);
-                    }}>设置</Button>
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={24}>
-                <Col lg={21}>
-                  <Form.Item label="系数公式">
-                    {getFieldDecorator('feeApportion', {
-                      initialValue: infoDetail.feeApportion ? infoDetail.feeApportion : '1',
-                      rules: [{ required: true, message: '请设置系数公式' }],
-                    })(<Input placeholder="请设置系数公式" />)}
-                  </Form.Item>
-                </Col>
-                <Col lg={3}>
-                  <Form.Item label="&nbsp;">
-                    <Button type="primary" onClick={() => {
-                      setAddFormulaVisible(true);
-                      setIsFormula(false);
-                    }}>设置</Button>
-                  </Form.Item>
-                </Col>
-              </Row>
+                <Row gutter={24}>
+                  <Col lg={12}>
+                    <Form.Item label="滞纳金比例(%)">
+                      {getFieldDecorator('delayRate', {
+                        initialValue: infoDetail.delayRate ? infoDetail.delayRate : 0,
+                        // rules: [{ required: true, message: '请输入滞纳金比例' }],
+                      })(<InputNumber placeholder="请输入滞纳金比例" style={{ width: '100%' }} />)}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={12}>
+                    <Form.Item label="计算方法">
+                      {getFieldDecorator('delayType', {
+                        initialValue: infoDetail.delayType ? infoDetail.delayType : 1,
+                        // rules: [{ required: true, message: '请选择滞纳金计算方式' }],
+                      })(
+                        <Select placeholder="选择滞纳金计算方式">
+                          <Option value={1}>按天计算（固定滞纳率）</Option>
+                          <Option value={2}>按月计算（固定滞纳率）</Option>
+                          <Option value={3}>按季计算（固定滞纳率）</Option>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={24}>
+                  <Col lg={24}>
+                    <Form.Item label="附加说明">
+                      {getFieldDecorator('memo', {
+                        initialValue: infoDetail.memo,
+                      })(<TextArea rows={6} placeholder="请输入附加说明" />)}
+                    </Form.Item>
+                  </Col>
+                </Row>
 
-              <Row gutter={24}>
-                <Col lg={12}>
-                  <Form.Item label="滞纳金比例(%)">
-                    {getFieldDecorator('delayRate', {
-                      initialValue: infoDetail.delayRate ? infoDetail.delayRate : 0,
-                      // rules: [{ required: true, message: '请输入滞纳金比例' }],
-                    })(<InputNumber placeholder="请输入滞纳金比例" style={{ width: '100%' }} />)}
-                  </Form.Item>
-                </Col>
-                <Col lg={12}>
-                  <Form.Item label="计算方法">
-                    {getFieldDecorator('delayType', {
-                      initialValue: infoDetail.delayType ? infoDetail.delayType : 1,
-                      // rules: [{ required: true, message: '请选择滞纳金计算方式' }],
-                    })(
-                      <Select placeholder="选择滞纳金计算方式">
-                        <Option value={1}>按天计算（固定滞纳率）</Option>
-                        <Option value={2}>按月计算（固定滞纳率）</Option>
-                        <Option value={3}>按季计算（固定滞纳率）</Option>
-                      </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={24}>
-                <Col lg={24}>
-                  <Form.Item label="附加说明">
-                    {getFieldDecorator('memo', {
-                      initialValue: infoDetail.memo,
-                    })(<TextArea rows={6} placeholder="请输入附加说明" />)}
-                  </Form.Item>
-                </Col>
-              </Row>
-
-            </Card>
-          </TabPane>
-          <TabPane tab="高级" key="2">
-            <Card title="小数精度" className={styles.card2}  >
-              <Row gutter={24}>
-                <Col lg={12}>
-                  <Form.Item label="中间每一步计算结果保留">
-                    {getFieldDecorator('midResultScale', {
-                      initialValue: infoDetail.midResultScale || infoDetail.midResultScale == 0 ? infoDetail.midResultScale : 2,
-                      rules: [{ required: true, message: '请选择小数位数' }],
-                    })(
-                      <Select placeholder="请选择小数位数">
-                        <Option value={0}>0</Option>
-                        <Option value={1}>1</Option>
-                        <Option value={2}>2</Option>
-                        <Option value={3}>3</Option>
-                        <Option value={4}>4</Option>
-                      </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col lg={12}>
-                  <Form.Item label="对最后一位">
-                    {getFieldDecorator('midScaleDispose', {
-                      initialValue: infoDetail.midScaleDispose ? infoDetail.midScaleDispose : 1,
-                      rules: [{ required: true, message: '请选择小数处理方法' }],
-                    })(
-                      <Select placeholder="请选择小数处理方法">
-                        <Option value={1}>四舍五入</Option>
-                        <Option value={2}>直接舍去</Option>
-                        <Option value={3}>有数进一</Option>
-                      </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={24}>
-                <Col lg={12}>
-                  <Form.Item label="最终结果保留小数位数">
-                    {getFieldDecorator('lastResultScale', {
-                      initialValue: infoDetail.lastResultScale || infoDetail.lastResultScale == 0 ? infoDetail.lastResultScale : 2,
-                      rules: [{ required: true, message: '请选择小数位数' }],
-                    })(
-                      <Select placeholder="请选择小数位数">
-                        <Option value={0}>0</Option>
-                        <Option value={1}>1</Option>
-                        <Option value={2}>2</Option>
-                        {/* <Option value={3}>3</Option>
+              </Card>
+            </TabPane>
+            <TabPane tab="高级" key="2">
+              <Card title="小数精度" className={styles.card2}  >
+                <Row gutter={24}>
+                  <Col lg={12}>
+                    <Form.Item label="中间每一步计算结果保留">
+                      {getFieldDecorator('midResultScale', {
+                        initialValue: infoDetail.midResultScale || infoDetail.midResultScale == 0 ? infoDetail.midResultScale : 2,
+                        rules: [{ required: true, message: '请选择小数位数' }],
+                      })(
+                        <Select placeholder="请选择小数位数">
+                          <Option value={0}>0</Option>
+                          <Option value={1}>1</Option>
+                          <Option value={2}>2</Option>
+                          <Option value={3}>3</Option>
+                          <Option value={4}>4</Option>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={12}>
+                    <Form.Item label="对最后一位">
+                      {getFieldDecorator('midScaleDispose', {
+                        initialValue: infoDetail.midScaleDispose ? infoDetail.midScaleDispose : 1,
+                        rules: [{ required: true, message: '请选择小数处理方法' }],
+                      })(
+                        <Select placeholder="请选择小数处理方法">
+                          <Option value={1}>四舍五入</Option>
+                          <Option value={2}>直接舍去</Option>
+                          <Option value={3}>有数进一</Option>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={24}>
+                  <Col lg={12}>
+                    <Form.Item label="最终结果保留小数位数">
+                      {getFieldDecorator('lastResultScale', {
+                        initialValue: infoDetail.lastResultScale || infoDetail.lastResultScale == 0 ? infoDetail.lastResultScale : 2,
+                        rules: [{ required: true, message: '请选择小数位数' }],
+                      })(
+                        <Select placeholder="请选择小数位数">
+                          <Option value={0}>0</Option>
+                          <Option value={1}>1</Option>
+                          <Option value={2}>2</Option>
+                          {/* <Option value={3}>3</Option>
                         <Option value={4}>4</Option> */}
-                      </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col lg={12}>
-                  <Form.Item label="对最后一位">
-                    {getFieldDecorator('lastScaleDispose', {
-                      initialValue: infoDetail.lastScaleDispose ? infoDetail.lastScaleDispose : 1,
-                      rules: [{ required: true, message: '请选择小数处理方法' }],
-                    })(
-                      <Select placeholder="请选择小数处理方法">
-                        <Option value={1}>四舍五入</Option>
-                        <Option value={2}>直接舍去</Option>
-                        <Option value={3}>有数进一</Option>
-                      </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-              </Row>
-              {/* <Row gutter={24}>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={12}>
+                    <Form.Item label="对最后一位">
+                      {getFieldDecorator('lastScaleDispose', {
+                        initialValue: infoDetail.lastScaleDispose ? infoDetail.lastScaleDispose : 1,
+                        rules: [{ required: true, message: '请选择小数处理方法' }],
+                      })(
+                        <Select placeholder="请选择小数处理方法">
+                          <Option value={1}>四舍五入</Option>
+                          <Option value={2}>直接舍去</Option>
+                          <Option value={3}>有数进一</Option>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                </Row>
+                {/* <Row gutter={24}>
                   <Col lg={12}>
                     <Form.Item label="单价保留小数点">
                       {getFieldDecorator('calcPrecision', {
@@ -1185,434 +1194,434 @@ const Modify = (props: ModifyProps) => {
                   </Col>
                 </Row> */}
 
-            </Card>
-            <Card title="账单日设置" className={styles.card2} >
-              <Row gutter={8}>
-                <Col span={6}>
-                  <Form.Item label="应收期间 距">
-                    {getFieldDecorator('accPeriodBase', {
-                      initialValue: infoDetail.accPeriodBase ? infoDetail.accPeriodBase : 2,
-                      rules: [{ required: true, message: '请选择应收期间' }],
-                    })(
-                      <Select placeholder="==选择应收期间==">
-                        <Option value={1}>同一季度费用,每季度首月为应收期间</Option>
-                        <Option value={2} >计费起始日期</Option>
-                        <Option value={3}>计费终止日期</Option>
-                      </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col span={6} style={{ marginTop: '29px' }}>
-                  <Form.Item>
-                    {getFieldDecorator('accPeriodBaseNum', {
-                      initialValue: infoDetail.accPeriodBaseNum ? infoDetail.accPeriodBaseNum : 0,
-                      rules: [{ required: true, message: '请输入数量' }],
-                    })(
-                      <InputNumber style={{ width: '100%' }} precision={0} />
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col span={6} style={{ marginTop: '29px' }}>
-                  <Form.Item>
-                    {getFieldDecorator('accPeriodBaseUnit', {
-                      initialValue: infoDetail.accPeriodBaseUnit ? infoDetail.accPeriodBaseUnit : 2,
-                      rules: [{ required: true, message: '请选择单位' }],
-                    })(
-                      <Select placeholder="==选择单位==">
-                        <Option value={1}>天</Option>
-                        <Option value={2} >月</Option>
-                      </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={8}>
-                <Col span={6}>
-                  <Form.Item label="账单日 距">
-                    {getFieldDecorator('accBillDateBase', {
-                      initialValue: infoDetail.accBillDateBase ? infoDetail.accBillDateBase : 2,
-                      rules: [{ required: true, message: '请选择账单日' }],
-                    })(
-                      <Select placeholder="==选择账单日==">
-                        <Option value={1}>同一季度费用,每季度首月为账单期间</Option>
-                        <Option value={2} >计费起始日期</Option>
-                        <Option value={3}>计费终止日期</Option>
-                      </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col span={6} style={{ marginTop: '29px' }}>
-                  <Form.Item>
-                    {getFieldDecorator('accBillDateNum', {
-                      initialValue: infoDetail.accBillDateNum ? infoDetail.accBillDateNum : 0,
-                      rules: [{ required: true, message: '请输入数量' }],
-                    })(
-                      <InputNumber style={{ width: '100%' }} precision={0} />
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col span={6} style={{ marginTop: '29px' }}>
-                  <Form.Item>
-                    {getFieldDecorator('accBillDateUnit', {
-                      initialValue: infoDetail.accBillDateUnit ? infoDetail.accBillDateUnit : 1,
-                      rules: [{ required: true, message: '请选择单位' }],
-                    })(
-                      <Select placeholder="==选择单位==" onChange={value => {
-                        if (value == 1) {
-                          setAccFixedDisabled(true);
-                        } else {
-                          setAccFixedDisabled(false);
-                        }
-                      }}>
-                        <Option value={1}>天</Option>
-                        <Option value={2}>月</Option>
-                      </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col span={6} style={{ marginTop: '29px' }}>
-                  <Form.Item>
-                    {getFieldDecorator('accBillDateFixed', {
-                      initialValue: infoDetail.accBillDateFixed,
-                    })(
-                      <Select disabled={accFixedDisabled}>
-                        <Option value="1">1日</Option>
-                        <Option value="2">2日</Option>
-                        <Option value="3">3日</Option>
-                        <Option value="4">4日</Option>
-                        <Option value="5">5日</Option>
-                        <Option value="6">6日</Option>
-                        <Option value="7">7日</Option>
-                        <Option value="8">8日</Option>
-                        <Option value="9">9日</Option>
-                        <Option value="10">10日</Option>
-                        <Option value="11">11日</Option>
-                        <Option value="12">12日</Option>
-                        <Option value="13">13日</Option>
-                        <Option value="14">14日</Option>
-                        <Option value="15">15日</Option>
-                        <Option value="16">16日</Option>
-                        <Option value="17">17日</Option>
-                        <Option value="18">18日</Option>
-                        <Option value="19">19日</Option>
-                        <Option value="20">20日</Option>
-                        <Option value="21">21日</Option>
-                        <Option value="22">22日</Option>
-                        <Option value="23">23日</Option>
-                        <Option value="24">24日</Option>
-                        <Option value="25">25日</Option>
-                        <Option value="26">26日</Option>
-                        <Option value="27">27日</Option>
-                        <Option value="28">28日</Option>
-                        <Option value="29">29日</Option>
-                        <Option value="30">30日</Option>
-                        <Option value="31">31日</Option>
-                      </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={8}>
-                <Col span={6}>
-                  <Form.Item label="收款截止日 距">
-                    {getFieldDecorator('payDeadlineBase', {
-                      initialValue: infoDetail.payDeadlineBase ? infoDetail.payDeadlineBase : 3,
-                      rules: [{ required: true, message: '请选择收款截止日' }],
-                    })(
-                      <Select placeholder="==选择收款截止日==">
-                        <Option value={1}>同一季度费用,每季度首月</Option>
-                        <Option value={2}>计费起始日期</Option>
-                        <Option value={3}>计费终止日期</Option>
-                      </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col span={6} style={{ marginTop: '29px' }}>
-                  <Form.Item>
-                    {getFieldDecorator('payDeadlineNum', {
-                      initialValue: infoDetail.payDeadlineNum ? infoDetail.payDeadlineNum : 0,
-                      rules: [{ required: true, message: '请输入数量' }],
-                    })(
-                      <InputNumber style={{ width: '100%' }} precision={0} />
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col span={6} style={{ marginTop: '29px' }}>
-                  <Form.Item>
-                    {getFieldDecorator('payDeadlineUnit', {
-                      initialValue: infoDetail.payDeadlineUnit ? infoDetail.payDeadlineUnit : 1,
-                      rules: [{ required: true, message: '请选择单位' }],
-                    })(
-                      <Select placeholder="==选择单位==" onChange={value => {
-                        if (value == 1) {
-                          setPayFixedDisabled(true);
-                        } else {
-                          setPayFixedDisabled(false);
-                        }
-                      }}>
-                        <Option value={1}>天</Option>
-                        <Option value={2} >月</Option>
-                      </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col span={6} style={{ marginTop: '29px' }}>
-                  <Form.Item>
-                    {getFieldDecorator('payDeadlineFixed', {
-                      initialValue: infoDetail.payDeadlineFixed,
-                    })(
-                      <Select disabled={payFixedDisabled}>
-                        <Option key="1"> 1日</Option>
-                        <Option key="2"> 2日</Option>
-                        <Option key="3"> 3日</Option>
-                        <Option key="4"> 4日</Option>
-                        <Option key="5"> 5日</Option>
-                        <Option key="6"> 6日</Option>
-                        <Option key="7"> 7日</Option>
-                        <Option key="8"> 8日</Option>
-                        <Option key="9"> 9日</Option>
-                        <Option key="10"> 10日</Option>
-                        <Option key="11"> 11日</Option>
-                        <Option key="12"> 12日</Option>
-                        <Option key="13"> 13日</Option>
-                        <Option key="14"> 14日</Option>
-                        <Option key="15"> 15日</Option>
-                        <Option key="16"> 16日</Option>
-                        <Option key="17"> 17日</Option>
-                        <Option key="18"> 18日</Option>
-                        <Option key="19"> 19日</Option>
-                        <Option key="20"> 20日</Option>
-                        <Option key="21"> 21日</Option>
-                        <Option key="22"> 22日</Option>
-                        <Option key="23"> 23日</Option>
-                        <Option key="24"> 24日</Option>
-                        <Option key="25"> 25日</Option>
-                        <Option key="26"> 26日</Option>
-                        <Option key="27"> 27日</Option>
-                        <Option key="28"> 28日</Option>
-                        <Option key="29"> 29日</Option>
-                        <Option key="30"> 30日</Option>
-                        <Option key="31"> 31日</Option>
-                      </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={8}>
-                <Col span={6}>
-                  <Form.Item label="滞纳金起算日 距">
-                    {getFieldDecorator('lateStartDateBase', {
-                      initialValue: infoDetail.lateStartDateBase ? infoDetail.lateStartDateBase : 3,
-                      rules: [{ required: true, message: '请选择滞纳金起算日' }],
-                    })(
-                      <Select placeholder="==选择滞纳金起算日==">
-                        <Option value={1}>同一季度费用,每季度首月</Option>
-                        <Option value={2}>计费起始日期</Option>
-                        <Option value={3}>计费终止日期</Option>
-                      </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col span={6} style={{ marginTop: '29px' }}>
-                  <Form.Item>
-                    {getFieldDecorator('lateStartDateNum', {
-                      initialValue: infoDetail.lateStartDateNum ? infoDetail.lateStartDateNum : 1,
-                      rules: [{ required: true, message: '请输入数量' }],
-                    })(
-                      <InputNumber style={{ width: '100%' }} precision={0} />
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col span={6} style={{ marginTop: '29px' }}>
-                  <Form.Item>
-                    {getFieldDecorator('lateStartDateUnit', {
-                      initialValue: infoDetail.lateStartDateUnit ? infoDetail.lateStartDateUnit : 1,
-                      rules: [{ required: true, message: '请选择单位' }],
-                    })(
-                      <Select placeholder="==选择单位==" onChange={value => {
-                        if (value == 1) {
-                          setLateFixedDisabled(true);
-                        } else {
-                          setLateFixedDisabled(false);
-                        }
-                      }}>
-                        <Option value={1}>天</Option>
-                        <Option value={2} >月</Option>
-                      </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col span={6} style={{ marginTop: '29px' }}>
-                  <Form.Item>
-                    {getFieldDecorator('lateStartDateFixed', {
-                      initialValue: infoDetail.lateStartDateFixed,
-                    })(
-                      <Select disabled={lateFixedDisabled}>
-                        <Option key="1"> 1日</Option>
-                        <Option key="2"> 2日</Option>
-                        <Option key="3"> 3日</Option>
-                        <Option key="4"> 4日</Option>
-                        <Option key="5"> 5日</Option>
-                        <Option key="6"> 6日</Option>
-                        <Option key="7"> 7日</Option>
-                        <Option key="8"> 8日</Option>
-                        <Option key="9"> 9日</Option>
-                        <Option key="10">10日</Option>
-                        <Option key="11">11日</Option>
-                        <Option key="12">12日</Option>
-                        <Option key="13">13日</Option>
-                        <Option key="14">14日</Option>
-                        <Option key="15">15日</Option>
-                        <Option key="16">16日</Option>
-                        <Option key="17">17日</Option>
-                        <Option key="18">18日</Option>
-                        <Option key="19">19日</Option>
-                        <Option key="20">20日</Option>
-                        <Option key="21">21日</Option>
-                        <Option key="22">22日</Option>
-                        <Option key="23">23日</Option>
-                        <Option key="24">24日</Option>
-                        <Option key="25">25日</Option>
-                        <Option key="26">26日</Option>
-                        <Option key="27">27日</Option>
-                        <Option key="28">28日</Option>
-                        <Option key="29">29日</Option>
-                        <Option key="30">30日</Option>
-                        <Option key="31">31日</Option>
-                      </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-              </Row>
-            </Card>
-            <Card title="其他" className={styles.card}>
-              <Row gutter={24}>
-                <Col span={6}  >
-                  <Form.Item label='&nbsp;'>
-                    {getFieldDecorator('payedCreateCope', {
-                      initialValue: infoDetail.payedCreateCope ? infoDetail.payedCreateCope : false,
-                    })(
-                      <Checkbox onChange={(e) => {
-                        if (e.target.checked) {
-                          setShowFeeField(true);
-                          var info = Object.assign({}, infoDetail, { payedCreateCope: e.target.checked })
-                          setInfoDetail(info);
-                        } else {
-                          setShowFeeField(false);
-                          var info = Object.assign({}, infoDetail, { payedCreateCope: e.target.checked, payDateUnit: null, payDateNum: null })
-                          setInfoDetail(info);
-                        }
-                      }}>收款后生成付款</Checkbox>
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col span={6}  >
-                  <Form.Item label='应付款项'>
-                    {getFieldDecorator('payFeeItemId', {
-                      initialValue: infoDetail.payFeeItemId,
-                    })(
-                      <Select placeholder="==请选择==">
-                        {feeItemNames.map(item => (
-                          <Option value={item.key} key={item.key}>
-                            {item.title}
-                          </Option>
-                        ))}
-                      </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col span={6} >
-                  <Form.Item label="应付比例（100%）">
-                    {getFieldDecorator('copeRate', {
-                      initialValue: infoDetail.copeRate ? infoDetail.copeRate : 100,
-                    })(
-                      <InputNumber style={{ width: '100%' }} />
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col span={6}  >
-                  <Form.Item label='付款对象'>
-                    {getFieldDecorator('copePersonType', {
-                      initialValue: infoDetail.copePersonType ? infoDetail.copePersonType : 2,
-                    })(
-                      <Select placeholder="==付款对象==">
-                        <Option value={1}>业主</Option>
-                        <Option value={2}>住/租户</Option>
-                        <Option value={3}>住/租户，空置时转给业主</Option>
-                      </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={24} style={{ display: showFeeField ? "" : "none" }}>
-                <Col span={6}>
-                  <Form.Item label="应付期间距收款日">
-                    {getFieldDecorator('payDateNum', {
-                      initialValue: infoDetail.payDateNum ? infoDetail.payDateNum : 0,
-                    })(
-                      <InputNumber style={{ width: '100%' }} />
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col span={6} style={{ marginTop: '29px' }}>
-                  <Form.Item>
-                    {getFieldDecorator('payDateUnit', {
-                      initialValue: infoDetail.payDateUnit ? infoDetail.payDateUnit : 1,
-                    })(
-                      <Select placeholder="==请选择单位==">
-                        <Option value={1}>天</Option>
-                        <Option value={2}>月</Option>
-                      </Select>
-                    )}
-                  </Form.Item>
-                </Col>
-              </Row>
-            </Card>
-          </TabPane>
-          {
-            id ?
-              <TabPane tab="所属机构" key="3" style={{ marginBottom: '20px' }}>
-                <div style={{ marginBottom: '5px', padding: '3px 2px' }}>
-                  <Input.Search
-                    key='orgsearch'
-                    className="search-input"
-                    placeholder="请输入要查询的机构名称"
-                    style={{ width: 200 }}
-                    onSearch={value => orgLoadData(value)}
-                  />
-                  <Button type="link" style={{ float: 'right' }}
-                    onClick={() => { setSelectOrgVisible(true) }}
-                  >
-                    <Icon type="plus" />
-                    新增
+              </Card>
+              <Card title="账单日设置" className={styles.card2} >
+                <Row gutter={8}>
+                  <Col span={6}>
+                    <Form.Item label="应收期间 距">
+                      {getFieldDecorator('accPeriodBase', {
+                        initialValue: infoDetail.accPeriodBase ? infoDetail.accPeriodBase : 2,
+                        rules: [{ required: true, message: '请选择应收期间' }],
+                      })(
+                        <Select placeholder="==选择应收期间==">
+                          <Option value={1}>同一季度费用,每季度首月为应收期间</Option>
+                          <Option value={2} >计费起始日期</Option>
+                          <Option value={3}>计费终止日期</Option>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col span={6} style={{ marginTop: '29px' }}>
+                    <Form.Item>
+                      {getFieldDecorator('accPeriodBaseNum', {
+                        initialValue: infoDetail.accPeriodBaseNum ? infoDetail.accPeriodBaseNum : 0,
+                        rules: [{ required: true, message: '请输入数量' }],
+                      })(
+                        <InputNumber style={{ width: '100%' }} precision={0} />
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col span={6} style={{ marginTop: '29px' }}>
+                    <Form.Item>
+                      {getFieldDecorator('accPeriodBaseUnit', {
+                        initialValue: infoDetail.accPeriodBaseUnit ? infoDetail.accPeriodBaseUnit : 2,
+                        rules: [{ required: true, message: '请选择单位' }],
+                      })(
+                        <Select placeholder="==选择单位==">
+                          <Option value={1}>天</Option>
+                          <Option value={2} >月</Option>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={8}>
+                  <Col span={6}>
+                    <Form.Item label="账单日 距">
+                      {getFieldDecorator('accBillDateBase', {
+                        initialValue: infoDetail.accBillDateBase ? infoDetail.accBillDateBase : 2,
+                        rules: [{ required: true, message: '请选择账单日' }],
+                      })(
+                        <Select placeholder="==选择账单日==">
+                          <Option value={1}>同一季度费用,每季度首月为账单期间</Option>
+                          <Option value={2} >计费起始日期</Option>
+                          <Option value={3}>计费终止日期</Option>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col span={6} style={{ marginTop: '29px' }}>
+                    <Form.Item>
+                      {getFieldDecorator('accBillDateNum', {
+                        initialValue: infoDetail.accBillDateNum ? infoDetail.accBillDateNum : 0,
+                        rules: [{ required: true, message: '请输入数量' }],
+                      })(
+                        <InputNumber style={{ width: '100%' }} precision={0} />
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col span={6} style={{ marginTop: '29px' }}>
+                    <Form.Item>
+                      {getFieldDecorator('accBillDateUnit', {
+                        initialValue: infoDetail.accBillDateUnit ? infoDetail.accBillDateUnit : 1,
+                        rules: [{ required: true, message: '请选择单位' }],
+                      })(
+                        <Select placeholder="==选择单位==" onChange={value => {
+                          if (value == 1) {
+                            setAccFixedDisabled(true);
+                          } else {
+                            setAccFixedDisabled(false);
+                          }
+                        }}>
+                          <Option value={1}>天</Option>
+                          <Option value={2}>月</Option>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col span={6} style={{ marginTop: '29px' }}>
+                    <Form.Item>
+                      {getFieldDecorator('accBillDateFixed', {
+                        initialValue: infoDetail.accBillDateFixed,
+                      })(
+                        <Select disabled={accFixedDisabled}>
+                          <Option value="1">1日</Option>
+                          <Option value="2">2日</Option>
+                          <Option value="3">3日</Option>
+                          <Option value="4">4日</Option>
+                          <Option value="5">5日</Option>
+                          <Option value="6">6日</Option>
+                          <Option value="7">7日</Option>
+                          <Option value="8">8日</Option>
+                          <Option value="9">9日</Option>
+                          <Option value="10">10日</Option>
+                          <Option value="11">11日</Option>
+                          <Option value="12">12日</Option>
+                          <Option value="13">13日</Option>
+                          <Option value="14">14日</Option>
+                          <Option value="15">15日</Option>
+                          <Option value="16">16日</Option>
+                          <Option value="17">17日</Option>
+                          <Option value="18">18日</Option>
+                          <Option value="19">19日</Option>
+                          <Option value="20">20日</Option>
+                          <Option value="21">21日</Option>
+                          <Option value="22">22日</Option>
+                          <Option value="23">23日</Option>
+                          <Option value="24">24日</Option>
+                          <Option value="25">25日</Option>
+                          <Option value="26">26日</Option>
+                          <Option value="27">27日</Option>
+                          <Option value="28">28日</Option>
+                          <Option value="29">29日</Option>
+                          <Option value="30">30日</Option>
+                          <Option value="31">31日</Option>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={8}>
+                  <Col span={6}>
+                    <Form.Item label="收款截止日 距">
+                      {getFieldDecorator('payDeadlineBase', {
+                        initialValue: infoDetail.payDeadlineBase ? infoDetail.payDeadlineBase : 3,
+                        rules: [{ required: true, message: '请选择收款截止日' }],
+                      })(
+                        <Select placeholder="==选择收款截止日==">
+                          <Option value={1}>同一季度费用,每季度首月</Option>
+                          <Option value={2}>计费起始日期</Option>
+                          <Option value={3}>计费终止日期</Option>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col span={6} style={{ marginTop: '29px' }}>
+                    <Form.Item>
+                      {getFieldDecorator('payDeadlineNum', {
+                        initialValue: infoDetail.payDeadlineNum ? infoDetail.payDeadlineNum : 0,
+                        rules: [{ required: true, message: '请输入数量' }],
+                      })(
+                        <InputNumber style={{ width: '100%' }} precision={0} />
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col span={6} style={{ marginTop: '29px' }}>
+                    <Form.Item>
+                      {getFieldDecorator('payDeadlineUnit', {
+                        initialValue: infoDetail.payDeadlineUnit ? infoDetail.payDeadlineUnit : 1,
+                        rules: [{ required: true, message: '请选择单位' }],
+                      })(
+                        <Select placeholder="==选择单位==" onChange={value => {
+                          if (value == 1) {
+                            setPayFixedDisabled(true);
+                          } else {
+                            setPayFixedDisabled(false);
+                          }
+                        }}>
+                          <Option value={1}>天</Option>
+                          <Option value={2} >月</Option>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col span={6} style={{ marginTop: '29px' }}>
+                    <Form.Item>
+                      {getFieldDecorator('payDeadlineFixed', {
+                        initialValue: infoDetail.payDeadlineFixed,
+                      })(
+                        <Select disabled={payFixedDisabled}>
+                          <Option key="1"> 1日</Option>
+                          <Option key="2"> 2日</Option>
+                          <Option key="3"> 3日</Option>
+                          <Option key="4"> 4日</Option>
+                          <Option key="5"> 5日</Option>
+                          <Option key="6"> 6日</Option>
+                          <Option key="7"> 7日</Option>
+                          <Option key="8"> 8日</Option>
+                          <Option key="9"> 9日</Option>
+                          <Option key="10"> 10日</Option>
+                          <Option key="11"> 11日</Option>
+                          <Option key="12"> 12日</Option>
+                          <Option key="13"> 13日</Option>
+                          <Option key="14"> 14日</Option>
+                          <Option key="15"> 15日</Option>
+                          <Option key="16"> 16日</Option>
+                          <Option key="17"> 17日</Option>
+                          <Option key="18"> 18日</Option>
+                          <Option key="19"> 19日</Option>
+                          <Option key="20"> 20日</Option>
+                          <Option key="21"> 21日</Option>
+                          <Option key="22"> 22日</Option>
+                          <Option key="23"> 23日</Option>
+                          <Option key="24"> 24日</Option>
+                          <Option key="25"> 25日</Option>
+                          <Option key="26"> 26日</Option>
+                          <Option key="27"> 27日</Option>
+                          <Option key="28"> 28日</Option>
+                          <Option key="29"> 29日</Option>
+                          <Option key="30"> 30日</Option>
+                          <Option key="31"> 31日</Option>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={8}>
+                  <Col span={6}>
+                    <Form.Item label="滞纳金起算日 距">
+                      {getFieldDecorator('lateStartDateBase', {
+                        initialValue: infoDetail.lateStartDateBase ? infoDetail.lateStartDateBase : 3,
+                        rules: [{ required: true, message: '请选择滞纳金起算日' }],
+                      })(
+                        <Select placeholder="==选择滞纳金起算日==">
+                          <Option value={1}>同一季度费用,每季度首月</Option>
+                          <Option value={2}>计费起始日期</Option>
+                          <Option value={3}>计费终止日期</Option>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col span={6} style={{ marginTop: '29px' }}>
+                    <Form.Item>
+                      {getFieldDecorator('lateStartDateNum', {
+                        initialValue: infoDetail.lateStartDateNum ? infoDetail.lateStartDateNum : 1,
+                        rules: [{ required: true, message: '请输入数量' }],
+                      })(
+                        <InputNumber style={{ width: '100%' }} precision={0} />
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col span={6} style={{ marginTop: '29px' }}>
+                    <Form.Item>
+                      {getFieldDecorator('lateStartDateUnit', {
+                        initialValue: infoDetail.lateStartDateUnit ? infoDetail.lateStartDateUnit : 1,
+                        rules: [{ required: true, message: '请选择单位' }],
+                      })(
+                        <Select placeholder="==选择单位==" onChange={value => {
+                          if (value == 1) {
+                            setLateFixedDisabled(true);
+                          } else {
+                            setLateFixedDisabled(false);
+                          }
+                        }}>
+                          <Option value={1}>天</Option>
+                          <Option value={2} >月</Option>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col span={6} style={{ marginTop: '29px' }}>
+                    <Form.Item>
+                      {getFieldDecorator('lateStartDateFixed', {
+                        initialValue: infoDetail.lateStartDateFixed,
+                      })(
+                        <Select disabled={lateFixedDisabled}>
+                          <Option key="1"> 1日</Option>
+                          <Option key="2"> 2日</Option>
+                          <Option key="3"> 3日</Option>
+                          <Option key="4"> 4日</Option>
+                          <Option key="5"> 5日</Option>
+                          <Option key="6"> 6日</Option>
+                          <Option key="7"> 7日</Option>
+                          <Option key="8"> 8日</Option>
+                          <Option key="9"> 9日</Option>
+                          <Option key="10">10日</Option>
+                          <Option key="11">11日</Option>
+                          <Option key="12">12日</Option>
+                          <Option key="13">13日</Option>
+                          <Option key="14">14日</Option>
+                          <Option key="15">15日</Option>
+                          <Option key="16">16日</Option>
+                          <Option key="17">17日</Option>
+                          <Option key="18">18日</Option>
+                          <Option key="19">19日</Option>
+                          <Option key="20">20日</Option>
+                          <Option key="21">21日</Option>
+                          <Option key="22">22日</Option>
+                          <Option key="23">23日</Option>
+                          <Option key="24">24日</Option>
+                          <Option key="25">25日</Option>
+                          <Option key="26">26日</Option>
+                          <Option key="27">27日</Option>
+                          <Option key="28">28日</Option>
+                          <Option key="29">29日</Option>
+                          <Option key="30">30日</Option>
+                          <Option key="31">31日</Option>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </Card>
+              <Card title="其他" className={styles.card}>
+                <Row gutter={24}>
+                  <Col span={6}  >
+                    <Form.Item label='&nbsp;'>
+                      {getFieldDecorator('payedCreateCope', {
+                        initialValue: infoDetail.payedCreateCope ? infoDetail.payedCreateCope : false,
+                      })(
+                        <Checkbox onChange={(e) => {
+                          if (e.target.checked) {
+                            setShowFeeField(true);
+                            var info = Object.assign({}, infoDetail, { payedCreateCope: e.target.checked })
+                            setInfoDetail(info);
+                          } else {
+                            setShowFeeField(false);
+                            var info = Object.assign({}, infoDetail, { payedCreateCope: e.target.checked, payDateUnit: null, payDateNum: null })
+                            setInfoDetail(info);
+                          }
+                        }}>收款后生成付款</Checkbox>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col span={6}  >
+                    <Form.Item label='应付款项'>
+                      {getFieldDecorator('payFeeItemId', {
+                        initialValue: infoDetail.payFeeItemId,
+                      })(
+                        <Select placeholder="==请选择==">
+                          {feeItemNames.map(item => (
+                            <Option value={item.key} key={item.key}>
+                              {item.title}
+                            </Option>
+                          ))}
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col span={6} >
+                    <Form.Item label="应付比例（100%）">
+                      {getFieldDecorator('copeRate', {
+                        initialValue: infoDetail.copeRate ? infoDetail.copeRate : 100,
+                      })(
+                        <InputNumber style={{ width: '100%' }} />
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col span={6}  >
+                    <Form.Item label='付款对象'>
+                      {getFieldDecorator('copePersonType', {
+                        initialValue: infoDetail.copePersonType ? infoDetail.copePersonType : 2,
+                      })(
+                        <Select placeholder="==付款对象==">
+                          <Option value={1}>业主</Option>
+                          <Option value={2}>住/租户</Option>
+                          <Option value={3}>住/租户，空置时转给业主</Option>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={24} style={{ display: showFeeField ? "" : "none" }}>
+                  <Col span={6}>
+                    <Form.Item label="应付期间距收款日">
+                      {getFieldDecorator('payDateNum', {
+                        initialValue: infoDetail.payDateNum ? infoDetail.payDateNum : 0,
+                      })(
+                        <InputNumber style={{ width: '100%' }} />
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col span={6} style={{ marginTop: '29px' }}>
+                    <Form.Item>
+                      {getFieldDecorator('payDateUnit', {
+                        initialValue: infoDetail.payDateUnit ? infoDetail.payDateUnit : 1,
+                      })(
+                        <Select placeholder="==请选择单位==">
+                          <Option value={1}>天</Option>
+                          <Option value={2}>月</Option>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </Card>
+            </TabPane>
+            {
+              id ?
+                <TabPane tab="所属机构" key="3" style={{ marginBottom: '20px' }}>
+                  <div style={{ marginBottom: '5px', padding: '3px 2px' }}>
+                    <Input.Search
+                      key='orgsearch'
+                      className="search-input"
+                      placeholder="请输入要查询的机构名称"
+                      style={{ width: 200 }}
+                      onSearch={value => orgLoadData(value)}
+                    />
+                    <Button type="link" style={{ float: 'right' }}
+                      onClick={() => { setSelectOrgVisible(true) }}
+                    >
+                      <Icon type="plus" />
+                      新增
                 </Button>
-                  {/* <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
+                    {/* <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
                   onClick={() => {}}
                 >
                   <Icon type="plus" />
                   刷新
                 </Button> */}
-                </div>
-                <Table
-                  key='list'
-                  style={{ border: 'none' }}
-                  bordered={false}
-                  size="middle"
-                  dataSource={orgData}
-                  columns={orgcolumns}
-                  rowKey={record => record.id}
-                  pagination={orgPagination}
-                  scroll={{ y: 420 }}
-                  onChange={(pagination: PaginationConfig, filters, sorter) =>
-                    orgLoadData(orgSearch, pagination, sorter)
-                  }
-                  loading={orgLoading}
-                />
-              </TabPane>
-              : null
-          }
+                  </div>
+                  <Table
+                    key='list'
+                    style={{ border: 'none' }}
+                    bordered={false}
+                    size="middle"
+                    dataSource={orgData}
+                    columns={orgcolumns}
+                    rowKey={record => record.id}
+                    pagination={orgPagination}
+                    scroll={{ y: 420 }}
+                    onChange={(pagination: PaginationConfig, filters, sorter) =>
+                      orgLoadData(orgSearch, pagination, sorter)
+                    }
+                    loading={orgLoading}
+                  />
+                </TabPane>
+                : null
+            }
 
-          {/* {
+            {/* {
             id ?
               <TabPane tab="优惠政策" key="4" style={{ marginBottom: '20px' }}>
                 <div style={{ marginBottom: '5px', padding: '3px 2px' }}>
@@ -1649,72 +1658,73 @@ const Modify = (props: ModifyProps) => {
               : null
           } */}
 
-          {
-            id && infoDetail.feeKind == '收款费项' ?
-              <TabPane tab="设置房屋费项" key="5" style={{ marginBottom: '20px' }}>
-                <div style={{ marginBottom: '5px', padding: '3px 2px' }}>
-                  <Input.Search
-                    key='search'
-                    className="search-input"
-                    placeholder="请输入要查询的房屋编号"
-                    style={{ width: 200 }}
-                    onSearch={value => houseLoadData(value)}
-                  />
-                  {/* <Button type="link" style={{ float: 'right' }}
+            {
+              id && infoDetail.feeKind == '收款费项' ?
+                <TabPane tab="设置房屋费项" key="5" style={{ marginBottom: '20px' }}>
+                  <div style={{ marginBottom: '5px', padding: '3px 2px' }}>
+                    <Input.Search
+                      key='search'
+                      className="search-input"
+                      placeholder="请输入要查询的房屋编号"
+                      style={{ width: 200 }}
+                      onSearch={value => houseLoadData(value)}
+                    />
+                    {/* <Button type="link" style={{ float: 'right' }}
                     onClick={() => { initOrgLoadData() }}
                   >
                     <Icon type="reload" />
                     刷新
                 </Button> */}
 
-                  <Button type="link" style={{ float: 'right' }}
-                    onClick={deleteAllHouse}
-                  >
-                    <Icon type="delete" />
-                    全部删除
+                    <Button type="link" style={{ float: 'right' }}
+                      onClick={deleteAllHouse}
+                    >
+                      <Icon type="delete" />
+                      全部删除
                 </Button>
 
-                  <Button type="link" style={{ float: 'right' }}
-                    onClick={deleteHouse}
-                  >
-                    <Icon type="delete" />
-                    删除
+                    <Button type="link" style={{ float: 'right' }}
+                      onClick={deleteHouse}
+                    >
+                      <Icon type="delete" />
+                      删除
                 </Button>
-                  <Button type="link" style={{ float: 'right' }}
-                    onClick={() => {
-                      //请选择费项所属的组织机构！
-                      if (orgData == null || orgData.length == 0) {
-                        message.error('请选择费项所属的组织机构！');
-                      }
-                      else {
-                        setSelectHouseVisible(true);
-                      }
-                    }}
-                  >
-                    <Icon type="plus" />
-                    新增
+                    <Button type="link" style={{ float: 'right' }}
+                      onClick={() => {
+                        //请选择费项所属的组织机构！
+                        if (orgData == null || orgData.length == 0) {
+                          message.error('请选择费项所属的组织机构！');
+                        }
+                        else {
+                          setSelectHouseVisible(true);
+                        }
+                      }}
+                    >
+                      <Icon type="plus" />
+                      新增
                 </Button>
 
-                </div>
-                <Table
-                  key='list'
-                  style={{ border: 'none' }}
-                  bordered={false}
-                  size="middle"
-                  rowSelection={houseRowSelection}
-                  dataSource={houseData}
-                  columns={housecolumns}
-                  rowKey={record => record.unitFeeId}
-                  pagination={housePagination}
-                  scroll={{ y: 420, x: 1000 }}
-                  onChange={(pagination: PaginationConfig, filters, sorter) =>
-                    houseLoadData(houseSearch, pagination, sorter)
-                  }
-                  loading={houseLoading}
-                />
-              </TabPane> : null
-          }
-        </Tabs>
+                  </div>
+                  <Table
+                    key='list'
+                    style={{ border: 'none' }}
+                    bordered={false}
+                    size="middle"
+                    rowSelection={houseRowSelection}
+                    dataSource={houseData}
+                    columns={housecolumns}
+                    rowKey={record => record.unitFeeId}
+                    pagination={housePagination}
+                    scroll={{ y: 420, x: 1000 }}
+                    onChange={(pagination: PaginationConfig, filters, sorter) =>
+                      houseLoadData(houseSearch, pagination, sorter)
+                    }
+                    loading={houseLoading}
+                  />
+                </TabPane> : null
+            }
+          </Tabs>
+        </Spin>
         <div
           style={{
             position: 'absolute',
