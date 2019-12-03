@@ -10,15 +10,18 @@ interface ListTableProps {
   loading: boolean;
   pagination: PaginationConfig;
   data: any[];
-  detail(id: string, chargeId: string): void;
-  modify(id: string, chargeId: string): void;
-  approve(id: string, chargeId: string): void;
-  change(id: string, chargeId: string): void;
+  detail(id: string, chargeId: string): void;//查看
+  modify(id: string, chargeId: string): void;//修改
+  approve(id: string, chargeId: string): void;//审核
+  change(id: string, chargeId: string): void;//变更
+  renewal(id: string, chargeId: string): void;//续租
+  withdrawal(id: string, chargeId: string): void;//退租
+  forward(id: string, chargeId: string): void;//结转
   reload(): void;
 };
 
 function ListTable(props: ListTableProps) {
-  const { onchange, loading, pagination, data, detail, modify, reload, approve, change } = props;
+  const { onchange, loading, pagination, data, detail, modify, reload, approve, change, renewal, withdrawal, forward } = props;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
   };
@@ -35,16 +38,20 @@ function ListTable(props: ListTableProps) {
     });
   };
 
-
-  //合同变更
+  //合同操作
   const editAndDelete = (key: string, currentItem: any) => {
-    if (key === 'split') {
-
-    } else if (key === 'trans') {
-
+    if (key === 'renewal') {
+      //续租
+      renewal(currentItem.id, currentItem.chargeId);
+    } else if (key === 'withdrawal') {
+      //退租
+      withdrawal(currentItem.id, currentItem.chargeId);
+    } else if (key === 'forward') {
+      //结转 
+      forward(currentItem.id, currentItem.chargeId);
+    } else if (key === 'invalid') {
     }
   };
-
 
   const MoreBtn: React.FC<{
     item: any;
@@ -59,7 +66,7 @@ function ListTable(props: ListTableProps) {
           <Menu.Item key="invalid">作废</Menu.Item>
         </Menu>}>
       <a>
-        变更<Icon type="down" />
+        操作<Icon type="down" />
       </a>
     </Dropdown>
   );
@@ -243,10 +250,10 @@ function ListTable(props: ListTableProps) {
         } else {
           return [
             <span>
-              {/* <a onClick={() => change(record.id, record.chargeId)} key="change">变更</a> */} 
+              {/* <a onClick={() => change(record.id, record.chargeId)} key="change">变更</a> */}
               <a onClick={() => detail(record.id, record.chargeId)} key="detail">查看</a>
               <Divider type="vertical" key='spilt1' />
-              <MoreBtn key="more" item={record} />  
+              <MoreBtn key="more" item={record} />
             </span>
           ];
         }

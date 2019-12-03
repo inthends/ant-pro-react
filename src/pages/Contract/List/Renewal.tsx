@@ -1,69 +1,182 @@
-
-import { Spin, message, AutoComplete, InputNumber, TreeSelect, Tabs, Select, Button, Card, Col, DatePicker, Drawer, Form, Input, Row } from 'antd';
+//续租
+import {
+  Tag, Spin, Divider, PageHeader, AutoComplete, InputNumber, TreeSelect, message,
+  Tabs, Select, Button, Card, Col, DatePicker, Drawer, Form, Input, Row
+} from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import {
-  TreeEntity, HtLeasecontractcharge, HtLeasecontractchargefee,
-  HtLeasecontractchargefeeoffer,
+  TreeEntity,
+  HtLeasecontractcharge,
+  HtLeasecontractchargefee,
   HtLeasecontractchargeincre,
-  HtChargefeeresult,
-  LeaseContractDTO
+  HtLeasecontractchargefeeoffer,
+  LeaseContractDTO,
+  ChargeDetailDTO
 } from '@/model/models';
 import React, { useEffect, useState } from 'react';
-import LeaseTerm from './LeaseTerm';
+import ResultList from './ResultList';
+import { SubmitForm, SaveForm, GetFeeItemsByUnitId, GetCharge, GetFormJson, GetChargeDetail } from './Main.service';
+import { GetOrgTreeSimple, GetAsynChildBuildingsSimple, getCommonItems, GetUserList } from '@/services/commonItem';
+import moment from 'moment';
+import styles from './style.less';
+import LeaseTermRenewal from './LeaseTermRenewal';
 import IncreasingRate from './IncreasingRate';
 import Rebate from './Rebate';
-import ResultList from './ResultList';
-import moment from 'moment';
-import { getCommonItems, GetUserList } from '@/services/commonItem';
-import { SaveForm, GetFeeItemsByUnitId, GetChargeDetail } from './Main.service';
-import { GetOrgTreeSimple, GetAsynChildBuildingsSimple } from '@/services/commonItem';
-import styles from './style.less';
 
 const { Option } = Select;
 const { TabPane } = Tabs;
 
-interface AddProps {
+interface RenewalProps {
   visible: boolean;
-  id?: string;
-  data?: any;
-  // treeData: any[];
+  id?: string;//合同id
+  chargeId?: string;//合同条款id
   closeDrawer(): void;
   form: WrappedFormUtils;
   reload(): void;
+  // treeData: any[];
+  // choose(): void;
 };
 
-const Add = (props: AddProps) => {
-  const title = '添加合同';
-  const { visible, closeDrawer, form, reload } = props;
+const Renewal = (props: RenewalProps) => {
+  const title = '合同续租';
+  const { visible, closeDrawer, id, form, chargeId, reload } = props;
   const { getFieldDecorator } = form;
-  const [industryType, setIndustryType] = useState<any[]>([]); //行业  
+  //const [industryType, setIndustryType] = useState<any[]>([]); //行业  
+  //const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
+  const [infoDetail, setInfoDetail] = useState<LeaseContractDTO>({});
+  const [contractCharge, setContractCharge] = useState<HtLeasecontractcharge>({});
+  // const [chargeFeeList, setChargeFeeList] = useState<HtLeasecontractchargefee[]>([]);
+  // const [chargeIncreList, setChargeIncreList] = useState<HtLeasecontractchargeincre[]>([]);
+  // const [chargeOfferList, setChargeOfferList] = useState<HtLeasecontractchargefeeoffer[]>([]);
+  const [depositData, setDepositData] = useState<any[]>([]);//保证金
+  const [chargeData, setChargeData] = useState<any[]>([]);//租金 
+  const [industryType, setIndustryType] = useState<any[]>([]); //行业 
   const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
-  //租金计算结果
-  const [depositData, setDepositData] = useState<HtChargefeeresult[]>([]);//保证金
-  const [chargeData, setChargeData] = useState<HtChargefeeresult[]>([]);//租金 
-  const [treeData, setTreeData] = useState<any[]>([]);
   const [isCal, setIsCal] = useState<boolean>(false);
   const [TermJson, setTermJson] = useState<string>();
   const [RateJson, setRateJson] = useState<string>();
   const [RebateJson, setRebateJson] = useState<string>();
   const [userSource, setUserSource] = useState<any[]>([]);
-
-  // const [DepositResult, setDepositResult] = useState<HtChargefeeresult[]>([]);
-  // const [ChargeFeeResult, setChargeFeeResult] = useState<HtChargefeeresult[]>([]);
-
+  const [rooms, setRooms] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [treeData, setTreeData] = useState<any[]>([]);
 
-  // const [billUnitId, setBillUnitId] = useState<string>();//计费房屋Id 
   // const close = () => {
   //   closeDrawer();
+  // };
+
+  //打开抽屉时初始化
+  useEffect(() => {
+    getCommonItems('IndustryType').then(res => {
+      setIndustryType(res || []);
+    });
+    //加载关联收费项目
+    // GetAllFeeItems().then(res => {
+    //   setFeeitems(res || []);
+    // });
+
+    //获取房产树
+    GetOrgTreeSimple().then((res: any[]) => {
+      setTreeData(res || []);
+    });
+
+  }, []);
+
+  // 打开抽屉时初始化
+  useEffect(() => {
+    if (visible) {
+      if (id) {
+        setLoading(true);
+        GetFormJson(id).then((tempInfo: LeaseContractDTO) => {
+          //处理一下房间
+          let rooms: any[] = [];
+          if (tempInfo != null && tempInfo.houseList != null) {
+            tempInfo.houseList.forEach(item => {
+              rooms.push(item.roomId);
+            });
+            setRooms(rooms);
+          }
+
+          GetFeeItemsByUnitId(tempInfo.billUnitId).then(res => {
+            setFeeitems(res || []);
+          });
+
+          setInfoDetail(tempInfo);
+
+          //获取条款
+          GetCharge(chargeId).then((charge: ChargeDetailDTO) => {
+            setContractCharge(charge.contractCharge || {});
+            // setChargeFeeList(charge.chargeFeeList || []);
+            // setChargeIncreList(charge.chargeIncreList || []);
+            // setChargeOfferList(charge.chargeFeeOfferList || []);
+            // setDepositData(charge.depositFeeResultList || []);//保证金明细
+            // setChargeData(charge.chargeFeeResultList || []);//租金明细    
+          })
+          form.resetFields();
+          setLoading(false);
+        });
+      } else {
+        form.resetFields();
+      }
+    } else {
+      form.setFieldsValue({});
+    }
+  }, [visible]);
+
+  const handleSearch = value => {
+    if (value == '')
+      return;
+    GetUserList(value, '员工').then(res => {
+      setUserSource(res || []);
+    })
+  };
+
+  const userList = userSource.map
+    (item => <Option key={item.id} value={item.name}>{item.name}</Option>);
+
+  const onFollowerSelect = (value, option) => {
+    form.setFieldsValue({ followerId: option.key });
+  };
+
+  const onSignerSelect = (value, option) => {
+    form.setFieldsValue({ signerId: option.key });
+  };
+
+  const onRoomChange = (value, label, extra) => {
+    //多个房屋的时候，默认获取第一个房屋作为计费单元
+    if (value.length == 0) {
+      form.setFieldsValue({ billUnitId: '' });
+      setFeeitems([]);
+    } else {
+      form.setFieldsValue({ billUnitId: value[0] });
+      //加载房屋费项
+      //加载关联收费项目
+      GetFeeItemsByUnitId(value[0]).then(res => {
+        setFeeitems(res || []);
+      });
+    }
+
+    //选择房源,计算面积
+    //["101 158.67㎡", "102 156.21㎡"]
+    let area = 0;
+    label.forEach((val, idx, arr) => {
+      area += parseFloat(val.split(' ')[1].replace('㎡', ''));
+    });
+    form.setFieldsValue({ leaseSize: area.toFixed(2) });
+    form.setFieldsValue({ leaseArea: area.toFixed(2) });
+  };
+
+  // const onIndustrySelect = (value, option) => {
+  //   //设置行业名称
+  //   form.setFieldsValue({ industry: option.props.children });
   // };
 
   //计算租金明细
   const calculation = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        //租赁条款     
         setLoading(true);
+        //数据处理  租赁条款     
         let TermJson: HtLeasecontractchargefee[] = [];
         let data: HtLeasecontractchargefee = {};
         //const TermJson=[];
@@ -150,6 +263,7 @@ const Add = (props: AddProps) => {
         setRateJson(strRateJson);
         let strRebateJson = JSON.stringify(RebateJson);
         setRebateJson(strRebateJson);
+
         GetChargeDetail({
           ...entity,
           BillUnitId: values.billUnitId,//计费单元id
@@ -159,6 +273,7 @@ const Add = (props: AddProps) => {
           TermJson: strTermJson,
           RateJson: strRateJson,
           RebateJson: strRebateJson
+
         }).then(res => {
           setIsCal(true);//计算租金
           setDepositData(res.depositFeeResultList);//保证金明细
@@ -171,7 +286,12 @@ const Add = (props: AddProps) => {
     });
   };
 
-  const save = () => {
+  //提交审核
+  const submit = () => {
+    //弹出选人
+    //choose();
+    //save(); 
+    //发起审批
     form.validateFields((errors, values) => {
       if (!errors) {
         //是否生成租金明细
@@ -179,12 +299,10 @@ const Add = (props: AddProps) => {
           // Modal.warning({
           //   title: '提示',
           //   content: '请生成租金明细！',
-          //   okText: '确认'
-          // }); 
+          // });
           message.warning('请生成租金明细！');
           return;
         }
-
         //保存合同数据
         let ContractCharge: HtLeasecontractcharge = {};
         //费用条款-基本条款 
@@ -197,7 +315,9 @@ const Add = (props: AddProps) => {
         ContractCharge.endDate = values.contractEndDate.format('YYYY-MM-DD');
         ContractCharge.payDate = values.contractStartDate.format('YYYY-MM-DD');
 
+        //合同信息
         let Contract: LeaseContractDTO = {};
+        Contract.id = id;
         Contract.no = values.no;
         Contract.follower = values.follower;
         Contract.followerId = values.followerId;
@@ -210,7 +330,7 @@ const Add = (props: AddProps) => {
         Contract.customer = values.customer;
         Contract.customerId = values.customerId;
         Contract.industry = values.industry;
-        //Contract.industryId = values.industryId;
+        //Contract.industryId = values.industryId; 
         Contract.legalPerson = values.legalPerson;
         Contract.signer = values.signer;
         Contract.signerId = values.signerId;
@@ -222,6 +342,79 @@ const Add = (props: AddProps) => {
         Contract.maxLateFeeUnit = values.maxLateFeeUnit;
         Contract.billUnitId = values.billUnitId;
 
+        SubmitForm({
+          ...Contract,
+          ...ContractCharge,
+          keyValue: id,
+          ChargeId: chargeId,
+          room: values.room,
+          TermJson: TermJson,
+          RateJson: RateJson,
+          RebateJson: RebateJson,
+          DepositResult: JSON.stringify(depositData),
+          ChargeFeeResult: JSON.stringify(chargeData)
+
+        }).then(res => {
+          message.success('提交成功');
+          closeDrawer();
+          reload();
+        });
+      }
+    });
+  };
+
+  //续租保存
+  const save = () => {
+    form.validateFields((errors, values) => {
+      if (!errors) {
+        //是否生成租金明细
+        if (!isCal) {
+          // Modal.warning({
+          //   title: '提示',
+          //   content: '请生成租金明细！',
+          // });
+          message.warning('请生成租金明细！');
+          return;
+        }
+        //保存合同数据
+        let ContractCharge: HtLeasecontractcharge = {};
+        //费用条款-基本条款 
+        ContractCharge.depositFeeItemId = values.depositFeeItemId;
+        ContractCharge.depositFeeItemName = values.depositFeeItemName;
+        ContractCharge.leaseArea = values.leaseArea;
+        ContractCharge.deposit = values.deposit;
+        ContractCharge.depositUnit = values.depositUnit;
+        ContractCharge.startDate = values.billingDate.format('YYYY-MM-DD');
+        ContractCharge.endDate = values.contractEndDate.format('YYYY-MM-DD');
+        ContractCharge.payDate = values.contractStartDate.format('YYYY-MM-DD');
+
+        //合同信息
+        let Contract: LeaseContractDTO = {};
+        Contract.id = id;
+        Contract.no = values.no;
+        Contract.follower = values.follower;
+        Contract.followerId = values.followerId;
+        Contract.leaseSize = values.leaseSize;
+        Contract.contractStartDate = values.contractStartDate.format('YYYY-MM-DD');
+        Contract.billingDate = values.billingDate.format('YYYY-MM-DD');
+        Contract.contractEndDate = values.contractEndDate.format('YYYY-MM-DD');
+        Contract.calcPrecision = values.calcPrecision;
+        Contract.calcPrecisionMode = values.calcPrecisionMode;
+        Contract.customer = values.customer;
+        Contract.customerId = values.customerId;
+        Contract.industry = values.industry;
+        //Contract.industryId = values.industryId; 
+        Contract.legalPerson = values.legalPerson;
+        Contract.signer = values.signer;
+        Contract.signerId = values.signerId;
+        Contract.customerContact = values.customerContact;
+        Contract.customerContactId = values.customerContactId;
+        Contract.lateFee = values.lateFee;
+        Contract.lateFeeUnit = values.lateFeeUnit;
+        Contract.maxLateFee = values.maxLateFee;
+        Contract.maxLateFeeUnit = values.maxLateFeeUnit;
+        Contract.billUnitId = values.billUnitId;
+        Contract.preContractId = id;
         SaveForm({
           ...Contract,
           ...ContractCharge,
@@ -231,13 +424,11 @@ const Add = (props: AddProps) => {
           TermJson: TermJson,
           RateJson: RateJson,
           RebateJson: RebateJson,
-          // DepositResult: JSON.stringify(DepositResult),
-          // ChargeFeeResult:JSON.stringify(ChargeFeeResult) 
           DepositResult: JSON.stringify(depositData),
           ChargeFeeResult: JSON.stringify(chargeData)
 
         }).then(res => {
-          message.success('保存成功！');
+          message.success('保存成功');
           closeDrawer();
           reload();
         });
@@ -245,89 +436,13 @@ const Add = (props: AddProps) => {
     });
   };
 
-  //打开抽屉时初始化
-  useEffect(() => {
-    getCommonItems('IndustryType').then(res => {
-      setIndustryType(res || []);
-    });
-
-    // //加载关联收费项目
-    // GetAllFeeItems().then(res => {
-    //   setFeeitems(res || []);
-    // });
-
-    //获取房产树
-    GetOrgTreeSimple().then((res: any[]) => {
-      setTreeData(res || []);
-    });
-
-  }, []);
-
-  // 打开抽屉时初始化
-  useEffect(() => {
-  }, [visible]);
-
-  const handleSearch = value => {
-    if (value == '')
-      return;
-    GetUserList(value, '员工').then(res => {
-      setUserSource(res || []);
-    })
-  };
-
-  const userList = userSource.map
-    (item => <Option key={item.id} value={item.name}>{item.name}</Option>);
-
-  const onFollowerSelect = (value, option) => {
-    form.setFieldsValue({ followerId: option.key });
-  };
-
-  const onSignerSelect = (value, option) => {
-    form.setFieldsValue({ signerId: option.key });
-  };
-
-  //选择房屋
-  const onRoomChange = (value, label, extra) => {
-    //多个房屋的时候，默认获取第一个房屋作为计费单元
-    if (value.length == 0) {
-      // setBillUnitId('');
-      form.setFieldsValue({ billUnitId: '' });
-      setFeeitems([]);
-    } else {
-      form.setFieldsValue({ billUnitId: value[0] });
-      // setBillUnitId(value[0]);
-      //加载房屋费项
-      //加载关联收费项目
-      GetFeeItemsByUnitId(value[0]).then(res => {
-        setFeeitems(res || []);
-      });
-    }
-
-    //选择房源,计算面积
-    //["101 158.67㎡", "102 156.21㎡"] 
-    let area = 0;
-
-    label.forEach((val, idx, arr) => {
-      area += parseFloat(val.split(' ')[1].replace('㎡', ''));
-    });
-    form.setFieldsValue({ leaseSize: area.toFixed(2) });
-    form.setFieldsValue({ leaseArea: area.toFixed(2) });
-  };
-
-  // const onIndustrySelect = (value, option) => { 
-  //   //设置行业名称
-  //   form.setFieldsValue({ industry: option.props.children });
-  // };
-
-
-  //异步加载
+  //异步加载房间，提高速度
   const onLoadData = treeNode =>
     new Promise<any>(resolve => {
       if (treeNode.props.children && treeNode.props.children.length > 0 && treeNode.props.type != 'D') {
         resolve();
         return;
       }
-
       setTimeout(() => {
         GetAsynChildBuildingsSimple(treeNode.props.eventKey, treeNode.props.type).then((res: any[]) => {
           // treeNode.props.children = res || [];
@@ -340,21 +455,32 @@ const Add = (props: AddProps) => {
     });
 
 
+  //转换状态
+  const GetStatus = (status) => {
+    switch (status) {
+      case 0:
+        return <Tag color="#e4aa5b">新建</Tag>;
+      case 1:
+        return <Tag color="#e4aa4b">待审核</Tag>;
+      case 2:
+        return <Tag color="#19d54e">已审核</Tag>;
+      case -1:
+        return <Tag color="#d82d2d">已作废</Tag>
+      default:
+        return '';
+    }
+  };
+
   //保证金单位切换
   const changeFeeItem = (value, option) => {
-    //const changeFeeItem = e => {
     form.setFieldsValue({ depositFeeItemName: option.props.children });
   };
 
-  //结束日期控制
-  const disabledEndDate = (current) => {
-    return current < moment(form.getFieldValue('billingDate'));
+  //合同续租，起租日和签订日都要大于原来合同的结束日期
+  const disabledDate = (current) => {
+    return current < moment(infoDetail.contractEndDate).add(1, 'days');
   };
 
-  //起始日期控制
-  const disabledStartDate = (current) => {
-    return current < moment(form.getFieldValue('contractEndDate'));
-  };
 
   return (
     <Drawer
@@ -364,6 +490,13 @@ const Add = (props: AddProps) => {
       onClose={closeDrawer}
       visible={visible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
+      <PageHeader title={GetStatus(infoDetail.status)}
+      // extra={[
+      //   <Button key="1">附件</Button>, 
+      //   <Button key="2">打印</Button>,
+      // ]}
+      />
+      <Divider dashed />
       <Form layout="vertical" hideRequiredMark>
         <Spin tip="数据加载中..." spinning={loading}>
           <Tabs defaultActiveKey="1" >
@@ -371,14 +504,6 @@ const Add = (props: AddProps) => {
               <Row gutter={24}>
                 <Col span={12}>
                   <Card title="基本信息" className={styles.addcard}>
-                    <Row gutter={24}>
-                      <Col lg={24}>
-                        <Form.Item label="模板选择">
-                          {getFieldDecorator('template', {
-                          })(<Select placeholder="请选择模板" />)}
-                        </Form.Item>
-                      </Col>
-                    </Row>
                     <Row gutter={24}>
                       <Col lg={12}>
                         <Form.Item label="合同编号" required>
@@ -390,6 +515,7 @@ const Add = (props: AddProps) => {
                       <Col lg={12}>
                         <Form.Item label="跟进人" >
                           {getFieldDecorator('follower', {
+                            initialValue: infoDetail.follower
                           })(
                             <AutoComplete
                               dataSource={userList}
@@ -399,6 +525,7 @@ const Add = (props: AddProps) => {
                             />
                           )}
                           {getFieldDecorator('followerId', {
+                            initialValue: infoDetail.followerId
                           })(
                             <input type='hidden' />
                           )}
@@ -409,6 +536,7 @@ const Add = (props: AddProps) => {
                       <Col lg={12}>
                         <Form.Item label="租赁数量（m²)">
                           {getFieldDecorator('leaseSize', {
+                            initialValue: infoDetail.leaseSize,
                             rules: [{ required: true, message: '请输入租赁数量' }],
                           })(<InputNumber placeholder="请输入租赁数量" style={{ width: '100%' }} />)}
                         </Form.Item>
@@ -416,9 +544,10 @@ const Add = (props: AddProps) => {
                       <Col lg={12}>
                         <Form.Item label="合同签订时间" required>
                           {getFieldDecorator('contractStartDate', {
-                            initialValue: moment(new Date()),
+                            initialValue: moment(infoDetail.contractEndDate).add(1, 'days'),
                             rules: [{ required: true, message: '请选择合同签订时间' }],
-                          })(<DatePicker placeholder="请选择合同签订时间" style={{ width: '100%' }} />)}
+                          })(<DatePicker placeholder="请选择合同签订时间"
+                            style={{ width: '100%' }} />)}
                         </Form.Item>
                       </Col>
                     </Row>
@@ -426,21 +555,21 @@ const Add = (props: AddProps) => {
                       <Col lg={12}>
                         <Form.Item label="合同计租时间">
                           {getFieldDecorator('billingDate', {
-                            initialValue: moment(new Date()),
+                            initialValue: moment(infoDetail.contractEndDate).add(1, 'days'),
                             rules: [{ required: true, message: '请选择合同计租时间' }],
-                          })(<DatePicker placeholder="请选择合同计租时间"
-                            disabledDate={disabledStartDate}
-                            style={{ width: '100%' }} />)}
+                          })(<DatePicker
+                            disabledDate={disabledDate}
+                            placeholder="请选择合同计租时间" style={{ width: '100%' }} />)}
                         </Form.Item>
                       </Col>
                       <Col lg={12}>
                         <Form.Item label="合同失效时间" required>
                           {getFieldDecorator('contractEndDate', {
-                            initialValue: moment(new Date()).add(1, 'years').add(-1, 'days'),
+                            initialValue: moment(infoDetail.contractEndDate).add(1, 'years').add(1, 'days'),
                             rules: [{ required: true, message: '请选择合同失效时间' }],
-                          })(<DatePicker placeholder="请选择合同失效时间"
-                            disabledDate={disabledEndDate}
-                            style={{ width: '100%' }} />)}
+                          })(<DatePicker
+                            disabledDate={disabledDate}
+                            placeholder="请选择合同失效时间" style={{ width: '100%' }} />)}
                         </Form.Item>
                       </Col>
                     </Row>
@@ -448,7 +577,7 @@ const Add = (props: AddProps) => {
                       <Col lg={12}>
                         <Form.Item label="单价保留小数点">
                           {getFieldDecorator('calcPrecision', {
-                            initialValue: 2,
+                            initialValue: infoDetail.calcPrecision ? infoDetail.calcPrecision : 2,
                             rules: [{ required: true, message: '请填写保留几位' }],
                           })(<InputNumber placeholder="请填写保留几位" style={{ width: '100%' }} />)}
                         </Form.Item>
@@ -456,12 +585,47 @@ const Add = (props: AddProps) => {
                       <Col lg={12}>
                         <Form.Item label="计算精度">
                           {getFieldDecorator('calcPrecisionMode', {
-                            initialValue: "最终计算结果保留2位"
+                            initialValue: infoDetail.calcPrecisionMode ? infoDetail.calcPrecisionMode : "最终计算结果保留2位"
                           })(<Select>
                             <Option value="最终计算结果保留2位" >最终计算结果保留2位</Option>
                             <Option value="每步计算结果保留2位" >每步计算结果保留2位</Option>
                           </Select>
                           )}
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row gutter={24}>
+                      <Col lg={6}>
+                        <Form.Item label="滞纳金比例" >
+                          {getFieldDecorator('lateFee', {
+                            initialValue: infoDetail.lateFee
+                          })(<InputNumber placeholder="请输入" />)}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={6}>
+                        <Form.Item label="&nbsp;" >
+                          {getFieldDecorator('lateFeeUnit', {
+                            initialValue: infoDetail.lateFeeUnit ? infoDetail.lateFeeUnit : "%/天"
+                          })(
+                            <Select>
+                              <Option value="%/天">%/天</Option>
+                            </Select>)}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={7}>
+                        <Form.Item label="滞纳金上限" >
+                          {getFieldDecorator('maxLateFee', {
+                            initialValue: infoDetail.maxLateFee
+                          })(<InputNumber placeholder="请输入" />)}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={5}>
+                        <Form.Item label="&nbsp;" >
+                          {getFieldDecorator('maxLateFeeUnit', {
+                            initialValue: infoDetail.maxLateFeeUnit ? infoDetail.maxLateFeeUnit : "%"
+                          })(<Select>
+                            <Option value="%">%</Option>
+                          </Select>)}
                         </Form.Item>
                       </Col>
                     </Row>
@@ -473,6 +637,7 @@ const Add = (props: AddProps) => {
                       <Col lg={24}>
                         <Form.Item label="房源选择" required>
                           {getFieldDecorator('room', {
+                            initialValue: rooms,
                             rules: [{ required: true, message: '请选择房源' }],
                           })(
                             <TreeSelect
@@ -487,12 +652,11 @@ const Add = (props: AddProps) => {
                             </TreeSelect>
                           )}
                           <span style={{ marginLeft: 8, color: "green" }}>多个房屋的时候，默认获取第一个房屋作为计费单元</span>
-
                           {getFieldDecorator('billUnitId', {
+                            initialValue: infoDetail.billUnitId
                           })(
                             <input type='hidden' />
                           )}
-
                         </Form.Item>
                       </Col>
                     </Row>
@@ -500,6 +664,7 @@ const Add = (props: AddProps) => {
                       <Col lg={12}>
                         <Form.Item label="租客" required>
                           {getFieldDecorator('customer', {
+                            initialValue: infoDetail.customer,
                             rules: [{ required: true, message: '请填写姓名或公司' }],
                           })(<Input placeholder="请填写姓名或公司" />)}
                         </Form.Item>
@@ -507,31 +672,24 @@ const Add = (props: AddProps) => {
                       <Col lg={12}>
                         <Form.Item label="行业" required>
                           {getFieldDecorator('industry', {
+                            initialValue: infoDetail.industry,
                             rules: [{ required: true, message: '请选择行业' }],
                           })(
                             <Select placeholder="请选择行业"
                             // onSelect={onIndustrySelect}
                             >
-                              {/* {industryType.map(item => (
-                              <Option value={item.value} key={item.key}>
-                                {item.title}
-                              </Option>
-                            ))} */}
-
                               {industryType.map(item => (
-                                <Option value={item.title} key={item.title}>
+                                <Option value={item.value} key={item.key}>
                                   {item.title}
                                 </Option>
                               ))}
-
                             </Select>
                           )}
-
                           {/* {getFieldDecorator('industry', {
+                            initialValue: infoDetail.industry
                           })(
                             <input type='hidden' />
                           )} */}
-
                         </Form.Item>
                       </Col>
                     </Row>
@@ -539,6 +697,7 @@ const Add = (props: AddProps) => {
                       <Col lg={12}>
                         <Form.Item label="法人" required>
                           {getFieldDecorator('legalPerson', {
+                            initialValue: infoDetail.legalPerson,
                             rules: [{ required: true, message: '请填写法人' }],
                           })(<Input placeholder="请填写法人" />)}
                         </Form.Item>
@@ -546,6 +705,7 @@ const Add = (props: AddProps) => {
                       <Col lg={12}>
                         <Form.Item label="签订人" required>
                           {getFieldDecorator('signer', {
+                            initialValue: infoDetail.signer,
                             rules: [{ required: true, message: '请输入签订人' }],
                           })(
                             <AutoComplete
@@ -556,6 +716,7 @@ const Add = (props: AddProps) => {
                             />
                           )}
                           {getFieldDecorator('signerId', {
+                            initialValue: infoDetail.signerId,
                           })(
                             <input type='hidden' />
                           )}
@@ -566,61 +727,31 @@ const Add = (props: AddProps) => {
                       <Col lg={24}>
                         <Form.Item label="租客联系人">
                           {getFieldDecorator('customerContact', {
+                            initialValue: infoDetail.customerContact,
                             rules: [{ required: true, message: '请输入租客联系人' }],
                           })(<Input placeholder="请输入租客联系人" />)}
                         </Form.Item>
                       </Col>
                     </Row>
-                    <Row gutter={24}>
-                      <Col lg={6}>
-                        <Form.Item label="滞纳金比例" >
-                          {getFieldDecorator('lateFee', {
-                          })(<InputNumber placeholder="请输入" />)}
-                        </Form.Item>
-                      </Col>
-                      <Col lg={6}>
-                        <Form.Item label="&nbsp;" >
-                          {getFieldDecorator('lateFeeUnit', {
-                            initialValue: "%/天"
-                          })(
-                            <Select>
-                              <Option value="%/天">%/天</Option>
-                            </Select>)}
-                        </Form.Item>
-                      </Col>
-                      <Col lg={7}>
-                        <Form.Item label="滞纳金上限" >
-                          {getFieldDecorator('maxLateFee', {
-                          })(<InputNumber placeholder="请输入" />)}
-                        </Form.Item>
-                      </Col>
-                      <Col lg={5}>
-                        <Form.Item label="&nbsp;" >
-                          {getFieldDecorator('maxLateFeeUnit', {
-                            initialValue: "%"
-                          })(<Select>
-                            <Option value="%">%</Option>
-                          </Select>)}
-                        </Form.Item>
-                      </Col>
-                    </Row>
+
                   </Card>
                 </Col>
               </Row>
-
             </TabPane>
-            <TabPane tab="费用条款" key="2">
+            <TabPane tab="租赁条款" key="2">
               <Card title="基本条款" className={styles.card} >
                 <Row gutter={24}>
                   <Col lg={4}>
                     <Form.Item label="租赁数量（㎡）" required>
                       {getFieldDecorator('leaseArea', {
+                        initialValue: contractCharge.leaseArea
                       })(<Input readOnly />)}
                     </Form.Item>
                   </Col>
                   <Col lg={10}>
                     <Form.Item label="保证金关联费项" required>
                       {getFieldDecorator('depositFeeItemId', {
+                        initialValue: contractCharge.depositFeeItemId,
                         rules: [{ required: true, message: '请选择费项' }]
                       })(
                         <Select placeholder="请选择费项"
@@ -635,6 +766,7 @@ const Add = (props: AddProps) => {
                       )}
 
                       {getFieldDecorator('depositFeeItemName', {
+                        initialValue: contractCharge.depositFeeItemName,
                       })(
                         <input type='hidden' />
                       )}
@@ -644,7 +776,7 @@ const Add = (props: AddProps) => {
                   <Col lg={5}>
                     <Form.Item label="保证金数量" required>
                       {getFieldDecorator('deposit', {
-                        initialValue: 1,
+                        initialValue: contractCharge.deposit ? contractCharge.deposit : 1,
                         rules: [{ required: true, message: '请输入保证金数量' }],
                       })(<Input placeholder="请输入保证金数量" />)}
                     </Form.Item>
@@ -652,7 +784,7 @@ const Add = (props: AddProps) => {
                   <Col lg={5}>
                     <Form.Item label="&nbsp;" >
                       {getFieldDecorator('depositUnit', {
-                        initialValue: "月"
+                        initialValue: contractCharge.depositUnit ? contractCharge.depositUnit : "月"
                       })(
                         <Select>
                           <Option value="月">月</Option>
@@ -668,16 +800,24 @@ const Add = (props: AddProps) => {
                 </Col> */}
                 </Row>
               </Card>
-              <LeaseTerm form={form} feeitems={feeitems}></LeaseTerm>
-              <IncreasingRate form={form}></IncreasingRate>
-              <Rebate form={form}></Rebate>
-              <Button style={{ width: '100%', marginBottom: '10px' }} onClick={calculation}>点击生成租金明细</Button>
+              <LeaseTermRenewal
+                form={form}
+                feeitems={feeitems}
+              ></LeaseTermRenewal>
+              <IncreasingRate
+                form={form}
+              ></IncreasingRate>
+              <Rebate
+                form={form}
+              ></Rebate>
+              <Button style={{ width: '100%', marginBottom: '10px' }}
+                onClick={calculation}>点击生成租金明细</Button>
               <ResultList
                 depositData={depositData}
                 chargeData={chargeData}
               ></ResultList>
-
             </TabPane>
+
           </Tabs>
         </Spin>
       </Form>
@@ -695,16 +835,18 @@ const Add = (props: AddProps) => {
         }}
       >
         <Button onClick={closeDrawer} style={{ marginRight: 8 }}>
-          取消
+          关闭
           </Button>
-        <Button onClick={save} type="primary">
-          确定
+        <Button onClick={save} style={{ marginRight: 8 }}>
+          保存
+          </Button>
+        <Button onClick={submit} type="primary">
+          提交
           </Button>
       </div>
-    </Drawer>
+    </Drawer >
   );
-
 };
 
-export default Form.create<AddProps>()(Add);
+export default Form.create<RenewalProps>()(Renewal);
 

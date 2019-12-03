@@ -83,3 +83,10 @@ export function ApproveForm(data): Promise<any> {
     .post(process.env.basePath + `/Contract/ApproveForm`, { data: objToFormdata(data) })
     .then(getResult as any);
 }
+
+//退租
+export function WithdrawalForm(data): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Contract/WithdrawalForm`, { data: objToFormdata(data) })
+    .then(getResult as any);
+}

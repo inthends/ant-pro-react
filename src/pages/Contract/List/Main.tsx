@@ -11,6 +11,9 @@ import Modify from './Modify';
 import Detail from './Detail';
 import Approve from './Approve';
 import Change from './Change';
+import Renewal from './Renewal';
+import Withdrawal from './Withdrawal';
+import Forward from './Forward';
 // import ChooseUser from './ChooseUser';
 // import { GetQuickSimpleTreeAllForContract } from '@/services/commonItem';
 
@@ -18,10 +21,13 @@ const { Content } = Layout;
 const { Search } = Input;
 
 function Main() {
-  const [addVisible, setAddVisible] = useState<boolean>(false);
-  const [modifyVisible, setModifyVisible] = useState<boolean>(false);
-  const [detailVisible, setDetailVisible] = useState<boolean>(false); 
-  const [changeVisible, setChangeVisible] = useState<boolean>(false);
+  const [addVisible, setAddVisible] = useState<boolean>(false);//新建
+  const [modifyVisible, setModifyVisible] = useState<boolean>(false);//修改
+  const [detailVisible, setDetailVisible] = useState<boolean>(false);//查看
+  const [changeVisible, setChangeVisible] = useState<boolean>(false);//变更
+  const [renewalVisible, setRenewalVisible] = useState<boolean>(false);//续租 
+  const [withdrawalVisible, setWithdrawalVisible] = useState<boolean>(false);//退租 
+  const [forwardVisible, setForwardVisible] = useState<boolean>(false);//结转
 
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
@@ -73,6 +79,42 @@ function Main() {
     setId(id);
     setChargeId(chargeId);
   };
+
+  //续租
+  const showRenewalDrawer = (id?, chargeId?) => {
+    setRenewalVisible(true);
+    setId(id);
+    setChargeId(chargeId);
+  };
+
+  const closeRenewalDrawer = () => {
+    setRenewalVisible(false);
+  };
+
+  //退租
+  const showWithdrawalDrawer = (id?, chargeId?) => {
+    setWithdrawalVisible(true);
+    setId(id);
+    setChargeId(chargeId);
+  };
+
+  const closeWithdrawalDrawer = () => {
+    setWithdrawalVisible(false);
+  };
+
+  //结转
+  const showForwardDrawer = (id?, chargeId?) => {
+    setForwardVisible(true);
+    setId(id);
+    setChargeId(chargeId);
+  };
+
+  const closeForwardDrawer = () => {
+    setForwardVisible(false);
+  };
+
+
+
 
   const loadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(search);
@@ -184,6 +226,9 @@ function Main() {
           modify={showModifyDrawer}
           approve={showApproveDrawer}
           change={showChangeDrawer}
+          renewal={showRenewalDrawer}
+          withdrawal={showWithdrawalDrawer}
+          forward={showForwardDrawer}
           reload={() => initLoadData(search)} />
       </Content>
 
@@ -226,7 +271,6 @@ function Main() {
         close={() => setUserVisible(false)}
       /> */}
 
-
       <Change
         visible={changeVisible}
         closeDrawer={closeChangeDrawer}
@@ -235,6 +279,32 @@ function Main() {
         chargeId={chargeId}
         reload={() => initLoadData(search)}
       // choose={showChoose}
+      />
+
+      <Renewal
+        visible={renewalVisible}
+        closeDrawer={closeRenewalDrawer}
+        // treeData={treeData}
+        id={id}
+        chargeId={chargeId}
+        reload={() => initLoadData(search)}
+      // choose={showChoose}
+      />
+
+      <Withdrawal
+        visible={withdrawalVisible}
+        closeDrawer={closeWithdrawalDrawer}
+        id={id}
+        chargeId={chargeId}
+        reload={() => initLoadData(search)}
+      />
+
+      <Forward
+        visible={forwardVisible}
+        closeDrawer={closeForwardDrawer}
+        id={id}
+        chargeId={chargeId}
+        reload={() => initLoadData(search)}
       />
 
     </Layout>

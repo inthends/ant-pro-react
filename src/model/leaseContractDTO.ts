@@ -136,4 +136,9 @@ export interface LeaseContractDTO {
    */
   organizeId?: string;
   
+    /**
+   * 续租前合同Id
+   */
+  preContractId?: string;
+  
 }
