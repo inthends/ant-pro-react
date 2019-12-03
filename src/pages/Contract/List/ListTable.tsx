@@ -15,13 +15,12 @@ interface ListTableProps {
   approve(id: string, chargeId: string): void;//审核
   change(id: string, chargeId: string): void;//变更
   renewal(id: string, chargeId: string): void;//续租
-  withdrawal(id: string, chargeId: string): void;//退租
-  forward(id: string, chargeId: string): void;//结转
+  withdrawal(id: string, chargeId: string): void;//退租 
   reload(): void;
 };
 
 function ListTable(props: ListTableProps) {
-  const { onchange, loading, pagination, data, detail, modify, reload, approve, change, renewal, withdrawal, forward } = props;
+  const { onchange, loading, pagination, data, detail, modify, reload, approve, change, renewal, withdrawal } = props;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
   };
@@ -46,10 +45,8 @@ function ListTable(props: ListTableProps) {
     } else if (key === 'withdrawal') {
       //退租
       withdrawal(currentItem.id, currentItem.chargeId);
-    } else if (key === 'forward') {
-      //结转 
-      forward(currentItem.id, currentItem.chargeId);
     } else if (key === 'invalid') {
+
     }
   };
 
@@ -58,8 +55,7 @@ function ListTable(props: ListTableProps) {
   }> = ({ item }) => (
     <Dropdown
       overlay={
-        <Menu onClick={({ key }) => editAndDelete(key, item)}>
-          <Menu.Item key="forward">结转</Menu.Item>
+        <Menu onClick={({ key }) => editAndDelete(key, item)}> 
           <Menu.Item key="change">变更</Menu.Item>
           <Menu.Item key="renewal">续租</Menu.Item>
           <Menu.Item key="withdrawal">退租</Menu.Item>
@@ -120,11 +116,23 @@ function ListTable(props: ListTableProps) {
       render: (text, record) => {
         switch (text) {
           case 0:
-            return <Tag color="#e4aa5b">新建</Tag>;
+            return <Tag color="#e4aa5b">新建待修改</Tag>;
           case 1:
-            return <Tag color="#e4aa4b">待审核</Tag>;
+            return <Tag color="#e4aa4b">新建待审核</Tag>;
           case 2:
-            return <Tag color="#19d54e">已审核</Tag>;
+            return <Tag color="#19d54e">变更待修改</Tag>;
+          case 3:
+            return <Tag color="#19d54e">变更待审核</Tag>;
+          case 4:
+            return <Tag color="#19d54e">退租待审核</Tag>;
+          case 5:
+            return <Tag color="#19d54e">作废待审核</Tag>;
+          case 6:
+            return <Tag color="#19d54e">正常执行</Tag>;
+          case 7:
+            return <Tag color="#19d54e">到期未处理</Tag>;
+          case 8:
+            return <Tag color="#19d54e">待执行</Tag>;
           case -1:
             return <Tag color="#d82d2d">已作废</Tag>
           default:

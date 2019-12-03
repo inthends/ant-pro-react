@@ -1,5 +1,5 @@
 
-import { message, Tag, Divider, PageHeader, List, Tabs, Button, Card, Col, Drawer, Form, Row } from 'antd';
+import { Input, message, Tag, Divider, PageHeader, List, Tabs, Button, Card, Col, Drawer, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import {
   HtLeasecontractcharge,
@@ -27,6 +27,7 @@ interface ApproveProps {
 const Approve = (props: ApproveProps) => {
   const { reload, visible, closeDrawer, id, form, chargeId } = props;
   const title = '合同详情';
+  const { getFieldDecorator } = form;
   //const [industryType, setIndustryType] = useState<any[]>([]); //行业  
   //const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
   const [infoDetail, setInfoDetail] = useState<LeaseContractDTO>({});
@@ -76,29 +77,42 @@ const Approve = (props: ApproveProps) => {
       form.setFieldsValue({});
     }
   }, [visible]);
-
-  //转换状态
-  const GetStatus = (status) => {
-    switch (status) {
-      case 0:
-        return <Tag color="#e4aa5b">新建</Tag>;
-      case 1:
-        return <Tag color="#e4aa4b">待审核</Tag>;
-      case 2:
-        return <Tag color="#19d54e">已审核</Tag>;
-      case -1:
-        return <Tag color="#d82d2d">已作废</Tag>
-      default:
-        return '';
-    }
-  };
+  
+ //转换状态
+ const GetStatus = (status) => {
+  switch (status) {
+    case 0:
+      return <Tag color="#e4aa5b">新建待修改</Tag>;
+    case 1:
+      return <Tag color="#e4aa4b">新建待审核</Tag>;
+    case 2:
+      return <Tag color="#19d54e">变更待修改</Tag>;
+    case 3:
+      return <Tag color="#19d54e">变更待审核</Tag>;
+    case 4:
+      return <Tag color="#19d54e">退租待审核</Tag>;
+    case 5:
+      return <Tag color="#19d54e">作废待审核</Tag>;
+    case 6:
+      return <Tag color="#19d54e">正常执行</Tag>;
+    case 7:
+      return <Tag color="#19d54e">到期未处理</Tag>;
+    case 8:
+      return <Tag color="#19d54e">待执行</Tag>;
+    case -1:
+      return <Tag color="#d82d2d">已作废</Tag>
+    default:
+      return '';
+  }
+};
 
   const approve = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
         ApproveForm({
           contractId: id,
-          chargeId:chargeId
+          chargeId: chargeId,
+          verifyMemo: values.verifyMemo
         }).then(res => {
           message.success('审批成功！');
           closeDrawer();
@@ -123,7 +137,7 @@ const Approve = (props: ApproveProps) => {
       // ]}
       />
       <Divider dashed />
-      <Form layout="vertical">
+      <Form layout="vertical" hideRequiredMark>
         <Tabs defaultActiveKey="1" >
           <TabPane tab="基本信息" key="1">
             <Row gutter={24}>
@@ -180,7 +194,7 @@ const Approve = (props: ApproveProps) => {
                   </Row>
                 </Card>
 
-                <Card title="滞纳金" className={styles.addcard}>
+                <Card title="滞纳金" className={styles.card}>
                   <Row gutter={24}>
                     <Col lg={12}>
                       <Form.Item label="滞纳金比例" >
@@ -319,7 +333,7 @@ const Approve = (props: ApproveProps) => {
                       <Form.Item label="租期划分方式">
                         {k.rentalPeriodDivided}
                       </Form.Item>
-                    </Col> 
+                    </Col>
                     {(k.priceUnit == '元/m²·天' || k.priceUnit == '元/天') ?
                       <Col lg={4}>
                         <Form.Item label="天单价换算规则">
@@ -422,6 +436,18 @@ const Approve = (props: ApproveProps) => {
             ></ResultList>
           </TabPane>
         </Tabs>
+
+        <Card title="审核意见" className={styles.addcard}>
+          <Form.Item label="">
+            {getFieldDecorator('verifyMemo', {
+              rules: [{ required: true, message: '请输入审核意见' }]
+            })(
+              <Input.TextArea rows={4} />
+            )}
+          </Form.Item>
+        </Card>
+
+
       </Form>
       <div
         style={{

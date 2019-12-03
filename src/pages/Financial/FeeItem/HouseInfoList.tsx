@@ -63,7 +63,7 @@ function HouseInfoList(props: HouseInfoListProps) {
       title: '计费起始日期',
       dataIndex: 'beginDate',
       key: 'beginDate',
-      width: 85,
+      width: 90,
       render: val =>{
         if(val==null){
           return ''
@@ -75,7 +75,7 @@ function HouseInfoList(props: HouseInfoListProps) {
       title: '计费终止日期',
       dataIndex: 'endDate',
       key: 'endDate',
-      width: 85,
+      width: 90,
       render: val =>{
         if(val==null){
           return ''

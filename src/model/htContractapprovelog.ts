@@ -12,59 +12,40 @@
 
 
 /**
- * 递增率
+ * 合同审批记录
  */
-export interface HtLeasecontractchargeincre {
+export interface htContractapprovelog {
+    
+   /**
+   * Desc:  Default:b'0'  Nullable:False
+   */
+    ifVerify?: boolean;
     /**
      * Desc:  Default:  Nullable:True
      */
-    createUserName?: string;
+    verifyUserName?: string;
     /**
      * Desc:  Default:  Nullable:True
      */
-    modifyDate?: Date;
+    verifyUserId?: string;
+    /**
+     * Desc:  Default:  Nullable:True
+     */
+    verifyDate?: Date;
+    /**
+     * Desc:  Default:  Nullable:True
+     */
+    verifyMemo?: string;
+    /**
+     * Desc:  Default:  Nullable:True
+     */
+    action?: string;
+    /**
+     * Desc:  Default:  Nullable:True
+     */
+    contractId?: string;
     /**
      * Desc:  Default:  Nullable:False
      */
     id?: string;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    modifyUserId?: string;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    increDate?: Date;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    modifyUserName?: string;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    increDeposit?: number;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    increDepositUnit?: string;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    increPrice?: number;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    createDate?: Date;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    increPriceUnit?: string;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    createUserId?: string;
-    /**
-     * Desc:  Default:  Nullable:False
-     */
-    leaseContractChargeId?: string;
 }

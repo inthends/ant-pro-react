@@ -12,7 +12,7 @@
 
 
 /**
- * 
+ * 费用明细
  */
 export interface HtChargefeeresult {
     /**

@@ -12,7 +12,7 @@
 
 
 /**
- * 
+ * 折扣
  */
 export interface HtLeasecontractchargefeeoffer {
     /**

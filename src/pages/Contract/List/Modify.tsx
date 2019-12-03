@@ -472,11 +472,23 @@ const Modify = (props: ModifyProps) => {
   const GetStatus = (status) => {
     switch (status) {
       case 0:
-        return <Tag color="#e4aa5b">新建</Tag>;
+        return <Tag color="#e4aa5b">新建待修改</Tag>;
       case 1:
-        return <Tag color="#e4aa4b">待审核</Tag>;
+        return <Tag color="#e4aa4b">新建待审核</Tag>;
       case 2:
-        return <Tag color="#19d54e">已审核</Tag>;
+        return <Tag color="#19d54e">变更待修改</Tag>;
+      case 3:
+        return <Tag color="#19d54e">变更待审核</Tag>;
+      case 4:
+        return <Tag color="#19d54e">退租待审核</Tag>;
+      case 5:
+        return <Tag color="#19d54e">作废待审核</Tag>;
+      case 6:
+        return <Tag color="#19d54e">正常执行</Tag>;
+      case 7:
+        return <Tag color="#19d54e">到期未处理</Tag>;
+      case 8:
+        return <Tag color="#19d54e">待执行</Tag>;
       case -1:
         return <Tag color="#d82d2d">已作废</Tag>
       default:

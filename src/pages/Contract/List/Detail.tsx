@@ -1,5 +1,5 @@
 
-import {Tag, Divider, PageHeader, List, Tabs, Button, Card, Col, Drawer, Form, Row } from 'antd';
+import { Tag, Divider, PageHeader, List, Tabs, Button, Card, Col, Drawer, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import {
   HtLeasecontractcharge,
@@ -11,6 +11,7 @@ import {
 } from '@/model/models';
 import React, { useEffect, useState } from 'react';
 import ResultList from './ResultList';
+import AppLog from './AppLog';
 import { GetCharge, GetFormJson } from './Main.service';
 import styles from './style.less';
 const { TabPane } = Tabs;
@@ -36,6 +37,8 @@ const Detail = (props: DetailProps) => {
   const [chargeOfferList, setChargeOfferList] = useState<HtLeasecontractchargefeeoffer[]>([]);
   const [depositData, setDepositData] = useState<any[]>([]);//保证金
   const [chargeData, setChargeData] = useState<any[]>([]);//租金
+  const [appData, setAppData] = useState<any[]>([]);//审批记录
+  
 
   // const close = () => {
   //   closeDrawer();
@@ -66,8 +69,8 @@ const Detail = (props: DetailProps) => {
             setChargeIncreList(charge.chargeIncreList || []);
             setChargeOfferList(charge.chargeFeeOfferList || []);
             setDepositData(charge.depositFeeResultList || []);//保证金明细
-            setChargeData(charge.chargeFeeResultList || []);//租金明细   
-
+            setChargeData(charge.chargeFeeResultList || []);//租金明细    
+            setAppData(charge.contractapproveLog || []);//审批记录    
           })
           form.resetFields();
         });
@@ -79,21 +82,33 @@ const Detail = (props: DetailProps) => {
     }
   }, [visible]);
 
-    //转换状态
-    const GetStatus = (status) => {
-      switch (status) {
-        case 0:
-          return <Tag color="#e4aa5b">新建</Tag>;
-        case 1:
-          return <Tag color="#e4aa4b">待审核</Tag>;
-        case 2:
-          return <Tag color="#19d54e">已审核</Tag>;
-        case -1:
-          return <Tag color="#d82d2d">已作废</Tag>
-        default:
-          return '';
-      }
-    };
+  //转换状态
+  const GetStatus = (status) => {
+    switch (status) {
+      case 0:
+        return <Tag color="#e4aa5b">新建待修改</Tag>;
+      case 1:
+        return <Tag color="#e4aa4b">新建待审核</Tag>;
+      case 2:
+        return <Tag color="#19d54e">变更待修改</Tag>;
+      case 3:
+        return <Tag color="#19d54e">变更待审核</Tag>;
+      case 4:
+        return <Tag color="#19d54e">退租待审核</Tag>;
+      case 5:
+        return <Tag color="#19d54e">作废待审核</Tag>;
+      case 6:
+        return <Tag color="#19d54e">正常执行</Tag>;
+      case 7:
+        return <Tag color="#19d54e">到期未处理</Tag>;
+      case 8:
+        return <Tag color="#19d54e">待执行</Tag>;
+      case -1:
+        return <Tag color="#d82d2d">已作废</Tag>
+      default:
+        return '';
+    }
+  };
 
   return (
     <Drawer
@@ -308,14 +323,14 @@ const Detail = (props: DetailProps) => {
                       <Form.Item label="租期划分方式">
                         {k.rentalPeriodDivided}
                       </Form.Item>
-                    </Col> 
+                    </Col>
                     {(k.priceUnit == '元/m²·天' || k.priceUnit == '元/天') ?
                       <Col lg={4}>
                         <Form.Item label="天单价换算规则">
                           {k.dayPriceConvertRule}
                         </Form.Item>
                       </Col>
-                      : null} 
+                      : null}
                     <Col lg={4}>
                       <Form.Item label="年天数">
                         {k.yearDays}
@@ -404,13 +419,15 @@ const Detail = (props: DetailProps) => {
 
           </TabPane>
           <TabPane tab="租金明细" key="3">
-
             <ResultList
               depositData={depositData}
               chargeData={chargeData}
             ></ResultList>
-
+          </TabPane> 
+          <TabPane tab="审批记录" key="4">
+            <AppLog appData={appData}></AppLog>
           </TabPane>
+
         </Tabs>
       </Form>
       <div

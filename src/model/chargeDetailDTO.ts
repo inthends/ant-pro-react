@@ -14,7 +14,7 @@ import { HtLeasecontractcharge } from './htLeasecontractcharge';
 import { HtLeasecontractchargefee } from './htLeasecontractchargefee';
 import { HtLeasecontractchargefeeoffer } from './htLeasecontractchargefeeoffer';
 import { HtLeasecontractchargeincre } from './htLeasecontractchargeincre';
-
+import { htContractapprovelog } from './htContractapprovelog';
 
 /**
  * 费用明细
@@ -44,4 +44,10 @@ export interface ChargeDetailDTO {
      * 租金明细
      */
     chargeFeeResultList?: Array<HtChargefeeresult>;
+
+    /**
+     * 审批记录
+     */
+    contractapproveLog?: Array<htContractapprovelog>;
+    
 }

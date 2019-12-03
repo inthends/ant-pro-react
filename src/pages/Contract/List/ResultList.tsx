@@ -17,7 +17,7 @@ function ResultList(props: ResultListProps) {
       title: '区间', 
       width: 100,
       render: (text, row, index) => {   
-        return moment(row.startDate).format('YYYY-MM-DD') + " - " +  moment(row.endDate).format('YYYY-MM-DD');
+        return moment(row.beginDate).format('YYYY-MM-DD') + " - " +  moment(row.endDate).format('YYYY-MM-DD');
       }
     },
     {

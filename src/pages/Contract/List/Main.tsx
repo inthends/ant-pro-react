@@ -12,8 +12,7 @@ import Detail from './Detail';
 import Approve from './Approve';
 import Change from './Change';
 import Renewal from './Renewal';
-import Withdrawal from './Withdrawal';
-import Forward from './Forward';
+import Withdrawal from './Withdrawal'; 
 // import ChooseUser from './ChooseUser';
 // import { GetQuickSimpleTreeAllForContract } from '@/services/commonItem';
 
@@ -26,8 +25,7 @@ function Main() {
   const [detailVisible, setDetailVisible] = useState<boolean>(false);//查看
   const [changeVisible, setChangeVisible] = useState<boolean>(false);//变更
   const [renewalVisible, setRenewalVisible] = useState<boolean>(false);//续租 
-  const [withdrawalVisible, setWithdrawalVisible] = useState<boolean>(false);//退租 
-  const [forwardVisible, setForwardVisible] = useState<boolean>(false);//结转
+  const [withdrawalVisible, setWithdrawalVisible] = useState<boolean>(false);//退租  
 
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
@@ -100,21 +98,7 @@ function Main() {
 
   const closeWithdrawalDrawer = () => {
     setWithdrawalVisible(false);
-  };
-
-  //结转
-  const showForwardDrawer = (id?, chargeId?) => {
-    setForwardVisible(true);
-    setId(id);
-    setChargeId(chargeId);
-  };
-
-  const closeForwardDrawer = () => {
-    setForwardVisible(false);
-  };
-
-
-
+  }; 
 
   const loadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(search);
@@ -227,8 +211,7 @@ function Main() {
           approve={showApproveDrawer}
           change={showChangeDrawer}
           renewal={showRenewalDrawer}
-          withdrawal={showWithdrawalDrawer}
-          forward={showForwardDrawer}
+          withdrawal={showWithdrawalDrawer} 
           reload={() => initLoadData(search)} />
       </Content>
 
@@ -297,15 +280,7 @@ function Main() {
         id={id}
         chargeId={chargeId}
         reload={() => initLoadData(search)}
-      />
-
-      <Forward
-        visible={forwardVisible}
-        closeDrawer={closeForwardDrawer}
-        id={id}
-        chargeId={chargeId}
-        reload={() => initLoadData(search)}
-      />
+      /> 
 
     </Layout>
   );

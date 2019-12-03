@@ -12,7 +12,7 @@
 
 
 /**
- * 
+ * 合同条款
  */
 export interface HtLeasecontractchargefee {
     /**
