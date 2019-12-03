@@ -131,6 +131,7 @@ function House() {
       return res;
     });
   };
+  
   const initLoadData = (orgId: string, searchText) => {
     setSearch(searchText);
     const queryJson = { OrganizeId: orgId, keyword: searchText };

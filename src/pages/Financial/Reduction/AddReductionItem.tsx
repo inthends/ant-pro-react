@@ -232,8 +232,7 @@ const AddReductionItem = (props: AddReductionItemProps) => {
                   <DatePicker onChange={(date, dateString) => selectEndDate(dateString)} />
                 )}
               </Form.Item>
-            </Col>
-
+            </Col> 
           </Row>
         </Form>
         <Row gutter={12}>

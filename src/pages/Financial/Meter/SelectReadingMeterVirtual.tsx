@@ -1,5 +1,5 @@
 //添加编辑费项
-import {  Col,  Select,  Form,  Row,Modal, message,Tree} from 'antd';
+import {  Col,   Form,  Row,Modal, message,Tree} from 'antd';
 import { TreeEntity } from '@/model/models';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
@@ -13,13 +13,13 @@ interface SelectReadingMeterVirtualProps {
   form: WrappedFormUtils;
   readingDetail:any;
   reload():any;
-  id?:string;
+  // id?:string;
 }
 
 const SelectReadingMeterVirtual = (props: SelectReadingMeterVirtualProps) => {
-  const { visible, closeModal,readingDetail,id ,reload} = props;
+  const { visible, closeModal,readingDetail, reload} = props;
   const [feeTreeData,setFeeTreeData]=useState<TreeEntity[]>([]);
-  const [feeData,setFeeData]=useState<string>('');
+  const [feeData,setFeeData]=useState<any>();
   useEffect(() => {
     if(visible){
       GetQuickVirtualMeterTree().then(res=>{

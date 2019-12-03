@@ -63,7 +63,7 @@ const Role = () => {
 
   //刷新
   const loadData = (searchParam: any, paginationConfig?: PaginationConfig, sorter?) => {
-    setSearch(searchParam);
+    setSearch(searchParam);//查询的时候，必须赋值，否则查询条件会不起作用 
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: pagination.pageSize,

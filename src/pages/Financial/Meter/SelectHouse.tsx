@@ -1,5 +1,5 @@
 //费表装表选择房间，修改为同步树
-import { Col, Form, Row, Modal, message } from 'antd';
+import { Spin, Col, Form, Row, Modal, message } from 'antd';
 // import { TreeEntity } from '@/model/models';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
@@ -25,7 +25,7 @@ const SelectHouse = (props: SelectHouseProps) => {
   }, [visible]);
 
   const [unitData, setUnitData] = useState<any[]>([]);
-
+  const [loading, setLoading] = useState<boolean>(false);
   return (
     <Modal
       title="选择房屋"
@@ -37,8 +37,10 @@ const SelectHouse = (props: SelectHouseProps) => {
         if (unitData.length == 0) {
           message.warning('请选择房间');
         } else {
+          setLoading(true);
           var newdata = Object.assign({}, feeDetail, { units: JSON.stringify(unitData) });
           UnitMeterSaveForm(newdata).then(res => {
+            setLoading(false);
             closeModal();
             message.success('添加成功！');
             reload();
@@ -62,10 +64,10 @@ const SelectHouse = (props: SelectHouseProps) => {
         </Col>
       </Row> */}
       {/* <Row style={{ height: '400px', overflow: 'auto', marginTop: '5px', backgroundColor: 'rgb(255,255,255)' }}> */}
-
-      <Row>
-        <Col style={{ height: '420px', overflow: 'auto' }}>
-          {/* <AsynSelectTree
+      <Spin tip="数据处理中..." spinning={loading}>
+        <Row>
+          <Col style={{ height: '420px', overflow: 'auto' }}>
+            {/* <AsynSelectTree
             parentid={'0'}
             getCheckedKeys={(keys)=>{
               setUnitData(keys);
@@ -74,18 +76,19 @@ const SelectHouse = (props: SelectHouseProps) => {
             }}
           /> */}
 
-          <SelectTree
-            checkable={true}
-            treeData={treeData}
-            getCheckedKeys={(keys) => {
-              setUnitData(keys);
-            }}
-            selectTree={(id, type, info?) => {
-            }}
-          />
+            <SelectTree
+              checkable={true}
+              treeData={treeData}
+              getCheckedKeys={(keys) => {
+                setUnitData(keys);
+              }}
+              selectTree={(id, type, info?) => {
+              }}
+            />
 
-        </Col>
-      </Row>
+          </Col>
+        </Row>
+      </Spin>
     </Modal>
   );
 };

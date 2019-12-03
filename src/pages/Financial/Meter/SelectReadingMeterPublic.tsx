@@ -1,43 +1,44 @@
 //添加编辑费项
-import {  Col,  Form,  Row,Modal, message,Tree} from 'antd';
+import { Col, Form, Row, Modal, message, Tree } from 'antd';
 import { TreeEntity } from '@/model/models';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import {GetQuickPublicMeterTree,SavePublicForm} from './Meter.service';
+import { GetQuickPublicMeterTree, SavePublicForm } from './Meter.service';
 import './style.less';
 
 interface SelectReadingMeterPublicProps {
   visible: boolean;
   closeModal(): void;
   form: WrappedFormUtils;
-  readingDetail:any;
-  reload():any;
-  id?:string;
+  readingDetail: any;
+  reload(): any;
+  // id?:string;
 }
 
 const SelectReadingMeterPublic = (props: SelectReadingMeterPublicProps) => {
-  const { visible, closeModal,readingDetail,id ,reload} = props;
-  const [feeTreeData,setFeeTreeData]=useState<TreeEntity[]>([]);
-  const [feeData,setFeeData]=useState<string>('');
+  const { visible, closeModal, readingDetail,
+    // id ,
+    reload } = props;
+  const [feeTreeData, setFeeTreeData] = useState<TreeEntity[]>([]);
+  const [feeData, setFeeData] = useState<any>();
   useEffect(() => {
-    if(visible){
-      GetQuickPublicMeterTree().then(res=>{
+    if (visible) {
+      GetQuickPublicMeterTree().then(res => {
         setFeeTreeData(res);
       });
-
     }
   }, [visible]);
- const renderTreeNodes = data =>
-  data.map(item => {
-    if (item.children) {
-      return (
-        <Tree.TreeNode title={item.title} key={item.key} dataRef={item}>
-          {renderTreeNodes(item.children)}
-        </Tree.TreeNode>
-      );
-    }
-    return <Tree.TreeNode key={item.key} {...item} dataRef={item} />;
-  });
+  const renderTreeNodes = data =>
+    data.map(item => {
+      if (item.children) {
+        return (
+          <Tree.TreeNode title={item.title} key={item.key} dataRef={item}>
+            {renderTreeNodes(item.children)}
+          </Tree.TreeNode>
+        );
+      }
+      return <Tree.TreeNode key={item.key} {...item} dataRef={item} />;
+    });
   return (
     <Modal
       title="选择收费项目"
@@ -46,16 +47,16 @@ const SelectReadingMeterPublic = (props: SelectReadingMeterPublicProps) => {
       cancelText="取消"
       onCancel={() => closeModal()}
       onOk={() => {
-        if(feeData.length==0){
+        if (feeData.length == 0) {
           message.warning('请选择公共费表');
-        }else{
-          var newdata=Object.assign({},readingDetail,{meters:JSON.stringify(feeData)});
+        } else {
+          var newdata = Object.assign({}, readingDetail, { meters: JSON.stringify(feeData) });
           console.log(newdata);
-          SavePublicForm(newdata).then(res=>{
+          SavePublicForm(newdata).then(res => {
             closeModal();
             reload();
             message.success('数据保存成功');
-          }).catch(()=>{
+          }).catch(() => {
             message.warning('数据保存错误');
           })
         }
@@ -64,11 +65,11 @@ const SelectReadingMeterPublic = (props: SelectReadingMeterPublicProps) => {
       bodyStyle={{ background: '#f6f7fb' }}
       width='600px'
     >
-      <Row gutter={8} style={{height:'400px',overflow:'auto' ,marginTop:'5px',backgroundColor:'rgb(255,255,255)'}}>
-        <Col span={12} style={{height:'395px',overflow:'auto' }}>
+      <Row gutter={8} style={{ height: '400px', overflow: 'auto', marginTop: '5px', backgroundColor: 'rgb(255,255,255)' }}>
+        <Col span={12} style={{ height: '395px', overflow: 'auto' }}>
           <Tree
             checkable
-            onCheck={(checkedKeys)=>{
+            onCheck={(checkedKeys) => {
               setFeeData(checkedKeys);
             }}
             showLine>

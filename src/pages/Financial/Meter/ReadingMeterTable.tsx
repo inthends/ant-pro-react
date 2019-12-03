@@ -133,8 +133,8 @@ function ReadingMeterTable(props: ReadingMeterTableProps) {
     },
     {
       title: '备注',
-      dataIndex: 'Memo',
-      key: 'Memo',
+      dataIndex: 'memo',
+      key: 'memo',
       sorter: true
     },
     {

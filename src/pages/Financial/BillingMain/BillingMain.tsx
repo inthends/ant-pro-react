@@ -231,7 +231,7 @@ function BillingMain() {
   //   });
   // };
 
-  const [meterSearchParams, setMeterSearchParams] = useState<any>({});
+  // const [meterSearchParams, setMeterSearchParams] = useState<any>({});
   const [isEdit, setIsEdit] = useState<boolean>(false);
   return (
     <Layout>
@@ -244,10 +244,12 @@ function BillingMain() {
       <Content style={{ paddingLeft: '18px' }}>
         <Tabs defaultActiveKey="1" >
           <TabPane tab="计费单列表" key="1">
-            <div style={{ marginBottom: '20px', padding: '3px 2px' }} onChange={(value) => {
-              var params = Object.assign({}, meterSearchParams, { metertype: value });
-              setMeterSearchParams(params);
-            }}>
+            <div style={{ marginBottom: '20px', padding: '3px 2px' }} 
+            // onChange={(value) => {
+            //   var params = Object.assign({}, meterSearchParams, { metertype: value });
+            //   setMeterSearchParams(params);
+            // }}
+            >
               <Search
                 className="search-input"
                 placeholder="请输入要查询的单号"

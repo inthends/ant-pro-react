@@ -96,7 +96,6 @@ function Main() {
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
       searchCondition.sidx = field ? field : 'id';
     }
-
     return load(searchCondition).then(res => {
       return res;
     });
@@ -151,8 +150,7 @@ function Main() {
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>
-        <div style={{ marginBottom: '10px' }}>
-
+        <div style={{ marginBottom: '10px' }}> 
           <Select
             allowClear={true}
             style={{ width: '160px', marginRight: '5px' }}

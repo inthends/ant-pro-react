@@ -1,5 +1,5 @@
 //选择抄表房屋
-import { Col, Form, Row, Modal, message } from 'antd';
+import { Spin,Col, Form, Row, Modal, message } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { GetMeterTreeJson, SaveUnitForm } from './Meter.service';
@@ -13,12 +13,14 @@ interface SelectReadingMeterHouseProps {
   form: WrappedFormUtils;
   readingDetail: any;
   reload(): any;
-  id?: string;
+  // id?: string;
   treeData: any[];
 };
 
 const SelectReadingMeterHouse = (props: SelectReadingMeterHouseProps) => {
-  const { id, treeData, visible, closeModal, readingDetail, reload } = props;
+  const { 
+    //id, 
+    treeData, visible, closeModal, readingDetail, reload } = props;
   // const { getFieldDecorator } = form;
   const [feeItemData, setFeeItemData] = useState<any[]>([]);
   useEffect(() => {
@@ -34,6 +36,7 @@ const SelectReadingMeterHouse = (props: SelectReadingMeterHouseProps) => {
   // const [beginDate, setBeginDate] = useState<string>('');
   // const [endDate, setEndDate] = useState<string>('');
   const [meterId, setMeterId] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
   return (
     <Modal
@@ -62,53 +65,53 @@ const SelectReadingMeterHouse = (props: SelectReadingMeterHouseProps) => {
         //   }
         //   newdata = Object.assign({}, newdata, { BeginDate: beginDate, EndDate: endDate });
         // }
-
-        // const newData = readingDetail ? { ...readingDetail, ...values } : values;
-        readingDetail.keyValue = id;
+        // const newData = readingDetail ? { ...readingDetail, ...values } : values;  
+        setLoading(true);
+        // readingDetail.keyValue = id;
         readingDetail.units = JSON.stringify(unitData);
         readingDetail.meterId = meterId;
         SaveUnitForm(readingDetail).then(res => {
+          setLoading(false);
           message.success('添加成功！');
           closeModal();
           reload();
         }).catch(() => {
           message.warning('添加失败！');
         })
-
       }}
 
       destroyOnClose={true}
       bodyStyle={{ background: '#f6f7fb' }}
       width='650px'
     >
-      <Row gutter={24}
-      // style={{ height: '400px', overflow: 'auto', marginTop: '5px', backgroundColor: 'rgb(255,255,255)' }}
-      >
-        <Col span={12} style={{ height: '450px', overflow: 'auto' }}>
+      <Spin tip="数据处理中..." spinning={loading}> 
 
-          {/* <AsynSelectTree
+        <Row gutter={24}
+        // style={{ height: '400px', overflow: 'auto', marginTop: '5px', backgroundColor: 'rgb(255,255,255)' }}
+        >
+          <Col span={12} style={{ height: '450px', overflow: 'auto' }}>
+
+            {/* <AsynSelectTree
             parentid={'0'}
             getCheckedKeys={(keys) => {
               setUnitData(keys);
             }}
             selectTree={(id, type, info?) => {
             }} */}
+            <SelectTree
+              checkable={true}
+              treeData={treeData}
+              getCheckedKeys={(keys) => {
+                setUnitData(keys);
+              }}
+              selectTree={(id, type, info?) => {
+              }}
+            />
 
+          </Col>
 
-          <SelectTree
-            checkable={true}
-            treeData={treeData}
-            getCheckedKeys={(keys) => {
-              setUnitData(keys);
-            }}
-            selectTree={(id, type, info?) => {
-            }}
-          />
-
-        </Col>
-
-        <Col span={12} style={{ height: '450px', overflow: 'auto' }}>
-          {/* <Card>
+          <Col span={12} style={{ height: '450px', overflow: 'auto' }}>
+            {/* <Card>
             <Form layout="vertical" hideRequiredMark>
               <Row gutter={24}>
                 <Col span={24}>
@@ -174,22 +177,19 @@ const SelectReadingMeterHouse = (props: SelectReadingMeterHouseProps) => {
               </Row>
             </Form>
           </Card> */}
-
-
-          <SelectTree
-            checkable={false}
-            treeData={feeItemData}
-            getCheckedKeys={(keys) => {
-              // setUnitData(keys);
-            }}
-            selectTree={(id, type, info?) => {
-              setMeterId(id);
-            }}
-          />
-
-
-        </Col>
-      </Row>
+            <SelectTree
+              checkable={false}
+              treeData={feeItemData}
+              getCheckedKeys={(keys) => {
+                // setUnitData(keys);
+              }}
+              selectTree={(id, type, info?) => {
+                setMeterId(id);
+              }}
+            />
+          </Col>
+        </Row>
+      </Spin>
     </Modal>
   );
 };

@@ -45,30 +45,28 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
   const [chargeFeeItemVisible, setChargeFeeItemVisible] = useState<boolean>(false);
   const [unitFeeVisible, setUnitFeeVisible] = useState<boolean>(false);
   const [virtualFeeVisible, setVirtualFeeVisible] = useState<boolean>(false);
-  
   const [publicFeeVisible, setPublicFeeVisible] = useState<boolean>(false);
-  const [houseSearchParams, setHouseSearchParams] = useState<any>({});
-  // const [houseLoading, setHouseLoading] = useState<boolean>(false);
-  const [houseData, setHouseData] = useState<any>();
+
+  const [houseSearch, setHouseSearch] = useState<string>('');//查询关键字
+  const [houseLoading, setHouseLoading] = useState<boolean>(false);
+  const [houseData, setHouseData] = useState<any[]>([]);
   const [housePagination, setHousePagination] = useState<DefaultPagination>(new DefaultPagination());
 
-  const [publicSearchParams, setPublicSearchParams] = useState<any>({});
-  // const [publicLoading, setPublicLoading] = useState<boolean>(false);
+  const [publicSearch, setPublicSearch] = useState<any>({});
+  const [publicLoading, setPublicLoading] = useState<boolean>(false);
   const [publicData, setPublicData] = useState<any>();
   const [publicPagination, setPublicPagination] = useState<DefaultPagination>(new DefaultPagination());
 
-  const [virtualSearchParams, setVirtualSearchParams] = useState<any>({});
-  // const [virtualLoading, setVirtualLoading] = useState<boolean>(false);
+  const [virtualSearch, setVirtualSearch] = useState<any>({});
+  const [virtualLoading, setVirtualLoading] = useState<boolean>(false);
   const [virtualData, setVirtualData] = useState<any>();
   const [virtualPagination, setVirtualPagination] = useState<DefaultPagination>(new DefaultPagination());
 
   // const [addFormulaVisible, setAddFormulaVisible] = useState<boolean>(false);
-  const [houseFeeItemRowId, setHouseFeeItemRowId] = useState<string>('');
-  const [publicFeeItemRowId, setPublicFeeItemRowId] = useState<string>('');
+  // const [houseFeeItemRowId, setHouseFeeItemRowId] = useState<string>('');
+  // const [publicFeeItemRowId, setPublicFeeItemRowId] = useState<string>('');
 
-  let keyValue = ''
-  let isAdd = false;//是否新增
-
+  const [keyValue, setKeyValue] = useState<string>('');
   useEffect(() => {
     if (modifyVisible) {
       // //获取费表类型
@@ -83,19 +81,18 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
       //   setOrgTreeData(res);
       // })
       if (id) {
-        keyValue = id;
-        //setIsAdd(false);
+        setKeyValue(id);
         setLoading(true);
         GetMeterRead(id).then(res => {
           setInfoDetail(res);
+          //明细数据初始化
+          initHouseLoadData(houseSearch);
+          initPublicLoadData(publicSearch);
+          initVirtualLoadData(virtualSearch);
           setLoading(false);
-          initHouseLoadData();
-          initPublicLoadData();
-          initVirtualLoadData();
         });
       } else {
-        keyValue = getGuid();
-        isAdd = true;
+        setKeyValue(getGuid());
         form.resetFields();
         setInfoDetail({});
         //setMeterData([]);
@@ -104,45 +101,51 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
     }
   }, [modifyVisible]);
 
+  //房屋费表初始化
+  const initHouseLoadData = (search) => {
+    const queryJson = {
+      keyword: search,
+      keyValue: keyValue
+    }
+    const sidx = 'id';
+    const sord = 'asc';
+    const { current: pageIndex, pageSize, total } = housePagination;
+    return houseload({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
+      return res;
+    });
+  };
 
-  const initHouseLoadData = (paginationConfig?: PaginationConfig, sorter?) => {
-    //setMeterSearch(search);
+  //刷新
+  const loadHouseData = (searchText, paginationConfig?: PaginationConfig, sorter?) => {
+    setHouseSearch(searchText);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: housePagination.pageSize,
       total: 0,
     };
-
-    // let keyvalue;
-    // if (id != null || id != '') {
-    //   keyvalue = id;
-    // }
-    // if (infoDetail != null && infoDetail.BillId != null) {
-    //   keyvalue = infoDetail.BillId;
-    // }
-
-    let searchCondition: any = {
+    const searchCondition: any = {
       pageIndex,
       pageSize,
       total,
       queryJson: {
-        keyword: houseSearchParams.search == null ? '' : houseSearchParams.search,
+        keyword: searchText,
         keyValue: keyValue
-      }
+      },
     };
-
     if (sorter) {
-      let { field, order } = sorter;
+      const { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'billcode';
+      searchCondition.sidx = field ? field : 'id';
     }
     return houseload(searchCondition).then(res => {
       return res;
     });
   };
 
+  //加载数据
   const houseload = data => {
-    data.sidx = data.sidx || 'billcode';
+    setHouseLoading(true);
+    data.sidx = data.sidx || 'id';
     data.sord = data.sord || 'asc';
     return GetUnitReadPageList(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -155,40 +158,55 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
         };
       });
       setHouseData(res.data);
+      setHouseLoading(false);
       return res;
     });
   };
 
-
   //公共
-  const initPublicLoadData = (paginationConfig?: PaginationConfig, sorter?) => {
-    //setMeterSearch(search);
+  const initPublicLoadData = (search) => {
+    const queryJson = {
+      keyword: search,
+      keyValue: keyValue
+    }
+    const sidx = 'id';
+    const sord = 'asc';
+    const { current: pageIndex, pageSize, total } = publicPagination;
+    return publicload({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
+      return res;
+    });
+  };
+
+  //刷新
+  const loadPublicData = (searchText, paginationConfig?: PaginationConfig, sorter?) => {
+    setPublicSearch(searchText);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: publicPagination.pageSize,
       total: 0,
     };
-    let searchCondition: any = {
+    const searchCondition: any = {
       pageIndex,
       pageSize,
       total,
-      queryJson: { keyword: publicSearchParams.search == null ? '' : publicSearchParams.search, keyValue: id }
+      queryJson: {
+        keyword: searchText,
+        keyValue: keyValue
+      },
     };
-
     if (sorter) {
-      let { field, order } = sorter;
+      const { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'billcode';
+      searchCondition.sidx = field ? field : 'id';
     }
-
     return publicload(searchCondition).then(res => {
       return res;
     });
-  }
+  };
 
   const publicload = data => {
-    //setPublicLoading(true);
-    data.sidx = data.sidx || 'billcode';
+    setPublicLoading(true);
+    data.sidx = data.sidx || 'id';
     data.sord = data.sord || 'asc';
     return GetPublicReadPageList(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -201,39 +219,55 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
         };
       });
       setPublicData(res.data);
-      // setMeterLoading(false);
+      setPublicLoading(false);
       return res;
     });
   };
 
-  const initVirtualLoadData = (paginationConfig?: PaginationConfig, sorter?) => {
-    //setMeterSearch(search);
+  //虚拟表
+  const initVirtualLoadData = (search) => {
+    const queryJson = {
+      keyword: search,
+      keyValue: keyValue
+    }
+    const sidx = 'id';
+    const sord = 'asc';
+    const { current: pageIndex, pageSize, total } = virtualPagination;
+    return virtualload({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
+      return res;
+    });
+  };
+
+  //刷新
+  const loadVirtualData = (searchText, paginationConfig?: PaginationConfig, sorter?) => {
+    setVirtualSearch(searchText);//查询的时候，必须赋值，否则查询条件会不起作用 
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: virtualPagination.pageSize,
       total: 0,
     };
-    let searchCondition: any = {
+    const searchCondition: any = {
       pageIndex,
       pageSize,
       total,
-      queryJson: { keyword: virtualSearchParams.search == null ? '' : virtualSearchParams.search, keyValue: id }
+      queryJson: {
+        keyword: searchText,
+        keyValue: keyValue
+      },
     };
-
     if (sorter) {
-      let { field, order } = sorter;
+      const { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'billcode';
+      searchCondition.sidx = field ? field : 'id';
     }
-
     return virtualload(searchCondition).then(res => {
       return res;
     });
-  }
+  };
 
   const virtualload = data => {
-    //setMeterLoading(true);
-    data.sidx = data.sidx || 'billcode';
+    setVirtualLoading(true);
+    data.sidx = data.sidx || 'id';
     data.sord = data.sord || 'asc';
     return GetVirtualReadPageList(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -246,7 +280,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
         };
       });
       setVirtualData(res.data);
-      //setMeterLoading(false);
+      setVirtualLoading(false);
       return res;
     });
   };
@@ -272,29 +306,27 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
   const onSave = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-
         // let newData = {
         //   payBeginDate: values.payBeginDate.format('YYYY-MM-DD HH:mm:ss'),
         //   payEndDate: values.payEndDate.format('YYYY-MM-DD HH:mm:ss'),
         //   beginDate: values.beginDate.format('YYYY-MM-DD HH:mm:ss'),
         //   endDate: values.endDate.format('YYYY-MM-DD HH:mm:ss')
-        // };
-
+        // }; 
         const newData = infoDetail ? { ...infoDetail, ...values } : values;
         newData.keyValue = keyValue;
-        newData.isAdd = isAdd;
+        newData.isAdd = false;//houseData.length == 0 ? true: false;
         newData.endReadDate = newData.endReadDate.format('YYYY-MM-DD');
         newData.readDate = newData.readDate.format('YYYY-MM-DD');
+        newData.meterCode = newData.meterCode.format('YYYYMM');
+        newData.IfVerify = false;
         SaveMainForm(newData).then((res) => {
           close();
           message.success('保存成功！');
           reload();
         });
-
       }
     });
   };
-
 
   /*详情可编辑单元格*/
   const EditableContext = React.createContext('');
@@ -303,9 +335,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
       <tr {...props} />
     </EditableContext.Provider>
   );
-
   const EditableFormRow = Form.create()(EditableRow);
-
   class EditableCell extends React.Component {
     state = {
       editing: false,
@@ -486,7 +516,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
           <span>
             <a onClick={() => {
               RemoveReadPublicForm(record.id).then(res => {
-                initPublicLoadData();
+                initPublicLoadData(publicSearch);
               })
             }} key="delete">删除</a>
           </span>
@@ -615,7 +645,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                 okText: '确定',
                 onOk: () => {
                   RemoveReadingUnitForm(record.id).then(res => {
-                    initHouseLoadData();
+                    initHouseLoadData(houseSearch);
                   });
                 }
               })
@@ -751,14 +781,12 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
       width: 200
     }
   ] as ColumnProps<any>[];
-
-
   // const [isFormula, setIsFormula] = useState<boolean>(false);
   return (
     <Drawer
       title={title}
       placement="right"
-      width={700}
+      width={800}
       onClose={close}
       visible={modifyVisible}
       style={{ height: 'calc(100vh-50px)' }}
@@ -876,8 +904,8 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                       className="search-input"
                       placeholder="请输入要查询的费表编号"
                       style={{ width: 200 }}
+                      onSearch={value => loadHouseData(value)}
                     />
-
                     <Button type="link" style={{ float: 'right' }}
                       onClick={() => {
                         /*var ids=[];
@@ -885,7 +913,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                           ids.push(item.id);
                         });*/
                         RemoveFormAll(id).then(res => {
-                          initHouseLoadData();
+                          initHouseLoadData(houseSearch);
                         });
                       }}
                     >
@@ -924,7 +952,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                   <Table
                     components={components}
                     onChange={(paginationConfig, filters, sorter) => {
-                      initHouseLoadData(paginationConfig, sorter)
+                      loadHouseData(houseSearch, paginationConfig, sorter)
                     }}
                     bordered={false}
                     size="middle"
@@ -933,15 +961,16 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                     rowKey="id"
                     pagination={housePagination}
                     scroll={{ y: 500, x: 1300 }}
-                    loading={loading}
+                    loading={houseLoading}
                   />
                 </TabPane>
                 <TabPane tab="公用费表" key="2">
                   <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
                     <Search
                       className="search-input"
-                      placeholder="请输入要查询的费表名称"
+                      placeholder="请输入要查询的费表编号"
                       style={{ width: 200 }}
+                      onSearch={value => loadPublicData(value)}
                     />
                     <Button type="link" style={{ float: 'right', marginLeft: '10px' }}
                       onClick={() => {
@@ -950,7 +979,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                           ids.push(item.id);
                         });*/
                         RemoveReadPublicFormAll(id).then(res => {
-                          initPublicLoadData();
+                          initPublicLoadData(publicSearch);
                         });
                       }}
                     >
@@ -987,7 +1016,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                   <Table
                     components={components}
                     onChange={(paginationConfig, filters, sorter) => {
-                      initPublicLoadData(paginationConfig, sorter)
+                      loadPublicData(publicSearch, paginationConfig, sorter)
                     }}
                     bordered={false}
                     size="middle"
@@ -996,7 +1025,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                     rowKey="id"
                     pagination={publicPagination}
                     scroll={{ y: 500, x: 1620 }}
-                    loading={loading}
+                    loading={publicLoading}
                   />
                 </TabPane>
                 <TabPane tab="虚拟费表" key="3">
@@ -1005,6 +1034,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                       className="search-input"
                       placeholder="请输入要查询的费表编号"
                       style={{ width: 200 }}
+                      onSearch={value => loadVirtualData(value)}
                     />
                     <Button type="link" style={{ float: 'right', marginLeft: '10px' }}
                       onClick={() => {
@@ -1013,7 +1043,8 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                           ids.push(item.id);
                         });
                         RemoveReadVirtualFormAll(JSON.stringify(ids)).then(res => {
-                          if (res.code != 0) { initVirtualLoadData(); }
+                          // if (res.code != 0) { initVirtualLoadData(); }
+                          initVirtualLoadData(virtualSearch);
                         });
                       }}
                     >
@@ -1047,7 +1078,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                   </div>
                   <Table<any>
                     onChange={(paginationConfig, filters, sorter) => {
-                      initVirtualLoadData(paginationConfig, sorter)
+                      loadVirtualData(virtualSearch, paginationConfig, sorter)
                     }}
                     bordered={false}
                     size="middle"
@@ -1056,7 +1087,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                     rowKey="id"
                     pagination={virtualPagination}
                     scroll={{ y: 500, x: 1620 }}
-                    loading={loading}
+                    loading={virtualLoading}
                   />
                 </TabPane>
               </Tabs>
@@ -1081,9 +1112,9 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
         }}
         readingDetail={readingDetail}
         reload={() => {
-          initHouseLoadData();
+          initHouseLoadData(houseSearch);
         }}
-        id={houseFeeItemRowId}
+        // id={houseFeeItemRowId}
         treeData={treeData}
       />
       <SelectReadingMeterPublic
@@ -1093,9 +1124,9 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
         }}
         readingDetail={readingDetail}
         reload={() => {
-
+          initPublicLoadData(publicSearch);
         }}
-        id={publicFeeItemRowId}
+        // id={publicFeeItemRowId}
       />
       <SelectReadingMeterVirtual
         visible={virtualFeeVisible}
@@ -1104,9 +1135,9 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
         }}
         readingDetail={readingDetail}
         reload={() => {
-
+          initVirtualLoadData(virtualSearch);
         }}
-        id={publicFeeItemRowId}
+        // id={publicFeeItemRowId}
       />
       <div
         style={{
