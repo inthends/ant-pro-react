@@ -2,12 +2,12 @@
 import React from 'react';
 import { SiderContextProvider } from '../SiderContext';
 
-const dashboard = props => {
+const Dashboard = props => {
   return (
     // <PageLayout>
     <SiderContextProvider>{props.children}</SiderContextProvider>
     // </PageLayout>
   );
 };
-export default dashboard;
+export default Dashboard;
 

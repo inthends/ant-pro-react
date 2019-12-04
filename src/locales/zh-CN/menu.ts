@@ -63,7 +63,8 @@ export default {
 
   //workflow
   'menu.workflow': '流程中心',
-  'menu.workflow.flow': '流程设置', 
+  'menu.workflow.flowedit': '流程设置', 
+  'menu.workflow.flowtask': '待办任务', 
 
   'menu.system': '系统管理',
   'menu.system.organize': '机构设置',

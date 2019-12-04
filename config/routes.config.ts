@@ -36,7 +36,7 @@ export default [
         path: '/',
         redirect: '/login',
       },
-
+      //个人中心
       {
         name: 'account',
         hideInMenu: true,
@@ -46,15 +46,15 @@ export default [
           {
             name: 'settings',
             path: '/account/settings', 
-            component: './account/settings',
+            component: './Account/Settings',
           },
         ],
       },
-
+      //数据中心
       {
         name: 'dashboard',
         path: '/dashboard',
-        component: './dashboard/dashboard',
+        component: './Dashboard/Dashboard',
         icon: 'dashboard',
         routes: [
           {
@@ -64,47 +64,45 @@ export default [
           {
             name: 'analysis',
             path: '/dashboard/analysis',
-            component: './dashboard/analysis',
+            component: './Dashboard/Analysis',
           },
           // {
           //   name: 'workplace',
           //   path: '/dashboard/workplace',
           //   component: './dashboard/workplace',
-          // },
-
+          // }, 
           {
             name: 'reconciliation',
             path: '/dashboard/reconciliation',
-            component: './dashboard/Reconciliation/Reconciliation',
+            component: './Dashboard/Reconciliation/Reconciliation',
           }, 
 
           {
             name: 'billdetails',
             path: '/dashboard/billdetails',
-            component: './dashboard/BillDetails/BillDetails',
+            component: './Dashboard/BillDetails/BillDetails',
           }, 
 
           {
             name: 'receiptdetails',
             path: '/dashboard/receiptdetails',
-            component: './dashboard/ReceiptDetails/ReceiptDetails',
+            component: './Dashboard/ReceiptDetails/ReceiptDetails',//js组件
           },  
 
           {
             name: 'receivabledivide',
             path: '/dashboard/receivabledivide',
-            component: './dashboard/Receivabledivide/Receivabledivide',
-          },  
-
+            component: './Dashboard/Receivabledivide/Receivabledivide',
+          },   
           {
             name: 'receiveddivide',
             path: '/dashboard/receiveddivide',
-            component: './dashboard/Receiveddivide/Receiveddivide',
+            component: './Dashboard/Receiveddivide/Receiveddivide',
           },  
 
         ],
       },
-
+      //资源管理
       {
         name: 'resource',
         path: '/resource',
@@ -285,9 +283,14 @@ export default [
         icon: 'highlight', 
         routes: [
           {
-            name: 'flow',
-            path: '/workflow/flow',
-            component: './workflow/flow/Flow',
+            name: 'flowedit',//name关联多语言
+            path: '/workflow/flowedit',
+            component: './Workflow/FlowEdit/Flow',
+          },
+          {
+            name: 'flowtask',
+            path: '/workflow/flowtask',//权限控制
+            component: './Workflow/FlowTask/Main',
           },
           // {
           //   name: 'mind',
