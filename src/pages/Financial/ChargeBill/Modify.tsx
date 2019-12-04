@@ -322,6 +322,10 @@ const Modify = (props: ModifyProps) => {
     }
     return '';
   };
+ 
+   const disabledDate = (current) => {
+    return current < moment(form.getFieldValue('beginDate'));
+  };
 
   return (
     <Drawer
@@ -534,9 +538,7 @@ const Modify = (props: ModifyProps) => {
                       </Select>
                     )}
                   </Form.Item>
-                </Col>
-
-
+                </Col> 
               </Row>
               <Row>
                 <Col span={12}>
@@ -545,7 +547,7 @@ const Modify = (props: ModifyProps) => {
                       initialValue: infoDetail.beginDate == null ? moment(new Date()) : moment(infoDetail.beginDate),
                       rules: [{ required: true, message: '请选择起始日期' }]
                     })(
-                      <DatePicker disabled={true} style={{ width: '100%' }} />
+                      <DatePicker disabled={!infoDetail.isModifyDate} style={{ width: '100%' }} />
                     )}
                   </Form.Item>
                 </Col>
@@ -555,7 +557,9 @@ const Modify = (props: ModifyProps) => {
                       initialValue: infoDetail.endDate == null ? moment(getEndDate()) : moment(infoDetail.endDate),
                       rules: [{ required: true, message: '请选择结束日期' }]
                     })(
-                      <DatePicker disabled={true} style={{ width: '100%' }} />
+                      <DatePicker disabled={!infoDetail.isModifyDate} 
+                      disabledDate={disabledDate}
+                      style={{ width: '100%' }} />
                     )}
                   </Form.Item>
                 </Col>

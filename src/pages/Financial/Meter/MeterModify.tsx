@@ -38,13 +38,14 @@ const MeterModify = (props: MeterModifyProps) => {
   const [chargeFeeItemVisible, setChargeFeeItemVisible] = useState<boolean>(false);
   const [selectHouseVisible, setSelectHouseVisible] = useState<boolean>(false);
   const [editHouseFeeItemVisible, setEditHouseFeeItemVisible] = useState<boolean>(false);
-  const [meterSearchParams, setMeterSearchParams] = useState<any>({});
+  const [meterSearch, setMeterSearch] = useState<string>('');
   // const [meterLoading, setMeterLoading] = useState<boolean>(false);
   const [meterData, setMeterData] = useState<any>();
   // const [meterSearch, setMeterSearch] = useState<string>('');
   const [meterPagination, setMeterPagination] = useState<DefaultPagination>(new DefaultPagination());
   const [addFormulaVisible, setAddFormulaVisible] = useState<boolean>(false);
   const [isAdd, setIsAdd] = useState<boolean>(true);
+  const [keyValue, setKeyValue] = useState<string>('');
 
   useEffect(() => {
     if (modifyVisible) {
@@ -62,15 +63,17 @@ const MeterModify = (props: MeterModifyProps) => {
         setOrgTreeData(res);
       });
       if (id) {
+        setKeyValue(id);
         setIsAdd(false);
         setLoading(true);
         GetInfoFormJson(id).then(res => {
           setInfoDetail(res);
           setLoading(false);
-          initMeterLoadData();
+          initMeterLoadData(meterSearch);
 
         });
       } else {
+        setKeyValue(getGuid());
         form.resetFields();
         setInfoDetail({});
         setMeterData([]);
@@ -89,30 +92,49 @@ const MeterModify = (props: MeterModifyProps) => {
       return v.toString(16);
     });
   }
-  const initMeterLoadData = (paginationConfig?: PaginationConfig, sorter?) => {
-    //setMeterSearch(search);
+
+
+  //房屋费表初始化
+  const initMeterLoadData = (search) => {
+    const queryJson = {
+      keyword: search,
+      MeterId: keyValue
+    }
+    const sidx = 'meterCode';
+    const sord = 'asc';
+    const { current: pageIndex, pageSize, total } = meterPagination;
+    return meterload({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
+      return res;
+    });
+  };
+
+  //刷新
+  const loadMeterData = (searchText, paginationConfig?: PaginationConfig, sorter?) => {
+    setMeterSearch(searchText);//查询的时候，必须赋值，否则查询条件会不起作用 
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: meterPagination.pageSize,
       total: 0,
     };
-    let searchCondition: any = {
+    const searchCondition: any = {
       pageIndex,
       pageSize,
       total,
-      queryJson: { keyword: meterSearchParams.search == null ? '' : meterSearchParams.search, MeterId: id }
+      queryJson: {
+        keyword: searchText,
+        MeterId: keyValue
+      },
     };
-
     if (sorter) {
-      let { field, order } = sorter;
+      const { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
       searchCondition.sidx = field ? field : 'meterCode';
     }
-
     return meterload(searchCondition).then(res => {
       return res;
     });
-  }
+  };
+
 
   const meterload = data => {
     // setMeterLoading(true);
@@ -138,10 +160,10 @@ const MeterModify = (props: MeterModifyProps) => {
   const checkEntity = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        let guid = getGuid();
+        // let guid = getGuid();
         var meterEntity = {
-          keyValue: id == null || id == '' ? guid : id,
-          MeterId: id == null || id == '' ? guid : id,
+          keyValue: keyValue,//id == null || id == '' ? guid : id,
+          MeterId: keyValue,//id == null || id == '' ? guid : id,
           OrganizeId: infoDetail.organizeId,
           MeterType: values.meterType,
           MeterKind: values.meterKind,
@@ -252,7 +274,7 @@ const MeterModify = (props: MeterModifyProps) => {
                 okText: '确定',
                 onOk: () => {
                   RemoveUnitForm(record.unitMeterId).then(res => {
-                    initMeterLoadData();
+                    initMeterLoadData(meterSearch);
                   })
                 }
               })
@@ -366,7 +388,7 @@ const MeterModify = (props: MeterModifyProps) => {
                     })(
                       <TreeSelect
                         style={{ width: '100%' }}
-                        dropdownStyle={{ maxHeight: 380, overflow: 'auto' }}
+                        dropdownStyle={{ maxHeight: 310, overflow: 'auto' }}
                         treeData={orgTreeData}
                         placeholder="=请选择="
                         treeDefaultExpandAll
@@ -495,11 +517,12 @@ const MeterModify = (props: MeterModifyProps) => {
                     className="search-input"
                     placeholder="请输入要查询的表编号"
                     style={{ width: 200 }}
-                    onSearch={(value) => {
-                      var params = Object.assign({}, meterSearchParams, { search: value })
-                      setMeterSearchParams(params);
-                      initMeterLoadData();
-                    }}
+                    onSearch={value => loadMeterData(value)}
+                  // onSearch={(value) => {
+                  //   var params = Object.assign({}, meterSearchParams, { search: value })
+                  //   setMeterSearchParams(params);
+                  //   initMeterLoadData();
+                  // }}
                   />
                   <Button type="link" style={{ float: 'right' }}
                     onClick={() => {
@@ -510,7 +533,7 @@ const MeterModify = (props: MeterModifyProps) => {
                           if (id != null || id != '') {
                             RemoveFormAll(id).then(res => {
                               message.success('删除成功！');
-                              initMeterLoadData();
+                              initMeterLoadData(meterSearch);
                             });
                           }
                         },
@@ -528,7 +551,7 @@ const MeterModify = (props: MeterModifyProps) => {
                 </div>
                 <Table<any>
                   onChange={(paginationConfig, filters, sorter) => {
-                    initMeterLoadData(paginationConfig, sorter)
+                    loadMeterData(meterSearch, paginationConfig, sorter)
                   }
                   }
                   bordered={false}
@@ -633,8 +656,8 @@ const MeterModify = (props: MeterModifyProps) => {
         feeDetail={feeDetail}
         treeData={treeData}
         reload={() => {
-          //刷新数据
-          initMeterLoadData();
+          //刷新数据 
+          initMeterLoadData(meterSearch);
           setIsAdd(false);
         }}
       />
@@ -648,7 +671,7 @@ const MeterModify = (props: MeterModifyProps) => {
         // meterinfo={infoDetail}
         reload={() => {
           //刷新数据
-          initMeterLoadData();
+          initMeterLoadData(meterSearch);
           setIsAdd(false);
         }}
       />

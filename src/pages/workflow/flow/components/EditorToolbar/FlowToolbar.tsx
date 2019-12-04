@@ -6,7 +6,7 @@ import styles from './index.less';
 
 const FlowToolbar = () => (
   <Toolbar className={styles.toolbar}>
-    <ToolbarButton command="save" icon="save" text="保存" />
+    {/* <ToolbarButton command="save" icon="save" text="保存" /> */}
     <ToolbarButton command="undo" icon="undo" text="撤销" />
     <ToolbarButton command="redo" icon="redo" text="重做" />
     <Divider type="vertical" />

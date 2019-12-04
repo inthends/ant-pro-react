@@ -1,6 +1,6 @@
 //费表列表
 import Page from '@/components/Common/Page';
-import { Divider, Form, Table } from 'antd';
+import { message, Modal, Divider, Form, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
@@ -18,6 +18,21 @@ interface MeterTableProps {
 
 function MeterTable(props: MeterTableProps) {
   const { onchange, loading, pagination, data, reload, showModify } = props;
+
+  const doDelete = record => {
+    Modal.confirm({
+      title: '请确认',
+      content: `您是否要删除${record.meterName}吗`,
+      onOk: () => {
+        RemoveForm(record.meterId)
+          .then(() => { 
+            // message.success('删除成功');
+            reload();
+          })
+          .catch(e => { });
+      },
+    });
+  };
 
   const columns = [
     {
@@ -72,7 +87,7 @@ function MeterTable(props: MeterTableProps) {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
-      align:'center',
+      align: 'center',
       width: 95,
       render: (text, record) => {
         return [
@@ -109,12 +124,7 @@ function MeterTable(props: MeterTableProps) {
           <span>
             <a onClick={() => showModify(record.meterId)} key="modify">修改</a>
             <Divider type="vertical" />
-            <a onClick={() => {
-              RemoveForm(record.meterId).then(res => {
-                if (res.code != 0) { reload(); }
-              })
-
-            }} key="delete">删除</a>
+            <a  onClick={() => doDelete(record)} key="delete">删除</a>
           </span>
 
         ];
@@ -131,7 +141,7 @@ function MeterTable(props: MeterTableProps) {
         dataSource={data}
         rowKey="meterid"
         pagination={pagination}
-        scroll={{ y: 500  }}
+        scroll={{ y: 500 }}
         loading={loading}
         onChange={onchange}
       />

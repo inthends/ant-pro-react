@@ -1,9 +1,9 @@
 import { BaseModifyProvider } from '@/components/BaseModifyDrawer/BaseModifyDrawer';
 import ModifyItem from '@/components/BaseModifyDrawer/ModifyItem';
-import { Col, Card, Form, Row } from 'antd';
+import { message, Col, Card, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import React from 'react';
-import { SaveForm } from './Flow.service'; 
+import React, { useState } from 'react';
+import { SaveForm } from './Flow.service';
 import GGEditor, { Flow } from 'gg-editor';
 import { FlowContextMenu } from './components/EditorContextMenu';
 import { FlowDetailPanel } from './components/EditorDetailPanel';
@@ -11,7 +11,7 @@ import { FlowItemPanel } from './components/EditorItemPanel';
 import { FlowToolbar } from './components/EditorToolbar';
 import EditorMinimap from './components/EditorMinimap';
 import styles from './index.less';
-import SaveCommand from './components/SaveCommand';
+// import SaveCommand from './components/SaveCommand';
 
 interface ModifyProps {
   visible: boolean;
@@ -20,20 +20,25 @@ interface ModifyProps {
   closeDrawer(): void;
   reload(): void;
   typeId: string;
-  typeName: string; 
-  roles:any[];
+  typeName: string;
+  roles: any[];
 };
 
 const Modify = (props: ModifyProps) => {
-  const {  roles, typeName, typeId, data, form } = props;
+  const { roles, typeName, typeId, data, form } = props;
   let initData = data ? data : { flowTypeName: typeName, flowType: typeId };
   // initData.expDate = initData.expDate ? initData.expDate : new Date();
   const baseFormProps = { form, initData };
   //流程图
   // const [flowData, setflowData] = useState<any>({});
-
+  // const [isSave, setIsSave] = useState<boolean>(true);
   //数据保存
   const doSave = dataDetail => {
+    // if (!isSave) {
+    //   message.warning('请先保存流程图');
+    //   return;
+    // }
+
     let modifyData = { ...initData, ...dataDetail, keyValue: initData.id };
     // modifyData.flowType = typeId;
     // modifyData.flowTypeName = typeName;
@@ -83,7 +88,7 @@ const Modify = (props: ModifyProps) => {
   //   }],
   // };
 
-  const GetData = () => {
+  const GetData = () => { 
     if (data) {
       var str = initData.designerJSON;
       return JSON.parse(str);
@@ -130,11 +135,13 @@ const Modify = (props: ModifyProps) => {
           <Col span={24}>
             <FlowToolbar />
             {/* 注册保存命令 */}
-            <SaveCommand GetData={(data) => {
+            {/* <SaveCommand GetData={(data) => {
               // console.log("data", data); 
               //setflowData(data);
               initData.designerJSON = JSON.stringify(data);//转化为json
-            }} />
+              setIsSave(true);
+              message.warning('流程图已经更新');
+            }} /> */}
           </Col>
         </Row>
         <Row type="flex" className={styles.editorBd}>
@@ -148,10 +155,17 @@ const Modify = (props: ModifyProps) => {
               //   data ? flowData : {}
               // }
               data={GetData()}
+              onAfterChange={(e) => {
+                if (e.action != "changeData") { 
+                  // setIsSave(false); 
+                  initData.designerJSON = JSON.stringify(e.item.graph._cfg._data);
+                }
+              }}
+
             />
           </Col>
           <Col span={5} className={styles.editorSidebar}>
-            <FlowDetailPanel roles={roles}/>
+            <FlowDetailPanel roles={roles} />
             <EditorMinimap />
           </Col>
         </Row>

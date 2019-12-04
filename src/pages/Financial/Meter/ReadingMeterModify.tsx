@@ -94,8 +94,11 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
       } else {
         setKeyValue(getGuid());
         form.resetFields();
-        setInfoDetail({});
-        //setMeterData([]);
+        //数据重置
+        setInfoDetail({}); 
+        setHouseData([]);
+        setPublicData([]);
+        setVirtualData([]);
         setLoading(false);
       }
     }
@@ -913,6 +916,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                           ids.push(item.id);
                         });*/
                         RemoveReadUnitFormAll(id).then(res => {
+                          message.success('删除成功！');
                           initHouseLoadData(houseSearch);
                         });
                       }}
@@ -979,6 +983,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                           ids.push(item.id);
                         });*/
                         RemoveReadPublicFormAll(id).then(res => {
+                          message.success('删除成功！');
                           initPublicLoadData(publicSearch);
                         });
                       }}
@@ -1044,6 +1049,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                         });
                         RemoveReadVirtualFormAll(JSON.stringify(ids)).then(res => {
                           // if (res.code != 0) { initVirtualLoadData(); }
+                          message.success('删除成功！');
                           initVirtualLoadData(virtualSearch);
                         });
                       }}
