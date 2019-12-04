@@ -1,5 +1,5 @@
 //退租
-import { message, Checkbox, Input, Tag, Divider, PageHeader, List, Tabs, Button, Card, Col, Drawer, Form, Row } from 'antd';
+import { DatePicker, message, Checkbox, Input, Tag, Divider, PageHeader, List, Tabs, Button, Card, Col, Drawer, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import {
   HtLeasecontractcharge,
@@ -13,6 +13,7 @@ import React, { useEffect, useState } from 'react';
 import ResultList from './ResultList';
 import { GetCharge, GetFormJson, WithdrawalForm } from './Main.service';
 import styles from './style.less';
+import moment from 'moment';
 const { TabPane } = Tabs;
 
 interface WithdrawalProps {
@@ -84,11 +85,23 @@ const Withdrawal = (props: WithdrawalProps) => {
   const GetStatus = (status) => {
     switch (status) {
       case 0:
-        return <Tag color="#e4aa5b">新建</Tag>;
+        return <Tag color="#e4aa5b">新建待修改</Tag>;
       case 1:
-        return <Tag color="#e4aa4b">待审核</Tag>;
+        return <Tag color="#e4aa4b">新建待审核</Tag>;
       case 2:
-        return <Tag color="#19d54e">已审核</Tag>;
+        return <Tag color="#19d54e">变更待修改</Tag>;
+      case 3:
+        return <Tag color="#19d54e">变更待审核</Tag>;
+      case 4:
+        return <Tag color="#19d54e">退租待审核</Tag>;
+      case 5:
+        return <Tag color="#19d54e">作废待审核</Tag>;
+      case 6:
+        return <Tag color="#19d54e">正常执行</Tag>;
+      case 7:
+        return <Tag color="#19d54e">到期未处理</Tag>;
+      case 8:
+        return <Tag color="#19d54e">待执行</Tag>;
       case -1:
         return <Tag color="#d82d2d">已作废</Tag>
       default:
@@ -102,8 +115,8 @@ const Withdrawal = (props: WithdrawalProps) => {
         WithdrawalForm({
           contractId: id,
           chargeId: chargeId,
-          withdrawal:values.withdrawal,
-          withdrawalMemo:values.withdrawalMemo
+          withdrawal: values.withdrawal,
+          withdrawalMemo: values.withdrawalMemo
         }).then(res => {
           message.success('退租申请成功');
           closeDrawer();
@@ -112,6 +125,12 @@ const Withdrawal = (props: WithdrawalProps) => {
       }
     });
   };
+
+    //退租日期不能小于合同计租日期
+    const disabledDate = (current) => {
+      return current < moment(infoDetail.billingDate);
+    };
+  
 
   return (
     <Drawer
@@ -128,7 +147,7 @@ const Withdrawal = (props: WithdrawalProps) => {
       // ]}
       />
       <Divider dashed />
-      <Form layout="vertical">
+      <Form layout="vertical" hideRequiredMark>
         <Tabs defaultActiveKey="1" >
           <TabPane tab="基本信息" key="1">
             <Row gutter={24}>
@@ -185,7 +204,7 @@ const Withdrawal = (props: WithdrawalProps) => {
                   </Row>
                 </Card>
 
-                <Card title="滞纳金" className={styles.addcard}>
+                <Card title="滞纳金" className={styles.card}>
                   <Row gutter={24}>
                     <Col lg={12}>
                       <Form.Item label="滞纳金比例" >
@@ -421,23 +440,31 @@ const Withdrawal = (props: WithdrawalProps) => {
             }
 
           </TabPane>
-          <TabPane tab="租金明细" key="3">
-
+          <TabPane tab="租金明细" key="3"> 
             <ResultList
               depositData={depositData}
               chargeData={chargeData}
+              className={styles.card}
             ></ResultList>
 
           </TabPane>
         </Tabs>
-        <Card title="退租原因" className={styles.addcard}>
+        <Card title="退租" className={styles.addcard}> 
+          <Form.Item label="退租日期" required>
+            {getFieldDecorator('withdrawalDate', {
+              initialValue: moment(new Date()),
+              rules: [{ required: true, message: '请选择退租日期' }],
+            })(<DatePicker placeholder="请选择退租日期"
+              disabledDate={disabledDate}
+            />)}
+          </Form.Item>
+
           <Form.Item label="">
             {getFieldDecorator('withdrawal', {
             })(<Checkbox.Group options={['正常到期', '价格因素', '物业服务', '交通不便', '卫生环境', '楼宇质量', '公司扩张', '经营不善', '其他原因']} />
             )}
           </Form.Item>
-        </Card>
-        <Card title="备注信息" className={styles.addcard}>
+
           <Form.Item label="">
             {getFieldDecorator('withdrawalMemo', {
               rules: [{ required: false }]
@@ -446,6 +473,7 @@ const Withdrawal = (props: WithdrawalProps) => {
             )}
           </Form.Item>
         </Card>
+
 
       </Form>
       <div

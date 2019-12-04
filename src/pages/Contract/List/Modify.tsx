@@ -838,6 +838,7 @@ const Modify = (props: ModifyProps) => {
               <ResultList
                 depositData={depositData}
                 chargeData={chargeData}
+                className={styles.addcard}
               ></ResultList>
             </TabPane>
 

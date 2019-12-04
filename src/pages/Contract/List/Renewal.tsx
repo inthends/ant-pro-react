@@ -815,6 +815,7 @@ const Renewal = (props: RenewalProps) => {
               <ResultList
                 depositData={depositData}
                 chargeData={chargeData}
+                className={styles.addcard}
               ></ResultList>
             </TabPane>
 

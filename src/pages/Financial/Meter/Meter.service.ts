@@ -151,6 +151,12 @@ export function GetMeterRead(data): Promise<any> {
   return request.get(process.env.basePath + `/Meter/GetMeterRead?keyValue=${data}`, {}).then(getResult as any);;
 }
 
+
+//全部删除单元抄表 
+export function RemoveReadUnitFormAll(data): Promise<any> {
+  return request.post(process.env.basePath + `/Meter/RemoveReadUnitFormAll?keyValue=${data}`, {}).then(getResult as any);;
+}
+
 //全部删除公用抄表
 export function RemoveReadPublicFormAll(data): Promise<any> {
   return request.post(process.env.basePath + `/Meter/RemoveReadPublicFormAll?keyValue=${data}`, {}).then(getResult as any);;

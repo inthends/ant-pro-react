@@ -434,6 +434,7 @@ const Approve = (props: ApproveProps) => {
             <ResultList
               depositData={depositData}
               chargeData={chargeData}
+              className={styles.addcard}
             ></ResultList>
           </TabPane>
         </Tabs>

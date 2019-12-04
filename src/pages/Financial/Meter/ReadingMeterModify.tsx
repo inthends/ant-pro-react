@@ -5,7 +5,7 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import {
-  SaveMainForm, GetVirtualReadPageList, SaveReadPublicForm, SaveReadUnitForm, RemoveFormAll, RemoveReadingUnitForm, RemoveReadPublicFormAll,
+  SaveMainForm, GetVirtualReadPageList, SaveReadPublicForm, SaveReadUnitForm, RemoveReadUnitFormAll, RemoveReadingUnitForm, RemoveReadPublicFormAll,
   RemoveReadPublicForm, GetPublicReadPageList, GetUnitReadPageList, GetMeterRead, RemoveReadVirtualFormAll
 } from './Meter.service';
 import styles from './style.less';
@@ -912,7 +912,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                         houseData.map(item=>{
                           ids.push(item.id);
                         });*/
-                        RemoveFormAll(id).then(res => {
+                        RemoveReadUnitFormAll(id).then(res => {
                           initHouseLoadData(houseSearch);
                         });
                       }}

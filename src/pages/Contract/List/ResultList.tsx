@@ -1,23 +1,24 @@
 //计费明细表 
 import { Card, Table } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
-import React from 'react'; 
-import moment from 'moment'; 
+import React from 'react';
+import moment from 'moment';
 import styles from './style.less';
 
-interface ResultListProps {  
-  depositData: any[]; 
-  chargeData: any[]; 
+interface ResultListProps {
+  depositData: any[];
+  chargeData: any[];
+  className: any;
 }
 
 function ResultList(props: ResultListProps) {
-  const { depositData , chargeData} = props;
+  const { depositData, chargeData, className } = props;
   const columns = [
     {
-      title: '区间', 
+      title: '区间',
       width: 100,
-      render: (text, row, index) => {   
-        return moment(row.beginDate).format('YYYY-MM-DD') + " - " +  moment(row.endDate).format('YYYY-MM-DD');
+      render: (text, row, index) => {
+        return moment(row.beginDate).format('YYYY-MM-DD') + " - " + moment(row.endDate).format('YYYY-MM-DD');
       }
     },
     {
@@ -31,26 +32,26 @@ function ResultList(props: ResultListProps) {
       dataIndex: 'deadline',
       key: 'deadline',
       width: 60,
-      render: val =>  moment(val).format('YYYY-MM-DD')
+      render: val => moment(val).format('YYYY-MM-DD')
     },
     {
-      title: '最终单价', 
+      title: '最终单价',
       width: 60,
-      render: (text, row, index) => {   
-        let unit='';
-        if(row.priceUnit=="1")
+      render: (text, row, index) => {
+        let unit = '';
+        if (row.priceUnit == "1")
           unit = '元/m²·月';
-        else if(row.priceUnit=="2")
+        else if (row.priceUnit == "2")
           unit = '元/m²·天';
-        else if(row.priceUnit=="3")
+        else if (row.priceUnit == "3")
           unit = '元/月';
-        else  
-          unit = '元/天'; 
-
-        if(row.price)  
-           return row.price+' '+unit;
         else
-        return '';
+          unit = '元/天';
+
+        if (row.price)
+          return row.price + ' ' + unit;
+        else
+          return '';
       }
     },
     {
@@ -70,15 +71,15 @@ function ResultList(props: ResultListProps) {
           size="middle"
           columns={columns}
           dataSource={depositData} />
-      </Card> 
-      <Card title="租金" className={styles.addcard} >
+      </Card>
+      <Card title="租金" className={className} >
         <Table
           style={{ border: 'none' }}
           bordered={false}
           size="middle"
           columns={columns}
-          dataSource={chargeData} 
-          />
+          dataSource={chargeData}
+        />
       </Card>
     </div>
   );
