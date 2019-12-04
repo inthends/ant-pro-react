@@ -86,8 +86,7 @@ const Modify = (props: ModifyProps) => {
     if (visible) {
       if (id) {
         setLoading(true);
-        GetFormJson(id).then((tempInfo: LeaseContractDTO) => {
-
+        GetFormJson(id).then((tempInfo: LeaseContractDTO) => { 
           //处理一下房间
           let rooms: any[] = [];
           if (tempInfo != null && tempInfo.houseList != null) {

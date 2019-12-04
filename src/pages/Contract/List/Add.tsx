@@ -326,8 +326,7 @@ const Add = (props: AddProps) => {
       if (treeNode.props.children && treeNode.props.children.length > 0 && treeNode.props.type != 'D') {
         resolve();
         return;
-      }
-
+      } 
       setTimeout(() => {
         GetAsynChildBuildingsSimple(treeNode.props.eventKey, treeNode.props.type).then((res: any[]) => {
           // treeNode.props.children = res || [];

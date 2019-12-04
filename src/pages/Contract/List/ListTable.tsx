@@ -55,7 +55,7 @@ function ListTable(props: ListTableProps) {
   }> = ({ item }) => (
     <Dropdown
       overlay={
-        <Menu onClick={({ key }) => editAndDelete(key, item)}> 
+        <Menu onClick={({ key }) => editAndDelete(key, item)}>
           <Menu.Item key="change">变更</Menu.Item>
           <Menu.Item key="renewal">续租</Menu.Item>
           <Menu.Item key="withdrawal">退租</Menu.Item>
@@ -247,7 +247,8 @@ function ListTable(props: ListTableProps) {
               <a onClick={() => doDelete(record)} key="delete">删除</a>
             </span>
           ];
-        } else if (record.status == 1) {
+        } else if (record.status == 1 || record.status == 4) {
+          //新建提交和退租待审核
           return [
             <span>
               <a onClick={() => approve(record.id, record.chargeId)} key="modify">审核</a>

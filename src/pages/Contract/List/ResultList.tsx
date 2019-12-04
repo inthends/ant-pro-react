@@ -28,8 +28,8 @@ function ResultList(props: ResultListProps) {
     },
     {
       title: '付款日',
-      dataIndex: 'payDate',
-      key: 'payDate',
+      dataIndex: 'deadline',
+      key: 'deadline',
       width: 60,
       render: val =>  moment(val).format('YYYY-MM-DD')
     },

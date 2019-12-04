@@ -40,7 +40,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
   };
 
   const [loading, setLoading] = useState<boolean>(false);
-  const { getFieldDecorator } = form;
+  const {getFieldDecorator } = form;
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [chargeFeeItemVisible, setChargeFeeItemVisible] = useState<boolean>(false);
   const [unitFeeVisible, setUnitFeeVisible] = useState<boolean>(false);
@@ -52,12 +52,12 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
   const [houseData, setHouseData] = useState<any[]>([]);
   const [housePagination, setHousePagination] = useState<DefaultPagination>(new DefaultPagination());
 
-  const [publicSearch, setPublicSearch] = useState<any>({});
+  const [publicSearch, setPublicSearch] = useState<string>('');
   const [publicLoading, setPublicLoading] = useState<boolean>(false);
   const [publicData, setPublicData] = useState<any>();
   const [publicPagination, setPublicPagination] = useState<DefaultPagination>(new DefaultPagination());
 
-  const [virtualSearch, setVirtualSearch] = useState<any>({});
+  const [virtualSearch, setVirtualSearch] = useState<string>('');
   const [virtualLoading, setVirtualLoading] = useState<boolean>(false);
   const [virtualData, setVirtualData] = useState<any>();
   const [virtualPagination, setVirtualPagination] = useState<DefaultPagination>(new DefaultPagination());

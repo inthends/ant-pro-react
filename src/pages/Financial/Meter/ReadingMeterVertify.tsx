@@ -1,5 +1,5 @@
 //抄表单审核
-import { Tabs, Card, Table, Button, Col, Drawer, Form, Row, Input } from 'antd';
+import { Spin, Tabs, Card, Table, Button, Col, Drawer, Form, Row, Input } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import { DefaultPagination } from '@/utils/defaultSetting';
@@ -27,15 +27,18 @@ const ReadingMeterVertify = (props: ReadingMeterVertifyProps) => {
   const { getFieldDecorator } = form;
   const [infoDetail, setInfoDetail] = useState<any>({});
 
-  const [houseSearchParams, setHouseSearchParams] = useState<any>({});
+  const [houseSearch, setHouseSearch] = useState<string>('');//查询关键字
+  const [houseLoading, setHouseLoading] = useState<boolean>(false);
   const [houseData, setHouseData] = useState<any>();
   const [housePagination, setHousePagination] = useState<DefaultPagination>(new DefaultPagination());
 
-  const [publicSearchParams, setPublicSearchParams] = useState<any>({});
+  const [publicSearch, setPublicSearch] = useState<string>('');
+  const [publicLoading, setPublicLoading] = useState<boolean>(false);
   const [publicData, setPublicData] = useState<any>();
   const [publicPagination, setPublicPagination] = useState<DefaultPagination>(new DefaultPagination());
 
-  const [virtualSearchParams, setVirtualSearchParams] = useState<any>({});
+  const [virtualSearch, setVirtualSearch] = useState<string>('');
+  const [virtualLoading, setVirtualLoading] = useState<boolean>(false);
   const [virtualData, setVirtualData] = useState<any>();
   const [virtualPagination, setVirtualPagination] = useState<DefaultPagination>(new DefaultPagination());
 
@@ -47,9 +50,10 @@ const ReadingMeterVertify = (props: ReadingMeterVertifyProps) => {
         setLoading(true);
         GetMeterRead(id).then(res => {
           setInfoDetail(res);
-          initHouseLoadData();
-          initPublicLoadData();
-          initVirtualLoadData();
+          //明细数据初始化
+          initHouseLoadData(houseSearch);
+          initPublicLoadData(publicSearch);
+          initVirtualLoadData(virtualSearch);
           setLoading(false);
         })
       } else {
@@ -66,6 +70,7 @@ const ReadingMeterVertify = (props: ReadingMeterVertifyProps) => {
   const onSave = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
+        setLoading(true);
         let newData = {
           keyValue: infoDetail.billId,
           BillId: infoDetail.billId,
@@ -82,13 +87,13 @@ const ReadingMeterVertify = (props: ReadingMeterVertifyProps) => {
           VerifyMemo: values.verifymemo
         };
         Audit(newData).then(() => {
+          setLoading(false);
           closeVertify(true);
           reload();
         });
       }
     });
   };
-
 
   const publicFeeColumns = [
     {
@@ -311,36 +316,51 @@ const ReadingMeterVertify = (props: ReadingMeterVertifyProps) => {
   ] as ColumnProps<any>[];
 
 
-  const initHouseLoadData = (paginationConfig?: PaginationConfig, sorter?) => {
-    //setMeterSearch(search);
+  //房屋费表初始化
+  const initHouseLoadData = (search) => {
+    const queryJson = {
+      keyword: search,
+      keyValue: id
+    }
+    const sidx = 'id';
+    const sord = 'asc';
+    const { current: pageIndex, pageSize, total } = housePagination;
+    return houseload({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
+      return res;
+    });
+  };
+
+  //刷新
+  const loadHouseData = (searchText, paginationConfig?: PaginationConfig, sorter?) => {
+    setHouseSearch(searchText);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: housePagination.pageSize,
       total: 0,
     };
-
-    let searchCondition: any = {
+    const searchCondition: any = {
       pageIndex,
       pageSize,
       total,
       queryJson: {
-        keyword: houseSearchParams.search == null ? '' : houseSearchParams.search,
+        keyword: searchText,
         keyValue: id
-      }
+      },
     };
-
     if (sorter) {
-      let { field, order } = sorter;
+      const { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'billcode';
+      searchCondition.sidx = field ? field : 'id';
     }
     return houseload(searchCondition).then(res => {
       return res;
     });
   };
 
+  //加载数据
   const houseload = data => {
-    data.sidx = data.sidx || 'billcode';
+    setHouseLoading(true);
+    data.sidx = data.sidx || 'id';
     data.sord = data.sord || 'asc';
     return GetUnitReadPageList(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -353,40 +373,56 @@ const ReadingMeterVertify = (props: ReadingMeterVertifyProps) => {
         };
       });
       setHouseData(res.data);
+      setHouseLoading(false);
       return res;
     });
   };
 
 
-  //公共
-  const initPublicLoadData = (paginationConfig?: PaginationConfig, sorter?) => {
-    //setMeterSearch(search);
+     //公共
+  const initPublicLoadData = (search) => {
+    const queryJson = {
+      keyword: search,
+      keyValue: id
+    }
+    const sidx = 'id';
+    const sord = 'asc';
+    const { current: pageIndex, pageSize, total } = publicPagination;
+    return publicload({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
+      return res;
+    });
+  };
+
+  //刷新
+  const loadPublicData = (searchText, paginationConfig?: PaginationConfig, sorter?) => {
+    setPublicSearch(searchText);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: publicPagination.pageSize,
       total: 0,
     };
-    let searchCondition: any = {
+    const searchCondition: any = {
       pageIndex,
       pageSize,
       total,
-      queryJson: { keyword: publicSearchParams.search == null ? '' : publicSearchParams.search, keyValue: id }
+      queryJson: {
+        keyword: searchText,
+        keyValue: id
+      },
     };
-
     if (sorter) {
-      let { field, order } = sorter;
+      const { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'billcode';
+      searchCondition.sidx = field ? field : 'id';
     }
-
     return publicload(searchCondition).then(res => {
       return res;
     });
-  }
+  };
 
   const publicload = data => {
-    //setPublicLoading(true);
-    data.sidx = data.sidx || 'billcode';
+    setPublicLoading(true);
+    data.sidx = data.sidx || 'id';
     data.sord = data.sord || 'asc';
     return GetPublicReadPageList(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -399,39 +435,55 @@ const ReadingMeterVertify = (props: ReadingMeterVertifyProps) => {
         };
       });
       setPublicData(res.data);
-      // setMeterLoading(false);
+      setPublicLoading(false);
       return res;
     });
   };
 
-  const initVirtualLoadData = (paginationConfig?: PaginationConfig, sorter?) => {
-    //setMeterSearch(search);
+  //虚拟表
+  const initVirtualLoadData = (search) => {
+    const queryJson = {
+      keyword: search,
+      keyValue: id
+    }
+    const sidx = 'id';
+    const sord = 'asc';
+    const { current: pageIndex, pageSize, total } = virtualPagination;
+    return virtualload({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
+      return res;
+    });
+  };
+
+  //刷新
+  const loadVirtualData = (searchText, paginationConfig?: PaginationConfig, sorter?) => {
+    setVirtualSearch(searchText);//查询的时候，必须赋值，否则查询条件会不起作用 
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: virtualPagination.pageSize,
       total: 0,
     };
-    let searchCondition: any = {
+    const searchCondition: any = {
       pageIndex,
       pageSize,
       total,
-      queryJson: { keyword: virtualSearchParams.search == null ? '' : virtualSearchParams.search, keyValue: id }
+      queryJson: {
+        keyword: searchText,
+        keyValue: id
+      },
     };
-
     if (sorter) {
-      let { field, order } = sorter;
+      const { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'billcode';
+      searchCondition.sidx = field ? field : 'id';
     }
-
     return virtualload(searchCondition).then(res => {
       return res;
     });
-  }
+  };
 
   const virtualload = data => {
-    //setMeterLoading(true);
-    data.sidx = data.sidx || 'billcode';
+    setVirtualLoading(true);
+    data.sidx = data.sidx || 'id';
     data.sord = data.sord || 'asc';
     return GetVirtualReadPageList(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -444,7 +496,7 @@ const ReadingMeterVertify = (props: ReadingMeterVertifyProps) => {
         };
       });
       setVirtualData(res.data);
-      //setMeterLoading(false);
+      setVirtualLoading(false);
       return res;
     });
   };
@@ -462,136 +514,140 @@ const ReadingMeterVertify = (props: ReadingMeterVertifyProps) => {
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
       <Form layout="vertical" hideRequiredMark>
-        <Tabs >
-          <TabPane tab="基础信息" key="1">
-            <Card className={styles.Card} >
-              <Row gutter={12}>
-                <Col span={8}>
-                  <Form.Item required={true} label="单据编号"  >
-                    {infoDetail.billCode}
-                  </Form.Item>
-                </Col>
-                <Col span={8}>
-                  <Form.Item required={true} label="单据日期">
-                    {String(infoDetail.readDate).substr(0, 10)}
-                  </Form.Item>
-                </Col>
-                <Col span={8}>
-                  <Form.Item required={true} label="抄表月份" >
-                    {String(infoDetail.meterCode).substr(0, 7)}
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={12}>
-                <Col span={8}>
-                  <Form.Item required={true} label="抄表人">
-                    {infoDetail.meterReader}
-                  </Form.Item>
-                </Col>
-                <Col span={8}>
-                  <Form.Item required={true} label="结束抄表日期"  >
-                    {String(infoDetail.endReadDate).substr(0, 10)}
+        <Spin tip="数据处理中..." spinning={loading}>
+          <Tabs >
+            <TabPane tab="基础信息" key="1">
+              <Card className={styles.Card} >
+                <Row gutter={12}>
+                  <Col span={8}>
+                    <Form.Item required={true} label="单据编号"  >
+                      {infoDetail.billCode}
+                    </Form.Item>
+                  </Col>
+                  <Col span={8}>
+                    <Form.Item required={true} label="单据日期">
+                      {String(infoDetail.readDate).substr(0, 10)}
+                    </Form.Item>
+                  </Col>
+                  <Col span={8}>
+                    <Form.Item required={true} label="抄表月份" >
+                      {String(infoDetail.meterCode).substr(0, 7)}
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={12}>
+                  <Col span={8}>
+                    <Form.Item required={true} label="抄表人">
+                      {infoDetail.meterReader}
+                    </Form.Item>
+                  </Col>
+                  <Col span={8}>
+                    <Form.Item required={true} label="结束抄表日期"  >
+                      {String(infoDetail.endReadDate).substr(0, 10)}
 
-                  </Form.Item>
-                </Col>
-                <Col span={8}>
-                  <Form.Item required={true} label="结束标识"  >
-                    {infoDetail.batchCode}
-                  </Form.Item>
-                </Col>
-              </Row>
-
-              <Row gutter={12}>
-                <Col span={24}>
-                  <Form.Item required={true} label="抄表说明">
-                    {infoDetail.memo}
-                  </Form.Item>
-                </Col>
-              </Row>
-
-            </Card>
-          </TabPane>
-          <TabPane tab="房屋费表" key="2">
-            <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
-              <Search
-                className="search-input"
-                placeholder="请输入要查询的费表编号"
-                style={{ width: 200 }}
+                    </Form.Item>
+                  </Col>
+                  <Col span={8}>
+                    <Form.Item required={true} label="结束标识"  >
+                      {infoDetail.batchCode}
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={12}>
+                  <Col span={24}>
+                    <Form.Item required={true} label="抄表说明">
+                      {infoDetail.memo}
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </Card>
+            </TabPane>
+            <TabPane tab="房屋费表" key="2">
+              <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
+                <Search
+                  className="search-input"
+                  placeholder="请输入要查询的费表编号"
+                  style={{ width: 200 }}
+                  onSearch={value => loadHouseData(value)}
+                />
+              </div>
+              <Table
+                onChange={(paginationConfig, filters, sorter) => {
+                  loadHouseData(houseSearch, paginationConfig, sorter)
+                }}
+                bordered={false}
+                size="middle"
+                columns={houseFeeColumns}
+                dataSource={houseData}
+                rowKey="id"
+                pagination={housePagination}
+                scroll={{ y: 500, x: 1300 }}
+                loading={houseLoading}
               />
-            </div>
-            <Table
-              onChange={(paginationConfig, filters, sorter) => {
-                initHouseLoadData(paginationConfig, sorter)
-              }}
-              bordered={false}
-              size="middle"
-              columns={houseFeeColumns}
-              dataSource={houseData}
-              rowKey="id"
-              pagination={housePagination}
-              scroll={{ y: 500, x: 1300 }}
-              loading={loading}
-            />
-          </TabPane>
-          <TabPane tab="公用费表" key="3">
-            <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
-              <Search
-                className="search-input"
-                placeholder="请输入要查询的费表名称"
-                style={{ width: 200 }}
-              />
-            </div>
+            </TabPane>
+            <TabPane tab="公用费表" key="3">
+              <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
+                <Search
+                  className="search-input"
+                  placeholder="请输入要查询的费表编号"
+                  style={{ width: 200 }}
+                  onSearch={value => loadPublicData(value)}
+                />
+              </div>
 
-            <Table
-              onChange={(paginationConfig, filters, sorter) => {
-                initPublicLoadData(paginationConfig, sorter)
-              }}
-              bordered={false}
-              size="middle"
-              columns={publicFeeColumns}
-              dataSource={publicData}
-              rowKey="id"
-              pagination={publicPagination}
-              scroll={{ y: 500, x: 1620 }}
-              loading={loading}
-            />
-          </TabPane>
-          <TabPane tab="虚拟费表" key="4">
-            <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
-              <Search
-                className="search-input"
-                placeholder="请输入要查询的费表编号"
-                style={{ width: 200 }}
+              <Table
+                onChange={(paginationConfig, filters, sorter) => {
+                  loadPublicData(publicSearch, paginationConfig, sorter)
+                }}
+                bordered={false}
+                size="middle"
+                columns={publicFeeColumns}
+                dataSource={publicData}
+                rowKey="id"
+                pagination={publicPagination}
+                scroll={{ y: 500, x: 1620 }}
+                loading={publicLoading}
               />
-            </div>
-            <Table<any>
-              onChange={(paginationConfig, filters, sorter) => {
-                initVirtualLoadData(paginationConfig, sorter)
-              }}
-              bordered={false}
-              size="middle"
-              columns={virtualFeeColumns}
-              dataSource={virtualData}
-              rowKey="id"
-              pagination={virtualPagination}
-              scroll={{ y: 500, x: 1620 }}
-              loading={loading}
-            />
-          </TabPane>
-        </Tabs>
-        <Row>
-          <Col >
-            <Form.Item label="审核情况" >
-              {getFieldDecorator('verifymemo', {
-                initialValue: infoDetail.verifymemo
-              })(
-                < TextArea rows={4}
-                  placeholder='请输入审核情况'
-                > </ TextArea >
-              )}
-            </Form.Item>
-          </Col>
-        </Row>
+            </TabPane>
+
+            <TabPane tab="虚拟费表" key="4">
+              <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
+                <Search
+                  className="search-input"
+                  placeholder="请输入要查询的费表编号"
+                  style={{ width: 200 }}
+                  onSearch={value => loadVirtualData(value)}
+                />
+              </div>
+              <Table<any>
+                onChange={(paginationConfig, filters, sorter) => {
+                  loadVirtualData(virtualSearch, paginationConfig, sorter)
+                }}
+                bordered={false}
+                size="middle"
+                columns={virtualFeeColumns}
+                dataSource={virtualData}
+                rowKey="id"
+                pagination={virtualPagination}
+                scroll={{ y: 500, x: 1620 }}
+                loading={virtualLoading}
+              />
+            </TabPane>
+          </Tabs>
+          <Row>
+            <Col >
+              <Form.Item label="审核情况" >
+                {getFieldDecorator('verifymemo', {
+                  initialValue: infoDetail.verifymemo
+                })(
+                  < TextArea rows={4}
+                    placeholder='请输入审核情况'
+                  > </ TextArea >
+                )}
+              </Form.Item>
+            </Col>
+          </Row>
+        </Spin>
       </Form>
       <div
         style={{

@@ -16,68 +16,97 @@
  */
 export interface HtChargefeeresult {
     /**
+    * Desc:  Default:  Nullable:False
+    */
+    id?: string;
+    /**
+    * Desc:  Default:  Nullable:False
+    */
+    leaseContractChargeId?: string;
+    /**
+   * Desc:  Default:  Nullable:True
+   */
+    beginDate?: Date;
+    /**
+   * Desc:  Default:  Nullable:True
+   */
+    endDate?: Date;
+    /**
+   * Desc:  Default:  Nullable:True
+   */
+    feeItemId?: string;
+    /**
+   * Desc:  Default:  Nullable:True
+   */
+    feeItemName?: string;
+
+    /**
+     * Desc:  Default:  Nullable:True
+    */
+    period?: Date;
+
+    /**
+   * Desc:  Default:  Nullable:True
+  */
+    billDate?: Date;
+
+    /**
+   * Desc:  Default:  Nullable:True
+  */
+    deadline?: Date;
+
+    /**
+    * Desc:  Default:  Nullable:True
+    */
+    price?: number;
+
+    /**
+    * Desc:  Default:  Nullable:True
+    */
+    priceUnit?: string;
+
+    /**
+    * Desc:  Default:  Nullable:True
+    */
+    quantity?: number;
+
+    /**
+    * Desc:  Default:  Nullable:True
+    */
+    totalPrice?: number;
+
+    /**
+ * Desc:费用类型，1保证金2租金  Default:  Nullable:True
+ */
+    feeType?: number;
+
+    /**
+   * Desc:  Default:  Nullable:True
+   */
+    createDate?: Date;
+
+    /**
+    * Desc:  Default:  Nullable:True
+    */
+    createUserId?: string;
+
+    /**
      * Desc:  Default:  Nullable:True
      */
     createUserName?: string;
+
+    /**
+   * Desc:  Default:  Nullable:True
+   */
+    modifyDate?: Date;
+
     /**
      * Desc:  Default:  Nullable:True
      */
     modifyUserId?: string;
+
     /**
      * Desc:  Default:  Nullable:True
      */
-    endDate?: Date;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    modifyUserName?: string;
-    feeItemId?: string;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    payDate?: Date;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    feeItemName?: string;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    price?: number;
-    /**
-     * Desc:费用类型，1保证金2租金  Default:  Nullable:True
-     */
-    feeType?: number;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    priceUnit?: string;
-    /**
-     * Desc:  Default:  Nullable:False
-     */
-    id?: string;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    startDate?: Date;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    createDate?: Date;
-    /**
-     * Desc:  Default:  Nullable:False
-     */
-    leaseContractChargeId?: string;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    totalPrice?: number;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    createUserId?: string;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    modifyDate?: Date;
+    modifyUserName?: string;  
 }

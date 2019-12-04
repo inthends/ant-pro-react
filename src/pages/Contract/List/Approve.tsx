@@ -77,34 +77,34 @@ const Approve = (props: ApproveProps) => {
       form.setFieldsValue({});
     }
   }, [visible]);
-  
- //转换状态
- const GetStatus = (status) => {
-  switch (status) {
-    case 0:
-      return <Tag color="#e4aa5b">新建待修改</Tag>;
-    case 1:
-      return <Tag color="#e4aa4b">新建待审核</Tag>;
-    case 2:
-      return <Tag color="#19d54e">变更待修改</Tag>;
-    case 3:
-      return <Tag color="#19d54e">变更待审核</Tag>;
-    case 4:
-      return <Tag color="#19d54e">退租待审核</Tag>;
-    case 5:
-      return <Tag color="#19d54e">作废待审核</Tag>;
-    case 6:
-      return <Tag color="#19d54e">正常执行</Tag>;
-    case 7:
-      return <Tag color="#19d54e">到期未处理</Tag>;
-    case 8:
-      return <Tag color="#19d54e">待执行</Tag>;
-    case -1:
-      return <Tag color="#d82d2d">已作废</Tag>
-    default:
-      return '';
-  }
-};
+
+  //转换状态
+  const GetStatus = (status) => {
+    switch (status) {
+      case 0:
+        return <Tag color="#e4aa5b">新建待修改</Tag>;
+      case 1:
+        return <Tag color="#e4aa4b">新建待审核</Tag>;
+      case 2:
+        return <Tag color="#19d54e">变更待修改</Tag>;
+      case 3:
+        return <Tag color="#19d54e">变更待审核</Tag>;
+      case 4:
+        return <Tag color="#19d54e">退租待审核</Tag>;
+      case 5:
+        return <Tag color="#19d54e">作废待审核</Tag>;
+      case 6:
+        return <Tag color="#19d54e">正常执行</Tag>;
+      case 7:
+        return <Tag color="#19d54e">到期未处理</Tag>;
+      case 8:
+        return <Tag color="#19d54e">待执行</Tag>;
+      case -1:
+        return <Tag color="#d82d2d">已作废</Tag>
+      default:
+        return '';
+    }
+  };
 
   const approve = () => {
     form.validateFields((errors, values) => {
@@ -112,6 +112,7 @@ const Approve = (props: ApproveProps) => {
         ApproveForm({
           contractId: id,
           chargeId: chargeId,
+          status: values.status,
           verifyMemo: values.verifyMemo
         }).then(res => {
           message.success('审批成功！');
@@ -463,7 +464,7 @@ const Approve = (props: ApproveProps) => {
         }}
       >
         <Button onClick={closeDrawer} style={{ marginRight: 8 }}>
-          驳回
+          关闭
           </Button>
         <Button type="primary" onClick={approve}>
           通过
