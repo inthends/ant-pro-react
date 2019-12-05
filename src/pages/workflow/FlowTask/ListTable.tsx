@@ -1,21 +1,20 @@
 import Page from '@/components/Common/Page';
-import { Divider, message, Modal, Switch, Table } from 'antd';
+import { Divider, message, Modal, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
-import { CheckRole, SaveForm, RemoveForm } from './FlowTask.service';
+import { CheckRole, RemoveForm } from './FlowTask.service';
 
 interface ListTableProps {
   loading: boolean;
   pagination: PaginationConfig;
   data: any[];
-  modify(record: any): void; 
+  modify(record: any): void;
   onchange(page: any, filter: any, sort: any): any;
   reload(): void;
-  setData(data: any[]): void;
 }
 
 function ListTable(props: ListTableProps) {
-  const { onchange, loading, data, modify, reload, pagination, setData } = props;
+  const { onchange, loading, data, modify, reload, pagination } = props;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
   };
@@ -43,55 +42,52 @@ function ListTable(props: ListTableProps) {
   const doModify = record => {
     modify({ ...record });
   };
-  const toggleDisabled = record => {
-    record.enabledMark = record.enabledMark === 0 ? 1 : 0;
-    let keyValue = record.roleId;
-    SaveForm({ ...record, keyValue }).then(() => {
-      setData([...data]);
-    });
-  };
+
   const columns = [
     {
-      title: '角色编号',
+      title: '标题',
       dataIndex: 'enCode',
       key: 'enCode',
       width: 100,
     },
     {
-      title: '角色名称',
+      title: '流程',
       dataIndex: 'fullName',
       key: 'fullName',
       width: 100,
     },
     {
-      title: '创建时间',
+      title: '步骤',
       dataIndex: 'createDate',
       key: 'createDate',
       width: 120,
     },
     {
-      title: '有效',
-      dataIndex: 'enabledMark',
-      key: 'enabledMark',
-      width: 80,
-      render: (text: any, record, index) => {
-        return (
-          <Switch
-            size="small"
-            checked={text === ENABLEDMARKS.正常}
-            checkedChildren={ENABLEDMARKS[ENABLEDMARKS.正常]}
-            unCheckedChildren={ENABLEDMARKS[ENABLEDMARKS.禁用]}
-            onClick={() => toggleDisabled(record)}
-          />
-        );
-      },
-    },
-    {
-      title: '角色描述',
+      title: '发送人',
       dataIndex: 'description',
       key: 'description',
       width: 200,
     },
+    {
+      title: '接收时间',
+      dataIndex: 'description',
+      key: 'description',
+      width: 200,
+    },
+    {
+      title: '状态',
+      dataIndex: 'description',
+      key: 'description',
+      width: 200,
+    },
+
+    {
+      title: '备注',
+      dataIndex: 'description',
+      key: 'description',
+      width: 200,
+    },
+
     {
       title: '操作',
       dataIndex: 'operation',
@@ -109,7 +105,7 @@ function ListTable(props: ListTableProps) {
               修改
           </a>
             <Divider type="vertical" key='divider1' />
-          
+
             <Divider type="vertical" key='divider3' />
             <a key="delete" type="link" onClick={() => doDelete(record)}>
               删除

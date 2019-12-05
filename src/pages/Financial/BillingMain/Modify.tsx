@@ -229,7 +229,7 @@ const Modify = (props: ModifyProps) => {
         var feeEntity = {
           keyValue: (id == null || id == '') ? guid : id,
           // BillId: id == null || id == '' ? guid : id,
-          BillSource: '周期费计算',
+          BillSource: '计算周期费',
           BillDate: moment(values.billDate).format('YYYY-MM-DD'),
           LinkId: '',
           IfVerify: values.ifVerify == "未审核" ? false : true,

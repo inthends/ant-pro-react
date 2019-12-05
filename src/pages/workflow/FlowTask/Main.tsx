@@ -1,10 +1,10 @@
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { Button, Icon, Input, Layout } from 'antd';
+import { Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
-import React, { useEffect, useState } from 'react'; 
+import React, { useEffect, useState } from 'react';
 import ListTable from './ListTable';
 import Modify from './Modify';
-import { getDataList } from './FlowTask.service'; 
+import { GetDataList } from './FlowTask.service';
 
 // const { Option } = Select;
 const { Content } = Layout;
@@ -19,7 +19,7 @@ const Main = () => {
     // condition: 'EnCode',
     keyword: '',
   });
-  const [modifyVisible, setModifyVisible] = useState<boolean>(false); 
+  const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<any[]>([]);
   const [currData, setCurrData] = useState<any>();
@@ -79,7 +79,7 @@ const Main = () => {
     setLoading(true);
     formData.sidx = formData.sidx || 'CreateDate';
     formData.sord = formData.sord || 'desc';
-    return getDataList(formData).then(res => {
+    return GetDataList(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
         return {
@@ -117,10 +117,7 @@ const Main = () => {
             onSearch={keyword => loadData({ ...search, keyword })}
             style={{ width: 200 }}
           />
-          <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer()}>
-            <Icon type="plus" />
-            角色
-          </Button>
+
         </div>
         <ListTable
           key='ListTable'
@@ -130,9 +127,8 @@ const Main = () => {
           loading={loading}
           pagination={pagination}
           data={data}
-          modify={showDrawer} 
+          modify={showDrawer}
           reload={() => initLoadData(search)}
-          setData={setData}
         />
       </Content>
       <Modify
@@ -142,7 +138,7 @@ const Main = () => {
         // reload={() => initLoadData({ ...search })}
         reload={() => initLoadData(search)}
       />
-      
+
     </Layout>
   );
 };
