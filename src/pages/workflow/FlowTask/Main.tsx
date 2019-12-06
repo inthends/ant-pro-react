@@ -41,7 +41,7 @@ const Main = () => {
   const initLoadData = (searchParam: SearchParam) => {
     // setSearch(searchParam);
     const queryJson = searchParam;
-    const sidx = 'CreateDate';
+    const sidx = 'ReceiveTime';
     const sord = 'desc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
@@ -67,7 +67,7 @@ const Main = () => {
     if (sorter) {
       const { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'CreateDate';
+      searchCondition.sidx = field ? field : 'ReceiveTime';
     }
 
     return load(searchCondition).then(res => {
@@ -77,7 +77,7 @@ const Main = () => {
 
   const load = formData => {
     setLoading(true);
-    formData.sidx = formData.sidx || 'CreateDate';
+    formData.sidx = formData.sidx || 'ReceiveTime';
     formData.sord = formData.sord || 'desc';
     return GetDataList(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -131,6 +131,7 @@ const Main = () => {
           reload={() => initLoadData(search)}
         />
       </Content>
+
       <Modify
         visible={modifyVisible}
         closeDrawer={closeDrawer}
@@ -138,6 +139,7 @@ const Main = () => {
         // reload={() => initLoadData({ ...search })}
         reload={() => initLoadData(search)}
       />
+      
 
     </Layout>
   );

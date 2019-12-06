@@ -25,24 +25,13 @@ const Modify = (props: ModifyProps) => {
   };
 
   return (
-    <BaseModifyProvider {...props} name="角色" save={doSave}>
+    <BaseModifyProvider {...props} name="流程" save={doSave}>
       <Card >
         <Form layout="vertical" hideRequiredMark>
-          <Row gutter={24}>
-            <ModifyItem
-              {...baseFormProps}
-              field="fullName"
-              label="角色名称"
-              rules={[{ required: true, message: "请输入角色名称" }]}
-            ></ModifyItem>
-            <ModifyItem
-              {...baseFormProps}
-              field="enCode"
-              label="角色编号"
-              rules={[{ required: true, message: "请输入角色编号" }]}
-            ></ModifyItem>
+          
+          
 
-          </Row>
+
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
@@ -50,7 +39,7 @@ const Modify = (props: ModifyProps) => {
               lg={24}
               type="textarea"
               field="description"
-              label="备注"
+              label="审核内容"
             ></ModifyItem>
           </Row>
         </Form>

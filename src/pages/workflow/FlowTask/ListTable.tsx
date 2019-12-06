@@ -46,46 +46,45 @@ function ListTable(props: ListTableProps) {
   const columns = [
     {
       title: '标题',
-      dataIndex: 'enCode',
-      key: 'enCode',
-      width: 100,
+      dataIndex: 'title',
+      key: 'title',
+      width: 200,
     },
     {
       title: '流程',
-      dataIndex: 'fullName',
-      key: 'fullName',
-      width: 100,
+      dataIndex: 'flowName',
+      key: 'flowName',
+      width: 150,
     },
     {
       title: '步骤',
-      dataIndex: 'createDate',
-      key: 'createDate',
+      dataIndex: 'stepName',
+      key: 'stepName',
       width: 120,
     },
     {
       title: '发送人',
-      dataIndex: 'description',
-      key: 'description',
-      width: 200,
+      dataIndex: 'senderName',
+      key: 'senderName',
+      width: 100,
     },
     {
       title: '接收时间',
-      dataIndex: 'description',
-      key: 'description',
-      width: 200,
+      dataIndex: 'receiveTime',
+      key: 'receiveTime',
+      width: 160,
     },
-    {
-      title: '状态',
-      dataIndex: 'description',
-      key: 'description',
-      width: 200,
-    },
+    // {
+    //   title: '状态',
+    //   dataIndex: 'status',
+    //   key: 'status',
+    //   width: 60,
 
+    // }, 
     {
       title: '备注',
-      dataIndex: 'description',
-      key: 'description',
-      width: 200,
+      dataIndex: 'note',
+      key: 'note'
     },
 
     {
@@ -93,7 +92,7 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'operation',
       key: 'operation',
       align: 'center',
-      width: 140,
+      width: 120,
       render: (text, record) => {
         return [
           <span key='span'>
@@ -102,13 +101,11 @@ function ListTable(props: ListTableProps) {
               key="modify"
               onClick={() => doModify(record)}
             >
-              修改
-          </a>
-            <Divider type="vertical" key='divider1' />
-
+              处理
+          </a> 
             <Divider type="vertical" key='divider3' />
             <a key="delete" type="link" onClick={() => doDelete(record)}>
-              删除
+              作废
           </a>
           </span>
         ];
@@ -139,7 +136,4 @@ function ListTable(props: ListTableProps) {
 
 export default ListTable;
 
-enum ENABLEDMARKS {
-  正常 = 1,
-  禁用 = 0,
-}
+ 

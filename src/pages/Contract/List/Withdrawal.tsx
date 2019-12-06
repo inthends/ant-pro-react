@@ -115,7 +115,8 @@ const Withdrawal = (props: WithdrawalProps) => {
         WithdrawalForm({
           contractId: id,
           chargeId: chargeId,
-          withdrawal: values.withdrawal,
+          withdrawalDate: values.withdrawalDate.format('YYYY-MM-DD'),
+          withdrawal: values.withdrawal, 
           withdrawalMemo: values.withdrawalMemo
         }).then(res => {
           message.success('退租申请成功');
