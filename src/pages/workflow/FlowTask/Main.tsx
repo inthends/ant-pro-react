@@ -3,39 +3,36 @@ import { Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import ListTable from './ListTable';
-import Modify from './Modify';
 import { GetDataList } from './FlowTask.service';
+//合同审批
+import Approve from '../../Contract/List/Approve';
+//合同退租验房
+import RoomCheck from '../../Contract/List/RoomCheck';
+//合同退租结算
+import BillCheck from '../../Contract/List/BillCheck';
 
-// const { Option } = Select;
 const { Content } = Layout;
 const { Search } = Input;
 interface SearchParam {
-  // condition: 'EnCode' | 'FullName';
   keyword: string;
 };
 
 const Main = () => {
   const [search, setSearch] = useState<SearchParam>({
-    // condition: 'EnCode',
     keyword: '',
   });
-  const [modifyVisible, setModifyVisible] = useState<boolean>(false);
+
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<any[]>([]);
-  const [currData, setCurrData] = useState<any>();
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
+  const [roomcheckVisible, setRoomCheckVisible] = useState<boolean>(false);
+  const [billcheckVisible, setBillCheckVisible] = useState<boolean>(false);
+  const [approveVisible, setApproveVisible] = useState<boolean>(false);
+  const [id, setId] = useState<string>();
 
   useEffect(() => {
     initLoadData(search);
   }, []);
-
-  const closeDrawer = () => {
-    setModifyVisible(false);
-  };
-  const showDrawer = (item?) => {
-    setCurrData(item);
-    setModifyVisible(true);
-  };
 
   //初始化
   const initLoadData = (searchParam: SearchParam) => {
@@ -95,6 +92,36 @@ const Main = () => {
     });
   };
 
+  //approve
+  const closeApproveDrawer = () => {
+    setApproveVisible(false);
+  };
+
+  const showApproveDrawer = (id) => {
+    setApproveVisible(true);
+    setId(id);
+  };
+
+  //验房
+  const closeRoomCheckDrawer = () => {
+    setRoomCheckVisible(false);
+  };
+
+  const showRoomCheckDrawer = (id) => {
+    setRoomCheckVisible(true);
+    setId(id);
+  };
+
+  //结算
+  const closeBillCheckDrawer = () => {
+    setBillCheckVisible(false);
+  };
+
+  const showBillCheckDrawer = (id) => {
+    setBillCheckVisible(true);
+    setId(id);
+  };
+
   return (
     <Layout style={{ height: '100%' }}>
       <Content style={{ padding: '0 20px', overflow: 'auto' }}>
@@ -117,7 +144,6 @@ const Main = () => {
             onSearch={keyword => loadData({ ...search, keyword })}
             style={{ width: 200 }}
           />
-
         </div>
         <ListTable
           key='ListTable'
@@ -127,20 +153,34 @@ const Main = () => {
           loading={loading}
           pagination={pagination}
           data={data}
-          modify={showDrawer}
+          reload={() => initLoadData(search)}
+          roomcheck={showRoomCheckDrawer}
+          billcheck={showBillCheckDrawer}
+          approve={showApproveDrawer}
+        />
+
+        <RoomCheck
+          visible={roomcheckVisible}
+          closeDrawer={closeRoomCheckDrawer}
+          id={id}
           reload={() => initLoadData(search)}
         />
+
+        <BillCheck
+          visible={billcheckVisible}
+          closeDrawer={closeBillCheckDrawer}
+          id={id}
+          reload={() => initLoadData(search)}
+        />
+
+        <Approve
+          visible={approveVisible}
+          closeDrawer={closeApproveDrawer}
+          id={id}
+          reload={() => initLoadData(search)}
+        />
+
       </Content>
-
-      <Modify
-        visible={modifyVisible}
-        closeDrawer={closeDrawer}
-        data={currData}
-        // reload={() => initLoadData({ ...search })}
-        reload={() => initLoadData(search)}
-      />
-      
-
     </Layout>
   );
 };

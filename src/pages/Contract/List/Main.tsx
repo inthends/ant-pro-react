@@ -9,7 +9,7 @@ import ListTable from './ListTable';
 import Add from './Add';
 import Modify from './Modify';
 import Detail from './Detail';
-import Approve from './Approve';
+// import Approve from './Approve';
 import Change from './Change';
 import Renewal from './Renewal';
 import Withdrawal from './Withdrawal'; 
@@ -35,7 +35,7 @@ function Main() {
   const [search, setSearch] = useState<string>('');
   // const [treeData, setTreeData] = useState<any[]>([]); 
   // const [userVisible, setUserVisible] = useState<boolean>(false); 
-  const [approveVisible, setApproveVisible] = useState<boolean>(false);
+ 
 
   const closeAddDrawer = () => {
     setAddVisible(false);
@@ -171,16 +171,6 @@ function Main() {
   //   // setCurrData(item);
   // };
 
-  const showApproveDrawer = (id?, chargeId?) => {
-    setApproveVisible(true);
-    setId(id);
-    setChargeId(chargeId);
-  };
-
-  const closeApproveDrawer = () => {
-    setApproveVisible(false);
-  };
-
   return (
     <Layout style={{ height: '100%' }}>
       <Content  >
@@ -208,7 +198,7 @@ function Main() {
           data={data}
           detail={showDetailDrawer}
           modify={showModifyDrawer}
-          approve={showApproveDrawer}
+          // approve={showApproveDrawer}
           change={showChangeDrawer}
           renewal={showRenewalDrawer}
           withdrawal={showWithdrawalDrawer} 
@@ -241,13 +231,7 @@ function Main() {
         reload={() => initLoadData(search)}
       />
 
-      <Approve
-        visible={approveVisible}
-        closeDrawer={closeApproveDrawer}
-        id={id}
-        chargeId={chargeId}
-        reload={() => initLoadData(search)}
-      />
+   
 
       {/* <ChooseUser
         visible={userVisible}

@@ -12,7 +12,7 @@ interface ListTableProps {
   data: any[];
   detail(id: string, chargeId: string): void;//查看
   modify(id: string, chargeId: string): void;//修改
-  approve(id: string, chargeId: string): void;//审核
+  // approve(id: string, chargeId: string): void;//审核
   change(id: string, chargeId: string): void;//变更
   renewal(id: string, chargeId: string): void;//续租
   withdrawal(id: string, chargeId: string): void;//退租 
@@ -20,7 +20,7 @@ interface ListTableProps {
 };
 
 function ListTable(props: ListTableProps) {
-  const { onchange, loading, pagination, data, detail, modify, reload, approve, change, renewal, withdrawal } = props;
+  const { onchange, loading, pagination, data, detail, modify, reload, renewal, withdrawal } = props;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
   };
@@ -223,8 +223,7 @@ function ListTable(props: ListTableProps) {
       key: 'operation',
       width: 140,
       fixed: 'right',
-      render: (text, record) => {
-
+      render: (text, record) => { 
         //新建
         if (record.status == 0) {
           return [
@@ -251,8 +250,8 @@ function ListTable(props: ListTableProps) {
           //新建提交和退租待审核
           return [
             <span>
-              <a onClick={() => approve(record.id, record.chargeId)} key="modify">审核</a>
-              <Divider type="vertical" key='spilt1' />
+              {/* <a onClick={() => approve(record.id, record.chargeId)} key="modify">审核</a>
+              <Divider type="vertical" key='spilt1' /> */}
               <a onClick={() => detail(record.id, record.chargeId)} key="detail">查看</a>
             </span>
           ];

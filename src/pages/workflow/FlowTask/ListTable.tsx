@@ -8,13 +8,16 @@ interface ListTableProps {
   loading: boolean;
   pagination: PaginationConfig;
   data: any[];
-  modify(record: any): void;
+  // modify(record: any): void;
   onchange(page: any, filter: any, sort: any): any;
   reload(): void;
+  roomcheck(id: string): void;//验房
+  billcheck(id: string): void;//结算
+  approve(id: string): void;//审核退租
 }
 
 function ListTable(props: ListTableProps) {
-  const { onchange, loading, data, modify, reload, pagination } = props;
+  const { onchange, loading, data,   reload, pagination } = props;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
   };
@@ -39,9 +42,9 @@ function ListTable(props: ListTableProps) {
     });
   };
 
-  const doModify = record => {
-    modify({ ...record });
-  };
+  // const doModify = record => {
+  //   modify({ ...record });
+  // };
 
   const columns = [
     {
