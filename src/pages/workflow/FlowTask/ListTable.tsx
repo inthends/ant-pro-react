@@ -2,49 +2,50 @@ import Page from '@/components/Common/Page';
 import { Divider, message, Modal, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
-import { CheckRole, RemoveForm } from './FlowTask.service';
+import { RemoveForm } from './FlowTask.service';
 
 interface ListTableProps {
   loading: boolean;
   pagination: PaginationConfig;
   data: any[];
-  // modify(record: any): void;
   onchange(page: any, filter: any, sort: any): any;
   reload(): void;
-  roomcheck(id: string): void;//验房
-  billcheck(id: string): void;//结算
-  approve(id: string): void;//审核退租
+  roomcheck(flowId: string, id: string, instanceId: string): void;//验房
+  billcheck(flowId: string, id: string, instanceId: string): void;//结算
+  approve(flowId: string, id: string, instanceId: string): void;//审核退租
 }
 
 function ListTable(props: ListTableProps) {
-  const { onchange, loading, data,   reload, pagination } = props;
+  const { onchange, loading, data, reload, pagination, roomcheck, billcheck, approve } = props;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
   };
+
+  //作废
   const doDelete = record => {
     Modal.confirm({
       title: '请确认',
-      content: `您是否要删除 ${record.fullName} 吗？`,
+      content: `您是否要作废 ${record.fullName} 吗？`,
       onOk: () => {
-        CheckRole(record.roleId).then((res) => {
-          if (res) {
-            message.error('包含用户，不允许删除！');
-            return;
-          }
-          RemoveForm(record.roleId)
-            .then(() => {
-              message.success('删除成功！');
-              reload();
-            })
-            .catch(e => { });
-        })
-      },
+        RemoveForm(record.roleId)
+          .then(() => {
+            message.success('作废成功！');
+            reload();
+          })
+      }
     });
   };
 
-  // const doModify = record => {
-  //   modify({ ...record });
-  // };
+  const doHandle = record => {
+    //判断步骤
+    if (record.stepName == '验房') { 
+      roomcheck(record.flowId, record.id, record.instanceId);
+    } else if (record.stepName == '财务结算') {
+      billcheck(record.flowId, record.id, record.instanceId);
+    } else {
+      approve(record.flowId, record.id, record.instanceId);
+    }
+  };
 
   const columns = [
     {
@@ -102,10 +103,10 @@ function ListTable(props: ListTableProps) {
             <a
               type="link"
               key="modify"
-              onClick={() => doModify(record)}
+              onClick={() => doHandle(record)}
             >
               处理
-          </a> 
+          </a>
             <Divider type="vertical" key='divider3' />
             <a key="delete" type="link" onClick={() => doDelete(record)}>
               作废
@@ -139,4 +140,4 @@ function ListTable(props: ListTableProps) {
 
 export default ListTable;
 
- 
+

@@ -28,7 +28,9 @@ const Main = () => {
   const [roomcheckVisible, setRoomCheckVisible] = useState<boolean>(false);
   const [billcheckVisible, setBillCheckVisible] = useState<boolean>(false);
   const [approveVisible, setApproveVisible] = useState<boolean>(false);
+  const [flowId, setFlowId] = useState<string>();
   const [id, setId] = useState<string>();
+  const [instanceId, setInstanceId] = useState<string>();
 
   useEffect(() => {
     initLoadData(search);
@@ -97,9 +99,11 @@ const Main = () => {
     setApproveVisible(false);
   };
 
-  const showApproveDrawer = (id) => {
+  const showApproveDrawer = (flowId,id,instanceId) => {
     setApproveVisible(true);
+    setFlowId(flowId);
     setId(id);
+    setInstanceId(instanceId);
   };
 
   //验房
@@ -107,9 +111,11 @@ const Main = () => {
     setRoomCheckVisible(false);
   };
 
-  const showRoomCheckDrawer = (id) => {
+  const showRoomCheckDrawer = (flowId,id,instanceId) => {
     setRoomCheckVisible(true);
+    setFlowId(flowId);
     setId(id);
+    setInstanceId(instanceId);
   };
 
   //结算
@@ -117,9 +123,11 @@ const Main = () => {
     setBillCheckVisible(false);
   };
 
-  const showBillCheckDrawer = (id) => {
+  const showBillCheckDrawer = (flowId,id,instanceId) => {
     setBillCheckVisible(true);
+    setFlowId(flowId);
     setId(id);
+    setInstanceId(instanceId);
   };
 
   return (
@@ -162,21 +170,27 @@ const Main = () => {
         <RoomCheck
           visible={roomcheckVisible}
           closeDrawer={closeRoomCheckDrawer}
+          flowId={flowId}
           id={id}
+          instanceId={instanceId}
           reload={() => initLoadData(search)}
         />
-
+        
         <BillCheck
           visible={billcheckVisible}
           closeDrawer={closeBillCheckDrawer}
+          flowId={flowId}
           id={id}
+          instanceId={instanceId}
           reload={() => initLoadData(search)}
         />
 
         <Approve
           visible={approveVisible}
           closeDrawer={closeApproveDrawer}
+          flowId={flowId}
           id={id}
+          instanceId={instanceId}
           reload={() => initLoadData(search)}
         />
 

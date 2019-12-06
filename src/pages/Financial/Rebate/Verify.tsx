@@ -8,7 +8,6 @@ import { GetFormJson, GetListByID, Audit } from './Main.service';
 import moment from 'moment';
 const { TextArea } = Input;
 import styles from './style.less'
-
 interface VerifyProps {
   modalVisible: boolean;
   closeModal(): void;

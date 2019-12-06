@@ -11,21 +11,22 @@ import {
 } from '@/model/models';
 import React, { useEffect, useState } from 'react';
 import ResultList from './ResultList';
-import { ApproveForm, GetCharge, GetFormJson } from './Main.service';
+import { ApproveForm, GetChargeByContractId, GetFormJson } from './Main.service';
 import styles from './style.less';
 const { TabPane } = Tabs;
 
 interface ApproveProps {
   visible: boolean;
-  id?: string;//合同id
-  chargeId?: string;//合同条款id
+  flowId?: string;//流程id
+  id?: string;//任务id
+  instanceId?: string;//合同id
   closeDrawer(): void;
   form: WrappedFormUtils;
   reload(): void;
 }
 
 const Approve = (props: ApproveProps) => {
-  const { reload, visible, closeDrawer, id, form, chargeId } = props;
+  const { reload, visible, closeDrawer, flowId, id, instanceId, form } = props;
   const title = '合同详情';
   const { getFieldDecorator } = form;
   //const [industryType, setIndustryType] = useState<any[]>([]); //行业  
@@ -60,7 +61,7 @@ const Approve = (props: ApproveProps) => {
         GetFormJson(id).then((tempInfo: LeaseContractDTO) => {
           setInfoDetail(tempInfo);
           //获取条款
-          GetCharge(chargeId).then((charge: ChargeDetailDTO) => {
+          GetChargeByContractId(id).then((charge: ChargeDetailDTO) => {
             setContractCharge(charge.contractCharge || {});
             setChargeFeeList(charge.chargeFeeList || []);
             setChargeIncreList(charge.chargeIncreList || []);
@@ -110,9 +111,9 @@ const Approve = (props: ApproveProps) => {
     form.validateFields((errors, values) => {
       if (!errors) {
         ApproveForm({
-          contractId: id,
-          chargeId: chargeId,
-          status: values.status,
+          flowId: flowId,
+          id: id,
+          instanceId: instanceId,
           verifyMemo: values.verifyMemo
         }).then(res => {
           message.success('审批成功！');

@@ -64,6 +64,13 @@ export function GetCharge(keyValue): Promise<ChargeDetailDTO> {
     .then(getResult as any);
 }
 
+// 获取条款
+export function GetChargeByContractId(keyValue): Promise<ChargeDetailDTO> {
+  return request
+    .get(process.env.basePath + `/Contract/GetChargeByContractId?keyValue=${keyValue}`)
+    .then(getResult as any);
+}
+
 export function GetDepartmentTreeJson(): Promise<any> {
   return request
     .get(process.env.basePath + `/PermissionRole/GetDepartmentTreeJson`)
@@ -77,16 +84,23 @@ export function GetUserList(DepartmentId): Promise<any> {
     .then(getResult as any);
 }
 
-//审核
-export function ApproveForm(data): Promise<any> {
-  return request
-    .post(process.env.basePath + `/Contract/ApproveForm`, { data: objToFormdata(data) })
-    .then(getResult as any);
-}
+// //审核
+// export function ApproveForm(data): Promise<any> {
+//   return request
+//     .post(process.env.basePath + `/Contract/ApproveForm`, { data: objToFormdata(data) })
+//     .then(getResult as any);
+// }
 
 //退租
 export function WithdrawalForm(data): Promise<any> {
   return request
     .post(process.env.basePath + `/Contract/WithdrawalForm`, { data: objToFormdata(data) })
+    .then(getResult as any);
+}
+
+//审核
+export function ApproveForm(data): Promise<any> {
+  return request
+    .post(process.env.basePath + `/FlowTask/ApproveForm`, { data: objToFormdata(data) })
     .then(getResult as any);
 }
