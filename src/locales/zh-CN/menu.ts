@@ -52,7 +52,9 @@ export default {
   'menu.estate': '物业管理',
   'menu.estate.servicedesk': '服务总台',
   'menu.estate.repair': '报修管理',
-  'menu.estate.complaint': '投诉管理',
+  'menu.estate.complaint': '投诉管理', 
+  'menu.estate.devicetype': '设备种类',
+  'menu.estate.device': '设备资料',
 
   'menu.admin': '行政管理',
   'menu.admin.news': '信息发布',

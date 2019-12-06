@@ -150,7 +150,7 @@ const Template = () => {
         ) : (
             <>
               {treeData != null && treeData.length > 0 ?
-                (<LeftTree
+                (<LeftTree 
                   key='lefttree'
                   treeData={treeData}
                   selectTree={(id, item) => {

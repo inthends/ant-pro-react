@@ -45,7 +45,7 @@ export default [
         routes: [
           {
             name: 'settings',
-            path: '/account/settings', 
+            path: '/account/settings',
             component: './Account/Settings',
           },
         ],
@@ -75,30 +75,30 @@ export default [
             name: 'reconciliation',
             path: '/dashboard/reconciliation',
             component: './Dashboard/Reconciliation/Reconciliation',
-          }, 
+          },
 
           {
             name: 'billdetails',
             path: '/dashboard/billdetails',
             component: './Dashboard/BillDetails/BillDetails',
-          }, 
+          },
 
           {
             name: 'receiptdetails',
             path: '/dashboard/receiptdetails',
             component: './Dashboard/ReceiptDetails/ReceiptDetails',//js组件
-          },  
+          },
 
           {
             name: 'receivabledivide',
             path: '/dashboard/receivabledivide',
             component: './Dashboard/Receivabledivide/Receivabledivide',
-          },   
+          },
           {
             name: 'receiveddivide',
             path: '/dashboard/receiveddivide',
             component: './Dashboard/Receiveddivide/Receiveddivide',
-          },  
+          },
 
         ],
       },
@@ -197,7 +197,7 @@ export default [
             path: '/financial/reduction',
             component: './Financial/Reduction/Main',
           },
-           {
+          {
             name: 'rebate',
             path: '/financial/rebate',
             component: './Financial/Rebate/Main',
@@ -218,12 +218,12 @@ export default [
             name: 'news',
             path: '/admin/news',
             component: './Admin/News/Main',
-          }, 
+          },
           {
             name: 'warehouse',
             path: '/admin/warehouse',
             component: './Admin/Warehouse/Main',
-          }, 
+          },
         ],
       },
 
@@ -251,6 +251,17 @@ export default [
             name: 'complaint',
             path: '/estate/complaint',
             component: './Estate/Complaint/Main',
+          },
+
+          {
+            name: 'devicetype',
+            path: '/estate/devicetype',
+            component: './Estate/DeviceType/DeviceType',
+          },
+          {
+            name: 'device',
+            path: '/estate/device',
+            component: './Estate/Device/Device',
           }
         ],
       },
@@ -280,7 +291,7 @@ export default [
         name: 'workflow',
         path: '/workflow',
         // component: './workflow/editormain',
-        icon: 'highlight', 
+        icon: 'highlight',
         routes: [
           {
             name: 'flowedit',//name关联多语言

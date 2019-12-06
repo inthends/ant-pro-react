@@ -4,14 +4,14 @@ import { PaginationConfig } from "antd/lib/table";
 import React, { useContext, useEffect, useState } from "react";
 import ListTable from "./ListTable";
 import Modify from "./Modify";
-import { GetDataItemTreeList, GetDataList } from "./Dictionary.service";
+import { GetDataItemTreeList, GetDataList } from "./Device.service";
 import { SiderContext } from '../../SiderContext';
 import LeftTree from '../LeftTree';
 const { Sider } = Layout;
 const { Content } = Layout;
 const { Search } = Input;
 
-const Dictionary = () => {
+const Device = () => {
   const [itemId, setItemId] = useState<string>();
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -187,4 +187,4 @@ const Dictionary = () => {
   );
 };
 
-export default Dictionary;
+export default Device;

@@ -1,7 +1,7 @@
 import Page from '@/components/Common/Page';
 //import { TreeEntity } from '@/model/models';
 import { Tree } from 'antd';
-import React  from 'react';
+import React from 'react';
 
 // const { TreeNode } = Tree;
 
@@ -25,7 +25,7 @@ function LeftTree(props: LeftTreeProps) {
   //   }
   // };
 
-  const onSelect = (selectedKeys, info) => { 
+  const onSelect = (selectedKeys, info) => {
     if (selectedKeys.length === 1) {
       //const item = treeData.filter(item => item.key === selectedKeys[0])[0];
       selectTree(selectedKeys[0], info);
@@ -79,6 +79,7 @@ function LeftTree(props: LeftTreeProps) {
         onSelect={onSelect}
         treeData={treeData}
         defaultExpandAll={true}
+      // defaultExpandAll={true}
       // onExpand={clickExpend}
       >
         {/* {renderTree(treeData, '0')} */}

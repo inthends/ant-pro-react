@@ -19,7 +19,7 @@ export function SaveForm(data): Promise<any> {
     .then(getResult as any);
 }
  
-// 删除
+// 删除分类
 export function RemoveForm(keyValue): Promise<any> {
   return request
     .post(process.env.basePath + `/Dictionary/RemoveForm?keyValue=${keyValue}`, {})
@@ -30,4 +30,12 @@ export function RemoveForm(keyValue): Promise<any> {
 //获取字典分类
 export function GetDataItemTreeList(): Promise<TreeEntity[]> {
   return request.get(process.env.basePath + `/Dictionary/GetDataItemTreeList`, {}).then(getResult as any);
+}
+
+
+// 删除明细
+export function RemoveDetailForm(keyValue): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Dictionary/RemoveDetailForm?keyValue=${keyValue}`, {})
+    .then(getResult as any);
 }
