@@ -4,7 +4,7 @@ import { PaginationConfig } from "antd/lib/table";
 import React, { useContext, useEffect, useState } from "react";
 import ListTable from "./ListTable";
 import Modify from "./Modify";
-import { GetDataItemTreeList, GetDataList } from "./Device.service";
+import { GetTypes, GetDataList } from "./Device.service";
 import { SiderContext } from '../../SiderContext';
 import LeftTree from '../LeftTree';
 const { Sider } = Layout;
@@ -18,11 +18,11 @@ const Device = () => {
   const [data, setData] = useState<any[]>([]);
   const [currData, setCurrData] = useState<any>();
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
-  const { hideSider, setHideSider } = useContext(SiderContext);
+  const {hideSider, setHideSider } = useContext(SiderContext);
   const [treeData, setTreeData] = useState<any[]>([]);
 
   useEffect(() => {
-    GetDataItemTreeList().then((res) => {
+    GetTypes().then((res) => {
       setTreeData(res || []);
     });
     initLoadData(itemId);
@@ -172,8 +172,7 @@ const Device = () => {
           data={data}
           modify={showDrawer}
           choose={showChoose}
-          reload={() => initLoadData(itemId)}
-          setData={setData}
+          reload={() => initLoadData(itemId)} 
         />
       </Content>
       <Modify
@@ -181,6 +180,7 @@ const Device = () => {
         closeDrawer={closeDrawer}
         data={currData}
         reload={() => initLoadData(itemId)}
+        types={treeData}
       />
 
     </Layout>

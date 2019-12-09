@@ -1,8 +1,9 @@
 import Page from "@/components/Common/Page";
-import { Divider, message, Modal, Switch, Table } from "antd";
+import { Tag, Divider, message, Modal, Table } from "antd";
 import { ColumnProps, PaginationConfig } from "antd/lib/table";
 import React from "react";
-import { SaveForm, RemoveDetailForm } from "./Device.service";
+import moment from 'moment';
+import { RemoveDetailForm } from "./Device.service";
 
 interface ListTableProps {
   loading: boolean;
@@ -12,11 +13,10 @@ interface ListTableProps {
   choose(record: any): void;
   onchange(page: any, filter: any, sort: any): any;
   reload(): void;
-  setData(data: any[]): void;
 }
 
 function ListTable(props: ListTableProps) {
-  const { onchange,loading, data, modify, reload, pagination, setData } = props;
+  const { onchange, loading, data, modify, reload, pagination } = props;
 
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
@@ -25,9 +25,9 @@ function ListTable(props: ListTableProps) {
   const doDelete = record => {
     Modal.confirm({
       title: "请确认",
-      content: `您是否要删除 ${record.itemName} 吗`,
+      content: `您是否要删除 ${record.name} 吗`,
       onOk: () => {
-        RemoveDetailForm(record.itemDetailId)
+        RemoveDetailForm(record.id)
           .then(() => {
             message.success("删除成功");
             reload();
@@ -39,72 +39,94 @@ function ListTable(props: ListTableProps) {
   const doModify = record => {
     modify({ ...record });
   };
-  const toggleDisabled = record => {
-    record.enabledMark = record.enabledMark === 0 ? 1 : 0;
-    let keyValue = record.itemDetailId;
-    SaveForm({ ...record, keyValue }).then(() => {
-      setData([...data]);
-    });
-  };
+
   const columns = [
     {
-      title: "词典名称",
-      dataIndex: "itemName",
-      key: "itemName",
-      width: 100,
+      title: "所属机构",
+      dataIndex: "organizeName",
+      key: "organizeName",
+      width: 150,
     },
     {
-      title: "词典值",
-      dataIndex: "itemValue",
-      key: "itemValue",
+      title: "设备类别",
+      dataIndex: "typeName",
+      key: "typeName",
+      width: 150
+    },
+    {
+      title: "设备名称",
+      dataIndex: "name",
+      key: "name",
+      width: 150
+    },
+    {
+      title: "设备编号",
+      dataIndex: "code",
+      key: "code",
       width: 100
     },
     {
-      title: "简拼",
-      dataIndex: "simpleSpelling",
-      key: "simpleSpelling",
+      title: "规格型号",
+      dataIndex: "modelNo",
+      key: "modelNo",
       width: 100
     },
     {
-      title: "排序",
-      dataIndex: "sortCode",
-      key: "sortCode",
-      width: 80
+      title: "品牌",
+      dataIndex: "brand",
+      key: "brand",
+      width: 100
+    },
+    // {
+    //   title: "位置",
+    //   dataIndex: "isDefault",
+    //   key: "isDefault",
+    //   width: 80
+    // },
+    {
+      title: "位置描述",
+      dataIndex: "pSMemo",
+      key: "pSMemo",
+      width: 100
     },
     {
-      title: "默认",
-      dataIndex: "isDefault",
-      key: "isDefault",
-      width: 80
-    },
-    {
-      title: "有效",
-      dataIndex: "enabledMark",
-      key: "enabledMark",
+      title: "投用日期",
+      dataIndex: "useDate",
+      key: "useDate",
       width: 100,
-      render: (text: any, record, index) => {
-        return (
-          <Switch
-            size="small"
-            checked={text === ENABLEDMARKS.正常}
-            checkedChildren={ENABLEDMARKS[ENABLEDMARKS.正常]}
-            unCheckedChildren={ENABLEDMARKS[ENABLEDMARKS.禁用]}
-            onClick={() => toggleDisabled(record)}
-          />
-        );
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
+    },
+    {
+      title: "状态",
+      dataIndex: "status",
+      key: "status",
+      width: 80,
+      render: (text, record) => {
+        switch (text) {
+          case 1:
+            return <Tag color="#e4aa5b">正常运行</Tag>;
+          case 2:
+            return <Tag color="#e4aa4b">停用</Tag>;
+          case 3:
+            return <Tag color="#19d54e">报废</Tag>;
+          case 4:
+            return <Tag color="#009688">闲置</Tag>;
+          default:
+            return '';
+        }
       }
     },
     {
-      title: "备注",
+      title: "附加说明",
       dataIndex: "description",
-      key: "description",
-      width: 100,
+      key: "description"
     },
     {
       title: "操作",
       dataIndex: "operation",
       key: "operation",
-      width: 70,
+      fixed: 'right',
+      width: 95,
       render: (text, record) => {
         return [
           <span>
@@ -124,8 +146,8 @@ function ListTable(props: ListTableProps) {
         size="middle"
         dataSource={data}
         columns={columns}
-        rowKey={record => record.roleId}
-        scroll={{ y: 500 }}
+        rowKey={record => record.id}
+        scroll={{ x: 1500, y: 500 }}
         loading={loading}
         pagination={pagination}
         onChange={(pagination: PaginationConfig, filters, sorter) =>
@@ -138,7 +160,4 @@ function ListTable(props: ListTableProps) {
 
 export default ListTable;
 
-enum ENABLEDMARKS {
-  正常 = 1,
-  禁用 = 0
-}
+

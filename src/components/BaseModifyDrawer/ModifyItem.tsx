@@ -99,13 +99,22 @@ const ModifyItem = (props: ModifyItemProps) => {
         );
       case 'select':
         return (
+          // <Select {...inner} placeholder={`请选择${label as string}`} onChange={onChange}>
+          //   {(items || []).map((item: SelectItem) => (
+          //     <Option value={item.value} key={item.value}>
+          //       {item.label}
+          //     </Option>
+          //   ))}
+          // </Select>
+
           <Select {...inner} placeholder={`请选择${label as string}`} onChange={onChange}>
-            {(items || []).map((item: SelectItem) => (
-              <Option value={item.value} key={item.value}>
-                {item.label}
-              </Option>
-            ))}
-          </Select>
+          {(items || []).map((item: SelectItem) => (
+            <Option value={item.value} key={item.value}>
+              {item.title}
+            </Option>
+          ))}
+        </Select>
+
         );
       case 'password':
         return (
@@ -146,8 +155,6 @@ const ModifyItem = (props: ModifyItemProps) => {
             onChange={onChange}
           ></InputNumber>
         );
-
-     
 
       default:
         return (

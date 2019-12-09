@@ -112,7 +112,7 @@ const Modify = (props: ModifyProps) => {
   };
 
   //设置负责人
-  const onSelect = (value, option) => { 
+  const onSelect = (value, option) => {
     form.setFieldsValue({ chargeLeaderId: option.key });
   };
 
@@ -120,7 +120,7 @@ const Modify = (props: ModifyProps) => {
     <BaseModifyProvider {...props} name="机构" save={doSave}>
       <Card className={styles.card}>
         <Form layout="vertical" hideRequiredMark>
-        <Row gutter={24} hidden={initData.parentId == 0 ? true : false} >
+          <Row gutter={24} hidden={initData.parentId == 0 ? true : false} >
             <ModifyItem
               {...baseFormProps}
               field="parentId"
@@ -138,18 +138,22 @@ const Modify = (props: ModifyProps) => {
               disabled={initData.parentId === '0'}
               items={[
                 {
+                  title: '集团',
                   label: '集团',
                   value: 'A',
                 },
                 {
+                  title: '区域',
                   label: '区域',
                   value: 'B',
                 },
                 {
+                  title: '公司',
                   label: '公司',
                   value: 'C',
                 },
                 {
+                  title: '管理处',
                   label: '管理处',
                   value: 'D',
                 },
