@@ -1,31 +1,37 @@
 
-import { Button, Icon,  Layout } from 'antd';
+import { Button, Icon, Layout } from 'antd';
 import React, { useEffect, useState } from 'react';
 import TypeListTable from './ListTable';
-import { GetTreeListJson } from './DeviceType.service';
+import { GetTypes, GetTreeListJson } from './DeviceType.service';
 import Modify from './Modify';
 
 const { Content } = Layout;
 // const { Search } = Input;
 
-const DeviceType= () => {
+const DeviceType = () => {
   const [search, setSearch] = useState<string>('');
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<any[]>([]);
   const [currData, setCurrData] = useState<any>();
+  const [types, setTypes] = useState<any[]>();
 
   useEffect(() => {
     initLoadData({ searchText: '' });
+    GetTypes().then(res => {
+      setTypes(res);
+    });
   }, []);
 
   const closeDrawer = () => {
     setModifyVisible(false);
   };
+
   const showDrawer = (item?) => {
     setCurrData(item);
     setModifyVisible(true);
   };
+
   const loadData = (
     { searchText }, sorter?) => {
     setSearch(searchText);
@@ -86,7 +92,7 @@ const DeviceType= () => {
 
           <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer()}>
             <Icon type="plus" />
-            机构
+            分类
           </Button>
 
         </div>
@@ -109,7 +115,14 @@ const DeviceType= () => {
         visible={modifyVisible}
         closeDrawer={closeDrawer}
         data={currData}
-        reload={() => initLoadData({ searchText: search })}
+        reload={() => {
+          initLoadData({ searchText: search });
+          //刷新分类
+          GetTypes().then(res => {
+            setTypes(res);
+          });
+        }}
+        types={types}
       />
 
     </Layout>

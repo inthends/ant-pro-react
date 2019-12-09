@@ -20,13 +20,11 @@ function ListTable(props: ListTableProps) {
       title: '请确认',
       content: `您是否要删除 ${record.fullName} 吗`,
       onOk: () => {
-
         CheckDepartment(record.key).then((res) => {
           if (res) {
             message.error('存在下级，不允许删除！');
             return;
           }
-
           RemoveForm(record.key)
             .then(() => {
               message.success('删除成功');
@@ -45,8 +43,7 @@ function ListTable(props: ListTableProps) {
     });
   };
 
-  const setClassName = (record, index) => {
-
+  const setClassName = (record, index) => { 
     if (record.key === selectedRowKey) {
       return styles.rowSelect;
     }

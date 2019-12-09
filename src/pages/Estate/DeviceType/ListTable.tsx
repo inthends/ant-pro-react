@@ -1,10 +1,9 @@
 import Page from '@/components/Common/Page';
 import { Divider, message, Modal, Table } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
-import React from 'react';
-import { CheckOrg, RemoveForm, GetDetailJson } from './DeviceType.service';
-import moment from 'moment';
-
+import React, { useState } from 'react';
+import { CheckType, RemoveForm, GetDetailJson } from './DeviceType.service'; 
+import styles from './style.less';
 interface ListTableProps {
   loading: boolean;
   data: any[];
@@ -13,15 +12,16 @@ interface ListTableProps {
   reload(): void;
 }
 
-function TypeListTable(props: ListTableProps) {
-  const { loading, data, modify, reload } = props;
+function ListTable(props: ListTableProps) {
+  const { loading, data, modify, reload } = props; 
+  const [selectedRowKey, setSelectedRowKey] = useState([]);
   const doDelete = record => {
     Modal.confirm({
       title: '请确认',
       content: `您是否要删除 ${record.fullName} 吗？`,
       onOk: () => {
         //check 
-        CheckOrg(record.key).then((res) => { 
+        CheckType(record.key).then((res) => { 
           if (res) {
             message.error('存在下级，不允许删除！');
             return;
@@ -44,46 +44,38 @@ function TypeListTable(props: ListTableProps) {
     });
   };
 
+  const setClassName = (record, index) => { 
+    if (record.key === selectedRowKey) {
+      return styles.rowSelect;
+    }
+  };
+
+  const onRow = (record) => {
+    return {
+      onClick: event => {
+        //if (record.type == 'Department' || record.type == 'D') {
+        setSelectedRowKey(record.key);
+        //}
+        //getRowSelect(record);
+      }
+    };
+  }
+
   const columns = [
     {
-      title: '机构名称',
-      dataIndex: 'fullName',
-      key: 'fullName',
-      width: 250,
-    },
-    {
-      title: '机构编号',
+      title: '类别编号',
       dataIndex: 'enCode',
       key: 'enCode',
       width: 200,
     },
     {
-      title: '成立时间',
-      dataIndex: 'foundedTime',
-      key: 'foundedTime',
-      width: 100,
-      render: val => {
-        if (val == null) {
-          return '';
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
+      title: '类别名称',
+      dataIndex: 'fullName',
+      key: 'fullName',
+      width: 250,
     },
     {
-      title: '负责人',
-      dataIndex: 'manager',
-      key: 'manager',
-      width: 100
-    },
-    {
-      title: '联系电话',
-      dataIndex: 'telPhone',
-      key: 'telPhone',
-      width: 150,
-    },
-    {
-      title: '备注',
+      title: '描述',
       dataIndex: 'description',
       key: 'description'
     },
@@ -125,9 +117,10 @@ function TypeListTable(props: ListTableProps) {
         columns={columns}
         rowKey={record => record.key}
         loading={loading}
+        onRow={onRow}
+        rowClassName={setClassName} //表格行点击高亮
       />
     </Page>
   );
 }
-
 export default ListTable;
