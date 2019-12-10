@@ -22,7 +22,7 @@ const Modify = (props: ModifyProps) => {
   let initData = data ? data : { enabledMark: 1 };
   const baseFormProps = { form, initData };
   const doSave = dataDetail => {
-    let modifyData = { ...initData, ...dataDetail, keyValue: initData.itemDetailId };
+    let modifyData = { ...initData, ...dataDetail, keyValue: initData.id };
     return SaveDeviceForm(modifyData);
   };
 
@@ -39,7 +39,6 @@ const Modify = (props: ModifyProps) => {
     });
 
   }, []);
-
 
 
   return (

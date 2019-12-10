@@ -12,14 +12,15 @@ interface ChargeListTableProps {
   loading: boolean;
   pagination: PaginationConfig;
   data: any[];
-  showDetail(): void;
-  showVertify(id: string, ifVertify: boolean): void;
+  showDetail(billId): void;
+  // showVertify(id: string, ifVertify: boolean): void;
   reload(): void;
-  getRowSelect(record): void;
+  // getRowSelect(record): void;
+  rowSelect(rowSelectedKeys): void;
 }
 
 function ChargeListTable(props: ChargeListTableProps) {
-  const { onchange, loading, pagination, data, reload, getRowSelect, showDetail, showVertify } = props;
+  const { onchange, loading, pagination, data, reload, rowSelect, showDetail } = props;
   // const changePage = (pagination: PaginationConfig, filters, sorter) => {
   //   onchange(pagination, filters, sorter);
   // };
@@ -180,14 +181,14 @@ function ChargeListTable(props: ChargeListTableProps) {
       key: 'operation',
       fixed: 'right',
       align: 'center',
-      width: 150,
+      width: 110,
       render: (text, record) => {
         return [
           <span>
-            <a onClick={() => showDetail()} key="view">查看</a>
+            <a onClick={() => showDetail(record.billId)} key="view">查看</a>
             <Divider type="vertical" />
-            {!record.ifVerify ? <a onClick={() => showVertify(record.billId, false)} key="approve">审核</a> : <a onClick={() => showVertify(record.id, true)} key="unapprove">反审</a>}
-            <Divider type="vertical" />
+            {/* {!record.ifVerify ? <a onClick={() => showVertify(record.billId, false)} key="approve">审核</a> : <a onClick={() => showVertify(record.id, true)} key="unapprove">反审</a>}
+            <Divider type="vertical" /> */}
             {record.status == 1 && record.linkId == null ? <MoreBtn key="more" item={record} /> : null}
           </span>
 
@@ -200,7 +201,7 @@ function ChargeListTable(props: ChargeListTableProps) {
     return {
       onClick: event => {
         setSelectedRowKey(record.billId);
-        getRowSelect(record);
+        // getRowSelect(record);
         //console.log(record);
       }, // 点击行
       // onDoubleClick: event => {
@@ -226,6 +227,15 @@ function ChargeListTable(props: ChargeListTableProps) {
     }
   };
 
+  const onSelectChange = (selectedRowKeys, selectedRows) => {
+    setSelectedRowKeys(selectedRowKeys);
+    rowSelect(selectedRowKeys);
+  };
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  };
 
   return (
     <Page >
@@ -242,6 +252,7 @@ function ChargeListTable(props: ChargeListTableProps) {
         loading={loading}
         onRow={onRow}
         onChange={onchange}
+        rowSelection={rowSelection}
       />
     </Page>
   );

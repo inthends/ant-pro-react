@@ -33,8 +33,7 @@ function BillNotice() {
   const [ifVerify, setIfVerify] = useState<boolean>(false);
   const [vertifyVisible, setVerifyVisible] = useState<boolean>(false);
   const [showCheckBillVisible, setShowCheckBillVisible] = useState<boolean>(false);
-  const [tempListData, setTempListData] = useState<any[]>([]);
-
+  const [tempListData, setTempListData] = useState<any[]>([]); 
   const [unitTreeData, setUnitTreeData] = useState<any[]>([]);
 
   const selectTree = (org, item, info) => {
@@ -108,7 +107,7 @@ function BillNotice() {
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'id';
+      searchCondition.sidx = field ? field : 'billId';
     }
     return billNoticeload(searchCondition);
   };
@@ -136,7 +135,7 @@ function BillNotice() {
   };
   const billNoticeload = data => {
     setBillNoticeLoading(true);
-    data.sidx = data.sidx || 'id';
+    data.sidx = data.sidx || 'billId';
     data.sord = data.sord || 'asc';
     return ChargeFeePageData(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -178,7 +177,7 @@ function BillNotice() {
       TreeTypeId: org.id,
       TreeType: org.type,
     };
-    const sidx = 'id';
+    const sidx = 'billId';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = billNoticePagination;
     return billNoticeload({ pageIndex, pageSize, sidx, sord, total, queryJson });

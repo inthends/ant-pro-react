@@ -62,11 +62,11 @@ function ListTable(props: ListTableProps) {
     //this.showEditModal(currentItem);
     //}
     //else
-    if (key === 'split') { 
+    if (key === 'split') {
       //如果设置了优惠政策，则不允许拆费
       if (!currentItem.rmid) {
         message.warning('设置了优惠政策，不允许拆费');
-      } else { 
+      } else {
         showSplit(currentItem.id);
       }
     } else if (key === 'trans') {
@@ -298,6 +298,7 @@ function ListTable(props: ListTableProps) {
           cancelText: '取消',
           okText: '确定',
           onOk: () => {
+
             let info = Object.assign({}, values, {
               // roomId: organizeId,
               ids: JSON.stringify(selectedRowKeys),
@@ -307,17 +308,16 @@ function ListTable(props: ListTableProps) {
               //organize.title.split(' ')[1]
             });
 
-
             if (Number(sumEntity.sumlastAmount) != Number(info.payAmountA + info.payAmountB + info.payAmountC)) {
               message.warning('本次收款金额小于本次选中未收金额合计，不允许收款，请拆费或者重新选择收款项');
               return;
             }
-            Charge(info).then(res => {
+
+            Charge(info).then(billId => {
               message.success('收款成功！');
               reload();
               //弹出查看页面
-              showDetail(res);
-
+              showDetail(billId);
             });
           }
         });
@@ -338,12 +338,12 @@ function ListTable(props: ListTableProps) {
                   <Select >
                     <Option value="现金">现金</Option>
                     <Option value="支付宝扫码" >支付宝扫码</Option>
-                    <Option value="支付宝">支付宝</Option>
-                    <Option value="微信" >微信</Option>
+                    <Option value="支付宝转账">支付宝转账</Option>
                     <Option value="微信扫码">微信扫码</Option>
+                    <Option value="微信转账">微信转账</Option>
                     <Option value="刷卡">刷卡</Option>
                     <Option value="转账">转账</Option>
-                    <Option value="抵扣卷">抵扣卷</Option>
+                    <Option value="抵扣券">抵扣券</Option>
                   </Select>
                 )}
               </Form.Item>
@@ -371,17 +371,17 @@ function ListTable(props: ListTableProps) {
             <Col lg={4}>
               <Form.Item >
                 {getFieldDecorator('payTypeB', {
-                  initialValue: '微信'
+                  initialValue: '微信扫码'
                 })(
                   <Select  >
                     <Option value="现金">现金</Option>
                     <Option value="支付宝扫码" >支付宝扫码</Option>
-                    <Option value="支付宝">支付宝</Option>
-                    <Option value="微信" >微信</Option>
+                    <Option value="支付宝转账">支付宝转账</Option>
                     <Option value="微信扫码">微信扫码</Option>
+                    <Option value="微信转账">微信转账</Option>
                     <Option value="刷卡">刷卡</Option>
                     <Option value="转账">转账</Option>
-                    <Option value="抵扣卷">抵扣卷</Option>
+                    <Option value="抵扣券">抵扣券</Option>
                   </Select>
                 )}
               </Form.Item>
@@ -418,12 +418,12 @@ function ListTable(props: ListTableProps) {
                   <Select>
                     <Option value="现金">现金</Option>
                     <Option value="支付宝扫码" >支付宝扫码</Option>
-                    <Option value="支付宝">支付宝</Option>
-                    <Option value="微信" >微信</Option>
+                    <Option value="支付宝转账">支付宝转账</Option>
                     <Option value="微信扫码">微信扫码</Option>
+                    <Option value="微信转账">微信转账</Option>
                     <Option value="刷卡">刷卡</Option>
                     <Option value="转账">转账</Option>
-                    <Option value="抵扣卷">抵扣卷</Option>
+                    <Option value="抵扣券">抵扣券</Option>
                   </Select>
                 )}
               </Form.Item>
@@ -504,5 +504,4 @@ function ListTable(props: ListTableProps) {
 }
 
 //export default ListTable;
-
 export default Form.create<ListTableProps>()(ListTable);

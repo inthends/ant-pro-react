@@ -23,7 +23,6 @@ function BillCheckTable(props: BillCheckTableProps) {
   const { onchange, loading, pagination, data, reload, showCheckBill, getRowSelect } = props;
   // const [selectedRowKey, setSelectedRowKey] = useState([]);
 
-
   const doDelete = (record) => {
     Modal.confirm({
       title: '请确认',
@@ -37,7 +36,6 @@ function BillCheckTable(props: BillCheckTableProps) {
         })
       },
     });
-
   }
 
   const columns = [
@@ -68,7 +66,7 @@ function BillCheckTable(props: BillCheckTableProps) {
       title: '房间编号',
       dataIndex: 'unitId',
       key: 'unitId',
-      width: 120,
+      width: 140,
       sorter: true,
     },
     {
@@ -109,13 +107,13 @@ function BillCheckTable(props: BillCheckTableProps) {
       title: '审核人',
       dataIndex: 'verifyPerson',
       key: 'verifyPerson',
-      width: 100
+      width: 80
     },
     {
       title: '审核时间',
       dataIndex: 'verifyDate',
       key: 'verifyDate',
-      width: 150,
+      width: 100,
       sorter: true,
       render: val => {
         if (val == null) {
@@ -164,7 +162,6 @@ function BillCheckTable(props: BillCheckTableProps) {
     selectedRowKeys,
     onChange: onSelectChange,
   };
-
 
   return (
     <Page>

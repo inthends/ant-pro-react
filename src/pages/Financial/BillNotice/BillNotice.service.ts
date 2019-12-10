@@ -17,12 +17,12 @@ export function GetBillPageData(data): Promise<any> {
   return request.post(process.env.basePath + `/Notice/GetBillPageData`, {data:objToFormdata(data)}).then(getResult as any);
 }
 
-//收费数据明细
+//明细
 export function ChargeFeeDetail(data): Promise<any> {
   return request.post(process.env.basePath + `/Notice/ChargeFeeDetail`, {data:objToFormdata(data)}).then(getResult as any);
 }
 
-//账单费用明细
+//明细
 export function ChargeFeePageData(data): Promise<any> {
   return request.post(process.env.basePath + `/Notice/ChargeFeePageData`, {data:objToFormdata(data)}).then(getResult as any);
 }

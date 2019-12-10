@@ -2,15 +2,17 @@ import { DefaultPagination } from '@/utils/defaultSetting';
 import { Checkbox, Tabs, Button, Icon, Input, Layout, Select, DatePicker, message } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useState } from 'react';
-import { NotChargeFeeData, ChargeFeePageData } from './Main.service';
+import { NotChargeFeeData, ChargeFeePageData, ChargeCheckPageData } from './Main.service';
 import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
 import ChargeListTable from './ChargeListTable';
+import ChargeCheckTable from './ChargeCheckTable';
 import Modify from './Modify';
 import Show from './Show';
-import Vertify from './Vertify';
+// import Vertify from './Vertify';
 import Split from './Split';
 import Transform from './Transform';
+import Submit from './Submit';
 const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
@@ -20,11 +22,19 @@ function Main() {
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   // const [addFeeVisible, setAddFeeVisibleisible] = useState<boolean>(false);
   // const [treeData, setTreeData] = useState<TreeEntity[]>([]);
+
+  const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
-  const [data, setData] = useState<any[]>([]);
+
   const [dataCharge, setChargeData] = useState<any[]>([]);
+  const [loadingCharge, setLoadingCharge] = useState<boolean>(false);
   const [paginationCharge, setPaginationCharge] = useState<PaginationConfig>(new DefaultPagination());
+
+  //对账单
+  const [dataChargeCheck, setChargeCheckData] = useState<any[]>([]);
+  const [loadingChargeCheck, setLoadingChargeCheck] = useState<boolean>(false);
+  const [paginationChargeCheck, setPaginationChargeCheck] = useState<PaginationConfig>(new DefaultPagination());
 
   const [id, setId] = useState<string>('');//当前费用Id
   const [organizeId, setOrganizeId] = useState<string>('');//左侧树选择的id
@@ -41,7 +51,7 @@ function Main() {
 
   const [showVisible, setShowVisible] = useState<boolean>(false);
   const [vertifyVisible, setVertifyVisible] = useState<boolean>(false);
-  const [ifVertify, setIfVertify] = useState<boolean>(false);
+  // const [ifVertify, setIfVertify] = useState<boolean>(false);
 
   // const [flushVisible, setflushVisible] = useState<boolean>(false);
   // const [chargeRowStatus, setChargeRowStatus] = useState<number>(0);
@@ -51,6 +61,9 @@ function Main() {
   const [modifyEdit, setModifyEdit] = useState<boolean>(true);
   // const [organize, SetOrganize] = useState<any>({});
   const [chargedSearchParams, setChargedSearchParams] = useState<any>({});
+
+  //收款单送审
+  const [chargeSelectedKeys, setChargeSelectedKeys] = useState<any[]>([]);
 
   const selectTree = (id, search) => {
     initLoadData(search, id);
@@ -133,7 +146,6 @@ function Main() {
     });
   };
 
-
   const initLoadData = (search, unitId = '', showCustomerFee = false) => {
     setSearch(search);
     // setShowCustomerFee(showCustomerFee);
@@ -150,7 +162,7 @@ function Main() {
   const loadChargeData = (paginationConfig?: PaginationConfig, sorter?) => {
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
-      pageSize: pagination.pageSize,
+      pageSize: paginationCharge.pageSize,
       total: 0,
     };
     let searchCondition: any = {
@@ -178,7 +190,7 @@ function Main() {
   };
 
   const loadCharge = data => {
-    setLoading(true);
+    setLoadingCharge(true);
     data.sidx = data.sidx || 'billCode';
     data.sord = data.sord || 'desc';
     return ChargeFeePageData(data).then(res => {
@@ -192,7 +204,7 @@ function Main() {
         };
       });
       setChargeData(res.data);
-      setLoading(false);
+      setLoadingCharge(false);
       return res;
     });
   };
@@ -214,6 +226,74 @@ function Main() {
     });
   };
 
+  //对账单
+  const loadChargeCheckData = (paginationConfig?: PaginationConfig, sorter?) => {
+    const { current: pageIndex, pageSize, total } = paginationConfig || {
+      current: 1,
+      pageSize: paginationChargeCheck.pageSize,
+      total: 0,
+    };
+    let searchCondition: any = {
+      pageIndex,
+      pageSize,
+      total,
+      queryJson: {
+        keyword: chargedSearchParams.search ? chargedSearchParams.search : '',
+        TreeType: "5",
+        TreeTypeId: organizeId,
+        Status: chargedSearchParams.status ? chargedSearchParams.status : '',
+        StartDate: chargedSearchParams.startDate ? chargedSearchParams.startDate : '',
+        EndDate: chargedSearchParams.endDate ? chargedSearchParams.endDate : ''
+      },
+    };
+
+    if (sorter) {
+      let { field, order } = sorter;
+      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sidx = field ? field : 'billCode';
+    }
+    return loadChargeCheck(searchCondition).then(res => {
+      return res;
+    });
+  };
+
+  const loadChargeCheck = data => {
+    setLoadingChargeCheck(true);
+    data.sidx = data.sidx || 'billCode';
+    data.sord = data.sord || 'desc';
+    return ChargeCheckPageData(data).then(res => {
+      const { pageIndex: current, total, pageSize } = res;
+      setPaginationChargeCheck(pagesetting => {
+        return {
+          ...pagesetting,
+          current,
+          total,
+          pageSize,
+        };
+      });
+      setChargeCheckData(res.data);
+      setLoadingChargeCheck(false);
+      return res;
+    });
+  };
+
+  const initChargeCheckLoadData = (id) => {
+    const queryJson = {
+      keyword: chargedSearchParams.search ? chargedSearchParams.search : '',
+      TreeType: "5",
+      TreeTypeId: id,
+      Status: chargedSearchParams.status ? chargedSearchParams.status : '',
+      StartDate: chargedSearchParams.startDate ? chargedSearchParams.startDate : '',
+      EndDate: chargedSearchParams.endDate ? chargedSearchParams.endDate : ''
+    };
+    const sidx = 'billCode';
+    const sord = 'desc';
+    const { current: pageIndex, pageSize, total } = paginationCharge;
+    return loadChargeCheck({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
+      return res;
+    });
+  };
+
   const onShowCustomerChange = (e: any) => {
     initLoadData(search, organizeId, e.target.checked);
   }
@@ -221,12 +301,14 @@ function Main() {
   const showVertify = (id: string, ifVertify: boolean) => {
     setId(id);
     setVertifyVisible(true);
-    setIfVertify(ifVertify);
+    // setIfVertify(ifVertify);
   }
 
   const closeVertify = () => {
     setVertifyVisible(false);
   }
+
+  //拆费
   const [splitId, setSplitId] = useState<string>('');
   const showSplit = (id) => {
     console.log(id);
@@ -238,6 +320,8 @@ function Main() {
     setSplitId('');
     setSplitVisible(false);
   }
+
+  //转费
   const [transId, setTransId] = useState<string>('');
   const showTrans = (id) => {
     setTransId(id);
@@ -249,11 +333,15 @@ function Main() {
     setTransVisible(false);
   }
 
-  const showDetail = () => {
+  //收款单Id
+  const [billId, setBillId] = useState<string>('');
+  const showDetail = (id?) => {
+    setBillId(id);
     setShowVisible(true);
   }
 
   const closeDetail = () => {
+    setBillId('');
     setShowVisible(false);
   }
 
@@ -295,22 +383,32 @@ function Main() {
   //   });
   // }
 
+  //未收费用勾选
   const GetUnChargeSelectedKeys = (rowSelectedKeys?) => {
     setUnChargeSelectedKeys(rowSelectedKeys);
     // console.log(rowSelectedKeys);
   }
-  const [chargedRowSelectedKey, setChargedRowSelectedKey] = useState<any>({});
-  const GetChargedSelectedKey = (record) => {
-    setChargedRowSelectedKey(record);
+
+  // const [chargedRowSelectedKey, setChargedRowSelectedKey] = useState<any>({});
+  // const GetChargedSelectedKey = (record) => {
+  //   setChargedRowSelectedKey(record);
+  // }
+
+  //收款单勾选
+  const GetChargeSelectedKeys = (rowSelectedKeys?) => {
+    setChargeSelectedKeys(rowSelectedKeys);
   }
+
 
   //tab切换刷新数据
   const changeTab = (e: string) => {
     if (e === '1') {
       if (organizeId)
         initLoadData(search, organizeId);
-    } else {
+    } else if (e === '2') {
       initChargeLoadData(organizeId);
+    } else {
+      initChargeCheckLoadData(organizeId);
     }
   };
 
@@ -398,7 +496,9 @@ function Main() {
               customerName={customerName}
               showSplit={showSplit}
               showTrans={showTrans}
-              showDetail={(billId) => { chargedRowSelectedKey.billId = billId; showDetail(); }}
+              // showDetail={(billId) => { chargedRowSelectedKey.billId = billId; showDetail(); }}
+              showDetail={showDetail}
+
             />
           </TabPane>
           <TabPane tab="收款单列表" key="2">
@@ -474,13 +574,7 @@ function Main() {
                 <Icon type="minus-square" />
                 反审
               </Button>
-              <Button type="primary" style={{ float: 'right', marginLeft: '3px' }}
-                onClick={() => showVertify('', true)}
-                disabled={chargedRowSelectedKey.status == null || chargedRowSelectedKey.status == 3 || chargedRowSelectedKey.status == -1 || chargedRowSelectedKey.status == 2 || chargedRowSelectedKey.status == 0 ? true : false}
-              >
-                <Icon type="check-square" />
-                审核
-              </Button>
+            
               <Button type="default" style={{ float: 'right', marginLeft: '3px' }}
                 onClick={() => showDetail()}
                 disabled={chargedRowSelectedKey.status == null || chargedRowSelectedKey.status == 0 ? true : false}
@@ -488,23 +582,82 @@ function Main() {
                 <Icon type="file" />
                 查看
               </Button> */}
+
+              <Button type="primary" style={{ float: 'right', marginLeft: '3px' }}
+                onClick={() => showVertify('', true)}
+                disabled={chargeSelectedKeys.length == 0 ? true : false}
+              >
+                <Icon type="plus" />
+                送审
+              </Button>
+
             </div>
 
             <ChargeListTable
               onchange={(paginationConfig, filters, sorter) =>
                 loadChargeData(paginationConfig, sorter)
               }
-              loading={loading}
+              loading={loadingCharge}
               pagination={paginationCharge}
               data={dataCharge}
               showDetail={showDetail}
-              showVertify={showVertify}
+              // showVertify={showVertify}
               reload={() => initChargeLoadData(organizeId)}
-              getRowSelect={GetChargedSelectedKey}
+              // getRowSelect={GetChargedSelectedKey}
+              rowSelect={GetChargeSelectedKeys}
             />
           </TabPane>
+
+          <TabPane tab="对账单" key="3">
+            <div style={{ marginBottom: '10px' }}>
+
+              <DatePicker
+                placeholder='收款日期'
+                onChange={(date, dateStr) => {
+                  var params = Object.assign({}, chargedSearchParams, { startDate: dateStr });
+                  setChargedSearchParams(params);
+                }} style={{ marginRight: '5px' }} />
+              至
+              <DatePicker
+                placeholder='收款日期'
+                onChange={(date, dateStr) => {
+                  var params = Object.assign({}, chargedSearchParams, { endDate: dateStr });
+                  setChargedSearchParams(params);
+                }} style={{ marginLeft: '5px', marginRight: '5px' }} />
+              <Search
+                className="search-input"
+                placeholder="请输入收款单号"
+                style={{ width: 200 }}
+                onChange={e => {
+                  var params = Object.assign({}, chargedSearchParams, { search: e.target.value });
+                  setChargedSearchParams(params);
+                }}
+              />
+              <Button type="primary" style={{ marginLeft: '3px' }}
+                onClick={() => {
+                  initChargeLoadData(organizeId);
+                }}
+              >
+                <Icon type="search" />
+                搜索
+              </Button>
+            </div>
+
+            <ChargeCheckTable
+              onchange={(paginationConfig, filters, sorter) =>
+                loadChargeCheckData(paginationConfig, sorter)
+              }
+              loading={loadingChargeCheck}
+              pagination={paginationChargeCheck}
+              data={dataChargeCheck}
+              reload={() => initChargeCheckLoadData(organizeId)}
+            // rowSelect={GetChargedSelectedKey}
+            />
+          </TabPane>
+
         </Tabs>
       </Content>
+
       <Modify
         modifyVisible={modifyVisible}
         closeDrawer={closeDrawer}
@@ -514,24 +667,28 @@ function Main() {
         reload={() => initLoadData(search, organizeId)}
         edit={modifyEdit}
       />
+
       <Show
         showVisible={showVisible}
         closeShow={closeDetail}
-        id={chargedRowSelectedKey.billId}
+        id={billId}
+      // id={chargedRowSelectedKey.billId}
       />
-      <Vertify
+
+      <Submit
         vertifyVisible={vertifyVisible}
         closeVertify={closeVertify}
-        id={chargedRowSelectedKey.billId}
-        ifVertify={ifVertify}
+        ids={chargeSelectedKeys}
         reload={() => initChargeLoadData(organizeId)}
       />
+
       <Split
         splitVisible={splitVisible}
         closeSplit={closeSplit}
         id={splitId}
         reload={() => initLoadData(search, organizeId)}
       />
+
       <Transform
         transVisible={transVisible}
         closeTrans={closeTrans}
