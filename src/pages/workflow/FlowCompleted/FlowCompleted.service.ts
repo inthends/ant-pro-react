@@ -4,7 +4,7 @@ import request from '@/utils/request';
 
 export function GetDataList(data): Promise<any> {
   return request
-    .post(process.env.basePath + `/FlowTask/GetPageListJson`, {
+    .post(process.env.basePath + `/FlowCompleted/GetPageListJson`, {
       data: objToFormdata(data),
     })
     .then(getResult as any);

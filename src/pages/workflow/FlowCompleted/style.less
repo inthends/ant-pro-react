@@ -1,0 +1,59 @@
+@import '~antd/lib/style/themes/default.less';
+
+.card {
+  margin-bottom: 24px;
+}
+
+.userLabel {
+  height: 60px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  margin-bottom: 10px;
+  user-select: none;
+  display: flex;
+  overflow: hidden;
+  cursor: pointer;
+
+  &.checked {
+    border: 2px solid #ff5d5b;
+    padding: 0 0px;
+  }
+
+  .userImg {
+    width: 60px;
+    line-height: 58px;
+    background-color: #ebebeb;
+    border-right: 1px solid #ccc;
+    text-align: center;
+
+    img {
+      justify-content: center;
+      border-radius: 45px;
+    }
+  }
+
+  .userContent {
+    flex: 1;
+    padding-left: 6px;
+    padding-top: 2px;
+
+    p {
+      margin: 0;
+      font-size: 9pt;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      word-break: break-all;
+      white-space: nowrap;
+    }
+  }
+}
+
+.spin {
+  display: inline-block;
+  opacity: 1;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  margin-top: 50px;
+}

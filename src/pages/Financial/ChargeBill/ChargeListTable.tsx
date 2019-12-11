@@ -1,6 +1,6 @@
 //已收列表
 import Page from '@/components/Common/Page';
-import { Icon, Menu, Dropdown, Divider, message, Table, Modal } from 'antd';
+import {Tag, Icon, Menu, Dropdown, Divider, message, Table, Modal } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState } from 'react';
 import moment from 'moment';
@@ -144,14 +144,25 @@ function ChargeListTable(props: ChargeListTableProps) {
       width: 60
     },
     {
-      title: '是否审核',
+      title: '审核状态',
       dataIndex: 'ifVerify',
       key: 'ifVerify',
       align: 'center',
       width: 80,
-      render: val => val ? '已审核' : '未审核'
+      // render: val => val ? '已审核' : '未审核'
+      render: (text, record) => {
+        switch (text) {
+          case 0:
+            return <Tag color="#e4aa5b">待处理</Tag>;
+          case 1:
+            return <Tag color="#e4aa4b">已送审</Tag>;
+          case 2:
+            return <Tag color="#19d54e">已审核</Tag>; 
+          default:
+            return '';
+        }
+      }
     },
-
     {
       title: '审核日期',
       dataIndex: 'verifyDate',

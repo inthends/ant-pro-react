@@ -11,7 +11,7 @@ export function SaveForm(data): Promise<any> {
     .then(getResult as any);
 }
  
-// 删除
+// 逻辑删除
 export function RemoveForm(keyValue): Promise<any> {
   return request
     .post(process.env.basePath + `/FlowDesigner/RemoveForm?keyValue=${keyValue}`, {})

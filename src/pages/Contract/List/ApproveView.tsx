@@ -1,5 +1,5 @@
-//退租
-import { DatePicker, message, Checkbox, Input, Tag, Divider, PageHeader, List, Tabs, Button, Card, Col, Drawer, Form, Row } from 'antd';
+//合同审批查看
+import { Tag, Divider, PageHeader, List, Tabs, Button, Card, Col, Drawer, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import {
   HtLeasecontractcharge,
@@ -11,24 +11,24 @@ import {
 } from '@/model/models';
 import React, { useEffect, useState } from 'react';
 import ResultList from './ResultList';
-import { GetCharge, GetFormJson, WithdrawalForm } from './Main.service';
+import { GetChargeByContractId, GetFormJson } from './Main.service';
+import CommentBox from '../../Workflow/CommentBox';
 import styles from './style.less';
-import moment from 'moment';
 const { TabPane } = Tabs;
 
-interface WithdrawalProps {
+interface ApproveViewProps {
   visible: boolean;
-  id?: string;//合同id
-  chargeId?: string;//合同条款id
+  flowId?: string;//流程id
+  id?: string;//任务id
+  instanceId?: string;//合同id
   closeDrawer(): void;
   form: WrappedFormUtils;
   reload(): void;
 }
 
-const Withdrawal = (props: WithdrawalProps) => {
-  const { visible, closeDrawer, id, form, chargeId, reload } = props;
-  const { getFieldDecorator } = form;
-  const title = '合同退租';
+const ApproveView = (props: ApproveViewProps) => {
+  const { visible, closeDrawer,  instanceId, form } = props;
+  const title = '单据详情';
   //const [industryType, setIndustryType] = useState<any[]>([]); //行业  
   //const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
   const [infoDetail, setInfoDetail] = useState<LeaseContractDTO>({});
@@ -47,29 +47,27 @@ const Withdrawal = (props: WithdrawalProps) => {
   // useEffect(() => {
   //   // getCommonItems('IndustryType').then(res => {
   //   //   setIndustryType(res || []);
-  //   // });
+  //   // }); 
   //   //加载关联收费项目
   //   // GetAllFeeItems().then(res => {
   //   //   setFeeitems(res || []);
-  //   // });
+  //   // }); 
   // }, []);
-
 
   // 打开抽屉时初始化
   useEffect(() => {
     if (visible) {
-      if (id) {
-        GetFormJson(id).then((tempInfo: LeaseContractDTO) => {
+      if (instanceId) {
+        GetFormJson(instanceId).then((tempInfo: LeaseContractDTO) => {
           setInfoDetail(tempInfo);
           //获取条款
-          GetCharge(chargeId).then((charge: ChargeDetailDTO) => {
+          GetChargeByContractId(instanceId).then((charge: ChargeDetailDTO) => {
             setContractCharge(charge.contractCharge || {});
             setChargeFeeList(charge.chargeFeeList || []);
             setChargeIncreList(charge.chargeIncreList || []);
             setChargeOfferList(charge.chargeFeeOfferList || []);
             setDepositData(charge.depositFeeResultList || []);//保证金明细
-            setChargeData(charge.chargeFeeResultList || []);//租金明细   
-
+            setChargeData(charge.chargeFeeResultList || []);//租金明细    
           })
           form.resetFields();
         });
@@ -108,36 +106,6 @@ const Withdrawal = (props: WithdrawalProps) => {
         return '';
     }
   };
-
-  const doWwithdrawal = () => {
-    form.validateFields((errors, values) => {
-      if (!errors) {
-        WithdrawalForm({
-          contractId: id,
-          chargeId: chargeId,
-          withdrawalDate: values.withdrawalDate.format('YYYY-MM-DD'),
-          withdrawal: values.withdrawal,
-          withdrawalMemo: values.withdrawalMemo
-        }).then(res => { 
-          if (!res.flag) {
-            
-            message.warning(res.message);
-
-          } else { 
-            message.success('退租申请成功！');
-            closeDrawer();
-            reload();
-          }
-        });
-      }
-    });
-  };
-
-  //退租日期不能小于合同计租日期
-  const disabledDate = (current) => {
-    return current < moment(infoDetail.billingDate);
-  };
-
 
   return (
     <Drawer
@@ -224,9 +192,7 @@ const Withdrawal = (props: WithdrawalProps) => {
                       </Form.Item>
                     </Col>
                   </Row>
-
                 </Card>
-
               </Col>
               <Col span={12}>
                 <Card title="房源信息" className={styles.card}>
@@ -360,6 +326,7 @@ const Withdrawal = (props: WithdrawalProps) => {
                         </Form.Item>
                       </Col>
                       : null}
+
                     <Col lg={4}>
                       <Form.Item label="年天数">
                         {k.yearDays}
@@ -451,37 +418,14 @@ const Withdrawal = (props: WithdrawalProps) => {
             <ResultList
               depositData={depositData}
               chargeData={chargeData}
-              className={styles.card}
+              className={styles.addcard}
             ></ResultList>
-
+          </TabPane>
+          <TabPane tab="审批记录" key="4">
+            <CommentBox instanceId={instanceId} />
           </TabPane>
         </Tabs>
-        <Card title="退租" className={styles.addcard}>
-          <Form.Item label="退租日期" required>
-            {getFieldDecorator('withdrawalDate', {
-              initialValue: moment(new Date()),
-              rules: [{ required: true, message: '请选择退租日期' }],
-            })(<DatePicker placeholder="请选择退租日期"
-              disabledDate={disabledDate}
-            />)}
-          </Form.Item>
-
-          <Form.Item label="">
-            {getFieldDecorator('withdrawal', {
-            })(<Checkbox.Group options={['正常到期', '价格因素', '物业服务', '交通不便', '卫生环境', '楼宇质量', '公司扩张', '经营不善', '其他原因']} />
-            )}
-          </Form.Item>
-
-          <Form.Item label="">
-            {getFieldDecorator('withdrawalMemo', {
-              rules: [{ required: false }]
-            })(
-              <Input.TextArea rows={4} />
-            )}
-          </Form.Item>
-        </Card>
-
-
+ 
       </Form>
       <div
         style={{
@@ -496,17 +440,15 @@ const Withdrawal = (props: WithdrawalProps) => {
           textAlign: 'right',
         }}
       >
-        <Button onClick={closeDrawer} style={{ marginRight: 8 }}>
-          取消
-          </Button>
-        <Button onClick={doWwithdrawal} type="primary" >
-          确定
-          </Button>
+        <Button onClick={closeDrawer} >
+          关闭
+        </Button>
+
       </div>
     </Drawer>
   );
 
 };
 
-export default Form.create<WithdrawalProps>()(Withdrawal);
+export default Form.create<ApproveViewProps>()(ApproveView);
 

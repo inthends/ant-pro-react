@@ -1,18 +1,14 @@
+//已办任务
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import ListTable from './ListTable';
-import { GetDataList } from './FlowTask.service';
-//合同审批
-import ContractApprove from '../../Contract/List/Approve';
-//合同退租验房
-import RoomCheck from '../../Contract/List/RoomCheck';
-//合同退租结算
-import BillCheck from '../../Contract/List/BillCheck';
-
-//收款单审批
-import ReceiveApprove from '../../Financial/ChargeBill/Approve';
+import { GetDataList } from './FlowCompleted.service';
+//合同审批查看
+import ContractView from '../../Contract/List/ApproveView';
+//收款单审批查看
+import ReceiveView from '../../Financial/ChargeBill/ApproveView';
 
 const { Content } = Layout;
 const { Search } = Input;
@@ -28,12 +24,13 @@ const Main = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<any[]>([]);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
-  const [roomcheckVisible, setRoomCheckVisible] = useState<boolean>(false);
-  const [billcheckVisible, setBillCheckVisible] = useState<boolean>(false);
-  const [approveVisible, setApproveVisible] = useState<boolean>(false);
+
   const [flowId, setFlowId] = useState<string>();
-  const [id, setId] = useState<string>();
+  // const [id, setId] = useState<string>();
   const [instanceId, setInstanceId] = useState<string>();
+
+  const [contractVisible, setContractVisible] = useState<boolean>(false);
+  const [receiveVisible, setReceiveVisible] = useState<boolean>(false);
 
   useEffect(() => {
     initLoadData(search);
@@ -97,40 +94,26 @@ const Main = () => {
     });
   };
 
-  //approve
-  const closeApproveDrawer = () => {
-    setApproveVisible(false);
+
+  const closeDrawer = () => {
+    if (flowId == 'b5011d6f-d386-4ed3-a2ab-2f2eb5597b7f') {
+      setContractVisible(false);
+    }
+    else {
+      setReceiveVisible(false);
+    }
   };
 
-  const showApproveDrawer = (flowId, id, instanceId) => {
-    setApproveVisible(true);
+  const showDrawer = (flowId, id, instanceId) => { 
+    if (flowId == 'b5011d6f-d386-4ed3-a2ab-2f2eb5597b7f') {
+      //合同
+      setContractVisible(true);
+    } else {
+      setReceiveVisible(true);
+    }
     setFlowId(flowId);
-    setId(id);
-    setInstanceId(instanceId);
-  };
-
-  //验房
-  const closeRoomCheckDrawer = () => {
-    setRoomCheckVisible(false);
-  };
-
-  const showRoomCheckDrawer = (flowId, id, instanceId) => {
-    setRoomCheckVisible(true);
-    setFlowId(flowId);
-    setId(id);
-    setInstanceId(instanceId);
-  };
-
-  //结算
-  const closeBillCheckDrawer = () => {
-    setBillCheckVisible(false);
-  };
-
-  const showBillCheckDrawer = (flowId, id, instanceId) => {
-    setBillCheckVisible(true);
-    setFlowId(flowId);
-    setId(id);
-    setInstanceId(instanceId);
+    // setId(id);
+    setInstanceId(instanceId); 
   };
 
   return (
@@ -165,43 +148,19 @@ const Main = () => {
           pagination={pagination}
           data={data}
           reload={() => initLoadData(search)}
-          roomcheck={showRoomCheckDrawer}
-          billcheck={showBillCheckDrawer}
-          approve={showApproveDrawer}
+          view={showDrawer}
         />
 
-        <RoomCheck
-          visible={roomcheckVisible}
-          closeDrawer={closeRoomCheckDrawer}
-          flowId={flowId}
-          id={id}
+        <ContractView
+          visible={contractVisible}
+          closeDrawer={closeDrawer}
           instanceId={instanceId}
           reload={() => initLoadData(search)}
         />
 
-        <BillCheck
-          visible={billcheckVisible}
-          closeDrawer={closeBillCheckDrawer}
-          flowId={flowId}
-          id={id}
-          instanceId={instanceId}
-          reload={() => initLoadData(search)}
-        />
-
-        <ContractApprove
-          visible={approveVisible}
-          closeDrawer={closeApproveDrawer}
-          flowId={flowId}
-          id={id}
-          instanceId={instanceId}
-          reload={() => initLoadData(search)}
-        />
-
-        <ReceiveApprove
-          visible={approveVisible}
-          closeDrawer={closeApproveDrawer}
-          flowId={flowId}
-          id={id}
+        <ReceiveView
+          visible={receiveVisible}
+          closeDrawer={closeDrawer}
           instanceId={instanceId}
           reload={() => initLoadData(search)}
         />

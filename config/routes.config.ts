@@ -303,6 +303,11 @@ export default [
             path: '/workflow/flowtask',//权限控制
             component: './Workflow/FlowTask/Main',
           },
+          {
+            name: 'flowcompleted',
+            path: '/workflow/flowcompleted',//权限控制
+            component: './Workflow/FlowCompleted/Main',
+          },
           // {
           //   name: 'mind',
           //   path: '/editor/mind',

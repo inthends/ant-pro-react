@@ -1,75 +1,59 @@
 //送审
-import { message, DatePicker, Card, Button, Col, Drawer, Form, Input, Row, Table } from 'antd';
+import { message, Card, Button, Col, Drawer, Form, Input, Row, Table } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetTotalAmount, GetReceiveList, SubmitForm } from './Main.service';
+import { GetReceiveList, ApproveForm } from './Main.service';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import styles from './style.less';
 import moment from 'moment';
 
-interface SubmitProps {
-  vertifyVisible: boolean;
-  closeVertify(): void;
+interface ApproveProps {
+  visible: boolean;
+  flowId?: string;//流程id
+  id?: string;//任务id
+  instanceId?: string;//合同id
+  closeDrawer(): void;
   form: WrappedFormUtils;
-  ids?: string[];
   reload(): void;
 }
 
-const Submit = (props: SubmitProps) => {
-  const { vertifyVisible, closeVertify, ids, form, reload } = props;
+const Approve = (props: ApproveProps) => {
+  const { reload, visible, closeDrawer, flowId, id, instanceId, form } = props;
   const { getFieldDecorator } = form;
-  const title = "收款单送审";
+  const title = "单据详情";
   const [loading, setLoading] = useState<boolean>(false);
   const [chargeBillData, setChargeBillData] = useState<any[]>([]);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
-  const [amount, setAmount] = useState<any>();
-  const [receiveDetail, setReceiveDetail] = useState<any>();
+  const [infoDetail, setInfoDetail] = useState<any>({});
 
-  // 打开抽屉时初始化
+  //打开抽屉时初始化
   useEffect(() => {
-    form.resetFields();
-    if (vertifyVisible) {
-      if (ids != null) {
-        setLoading(true);
-        GetTotalAmount({ ids: JSON.stringify(ids) }).then(res => {
-          setAmount(res.amount);
-          setReceiveDetail(res.receiveDetail);
-          initLoad(ids);
-          setLoading(false);
-        })
+    if (visible) {
+      if (id != null) {
+
       }
     }
-  }, [vertifyVisible]);
+  }, [visible]);
 
-  // const close = () => {
-  //   closeVertify();
-  // };
-
-  const doSubmit = () => {
+  const approve = () => {
     form.validateFields((errors, values) => {
-      var newData = {
-        ids: JSON.stringify(ids),
-        receiveDetail: receiveDetail,
-        amount: amount,
-        memo: values.memo
-      };
-      SubmitForm(newData).then(res => {
-        if (!res.flag) {
-          message.warning(res.message);
-        }
-        else {
-          message.success('送审成功！');
+      if (!errors) {
+        ApproveForm({
+          flowId: flowId,
+          id: id,
+          instanceId: instanceId,
+          verifyMemo: values.verifyMemo
+        }).then(res => {
+          message.success('审批成功！');
+          closeDrawer();
           reload();
-          closeVertify();
-        }
-
-      });
+        });
+      }
     });
   };
 
   const initLoad = (ids) => {
-    // const queryJson = { billIds: JSON.stringify(ids) };
     const sidx = 'billCode';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
@@ -197,58 +181,33 @@ const Submit = (props: SubmitProps) => {
       title={title}
       placement="right"
       width={700}
-      onClose={closeVertify}
-      visible={vertifyVisible}
+      onClose={closeDrawer}
+      visible={visible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
-      <Card className={styles.card}>
-        <Form layout="vertical" hideRequiredMark>
+      <Form layout="vertical" hideRequiredMark>
+        <Card className={styles.card}>
           <Row gutter={24}>
             <Col span={8}>
               <Form.Item label="总金额">
-                {getFieldDecorator('amount', {
-                  initialValue: amount
-                })(
-                  <Input readOnly />
-                )}
+                {infoDetail.amount}
               </Form.Item>
             </Col>
             <Col span={8}>
               <Form.Item label="送审日期">
-                {getFieldDecorator('createDate', {
-                  initialValue: moment(new Date()),
-                  rules: [{ required: true, message: '请选择单据日期' }],
-                })(
-                  <DatePicker style={{ width: '100%' }} />
-                )}
+                {infoDetail.createDate}
               </Form.Item>
             </Col>
             <Col span={8}>
               <Form.Item label="送审人">
-                {getFieldDecorator('createUserName', {
-                  initialValue: localStorage.getItem("name"),
-                })(
-                  <Input readOnly />
-                )}
+                {infoDetail.createUserName}
               </Form.Item>
             </Col>
           </Row>
-
-          <Row gutter={24}>
-            <Col span={24}>
-              <Form.Item label="收款金额" style={{ color: "green" }}>
-                {receiveDetail}
-              </Form.Item>
-            </Col>
-          </Row>
-
           <Row gutter={24}>
             <Col span={24}>
               <Form.Item label="送审说明" >
-                {getFieldDecorator('memo', {
-                })(
-                  <Input.TextArea rows={5} style={{ width: '100%' }} />
-                )}
+                {infoDetail.memo}
               </Form.Item>
             </Col>
           </Row>
@@ -262,8 +221,18 @@ const Submit = (props: SubmitProps) => {
             loading={loading}
           />
 
-        </Form>
-      </Card>
+        </Card>
+
+        <Card title="审核意见" className={styles.addcard}>
+          <Form.Item label="">
+            {getFieldDecorator('verifyMemo', {
+              rules: [{ required: true, message: '请输入审核意见' }]
+            })(
+              <Input.TextArea rows={4} />
+            )}
+          </Form.Item>
+        </Card>
+      </Form>
       <div
         style={{
           position: 'absolute',
@@ -276,15 +245,15 @@ const Submit = (props: SubmitProps) => {
           textAlign: 'right',
         }}
       >
-        <Button onClick={closeVertify} style={{ marginRight: 8 }}>
-          取消
+        <Button onClick={closeDrawer} style={{ marginRight: 8 }}>
+          关闭
         </Button>
-        <Button onClick={doSubmit} type="primary">
-          提交
+        <Button onClick={approve} type="primary">
+          通过
         </Button>
       </div>
     </Drawer>
   );
 };
-export default Form.create<SubmitProps>()(Submit);
+export default Form.create<ApproveProps>()(Approve);
 

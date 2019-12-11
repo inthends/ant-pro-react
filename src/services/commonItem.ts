@@ -111,3 +111,11 @@ export function GetOrgsWithNoGLC(): Promise<any[]> {
 export function GetOrgEsates(): Promise<any[]> {
   return request.get(process.env.basePath + `/Common/GetOrgEsates`).then(getResult as any);
 }
+
+
+//获取审批记录
+export function GetApproveLog(keyValue): Promise<any> {
+  return request
+    .get(process.env.basePath + `/FlowTask/GetApproveLog?keyValue=${keyValue}`)
+    .then(getResult as any);
+}

@@ -152,8 +152,13 @@ export function CheckRedFlush(keyValue): Promise<any> {
 }
 
 //审核接口
-export function Audit(data): Promise<any> {
-  return request.post(process.env.basePath + `/Receivable/Audit`, { data: objToFormdata(data) }).then(getResult as any);
+// export function Audit(data): Promise<any> {
+//   return request.post(process.env.basePath + `/Receivable/Audit`, { data: objToFormdata(data) }).then(getResult as any);
+// }
+
+//送审
+export function SubmitForm(data): Promise<any> {
+  return request.post(process.env.basePath + `/Receivable/SubmitForm`, { data: objToFormdata(data) }).then(getResult as any);
 }
 
 //获取收款单实体
@@ -188,3 +193,13 @@ export function GetTotalAmount(data): Promise<any> {
   return request.post(process.env.basePath + `/Receivable/GetTotalAmount`, {data:objToFormdata(data)}).then(getResult as any);
 }
  
+
+//获取送审单实体
+export function GetSubmitEntity(keyValue): Promise<any> {
+  return request.get(process.env.basePath + `/Receivable/GetSubmitEntity?keyValue=${keyValue}`).then(getResult as any);
+}
+
+//查看的时候获取送审单明细
+export function GetReceiveListByBillId(data): Promise<any> {
+  return request.post(process.env.basePath + `/Receivable/GetReceiveListByBillId`, {data:objToFormdata(data)}).then(getResult as any);
+}

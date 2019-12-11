@@ -174,6 +174,20 @@ const Show = (props: ShowProps) => {
     }
   };
 
+  const GetVerifyStatus = (status) => {
+    switch (status) {
+      case 0:
+        return '待处理';
+      case 1:
+        return '已送审';
+      case 2:
+        return '已审核';
+      default:
+        return '';
+    }
+  };
+
+
   return (
     <Drawer
       title={title}
@@ -225,11 +239,11 @@ const Show = (props: ShowProps) => {
                 <Form.Item label="单据状态"   >
                   {GetStatus(infoDetail.status)}
                 </Form.Item>
-              </Col>
-
+              </Col> 
               <Col span={6}>
                 <Form.Item label="审核状态"   >
-                  {infoDetail.ifVerify ? '已审核' : '未审核'}
+                  {/* {infoDetail.ifVerify ? '已审核' : '未审核'} */} 
+                  {GetVerifyStatus(infoDetail.ifVerify)} 
                 </Form.Item>
               </Col>
             </Row>
