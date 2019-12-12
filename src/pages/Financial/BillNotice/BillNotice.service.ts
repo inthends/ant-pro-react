@@ -70,12 +70,14 @@ export function GetInfoFormJson(data): Promise<any> {
 export function CheckNoticeBill(data): Promise<any> {
   return request.get(process.env.basePath + `/Notice/CheckNoticeBill?keyValue=${data}`, {}).then(getResult as any);
 }
-//获取模板
+ 
+
+//获取打印模板
 export function GetTemplates(): Promise<any> {
-  return request.get(process.env.basePath + `/Notice/GetTemplates`, {}).then(getResult as any);
+  return request.get(process.env.basePath + `/Template/GetTemplates`).then(getResult as any);
 }
 
 //获取所有收费列表
 export function GetReceivablesFeeItemTreeJson(): Promise<TreeEntity[]> {
-  return request.get(process.env.basePath + `/FeeItems/GetReceivablesFeeItemTreeJson`, {}).then(getResult as any);
+  return request.get(process.env.basePath + `/FeeItems/GetReceivablesFeeItemTreeJson`).then(getResult as any);
 }

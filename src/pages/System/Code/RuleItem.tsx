@@ -24,7 +24,7 @@ const RuleItem = (props: RuleItemProps) => {
   //打开抽屉时初始化
   useEffect(() => {
     if (visible) {
-      if (data) { 
+      if (data) {
         setMyItemType(data.itemType);
       }
     }
@@ -49,9 +49,9 @@ const RuleItem = (props: RuleItemProps) => {
               rules={[{ required: true, message: "请选择类型" }]}
               type='select'
               items={[
-                { label: '自定义', value: '0' },
-                { label: '日期', value: '1' },
-                { label: '流水号', value: '2' }]}
+                { label: '自定义', value: '0', title: '自定义' },
+                { label: '日期', value: '1', title: '日期' },
+                { label: '流水号', value: '2', title: '流水号' }]}
               onChange={(value, option) => {
                 setMyItemType(value);
                 setItemTypeName(option.props.children);
@@ -73,8 +73,8 @@ const RuleItem = (props: RuleItemProps) => {
                 rules={[{ required: true, message: "请选择格式" }]}
                 type='select'
                 items={myitemType == '1' ?
-                  [{ label: 'yyyyMMdd', value: 'yyyyMMdd' }, { label: 'yyMdd', value: 'yyMdd' }, { label: 'yyyyMdd', value: 'yyyyMdd' }, { label: 'yyyy-MM-dd', value: 'yyyy-MM-dd' }, { label: 'yyMMdd', value: 'yyMMdd' }] :
-                  [{ label: '000', value: '000' }, { label: '0000', value: '0000' }, { label: '00000', value: '00000' }, { label: '000000', value: '000000' }]
+                  [{ label: 'yyyyMMdd', value: 'yyyyMMdd', title: 'yyyyMMdd' }, { label: 'yyMdd', value: 'yyMdd', title: 'yyMdd' }, { label: 'yyyyMdd', value: 'yyyyMdd', title: 'yyyyMdd' }, { label: 'yyyy-MM-dd', value: 'yyyy-MM-dd', title: 'yyyy-MM-dd' }, { label: 'yyMMdd', value: 'yyMMdd', title: 'label' }] :
+                  [{ label: '000', value: '000', title: '000' }, { label: '0000', value: '0000', title: '0000' }, { label: '00000', value: '00000', title: '00000' }, { label: '000000', value: '000000', title: '000000' }]
                 }
               ></ModifyItem>}
           </Row>

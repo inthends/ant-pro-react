@@ -1,5 +1,5 @@
 //查看收款单
-import { Spin, Modal, Button, Card, Table, Col, Drawer, Form, Row } from 'antd';
+import { Spin, Button, Card, Table, Col, Drawer, Form, Row } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { GetEntityShow, ChargeFeeDetail, Print } from './Main.service';
 import moment from 'moment';
 import styles from './style.less';
+import SelectTemplate from './SelectTemplate';
 
 interface ShowProps {
   showVisible: boolean;
@@ -23,6 +24,8 @@ const Show = (props: ShowProps) => {
   // const [chargeBillData, setChargeBillData] = useState<any[]>([]);
   const [chargeBillData, setChargeBillData] = useState<any>();
   const [linkno, setLinkno] = useState<any>('');
+   //选择模板
+   const [modalvisible, setModalVisible] = useState<boolean>(false);
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -43,6 +46,13 @@ const Show = (props: ShowProps) => {
       }
     }
   }, [showVisible]);
+
+  const showModal = () => {
+    setModalVisible(true);
+  };
+  const closeModal = () => {
+    setModalVisible(false);
+  };
 
   const columns = [
     {
@@ -142,22 +152,23 @@ const Show = (props: ShowProps) => {
   //   closeShow();
   // };
 
-  const onPrint = () => {
+  //const onPrint = () => {
     //打印
-    Modal.confirm({
-      title: '请确认',
-      content: `您是否要打印吗？`,
-      onOk: () => {
-        setLoading(true);
+    // Modal.confirm({
+    //   title: '请确认',
+    //   content: `您要打印吗？`, 
+    //   onOk: () => {
+    //     setLoading(true); 
+    //     Print(id).then(res => {
+    //       //window.location.href = res;
+    //       window.open(res);
+    //       setLoading(false);
+    //     });
+    //   },
+    // });
 
-        Print(id).then(res => {
-          //window.location.href = res;
-          window.open(res);
-          setLoading(false);
-        });
-      },
-    });
-  };
+    //弹出选择打印模板  
+  //};
 
   const GetStatus = (status) => {
     switch (status) {
@@ -239,11 +250,11 @@ const Show = (props: ShowProps) => {
                 <Form.Item label="单据状态"   >
                   {GetStatus(infoDetail.status)}
                 </Form.Item>
-              </Col> 
+              </Col>
               <Col span={6}>
                 <Form.Item label="审核状态"   >
-                  {/* {infoDetail.ifVerify ? '已审核' : '未审核'} */} 
-                  {GetVerifyStatus(infoDetail.ifVerify)} 
+                  {/* {infoDetail.ifVerify ? '已审核' : '未审核'} */}
+                  {GetVerifyStatus(infoDetail.ifVerify)}
                 </Form.Item>
               </Col>
             </Row>
@@ -307,11 +318,17 @@ const Show = (props: ShowProps) => {
       >
         <Button onClick={closeShow} style={{ marginRight: 8 }}>
           关闭
-           </Button>
-        <Button onClick={onPrint} type="primary">
+        </Button>
+        <Button onClick={showModal} type="primary">
           打印
         </Button>
       </div>
+
+      <SelectTemplate
+        id={id}
+        visible={modalvisible}
+        closeModal={closeModal}
+      />
 
     </Drawer>
   );
