@@ -1,4 +1,4 @@
-import { Avatar, Icon, Menu, Spin } from 'antd';
+import { Modal,Avatar, Icon, Menu, Spin } from 'antd';
 import { ClickParam } from 'antd/es/menu';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import React from 'react';
@@ -19,12 +19,22 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
   onMenuClick = (event: ClickParam) => {
     const { key } = event; 
     if (key === 'logout') { 
-      const { dispatch } = this.props;
-      if (dispatch) {
-        dispatch({
-          type: 'login/logout',
-        });
-      } 
+ 
+      Modal.confirm({
+        title: '请确认',
+        content: `您确认要退出？`,
+        onOk: () => {
+          
+          const { dispatch } = this.props;
+          if (dispatch) {
+            dispatch({
+              type: 'login/logout',
+            });
+          }
+
+        }
+      });  
+
       return;
     }
     router.push(`/account/${key}`);

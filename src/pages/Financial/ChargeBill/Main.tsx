@@ -523,18 +523,18 @@ function Main() {
                 </Option>
               </Select>
               <DatePicker
-                placeholder='收款日期'
+                placeholder='收款日期起'
                 onChange={(date, dateStr) => {
                   var params = Object.assign({}, chargedSearchParams, { startDate: dateStr });
                   setChargedSearchParams(params);
-                }} style={{ marginRight: '5px' }} />
+                }} style={{ marginRight: '5px', width: '150px'  }} />
               至
               <DatePicker
-                placeholder='收款日期'
+                placeholder='收款日期至'
                 onChange={(date, dateStr) => {
                   var params = Object.assign({}, chargedSearchParams, { endDate: dateStr });
                   setChargedSearchParams(params);
-                }} style={{ marginLeft: '5px', marginRight: '5px' }} />
+                }} style={{ marginLeft: '5px', marginRight: '5px', width: '150px'  }} />
               <Search
                 className="search-input"
                 placeholder="请输入收款单号"

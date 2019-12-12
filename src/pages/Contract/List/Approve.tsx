@@ -11,7 +11,8 @@ import {
 } from '@/model/models';
 import React, { useEffect, useState } from 'react';
 import ResultList from './ResultList';
-import { ApproveForm, GetChargeByContractId, GetFormJson } from './Main.service';
+import { GetChargeByContractId, GetFormJson } from './Main.service';
+import { ApproveForm, RejectForm } from '../../Workflow/FlowTask/FlowTask.service'
 import styles from './style.less';
 const { TabPane } = Tabs;
 
@@ -27,7 +28,7 @@ interface ApproveProps {
 
 const Approve = (props: ApproveProps) => {
   const { reload, visible, closeDrawer, flowId, id, instanceId, form } = props;
-  const title = '合同详情';
+  const title = '单据详情';
   const { getFieldDecorator } = form;
   //const [industryType, setIndustryType] = useState<any[]>([]); //行业  
   //const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
@@ -117,6 +118,23 @@ const Approve = (props: ApproveProps) => {
           verifyMemo: values.verifyMemo
         }).then(res => {
           message.success('审批成功！');
+          closeDrawer();
+          reload();
+        });
+      }
+    });
+  };
+
+  const reject = () => {
+    form.validateFields((errors, values) => {
+      if (!errors) {
+        RejectForm({
+          flowId: flowId,
+          id: id,
+          instanceId: instanceId,
+          verifyMemo: values.verifyMemo
+        }).then(res => {
+          message.success('退回成功！');
           closeDrawer();
           reload();
         });
@@ -429,7 +447,6 @@ const Approve = (props: ApproveProps) => {
               </Card>
             )) : null
             }
-
           </TabPane>
           <TabPane tab="租金明细" key="3">
             <ResultList
@@ -468,6 +485,9 @@ const Approve = (props: ApproveProps) => {
         <Button onClick={closeDrawer} style={{ marginRight: 8 }}>
           关闭
           </Button>
+        <Button onClick={reject} type='danger' style={{ marginRight: 8 }}>
+          退回
+        </Button>
         <Button type="primary" onClick={approve}>
           通过
         </Button>

@@ -1,4 +1,4 @@
-//审批记录 
+//审批记录，废弃
 import { Card, Table } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import React from 'react'; 

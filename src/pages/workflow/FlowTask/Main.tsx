@@ -11,8 +11,11 @@ import RoomCheck from '../../Contract/List/RoomCheck';
 //合同退租结算
 import BillCheck from '../../Contract/List/BillCheck';
 
+//收款单送审
+import ReceiveReSubmit from '../../Financial/ChargeBill/ReSubmit';
 //收款单审批
 import ReceiveApprove from '../../Financial/ChargeBill/Approve';
+
 
 const { Content } = Layout;
 const { Search } = Input;
@@ -30,10 +33,14 @@ const Main = () => {
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [roomcheckVisible, setRoomCheckVisible] = useState<boolean>(false);
   const [billcheckVisible, setBillCheckVisible] = useState<boolean>(false);
-  const [approveVisible, setApproveVisible] = useState<boolean>(false);
+
   const [flowId, setFlowId] = useState<string>();
   const [id, setId] = useState<string>();
   const [instanceId, setInstanceId] = useState<string>();
+
+  const [contractVisible, setContractVisible] = useState<boolean>(false);
+  const [receiveVisible, setReceiveVisible] = useState<boolean>(false);
+  const [receiveSubmitVisible, setReceiveSubmitVisible] = useState<boolean>(false);
 
   useEffect(() => {
     initLoadData(search);
@@ -99,11 +106,22 @@ const Main = () => {
 
   //approve
   const closeApproveDrawer = () => {
-    setApproveVisible(false);
+    if (flowId == 'b5011d6f-d386-4ed3-a2ab-2f2eb5597b7f') {
+      setContractVisible(false);
+    }
+    else {
+      //收款
+      setReceiveVisible(false);
+    }
   };
-
   const showApproveDrawer = (flowId, id, instanceId) => {
-    setApproveVisible(true);
+    if (flowId == 'b5011d6f-d386-4ed3-a2ab-2f2eb5597b7f') {
+      //合同
+      setContractVisible(true);
+    } else {
+      //收款
+      setReceiveVisible(true);
+    }
     setFlowId(flowId);
     setId(id);
     setInstanceId(instanceId);
@@ -113,7 +131,6 @@ const Main = () => {
   const closeRoomCheckDrawer = () => {
     setRoomCheckVisible(false);
   };
-
   const showRoomCheckDrawer = (flowId, id, instanceId) => {
     setRoomCheckVisible(true);
     setFlowId(flowId);
@@ -125,9 +142,32 @@ const Main = () => {
   const closeBillCheckDrawer = () => {
     setBillCheckVisible(false);
   };
-
   const showBillCheckDrawer = (flowId, id, instanceId) => {
     setBillCheckVisible(true);
+    setFlowId(flowId);
+    setId(id);
+    setInstanceId(instanceId);
+  };
+
+
+  //resubmit
+  const closeSubmitDrawer = () => {
+    if (flowId == 'b5011d6f-d386-4ed3-a2ab-2f2eb5597b7f') {
+      // setContractSubmitVisible(false);
+    }
+    else {
+      //收款
+      setReceiveSubmitVisible(false);
+    }
+  };
+  const showSubmitDrawer = (flowId, id, instanceId) => {
+    if (flowId == 'b5011d6f-d386-4ed3-a2ab-2f2eb5597b7f') {
+      //合同
+      // setContractSubmitVisible(true);
+    } else {
+      //收款
+      setReceiveSubmitVisible(true);
+    }
     setFlowId(flowId);
     setId(id);
     setInstanceId(instanceId);
@@ -168,6 +208,7 @@ const Main = () => {
           roomcheck={showRoomCheckDrawer}
           billcheck={showBillCheckDrawer}
           approve={showApproveDrawer}
+          submit={showSubmitDrawer}
         />
 
         <RoomCheck
@@ -189,7 +230,7 @@ const Main = () => {
         />
 
         <ContractApprove
-          visible={approveVisible}
+          visible={contractVisible}
           closeDrawer={closeApproveDrawer}
           flowId={flowId}
           id={id}
@@ -197,8 +238,17 @@ const Main = () => {
           reload={() => initLoadData(search)}
         />
 
+        <ReceiveReSubmit
+          visible={receiveSubmitVisible}
+          closeDrawer={closeSubmitDrawer}
+          flowId={flowId}
+          id={id}
+          instanceId={instanceId}
+          reload={() => initLoadData(search)}
+        />
+
         <ReceiveApprove
-          visible={approveVisible}
+          visible={receiveVisible}
           closeDrawer={closeApproveDrawer}
           flowId={flowId}
           id={id}

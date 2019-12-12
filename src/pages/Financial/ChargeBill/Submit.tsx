@@ -51,7 +51,7 @@ const Submit = (props: SubmitProps) => {
       var newData = {
         ids: JSON.stringify(ids),
         receiveDetail: receiveDetail,
-        amount: amount,
+        amount: amount, 
         memo: values.memo
       };
       SubmitForm(newData).then(res => {
@@ -219,7 +219,7 @@ const Submit = (props: SubmitProps) => {
                   initialValue: moment(new Date()),
                   rules: [{ required: true, message: '请选择单据日期' }],
                 })(
-                  <DatePicker style={{ width: '100%' }} />
+                  <DatePicker style={{ width: '100%' }} disabled={true} />
                 )}
               </Form.Item>
             </Col>

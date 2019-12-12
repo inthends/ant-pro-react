@@ -185,14 +185,20 @@ export function CheckRebateFee(data): Promise<any> {
 
 //送审的时候获取收款单列表
 export function GetReceiveList(data): Promise<any> {
-  return request.post(process.env.basePath + `/Receivable/GetReceiveList`, {data:objToFormdata(data)}).then(getResult as any);
+  return request.post(process.env.basePath + `/Receivable/GetReceiveList`, { data: objToFormdata(data) }).then(getResult as any);
 }
+
+//删除送审单明细
+export function RemoveSubmitDetail(keyValue): Promise<any> {
+  return request.post(process.env.basePath + `/Receivable/RemoveSubmitDetail?keyValue=${keyValue}`).then(getResult as any);
+}
+
 
 //获取送审单总金额
 export function GetTotalAmount(data): Promise<any> {
-  return request.post(process.env.basePath + `/Receivable/GetTotalAmount`, {data:objToFormdata(data)}).then(getResult as any);
+  return request.post(process.env.basePath + `/Receivable/GetTotalAmount`, { data: objToFormdata(data) }).then(getResult as any);
 }
- 
+
 
 //获取送审单实体
 export function GetSubmitEntity(keyValue): Promise<any> {
@@ -201,5 +207,20 @@ export function GetSubmitEntity(keyValue): Promise<any> {
 
 //查看的时候获取送审单明细
 export function GetReceiveListByBillId(data): Promise<any> {
-  return request.post(process.env.basePath + `/Receivable/GetReceiveListByBillId`, {data:objToFormdata(data)}).then(getResult as any);
+  return request.post(process.env.basePath + `/Receivable/GetReceiveListByBillId`, { data: objToFormdata(data) }).then(getResult as any);
+}
+
+//获取未送审批的已收
+export function GetUnSubmitChargeList(data): Promise<any> {
+  return request.post(process.env.basePath + `/Receivable/GetUnSubmitChargeList`, { data: objToFormdata(data) }).then(getResult as any);
+}
+
+//退回后重新送审保存明细
+export function SaveSubmitDetail(data): Promise<any> {
+  return request.post(process.env.basePath + `/Receivable/SaveSubmitDetail`, { data: objToFormdata(data) }).then(getResult as any);
+}
+
+//收款单重新送审
+export function ReSubmitForm(data): Promise<any> {
+  return request.post(process.env.basePath + `/Receivable/ReSubmitForm`, { data: objToFormdata(data) }).then(getResult as any);
 }

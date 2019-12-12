@@ -16,7 +16,7 @@ export interface CurrentUser {
 export interface UserModelState {
   list: any[];
   currentUser: CurrentUser;
-  dingdingInfo: any;
+  // dingdingInfo: any;
 }
 
 export interface UserModelType {
@@ -41,7 +41,7 @@ const UserModel: UserModelType = {
   state: {
     list: [],
     currentUser: {},
-    dingdingInfo: {},
+    // dingdingInfo: {},
   },
 
   effects: {

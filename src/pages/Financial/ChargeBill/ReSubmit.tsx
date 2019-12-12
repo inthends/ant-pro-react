@@ -1,16 +1,16 @@
-//送审
-import { message, Card, Button, Col, Drawer, Form, Input, Row, Table } from 'antd';
+//退回后重新送审
+import { Modal, Icon, DatePicker, message, Card, Button, Col, Drawer, Form, Input, Row, Table } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetReceiveListByBillId, GetSubmitEntity } from './Main.service';
+import { GetReceiveListByBillId, GetSubmitEntity, RemoveSubmitDetail, ReSubmitForm } from './Main.service';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
-import { ApproveForm, RejectForm } from '../../Workflow/FlowTask/FlowTask.service'
 import styles from './style.less';
 import moment from 'moment';
 import CommentBox from '../../Workflow/CommentBox';
+import AddReceiveMain from './AddReceiveMain';
 
-interface ApproveProps {
+interface ReSubmitProps {
   visible: boolean;
   flowId?: string;//流程id
   id?: string;//任务id
@@ -20,63 +20,58 @@ interface ApproveProps {
   reload(): void;
 }
 
-const Approve = (props: ApproveProps) => {
+const ReSubmit = (props: ReSubmitProps) => {
   const { reload, visible, closeDrawer, flowId, id, instanceId, form } = props;
   const { getFieldDecorator } = form;
-  const title = "单据详情";
+  const title = "单据送审";
   const [loading, setLoading] = useState<boolean>(false);
   const [chargeBillData, setChargeBillData] = useState<any[]>([]);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [infoDetail, setInfoDetail] = useState<any>({});
+  //添加收款单
+  const [modalvisible, setModalVisible] = useState<boolean>(false);
 
   //打开抽屉时初始化
   useEffect(() => {
     if (visible) {
       if (instanceId != null) {
-        setLoading(true);
-        GetSubmitEntity(instanceId).then(res => {
-          setInfoDetail(res);
-          initLoad(instanceId);
-          setLoading(false);
-        })
+        LoadData();
       }
     }
   }, [visible]);
 
-  const approve = () => {
+  const LoadData = () => {
+    setLoading(true);
+    GetSubmitEntity(instanceId).then(res => {
+      setInfoDetail(res);
+      initLoad(instanceId);
+      setLoading(false);
+    })
+  }
+
+  const doSubmit = () => {
     form.validateFields((errors, values) => {
-      if (!errors) {
-        ApproveForm({
-          flowId: flowId,
-          id: id,
-          instanceId: instanceId,
-          verifyMemo: values.verifyMemo
-        }).then(res => {
-          message.success('审批成功！');
-          closeDrawer();
+      //更新主单
+      var newData = {
+        id: id,
+        instanceId: instanceId,
+        flowId: flowId,
+        memo: values.memo
+      };
+
+      ReSubmitForm(newData).then(res => {
+        if (!res.flag) {
+          message.warning(res.message);
+        }
+        else {
+          message.success('送审成功！');
           reload();
-        });
-      }
+          closeDrawer();
+        }
+      });
     });
   };
 
-  const reject = () => {
-    form.validateFields((errors, values) => {
-      if (!errors) {
-        RejectForm({
-          flowId: flowId,
-          id: id,
-          instanceId: instanceId,
-          verifyMemo: values.verifyMemo
-        }).then(res => {
-          message.success('退回成功！');
-          closeDrawer();
-          reload();
-        });
-      }
-    });
-  };
- 
   const initLoad = (id) => {
     const sidx = 'billCode';
     const sord = 'asc';
@@ -106,6 +101,16 @@ const Approve = (props: ApproveProps) => {
     });
   };
 
+  const showModal = () => {
+    form.validateFields((errors, values) => {
+      if (!errors) {
+        setModalVisible(true);
+      }
+    });
+  };
+  const closeModal = () => {
+    setModalVisible(false);
+  };
 
   const columns = [
     {
@@ -199,7 +204,6 @@ const Approve = (props: ApproveProps) => {
     }
   ] as ColumnProps<any>[];
 
-
   return (
     <Drawer
       title={title}
@@ -213,20 +217,34 @@ const Approve = (props: ApproveProps) => {
           <Row gutter={24}>
             <Col span={8}>
               <Form.Item label="总金额">
-                {infoDetail.amount}
+                {getFieldDecorator('amount', {
+                  initialValue: infoDetail.amount
+                })(
+                  <Input readOnly />
+                )}
               </Form.Item>
             </Col>
             <Col span={8}>
               <Form.Item label="送审日期">
-                {infoDetail.createDate}
+                {getFieldDecorator('createDate', {
+                  initialValue: moment(new Date()),
+                  rules: [{ required: true, message: '请选择单据日期' }],
+                })(
+                  <DatePicker style={{ width: '100%' }}  disabled={true}/>
+                )}
               </Form.Item>
             </Col>
             <Col span={8}>
               <Form.Item label="送审人">
-                {infoDetail.createUserName}
+                {getFieldDecorator('createUserName', {
+                  initialValue: infoDetail.createUserName,
+                })(
+                  <Input readOnly />
+                )}
               </Form.Item>
             </Col>
           </Row>
+
           <Row gutter={24}>
             <Col span={24}>
               <Form.Item label="收款金额" style={{ color: "green" }}>
@@ -234,33 +252,70 @@ const Approve = (props: ApproveProps) => {
               </Form.Item>
             </Col>
           </Row>
+
           <Row gutter={24}>
             <Col span={24}>
               <Form.Item label="送审说明" >
-                {infoDetail.memo}
+                {getFieldDecorator('memo', {
+                  initialValue: infoDetail.memo,
+                  rules: [{ required: true, message: '请输入送审说明' }]
+                })(
+                  <Input.TextArea rows={5} style={{ width: '100%' }} />
+                )}
               </Form.Item>
             </Col>
           </Row>
-          <Table
-            size="middle"
-            dataSource={chargeBillData}
-            columns={columns}
-            rowKey={record => record.billId}
-            pagination={pagination}
-            scroll={{ y: 500, x: 1500 }}
-            loading={loading}
-          />
+          <Row>
+            <Col>
+              <Button type='link' style={{ float: 'right', marginLeft: '1px' }}
+                disabled={chargeBillData.length == 0 ? true : false}
+                onClick={() => {
+                  Modal.confirm({
+                    title: '请确认',
+                    content: `您是否确定全部删除？`,
+                    onOk: () => {
+                      RemoveSubmitDetail(instanceId).then(res => {
+                        message.success('全部删除成功！');
+                        // initLoad(instanceId);
+                        LoadData();
+                      });
+                    },
+                  });
+                }}
+              >
+                <Icon type="delete" />
+                全部删除
+              </Button>
+              <Button type='link' style={{ float: 'right' }}
+                onClick={() => showModal()}
+              >
+                <Icon type="plus" />
+                添加
+              </Button>
+            </Col>
+          </Row>
+          <Row style={{ marginTop: '15px' }}>
+            <Table
+              size="middle"
+              dataSource={chargeBillData}
+              columns={columns}
+              rowKey={record => record.billId}
+              pagination={pagination}
+              scroll={{ y: 500, x: 1500 }}
+              loading={loading}
+            />
+          </Row>
         </Card>
 
-        <Card  className={styles.card}>
+        <Card className={styles.card}>
           <CommentBox instanceId={instanceId} />
-          <Form.Item label="">
+          {/* <Form.Item label="">
             {getFieldDecorator('verifyMemo', {
               rules: [{ required: true, message: '请输入审核意见' }]
             })(
               <Input.TextArea rows={4} />
             )}
-          </Form.Item>
+          </Form.Item> */}
         </Card>
       </Form>
       <div
@@ -268,6 +323,7 @@ const Approve = (props: ApproveProps) => {
           position: 'absolute',
           left: 0,
           bottom: 0,
+          zIndex: 999,
           width: '100%',
           borderTop: '1px solid #e9e9e9',
           padding: '10px 16px',
@@ -276,17 +332,24 @@ const Approve = (props: ApproveProps) => {
         }}
       >
         <Button onClick={closeDrawer} style={{ marginRight: 8 }}>
-          关闭
+          取消
         </Button>
-        <Button onClick={reject} type='danger' style={{ marginRight: 8 }}>
-          退回
-        </Button>
-        <Button onClick={approve} type="primary">
-          通过
+        <Button onClick={doSubmit} type="primary"
+          disabled={chargeBillData.length == 0 ? true : false}
+        >
+          提交
         </Button>
       </div>
+
+      <AddReceiveMain
+        mainId={instanceId}
+        visible={modalvisible}
+        closeModal={closeModal}
+        reload={() => LoadData()}
+      />
+
     </Drawer>
   );
 };
-export default Form.create<ApproveProps>()(Approve);
+export default Form.create<ReSubmitProps>()(ReSubmit);
 

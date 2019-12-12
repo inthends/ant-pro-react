@@ -1,8 +1,8 @@
 import Page from '@/components/Common/Page';
-import { Divider, message, Modal, Table } from 'antd';
+import { Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
-import { RemoveForm } from './FlowTask.service';
+// import { RemoveForm } from './FlowTask.service';
 
 interface ListTableProps {
   loading: boolean;
@@ -13,36 +13,42 @@ interface ListTableProps {
   roomcheck(flowId: string, id: string, instanceId: string): void;//验房
   billcheck(flowId: string, id: string, instanceId: string): void;//结算
   approve(flowId: string, id: string, instanceId: string): void;//审核退租
+  submit(flowId: string, id: string, instanceId: string): void;//重新发起
 }
 
 function ListTable(props: ListTableProps) {
-  const { onchange, loading, data, reload, pagination, roomcheck, billcheck, approve } = props;
+  const { onchange, loading, data, reload, pagination, roomcheck, billcheck, approve, submit } = props;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
   };
 
   //作废
-  const doDelete = record => {
-    Modal.confirm({
-      title: '请确认',
-      content: `您是否要作废 ${record.fullName} 吗？`,
-      onOk: () => {
-        RemoveForm(record.roleId)
-          .then(() => {
-            message.success('作废成功！');
-            reload();
-          })
-      }
-    });
-  };
+  // const doDelete = record => {
+  //   Modal.confirm({
+  //     title: '请确认',
+  //     content: `您是否要作废 ${record.fullName} 吗？`,
+  //     onOk: () => {
+  //       RemoveForm(record.roleId)
+  //         .then(() => {
+  //           message.success('作废成功！');
+  //           reload();
+  //         })
+  //     }
+  //   });
+  // };
 
   const doHandle = record => {
     //判断步骤
-    if (record.stepName == '验房') { 
+    if (record.stepName == '验房') {
       roomcheck(record.flowId, record.id, record.instanceId);
     } else if (record.stepName == '财务结算') {
       billcheck(record.flowId, record.id, record.instanceId);
-    } else {
+    }
+    else if (record.stepName == '开始') {
+      //resubmit
+      submit(record.flowId, record.id, record.instanceId);
+    }
+    else {
       approve(record.flowId, record.id, record.instanceId);
     }
   };
@@ -96,7 +102,7 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'operation',
       key: 'operation',
       align: 'center',
-      width: 120,
+      width: 70,
       render: (text, record) => {
         return [
           <span key='span'>
@@ -107,10 +113,10 @@ function ListTable(props: ListTableProps) {
             >
               处理
           </a>
-            <Divider type="vertical" key='divider3' />
+            {/* <Divider type="vertical" key='divider3' />
             <a key="delete" type="link" onClick={() => doDelete(record)}>
               作废
-          </a>
+          </a> */}
           </span>
         ];
       },

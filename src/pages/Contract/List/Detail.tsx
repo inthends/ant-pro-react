@@ -11,7 +11,7 @@ import {
 } from '@/model/models';
 import React, { useEffect, useState } from 'react';
 import ResultList from './ResultList';
-import AppLog from './AppLog';
+// import AppLog from './AppLog';
 import { GetCharge, GetFormJson } from './Main.service';
 import styles from './style.less';
 const { TabPane } = Tabs;
@@ -425,9 +425,9 @@ const Detail = (props: DetailProps) => {
               className={styles.addcard}
             ></ResultList>
           </TabPane> 
-          <TabPane tab="审批记录" key="4">
+          {/* <TabPane tab="审批记录" key="4">
             <AppLog appData={appData}></AppLog>
-          </TabPane>
+          </TabPane> */}
 
         </Tabs>
       </Form>

@@ -97,10 +97,3 @@ export function WithdrawalForm(data): Promise<any> {
     .post(process.env.basePath + `/Contract/WithdrawalForm`, { data: objToFormdata(data) })
     .then(getResult as any);
 }
-
-//审核
-export function ApproveForm(data): Promise<any> {
-  return request
-    .post(process.env.basePath + `/FlowTask/ApproveForm`, { data: objToFormdata(data) })
-    .then(getResult as any);
-}

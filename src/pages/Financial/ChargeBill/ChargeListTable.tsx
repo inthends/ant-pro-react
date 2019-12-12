@@ -137,11 +137,25 @@ function ChargeListTable(props: ChargeListTableProps) {
       width: 80,
     },
     {
-      title: '状态',
-      dataIndex: 'statusName',
-      key: 'statusName',
+      title: '收款状态',
+      dataIndex: 'status',
+      key: 'status',
       align: 'center',
-      width: 60
+      width: 80,
+      render: (text, record) => {
+        switch (text) {
+          case 0:
+            return <Tag color="#e4aa5b">未收</Tag>;
+          case 1:
+            return <Tag color="#e4aa4b">已收</Tag>;
+          case 2:
+            return <Tag color="#19d54e">冲红</Tag>;
+          case -1:
+            return <Tag color="#19d54e">作废</Tag>; 
+          default:
+            return '';
+        }
+      }
     },
     {
       title: '审核状态',
