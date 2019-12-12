@@ -226,6 +226,6 @@ export function ReSubmitForm(data): Promise<any> {
 }
 
 //获取打印模板
-export function GetTemplates(): Promise<any> {
-  return request.get(process.env.basePath + `/Template/GetTemplates`).then(getResult as any);
+export function GetTemplates(unitId): Promise<any> {
+  return request.get(process.env.basePath + `/Template/GetTemplates?unitId=${unitId}`).then(getResult as any);
 }

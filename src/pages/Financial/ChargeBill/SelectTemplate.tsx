@@ -10,10 +10,11 @@ interface SelectTemplateProps {
   form: WrappedFormUtils;
   // rowSelect(rowSelectedKeys): void;
   id?: string;
+  unitId?: string;
 }
 
 const SelectTemplate = (props: SelectTemplateProps) => {
-  const { visible, closeModal, id, form } = props;
+  const { visible, closeModal, id, unitId,form } = props;
   const [loading, setLoading] = useState<boolean>(false);
   const { getFieldDecorator } = form;
   const [tempListData, setTempListData] = useState<any[]>([]);
@@ -21,7 +22,7 @@ const SelectTemplate = (props: SelectTemplateProps) => {
   useEffect(() => {
     if (visible) {
       //加载打印模板
-      GetTemplates().then((res) => {
+      GetTemplates(unitId).then((res) => {
         setTempListData(res || []);
       })
     }

@@ -4,7 +4,7 @@ import { DefaultPagination } from '@/utils/defaultSetting';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetEntityShow, ChargeFeeDetail, Print } from './Main.service';
+import { GetEntityShow, ChargeFeeDetail } from './Main.service';
 import moment from 'moment';
 import styles from './style.less';
 import SelectTemplate from './SelectTemplate';
@@ -24,8 +24,8 @@ const Show = (props: ShowProps) => {
   // const [chargeBillData, setChargeBillData] = useState<any[]>([]);
   const [chargeBillData, setChargeBillData] = useState<any>();
   const [linkno, setLinkno] = useState<any>('');
-   //选择模板
-   const [modalvisible, setModalVisible] = useState<boolean>(false);
+  //选择模板
+  const [modalvisible, setModalVisible] = useState<boolean>(false);
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -153,21 +153,21 @@ const Show = (props: ShowProps) => {
   // };
 
   //const onPrint = () => {
-    //打印
-    // Modal.confirm({
-    //   title: '请确认',
-    //   content: `您要打印吗？`, 
-    //   onOk: () => {
-    //     setLoading(true); 
-    //     Print(id).then(res => {
-    //       //window.location.href = res;
-    //       window.open(res);
-    //       setLoading(false);
-    //     });
-    //   },
-    // });
+  //打印
+  // Modal.confirm({
+  //   title: '请确认',
+  //   content: `您要打印吗？`, 
+  //   onOk: () => {
+  //     setLoading(true); 
+  //     Print(id).then(res => {
+  //       //window.location.href = res;
+  //       window.open(res);
+  //       setLoading(false);
+  //     });
+  //   },
+  // });
 
-    //弹出选择打印模板  
+  //弹出选择打印模板  
   //};
 
   const GetStatus = (status) => {
@@ -328,6 +328,7 @@ const Show = (props: ShowProps) => {
         id={id}
         visible={modalvisible}
         closeModal={closeModal}
+        unitId={infoDetail.unitId}
       />
 
     </Drawer>

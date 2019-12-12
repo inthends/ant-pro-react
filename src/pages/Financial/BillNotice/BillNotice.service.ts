@@ -72,9 +72,9 @@ export function CheckNoticeBill(data): Promise<any> {
 }
  
 
-//获取打印模板
-export function GetTemplates(): Promise<any> {
-  return request.get(process.env.basePath + `/Template/GetTemplates`).then(getResult as any);
+//获取通知单打印模板
+export function GetNoticeTemplates(): Promise<any> {
+  return request.get(process.env.basePath + `/Template/GetNoticeTemplates`).then(getResult as any);
 }
 
 //获取所有收费列表

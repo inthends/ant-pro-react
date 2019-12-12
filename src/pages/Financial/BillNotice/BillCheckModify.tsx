@@ -3,7 +3,7 @@ import { Card, Button, Col, Select, Form, Input, Row, Drawer, message, Spin, Dat
 import { TreeEntity } from '@/model/models';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { SaveBill, GetReceivablesFeeItemTreeJson, TestCalBill, GetTemplates, GetEntityShow } from './BillNotice.service';
+import { SaveBill, GetReceivablesFeeItemTreeJson, TestCalBill, GetNoticeTemplates, GetEntityShow } from './BillNotice.service';
 import './style.less';
 // import AsynSelectTree from '../AsynSelectTree';
 import LeftSelectTree from '../LeftSelectTree';
@@ -21,7 +21,7 @@ interface BillCheckModifyProps {
   treeData: any[];
 }
 const BillCheckModify = (props: BillCheckModifyProps) => {
-  const { visible, closeDrawer, form, isEdit, id, reload, treeData  } = props;
+  const { visible, closeDrawer, form, isEdit, id, reload, treeData } = props;
   const [feeTreeData, setFeeTreeData] = useState<TreeEntity[]>([]);
   const [tempListData, setTempListData] = useState<any[]>([]);
   const [infoDetail, setInfoDetail] = useState<any>({});
@@ -44,9 +44,9 @@ const BillCheckModify = (props: BillCheckModifyProps) => {
         // });
         setFeeTreeData(res || []);
       }).then(() => {
-        return GetTemplates();
+        return GetNoticeTemplates();
       }).then(res => {
-        setTempListData(res);
+        setTempListData(res || []);
       }).then(() => {
         if (id != null && id != "") {
           GetEntityShow(id).then(res => {
@@ -178,7 +178,7 @@ const BillCheckModify = (props: BillCheckModifyProps) => {
                       })(
                         <Select placeholder="==请选择==" style={{ width: '100%' }} disabled={!isEdit} >
                           {
-                            (tempListData || []).map(item => {
+                            tempListData.map(item => {
                               return <Select.Option value={item.value}>{item.title}</Select.Option>
                             })
                           }
