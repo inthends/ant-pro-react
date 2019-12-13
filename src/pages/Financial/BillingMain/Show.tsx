@@ -265,7 +265,7 @@ const Show = (props: ShowProps) => {
     >
       <Card className={styles.card} >
         <Form layout="vertical" hideRequiredMark>
-          <Spin tip="数据加载中..." spinning={loading}>
+          <Spin tip="数据处理中..." spinning={loading}>
             <Row gutter={24}>
               <Col span={8}>
                 <Form.Item label="计费单号">
@@ -302,24 +302,25 @@ const Show = (props: ShowProps) => {
             </Row>
             <Row>
               <Col span={24}>
-                <Form.Item label="审核情况"  >
-                  {infoDetail.verifyMemo}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={24}>
                 <Form.Item label="备注"  >
                   {infoDetail.memo}
                 </Form.Item>
               </Col>
             </Row>
             <Row>
+              <Col span={24}>
+                <Form.Item label="审核情况"  >
+                  {infoDetail.verifyMemo}
+                </Form.Item>
+              </Col>
+            </Row>
+           
+            <Row>
               <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
                 <Search
                   className="search-input"
                   placeholder="请输入要查询的单元编号"
-                  style={{ width: 280 }}
+                  style={{ width: 200 }}
                   //onSearch={(value) => {
                   // var params = Object.assign({}, meterSearchParams, { search: value })
                   // setMeterSearchParams(params);

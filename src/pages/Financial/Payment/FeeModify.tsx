@@ -208,7 +208,7 @@ const FeeModify = (props: FeeModifyProps) => {
         <Col span={id != null && id != "" ? 24 : 16} style={{ height: 'calc(100vh - 20px)', overflow: 'visible', position: 'relative' }}>
           <Card   >
             <Form hideRequiredMark>
-              {/* <Spin tip="数据加载中..." spinning={loading}> */}
+              {/* <Spin tip="数据处理中..." spinning={loading}> */}
               <Row> <Col>
                 <Form.Item label="付款对象" required labelCol={{ span: 4 }} wrapperCol={{ span: 20 }}>
                   {getFieldDecorator('relationId', {

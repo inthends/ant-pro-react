@@ -285,7 +285,7 @@ const Show = (props: ShowProps) => {
       bodyStyle={{ background: '#f6f7fb', height: 'calc(100vh -55px)' }}
     >
       <Form layout="vertical" hideRequiredMark>
-        {/* <Spin tip="数据加载中..." spinning={loading}> */}
+        {/* <Spin tip="数据处理中..." spinning={loading}> */}
         <Card className={styles.card}>
           <Row gutter={24}>
             <Col lg={8}>

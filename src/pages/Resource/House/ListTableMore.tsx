@@ -8,7 +8,7 @@ interface ListTableMoreProps {
   loading: boolean;
   pagination: PaginationConfig;
   data: any[];
-  selectId:string;
+  selectId: string;
   modify(id: string): void;
   onchange(page: any, filter: any, sort: any): any;
   reload(id, type): void;
@@ -42,10 +42,10 @@ function ListTableMore(props: ListTableMoreProps) {
       title: '名称',
       dataIndex: 'name',
       key: 'name',
-      width: 200,
+      width: 180,
       fixed: 'left',
       sorter: true,
-      render: (text, record) => { 
+      render: (text, record) => {
         return record.type == 5 ? text : <a onClick={() => refresh(record.id, record.type)} key="refresh">{record.name}</a>
       }
     },
@@ -60,27 +60,42 @@ function ListTableMore(props: ListTableMoreProps) {
       title: '建筑面积',
       dataIndex: 'area',
       key: 'area',
-      width: 120,
+      width: 100,
+      sorter: true,
+    },
+
+    {
+      title: '业主',
+      dataIndex: 'ownerName',
+      key: 'ownerName',
+      width: 100,
+      sorter: true,
+    },
+
+    {
+      title: '租户',
+      dataIndex: 'tenantName',
+      key: 'tenantName',
+      width: 100,
       sorter: true,
     },
     {
       title: '联系电话',
       dataIndex: 'phoneNum',
       key: 'phoneNum',
-      width: 100,
-      sorter: true,
+      width: 100, 
     },
+ 
     {
       title: '全称',
       dataIndex: 'allName',
-      key: 'allName',
-      align:'center',
-      sorter: true,
+      key: 'allName',  
     },
     {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
+      fixed: 'right',
       width: 95,
       render: (text, record) => {
         return [
@@ -114,6 +129,7 @@ function ListTableMore(props: ListTableMoreProps) {
         columns={columns}
         rowKey={record => record.id}
         pagination={pagination}
+        scroll={{ x: 1100 }}
         onChange={(pag: PaginationConfig, filters, sorter) => changePage(pag, filters, sorter)}
         loading={loading}
       />

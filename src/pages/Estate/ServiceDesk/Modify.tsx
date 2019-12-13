@@ -456,7 +456,7 @@ const Modify = (props: ModifyProps) => {
                   </Row>
                 </Card>
               ) :
-                <Card className={styles.card} title="基础信息" >
+                <Card className={infoDetail.status == 2 ? styles.card2 : styles.card} title="基础信息" >
                   <Row gutter={24}>
                     <Col lg={4}>
                       <Form.Item label="单据来源"  >
@@ -526,6 +526,29 @@ const Modify = (props: ModifyProps) => {
                       </Form.Item>
                     </Col>
                   </Row>
+
+                  <Row gutter={24}>
+                    <Col lg={24}>
+                      <div className="clearfix">
+                        <Upload
+                          accept='image/*'
+                          action={process.env.basePath + '/News/Upload'}
+                          listType="picture-card"
+                          fileList={fileList}
+                          onPreview={handlePreview}
+                        // onChange={handleChange}
+                        // onRemove={handleRemove}
+                        >
+                          {/* {fileList.length > 1 ? null : uploadButton} */}
+                        </Upload>
+                        <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
+                          <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                        </Modal>
+                      </div>
+                    </Col>
+                  </Row>
+
+
                 </Card>
               }
 

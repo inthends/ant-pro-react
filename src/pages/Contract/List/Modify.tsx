@@ -516,7 +516,7 @@ const Modify = (props: ModifyProps) => {
       />
       <Divider dashed />
       <Form layout="vertical" hideRequiredMark>
-        <Spin tip="数据加载中..." spinning={loading}>
+        <Spin tip="数据处理中..." spinning={loading}>
           <Tabs defaultActiveKey="1" >
             <TabPane tab="基本信息" key="1">
               <Row gutter={24}>

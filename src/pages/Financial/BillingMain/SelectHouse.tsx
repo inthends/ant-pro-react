@@ -1,5 +1,5 @@
 //添加编辑费项
-import { Col, Form, Row, Modal, message, } from 'antd';
+import { Spin,Col, Form, Row, Modal, message, } from 'antd';
 import { TreeEntity } from '@/model/models';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
@@ -21,6 +21,7 @@ interface SelectHouseProps {
 const SelectHouse = (props: SelectHouseProps) => {
   const { visible, closeModal, feeDetail, getBillID, treeData } = props;
   const [feeTreeData, setFeeTreeData] = useState<TreeEntity[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   useEffect(() => {
     if (visible) {
       GetReceivablesFeeItemTreeJson().then((res) => {
@@ -54,11 +55,13 @@ const SelectHouse = (props: SelectHouseProps) => {
           if (selectedFeeId == null || selectedFeeId == '') {
             message.warning('请选择费项');
           } else {
+            setLoading(true);
             var newdata = Object.assign({}, feeDetail, { units: JSON.stringify(unitData), feeitemid: selectedFeeId });
             SaveUnitFee(newdata).then(res => {
               closeModal();
               //message.success('数据保存成功');
               getBillID(feeDetail.keyValue);
+              setLoading(false);
             }).catch(() => {
               message.warning('保存失败！');
             });
@@ -70,28 +73,29 @@ const SelectHouse = (props: SelectHouseProps) => {
       width='600px'
     >
       {/* <Row style={{ height: '600px', overflow: 'hidden', marginTop: '5px', backgroundColor: 'rgb(255,255,255)' }}> */}
-
-      <Row gutter={8}>
-        <Col span={12} style={{ height: '600px', overflow: 'auto' }}>
-          <SelectTree
-            checkable={true}
-            treeData={treeData}
-            getCheckedKeys={(keys) => {
-              setUnitData(keys);
-            }}
-            selectTree={(id, type, info?) => {
-            }}
-          />
-        </Col>
-        <Col span={12} style={{ height: '600px', overflow: 'auto' }}>
-          <LeftTree
-            treeData={feeTreeData}
-            selectTree={(id, item) => {
-              setSelectedFeeId(id);
-            }}
-          />
-        </Col>
-      </Row>
+      <Spin tip="数据处理中..." spinning={loading}>
+        <Row gutter={8}>
+          <Col span={12} style={{ height: '600px', overflow: 'auto' }}>
+            <SelectTree
+              checkable={true}
+              treeData={treeData}
+              getCheckedKeys={(keys) => {
+                setUnitData(keys);
+              }}
+              selectTree={(id, type, info?) => {
+              }}
+            />
+          </Col>
+          <Col span={12} style={{ height: '600px', overflow: 'auto' }}>
+            <LeftTree
+              treeData={feeTreeData}
+              selectTree={(id, item) => {
+                setSelectedFeeId(id);
+              }}
+            />
+          </Col>
+        </Row>
+      </Spin>
     </Modal>
   );
 };

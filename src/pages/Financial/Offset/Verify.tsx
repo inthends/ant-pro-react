@@ -258,7 +258,7 @@ const Verify = (props: VerifyProps) => {
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
       <Form layout="vertical" hideRequiredMark>
-        {/* <Spin tip="数据加载中..." spinning={loading}>
+        {/* <Spin tip="数据处理中..." spinning={loading}>
        </Spin> */}
  
         <Card className={styles.card}>

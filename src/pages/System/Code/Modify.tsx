@@ -8,6 +8,8 @@ import RuleItem from './RuleItem';
 import { DefaultPagination } from "@/utils/defaultSetting";
 import { ColumnProps, PaginationConfig } from "antd/lib/table";
 import styles from './style.less';
+import { GetOrgs } from '@/services/commonItem';
+import { TreeNode } from 'antd/lib/tree-select';
 
 interface ModifyProps {
   visible: boolean;
@@ -35,12 +37,17 @@ const Modify = (props: ModifyProps) => {
     new DefaultPagination()
   );
 
+  const [orgs, setOrgs] = useState<TreeNode[]>();
+
   //打开抽屉时初始化
   useEffect(() => {
     if (visible) {
       if (data) {
         //获取明细
         initLoadData();
+        GetOrgs().then(res => {
+          setOrgs(res);
+        });
       }
     }
   }, [visible]);
@@ -199,12 +206,28 @@ const Modify = (props: ModifyProps) => {
       save={doSave}>
       <Card className={styles.card}>
         <Form layout="vertical" hideRequiredMark>
+
+          <Row gutter={24}>
+
+            <ModifyItem
+              {...baseFormProps}
+              field="organizeId"
+              label="所属机构"
+              type="tree"
+              treeData={orgs}
+              disabled={initData.organizeId != undefined}
+              rules={[{ required: true, message: '请选择所属机构' }]} 
+            ></ModifyItem>
+
+          </Row>
+
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
               field="enCode"
               label="编号"
               rules={[{ required: true, message: "请输入编号" }]}
+              disabled={true}
             ></ModifyItem>
             <ModifyItem
               {...baseFormProps}
@@ -239,7 +262,7 @@ const Modify = (props: ModifyProps) => {
           columns={columns}
           rowKey={record => record.id}
           pagination={pagination}
-          scroll={{   y: 420 }}
+          scroll={{ y: 420 }}
           loading={loading}
         />
 

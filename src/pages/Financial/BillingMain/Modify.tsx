@@ -415,7 +415,7 @@ const Modify = (props: ModifyProps) => {
     >
       <Card className={styles.card} >
         <Form layout="vertical" hideRequiredMark>
-          <Spin tip="数据加载中..." spinning={loading}>
+          <Spin tip="数据处理中..." spinning={loading}>
             <Row gutter={24}>
               <Col span={8}>
                 <Form.Item required label="计费单号">
@@ -491,7 +491,7 @@ const Modify = (props: ModifyProps) => {
                 <Search
                   className="search-input"
                   placeholder="请输入要查询的单元编号"
-                  style={{ width: 280 }}
+                  style={{ width: 200 }}
                   onSearch={(value) => {
                     var params = Object.assign({}, unitFeeSearchParams, { search: value })
                     setUnitFeeSearchParams(params);
@@ -631,6 +631,7 @@ const Modify = (props: ModifyProps) => {
         feeDetail={feeDetail}
         treeData={treeData}
         getBillID={(billid) => {
+          setLoading(true);
           setNewId(billid);
           GetBilling(billid).then(res => {
             if (res != null) {

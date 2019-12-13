@@ -91,7 +91,7 @@ function ListTable(props: ListTableProps) {
       title: '联系地点',
       dataIndex: 'address',
       key: 'address',
-      width: 200,
+      width: 250,
       sorter: true,
     },
     {

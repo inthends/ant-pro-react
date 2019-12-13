@@ -207,7 +207,7 @@ const Show = (props: ShowProps) => {
     >
       <Card className={styles.card}>
         <Form layout="vertical" >
-          {/* <Spin tip="数据加载中..." spinning={loading}> */}
+          {/* <Spin tip="数据处理中..." spinning={loading}> */}
           <Row gutter={24}>
             <Col span={8}>
               <Form.Item label="付款单号">

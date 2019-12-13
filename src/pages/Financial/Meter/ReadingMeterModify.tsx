@@ -797,7 +797,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
     >
       <Card className={styles.card}>
         <Form layout="vertical" hideRequiredMark>
-          <Spin tip="数据加载中..." spinning={loading}>
+          <Spin tip="数据处理中..." spinning={loading}>
             <Row gutter={12}>
               <Col span={8}>
                 <Form.Item required={true} label="抄表单号"  >

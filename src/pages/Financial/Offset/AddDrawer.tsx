@@ -233,7 +233,7 @@ const AddDrawer = (props: AddDrawerProps) => {
       bodyStyle={{ background: '#f6f7fb', height: 'calc(100vh -50px)' }}
     >
       <Form layout='vertical' hideRequiredMark >
-        <Spin tip="数据加载中..." spinning={loading}>
+        <Spin tip="数据处理中..." spinning={loading}>
           <Row gutter={24}>
             <Col lg={6}>
               <Form.Item label="应付起始日" required>

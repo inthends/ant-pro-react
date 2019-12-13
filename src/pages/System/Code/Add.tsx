@@ -2,9 +2,11 @@ import { BaseModifyProvider } from "@/components/BaseModifyDrawer/BaseModifyDraw
 import ModifyItem from "@/components/BaseModifyDrawer/ModifyItem";
 import { Card, Form, Row } from "antd";
 import { WrappedFormUtils } from "antd/lib/form/Form";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { SaveForm } from "./Code.service";
 // import RuleItem from './RuleItem';
+import { GetOrgs } from '@/services/commonItem';
+import { TreeNode } from 'antd/lib/tree-select';
 
 interface AddProps {
   visible: boolean;
@@ -15,17 +17,27 @@ interface AddProps {
 };
 
 const Add = (props: AddProps) => {
-  const { data, form } = props;
+  const { data, form ,visible} = props;
   let initData = data ? data : { enabledMark: 1 };
   // initData.expDate = initData.expDate ? initData.expDate : new Date();
   const baseFormProps = { form, initData };
   // const [ruleItemVisible, setRuleItemVisible] = useState<boolean>(false);
   // const [ruleItem, setRuleItem] = useState<any>();
+  const [orgs, setOrgs] = useState<TreeNode[]>();
 
   const doSave = dataDetail => {
     let modifyData = { ...initData, ...dataDetail, keyValue: initData.ruleId };
     return SaveForm(modifyData);
   };
+
+  //打开抽屉时初始化
+  useEffect(() => {
+    if (visible) { 
+      GetOrgs().then(res => {
+        setOrgs(res);
+      });
+    }
+  }, [visible]);
 
   // const [ruleList, setRuleList] = useState<any[]>([]);
   // 打开抽屉时初始化
@@ -132,6 +144,19 @@ const Add = (props: AddProps) => {
       save={doSave}>
       <Card>
         <Form layout="vertical" hideRequiredMark>
+          <Row gutter={24}>
+
+            <ModifyItem
+              {...baseFormProps}
+              field="organizeId"
+              label="所属机构"
+              type="tree"
+              treeData={orgs}
+              disabled={initData.organizeId != undefined}
+              rules={[{ required: true, message: '请选择所属机构' }]}
+            ></ModifyItem>
+
+          </Row>
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}

@@ -222,7 +222,7 @@ const Verify = (props: VerifyProps) => {
     >
       <Card className={styles.card} >
         <Form layout="vertical" hideRequiredMark>
-          <Spin tip="数据加载中..." spinning={loading}>
+          <Spin tip="数据处理中..." spinning={loading}>
             <Row gutter={24}>
               <Col span={8}>
                 <Form.Item label="计费单号">

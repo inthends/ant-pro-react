@@ -17,7 +17,7 @@ interface ModifyProps {
 };
 
 const Modify = (props: ModifyProps) => {
-  const { data, form } = props;
+  const { data, form, visible } = props;
   const { getFieldDecorator } = form;
   const [managers, setManagers] = useState<SelectItem[]>([]);
   // const [types, setTypes] = useState<SelectItem[]>([
@@ -51,8 +51,10 @@ const Modify = (props: ModifyProps) => {
   };
 
   useEffect(() => {
-    getOrgs();
-  }, []);
+    if (visible) {
+      getOrgs();
+    }
+  }, [visible]);
 
   const searchManager = value => {
     searchUser(value).then(res => {
@@ -114,7 +116,7 @@ const Modify = (props: ModifyProps) => {
   };
 
   //设置负责人
-  const onSelect = (value, option) => { 
+  const onSelect = (value, option) => {
     form.setFieldsValue({ chargeLeaderId: option.key });
   };
 

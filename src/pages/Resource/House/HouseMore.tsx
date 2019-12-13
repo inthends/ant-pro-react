@@ -113,11 +113,9 @@ function HouseMore(props) {
     });
   };
 
-  const initLoadData = (parentId, type, searchText) => { 
-    
-    setSearch(searchText);
-    setParentId(parentId);
-
+  const initLoadData = (parentId, type, searchText) => {  
+    setSearch(searchText);//必须赋值，否则查询条件不生效
+    setParentId(parentId); 
     const queryJson = {
       keyword: search,
       //PStructId: psid,

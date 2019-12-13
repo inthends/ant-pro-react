@@ -208,7 +208,7 @@ const Show = (props: ShowProps) => {
       visible={showVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
-      <Spin tip="数据加载中..." spinning={loading}>
+      <Spin tip="数据处理中..." spinning={loading}>
         <Card className={styles.card}>
           <Form layout="vertical" >
             <Row gutter={24}>

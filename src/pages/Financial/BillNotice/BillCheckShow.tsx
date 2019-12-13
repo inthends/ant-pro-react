@@ -240,7 +240,7 @@ const BillCheckShow = (props: BillCheckShowProps) => {
         </Form>
       </Card>
 
-      <Spin tip="数据加载中..." spinning={loading}>
+      <Spin tip="数据处理中..." spinning={loading}>
         <Table<any>
           onChange={(paginationConfig, filters, sorter) => {
             initBillCheckLoadData(paginationConfig, sorter)
