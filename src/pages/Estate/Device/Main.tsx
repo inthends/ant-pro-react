@@ -1,53 +1,31 @@
-import { DefaultPagination } from "@/utils/defaultSetting";   
-import { Button, Icon, Input, Layout } from "antd";
+import { DefaultPagination } from "@/utils/defaultSetting";
+import { Icon, Input, Layout } from "antd";
 import { PaginationConfig } from "antd/lib/table";
 import React, { useContext, useEffect, useState } from "react";
 import ListTable from "./ListTable";
 import Modify from "./Modify";
-import { GetTreeRoleJson, GetDataItemTreeList, GetDataList } from "./Flow.service";
+import { GetTypes, GetDataList } from "./Main.service";
 import { SiderContext } from '../../SiderContext';
 import LeftTree from '../LeftTree';
 const { Sider } = Layout;
 const { Content } = Layout;
 const { Search } = Input;
 
-interface SearchParam {
-  typeId: string;
-  typeName: string;
-  type: string;
-  keyword: string;
-}
-
-const Flow = () => {
-  // const [itemId, setItemId] = useState<string>(); 
-  const [search, setSearch] = useState<SearchParam>({
-    typeId: '',
-    typeName: '',
-    type: '',
-    keyword: '',
-  });
-
+const Device = () => {
+  const [itemId, setItemId] = useState<string>();
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<any[]>([]);
   const [currData, setCurrData] = useState<any>();
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
-  const { hideSider, setHideSider } = useContext(SiderContext);
+  const {hideSider, setHideSider } = useContext(SiderContext);
   const [treeData, setTreeData] = useState<any[]>([]);
-  //是否能新增
-  const [isDisabled, setDisabled] = useState<boolean>(true); 
-  const [roles, setRoles] = useState<any[]>([]);
 
   useEffect(() => {
-    GetDataItemTreeList().then((res) => {
+    GetTypes().then((res) => {
       setTreeData(res || []);
     });
-
-    GetTreeRoleJson().then(res => {
-      setRoles(res || []);
-    });
-  
-    initLoadData(search);
+    initLoadData(itemId);
   }, []);
 
   const closeDrawer = () => {
@@ -61,11 +39,11 @@ const Flow = () => {
     setCurrData(item);
   };
   const loadData = (
-    searchParam: any,
+    itemId: any,
     paginationConfig?: PaginationConfig,
     sorter?
   ) => {
-    setSearch(searchParam);
+    setItemId(itemId);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: pagination.pageSize,
@@ -75,7 +53,7 @@ const Flow = () => {
       pageIndex,
       pageSize,
       total,
-      queryJson: searchParam
+      itemId: itemId
     };
 
     if (sorter) {
@@ -87,7 +65,6 @@ const Flow = () => {
       return res;
     });
   };
-
   const load = formData => {
     setLoading(true);
     formData.sidx = formData.sidx || "CreateDate";
@@ -102,19 +79,20 @@ const Flow = () => {
           pageSize
         };
       });
+
       setData(res.data);
       setLoading(false);
       return res;
     });
   };
 
-  const initLoadData = (searchParam: SearchParam) => {
-    setSearch(searchParam);
-    const queryJson = searchParam;
+  const initLoadData = (itemId) => {
+    setItemId(itemId);
+    //const queryJson = searchParam;
     const sidx = "CreateDate";
     const sord = "desc";
     const { current: pageIndex, pageSize, total } = pagination;
-    return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(
+    return load({ pageIndex, pageSize, sidx, sord, total, itemId }).then(
       res => {
         return res;
       }
@@ -122,22 +100,14 @@ const Flow = () => {
   };
 
   const selectTree = (item) => {
-    var type = item.node.props.type;
-    if (type == '1') {
-      setDisabled(true);
-      type = '';
-    }
-    else {
-      setDisabled(false);
-    }
-
-    var typeId = item.node.props.value;
-    var typeName = item.node.props.title;
-    initLoadData({ ...search, typeId, typeName, type });
+    var value = item.node.props.value;
+    initLoadData(value);
+    setItemId(itemId);
   };
 
   return (
     <Layout style={{ height: "100%" }}>
+
       <Sider
         theme="light"
         style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh + 10px)' }}
@@ -156,7 +126,7 @@ const Flow = () => {
         ) : (
             <>
               {treeData != null && treeData.length > 0 ?
-                (<LeftTree
+                (<LeftTree 
                   key='lefttree'
                   treeData={treeData}
                   selectTree={(id, item) => {
@@ -182,43 +152,39 @@ const Flow = () => {
             className="search-input"
             placeholder="请输入要查询的关键词"
             style={{ width: 200 }}
-            onSearch={keyword => loadData({ ...search, keyword })}
           />
 
-          <Button
+          {/* <Button
             type="primary"
             style={{ float: "right" }}
             onClick={() => showDrawer()}
-            disabled={isDisabled}
           >
             <Icon type="plus" />
-            流程
-          </Button>
+            分类
+          </Button> */}
         </div>
         <ListTable
           onchange={(paginationConfig, filters, sorter) =>
-            loadData(search, paginationConfig, sorter)
+            loadData(itemId, paginationConfig, sorter)
           }
           loading={loading}
           pagination={pagination}
           data={data}
           modify={showDrawer}
           choose={showChoose}
-          reload={() => initLoadData(search)}
+          reload={() => initLoadData(itemId)} 
         />
       </Content>
       <Modify
         visible={modifyVisible}
         closeDrawer={closeDrawer}
-        typeId={search.typeId}
-        typeName={search.typeName}
-        data={currData} 
-        reload={() => initLoadData(search)}
-        roles={roles}
+        data={currData}
+        reload={() => initLoadData(itemId)}
+        types={treeData}
       />
 
     </Layout>
   );
 };
 
-export default Flow;
+export default Device;

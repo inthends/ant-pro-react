@@ -4,7 +4,7 @@ import ModifyItem from "@/components/BaseModifyDrawer/ModifyItem";
 import { Card, Form, Row } from "antd";
 import { WrappedFormUtils } from "antd/lib/form/Form";
 import React, { useState, useEffect } from 'react';
-import { SaveDeviceForm } from "./Device.service";
+import { SaveDeviceForm } from "./Main.service";
 import styles from './style.less';
 import { GetOrgs, getCommonItems } from '@/services/commonItem';
 import { TreeNode } from 'antd/lib/tree-select';

@@ -2,7 +2,7 @@ import Page from '@/components/Common/Page';
 import { Divider, message, Modal, Table } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import React, { useState } from 'react';
-import { CheckType, RemoveForm, GetDetailJson } from './DeviceType.service'; 
+import { CheckType, RemoveForm, GetDetailJson } from './Main.service'; 
 import styles from './style.less';
 interface ListTableProps {
   loading: boolean;

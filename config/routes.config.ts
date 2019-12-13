@@ -14,7 +14,6 @@ export default [
     path: '/exception/403',
     component: './403',
   },
-
   // {
   //   path: '/register',
   //   component: '../layouts/UserLayout',
@@ -27,7 +26,6 @@ export default [
   //     },
   //   ],
   // },
-
   {
     path: '/',
     component: '../layouts/BasicLayout',
@@ -256,12 +254,17 @@ export default [
           {
             name: 'devicetype',
             path: '/estate/devicetype',
-            component: './Estate/DeviceType/DeviceType',
+            component: './Estate/DeviceType/Main',
           },
           {
             name: 'device',
             path: '/estate/device',
-            component: './Estate/Device/Device',
+            component: './Estate/Device/Main',
+          },
+          {
+            name: 'pollingitem',
+            path: '/estate/pollingitem',
+            component: './Estate/PollingItem/Main',
           }
         ],
       },

@@ -2,7 +2,7 @@ import Page from "@/components/Common/Page";
 import { Divider, message, Modal, Table } from "antd";
 import { ColumnProps, PaginationConfig } from "antd/lib/table";
 import React from "react";
-import { RemoveForm } from "./Flow.service";
+import { RemoveForm } from "./Main.service";
 
 interface ListTableProps {
   loading: boolean;

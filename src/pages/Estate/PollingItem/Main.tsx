@@ -1,31 +1,53 @@
-import { DefaultPagination } from "@/utils/defaultSetting";
-import { Icon, Input, Layout } from "antd";
+import { DefaultPagination } from "@/utils/defaultSetting";   
+import { Button, Icon, Input, Layout } from "antd";
 import { PaginationConfig } from "antd/lib/table";
 import React, { useContext, useEffect, useState } from "react";
 import ListTable from "./ListTable";
 import Modify from "./Modify";
-import { GetTypes, GetDataList } from "./Device.service";
+import { GetTreeRoleJson, GetDataItemTreeList, GetDataList } from "./Main.service";
 import { SiderContext } from '../../SiderContext';
 import LeftTree from '../LeftTree';
 const { Sider } = Layout;
 const { Content } = Layout;
 const { Search } = Input;
 
-const Device = () => {
-  const [itemId, setItemId] = useState<string>();
+interface SearchParam {
+  typeId: string;
+  typeName: string;
+  type: string;
+  keyword: string;
+}
+
+const Flow = () => {
+  // const [itemId, setItemId] = useState<string>(); 
+  const [search, setSearch] = useState<SearchParam>({
+    typeId: '',
+    typeName: '',
+    type: '',
+    keyword: '',
+  });
+
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<any[]>([]);
   const [currData, setCurrData] = useState<any>();
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
-  const {hideSider, setHideSider } = useContext(SiderContext);
+  const { hideSider, setHideSider } = useContext(SiderContext);
   const [treeData, setTreeData] = useState<any[]>([]);
+  //是否能新增
+  const [isDisabled, setDisabled] = useState<boolean>(true); 
+  const [roles, setRoles] = useState<any[]>([]);
 
   useEffect(() => {
-    GetTypes().then((res) => {
+    GetDataItemTreeList().then((res) => {
       setTreeData(res || []);
     });
-    initLoadData(itemId);
+
+    GetTreeRoleJson().then(res => {
+      setRoles(res || []);
+    });
+  
+    initLoadData(search);
   }, []);
 
   const closeDrawer = () => {
@@ -39,11 +61,11 @@ const Device = () => {
     setCurrData(item);
   };
   const loadData = (
-    itemId: any,
+    searchParam: any,
     paginationConfig?: PaginationConfig,
     sorter?
   ) => {
-    setItemId(itemId);
+    setSearch(searchParam);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: pagination.pageSize,
@@ -53,7 +75,7 @@ const Device = () => {
       pageIndex,
       pageSize,
       total,
-      itemId: itemId
+      queryJson: searchParam
     };
 
     if (sorter) {
@@ -65,6 +87,7 @@ const Device = () => {
       return res;
     });
   };
+
   const load = formData => {
     setLoading(true);
     formData.sidx = formData.sidx || "CreateDate";
@@ -79,20 +102,19 @@ const Device = () => {
           pageSize
         };
       });
-
       setData(res.data);
       setLoading(false);
       return res;
     });
   };
 
-  const initLoadData = (itemId) => {
-    setItemId(itemId);
-    //const queryJson = searchParam;
+  const initLoadData = (searchParam: SearchParam) => {
+    setSearch(searchParam);
+    const queryJson = searchParam;
     const sidx = "CreateDate";
     const sord = "desc";
     const { current: pageIndex, pageSize, total } = pagination;
-    return load({ pageIndex, pageSize, sidx, sord, total, itemId }).then(
+    return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(
       res => {
         return res;
       }
@@ -100,14 +122,22 @@ const Device = () => {
   };
 
   const selectTree = (item) => {
-    var value = item.node.props.value;
-    initLoadData(value);
-    setItemId(itemId);
+    var type = item.node.props.type;
+    if (type == '1') {
+      setDisabled(true);
+      type = '';
+    }
+    else {
+      setDisabled(false);
+    }
+
+    var typeId = item.node.props.value;
+    var typeName = item.node.props.title;
+    initLoadData({ ...search, typeId, typeName, type });
   };
 
   return (
     <Layout style={{ height: "100%" }}>
-
       <Sider
         theme="light"
         style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh + 10px)' }}
@@ -126,7 +156,7 @@ const Device = () => {
         ) : (
             <>
               {treeData != null && treeData.length > 0 ?
-                (<LeftTree 
+                (<LeftTree
                   key='lefttree'
                   treeData={treeData}
                   selectTree={(id, item) => {
@@ -152,39 +182,43 @@ const Device = () => {
             className="search-input"
             placeholder="请输入要查询的关键词"
             style={{ width: 200 }}
+            onSearch={keyword => loadData({ ...search, keyword })}
           />
 
-          {/* <Button
+          <Button
             type="primary"
             style={{ float: "right" }}
             onClick={() => showDrawer()}
+            disabled={isDisabled}
           >
             <Icon type="plus" />
-            分类
-          </Button> */}
+            流程
+          </Button>
         </div>
         <ListTable
           onchange={(paginationConfig, filters, sorter) =>
-            loadData(itemId, paginationConfig, sorter)
+            loadData(search, paginationConfig, sorter)
           }
           loading={loading}
           pagination={pagination}
           data={data}
           modify={showDrawer}
           choose={showChoose}
-          reload={() => initLoadData(itemId)} 
+          reload={() => initLoadData(search)}
         />
       </Content>
       <Modify
         visible={modifyVisible}
         closeDrawer={closeDrawer}
-        data={currData}
-        reload={() => initLoadData(itemId)}
-        types={treeData}
+        typeId={search.typeId}
+        typeName={search.typeName}
+        data={currData} 
+        reload={() => initLoadData(search)}
+        roles={roles}
       />
 
     </Layout>
   );
 };
 
-export default Device;
+export default Flow;
