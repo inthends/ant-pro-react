@@ -23,7 +23,7 @@ function UnitTable(props: UnitTableProps) {
       title: '计费单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 100,
+      width: 180,
       sorter: true
     },
     {

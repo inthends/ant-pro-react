@@ -49,7 +49,7 @@ function BillCheckTable(props: BillCheckTableProps) {
       title: '单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 130,
+      width: 180,
       sorter: true
     },
     {

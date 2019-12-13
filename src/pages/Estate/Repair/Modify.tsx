@@ -101,7 +101,7 @@ const Modify = (props: ModifyProps) => {
       if (!errors) {
         const newData = data ? { ...data, ...values } : values;
         Dispatch({ ...newData, keyValue: newData.id }).then(res => {
-          message.success('派单成功！');
+          message.success('派单成功');
           closeDrawer();
           reload();
         });

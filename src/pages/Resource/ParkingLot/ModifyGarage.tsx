@@ -71,7 +71,7 @@ const ModifyGarage = (props: ModifyGarageProps) => {
   const doSave = dataDetail => {
     dataDetail.keyValue = dataDetail.id;
     SaveGarageForm({ ...dataDetail, type: 8 }).then(res => {
-      message.success('保存成功！');
+      message.success('保存成功');
       closeDrawer();
       reload();
     });

@@ -800,7 +800,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
           <Spin tip="数据加载中..." spinning={loading}>
             <Row gutter={12}>
               <Col span={8}>
-                <Form.Item required={true} label="单据编号"  >
+                <Form.Item required={true} label="抄表单号"  >
                   {getFieldDecorator('billCode', {
                     initialValue: infoDetail.billCode,
                   })(
@@ -916,7 +916,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                           ids.push(item.id);
                         });*/
                         RemoveReadUnitFormAll(id).then(res => {
-                          message.success('删除成功！');
+                          message.success('删除成功');
                           initHouseLoadData(houseSearch);
                         });
                       }}

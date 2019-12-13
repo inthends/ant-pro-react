@@ -59,7 +59,7 @@ const Submit = (props: SubmitProps) => {
           message.warning(res.message);
         }
         else {
-          message.success('送审成功！');
+          message.success('送审成功');
           reload();
           closeVertify();
         }
@@ -104,7 +104,7 @@ const Submit = (props: SubmitProps) => {
       title: '收款单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 150,
+      width: 180,
       sorter: true,
     },
     {

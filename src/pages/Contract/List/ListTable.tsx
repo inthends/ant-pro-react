@@ -30,7 +30,7 @@ function ListTable(props: ListTableProps) {
       content: `您是否要作废${record.name}？`,
       onOk: () => {
         RemoveForm(record.id).then(() => {
-          message.success('作废成功！');
+          message.success('作废成功');
           reload();
         });
       },

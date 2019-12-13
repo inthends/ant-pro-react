@@ -124,7 +124,7 @@ const Withdrawal = (props: WithdrawalProps) => {
             message.warning(res.message);
 
           } else { 
-            message.success('退租申请成功！');
+            message.success('退租申请成功');
             closeDrawer();
             reload();
           }

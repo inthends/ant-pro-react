@@ -418,7 +418,7 @@ const Modify = (props: ModifyProps) => {
           <Spin tip="数据加载中..." spinning={loading}>
             <Row gutter={24}>
               <Col span={8}>
-                <Form.Item required label="单据编号">
+                <Form.Item required label="计费单号">
                   {getFieldDecorator('billCode', {
                     initialValue: infoDetail.billCode,
                   })(
@@ -507,7 +507,7 @@ const Modify = (props: ModifyProps) => {
                         const billId = id == null || id == '' ? newId : id;//新增时候处理
                         //if (id != null || id != "") {
                         RemoveUnitFormAll(billId).then(res => {
-                          message.success('删除成功！');
+                          message.success('删除成功');
                           initUnitFeeLoadData('');
                         });
 

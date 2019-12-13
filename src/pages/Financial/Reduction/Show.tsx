@@ -193,7 +193,7 @@ const Show = (props: ShowProps) => {
         <Card className={styles.card}>
           <Row gutter={24}>
             <Col lg={8}>
-              <Form.Item label="单据编号">
+              <Form.Item label="减免单号">
                 {infoDetail.billCode}
               </Form.Item>
             </Col>

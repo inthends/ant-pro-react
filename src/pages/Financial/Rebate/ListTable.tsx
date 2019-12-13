@@ -37,7 +37,7 @@ function ListTable(props: ListTableProps) {
       content: `您是否要作废${record.billCode}？`,
       onOk: () => {
         InvalidForm(record.billId).then(() => {
-          message.success('作废成功！');
+          message.success('作废成功');
           reload();
         });
       },
@@ -61,10 +61,10 @@ function ListTable(props: ListTableProps) {
 
   const columns = [
     {
-      title: '单号',
+      title: '优惠单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 150,
+      width: 180,
       sorter: true,
     },
     {

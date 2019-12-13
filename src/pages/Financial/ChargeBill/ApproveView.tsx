@@ -74,7 +74,7 @@ const ApproveView = (props: ApproveViewProps) => {
       title: '收款单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 150,
+      width: 180,
       sorter: true,
     },
     {

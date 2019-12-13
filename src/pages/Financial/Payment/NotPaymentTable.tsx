@@ -213,7 +213,7 @@ function NotPaymentTable(props: NotPaymentTableProps) {
               return;
             }
             Pay(info).then(res => {
-              message.success('付款成功！');
+              message.success('付款成功');
               reload();
               //弹出查看页面 
               showDetail(res);

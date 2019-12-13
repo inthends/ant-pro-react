@@ -168,7 +168,7 @@ const AddDrawer = (props: AddDrawerProps) => {
                 '没有找到要冲抵的费用！'
             });
           } else {
-            message.success('保存成功！');
+            message.success('保存成功');
             reload();
             closeDrawer();
           }

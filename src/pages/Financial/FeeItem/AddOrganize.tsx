@@ -71,10 +71,10 @@ const AddOrganize = (props: AddOrganizeProps) => {
         } else {
           OrganizeSaveForm({ FeeItemId: feeId, JsonFeeIdArray: JSON.stringify(orgData) }).then(res => {
             closeModal();
-            message.success('数据保存成功！');
+            message.success('数据保存成功');
             reload();
           }).catch(() => {
-            message.warning('数据保存失败！');
+            message.warning('数据保存失败');
           });
         }
       }}

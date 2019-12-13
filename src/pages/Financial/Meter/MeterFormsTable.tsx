@@ -18,10 +18,10 @@ function MeterFormsTable(props: MeterFormsTableProps) {
   const {  onchange, loading, pagination, data  } = props; 
   const columns = [
     {
-      title: '单号',
+      title: '抄表单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 150,
+      width: 180,
       sorter: true
     },
     {

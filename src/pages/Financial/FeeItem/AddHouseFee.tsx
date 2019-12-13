@@ -45,16 +45,16 @@ const AddHouseFee = (props: AddHouseFeeProps) => {
       }}
       onOk={() => {
         if (unitData.length == 0) {
-          message.warning('请选择房屋！');
+          message.warning('请选择房屋');
         } else {
           setLoading(true);
           UnitFeeSaveForm({ FeeItemID: feeId, JsonFeeIdArray: JSON.stringify(unitData) }).then(res => {
-            message.success('添加成功！');
+            message.success('添加成功');
             setLoading(false);
             closeModal();
             reload();
           }).catch(() => {
-            message.warning('添加失败！');
+            message.warning('添加失败');
           });
 
         }

@@ -34,7 +34,7 @@ function ListTable(props: ListTableProps) {
       title: '计费单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 120,
+      width: 180,
     },
     {
       title: '单据日期',
@@ -55,7 +55,6 @@ function ListTable(props: ListTableProps) {
       key: 'feeName',
       width: 100, 
     },
-
     {
       title: '拆分前计费期间',
       dataIndex: 'bBeginDate',

@@ -150,7 +150,7 @@ const Verify = (props: VerifyProps) => {
         newData.keyValue = infoDetail.billId;
         newData.ifVerify = ifVerify;
         Audit(newData).then(res => {
-          message.success('提交成功！');
+          message.success('提交成功');
           closeVerify();
           reload();
         });
@@ -163,10 +163,10 @@ const Verify = (props: VerifyProps) => {
 
   const columns = [
     {
-      title: '单号',
+      title: '冲抵单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 120,
+      width: 180,
       sorter: true
     },
     {
@@ -264,7 +264,7 @@ const Verify = (props: VerifyProps) => {
         <Card className={styles.card}>
           <Row gutter={24}>
             <Col lg={8}>
-              <Form.Item label="单据编号">
+              <Form.Item label="冲抵单号">
                 {infoDetail.billCode}
               </Form.Item>
             </Col>

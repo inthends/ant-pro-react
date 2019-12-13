@@ -532,7 +532,7 @@ const MeterModify = (props: MeterModifyProps) => {
                         onOk: () => {
                           if (id != null || id != '') {
                             RemoveFormAll(id).then(res => {
-                              message.success('删除成功！');
+                              message.success('删除成功');
                               initMeterLoadData(meterSearch);
                             });
                           }

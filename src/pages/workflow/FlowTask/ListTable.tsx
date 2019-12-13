@@ -30,7 +30,7 @@ function ListTable(props: ListTableProps) {
   //     onOk: () => {
   //       RemoveForm(record.roleId)
   //         .then(() => {
-  //           message.success('作废成功！');
+  //           message.success('作废成功');
   //           reload();
   //         })
   //     }

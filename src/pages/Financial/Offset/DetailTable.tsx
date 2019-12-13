@@ -26,10 +26,10 @@ function DetailTable(props: DetailTableProps) {
   };
   const columns = [
     {
-      title: '单号',
+      title: '冲抵单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 130,
+      width: 180,
       sorter: true
     },
     {

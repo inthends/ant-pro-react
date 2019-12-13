@@ -32,7 +32,7 @@ function PaymentTable(props: PaymentTableProps) {
       content: `您是否要作废${record.billCode}？`,
       onOk: () => {
         InvalidForm(record.billId).then(() => {
-          message.success('作废成功！');
+          message.success('作废成功');
           reload();
         });
       },
@@ -41,10 +41,10 @@ function PaymentTable(props: PaymentTableProps) {
 
   const columns = [
     {
-      title: '付款单编号',
+      title: '付款单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 150,
+      width: 180,
       sorter: true,
     },
     {

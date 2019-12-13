@@ -46,7 +46,7 @@ const RoleAuth = (props: RoleAuthProps) => {
       const moduleButtonIds = getMenu(checkedKeys, treeData, 'button').join(',');
       const halfchecks = halfCheckedKeys.join(',');//半选节点
       SaveModuleAuthorize({ roleId, halfchecks, moduleIds, moduleButtonIds }).then(() => {
-        message.success('保存成功！');
+        message.success('保存成功');
         close();
       });
     }

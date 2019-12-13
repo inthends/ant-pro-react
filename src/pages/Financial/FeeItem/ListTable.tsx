@@ -27,7 +27,7 @@ function ListTable(props: ListTableProps) {
       okText: '确定',
       onOk: () => {
         RemoveForm(record.feeItemId).then(() => {
-          message.success('删除成功！');
+          message.success('删除成功');
           reload();
         });
       },

@@ -73,10 +73,10 @@ const AddRebateOrganize = (props: AddRebateOrganizeProps) => {
           values.feeItemId = feeId;
           RebateSaveForm({ ...values, JsonFeeIdArray: JSON.stringify(orgData) }).then(res => {
             closeModal();
-            message.success('保存成功！');
+            message.success('保存成功');
             reload();
           }).catch(() => {
-            message.warning('保存失败！');
+            message.warning('保存失败');
           });
         }
       }

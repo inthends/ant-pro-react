@@ -52,7 +52,7 @@ function ListTable(props: ListTableProps) {
         content: `您是否要作废${currentItem.billCode}？`,
         onOk: () => {
           InvalidForm(currentItem.billId).then(() => {
-            message.success('作废成功！');
+            message.success('作废成功');
             reload();
           });
         },
@@ -62,10 +62,10 @@ function ListTable(props: ListTableProps) {
 
   const columns = [
     {
-      title: '单号',
+      title: '计费单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 130,
+      width: 180,
       sorter: true
     },
     {

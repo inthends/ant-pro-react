@@ -28,7 +28,7 @@ function ListTable(props: ListTableProps) {
           }
           RemoveForm(record.key)
             .then(() => {
-              message.success('删除成功！');
+              message.success('删除成功');
               reload();
             })
             .catch(e => { });

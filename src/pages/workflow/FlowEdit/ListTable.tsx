@@ -26,7 +26,7 @@ function ListTable(props: ListTableProps) {
       onOk: () => {
         RemoveForm(record.id)
           .then(() => {
-            message.success("删除成功！");
+            message.success("删除成功");
             reload();
           })
           .catch(e => { });

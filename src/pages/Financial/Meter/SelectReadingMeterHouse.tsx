@@ -72,11 +72,11 @@ const SelectReadingMeterHouse = (props: SelectReadingMeterHouseProps) => {
         readingDetail.meterId = meterId;
         SaveUnitForm(readingDetail).then(res => {
           setLoading(false);
-          message.success('添加成功！');
+          message.success('添加成功');
           closeModal();
           reload();
         }).catch(() => {
-          message.warning('添加失败！');
+          message.warning('添加失败');
         })
       }}
 

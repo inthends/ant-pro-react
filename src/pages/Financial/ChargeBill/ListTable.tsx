@@ -314,7 +314,7 @@ function ListTable(props: ListTableProps) {
             }
 
             Charge(info).then(billId => {
-              message.success('收款成功！');
+              message.success('收款成功');
               reload();
               //弹出查看页面
               showDetail(billId);

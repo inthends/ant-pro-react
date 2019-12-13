@@ -22,7 +22,7 @@ const AddMemo = (props: AddMemoProps) => {
       if (!errors) {
         const newData = { keyValue: keyValue, memo: values.memo };
         Finish({ ...newData }).then(res => {
-          message.success('闭单成功！');
+          message.success('闭单成功');
           closeModal();
           closeDrawer();
           reload();

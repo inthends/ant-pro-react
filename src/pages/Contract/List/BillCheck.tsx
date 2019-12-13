@@ -116,7 +116,7 @@ const BillCheck = (props: BillCheckProps) => {
           instanceId: instanceId,
           verifyMemo: values.verifyMemo
         }).then(res => {
-          message.success('审批成功！');
+          message.success('审批成功');
           closeDrawer();
           reload();
         });

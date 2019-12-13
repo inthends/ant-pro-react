@@ -64,7 +64,7 @@ const Show = (props: ShowProps) => {
         //doSave(newData);
         //newData.keyValue = newData.id;
         Project({ ...newData, keyValue: newData.id }).then(res => {
-          message.success('立项成功！');
+          message.success('立项成功');
           closeDrawer();
           reload();
         });

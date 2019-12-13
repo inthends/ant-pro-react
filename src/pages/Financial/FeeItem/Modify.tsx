@@ -753,7 +753,7 @@ const Modify = (props: ModifyProps) => {
         content: `您是否要删除？删除后无法恢复！`,
         onOk: () => {
           HouseRemoveForm({ feeitemid: id, keyValues: JSON.stringify(selectedHouseRowKeys) }).then(() => {
-            message.success('删除成功！');
+            message.success('删除成功');
             houseLoadData('');
           });
         },

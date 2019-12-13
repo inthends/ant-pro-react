@@ -268,7 +268,7 @@ const Show = (props: ShowProps) => {
           <Spin tip="数据加载中..." spinning={loading}>
             <Row gutter={24}>
               <Col span={8}>
-                <Form.Item label="单据编号">
+                <Form.Item label="计费单号">
                   {infoDetail.billCode}
                 </Form.Item>
               </Col>

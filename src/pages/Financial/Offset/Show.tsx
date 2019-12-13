@@ -178,7 +178,7 @@ const Show = (props: ShowProps) => {
   //           });
   //         } else {
   //           // close();
-  //           message.success('保存成功！');
+  //           message.success('保存成功');
   //           reload();
   //           closeDrawer();
   //         }
@@ -192,7 +192,7 @@ const Show = (props: ShowProps) => {
       title: '单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 120,
+      width: 180,
       sorter: true
     },
     {
@@ -289,7 +289,7 @@ const Show = (props: ShowProps) => {
         <Card className={styles.card}>
           <Row gutter={24}>
             <Col lg={8}>
-              <Form.Item label="单据编号">
+              <Form.Item label="冲抵单号">
                 {infoDetail.billCode}
               </Form.Item>
             </Col>

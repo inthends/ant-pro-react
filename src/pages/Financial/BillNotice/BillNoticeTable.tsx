@@ -25,7 +25,7 @@ function BillNoticeTable(props: BillNoticeTableProps) {
       title: '单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 120,
+      width: 180,
       sorter: true
     },
     {

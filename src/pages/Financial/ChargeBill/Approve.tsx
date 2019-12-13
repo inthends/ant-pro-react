@@ -52,7 +52,7 @@ const Approve = (props: ApproveProps) => {
           instanceId: instanceId,
           verifyMemo: values.verifyMemo
         }).then(res => {
-          message.success('审批成功！');
+          message.success('审批成功');
           closeDrawer();
           reload();
         });
@@ -112,7 +112,7 @@ const Approve = (props: ApproveProps) => {
       title: '收款单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 150,
+      width: 180,
       sorter: true,
     },
     {

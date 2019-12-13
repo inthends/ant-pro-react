@@ -26,7 +26,7 @@ function ListTable(props: ListTableProps) {
       onOk: () => {
         InvalidForm(record.id)
           .then(() => {
-            message.success('作废成功！');
+            message.success('作废成功');
             reload();
           })
           .catch(e => { });
@@ -35,10 +35,10 @@ function ListTable(props: ListTableProps) {
   };
   const columns = [
     {
-      title: '单据编号',
+      title: '报修单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 150,
+      width: 180,
       sorter: true,
     },
     {

@@ -26,7 +26,7 @@ function ListTable(props: ListTableProps) {
       onOk: () => {
         InvalidForm(record.id)
           .then(() => {
-            message.success('作废成功！');
+            message.success('作废成功');
             reload();
           })
           .catch(e => { });
@@ -73,10 +73,10 @@ function ListTable(props: ListTableProps) {
       }
     },
     {
-      title: '单据编号',
+      title: '服务单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 150,
+      width: 180,
       sorter: true,
     },
     {
@@ -125,7 +125,7 @@ function ListTable(props: ListTableProps) {
       title: '关联单号',
       dataIndex: 'businessCode',
       key: 'businessCode',
-      width: 150,
+      width: 180,
     },
     {
       title: '备注',

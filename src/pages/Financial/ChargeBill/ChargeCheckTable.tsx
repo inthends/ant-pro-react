@@ -68,7 +68,6 @@ function ChargeCheckTable(props: ChargeCheckTableProps) {
       sorter: true,
     },
 
-
     {
       title: '平台订单号',
       dataIndex: 'transactionId',
@@ -111,7 +110,7 @@ function ChargeCheckTable(props: ChargeCheckTableProps) {
       title: '收款单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 120,
+      width: 180,
     }, {
       title: '收款单日期',
       dataIndex: 'rBillDate',

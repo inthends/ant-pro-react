@@ -117,7 +117,7 @@ const ReSubmit = (props: ReSubmitProps) => {
       title: '收款单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 150,
+      width: 180,
       sorter: true,
     },
     {
@@ -275,7 +275,7 @@ const ReSubmit = (props: ReSubmitProps) => {
                     content: `您是否确定全部删除？`,
                     onOk: () => {
                       RemoveSubmitDetail(instanceId).then(res => {
-                        message.success('全部删除成功！');
+                        message.success('全部删除成功');
                         // initLoad(instanceId);
                         LoadData();
                       });

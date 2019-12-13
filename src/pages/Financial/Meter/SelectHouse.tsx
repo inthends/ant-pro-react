@@ -42,7 +42,7 @@ const SelectHouse = (props: SelectHouseProps) => {
           UnitMeterSaveForm(newdata).then(res => {
             setLoading(false);
             closeModal();
-            message.success('添加成功！');
+            message.success('添加成功');
             reload();
           })
           //.catch(() => {

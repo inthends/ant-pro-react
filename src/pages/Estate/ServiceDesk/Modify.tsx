@@ -94,7 +94,7 @@ const Modify = (props: ModifyProps) => {
     dataDetail.isAdd = dataDetail.billCode == undefined ? true : false;
     dataDetail.custEvaluate = 0;
     SaveForm({ ...dataDetail }).then(res => {
-      message.success('保存成功！');
+      message.success('保存成功');
       closeDrawer();
       reload();
     });
@@ -286,7 +286,7 @@ const Modify = (props: ModifyProps) => {
                       </Form.Item>
                     </Col>
                     <Col lg={8}>
-                      <Form.Item label="单据编号">
+                      <Form.Item label="服务单号">
                         {getFieldDecorator('billCode', {
                           initialValue: infoDetail.billCode
                         })(<Input placeholder="自动获取编号" readOnly />)}
@@ -464,7 +464,7 @@ const Modify = (props: ModifyProps) => {
                       </Form.Item>
                     </Col>
                     <Col lg={5}>
-                      <Form.Item label="单据编号">
+                      <Form.Item label="服务单号">
                         {infoDetail.billCode}
                       </Form.Item>
                     </Col>

@@ -54,7 +54,7 @@ function ChargeListTable(props: ChargeListTableProps) {
             content: `您确定要冲红该收款单${currentItem.billCode}`,
             onOk: () => {
               RedFlush(currentItem.billId).then(() => {
-                message.success('冲红成功！');
+                message.success('冲红成功');
                 reload();
               });
             },
@@ -93,7 +93,7 @@ function ChargeListTable(props: ChargeListTableProps) {
       title: '收款单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 120,
+      width: 180,
       sorter: true,
     },
     {

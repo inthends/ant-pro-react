@@ -98,10 +98,10 @@ const EditHouseFeeItem = (props: EditHouseFeeItemProps) => {
         newData.keyValue = id;
         SaveUnitMeterForm(newData).then(res => {
           closeModal();
-          message.success('保存成功！');
+          message.success('保存成功');
           reload();
         }).catch(() => {
-          message.warning('保存失败！');
+          message.warning('保存失败');
         })
       }
     });

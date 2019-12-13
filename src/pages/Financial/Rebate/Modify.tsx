@@ -435,7 +435,7 @@ const Modify = (props: ModifyProps) => {
         <Card className={styles.card} >
           <Row gutter={24}>
             <Col lg={8}>
-              <Form.Item label="单据编号">
+              <Form.Item label="优惠单号">
                 {getFieldDecorator('billCode', {
                   initialValue: infoDetail.billCode,
                   rules: [{ message: '自动获取编号' }],
@@ -531,7 +531,7 @@ const Modify = (props: ModifyProps) => {
                     onOk: () => {
                       if (id != null || id != "") {
                         RemoveFormUnitAll(id).then(res => {
-                          message.success('删除成功！');
+                          message.success('删除成功');
                         });
                       }
                     },

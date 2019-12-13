@@ -237,7 +237,7 @@ const Add = (props: AddProps) => {
           ChargeFeeResult: JSON.stringify(chargeData)
 
         }).then(res => {
-          message.success('保存成功！');
+          message.success('保存成功');
           closeDrawer();
           reload();
         });

@@ -46,7 +46,7 @@ const AddReceiveMain = (props: AddReceiveMainProps) => {
     };
 
     SaveSubmitDetail(newData).then((res) => {
-      message.success('保存成功！');
+      message.success('保存成功');
       setLoading(false);
       reload();
       closeModal();
@@ -131,7 +131,7 @@ const AddReceiveMain = (props: AddReceiveMainProps) => {
       title: '收款单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 120,
+      width: 180,
       sorter: true,
     },
     {

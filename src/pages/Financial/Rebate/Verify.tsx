@@ -72,7 +72,7 @@ const Verify= (props: VerifyProps) => {
         newData.keyValue = infoDetail.billId;
         newData.ifVerify = ifVerify;
         Audit(newData).then(res => {
-          message.success('提交成功！');
+          message.success('提交成功');
           closeModal();
           reload();
         }); 
@@ -199,7 +199,7 @@ const Verify= (props: VerifyProps) => {
         <Card  className={styles.card}>
           <Row gutter={24}>
             <Col lg={8}>
-              <Form.Item label="单据编号">
+              <Form.Item label="优惠单号">
                 {infoDetail.billCode}
               </Form.Item>
             </Col>
