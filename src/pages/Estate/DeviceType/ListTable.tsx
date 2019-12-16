@@ -72,7 +72,7 @@ function ListTable(props: ListTableProps) {
       title: '类别名称',
       dataIndex: 'fullName',
       key: 'fullName',
-      width: 250,
+      width: 300,
     },
     {
       title: '描述',

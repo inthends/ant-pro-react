@@ -201,12 +201,12 @@ const Modify = (props: ModifyProps) => {
               type='select'
               label="类型"
               items={[
-                { label: '通知', value: '通知' },
-                { label: '公告', value: '公告' },
-                { label: '资讯', value: '资讯' },
-                { label: '广告', value: '广告' },
-                { label: '活动', value: '活动' },
-                { label: '关于我们', value: '关于我们' }
+                { label: '通知', title: '通知', value: '通知' },
+                { label: '公告', title: '公告', value: '公告' },
+                { label: '资讯', title: '资讯', value: '资讯' },
+                { label: '广告', title: '广告', value: '广告' },
+                { label: '活动', title: '活动', value: '活动' },
+                { label: '关于我们', title: '关于我们', value: '关于我们' }
               ]}
               // onChange={value => form.setFieldsValue({ isPublish: value })}
               rules={[{ required: true, message: "请选择类型" }]}
@@ -299,7 +299,7 @@ const Modify = (props: ModifyProps) => {
               rules={[{ required: form.getFieldValue('type') == '广告', message: "请输入链接地址" }]}
               lg={24}
             ></ModifyItem>
-          </Row> 
+          </Row>
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
@@ -309,7 +309,7 @@ const Modify = (props: ModifyProps) => {
               maxLength={500}
               lg={24}
             ></ModifyItem>
-          </Row> 
+          </Row>
           <Row gutter={24}>
             <Col>
               <Form.Item required label="">

@@ -48,7 +48,7 @@ function ListTable(props: ListTableProps) {
       title: "名称",
       dataIndex: "name",
       key: "name",
-      width: 100
+      width: 150
     },
     {
       title: "类别",
@@ -60,13 +60,13 @@ function ListTable(props: ListTableProps) {
       title: "单位",
       dataIndex: "unit",
       key: "unit",
-      width: 120
+      width: 80
     },
     {
       title: "频次",
       dataIndex: "frequency",
       key: "frequency",
-      width: 120
+      width: 80
     },
     {
       title: "说明",
@@ -78,7 +78,7 @@ function ListTable(props: ListTableProps) {
       // dataIndex: "operation",
       key: "operation",
       align: 'center',
-      width: 70,
+      width: 95,
       render: (text, record) => {
         return [
           <span key='span'>
