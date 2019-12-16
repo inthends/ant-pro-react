@@ -260,12 +260,17 @@ export default [
             name: 'device',
             path: '/estate/device',
             component: './Estate/Device/Main',
-          },
+          }, 
           {
-            name: 'pollingitem',
-            path: '/estate/pollingitem',
-            component: './Estate/PollingItem/Main',
+            name: 'pollingcontent',
+            path: '/estate/pollingcontent',
+            component: './Estate/PollingContent/Main',
           }
+          {
+            name: 'pollingline',
+            path: '/estate/pollingline',
+            component: './Estate/PollingLine/Main',
+          },
         ],
       },
       {

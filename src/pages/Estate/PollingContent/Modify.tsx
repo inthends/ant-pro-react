@@ -20,7 +20,7 @@ interface ModifyProps {
 const Modify = (props: ModifyProps) => {
   const { data, form, visible } = props;
   const { getFieldDecorator } = form;
-  let initData = data ? data : { unit: '月' };
+  let initData = data ? data : {};
   const baseFormProps = { form, initData };
   const [pollingType, setPollingType] = useState<any[]>([]);
   const [orgs, setOrgs] = useState<TreeNode[]>();
@@ -37,7 +37,7 @@ const Modify = (props: ModifyProps) => {
       });
       getCommonItems('PollingType').then(res => {
         setPollingType(res || []);
-      }); 
+      });
     }
   }, [visible]);
 
@@ -63,7 +63,6 @@ const Modify = (props: ModifyProps) => {
               rules={[{ required: true, message: "请输入编号" }]}
             ></ModifyItem>
           </Row>
-
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
@@ -89,48 +88,24 @@ const Modify = (props: ModifyProps) => {
               <input type='hidden' />
             )}
           </Row>
-
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
-              field="unitNum"
-              lg={8}
-              label="频次"
-              type='inputNumber'
-              rules={[{ required: true, message: "请输入频次" }]}
+              field="criterion"
+              label="标准要求"
+              rules={[{ required: true, message: "请输入标准要求" }]}
             ></ModifyItem>
 
             <ModifyItem
               {...baseFormProps}
-              field="unit"
-              lg={8}
-              label="频次单位"
-              type='select'
-              items={[
-                { label: '天', title: '天', value: '天' },
-                { label: '周', title: '周', value: '周' },
-                { label: '月', title: '月', value: '月' },
-                { label: '季', title: '季', value: '季' },
-                { label: '年', title: '年', value: '年' }
-              ]}
+              field="checkWay"
+              label="检查方法"
               rules={[{ required: true, message: '请选择频次单位' }]}
             ></ModifyItem>
-            <ModifyItem
-              {...baseFormProps}
-              field="frequency"
-              lg={8}
-              type='inputNumber'
-              label="次数"
-              rules={[{ required: true, message: '请输入次数' }]}
-            ></ModifyItem>
-
           </Row>
-
-
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
-              // wholeLine={true}
               lg={24}
               type="textarea"
               field="memo"
