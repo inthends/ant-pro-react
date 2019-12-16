@@ -44,15 +44,11 @@ const Modify = (props: ModifyProps) => {
   // initData.expDate = initData.expDate ? initData.expDate : new Date();
   const baseFormProps = { form, initData };
 
-  const getOrgs = () => {
-    GetOrgs().then(res => {
-      setOrgs(res);
-    });
-  };
-
   useEffect(() => {
     if (visible) {
-      getOrgs();
+      GetOrgs().then(res => {
+        setOrgs(res);
+      });
     }
   }, [visible]);
 

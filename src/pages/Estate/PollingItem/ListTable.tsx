@@ -15,7 +15,7 @@ interface ListTableProps {
 }
 
 function ListTable(props: ListTableProps) {
-  const {  onchange, loading, data, modify, reload, pagination } = props;
+  const { onchange, loading, data, modify, reload, pagination } = props;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
   };
@@ -39,28 +39,39 @@ function ListTable(props: ListTableProps) {
 
   const columns = [
     {
-      title: "流程名称",
+      title: "编号",
+      dataIndex: "code",
+      key: "code",
+      width: 100,
+    },
+    {
+      title: "名称",
       dataIndex: "name",
       key: "name",
-      width: 250,
+      width: 100
     },
     {
-      title: "流程分类",
-      dataIndex: "flowTypeName",
-      key: "flowTypeName",
-      width: 250
-    },
-    {
-      title: "创建人",
-      dataIndex: "createUserName",
-      key: "createUserName",
+      title: "类别",
+      dataIndex: "typeName",
+      key: "typeName",
       width: 80
     },
     {
-      title: "创建时间",
-      dataIndex: "createDate",
-      key: "createDate",
+      title: "单位",
+      dataIndex: "unit",
+      key: "unit",
       width: 120
+    },
+    {
+      title: "频次",
+      dataIndex: "frequency",
+      key: "frequency",
+      width: 120
+    },
+    {
+      title: "说明",
+      dataIndex: "memo",
+      key: "memo"
     },
     {
       title: "操作",

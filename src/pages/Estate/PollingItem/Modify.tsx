@@ -2,9 +2,10 @@ import { BaseModifyProvider } from "@/components/BaseModifyDrawer/BaseModifyDraw
 import ModifyItem from "@/components/BaseModifyDrawer/ModifyItem";
 import { Form, Row, Card } from "antd";
 import { WrappedFormUtils } from "antd/lib/form/Form";
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import { SaveForm } from "./Main.service";
-
+import { GetOrgs } from '@/services/commonItem';
+import { TreeNode } from 'antd/lib/tree-select';
 
 interface ModifyProps {
   visible: boolean;
@@ -12,17 +13,28 @@ interface ModifyProps {
   form: WrappedFormUtils<any>;
   closeDrawer(): void;
   reload(): void;
+  typeId: string;
+  typeName: string;
 };
 
 const Modify = (props: ModifyProps) => {
-  const { data, form } = props;
+  const { data, form,visible } = props;
   let initData = data ? data : { enabledMark: 1 };
-  initData.expDate = initData.expDate ? initData.expDate : new Date(); 
-  const baseFormProps = { form, initData }; 
+  initData.expDate = initData.expDate ? initData.expDate : new Date();
+  const baseFormProps = { form, initData };
+  const [orgs, setOrgs] = useState<TreeNode[]>();
   const doSave = dataDetail => {
     let modifyData = { ...initData, ...dataDetail, keyValue: initData.roleId };
     return SaveForm(modifyData);
   };
+
+  useEffect(() => {
+    if (visible) {
+      GetOrgs().then(res => {
+        setOrgs(res);
+      });
+    }
+  }, [visible]);
 
   return (
     <BaseModifyProvider {...props} name="巡检项目" save={doSave}>
@@ -31,18 +43,32 @@ const Modify = (props: ModifyProps) => {
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
-              field="fullName"
-              label="角色名称"
-              rules={[{ required: true, message: "请输入角色名称" }]}
+              field="name"
+              label="名称"
+              rules={[{ required: true, message: "请输入名称" }]}
             ></ModifyItem>
             <ModifyItem
               {...baseFormProps}
-              field="enCode"
-              label="角色编号"
-              rules={[{ required: true, message: "请输入角色编号" }]}
+              field="code"
+              label="编号"
+              rules={[{ required: true, message: "请输入编号" }]}
+            ></ModifyItem>
+          </Row>
+
+          <Row gutter={24}>
+           
+          <ModifyItem
+              {...baseFormProps}
+              field="organizeId"
+              label="所属机构"
+              type="tree"
+              treeData={orgs}
+              disabled={initData.organizeId != undefined}
+              rules={[{ required: true, message: '请选择所属机构' }]} 
             ></ModifyItem>
 
           </Row>
+
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}

@@ -1,8 +1,8 @@
 import { BaseModifyProvider } from '@/components/BaseModifyDrawer/BaseModifyDrawer';
 import ModifyItem from '@/components/BaseModifyDrawer/ModifyItem';
-import { message, Col, Card, Form, Row } from 'antd';
+import {  Col, Card, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import React, { useState } from 'react';
+import React from 'react';
 import { SaveForm } from './Flow.service';
 import GGEditor, { Flow } from 'gg-editor';
 import { FlowContextMenu } from './components/EditorContextMenu';
@@ -161,7 +161,6 @@ const Modify = (props: ModifyProps) => {
                   initData.designerJSON = JSON.stringify(e.item.graph._cfg._data);
                 }
               }}
-
             />
           </Col>
           <Col span={5} className={styles.editorSidebar}>
