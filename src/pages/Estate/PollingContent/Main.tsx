@@ -1,10 +1,10 @@
-import { DefaultPagination } from "@/utils/defaultSetting";   
+import { DefaultPagination } from "@/utils/defaultSetting";
 import { Button, Icon, Input, Layout } from "antd";
 import { PaginationConfig } from "antd/lib/table";
 import React, { useContext, useEffect, useState } from "react";
 import ListTable from "./ListTable";
 import Modify from "./Modify";
-import { GetDataItemTreeList, GetDataList } from "./Main.service";
+import { GetDataItemTreeList, GetPageContentListJson } from "./Main.service";
 import { SiderContext } from '../../SiderContext';
 import LeftTree from '../LeftTree';
 const { Sider } = Layout;
@@ -18,8 +18,7 @@ interface SearchParam {
   keyword: string;
 }
 
-const Flow = () => {
-  // const [itemId, setItemId] = useState<string>(); 
+const Main = () => {
   const [search, setSearch] = useState<SearchParam>({
     typeId: '',
     typeName: '',
@@ -35,14 +34,13 @@ const Flow = () => {
   const { hideSider, setHideSider } = useContext(SiderContext);
   const [treeData, setTreeData] = useState<any[]>([]);
   //是否能新增
-  const [isDisabled, setDisabled] = useState<boolean>(true);  
+  const [isDisabled, setDisabled] = useState<boolean>(true);
 
   useEffect(() => {
     GetDataItemTreeList().then((res) => {
       setTreeData(res || []);
     });
- 
-  
+
     initLoadData(search);
   }, []);
 
@@ -88,7 +86,7 @@ const Flow = () => {
     setLoading(true);
     formData.sidx = formData.sidx || "CreateDate";
     formData.sord = formData.sord || "desc";
-    return GetDataList(formData).then(res => {
+    return GetPageContentListJson(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
         return {
@@ -134,42 +132,13 @@ const Flow = () => {
 
   return (
     <Layout style={{ height: "100%" }}>
-      <Sider
-        theme="light"
-        style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh + 10px)' }}
-        width={hideSider ? 20 : 245}
-      >
-        {hideSider ? (
-          <div style={{ position: 'absolute', top: '40%', left: 5 }}>
-            <Icon
-              type="double-right"
-              onClick={() => {
-                setHideSider(false);
-              }}
-              style={{ color: '#1890ff' }}
-            />
-          </div>
-        ) : (
-            <>
-              {treeData != null && treeData.length > 0 ?
-                (<LeftTree
-                  key='lefttree'
-                  treeData={treeData}
-                  selectTree={(id, item) => {
-                    selectTree(item);
-                  }}
-                />) : null}
-              <div
-                style={{ position: 'absolute', top: '40%', right: -15 }}
-                onClick={() => {
-                  setHideSider(true);
-                }}
-              >
-                <Icon type="double-left" style={{ color: '#1890ff', cursor: 'pointer' }} />
-              </div>
-            </>
-          )}
-      </Sider>
+      <LeftTree
+        key='lefttree'
+        treeData={treeData}
+        selectTree={(id, item) => {
+          selectTree(item);
+        }}
+      />
 
       <Content style={{ paddingLeft: '18px' }}>
         <div style={{ marginBottom: 20, padding: "3px 0" }}>
@@ -188,7 +157,7 @@ const Flow = () => {
             disabled={isDisabled}
           >
             <Icon type="plus" />
-            项目
+            内容
           </Button>
         </div>
         <ListTable
@@ -199,7 +168,6 @@ const Flow = () => {
           pagination={pagination}
           data={data}
           modify={showDrawer}
-          choose={showChoose}
           reload={() => initLoadData(search)}
         />
       </Content>
@@ -208,12 +176,12 @@ const Flow = () => {
         closeDrawer={closeDrawer}
         typeId={search.typeId}
         typeName={search.typeName}
-        data={currData} 
-        reload={() => initLoadData(search)} 
+        data={currData}
+        reload={() => initLoadData(search)}
       />
 
     </Layout>
   );
 };
 
-export default Flow;
+export default Main;

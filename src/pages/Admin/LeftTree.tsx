@@ -2,7 +2,6 @@ import Page from '@/components/Common/Page';
 import { Icon, Layout, Tree } from 'antd';
 import React, { useContext, useState, useEffect } from 'react';
 import { SiderContext } from '../SiderContext';
-
 const { Sider } = Layout;
 
 interface LeftTreeProps {

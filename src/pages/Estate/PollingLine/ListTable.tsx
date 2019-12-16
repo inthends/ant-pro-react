@@ -39,35 +39,29 @@ function ListTable(props: ListTableProps) {
 
   const columns = [
     {
-      title: "编号",
+      title: "路线编号",
       dataIndex: "code",
       key: "code",
       width: 100,
     },
     {
-      title: "名称",
+      title: "路线名称",
       dataIndex: "name",
       key: "name",
       width: 150
     },
     {
-      title: "类别",
-      dataIndex: "typeName",
-      key: "typeName",
-      width: 80
+      title: "所属机构",
+      dataIndex: "orgName",
+      key: "orgName",
+      width: 150
     },
     {
-      title: "单位",
-      dataIndex: "unit",
-      key: "unit",
-      width: 80
-    },
-    {
-      title: "频次",
-      dataIndex: "frequency",
-      key: "frequency",
-      width: 80
-    },
+      title: "所属楼盘",
+      dataIndex: "psName",
+      key: "psName",
+      width: 150
+    }, 
     {
       title: "说明",
       dataIndex: "memo",
@@ -75,7 +69,7 @@ function ListTable(props: ListTableProps) {
     },
     {
       title: "操作",
-      // dataIndex: "operation",
+      dataIndex: "operation",
       key: "operation",
       align: 'center',
       width: 95,

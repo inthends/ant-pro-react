@@ -3,9 +3,9 @@ import request from "@/utils/request";
 import { TreeEntity } from '@/model/models';
 
 // 新增修改
-export function SaveForm(data): Promise<any> {
+export function SaveContentForm(data): Promise<any> {
   return request
-    .post(process.env.basePath + `/Polling/SaveForm`, {
+    .post(process.env.basePath + `/Polling/SaveContentForm`, {
       data: objToFormdata(data)
     })
     .then(getResult as any);
@@ -28,9 +28,9 @@ export function GetDataItemTreeList(): Promise<TreeEntity[]> {
   return request.get(process.env.basePath + `/Polling/GetDataItemTreeList`, {}).then(getResult as any);
 }
 
-export function GetDataList(data): Promise<any> {
+export function GetPageContentListJson(data): Promise<any> {
   return request
-    .post(process.env.basePath + `/Polling/GetPageListJson`, {
+    .post(process.env.basePath + `/Polling/GetPageContentListJson`, {
       data: objToFormdata(data)
     })
     .then(getResult as any);

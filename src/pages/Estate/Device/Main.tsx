@@ -108,7 +108,7 @@ const Device = () => {
   return (
     <Layout style={{ height: "100%" }}>
 
-      <Sider
+      {/* <Sider
         theme="light"
         style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh + 10px)' }}
         width={hideSider ? 20 : 245}
@@ -143,7 +143,7 @@ const Device = () => {
               </div>
             </>
           )}
-      </Sider>
+      </Sider> */}
 
       <Content style={{ paddingLeft: '18px' }}>
         <div style={{ marginBottom: 20, padding: "3px 0" }}>

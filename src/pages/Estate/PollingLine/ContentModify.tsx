@@ -46,7 +46,7 @@ const Modify = (props: ModifyProps) => {
   };
 
   return (
-    <BaseModifyProvider {...props} name="巡检项目" save={doSave}>
+    <BaseModifyProvider {...props} name="巡检路线" save={doSave}>
       <Card >
         <Form layout="vertical" hideRequiredMark>
           <Row gutter={24}>
@@ -68,11 +68,11 @@ const Modify = (props: ModifyProps) => {
             <ModifyItem
               {...baseFormProps}
               field="organizeId"
-              label="所属机构"
+              label="所属楼盘"
               type="tree"
               treeData={orgs}
               disabled={initData.organizeId != undefined}
-              rules={[{ required: true, message: '请选择所属机构' }]}
+              rules={[{ required: true, message: '请选择所属楼盘' }]}
             ></ModifyItem>
             <ModifyItem
               {...baseFormProps}

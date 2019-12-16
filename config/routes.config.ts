@@ -265,7 +265,7 @@ export default [
             name: 'pollingcontent',
             path: '/estate/pollingcontent',
             component: './Estate/PollingContent/Main',
-          }
+          },
           {
             name: 'pollingline',
             path: '/estate/pollingline',

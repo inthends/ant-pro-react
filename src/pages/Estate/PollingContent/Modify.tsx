@@ -3,7 +3,7 @@ import ModifyItem from "@/components/BaseModifyDrawer/ModifyItem";
 import { Form, Row, Card } from "antd";
 import { WrappedFormUtils } from "antd/lib/form/Form";
 import React, { useState, useEffect } from 'react';
-import { SaveForm } from "./Main.service";
+import { SaveContentForm } from "./Main.service";
 import { GetOrgs, getCommonItems } from '@/services/commonItem';
 import { TreeNode } from 'antd/lib/tree-select';
 
@@ -27,8 +27,9 @@ const Modify = (props: ModifyProps) => {
 
   const doSave = dataDetail => {
     let modifyData = { ...initData, ...dataDetail, keyValue: initData.id };
-    return SaveForm(modifyData);
+    return SaveContentForm(modifyData);
   };
+
 
   useEffect(() => {
     if (visible) {

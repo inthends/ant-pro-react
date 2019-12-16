@@ -8,8 +8,7 @@ interface ListTableProps {
   loading: boolean;
   pagination: PaginationConfig;
   data: any[];
-  modify(record: any): void;
-  choose(record: any): void;
+  modify(record: any): void; 
   onchange(page: any, filter: any, sort: any): any;
   reload(): void;
 }
@@ -56,18 +55,32 @@ function ListTable(props: ListTableProps) {
       key: "typeName",
       width: 80
     },
+
     {
-      title: "单位",
-      dataIndex: "unit",
-      key: "unit",
-      width: 80
+      title: "标准要求",
+      dataIndex: "criterion",
+      key: "criterion",
+      width: 120
     },
     {
-      title: "频次",
-      dataIndex: "frequency",
-      key: "frequency",
-      width: 80
+      title: "检查方法",
+      dataIndex: "checkWay",
+      key: "checkWay",
+      width: 100
     },
+
+    // {
+    //   title: "单位",
+    //   dataIndex: "unit",
+    //   key: "unit",
+    //   width: 80
+    // },
+    // {
+    //   title: "频次",
+    //   dataIndex: "frequency",
+    //   key: "frequency",
+    //   width: 80
+    // },
     {
       title: "说明",
       dataIndex: "memo",
