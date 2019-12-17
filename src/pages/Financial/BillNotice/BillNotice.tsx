@@ -3,7 +3,7 @@ import { DefaultPagination } from '@/utils/defaultSetting';
 import { message, Dropdown, Menu, Tabs, Button, Icon, Input, Layout, Modal, Select } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { GetBillPageData, ChargeFeePageData, BatchRemoveForm, GetTemplates, BatchAudit } from './BillNotice.service';
+import { GetBillPageData, ChargeFeePageData, BatchRemoveForm, GetNoticeTemplates, BatchAudit } from './BillNotice.service';
 import AsynLeftTree from '../AsynLeftTree';
 import BillCheckTable from './BillCheckTable';
 import BillNoticeTable from './BillNoticeTable';
@@ -51,7 +51,7 @@ function BillNotice() {
         return res || [];
       });
 
-    GetTemplates().then(res => {
+      GetNoticeTemplates().then(res => {
       setTempListData(res);
     }).then(() => {
       initBillCheckLoadData('', '');
