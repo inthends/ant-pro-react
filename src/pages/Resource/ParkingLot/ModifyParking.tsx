@@ -27,7 +27,7 @@ const { TextArea } = Input;
 
 interface ModifyParkingProps {
   modifyVisible: boolean;
-  data?: ParkingData;
+  data?: any;
   form: WrappedFormUtils;
   organizeId: string;
   treeData: any[];
@@ -38,7 +38,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
   const { treeData, modifyVisible, data, closeDrawer, form, reload } = props;
   const { getFieldDecorator } = form;
   const title = data === undefined ? '添加车位' : '修改车位';
-  const [infoDetail, setInfoDetail] = useState<any>({});
+  const [infoDetail, setInfoDetail] = useState<ParkingData>({});
   // const [estateTree, setEstateTree] = useState<any[]>([]);
   // const [parkingLotState, setParkingLotState] = useState<any[]>([]); // 获取车位状态
   const [vehicleBrand, setVehicleBrand] = useState<any[]>([]); // 车辆品牌
@@ -80,7 +80,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
         // getEstateTreeData(organizeId, '8').then(res => {
         //   const treeList = res || [];
         //   setEstateTree(treeList);
-        // });
+        // }); 
         form.resetFields();
       }
     } else {

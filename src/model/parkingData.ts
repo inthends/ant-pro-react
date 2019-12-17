@@ -9,7 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { GmCustomerinfo } from './gmCustomerinfo';
+// import { GmCustomerinfo } from './gmCustomerinfo';
 import { GmParkingdetail } from './gmParkingdetail';
 import { GmPstructure } from './gmPstructure';
 
@@ -26,12 +26,12 @@ export interface ParkingData {
      * 车位详情
      */
     parkingDetail?: GmParkingdetail;
-    /**
-     * 拥有者
-     */
-    owner?: GmCustomerinfo;
-    /**
-     * 租户
-     */
-    tenant?: GmCustomerinfo;
+    // /**
+    //  * 拥有者
+    //  */
+    // owner?: GmCustomerinfo;
+    // /**
+    //  * 租户
+    //  */
+    // tenant?: GmCustomerinfo;
 }

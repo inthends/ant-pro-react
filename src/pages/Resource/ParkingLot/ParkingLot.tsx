@@ -8,7 +8,7 @@ import ListTable from './ListTable';
 import ModifyGarage from './ModifyGarage';
 import ModifyParking from './ModifyParking';
 // import { TreeNode } from 'antd/lib/tree-select';
-import { GetPublicAreas, GetQuickParkingTree } from './ParkingLot.service';
+import { GetParkPageList, GetQuickParkingTree } from './ParkingLot.service';
 import { GetOrgs } from '@/services/commonItem';
 const { Content } = Layout;
 const { Search } = Input;
@@ -21,7 +21,7 @@ function ParkingLot() {
   const [orgid, setOrgid] = useState<string>('');
   const [orgtype, setOrgtype] = useState<string>('1');
   const [data, setData] = useState<any[]>([]);
-  const [currData, setCurrData] = useState<ParkingData>();
+  const [currData, setCurrData] = useState<ParkingData>(); 
   const [search, setSearch] = useState<string>('');
   //是否能新增
   const [isAdd, setIsAdd] = useState<boolean>(false);
@@ -85,7 +85,7 @@ function ParkingLot() {
     }
     setModifyVisible(true);
   };
-  const showDrawer = (item?) => {
+  const showDrawer = (item?) => {  
     setCurrData(item);
     setModifyVisible(true);
   };
@@ -122,7 +122,7 @@ function ParkingLot() {
     setLoading(true);
     formData.sidx = formData.sidx || 'id';
     formData.sord = formData.sord || 'asc';
-    return GetPublicAreas(formData).then(res => {
+    return GetParkPageList(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
         return {

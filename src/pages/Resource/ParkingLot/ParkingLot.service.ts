@@ -1,15 +1,13 @@
-import { ParkingData,   TreeEntity } from '@/model/models';
+import { ParkingData, TreeEntity } from '@/model/models';
 import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
 
 export function GetQuickParkingTree(type): Promise<any[]> {
   return request.get(process.env.basePath + `/ParkingLot/GetQuickParkingTree?type=${type}`, {}).then(getResult);
 }
- 
-export function GetPublicAreas(data): Promise<any> {
-  return request
-    .post(process.env.basePath + `/ParkingLot/GetStatistics`, { data: objToFormdata(data) })
-    .then(getResult as any);
+
+export function GetParkPageList(data): Promise<any> {
+  return request.post(process.env.basePath + `/ParkingLot/GetParkPageList`, { data: objToFormdata(data) }).then(getResult as any);
 }
 
 export function GetTreeAreaJson(id): Promise<TreeEntity[]> {

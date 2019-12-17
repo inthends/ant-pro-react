@@ -212,14 +212,14 @@ const Modify = (props: ModifyProps) => {
 
 export default Form.create<ModifyProps>()(Modify);
 
-const renderTree = (treeData: TreeEntity[], parentId: string) => {
-  return treeData
-    .filter(item => item.parentId === parentId)
-    .map(filteditem => {
-      return (
-        <TreeNode title={filteditem.text} key={filteditem.id} value={filteditem.id}>
-          {renderTree(treeData, filteditem.id as string)}
-        </TreeNode>
-      );
-    });
-};
+// const renderTree = (treeData: TreeEntity[], parentId: string) => {
+//   return treeData
+//     .filter(item => item.parentId === parentId)
+//     .map(filteditem => {
+//       return (
+//         <TreeNode title={filteditem.text} key={filteditem.id} value={filteditem.id}>
+//           {renderTree(treeData, filteditem.id as string)}
+//         </TreeNode>
+//       );
+//     });
+// };

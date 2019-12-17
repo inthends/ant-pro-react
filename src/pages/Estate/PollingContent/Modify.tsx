@@ -47,7 +47,7 @@ const Modify = (props: ModifyProps) => {
   };
 
   return (
-    <BaseModifyProvider {...props} name="巡检项目" save={doSave}>
+    <BaseModifyProvider {...props} name="巡检内容" save={doSave}>
       <Card >
         <Form layout="vertical" hideRequiredMark>
           <Row gutter={24}>
