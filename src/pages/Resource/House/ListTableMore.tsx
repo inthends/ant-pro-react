@@ -1,5 +1,5 @@
 import Page from '@/components/Common/Page';
-import { Divider, message, Table, Modal } from 'antd';
+import { Tag,Divider, message, Table, Modal } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import { RemoveForm } from './House.service';
@@ -83,13 +83,42 @@ function ListTableMore(props: ListTableMoreProps) {
       title: '联系电话',
       dataIndex: 'phoneNum',
       key: 'phoneNum',
-      width: 100, 
+      width: 100,
     },
- 
+
+    
+    // {
+    //   title: '状态',
+    //   dataIndex: 'state',
+    //   key: 'state', 
+    //   width: 60, 
+    //   sorter: true,
+    //   render: (text, record) => { 
+    //     switch (text) {
+    //       case 0:
+    //         return <Tag color="#c32c2b">未售</Tag>
+    //       case 1:
+    //         return <Tag color="#cf366f">待交房</Tag>
+    //       case 2:
+    //         return <Tag color="#e97d1c">装修</Tag>
+    //       case 3:
+    //         return <Tag color="#566485">空置</Tag>
+    //       case 4:
+    //         return <Tag color="#9ac82b">出租</Tag>
+    //       case 5:
+    //         return <Tag color="#e7ba0d">自用</Tag>
+    //       case -1:
+    //         return <Tag color="#40A9FF">已作废</Tag>
+    //       default:
+    //         return '';
+    //     }
+    //   }
+    // },
+
     {
       title: '全称',
       dataIndex: 'allName',
-      key: 'allName',  
+      key: 'allName',
     },
     {
       title: '操作',

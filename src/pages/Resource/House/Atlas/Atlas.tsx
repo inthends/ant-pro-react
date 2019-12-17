@@ -47,9 +47,9 @@ const Atlas = (props: AtlasProps) => {
         <Block title="未售" borderColor="#c32c2b" background="#dc7b78" />
         <Block title="待交房" borderColor="#cf366f" background="#de7b9e" />
         <Block title="装修" borderColor="#e97d1c" background="#feb97a" />
-        <Block title="出租" borderColor="#9ac82b" background="#bfe06c" />
-        <Block title="自用" borderColor="#e7ba0d" background="#fee067" />
         <Block title="空置" borderColor="#566485" background="#728db0" />
+        <Block title="出租" borderColor="#9ac82b" background="#bfe06c" />
+        <Block title="自用" borderColor="#e7ba0d" background="#fee067" /> 
         {inline ? (
           <Icon
             type="fullscreen"

@@ -1,6 +1,6 @@
 import Page from '@/components/Common/Page';
 import { ParkingData } from '@/model/models';
-import { Divider, message, Modal, Table } from 'antd';
+import { Tag, Divider, message, Modal, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import { GetDetailJson, RemoveForm } from './ParkingLot.service';
@@ -10,7 +10,7 @@ interface ListTableProps {
   pagination: PaginationConfig;
   data: any[];
   onchange(page: any, filter: any, sort: any): any;
-  modify(data: ParkingData): void;
+  modify(data: any): void;
   reload(): void;
 }
 
@@ -61,8 +61,8 @@ function ListTable(props: ListTableProps) {
     },
     {
       title: '计费面积(㎡)',
-      dataIndex: 'chargingarea',
-      key: 'chargingarea',
+      dataIndex: 'billarea',
+      key: 'billarea',
       width: 120,
       sorter: true,
     },
@@ -79,6 +79,16 @@ function ListTable(props: ListTableProps) {
       key: 'state',
       width: 100,
       sorter: true,
+      render: (text, record) => {
+        switch (text) {
+          case 3:
+            return <Tag color="#e4aa5b">空置</Tag>
+          case 4:
+            return <Tag color="#61c33a">出租</Tag>
+          default:
+            return '';
+        }
+      }
     },
     {
       title: '全称',
@@ -87,7 +97,7 @@ function ListTable(props: ListTableProps) {
       sorter: true,
     },
     {
-      title: '操作', 
+      title: '操作',
       align: 'center',
       width: 95,
       fixed: 'right',

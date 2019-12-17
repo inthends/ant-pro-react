@@ -1,4 +1,4 @@
-import { ParkingData  } from '@/model/models';
+ 
 import { Button, Card, Col, Drawer, Form, Input, message, Row, TreeSelect, InputNumber } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
@@ -10,13 +10,14 @@ const { TextArea } = Input;
 
 interface ModifyGarageProps {
   modifyVisible: boolean;
-  data?: ParkingData;
+  data?: any;
   form: WrappedFormUtils;
   organizeId: string;
   treeData: any[];
   closeDrawer(): void;
   reload(): void;
 }
+
 const ModifyGarage = (props: ModifyGarageProps) => {
   const { modifyVisible, data, closeDrawer, form, reload, treeData } = props;
   const { getFieldDecorator } = form;
@@ -49,7 +50,8 @@ const ModifyGarage = (props: ModifyGarageProps) => {
   useEffect(() => {
     if (modifyVisible) {
       if (data) {
-        setInfoDetail(data.baseInfo);
+        // setInfoDetail(data.baseInfo);
+        setInfoDetail(data);
         form.resetFields();
       }
     } else {
@@ -63,7 +65,8 @@ const ModifyGarage = (props: ModifyGarageProps) => {
   const save = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        const newData = data!.baseInfo ? { ...data!.baseInfo, ...values } : values;
+        // const newData = data!.baseInfo ? { ...data!.baseInfo, ...values } : values;
+        const newData = data ? { ...data, ...values } : values;
         doSave(newData);
       }
     });

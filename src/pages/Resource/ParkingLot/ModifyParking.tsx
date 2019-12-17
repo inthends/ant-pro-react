@@ -1,4 +1,4 @@
-import { ParkingData } from '@/model/models';
+// import { ParkingData } from '@/model/models';
 import { getCommonItems } from '@/services/commonItem';
 import {
   AutoComplete,
@@ -38,14 +38,16 @@ const ModifyParking = (props: ModifyParkingProps) => {
   const { treeData, modifyVisible, data, closeDrawer, form, reload } = props;
   const { getFieldDecorator } = form;
   const title = data === undefined ? '添加车位' : '修改车位';
-  const [infoDetail, setInfoDetail] = useState<ParkingData>({});
+  // const [infoDetail, setInfoDetail] = useState<ParkingData>({});
   // const [estateTree, setEstateTree] = useState<any[]>([]);
   // const [parkingLotState, setParkingLotState] = useState<any[]>([]); // 获取车位状态
-  const [vehicleBrand, setVehicleBrand] = useState<any[]>([]); // 车辆品牌
+  // const [vehicleBrand, setVehicleBrand] = useState<any[]>([]); // 车辆品牌
   const [parkingLotType, setParkingLotType] = useState<any[]>([]); // 车位类型
   const [parkingNature, setParkingNature] = useState<any[]>([]); // 车位性质
-  const [color, setColor] = useState<any[]>([]); // 颜色 
+  // const [color, setColor] = useState<any[]>([]); // 颜色 
   const [userSource, setUserSource] = useState<any[]>([]);
+
+  const [infoDetail, setInfoDetail] = useState<any>({});
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -62,13 +64,13 @@ const ModifyParking = (props: ModifyParkingProps) => {
       setParkingLotType(res || []);
     });
     // 车辆品牌
-    getCommonItems('VehicleBrand').then(res => {
-      setVehicleBrand(res || []);
-    });
-    // 车辆品牌
-    getCommonItems('Color').then(res => {
-      setColor(res || []);
-    });
+    // getCommonItems('VehicleBrand').then(res => {
+    //   setVehicleBrand(res || []);
+    // });
+    // // 车辆品牌
+    // getCommonItems('Color').then(res => {
+    //   setColor(res || []);
+    // });
 
   }, []);
 
@@ -76,11 +78,12 @@ const ModifyParking = (props: ModifyParkingProps) => {
   useEffect(() => {
     if (modifyVisible) {
       if (data) {
-        setInfoDetail({ ...data.baseInfo, ...data.parkingDetail });
+        // setInfoDetail({ ...data.baseInfo, ...data.parkingDetail });
         // getEstateTreeData(organizeId, '8').then(res => {
         //   const treeList = res || [];
         //   setEstateTree(treeList);
         // }); 
+        setInfoDetail(data);
         form.resetFields();
       }
     } else {
@@ -94,18 +97,20 @@ const ModifyParking = (props: ModifyParkingProps) => {
   const save = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        let newData =
-          data && data.baseInfo && data.baseInfo.id
-            ? { ...data.baseInfo, ...data.parkingDetail, ...values, id: data!.parkingDetail!.id }
-            : values;
-        newData = {
-          ...newData,
-          date: values.date ? values.date.format('YYYY-MM-DD') : undefined,
-          beginRentDate: values.beginRentDate
-            ? values.beginRentDate.format('YYYY-MM-DD')
-            : undefined,
-          endRentDate: values.endRentDate ? values.endRentDate.format('YYYY-MM-DD') : undefined,
-        };
+        // let newData =
+        //   data && data.baseInfo && data.baseInfo.id
+        //     ? { ...data.baseInfo, ...data.parkingDetail, ...values, id: data!.parkingDetail!.id }
+        //     : values;
+        // newData = {
+        //   ...newData,
+        //   date: values.date ? values.date.format('YYYY-MM-DD') : undefined,
+        //   beginRentDate: values.beginRentDate
+        //     ? values.beginRentDate.format('YYYY-MM-DD')
+        //     : undefined,
+        //   endRentDate: values.endRentDate ? values.endRentDate.format('YYYY-MM-DD') : undefined,
+        // };
+
+        const newData = data ? { ...data, ...values } : values; 
         doSave(newData);
       }
     });
@@ -199,8 +204,8 @@ const ModifyParking = (props: ModifyParkingProps) => {
                           {item.title}
                         </Option>
                       ))} */}
-                      <Option value="0">空置</Option>
-                      <Option value="1">出租</Option>
+                      <Option value={3}>空置</Option>
+                      <Option value={4}>出租</Option>
                     </Select>,
                   )}
                 </Form.Item>
@@ -208,8 +213,8 @@ const ModifyParking = (props: ModifyParkingProps) => {
 
               <Col lg={12}>
                 <Form.Item label="车位类型">
-                  {getFieldDecorator('parkingType', {
-                    initialValue: infoDetail.parkingType,
+                  {getFieldDecorator('propertyType', {
+                    initialValue: infoDetail.propertyType,
                   })(
                     <Select placeholder="请选择车位类型">
                       {parkingLotType.map(item => (
@@ -241,8 +246,8 @@ const ModifyParking = (props: ModifyParkingProps) => {
               <Col lg={12}>
                 <Form.Item label="交付日期">
                   {getFieldDecorator('date', {
-                    initialValue: infoDetail.date
-                      ? moment(new Date(infoDetail.date))
+                    initialValue: infoDetail.handoverDate
+                      ? moment(new Date(infoDetail.handoverDate))
                       : moment(new Date()),
                   })(<DatePicker style={{ width: '100%' }} />)}
                 </Form.Item>
@@ -258,8 +263,8 @@ const ModifyParking = (props: ModifyParkingProps) => {
               </Col>
               <Col lg={12}>
                 <Form.Item label="计费面积(㎡)">
-                  {getFieldDecorator('chargingArea', {
-                    initialValue: infoDetail.chargingArea,
+                  {getFieldDecorator('billArea', {
+                    initialValue: infoDetail.billArea,
                   })(<InputNumber placeholder="请输入计费面积" style={{ width: '100%' }} />)}
                 </Form.Item>
               </Col>
@@ -311,7 +316,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
                 </Form.Item>
               </Col>
             </Row>
-            <Row gutter={24}>
+            {/* <Row gutter={24}>
               <Col lg={12}>
                 <Form.Item label="起租日期">
                   {getFieldDecorator('memo', {
@@ -330,7 +335,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
                   })(<DatePicker style={{ width: '100%' }} />)}
                 </Form.Item>
               </Col>
-            </Row>
+            </Row> */}
 
             <Row gutter={24}>
               <Col lg={12}>
@@ -348,7 +353,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
                 </Form.Item>
               </Col>
             </Row>
-            <Row gutter={24}>
+            {/* <Row gutter={24}>
               <Col lg={12}>
                 <Form.Item label="车辆品牌">
                   {getFieldDecorator('vehicleBrand', {
@@ -379,7 +384,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
                   )}
                 </Form.Item>
               </Col>
-            </Row>
+            </Row> */}
             <Row gutter={24}>
               <Col lg={24}>
                 <Form.Item label="附加说明">

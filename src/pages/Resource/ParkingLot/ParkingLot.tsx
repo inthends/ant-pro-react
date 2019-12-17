@@ -1,4 +1,4 @@
-import { ParkingData, TreeEntity } from '@/model/models';
+import { TreeEntity } from '@/model/models';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
@@ -21,7 +21,7 @@ function ParkingLot() {
   const [orgid, setOrgid] = useState<string>('');
   const [orgtype, setOrgtype] = useState<string>('1');
   const [data, setData] = useState<any[]>([]);
-  const [currData, setCurrData] = useState<ParkingData>(); 
+  const [currData, setCurrData] = useState<any>();
   const [search, setSearch] = useState<string>('');
   //是否能新增
   const [isAdd, setIsAdd] = useState<boolean>(false);
@@ -30,13 +30,13 @@ function ParkingLot() {
 
   const selectTree = (id, type, searchText) => {
     initLoadData(id, type, searchText);
-    if (type == '1' || type == '8' ) {
+    if (type == '1' || type == '8') {
       setIsAdd(false);
     } else {
       setIsAdd(true);
-    } 
+    }
     setOrgid(id);
-    setOrgtype(type); 
+    setOrgtype(type);
   };
 
   useEffect(() => {
@@ -48,7 +48,7 @@ function ParkingLot() {
 
       //加载管理处
       GetOrgs().then(res => {
-        setOrgs(res|| []);
+        setOrgs(res || []);
       });
 
       initLoadData('', '', '');
@@ -60,16 +60,16 @@ function ParkingLot() {
   //   return GetQuickParkingTree('').then((res: any[]) => {
   //     setTreeData(res || []);
   //     return res || [];
-      // const treeList = (res || []).map(item => {
-      //   return {
-      //     ...item,
-      //     id: item.id,
-      //     text: item.name,
-      //     parentId: item.pId,
-      //   };
-      // });
-      // setTreeData(treeList);
-      // return treeList;
+  // const treeList = (res || []).map(item => {
+  //   return {
+  //     ...item,
+  //     id: item.id,
+  //     text: item.name,
+  //     parentId: item.pId,
+  //   };
+  // });
+  // setTreeData(treeList);
+  // return treeList;
   //   });
   // };
 
@@ -85,10 +85,12 @@ function ParkingLot() {
     }
     setModifyVisible(true);
   };
-  const showDrawer = (item?) => {  
+
+  const showDrawer = (item?) => {
     setCurrData(item);
     setModifyVisible(true);
   };
+
   const loadData = (searchText, org, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(searchText);
     const { current: pageIndex, pageSize, total } = paginationConfig || {

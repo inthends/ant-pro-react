@@ -1,4 +1,4 @@
-import { ParkingData, TreeEntity } from '@/model/models';
+import { TreeEntity } from '@/model/models';
 import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
 
@@ -22,7 +22,7 @@ export function GetProjectType(): Promise<TreeEntity[]> {
 }
 
 // 获取房产信息
-export function GetDetailJson(keyValue): Promise<ParkingData> {
+export function GetDetailJson(keyValue): Promise<any> {
   return request
     .get(process.env.basePath + `/ParkingLot/GetFormInfoJson?keyValue=${keyValue}`)
     .then(getResult as any);
