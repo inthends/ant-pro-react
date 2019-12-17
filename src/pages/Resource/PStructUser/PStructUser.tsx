@@ -25,7 +25,7 @@ function PublicArea() {
   const closeDrawer = () => {
     setModifyVisible(false);
   };
-  const showDrawer = (item?) => {
+  const showDrawer = (item?) => { 
     setCurrData(item);
     setModifyVisible(true);
   };

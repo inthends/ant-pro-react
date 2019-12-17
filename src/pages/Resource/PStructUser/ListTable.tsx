@@ -48,8 +48,6 @@ function ListTable(props: ListTableProps) {
   //   });
   // };
 
-
-
   const columns = [
     {
       title: '客户类别',
@@ -107,8 +105,8 @@ function ListTable(props: ListTableProps) {
 
     {
       title: '证件类别',
-      dataIndex: 'certificatetype',
-      key: 'certificatetype',
+      dataIndex: 'certificateType',
+      key: 'certificateType',
       width: 100,
       render: (text, record) => {
         switch (text) {
@@ -123,8 +121,8 @@ function ListTable(props: ListTableProps) {
     },
     {
       title: '证件号码',
-      dataIndex: 'certificateno',
-      key: 'certificateno',
+      dataIndex: 'certificateNO',
+      key: 'certificateNO',
       width: 140,
       // sorter: true,
     },
