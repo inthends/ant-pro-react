@@ -330,7 +330,8 @@ const BillCheckModify = (props: BillCheckModifyProps) => {
               }
               form.validateFields((errors, values) => {
                 if (!errors) {
-                  console.log(infoDetail);
+                  // console.log(infoDetail);
+                  setLoading(true);
                   let newData = {
                     BeginDate: moment(values.beginDate).format('YYYY-MM-DD'),
                     EndDate: moment(values.endDate).format('YYYY-MM-DD'),
@@ -346,7 +347,8 @@ const BillCheckModify = (props: BillCheckModifyProps) => {
                     items: JSON.stringify(selectedFeeId)
                   }
                   SaveBill(newData).then((res) => {
-                    console.log(res);
+                    // console.log(res);
+                    setLoading(true);
                     closeDrawer();
                     reload();
                   });

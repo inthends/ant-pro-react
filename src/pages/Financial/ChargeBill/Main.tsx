@@ -421,7 +421,7 @@ function Main() {
           setAdminOrgId(info.node.props.organizeId);//管理处Id
           setOrganizeId(id);
           // SetOrganize(info);
-          if (type == 5) {
+          if (type == 5 || type == 9) {
             setAddButtonDisable(false);
             var cusname = info.node.props.tenantname;
             setCustomerName(cusname);

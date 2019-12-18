@@ -140,7 +140,7 @@ const Modify = (props: ModifyProps) => {
   // };
 
   const save = () => {
-    form.validateFields((errors, values) => {
+    form.validateFields((errors, values) => { 
       if (!errors) {
         setLoading(true);
         const newData = infoDetail ? { ...infoDetail, ...values } : values;
@@ -272,7 +272,7 @@ const Modify = (props: ModifyProps) => {
       title: '房屋编号',
       dataIndex: 'code',
       key: 'code',
-      width: 140,
+      width: 160,
       sorter: true,
     },
     {
@@ -334,6 +334,7 @@ const Modify = (props: ModifyProps) => {
       dataIndex: 'operation',
       align: 'center',
       key: 'operation',
+      fixed:'right',
       width: 75,
       render: (text, record) => {
         return [
@@ -1715,7 +1716,7 @@ const Modify = (props: ModifyProps) => {
                     columns={housecolumns}
                     rowKey={record => record.unitFeeId}
                     pagination={housePagination}
-                    scroll={{ y: 420, x: 1000 }}
+                    scroll={{ y: 420, x: 1100 }}
                     onChange={(pagination: PaginationConfig, filters, sorter) =>
                       houseLoadData(houseSearch, pagination, sorter)
                     }
