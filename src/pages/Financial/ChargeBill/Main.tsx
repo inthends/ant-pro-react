@@ -441,7 +441,9 @@ function Main() {
                 placeholder="请输入要查询费项"
                 style={{ width: 200 }}
                 onSearch={value => loadData(value)} />
-              <Checkbox style={{ marginLeft: '10px' }} onChange={onShowCustomerChange} >显示该户其他费用</Checkbox>
+              <Checkbox style={{ marginLeft: '10px' }} onChange={onShowCustomerChange}
+                defaultChecked={true}
+              >显示该户其他费用</Checkbox>
               {/* <Button type="primary" style={{ float: 'right', marginLeft: '3px' }}
                 onClick={() => showTrans()}
                 disabled={billRowKey == -1 ? true : false}  >
@@ -527,14 +529,14 @@ function Main() {
                 onChange={(date, dateStr) => {
                   var params = Object.assign({}, chargedSearchParams, { startDate: dateStr });
                   setChargedSearchParams(params);
-                }} style={{ marginRight: '5px', width: '150px'  }} />
+                }} style={{ marginRight: '5px', width: '150px' }} />
               至
               <DatePicker
                 placeholder='收款日期至'
                 onChange={(date, dateStr) => {
                   var params = Object.assign({}, chargedSearchParams, { endDate: dateStr });
                   setChargedSearchParams(params);
-                }} style={{ marginLeft: '5px', marginRight: '5px', width: '150px'  }} />
+                }} style={{ marginLeft: '5px', marginRight: '5px', width: '150px' }} />
               <Search
                 className="search-input"
                 placeholder="请输入收款单号"

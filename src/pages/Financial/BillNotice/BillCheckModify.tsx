@@ -3,7 +3,10 @@ import { Card, Button, Col, Select, Form, Input, Row, Drawer, message, Spin, Dat
 import { TreeEntity } from '@/model/models';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { SaveBill, GetReceivablesFeeItemTreeJson, TestCalBill, GetNoticeTemplates, GetEntityShow } from './BillNotice.service';
+import {
+  SaveBill, GetReceivablesFeeItemTreeJson,
+  TestCalBill, GetNoticeTemplates, GetEntityShow
+} from './BillNotice.service';
 import './style.less';
 // import AsynSelectTree from '../AsynSelectTree';
 import LeftSelectTree from '../LeftSelectTree';
@@ -71,6 +74,7 @@ const BillCheckModify = (props: BillCheckModifyProps) => {
       width={1100}
       onClose={closeDrawer}
       visible={visible}
+      destroyOnClose={true}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
       <Spin tip="数据处理中..." spinning={loading}>
