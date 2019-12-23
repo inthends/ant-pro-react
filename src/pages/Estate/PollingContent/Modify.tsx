@@ -96,7 +96,6 @@ const Modify = (props: ModifyProps) => {
               label="标准要求"
               rules={[{ required: true, message: "请输入标准要求" }]}
             ></ModifyItem>
-
             <ModifyItem
               {...baseFormProps}
               field="checkWay"

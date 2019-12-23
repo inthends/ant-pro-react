@@ -130,8 +130,7 @@ const Modify = (props: ModifyProps) => {
           if (tempInfo.city) {
             getArea(tempInfo.city, true);
           }
-          setInfoDetail(tempInfo);
-
+          setInfoDetail(tempInfo); 
           //加载图片
           let files: any[]; files = [];
           if (tempInfo.mainPic != null) {
@@ -141,9 +140,8 @@ const Modify = (props: ModifyProps) => {
             }
             files.push(filedate);
           }
+          //加载图片 
           setFileList(files);
-          //加载图片
- 
           //给文本编辑器赋值
           setTimeout(() => {
             form.setFieldsValue({
@@ -152,8 +150,6 @@ const Modify = (props: ModifyProps) => {
               )
             })
           }, 500)
-
-
           form.resetFields();
         });
       } else {
@@ -242,8 +238,6 @@ const Modify = (props: ModifyProps) => {
     }
   };
 
-
-
   //文本编辑器开始
   const [state, setState] = useState<any>(
     {
@@ -320,7 +314,7 @@ const Modify = (props: ModifyProps) => {
                       allowClear
                       treeDefaultExpandAll>
                       {/* {renderTree(treeData, '0')} */}
-                    </TreeSelect>,
+                    </TreeSelect>
                   )}
                 </Form.Item>
               </Col>

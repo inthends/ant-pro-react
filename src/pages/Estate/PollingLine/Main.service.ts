@@ -42,7 +42,6 @@ export function SaveLinePointForm(data): Promise<any> {
   return request.post(process.env.basePath + `/Polling/SaveLinePointForm`, { data: objToFormdata(data) }).then(getResult as any);
 }
 
-
 //加载全部checkbox巡检点位
 export function GetPointTreeAll(): Promise<ResponseObject<TreeEntity[]>> {
   return request.get(process.env.basePath + `/Common/GetPointTreeAll`, {});
@@ -60,4 +59,14 @@ export function GetPageLineListJson(data): Promise<any> {
 //获取点位明细
 export function GetPonitPageListByID(data): Promise<any> {
   return request.post(process.env.basePath + `/Polling/GetPonitPageListByID`, { data: objToFormdata(data) }).then(getResult as any);;
+}
+
+// 获取巡检内容
+export function GetContents(): Promise<any[]> {
+  return request.get(process.env.basePath + `/Polling/GetContents`).then(getResult as any);
+}
+
+//保存巡检点位内容
+export function SavePointContentForm(data): Promise<any> {
+  return request.post(process.env.basePath + `/Polling/SavePointContentForm`, { data: objToFormdata(data) }).then(getResult as any);
 }

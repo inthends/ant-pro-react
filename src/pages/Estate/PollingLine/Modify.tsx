@@ -9,7 +9,7 @@ import { TreeNode } from 'antd/lib/tree-select';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import SelectHouse from './SelectHouse';
-import ContentModify from './ContentModify';
+import LineContent from './LineContent';
 
 import styles from './style.less';
 const Search = Input.Search;
@@ -160,7 +160,7 @@ const Modify = (props: ModifyProps) => {
   const [pointcontentVisible, setPointcontentVisible] = useState<boolean>(false);
   const [lpId, setLpId] = useState<any>();
   const doModify = record => {
-    setLpId(record.lpId);
+    setLpId(record.id);
     setPointcontentVisible(true);
   };
 
@@ -186,16 +186,15 @@ const Modify = (props: ModifyProps) => {
     },
     {
       title: '操作',
-      dataIndex: 'operation',
       key: 'operation',
       align: 'center',
       fixed: 'right',
       width: 125,
       render: (text, record) => {
         return [
-          <span>
+          <span key='span'>
             <a onClick={() => doModify(record)} key="modify">巡检内容</a>
-            <Divider type="vertical" />
+            <Divider type="vertical" key='divider' />
             <a onClick={() => {
               Modal.confirm({
                 title: '请确认',
@@ -293,7 +292,8 @@ const Modify = (props: ModifyProps) => {
             添加点位
               </Button>
         </div>
-        <Table<any>
+        <Table
+          key="list"
           onChange={(paginationConfig, filters, sorter) => {
             loadData(search, paginationConfig, sorter)
           }
@@ -302,11 +302,10 @@ const Modify = (props: ModifyProps) => {
           size="middle"
           columns={columns}
           dataSource={linepointData}
-          rowKey="id"
+          rowKey={record => record.id}
           pagination={pagination}
           scroll={{ y: 500, x: 700 }}
           loading={loading}
-        //rowSelection={rowSelection}
         />
       </Card>
 
@@ -322,7 +321,7 @@ const Modify = (props: ModifyProps) => {
         }}
       />
 
-      <ContentModify
+      <LineContent
         visible={pointcontentVisible}
         closeDrawer={() => setPointcontentVisible(false)}
         lpId={lpId}

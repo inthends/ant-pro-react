@@ -6,7 +6,7 @@ import { DefaultPagination } from '@/utils/defaultSetting';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 const Search = Input.Search;
 import { GetPointcontentPageListByID, RemoveLineContentPoint, RemoveLineContentPointAll } from "./Main.service";
-import SelectPointContent from './SelectPointContent';
+import PointContentModify from './PointContentModify';
 
 interface LineContentProps {
   visible: boolean;
@@ -98,6 +98,7 @@ const LineContent = (props: LineContentProps) => {
   const [selectPointContentVisible, setSelectPointContentVisible] = useState<boolean>(false);
 
   const add = () => {
+
     setSelectPointContentVisible(true);
   };
 
@@ -114,23 +115,30 @@ const LineContent = (props: LineContentProps) => {
 
   const columns = [
     {
-      title: '点位编号',
-      dataIndex: 'code',
-      key: 'code',
+      title: '点位名称',
+      dataIndex: 'pointName',
+      key: 'pointName',
       width: 120,
       sorter: true
     },
     {
-      title: '点位名称',
+      title: '巡检内容',
+      dataIndex: 'content',
+      key: 'content',
+      width: 120,
+      sorter: true
+    },
+    {
+      title: '频次',
       dataIndex: 'name',
       key: 'name',
-      width: 120,
+      width: 100,
       sorter: true
     },
     {
-      title: '描述',
-      dataIndex: 'allName',
-      key: 'allName',
+      title: '备注',
+      dataIndex: 'memo',
+      key: 'memo',
     },
     {
       title: '操作',
@@ -167,7 +175,7 @@ const LineContent = (props: LineContentProps) => {
     <Drawer
       title='巡检内容'
       placement="right"
-      width={1050}
+      width={700}
       onClose={closeDrawer}
       visible={visible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
@@ -231,14 +239,13 @@ const LineContent = (props: LineContentProps) => {
         </Button>
       </div>
 
-
-      <SelectPointContent
+      <PointContentModify
         visible={selectPointContentVisible}
-        closeModal={closeSelectPointContent} 
+        closeModal={closeSelectPointContent}
+        lpId={lpId}
         reload={() => {
           //刷新数据 
-          initLoadData(search, lpId);
-          // setIsAdd(false);
+          initLoadData(search, lpId); 
         }}
       />
 
