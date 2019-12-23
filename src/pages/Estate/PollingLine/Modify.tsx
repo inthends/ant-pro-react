@@ -3,12 +3,13 @@ import ModifyItem from "@/components/BaseModifyDrawer/ModifyItem";
 import { message, Divider, Icon, Table, Modal, Button, Input, Form, Row, Card } from "antd";
 import { WrappedFormUtils } from "antd/lib/form/Form";
 import React, { useState, useEffect } from 'react';
-import { SaveForm, GetPageListByID, RemoveLinePoint, RemoveLinePointAll } from "./Main.service";
-import { GetOrgs } from '@/services/commonItem';
+import { SaveForm, GetPonitPageListByID, RemoveLinePoint, RemoveLinePointAll } from "./Main.service";
+import { GetOrgEsates } from '@/services/commonItem';
 import { TreeNode } from 'antd/lib/tree-select';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import SelectHouse from './SelectHouse';
+import ContentModify from './ContentModify';
 
 import styles from './style.less';
 const Search = Input.Search;
@@ -36,12 +37,12 @@ const Modify = (props: ModifyProps) => {
   const [search, setSearch] = useState<string>('');
   const [selectPointVisible, setSelectPointVisible] = useState<boolean>(false);
   const [isAdd, setIsAdd] = useState<boolean>(true);
-  const [keyValue, setKeyValue] = useState<string>('');
+  const [lineId, setLineId] = useState<string>('');
 
   const doSave = dataDetail => {
     let modifyData = {
       ...initData, ...dataDetail,
-      keyValue: keyValue,
+      keyValue: lineId,
       type: isAdd ? 1 : 0
     };
     return SaveForm(modifyData);
@@ -56,19 +57,34 @@ const Modify = (props: ModifyProps) => {
 
   useEffect(() => {
     if (visible) {
-      setLoading(true);
-      GetOrgs().then(res => {
+      GetOrgEsates().then(res => {
         setOrgs(res);
-        setLoading(false);
       });
-      if (initData.id === undefined) {
-        setKeyValue(GetGuid());
-      }
-      else {
-        setKeyValue(initData.id);
+
+      if (data) {
+        setLineId(data.id);
+        // setLoading(true);
+        initLoadData(search, data.id);
+        // setLoading(false);
+      } else {
+        setLineId(GetGuid());
       }
     }
   }, [visible]);
+
+  //初始化
+  const initLoadData = (search, lineId) => {
+    const queryJson = {
+      keyword: search,
+      LineId: lineId
+    }
+    const sidx = 'id';
+    const sord = 'asc';
+    const { current: pageIndex, pageSize, total } = pagination;
+    return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
+      return res;
+    });
+  };
 
   //刷新
   const loadData = (searchText, paginationConfig?: PaginationConfig, sorter?) => {
@@ -84,7 +100,7 @@ const Modify = (props: ModifyProps) => {
       total,
       queryJson: {
         keyword: searchText,
-        MeterId:  keyValue
+        LineId: lineId
       },
     };
     if (sorter) {
@@ -98,10 +114,10 @@ const Modify = (props: ModifyProps) => {
   };
 
   const load = data => {
-    // setMeterLoading(true);
+    setLoading(true);
     data.sidx = data.sidx || 'id';
     data.sord = data.sord || 'asc';
-    return GetPageListByID(data).then(res => {
+    return GetPonitPageListByID(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
         return {
@@ -112,20 +128,7 @@ const Modify = (props: ModifyProps) => {
         };
       });
       setLinepointData(res.data);
-      return res;
-    });
-  };
-
-  //房屋费表初始化
-  const initLoadData = (search) => {
-    const queryJson = {
-      keyword: search,
-      MeterId: keyValue
-    }
-    const sidx = 'id';
-    const sord = 'asc';
-    const { current: pageIndex, pageSize, total } = pagination;
-    return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
+      setLoading(false);
       return res;
     });
   };
@@ -134,11 +137,10 @@ const Modify = (props: ModifyProps) => {
   const add = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-
         //获取值
         var obj = {
-          keyValue: keyValue,
-          id: keyValue,
+          keyValue: lineId,
+          id: lineId,
           organizeId: values.organizeId,
           pStructId: values.pStructId,
           name: values.name,
@@ -153,6 +155,13 @@ const Modify = (props: ModifyProps) => {
 
   const closeSelectPoint = () => {
     setSelectPointVisible(false);
+  };
+
+  const [pointcontentVisible, setPointcontentVisible] = useState<boolean>(false);
+  const [lpId, setLpId] = useState<any>();
+  const doModify = record => {
+    setLpId(record.lpId);
+    setPointcontentVisible(true);
   };
 
   const columns = [
@@ -181,11 +190,11 @@ const Modify = (props: ModifyProps) => {
       key: 'operation',
       align: 'center',
       fixed: 'right',
-      width: 95,
+      width: 125,
       render: (text, record) => {
         return [
           <span>
-            <a key="modify">编辑</a>
+            <a onClick={() => doModify(record)} key="modify">巡检内容</a>
             <Divider type="vertical" />
             <a onClick={() => {
               Modal.confirm({
@@ -195,7 +204,7 @@ const Modify = (props: ModifyProps) => {
                 okText: '确定',
                 onOk: () => {
                   RemoveLinePoint(record.id).then(res => {
-                    initLoadData(search);
+                    initLoadData(search, lineId);
                   })
                 }
               })
@@ -205,7 +214,6 @@ const Modify = (props: ModifyProps) => {
       },
     }
   ] as ColumnProps<any>[];
-
 
   return (
     <BaseModifyProvider {...props}
@@ -220,6 +228,7 @@ const Modify = (props: ModifyProps) => {
               lg={8}
               label="所属楼盘"
               type="tree"
+              dropdownStyle={{ maxHeight: 380 }}
               treeData={orgs}
               disabled={initData.pStructId != undefined}
               rules={[{ required: true, message: '请选择所属楼盘' }]}
@@ -256,50 +265,49 @@ const Modify = (props: ModifyProps) => {
               label="备注"
             ></ModifyItem>
           </Row>
-          <Row>
-            <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
-              <Search className="search-input"
-                placeholder="请输入要查询的关键词"
-                style={{ width: 200 }}
-                onSearch={value => loadData(value)} />
-              <Button type="link" style={{ float: 'right' }}
-                onClick={() => {
-                  Modal.confirm({
-                    title: '请确认',
-                    content: `您是否确定全部删除？`,
-                    onOk: () => {
-                      if (data != null || data.id != '') {
-                        RemoveLinePointAll(data.id).then(res => {
-                          message.success('删除成功');
-                          initLoadData(search);
-                        });
-                      }
-                    },
-                  });
-                }}
-              ><Icon type="delete" />全部删除</Button>
-              <Button type="link" style={{ float: 'right', marginLeft: '1px' }} onClick={add}>
-                <Icon type="plus" />
-                添加点位
-              </Button>
-            </div>
-            <Table<any>
-              onChange={(paginationConfig, filters, sorter) => {
-                loadData(search, paginationConfig, sorter)
-              }
-              }
-              bordered={false}
-              size="middle"
-              columns={columns}
-              dataSource={linepointData}
-              rowKey="id"
-              pagination={pagination}
-              scroll={{ y: 500, x: 800 }}
-              loading={loading}
-            //rowSelection={rowSelection}
-            />
-          </Row>
         </Form>
+
+        <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
+          <Search className="search-input"
+            placeholder="请输入要查询的关键词"
+            style={{ width: 200 }}
+            onSearch={value => loadData(value)} />
+          <Button type="link" style={{ float: 'right' }}
+            onClick={() => {
+              Modal.confirm({
+                title: '请确认',
+                content: `您是否确定全部删除？`,
+                onOk: () => {
+                  if (data != null || data.id != '') {
+                    RemoveLinePointAll(data.id).then(res => {
+                      message.success('删除成功');
+                      initLoadData(search, lineId);
+                    });
+                  }
+                },
+              });
+            }}
+          ><Icon type="delete" />全部删除</Button>
+          <Button type="link" style={{ float: 'right', marginLeft: '1px' }} onClick={add}>
+            <Icon type="plus" />
+            添加点位
+              </Button>
+        </div>
+        <Table<any>
+          onChange={(paginationConfig, filters, sorter) => {
+            loadData(search, paginationConfig, sorter)
+          }
+          }
+          bordered={false}
+          size="middle"
+          columns={columns}
+          dataSource={linepointData}
+          rowKey="id"
+          pagination={pagination}
+          scroll={{ y: 500, x: 700 }}
+          loading={loading}
+        //rowSelection={rowSelection}
+        />
       </Card>
 
       <SelectHouse
@@ -309,11 +317,17 @@ const Modify = (props: ModifyProps) => {
         treeData={treeData}
         reload={() => {
           //刷新数据 
-          initLoadData(search);
+          initLoadData(search, lineId);
           setIsAdd(false);
         }}
       />
 
+      <ContentModify
+        visible={pointcontentVisible}
+        closeDrawer={() => setPointcontentVisible(false)}
+        lpId={lpId}
+        reload={() => { }}
+      />
     </BaseModifyProvider>
   );
 };

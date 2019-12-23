@@ -65,10 +65,17 @@ function Main() {
   //收款单送审
   const [chargeSelectedKeys, setChargeSelectedKeys] = useState<any[]>([]);
 
-  const selectTree = (id, search) => {
-    initLoadData(search, id);
-    //initChargeLoadData(id)
-    //loadChargeData(id);
+  //点击的tab
+  const [tabIndex, setTabIndex] = useState<string>('1');
+
+  //点击左侧树，加载数据
+  const selectTree = (organizeId, search) => { 
+    if (tabIndex == '1')
+      initLoadData(search, organizeId);
+    else if (tabIndex == '2')
+      initChargeLoadData(organizeId);
+    else
+      initChargeCheckLoadData(organizeId); 
   };
 
   // useEffect(() => {
@@ -311,7 +318,7 @@ function Main() {
   //拆费
   const [splitId, setSplitId] = useState<string>('');
   const showSplit = (id) => {
-    console.log(id);
+    // console.log(id);
     setSplitId(id);
     setSplitVisible(true);
   }
@@ -402,6 +409,7 @@ function Main() {
 
   //tab切换刷新数据
   const changeTab = (e: string) => {
+    setTabIndex(e);
     if (e === '1') {
       if (organizeId)
         initLoadData(search, organizeId);
@@ -465,7 +473,7 @@ function Main() {
                 查看
               </Button> */}
 
-              <span style={{ marginLeft: 8, color: "green" }}>
+              <span style={{ marginLeft: 8, color: "red" }}>
                 已选择：{showname}
               </span>
 

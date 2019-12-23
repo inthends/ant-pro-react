@@ -702,7 +702,6 @@ const Add = (props: AddProps) => {
       </div>
     </Drawer>
   );
-
 };
 
 export default Form.create<AddProps>()(Add);

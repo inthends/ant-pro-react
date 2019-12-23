@@ -104,7 +104,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
     }
   }, [modifyVisible]);
 
-  //房屋费表初始化
+  //初始化
   const initHouseLoadData = (search) => {
     const queryJson = {
       keyword: search,

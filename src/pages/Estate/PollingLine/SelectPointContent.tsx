@@ -1,24 +1,24 @@
 //选择巡检点位，修改为同步树
-import { Spin, Col, Form, Row, Modal, message } from 'antd';
+import { Spin, Col, Form, Row, Modal, message } from 'antd'; 
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import React, { useState } from 'react';
-import { SaveLinePointForm } from './Main.service';
-import SelectTree from '../SelectTree';
-interface SelectHouseProps {
+import React, { useEffect, useState } from 'react';
+import { SaveLinePointForm } from './Main.service'; 
+import SelectTree from '../SelectTree'; 
+interface SelectPointContentProps {
   visible: boolean;
-  closeModal(): void;
+  closeModal(): void; 
   form: WrappedFormUtils;
   entity: any;
   treeData: any[];
   reload(): void;
 }
 
-const SelectHouse = (props: SelectHouseProps) => {
+const SelectPointContent = (props: SelectPointContentProps) => {
   const { reload, visible, closeModal, entity, treeData } = props;
-  // useEffect(() => {
-  //   if (visible) {
-  //   }
-  // }, [visible]);
+  useEffect(() => {
+    if (visible) {
+    }
+  }, [visible]);
 
   const [unitData, setUnitData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -80,13 +80,12 @@ const SelectHouse = (props: SelectHouseProps) => {
               }}
               selectTree={(id, type, info?) => {
               }}
-            />
-
+            /> 
           </Col>
         </Row>
       </Spin>
     </Modal>
   );
 };
-export default Form.create<SelectHouseProps>()(SelectHouse);
+export default Form.create<SelectPointContentProps>()(SelectPointContent);
 

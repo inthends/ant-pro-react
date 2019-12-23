@@ -11,7 +11,6 @@ import request from '@/utils/request';
 //   return request.get(process.env.basePath + `/Common/GetQuickSimpleTreeAll`, {}).then(getResult as any);
 // }
 
-
 //费表列表
 export function GetMeterPageList(data): Promise<any> {
   return request.post(process.env.basePath + `/Meter/GetMeterPageList`, { data: objToFormdata(data) }).then(getResult as any);
@@ -65,6 +64,7 @@ export function GetReceivablesFeeItemTreeJson(): Promise<ResponseObject<TreeEnti
 export function GetPageListWithMeterID(data): Promise<any> {
   return request.post(process.env.basePath + `/Meter/GetPageListWithMeterID`, { data: objToFormdata(data) }).then(getResult as any);;
 }
+
 //获取费表信息
 export function GetInfoFormJson(data): Promise<ResponseObject<TreeEntity[]>> {
   return request.get(process.env.basePath + `/Meter/GetInfoFormJson?keyValue=${data}`, {}).then(getResult as any);;
@@ -145,12 +145,11 @@ export function GetQuickVirtualMeterTree(): Promise<any> {
 export function GetQuickPublicMeterTree(): Promise<any> {
   return request.get(process.env.basePath + `/Common/GetQuickPublicMeterTree?queryJson=${""}`, {}).then(getResult as any);;
 }
-//抄表单详细
 
+//抄表单详细
 export function GetMeterRead(data): Promise<any> {
   return request.get(process.env.basePath + `/Meter/GetMeterRead?keyValue=${data}`, {}).then(getResult as any);;
 }
-
 
 //全部删除单元抄表 
 export function RemoveReadUnitFormAll(data): Promise<any> {
@@ -161,10 +160,12 @@ export function RemoveReadUnitFormAll(data): Promise<any> {
 export function RemoveReadPublicFormAll(data): Promise<any> {
   return request.post(process.env.basePath + `/Meter/RemoveReadPublicFormAll?keyValue=${data}`, {}).then(getResult as any);;
 }
+
 //删除公用抄表
 export function RemoveReadPublicForm(data): Promise<any> {
   return request.post(process.env.basePath + `/Meter/RemoveReadPublicForm?keyValue=${data}`, {}).then(getResult as any);;
 }
+
 //全部删除虚拟抄表
 export function RemoveReadVirtualFormAll(data): Promise<any> {
   return request.post(process.env.basePath + `/Meter/RemoveReadVirtualFormAll?keyValue=${data}`, {}).then(getResult as any);;

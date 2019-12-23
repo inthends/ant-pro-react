@@ -205,10 +205,8 @@ const Modify = (props: ModifyProps) => {
       width={700}
       save={doSave}>
       <Card className={styles.card}>
-        <Form layout="vertical" hideRequiredMark>
-
-          <Row gutter={24}>
-
+        <Form layout="vertical" hideRequiredMark> 
+          <Row gutter={24}> 
             <ModifyItem
               {...baseFormProps}
               field="organizeId"
@@ -216,11 +214,10 @@ const Modify = (props: ModifyProps) => {
               type="tree"
               treeData={orgs}
               disabled={initData.organizeId != undefined}
-              rules={[{ required: true, message: '请选择所属机构' }]} 
+              rules={[{ required: true, message: '请选择所属机构' }]}
             ></ModifyItem>
 
           </Row>
-
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}

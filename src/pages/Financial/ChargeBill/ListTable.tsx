@@ -1,6 +1,6 @@
 //未收列表
 import Page from '@/components/Common/Page';
-import { Tag, Menu, Dropdown, Icon, Divider, InputNumber, Input, Select, Col, Row, Form, DatePicker, Card, Button, message, Table, Modal } from 'antd';
+import { Menu, Dropdown, Icon, Divider, InputNumber, Input, Select, Col, Row, Form, DatePicker, Card, Button, message, Table, Modal } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
@@ -64,7 +64,7 @@ function ListTable(props: ListTableProps) {
     //else
     if (key === 'split') {
       //如果设置了优惠政策，则不允许拆费
-      if (!currentItem.rmid) {
+      if (currentItem.rmid != null) {
         message.warning('设置了优惠政策，不允许拆费');
       } else {
         showSplit(currentItem.id);
@@ -96,15 +96,21 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'feeName',
       key: 'feeName',
       width: 140,
+      render: (text, record) => {
+        if (record.rmid != null)
+          return <span>{text + ' '}<span style={{ color: 'red', fontSize: '4px', verticalAlign: 'super' }}>惠</span></span>;
+        else
+          return text;
+      }
     },
-    {
-      title: '是否优惠',
-      dataIndex: 'rmid',
-      key: 'rmid',
-      align: 'center',
-      width: 80,
-      render: val => val ? <Tag color="red">是</Tag> : '否'
-    },
+    // {
+    //   title: '是否优惠',
+    //   dataIndex: 'rmid',
+    //   key: 'rmid',
+    //   align: 'center',
+    //   width: 80,
+    //   render: val => val ? <Tag color="red">是</Tag> : '否'
+    // },
     {
       title: '应收金额',
       dataIndex: 'amount',
@@ -179,7 +185,6 @@ function ListTable(props: ListTableProps) {
         }
       }
     },
-
     {
       title: '备注',
       dataIndex: 'memo',
@@ -492,7 +497,7 @@ function ListTable(props: ListTableProps) {
         columns={columns}
         rowKey={record => record.id}
         pagination={pagination}
-        scroll={{ y: 500, x: 1800 }}
+        scroll={{ y: 500, x: 1850 }}
         onChange={(pagination: PaginationConfig, filters, sorter) =>
           changePage(pagination, filters, sorter)
         }

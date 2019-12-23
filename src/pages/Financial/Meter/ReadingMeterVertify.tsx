@@ -316,7 +316,7 @@ const ReadingMeterVertify = (props: ReadingMeterVertifyProps) => {
   ] as ColumnProps<any>[];
 
 
-  //房屋费表初始化
+  //初始化
   const initHouseLoadData = (search) => {
     const queryJson = {
       keyword: search,

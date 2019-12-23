@@ -272,7 +272,7 @@ function ChargeListTable(props: ChargeListTableProps) {
         columns={columns}
         rowKey={record => record.billId}
         pagination={pagination}
-        scroll={{ y: 500, x: 1500 }}
+        scroll={{ y: 500, x: 1600 }}
         rowClassName={setClassName} //表格行点击高亮
         loading={loading}
         onRow={onRow}

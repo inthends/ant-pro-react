@@ -56,3 +56,8 @@ export function GetPageLineListJson(data): Promise<any> {
     })
     .then(getResult as any);
 }
+
+//获取点位明细
+export function GetPonitPageListByID(data): Promise<any> {
+  return request.post(process.env.basePath + `/Polling/GetPonitPageListByID`, { data: objToFormdata(data) }).then(getResult as any);;
+}
