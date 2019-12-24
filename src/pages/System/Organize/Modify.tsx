@@ -61,9 +61,7 @@ const Modify = (props: ModifyProps) => {
       GetOrgsWithNoGLC().then(res => {
         setOrgs(res);
       });
-
     })
-
   };
 
   const searchManager = value => {

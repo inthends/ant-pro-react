@@ -11,17 +11,12 @@ export function SaveForm(data): Promise<any> {
     .then(getResult as any);
 }
 
-// 逻辑删除
+//删除
 export function RemoveForm(keyValue): Promise<any> {
   return request
     .post(process.env.basePath + `/Polling/RemoveForm?keyValue=${keyValue}`, {})
     .then(getResult as any);
 }
-
-// 查询机构
-// export function searchOrgs(): Promise<any[]> {
-//   return request.get(process.env.basePath + `/Common/GetOrgTreeOnly`).then(getResult as any);
-// }
 
 //获取分类
 export function GetDataItemTreeList(): Promise<TreeEntity[]> {
@@ -56,9 +51,9 @@ export function GetPageLineListJson(data): Promise<any> {
     .then(getResult as any);
 }
 
-//获取点位明细
-export function GetPonitPageListByID(data): Promise<any> {
-  return request.post(process.env.basePath + `/Polling/GetPonitPageListByID`, { data: objToFormdata(data) }).then(getResult as any);;
+//获取巡检路线点位明细
+export function GetLinePonitPageListByID(data): Promise<any> {
+  return request.post(process.env.basePath + `/Polling/GetLinePonitPageListByID`, { data: objToFormdata(data) }).then(getResult as any);;
 }
 
 // 获取巡检内容
@@ -69,4 +64,37 @@ export function GetContents(): Promise<any[]> {
 //保存巡检点位内容
 export function SavePointContentForm(data): Promise<any> {
   return request.post(process.env.basePath + `/Polling/SavePointContentForm`, { data: objToFormdata(data) }).then(getResult as any);
+}
+
+//获取巡检点位的内容
+export function GetPointcontentPageListByID(data): Promise<any> {
+  return request.post(process.env.basePath + `/Polling/GetPointcontentPageListByID`, { data: objToFormdata(data) }).then(getResult as any);;
+}
+
+//删除巡检点位内容
+export function RemoveLineContentPoint(keyValue): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Polling/RemoveLineContentPoint?keyValue=${keyValue}`, {})
+    .then(getResult as any);
+}
+
+//删除巡检点位全部内容
+export function RemoveLineContentPointAll(keyValue): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Polling/RemoveLineContentPointAll?keyValue=${keyValue}`)
+    .then(getResult as any);
+}
+
+//删除巡检路线下的点位
+export function RemoveLinePoint(keyValue): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Polling/RemoveLinePoint?keyValue=${keyValue}`, {})
+    .then(getResult as any);
+}
+
+//删除巡检路线下的全部点位
+export function RemoveLinePointAll(keyValue): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Polling/RemoveLinePointAll?keyValue=${keyValue}`)
+    .then(getResult as any);
 }

@@ -3,7 +3,7 @@ import ModifyItem from "@/components/BaseModifyDrawer/ModifyItem";
 import { message, Divider, Icon, Table, Modal, Button, Input, Form, Row, Card } from "antd";
 import { WrappedFormUtils } from "antd/lib/form/Form";
 import React, { useState, useEffect } from 'react';
-import { SaveForm, GetPonitPageListByID, RemoveLinePoint, RemoveLinePointAll } from "./Main.service";
+import { SaveForm, GetLinePonitPageListByID, RemoveLinePoint, RemoveLinePointAll } from "./Main.service";
 import { GetOrgEsates } from '@/services/commonItem';
 import { TreeNode } from 'antd/lib/tree-select';
 import { DefaultPagination } from '@/utils/defaultSetting';
@@ -33,7 +33,7 @@ const Modify = (props: ModifyProps) => {
   const [orgs, setOrgs] = useState<TreeNode[]>();
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<DefaultPagination>(new DefaultPagination());
-  const [linepointData, setLinepointData] = useState<any>();
+  const [linepointData, setLinepointData] = useState<any[]>([]);
   const [search, setSearch] = useState<string>('');
   const [selectPointVisible, setSelectPointVisible] = useState<boolean>(false);
   const [isAdd, setIsAdd] = useState<boolean>(true);
@@ -68,6 +68,7 @@ const Modify = (props: ModifyProps) => {
         // setLoading(false);
       } else {
         setLineId(GetGuid());
+        setLinepointData([]);
       }
     }
   }, [visible]);
@@ -117,7 +118,7 @@ const Modify = (props: ModifyProps) => {
     setLoading(true);
     data.sidx = data.sidx || 'id';
     data.sord = data.sord || 'asc';
-    return GetPonitPageListByID(data).then(res => {
+    return GetLinePonitPageListByID(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
         return {
@@ -198,7 +199,7 @@ const Modify = (props: ModifyProps) => {
             <a onClick={() => {
               Modal.confirm({
                 title: '请确认',
-                content: `您是否要删除${record.code}？`,
+                content: `您是否要删除${record.name}？`,
                 cancelText: '取消',
                 okText: '确定',
                 onOk: () => {
@@ -218,7 +219,7 @@ const Modify = (props: ModifyProps) => {
     <BaseModifyProvider {...props}
       width={700}
       name="巡检路线" save={doSave}>
-      <Card style={styles.Card}>
+      <Card className={styles.card}>
         <Form layout="vertical" hideRequiredMark>
           <Row gutter={24}>
             <ModifyItem
@@ -264,51 +265,49 @@ const Modify = (props: ModifyProps) => {
               label="备注"
             ></ModifyItem>
           </Row>
-        </Form>
-
-        <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
-          <Search className="search-input"
-            placeholder="请输入要查询的关键词"
-            style={{ width: 200 }}
-            onSearch={value => loadData(value)} />
-          <Button type="link" style={{ float: 'right' }}
-            onClick={() => {
-              Modal.confirm({
-                title: '请确认',
-                content: `您是否确定全部删除？`,
-                onOk: () => {
-                  if (data != null || data.id != '') {
-                    RemoveLinePointAll(data.id).then(res => {
-                      message.success('删除成功');
-                      initLoadData(search, lineId);
-                    });
-                  }
-                },
-              });
-            }}
-          ><Icon type="delete" />全部删除</Button>
-          <Button type="link" style={{ float: 'right', marginLeft: '1px' }} onClick={add}>
-            <Icon type="plus" />
-            添加点位
+          <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
+            <Search className="search-input"
+              placeholder="请输入要查询的关键词"
+              style={{ width: 200 }}
+              onSearch={value => loadData(value)} />
+            <Button type="link" style={{ float: 'right' }}
+              onClick={() => {
+                Modal.confirm({
+                  title: '请确认',
+                  content: `您是否确定全部删除？`,
+                  onOk: () => {
+                    if (data != null || data.id != '') {
+                      RemoveLinePointAll(data.id).then(res => {
+                        message.success('删除成功');
+                        initLoadData(search, lineId);
+                      });
+                    }
+                  },
+                });
+              }}
+            ><Icon type="delete" />全部删除</Button>
+            <Button type="link" style={{ float: 'right', marginLeft: '1px' }} onClick={add}>
+              <Icon type="plus" />
+              添加点位
               </Button>
-        </div>
-        <Table
-          key="list"
-          onChange={(paginationConfig, filters, sorter) => {
-            loadData(search, paginationConfig, sorter)
-          }
-          }
-          bordered={false}
-          size="middle"
-          columns={columns}
-          dataSource={linepointData}
-          rowKey={record => record.id}
-          pagination={pagination}
-          scroll={{ y: 500, x: 700 }}
-          loading={loading}
-        />
+          </div>
+          <Table
+            key="list"
+            onChange={(paginationConfig, filters, sorter) => {
+              loadData(search, paginationConfig, sorter)
+            }
+            }
+            bordered={false}
+            size="middle"
+            columns={columns}
+            dataSource={linepointData}
+            rowKey={record => record.id}
+            pagination={pagination}
+            scroll={{ y: 500, x: 700 }}
+            loading={loading}
+          />
+        </Form>
       </Card>
-
       <SelectHouse
         visible={selectPointVisible}
         closeModal={closeSelectPoint}

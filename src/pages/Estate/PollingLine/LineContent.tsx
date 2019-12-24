@@ -1,12 +1,12 @@
-
+//巡检内容
 import { Divider, message, Table, Icon, Input, Modal, Button, Drawer, Card, Form } from "antd";
 import { WrappedFormUtils } from "antd/lib/form/Form";
 import React, { useState, useEffect } from 'react';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
-const Search = Input.Search;
 import { GetPointcontentPageListByID, RemoveLineContentPoint, RemoveLineContentPointAll } from "./Main.service";
 import PointContentModify from './PointContentModify';
+const Search = Input.Search;
 
 interface LineContentProps {
   visible: boolean;
@@ -26,7 +26,7 @@ const LineContent = (props: LineContentProps) => {
   //打开抽屉时初始化
   useEffect(() => {
     if (visible) {
-      if (data) {
+      if (lpId) {
         //获取明细
         initLoadData(search, lpId);
       }
@@ -94,23 +94,15 @@ const LineContent = (props: LineContentProps) => {
     });
   };
 
+  const [currData, setCurrData] = useState<any>();
+  const [modifyVisible, setModifyVisible] = useState<boolean>(false);
 
-  const [selectPointContentVisible, setSelectPointContentVisible] = useState<boolean>(false);
-
-  const add = () => {
-
-    setSelectPointContentVisible(true);
+  const closeModal = () => {
+    setModifyVisible(false);
   };
-
-  const closeSelectPointContent = () => {
-    setSelectPointContentVisible(false);
-  };
-
-  const [lpcId, setLpcId] = useState<any>();
-  const [pointcontentVisible, setPointcontentVisible] = useState<boolean>(false);
-  const doModify = record => {
-    setLpcId(record.id);
-    setPointcontentVisible(true);
+  const showModal = (item?) => {
+    setCurrData(item);
+    setModifyVisible(true);
   };
 
   const columns = [
@@ -123,18 +115,40 @@ const LineContent = (props: LineContentProps) => {
     },
     {
       title: '巡检内容',
-      dataIndex: 'content',
-      key: 'content',
+      dataIndex: 'contentName',
+      key: 'contentName',
       width: 120,
       sorter: true
     },
     {
       title: '频次',
-      dataIndex: 'name',
-      key: 'name',
-      width: 100,
-      sorter: true
+      dataIndex: 'pc',
+      key: 'pc',
+      width: 80,
+      render: (text, record) => {
+        return record.unitNum + record.unit + record.frequency + '次';
+      }
     },
+    {
+      title: "类别",
+      dataIndex: "typeName",
+      key: "typeName",
+      width: 100
+    },
+
+    {
+      title: "标准要求",
+      dataIndex: "criterion",
+      key: "criterion",
+      width: 120
+    },
+    {
+      title: "检查方法",
+      dataIndex: "checkWay",
+      key: "checkWay",
+      width: 100
+    },
+
     {
       title: '备注',
       dataIndex: 'memo',
@@ -146,16 +160,16 @@ const LineContent = (props: LineContentProps) => {
       key: 'operation',
       align: 'center',
       fixed: 'right',
-      width: 125,
+      width: 100,
       render: (text, record) => {
         return [
-          <span>
-            <a onClick={() => doModify(record)} key="modify">巡检内容</a>
+          <span key='span'>
+            <a onClick={() => showModal(record)} key="modify">编辑</a>
             <Divider type="vertical" />
             <a onClick={() => {
               Modal.confirm({
                 title: '请确认',
-                content: `您是否要删除${record.code}？`,
+                content: `您是否要删除${record.contentName}？`,
                 cancelText: '取消',
                 okText: '确定',
                 onOk: () => {
@@ -175,12 +189,11 @@ const LineContent = (props: LineContentProps) => {
     <Drawer
       title='巡检内容'
       placement="right"
-      width={700}
+      width={800}
       onClose={closeDrawer}
       visible={visible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
       <Card>
-
         <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
           <Search className="search-input"
             placeholder="请输入要查询的关键词"
@@ -192,7 +205,7 @@ const LineContent = (props: LineContentProps) => {
                 title: '请确认',
                 content: `您是否确定全部删除？`,
                 onOk: () => {
-                  RemoveLineContentPointAll(data.id).then(res => {
+                  RemoveLineContentPointAll(lpId).then(res => {
                     message.success('删除成功');
                     initLoadData(search, lpId);
                   });
@@ -200,7 +213,7 @@ const LineContent = (props: LineContentProps) => {
               });
             }}
           ><Icon type="delete" />全部删除</Button>
-          <Button type="link" style={{ float: 'right', marginLeft: '1px' }} onClick={add}>
+          <Button type="link" style={{ float: 'right', marginLeft: '1px' }} onClick={() => showModal()}>
             <Icon type="plus" />
             添加内容
               </Button>
@@ -216,9 +229,8 @@ const LineContent = (props: LineContentProps) => {
           dataSource={data}
           rowKey="id"
           pagination={pagination}
-          scroll={{ y: 500, x: 700 }}
+          scroll={{ y: 500, x: 850 }}
           loading={loading}
-        //rowSelection={rowSelection}
         />
       </Card>
       <div
@@ -240,12 +252,12 @@ const LineContent = (props: LineContentProps) => {
       </div>
 
       <PointContentModify
-        visible={selectPointContentVisible}
-        closeModal={closeSelectPointContent}
+        visible={modifyVisible}
+        closeModal={closeModal}
+        data={currData}
         lpId={lpId}
-        reload={() => {
-          //刷新数据 
-          initLoadData(search, lpId); 
+        reload={() => { 
+          initLoadData(search, lpId); //刷新数据 
         }}
       />
 
