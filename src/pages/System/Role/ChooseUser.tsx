@@ -1,6 +1,6 @@
-import { Modal, Tree, Input, Row  } from 'antd';
+import { message, Modal, Tree, Input, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { GetDepartmentTreeJson, GetUserList, chooseUser } from './Role.service';
+import { GetDepartmentTreeJson, GetUserList, SaveMember } from './Role.service';
 import UserLabel from './UserLabel';
 
 const { Search } = Input;
@@ -13,7 +13,7 @@ const ChooseUser = (props: ModifyProps) => {
   const { visible, data, close } = props;
   const { roleId = '' } = data || {};
   const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
-  const [treeData, setTreeData] = useState<any[]>([]); 
+  const [treeData, setTreeData] = useState<any[]>([]);
   const [searchText, setSearchText] = useState<string>('');
   const [depId, setDepId] = useState<string>('');
   const [userList, setUserList] = useState<any[]>([]);
@@ -28,7 +28,7 @@ const ChooseUser = (props: ModifyProps) => {
   }, [visible]);
   // 此处搜索只能做前端过滤，否则会导致其他部门有权限的员工被清空，除非保存时参数多传部门
   const searchUser = () => {
-    GetUserList({ roleId, departmentId: ''}).then(res => {
+    GetUserList({ roleId, departmentId: '' }).then(res => {
       setUserList(res || []);
     });
   };
@@ -43,13 +43,20 @@ const ChooseUser = (props: ModifyProps) => {
   const okHandler = (list: any[]) => {
     const userIds = list.filter(item => item.ischeck === 1).map(item => item.id);
     setLoading(true);
-    chooseUser({ roleId, userIds })
+    SaveMember({ roleId, userIds })
       .then(close)
       .finally(() => {
+        message.success('保存成功');
         setLoading(false);
       });
   };
-  const selectDep = e => {
+  const selectDep = (e, item) => {
+    debugger
+    let type = item.selectedNodes[0].props.type;
+    if (type != 'D') {
+      return;
+    }
+
     if (e && e.length > 0) {
       setDepId(e[0]);
     } else {
@@ -58,7 +65,7 @@ const ChooseUser = (props: ModifyProps) => {
   };
   return (
     <Modal
-      title="选择角色成员"
+      title="设置角色成员"
       maskClosable={false}
       visible={visible}
       onOk={() => okHandler(userList)}
@@ -66,7 +73,7 @@ const ChooseUser = (props: ModifyProps) => {
       width={850}
       bodyStyle={{ padding: 0 }}
       confirmLoading={loading}>
-        
+
       <div style={{ height: 500, display: 'flex' }}>
         <div
           style={{
@@ -102,7 +109,7 @@ const ChooseUser = (props: ModifyProps) => {
           <div style={{ paddingTop: 24 }}>
             <Row gutter={16}>
               {userList
-                .filter(item => item.departmentId === depId || depId === '')
+                .filter(item => item.organizeId === depId || item.departmentId === depId || depId === '')
                 .filter(item => item.name.includes(searchText))
                 .map(item => {
                   return (

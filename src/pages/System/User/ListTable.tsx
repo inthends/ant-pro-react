@@ -13,10 +13,11 @@ interface ListTableProps {
   onchange(page: any, filter: any, sort: any): any;
   reload(): void;
   setData(data: any[]): void;
+  showAuth(record: any): void;
 }
 
 function ListTable(props: ListTableProps) {
-  const { onchange, loading, data, modify, pagination, setData } = props;
+  const { onchange, loading, data, modify, pagination, setData, showAuth } = props;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
   };
@@ -50,7 +51,7 @@ function ListTable(props: ListTableProps) {
       },
     });
   };
- 
+
   const doModify = record => {
     modify({ ...record });
   };
@@ -147,7 +148,7 @@ function ListTable(props: ListTableProps) {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
-      width: 100,
+      width: 175,
       render: (text, record) => {
         return [
           // <Button
@@ -162,8 +163,12 @@ function ListTable(props: ListTableProps) {
           //   删除
           // </Button>,
 
-          <span>
+          <span key='span'>
             <a onClick={() => doModify(record)} key="modify">编辑</a>
+            <Divider type="vertical" key='divider2' />
+            <a key="auth" type='link' onClick={() => showAuth(record)}>
+              用户授权
+          </a>
             <Divider type="vertical" key='divider' />
             <a onClick={() => resetPwd(record.id)} key="delete">重置密码</a>
           </span>

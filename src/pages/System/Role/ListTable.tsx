@@ -108,7 +108,7 @@ function ListTable(props: ListTableProps) {
               key="modify"
               onClick={() => doModify(record)}
             >
-              修改
+              编辑
           </a>
             <Divider type="vertical" key='divider1' />
             <a key="choose" type='link' onClick={() => choose(record)}>

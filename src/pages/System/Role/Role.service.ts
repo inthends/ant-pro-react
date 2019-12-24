@@ -103,7 +103,7 @@ export function SaveDataAuthorize(data): Promise<any> {
     .then(getResult as any);
 }
 
-export function chooseUser(data): Promise<any> {
+export function SaveMember(data): Promise<any> {
   return request
     .post(process.env.basePath + `/PermissionRole/SaveMember`, {
       data: objToFormdata(data),
@@ -119,7 +119,7 @@ export function GetDataCheckIds(roleId): Promise<any> {
 }
 
 
-//获取半选中的模数据节点
+//获取半选中的模块数据节点
 export function GetDataHalfCheckIds(roleId): Promise<any> {
   return request
     .get(process.env.basePath + `/PermissionRole/GetDataHalfCheckIds?roleId=${roleId}`)

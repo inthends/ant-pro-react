@@ -7,6 +7,7 @@ import Modify from './Modify';
 import { TreeNode } from 'antd/lib/tree-select';
 import { getDataList } from './User.service';
 import { GetOrgs } from '@/services/commonItem';
+import UserAuth from './UserAuth';
 
 const { Content } = Layout;
 const { Search } = Input;
@@ -24,14 +25,14 @@ const User = () => {
   const [data, setData] = useState<any[]>([]);
   const [currData, setCurrData] = useState<any>();
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
-  const [orgs, setOrgs] = useState<TreeNode[]>();
+  const [orgs, setOrgs] = useState<TreeNode[]>([]);
+  const [authVisible, setAuthVisible] = useState<boolean>(false);
 
   useEffect(() => {
     initLoadData(search);
     GetOrgs().then(res => {
       setOrgs(res);
     });
-
   }, []);
 
 
@@ -59,7 +60,7 @@ const User = () => {
     if (sorter) {
       const { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'Id';
+      searchCondition.sidx = field ? field : 'id';
     }
 
     return load(searchCondition).then(res => {
@@ -68,7 +69,7 @@ const User = () => {
   };
   const load = formData => {
     setLoading(true);
-    formData.sidx = formData.sidx || 'Id';
+    formData.sidx = formData.sidx || 'id';
     formData.sord = formData.sord || 'asc';
     return getDataList(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -90,12 +91,17 @@ const User = () => {
   const initLoadData = (searchParam: SearchParam) => {
     setSearch(searchParam);
     const queryJson = searchParam;
-    const sidx = 'Id';
+    const sidx = 'id';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
       return res;
     });
+  };
+
+  const showAuth = (item?) => {
+    setAuthVisible(true);
+    setCurrData(item);
   };
 
   return (
@@ -138,6 +144,7 @@ const User = () => {
           modify={showDrawer}
           reload={() => initLoadData(search)}
           setData={setData}
+          showAuth={showAuth}
         />
       </Content>
       <Modify
@@ -147,6 +154,13 @@ const User = () => {
         treeDate={orgs}
         reload={() => initLoadData({ ...search })}
       />
+
+      <UserAuth
+        visible={authVisible}
+        close={() => setAuthVisible(false)}
+        userId={currData && currData.id}
+      />
+
     </Layout>
   );
 }

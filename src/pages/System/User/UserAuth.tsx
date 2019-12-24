@@ -2,15 +2,18 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Modal, Tree, Tabs, message, Spin } from 'antd';
 import styles from './style.less';
-import { GetDataHalfCheckIds, GetDataCheckIds, GetHalfCheckIds, GetCheckIds, GetAuths, GetDataAuths, SaveDataAuthorize, SaveModuleAuthorize } from './Role.service';
+import {
+  GetDataHalfCheckIds, GetDataCheckIds, GetHalfCheckIds, GetCheckIds,
+  GetAuths, GetDataAuths, SaveDataAuthorize, SaveModuleAuthorize
+} from './User.service';
 const { TabPane } = Tabs;
-interface RoleAuthProps {
+interface UserAuthProps {
   visible: boolean;
-  roleId?;
+  userId?;
   close(): void;
 }
-const RoleAuth = (props: RoleAuthProps) => {
-  const { visible, close, roleId } = props;
+const UserAuth = (props: UserAuthProps) => {
+  const { visible, close, userId } = props;
   const treeRef = useRef(null);
   useEffect(() => {
     if (visible) {
@@ -37,7 +40,7 @@ const RoleAuth = (props: RoleAuthProps) => {
 
     if (tab === ACTIVEKEYS.数据权限) {
       //const halfchecks = halfCheckedKeys.join(',');//半选节点 
-      SaveDataAuthorize({ roleId, halfchecks: halfCheckedKeys.join(','), authorizeDataJson: checkedKeys.join(',') }).then(() => {
+      SaveDataAuthorize({ userId, halfchecks: halfCheckedKeys.join(','), authorizeDataJson: checkedKeys.join(',') }).then(() => {
         message.success('保存成功！');
         close();
       });
@@ -45,7 +48,7 @@ const RoleAuth = (props: RoleAuthProps) => {
       const moduleIds = getMenu(checkedKeys, treeData, 'menu').join(',');
       const moduleButtonIds = getMenu(checkedKeys, treeData, 'button').join(',');
       const halfchecks = halfCheckedKeys.join(',');//半选节点
-      SaveModuleAuthorize({ roleId, halfchecks, moduleIds, moduleButtonIds }).then(() => {
+      SaveModuleAuthorize({ userId, halfchecks, moduleIds, moduleButtonIds }).then(() => {
         message.success('保存成功');
         close();
       });
@@ -53,7 +56,7 @@ const RoleAuth = (props: RoleAuthProps) => {
   };
 
   //点击事件
-  const onCheck = (checkedKeys, info) => { 
+  const onCheck = (checkedKeys, info) => {
     //let checkedKeysResult = [...checkedKeys, ...info.halfCheckedKeys];
     setCheckedKeys(checkedKeys);
     setHalfCheckedKeys(info.halfCheckedKeys);//半选中节点
@@ -63,39 +66,37 @@ const RoleAuth = (props: RoleAuthProps) => {
     setActiveKey(e);
     setIsLoaded(false);
     if (e === ACTIVEKEYS.功能权限) {
-      GetAuths(roleId).then(res => {
+      GetAuths(userId).then(res => {
         setAuths(res || []);
 
         //半选
-        GetHalfCheckIds(roleId).then(res => {
+        GetHalfCheckIds(userId).then(res => {
           setHalfCheckedKeys(res || []);
         })
 
         //全选
-        GetCheckIds(roleId).then(res => {
+        GetCheckIds(userId).then(res => {
           setCheckedKeys(res || []);
         })
 
         setIsLoaded(true);
       });
       // } else if (e === ACTIVEKEYS.操作权限) {
-      //   GetButtonAuths(roleId).then(res => {
+      //   GetButtonAuths(userId).then(res => {
       //     console.log(res);
       //     setAuths(res);
       //     setIsLoaded(true);
       //   });
     } else if (e === ACTIVEKEYS.数据权限) {
-      GetDataAuths(roleId).then(res => {
+      GetDataAuths(userId).then(res => {
         //console.log(JSON.parse(res));
-
-
         //半选
-        GetDataHalfCheckIds(roleId).then(res => {
+        GetDataHalfCheckIds(userId).then(res => {
           setHalfCheckedKeys(res || []);
         })
 
         //全选
-        GetDataCheckIds(roleId).then(res => {
+        GetDataCheckIds(userId).then(res => {
           setCheckedKeys(res || []);
         })
 
@@ -135,16 +136,17 @@ const RoleAuth = (props: RoleAuthProps) => {
               treeData={auths}
               key={activeKey}
               defaultExpandAll
-              ref={treeRef} 
+              ref={treeRef}
             ></Tree>
-          ) : <Spin tip="数据处理中..."  className={styles.spin}   />}
+          ) : <Spin tip="数据处理中..."  className={styles.spin} />}
         </div>
       ) : null}
     </Modal>
   );
 };
 
-export default RoleAuth;
+export default UserAuth;
+
 enum ACTIVEKEYS {
   功能权限 = '1',
   // 操作权限 = '2',

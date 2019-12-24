@@ -48,3 +48,62 @@ export function DisabledToggle(keyValue, disabled: boolean): Promise<any> {
   }
 }
  
+//权限操作
+
+// 系统功能列表
+export function GetAuths(userId): Promise<any> {
+  return request
+    .get(process.env.basePath + `/PermissionUser/GetModuleTree?userId=${userId}`)
+    .then(getResult as any);
+}
+
+// 数据权限列表
+export function GetDataAuths(userId): Promise<any> {
+  return request
+    .get(process.env.basePath + `/PermissionUser/GetPstructTree?userId=${userId}`)
+    .then(getResult as any);
+}
+
+//获取选中的模块节点
+export function GetCheckIds(userId): Promise<any> {
+  return request
+    .get(process.env.basePath + `/PermissionUser/GetCheckIds?userId=${userId}`)
+    .then(getResult as any);
+}
+
+
+//获取半选中的模块节点
+export function GetHalfCheckIds(userId): Promise<any> {
+  return request
+    .get(process.env.basePath + `/PermissionUser/GetHalfCheckIds?userId=${userId}`)
+    .then(getResult as any);
+}
+
+//获取选中的数据节点
+export function GetDataCheckIds(userId): Promise<any> {
+  return request
+    .get(process.env.basePath + `/PermissionUser/GetDataCheckIds?userId=${userId}`)
+    .then(getResult as any);
+}
+
+//获取半选中的模块数据节点
+export function GetDataHalfCheckIds(userId): Promise<any> {
+  return request
+    .get(process.env.basePath + `/PermissionUser/GetDataHalfCheckIds?userId=${userId}`)
+    .then(getResult as any);
+}
+
+export function SaveModuleAuthorize(data): Promise<any> {
+  return request
+    .post(process.env.basePath + `/PermissionUser/SaveModuleAuthorize`, {
+      data: objToFormdata(data),
+    })
+    .then(getResult as any);
+}
+export function SaveDataAuthorize(data): Promise<any> {
+  return request
+    .post(process.env.basePath + `/PermissionUser/SaveDataAuthorize`, {
+      data: objToFormdata(data),
+    })
+    .then(getResult as any);
+}
