@@ -51,12 +51,10 @@ const ChooseUser = (props: ModifyProps) => {
       });
   };
   const selectDep = (e, item) => {
-    debugger
     let type = item.selectedNodes[0].props.type;
     if (type != 'D') {
       return;
     }
-
     if (e && e.length > 0) {
       setDepId(e[0]);
     } else {
