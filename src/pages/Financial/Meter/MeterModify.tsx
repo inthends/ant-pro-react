@@ -624,7 +624,7 @@ const MeterModify = (props: MeterModifyProps) => {
             })
           }}
         >
-          确定
+          提交
         </Button>
       </div>
       <ChargeFeeItem

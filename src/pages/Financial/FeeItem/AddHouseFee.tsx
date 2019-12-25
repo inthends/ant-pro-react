@@ -56,7 +56,6 @@ const AddHouseFee = (props: AddHouseFeeProps) => {
           }).catch(() => {
             message.warning('添加失败');
           });
-
         }
       }}
       destroyOnClose={true}
@@ -64,7 +63,6 @@ const AddHouseFee = (props: AddHouseFeeProps) => {
       width='600px'
     >
       {/* <Row style={{ height: '400px', overflow: 'hidden', marginTop: '5px', backgroundColor: 'rgb(255,255,255)' }}> */}
-
       <Spin tip="数据处理中..." spinning={loading}>
         <Row gutter={8}>
           <Col span={12} style={{ height: '420px', overflow: 'auto' }}>
@@ -94,6 +92,5 @@ const AddHouseFee = (props: AddHouseFeeProps) => {
     </Modal>
   );
 };
-
 export default Form.create<AddHouseFeeProps>()(AddHouseFee);
 

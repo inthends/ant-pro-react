@@ -5,7 +5,7 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import {
   GetUserRoomsByRelationId, SaveDetail, GetReceivablesFeeItemTreeJson, GetRoomUsers,
-  GetUserRooms, GetFeeItemDetail, SaveTempBill, GetShowDetail
+  GetUserRooms, GetFeeItemDetail, SaveTempBill, GetShowDetail, Call
 } from './Main.service';
 import LeftTree from '../LeftTree';
 import moment from 'moment';
@@ -78,8 +78,7 @@ const Modify = (props: ModifyProps) => {
           GetShowDetail(id).then(info => {
             // let info = value.entity;
             // info.number = value.number; 
-            //追加
-            setInfoDetail(info);
+
             let customerid = '';
             for (var i = 0; i < res.length; i++) {
               if (res[i].key == info.relationId) {
@@ -89,6 +88,9 @@ const Modify = (props: ModifyProps) => {
             GetUserRooms(customerid).then(urooms => {
               setUnitIds(urooms);
             });
+
+            //赋值
+            setInfoDetail(info);
           })
         });
 
@@ -107,10 +109,10 @@ const Modify = (props: ModifyProps) => {
                 if (res.length > 0) {
                   //var info = Object.assign({}, infoDetail, { unitId: res[0].key });
                   info.unitId = res[0].key
+                  setInfoDetail(info);
+                  form.resetFields();
                 }
-              });
-            setInfoDetail(info);
-            form.resetFields();
+              }); 
           }
           // return info;
         });
@@ -196,7 +198,7 @@ const Modify = (props: ModifyProps) => {
         var guid = getGuid();
         var unit = {
           BillId: id != null && id != "" ? infoDetail.billId : guid,
-          UnitId: values.householdId,
+          UnitId: values.unitId,
           FeeItemId: infoDetail.feeItemId,
           Quantity: "" + values.quantity,
           Price: "" + values.price,
@@ -322,8 +324,8 @@ const Modify = (props: ModifyProps) => {
     }
     return '';
   };
- 
-   const disabledDate = (current) => {
+
+  const disabledDate = (current) => {
     return current < moment(form.getFieldValue('beginDate'));
   };
 
@@ -409,7 +411,7 @@ const Modify = (props: ModifyProps) => {
               </Row>
               <Row>
                 <Form.Item label="选择房屋" required labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} >
-                  {getFieldDecorator('householdId', {
+                  {getFieldDecorator('unitId', {
                     // initialValue: infoDetail.householdId == null ? null : getUnitId(infoDetail.householdId),
                     initialValue: infoDetail.unitId == null ? null : infoDetail.unitId,
                     rules: [{ required: true, message: '请选择房屋' }]
@@ -439,7 +441,13 @@ const Modify = (props: ModifyProps) => {
                         onChange={value => {
                           const quantity = Number(form.getFieldValue('quantity'));
                           const number = Number(form.getFieldValue('number'));
-                          form.setFieldsValue({ amount: quantity * number * Number(value) });
+                          //form.setFieldsValue({ amount: quantity * number * Number(value) }); 
+                          //调用后台计算并且根据设置保留小数位
+                          const unitId = form.getFieldValue('unitId');
+                          Call({ unitId: unitId, feeItemId: infoDetail.feeItemId, price: value, quantity: quantity, number: number }).then(res => {
+                            form.setFieldsValue({ amount: res });
+                          });
+
                         }}
                       ></InputNumber>
                     )}
@@ -454,7 +462,7 @@ const Modify = (props: ModifyProps) => {
                       initialValue: infoDetail.quantity,
                       rules: [{ required: true, message: '请输入数量' }]
                     })(
-                      <InputNumber min={0} readOnly style={{ width: '100%' }} ></InputNumber>
+                      <Input min={0} disabled style={{ width: '100%' }} ></Input>
                     )}
                   </Form.Item>
                 </Col>
@@ -477,7 +485,12 @@ const Modify = (props: ModifyProps) => {
 
                           const price = Number(form.getFieldValue('price'));
                           const quantity = Number(form.getFieldValue('quantity'));
-                          form.setFieldsValue({ amount: price * quantity * Number(value) });
+                          //form.setFieldsValue({ amount: price * quantity * Number(value) }); 
+                          //调用后台计算并且根据设置保留小数位
+                          const unitId = form.getFieldValue('unitId');
+                          Call({ unitId: unitId, feeItemId: infoDetail.feeItemId, price: price, quantity: quantity, number: value }).then(res => {
+                            form.setFieldsValue({ amount: res });
+                          });
 
                         }}></InputNumber>
                     )}
@@ -497,7 +510,6 @@ const Modify = (props: ModifyProps) => {
                 </Col>
               </Row>
               <Row>
-
                 <Col span={12}>
                   <Form.Item label="周期" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
                     {getFieldDecorator('cycleValue', {
@@ -538,7 +550,7 @@ const Modify = (props: ModifyProps) => {
                       </Select>
                     )}
                   </Form.Item>
-                </Col> 
+                </Col>
               </Row>
               <Row>
                 <Col span={12}>
@@ -557,9 +569,9 @@ const Modify = (props: ModifyProps) => {
                       initialValue: infoDetail.endDate == null ? moment(getEndDate()) : moment(infoDetail.endDate),
                       rules: [{ required: true, message: '请选择结束日期' }]
                     })(
-                      <DatePicker disabled={!infoDetail.isModifyDate} 
-                      disabledDate={disabledDate}
-                      style={{ width: '100%' }} />
+                      <DatePicker disabled={!infoDetail.isModifyDate}
+                        disabledDate={disabledDate}
+                        style={{ width: '100%' }} />
                     )}
                   </Form.Item>
                 </Col>

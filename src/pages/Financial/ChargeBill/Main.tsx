@@ -69,13 +69,13 @@ function Main() {
   const [tabIndex, setTabIndex] = useState<string>('1');
 
   //点击左侧树，加载数据
-  const selectTree = (organizeId, search) => { 
+  const selectTree = (organizeId, search) => {
     if (tabIndex == '1')
       initLoadData(search, organizeId);
     else if (tabIndex == '2')
       initChargeLoadData(organizeId);
     else
-      initChargeCheckLoadData(organizeId); 
+      initChargeCheckLoadData(organizeId);
   };
 
   // useEffect(() => {
@@ -508,7 +508,6 @@ function Main() {
               showTrans={showTrans}
               // showDetail={(billId) => { chargedRowSelectedKey.billId = billId; showDetail(); }}
               showDetail={showDetail}
-
             />
           </TabPane>
           <TabPane tab="收款单列表" key="2">
@@ -600,7 +599,6 @@ function Main() {
                 <Icon type="plus" />
                 送审
               </Button>
-
             </div>
 
             <ChargeListTable
@@ -617,23 +615,21 @@ function Main() {
               rowSelect={GetChargeSelectedKeys}
             />
           </TabPane>
-
           <TabPane tab="对账单" key="3">
             <div style={{ marginBottom: '10px' }}>
-
               <DatePicker
                 placeholder='收款日期'
                 onChange={(date, dateStr) => {
                   var params = Object.assign({}, chargedSearchParams, { startDate: dateStr });
                   setChargedSearchParams(params);
-                }} style={{ marginRight: '5px' }} />
+                }} style={{ marginRight: '5px', width: '150px' }} />
               至
               <DatePicker
                 placeholder='收款日期'
                 onChange={(date, dateStr) => {
                   var params = Object.assign({}, chargedSearchParams, { endDate: dateStr });
                   setChargedSearchParams(params);
-                }} style={{ marginLeft: '5px', marginRight: '5px' }} />
+                }} style={{ marginLeft: '5px', marginRight: '5px', width: '150px' }} />
               <Search
                 className="search-input"
                 placeholder="请输入收款单号"
@@ -646,8 +642,7 @@ function Main() {
               <Button type="primary" style={{ marginLeft: '3px' }}
                 onClick={() => {
                   initChargeLoadData(organizeId);
-                }}
-              >
+                }}>
                 <Icon type="search" />
                 搜索
               </Button>

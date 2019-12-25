@@ -229,3 +229,10 @@ export function ReSubmitForm(data): Promise<any> {
 export function GetTemplates(unitId): Promise<any> {
   return request.get(process.env.basePath + `/Template/GetTemplates?unitId=${unitId}`).then(getResult as any);
 }
+
+// 收款
+export function Call(data): Promise<any> {
+  return request
+    .post(process.env.basePath + `/BillingMain/Call`, { data: objToFormdata(data) })
+    .then(getResult as any);
+}

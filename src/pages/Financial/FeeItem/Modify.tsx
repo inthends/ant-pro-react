@@ -1110,7 +1110,7 @@ const Modify = (props: ModifyProps) => {
             <TabPane tab="高级" key="2">
               <Card title="小数精度" className={styles.card2}  >
                 <Row gutter={24}>
-                  <Col lg={12}>
+                  <Col lg={7}>
                     <Form.Item label="中间每一步计算结果保留">
                       {getFieldDecorator('midResultScale', {
                         initialValue: infoDetail.midResultScale || infoDetail.midResultScale == 0 ? infoDetail.midResultScale : 2,
@@ -1126,7 +1126,7 @@ const Modify = (props: ModifyProps) => {
                       )}
                     </Form.Item>
                   </Col>
-                  <Col lg={12}>
+                  <Col lg={5}>
                     <Form.Item label="对最后一位">
                       {getFieldDecorator('midScaleDispose', {
                         initialValue: infoDetail.midScaleDispose ? infoDetail.midScaleDispose : 1,
@@ -1140,9 +1140,8 @@ const Modify = (props: ModifyProps) => {
                       )}
                     </Form.Item>
                   </Col>
-                </Row>
-                <Row gutter={24}>
-                  <Col lg={12}>
+               
+                  <Col lg={7}>
                     <Form.Item label="最终结果保留小数位数">
                       {getFieldDecorator('lastResultScale', {
                         initialValue: infoDetail.lastResultScale || infoDetail.lastResultScale == 0 ? infoDetail.lastResultScale : 2,
@@ -1158,7 +1157,7 @@ const Modify = (props: ModifyProps) => {
                       )}
                     </Form.Item>
                   </Col>
-                  <Col lg={12}>
+                  <Col lg={5}>
                     <Form.Item label="对最后一位">
                       {getFieldDecorator('lastScaleDispose', {
                         initialValue: infoDetail.lastScaleDispose ? infoDetail.lastScaleDispose : 1,
@@ -1587,7 +1586,7 @@ const Modify = (props: ModifyProps) => {
                       key='orgsearch'
                       className="search-input"
                       placeholder="请输入要查询的机构名称"
-                      style={{ width: 200 }}
+                      style={{ width: 220 }}
                       onSearch={value => orgLoadData(value)}
                     />
                     <Button type="link" style={{ float: 'right' }}
@@ -1667,7 +1666,7 @@ const Modify = (props: ModifyProps) => {
                       key='search'
                       className="search-input"
                       placeholder="请输入要查询的房屋编号"
-                      style={{ width: 200 }}
+                      style={{ width: 220 }}
                       onSearch={value => houseLoadData(value)}
                     />
                     {/* <Button type="link" style={{ float: 'right' }}
