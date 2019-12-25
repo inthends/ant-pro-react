@@ -1,5 +1,5 @@
 
-import { Spin, message, AutoComplete, InputNumber, TreeSelect, Tabs, Select, Button, Card, Col, DatePicker, Drawer, Form, Input, Row } from 'antd';
+import { Spin, message, InputNumber, TreeSelect, Tabs, Select, Button, Card, Col, DatePicker, Drawer, Form, Input, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import {
   TreeEntity, HtLeasecontractcharge, HtLeasecontractchargefee,
@@ -261,26 +261,38 @@ const Add = (props: AddProps) => {
       setTreeData(res || []);
     });
 
+    GetUserList('', '员工').then(res => {
+      setUserSource(res || []);
+    })
+
   }, []);
 
   // 打开抽屉时初始化
   useEffect(() => {
   }, [visible]);
 
-  const handleSearch = value => {
-    if (value == '')
-      return;
-    GetUserList(value, '员工').then(res => {
-      setUserSource(res || []);
-    })
-  };
+  // const handleSearch = value => {
+  //   if (value == '')
+  //     return;
+  //   GetUserList(value, '员工').then(res => {
+  //     setUserSource(res || []);
+  //   })
+  // };
 
-  const userList = userSource.map
-    (item => <Option key={item.id} value={item.name}>{item.name}</Option>);
+  // const userList = userSource.map
+  //   (item => <Option key={item.id} value={item.name}>{item.name}</Option>);
 
   const onFollowerSelect = (value, option) => {
     form.setFieldsValue({ followerId: option.key });
   };
+
+  // const onFollowerChange = (value) => { 
+  //   //验证值
+  //   const len = userSource.indexOf(value);
+  //   if (len < 0) {
+  //     message.warning('用户不存在');
+  //   } 
+  // };
 
   const onSignerSelect = (value, option) => {
     form.setFieldsValue({ signerId: option.key });
@@ -388,15 +400,34 @@ const Add = (props: AddProps) => {
                       </Col>
                       <Col lg={12}>
                         <Form.Item label="跟进人" >
-                          {getFieldDecorator('follower', {
+
+                          {/* {getFieldDecorator('follower', {
                           })(
                             <AutoComplete
                               dataSource={userList}
                               onSearch={handleSearch}
                               placeholder="请输入跟进人"
                               onSelect={onFollowerSelect}
+                              // onChange={onFollowerChange}
                             />
+                          )} */}
+
+                          {getFieldDecorator('follower', {
+                          })(
+                            <Select
+                              showSearch
+                              // onSearch={handleSearch}
+                              // optionFilterProp="children"
+                              onSelect={onFollowerSelect}
+                            >
+                              {userSource.map(item => (
+                                <Option key={item.id} value={item.name}>
+                                  {item.name}
+                                </Option>
+                              ))}
+                            </Select>
                           )}
+
                           {getFieldDecorator('followerId', {
                           })(
                             <input type='hidden' />
@@ -544,7 +575,7 @@ const Add = (props: AddProps) => {
                       </Col>
                       <Col lg={12}>
                         <Form.Item label="签订人" required>
-                          {getFieldDecorator('signer', {
+                          {/* {getFieldDecorator('signer', {
                             rules: [{ required: true, message: '请输入签订人' }],
                           })(
                             <AutoComplete
@@ -553,7 +584,24 @@ const Add = (props: AddProps) => {
                               placeholder="请输入签订人"
                               onSelect={onSignerSelect}
                             />
+                          )} */}
+
+                          {getFieldDecorator('signer', {
+                          })(
+                            <Select
+                              showSearch
+                              onSelect={onFollowerSelect}
+                            >
+                              {userSource.map(item => (
+                                <Option key={item.id} value={item.name}>
+                                  {item.name}
+                                </Option>
+                              ))}
+                            </Select>
                           )}
+
+
+
                           {getFieldDecorator('signerId', {
                           })(
                             <input type='hidden' />
@@ -675,7 +723,7 @@ const Add = (props: AddProps) => {
                 depositData={depositData}
                 chargeData={chargeData}
                 className={styles.addcard}
-              ></ResultList> 
+              ></ResultList>
             </TabPane>
           </Tabs>
         </Spin>

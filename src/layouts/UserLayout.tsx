@@ -1,6 +1,7 @@
 import {
-  DefaultFooter, MenuDataItem,
-  //  getMenuData,
+  DefaultFooter,
+  //MenuDataItem,
+  //getMenuData,
   getPageTitle
 } from '@ant-design/pro-layout';
 import DocumentTitle from 'react-document-title';
@@ -11,11 +12,11 @@ import { formatMessage } from 'umi-plugin-react/locale';
 
 import SelectLang from '@/components/SelectLang';
 import { ConnectProps, ConnectState } from '@/models/connect';
-// import logo from '../assets/logo.svg';
+import logo from '../assets/logo.svg';
 import styles from './UserLayout.less';
 
 export interface UserLayoutProps extends ConnectProps {
-  breadcrumbNameMap: { [path: string]: MenuDataItem };
+  //breadcrumbNameMap: { [path: string]: MenuDataItem };
 }
 
 const UserLayout: React.SFC<UserLayoutProps> = props => {
@@ -50,7 +51,7 @@ const UserLayout: React.SFC<UserLayoutProps> = props => {
           <div className={styles.top}>
             <div className={styles.header}>
               <Link to="/">
-                {/* <img alt="logo" className={styles.logo} src={logo} />  */}
+                {/* <img alt="logo" className={styles.logo} src={logo} /> */}
                 <span className={styles.title}>A6资产管理系统</span>
               </Link>
             </div>

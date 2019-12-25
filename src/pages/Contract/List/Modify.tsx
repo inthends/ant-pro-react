@@ -86,7 +86,7 @@ const Modify = (props: ModifyProps) => {
     if (visible) {
       if (id) {
         setLoading(true);
-        GetFormJson(id).then((tempInfo: LeaseContractDTO) => { 
+        GetFormJson(id).then((tempInfo: LeaseContractDTO) => {
           //处理一下房间
           let rooms: any[] = [];
           if (tempInfo != null && tempInfo.houseList != null) {
@@ -222,13 +222,13 @@ const Modify = (props: ModifyProps) => {
           data.priceUnit = values.priceUnit[index];
           data.advancePayTime = values.advancePayTime[index];
           data.advancePayTimeUnit = values.advancePayTimeUnit[index];
-          data.billType = values.billType[index]; 
+          data.billType = values.billType[index];
           if (data.priceUnit == "元/m²·天" || data.priceUnit == "元/天") {
             data.dayPriceConvertRule = values.dayPriceConvertRule[index];
           }
-          data.yearDays = values.yearDays[index]; 
-          data.payCycle = values.payCycle[index]; 
-          data.rentalPeriodDivided = values.rentalPeriodDivided[index];   
+          data.yearDays = values.yearDays[index];
+          data.payCycle = values.payCycle[index];
+          data.rentalPeriodDivided = values.rentalPeriodDivided[index];
           TermJson.push(data);
         });
 
@@ -615,14 +615,14 @@ const Modify = (props: ModifyProps) => {
                       </Col>
                     </Row>
                     <Row gutter={24}>
-                      <Col lg={6}>
+                      <Col lg={7}>
                         <Form.Item label="滞纳金比例" >
                           {getFieldDecorator('lateFee', {
                             initialValue: infoDetail.lateFee
-                          })(<InputNumber placeholder="请输入" />)}
+                          })(<InputNumber placeholder="请输入" style={{ width: '120px' }} />)}
                         </Form.Item>
                       </Col>
-                      <Col lg={6}>
+                      <Col lg={5}>
                         <Form.Item label="&nbsp;" >
                           {getFieldDecorator('lateFeeUnit', {
                             initialValue: infoDetail.lateFeeUnit ? infoDetail.lateFeeUnit : "%/天"
@@ -636,7 +636,7 @@ const Modify = (props: ModifyProps) => {
                         <Form.Item label="滞纳金上限" >
                           {getFieldDecorator('maxLateFee', {
                             initialValue: infoDetail.maxLateFee
-                          })(<InputNumber placeholder="请输入" />)}
+                          })(<InputNumber placeholder="请输入" style={{ width: '120px' }}/>)}
                         </Form.Item>
                       </Col>
                       <Col lg={5}>

@@ -6,6 +6,8 @@ import NoticeList, { NoticeIconTabProps } from './NoticeList';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
 
+import router from 'umi/router';
+
 const { TabPane } = Tabs;
 
 export interface NoticeIconData {
@@ -41,11 +43,11 @@ export default class NoticeIcon extends Component<NoticeIconProps> {
   public static Tab: typeof NoticeList = NoticeList;
 
   static defaultProps = {
-    onItemClick: (): void => {},
-    onPopupVisibleChange: (): void => {},
-    onTabChange: (): void => {},
-    onClear: (): void => {},
-    onViewMore: (): void => {},
+    onItemClick: (): void => { },
+    onPopupVisibleChange: (): void => { },
+    onTabChange: (): void => { },
+    onClear: (): void => { },
+    onViewMore: (): void => { },
     loading: false,
     clearClose: false,
     emptyImage: 'https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg',
@@ -99,7 +101,8 @@ export default class NoticeIcon extends Component<NoticeIconProps> {
         const msgCount = count || count === 0 ? count : len;
         const tabTitle: string = msgCount > 0 ? `${title} (${msgCount})` : title;
         return (
-          <TabPane tab={tabTitle} key={title}>
+          <TabPane tab={tabTitle} key={title}
+          >
             <NoticeList
               clearText={clearText}
               viewMoreText={viewMoreText}
@@ -142,7 +145,8 @@ export default class NoticeIcon extends Component<NoticeIconProps> {
     const notificationBox = this.getNotificationBox();
     const NoticeBellIcon = bell || <Icon type="bell" className={styles.icon} />;
     const trigger = (
-      <span className={classNames(noticeButtonClass, { opened: visible })}>
+      <span onClick={() => router.push('/workflow/flowtask')} //打开待办
+        className={classNames(noticeButtonClass, { opened: visible })}>
         <Badge count={count} style={{ boxShadow: 'none' }} className={styles.badge}>
           {NoticeBellIcon}
         </Badge>

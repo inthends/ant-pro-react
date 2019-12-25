@@ -37,7 +37,7 @@ const Detail = (props: DetailProps) => {
   const [chargeOfferList, setChargeOfferList] = useState<HtLeasecontractchargefeeoffer[]>([]);
   const [depositData, setDepositData] = useState<any[]>([]);//保证金
   const [chargeData, setChargeData] = useState<any[]>([]);//租金
-  const [appData, setAppData] = useState<any[]>([]);//审批记录
+  // const [appData, setAppData] = useState<any[]>([]);//审批记录
   
 
   // const close = () => {
@@ -70,7 +70,7 @@ const Detail = (props: DetailProps) => {
             setChargeOfferList(charge.chargeFeeOfferList || []);
             setDepositData(charge.depositFeeResultList || []);//保证金明细
             setChargeData(charge.chargeFeeResultList || []);//租金明细    
-            setAppData(charge.contractapproveLog || []);//审批记录    
+            // setAppData(charge.contractapproveLog || []);//审批记录    
           })
           form.resetFields();
         });
