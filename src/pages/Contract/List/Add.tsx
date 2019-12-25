@@ -599,9 +599,7 @@ const Add = (props: AddProps) => {
                               ))}
                             </Select>
                           )}
-
-
-
+ 
                           {getFieldDecorator('signerId', {
                           })(
                             <input type='hidden' />
