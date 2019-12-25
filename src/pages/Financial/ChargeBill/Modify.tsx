@@ -101,14 +101,13 @@ const Modify = (props: ModifyProps) => {
           if (res.length > 0) {
             //var info = Object.assign({}, infoDetail, { relationId: res[0].key });
             let info = Object.assign({ relationId: res[0].key });
-            // setInfoDetail(info);
-
+            // setInfoDetail(info); 
             GetUserRooms(res[0].attributeA)//customerid
               .then(res => {
                 setUnitIds(res);
                 if (res.length > 0) {
                   //var info = Object.assign({}, infoDetail, { unitId: res[0].key });
-                  info.unitId = res[0].key
+                  info.unitId = res[0].key;
                   setInfoDetail(info);
                   form.resetFields();
                 }

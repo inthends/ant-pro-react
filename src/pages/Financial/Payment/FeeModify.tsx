@@ -98,11 +98,12 @@ const FeeModify = (props: FeeModifyProps) => {
                 setUnitIds(res);
                 if (res.length > 0) {
                   //var info = Object.assign({}, infoDetail, { unitId: res[0].key });
-                  info.unitId = res[0].key
+                  info.unitId = res[0].key;
+                  setInfoDetail(info);
+                  form.resetFields();
                 }
               });
-            setInfoDetail(info);
-            form.resetFields();
+           
           }
         })
         //}

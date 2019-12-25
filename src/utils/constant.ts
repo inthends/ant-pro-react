@@ -8,7 +8,7 @@ export const DefaultPage: PaginationProps = {
   defaultCurrent: 1,
   defaultPageSize: 20,
   showSizeChanger: true,
-  pageSizeOptions: ['10', '20', '50'],
+  pageSizeOptions: ['10', '20', '50','100'],
 };
 
 export const enum ParamTypes {
