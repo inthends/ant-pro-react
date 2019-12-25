@@ -113,24 +113,22 @@ function ListTable(props: ListTableProps) {
       title: '折后月度已收合计(含税)',
       dataIndex: 'payAmount',
       key: 'payAmount',
-      width: 140,
+      width: 150,
     },
 
     {
       title: '折后月度已收合计(税后)',
       dataIndex: 'aftTaxPayAmount',
       key: 'aftTaxPayAmount',
-      width: 140,
-    },
-
+      width: 150,
+    }, 
     {
       title: '计费起始日期',
       dataIndex: 'beginDate',
       key: 'beginDate',
       width: 100,
       render: val => moment(val).format('YYYY-MM-DD')
-    },
-
+    }, 
     {
       title: '计费终止日期',
       dataIndex: 'endDate',
@@ -138,7 +136,6 @@ function ListTable(props: ListTableProps) {
       width: 100,
       render: val => moment(val).format('YYYY-MM-DD')
     }
-
   ] as ColumnProps<any>[];
 
   return (
