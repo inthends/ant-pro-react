@@ -2,7 +2,6 @@ import Page from '@/components/Common/Page';
 //import { TreeEntity } from '@/model/models';
 import { Tree } from 'antd';
 import React, { useEffect, useState } from 'react';
-
 // const { TreeNode } = Tree;
 
 interface LeftTreeProps {
@@ -26,10 +25,8 @@ function LeftTree(props: LeftTreeProps) {
 
   useEffect(() => {
     //setExpanded(treeData.map(item => item.key as string));
-
     getAllkeys(treeData || []);
     setExpanded(keys);
-
   }, [treeData]);
 
   // const onSelect = (selectedKeys, info) => { 
@@ -94,16 +91,19 @@ function LeftTree(props: LeftTreeProps) {
       height: '100%',
       overflowY: 'auto'
     }}>
-      <Tree
-        expandedKeys={expanded}
-        showLine
-        onSelect={onSelect}
-        treeData={treeData}
-        // defaultExpandAll={true}
-        onExpand={clickExpend}
-      >
-        {/* {renderTree(treeData, '0')} */}
-      </Tree>
+
+      {treeData != null && treeData.length > 0 ? 
+        (<Tree
+          expandedKeys={expanded}
+          showLine
+          onSelect={onSelect}
+          treeData={treeData}
+          autoExpandParent
+          // defaultExpandAll={true}
+          onExpand={clickExpend}
+        >
+          {/* {renderTree(treeData, '0')} */}
+        </Tree>) : null}
     </Page>
   );
 }

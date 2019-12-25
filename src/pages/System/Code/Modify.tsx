@@ -8,8 +8,8 @@ import RuleItem from './RuleItem';
 import { DefaultPagination } from "@/utils/defaultSetting";
 import { ColumnProps, PaginationConfig } from "antd/lib/table";
 import styles from './style.less';
-import { GetOrgs } from '@/services/commonItem';
-import { TreeNode } from 'antd/lib/tree-select';
+// import { GetOrgs } from '@/services/commonItem';
+// import { TreeNode } from 'antd/lib/tree-select';
 
 interface ModifyProps {
   visible: boolean;
@@ -37,7 +37,7 @@ const Modify = (props: ModifyProps) => {
     new DefaultPagination()
   );
 
-  const [orgs, setOrgs] = useState<TreeNode[]>();
+  // const [orgs, setOrgs] = useState<TreeNode[]>();
 
   //打开抽屉时初始化
   useEffect(() => {
@@ -45,9 +45,9 @@ const Modify = (props: ModifyProps) => {
       if (data) {
         //获取明细
         initLoadData();
-        GetOrgs().then(res => {
-          setOrgs(res);
-        });
+        // GetOrgs().then(res => {
+        //   setOrgs(res);
+        // });
       }
     }
   }, [visible]);
@@ -94,7 +94,6 @@ const Modify = (props: ModifyProps) => {
           pageSize
         };
       });
-
       setItemData(res.data);
       setLoading(false);
       return res;
@@ -205,8 +204,8 @@ const Modify = (props: ModifyProps) => {
       width={700}
       save={doSave}>
       <Card className={styles.card}>
-        <Form layout="vertical" hideRequiredMark> 
-          <Row gutter={24}> 
+        <Form layout="vertical" hideRequiredMark>
+          {/* <Row gutter={24}> 
             <ModifyItem
               {...baseFormProps}
               field="organizeId"
@@ -215,9 +214,8 @@ const Modify = (props: ModifyProps) => {
               treeData={orgs}
               disabled={initData.organizeId != undefined}
               rules={[{ required: true, message: '请选择所属机构' }]}
-            ></ModifyItem>
-
-          </Row>
+            ></ModifyItem> 
+          </Row> */}
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}

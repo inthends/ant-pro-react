@@ -1,6 +1,6 @@
 //新增临时收费，ok
 import { TreeEntity } from '@/model/models';
-import { Card, Select, Button, Col, DatePicker, Drawer, Form, Input, InputNumber, Row } from 'antd';
+import { Card, Select, Button, Col, DatePicker, Drawer, Form, Input, InputNumber, Row, message } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import {
@@ -244,6 +244,7 @@ const Modify = (props: ModifyProps) => {
             code: id != null && id != "" ? 1 : 0
           };
           SaveTempBill(newData).then((res) => {
+            message.success('提交成功');
             close(true);
           });
         }

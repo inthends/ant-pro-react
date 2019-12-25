@@ -69,6 +69,7 @@ const Split = (props: SplitProps) => {
           keyValue: id
         };
         SplitBilling(splitData).then(res => {
+          message.success('提交成功');
           reload();
           close();
         });

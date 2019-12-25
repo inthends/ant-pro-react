@@ -535,7 +535,7 @@ const Modify = (props: ModifyProps) => {
               </Col>
             </Row> */}
             <Row gutter={24}>
-              <Col lg={10}>
+              <Col lg={8}>
                 <Form.Item label="楼栋管家">
                   {getFieldDecorator('housekeeperName', {
                     initialValue: infoDetail.housekeeperName,
@@ -565,8 +565,8 @@ const Modify = (props: ModifyProps) => {
               </Col>
 
 
-              <Col lg={4}>
-                <Form.Item label="项目风采">
+              <Col lg={6}>
+                <Form.Item label="微信端项目风采">
                   {getFieldDecorator('isPublish', {
                     initialValue: infoDetail.isPublish,
                   })(

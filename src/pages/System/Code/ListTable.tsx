@@ -51,6 +51,12 @@ function ListTable(props: ListTableProps) {
       key: "fullName",
       width: 150
     },
+    // {
+    //   title: "所属机构",
+    //   dataIndex: "orgName",
+    //   key: "orgName",
+    //   width: 150
+    // },
     {
       title: "当前流水号",
       dataIndex: "currentNumber",
@@ -90,7 +96,7 @@ function ListTable(props: ListTableProps) {
       title: "说明",
       dataIndex: "description",
       key: "description",
-      width: 300,
+      width: 100,
     },
     {
       title: "操作",

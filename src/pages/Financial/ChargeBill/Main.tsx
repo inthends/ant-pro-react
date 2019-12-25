@@ -406,7 +406,6 @@ function Main() {
     setChargeSelectedKeys(rowSelectedKeys);
   }
 
-
   //tab切换刷新数据
   const changeTab = (e: string) => {
     setTabIndex(e);
@@ -447,7 +446,7 @@ function Main() {
               <Search
                 className="search-input"
                 placeholder="请输入要查询费项"
-                style={{ width: 200 }}
+                style={{ width: 180 }}
                 onSearch={value => loadData(value)} />
               <Checkbox style={{ marginLeft: '10px' }} onChange={onShowCustomerChange}
                 defaultChecked={true}
@@ -512,7 +511,7 @@ function Main() {
           </TabPane>
           <TabPane tab="收款单列表" key="2">
             <div style={{ marginBottom: '10px' }}>
-              <Select placeholder="=请选择="
+              <Select placeholder="收款单状态"
                 allowClear={true}
                 style={{ width: '120px', marginRight: '5px' }} onChange={(value) => {
                   var params = Object.assign({}, chargedSearchParams, { status: value });
@@ -547,7 +546,7 @@ function Main() {
               <Search
                 className="search-input"
                 placeholder="请输入收款单号"
-                style={{ width: 200 }}
+                style={{ width: 160 }}
                 onChange={e => {
                   var params = Object.assign({}, chargedSearchParams, { search: e.target.value });
                   setChargedSearchParams(params);

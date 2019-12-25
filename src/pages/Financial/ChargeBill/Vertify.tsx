@@ -73,6 +73,7 @@ const Vertify = (props: VertifyProps) => {
           ifVerify: !ifVertify
         });
       Audit(newData).then(res => {
+        message.success('提交成功');
         reload();
         closeVertify();
       });

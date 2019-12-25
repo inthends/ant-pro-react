@@ -230,7 +230,7 @@ function NotPaymentTable(props: NotPaymentTableProps) {
         <Card bordered={false}  >
           <Row gutter={24} style={{ marginBottom: '8px' }}>
             <Col lg={24}>
-              <span style={{ color: "green" }}>
+              <span style={{ color: "red" }}>
                 {organize.type == 5 ? `已选择：${organize.allname} ，本次选中未付金额合计：${sumEntity}元` : `已选择： 本次选中未付金额合计：`}
               </span>
             </Col>

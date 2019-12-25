@@ -1,6 +1,6 @@
 //未收列表
 import Page from '@/components/Common/Page';
-import { Menu, Dropdown, Icon, Divider, InputNumber, Input, Select, Col, Row, Form, DatePicker, Card, Button, message, Table, Modal } from 'antd';
+import { Checkbox, Menu, Dropdown, Icon, Divider, InputNumber, Input, Select, Col, Row, Form, DatePicker, Card, Button, message, Table, Modal } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
@@ -32,6 +32,15 @@ function ListTable(props: ListTableProps) {
     onchange(pagination, filters, sorter);
   };
   const [hasSelected, setHasSelected] = useState<boolean>();
+
+
+  //是否抹零
+  const [isML, setIsML] = useState<boolean>(false);
+  //抹零类型
+  const [mlType, setMlType] = useState<any>('1');
+  //小数位处理
+  const [mlScale, setMlScale] = useState<any>('1');
+
   useEffect(() => {
     setSelectedRowKeys([]);
     setHasSelected(false);
@@ -303,7 +312,6 @@ function ListTable(props: ListTableProps) {
           cancelText: '取消',
           okText: '确定',
           onOk: () => {
-
             let info = Object.assign({}, values, {
               // roomId: organizeId,
               ids: JSON.stringify(selectedRowKeys),
@@ -311,6 +319,9 @@ function ListTable(props: ListTableProps) {
               CustomerName: customerName,
               billDate: values.billDate.format('YYYY-MM-DD HH:mm:ss'),
               //organize.title.split(' ')[1]
+              isML: isML,
+              mlType: mlType,
+              mlScale: mlScale
             });
 
             if (Number(sumEntity.sumlastAmount) != Number(info.payAmountA + info.payAmountB + info.payAmountC)) {
@@ -334,7 +345,7 @@ function ListTable(props: ListTableProps) {
     <Page>
       <Form layout="vertical" hideRequiredMark>
         <Card bordered={false}  >
-          <Row gutter={27}>
+          <Row gutter={12}>
             <Col lg={4}>
               <Form.Item >
                 {getFieldDecorator('payTypeA', {
@@ -393,7 +404,6 @@ function ListTable(props: ListTableProps) {
             </Col>
             <Col lg={4}>
               <Form.Item required>
-
                 {getFieldDecorator('payAmountB', {
                   initialValue: 0,
                   rules: [{ required: true, message: '请输入金额' }],
@@ -412,7 +422,6 @@ function ListTable(props: ListTableProps) {
                     }}
                   />
                 )}
-
               </Form.Item>
             </Col>
             <Col lg={4}>
@@ -477,11 +486,34 @@ function ListTable(props: ListTableProps) {
               <Form.Item >
                 {getFieldDecorator('memo', {
                 })(<Input placeholder="请输入备注" />)}
-
               </Form.Item>
             </Col>
           </Row>
+
           <Button type="primary" disabled={isDisabled} onClick={charge}>收款确认</Button>
+
+          <Checkbox
+            style={{ marginLeft: '10px' }}
+            onChange={(e) => { setIsML(e.target.checked); }}
+          >自动抹零</Checkbox>
+
+          <Select style={{ marginLeft: '10px', width: '110px' }}
+            defaultValue='1'
+            onChange={(value) => { setMlType(value); }}
+          >
+            <Option value='1'>抹去角和分</Option>
+            <Option value='2'>抹去角</Option>
+            <Option value='3'>抹去分</Option>
+          </Select>
+          <Select style={{ marginLeft: '10px', width: '96px' }}
+            defaultValue='1'
+            onChange={(value) => { setMlScale(value); }}
+          >
+            <Option value='1'>四舍五入</Option>
+            <Option value='2'>直接舍去</Option>
+            <Option value='3'>有数进一</Option>
+          </Select>
+
           <span style={{ marginLeft: 8, color: "red" }}>
             {hasSelected ? `应收金额：${sumEntity.sumAmount} ，
             减免金额：${sumEntity.sumreductionAmount}，

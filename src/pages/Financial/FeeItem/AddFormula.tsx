@@ -1,4 +1,4 @@
-//添加编辑费项
+//添加编辑费项公式
 import { Button, Col, Form, Input, Row, Modal, Tabs } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect } from 'react';
@@ -57,17 +57,17 @@ const AddFormula = (props: AddFormulaProps) => {
     const { textAreaRef } = memoRef;
     textAreaRef.value = value;
   }
-  
+
   return (
     <Modal
-      title="编辑公式"
+      title="设置公式"
       visible={visible}
       okText="确认"
       cancelText="取消"
       onCancel={() => closeModal()}
       onOk={() => pushSelectKey()}
       destroyOnClose={true}
-      bodyStyle={{ background: '#f6f7fb', height: '380px' }}
+      bodyStyle={{ background: '#f6f7fb', height: '430px' }}
       width='600px'
     >
       <Row gutter={8} style={{ width: '100%' }}>
@@ -115,15 +115,21 @@ const AddFormula = (props: AddFormulaProps) => {
               </Row>
               <Row style={{ marginBottom: '2px' }}>
                 <Button style={{ width: '95%' }} onClick={() => {
-                  InsterText('<涵碧楼电表金额>');
-                  InsterMemo('返回当前单据里涵碧楼电表金额');
-                }}>涵碧楼电表金额</Button>
+                  InsterText('<电表金额>');
+                  InsterMemo('返回当前单据里电表金额');
+                }}>电表金额</Button>
               </Row>
               <Row style={{ marginBottom: '2px' }}>
                 <Button style={{ width: '95%' }} onClick={() => {
-                  InsterText('<涵碧楼水表金额>');
-                  InsterMemo('返回当前单据里涵碧楼水表金额');
-                }}>涵碧楼水表金额</Button>
+                  InsterText('<水表金额>');
+                  InsterMemo('返回当前单据里水表金额');
+                }}>水表金额</Button>
+              </Row>
+              <Row style={{ marginBottom: '2px' }}>
+                <Button style={{ width: '95%' }} onClick={() => {
+                  InsterText('<煤气表金额>');
+                  InsterMemo('返回当前单据里煤气表金额');
+                }}>煤气表金额</Button>
               </Row>
               <Row style={{ marginBottom: '2px' }}>
                 <Button style={{ width: '95%' }}>=========公用表=========</Button>
@@ -136,28 +142,33 @@ const AddFormula = (props: AddFormulaProps) => {
               </Row>
               <Row style={{ marginBottom: '2px' }}>
                 <Button style={{ width: '95%' }} onClick={() => {
-                  InsterText('<公用电表2金额>');
-                  InsterMemo('返回当前单据里公用电表2金额');
-                }}>公用电表2金额</Button>
+                  InsterText('<公用水表金额>');
+                  InsterMemo('返回当前单据里公用水表金额');
+                }}>公用水表金额</Button>
+              </Row>
+              <Row style={{ marginBottom: '2px' }}>
+                <Button style={{ width: '95%' }} onClick={() => {
+                  InsterText('<公用煤气表金额>');
+                  InsterMemo('返回当前单据里公用煤气表金额');
+                }}>公用煤气表金额</Button>
               </Row>
               <Row style={{ marginBottom: '2px' }}>
                 <Button style={{ width: '95%' }}>=========虚拟表=========</Button>
               </Row>
               <Row style={{ marginBottom: '2px' }}>
                 <Button style={{ width: '95%' }} onClick={() => {
-                  InsterText('<虚拟表测试1金额>');
-                  InsterMemo('返回当前单据里虚拟表测试1金额');
-                }}>虚拟表测试1金额</Button>
+                  InsterText('<虚拟表金额>');
+                  InsterMemo('返回当前单据里虚拟表金额');
+                }}>虚拟表金额</Button>
               </Row>
             </TabPane>
             <TabPane tab="函数" key="3">
-
             </TabPane>
           </Tabs>
         </Col>
         <Col span={12}>
           <Row>
-            计算公式：
+            计算公式
           </Row>
           <Row style={{ marginBottom: "2px" }}>
             <Input.TextArea ref={c => inputRef = c} rows={4} style={{ resize: 'none' }}

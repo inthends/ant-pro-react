@@ -72,13 +72,15 @@ export function GetTransferRoomUsers(roomid, relationid): Promise<any[]> {
     .get(process.env.basePath + `/Receivable/GetTransferRoomUsers?roomId=${roomid}&relationId=${relationid}`)
     .then(getResult as any);
 }
+
 //表单明细
 export function GetEntity(keyValue): Promise<TreeEntity[]> {
   return request
     .get(process.env.basePath + `/Receivable/GetEntity?keyValue=${keyValue}`)
     .then(getResult as any);
 }
-// 收款
+
+//收款
 export function Charge(data): Promise<any> {
   return request
     .post(process.env.basePath + `/Receivable/Charge`, { data: objToFormdata(data) })

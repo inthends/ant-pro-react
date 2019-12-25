@@ -67,6 +67,7 @@ const Transfrom = (props: TransfromProps) => {
         };
 
         TransferBilling(splitData).then(res => {
+          message.success('提交成功');
           reload();
           close();
         });

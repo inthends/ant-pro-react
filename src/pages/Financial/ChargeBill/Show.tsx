@@ -1,5 +1,5 @@
 //查看收款单
-import { Spin, Button, Card, Table, Col, Drawer, Form, Row } from 'antd';
+import { Tag, Spin, Button, Card, Table, Col, Drawer, Form, Row } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
@@ -173,13 +173,13 @@ const Show = (props: ShowProps) => {
   const GetStatus = (status) => {
     switch (status) {
       case 0:
-        return '未收';
+        return <Tag color="#e4aa5b">未收</Tag>;
       case 1:
-        return '已收';
+        return <Tag color="#86db47">已收</Tag>;
       case 2:
-        return '冲红';
+        return <Tag color="#19d54e">冲红</Tag>;
       case -1:
-        return '作废';
+        return <Tag color="#19d54e">作废</Tag>;
       default:
         return '';
     }
@@ -188,11 +188,11 @@ const Show = (props: ShowProps) => {
   const GetVerifyStatus = (status) => {
     switch (status) {
       case 0:
-        return '待处理';
+        return <Tag color="#e4aa5b">待处理</Tag>;
       case 1:
-        return '已送审';
+        return <Tag color="#e4aa4b">已送审</Tag>;
       case 2:
-        return '已审核';
+        return <Tag color="#19d54e">已审核</Tag>;
       default:
         return '';
     }
@@ -277,7 +277,7 @@ const Show = (props: ShowProps) => {
             </Row>
             <Row gutter={24}>
               <Col span={24}>
-                <Form.Item label="收款金额" style={{ color: "green" }}>
+                <Form.Item label="收款金额" style={{ color: "red" }}>
                   {`${infoDetail.payAmountA + infoDetail.payAmountB + infoDetail.payAmountC}元，其中${infoDetail.payTypeA}${infoDetail.payAmountA}元，${infoDetail.payTypeB}${infoDetail.payAmountB}元，${infoDetail.payTypeC}${infoDetail.payAmountC}元`}
                 </Form.Item>
               </Col>
@@ -297,7 +297,7 @@ const Show = (props: ShowProps) => {
               columns={columns}
               rowKey={record => record.id}
               pagination={pagination}
-              scroll={{ y: 500, x: 1300 }}
+              scroll={{ y: 500, x: 1100 }}
               loading={loading}
             />
           </Form>

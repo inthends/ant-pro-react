@@ -8,6 +8,7 @@ import { GetPageListJson } from './House.service';
 import HouseMoreLeftTree from '../HouseMoreLeftTree';
 import ListTableMore from './ListTableMore';
 import PstructInfo from './PstructInfo';
+import Room from './Room';
 import Atlas from './Atlas/Atlas';
 const { Content } = Layout;
 const { Search } = Input;
@@ -28,13 +29,16 @@ function HouseMore(props) {
   const [selectId, setSelectId] = useState<string>(''); //列表选中的节点id  
   const [organizeId, setOrganizeId] = useState<string>(''); //列表选中的节点组织id  
 
-  const selectTree = (parentId, type, searchText) => {  
+
+  const [roomVisible, setRoomVisible] = useState<boolean>(false);
+
+  const selectTree = (parentId, type, searchText) => {
     //初始化页码
     const page = new DefaultPagination();
     refresh(parentId, type, searchText, page);//, pstructId); 
     setParentId(parentId);
     setPagination(page);
-    setType(type); 
+    setType(type);
   };
 
   useEffect(() => {
@@ -54,12 +58,23 @@ function HouseMore(props) {
   const closeDrawer = () => {
     setModifyVisible(false);
   };
+
   const showDrawer = (item?) => {
     setCurrData(item);
     setModifyVisible(true);
   };
+
+  //房态图弹出房间
+  const showAtlasDrawer = (item?) => {
+    setCurrData(item);
+    setRoomVisible(true);
+  };
+
+  const closeAtlasDrawer = () => {
+    setRoomVisible(false);
+  };
+
   const loadData = (searchText, parentId, type, paginationConfig?: PaginationConfig, sorter?) => {
- 
     //刷新值，必须
     setSearch(searchText);
     setParentId(parentId);
@@ -113,9 +128,9 @@ function HouseMore(props) {
     });
   };
 
-  const initLoadData = (parentId, type, searchText) => {  
+  const initLoadData = (parentId, type, searchText) => {
     setSearch(searchText);//必须赋值，否则查询条件不生效
-    setParentId(parentId); 
+    setParentId(parentId);
     const queryJson = {
       keyword: search,
       //PStructId: psid,
@@ -131,7 +146,7 @@ function HouseMore(props) {
   };
 
   //点击树刷新列表
-  const refresh = (parentId, type, searchText, page) => { 
+  const refresh = (parentId, type, searchText, page) => {
     setSearch(searchText);
     const queryJson = {
       keyword: search,
@@ -169,7 +184,7 @@ function HouseMore(props) {
                 style={{ width: 200 }}
               />
               <Button key='add' type="primary" style={{ float: 'right', marginLeft: '10px' }}
-               onClick={() => showDrawer()}>
+                onClick={() => showDrawer()}>
                 <Icon type="plus" />
                 新增
               </Button>
@@ -192,7 +207,7 @@ function HouseMore(props) {
               data={data}
               selectId={selectId}
               modify={showDrawer}
-              reload={(id, selecttype) => { 
+              reload={(id, selecttype) => {
                 setType(selecttype || type);
                 setSelectId(id);
                 initLoadData(id || parentId, selecttype || type, search)
@@ -201,7 +216,7 @@ function HouseMore(props) {
           </TabPane>
           {type === 2 ? (
             <TabPane tab="房态图" key="2">
-              <Atlas parentId={parentId} showDrawer={showDrawer}></Atlas>
+              <Atlas parentId={parentId} showDrawer={showAtlasDrawer}></Atlas>
             </TabPane>
           ) : null}
         </Tabs>
@@ -219,6 +234,20 @@ function HouseMore(props) {
           initLoadData(parentId, type, search);
         }}
       />
+
+      <Room
+        modifyVisible={roomVisible}
+        closeDrawer={closeAtlasDrawer}
+        organizeId={organizeId}
+        parentId={parentId}
+        data={currData}
+        type={5}
+        reload={() => {
+          //刷新一下左侧树 to do
+          initLoadData(parentId, type, search);
+        }}
+      />
+
     </Layout>
   );
 }

@@ -174,9 +174,8 @@ function Main() {
 
   //加载费项房屋
   const houseLoadData = (search, feeItemId, paginationConfig?: PaginationConfig, sorter?) => {
-    setHouseSearch(search);
-    setHouseFeeItemId(feeItemId);
-
+    setHouseSearch(search);//必须赋值，否则数据不更新
+    setHouseFeeItemId(feeItemId); 
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: housePagination.pageSize,
@@ -337,7 +336,7 @@ function Main() {
                 key='search'
                 className="search-input"
                 placeholder="搜索房屋编号"
-                style={{ width: 200 }}
+                style={{ width: 180 }}
                 onSearch={(value) => houseLoadData(value, houseFeeItemId)}
               />
             </div>
@@ -354,7 +353,6 @@ function Main() {
           </TabPane>
         </Tabs>
       </Content>
-
 
       <Modify
         modifyVisible={modifyVisible}

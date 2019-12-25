@@ -675,7 +675,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
               </Row> */}
 
               <Row gutter={24}>
-                <Col lg={12}>
+                <Col lg={6}>
                   <Form.Item label="中间每一步计算结果保留">
                     {getFieldDecorator('midResultScale', {
                       initialValue: infoDetail.midResultScale,
@@ -690,7 +690,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                     )}
                   </Form.Item>
                 </Col>
-                <Col lg={12}>
+                <Col lg={6}>
                   <Form.Item label="对最后一位">
                     {getFieldDecorator('midScaleDispose', {
                       initialValue: infoDetail.midScaleDispose,
@@ -703,9 +703,8 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                     )}
                   </Form.Item>
                 </Col>
-              </Row>
-              <Row gutter={24}>
-                <Col lg={12}>
+
+                <Col lg={6}>
                   <Form.Item label="最终结果保留小数位数">
                     {getFieldDecorator('lastResultScale', {
                       initialValue: infoDetail.lastResultScale,
@@ -720,7 +719,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                     )}
                   </Form.Item>
                 </Col>
-                <Col lg={12}>
+                <Col lg={6}>
                   <Form.Item label="对最后一位">
                     {getFieldDecorator('lastScaleDispose', {
                       initialValue: infoDetail.lastScaleDispose,
