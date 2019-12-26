@@ -43,7 +43,9 @@ function Main() {
   const [customerName, setCustomerName] = useState<string>('');
   const [showname, setShowname] = useState<string>('');
   const [addButtonDisable, setAddButtonDisable] = useState<boolean>(true);
-  // const [showCustomerFee, setShowCustomerFee] = useState<boolean>(false)
+
+  //显示该户其他费用
+  const [showCustomerFee, setShowCustomerFee] = useState<boolean>(true)
 
   const [splitVisible, setSplitVisible] = useState<boolean>(false);
   const [transVisible, setTransVisible] = useState<boolean>(false);
@@ -71,7 +73,7 @@ function Main() {
   //点击左侧树，加载数据
   const selectTree = (organizeId, search) => {
     if (tabIndex == '1')
-      initLoadData(search, organizeId);
+      initLoadData(search, organizeId, showCustomerFee);
     else if (tabIndex == '2')
       initChargeLoadData(organizeId);
     else
@@ -301,7 +303,9 @@ function Main() {
     });
   };
 
+  //显示该户其他费用
   const onShowCustomerChange = (e: any) => {
+    setShowCustomerFee(e.target.checked);
     initLoadData(search, organizeId, e.target.checked);
   }
 
@@ -535,14 +539,14 @@ function Main() {
                 onChange={(date, dateStr) => {
                   var params = Object.assign({}, chargedSearchParams, { startDate: dateStr });
                   setChargedSearchParams(params);
-                }} style={{ marginRight: '5px', width: '150px' }} />
+                }} style={{ marginRight: '5px', width: '120px' }} />
               至
               <DatePicker
                 placeholder='收款日期至'
                 onChange={(date, dateStr) => {
                   var params = Object.assign({}, chargedSearchParams, { endDate: dateStr });
                   setChargedSearchParams(params);
-                }} style={{ marginLeft: '5px', marginRight: '5px', width: '150px' }} />
+                }} style={{ marginLeft: '5px', marginRight: '5px', width: '120px' }} />
               <Search
                 className="search-input"
                 placeholder="请输入收款单号"
@@ -617,22 +621,22 @@ function Main() {
           <TabPane tab="对账单" key="3">
             <div style={{ marginBottom: '10px' }}>
               <DatePicker
-                placeholder='收款日期'
+                placeholder='收款日期起'
                 onChange={(date, dateStr) => {
                   var params = Object.assign({}, chargedSearchParams, { startDate: dateStr });
                   setChargedSearchParams(params);
-                }} style={{ marginRight: '5px', width: '150px' }} />
+                }} style={{ marginRight: '5px', width: '120px' }} />
               至
               <DatePicker
-                placeholder='收款日期'
+                placeholder='收款日期至'
                 onChange={(date, dateStr) => {
                   var params = Object.assign({}, chargedSearchParams, { endDate: dateStr });
                   setChargedSearchParams(params);
-                }} style={{ marginLeft: '5px', marginRight: '5px', width: '150px' }} />
+                }} style={{ marginLeft: '5px', marginRight: '5px', width: '120px' }} />
               <Search
                 className="search-input"
                 placeholder="请输入收款单号"
-                style={{ width: 200 }}
+                style={{ width: 160 }}
                 onChange={e => {
                   var params = Object.assign({}, chargedSearchParams, { search: e.target.value });
                   setChargedSearchParams(params);
@@ -657,11 +661,9 @@ function Main() {
               reload={() => initChargeCheckLoadData(organizeId)}
             // rowSelect={GetChargedSelectedKey}
             />
-          </TabPane>
-
+          </TabPane> 
         </Tabs>
       </Content>
-
       <Modify
         modifyVisible={modifyVisible}
         closeDrawer={closeDrawer}
