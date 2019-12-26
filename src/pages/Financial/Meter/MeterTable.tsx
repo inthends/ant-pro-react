@@ -72,16 +72,14 @@ function MeterTable(props: MeterTableProps) {
     },
     {
       title: '关联收费项目',
-      dataIndex: 'feeItemname',
-      key: 'feeItemname',
-      sorter: true,
+      dataIndex: 'feeItemName',
+      key: 'feeItemName', 
       width: 150
     },
     {
       title: '所属机构',
       dataIndex: 'fullName',
-      key: 'fullName',
-      sorter: true
+      key: 'fullName', 
     },
     {
       title: '操作',

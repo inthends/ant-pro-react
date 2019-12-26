@@ -63,8 +63,7 @@ function UnitMeterTable(props: UnitMeterTableProps) {
     {
       title: '所属机构',
       key: 'allName',
-      dataIndex: 'allName',
-      sorter: true,
+      dataIndex: 'allName', 
       width: 200
     }
   ] as ColumnProps<any>[];

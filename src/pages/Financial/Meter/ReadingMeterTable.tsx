@@ -99,22 +99,19 @@ function ReadingMeterTable(props: ReadingMeterTableProps) {
     {
       title: '审核状态',
       dataIndex: 'isverifyName',
-      key: 'isverifyName',
-      sorter: true,
+      key: 'isverifyName', 
       width: 100
     },
     {
       title: '审核人',
       dataIndex: 'verifyPerson',
-      key: 'verifyPerson',
-      sorter: true,
+      key: 'verifyPerson', 
       width: 80
     },
     {
       title: '审核日期',
       dataIndex: 'verifyDate',
-      key: 'verifyDate',
-      sorter: true,
+      key: 'verifyDate', 
       width: 100,
       render: val => {
         if (val == null) {
@@ -127,15 +124,13 @@ function ReadingMeterTable(props: ReadingMeterTableProps) {
     {
       title: '审核情况',
       dataIndex: 'verifyMemo',
-      key: 'verifyMemo',
-      sorter: true,
+      key: 'verifyMemo', 
       width: 100
     },
     {
       title: '备注',
       dataIndex: 'memo',
-      key: 'memo',
-      sorter: true
+      key: 'memo', 
     },
     {
       title: '操作',

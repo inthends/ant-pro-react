@@ -85,8 +85,7 @@ function MeterFormsTable(props: MeterFormsTableProps) {
     {
       title: '安装位置',
       dataIndex: 'allName',
-      key: 'allName',
-      sorter: true,
+      key: 'allName', 
       width: 200
     }
   ] as ColumnProps<any>[];

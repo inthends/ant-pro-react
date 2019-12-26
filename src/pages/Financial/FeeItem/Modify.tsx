@@ -325,9 +325,7 @@ const Modify = (props: ModifyProps) => {
     }, {
       title: '房屋全称',
       dataIndex: 'allName',
-      key: 'allName',
-      width: 220,
-      sorter: true,
+      key: 'allName',  
     },
     {
       title: '操作',
