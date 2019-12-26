@@ -521,13 +521,13 @@ function Main() {
                   var params = Object.assign({}, chargedSearchParams, { status: value });
                   setChargedSearchParams(params);
                 }} >
-                <Option key='2' value='2'>
+                {/* <Option key='2' value='2'>
                   {'已审核'}
                 </Option>
                 <Option key='1' value='1'>
                   {'未审核'}
-                </Option>
-                <Option key='3' value='3'>
+                </Option> */}
+                <Option key='2' value='2'>
                   {'已冲红'}
                 </Option>
                 <Option key='-1' value='-1'>

@@ -108,9 +108,7 @@ function UnitTable(props: UnitTableProps) {
     {
       title: '备注',
       dataIndex: 'memo',
-      key: 'memo',
-      sorter: true,
-      width:100
+      key: 'memo',  
     }
   ] as ColumnProps<any>[];
 

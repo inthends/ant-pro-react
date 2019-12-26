@@ -283,7 +283,7 @@ function Offset() {
               <Search
                 className="search-input"
                 placeholder="请输入要查询的单号"
-                style={{ width: 200 }}
+                style={{ width: 180 }}
                 onSearch={value => loadData(value)}
               />
               {/* <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
@@ -319,7 +319,7 @@ function Offset() {
               <Search
                 className="search-input"
                 placeholder="请输入要查询的单号"
-                style={{ width: 280 }}
+                style={{ width: 180 }}
                 onSearch={value => loadDetailData(value)}
               />
             </div>

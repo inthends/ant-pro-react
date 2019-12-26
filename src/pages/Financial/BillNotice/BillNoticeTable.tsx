@@ -110,7 +110,7 @@ function BillNoticeTable(props: BillNoticeTableProps) {
         dataSource={data}
         rowKey="billId"
         pagination={pagination}
-        scroll={{ y: 500, x: 1300 }}
+        scroll={{ y: 500, x: 1400 }}
         loading={loading}
         onChange={onchange}
       />
