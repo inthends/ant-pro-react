@@ -1,11 +1,11 @@
 export default {
   'dashboard-analysis.analysis.test': '{no} 号管理处',
-  'dashboard-analysis.analysis.introduce': '指标说明',
+  'dashboard-analysis.analysis.introduce': '收款统计',
   'dashboard-analysis.analysis.total-sales': '本月收款',
   'dashboard-analysis.analysis.day-sales': '当天收款',
   'dashboard-analysis.analysis.visits': '总访问量',
   'dashboard-analysis.analysis.visits-trend': '访问量趋势',
-  'dashboard-analysis.analysis.visits-ranking': '门店访问量排名',
+  'dashboard-analysis.analysis.visits-ranking': '管理处访问量排名',
   'dashboard-analysis.analysis.day-visits': '月访问量',
   'dashboard-analysis.analysis.week': '月同比',
   'dashboard-analysis.analysis.day': '日同比',

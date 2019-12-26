@@ -29,6 +29,7 @@ export interface RadarData {
 }
 
 export interface AnalysisData {
+  monthReceivables: any;//本月收款,add new
   visitData: VisitDataType[];
   visitData2: VisitDataType[];
   salesData: VisitDataType[];

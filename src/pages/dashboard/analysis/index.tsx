@@ -1,4 +1,4 @@
-import { Col, Dropdown, Icon, Menu, Row } from 'antd';
+import { Col, Row } from 'antd';
 import React, { Component, Suspense } from 'react';
 
 import { Dispatch } from 'redux';
@@ -44,8 +44,8 @@ interface AnalysisState {
   }),
 )
 class Analysis extends Component<
-  AnalysisProps,
-  AnalysisState
+AnalysisProps,
+AnalysisState
 > {
   state: AnalysisState = {
     salesType: 'all',
@@ -128,6 +128,7 @@ class Analysis extends Component<
     const { rangePickerValue, salesType, currentTabKey } = this.state;
     const { dashboardAnalysis, loading } = this.props;
     const {
+      monthReceivables,
       visitData,
       visitData2,
       salesData,
@@ -144,27 +145,28 @@ class Analysis extends Component<
     } else {
       salesPieData = salesType === 'online' ? salesTypeDataOnline : salesTypeDataOffline;
     }
-    const menu = (
-      <Menu>
-        <Menu.Item>操作一</Menu.Item>
-        <Menu.Item>操作二</Menu.Item>
-      </Menu>
-    );
+    // const menu = (
+    //   <Menu>
+    //     <Menu.Item>操作一</Menu.Item>
+    //     <Menu.Item>操作二</Menu.Item>
+    //   </Menu>
+    // );
 
     const dropdownGroup = (
       <span className={styles.iconGroup}>
-        <Dropdown overlay={menu} placement="bottomRight">
+        {/* <Dropdown overlay={menu} placement="bottomRight">
           <Icon type="ellipsis" />
-        </Dropdown>
+        </Dropdown> */}
       </span>
     );
 
     const activeKey = currentTabKey || (offlineData[0] && offlineData[0].name);
+
     return (
       <GridContent>
         <React.Fragment>
           <Suspense fallback={<PageLoading />}>
-            <IntroduceRow loading={loading} visitData={visitData} />
+            <IntroduceRow loading={loading} visitData={visitData} monthReceivables={monthReceivables} />
           </Suspense>
           <Suspense fallback={null}>
             <SalesCard

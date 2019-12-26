@@ -1,5 +1,5 @@
+//头部统计
 import { Col, Icon, Row, Tooltip } from 'antd';
-
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import React from 'react';
 import numeral from 'numeral';
@@ -18,7 +18,7 @@ const topColResponsiveProps = {
   style: { marginBottom: 24 },
 };
 
-const IntroduceRow = ({ loading, visitData }: { loading: boolean; visitData: VisitDataType[] }) => (
+const IntroduceRow = ({ loading, monthReceivables, visitData }: { loading: boolean; monthReceivables: any; visitData: VisitDataType[] }) => (
   <Row gutter={24} type="flex">
     <Col {...topColResponsiveProps}>
       <ChartCard
@@ -36,7 +36,7 @@ const IntroduceRow = ({ loading, visitData }: { loading: boolean; visitData: Vis
           </Tooltip>
         }
         loading={loading}
-        total={() => <Yuan>126560</Yuan>}
+        total={() => <Yuan>{monthReceivables}</Yuan>} 
         footer={
           <Field
             label={
