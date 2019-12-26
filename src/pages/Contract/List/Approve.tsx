@@ -58,11 +58,11 @@ const Approve = (props: ApproveProps) => {
   // 打开抽屉时初始化
   useEffect(() => {
     if (visible) {
-      if (id) {
-        GetFormJson(id).then((tempInfo: LeaseContractDTO) => {
+      if (instanceId) {
+        GetFormJson(instanceId).then((tempInfo: LeaseContractDTO) => {
           setInfoDetail(tempInfo);
           //获取条款
-          GetChargeByContractId(id).then((charge: ChargeDetailDTO) => {
+          GetChargeByContractId(instanceId).then((charge: ChargeDetailDTO) => {
             setContractCharge(charge.contractCharge || {});
             setChargeFeeList(charge.chargeFeeList || []);
             setChargeIncreList(charge.chargeIncreList || []);

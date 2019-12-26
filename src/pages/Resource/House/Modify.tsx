@@ -1,6 +1,6 @@
 //项目修改
 import { TreeEntity } from '@/model/models';
-import { Switch, AutoComplete, Upload, Modal, Icon, Button, Card, Col, DatePicker, Drawer, Form, Input, Row, Select, TreeSelect, message } from 'antd';
+import { Switch, Upload, Modal, Icon, Button, Card, Col, DatePicker, Drawer, Form, Input, Row, Select, TreeSelect, message } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { ExistEnCode, GetFormInfoJson, GetTreeAreaJson, SaveForm } from './House.service';
@@ -53,6 +53,11 @@ const Modify = (props: ModifyProps) => {
     getCommonItems('ProjectType').then(res => {
       setProject(res || []);
     });
+
+    GetUserList('', '员工').then(res => {
+      setUserSource(res || []);
+    })
+
   }, []);
 
   const getCity = (areaId: string, init = false) => {
@@ -130,7 +135,7 @@ const Modify = (props: ModifyProps) => {
           if (tempInfo.city) {
             getArea(tempInfo.city, true);
           }
-          setInfoDetail(tempInfo); 
+          setInfoDetail(tempInfo);
           //加载图片
           let files: any[]; files = [];
           if (tempInfo.mainPic != null) {
@@ -180,16 +185,16 @@ const Modify = (props: ModifyProps) => {
     });
   };
 
-  const handleSearch = value => {
-    if (value == '')
-      return;
-    GetUserList(value, '员工').then(res => {
-      setUserSource(res || []);
-    })
-  };
+  // const handleSearch = value => {
+  //   if (value == '')
+  //     return;
+  //   GetUserList(value, '员工').then(res => {
+  //     setUserSource(res || []);
+  //   })
+  // };
 
-  const userList = userSource.map
-    (item => <Option key={item.id} value={item.name}>{item.name}</Option>);
+  // const userList = userSource.map
+  //   (item => <Option key={item.id} value={item.name}>{item.name}</Option>);
 
   //选择楼栋管家
   const onHousekeeperNameSelect = (value, option) => {
@@ -540,12 +545,24 @@ const Modify = (props: ModifyProps) => {
                   {getFieldDecorator('housekeeperName', {
                     initialValue: infoDetail.housekeeperName,
                   })(
-                    <AutoComplete
-                      dataSource={userList}
-                      onSearch={handleSearch}
-                      placeholder="请选择楼栋管家"
+                    // <AutoComplete
+                    //   dataSource={userList}
+                    //   onSearch={handleSearch}
+                    //   placeholder="请选择楼栋管家"
+                    //   onSelect={onHousekeeperNameSelect}
+                    // />
+
+                    <Select
+                      showSearch
                       onSelect={onHousekeeperNameSelect}
-                    />
+                    >
+                      {userSource.map(item => (
+                        <Option key={item.id} value={item.name}>
+                          {item.name}
+                        </Option>
+                      ))}
+                    </Select>
+
                   )}
 
                   {getFieldDecorator('housekeeperId', {
@@ -588,7 +605,7 @@ const Modify = (props: ModifyProps) => {
                   })(<TextArea rows={4} placeholder="请输入备注" maxLength={500} />)}
                 </Form.Item>
               </Col>
-            </Row> 
+            </Row>
             <Row gutter={24}>
               <Col lg={24}>
                 <Form.Item required label="">

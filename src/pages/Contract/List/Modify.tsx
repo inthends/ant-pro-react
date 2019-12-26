@@ -354,7 +354,7 @@ const Modify = (props: ModifyProps) => {
         Contract.maxLateFee = values.maxLateFee;
         Contract.maxLateFeeUnit = values.maxLateFeeUnit;
         Contract.billUnitId = values.billUnitId;
-
+        Contract.organizeId = infoDetail.organizeId;
         SubmitForm({
           ...Contract,
           ...ContractCharge,
@@ -368,9 +368,13 @@ const Modify = (props: ModifyProps) => {
           ChargeFeeResult: JSON.stringify(chargeData)
 
         }).then(res => {
-          message.success('提交成功');
-          closeDrawer();
-          reload();
+          if (res.flag) {
+            message.success('提交成功');
+            closeDrawer();
+            reload();
+          } else {
+            message.warning(res.message);
+          }
         });
       }
     });
@@ -427,6 +431,7 @@ const Modify = (props: ModifyProps) => {
         Contract.maxLateFee = values.maxLateFee;
         Contract.maxLateFeeUnit = values.maxLateFeeUnit;
         Contract.billUnitId = values.billUnitId;
+        Contract.organizeId = infoDetail.organizeId;
         SaveForm({
           ...Contract,
           ...ContractCharge,
@@ -636,7 +641,7 @@ const Modify = (props: ModifyProps) => {
                         <Form.Item label="滞纳金上限" >
                           {getFieldDecorator('maxLateFee', {
                             initialValue: infoDetail.maxLateFee
-                          })(<InputNumber placeholder="请输入" style={{ width: '120px' }}/>)}
+                          })(<InputNumber placeholder="请输入" style={{ width: '120px' }} />)}
                         </Form.Item>
                       </Col>
                       <Col lg={5}>

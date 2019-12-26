@@ -8,7 +8,6 @@ interface SaveCommandProps extends FormComponentProps {
   propsAPI?: any;
 }
 
-
 class SaveCommand extends React.Component<SaveCommandProps> {
   render() {
     const { propsAPI, GetData } = this.props;

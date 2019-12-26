@@ -94,26 +94,35 @@ const Main = () => {
     });
   };
 
-
   const closeDrawer = () => {
-    if (flowId == 'b5011d6f-d386-4ed3-a2ab-2f2eb5597b7f') {
+    if (flowId == 'b5011d6f-d386-4ed3-a2ab-2f2eb5597b7f'
+      || flowId == 'b6011d6f-d386-4ed3-a2ab-2f2eb5597b7f'
+      || flowId == 'b7011d6f-d386-4ed3-a2ab-2f2eb5597b7f'
+    ) {
+      //合同
       setContractVisible(false);
     }
     else {
+      //收款送审
       setReceiveVisible(false);
     }
   };
 
-  const showDrawer = (flowId, id, instanceId) => { 
-    if (flowId == 'b5011d6f-d386-4ed3-a2ab-2f2eb5597b7f') {
+  const showDrawer = (flowId, id, instanceId) => {
+    if (flowId == 'b5011d6f-d386-4ed3-a2ab-2f2eb5597b7f'
+      || flowId == 'b6011d6f-d386-4ed3-a2ab-2f2eb5597b7f'
+      || flowId == 'b7011d6f-d386-4ed3-a2ab-2f2eb5597b7f'
+    ) {
       //合同
       setContractVisible(true);
-    } else {
+    }
+    else {
+      //收款送审
       setReceiveVisible(true);
     }
     setFlowId(flowId);
     // setId(id);
-    setInstanceId(instanceId); 
+    setInstanceId(instanceId);
   };
 
   return (

@@ -1,6 +1,6 @@
 import { BaseModifyProvider } from '@/components/BaseModifyDrawer/BaseModifyDrawer';
 import ModifyItem from '@/components/BaseModifyDrawer/ModifyItem';
-import {  Col, Card, Form, Row } from 'antd';
+import {message, Col, Card, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React from 'react';
 import { SaveForm } from './Flow.service';
@@ -11,7 +11,7 @@ import { FlowItemPanel } from './components/EditorItemPanel';
 import { FlowToolbar } from './components/EditorToolbar';
 import EditorMinimap from './components/EditorMinimap';
 import styles from './index.less';
-// import SaveCommand from './components/SaveCommand';
+import SaveCommand from './components/SaveCommand';
 
 interface ModifyProps {
   visible: boolean;
@@ -88,7 +88,7 @@ const Modify = (props: ModifyProps) => {
   //   }],
   // };
 
-  const GetData = () => { 
+  const GetData = () => {
     if (data) {
       var str = initData.designerJSON;
       return JSON.parse(str);
@@ -135,13 +135,13 @@ const Modify = (props: ModifyProps) => {
           <Col span={24}>
             <FlowToolbar />
             {/* 注册保存命令 */}
-            {/* <SaveCommand GetData={(data) => {
+            <SaveCommand GetData={(data) => {
               // console.log("data", data); 
               //setflowData(data);
               initData.designerJSON = JSON.stringify(data);//转化为json
-              setIsSave(true);
-              message.warning('流程图已经更新');
-            }} /> */}
+              // setIsSave(true);
+              message.success('流程图已经更新');
+            }} />
           </Col>
         </Row>
         <Row type="flex" className={styles.editorBd}>
@@ -155,8 +155,9 @@ const Modify = (props: ModifyProps) => {
               //   data ? flowData : {}
               // }
               data={GetData()}
-              onAfterChange={(e) => {
-                if (e.action != "changeData") { 
+              //修改流程图
+              onAfterChange={(e) => { 
+                if (e.action != "changeData") {
                   // setIsSave(false); 
                   initData.designerJSON = JSON.stringify(e.item.graph._cfg._data);
                 }

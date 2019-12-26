@@ -179,7 +179,7 @@ const ApproveView = (props: ApproveViewProps) => {
                   </Row>
                 </Card>
 
-                <Card title="滞纳金" className={styles.card}>
+                <Card title="滞纳金" className={styles.addcard}>
                   <Row gutter={24}>
                     <Col lg={12}>
                       <Form.Item label="滞纳金比例" >

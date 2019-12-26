@@ -184,7 +184,7 @@ const Add = (props: AddProps) => {
           message.warning('请生成租金明细！');
           return;
         }
-
+        setLoading(true);
         //保存合同数据
         let ContractCharge: HtLeasecontractcharge = {};
         //费用条款-基本条款 
@@ -234,12 +234,12 @@ const Add = (props: AddProps) => {
           // DepositResult: JSON.stringify(DepositResult),
           // ChargeFeeResult:JSON.stringify(ChargeFeeResult) 
           DepositResult: JSON.stringify(depositData),
-          ChargeFeeResult: JSON.stringify(chargeData)
-
+          ChargeFeeResult: JSON.stringify(chargeData) 
         }).then(res => {
+          setLoading(false);
           message.success('保存成功');
           closeDrawer();
-          reload();
+          reload(); 
         });
       }
     });
@@ -268,8 +268,8 @@ const Add = (props: AddProps) => {
   }, []);
 
   // 打开抽屉时初始化
-  useEffect(() => {
-  }, [visible]);
+  // useEffect(() => {
+  // }, [visible]);
 
   // const handleSearch = value => {
   //   if (value == '')
@@ -590,7 +590,7 @@ const Add = (props: AddProps) => {
                           })(
                             <Select
                               showSearch
-                              onSelect={onFollowerSelect}
+                              onSelect={onSignerSelect}
                             >
                               {userSource.map(item => (
                                 <Option key={item.id} value={item.name}>
@@ -617,13 +617,13 @@ const Add = (props: AddProps) => {
                       </Col>
                     </Row>
                     <Row gutter={24}>
-                      <Col lg={6}>
+                      <Col lg={7}>
                         <Form.Item label="滞纳金比例" >
                           {getFieldDecorator('lateFee', {
-                          })(<InputNumber placeholder="请输入" />)}
+                          })(<InputNumber placeholder="请输入" style={{ width: '120px' }} />)}
                         </Form.Item>
                       </Col>
-                      <Col lg={6}>
+                      <Col lg={5}>
                         <Form.Item label="&nbsp;" >
                           {getFieldDecorator('lateFeeUnit', {
                             initialValue: "%/天"
@@ -636,7 +636,7 @@ const Add = (props: AddProps) => {
                       <Col lg={7}>
                         <Form.Item label="滞纳金上限" >
                           {getFieldDecorator('maxLateFee', {
-                          })(<InputNumber placeholder="请输入" />)}
+                          })(<InputNumber placeholder="请输入" style={{ width: '120px' }} />)}
                         </Form.Item>
                       </Col>
                       <Col lg={5}>

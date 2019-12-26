@@ -106,7 +106,10 @@ const Main = () => {
 
   //approve
   const closeApproveDrawer = () => {
-    if (flowId == 'b5011d6f-d386-4ed3-a2ab-2f2eb5597b7f') {
+    if (flowId == 'b5011d6f-d386-4ed3-a2ab-2f2eb5597b7f'
+      || flowId == 'b6011d6f-d386-4ed3-a2ab-2f2eb5597b7f'
+      || flowId == 'b7011d6f-d386-4ed3-a2ab-2f2eb5597b7f'
+    ) {
       setContractVisible(false);
     }
     else {
@@ -115,7 +118,10 @@ const Main = () => {
     }
   };
   const showApproveDrawer = (flowId, id, instanceId) => {
-    if (flowId == 'b5011d6f-d386-4ed3-a2ab-2f2eb5597b7f') {
+    if (flowId == 'b5011d6f-d386-4ed3-a2ab-2f2eb5597b7f'
+      || flowId == 'b6011d6f-d386-4ed3-a2ab-2f2eb5597b7f'
+      || flowId == 'b7011d6f-d386-4ed3-a2ab-2f2eb5597b7f'
+    ) {
       //合同
       setContractVisible(true);
     } else {
@@ -255,7 +261,6 @@ const Main = () => {
           instanceId={instanceId}
           reload={() => initLoadData(search)}
         />
-
       </Content>
     </Layout>
   );
