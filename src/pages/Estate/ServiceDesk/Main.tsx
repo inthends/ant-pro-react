@@ -20,11 +20,11 @@ function Main() {
   const [data, setData] = useState<any[]>([]);
   const [currData, setCurrData] = useState<any>();
   const [search, setSearch] = useState<string>('');
-  const [treeData, setTreeData] = useState<any[]>([]); 
+  const [treeData, setTreeData] = useState<any[]>([]);
 
-  const selectTree = (org, item, searchText) => {
-    initLoadData(item, searchText);
-    SetOrganize(item);
+  const selectTree = (id, type, info) => {
+    initLoadData(info.node.props.dataRef, search);
+    SetOrganize(info.node.props.dataRef);
   };
 
   useEffect(() => {
@@ -35,7 +35,6 @@ function Main() {
     //   initLoadData('', '');
     // });
 
-
     //获取房产树
     GetQuickSimpleTreeAllForDeskService()
       .then(getResult)
@@ -43,7 +42,6 @@ function Main() {
         setTreeData(res || []);
         return res || [];
       });
-
     initLoadData('', '');
 
   }, []);
@@ -66,7 +64,7 @@ function Main() {
   const closeDrawer = () => {
     setModifyVisible(false);
   };
-  
+
   const showDrawer = (item?) => {
     setCurrData(item);
     setModifyVisible(true);
@@ -85,8 +83,8 @@ function Main() {
       total,
       queryJson: {
         keyword: searchText,
-        OrganizeId: org.organizeId,
-        TreeTypeId: org.id,
+        // OrganizeId: org.organizeId,
+        TreeTypeId: org.key,
         TreeType: org.type,
       },
     };
@@ -105,7 +103,7 @@ function Main() {
     setLoading(true);
     formData.sidx = formData.sidx || 'createDate';
     formData.sord = formData.sord || 'desc';
-    return GetPageListJson(formData).then(res => {  
+    return GetPageListJson(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
         return {
@@ -125,9 +123,9 @@ function Main() {
   const initLoadData = (org, searchText) => {
     setSearch(searchText);
     const queryJson = {
-      OrganizeId: org.organizeId,
+      // OrganizeId: org.organizeId,
       keyword: searchText,
-      TreeTypeId: org.id,
+      TreeTypeId: org.key,
       TreeType: org.type,
     };
     const sidx = 'createDate';
@@ -142,8 +140,8 @@ function Main() {
     <Layout style={{ height: '100%' }}>
       <AsynLeftTree
         parentid={'0'}
-        selectTree={(id, item) => {
-          selectTree(id, item, search);
+        selectTree={(pid, type, info) => {
+          selectTree(pid, type, info);
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>

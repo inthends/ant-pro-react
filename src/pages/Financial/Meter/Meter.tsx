@@ -54,12 +54,12 @@ function Meter() {
 
   const [ifVertify, setIfVertify] = useState<boolean>(false);
   const [vertifyVisible, setVertifyVisible] = useState<boolean>(false);
-  const selectTree = (org, item, searchText) => {
-    SetOrganize(item);
-    initMeterLoadData(item, '', '');
-    initReadingMeterLoadData(item, '');
-    initMeterFormsLoadData(item, '');
-    initUnitMeterLoadData(item, '');
+  const selectTree = (pid, type, info) => {
+    SetOrganize(info.node.props.dataRef);
+    initMeterLoadData(info.node.props.dataRef, meterSearch, '');
+    initReadingMeterLoadData(info.node.props.dataRef, readingMeterSearch);
+    initMeterFormsLoadData(info.node.props.dataRef, meterFormsSearch);
+    initUnitMeterLoadData(info.node.props.dataRef, unitMeterSearch);
   };
 
   // let meterKind = [];
@@ -246,7 +246,6 @@ function Meter() {
     // }); 
   };
 
-
   const unitMeterload = data => {
     setUnitMeterLoading(true);
     data.sidx = data.sidx || 'unitmeterid';
@@ -347,7 +346,7 @@ function Meter() {
       // OrganizeId: org.organizeId,
       meterType: meterType,
       keyword: searchText,
-      TreeTypeId: org.id,
+      TreeTypeId: org.key,
       TreeType: org.type,
     };
     const sidx = 'meterName';
@@ -360,12 +359,12 @@ function Meter() {
   const initUnitMeterLoadData = (org, searchText) => {
     setUnitMeterSearch(searchText);
     const queryJson = {
-      OrganizeId: org.organizeId,
+      // OrganizeId: org.organizeId,
       keyword: searchText,
-      TreeTypeId: org.id,
+      TreeTypeId: org.key,
       TreeType: org.type,
     };
-    const sidx = 'unitmeterid';
+    const sidx = 'unitMeterId';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = unitMeterPagination;
     //setAddButtonDisable(true);
@@ -375,27 +374,27 @@ function Meter() {
   const initReadingMeterLoadData = (org, searchText) => {
     setReadingMeterSearch(searchText);
     const queryJson = {
-      OrganizeId: org.organizeId,
+      // OrganizeId: org.organizeId,
       keyword: searchText,
-      TreeTypeId: org.id,
+      TreeTypeId: org.key,
       TreeType: org.type,
     };
-    const sidx = 'billcode';
+    const sidx = 'billCode';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = readingMeterPagination;
     //setAddButtonDisable(true);
     return readingMeterload({ pageIndex, pageSize, sidx, sord, total, queryJson });
   };
-  
+
   const initMeterFormsLoadData = (org, searchText) => {
     setMeterFormsSearch(searchText);
     const queryJson = {
-      OrganizeId: org.organizeId,
+      // OrganizeId: org.organizeId,
       keyword: searchText,
-      TreeTypeId: org.id,
+      TreeTypeId: org.key,
       TreeType: org.type,
     };
-    const sidx = 'billcode';
+    const sidx = 'billCode';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = meterFormsPagination;
     //setAddButtonDisable(true);
@@ -437,7 +436,7 @@ function Meter() {
     //   loadReadingMeterData
     // }
   }
-  
+
   const showModify = (id?) => {
     setModifyVisible(true);
     setId(id);
@@ -470,15 +469,14 @@ function Meter() {
       initMeterFormsLoadData(organize, meterFormsSearch);
     }
   };
-
   // const [meterSearchParams, setMeterSearchParams] = useState<any>({});
 
   return (
     <Layout>
       <AsynLeftTree
         parentid={'0'}
-        selectTree={(id, item) => {
-          selectTree(id, item, '');
+        selectTree={(pid, type, info) => {
+          selectTree(pid, type, info);
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>

@@ -1,7 +1,7 @@
 import {  TreeEntity } from '@/model/models';
 import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
-import { CwReductionmain } from '@/model/cwReductionmain'; 
+// import { CwReductionmain } from '@/model/cwReductionmain'; 
 
 //加载收款费项
 // export function GetFeeTreeListExpand(): Promise<ResponseObject<TreeEntity[]>> {

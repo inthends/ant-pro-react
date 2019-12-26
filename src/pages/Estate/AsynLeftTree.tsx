@@ -10,7 +10,7 @@ const { Sider } = Layout;
 
 interface AsynLeftTreeProps {
   //treeData: any[];
-  selectTree(parentId, type): void;
+  selectTree(parentId, type, info): void;
   parentid: string;
 }
 
@@ -24,10 +24,10 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
   const [treeData, setTreeData] = useState<any[]>([]);
 
   var keys: any[];
-  keys = []; 
+  keys = [];
   const getAllkeys = res =>
-    res.map(item => { 
-      if (item.children&&item.type!='D') {
+    res.map(item => {
+      if (item.children && item.type != 'D') {
         keys.push(getAllkeys(item.children))
       }
       keys.push(item.key);
@@ -51,7 +51,7 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
       const type = info.node.props.type;
       if ('ABCD'.indexOf(type) != -1)
         return;
-      selectTree(selectedKeys[0], type);
+      selectTree(selectedKeys[0], type, info);
     }
   };
 
@@ -76,8 +76,8 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
   const onLoadData = treeNode =>
     new Promise<any>(resolve => {
       if (treeNode.props.children &&
-        treeNode.props.children.length > 0&&
-        treeNode.props.type!='D') {
+        treeNode.props.children.length > 0 &&
+        treeNode.props.type != 'D') {
         resolve();
         return;
       }

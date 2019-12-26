@@ -75,15 +75,15 @@ function ListTable(props: ListTableProps) {
     //   width: 100
     // },  
     {
-      title: "职位",
-      dataIndex: "dutyName",
-      key: "dutyName",
-      width: 100
+      title: "所属机构",
+      dataIndex: "orgName",
+      key: "orgName",
+      width: 120
     },
     {
-      title: "岗位",
-      dataIndex: "postName",
-      key: "postName",
+      title: "办公室",
+      dataIndex: "deptName",
+      key: "deptName",
       width: 100
     },
 

@@ -20,26 +20,25 @@ function BillingMain() {
   const [organize, SetOrganize] = useState<any>({});
   // const [treeSearch, SetTreeSearch] = useState<any>({});
   const [id, setId] = useState<string>();
-  const [meterLoading, setMeterLoading] = useState<boolean>(false);
-  const [unitMeterLoading, setUnitMeterLoading] = useState<boolean>(false);
-  const [meterData, setMeterData] = useState<any>();
-  const [unitMeterData, setUnitMeterData] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [detailLoading, setDetailLoading] = useState<boolean>(false);
+  const [data, setData] = useState<any>();
+  const [undetailData, setDetailData] = useState<any[]>([]);
   const [search, setSearch] = useState<string>('');
-  const [unitMeterSearch, setUnitMeterSearch] = useState<string>('');
-  const [meterPagination, setMeterPagination] = useState<DefaultPagination>(new DefaultPagination());
-  const [unitMeterPagination, setUnitMeterPagination] = useState<DefaultPagination>(new DefaultPagination());
+  const [detailSearch, setDetailSearch] = useState<string>('');
+  const [pagination, setPagination] = useState<DefaultPagination>(new DefaultPagination());
+  const [detailPagination, setDetailPagination] = useState<DefaultPagination>(new DefaultPagination());
   const [ifVerify, setIfVerify] = useState<boolean>(false);
   const [vertifyVisible, setVerifyVisible] = useState<boolean>(false);
   const [unitTreeData, setUnitTreeData] = useState<any[]>([]);
   const [divideVisible, setDivideVisible] = useState<boolean>(false);
-
   const [showVisible, setShowVisible] = useState<boolean>(false);
 
-  const selectTree = (org, item, info) => {
+  const selectTree = (pid, type, info) => {
     //console.log(org,item,info);
     SetOrganize(info.node.props.dataRef);
-    initMeterLoadData(info.node.props.dataRef, '');
-    initUnitMeterLoadData(info.node.props.dataRef, '');
+    initLoadData(info.node.props.dataRef, search);
+    initLoadDetailData(info.node.props.dataRef, detailSearch);
   };
 
   useEffect(() => {
@@ -50,17 +49,16 @@ function BillingMain() {
         setUnitTreeData(res || []);
         return res || [];
       });
-    initMeterLoadData('', '');
-    initUnitMeterLoadData('', '');
+    initLoadData('', '');
+    initLoadDetailData('', '');
   }, []);
-
 
   const loadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
     //赋值,必须，否则查询条件会不起作用
     setSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
-      pageSize: meterPagination.pageSize,
+      pageSize: pagination.pageSize,
       total: 0,
     };
     let searchCondition: any = {
@@ -78,10 +76,10 @@ function BillingMain() {
     return meterload(searchCondition);
   }
   const loadUnitMeterData = (search, paginationConfig?: PaginationConfig, sorter?) => {
-    setUnitMeterSearch(search);
+    setDetailSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
-      pageSize: unitMeterPagination.pageSize,
+      pageSize: detailPagination.pageSize,
       total: 0,
     };
     let searchCondition: any = {
@@ -99,13 +97,13 @@ function BillingMain() {
     return unitMeterload(searchCondition);
   }
   const meterload = data => {
-    setMeterLoading(true);
+    setLoading(true);
     data.sidx = data.sidx || 'billCode';
     data.sord = data.sord || 'asc';
 
     return GetPageListJson(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
-      setMeterPagination(pagesetting => {
+      setPagination(pagesetting => {
         return {
           ...pagesetting,
           current,
@@ -114,19 +112,19 @@ function BillingMain() {
         };
       });
 
-      setMeterData(res.data);
-      setMeterLoading(false);
+      setData(res.data);
+      setLoading(false);
       return res;
     });
   };
   const unitMeterload = data => {
-    setUnitMeterLoading(true);
+    setDetailLoading(true);
     data.sidx = data.sidx || 'id';
     data.sord = data.sord || 'asc';
     return GetPageDetailListJson(data).then(res => {
       console.log(res);
       const { pageIndex: current, total, pageSize } = res;
-      setUnitMeterPagination(pagesetting => {
+      setDetailPagination(pagesetting => {
         return {
           ...pagesetting,
           current,
@@ -134,13 +132,13 @@ function BillingMain() {
           pageSize,
         };
       });
-      setUnitMeterData(res.data);
-      setUnitMeterLoading(false);
+      setDetailData(res.data);
+      setDetailLoading(false);
       return res;
     });
   };
 
-  const initMeterLoadData = (org, searchText) => {
+  const initLoadData = (org, searchText) => {
     // console.log(org);
     // setMeterSearch(searchText);
     const queryJson = {
@@ -151,11 +149,11 @@ function BillingMain() {
     };
     const sidx = 'billCode';
     const sord = 'asc';
-    const { current: pageIndex, pageSize, total } = meterPagination;
+    const { current: pageIndex, pageSize, total } = pagination;
     return meterload({ pageIndex, pageSize, sidx, sord, total, queryJson });
   };
-  const initUnitMeterLoadData = (org, searchText) => {
-    setUnitMeterSearch(searchText);
+  const initLoadDetailData = (org, searchText) => {
+    setDetailSearch(searchText);
     const queryJson = {
       //OrganizeId: org.organizeId,
       keyword: searchText,
@@ -164,7 +162,7 @@ function BillingMain() {
     };
     const sidx = 'id';
     const sord = 'asc';
-    const { current: pageIndex, pageSize, total } = unitMeterPagination;
+    const { current: pageIndex, pageSize, total } = detailPagination;
     return unitMeterload({ pageIndex, pageSize, sidx, sord, total, queryJson });
   };
 
@@ -179,7 +177,7 @@ function BillingMain() {
   const closeVerify = (result?) => {
     setVerifyVisible(false);
     if (result) {
-      initMeterLoadData(organize, '');
+      initLoadData(organize, '');
     }
     setId('');
   };
@@ -216,7 +214,6 @@ function BillingMain() {
       setId(id);
   };
 
-
   // const deleteData = (id?) => {
   //   Modal.confirm({
   //     title: '是否确认删除该条抵冲记录?',
@@ -224,7 +221,6 @@ function BillingMain() {
   //       RemoveForm({
   //         keyValue: id
   //       }).then(res => {
-
   //       });
   //     },
   //     onCancel() { },
@@ -237,14 +233,14 @@ function BillingMain() {
     <Layout>
       <AsynLeftTree
         parentid={'0'}
-        selectTree={(id, item, info) => {
-          selectTree(id, item, info);
+        selectTree={(pid, type, info) => {
+          selectTree(pid, type, info);
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>
         <Tabs defaultActiveKey="1" >
           <TabPane tab="计费单列表" key="1">
-            <div style={{ marginBottom: '20px', padding: '3px 2px' }} 
+            <div style={{ marginBottom: '20px', padding: '3px 2px' }}
             // onChange={(value) => {
             //   var params = Object.assign({}, meterSearchParams, { metertype: value });
             //   setMeterSearchParams(params);
@@ -313,9 +309,9 @@ function BillingMain() {
               }
               }
               showDivide={showDivide}
-              loading={meterLoading}
-              pagination={meterPagination}
-              data={meterData}
+              loading={loading}
+              pagination={pagination}
+              data={data}
               showVerify={showVerify}
               showFee={showFee}
               showModify={(id, isedit) => {
@@ -325,7 +321,7 @@ function BillingMain() {
                 setIsEdit(isedit);
                 setModifyVisible(true);
               }}
-              reload={() => initMeterLoadData(organize, search)}
+              reload={() => initLoadData(organize, search)}
               getRowSelect={(record) => {
                 setId(record.billId);
                 if (record.ifVerify == 0) {
@@ -347,12 +343,12 @@ function BillingMain() {
             </div>
             <UnitTable
               onchange={(paginationConfig, filters, sorter) =>
-                loadUnitMeterData(unitMeterSearch, paginationConfig, sorter)
+                loadUnitMeterData(detailSearch, paginationConfig, sorter)
               }
-              loading={unitMeterLoading}
-              pagination={unitMeterPagination}
-              data={unitMeterData}
-              reload={() => initUnitMeterLoadData('', unitMeterSearch)}
+              loading={detailLoading}
+              pagination={detailPagination}
+              data={undetailData}
+              reload={() => initLoadDetailData('', detailSearch)}
             />
           </TabPane>
         </Tabs>
@@ -363,7 +359,7 @@ function BillingMain() {
         organizeId={organize}
         id={id}
         isEdit={isEdit}
-        reload={() => initMeterLoadData('', '')}
+        reload={() => initLoadData('', '')}
         treeData={unitTreeData}
       />
       <Verify
@@ -371,7 +367,7 @@ function BillingMain() {
         closeVerify={closeVerify}
         ifVerify={ifVerify}
         id={id}
-        reload={() => initMeterLoadData('', '')}
+        reload={() => initLoadData('', '')}
       />
 
       <Show

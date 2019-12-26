@@ -1,7 +1,7 @@
 //费用冲抵
 import { DefaultPagination } from '@/utils/defaultSetting';
 // import { getResult } from '@/utils/networkUtils';
-import { Tabs, Button, Icon, Input, Layout  } from 'antd';
+import { Tabs, Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import { GetOffsetPageDetailData, GetOffsetPageData } from './Offset.service';
@@ -26,25 +26,27 @@ function Offset() {
   // const [search, setSearch] = useState<any>({});
   // const { hideSider, setHideSider } = useContext(SiderContext);
   const [addDrawerVisible, setAddDrawerVisible] = useState<boolean>(false);
-  const [id, setId] = useState<string>(); 
+  const [id, setId] = useState<string>();
   const [verifyVisible, setVerifyVisible] = useState<boolean>(false);
-  const [modifyVisible, setModifyVisible] = useState<boolean>(false); 
-  const [ifVerify, setIfVerify] = useState<boolean>(false); 
+  const [modifyVisible, setModifyVisible] = useState<boolean>(false);
+  const [ifVerify, setIfVerify] = useState<boolean>(false);
   const [addButtonDisable, setAddButtonDisable] = useState<boolean>(true);
-  const [checkloading, setCheckLoading] = useState<boolean>(false);
-  const [checkpagination, setCheckPagination] = useState<DefaultPagination>(new DefaultPagination());
-  const [checkdata, setCheckData] = useState<any>();
-  const [search, setSearch] = useState<string>('');  
-  const [noticeloading, setNoticeLoading] = useState<boolean>(false);
-  const [noticepagination, setNoticePagination] = useState<DefaultPagination>(new DefaultPagination());
-  const [noticedata, setNoticeData] = useState<any>();
-  const [noticesearch, setDetailSearch] = useState<string>(''); 
+  const [loading, setLoading] = useState<boolean>(false);
+  const [pagination, setPagination] = useState<DefaultPagination>(new DefaultPagination());
+  const [data, setData] = useState<any>();
+  const [search, setSearch] = useState<string>('');
+
+  const [detailLoading, setDetailLoading] = useState<boolean>(false);
+  const [detailPagination, setDetailPagination] = useState<DefaultPagination>(new DefaultPagination());
+  const [detailData, setDetailData] = useState<any>();
+  const [detailSearch, setDetailSearch] = useState<string>('');
+
   const [unitTreeData, setUnitTreeData] = useState<any[]>([]);
 
-  const selectTree = (org, item, searchText) => {
-    initLoadData(item, '');
-    initDetailLoadData(item, '');
-    setOrganize(item);
+  const selectTree = (id, type, info) => {
+    initLoadData(info.node.props.dataRef, search);
+    initDetailLoadData(info.node.props.dataRef, detailSearch);
+    setOrganize(info.node.props.dataRef);
   };
 
   useEffect(() => {
@@ -98,7 +100,7 @@ function Offset() {
     setSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
-      pageSize: checkpagination.pageSize,
+      pageSize: pagination.pageSize,
       total: 0,
     };
     let searchCondition: any = {
@@ -111,7 +113,7 @@ function Offset() {
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'billid';
+      searchCondition.sidx = field ? field : 'billId';
     }
 
     return checkload(searchCondition).then(res => {
@@ -121,12 +123,12 @@ function Offset() {
 
   //账单表加载
   const checkload = data => {
-    setCheckLoading(true);
+    setLoading(true);
     data.sidx = data.sidx || 'billId';
     data.sord = data.sord || 'asc';
     return GetOffsetPageData(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
-      setCheckPagination(pagesetting => {
+      setPagination(pagesetting => {
         return {
           ...pagesetting,
           current,
@@ -134,8 +136,8 @@ function Offset() {
           pageSize,
         };
       });
-      setCheckData(res.data);
-      setCheckLoading(false);
+      setData(res.data);
+      setLoading(false);
       return res;
     });
   };
@@ -145,7 +147,7 @@ function Offset() {
     setDetailSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
-      pageSize: noticepagination.pageSize,
+      pageSize: detailPagination.pageSize,
       total: 0,
     };
     let searchCondition: any = {
@@ -158,7 +160,7 @@ function Offset() {
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'billid';
+      searchCondition.sidx = field ? field : 'billId';
     }
 
     return detailload(searchCondition).then(res => {
@@ -167,12 +169,12 @@ function Offset() {
   };
   //明细表加载
   const detailload = data => {
-    setNoticeLoading(true);
-    data.sidx = data.sidx || 'billid';
+    setDetailLoading(true);
+    data.sidx = data.sidx || 'billId';
     data.sord = data.sord || 'asc';
     return GetOffsetPageDetailData(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
-      setNoticePagination(pagesetting => {
+      setDetailPagination(pagesetting => {
         return {
           ...pagesetting,
           current,
@@ -180,8 +182,8 @@ function Offset() {
           pageSize,
         };
       });
-      setNoticeData(res.data);
-      setNoticeLoading(false);
+      setDetailData(res.data);
+      setDetailLoading(false);
       return res;
     });
   };
@@ -189,14 +191,14 @@ function Offset() {
   const initLoadData = (org, searchText) => {
     setSearch(searchText);
     const queryJson = {
-      OrganizeId: org.organizeId,
+      // OrganizeId: org.organizeId,
       keyword: searchText,
-      TreeTypeId: org.id,
+      TreeTypeId: org.key,
       TreeType: org.type,
     };
-    const sidx = 'billcode';
+    const sidx = 'billCode';
     const sord = 'asc';
-    const { current: pageIndex, pageSize, total } = checkpagination;
+    const { current: pageIndex, pageSize, total } = pagination;
     setAddButtonDisable(true);
     return checkload({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
       return res;
@@ -208,14 +210,14 @@ function Offset() {
   const initDetailLoadData = (org, searchText) => {
     setDetailSearch(searchText);
     const queryJson = {
-      OrganizeId: org.organizeId,
+      // OrganizeId: org.organizeId,
       keyword: searchText,
-      TreeTypeId: org.id,
+      TreeTypeId: org.key,
       TreeType: org.type,
     };
-    const sidx = 'billcode';
+    const sidx = 'billCode';
     const sord = 'asc';
-    const { current: pageIndex, pageSize, total } = noticepagination;
+    const { current: pageIndex, pageSize, total } = detailPagination;
     return detailload({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
       return res;
     });
@@ -234,7 +236,7 @@ function Offset() {
     setIfVerify(ifVerify);
     setId(id);
   };
-  
+
   // const closeModify = (result?) => {
   //   setModifyVisible(false);
   //   if (result) {
@@ -270,8 +272,8 @@ function Offset() {
     <Layout className="offsetMain">
       <AsynLeftTree
         parentid={'0'}
-        selectTree={(id, item) => {
-          selectTree(id, item, search);
+        selectTree={(id, type, info) => {
+          selectTree(id, type, info);
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>
@@ -301,9 +303,9 @@ function Offset() {
               onchange={(paginationConfig, filters, sorter) =>
                 loadDetailData(search, paginationConfig, sorter)
               }
-              loading={checkloading}
-              pagination={checkpagination}
-              data={checkdata}
+              loading={loading}
+              pagination={pagination}
+              data={data}
               showVerify={showVerify}
               closeVerify={closeVerify}
               // deleteData={deleteData}
@@ -323,12 +325,12 @@ function Offset() {
             </div>
             <DetailTable
               onchange={(paginationConfig, filters, sorter) =>
-                loadDetailData(noticesearch, paginationConfig, sorter)
+                loadDetailData(detailSearch, paginationConfig, sorter)
               }
-              loading={noticeloading}
-              pagination={noticepagination}
-              data={noticedata}
-              reload={() => initDetailLoadData('', noticesearch)}
+              loading={detailLoading}
+              pagination={detailPagination}
+              data={detailData}
+              reload={() => initDetailLoadData('', detailSearch)}
             />
           </TabPane>
         </Tabs>
@@ -346,7 +348,7 @@ function Offset() {
         closeDrawer={closeModify}
         // organizeId={organize}
         id={id}
-        // reload={() => initLoadData('', search)}
+      // reload={() => initLoadData('', search)}
       />
       <Verify
         verifyVisible={verifyVisible}

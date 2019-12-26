@@ -37,12 +37,12 @@ function Main() {
   const [detailsearch, setDetailSearch] = useState<string>('');
   const [unitTreeData, setUnitTreeData] = useState<any[]>([]);
 
-   //收款单查看
-   const [chargeId, setChargeId] = useState<string>();
-   const [chargeVisible, setChargeVisible] = useState<boolean>(false);//查看
+  //收款单查看
+  const [chargeId, setChargeId] = useState<string>();
+  const [chargeVisible, setChargeVisible] = useState<boolean>(false);//查看
 
-  const selectTree = (org, item, searchText) => {
-    initLoadData(item, '');
+  const selectTree = (pid, type, info) => {
+    initLoadData(info.node.props.dataRef, search);
     // SetOrganize(item);
   };
 
@@ -119,17 +119,17 @@ function Main() {
     setIfVerify(ifVerify);
   };
 
-    //查看收款单
-    const showChargeDrawer = (id) => {
-      setChargeVisible(true);
-      setChargeId(id);
-    };
-  
-    //收款单关闭
-    const closeChargeDrawer = () => {
-      setChargeVisible(false);
-      setChargeId('');
-    };
+  //查看收款单
+  const showChargeDrawer = (id) => {
+    setChargeVisible(true);
+    setChargeId(id);
+  };
+
+  //收款单关闭
+  const closeChargeDrawer = () => {
+    setChargeVisible(false);
+    setChargeId('');
+  };
 
   const loadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(search);
@@ -181,7 +181,7 @@ function Main() {
     const queryJson = {
       // OrganizeId: org.organizeId,
       keyword: searchText,
-      TreeTypeId: org.id,
+      TreeTypeId: org.key,
       TreeType: org.type,
     };
     const sidx = 'billcode';
@@ -240,9 +240,9 @@ function Main() {
   const initDetailLoadData = (org, searchText) => {
     setDetailSearch(searchText);
     const queryJson = {
-      OrganizeId: org.organizeId,
+      // OrganizeId: org.organizeId,
       keyword: searchText,
-      TreeTypeId: org.id,
+      TreeTypeId: org.key,
       TreeType: org.type,
     };
     const sidx = 'billCode';
@@ -266,8 +266,8 @@ function Main() {
     <Layout style={{ height: '100%' }}>
       <AsynLeftTree
         parentid={'0'}
-        selectTree={(id, item) => {
-          selectTree(id, item, search);
+        selectTree={(pid, type, info) => {
+          selectTree(pid, type, info);
         }}
       />
 

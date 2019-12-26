@@ -35,7 +35,7 @@ function Payment() {
   const [organize, setOrganize] = useState<any>({});
 
   const selectTree = (id, type, info) => {
-    setOrganize(info.node.props);
+    setOrganize(info.node.props.dataRef);
     if (type == 5) {
       initNotPaymentLoadData({ id: id, type: type }, '');
       initPaymentLoadData({ id: id, type: type }, '');
@@ -239,7 +239,6 @@ function Payment() {
   const [paymentEndDate, setPaymentEndDate] = useState<string>('');
   // const [billStatus, setBillStatus] = useState<number>(-1);
 
-
   //页签切换刷新
   const changeTab = key => {
     if (key == "1") {
@@ -248,7 +247,6 @@ function Payment() {
       initPaymentLoadData(organize, '');
     }
   };
-
 
   return (
     <Layout>
@@ -335,7 +333,6 @@ function Payment() {
               organize={organize}
               // showDetail={(billId) => showBill(billId)}  
               showDetail={(billId) => { setId(billId); setShowVisible(true); }}
-
             />
           </TabPane>
           <TabPane tab="付款单列表" key="2">

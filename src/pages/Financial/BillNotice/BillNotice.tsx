@@ -10,7 +10,7 @@ import BillNoticeTable from './BillNoticeTable';
 import BillCheckModify from './BillCheckModify';
 import BillCheckVerify from './BillCheckVerify';
 import BillCheckShow from './BillCheckShow';
-import {getResult } from '@/utils/networkUtils';
+import { getResult } from '@/utils/networkUtils';
 import { GetUnitTreeAll } from '@/services/commonItem';//获取全部房间树
 const { Content } = Layout;
 const { Search } = Input;
@@ -33,16 +33,16 @@ function BillNotice() {
   const [ifVerify, setIfVerify] = useState<boolean>(false);
   const [vertifyVisible, setVerifyVisible] = useState<boolean>(false);
   const [showCheckBillVisible, setShowCheckBillVisible] = useState<boolean>(false);
-  const [tempListData, setTempListData] = useState<any[]>([]); 
+  const [tempListData, setTempListData] = useState<any[]>([]);
   const [unitTreeData, setUnitTreeData] = useState<any[]>([]);
 
-  const selectTree = (org, item, info) => {
-    SetOrganize(org);
-    initBillCheckLoadData(info, '');
-    initBillNoticeLoadData(info, '');
+  const selectTree = (pid, type, info) => {
+    SetOrganize(info.node.props.dataRef);
+    initBillCheckLoadData(info.node.props.dataRef, billCheckSearch);
+    initBillNoticeLoadData(info.node.props.dataRef, billNoticeSearch);
   };
 
-  useEffect(() => { 
+  useEffect(() => {
     //获取房产树
     GetUnitTreeAll()
       .then(getResult)
@@ -51,7 +51,7 @@ function BillNotice() {
         return res || [];
       });
 
-      GetNoticeTemplates().then(res => {
+    GetNoticeTemplates().then(res => {
       setTempListData(res);
     }).then(() => {
       initBillCheckLoadData('', '');
@@ -133,6 +133,7 @@ function BillNotice() {
       setBillCheckLoading(false);
     });
   };
+  
   const billNoticeload = data => {
     setBillNoticeLoading(true);
     data.sidx = data.sidx || 'billId';
@@ -162,7 +163,7 @@ function BillNotice() {
       TemplateId: templateId,
       BillType: billType,
       keyword: searchText,
-      TreeTypeId: org.id,
+      TreeTypeId: org.key,
       TreeType: org.type,
     };
     const sidx = 'billId';
@@ -170,11 +171,12 @@ function BillNotice() {
     const { current: pageIndex, pageSize, total } = billCheckPagination;
     return billCheckload({ pageIndex, pageSize, sidx, sord, total, queryJson });
   };
+
   const initBillNoticeLoadData = (org, searchText) => {
     setBillNoticeSearch(searchText);
     const queryJson = {
       keyword: searchText,
-      TreeTypeId: org.id,
+      TreeTypeId: org.key,
       TreeType: org.type,
     };
     const sidx = 'billId';
@@ -305,7 +307,7 @@ function BillNotice() {
           title: '是否确认删除?',
           onOk() {
             BatchRemoveForm({
-              keyValues:  JSON.stringify(selectIds)
+              keyValues: JSON.stringify(selectIds)
             }).then(res => {
               message.success('删除成功');
               initBillCheckLoadData('', '');
@@ -335,13 +337,12 @@ function BillNotice() {
     }
   };
 
-
   return (
     <Layout>
       <AsynLeftTree
         parentid={'0'}
-        selectTree={(id, item, info) => {
-          selectTree(id, item, info);
+        selectTree={(pid, type, info) => {
+          selectTree(pid, type, info);
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>

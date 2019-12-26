@@ -20,9 +20,9 @@ function Main() {
   const [currData, setCurrData] = useState<any>();
   const [search, setSearch] = useState<string>('');
 
-  const selectTree = (org, item, searchText) => {
-    initLoadData(item, searchText);
-    SetOrganize(item);
+  const selectTree = (id, type, info) => {
+    initLoadData(info.node.props.dataRef, search);
+    SetOrganize(info.node.props.dataRef);
   };
 
   useEffect(() => {
@@ -71,8 +71,8 @@ function Main() {
       total,
       queryJson: {
         keyword: searchText,
-        OrganizeId: org.organizeId,
-        TreeTypeId: org.id,
+        // OrganizeId: org.organizeId,
+        TreeTypeId: org.key,
         TreeType: org.type,
       },
     };
@@ -111,9 +111,9 @@ function Main() {
   const initLoadData = (org, searchText) => {
     setSearch(searchText);
     const queryJson = {
-      OrganizeId: org.organizeId,
+      // OrganizeId: org.organizeId,
       keyword: searchText,
-      TreeTypeId: org.id,
+      TreeTypeId: org.key,
       TreeType: org.type,
     };
     const sidx = 'id';
@@ -128,8 +128,8 @@ function Main() {
     <Layout style={{ height: '100%' }}>
       <AsynLeftTree
         parentid={'0'}
-        selectTree={(id, item) => {
-          selectTree(id, item, search);
+        selectTree={(pid, type, info) => {
+          selectTree(pid, type, info);
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>
