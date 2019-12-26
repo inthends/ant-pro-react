@@ -269,6 +269,12 @@ class SettingDrawer extends Component<SettingDrawerProps, SettingDrawerState> {
             <BlockCheckbox
               list={[
                 {
+                  key: 'light',
+                  url:
+                    'https://gw.alipayobjects.com/zos/antfincdn/NQ%24zoisaD2/jpRkZQMyYRryryPNtyIC.svg',
+                  title: formatMessage({ id: 'app.setting.pagestyle.light' }),
+                },
+                {
                   key: 'dark',
                   url:
                     'https://gw.alipayobjects.com/zos/antfincdn/XwFOFbLkSM/LCkqqYNmvBEbokSDscrm.svg',
@@ -277,12 +283,16 @@ class SettingDrawer extends Component<SettingDrawerProps, SettingDrawerState> {
                     defaultMessage: '',
                   }),
                 },
-                {
-                  key: 'light',
-                  url:
-                    'https://gw.alipayobjects.com/zos/antfincdn/NQ%24zoisaD2/jpRkZQMyYRryryPNtyIC.svg',
-                  title: formatMessage({ id: 'app.setting.pagestyle.light' }),
-                },
+                // {
+                //   key: 'realDark',
+                //   url:
+                //     'https://gw.alipayobjects.com/zos/antfincdn/hmKaLQvmY2/LCkqqYNmvBEbokSDscrm.svg',
+                //   title: formatMessage({
+                //     id: 'app.setting.pagestyle.dark',
+                //     defaultMessage: '',
+                //   }),
+                // },
+
               ]}
               value={navTheme}
               onChange={value => this.changeSetting('navTheme', value)}
