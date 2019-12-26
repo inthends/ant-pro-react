@@ -1,13 +1,15 @@
 import { DefaultPagination } from "@/utils/defaultSetting";
-import { Icon, Input, Layout } from "antd";
+import { Button, Icon, Input, Layout } from "antd";
 import { PaginationConfig } from "antd/lib/table";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ListTable from "./ListTable";
 import Modify from "./Modify";
+import { getResult } from '@/utils/networkUtils';
 import { GetTypes, GetDataList } from "./Main.service";
-import { SiderContext } from '../../SiderContext';
-import LeftTree from '../LeftTree';
-const { Sider } = Layout;
+import { GetQuickSimpleTreeAllForDeskService } from '@/services/commonItem';
+// import { SiderContext } from '../../SiderContext';
+// import LeftTree from '../LeftTree';
+// const { Sider } = Layout;
 const { Content } = Layout;
 const { Search } = Input;
 
@@ -18,13 +20,24 @@ const Device = () => {
   const [data, setData] = useState<any[]>([]);
   const [currData, setCurrData] = useState<any>();
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
-  const {hideSider, setHideSider } = useContext(SiderContext);
+  // const { hideSider, setHideSider } = useContext(SiderContext);
   const [treeData, setTreeData] = useState<any[]>([]);
+
+  const [unitData, setUnitData] = useState<any[]>([]);
 
   useEffect(() => {
     GetTypes().then((res) => {
       setTreeData(res || []);
     });
+
+    //获取房产树
+    GetQuickSimpleTreeAllForDeskService()
+      .then(getResult)
+      .then((res: any[]) => {
+        setUnitData(res || []);
+        // return res || [];
+      });
+
     initLoadData(itemId);
   }, []);
 
@@ -99,11 +112,11 @@ const Device = () => {
     );
   };
 
-  const selectTree = (item) => {
-    var value = item.node.props.value;
-    initLoadData(value);
-    setItemId(itemId);
-  };
+  // const selectTree = (item) => {
+  //   var value = item.node.props.value;
+  //   initLoadData(value);
+  //   setItemId(itemId);
+  // };
 
   return (
     <Layout style={{ height: "100%" }}>
@@ -154,14 +167,14 @@ const Device = () => {
             style={{ width: 200 }}
           />
 
-          {/* <Button
+          <Button
             type="primary"
             style={{ float: "right" }}
             onClick={() => showDrawer()}
           >
             <Icon type="plus" />
-            分类
-          </Button> */}
+            设备
+          </Button>
         </div>
         <ListTable
           onchange={(paginationConfig, filters, sorter) =>
@@ -172,7 +185,7 @@ const Device = () => {
           data={data}
           modify={showDrawer}
           choose={showChoose}
-          reload={() => initLoadData(itemId)} 
+          reload={() => initLoadData(itemId)}
         />
       </Content>
       <Modify
@@ -181,6 +194,7 @@ const Device = () => {
         data={currData}
         reload={() => initLoadData(itemId)}
         types={treeData}
+        unitData={unitData}
       />
 
     </Layout>

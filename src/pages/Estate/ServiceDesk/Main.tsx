@@ -40,8 +40,9 @@ function Main() {
       .then(getResult)
       .then((res: any[]) => {
         setTreeData(res || []);
-        return res || [];
+        // return res || [];
       });
+
     initLoadData('', '');
 
   }, []);

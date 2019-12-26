@@ -1,7 +1,7 @@
 // import { TreeEntity } from '@/model/models';
 import { BaseModifyProvider } from "@/components/BaseModifyDrawer/BaseModifyDrawer";
 import ModifyItem from "@/components/BaseModifyDrawer/ModifyItem";
-import { Card, Form, Row } from "antd";
+import { Col, TreeSelect, Card, Form, Row } from "antd";
 import { WrappedFormUtils } from "antd/lib/form/Form";
 import React, { useState, useEffect } from 'react';
 import { SaveDeviceForm } from "./Main.service";
@@ -15,12 +15,14 @@ interface ModifyProps {
   closeDrawer(): void;
   reload(): void;
   types?: any[];
+  unitData?: any[];
 }
 
 const Modify = (props: ModifyProps) => {
-  const { data, form, types } = props;
+  const { data, form, types, visible, unitData } = props;
   let initData = data ? data : { enabledMark: 1 };
   const baseFormProps = { form, initData };
+  const { getFieldDecorator } = form;
   const doSave = dataDetail => {
     let modifyData = { ...initData, ...dataDetail, keyValue: initData.id };
     return SaveDeviceForm(modifyData);
@@ -30,15 +32,17 @@ const Modify = (props: ModifyProps) => {
   const [deviceLevel, setDeviceLevel] = useState<any[]>([]);
 
   useEffect(() => {
-    GetOrgs().then(res => {
-      setOrgs(res);
-    });
-    //设备等级
-    getCommonItems('DeviceLevel').then(res => {
-      setDeviceLevel(res || []);
-    });
+    if (visible) {
+      GetOrgs().then(res => {
+        setOrgs(res);
+      });
+      //设备等级
+      getCommonItems('DeviceLevel').then(res => {
+        setDeviceLevel(res || []);
+      });
+    }
 
-  }, []);
+  }, [visible]);
 
 
   return (
@@ -145,21 +149,40 @@ const Modify = (props: ModifyProps) => {
           </Row>
 
           <Row gutter={24}>
-            <ModifyItem
+            {/* <ModifyItem
               {...baseFormProps}
               field="pStructId"
               lg={16}
               label="安装位置"
               type="tree"
+              treeData={unitData}
               rules={[{ required: true, message: "请选择安装位置" }]}
-            ></ModifyItem>
+            ></ModifyItem> */}
+            
+            <Col lg={16}>
+              <Form.Item label="安装位置" required>
+                {getFieldDecorator('pStructId', {
+                  initialValue: initData.pStructId,
+                  rules: [{ required: true, message: '请选择安装位置' }],
+                })(
+                  <TreeSelect
+                    placeholder="请选择安装位置"
+                    allowClear
+                    // onChange={onChange}
+                    dropdownStyle={{ maxHeight: 300 }}
+                    treeData={unitData}
+                    treeDataSimpleMode={true} >
+                  </TreeSelect>
+                )}
+              </Form.Item>
+            </Col>
 
             <ModifyItem
               {...baseFormProps}
               field="installType"
               lg={8}
               label="安装类型"
-              type="select" 
+              type="select"
               items={[{
                 title: '单台运行',
                 label: '单台运行',
