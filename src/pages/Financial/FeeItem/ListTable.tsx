@@ -22,7 +22,7 @@ function ListTable(props: ListTableProps) {
   const doDelete = record => {
     Modal.confirm({
       title: '请确认',
-      content: `您是否要删除${record.feeName}？`,
+      content: `您确认要删除${record.feeName}吗？`,
       cancelText: '取消',
       okText: '确定',
       onOk: () => {

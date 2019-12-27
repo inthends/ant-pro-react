@@ -29,7 +29,6 @@ function HouseMore(props) {
   const [selectId, setSelectId] = useState<string>(''); //列表选中的节点id  
   const [organizeId, setOrganizeId] = useState<string>(''); //列表选中的节点组织id  
 
-
   const [roomVisible, setRoomVisible] = useState<boolean>(false);
 
   const selectTree = (parentId, type, searchText) => {
@@ -194,7 +193,8 @@ function HouseMore(props) {
               </Button> */}
               <Button style={{ float: 'right' }} key='return'>
                 <Link to={{ pathname: 'house' }}>
-                  <Icon type="arrow-left" />返回</Link>
+                  <Icon type="arrow-left" />返回
+               </Link>
               </Button>
             </div>
 
@@ -205,6 +205,7 @@ function HouseMore(props) {
               loading={loading}
               pagination={pagination}
               data={data}
+              type={type}
               selectId={selectId}
               modify={showDrawer}
               reload={(id, selecttype) => {

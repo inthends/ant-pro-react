@@ -27,7 +27,7 @@ function ReadingMeterTable(props: ReadingMeterTableProps) {
   const doDelete = record => {
     Modal.confirm({
       title: '请确认',
-      content: `您是否要删除${record.billCode}吗`,
+      content: `您确认要删除${record.billCode}吗？`,
       onOk: () => {
         RemoveReadForm(record.billId)
           .then(() => {

@@ -18,7 +18,7 @@ function ListTable(props: ListTableProps) {
   const doDelete = record => {
     Modal.confirm({
       title: '请确认',
-      content: `您是否要删除 ${record.fullName} 吗？`,
+      content: `您确认要删除${record.fullName}吗？`,
       onOk: () => {
         //check 
         CheckOrg(record.key).then((res) => { 

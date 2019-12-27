@@ -915,10 +915,13 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                         houseData.map(item=>{
                           ids.push(item.id);
                         });*/
+
                         RemoveReadUnitFormAll(id).then(res => {
                           message.success('删除成功');
                           initHouseLoadData(houseSearch);
                         });
+
+                        
                       }}
                     >
                       <Icon type="delete" />

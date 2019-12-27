@@ -22,7 +22,7 @@ function MeterTable(props: MeterTableProps) {
   const doDelete = record => {
     Modal.confirm({
       title: '请确认',
-      content: `您是否要删除${record.meterName}吗`,
+      content: `您是否要删除${record.meterName}吗？`,
       onOk: () => {
         RemoveForm(record.meterId)
           .then(() => { 
