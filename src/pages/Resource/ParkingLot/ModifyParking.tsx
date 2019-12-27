@@ -295,7 +295,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
                 </Form.Item>
               </Col>
               <Col lg={12}>
-                <Form.Item label="租户名称">
+                <Form.Item label="住户名称">
                   {/* {getFieldDecorator('customerId', {
                     initialValue: infoDetail.customerId,
                   })(<TextArea rows={4} placeholder="请输计费面积" />)} */}

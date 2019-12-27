@@ -390,14 +390,14 @@ const Room = (props: RoomProps) => {
                   </Form.Item>
                 </Col>
                 <Col lg={12}>
-                  <Form.Item label="租户">
+                  <Form.Item label="住户">
                     {getFieldDecorator('tenantName', {
                       initialValue: infoDetail.tenantName,
                     })(<AutoComplete
                       dataSource={userList}
                       style={{ width: '100%' }}
                       onSearch={handleSearch}
-                      placeholder="请输入租户"
+                      placeholder="请输入住户"
                       onSelect={onTenantSelect}
                     />)}
                     {getFieldDecorator('tenantId', {

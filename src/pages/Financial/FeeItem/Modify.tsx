@@ -1544,8 +1544,8 @@ const Modify = (props: ModifyProps) => {
                       })(
                         <Select placeholder="==付款对象==">
                           <Option value={1}>业主</Option>
-                          <Option value={2}>住/租户</Option>
-                          <Option value={3}>住/租户，空置时转给业主</Option>
+                          <Option value={2}>住户</Option>
+                          <Option value={3}>住户，空置时转给业主</Option>
                         </Select>
                       )}
                     </Form.Item>
