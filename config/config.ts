@@ -6,7 +6,6 @@ import webpackPlugin from './plugin.config';
 import routes from './routes.config';
 import proxy from './proxy.config';
 // import theme from './theme.config';
-
 // const { pwa, primaryColor } = defaultSettings;
 
 const { pwa } = defaultSettings;
