@@ -10,7 +10,7 @@ const { Sider } = Layout;
 
 interface AsynLeftTreeProps {
   //treeData: any[];
-  selectTree(parentId, type): void;
+  selectTree(parentId, type, info): void;
   parentid: string;
 }
 
@@ -25,7 +25,7 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
   //选中节点
   // const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
 
-  let keys: any[]  = [];
+  let keys: any[] = [];
   // const getAllkeys = res =>
   //   res.map(item => {
   //     if (item.children && item.type != 'D') {
@@ -36,12 +36,12 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
 
 
   const getAllkeys = data =>
-  data.forEach(item => {
-    if (!item.isLeaf && item.type != 'D') {
-      keys.push(getAllkeys(item.children))
-    }
-    keys.push(item.key);
-  });
+    data.forEach(item => {
+      if (!item.isLeaf && item.type != 'D') {
+        keys.push(getAllkeys(item.children))
+      }
+      keys.push(item.key);
+    });
 
   //展开到管理处
   useEffect(() => {
@@ -60,7 +60,7 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
       const type = info.node.props.type;
       if ('ABCD'.indexOf(type) != -1)
         return;
-      selectTree(selectedKeys[0], type);
+      selectTree(selectedKeys[0], type, info);
     }
   };
 
@@ -80,7 +80,6 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
     //setAutoExpandParent(false);
   };
 
-
   //异步加载
   const onLoadData = treeNode =>
     new Promise<any>(resolve => {
@@ -97,7 +96,7 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
           setTreeData([...treeData]);
         });
         resolve();
-      }, 500);
+      }, 50);
     });
 
   // const renderTree = (tree: any[], parentId: string) => {
@@ -157,7 +156,7 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
                 expandedKeys={expandedKeys}
                 onExpand={clickExpend}
                 onSelect={onSelect}>
-                {renderTreeNodes(treeData)} 
+                {renderTreeNodes(treeData)}
               </Tree>
             </Page>
             <div

@@ -5,19 +5,18 @@ import { DefaultPagination } from '@/utils/defaultSetting';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { GetEntityShow, ChargeFeeDetail } from './BillNotice.service';
+import { GetEntityShow, ChargeFeeDetail } from './Main.service';
 import './style.less';
 import moment from 'moment';
 
-
-interface BillCheckShowProps {
+interface ShowProps {
   visible: boolean;
   closeDrawer(): void;
   form: WrappedFormUtils;
   id?: string;
 }
 
-const BillCheckShow = (props: BillCheckShowProps) => {
+const Show = (props: ShowProps) => {
   const { visible, closeDrawer, form, id } = props;
   const title = '查看通知单';
   const [loading, setLoading] = useState<boolean>(false);
@@ -287,5 +286,5 @@ const BillCheckShow = (props: BillCheckShowProps) => {
   );
 };
 
-export default Form.create<BillCheckShowProps>()(BillCheckShow);
+export default Form.create<ShowProps>()(Show);
 

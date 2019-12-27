@@ -1,11 +1,11 @@
 import { Card, Button, Col, DatePicker, Drawer, Form, Row, Input  } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { Audit, GetEntityShow } from './BillNotice.service';
+import { Audit, GetEntityShow } from './Main.service';
 import './style.less';
 import moment from 'moment';
 
-interface BillCheckVerifyProps {
+interface VerifyProps {
   vertifyVisible: boolean;
   ifVerify: boolean;
   closeVerify(result?): void;
@@ -14,7 +14,7 @@ interface BillCheckVerifyProps {
   reload(): void;
 }
 
-const BillCheckVerify = (props: BillCheckVerifyProps) => {
+const Verify = (props: VerifyProps) => {
   const { vertifyVisible, closeVerify, form, id, ifVerify } = props;
   const title = ifVerify ? '账单审核' : '账单取消审核';
   // const [loading, setLoading] = useState<boolean>(false);
@@ -184,5 +184,5 @@ const BillCheckVerify = (props: BillCheckVerifyProps) => {
   );
 };
 
-export default Form.create<BillCheckVerifyProps>()(BillCheckVerify);
+export default Form.create<VerifyProps>()(Verify);
 

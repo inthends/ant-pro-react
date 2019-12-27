@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import {
   SaveForm, GetPageDetailListJson, GetBilling,
   RemoveUnitForm, RemoveUnitFormAll, SaveMain
-} from './BillingMain.service';
+} from './Main.service';
 import styles from './style.less';
 import moment from 'moment';
 import SelectHouse from './SelectHouse';

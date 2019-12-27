@@ -1664,7 +1664,7 @@ const Modify = (props: ModifyProps) => {
                       key='search'
                       className="search-input"
                       placeholder="请输入要查询的房屋编号"
-                      style={{ width: 220 }}
+                      style={{ width: 210 }}
                       onSearch={value => houseLoadData(value)}
                     />
                     {/* <Button type="link" style={{ float: 'right' }}

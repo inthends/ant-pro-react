@@ -105,7 +105,7 @@ function ChargeListTable(props: ChargeListTableProps) {
       render: val => moment(val).format('YYYY-MM-DD')
     },
     {
-      title: '房间编号',
+      title: '单元编号',
       dataIndex: 'unitId',
       key: 'unitId',
       width: 150,

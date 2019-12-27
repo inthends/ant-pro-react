@@ -4,7 +4,7 @@ import { message, Dropdown, Menu, Icon, Modal, Divider, Form, Table } from 'antd
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState } from 'react';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import { InvalidForm } from './BillingMain.service';
+import { InvalidForm } from './Main.service';
 import moment from 'moment';
 import styles from './style.less';
 

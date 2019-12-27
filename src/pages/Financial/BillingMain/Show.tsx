@@ -2,7 +2,7 @@
 import { Table, Card, Button, Col, Drawer, Form, Row, Input, Spin } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetPageDetailListJson, GetBilling } from './BillingMain.service';
+import { GetPageDetailListJson, GetBilling } from './Main.service';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import styles from './style.less';

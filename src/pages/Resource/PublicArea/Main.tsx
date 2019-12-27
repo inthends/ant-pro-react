@@ -5,14 +5,14 @@ import React, { useEffect, useState } from 'react';
 import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
-import { GetPublicAreas } from './PublicArea.service';
+import { GetPublicAreas } from './Main.service';
 import { GetQuickSimpleTreeAllForArea } from '@/services/commonItem';
 import { getResult } from '@/utils/networkUtils';
 
 const { Content } = Layout;
 const { Search } = Input;
 
-function PublicArea() {
+function Main() {
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   const [treeData, setTreeData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -22,9 +22,9 @@ function PublicArea() {
   const [currData, setCurrData] = useState<any>();
   const [search, setSearch] = useState<string>('');
 
-  const selectTree = (org, item, searchText) => {
-    initLoadData(item, searchText);
-    SetOrganize(item);
+  const selectTree = (pid, type, info) => {
+    initLoadData(info.node.props.dataRef, search);
+    SetOrganize(info.node.props.dataRef);
   };
 
   useEffect(() => {
@@ -83,8 +83,8 @@ function PublicArea() {
       total,
       queryJson: {
         keyword: searchText,
-        OrganizeId: org.organizeId,
-        TreeTypeId: org.id,
+        // OrganizeId: org.organizeId,
+        TreeTypeId: org.key,
         TreeType: org.type,
       },
     };
@@ -123,9 +123,9 @@ function PublicArea() {
   const initLoadData = (org, searchText) => {
     setSearch(searchText);
     const queryJson = {
-      OrganizeId: org.organizeId,
+      // OrganizeId: org.organizeId,
       keyword: searchText,
-      TreeTypeId: org.id,
+      TreeTypeId: org.key,
       TreeType: org.type,
     };
     const sidx = 'id';
@@ -141,8 +141,8 @@ function PublicArea() {
       <AsynLeftTree
         parentid={'0'}
         //treeData={treeData}
-        selectTree={(parentId, type) => {
-          selectTree(parentId, type, search);
+        selectTree={(parentId, type, info) => {
+          selectTree(parentId, type, info);
         }}
       />
       <Content style={{ paddingLeft: '18px' }} >
@@ -182,4 +182,4 @@ function PublicArea() {
   );
 }
 
-export default PublicArea;
+export default Main;

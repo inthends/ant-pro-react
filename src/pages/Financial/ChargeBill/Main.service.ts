@@ -30,8 +30,8 @@ export function GetUserRooms(data): Promise<any[]> {
   return request.get(process.env.basePath + `/Common/GetUserRooms?customerid=${data}`, {}).then(getResult as any);;
 }
 
-export function GetFeeItemDetail(feeitemid, roomid): Promise<any> {
-  return request.get(process.env.basePath + `/Common/GetFeeItemDetail?feeitemid=${feeitemid}&roomid=${roomid}`, {}).then(getResult as any);;
+export function GetFeeItemDetail(feeItemId, roomId): Promise<any> {
+  return request.get(process.env.basePath + `/Common/GetFeeItemDetail?feeItemId=${feeItemId}&roomId=${roomId}`, {}).then(getResult as any);;
 }
 
 //未收

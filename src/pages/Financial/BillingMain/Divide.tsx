@@ -3,7 +3,7 @@ import { Col, Form, Row, Modal, message, } from 'antd';
 import { TreeEntity } from '@/model/models';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { SaveDivide, GetReceivablesFeeItemTreeJson } from './BillingMain.service';
+import { SaveDivide, GetReceivablesFeeItemTreeJson } from './Main.service';
 import './style.less';
 import SelectTree from '../SelectTree';
 import LeftTree from '../LeftTree';

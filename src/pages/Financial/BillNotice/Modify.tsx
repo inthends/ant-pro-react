@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import {
   SaveBill, GetReceivablesFeeItemTreeJson,
   TestCalBill, GetNoticeTemplates, GetEntityShow
-} from './BillNotice.service';
+} from './Main.service';
 import './style.less';
 // import AsynSelectTree from '../AsynSelectTree';
 import LeftSelectTree from '../LeftSelectTree';
@@ -14,7 +14,7 @@ import SelectTree from '../SelectTree';
 import moment from 'moment';
 const { MonthPicker } = DatePicker;
 
-interface BillCheckModifyProps {
+interface ModifyProps {
   visible: boolean;
   closeDrawer(): void;
   form: WrappedFormUtils;
@@ -23,7 +23,7 @@ interface BillCheckModifyProps {
   reload(): void;
   treeData: any[];
 }
-const BillCheckModify = (props: BillCheckModifyProps) => {
+const Modify = (props: ModifyProps) => {
   const { visible, closeDrawer, form, isEdit, id, reload, treeData } = props;
   const [feeTreeData, setFeeTreeData] = useState<TreeEntity[]>([]);
   const [tempListData, setTempListData] = useState<any[]>([]);
@@ -31,6 +31,7 @@ const BillCheckModify = (props: BillCheckModifyProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const { getFieldDecorator } = form;
   const title = id ? "修改通知单" : "新增通知单";
+
   useEffect(() => {
     if (visible) {
       form.resetFields();
@@ -363,5 +364,5 @@ const BillCheckModify = (props: BillCheckModifyProps) => {
     </Drawer >
   );
 };
-export default Form.create<BillCheckModifyProps>()(BillCheckModify);
+export default Form.create<ModifyProps>()(Modify);
 

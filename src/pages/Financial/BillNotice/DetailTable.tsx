@@ -6,7 +6,7 @@ import React  from 'react';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import moment from 'moment';
 
-interface BillNoticeTableProps {
+interface DetailTableProps {
   onchange(page: any, filter: any, sort: any): any;
   loading: boolean;
   pagination: PaginationConfig;
@@ -17,7 +17,7 @@ interface BillNoticeTableProps {
   getRowSelect(record): void;
 }
 
-function BillNoticeTable(props: BillNoticeTableProps) {
+function DetailTable(props: DetailTableProps) {
   const { onchange, loading, pagination, data } = props;
   // const [selectedRowKey, setSelectedRowKey] = useState([]);
   const columns = [
@@ -118,5 +118,5 @@ function BillNoticeTable(props: BillNoticeTableProps) {
   );
 }
 
-export default Form.create<BillNoticeTableProps>()(BillNoticeTable);
+export default Form.create<DetailTableProps>()(DetailTable);
 

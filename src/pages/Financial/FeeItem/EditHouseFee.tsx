@@ -582,7 +582,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
               </Row>
 
               <Row gutter={24}>
-                <Col lg={21}>
+                <Col lg={9}>
                   <Form.Item label="用量公式">
                     {getFieldDecorator('feeFormulaOne', {
                       initialValue: infoDetail.feeFormulaOne,
@@ -598,9 +598,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                     }}>设置</Button>
                   </Form.Item>
                 </Col>
-              </Row>
-              <Row gutter={24}>
-                <Col lg={21}>
+                <Col lg={9}>
                   <Form.Item label="系数公式">
                     {getFieldDecorator('feeApportion', {
                       initialValue: infoDetail.feeApportion,
@@ -644,7 +642,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                   <Form.Item label="附加说明">
                     {getFieldDecorator('memo', {
                       initialValue: infoDetail.memo,
-                    })(<TextArea rows={6} placeholder="请输入附加说明" />)}
+                    })(<TextArea rows={4} placeholder="请输入附加说明" />)}
                   </Form.Item>
                 </Col>
               </Row>

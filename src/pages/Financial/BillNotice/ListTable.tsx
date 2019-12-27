@@ -1,14 +1,14 @@
-//账单
+//通知单
 import Page from '@/components/Common/Page';
 import { Modal, message, Divider, Form, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState } from 'react';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import { RemoveForm } from './BillNotice.service';
+import { RemoveForm } from './Main.service';
 import moment from 'moment';
 import styles from './style.less';
 
-interface BillCheckTableProps {
+interface ListTableProps {
   onchange(page: any, filter: any, sort: any): any;
   loading: boolean;
   pagination: PaginationConfig;
@@ -19,7 +19,7 @@ interface BillCheckTableProps {
   getRowSelect(records): void;
 }
 
-function BillCheckTable(props: BillCheckTableProps) {
+function ListTable(props: ListTableProps) {
   const { onchange, loading, pagination, data, reload, showCheckBill, getRowSelect } = props;
   // const [selectedRowKey, setSelectedRowKey] = useState([]);
 
@@ -63,7 +63,7 @@ function BillCheckTable(props: BillCheckTableProps) {
       }
     },
     {
-      title: '房间编号',
+      title: '单元编号',
       dataIndex: 'unitId',
       key: 'unitId',
       width: 140,
@@ -142,13 +142,22 @@ function BillCheckTable(props: BillCheckTableProps) {
       fixed: 'right',
       width: 95,
       render: (text, record) => {
-        return [
-          <span>
-            <a onClick={() => showCheckBill(record.billId)} key="show">{"查看"}</a>
-            <Divider type="vertical" />
-            <a onClick={() => doDelete(record)} key="delete" disabled={record.ifVerify == 1 ? true : false}>删除</a>
-          </span>
-        ];
+
+        if (record.ifVerify == 1) {
+          return [
+            <span>
+              <a onClick={() => showCheckBill(record.billId)} key="show">查看</a>
+            </span>
+          ];
+        } else {
+          return [
+            <span>
+              <a onClick={() => showCheckBill(record.billId)} key="show">查看</a>
+              <Divider type="vertical" />
+              <a onClick={() => doDelete(record)} key="delete">删除</a>
+            </span>
+          ];
+        }
       },
     },
   ] as ColumnProps<any>[];
@@ -182,4 +191,4 @@ function BillCheckTable(props: BillCheckTableProps) {
   );
 }
 
-export default Form.create<BillCheckTableProps>()(BillCheckTable);
+export default Form.create<ListTableProps>()(ListTable);

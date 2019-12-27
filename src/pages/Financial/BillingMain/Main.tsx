@@ -3,7 +3,7 @@ import { DefaultPagination } from '@/utils/defaultSetting';
 import { Tabs, Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { GetPageListJson, GetPageDetailListJson } from './BillingMain.service';
+import { GetPageListJson, GetPageDetailListJson } from './Main.service';
 import { GetUnitTreeAll } from '@/services/commonItem';//获取全部房间树
 import { getResult } from '@/utils/networkUtils';
 import AsynLeftTree from '../AsynLeftTree';
@@ -16,7 +16,7 @@ import Show from './Show';
 const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
-function BillingMain() {
+function Main() {
   const [organize, SetOrganize] = useState<any>({});
   // const [treeSearch, SetTreeSearch] = useState<any>({});
   const [id, setId] = useState<string>();
@@ -385,4 +385,4 @@ function BillingMain() {
     </Layout>
   );
 }
-export default BillingMain;
+export default Main;

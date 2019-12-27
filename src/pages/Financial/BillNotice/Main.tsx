@@ -3,20 +3,21 @@ import { DefaultPagination } from '@/utils/defaultSetting';
 import { message, Dropdown, Menu, Tabs, Button, Icon, Input, Layout, Modal, Select } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { GetBillPageData, ChargeFeePageData, BatchRemoveForm, GetNoticeTemplates, BatchAudit } from './BillNotice.service';
+import { GetBillPageData, ChargeFeePageData, BatchRemoveForm, GetNoticeTemplates, BatchAudit } from './Main.service';
 import AsynLeftTree from '../AsynLeftTree';
-import BillCheckTable from './BillCheckTable';
-import BillNoticeTable from './BillNoticeTable';
-import BillCheckModify from './BillCheckModify';
-import BillCheckVerify from './BillCheckVerify';
-import BillCheckShow from './BillCheckShow';
+import ListTable from './ListTable';
+import DetailTable from './DetailTable';
+import Modify from './Modify';
+import Verify from './Verify';
+import Show from './Show';
 import { getResult } from '@/utils/networkUtils';
 import { GetUnitTreeAll } from '@/services/commonItem';//获取全部房间树
 const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
 // const { Option } = Select;
-function BillNotice() {
+
+function Main() {
   const [organize, SetOrganize] = useState<any>({});
   // const [treeSearch, SetTreeSearch] = useState<any>({});
   const [id, setId] = useState<string>();
@@ -466,7 +467,7 @@ function BillNotice() {
               </Button>
             </div>
 
-            <BillCheckTable
+            <ListTable
               onchange={(paginationConfig, filters, sorter) => {
                 loadBillCheckData(paginationConfig, sorter)
               }
@@ -508,7 +509,7 @@ function BillNotice() {
                 onSearch={value => loadBillNoticeData(value)}
               />
             </div>
-            <BillNoticeTable
+            <DetailTable
               showModify={(id) => {
                 setId(id);
               }}
@@ -531,7 +532,7 @@ function BillNotice() {
           </TabPane>
         </Tabs>
       </Content>
-      <BillCheckModify
+      <Modify
         visible={modifyVisible}
         closeDrawer={closeModify}
         id={id}
@@ -539,14 +540,14 @@ function BillNotice() {
         isEdit={true}
         reload={() => initBillCheckLoadData('', '')}
       />
-      <BillCheckShow
+      <Show
         visible={showCheckBillVisible}
         closeDrawer={() => {
           setShowCheckBillVisible(false);
         }}
         id={id}
       />
-      <BillCheckVerify
+      <Verify
         vertifyVisible={vertifyVisible}
         closeVerify={closeVerify}
         ifVerify={ifVerify}
@@ -556,4 +557,4 @@ function BillNotice() {
     </Layout>
   );
 }
-export default BillNotice;
+export default Main;

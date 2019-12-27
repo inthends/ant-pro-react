@@ -3,7 +3,7 @@ import { Spin,Col, Form, Row, Modal, message, } from 'antd';
 import { TreeEntity } from '@/model/models';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { SaveUnitFee, GetReceivablesFeeItemTreeJson } from './BillingMain.service';
+import { SaveUnitFee, GetReceivablesFeeItemTreeJson } from './Main.service';
 import './style.less';
 import SelectTree from '../SelectTree';
 import LeftTree from '../LeftTree';
@@ -43,7 +43,7 @@ const SelectHouse = (props: SelectHouseProps) => {
 
   return (
     <Modal
-      title="选择需要计费的房屋"
+      title="选择需要计费的房屋和费项"
       visible={visible}
       okText="确认"
       cancelText="取消"

@@ -10,7 +10,6 @@ import {
 import LeftTree from '../LeftTree';
 import moment from 'moment';
 import styles from './style.less';
-
 const { Option } = Select;
 
 interface ModifyProps {
@@ -88,7 +87,6 @@ const Modify = (props: ModifyProps) => {
             GetUserRooms(customerid).then(urooms => {
               setUnitIds(urooms);
             });
-
             //赋值
             setInfoDetail(info);
           })
@@ -111,11 +109,10 @@ const Modify = (props: ModifyProps) => {
                   setInfoDetail(info);
                   form.resetFields();
                 }
-              }); 
+              });
           }
           // return info;
         });
-
 
         // .then(infoDetail => {
         //   GetUserRooms(getRelationId(infoDetail.relationId))
@@ -190,9 +187,8 @@ const Modify = (props: ModifyProps) => {
 
   const onSave = () => {
     form.validateFields((errors, values) => {
-      if (infoDetail.feeItemId == null || infoDetail.feeItemId == '') {
-
-      }
+      // if (infoDetail.feeItemId == null || infoDetail.feeItemId == '') {
+      // }
       if (!errors) {
         var guid = getGuid();
         var unit = {
@@ -216,7 +212,6 @@ const Modify = (props: ModifyProps) => {
           unit = Object.assign({}, unit, { Id: id, keyValue: id });
           SaveDetail(unit).then(res => {
             close(true);
-
           })
         } else {
           let units: any[];
@@ -435,7 +430,8 @@ const Modify = (props: ModifyProps) => {
                     })(
                       <InputNumber
                         style={{ width: '100%' }}
-                        readOnly={!infoDetail.isEditTemp}
+                        disabled={!infoDetail.isEditTemp}
+                        placeholder='请输入单价'
                         min={0}
                         precision={4}
                         onChange={value => {
@@ -447,7 +443,6 @@ const Modify = (props: ModifyProps) => {
                           Call({ unitId: unitId, feeItemId: infoDetail.feeItemId, price: value, quantity: quantity, number: number }).then(res => {
                             form.setFieldsValue({ amount: res });
                           });
-
                         }}
                       ></InputNumber>
                     )}
@@ -462,7 +457,9 @@ const Modify = (props: ModifyProps) => {
                       initialValue: infoDetail.quantity,
                       rules: [{ required: true, message: '请输入数量' }]
                     })(
-                      <Input min={0} disabled style={{ width: '100%' }} ></Input>
+                      <Input min={0} disabled style={{ width: '100%' }}
+                        placeholder='请输入数量'
+                      ></Input>
                     )}
                   </Form.Item>
                 </Col>
@@ -475,7 +472,10 @@ const Modify = (props: ModifyProps) => {
                       initialValue: infoDetail.number,
                       rules: [{ required: true, message: '请输入系数' }]
                     })(
-                      <InputNumber min={0} style={{ width: '100%' }} disabled={edit ? false : true}
+                      <InputNumber min={0}
+                        placeholder='请输入系数'
+                        style={{ width: '100%' }}
+                        disabled={edit ? false : true}
                         onChange={(value) => {
                           // if (value != undefined) {
                           //   var amount = infoDetail.price * infoDetail.quantity * value;
@@ -504,7 +504,7 @@ const Modify = (props: ModifyProps) => {
                       initialValue: infoDetail.price == null || infoDetail.quantity == null || infoDetail.number == null ? 0 : infoDetail.price * infoDetail.quantity * infoDetail.number,
                       rules: [{ required: true, message: '=请选择=' }]
                     })(
-                      <InputNumber precision={2} readOnly style={{ width: '100%' }} ></InputNumber>
+                      <InputNumber precision={2} disabled style={{ width: '100%' }} ></InputNumber>
                     )}
                   </Form.Item>
                 </Col>
@@ -516,7 +516,10 @@ const Modify = (props: ModifyProps) => {
                       initialValue: infoDetail.cycleValue,
                       rules: [{ required: true, message: '请输入周期' }]
                     })(
-                      <InputNumber disabled={edit ? false : true} style={{ width: '100%' }}
+                      <InputNumber
+                        placeholder='请输入周期'
+                        disabled={edit ? false : true}
+                        style={{ width: '100%' }}
                         onChange={value => {
                           if (value != undefined) {
                             setEndDate(infoDetail.beginDate, value, infoDetail.cycleType);
@@ -597,7 +600,7 @@ const Modify = (props: ModifyProps) => {
                       initialValue: infoDetail.deadline == null ? moment(new Date()) : moment(infoDetail.deadline),
                       rules: [{ required: true, message: '请选择收款截止日期' }]
                     })(
-                      <DatePicker disabled={true} style={{ width: '100%' }} />
+                      <DatePicker disabled={!infoDetail.isModifyDate} style={{ width: '100%' }} />
                     )}
                   </Form.Item>
                 </Col>
@@ -607,7 +610,7 @@ const Modify = (props: ModifyProps) => {
                       initialValue: infoDetail.billDate == null ? moment(new Date()) : moment(infoDetail.billDate),
                       rules: [{ required: true, message: '请选择账单日' }]
                     })(
-                      <DatePicker disabled={true} style={{ width: '100%' }} />
+                      <DatePicker disabled={!infoDetail.isModifyDate} style={{ width: '100%' }} />
                     )}
                   </Form.Item>
                 </Col>
