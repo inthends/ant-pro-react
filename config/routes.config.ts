@@ -125,7 +125,7 @@ export default [
           {
             name: 'publicarea',
             path: '/resource/publicarea',
-            component: './Resource/PublicArea/PublicArea',
+            component: './Resource/PublicArea/Main',
           },
           {
             name: 'parkinglot',
@@ -168,12 +168,12 @@ export default [
           {
             name: 'billingmain',
             path: '/financial/billingmain',
-            component: './Financial/BillingMain/BillingMain',
+            component: './Financial/BillingMain/Main',
           },
           {
             name: 'billnotice',
             path: '/financial/billnotice',
-            component: './Financial/BillNotice/BillNotice',
+            component: './Financial/BillNotice/Main',
           },
           {
             name: 'chargebill',
