@@ -176,7 +176,8 @@ class SettingDrawer extends Component<SettingDrawerProps, SettingDrawerState> {
     const nextState = { ...settings };
     nextState[key] = value;
     if (key === 'layout') {
-      nextState.contentWidth = value === 'topmenu' ? 'Fixed' : 'Fluid';
+      // nextState.contentWidth = value === 'topmenu' ? 'Fixed' : 'Fluid';
+      nextState.contentWidth = value === 'topmenu' ? 'Fluid' : 'Fixed';//默认流式
     } else if (key === 'fixedHeader' && !value) {
       nextState.autoHideHeader = false;
     }
