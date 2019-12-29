@@ -501,10 +501,11 @@ const Modify = (props: ModifyProps) => {
                 <Col span={24}>
                   <Form.Item label="金额" required labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} >
                     {getFieldDecorator('amount', {
-                      initialValue: infoDetail.price == null || infoDetail.quantity == null || infoDetail.number == null ? 0 : infoDetail.price * infoDetail.quantity * infoDetail.number,
+                      initialValue: infoDetail.amount,
+                      // initialValue: infoDetail.price == null || infoDetail.quantity == null || infoDetail.number == null ? 0 : infoDetail.price * infoDetail.quantity * infoDetail.number,
                       rules: [{ required: true, message: '=请选择=' }]
                     })(
-                      <InputNumber precision={2} disabled style={{ width: '100%' }} ></InputNumber>
+                      <InputNumber precision={2} readOnly style={{ width: '100%' }} ></InputNumber>
                     )}
                   </Form.Item>
                 </Col>

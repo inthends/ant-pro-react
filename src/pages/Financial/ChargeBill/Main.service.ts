@@ -87,6 +87,13 @@ export function Charge(data): Promise<any> {
     .then(getResult as any);
 }
 
+//生成二维码
+export function QrCode(data): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Receivable/QrCode`, { data: objToFormdata(data) })
+    .then(getResult as any);
+}
+
 //已收
 export function ChargeFeePageData(data): Promise<any> {
   return request.post(process.env.basePath + `/Receivable/ChargeFeePageData`, { data: objToFormdata(data) }).then(getResult as any);
@@ -232,7 +239,7 @@ export function GetTemplates(unitId): Promise<any> {
   return request.get(process.env.basePath + `/Template/GetTemplates?unitId=${unitId}`).then(getResult as any);
 }
 
-// 收款
+// 收款抹零
 export function Call(data): Promise<any> {
   return request
     .post(process.env.basePath + `/BillingMain/Call`, { data: objToFormdata(data) })

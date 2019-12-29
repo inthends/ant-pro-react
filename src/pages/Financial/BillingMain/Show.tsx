@@ -258,7 +258,7 @@ const Show = (props: ShowProps) => {
       className="offsetVerify"
       title='查看计费单'
       placement="right"
-      width={700}
+      width={850}
       onClose={close}
       visible={visible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}

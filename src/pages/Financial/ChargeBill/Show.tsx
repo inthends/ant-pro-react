@@ -36,7 +36,7 @@ const Show = (props: ShowProps) => {
         GetEntityShow(id).then(res => {
           setInfoDetail(res.entity);
           setLinkno(res.linkno);
-          initLoadFeeDetail(res.entity.billId);
+          initLoadFeeDetail(res.entity.billId);  
           setLoading(false);
         })
       }
@@ -288,8 +288,7 @@ const Show = (props: ShowProps) => {
                   {infoDetail.memo}
                 </Form.Item>
               </Col>
-            </Row>
-
+            </Row> 
             <Table
               // title={() => '费用明细'}
               size="middle"
@@ -300,6 +299,9 @@ const Show = (props: ShowProps) => {
               scroll={{ y: 500, x: 1100 }}
               loading={loading}
             />
+
+
+
           </Form>
         </Card>
       </Spin>

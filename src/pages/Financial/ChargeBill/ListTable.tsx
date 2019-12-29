@@ -5,7 +5,7 @@ import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import { CheckRebateFee, InvalidBillDetailForm, Charge } from './Main.service';
+import { CheckRebateFee, InvalidBillDetailForm, Charge, QrCode } from './Main.service';
 // import styles from './style.less';
 const { Option } = Select;
 
@@ -31,15 +31,17 @@ function ListTable(props: ListTableProps) {
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
   };
+
   const [hasSelected, setHasSelected] = useState<boolean>();
-
-
   //是否抹零
   const [isML, setIsML] = useState<boolean>(false);
   //抹零类型
   const [mlType, setMlType] = useState<any>('1');
   //小数位处理
   const [mlScale, setMlScale] = useState<any>('1');
+
+  //是否生成收款码
+  const [isQrcode, setIsQrcode] = useState<boolean>(false);
 
   useEffect(() => {
     setSelectedRowKeys([]);
@@ -237,9 +239,7 @@ function ListTable(props: ListTableProps) {
   const [sumEntity, setSumEntity] = useState();
   // const [unitId, setUnitId] = useState();
   // const [customerName, setCustomerName] = useState();
-
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
-
   const onSelectChange = (selectedRowKeys, selectedRows) => {
 
     if (selectedRowKeys.length > 0) {
@@ -326,6 +326,22 @@ function ListTable(props: ListTableProps) {
 
             if (Number(sumEntity.sumlastAmount) != Number(info.payAmountA + info.payAmountB + info.payAmountC)) {
               message.warning('本次收款金额小于本次选中未收金额合计，不允许收款，请拆费或者重新选择收款项');
+              return;
+            }
+
+            //弹出支付宝扫码
+            if (isQrcode) {
+
+              QrCode(info).then(res => {
+
+                Modal.info({
+                  title: "请扫码",
+                  okText: "确认",
+                  cancelText: "取消",
+                  content: res
+                }); 
+              });
+
               return;
             }
 
@@ -490,53 +506,62 @@ function ListTable(props: ListTableProps) {
             </Col>
           </Row>
 
-          <Button type="primary" disabled={isDisabled} onClick={charge}>收款确认</Button>
+          <Row>
+            <Button type="primary" disabled={isDisabled} onClick={charge}>收款确认</Button>
 
-          <Checkbox
-            style={{ marginLeft: '10px' }}
-            onChange={(e) => { setIsML(e.target.checked); }}
-          >自动抹零</Checkbox>
+            <Checkbox
+              style={{ marginLeft: '10px' }}
+              onChange={(e) => { setIsQrcode(e.target.checked); }}
+            >生成收款码</Checkbox>
 
-          <Select style={{ marginLeft: '10px', width: '110px' }}
-            defaultValue='1'
-            onChange={(value) => { setMlType(value); }}
-          >
-            <Option value='1'>抹去角和分</Option>
-            <Option value='2'>抹去角</Option>
-            <Option value='3'>抹去分</Option>
-          </Select>
-          <Select style={{ marginLeft: '10px', width: '96px' }}
-            defaultValue='1'
-            onChange={(value) => { setMlScale(value); }}
-          >
-            <Option value='1'>四舍五入</Option>
-            <Option value='2'>直接舍去</Option>
-            <Option value='3'>有数进一</Option>
-          </Select>
+            <Checkbox
+              style={{ marginLeft: '10px' }}
+              onChange={(e) => { setIsML(e.target.checked); }}
+            >自动抹零</Checkbox>
 
-          <span style={{ marginLeft: 8, color: "red" }}>
-            {hasSelected ? `应收金额：${sumEntity.sumAmount} ，
+            <Select style={{ marginLeft: '10px', width: '110px' }}
+              defaultValue='1'
+              onChange={(value) => { setMlType(value); }}
+            >
+              <Option value='1'>抹去角和分</Option>
+              <Option value='2'>抹去角</Option>
+              <Option value='3'>抹去分</Option>
+            </Select>
+            <Select style={{ marginLeft: '10px', width: '96px' }}
+              defaultValue='1'
+              onChange={(value) => { setMlScale(value); }}
+            >
+              <Option value='1'>四舍五入</Option>
+              <Option value='2'>直接舍去</Option>
+              <Option value='3'>有数进一</Option>
+            </Select>
+          </Row>
+
+          <Row style={{ marginTop: '10px' }}>
+            <span style={{ marginLeft: 8, color: "red" }}>
+              {hasSelected ? `应收金额：${sumEntity.sumAmount} ，
             减免金额：${sumEntity.sumreductionAmount}，
             冲抵金额：${sumEntity.sumoffsetAmount}，
             未收金额：${sumEntity.sumlastAmount}` : ''}
-          </span>
+            </span>
+          </Row>
+          <Table
+            bordered={false}
+            size="middle"
+            dataSource={data}
+            columns={columns}
+            rowKey={record => record.id}
+            pagination={pagination}
+            scroll={{ y: 500, x: 1850 }}
+            onChange={(pagination: PaginationConfig, filters, sorter) =>
+              changePage(pagination, filters, sorter)
+            }
+            loading={loading}
+            rowSelection={rowSelection}
+          />
         </Card>
       </Form>
-      <Table
-        bordered={false}
-        size="middle"
-        dataSource={data}
-        columns={columns}
-        rowKey={record => record.id}
-        pagination={pagination}
-        scroll={{ y: 500, x: 1850 }}
-        onChange={(pagination: PaginationConfig, filters, sorter) =>
-          changePage(pagination, filters, sorter)
-        }
-        loading={loading}
-        rowSelection={rowSelection}
-      />
-    </Page>
+    </Page >
   );
 }
 

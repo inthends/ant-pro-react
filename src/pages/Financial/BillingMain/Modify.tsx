@@ -407,7 +407,7 @@ const Modify = (props: ModifyProps) => {
     <Drawer
       title={title}
       placement="right"
-      width={750}
+      width={850}
       onClose={close}
       visible={modifyVisible}
       style={{ height: 'calc(100vh-50px)' }}
