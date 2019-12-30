@@ -5,7 +5,7 @@ import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import { CheckRebateFee, InvalidBillDetailForm, Charge, QrCode } from './Main.service';
+import { CheckRebateFee, InvalidBillDetailForm, Charge, QrCode, QrCodeCharge } from './Main.service';
 // import styles from './style.less';
 const { Option } = Select;
 
@@ -337,18 +337,17 @@ function ListTable(props: ListTableProps) {
                 Modal.confirm({
                   title: "请扫码",
                   okText: "确认",
-                  cancelText: "取消", 
+                  cancelText: "取消",
                   content: (<img src={res}></img>),
                   onOk() {
 
                     //收款
-                    Charge(info).then(billId => {
+                    QrCodeCharge(info).then(billId => {
                       message.success('收款成功');
                       reload();
                       //弹出查看页面
                       showDetail(billId);
                     });
-
 
                   },
 

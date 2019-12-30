@@ -87,6 +87,14 @@ export function Charge(data): Promise<any> {
     .then(getResult as any);
 }
 
+//二维码收款
+export function QrCodeCharge(data): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Receivable/QrCodeCharge`, { data: objToFormdata(data) })
+    .then(getResult as any);
+}
+
+
 //生成二维码
 export function QrCode(data): Promise<any> {
   return request
