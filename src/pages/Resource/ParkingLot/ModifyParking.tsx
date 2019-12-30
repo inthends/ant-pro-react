@@ -150,7 +150,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
       title={title}
       placement="right"
       width={600}
-      onClose={close}
+      onClose={close} 
       visible={modifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
@@ -407,6 +407,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
           padding: '10px 16px',
           background: '#fff',
           textAlign: 'right',
+          zIndex: 999,
         }}
       >
         <Button onClick={close} style={{ marginRight: 8 }}>

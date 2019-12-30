@@ -334,23 +334,44 @@ function ListTable(props: ListTableProps) {
 
               QrCode(info).then(res => {
 
-                Modal.info({
+                Modal.confirm({
                   title: "请扫码",
                   okText: "确认",
-                  cancelText: "取消",
-                  content: res
-                }); 
+                  cancelText: "取消", 
+                  content: (<img src={res}></img>),
+                  onOk() {
+
+                    //收款
+                    Charge(info).then(billId => {
+                      message.success('收款成功');
+                      reload();
+                      //弹出查看页面
+                      showDetail(billId);
+                    });
+
+
+                  },
+
+                  onCancel() {
+
+                  }
+
+                });
+
               });
 
-              return;
+            } else {
+              //直接收款
+              Charge(info).then(billId => {
+                message.success('收款成功');
+                reload();
+                //弹出查看页面
+                showDetail(billId);
+              });
+
             }
 
-            Charge(info).then(billId => {
-              message.success('收款成功');
-              reload();
-              //弹出查看页面
-              showDetail(billId);
-            });
+
           }
         });
       }
