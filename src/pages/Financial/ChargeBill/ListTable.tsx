@@ -347,7 +347,7 @@ function ListTable(props: ListTableProps) {
                       //弹出查看页面
                       showDetail(billId);
                     });
-                  }, 
+                  },
                   onCancel() {
 
                   }
@@ -363,7 +363,7 @@ function ListTable(props: ListTableProps) {
                 reload();
                 //弹出查看页面
                 showDetail(billId);
-              }); 
+              });
             }
           }
         });
@@ -531,10 +531,12 @@ function ListTable(props: ListTableProps) {
             <Checkbox
               style={{ marginLeft: '10px' }}
               onChange={(e) => { setIsML(e.target.checked); }}
+              disabled={isQrcode}
             >自动抹零</Checkbox>
 
             <Select style={{ marginLeft: '10px', width: '110px' }}
               defaultValue='1'
+              disabled={isQrcode}
               onChange={(value) => { setMlType(value); }}
             >
               <Option value='1'>抹去角和分</Option>
@@ -543,6 +545,7 @@ function ListTable(props: ListTableProps) {
             </Select>
             <Select style={{ marginLeft: '10px', width: '96px' }}
               defaultValue='1'
+              disabled={isQrcode}
               onChange={(value) => { setMlScale(value); }}
             >
               <Option value='1'>四舍五入</Option>

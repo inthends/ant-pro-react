@@ -38,7 +38,7 @@ const Modify = (props: ModifyProps) => {
   //   },
   // ]);
   const [orgs, setOrgs] = useState<TreeNode[]>();
-  let initData = data ? data : { enabledMark: 1 }; 
+  let initData = data ? data : { enabledMark: 1 };
 
   // initData.expDate = initData.expDate ? initData.expDate : new Date();
   const baseFormProps = { form, initData };
@@ -56,7 +56,7 @@ const Modify = (props: ModifyProps) => {
     if (modifyData.foundedTime != null)
       modifyData.foundedTime = modifyData.foundedTime.format('YYYY-MM-DD');
     //return SaveForm(modifyData);
- 
+
     return SaveForm(modifyData).then(() => {
       GetOrgsWithNoGLC().then(res => {
         setOrgs(res);
@@ -209,19 +209,19 @@ const Modify = (props: ModifyProps) => {
           </Row>
 
           <Row gutter={24}>
-            <ModifyItem {...baseFormProps} field="lklMchId" label="拉卡拉商户号"></ModifyItem>
-            <ModifyItem {...baseFormProps} field="swiftMchId" label="威富通商户号"></ModifyItem>
+            <ModifyItem lg={24} {...baseFormProps} field="lklMchId" label="拉卡拉商户号"></ModifyItem>
+            <ModifyItem lg={24} {...baseFormProps} field="swiftMchId" label="威富通商户号"></ModifyItem> 
           </Row>
 
-          <Row gutter={24}>
-            <ModifyItem {...baseFormProps} field="lklPlatPublicKey" label="拉卡拉公钥"></ModifyItem>
-            {/* <ModifyItem {...baseFormProps} field="lklMchPrivateKey" label="拉卡拉私钥"></ModifyItem> */}
-          </Row>
+          {/* <Row gutter={24}> 
+           <ModifyItem {...baseFormProps} field="lklPlatPublicKey" label="拉卡拉公钥"></ModifyItem> 
+            <ModifyItem {...baseFormProps} field="lklMchPrivateKey" label="拉卡拉私钥"></ModifyItem>
+          </Row>*/}
 
           <Row gutter={24}>
             <ModifyItem {...baseFormProps} field="swiftPlatPublicKey" label="威富通公钥"></ModifyItem>
             <ModifyItem {...baseFormProps} field="swiftMchPrivateKey" label="威富通私钥"></ModifyItem>
-          </Row>
+          </Row> 
 
           <Row gutter={24}>
             <ModifyItem
