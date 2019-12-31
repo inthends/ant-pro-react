@@ -340,7 +340,6 @@ function ListTable(props: ListTableProps) {
                   cancelText: "取消",
                   content: (<img src={res}></img>),
                   onOk() {
-
                     //收款
                     QrCodeCharge(info).then(billId => {
                       message.success('收款成功');
@@ -348,9 +347,7 @@ function ListTable(props: ListTableProps) {
                       //弹出查看页面
                       showDetail(billId);
                     });
-
-                  },
-
+                  }, 
                   onCancel() {
 
                   }
@@ -366,11 +363,8 @@ function ListTable(props: ListTableProps) {
                 reload();
                 //弹出查看页面
                 showDetail(billId);
-              });
-
+              }); 
             }
-
-
           }
         });
       }

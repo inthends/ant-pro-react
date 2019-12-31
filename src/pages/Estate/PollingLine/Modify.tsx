@@ -3,7 +3,7 @@ import ModifyItem from "@/components/BaseModifyDrawer/ModifyItem";
 import { message, Divider, Icon, Table, Modal, Button, Input, Form, Row, Card } from "antd";
 import { WrappedFormUtils } from "antd/lib/form/Form";
 import React, { useState, useEffect } from 'react';
-import { SaveForm, GetLinePonitPageListByID, RemoveLinePoint, RemoveLinePointAll } from "./Main.service";
+import { SaveFormLine, GetLinePonitPageListByID, RemoveLinePoint, RemoveLinePointAll } from "./Main.service";
 import { GetOrgEsates } from '@/services/commonItem';
 import { TreeNode } from 'antd/lib/tree-select';
 import { DefaultPagination } from '@/utils/defaultSetting';
@@ -43,9 +43,9 @@ const Modify = (props: ModifyProps) => {
     let modifyData = {
       ...initData, ...dataDetail,
       keyValue: lineId,
-      type: isAdd ? 1 : 0
+      type: isAdd
     };
-    return SaveForm(modifyData);
+    return SaveFormLine(modifyData);
   };
 
   const GetGuid = () => {
@@ -232,6 +232,10 @@ const Modify = (props: ModifyProps) => {
               treeData={orgs}
               disabled={initData.pStructId != undefined}
               rules={[{ required: true, message: '请选择所属楼盘' }]}
+              onChange={(value, item, option) => {
+                const organizeId = option.triggerNode.props.parentId;
+                form.setFieldsValue({ organizeId: organizeId });
+              }}
             ></ModifyItem>
 
             {getFieldDecorator('organizeId', {

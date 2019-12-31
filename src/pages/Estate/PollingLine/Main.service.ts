@@ -2,13 +2,9 @@ import { getResult, objToFormdata } from "@/utils/networkUtils";
 import request from "@/utils/request";
 import { ResponseObject, TreeEntity } from '@/model/models';
 
-// 新增修改
-export function SaveForm(data): Promise<any> {
-  return request
-    .post(process.env.basePath + `/Polling/SaveForm`, {
-      data: objToFormdata(data)
-    })
-    .then(getResult as any);
+// 新增修改巡检路线
+export function SaveFormLine(data): Promise<any> {
+  return request.post(process.env.basePath + `/Polling/SaveFormLine`, {data: objToFormdata(data)}).then(getResult as any);
 }
 
 //删除
