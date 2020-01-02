@@ -185,7 +185,7 @@ function Main() {
       pageIndex,
       pageSize,
       total,
-      queryJson: { FeeKind: FeeKind, FeeType: FeeType, keyword: search, FeeItemID: feeItemId },
+      queryJson: { FeeKind: FeeKind, FeeType: FeeType, keyword: search, feeItemId: feeItemId },
     };
     if (sorter) {
       let { field, order } = sorter;
