@@ -183,7 +183,7 @@ export function GetEntityShow(keyValue): Promise<any> {
   return request.get(process.env.basePath + `/Receivable/GetEntityShow?keyValue=${keyValue}`).then(getResult as any);
 }
 
-//获取费用详情
+//获取费用详情列表
 export function ChargeFeeDetail(data): Promise<any> {
   return request.post(process.env.basePath + `/Receivable/ChargeFeeDetail`, { data: objToFormdata(data) }).then(getResult as any);
 }

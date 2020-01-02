@@ -45,7 +45,6 @@ function ListTable(props: ListTableProps) {
   //二维码地址
   // const [qrUrl, setQrUrl] = useState<any>('1');
 
-
   //是否生成收款码
   const [isQrcode, setIsQrcode] = useState<boolean>(false);
 
@@ -178,7 +177,7 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'allname',
       key: 'allname',
       align: 'center',
-      width: 240
+      width: 280
     },
 
     {

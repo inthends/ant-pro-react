@@ -66,7 +66,7 @@ const Show = (props: ShowProps) => {
       title: '收费项目',
       dataIndex: 'feeName',
       key: 'feeName',
-      width: 100,
+      width: 150,
       sorter: true,
     },
     {
@@ -94,7 +94,21 @@ const Show = (props: ShowProps) => {
       dataIndex: 'amount',
       key: 'amount',
       width: 100,
-    }, {
+    }, 
+    
+    {
+      title: '减免金额',
+      dataIndex: 'reductionAmount',
+      key: 'reductionAmount',
+      width: 80,
+    },
+    {
+      title: '冲抵金额',
+      dataIndex: 'offsetAmount',
+      key: 'offsetAmount',
+      width: 80,
+    },
+    {
       title: '本次实收金额',
       dataIndex: 'payAmount',
       key: 'payAmount',
@@ -296,7 +310,7 @@ const Show = (props: ShowProps) => {
               columns={columns}
               rowKey={record => record.id}
               pagination={pagination}
-              scroll={{ y: 500, x: 1100 }}
+              scroll={{ y: 500, x: 1300 }}
               loading={loading}
             />
 
