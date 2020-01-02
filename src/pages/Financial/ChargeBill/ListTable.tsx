@@ -5,7 +5,9 @@ import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import { CheckRebateFee, InvalidBillDetailForm, Charge, QrCode, QrCodeCharge } from './Main.service';
+import { CheckRebateFee, InvalidBillDetailForm, Charge, GetQrCode, QrCodeCharge } from './Main.service';
+// import QRCode from 'qrcode.react';
+
 // import styles from './style.less';
 const { Option } = Select;
 
@@ -39,6 +41,10 @@ function ListTable(props: ListTableProps) {
   const [mlType, setMlType] = useState<any>('1');
   //小数位处理
   const [mlScale, setMlScale] = useState<any>('1');
+
+  //二维码地址
+  // const [qrUrl, setQrUrl] = useState<any>('1');
+
 
   //是否生成收款码
   const [isQrcode, setIsQrcode] = useState<boolean>(false);
@@ -332,12 +338,17 @@ function ListTable(props: ListTableProps) {
             //弹出支付宝扫码
             if (isQrcode) {
 
-              QrCode(info).then(res => {
-
+              GetQrCode(info).then(res => {
+                // setQrUrl(res);  
                 Modal.confirm({
                   title: "请扫码",
-                  okText: "确认",
-                  cancelText: "取消",
+                  // okText: "确认",
+                  // cancelText: "取消", 
+                  // content: (<QRCode
+                  //   value={res} //value参数为生成二维码的链接
+                  //   size={200} //二维码的宽高尺寸
+                  //   fgColor="#000000"  //二维码的颜色 
+                  // />) 
                   content: (<img src={res}></img>),
                   onOk() {
                     //收款
@@ -348,9 +359,8 @@ function ListTable(props: ListTableProps) {
                       showDetail(billId);
                     });
                   },
-                  onCancel() {
-
-                  }
+                  onCancel() { 
+                  }  
 
                 });
 
@@ -370,6 +380,9 @@ function ListTable(props: ListTableProps) {
       }
     });
   };
+ 
+
+  //轮询支付回调数据
 
   return (
     <Page>
@@ -578,6 +591,7 @@ function ListTable(props: ListTableProps) {
           />
         </Card>
       </Form>
+
     </Page >
   );
 }

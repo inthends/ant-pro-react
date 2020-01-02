@@ -96,7 +96,7 @@ export function QrCodeCharge(data): Promise<any> {
 
 
 //生成二维码
-export function QrCode(data): Promise<any> {
+export function GetQrCode(data): Promise<any> {
   return request
     .post(process.env.basePath + `/Receivable/QrCode`, { data: objToFormdata(data) })
     .then(getResult as any);
