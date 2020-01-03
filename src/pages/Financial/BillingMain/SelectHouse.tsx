@@ -1,12 +1,13 @@
 //添加编辑费项
-import { Spin,Col, Form, Row, Modal, message, } from 'antd';
+import { DatePicker, Spin, Col, Form, Row, Modal, message, } from 'antd';
 import { TreeEntity } from '@/model/models';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { SaveUnitFee, GetReceivablesFeeItemTreeJson } from './Main.service';
+import { CalcUnitFee, GetReceivablesFeeItemTreeJson } from './Main.service';
 import './style.less';
 import SelectTree from '../SelectTree';
 import LeftTree from '../LeftTree';
+import moment from 'moment';
 
 interface SelectHouseProps {
   visible: boolean;
@@ -19,7 +20,8 @@ interface SelectHouseProps {
 }
 
 const SelectHouse = (props: SelectHouseProps) => {
-  const { visible, closeModal, feeDetail, getBillID, treeData } = props;
+  const { visible, closeModal, feeDetail, getBillID, treeData, form } = props;
+  const { getFieldDecorator } = form;
   const [feeTreeData, setFeeTreeData] = useState<TreeEntity[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   useEffect(() => {
@@ -40,6 +42,11 @@ const SelectHouse = (props: SelectHouseProps) => {
 
   const [unitData, setUnitData] = useState<string[]>([]);
   const [selectedFeeId, setSelectedFeeId] = useState<string>('');
+  // const [startDate, setStartDate] = useState<string>();
+
+  // const selectStartDate = (date) => {
+  //   setStartDate(date);
+  // };
 
   return (
     <Modal
@@ -49,24 +56,45 @@ const SelectHouse = (props: SelectHouseProps) => {
       cancelText="取消"
       onCancel={() => closeModal()}
       onOk={() => {
-        if (unitData.length == 0) {
-          message.warning('请选择房间');
-        } else {
-          if (selectedFeeId == null || selectedFeeId == '') {
-            message.warning('请选择费项');
-          } else {
-            setLoading(true);
-            var newdata = Object.assign({}, feeDetail, { units: JSON.stringify(unitData), feeitemid: selectedFeeId });
-            SaveUnitFee(newdata).then(res => {
-              closeModal();
-              //message.success('数据保存成功');
-              getBillID(feeDetail.keyValue);
-              setLoading(false);
-            }).catch(() => {
-              message.warning('保存失败！');
-            });
+
+        form.validateFields((errors, values) => {
+
+          if (!errors) {
+
+            if (unitData.length == 0) {
+              message.warning('请选择房间');
+            } else {
+              if (selectedFeeId == null || selectedFeeId == '') {
+                message.warning('请选择费项');
+              } else {
+                setLoading(true);
+                var newdata = Object.assign({}, feeDetail, {
+                  units: JSON.stringify(unitData),
+                  feeItemId: selectedFeeId,
+                  startDate: values.startDate.format('YYYY-MM-DD')
+                });
+                CalcUnitFee(newdata).then(res => {
+
+                  if (res.data != null) {
+                    message.warning(res.data);
+                    setLoading(false);
+                  } else {
+                    message.success('数据保存成功');
+                    closeModal();
+                    getBillID(feeDetail.keyValue);
+                    setLoading(false);
+                  }
+                })
+
+                // .catch(() => {
+                // message.warning('保存失败！');
+                // });
+
+              }
+            }
           }
-        }
+        })
+
       }}
       destroyOnClose={true}
       bodyStyle={{ background: '#f6f7fb' }}
@@ -74,8 +102,28 @@ const SelectHouse = (props: SelectHouseProps) => {
     >
       {/* <Row style={{ height: '600px', overflow: 'hidden', marginTop: '5px', backgroundColor: 'rgb(255,255,255)' }}> */}
       <Spin tip="数据处理中..." spinning={loading}>
+
+        <Form layout='inline' hideRequiredMark >
+          <Row gutter={24}>
+            <Col  >
+              <Form.Item label="计费起始日在此之前" required >
+                {getFieldDecorator('startDate', {
+                  initialValue: moment(new Date()),
+                  rules: [{ required: true, message: '请选择日期' }],
+                })(
+                  <DatePicker style={{ width: '132px' }}
+                  //  onChange={(date, dateString) => selectStartDate(dateString)}
+                  />
+                )}
+              </Form.Item>
+            </Col>
+
+          </Row>
+        </Form>
+
+
         <Row gutter={8}>
-          <Col span={12} style={{ height: '600px', overflow: 'auto' }}>
+          <Col span={12} style={{ height: '500px', overflow: 'auto' }}>
             <SelectTree
               checkable={true}
               treeData={treeData}
@@ -86,7 +134,7 @@ const SelectHouse = (props: SelectHouseProps) => {
               }}
             />
           </Col>
-          <Col span={12} style={{ height: '600px', overflow: 'auto' }}>
+          <Col span={12} style={{ height: '500px', overflow: 'auto' }}>
             <LeftTree
               treeData={feeTreeData}
               selectTree={(id, item) => {

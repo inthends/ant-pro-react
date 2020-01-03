@@ -52,7 +52,7 @@ function ListTable(props: ListTableProps) {
       title: '客户名称',
       dataIndex: '客户名称',
       key: '客户名称',
-      width: 100,
+      width: 180,
     },
     {
       title: '是否审核',

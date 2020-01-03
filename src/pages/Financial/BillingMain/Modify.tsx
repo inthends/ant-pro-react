@@ -633,14 +633,15 @@ const Modify = (props: ModifyProps) => {
         getBillID={(billid) => {
           setLoading(true);
           setNewId(billid);
-          GetBilling(billid).then(res => {
+          GetBilling(billid).then(res => { 
             if (res != null) {
               message.success('添加成功！');
               setInfoDetail(res);
               initUnitFeeLoadData('');
               setLoading(false);
             } else {
-              message.warning('添加失败！');
+              // message.warning('');
+              setLoading(false);
               setNewId('');
             }
           });

@@ -163,7 +163,6 @@ const AddReductionItem = (props: AddReductionItemProps) => {
       monthStr = '0' + month
     } else {
       monthStr = '' + month
-
     }
     if (day < 10) {
       dayStr = '0' + day

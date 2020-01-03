@@ -38,6 +38,7 @@ function House() {
   // };
 
   const setButton = (orgid, orgtype, searchText) => {
+ 
     setOrganizeId(orgid);
     if (orgtype == 'D') {
       setIsDisabled(false);

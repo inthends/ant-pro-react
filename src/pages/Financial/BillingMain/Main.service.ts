@@ -34,9 +34,9 @@ export function RemoveUnitFormAll(keyValue): Promise<any> {
   return request.post(process.env.basePath + `/BillingMain/RemoveUnitFormAll?keyValue=${keyValue}`, {}).then(getResult as any);
 }
 
-//保存周期费数据
-export function SaveUnitFee(data): Promise<any> {
-  return request.post(process.env.basePath + `/BillingMain/SaveUnitFee`, {data:objToFormdata(data)});
+//计算周期费数据
+export function CalcUnitFee(data): Promise<any> {
+  return request.post(process.env.basePath + `/BillingMain/CalcUnitFee`, {data:objToFormdata(data)});
 }
 
 //权责摊销
