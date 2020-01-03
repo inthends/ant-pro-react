@@ -219,7 +219,7 @@ const Modify = (props: ModifyProps) => {
           </Row>*/}
 
           <Row gutter={24}>
-            <ModifyItem {...baseFormProps} field="swiftPlatPublicKey" label="威富通公钥"></ModifyItem>
+            <ModifyItem {...baseFormProps} field="swiftPlatPublicKey" label="威富通平台公钥"></ModifyItem>
             <ModifyItem {...baseFormProps} field="swiftMchPrivateKey" label="威富通私钥"></ModifyItem>
           </Row> 
 

@@ -74,7 +74,7 @@ export function GetTransferRoomUsers(roomid, relationid): Promise<any[]> {
 }
 
 //表单明细
-export function GetEntity(keyValue): Promise<TreeEntity[]> {
+export function GetEntity(keyValue): Promise<any[]> {
   return request
     .get(process.env.basePath + `/Receivable/GetEntity?keyValue=${keyValue}`)
     .then(getResult as any);
@@ -88,12 +88,18 @@ export function Charge(data): Promise<any> {
 }
 
 //二维码收款
-export function QrCodeCharge(data): Promise<any> {
+// export function QrCodeCharge(data): Promise<any> {
+//   return request
+//     .post(process.env.basePath + `/Receivable/QrCodeCharge`, { data: objToFormdata(data) })
+//     .then(getResult as any);
+// }
+
+//轮询收款单状态，用于二维码支付
+export function GetPayState(keyValue): Promise<any[]> {
   return request
-    .post(process.env.basePath + `/Receivable/QrCodeCharge`, { data: objToFormdata(data) })
+    .get(process.env.basePath + `/Receivable/GetPayState?keyValue=${keyValue}`)
     .then(getResult as any);
 }
-
 
 //生成二维码
 export function GetQrCode(data): Promise<any> {

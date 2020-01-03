@@ -5,7 +5,7 @@ import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import { CheckRebateFee, InvalidBillDetailForm, Charge, GetQrCode, QrCodeCharge } from './Main.service';
+import { CheckRebateFee, InvalidBillDetailForm, Charge, GetQrCode, GetPayState } from './Main.service';
 // import QRCode from 'qrcode.react';
 
 // import styles from './style.less';
@@ -337,33 +337,36 @@ function ListTable(props: ListTableProps) {
             //弹出支付宝扫码
             if (isQrcode) {
 
+              // GetQrCode(info).then(res => {
+              //   // setQrUrl(res);  
+              //   Modal.confirm({
+              //     title: "请扫码",
+              //     // okText: "确认",
+              //     // cancelText: "取消", 
+              //     // content: (<QRCode
+              //     //   value={res} //value参数为生成二维码的链接
+              //     //   size={200} //二维码的宽高尺寸
+              //     //   fgColor="#000000"  //二维码的颜色 
+              //     // />) 
+              //     content: (<img src={res}></img>),
+              //     onOk() {
+              //       //收款
+              //       // QrCodeCharge(info).then(billId => {
+              //       //   message.success('收款成功');
+              //       //   reload();
+              //       //   //弹出查看页面
+              //       //   showDetail(billId);
+              //       // });
+              //     },
+              //     onCancel() {
+              //     } 
+              //   }); 
+              // });
+
+
               GetQrCode(info).then(res => {
-                // setQrUrl(res);  
-                Modal.confirm({
-                  title: "请扫码",
-                  // okText: "确认",
-                  // cancelText: "取消", 
-                  // content: (<QRCode
-                  //   value={res} //value参数为生成二维码的链接
-                  //   size={200} //二维码的宽高尺寸
-                  //   fgColor="#000000"  //二维码的颜色 
-                  // />) 
-                  content: (<img src={res}></img>),
-                  onOk() {
-                    //收款
-                    QrCodeCharge(info).then(billId => {
-                      message.success('收款成功');
-                      reload();
-                      //弹出查看页面
-                      showDetail(billId);
-                    });
-                  },
-                  onCancel() { 
-                  }  
-
-                });
-
-              });
+                pay(res);
+              })
 
             } else {
               //直接收款
@@ -379,9 +382,57 @@ function ListTable(props: ListTableProps) {
       }
     });
   };
- 
+
+  const pay = (url) => {
+    let temp = Modal.confirm({
+      content: (<img src={url}></img>),
+      onCancel() {
+        if (timer) {
+          timer = null;//关闭弹窗后不轮询
+        }
+      }
+    })
+
+    retry().then(() => {
+
+      temp.destroy();
+
+    })
+
+  }
 
   //轮询支付回调数据
+  let timer;
+  const retry = () => {
+    return new Promise((resolve, reject) => {
+
+      timer = setTimeout(() => {
+
+        GetPayState().then(billId => {
+          if (billId) {
+            //支付成功
+            resolve();
+            message.success('收款成功');
+            reload();
+            //弹出查看页面
+            showDetail(billId);
+
+          } else {
+
+            if (timer) {
+              retry();
+            }
+
+          }
+
+        })
+
+      }, 1000);//每秒轮询一次 
+
+    })
+
+  }
+
 
   return (
     <Page>
