@@ -766,7 +766,7 @@ const Modify = (props: ModifyProps) => {
       title: '请确认',
       content: `您是否要全部删除？删除后无法恢复！`,
       onOk: () => {
-        HouseAllRemoveForm({ feeitemid: id }).then(() => {
+        HouseAllRemoveForm({ feeitemId: id }).then(() => {
           message.success('删除成功！');
           houseLoadData('');
         });

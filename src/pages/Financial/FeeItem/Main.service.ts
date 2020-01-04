@@ -107,7 +107,7 @@ export function GetOrgTaxTateFormJson(data): Promise<TreeEntity[]> {
 //费项机构已选ID
 export function GetOrganizeForm(data): Promise<any[]> {
   return request
-    .get(process.env.basePath + `/FeeItems/GetOrganizeForm?FeeItemId=${data}`)
+    .get(process.env.basePath + `/FeeItems/GetOrganizeForm?feeItemId=${data}`)
     .then(getResult as any);
 }
 
