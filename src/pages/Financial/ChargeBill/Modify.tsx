@@ -1,6 +1,6 @@
 //新增临时收费，ok
 import { TreeEntity } from '@/model/models';
-import { Card, Select, Button, Col, DatePicker, Drawer, Form, Input, InputNumber, Row, message } from 'antd';
+import { Spin, Card, Select, Button, Col, DatePicker, Drawer, Form, Input, InputNumber, Row, message } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import {
@@ -31,11 +31,13 @@ const Modify = (props: ModifyProps) => {
   const [feeTreeData, setFeeTreeData] = useState<TreeEntity[]>([]);
   const [relationIds, setRelationIds] = useState<any[]>([]);
   const [unitIds, setUnitIds] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   // 打开抽屉时初始化
   useEffect(() => {
     // form.resetFields();
     if (modifyVisible) {
+      setLoading(true);
       GetReceivablesFeeItemTreeJson(organizeId).then(res => {
         setFeeTreeData(res);
       });
@@ -76,8 +78,7 @@ const Modify = (props: ModifyProps) => {
           setRelationIds(res);
           GetShowDetail(id).then(info => {
             // let info = value.entity;
-            // info.number = value.number; 
-
+            // info.number = value.number;  
             let customerid = '';
             for (var i = 0; i < res.length; i++) {
               if (res[i].key == info.relationId) {
@@ -89,6 +90,7 @@ const Modify = (props: ModifyProps) => {
             });
             //赋值
             setInfoDetail(info);
+            setLoading(false);
           })
         });
 
@@ -109,6 +111,7 @@ const Modify = (props: ModifyProps) => {
                   setInfoDetail(info);
                   form.resetFields();
                 }
+                setLoading(false);
               });
           }
           // return info;
@@ -143,6 +146,7 @@ const Modify = (props: ModifyProps) => {
         // setInfoDetail({});
         // form.resetFields();
       }
+   
     }
     // else {
     //   form.setFieldsValue({});
@@ -334,6 +338,7 @@ const Modify = (props: ModifyProps) => {
       destroyOnClose={true}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 50px)' }}
     >
+
       <Row gutter={8}>
         {
           id != '' ?
@@ -378,211 +383,213 @@ const Modify = (props: ModifyProps) => {
         }
 
         <Col span={id != '' ? 24 : 17}>
-          <Card className={styles.card} >
-            <Form hideRequiredMark>
-              <Row>
-                <Form.Item label="加费对象" required labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} >
-                  {getFieldDecorator('relationId', {
-                    initialValue: infoDetail.relationId == null ? null : infoDetail.relationId,// getRelationId(infoDetail.relationId),
-                    rules: [{ required: true, message: '请选择加费对象' }]
-                  })(
-                    <Select placeholder="=请选择=" disabled={id === '' && edit ? false : true}
-                      onSelect={(key) => {
-                        GetUserRoomsByRelationId(key).then(res => {
-                          setUnitIds(res);
-                          // var info = Object.assign({}, infoDetail, { householdId: res[0].value });
-                          // setInfoDetail(info);
-                        });
-                      }}>
-                      {relationIds.map(item => (
-                        <Option value={item.key}
-                        >
-                          {item.title}
-                        </Option>
-                      ))}
-                    </Select>
-                  )}
-                </Form.Item>
-              </Row>
-              <Row>
-                <Form.Item label="选择房屋" required labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} >
-                  {getFieldDecorator('unitId', {
-                    // initialValue: infoDetail.householdId == null ? null : getUnitId(infoDetail.householdId),
-                    initialValue: infoDetail.unitId == null ? null : infoDetail.unitId,
-                    rules: [{ required: true, message: '请选择房屋' }]
-                  })(
-                    <Select placeholder="=请选择=" disabled={id === '' && edit ? false : true} >
-                      {unitIds.map(item => (
-                        <Option value={item.key}>
-                          {item.title}
-                        </Option>
-                      ))}
-                    </Select>
-                  )}
-                </Form.Item>
-              </Row>
-              <Row>
-                <Col span={12}>
-                  <Form.Item label="单价" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
-                    {getFieldDecorator('price', {
-                      initialValue: infoDetail.price,
-                      rules: [{ required: true, message: '请输入单价' }]
+
+          <Spin tip="数据处理中..." spinning={loading}>
+            <Card className={styles.card} >
+              <Form hideRequiredMark>
+                <Row>
+                  <Form.Item label="加费对象" required labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} >
+                    {getFieldDecorator('relationId', {
+                      initialValue: infoDetail.relationId == null ? null : infoDetail.relationId,// getRelationId(infoDetail.relationId),
+                      rules: [{ required: true, message: '请选择加费对象' }]
                     })(
-                      <InputNumber
-                        style={{ width: '100%' }}
-                        disabled={!infoDetail.isEditTemp}
-                        placeholder='请输入单价'
-                        min={0}
-                        precision={4}
-                        onChange={value => {
-                          const quantity = Number(form.getFieldValue('quantity'));
-                          const number = Number(form.getFieldValue('number'));
-                          //form.setFieldsValue({ amount: quantity * number * Number(value) }); 
-                          //调用后台计算并且根据设置保留小数位
-                          const unitId = form.getFieldValue('unitId');
-                          Call({ unitId: unitId, feeItemId: infoDetail.feeItemId, price: value, quantity: quantity, number: number }).then(res => {
-                            form.setFieldsValue({ amount: res });
+                      <Select placeholder="=请选择=" disabled={id === '' && edit ? false : true}
+                        onSelect={(key) => {
+                          GetUserRoomsByRelationId(key).then(res => {
+                            setUnitIds(res);
+                            // var info = Object.assign({}, infoDetail, { householdId: res[0].value });
+                            // setInfoDetail(info);
                           });
-                        }}
-                      ></InputNumber>
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col span={1} style={{ lineHeight: "32px", textAlign: 'center' }}>
-                  X
-              </Col>
-                <Col span={5}>
-                  <Form.Item label="" required wrapperCol={{ span: 24 }}>
-                    {getFieldDecorator('quantity', {
-                      initialValue: infoDetail.quantity,
-                      rules: [{ required: true, message: '请输入数量' }]
-                    })(
-                      <Input min={0} disabled style={{ width: '100%' }}
-                        placeholder='请输入数量'
-                      ></Input>
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col span={1} style={{ lineHeight: "32px", textAlign: 'center' }}>
-                  X
-              </Col>
-                <Col span={5}>
-                  <Form.Item label="" required wrapperCol={{ span: 24 }}>
-                    {getFieldDecorator('number', {
-                      initialValue: infoDetail.number,
-                      rules: [{ required: true, message: '请输入系数' }]
-                    })(
-                      <InputNumber min={0}
-                        placeholder='请输入系数'
-                        style={{ width: '100%' }}
-                        disabled={edit ? false : true}
-                        onChange={(value) => {
-                          // if (value != undefined) {
-                          //   var amount = infoDetail.price * infoDetail.quantity * value;
-                          //   var info = Object.assign({}, infoDetail, { number: value, amount: amount });
-                          //   setInfoDetail(info);
-                          // }
-
-                          const price = Number(form.getFieldValue('price'));
-                          const quantity = Number(form.getFieldValue('quantity'));
-                          //form.setFieldsValue({ amount: price * quantity * Number(value) }); 
-                          //调用后台计算并且根据设置保留小数位
-                          const unitId = form.getFieldValue('unitId');
-                          Call({ unitId: unitId, feeItemId: infoDetail.feeItemId, price: price, quantity: quantity, number: value }).then(res => {
-                            form.setFieldsValue({ amount: res });
-                          });
-
-                        }}></InputNumber>
-                    )}
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row>
-                <Col span={24}>
-                  <Form.Item label="金额" required labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} >
-                    {getFieldDecorator('amount', {
-                      initialValue: infoDetail.amount,
-                      // initialValue: infoDetail.price == null || infoDetail.quantity == null || infoDetail.number == null ? 0 : infoDetail.price * infoDetail.quantity * infoDetail.number,
-                      rules: [{ required: true, message: '=请选择=' }]
-                    })(
-                      <InputNumber precision={2} readOnly style={{ width: '100%' }} ></InputNumber>
-                    )}
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row>
-                <Col span={12}>
-                  <Form.Item label="周期" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
-                    {getFieldDecorator('cycleValue', {
-                      initialValue: infoDetail.cycleValue,
-                      rules: [{ required: true, message: '请输入周期' }]
-                    })(
-                      <InputNumber
-                        placeholder='请输入周期'
-                        disabled={edit ? false : true}
-                        style={{ width: '100%' }}
-                        onChange={value => {
-                          if (value != undefined) {
-                            setEndDate(infoDetail.beginDate, value, infoDetail.cycleType);
-                          }
-                        }}></InputNumber>
-                    )}
-                  </Form.Item>
-                </Col>
-
-                <Col span={12}>
-                  <Form.Item label="周期单位" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
-                    {getFieldDecorator('cycleType', {
-                      initialValue: infoDetail.cycleType === null ? "月" : infoDetail.cycleType,
-                      rules: [{ required: true, message: '请选择周期单位' }]
-                    })(
-                      <Select placeholder="=请选择="
-                        disabled={edit ? false : true}
-                        style={{ width: '100%' }}
-                        onChange={(value: string) => {
-                          setEndDate(infoDetail.beginDate, infoDetail.cycleValue, value);
                         }}>
-                        <Option key='日' value='日'>
-                          {'日'}
-                        </Option>
-                        <Option key='月' value='月'>
-                          {'月'}
-                        </Option>
-                        <Option key='年' value='年'>
-                          {'年'}
-                        </Option>
+                        {relationIds.map(item => (
+                          <Option value={item.key}
+                          >
+                            {item.title}
+                          </Option>
+                        ))}
                       </Select>
                     )}
                   </Form.Item>
-                </Col>
-              </Row>
-              <Row>
-                <Col span={12}>
-                  <Form.Item label="起始日期" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}  >
-                    {getFieldDecorator('beginDate', {
-                      initialValue: infoDetail.beginDate == null ? moment(new Date()) : moment(infoDetail.beginDate),
-                      rules: [{ required: true, message: '请选择起始日期' }]
+                </Row>
+                <Row>
+                  <Form.Item label="选择房屋" required labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} >
+                    {getFieldDecorator('unitId', {
+                      // initialValue: infoDetail.householdId == null ? null : getUnitId(infoDetail.householdId),
+                      initialValue: infoDetail.unitId == null ? null : infoDetail.unitId,
+                      rules: [{ required: true, message: '请选择房屋' }]
                     })(
-                      <DatePicker disabled={!infoDetail.isModifyDate} style={{ width: '100%' }} />
+                      <Select placeholder="=请选择=" disabled={id === '' && edit ? false : true} >
+                        {unitIds.map(item => (
+                          <Option value={item.key}>
+                            {item.title}
+                          </Option>
+                        ))}
+                      </Select>
                     )}
                   </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item label="结束日期" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
-                    {getFieldDecorator('endDate', {
-                      initialValue: infoDetail.endDate == null ? moment(getEndDate()) : moment(infoDetail.endDate),
-                      rules: [{ required: true, message: '请选择结束日期' }]
-                    })(
-                      <DatePicker disabled={!infoDetail.isModifyDate}
-                        disabledDate={disabledDate}
-                        style={{ width: '100%' }} />
-                    )}
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row>
-                <Col span={12}>
-                  {/* <Form.Item label="应收期间" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
+                </Row>
+                <Row>
+                  <Col span={12}>
+                    <Form.Item label="单价" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
+                      {getFieldDecorator('price', {
+                        initialValue: infoDetail.price,
+                        rules: [{ required: true, message: '请输入单价' }]
+                      })(
+                        <InputNumber
+                          style={{ width: '100%' }}
+                          disabled={!infoDetail.isEditTemp}
+                          placeholder='请输入单价'
+                          min={0}
+                          precision={4}
+                          onChange={value => {
+                            const quantity = Number(form.getFieldValue('quantity'));
+                            const number = Number(form.getFieldValue('number'));
+                            //form.setFieldsValue({ amount: quantity * number * Number(value) }); 
+                            //调用后台计算并且根据设置保留小数位
+                            const unitId = form.getFieldValue('unitId');
+                            Call({ unitId: unitId, feeItemId: infoDetail.feeItemId, price: value, quantity: quantity, number: number }).then(res => {
+                              form.setFieldsValue({ amount: res });
+                            });
+                          }}
+                        ></InputNumber>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col span={1} style={{ lineHeight: "32px", textAlign: 'center' }}>
+                    X
+              </Col>
+                  <Col span={5}>
+                    <Form.Item label="" required wrapperCol={{ span: 24 }}>
+                      {getFieldDecorator('quantity', {
+                        initialValue: infoDetail.quantity,
+                        rules: [{ required: true, message: '请输入数量' }]
+                      })(
+                        <Input min={0} disabled style={{ width: '100%' }}
+                          placeholder='请输入数量'
+                        ></Input>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col span={1} style={{ lineHeight: "32px", textAlign: 'center' }}>
+                    X
+              </Col>
+                  <Col span={5}>
+                    <Form.Item label="" required wrapperCol={{ span: 24 }}>
+                      {getFieldDecorator('number', {
+                        initialValue: infoDetail.number,
+                        rules: [{ required: true, message: '请输入系数' }]
+                      })(
+                        <InputNumber min={0}
+                          placeholder='请输入系数'
+                          style={{ width: '100%' }}
+                          disabled={edit ? false : true}
+                          onChange={(value) => {
+                            // if (value != undefined) {
+                            //   var amount = infoDetail.price * infoDetail.quantity * value;
+                            //   var info = Object.assign({}, infoDetail, { number: value, amount: amount });
+                            //   setInfoDetail(info);
+                            // }
+
+                            const price = Number(form.getFieldValue('price'));
+                            const quantity = Number(form.getFieldValue('quantity'));
+                            //form.setFieldsValue({ amount: price * quantity * Number(value) }); 
+                            //调用后台计算并且根据设置保留小数位
+                            const unitId = form.getFieldValue('unitId');
+                            Call({ unitId: unitId, feeItemId: infoDetail.feeItemId, price: price, quantity: quantity, number: value }).then(res => {
+                              form.setFieldsValue({ amount: res });
+                            });
+
+                          }}></InputNumber>
+                      )}
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col span={24}>
+                    <Form.Item label="金额" required labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} >
+                      {getFieldDecorator('amount', {
+                        initialValue: infoDetail.amount,
+                        // initialValue: infoDetail.price == null || infoDetail.quantity == null || infoDetail.number == null ? 0 : infoDetail.price * infoDetail.quantity * infoDetail.number,
+                        rules: [{ required: true, message: '=请选择=' }]
+                      })(
+                        <InputNumber precision={2} readOnly style={{ width: '100%' }} ></InputNumber>
+                      )}
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col span={12}>
+                    <Form.Item label="周期" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
+                      {getFieldDecorator('cycleValue', {
+                        initialValue: infoDetail.cycleValue,
+                        rules: [{ required: true, message: '请输入周期' }]
+                      })(
+                        <InputNumber
+                          placeholder='请输入周期'
+                          disabled={edit ? false : true}
+                          style={{ width: '100%' }}
+                          onChange={value => {
+                            if (value != undefined) {
+                              setEndDate(infoDetail.beginDate, value, infoDetail.cycleType);
+                            }
+                          }}></InputNumber>
+                      )}
+                    </Form.Item>
+                  </Col>
+
+                  <Col span={12}>
+                    <Form.Item label="周期单位" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
+                      {getFieldDecorator('cycleType', {
+                        initialValue: infoDetail.cycleType === null ? "月" : infoDetail.cycleType,
+                        rules: [{ required: true, message: '请选择周期单位' }]
+                      })(
+                        <Select placeholder="=请选择="
+                          disabled={edit ? false : true}
+                          style={{ width: '100%' }}
+                          onChange={(value: string) => {
+                            setEndDate(infoDetail.beginDate, infoDetail.cycleValue, value);
+                          }}>
+                          <Option key='日' value='日'>
+                            {'日'}
+                          </Option>
+                          <Option key='月' value='月'>
+                            {'月'}
+                          </Option>
+                          <Option key='年' value='年'>
+                            {'年'}
+                          </Option>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col span={12}>
+                    <Form.Item label="起始日期" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}  >
+                      {getFieldDecorator('beginDate', {
+                        initialValue: infoDetail.beginDate == null ? moment(new Date()) : moment(infoDetail.beginDate),
+                        rules: [{ required: true, message: '请选择起始日期' }]
+                      })(
+                        <DatePicker disabled={!infoDetail.isModifyDate} style={{ width: '100%' }} />
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item label="结束日期" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
+                      {getFieldDecorator('endDate', {
+                        initialValue: infoDetail.endDate == null ? moment(getEndDate()) : moment(infoDetail.endDate),
+                        rules: [{ required: true, message: '请选择结束日期' }]
+                      })(
+                        <DatePicker disabled={!infoDetail.isModifyDate}
+                          disabledDate={disabledDate}
+                          style={{ width: '100%' }} />
+                      )}
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col span={12}>
+                    {/* <Form.Item label="应收期间" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
                   {getFieldDecorator('period', {
                     initialValue: infoDetail.period == null ? moment(new Date()) : moment(infoDetail.period),
                     rules: [{ required: true, message: '请选择应收期间' }]
@@ -590,46 +597,47 @@ const Modify = (props: ModifyProps) => {
                     <DatePicker disabled={true} style={{ width: '100%' }} />
                   )}
                 </Form.Item> */}
-                  {getFieldDecorator('period', {
-                    initialValue: infoDetail.period,
-                  })(
-                    <input type='hidden' />
-                  )}
+                    {getFieldDecorator('period', {
+                      initialValue: infoDetail.period,
+                    })(
+                      <input type='hidden' />
+                    )}
 
-                  <Form.Item label="收款截止日" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
-                    {getFieldDecorator('deadline', {
-                      initialValue: infoDetail.deadline == null ? moment(new Date()) : moment(infoDetail.deadline),
-                      rules: [{ required: true, message: '请选择收款截止日期' }]
-                    })(
-                      <DatePicker disabled={!infoDetail.isModifyDate} style={{ width: '100%' }} />
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item label="账单日" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
-                    {getFieldDecorator('billDate', {
-                      initialValue: infoDetail.billDate == null ? moment(new Date()) : moment(infoDetail.billDate),
-                      rules: [{ required: true, message: '请选择账单日' }]
-                    })(
-                      <DatePicker disabled={!infoDetail.isModifyDate} style={{ width: '100%' }} />
-                    )}
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row>
-                <Col span={24}>
-                  <Form.Item label="备注" required labelCol={{ span: 4 }} wrapperCol={{ span: 20 }}>
-                    {getFieldDecorator('memo', {
-                      initialValue: infoDetail.memo,
-                      rules: [{ required: false }]
-                    })(
-                      <Input.TextArea disabled={edit ? false : true} rows={3} />
-                    )}
-                  </Form.Item>
-                </Col>
-              </Row>
-            </Form>
-          </Card>
+                    <Form.Item label="收款截止日" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
+                      {getFieldDecorator('deadline', {
+                        initialValue: infoDetail.deadline == null ? moment(new Date()) : moment(infoDetail.deadline),
+                        rules: [{ required: true, message: '请选择收款截止日期' }]
+                      })(
+                        <DatePicker disabled={!infoDetail.isModifyDate} style={{ width: '100%' }} />
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item label="账单日" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
+                      {getFieldDecorator('billDate', {
+                        initialValue: infoDetail.billDate == null ? moment(new Date()) : moment(infoDetail.billDate),
+                        rules: [{ required: true, message: '请选择账单日' }]
+                      })(
+                        <DatePicker disabled={!infoDetail.isModifyDate} style={{ width: '100%' }} />
+                      )}
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col span={24}>
+                    <Form.Item label="备注" required labelCol={{ span: 4 }} wrapperCol={{ span: 20 }}>
+                      {getFieldDecorator('memo', {
+                        initialValue: infoDetail.memo,
+                        rules: [{ required: false }]
+                      })(
+                        <Input.TextArea disabled={edit ? false : true} rows={3} />
+                      )}
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </Form>
+            </Card>
+          </Spin>
         </Col>
 
       </Row>

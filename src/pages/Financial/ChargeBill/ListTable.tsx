@@ -365,7 +365,8 @@ function ListTable(props: ListTableProps) {
 
 
               GetQrCode(info).then(res => {
-                pay(res);
+                pay(res.code_img_url);
+                form.setFieldsValue({ tradenoId: res.tradenoId });
               })
 
             } else {
@@ -391,12 +392,9 @@ function ListTable(props: ListTableProps) {
           timer = null;//关闭弹窗后不轮询
         }
       }
-    })
-
-    retry().then(() => {
-
-      temp.destroy();
-
+    }) 
+    retry().then(() => { 
+      temp.destroy(); 
     })
 
   }
@@ -404,11 +402,10 @@ function ListTable(props: ListTableProps) {
   //轮询支付回调数据
   let timer;
   const retry = () => {
-    return new Promise((resolve, reject) => {
-
-      timer = setTimeout(() => {
-
-        GetPayState().then(billId => {
+    return new Promise((resolve, reject) => { 
+      timer = setTimeout(() => { 
+       const tradenoId = form.getFieldValue('tradenoId'); 
+        GetPayState(tradenoId).then(billId => {
           if (billId) {
             //支付成功
             resolve();
@@ -421,14 +418,10 @@ function ListTable(props: ListTableProps) {
 
             if (timer) {
               retry();
-            }
-
-          }
-
-        })
-
-      }, 1000);//每秒轮询一次 
-
+            } 
+          } 
+        }) 
+      }, 1000);//每秒轮询一次  
     })
 
   }
@@ -475,6 +468,13 @@ function ListTable(props: ListTableProps) {
                   max={hasSelected ? sumEntity.sumAmount : 0}
                   style={{ width: '100%' }}
                 />)}
+
+
+                {getFieldDecorator('tradenoId', {
+                })(
+                  <input type='hidden' />
+                )}
+
               </Form.Item>
             </Col>
             <Col lg={4}>

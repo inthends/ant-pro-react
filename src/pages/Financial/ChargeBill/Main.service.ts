@@ -14,7 +14,7 @@ export function GetReceivablesFeeItemTreeJson(roomId): Promise<TreeEntity[]> {
 
 //获取房间住户
 export function GetRoomUsers(data): Promise<any[]> {
-  return request.get(process.env.basePath + `/Common/GetRoomUsers?roomid=${data}`, {}).then(getResult as any);;
+  return request.get(process.env.basePath + `/Common/GetRoomUsers?roomId=${data}`, {}).then(getResult as any);;
 }
 
 //获取关联的房间
@@ -95,16 +95,16 @@ export function Charge(data): Promise<any> {
 // }
 
 //轮询收款单状态，用于二维码支付
-export function GetPayState(keyValue): Promise<any[]> {
+export function GetPayState(tradenoId): Promise<any> {
   return request
-    .get(process.env.basePath + `/Receivable/GetPayState?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/Receivable/GetPayState?tradenoId=${tradenoId}`)
     .then(getResult as any);
 }
 
 //生成二维码
 export function GetQrCode(data): Promise<any> {
   return request
-    .post(process.env.basePath + `/Receivable/QrCode`, { data: objToFormdata(data) })
+    .post(process.env.basePath + `/Receivable/GetQrCode`, { data: objToFormdata(data) })
     .then(getResult as any);
 }
 
