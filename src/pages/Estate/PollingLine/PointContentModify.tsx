@@ -109,8 +109,8 @@ const PointContentModify = (props: PointContentModifyProps) => {
                     <Option value="天">天</Option>
                     <Option value="周">周</Option>
                     <Option value="月">月</Option>
-                    <Option value="季">季</Option>
-                    <Option value="年">年</Option>
+                    {/* <Option value="季">季</Option>
+                    <Option value="年">年</Option> */}
                   </Select>
                 )}
               </Form.Item>

@@ -94,3 +94,10 @@ export function RemoveLinePointAll(keyValue): Promise<any> {
     .post(process.env.basePath + `/Polling/RemoveLinePointAll?keyValue=${keyValue}`)
     .then(getResult as any);
 }
+
+//获取角色
+export function GetTreeRoleJson(): Promise<any[]> { 
+  return request
+    .get(process.env.basePath + `/Polling/GetTreeRoleJson`)
+    .then(getResult as any);
+}

@@ -3,7 +3,7 @@ import ModifyItem from "@/components/BaseModifyDrawer/ModifyItem";
 import { message, Divider, Icon, Table, Modal, Button, Input, Form, Row, Card } from "antd";
 import { WrappedFormUtils } from "antd/lib/form/Form";
 import React, { useState, useEffect } from 'react';
-import { SaveFormLine, GetLinePonitPageListByID, RemoveLinePoint, RemoveLinePointAll } from "./Main.service";
+import { GetTreeRoleJson, SaveFormLine, GetLinePonitPageListByID, RemoveLinePoint, RemoveLinePointAll } from "./Main.service";
 import { GetOrgEsates } from '@/services/commonItem';
 import { TreeNode } from 'antd/lib/tree-select';
 import { DefaultPagination } from '@/utils/defaultSetting';
@@ -39,12 +39,16 @@ const Modify = (props: ModifyProps) => {
   const [isAdd, setIsAdd] = useState<boolean>(true);
   const [lineId, setLineId] = useState<string>('');
 
+  const [roles, setRoles] = useState<any[]>([]);
+
   const doSave = dataDetail => {
     let modifyData = {
       ...initData, ...dataDetail,
       keyValue: lineId,
       type: isAdd
     };
+    modifyData.beginDate = modifyData.beginDate.format('YYYY-MM-DD');
+    modifyData.endDate = modifyData.endDate.format('YYYY-MM-DD');
     return SaveFormLine(modifyData);
   };
 
@@ -59,6 +63,11 @@ const Modify = (props: ModifyProps) => {
     if (visible) {
       GetOrgEsates().then(res => {
         setOrgs(res);
+      });
+
+      //巡检角色
+      GetTreeRoleJson().then(res => {
+        setRoles(res || []);
       });
 
       if (data) {
@@ -225,7 +234,6 @@ const Modify = (props: ModifyProps) => {
             <ModifyItem
               {...baseFormProps}
               field="pStructId"
-              lg={8}
               label="所属楼盘"
               type="tree"
               dropdownStyle={{ maxHeight: 380 }}
@@ -246,19 +254,47 @@ const Modify = (props: ModifyProps) => {
 
             <ModifyItem
               {...baseFormProps}
+              field="roleId"
+              label="巡检角色"
+              type='select'
+              items={roles}
+              rules={[{ required: true, message: "请选择巡检角色" }]}
+            ></ModifyItem>
+          </Row>
+
+          <Row gutter={24}>
+            <ModifyItem
+              {...baseFormProps}
               field="name"
-              lg={8}
               label="名称"
               rules={[{ required: true, message: "请输入名称" }]}
             ></ModifyItem>
             <ModifyItem
               {...baseFormProps}
               field="code"
-              lg={8}
               label="编号"
               rules={[{ required: true, message: "请输入编号" }]}
             ></ModifyItem>
           </Row>
+
+          <Row gutter={24}>
+            <ModifyItem
+              {...baseFormProps}
+              field="beginDate"
+              label="开始日期"
+              type='date'
+              rules={[{ required: true, message: "请选择开始日期" }]}
+            ></ModifyItem>
+
+            <ModifyItem
+              {...baseFormProps}
+              field="endDate"
+              label="结束日期"
+              type='date'
+              rules={[{ required: true, message: "请选择结束日期" }]}
+            ></ModifyItem>
+          </Row>
+
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}

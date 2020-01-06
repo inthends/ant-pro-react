@@ -3,6 +3,7 @@ import { Divider, message, Modal, Table } from "antd";
 import { ColumnProps, PaginationConfig } from "antd/lib/table";
 import React from "react";
 import { RemoveForm } from "./Main.service";
+import moment from 'moment';
 
 interface ListTableProps {
   loading: boolean;
@@ -62,6 +63,39 @@ function ListTable(props: ListTableProps) {
       key: "psName",
       width: 150
     }, 
+    {
+      title: "巡检角色",
+      dataIndex: "roleName",
+      key: "roleName",
+      width: 100
+    }, 
+    {
+      title: "开始日期",
+      dataIndex: "beginDate",
+      key: "beginDate",
+      width: 100, 
+      render: val => {
+        if (val == null) {
+          return ''
+        } else {
+          return moment(val).format('YYYY-MM-DD');
+        }
+      }
+    }, 
+    {
+      title: "结束日期",
+      dataIndex: "endDate",
+      key: "endDate",
+      width: 100,
+      render: val => {
+        if (val == null) {
+          return ''
+        } else {
+          return moment(val).format('YYYY-MM-DD');
+        }
+      }
+    }, 
+
     {
       title: "说明",
       dataIndex: "memo",

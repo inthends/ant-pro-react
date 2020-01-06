@@ -39,6 +39,6 @@ export function GetDataList(data): Promise<any> {
 //获取角色
 export function GetTreeRoleJson(): Promise<any[]> { 
   return request
-    .get(process.env.basePath + `/FlowDesigner/GetTreeRoleJson`)
+    .get(process.env.basePath + `/Role/GetTreeRoleJson`)
     .then(getResult as any);
 }
