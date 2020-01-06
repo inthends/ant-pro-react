@@ -63,12 +63,12 @@ function ListTable(props: ListTableProps) {
       key: "psName",
       width: 150
     }, 
-    {
-      title: "巡检角色",
-      dataIndex: "roleName",
-      key: "roleName",
-      width: 100
-    }, 
+    // {
+    //   title: "巡检角色",
+    //   dataIndex: "roleName",
+    //   key: "roleName",
+    //   width: 100
+    // }, 
     {
       title: "开始日期",
       dataIndex: "beginDate",

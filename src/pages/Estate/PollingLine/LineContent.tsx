@@ -121,12 +121,18 @@ const LineContent = (props: LineContentProps) => {
       sorter: true
     },
     {
-      title: '频次',
-      dataIndex: 'pc',
-      key: 'pc',
+      title: '执行频率',
+      dataIndex: 'frequency',
+      key: 'frequency',
       width: 80,
       render: (text, record) => {
-        return record.unitNum + record.unit + record.frequency + '次';
+        if (text == 1) {
+          return '单次执行';
+        } else if (text == 2) {
+          return '每1小时执行';
+        } else {
+          return '每2小时执行';
+        }
       }
     },
     {
@@ -135,7 +141,12 @@ const LineContent = (props: LineContentProps) => {
       key: "typeName",
       width: 100
     },
-
+    {
+      title: "巡检角色",
+      dataIndex: "roleName",
+      key: "roleName",
+      width: 100
+    },
     {
       title: "标准要求",
       dataIndex: "criterion",
@@ -256,7 +267,7 @@ const LineContent = (props: LineContentProps) => {
         closeModal={closeModal}
         data={currData}
         lpId={lpId}
-        reload={() => { 
+        reload={() => {
           initLoadData(search, lpId); //刷新数据 
         }}
       />

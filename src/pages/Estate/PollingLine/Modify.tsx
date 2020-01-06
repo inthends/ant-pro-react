@@ -3,7 +3,7 @@ import ModifyItem from "@/components/BaseModifyDrawer/ModifyItem";
 import { message, Divider, Icon, Table, Modal, Button, Input, Form, Row, Card } from "antd";
 import { WrappedFormUtils } from "antd/lib/form/Form";
 import React, { useState, useEffect } from 'react';
-import { GetTreeRoleJson, SaveFormLine, GetLinePonitPageListByID, RemoveLinePoint, RemoveLinePointAll } from "./Main.service";
+import { SaveFormLine, GetLinePonitPageListByID, RemoveLinePoint, RemoveLinePointAll } from "./Main.service";
 import { GetOrgEsates } from '@/services/commonItem';
 import { TreeNode } from 'antd/lib/tree-select';
 import { DefaultPagination } from '@/utils/defaultSetting';
@@ -37,9 +37,7 @@ const Modify = (props: ModifyProps) => {
   const [search, setSearch] = useState<string>('');
   const [selectPointVisible, setSelectPointVisible] = useState<boolean>(false);
   const [isAdd, setIsAdd] = useState<boolean>(true);
-  const [lineId, setLineId] = useState<string>('');
-
-  const [roles, setRoles] = useState<any[]>([]);
+  const [lineId, setLineId] = useState<string>(''); 
 
   const doSave = dataDetail => {
     let modifyData = {
@@ -66,15 +64,17 @@ const Modify = (props: ModifyProps) => {
       });
 
       //巡检角色
-      GetTreeRoleJson().then(res => {
-        setRoles(res || []);
-      });
+      // GetTreeRoleJson().then(res => {
+      //   setRoles(res || []);
+      // });
 
       if (data) {
         setLineId(data.id);
         // setLoading(true);
         initLoadData(search, data.id);
         // setLoading(false);
+        setIsAdd(false);
+
       } else {
         setLineId(GetGuid());
         setLinepointData([]);
@@ -236,6 +236,7 @@ const Modify = (props: ModifyProps) => {
               field="pStructId"
               label="所属楼盘"
               type="tree"
+              lg={24}
               dropdownStyle={{ maxHeight: 380 }}
               treeData={orgs}
               disabled={initData.pStructId != undefined}
@@ -252,14 +253,15 @@ const Modify = (props: ModifyProps) => {
               <input type='hidden' />
             )}
 
-            <ModifyItem
+            {/* <ModifyItem
               {...baseFormProps}
               field="roleId"
               label="巡检角色"
               type='select'
               items={roles}
               rules={[{ required: true, message: "请选择巡检角色" }]}
-            ></ModifyItem>
+            ></ModifyItem> */}
+
           </Row>
 
           <Row gutter={24}>
