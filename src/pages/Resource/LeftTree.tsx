@@ -2,13 +2,12 @@ import Page from '@/components/Common/Page';
 import { Icon, Layout, Tree } from 'antd';
 import React, { useContext, useState, useEffect } from 'react';
 import { SiderContext } from '../SiderContext';
-
 const { Sider } = Layout;
 
 interface LeftTreeProps {
   treeData: any[];
   // selectTree(treeNode, item?: any): void;
-  selectTree(orgid, orgtype): void;
+  selectTree(orgid, orgtype, organizeId): void;
 }
 
 function LeftTree(props: LeftTreeProps) {
@@ -17,7 +16,6 @@ function LeftTree(props: LeftTreeProps) {
   const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
   // const [autoExpandParent, setAutoExpandParent] = useState<boolean>(false);
   const { hideSider, setHideSider } = useContext(SiderContext);
-
 
   // const getAllkeys = (data) => {
   //   var keys=[];
@@ -61,12 +59,11 @@ function LeftTree(props: LeftTreeProps) {
     // }  
 
     if (selectedKeys.length === 1) {
-      selectTree(selectedKeys[0], info.node.props.type);
+      selectTree(selectedKeys[0], info.node.props.type, info.node.props.organizeId);
     } else {
       //恢复查询
-      selectTree('', '');
+      selectTree('', '', info.node.props.organizeId);
     }
-
   };
 
   // const renderTree = (tree: any[], parentId: string) => {
@@ -142,24 +139,19 @@ function LeftTree(props: LeftTreeProps) {
                 treeData={treeData}
                 expandedKeys={expandedKeys}
                 onExpand={clickExpend}
-                onSelect={onSelect}
-              >
-
+                onSelect={onSelect} >
               </Tree>
             </Page>
             <div
               style={{ position: 'absolute', top: '40%', right: -15 }}
               onClick={() => {
                 setHideSider(true);
-              }}
-            >
+              }}>
               <Icon type="double-left" style={{ color: '#1890ff', cursor: 'pointer' }} />
             </div>
           </>
         )}
     </Sider>
   );
-
 }
-
 export default LeftTree;

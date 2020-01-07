@@ -234,12 +234,12 @@ const Add = (props: AddProps) => {
           // DepositResult: JSON.stringify(DepositResult),
           // ChargeFeeResult:JSON.stringify(ChargeFeeResult) 
           DepositResult: JSON.stringify(depositData),
-          ChargeFeeResult: JSON.stringify(chargeData) 
+          ChargeFeeResult: JSON.stringify(chargeData)
         }).then(res => {
           setLoading(false);
           message.success('保存成功');
           closeDrawer();
-          reload(); 
+          reload();
         });
       }
     });
@@ -247,25 +247,26 @@ const Add = (props: AddProps) => {
 
   //打开抽屉时初始化
   useEffect(() => {
-    getCommonItems('IndustryType').then(res => {
-      setIndustryType(res || []);
-    });
+    if (visible) {
+      getCommonItems('IndustryType').then(res => {
+        setIndustryType(res || []);
+      });
 
-    // //加载关联收费项目
-    // GetAllFeeItems().then(res => {
-    //   setFeeitems(res || []);
-    // });
+      // //加载关联收费项目
+      // GetAllFeeItems().then(res => {
+      //   setFeeitems(res || []);
+      // });
 
-    //获取房产树
-    GetOrgTreeSimple().then((res: any[]) => {
-      setTreeData(res || []);
-    });
+      //获取房产树
+      GetOrgTreeSimple().then((res: any[]) => {
+        setTreeData(res || []);
+      });
 
-    GetUserList('', '员工').then(res => {
-      setUserSource(res || []);
-    })
-
-  }, []);
+      GetUserList('', '员工').then(res => {
+        setUserSource(res || []);
+      })
+    }
+  }, [visible]);
 
   // 打开抽屉时初始化
   // useEffect(() => {
@@ -599,7 +600,7 @@ const Add = (props: AddProps) => {
                               ))}
                             </Select>
                           )}
- 
+
                           {getFieldDecorator('signerId', {
                           })(
                             <input type='hidden' />

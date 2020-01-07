@@ -21,12 +21,20 @@ export function GetProjectType(): Promise<TreeEntity[]> {
     .then(getResult as any);
 }
 
-// 获取房产信息
+// 获取车位车库信息
 export function GetDetailJson(keyValue): Promise<any> {
   return request
     .get(process.env.basePath + `/ParkingLot/GetFormInfoJson?keyValue=${keyValue}`)
     .then(getResult as any);
 }
+
+//获取管理处下的小区
+export function GetAreasByOrganizeId(organizeId): Promise<any> {
+  return request
+    .get(process.env.basePath + `/ParkingLot/GetAreasByOrganizeId?organizeId=${organizeId}`)
+    .then(getResult as any);
+}
+
 // 新增修改
 export function SaveGarageForm(data): Promise<any> {
   data.keyValue = data.id;
@@ -58,8 +66,8 @@ export function RemoveForm(keyValue): Promise<any> {
 // }
 
 //查询客户数据
-export function GetCustomerList(keyword): Promise<any> {
+export function GetCustomerList(keyword,organizeId): Promise<any> {
   return request
-    .get(process.env.basePath + `/PStructUser/GetCustomerList?keyword=${keyword}`)
+    .get(process.env.basePath + `/PStructUser/GetCustomerList?keyword=${keyword}&organizeId=${organizeId}`)
     .then(getResult as any);
 }

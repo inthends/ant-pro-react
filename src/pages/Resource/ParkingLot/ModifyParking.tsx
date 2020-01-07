@@ -1,20 +1,6 @@
 // import { ParkingData } from '@/model/models';
 import { getCommonItems } from '@/services/commonItem';
-import {
-  AutoComplete,
-  Button,
-  Card,
-  Col,
-  Drawer,
-  Form,
-  Input,
-  message,
-  Row,
-  Select,
-  DatePicker,
-  TreeSelect,
-  InputNumber,
-} from 'antd';
+import { AutoComplete, Button, Card, Col, Drawer, Form, Input, message, Row, Select, DatePicker, TreeSelect, InputNumber } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
@@ -35,7 +21,7 @@ interface ModifyParkingProps {
   reload(): void;
 }
 const ModifyParking = (props: ModifyParkingProps) => {
-  const { treeData, modifyVisible, data, closeDrawer, form, reload } = props;
+  const { organizeId, treeData, modifyVisible, data, closeDrawer, form, reload } = props;
   const { getFieldDecorator } = form;
   const title = data === undefined ? '添加车位' : '修改车位';
   // const [infoDetail, setInfoDetail] = useState<ParkingData>({});
@@ -46,7 +32,6 @@ const ModifyParking = (props: ModifyParkingProps) => {
   const [parkingNature, setParkingNature] = useState<any[]>([]); // 车位性质
   // const [color, setColor] = useState<any[]>([]); // 颜色 
   const [userSource, setUserSource] = useState<any[]>([]);
-
   const [infoDetail, setInfoDetail] = useState<any>({});
 
   // 打开抽屉时初始化
@@ -110,7 +95,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
         //   endRentDate: values.endRentDate ? values.endRentDate.format('YYYY-MM-DD') : undefined,
         // };
 
-        const newData = data ? { ...data, ...values } : values; 
+        const newData = data ? { ...data, ...values } : values;
         doSave(newData);
       }
     });
@@ -129,7 +114,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
   const handleSearch = value => {
     if (value == '')
       return;
-    GetCustomerList(value).then(res => {
+    GetCustomerList(value, organizeId).then(res => {
       setUserSource(res || []);
     })
   };
@@ -150,7 +135,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
       title={title}
       placement="right"
       width={600}
-      onClose={close} 
+      onClose={close}
       visible={modifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
@@ -204,6 +189,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
                           {item.title}
                         </Option>
                       ))} */}
+                      <Option value={0}>未售</Option> 
                       <Option value={3}>空置</Option>
                       <Option value={4}>出租</Option>
                     </Select>,
@@ -222,7 +208,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
                           {item.title}
                         </Option>
                       ))}
-                    </Select>,
+                    </Select>
                   )}
                 </Form.Item>
               </Col>

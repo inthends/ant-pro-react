@@ -1,10 +1,10 @@
- 
-import { Button, Card, Col, Drawer, Form, Input, message, Row, TreeSelect, InputNumber } from 'antd';
+
+import { Select, Button, Card, Col, Drawer, Form, Input, message, Row, TreeSelect, InputNumber } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { SaveGarageForm } from './ParkingLot.service';
+import { SaveGarageForm, GetAreasByOrganizeId } from './ParkingLot.service';
 import styles from './style.less';
-
+const { Option } = Select;
 const { TextArea } = Input;
 // const { TreeNode } = Tree;
 
@@ -25,6 +25,7 @@ const ModifyGarage = (props: ModifyGarageProps) => {
   const [infoDetail, setInfoDetail] = useState<any>({});
   // const [orgTree, setOrgTree] = useState<any[]>([]);
   // const [estateTree, setEstateTree] = useState<any[]>([]);
+  const [areas, setAreas] = useState<any[]>([]); //小区
 
   // 打开抽屉时初始化
   // useEffect(() => {
@@ -33,26 +34,31 @@ const ModifyGarage = (props: ModifyGarageProps) => {
   //   });
   // }, []);
 
-  useEffect(() => {
-    if (form.getFieldValue('organizeId') === undefined) {
-      return;
-    }
-    // getEstateTreeData(form.getFieldValue('organizeId'), '1').then(res => {
-    //   const treeList = res || [];
-    //   if (!treeList.map(item => item.id).includes(form.getFieldValue('parentId'))) {
-    //     form.setFieldsValue({ parentId: undefined });
-    //   } 
-    //   setEstateTree(treeList);
-    // });
-  }, [form.getFieldValue('organizeId')]);
+  // useEffect(() => {
+  //   if (form.getFieldValue('organizeId') === undefined) {
+  //     return;
+  //   }
+  // getEstateTreeData(form.getFieldValue('organizeId'), '1').then(res => {
+  //   const treeList = res || [];
+  //   if (!treeList.map(item => item.id).includes(form.getFieldValue('parentId'))) {
+  //     form.setFieldsValue({ parentId: undefined });
+  //   } 
+  //   setEstateTree(treeList);
+  // });
+  // }, [form.getFieldValue('organizeId')]);
 
   // 打开抽屉时初始化
   useEffect(() => {
     if (modifyVisible) {
       if (data) {
         // setInfoDetail(data.baseInfo);
-        setInfoDetail(data);
+        //加载小区
+        GetAreasByOrganizeId(data.organizeId).then(res => {
+          setAreas(res || []); 
+          setInfoDetail(data);
+        })
         form.resetFields();
+
       }
     } else {
       form.resetFields();
@@ -80,6 +86,14 @@ const ModifyGarage = (props: ModifyGarageProps) => {
     });
   };
 
+  //管理处选择
+  const onOrgSelect = (value) => {
+    GetAreasByOrganizeId(value).then(res => {
+      setAreas(res || []);
+    })
+  };
+
+
   return (
     <Drawer
       title={title}
@@ -93,7 +107,7 @@ const ModifyGarage = (props: ModifyGarageProps) => {
         {modifyVisible ? (
           <Form layout="vertical" hideRequiredMark>
             <Row gutter={24}>
-              <Col lg={24}>
+              <Col lg={12}>
                 <Form.Item label="隶属机构" required>
                   {getFieldDecorator('organizeId', {
                     initialValue: infoDetail.organizeId,
@@ -104,6 +118,7 @@ const ModifyGarage = (props: ModifyGarageProps) => {
                       treeData={treeData}
                       treeDefaultExpandAll
                       dropdownStyle={{ maxHeight: 300 }}
+                      onSelect={onOrgSelect}
                     >
                       {/* {renderTree(orgTree, '0')} */}
                     </TreeSelect>,
@@ -111,6 +126,35 @@ const ModifyGarage = (props: ModifyGarageProps) => {
                 </Form.Item>
               </Col>
 
+              <Col lg={12}>
+                <Form.Item label="所属小区">
+                  {getFieldDecorator('parentId', {
+                    initialValue: infoDetail.parentId,
+                    rules: [{ required: true, message: '请选择所属小区' }]
+                  })(
+                    <Select placeholder="请选择所属小区">
+                      {areas.map(item => (
+                        <Option value={item.id} key={item.id}>
+                          {item.name}
+                        </Option>
+                      ))}
+                    </Select>
+                  )}
+                </Form.Item>
+              </Col>
+
+              {/* <Col lg={12}>
+                <Form.Item label="所属小区">
+                  {getFieldDecorator('parentId', {
+                    rules: [{ required: true, message: '请选择所属小区' }],
+                    initialValue: infoDetail.parentId,
+                  })(
+                    <TreeSelect placeholder="请选择隶属机构" allowClear treeDefaultExpandAll>
+                      {renderTree(estateTree, '0')}
+                    </TreeSelect>,
+                  )}
+                </Form.Item>
+              </Col> */}
 
             </Row>
             <Row gutter={24}>
@@ -130,18 +174,6 @@ const ModifyGarage = (props: ModifyGarageProps) => {
                   })(<Input placeholder="请输入车库编号" />)}
                 </Form.Item>
               </Col>
-              {/* <Col lg={12}>
-                <Form.Item label="所属小区">
-                  {getFieldDecorator('parentId', {
-                    rules: [{ required: true, message: '请选择所属小区' }],
-                    initialValue: infoDetail.parentId,
-                  })(
-                    <TreeSelect placeholder="请选择隶属机构" allowClear treeDefaultExpandAll>
-                      {renderTree(estateTree, '0')}
-                    </TreeSelect>,
-                  )}
-                </Form.Item>
-              </Col> */}
             </Row>
 
             <Row gutter={24}>
@@ -156,7 +188,7 @@ const ModifyGarage = (props: ModifyGarageProps) => {
                 <Form.Item label="车库全称">
                   {getFieldDecorator('allName', {
                     initialValue: infoDetail.allName,
-                  })(<Input disabled placeholder="请输入车库全称" />)}
+                  })(<Input disabled placeholder="车库全称" />)}
                 </Form.Item>
               </Col>
             </Row>

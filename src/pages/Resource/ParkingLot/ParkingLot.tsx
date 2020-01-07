@@ -18,7 +18,8 @@ function ParkingLot() {
   const [treeData, setTreeData] = useState<TreeEntity[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
-  const [orgid, setOrgid] = useState<string>('');
+  const [orgid, setOrgid] = useState<string>('');//左侧点击树id 
+  const [organizeId, setOrganizeId] = useState<string>('');//所属机构id
   const [orgtype, setOrgtype] = useState<string>('1');
   const [data, setData] = useState<any[]>([]);
   const [currData, setCurrData] = useState<any>();
@@ -28,7 +29,7 @@ function ParkingLot() {
   // const [orgs, setOrgs] = useState<TreeNode[]>();
   const [orgs, setOrgs] = useState<any[]>([]);
 
-  const selectTree = (id, type, searchText) => {
+  const selectTree = (id, type, organizeId, searchText) => {
     initLoadData(id, type, searchText);
     if (type == '1' || type == '8') {
       setIsAdd(false);
@@ -37,6 +38,7 @@ function ParkingLot() {
     }
     setOrgid(id);
     setOrgtype(type);
+    setOrganizeId(organizeId);
   };
 
   useEffect(() => {
@@ -45,12 +47,10 @@ function ParkingLot() {
       // const rootOrg = root.length === 1 ? root[0] : undefined;
       // SetOrganize(rootOrg);
       setTreeData(res || []);
-
       //加载管理处
       GetOrgs().then(res => {
         setOrgs(res || []);
       });
-
       initLoadData('', '', '');
     });
   }, []);
@@ -163,8 +163,8 @@ function ParkingLot() {
     <Layout style={{ height: '100%' }}>
       <LeftTree
         treeData={treeData}
-        selectTree={(id, type) => {
-          selectTree(id, type, search);
+        selectTree={(id, type, organizeId) => {
+          selectTree(id, type, organizeId, search);
         }}
       />
       <Content style={{ paddingLeft: '18px' }} >
@@ -180,8 +180,7 @@ function ParkingLot() {
             style={{ float: 'right' }}
             // disabled={disabledCreate(orgid)}
             disabled={isAdd}
-            onClick={() => create(orgid)}
-          >
+            onClick={() => create(orgid)}>
             <Icon type="plus" />
             {orgtype == '8' ? '车位' : '车库'}
           </Button>
@@ -194,6 +193,7 @@ function ParkingLot() {
           pagination={pagination}
           data={data}
           modify={showDrawer}
+          type={orgtype}
           reload={() => initLoadData(orgid, orgtype, search)}
         />
       </Content>
@@ -202,7 +202,7 @@ function ParkingLot() {
           modifyVisible={modifyVisible}
           closeDrawer={closeDrawer}
           treeData={treeData}
-          organizeId={orgid}
+          organizeId={organizeId}
           data={currData}
           reload={() => initLoadData(orgid, orgtype, search)}
         />
@@ -220,5 +220,4 @@ function ParkingLot() {
     </Layout>
   );
 }
-
 export default ParkingLot;

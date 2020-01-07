@@ -4,9 +4,8 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { ExistEnCode, SaveForm, GetCustomerList } from './House.service';
 import styles from './style.less';
-
 const { TextArea } = Input;
-const { Option } = AutoComplete;
+const { Option } = Select;
 
 interface RoomProps {
   modifyVisible: boolean;
@@ -71,7 +70,6 @@ const Room = (props: RoomProps) => {
       form.resetFields();
     }
   }, [modifyVisible]);
-
 
   const close = () => {
     closeDrawer();

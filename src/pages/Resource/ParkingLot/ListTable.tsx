@@ -1,5 +1,5 @@
 import Page from '@/components/Common/Page';
-import { ParkingData } from '@/model/models';
+// import { ParkingData } from '@/model/models';
 import { Tag, Divider, message, Modal, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
@@ -12,10 +12,11 @@ interface ListTableProps {
   onchange(page: any, filter: any, sort: any): any;
   modify(data: any): void;
   reload(): void;
+  type: string;
 }
 
 function ListTable(props: ListTableProps) {
-  const { onchange, loading, pagination, data, modify, reload } = props;
+  const { type, onchange, loading, pagination, data, modify, reload } = props;
   const changePage = (pag: PaginationConfig, filters, sorter) => {
     onchange(pag, filters, sorter);
   };
@@ -36,9 +37,77 @@ function ListTable(props: ListTableProps) {
       },
     });
   };
+
+  const columnsGarage = [
+    {
+      title: '车库名称',
+      dataIndex: 'name',
+      key: 'name',
+      width: 200,
+      fixed: 'left',
+      sorter: true,
+    },
+    {
+      title: '车库编号',
+      dataIndex: 'code',
+      key: 'code',
+      width: 150,
+      sorter: true,
+    },
+    {
+      title: '建筑面积(㎡)',
+      dataIndex: 'area',
+      key: 'area',
+      width: 120,
+      sorter: true,
+    },
+    {
+      title: '占地面积(㎡)',
+      dataIndex: 'coverArea',
+      key: 'coverArea',
+      width: 120,
+      sorter: true,
+    },
+
+    {
+      title: '车库全称',
+      dataIndex: 'allname',
+      key: 'allname',
+      sorter: true,
+    },
+    {
+      title: '操作',
+      align: 'center',
+      width: 95,
+      fixed: 'right',
+      render: (text, record) => {
+        return [
+          // <Button
+          //   type="primary"
+          //   key="modify"
+          //   style={{ marginRight: '10px' }}
+          //   onClick={() => doModify(record.id)}
+          // >
+          //   修改
+          // </Button>,
+          // <Button type="danger" key="delete" onClick={() => doDelete(record)}>
+          //   删除
+          // </Button>,
+          <span>
+            <a onClick={() => doModify(record.id)} key="modify">修改</a>
+            <Divider type="vertical" key='split' />
+            <a onClick={() => doDelete(record)} key="delete">删除</a>
+          </span>
+        ];
+      },
+    },
+  ] as ColumnProps<any>[];
+
+
+
   const columns = [
     {
-      title: '名称',
+      title: '车位名称',
       dataIndex: 'name',
       key: 'name',
       width: 150,
@@ -46,7 +115,7 @@ function ListTable(props: ListTableProps) {
       sorter: true,
     },
     {
-      title: '编号',
+      title: '车库编号',
       dataIndex: 'code',
       key: 'code',
       width: 150,
@@ -81,6 +150,8 @@ function ListTable(props: ListTableProps) {
       sorter: true,
       render: (text, record) => {
         switch (text) {
+          case 0:
+            return <Tag color="#c32c2b">未售</Tag>
           case 3:
             return <Tag color="#e4aa5b">空置</Tag>
           case 4:
@@ -91,7 +162,7 @@ function ListTable(props: ListTableProps) {
       }
     },
     {
-      title: '全称',
+      title: '车库全称',
       dataIndex: 'allname',
       key: 'allname',
       sorter: true,
@@ -123,6 +194,8 @@ function ListTable(props: ListTableProps) {
       },
     },
   ] as ColumnProps<any>[];
+
+
   return (
     <Page>
       <Table
@@ -130,7 +203,8 @@ function ListTable(props: ListTableProps) {
         bordered={false}
         size="middle"
         dataSource={data}
-        columns={columns}
+        // columns={columns}
+        columns={type == '8' ? columns : columnsGarage}
         rowKey={record => record.id}
         pagination={pagination}
         scroll={{ x: 1200 }}
