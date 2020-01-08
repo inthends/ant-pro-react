@@ -1,12 +1,12 @@
-import {  Table,Card, Button, Col,  Drawer, Form, Row, Input, Spin } from 'antd';
+import { Table, Card, Button, Col, Drawer, Form, Row, Input, Spin } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetPageDetailListJson,Audit, GetBilling } from './Main.service';
+import { GetPageDetailListJson, Audit, GetBilling } from './Main.service';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { ColumnProps } from 'antd/lib/table';
 import styles from './style.less';
 import moment from 'moment';
-const {  TextArea } = Input;
+const { TextArea } = Input;
 const Search = Input.Search;
 interface VerifyProps {
   vertifyVisible: boolean;
@@ -18,21 +18,21 @@ interface VerifyProps {
 }
 
 const Verify = (props: VerifyProps) => {
-  const { vertifyVisible, closeVerify, form, id, ifVerify, reload } = props; 
+  const { vertifyVisible, closeVerify, form, id, ifVerify, reload } = props;
   const title = ifVerify ? '计费单审核' : '计费单取消审核';
   const [loading, setLoading] = useState<boolean>(false);
   const { getFieldDecorator } = form;
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [unitFeeData, setUnitFeeData] = useState<any>();
-  const [pagination, setPagination] = useState<DefaultPagination>(new DefaultPagination()); 
+  const [pagination, setPagination] = useState<DefaultPagination>(new DefaultPagination());
 
   useEffect(() => {
     if (vertifyVisible) {
-      form.resetFields(); 
+      form.resetFields();
       if (id != null && id != '') {
         setLoading(true);
         GetBilling(id).then(res => {
-          setInfoDetail(res); 
+          setInfoDetail(res);
           initUnitFeeLoadData('');
           setLoading(false);
         })
@@ -59,7 +59,7 @@ const Verify = (props: VerifyProps) => {
     return unitMeterload({ pageIndex, pageSize, sidx, sord, total, queryJson });
   };
 
-  const unitMeterload = data => { 
+  const unitMeterload = data => {
     data.sidx = data.sidx || 'id';
     data.sord = data.sord || 'asc';
     return GetPageDetailListJson(data).then(res => {
@@ -71,8 +71,8 @@ const Verify = (props: VerifyProps) => {
           total,
           pageSize,
         };
-      }); 
-      setUnitFeeData(res.data); 
+      });
+      setUnitFeeData(res.data);
       return res;
     });
   };
@@ -120,14 +120,14 @@ const Verify = (props: VerifyProps) => {
       title: '收费项目',
       dataIndex: 'feeName',
       key: 'feeName',
-      width: 100,
+      width: 150,
       sorter: true,
     },
     {
       title: '应收期间',
       dataIndex: 'period',
       key: 'period',
-      width: 120,
+      width: 100,
       sorter: true,
       render: val => {
         if (val == null) {
@@ -141,7 +141,7 @@ const Verify = (props: VerifyProps) => {
       title: '数量',
       dataIndex: 'quantity',
       key: 'quantity',
-      width: 100,
+      width: 80,
       sorter: true,
     },
     {
@@ -150,6 +150,41 @@ const Verify = (props: VerifyProps) => {
       key: 'price',
       sorter: true,
       width: 80
+    },
+    {
+      title: '金额',
+      key: 'amount',
+      dataIndex: 'amount',
+      sorter: true,
+      width: 100
+    },
+    {
+      title: '起始日期',
+      key: 'beginDate',
+      dataIndex: 'beginDate',
+      sorter: true,
+      width: 100,
+      render: val => {
+        if (val == null) {
+          return '';
+        } else {
+          return moment(val).format('YYYY-MM-DD');
+        }
+      }
+    },
+    {
+      title: '终止日期',
+      key: 'endDate',
+      dataIndex: 'endDate',
+      sorter: true,
+      width: 100,
+      render: val => {
+        if (val == null) {
+          return '';
+        } else {
+          return moment(val).format('YYYY-MM-DD');
+        }
+      }
     },
     {
       title: '周期',
@@ -165,46 +200,11 @@ const Verify = (props: VerifyProps) => {
       sorter: true,
       width: 100
     },
+
     {
-      title: '金额',
-      key: 'amount',
-      dataIndex: 'amount',
-      sorter: true,
-      width: 100
-    },
-    {
-      title: '起始日期',
-      key: 'beginDate',
-      dataIndex: 'beginDate',
-      sorter: true,
-      width: 120,
-      render: val => {
-        if (val == null) {
-          return '';
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
-    },
-    {
-      title: '终止日期',
-      key: 'endDate',
-      dataIndex: 'endDate',
-      sorter: true,
-      width: 120,
-      render: val => {
-        if (val == null) {
-          return '';
-        } else {
-          return  moment(val).format('YYYY-MM-DD');
-        }
-      }
-    }, {
       title: '备注',
       dataIndex: 'memo',
-      key: 'memo',
-      width: 100,
-      sorter: true
+      key: 'memo'
     }
   ] as ColumnProps<any>[];
 
@@ -213,7 +213,7 @@ const Verify = (props: VerifyProps) => {
       className="offsetVerify"
       title={title}
       placement="right"
-      width={700}
+      width={1000}
       onClose={close}
       visible={vertifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
@@ -228,7 +228,7 @@ const Verify = (props: VerifyProps) => {
                 </Form.Item>
               </Col>
               <Col span={8}>
-                <Form.Item label="单据日期"  > 
+                <Form.Item label="单据日期"  >
                   {String(infoDetail.billDate).substr(0, 10)}
                 </Form.Item>
               </Col>
@@ -250,8 +250,8 @@ const Verify = (props: VerifyProps) => {
                 </Form.Item>
               </Col>
               <Col span={8}>
-                <Form.Item required label="审核日期"   > 
-                  { infoDetail.verifyDate == null ? '' : String(infoDetail.verifyDate).substr(0, 10)} 
+                <Form.Item required label="审核日期"   >
+                  {infoDetail.verifyDate == null ? '' : String(infoDetail.verifyDate).substr(0, 10)}
                 </Form.Item>
               </Col>
             </Row>
@@ -261,7 +261,7 @@ const Verify = (props: VerifyProps) => {
                   {getFieldDecorator('verifyMemo', {
                     initialValue: infoDetail.verifyMemo
                   })(
-                    <TextArea  rows={4} placeholder="请输入审核情况" />
+                    <TextArea rows={4} placeholder="请输入审核情况" />
                   )}
                 </Form.Item>
               </Col>
@@ -277,10 +277,10 @@ const Verify = (props: VerifyProps) => {
                     // setMeterSearchParams(params);
                     initUnitFeeLoadData(value);
                   }}
-                /> 
+                />
               </div>
-             
-              <Table   
+
+              <Table
                 bordered={false}
                 size="middle"
                 columns={columns}

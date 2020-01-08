@@ -138,7 +138,7 @@ function Main() {
   const load = data => {
     setLoading(true);
     data.sidx = data.sidx || 'billDate';
-    data.sord = data.sord || 'desc';
+    data.sord = data.sord || 'asc';
     return NotChargeFeeData(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
@@ -160,7 +160,7 @@ function Main() {
     // setShowCustomerFee(showCustomerFee);
     const queryJson = { keyword: search, unitId: unitId, showCustomerFee: showCustomerFee };
     const sidx = 'billDate';
-    const sord = 'desc';
+    const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
       return res;
@@ -201,7 +201,7 @@ function Main() {
   const loadCharge = data => {
     setLoadingCharge(true);
     data.sidx = data.sidx || 'billDate';
-    data.sord = data.sord || 'desc';
+    data.sord = data.sord || 'asc';
     return ChargeFeePageData(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPaginationCharge(pagesetting => {
@@ -228,7 +228,7 @@ function Main() {
       EndDate: chargedSearchParams.endDate ? chargedSearchParams.endDate : ''
     };
     const sidx = 'billDate';
-    const sord = 'desc';
+    const sord = 'asc';
     const { current: pageIndex, pageSize, total } = paginationCharge;
     return loadCharge({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
       return res;

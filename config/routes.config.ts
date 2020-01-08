@@ -312,11 +312,12 @@ export default [
             icon: 'snippets',
             component: './Contract/List/Main',
           },
-          // {
-          //   name: '归档合同',
-          //   path: '/resource/test1',
-          //   component: './Resource/Test1',
-          // },
+          {
+            name: 'merchants',
+            path: '/contract/merchants',
+            icon: 'snippets',
+            component: './Contract/Merchants/Main',
+          },
         ],
       },
       {

@@ -236,13 +236,11 @@ const Modify = (props: ModifyProps) => {
           Status: 0,
           Memo: values.memo
         };
-
         //设置新id
         setNewId(feeEntity.keyValue);
         setFeeDetail(
           feeEntity
         );
-
         //console.log(feeEntity);
         setSelectHouseVisible(true);
       }
@@ -331,7 +329,7 @@ const Modify = (props: ModifyProps) => {
       key: 'cycleType',
       dataIndex: 'cycleType',
       width: 80
-    }, 
+    },
     {
       title: '备注',
       dataIndex: 'memo',

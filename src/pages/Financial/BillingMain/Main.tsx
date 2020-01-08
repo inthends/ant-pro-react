@@ -73,7 +73,7 @@ function Main() {
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
       searchCondition.sidx = field ? field : 'billCode';
     }
-    return meterload(searchCondition);
+    return load(searchCondition);
   }
   const loadUnitMeterData = (search, paginationConfig?: PaginationConfig, sorter?) => {
     setDetailSearch(search);
@@ -92,14 +92,14 @@ function Main() {
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'id';
+      searchCondition.sidx = field ? field : 'billCode';
     }
-    return unitMeterload(searchCondition);
+    return unitLoad(searchCondition);
   }
-  const meterload = data => {
+  const load = data => {
     setLoading(true);
     data.sidx = data.sidx || 'billCode';
-    data.sord = data.sord || 'asc';
+    data.sord = data.sord || 'desc';
 
     return GetPageListJson(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -117,7 +117,8 @@ function Main() {
       return res;
     });
   };
-  const unitMeterload = data => {
+
+  const unitLoad = data => {
     setDetailLoading(true);
     data.sidx = data.sidx || 'id';
     data.sord = data.sord || 'asc';
@@ -148,10 +149,11 @@ function Main() {
       TreeType: org.type,
     };
     const sidx = 'billCode';
-    const sord = 'asc';
+    const sord = 'desc';
     const { current: pageIndex, pageSize, total } = pagination;
-    return meterload({ pageIndex, pageSize, sidx, sord, total, queryJson });
+    return load({ pageIndex, pageSize, sidx, sord, total, queryJson });
   };
+
   const initLoadDetailData = (org, searchText) => {
     setDetailSearch(searchText);
     const queryJson = {
@@ -160,10 +162,10 @@ function Main() {
       TreeTypeId: org.key,
       TreeType: org.type,
     };
-    const sidx = 'id';
-    const sord = 'asc';
+    const sidx = 'billCode';
+    const sord = 'desc';
     const { current: pageIndex, pageSize, total } = detailPagination;
-    return unitMeterload({ pageIndex, pageSize, sidx, sord, total, queryJson });
+    return unitLoad({ pageIndex, pageSize, sidx, sord, total, queryJson });
   };
 
   const closeDivide = () => {

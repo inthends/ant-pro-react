@@ -29,13 +29,12 @@ export default {
   'menu.dashboard.receivabledivide': '应收权责摊销',
   'menu.dashboard.receiveddivide': '已收权责摊销',
 
-
   'menu.resource': '资源管理',
   'menu.resource.house': '项目资料',
   'menu.resource.housemore': '房产资料',
   'menu.resource.publicarea': '公共区域',
   'menu.resource.parkinglot': '车位资料',
-  'menu.resource.pstructuser': '客户资料',
+  'menu.resource.pstructuser': '住户资料',
   'menu.resource.reciprocatingunit': '往来单位',
 
   'menu.financial': '财务管理',
@@ -64,6 +63,7 @@ export default {
 
   'menu.contract': '资产运营',
   'menu.contract.list': '合同管理',
+  'menu.contract.merchants': '客户管理', 
 
   //workflow
   'menu.workflow': '流程中心',
