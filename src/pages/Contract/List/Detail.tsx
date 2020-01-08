@@ -38,7 +38,7 @@ const Detail = (props: DetailProps) => {
   const [depositData, setDepositData] = useState<any[]>([]);//保证金
   const [chargeData, setChargeData] = useState<any[]>([]);//租金
   // const [appData, setAppData] = useState<any[]>([]);//审批记录
-  
+
 
   // const close = () => {
   //   closeDrawer();
@@ -118,7 +118,11 @@ const Detail = (props: DetailProps) => {
       onClose={closeDrawer}
       visible={visible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
-      <PageHeader title={GetStatus(infoDetail.status)}
+      <PageHeader title={GetStatus(infoDetail.status)} 
+        style={{
+          border: '1px solid rgb(235, 237, 240)'
+        }}
+
       // extra={[
       //   <Button key="1">附件</Button>, 
       //   <Button key="2">打印</Button>,
@@ -424,7 +428,7 @@ const Detail = (props: DetailProps) => {
               chargeData={chargeData}
               className={styles.addcard}
             ></ResultList>
-          </TabPane> 
+          </TabPane>
           {/* <TabPane tab="审批记录" key="4">
             <AppLog appData={appData}></AppLog>
           </TabPane> */}

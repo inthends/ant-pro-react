@@ -438,7 +438,7 @@ const Add = (props: AddProps) => {
                     </Row>
                     <Row gutter={24}>
                       <Col lg={12}>
-                        <Form.Item label="租赁数量（m²)">
+                        <Form.Item label="租赁数量/㎡">
                           {getFieldDecorator('leaseSize', {
                             rules: [{ required: true, message: '请输入租赁数量' }],
                           })(<InputNumber placeholder="请输入租赁数量" style={{ width: '100%' }} />)}

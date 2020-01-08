@@ -5,55 +5,37 @@ import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import { GetPageListJson } from './Main.service';
 import ListTable from './ListTable';
-// import { getResult } from '@/utils/networkUtils';
-import Add from './Add';
+// import { getResult } from '@/utils/networkUtils'; 
 import Modify from './Modify';
-import Detail from './Detail';  
-
+import Detail from './Detail';
 const { Content } = Layout;
 const { Search } = Input;
 
 function Main() {
-  const [addVisible, setAddVisible] = useState<boolean>(false);//新建
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);//修改
   const [detailVisible, setDetailVisible] = useState<boolean>(false);//查看
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [data, setData] = useState<any[]>([]);
   const [id, setId] = useState<string>();
-  const [chargeId, setChargeId] = useState<string>();
   const [search, setSearch] = useState<string>('');
-  // const [treeData, setTreeData] = useState<any[]>([]); 
-  // const [userVisible, setUserVisible] = useState<boolean>(false); 
- 
-  const closeAddDrawer = () => {
-    setAddVisible(false);
-  };
-
-  const showAddDrawer = (id?, chargeId?) => {
-    setAddVisible(true);
-    setId(id);
-    setChargeId(chargeId);
-  };
 
   const closeModifyDrawer = () => {
     setModifyVisible(false);
   };
 
-  const showModifyDrawer = (id?, chargeId?) => {
+  const showModifyDrawer = (id?) => {
     setModifyVisible(true);
     setId(id);
-    setChargeId(chargeId);
   };
 
   const closeDetailDrawer = () => {
     setDetailVisible(false);
   };
 
-  const showDetailDrawer = (id?, chargeId?) => {
+  const showDetailDrawer = (id?) => {
     setDetailVisible(true);
     setId(id);
-    setChargeId(chargeId);
   };
 
   const loadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
@@ -73,7 +55,7 @@ function Main() {
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'BillingDate';
+      searchCondition.sidx = field ? field : 'customer';
     }
 
     return load(searchCondition).then(res => {
@@ -82,7 +64,7 @@ function Main() {
   };
   const load = data => {
     setLoading(true);
-    data.sidx = data.sidx || 'BillingDate';
+    data.sidx = data.sidx || 'customer';
     data.sord = data.sord || 'asc';
     return GetPageListJson(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -103,7 +85,7 @@ function Main() {
   const initLoadData = (search) => {
     setSearch(search);
     const queryJson = { keyword: search };
-    const sidx = 'BillingDate';
+    const sidx = 'customer';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
@@ -133,15 +115,15 @@ function Main() {
         <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
           <Search
             className="search-input"
-            placeholder="搜索合同编号"
-            style={{ width: 160 }}
+            placeholder="搜索客户名称"
+            style={{ width: 180 }}
             onSearch={value => loadData(value)}
           />
           <Button type="primary" style={{ float: 'right' }}
-            onClick={() => showAddDrawer()}
+            onClick={() => showModifyDrawer()}
           >
             <Icon type="plus" />
-            合同
+            客户
           </Button>
         </div>
 
@@ -154,36 +136,24 @@ function Main() {
           data={data}
           detail={showDetailDrawer}
           modify={showModifyDrawer}
-          // approve={showApproveDrawer} 
           reload={() => initLoadData(search)} />
       </Content>
-
-      <Add
-        visible={addVisible}
-        closeDrawer={closeAddDrawer}
-        // treeData={treeData}
-        id={id}
-        reload={() => initLoadData(search)}
-      />
 
       <Modify
         visible={modifyVisible}
         closeDrawer={closeModifyDrawer}
-        // treeData={treeData}
         id={id}
-        chargeId={chargeId}
         reload={() => initLoadData(search)}
-      // choose={showChoose}
       />
 
       <Detail
         visible={detailVisible}
         closeDrawer={closeDetailDrawer}
         id={id}
-        chargeId={chargeId}
         reload={() => initLoadData(search)}
+        // modify={showModifyDrawer}
       />
-  
+
     </Layout>
   );
 }
