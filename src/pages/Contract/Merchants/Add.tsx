@@ -9,10 +9,6 @@ import {
   LeaseContractDTO
 } from '@/model/models';
 import React, { useEffect, useState } from 'react';
-import LeaseTerm from './LeaseTerm';
-import IncreasingRate from './IncreasingRate';
-import Rebate from './Rebate';
-import ResultList from './ResultList';
 import moment from 'moment';
 import { getCommonItems, GetUserList } from '@/services/commonItem';
 import { SaveForm, GetFeeItemsByUnitId, GetChargeDetail } from './Main.service';
@@ -705,24 +701,9 @@ const Add = (props: AddProps) => {
                           <Option value="元">元</Option>
                         </Select>)}
                     </Form.Item>
-                  </Col>
-                  {/* <Col lg={4}>
-                  <Form.Item label="保证金金额" >
-                    {getFieldDecorator('totalDeposit', {
-                    })(<Input readOnly />)}
-                  </Form.Item>
-                </Col> */}
+                  </Col> 
                 </Row>
               </Card>
-              <LeaseTerm form={form} feeitems={feeitems}></LeaseTerm>
-              <IncreasingRate form={form}></IncreasingRate>
-              <Rebate form={form}></Rebate>
-              <Button style={{ width: '100%', marginBottom: '10px' }} onClick={calculation}>点击生成租金明细</Button>
-              <ResultList
-                depositData={depositData}
-                chargeData={chargeData}
-                className={styles.addcard}
-              ></ResultList>
             </TabPane>
           </Tabs>
         </Spin>
