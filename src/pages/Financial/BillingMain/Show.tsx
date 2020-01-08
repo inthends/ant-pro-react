@@ -163,7 +163,7 @@ const Show = (props: ShowProps) => {
       title: '收费项目',
       dataIndex: 'feeName',
       key: 'feeName',
-      width: 100,
+      width: 150,
       sorter: true,
     },
     {
@@ -184,7 +184,7 @@ const Show = (props: ShowProps) => {
       title: '数量',
       dataIndex: 'quantity',
       key: 'quantity',
-      width: 100,
+      width: 80,
       sorter: true,
     },
     {
@@ -194,20 +194,7 @@ const Show = (props: ShowProps) => {
       sorter: true,
       width: 80
     },
-    {
-      title: '周期',
-      key: 'cycleValue',
-      dataIndex: 'cycleValue',
-      sorter: true,
-      width: 80
-    },
-    {
-      title: '周期单位',
-      key: 'cycleType',
-      dataIndex: 'cycleType',
-      sorter: true,
-      width: 100
-    },
+
     {
       title: '金额',
       key: 'amount',
@@ -215,6 +202,7 @@ const Show = (props: ShowProps) => {
       sorter: true,
       width: 100
     },
+
     {
       title: '起始日期',
       key: 'beginDate',
@@ -242,23 +230,36 @@ const Show = (props: ShowProps) => {
           return moment(val).format('YYYY-MM-DD');
         }
       }
-    }, {
+    },
+
+    {
+      title: '周期',
+      key: 'cycleValue',
+      dataIndex: 'cycleValue',
+      sorter: true,
+      width: 80
+    },
+    {
+      title: '周期单位',
+      key: 'cycleType',
+      dataIndex: 'cycleType',
+      sorter: true,
+      width: 80
+    },
+   
+     {
       title: '备注',
       dataIndex: 'memo',
-      key: 'memo',
-      width: 100,
-      sorter: true
+      key: 'memo'
     }
   ] as ColumnProps<any>[];
-
-
 
   return (
     <Drawer
       className="offsetVerify"
       title='查看计费单'
       placement="right"
-      width={850}
+      width={1000}
       onClose={close}
       visible={visible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}

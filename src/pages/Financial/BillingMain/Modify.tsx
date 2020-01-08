@@ -259,13 +259,13 @@ const Modify = (props: ModifyProps) => {
       title: '收费项目',
       dataIndex: 'feeName',
       key: 'feeName',
-      width: 100,
+      width: 150,
     },
     {
       title: '应收期间',
       dataIndex: 'period',
       key: 'period',
-      width: 120,
+      width: 100,
       render: val => {
         if (val == null) {
           return ''
@@ -278,25 +278,13 @@ const Modify = (props: ModifyProps) => {
       title: '数量',
       dataIndex: 'quantity',
       key: 'quantity',
-      width: 100,
+      width: 80,
     },
     {
       title: '单价',
       dataIndex: 'price',
       key: 'price',
       width: 80
-    },
-    {
-      title: '周期',
-      key: 'cycleValue',
-      dataIndex: 'cycleValue',
-      width: 80
-    },
-    {
-      title: '周期单位',
-      key: 'cycleType',
-      dataIndex: 'cycleType',
-      width: 100
     },
     {
       title: '金额',
@@ -309,7 +297,7 @@ const Modify = (props: ModifyProps) => {
       title: '起始日期',
       key: 'beginDate',
       dataIndex: 'beginDate',
-      width: 120,
+      width: 100,
       render: val => {
         if (val == null) {
           return '';
@@ -322,7 +310,7 @@ const Modify = (props: ModifyProps) => {
       title: '终止日期',
       key: 'endDate',
       dataIndex: 'endDate',
-      width: 120,
+      width: 100,
       render: val => {
         if (val == null) {
           return '';
@@ -330,7 +318,21 @@ const Modify = (props: ModifyProps) => {
           return moment(val).format('YYYY-MM-DD');
         }
       }
-    }, {
+    },
+
+    {
+      title: '周期',
+      key: 'cycleValue',
+      dataIndex: 'cycleValue',
+      width: 80
+    },
+    {
+      title: '周期单位',
+      key: 'cycleType',
+      dataIndex: 'cycleType',
+      width: 80
+    }, 
+    {
       title: '备注',
       dataIndex: 'memo',
       key: 'memo',
@@ -407,7 +409,7 @@ const Modify = (props: ModifyProps) => {
     <Drawer
       title={title}
       placement="right"
-      width={850}
+      width={1000}
       onClose={close}
       visible={modifyVisible}
       style={{ height: 'calc(100vh-50px)' }}
@@ -633,7 +635,7 @@ const Modify = (props: ModifyProps) => {
         getBillID={(billid) => {
           setLoading(true);
           setNewId(billid);
-          GetBilling(billid).then(res => { 
+          GetBilling(billid).then(res => {
             if (res != null) {
               message.success('添加成功！');
               setInfoDetail(res);
