@@ -337,12 +337,18 @@ const Modify = (props: ModifyProps) => {
 
   const columns = [
     {
-      title: '单元编号',
-      dataIndex: 'unitId',
-      key: 'unitId',
-      width: '120px',
-      sorter: true,
-    },
+      title: '单元全称',
+      dataIndex: 'allName',
+      key: 'allName',
+      width: '250px'
+    }, 
+    // {
+    //   title: '单元编号',
+    //   dataIndex: 'unitId',
+    //   key: 'unitId',
+    //   width: '140px',
+    //   sorter: true,
+    // },
     {
       title: '收费项目',
       dataIndex: 'feeName',
@@ -559,7 +565,7 @@ const Modify = (props: ModifyProps) => {
     <Drawer
       title={title}
       placement="right"
-      width={780}
+      width={800}
       onClose={close}
       visible={modifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
@@ -622,7 +628,7 @@ const Modify = (props: ModifyProps) => {
                 )}
               </Form.Item>
             </Col> */}
-            <Col lg={8}>
+            <Col lg={12}>
               <Form.Item label="批量折扣(默认10不打折)">
                 {getFieldDecorator('rebate', {
                   initialValue: infoDetail.rebate ? infoDetail.rebate : 10,
@@ -632,7 +638,7 @@ const Modify = (props: ModifyProps) => {
                 )}
               </Form.Item>
             </Col>
-            <Col lg={8}>
+            <Col lg={12}>
               <Form.Item label="批量减免金额">
                 {getFieldDecorator('reductionAmount', {
                   initialValue: infoDetail.reductionAmount ? infoDetail.reductionAmount : 0,
@@ -695,7 +701,7 @@ const Modify = (props: ModifyProps) => {
               columns={datacolumns}
               rowKey={record => record.id}
               pagination={pagination}
-              scroll={{ x: 1150, y: 500 }}
+              scroll={{ x: 1300, y: 500 }}
               loading={loading}
               onChange={(pagination: PaginationConfig, filters, sorter) =>
                 changePage(pagination, filters, sorter)

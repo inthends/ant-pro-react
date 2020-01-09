@@ -4,7 +4,7 @@ import { DefaultPagination } from '@/utils/defaultSetting';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetFormJson, GetListByID } from './Main.service';
+import { GetFormJson, GetListById } from './Main.service';
 import moment from 'moment';
 // const { TextArea } = Input;
 import styles from './style.less';
@@ -52,7 +52,7 @@ const Show = (props: ShowProps) => {
             keyValue: entity.billId
           };
           setLoading(true);
-          GetListByID(searchCondition).then(res => {
+          GetListById(searchCondition).then(res => {
             //明细
             setListData(res.data);
             setLoading(false);
@@ -87,7 +87,7 @@ const Show = (props: ShowProps) => {
       searchCondition.sidx = field ? field : 'billId';
     }
     setLoading(true);
-    return GetListByID(searchCondition).then(res => {
+    return GetListById(searchCondition).then(res => {
       //设置查询后的分页
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
@@ -105,14 +105,21 @@ const Show = (props: ShowProps) => {
     });
   };
 
-  const columns = [
+  const columns = [ 
     {
-      title: '单元编号',
-      dataIndex: 'unitId',
-      key: 'unitId',
-      width: '120px',
-      sorter: true,
-    },
+      title: '单元全称',
+      dataIndex: 'allName',
+      key: 'allName',
+      width: '250px'
+    }, 
+
+    // {
+    //   title: '单元编号',
+    //   dataIndex: 'unitId',
+    //   key: 'unitId',
+    //   width: '140px',
+    //   sorter: true,
+    // },
     {
       title: '收费项目',
       dataIndex: 'feeName',
@@ -169,9 +176,10 @@ const Show = (props: ShowProps) => {
     {
       title: '减免后金额',
       dataIndex: 'lastAmount',
-      width: '100px',
-      key: 'lastAmount'
-    }, {
+      key: 'lastAmount',
+      width: '100px' 
+    },
+    {
       title: '备注',
       dataIndex: 'memo',
       key: 'memo'
@@ -248,7 +256,7 @@ const Show = (props: ShowProps) => {
               // rowKey={record => record.id}
               rowKey="billId"
               pagination={pagination}
-              scroll={{ x: 1200, y: 500 }}
+              scroll={{ x: 1300, y: 500 }}
               loading={loading}
               onChange={(pagination: PaginationConfig, filters, sorter) =>
                 changePage(pagination, filters, sorter)

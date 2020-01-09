@@ -23,9 +23,9 @@ export function GetDetailPageListJson(data): Promise<any> {
   return request.post(process.env.basePath + `/Reduction/GetPageDetailListJson`, {data:objToFormdata(data)}).then(getResult as any);
 }
 
-// 根据id查询明细列表
-export function GetListByID(data): Promise<any> {
-  return request.post(process.env.basePath + `/Reduction/GetListByID`, {data:objToFormdata(data)}).then(getResult as any);
+// 根据id查询减免单明细列表
+export function GetListById(data): Promise<any> {
+  return request.post(process.env.basePath + `/Reduction/GetListById`, {data:objToFormdata(data)}).then(getResult as any);
 }
 
 // 查询列表

@@ -156,21 +156,21 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'beginDate',
       key: 'beginDate',
       align: 'center',
-      width: 120,
+      width: 100,
       render: val => moment(val).format('YYYY-MM-DD')
     }, {
       title: '计费终止日期',
       dataIndex: 'endDate',
       key: 'endDate',
       align: 'center',
-      width: 120,
+      width: 100,
       render: val => moment(val).format('YYYY-MM-DD')
     }, {
       title: '账单日',
       dataIndex: 'billDate',
       key: 'billDate',
       align: 'center',
-      width: 120,
+      width: 100,
       render: val => moment(val).format('YYYY-MM-DD')
     }, {
       title: '房屋全称',
