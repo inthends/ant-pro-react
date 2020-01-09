@@ -115,7 +115,7 @@ const Modify = (props: ModifyProps) => {
   };
 
   return (
-    <BaseModifyProvider {...props} name="机构" save={doSave}>
+    <BaseModifyProvider {...props} name="机构" save={doSave} width='700' >
       <Card className={styles.card}>
         <Form layout="vertical" hideRequiredMark>
           <Row gutter={24} hidden={initData.parentId == 0 ? true : false} >
@@ -195,7 +195,6 @@ const Modify = (props: ModifyProps) => {
             })(
               <input type='hidden' />
             )}
-
             <ModifyItem
               {...baseFormProps}
               field="foundedTime"
@@ -207,10 +206,30 @@ const Modify = (props: ModifyProps) => {
             <ModifyItem {...baseFormProps} field="phoneNum" label="联系电话"></ModifyItem>
             <ModifyItem {...baseFormProps} field="fax" label="传真"></ModifyItem>
           </Row>
+          <Row gutter={24}>
+            <ModifyItem  {...baseFormProps} field="PosType" label="POS机类型" 
+              type="select"
+              rules={[{ required: true, message: '请选择POS机类型' }]}
+              items={
+                [
+                  {
+                    title: '拉卡拉',
+                    label: '拉卡拉',
+                    value: '拉卡拉',
+                  },
+                  {
+                    title: '银盛',
+                    label: '银盛',
+                    value: '银盛',
+                  }
+                ]}
+            ></ModifyItem>
+            <ModifyItem  {...baseFormProps} field="lklMchId" label="拉卡拉商户号"></ModifyItem>
+          </Row>
 
           <Row gutter={24}>
-            <ModifyItem lg={24} {...baseFormProps} field="lklMchId" label="拉卡拉商户号"></ModifyItem>
-            <ModifyItem lg={24} {...baseFormProps} field="swiftMchId" label="威富通商户号"></ModifyItem> 
+            <ModifyItem  {...baseFormProps} field="ySEMchId" label="银盛商户号"></ModifyItem>
+            <ModifyItem  {...baseFormProps} field="swiftMchId" label="威富通商户号"></ModifyItem>
           </Row>
 
           {/* <Row gutter={24}> 
@@ -221,7 +240,7 @@ const Modify = (props: ModifyProps) => {
           <Row gutter={24}>
             <ModifyItem {...baseFormProps} field="swiftPlatPublicKey" label="威富通平台公钥"></ModifyItem>
             <ModifyItem {...baseFormProps} field="swiftMchPrivateKey" label="威富通私钥"></ModifyItem>
-          </Row> 
+          </Row>
 
           <Row gutter={24}>
             <ModifyItem
@@ -235,7 +254,7 @@ const Modify = (props: ModifyProps) => {
           </Row>
         </Form>
       </Card>
-    </BaseModifyProvider>
+    </BaseModifyProvider >
   );
 };
 
