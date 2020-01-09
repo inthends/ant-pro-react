@@ -44,9 +44,9 @@ export function RemoveForm(keyValue): Promise<any> {
 }
 
 // 查询详情
-export function GetDetailJson(keyValue): Promise<any> {
+export function GetCustomerInfo(keyValue): Promise<any> {
   return request
-    .get(process.env.basePath + `/PStructUser/GetFormJson?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/PStructUser/GetCustomerInfo?keyValue=${keyValue}`)
     .then(getResult as any);
 }
 

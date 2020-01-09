@@ -3,9 +3,11 @@ import { Icon, Upload, Modal, Select, AutoComplete, Button, Card, Col, Drawer, F
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { ExistEnCode, SaveForm, GetCustomerList } from './House.service';
+import { GetCustomerInfo } from '../PStructUser/PStructUser.service';
 import styles from './style.less';
 const { TextArea } = Input;
 const { Option } = Select;
+import QuickModify from '../PStructUser/QuickModify';
 
 interface RoomProps {
   modifyVisible: boolean;
@@ -22,7 +24,7 @@ const Room = (props: RoomProps) => {
   const { organizeId, parentId, type, modifyVisible, closeDrawer, form, data, reload } = props;
   const { getFieldDecorator } = form;
   const [infoDetail, setInfoDetail] = useState<any>({});
-  const [userSource, setUserSource] = useState<any[]>([]);
+  // const [userSource, setUserSource] = useState<any[]>([]);
   //图片上传
   const [previewVisible, setPreviewVisible] = useState<boolean>(false);
   const [fileList, setFileList] = useState<any[]>([]);
@@ -44,6 +46,10 @@ const Room = (props: RoomProps) => {
   // 打开抽屉时初始化
   // useEffect(() => {
   // }, []);
+
+  const [userList, setUserList] = useState<any[]>([]);
+  const [usertype, setUserType] = useState<any>(1);
+  const [customerVisible, setCustomerVisible] = useState<boolean>(false);
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -126,24 +132,100 @@ const Room = (props: RoomProps) => {
   // };
 
   //用户选择
-  const handleSearch = value => {
-    if (value == '')
-      return;
-    GetCustomerList(value, organizeId).then(res => {
-      setUserSource(res || []);
-    })
+  // const handleSearch = value => {
+  //   if (value == '')
+  //     return;
+  //   GetCustomerList(value, organizeId).then(res => {
+  //     setUserSource(res || []);
+  //   })
+  // };
+
+  const closeCustomerDrawer = () => {
+    setCustomerVisible(false);
   };
 
-  const userList = userSource.map
-    (item => <Option key={item.id} value={item.name}>{item.name}</Option>);
+  //业主
+  const ownerSearch = value => {
+    if (value == '') {
+      setUserList([]);
+    }
+    else {
+      setUserList([]);
+      GetCustomerList(value, organizeId).then(res => {
+        // setUserSource(res || []); 
+        const list = res.map(item =>
+          <Option key={item.id}
+            value={item.name.trim()}>{item.name.trim()}
+            <span className={styles.phoneNum}>{item.phoneNum}</span>
+          </Option>
+        ).concat([
+          <Option disabled key="all" className={styles.addCustomer}>
+            <a onClick={() => showCustomerDrawer(1)}>
+              新增住户
+            </a>
+          </Option>]);//新增 
+        setUserList(list);
+      })
+    }
+  };
+
+  const showCustomerDrawer = (type) => {
+    setCustomerVisible(true);
+    setUserType(type);
+  };
+
+  //住户
+  const tenantSearch = value => {
+    if (value == '') {
+      setUserList([]);
+    }
+    else {
+      setUserList([]);
+      GetCustomerList(value, organizeId).then(res => {
+        // setUserSource(res || []); 
+        const list = res.map(item =>
+          <Option key={item.id}
+            value={item.name.trim()}>{item.name.trim()}
+            <span className={styles.phoneNum}>{item.phoneNum}</span>
+          </Option>
+        ).concat([
+          <Option disabled key="all" className={styles.addCustomer}>
+            <a onClick={() => showCustomerDrawer(1)}>
+              新增住户
+            </a>
+          </Option>]);//新增 
+        setUserList(list);
+      })
+    }
+  };
+
 
   const onOwnerSelect = (value, option) => {
+    //props.children[1].props.children
     form.setFieldsValue({ ownerId: option.key });
+    if (option.props.children.length == 2) {
+      form.setFieldsValue({ ownerPhone: option.props.children[1].props.children });
+    }
   };
 
   const onTenantSelect = (value, option) => {
     form.setFieldsValue({ tenantId: option.key });
+    if (option.props.children.length == 2) {
+      form.setFieldsValue({ tenantPhone: option.props.children[1].props.children });
+    }
   };
+
+
+  // const userList = userSource.map
+  //   (item => <Option key={item.id} value={item.name}>{item.name}</Option>);
+
+  // const onOwnerSelect = (value, option) => {
+  //   form.setFieldsValue({ ownerId: option.key });
+  // };
+
+  // const onTenantSelect = (value, option) => {
+  //   form.setFieldsValue({ tenantId: option.key });
+  // };
 
   //验证编码是否重复
   const checkExist = (rule, value, callback) => {
@@ -367,14 +449,17 @@ const Room = (props: RoomProps) => {
             {type == 4 || type == 5 ? (
               <Row gutter={24}>
                 <Col lg={12}>
-                  <Form.Item label="业主">
+                  <Form.Item label="业主名称">
                     {getFieldDecorator('ownerName', {
                       initialValue: infoDetail.ownerName,
                     })(
                       <AutoComplete
+                        dropdownClassName={styles.searchdropdown}
+                        optionLabelProp="value"
+                        dropdownMatchSelectWidth={false}
                         dataSource={userList}
                         style={{ width: '100%' }}
-                        onSearch={handleSearch}
+                        onSearch={ownerSearch}
                         placeholder="请输入业主"
                         onSelect={onOwnerSelect}
                       />
@@ -392,9 +477,12 @@ const Room = (props: RoomProps) => {
                     {getFieldDecorator('tenantName', {
                       initialValue: infoDetail.tenantName,
                     })(<AutoComplete
+                      dropdownClassName={styles.searchdropdown}
+                      optionLabelProp="value"
+                      dropdownMatchSelectWidth={false}
                       dataSource={userList}
                       style={{ width: '100%' }}
-                      onSearch={handleSearch}
+                      onSearch={tenantSearch}
                       placeholder="请输入住户"
                       onSelect={onTenantSelect}
                     />)}
@@ -403,6 +491,27 @@ const Room = (props: RoomProps) => {
                     })(
                       <input type='hidden' />
                     )}
+                  </Form.Item>
+                </Col>
+              </Row>
+            ) : null}
+
+            {type == 4 || type == 5 ? (
+              <Row gutter={24}>
+                <Col lg={12}>
+                  <Form.Item label="业主电话">
+                    {getFieldDecorator('ownerPhone', {
+                      initialValue: infoDetail.ownerPhone,
+                    })(
+                      <Input placeholder="自动带出业主电话" readOnly />
+                    )}
+                  </Form.Item>
+                </Col>
+                <Col lg={12}>
+                  <Form.Item label="住户电话">
+                    {getFieldDecorator('tenantPhone', {
+                      initialValue: infoDetail.tenantPhone,
+                    })(<Input placeholder="自动带出住户电话" readOnly />)}
                   </Form.Item>
                 </Col>
               </Row>) : null}
@@ -467,6 +576,31 @@ const Room = (props: RoomProps) => {
           提交
         </Button>
       </div>
+
+      <QuickModify
+        modifyVisible={customerVisible}
+        closeDrawer={closeCustomerDrawer}
+        data={undefined}
+        organizeId={organizeId}
+        type={usertype}
+        reload={(customerId, type) => {
+          GetCustomerInfo(customerId).then(res => {
+            if (type == 1) {
+              //业主
+              form.setFieldsValue({ ownerName: res.name });
+              form.setFieldsValue({ ownerId: customerId });
+              form.setFieldsValue({ ownerPhone: res.phoneNum });
+            } else {
+              //住户
+              form.setFieldsValue({ ownerName: res.name });
+              form.setFieldsValue({ ownerId: customerId });
+              form.setFieldsValue({ ownerPhone: res.phoneNum });
+            }
+          });
+        }
+        }
+      />
+
     </Drawer>
   );
 };

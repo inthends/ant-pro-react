@@ -1,18 +1,7 @@
 
 //废弃
 import { ParkingData, TreeEntity } from '@/model/models';
-import {
-  Button,
-  Card, 
-  Col,
-  Drawer,
-  Form,
-  Input,
-  message,
-  Modal,
-  Row, 
-  Tree, 
-} from 'antd';
+import { Button, Card, Col, Drawer, Form, Input, message, Modal, Row, Tree } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { SaveForm } from './ParkingLot.service';
@@ -35,7 +24,7 @@ const Modify = (props: ModifyProps) => {
   const [infoDetail, setInfoDetail] = useState<any>({});
 
   // 打开抽屉时初始化
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -155,7 +144,7 @@ const Modify = (props: ModifyProps) => {
                   })(<Input placeholder="请输入联系电话" />)}
                 </Form.Item>
               </Col>
-              
+
               <Col lg={12}>
                 <Form.Item label="车库全称">
                   {getFieldDecorator('memo', {
@@ -164,7 +153,7 @@ const Modify = (props: ModifyProps) => {
                 </Form.Item>
               </Col>
             </Row>
-            
+
 
             <Row gutter={24}>
               <Col lg={12}>
@@ -174,7 +163,7 @@ const Modify = (props: ModifyProps) => {
                   })(<Input placeholder="请输入建筑面积(㎡)" />)}
                 </Form.Item>
               </Col>
-              
+
               <Col lg={12}>
                 <Form.Item label="占地面积(㎡)">
                   {getFieldDecorator('memo', {
@@ -183,7 +172,7 @@ const Modify = (props: ModifyProps) => {
                 </Form.Item>
               </Col>
             </Row>
-          
+
           </Form>
         ) : null}
       </Card>

@@ -1,4 +1,5 @@
 // import { TreeEntity } from '@/model/models';
+//快速添加修改用户
 import {
   Button, Card, Col, Drawer, Form, Input, message, Row, Select, TreeSelect, Checkbox,
 } from 'antd';
@@ -7,23 +8,24 @@ import React, { useEffect, useState } from 'react';
 import { SaveForm } from './PStructUser.service';
 import { getCommonItems, GetOrgs } from '@/services/commonItem';
 import styles from './style.less';
-
 const { Option } = Select;
 const { TextArea } = Input;
 
-interface ModifyProps {
+interface QuickModifyProps {
   modifyVisible: boolean;
   data?: any;
   form: WrappedFormUtils;
   closeDrawer(): void;
-  reload(): void;
+  reload(customerId, type): void;
+  organizeId: string;
+  type: any;
 }
-const Modify = (props: ModifyProps) => {
-  const { modifyVisible, data, closeDrawer, form, reload } = props;
+
+const QuickModify = (props: QuickModifyProps) => {
+  const { type, organizeId, modifyVisible, data, closeDrawer, form, reload } = props;
   const { getFieldDecorator } = form;
   const title = data === undefined ? '添加客户' : '修改客户';
   const [infoDetail, setInfoDetail] = useState<any>({});
-
   const [treeData, setTreeData] = useState<any[]>([]); //所属机构
   const [banks, setBanks] = useState<any[]>([]); // 开户银行
   // const [banks, setBanks] = useState<any[]>([]); // 证件类别
@@ -67,6 +69,7 @@ const Modify = (props: ModifyProps) => {
   const close = () => {
     closeDrawer();
   };
+
   const save = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
@@ -75,12 +78,13 @@ const Modify = (props: ModifyProps) => {
       }
     });
   };
+
   const doSave = dataDetail => {
     dataDetail.keyValue = dataDetail.id;
     SaveForm({ ...dataDetail }).then(res => {
       message.success('保存成功');
       closeDrawer();
-      reload();
+      reload(res, type);//回调
     });
   };
 
@@ -100,7 +104,7 @@ const Modify = (props: ModifyProps) => {
               <Col lg={12}>
                 <Form.Item label="隶属机构" required>
                   {getFieldDecorator('organizeId', {
-                    initialValue: infoDetail.organizeId,
+                    initialValue: infoDetail.organizeId ? infoDetail.organizeId : organizeId,
                     rules: [{ required: true, message: '请选择隶属机构' }],
                   })(
                     <TreeSelect
@@ -108,6 +112,7 @@ const Modify = (props: ModifyProps) => {
                       treeData={treeData}
                       allowClear
                       treeDefaultExpandAll
+                      disabled
                       dropdownStyle={{ maxHeight: 350 }}
                     >
                       {/* {renderTree(treeData)} */}
@@ -383,7 +388,7 @@ const Modify = (props: ModifyProps) => {
   );
 };
 
-export default Form.create<ModifyProps>()(Modify);
+export default Form.create<QuickModifyProps>()(QuickModify);
 
 // const renderTree = (treeData: TreeEntity[], parentId: string) => {
 //   return treeData

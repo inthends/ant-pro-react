@@ -18,7 +18,6 @@ const { TabPane } = Tabs;
 //查看收款单
 import ChargeShow from '../ChargeBill/Show';
 
-
 function Main() {
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);//编辑
   const [viewVisible, setViewVisible] = useState<boolean>(false);//查看

@@ -191,7 +191,7 @@ const Show = (props: ShowProps) => {
     <Drawer
       title={title}
       placement="right"
-      width={780}
+      width={900}
       onClose={closeModal}
       visible={modalVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}

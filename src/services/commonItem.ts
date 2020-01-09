@@ -50,6 +50,13 @@ export function GetAsynChildBuildings(pstructid,type): Promise<any[]> {
     .then(getResult as any);
 }
 
+//获取下级
+export function GetAsynChildBuildingsForHouse(pstructid,type): Promise<any[]> {
+  return request
+    .get(process.env.basePath + `/Common/GetAsynChildBuildingsForHouse?parentId=${pstructid}&type=${type}`)
+    .then(getResult as any);
+}
+
 //获取公共区域下级
 export function GetAsynChildBuildingsForArea(pstructid,type): Promise<any[]> { 
   return request

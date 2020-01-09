@@ -4,7 +4,7 @@ import { Icon, Layout, Tree } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import { TreeEntity } from '@/model/models';
 import { SiderContext } from '../SiderContext';
-import { GetOrgTree, GetAsynChildBuildings, GetAllOrgIds } from '@/services/commonItem';
+import { GetOrgTree, GetAsynChildBuildingsForHouse, GetAllOrgIds } from '@/services/commonItem';
 
 const { TreeNode } = Tree;
 const { Sider } = Layout;
@@ -127,7 +127,7 @@ function HouseMoreLeftTree(props: HouseMoreLeftTreeProps) {
       }
 
       setTimeout(() => {
-        GetAsynChildBuildings(treeNode.props.eventKey, treeNode.props.type).then((res: any[]) => {
+        GetAsynChildBuildingsForHouse(treeNode.props.eventKey, treeNode.props.type).then((res: any[]) => {
           treeNode.props.dataRef.children = res || [];
           setTreeData([...treeData]);
         });

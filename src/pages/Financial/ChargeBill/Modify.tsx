@@ -97,6 +97,7 @@ const Modify = (props: ModifyProps) => {
       } else {
 
         GetRoomUsers(organizeId).then(res => {
+
           setRelationIds(res);
           if (res.length > 0) {
             //var info = Object.assign({}, infoDetail, { relationId: res[0].key });
@@ -113,6 +114,8 @@ const Modify = (props: ModifyProps) => {
                 }
                 setLoading(false);
               });
+          } else {
+            setLoading(false);
           }
           // return info;
         });
@@ -146,7 +149,7 @@ const Modify = (props: ModifyProps) => {
         // setInfoDetail({});
         // form.resetFields();
       }
-   
+
     }
     // else {
     //   form.setFieldsValue({});
@@ -353,11 +356,15 @@ const Modify = (props: ModifyProps) => {
                   // setFeeItemId(id);
                   if (organizeId) {
                     GetFeeItemDetail(id, organizeId).then(res => {
-                      // if (res.relationId != null) {
-                      // var info = Object.assign({}, res, { feeItemId: id });
-                      // console.log(info);
-                      res.feeItemId = id;
-                      setInfoDetail(res);
+                      if (res.feeItemId) {
+                        // if (res.relationId != null) {
+                        // var info = Object.assign({}, res, { feeItemId: id });
+                        // console.log(info);
+                        res.feeItemId = id;
+                        setInfoDetail(res);
+                      } else {
+                        message.warning(res);
+                      }
                       // return info;
                       // }
                       // else {

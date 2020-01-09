@@ -65,13 +65,13 @@ function ListTable(props: ListTableProps) {
         }
       },
     },
-    {
-      title: '客户编号',
-      dataIndex: 'code',
-      key: 'code',
-      width: 160,
-      sorter: true,
-    },
+    // {
+    //   title: '客户编号',
+    //   dataIndex: 'code',
+    //   key: 'code',
+    //   width: 160,
+    //   sorter: true,
+    // },
     {
       title: '客户名称',
       dataIndex: 'name',
@@ -94,20 +94,20 @@ function ListTable(props: ListTableProps) {
     //   width: 100,
     //   // sorter: true,
     // },
-    // {
-    //   title: '简称',
-    //   dataIndex: 'shortname',
-    //   key: 'shortname',
-    //   width: 100,
-    //   // sorter: true,
-    // },
+
+    {
+      title: '电子邮箱',
+      dataIndex: 'email',
+      key: 'email',
+      width: 100, 
+    },
 
 
     {
       title: '证件类别',
       dataIndex: 'certificateType',
       key: 'certificateType',
-      width: 100,
+      width: 120,
       render: (text, record) => {
         switch (text) {
           case '1':
@@ -123,7 +123,7 @@ function ListTable(props: ListTableProps) {
       title: '证件号码',
       dataIndex: 'certificateNO',
       key: 'certificateNO',
-      width: 140,
+      width: 200,
       // sorter: true,
     },
     {

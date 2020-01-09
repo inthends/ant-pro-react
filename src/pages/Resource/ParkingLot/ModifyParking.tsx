@@ -5,6 +5,8 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { SaveParkingForm, GetCustomerList } from './ParkingLot.service';
+import { GetCustomerInfo } from '../PStructUser/PStructUser.service';
+import QuickModify from '../PStructUser/QuickModify';
 import styles from './style.less';
 
 const { Option } = Select;
@@ -20,6 +22,7 @@ interface ModifyParkingProps {
   closeDrawer(): void;
   reload(): void;
 }
+
 const ModifyParking = (props: ModifyParkingProps) => {
   const { organizeId, treeData, modifyVisible, data, closeDrawer, form, reload } = props;
   const { getFieldDecorator } = form;
@@ -31,8 +34,12 @@ const ModifyParking = (props: ModifyParkingProps) => {
   const [parkingLotType, setParkingLotType] = useState<any[]>([]); // 车位类型
   const [parkingNature, setParkingNature] = useState<any[]>([]); // 车位性质
   // const [color, setColor] = useState<any[]>([]); // 颜色 
-  const [userSource, setUserSource] = useState<any[]>([]);
+  // const [userSource, setUserSource] = useState<any[]>([]);
   const [infoDetail, setInfoDetail] = useState<any>({});
+  
+  const [userList, setUserList] = useState<any[]>([]);
+  const [type, setType] = useState<any>(1); 
+  const [customerVisible, setCustomerVisible] = useState<boolean>(false);
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -76,6 +83,16 @@ const ModifyParking = (props: ModifyParkingProps) => {
     }
   }, [modifyVisible]);
 
+
+  const closeCustomerDrawer = () => {
+    setCustomerVisible(false);
+  };
+
+  const showCustomerDrawer = (type) => {
+    setCustomerVisible(true);
+    setType(type);
+  };
+
   const close = () => {
     closeDrawer();
   };
@@ -94,12 +111,12 @@ const ModifyParking = (props: ModifyParkingProps) => {
         //     : undefined,
         //   endRentDate: values.endRentDate ? values.endRentDate.format('YYYY-MM-DD') : undefined,
         // };
-
         const newData = data ? { ...data, ...values } : values;
         doSave(newData);
       }
     });
   };
+
   const doSave = dataDetail => {
     dataDetail.keyValue = dataDetail.id;
     dataDetail.type = 9;
@@ -110,31 +127,91 @@ const ModifyParking = (props: ModifyParkingProps) => {
     });
   };
 
-  //用户选择
-  const handleSearch = value => {
-    if (value == '')
-      return;
-    GetCustomerList(value, organizeId).then(res => {
-      setUserSource(res || []);
-    })
+  //业主
+  const ownerSearch = value => {
+    if (value == '') {
+      setUserList([]);
+    }
+    else {
+      setUserList([]);
+      GetCustomerList(value, organizeId).then(res => {
+        // setUserSource(res || []); 
+        const list = res.map(item =>
+          <Option key={item.id}
+            value={item.name.trim()}>{item.name.trim()}
+            <span className={styles.phoneNum}>{item.phoneNum}</span>
+          </Option>
+        ).concat([
+          <Option disabled key="all" className={styles.addCustomer}>
+            <a onClick={() => showCustomerDrawer(1)}>
+              新增住户
+            </a>
+          </Option>]);//新增 
+        setUserList(list);
+      })
+    }
   };
 
-  const userList = userSource.map
-    (item => <Option key={item.id} value={item.name}>{item.name}</Option>);
+
+  //住户
+  const tenantSearch = value => {
+    if (value == '') {
+      setUserList([]);
+    }
+    else {
+      setUserList([]);
+      GetCustomerList(value, organizeId).then(res => {
+        // setUserSource(res || []); 
+        const list = res.map(item =>
+          <Option key={item.id}
+            value={item.name.trim()}>{item.name.trim()}
+            <span className={styles.phoneNum}>{item.phoneNum}</span>
+          </Option>
+        ).concat([
+          <Option disabled key="all" className={styles.addCustomer}>
+            <a onClick={() => showCustomerDrawer(1)}>
+              新增住户
+            </a>
+          </Option>]);//新增 
+        setUserList(list);
+      })
+    }
+  };
+
+
+  // const userList = userSource.map(item =>
+  //   <Option key={item.id}
+  //     value={item.name}>{item.name}
+  //     <span className={styles.phoneNum}>{item.phoneNum}</span>
+  //   </Option>
+  // ).concat([
+  //   <Option disabled key="all" className={styles.addCustomer}>
+  //     <a href="#" target="_blank" rel="noopener noreferrer">
+  //       新增住户
+  //     </a>
+  //   </Option>]);
+  // //新增
 
   const onOwnerSelect = (value, option) => {
+    //props.children[1].props.children
     form.setFieldsValue({ ownerId: option.key });
+    if (option.props.children.length == 2) {
+      form.setFieldsValue({ ownerPhone: option.props.children[1].props.children });
+    }
   };
 
   const onTenantSelect = (value, option) => {
     form.setFieldsValue({ tenantId: option.key });
+    if (option.props.children.length == 2) {
+      form.setFieldsValue({ tenantPhone: option.props.children[1].props.children });
+    }
   };
 
   return (
     <Drawer
       title={title}
       placement="right"
-      width={600}
+      width={700}
       onClose={close}
       visible={modifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
@@ -189,7 +266,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
                           {item.title}
                         </Option>
                       ))} */}
-                      <Option value={0}>未售</Option> 
+                      <Option value={0}>未售</Option>
                       <Option value={3}>空置</Option>
                       <Option value={4}>出租</Option>
                     </Select>,
@@ -266,9 +343,12 @@ const ModifyParking = (props: ModifyParkingProps) => {
                     initialValue: infoDetail.ownerName,
                   })(
                     <AutoComplete
+                      dropdownClassName={styles.searchdropdown}
+                      optionLabelProp="value"
+                      dropdownMatchSelectWidth={false}
                       dataSource={userList}
                       style={{ width: '100%' }}
-                      onSearch={handleSearch}
+                      onSearch={ownerSearch}
                       placeholder="请输入业主"
                       onSelect={onOwnerSelect}
                     />
@@ -288,9 +368,12 @@ const ModifyParking = (props: ModifyParkingProps) => {
                   {getFieldDecorator('tenantName', {
                     initialValue: infoDetail.tenantName,
                   })(<AutoComplete
+                    dropdownClassName={styles.searchdropdown}
+                    optionLabelProp="value"
+                    dropdownMatchSelectWidth={false}
                     dataSource={userList}
                     style={{ width: '100%' }}
-                    onSearch={handleSearch}
+                    onSearch={tenantSearch}
                     placeholder="请输入住户"
                     onSelect={onTenantSelect}
                   />)}
@@ -302,6 +385,25 @@ const ModifyParking = (props: ModifyParkingProps) => {
                 </Form.Item>
               </Col>
             </Row>
+            <Row gutter={24}>
+              <Col lg={12}>
+                <Form.Item label="业主电话">
+                  {getFieldDecorator('ownerPhone', {
+                    initialValue: infoDetail.ownerPhone,
+                  })(
+                    <Input placeholder="自动带出业主电话" readOnly />
+                  )}
+                </Form.Item>
+              </Col>
+              <Col lg={12}>
+                <Form.Item label="住户电话">
+                  {getFieldDecorator('tenantPhone', {
+                    initialValue: infoDetail.tenantPhone,
+                  })(<Input placeholder="自动带出住户电话" readOnly />)}
+                </Form.Item>
+              </Col>
+            </Row>
+
             {/* <Row gutter={24}>
               <Col lg={12}>
                 <Form.Item label="起租日期">
@@ -403,7 +505,33 @@ const ModifyParking = (props: ModifyParkingProps) => {
           提交
         </Button>
       </div>
+
+      <QuickModify
+        modifyVisible={customerVisible}
+        closeDrawer={closeCustomerDrawer}
+        data={undefined}
+        organizeId={organizeId}
+        type={type}
+        reload={(customerId, type) => {
+          GetCustomerInfo(customerId).then(res => {
+            if (type == 1) {
+              //业主
+              form.setFieldsValue({ ownerName: res.name });
+              form.setFieldsValue({ ownerId: customerId });
+              form.setFieldsValue({ ownerPhone: res.phoneNum });
+            } else {
+              //住户
+              form.setFieldsValue({ ownerName: res.name });
+              form.setFieldsValue({ ownerId: customerId });
+              form.setFieldsValue({ ownerPhone: res.phoneNum });
+            }
+          });
+        }
+        }
+      />
+
     </Drawer>
+
   );
 };
 

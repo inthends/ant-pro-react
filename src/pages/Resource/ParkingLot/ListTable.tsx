@@ -128,13 +128,30 @@ function ListTable(props: ListTableProps) {
       width: 120,
       sorter: true,
     },
+    // {
+    //   title: '计费面积(㎡)',
+    //   dataIndex: 'billarea',
+    //   key: 'billarea',
+    //   width: 120,
+    //   sorter: true,
+    // },
+
     {
-      title: '计费面积(㎡)',
-      dataIndex: 'billarea',
-      key: 'billarea',
-      width: 120,
+      title: '业主姓名',
+      dataIndex: 'ownerName',
+      key: 'ownerName',
+      width: 100,
       sorter: true,
     },
+
+    {
+      title: '电话',
+      dataIndex: 'ownerPhone',
+      key: 'ownerPhone',
+      width: 100,
+      sorter: true,
+    },
+
     {
       title: '车牌号',
       dataIndex: 'carno',
@@ -147,6 +164,7 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'state',
       key: 'state',
       width: 100,
+      align:'center',
       sorter: true,
       render: (text, record) => {
         switch (text) {
