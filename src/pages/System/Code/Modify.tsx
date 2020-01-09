@@ -259,8 +259,7 @@ const Modify = (props: ModifyProps) => {
           pagination={pagination}
           scroll={{ y: 420 }}
           loading={loading}
-        />
-
+        /> 
       </Card>
 
       <RuleItem

@@ -21,3 +21,22 @@ export function GetFormJson(keyValue): Promise<any> {
     .get(process.env.basePath + `/Merchants/GetFormJson?keyValue=${keyValue}`)
     .then(getResult as any);
 }
+
+// 提交
+export function SaveFollow(data): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Merchants/SaveFollow`, { data: objToFormdata(data) })
+    .then(getResult as any);
+}
+
+export function GetFollow(keyValue): Promise<any> {
+  return request
+    .get(process.env.basePath + `/Merchants/GetFollow?keyValue=${keyValue}`)
+    .then(getResult as any);
+}
+
+export function GetFollowCount(keyValue): Promise<any> {
+  return request
+    .get(process.env.basePath + `/Merchants/GetFollowCount?keyValue=${keyValue}`)
+    .then(getResult as any);
+}

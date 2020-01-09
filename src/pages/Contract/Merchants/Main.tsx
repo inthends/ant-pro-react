@@ -151,7 +151,7 @@ function Main() {
         closeDrawer={closeDetailDrawer}
         id={id}
         reload={() => initLoadData(search)}
-        // modify={showModifyDrawer}
+        follow={showModifyDrawer}
       />
 
     </Layout>
