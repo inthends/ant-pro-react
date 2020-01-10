@@ -46,7 +46,8 @@ const Room = (props: RoomProps) => {
   // 打开抽屉时初始化
   // useEffect(() => {
   // }, []);
-
+ 
+  
   const [userList, setUserList] = useState<any[]>([]);
   const [usertype, setUserType] = useState<any>(1);
   const [customerVisible, setCustomerVisible] = useState<boolean>(false);
@@ -460,8 +461,7 @@ const Room = (props: RoomProps) => {
                     initialValue: infoDetail.lng,
                   })(<Input placeholder="请输入纬度" />)}
                 </Form.Item>
-              </Col>
-
+              </Col> 
             </Row>) : null}
 
             {type == 4 || type == 5 ? (

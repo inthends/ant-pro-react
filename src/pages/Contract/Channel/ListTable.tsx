@@ -62,23 +62,23 @@ function ListTable(props: ListTableProps) {
     },
     {
       title: '渠道类型',
-      dataIndex: 'visitChannel',
-      key: 'visitChannel',
+      dataIndex: 'channelType',
+      key: 'channelType',
       width: 100
     },
-    {
-      title: '带看量',
-      dataIndex: 'demandMinSize',
-      key: 'demandMinSize',
-      width: 100,
-    },
-    {
-      title: '最新带看时间',
-      dataIndex: 'visitDate',
-      key: 'visitDate',
-      width: 100,
-      render: val => moment(val).format('YYYY-MM-DD')
-    }, 
+    // {
+    //   title: '带看量',
+    //   dataIndex: 'demandMinSize',
+    //   key: 'demandMinSize',
+    //   width: 100,
+    // },
+    // {
+    //   title: '最新带看时间',
+    //   dataIndex: 'visitDate',
+    //   key: 'visitDate',
+    //   width: 100,
+    //   render: val => moment(val).format('YYYY-MM-DD')
+    // }, 
     {
       title: '操作',
       align: 'center',

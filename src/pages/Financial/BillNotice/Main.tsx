@@ -134,7 +134,7 @@ function Main() {
       setBillCheckLoading(false);
     });
   };
-  
+
   const billNoticeload = data => {
     setBillNoticeLoading(true);
     data.sidx = data.sidx || 'billId';
@@ -455,7 +455,7 @@ function Main() {
 
               <Dropdown overlay={menu}  >
                 <Button style={{ float: 'right', marginLeft: '10px' }}>
-                  更对<Icon type="down" />
+                  更多<Icon type="down" />
                 </Button>
               </Dropdown>
 
