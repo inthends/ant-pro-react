@@ -50,6 +50,7 @@ const Room = (props: RoomProps) => {
   const [userList, setUserList] = useState<any[]>([]);
   const [usertype, setUserType] = useState<any>(1);
   const [customerVisible, setCustomerVisible] = useState<boolean>(false);
+  const [customer, setCustomer] = useState<any>({});
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -160,7 +161,7 @@ const Room = (props: RoomProps) => {
           </Option>
         ).concat([
           <Option disabled key="all" className={styles.addCustomer}>
-            <a onClick={() => showCustomerDrawer(1)}>
+            <a onClick={() => showCustomerDrawer('', 1)}>
               新增住户
             </a>
           </Option>]);//新增 
@@ -169,9 +170,12 @@ const Room = (props: RoomProps) => {
     }
   };
 
-  const showCustomerDrawer = (type) => {
-    setCustomerVisible(true);
-    setUserType(type);
+  const showCustomerDrawer = (customerId, type) => {
+    GetCustomerInfo(customerId).then(res => {
+      setCustomer(res);
+      setCustomerVisible(true);
+      setUserType(type);
+    })
   };
 
   //住户
@@ -190,7 +194,7 @@ const Room = (props: RoomProps) => {
           </Option>
         ).concat([
           <Option disabled key="all" className={styles.addCustomer}>
-            <a onClick={() => showCustomerDrawer(1)}>
+            <a onClick={() => showCustomerDrawer('', 1)}>
               新增住户
             </a>
           </Option>]);//新增 
@@ -449,7 +453,7 @@ const Room = (props: RoomProps) => {
             {type == 4 || type == 5 ? (
               <Row gutter={24}>
                 <Col lg={12}>
-                  <Form.Item label="业主名称">
+                  <Form.Item label={infoDetail.ownerName ? <div>业主名称 <a onClick={() => { showCustomerDrawer(infoDetail.ownerId, 1) }}>编辑</a></div> : '业主名称'}>
                     {getFieldDecorator('ownerName', {
                       initialValue: infoDetail.ownerName,
                     })(
@@ -460,7 +464,7 @@ const Room = (props: RoomProps) => {
                         dataSource={userList}
                         style={{ width: '100%' }}
                         onSearch={ownerSearch}
-                        placeholder="请输入业主"
+                        placeholder="请输入业主名称"
                         onSelect={onOwnerSelect}
                       />
                     )}
@@ -473,7 +477,7 @@ const Room = (props: RoomProps) => {
                   </Form.Item>
                 </Col>
                 <Col lg={12}>
-                  <Form.Item label="住户">
+                  <Form.Item label={infoDetail.tenantName ? <div>住户名称 <a onClick={() => { showCustomerDrawer(infoDetail.tenantId, 2) }}>编辑</a></div> : '住户名称'}>
                     {getFieldDecorator('tenantName', {
                       initialValue: infoDetail.tenantName,
                     })(<AutoComplete
@@ -483,7 +487,7 @@ const Room = (props: RoomProps) => {
                       dataSource={userList}
                       style={{ width: '100%' }}
                       onSearch={tenantSearch}
-                      placeholder="请输入住户"
+                      placeholder="请输入住户名称"
                       onSelect={onTenantSelect}
                     />)}
                     {getFieldDecorator('tenantId', {
@@ -522,13 +526,11 @@ const Room = (props: RoomProps) => {
                   {getFieldDecorator('memo', {
                     initialValue: infoDetail.memo,
                   })(<TextArea rows={4} placeholder="请输入附加说明" />)}
-
                   {getFieldDecorator('mainPic', {
                     initialValue: infoDetail.mainPic,
                   })(
                     <input type='hidden' />
                   )}
-
                 </Form.Item>
               </Col>
             </Row>
@@ -543,8 +545,7 @@ const Room = (props: RoomProps) => {
                     fileList={fileList}
                     onPreview={handlePreview}
                     onChange={handleChange}
-                    onRemove={handleRemove}
-                  >
+                    onRemove={handleRemove}>
                     {fileList.length > 1 ? null : uploadButton}
                   </Upload>
                   <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
@@ -580,7 +581,7 @@ const Room = (props: RoomProps) => {
       <QuickModify
         modifyVisible={customerVisible}
         closeDrawer={closeCustomerDrawer}
-        data={undefined}
+        data={customer}
         organizeId={organizeId}
         type={usertype}
         reload={(customerId, type) => {

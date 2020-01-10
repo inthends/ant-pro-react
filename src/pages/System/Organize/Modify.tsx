@@ -115,7 +115,7 @@ const Modify = (props: ModifyProps) => {
   };
 
   return (
-    <BaseModifyProvider {...props} name="机构" save={doSave} width='700' >
+    <BaseModifyProvider {...props} name="机构" save={doSave} width={700} >
       <Card className={styles.card}>
         <Form layout="vertical" hideRequiredMark>
           <Row gutter={24} hidden={initData.parentId == 0 ? true : false} >
@@ -207,7 +207,7 @@ const Modify = (props: ModifyProps) => {
             <ModifyItem {...baseFormProps} field="fax" label="传真"></ModifyItem>
           </Row>
           <Row gutter={24}>
-            <ModifyItem  {...baseFormProps} field="PosType" label="POS机类型" 
+            <ModifyItem  {...baseFormProps} field="PosType" label="POS机类型"
               type="select"
               rules={[{ required: true, message: '请选择POS机类型' }]}
               items={

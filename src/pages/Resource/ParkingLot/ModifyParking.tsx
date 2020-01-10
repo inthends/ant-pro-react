@@ -5,7 +5,7 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { SaveParkingForm, GetCustomerList } from './ParkingLot.service';
-import { GetCustomerInfo } from '../PStructUser/PStructUser.service';
+import { GetCustomerInfo,CheckCustomer } from '../PStructUser/PStructUser.service';
 import QuickModify from '../PStructUser/QuickModify';
 import styles from './style.less';
 
@@ -36,10 +36,10 @@ const ModifyParking = (props: ModifyParkingProps) => {
   // const [color, setColor] = useState<any[]>([]); // 颜色 
   // const [userSource, setUserSource] = useState<any[]>([]);
   const [infoDetail, setInfoDetail] = useState<any>({});
-  
   const [userList, setUserList] = useState<any[]>([]);
-  const [type, setType] = useState<any>(1); 
+  const [type, setType] = useState<any>(1);
   const [customerVisible, setCustomerVisible] = useState<boolean>(false);
+  const [customer, setCustomer] = useState<any>({});
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -83,19 +83,22 @@ const ModifyParking = (props: ModifyParkingProps) => {
     }
   }, [modifyVisible]);
 
-
   const closeCustomerDrawer = () => {
     setCustomerVisible(false);
   };
 
-  const showCustomerDrawer = (type) => {
-    setCustomerVisible(true);
-    setType(type);
+  const showCustomerDrawer = (customerId, type) => {
+    GetCustomerInfo(customerId).then(res => {
+      setCustomer(res);
+      setCustomerVisible(true);
+      setType(type);
+    })
   };
 
   const close = () => {
     closeDrawer();
   };
+
   const save = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
@@ -143,7 +146,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
           </Option>
         ).concat([
           <Option disabled key="all" className={styles.addCustomer}>
-            <a onClick={() => showCustomerDrawer(1)}>
+            <a onClick={() => showCustomerDrawer('', 1)}>
               新增住户
             </a>
           </Option>]);//新增 
@@ -169,7 +172,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
           </Option>
         ).concat([
           <Option disabled key="all" className={styles.addCustomer}>
-            <a onClick={() => showCustomerDrawer(1)}>
+            <a onClick={() => showCustomerDrawer('', 1)}>
               新增住户
             </a>
           </Option>]);//新增 
@@ -204,6 +207,20 @@ const ModifyParking = (props: ModifyParkingProps) => {
     form.setFieldsValue({ tenantId: option.key });
     if (option.props.children.length == 2) {
       form.setFieldsValue({ tenantPhone: option.props.children[1].props.children });
+    }
+  };
+
+  const checkExist = (rule, value, callback) => {
+    if (value == undefined) {
+      callback();
+    }
+    else { 
+      CheckCustomer(organizeId, value).then(res => {
+        if (res)
+          callback('业主不存在，请先新增');
+        else
+          callback();
+      })
     }
   };
 
@@ -333,23 +350,27 @@ const ModifyParking = (props: ModifyParkingProps) => {
               </Col>
             </Row>
 
-            <Row gutter={24}>
+            <Row gutter={12}>
               <Col lg={12}>
-                <Form.Item label="业主名称">
+                <Form.Item label={infoDetail.ownerName ? <div>业主名称 <a onClick={() => { showCustomerDrawer(infoDetail.ownerId, 1) }}>编辑</a></div> : '业主名称'}>
                   {/* {getFieldDecorator('ownerId', {
                     initialValue: infoDetail.ownerId,
                   })(<TextArea rows={4} placeholder="请输入建筑面积" />)} */}
                   {getFieldDecorator('ownerName', {
                     initialValue: infoDetail.ownerName,
+                    rules: [{ required: true, message: '业主不存在，请先新增' }, 
+                    {
+                      validator: checkExist
+                    }
+                    ],
                   })(
                     <AutoComplete
                       dropdownClassName={styles.searchdropdown}
                       optionLabelProp="value"
                       dropdownMatchSelectWidth={false}
                       dataSource={userList}
-                      style={{ width: '100%' }}
                       onSearch={ownerSearch}
-                      placeholder="请输入业主"
+                      placeholder="请输入业主名称"
                       onSelect={onOwnerSelect}
                     />
                   )}
@@ -360,13 +381,15 @@ const ModifyParking = (props: ModifyParkingProps) => {
                   )}
                 </Form.Item>
               </Col>
+
               <Col lg={12}>
-                <Form.Item label="住户名称">
+                <Form.Item label={infoDetail.tenantName ? <div>住户名称 <a onClick={() => { showCustomerDrawer(infoDetail.tenantId, 2) }}>编辑</a></div> : '住户名称'}>
                   {/* {getFieldDecorator('customerId', {
                     initialValue: infoDetail.customerId,
                   })(<TextArea rows={4} placeholder="请输计费面积" />)} */}
                   {getFieldDecorator('tenantName', {
                     initialValue: infoDetail.tenantName,
+
                   })(<AutoComplete
                     dropdownClassName={styles.searchdropdown}
                     optionLabelProp="value"
@@ -374,7 +397,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
                     dataSource={userList}
                     style={{ width: '100%' }}
                     onSearch={tenantSearch}
-                    placeholder="请输入住户"
+                    placeholder="请输入住户名称"
                     onSelect={onTenantSelect}
                   />)}
                   {getFieldDecorator('tenantId', {
@@ -509,7 +532,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
       <QuickModify
         modifyVisible={customerVisible}
         closeDrawer={closeCustomerDrawer}
-        data={undefined}
+        data={customer}
         organizeId={organizeId}
         type={type}
         reload={(customerId, type) => {
@@ -530,7 +553,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
         }
       />
 
-    </Drawer>
+    </Drawer >
 
   );
 };

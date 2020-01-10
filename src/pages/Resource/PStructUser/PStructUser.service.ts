@@ -39,7 +39,7 @@ export function SaveForm(data): Promise<any> {
 // 删除
 export function RemoveForm(keyValue): Promise<any> {
   return request
-    .post(process.env.basePath + `/PStructUser/RemoveForm?keyValue=${keyValue}`, { })
+    .post(process.env.basePath + `/PStructUser/RemoveForm?keyValue=${keyValue}`, {})
     .then(getResult as any);
 }
 
@@ -54,5 +54,12 @@ export function GetCustomerInfo(keyValue): Promise<any> {
 export function CheckRelation(keyValue): Promise<any> {
   return request
     .get(process.env.basePath + `/PStructUser/CheckRelation?keyValue=${keyValue}`)
+    .then(getResult as any);
+}
+
+// 验证
+export function CheckCustomer(organizeId, name): Promise<any> {
+  return request
+    .get(process.env.basePath + `/PStructUser/CheckCustomer?organizeId=${organizeId}&name=${name}`)
     .then(getResult as any);
 }

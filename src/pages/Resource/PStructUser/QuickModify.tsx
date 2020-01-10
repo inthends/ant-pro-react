@@ -53,9 +53,9 @@ const QuickModify = (props: QuickModifyProps) => {
 
   // 打开抽屉时初始化
   useEffect(() => {
-    if (modifyVisible) {
+    if (modifyVisible) { 
       if (data) {
-        setInfoDetail({ ...data });
+        setInfoDetail(data);
         form.resetFields();
       } else {
         setInfoDetail({});
