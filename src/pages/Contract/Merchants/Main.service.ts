@@ -22,7 +22,7 @@ export function GetFormJson(keyValue): Promise<any> {
     .then(getResult as any);
 }
 
-// 提交
+// 提交跟进
 export function SaveFollow(data): Promise<any> {
   return request
     .post(process.env.basePath + `/Merchants/SaveFollow`, { data: objToFormdata(data) })
@@ -35,8 +35,9 @@ export function GetFollow(keyValue): Promise<any> {
     .then(getResult as any);
 }
 
-export function GetFollowCount(keyValue): Promise<any> {
+//刷新跟进
+export function RefreshFollow(keyValue): Promise<any> {
   return request
-    .get(process.env.basePath + `/Merchants/GetFollowCount?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/Merchants/RefreshFollow?keyValue=${keyValue}`)
     .then(getResult as any);
 }

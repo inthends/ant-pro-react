@@ -541,7 +541,7 @@ const Modify = (props: ModifyProps) => {
             </Row> */}
             <Row gutter={24}>
               <Col lg={8}>
-                <Form.Item label="楼栋管家">
+                <Form.Item label="管家">
                   {getFieldDecorator('housekeeperName', {
                     initialValue: infoDetail.housekeeperName,
                   })(
@@ -561,8 +561,7 @@ const Modify = (props: ModifyProps) => {
                           {item.name}
                         </Option>
                       ))}
-                    </Select>
-
+                    </Select> 
                   )}
 
                   {getFieldDecorator('housekeeperId', {

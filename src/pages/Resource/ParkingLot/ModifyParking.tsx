@@ -5,7 +5,7 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { SaveParkingForm, GetCustomerList } from './ParkingLot.service';
-import { GetCustomerInfo,CheckCustomer } from '../PStructUser/PStructUser.service';
+import { GetCustomerInfo, CheckCustomer } from '../PStructUser/PStructUser.service';
 import QuickModify from '../PStructUser/QuickModify';
 import styles from './style.less';
 
@@ -210,11 +210,12 @@ const ModifyParking = (props: ModifyParkingProps) => {
     }
   };
 
+  //验证用户
   const checkExist = (rule, value, callback) => {
     if (value == undefined) {
       callback();
     }
-    else { 
+    else {
       CheckCustomer(organizeId, value).then(res => {
         if (res)
           callback('业主不存在，请先新增');
@@ -358,11 +359,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
                   })(<TextArea rows={4} placeholder="请输入建筑面积" />)} */}
                   {getFieldDecorator('ownerName', {
                     initialValue: infoDetail.ownerName,
-                    rules: [{ required: true, message: '业主不存在，请先新增' }, 
-                    {
-                      validator: checkExist
-                    }
-                    ],
+                    rules: [{ required: true, message: '业主不存在，请先新增' }, { validator: checkExist }]
                   })(
                     <AutoComplete
                       dropdownClassName={styles.searchdropdown}
@@ -389,7 +386,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
                   })(<TextArea rows={4} placeholder="请输计费面积" />)} */}
                   {getFieldDecorator('tenantName', {
                     initialValue: infoDetail.tenantName,
-
+                    rules: [{ required: true, message: '住户不存在，请先新增' }, { validator: checkExist }]
                   })(<AutoComplete
                     dropdownClassName={styles.searchdropdown}
                     optionLabelProp="value"
@@ -537,6 +534,8 @@ const ModifyParking = (props: ModifyParkingProps) => {
         type={type}
         reload={(customerId, type) => {
           GetCustomerInfo(customerId).then(res => {
+            //防止旧数据缓存，清空下拉
+            setUserList([]);
             if (type == 1) {
               //业主
               form.setFieldsValue({ ownerName: res.name });

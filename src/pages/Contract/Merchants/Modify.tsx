@@ -22,12 +22,13 @@ const Modify = (props: ModifyProps) => {
   const { id, visible, closeDrawer, form, reload } = props;
   const title = id ? '修改客户' : '添加客户';
   const { getFieldDecorator } = form;
-  const [industryType, setIndustryType] = useState<any[]>([]);
+  const [industryType, setIndustryType] = useState<any[]>([]);//行业
   const [treeData, setTreeData] = useState<any[]>([]);
   const [userSource, setUserSource] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [infoDetail, setInfoDetail] = useState<any>({});
-  const [rooms, setRooms] = useState<any[]>([]);
+  const [rooms, setRooms] = useState<any[]>([]); 
+  const [area, setArea] = useState<any[]>([]);//商圈
 
   const save = () => {
     form.validateFields((errors, values) => {
@@ -59,6 +60,10 @@ const Modify = (props: ModifyProps) => {
     if (visible) {
       getCommonItems('IndustryType').then(res => {
         setIndustryType(res || []);
+      });
+
+      getCommonItems('TradingArea').then(res => {
+        setArea(res || []);
       });
 
       //获取房产树
@@ -402,7 +407,7 @@ const Modify = (props: ModifyProps) => {
                         initialValue: infoDetail.tradingArea,
                       })(
                         <Select placeholder="请选择商圈">
-                          {industryType.map(item => (
+                          {area.map(item => (
                             <Option value={item.title} key={item.title}>
                               {item.title}
                             </Option>

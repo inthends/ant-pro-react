@@ -2,7 +2,7 @@
 import { Spin, Icon, Tooltip, Tag, Divider, PageHeader, List, Button, Card, Col, Drawer, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetFormJson, GetFollowCount } from './Main.service';
+import { GetFormJson, RefreshFollow } from './Main.service';
 import styles from './style.less';
 import Follow from './Follow';
 
@@ -22,6 +22,9 @@ const Detail = (props: DetailProps) => {
   const [followVisible, setFollowVisible] = useState<boolean>(false);//修改 
   const [count, setCount] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+  //最新跟进
+  const [newflow, setNewFlow] = useState<string>('');
+
   const closeFollowDrawer = () => {
     setFollowVisible(false);
   };
@@ -37,12 +40,18 @@ const Detail = (props: DetailProps) => {
         GetFormJson(id).then((res) => {
           setInfoDetail(res.data);
           setHouse(res.houseList || []);
+          setCount(res.followCount);
+          setNewFlow(res.newFollow);
           form.resetFields();
+          setLoading(false);
           //获取跟进数量
-          GetFollowCount(id).then(res => {
-            setCount(res);
-            setLoading(false);
-          })
+          // GetFollowCount(id).then(res => {
+          //   setCount(res);
+          //   GetNewFollow(id).then(info => {
+          //     setNewFlow(info);
+          //     setLoading(false);
+          //   });
+          // })
         });
       } else {
         form.resetFields();
@@ -109,7 +118,7 @@ const Detail = (props: DetailProps) => {
               </Col>
               <Col lg={12}>
                 <Form.Item label={<div>最新跟进 <Icon type="sound" /></div>}>
-                  {infoDetail.remark}
+                  {newflow}
                 </Form.Item>
               </Col>
               <Col lg={3}>
@@ -188,7 +197,6 @@ const Detail = (props: DetailProps) => {
                       {infoDetail.demandMinPrice == null ? '' : infoDetail.demandMinPrice + ' - ' + infoDetail.demandMaxPrice + infoDetail.demandPriceUnit}
                     </Form.Item>
                   </Col>
-
                 </Row>
               </Card>
 
@@ -274,8 +282,9 @@ const Detail = (props: DetailProps) => {
         closeDrawer={closeFollowDrawer}
         id={id}
         reload={() => {
-          GetFollowCount(id).then(res => {
-            setCount(res);
+          RefreshFollow(id).then(res => {
+            setCount(res.followCount);
+            setNewFlow(res.newFollow);
             setLoading(false);
           })
         }}

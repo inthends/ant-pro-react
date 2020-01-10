@@ -7,7 +7,6 @@ import moment from 'moment';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { CheckRebateFee, InvalidBillDetailForm, Charge, GetQrCode, GetPayState } from './Main.service';
 // import QRCode from 'qrcode.react';
-
 // import styles from './style.less';
 const { Option } = Select;
 
@@ -44,7 +43,6 @@ function ListTable(props: ListTableProps) {
 
   //二维码地址
   // const [qrUrl, setQrUrl] = useState<any>('1');
-
   //是否生成收款码
   const [isQrcode, setIsQrcode] = useState<boolean>(false);
 
@@ -225,8 +223,7 @@ function ListTable(props: ListTableProps) {
           // </Button>,
           // <Button type="danger" key="delete" onClick={() => doDelete(record)}>
           //   删除
-          // </Button>,
-
+          // </Button>, 
           <span>
             <a onClick={() => modify(record.id)} key="modify">修改</a>
             <Divider type="vertical" />
@@ -246,7 +243,6 @@ function ListTable(props: ListTableProps) {
   // const [customerName, setCustomerName] = useState();
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const onSelectChange = (selectedRowKeys, selectedRows) => {
-
     if (selectedRowKeys.length > 0) {
       //如果该笔费用存在优惠，则需要选中与此费项有关的全部费用，一起缴款，否则给出提示 
       const data = {
@@ -336,7 +332,6 @@ function ListTable(props: ListTableProps) {
 
             //弹出支付宝扫码
             if (isQrcode) {
-
               // GetQrCode(info).then(res => {
               //   // setQrUrl(res);  
               //   Modal.confirm({
@@ -362,7 +357,6 @@ function ListTable(props: ListTableProps) {
               //     } 
               //   }); 
               // });
-
 
               GetQrCode(info).then(res => {
                 pay(res.code_img_url);
@@ -392,19 +386,18 @@ function ListTable(props: ListTableProps) {
           timer = null;//关闭弹窗后不轮询
         }
       }
-    }) 
-    retry().then(() => { 
-      temp.destroy(); 
     })
-
-  }
+    retry().then(() => {
+      temp.destroy();
+    })
+  };
 
   //轮询支付回调数据
   let timer;
   const retry = () => {
-    return new Promise((resolve, reject) => { 
-      timer = setTimeout(() => { 
-       const tradenoId = form.getFieldValue('tradenoId'); 
+    return new Promise((resolve, reject) => {
+      timer = setTimeout(() => {
+        const tradenoId = form.getFieldValue('tradenoId');
         GetPayState(tradenoId).then(billId => {
           if (billId) {
             //支付成功
@@ -413,19 +406,16 @@ function ListTable(props: ListTableProps) {
             reload();
             //弹出查看页面
             showDetail(billId);
-
           } else {
 
             if (timer) {
               retry();
-            } 
-          } 
-        }) 
+            }
+          }
+        })
       }, 1000);//每秒轮询一次  
     })
-
-  }
-
+  };
 
   return (
     <Page>
@@ -597,7 +587,12 @@ function ListTable(props: ListTableProps) {
               disabled={isQrcode}
             >自动抹零</Checkbox>
 
-            <Select style={{ marginLeft: '10px', width: '110px' }}
+            <Select
+              style={{
+                marginLeft: '10px',
+                width: '110px',
+                display: isML ? 'inline-block' : 'none'
+              }}
               defaultValue='1'
               disabled={isQrcode}
               onChange={(value) => { setMlType(value); }}
@@ -606,7 +601,10 @@ function ListTable(props: ListTableProps) {
               <Option value='2'>抹去角</Option>
               <Option value='3'>抹去分</Option>
             </Select>
-            <Select style={{ marginLeft: '10px', width: '96px' }}
+            <Select style={{
+              marginLeft: '10px', width: '96px',
+              display: isML ? 'inline-block' : 'none'
+            }}
               defaultValue='1'
               disabled={isQrcode}
               onChange={(value) => { setMlScale(value); }}

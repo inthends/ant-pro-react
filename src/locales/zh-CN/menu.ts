@@ -51,25 +51,26 @@ export default {
   'menu.estate': '物业管理',
   'menu.estate.servicedesk': '服务总台',
   'menu.estate.repair': '报修管理',
-  'menu.estate.complaint': '投诉管理', 
+  'menu.estate.complaint': '投诉管理',
   'menu.estate.devicetype': '设备种类',
   'menu.estate.device': '设备资料',
   'menu.estate.pollingcontent': '巡检内容',
   'menu.estate.pollingline': '巡检路线',
-  
+
   'menu.admin': '行政管理',
   'menu.admin.news': '信息发布',
   'menu.admin.warehouse': '仓库管理',
 
   'menu.contract': '资产运营',
   'menu.contract.list': '合同管理',
-  'menu.contract.merchants': '客户管理', 
+  'menu.contract.channel': '我的渠道',
+  'menu.contract.merchants': '客户管理',
 
   //workflow
   'menu.workflow': '流程中心',
-  'menu.workflow.flowedit': '流程设置', 
-  'menu.workflow.flowtask': '待办任务', 
-  'menu.workflow.flowcompleted': '已办任务', 
+  'menu.workflow.flowedit': '流程设置',
+  'menu.workflow.flowtask': '待办任务',
+  'menu.workflow.flowcompleted': '已办任务',
 
   'menu.system': '系统管理',
   'menu.system.organize': '机构设置',

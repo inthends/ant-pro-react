@@ -313,6 +313,12 @@ export default [
             component: './Contract/List/Main',
           },
           {
+            name: 'channel',
+            path: '/contract/channel',
+            icon: 'snippets',
+            component: './Contract/Channel/Main',
+          },
+          {
             name: 'merchants',
             path: '/contract/merchants',
             icon: 'snippets',

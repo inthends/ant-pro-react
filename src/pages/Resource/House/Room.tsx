@@ -3,7 +3,7 @@ import { Icon, Upload, Modal, Select, AutoComplete, Button, Card, Col, Drawer, F
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { ExistEnCode, SaveForm, GetCustomerList } from './House.service';
-import { GetCustomerInfo } from '../PStructUser/PStructUser.service';
+import { GetCustomerInfo, CheckCustomer } from '../PStructUser/PStructUser.service';
 import styles from './style.less';
 const { TextArea } = Input;
 const { Option } = Select;
@@ -219,6 +219,20 @@ const Room = (props: RoomProps) => {
     }
   };
 
+  //验证用户
+  const checkExist = (rule, value, callback) => {
+    if (value == undefined) {
+      callback();
+    }
+    else {
+      CheckCustomer(organizeId, value).then(res => {
+        if (res)
+          callback('业主不存在，请先新增');
+        else
+          callback();
+      })
+    }
+  };
 
   // const userList = userSource.map
   //   (item => <Option key={item.id} value={item.name}>{item.name}</Option>);
@@ -232,7 +246,7 @@ const Room = (props: RoomProps) => {
   // };
 
   //验证编码是否重复
-  const checkExist = (rule, value, callback) => {
+  const checkCodeExist = (rule, value, callback) => {
     if (value == undefined) {
       callback();
     }
@@ -332,7 +346,7 @@ const Room = (props: RoomProps) => {
                         message: '请输入编号'
                       },
                       {
-                        validator: checkExist
+                        validator: checkCodeExist
                       }
                     ],
                   })(<Input placeholder="请输入编号" />)}
@@ -456,6 +470,7 @@ const Room = (props: RoomProps) => {
                   <Form.Item label={infoDetail.ownerName ? <div>业主名称 <a onClick={() => { showCustomerDrawer(infoDetail.ownerId, 1) }}>编辑</a></div> : '业主名称'}>
                     {getFieldDecorator('ownerName', {
                       initialValue: infoDetail.ownerName,
+                      rules: [{ required: true, message: '业主不存在，请先新增' }, {  validator: checkExist  }]
                     })(
                       <AutoComplete
                         dropdownClassName={styles.searchdropdown}
@@ -480,6 +495,7 @@ const Room = (props: RoomProps) => {
                   <Form.Item label={infoDetail.tenantName ? <div>住户名称 <a onClick={() => { showCustomerDrawer(infoDetail.tenantId, 2) }}>编辑</a></div> : '住户名称'}>
                     {getFieldDecorator('tenantName', {
                       initialValue: infoDetail.tenantName,
+                      rules: [{ required: true, message: '住户不存在，请先新增' }, {  validator: checkExist  }]
                     })(<AutoComplete
                       dropdownClassName={styles.searchdropdown}
                       optionLabelProp="value"
@@ -586,6 +602,8 @@ const Room = (props: RoomProps) => {
         type={usertype}
         reload={(customerId, type) => {
           GetCustomerInfo(customerId).then(res => {
+            //防止旧数据缓存，清空下拉
+            setUserList([]);
             if (type == 1) {
               //业主
               form.setFieldsValue({ ownerName: res.name });

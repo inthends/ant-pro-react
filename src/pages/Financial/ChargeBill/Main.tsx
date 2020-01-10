@@ -111,6 +111,7 @@ function Main() {
     }
   };
 
+  //刷新
   const loadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
@@ -122,7 +123,7 @@ function Main() {
       pageIndex,
       pageSize,
       total,
-      queryJson: { keyword: search, roomid: organizeId },
+      queryJson: { keyword: search, unitId: organizeId, showCustomerFee: showCustomerFee },
     };
 
     if (sorter) {
@@ -625,14 +626,14 @@ function Main() {
                 onChange={(date, dateStr) => {
                   var params = Object.assign({}, chargedSearchParams, { startDate: dateStr });
                   setChargedSearchParams(params);
-                }} style={{ marginRight: '5px', width: '120px' }} />
+                }} style={{ marginRight: '5px', width: '140px' }} />
               至
               <DatePicker
                 placeholder='收款日期至'
                 onChange={(date, dateStr) => {
                   var params = Object.assign({}, chargedSearchParams, { endDate: dateStr });
                   setChargedSearchParams(params);
-                }} style={{ marginLeft: '5px', marginRight: '5px', width: '120px' }} />
+                }} style={{ marginLeft: '5px', marginRight: '5px', width: '140px' }} />
               <Search
                 className="search-input"
                 placeholder="请输入收款单号"
@@ -661,7 +662,7 @@ function Main() {
               reload={() => initChargeCheckLoadData(organizeId)}
             // rowSelect={GetChargedSelectedKey}
             />
-          </TabPane> 
+          </TabPane>
         </Tabs>
       </Content>
       <Modify
