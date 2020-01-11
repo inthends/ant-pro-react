@@ -587,12 +587,12 @@ const PstructInfo = (props: PstructInfoProps) => {
         closeDrawer={closeCustomerDrawer}
         data={customer}
         organizeId={organizeId}
-        type={usertype}
-        reload={(customerId, type) => {
+        // type={usertype}
+        reload={(customerId) => {
           GetCustomerInfo(customerId).then(res => {
             //防止旧数据缓存，清空下拉
             setUserList([]);
-            if (type == 1) {
+            if (usertype == 1) {
               //业主
               form.setFieldsValue({ ownerName: res.name });
               form.setFieldsValue({ ownerId: customerId });

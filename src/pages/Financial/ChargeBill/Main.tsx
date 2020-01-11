@@ -429,7 +429,13 @@ function Main() {
       {/* <Sider theme="light" style={{ overflow: 'hidden', height: '100%' }} width="245px"> */}
       <AsynLeftTree
         parentid={'0'}
-        selectTree={(id, type, info?) => {
+        selectTree={(id, type, info?) => { 
+
+          //点击前重置 
+          setAddButtonDisable(true);
+          selectTree(id, search);
+          setCustomerName('');
+          setShowname('');
           setAdminOrgId(info.node.props.organizeId);//管理处Id
           setOrganizeId(id);
           // SetOrganize(info);
@@ -438,8 +444,6 @@ function Main() {
             var cusname = info.node.props.tenantname;
             setCustomerName(cusname);
             setShowname(info.node.props.allname + ' 当前住户 ' + cusname);
-            //清空之前的收款信息 
-            selectTree(id, search);
           }
         }}
       />
@@ -669,7 +673,7 @@ function Main() {
         modifyVisible={modifyVisible}
         closeDrawer={closeDrawer}
         id={id}
-        organizeId={organizeId}
+        roomId={organizeId}
         adminOrgId={adminOrgId}
         reload={() => initLoadData(search, organizeId)}
         edit={modifyEdit}

@@ -16,7 +16,7 @@ interface ModifyProps {
   modifyVisible: boolean;
   closeDrawer(): void;
   form: WrappedFormUtils;
-  organizeId?: string;
+  roomId?: string;
   id?: string;
   adminOrgId?: String;//管理处Id
   reload(): void;
@@ -24,7 +24,7 @@ interface ModifyProps {
 }
 
 const Modify = (props: ModifyProps) => {
-  const { modifyVisible, closeDrawer, form, organizeId, id, reload, edit, adminOrgId } = props;
+  const { modifyVisible, closeDrawer, form, roomId, id, reload, edit, adminOrgId } = props;
   const { getFieldDecorator } = form;
   const title = id == "" ? '新增费用' : "修改费用";
   const [infoDetail, setInfoDetail] = useState<any>({});
@@ -38,7 +38,7 @@ const Modify = (props: ModifyProps) => {
     // form.resetFields();
     if (modifyVisible) {
       setLoading(true);
-      GetReceivablesFeeItemTreeJson(organizeId).then(res => {
+      GetReceivablesFeeItemTreeJson(roomId).then(res => {
         setFeeTreeData(res);
       });
 
@@ -74,7 +74,7 @@ const Modify = (props: ModifyProps) => {
         // });
 
         //加载数据
-        GetRoomUsers(organizeId).then(res => {
+        GetRoomUsers(roomId).then(res => {
           setRelationIds(res);
           GetShowDetail(id).then(info => {
             // let info = value.entity;
@@ -95,9 +95,7 @@ const Modify = (props: ModifyProps) => {
         });
 
       } else {
-
-        GetRoomUsers(organizeId).then(res => {
-
+        GetRoomUsers(roomId).then(res => {
           setRelationIds(res);
           if (res.length > 0) {
             //var info = Object.assign({}, infoDetail, { relationId: res[0].key });
@@ -339,59 +337,62 @@ const Modify = (props: ModifyProps) => {
       onClose={() => close(false)}
       visible={modifyVisible}
       destroyOnClose={true}
-      bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 50px)' }}
-    >
+      bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 50px)' }}>
+      <Spin tip="数据处理中..." spinning={loading}>
+        <Row gutter={8}>
 
-      <Row gutter={8}>
-        {
-          id != '' ?
-            null :
-            <Col span={7} style={{
-              overflow: 'visible', position: 'relative',
-              height: 'calc(100vh - 35px)',
-            }}>
-              <LeftTree
-                treeData={feeTreeData}
-                selectTree={(id, item) => {
-                  // setFeeItemId(id);
-                  if (organizeId) {
-                    GetFeeItemDetail(id, organizeId).then(res => {
-                      if (res.feeItemId) {
-                        // if (res.relationId != null) {
-                        // var info = Object.assign({}, res, { feeItemId: id });
-                        // console.log(info);
-                        res.feeItemId = id;
-                        setInfoDetail(res);
-                      } else {
-                        message.warning(res);
-                      }
-                      // return info;
-                      // }
-                      // else {
-                      //   message.warning(res);
-                      //   return null;
-                      // }
-                    });
-                    // .then(info => {
-                    //   if (info !== null) {
-                    //     GetUserRooms(getRelationId(info.relationId))
-                    //       .then(res => {
-                    //         setUnitIds(res);
-                    //         if (res.length > 0)
-                    //           info = Object.assign({}, info, { householdId: res[0].value });
-                    //         setInfoDetail(info);
-                    //       });
-                    //   }
-                    // });
-                  }
-                }}
-              />
-            </Col>
-        }
+          {
+            id != '' ?
+              null :
+              <Col span={7} style={{
+                overflow: 'visible', position: 'relative',
+                height: 'calc(100vh - 35px)',
+              }}>
+                <LeftTree
+                  treeData={feeTreeData}
+                  selectTree={(id, item) => {
+                    // setFeeItemId(id);
+                    if (roomId) {
+                      setLoading(true);
+                      GetFeeItemDetail(id, roomId).then(res => {
+                        if (res.feeItemId) {
+                          // if (res.relationId != null) {
+                          // var info = Object.assign({}, res, { feeItemId: id });
+                          // console.log(info);
+                          //res.feeItemId = id;
+                          setInfoDetail(res);
+                          setLoading(false);
+                        } else {
+                          message.warning(res);
+                          setLoading(false);
+                        }
+                        // return info;
+                        // }
+                        // else {
+                        //   message.warning(res);
+                        //   return null;
+                        // }
+                      });
+                      // .then(info => {
+                      //   if (info !== null) {
+                      //     GetUserRooms(getRelationId(info.relationId))
+                      //       .then(res => {
+                      //         setUnitIds(res);
+                      //         if (res.length > 0)
+                      //           info = Object.assign({}, info, { householdId: res[0].value });
+                      //         setInfoDetail(info);
+                      //       });
+                      //   }
+                      // });
+                    }
+                  }}
+                />
+              </Col>
+          }
 
-        <Col span={id != '' ? 24 : 17}>
+          <Col span={id != '' ? 24 : 17}>
 
-          <Spin tip="数据处理中..." spinning={loading}>
+
             <Card className={styles.card} >
               <Form hideRequiredMark>
                 <Row>
@@ -449,13 +450,17 @@ const Modify = (props: ModifyProps) => {
                           min={0}
                           precision={4}
                           onChange={value => {
-                            const quantity = Number(form.getFieldValue('quantity'));
-                            const number = Number(form.getFieldValue('number'));
-                            //form.setFieldsValue({ amount: quantity * number * Number(value) }); 
-                            //调用后台计算并且根据设置保留小数位
-                            const unitId = form.getFieldValue('unitId');
-                            Call({ unitId: unitId, feeItemId: infoDetail.feeItemId, price: value, quantity: quantity, number: number }).then(res => {
-                              form.setFieldsValue({ amount: res });
+                            form.validateFields((errors, values) => {
+                              if (!errors) {
+                                const quantity = Number(form.getFieldValue('quantity'));
+                                const number = Number(form.getFieldValue('number'));
+                                //form.setFieldsValue({ amount: quantity * number * Number(value) }); 
+                                //调用后台计算并且根据设置保留小数位
+                                const unitId = form.getFieldValue('unitId');
+                                Call({ unitId: unitId, feeItemId: infoDetail.feeItemId, price: value, quantity: quantity, number: number }).then(res => {
+                                  form.setFieldsValue({ amount: res });
+                                });
+                              }
                             });
                           }}
                         ></InputNumber>
@@ -497,13 +502,17 @@ const Modify = (props: ModifyProps) => {
                             //   setInfoDetail(info);
                             // }
 
-                            const price = Number(form.getFieldValue('price'));
-                            const quantity = Number(form.getFieldValue('quantity'));
-                            //form.setFieldsValue({ amount: price * quantity * Number(value) }); 
-                            //调用后台计算并且根据设置保留小数位
-                            const unitId = form.getFieldValue('unitId');
-                            Call({ unitId: unitId, feeItemId: infoDetail.feeItemId, price: price, quantity: quantity, number: value }).then(res => {
-                              form.setFieldsValue({ amount: res });
+                            form.validateFields((errors, values) => {
+                              if (!errors) {
+                                const price = Number(form.getFieldValue('price'));
+                                const quantity = Number(form.getFieldValue('quantity'));
+                                //form.setFieldsValue({ amount: price * quantity * Number(value) }); 
+                                //调用后台计算并且根据设置保留小数位
+                                const unitId = form.getFieldValue('unitId');
+                                Call({ unitId: unitId, feeItemId: infoDetail.feeItemId, price: price, quantity: quantity, number: value }).then(res => {
+                                  form.setFieldsValue({ amount: res });
+                                });
+                              }
                             });
 
                           }}></InputNumber>
@@ -517,7 +526,7 @@ const Modify = (props: ModifyProps) => {
                       {getFieldDecorator('amount', {
                         initialValue: infoDetail.amount,
                         // initialValue: infoDetail.price == null || infoDetail.quantity == null || infoDetail.number == null ? 0 : infoDetail.price * infoDetail.quantity * infoDetail.number,
-                        rules: [{ required: true, message: '=请选择=' }]
+                        rules: [{ required: true, message: '请输入金额' }]
                       })(
                         <InputNumber precision={2} readOnly style={{ width: '100%' }} ></InputNumber>
                       )}
@@ -550,7 +559,7 @@ const Modify = (props: ModifyProps) => {
                         initialValue: infoDetail.cycleType === null ? "月" : infoDetail.cycleType,
                         rules: [{ required: true, message: '请选择周期单位' }]
                       })(
-                        <Select placeholder="=请选择="
+                        <Select placeholder="=请选择周期单位="
                           disabled={edit ? false : true}
                           style={{ width: '100%' }}
                           onChange={(value: string) => {
@@ -581,6 +590,7 @@ const Modify = (props: ModifyProps) => {
                       )}
                     </Form.Item>
                   </Col>
+
                   <Col span={12}>
                     <Form.Item label="结束日期" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
                       {getFieldDecorator('endDate', {
@@ -596,14 +606,16 @@ const Modify = (props: ModifyProps) => {
                 </Row>
                 <Row>
                   <Col span={12}>
+
                     {/* <Form.Item label="应收期间" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
-                  {getFieldDecorator('period', {
-                    initialValue: infoDetail.period == null ? moment(new Date()) : moment(infoDetail.period),
-                    rules: [{ required: true, message: '请选择应收期间' }]
-                  })(
-                    <DatePicker disabled={true} style={{ width: '100%' }} />
-                  )}
-                </Form.Item> */}
+                    {getFieldDecorator('period', {
+                      initialValue: infoDetail.period == null ? moment(new Date()) : moment(infoDetail.period),
+                      rules: [{ required: true, message: '请选择应收期间' }]
+                    })(
+                      <DatePicker disabled={true} style={{ width: '100%' }} />
+                    )}
+                    </Form.Item> */}
+
                     {getFieldDecorator('period', {
                       initialValue: infoDetail.period,
                     })(
@@ -619,6 +631,7 @@ const Modify = (props: ModifyProps) => {
                       )}
                     </Form.Item>
                   </Col>
+
                   <Col span={12}>
                     <Form.Item label="账单日" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
                       {getFieldDecorator('billDate', {
@@ -644,31 +657,33 @@ const Modify = (props: ModifyProps) => {
                 </Row>
               </Form>
             </Card>
-          </Spin>
-        </Col>
+          </Col>
+        </Row>
+      </Spin>
 
-      </Row>
-      {edit ? <div
-        style={{
-          position: 'absolute',
-          left: 0,
-          bottom: 0,
-          width: '100%',
-          borderTop: '1px solid #e9e9e9',
-          padding: '10px 16px',
-          background: '#fff',
-          textAlign: 'right',
-        }}
-      >
-        <Button onClick={() => close(false)} style={{ marginRight: 8 }}>
-          取消
+      {
+        edit ? <div
+          style={{
+            position: 'absolute',
+            left: 0,
+            bottom: 0,
+            width: '100%',
+            borderTop: '1px solid #e9e9e9',
+            padding: '10px 16px',
+            background: '#fff',
+            textAlign: 'right',
+          }}
+        >
+          <Button onClick={() => close(false)} style={{ marginRight: 8 }}>
+            取消
         </Button>
-        <Button onClick={onSave} type="primary">
-          提交
+          <Button onClick={onSave} type="primary">
+            提交
         </Button>
-      </div> : null}
+        </div> : null
+      }
 
-    </Drawer>
+    </Drawer >
   );
 };
 export default Form.create<ModifyProps>()(Modify);

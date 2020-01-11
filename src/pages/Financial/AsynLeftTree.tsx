@@ -142,9 +142,10 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
               <Tree
                 loadData={onLoadData}
                 showLine
-                expandedKeys={expandedKeys}
+                expandedKeys={expandedKeys} 
                 onExpand={clickExpend}
                 onSelect={onSelect}>
+               
                 {renderTreeNodes(treeData)}
               </Tree>
             </Page>

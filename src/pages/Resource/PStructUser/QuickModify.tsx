@@ -16,13 +16,13 @@ interface QuickModifyProps {
   data?: any;
   form: WrappedFormUtils;
   closeDrawer(): void;
-  reload(customerId, type): void;
+  reload(customerId): void;
   organizeId: string;
-  type: any;
+  // type: any;
 }
 
 const QuickModify = (props: QuickModifyProps) => {
-  const { type, organizeId, modifyVisible, data, closeDrawer, form, reload } = props;
+  const {   organizeId, modifyVisible, data, closeDrawer, form, reload } = props;
   const { getFieldDecorator } = form;
   const title = data === undefined ? '添加客户' : '修改客户';
   const [infoDetail, setInfoDetail] = useState<any>({});
@@ -84,7 +84,7 @@ const QuickModify = (props: QuickModifyProps) => {
     SaveForm({ ...dataDetail }).then(res => {
       message.success('保存成功');
       closeDrawer();
-      reload(res, type);//回调
+      reload(res);//回调
     });
   };
 
