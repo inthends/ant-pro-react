@@ -80,7 +80,7 @@ function ListTable(props: ListTableProps) {
       sorter: true,
     },
     {
-      title: '手机号码',
+      title: '联系电话',
       dataIndex: 'phoneNum',
       key: 'phoneNum',
       width: 200,

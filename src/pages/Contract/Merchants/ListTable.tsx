@@ -42,10 +42,17 @@ function ListTable(props: ListTableProps) {
     },
 
     {
-      title: '跟进人',
-      dataIndex: 'follower',
-      key: 'follower',
-      width: 60,
+      title: '联系人',
+      dataIndex: 'customerContact',
+      key: 'customerContact',
+      width: 100,
+    },
+
+    {
+      title: '联系人电话',
+      dataIndex: 'customerTelephone',
+      key: 'customerTelephone',
+      width: 100,
     },
 
     {
@@ -83,7 +90,7 @@ function ListTable(props: ListTableProps) {
       title: '渠道',
       dataIndex: 'visitChannel',
       key: 'visitChannel',
-      width: 100
+      width: 80
     },
     {
       title: '需求面积段',
@@ -102,7 +109,7 @@ function ListTable(props: ListTableProps) {
       title: '行业',
       dataIndex: 'industry',
       key: 'industry',
-      width: 100
+      width: 60
     },
     {
       title: '预计签约时间',
@@ -115,8 +122,7 @@ function ListTable(props: ListTableProps) {
         else
           return '';
       }
-    },
-
+    }, 
     {
       title: '操作',
       align: 'center',

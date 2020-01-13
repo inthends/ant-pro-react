@@ -64,10 +64,3 @@ export function RemoveForm(keyValue): Promise<any> {
 //     .get(process.env.basePath + `/Common/GetTreeJson?organizeId=${organizeId}${typestr}`)
 //     .then(getResult as any);
 // }
-
-//查询客户数据
-export function GetCustomerList(keyword,organizeId): Promise<any> {
-  return request
-    .get(process.env.basePath + `/PStructUser/GetCustomerList?keyword=${keyword}&organizeId=${organizeId}`)
-    .then(getResult as any);
-}

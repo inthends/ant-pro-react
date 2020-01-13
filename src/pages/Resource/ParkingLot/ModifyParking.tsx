@@ -4,8 +4,8 @@ import { AutoComplete, Button, Card, Col, Drawer, Form, Input, message, Row, Sel
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { SaveParkingForm, GetCustomerList } from './ParkingLot.service';
-import { GetCustomerInfo, CheckCustomer } from '../PStructUser/PStructUser.service';
+import { SaveParkingForm } from './ParkingLot.service';
+import { GetCustomerInfo, CheckCustomer, GetCustomerList } from '../PStructUser/PStructUser.service';
 import QuickModify from '../PStructUser/QuickModify';
 import styles from './style.less';
 
@@ -39,7 +39,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
   const [userList, setUserList] = useState<any[]>([]);
   const [type, setType] = useState<any>(1);
   const [customerVisible, setCustomerVisible] = useState<boolean>(false);
-  const [customer, setCustomer] = useState<any>({});
+  const [customer, setCustomer] = useState<any>();
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -88,11 +88,13 @@ const ModifyParking = (props: ModifyParkingProps) => {
   };
 
   const showCustomerDrawer = (customerId, type) => {
-    GetCustomerInfo(customerId).then(res => {
-      setCustomer(res);
-      setCustomerVisible(true);
-      setType(type);
-    })
+    if (customerId != '') {
+      GetCustomerInfo(customerId).then(res => {
+        setCustomer(res); 
+        setType(type);
+      })
+    } 
+    setCustomerVisible(true);
   };
 
   const close = () => {
@@ -212,13 +214,13 @@ const ModifyParking = (props: ModifyParkingProps) => {
 
   //验证用户
   const checkExist = (rule, value, callback) => {
-    if (value == undefined) {
+    if (value == undefined || value == '') {
       callback();
     }
     else {
       CheckCustomer(organizeId, value).then(res => {
         if (res)
-          callback('业主不存在，请先新增');
+          callback('人员信息不存在，请先新增');
         else
           callback();
       })
@@ -359,7 +361,10 @@ const ModifyParking = (props: ModifyParkingProps) => {
                   })(<TextArea rows={4} placeholder="请输入建筑面积" />)} */}
                   {getFieldDecorator('ownerName', {
                     initialValue: infoDetail.ownerName,
-                    rules: [{ required: true, message: '业主不存在，请先新增' }, { validator: checkExist }]
+                    rules: [{
+                      required: false, message: '业主不存在，请先新增'
+                    },
+                    { validator: checkExist }]
                   })(
                     <AutoComplete
                       dropdownClassName={styles.searchdropdown}
@@ -386,7 +391,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
                   })(<TextArea rows={4} placeholder="请输计费面积" />)} */}
                   {getFieldDecorator('tenantName', {
                     initialValue: infoDetail.tenantName,
-                    rules: [{ required: true, message: '住户不存在，请先新增' }, { validator: checkExist }]
+                    rules: [{ required: false, message: '住户不存在，请先新增' }, { validator: checkExist }]
                   })(<AutoComplete
                     dropdownClassName={styles.searchdropdown}
                     optionLabelProp="value"
@@ -531,9 +536,10 @@ const ModifyParking = (props: ModifyParkingProps) => {
         closeDrawer={closeCustomerDrawer}
         data={customer}
         organizeId={organizeId}
-        type={type}
-        reload={(customerId, type) => {
+        // type={type}
+        reload={(customerId) => {
           GetCustomerInfo(customerId).then(res => {
+            debugger
             //防止旧数据缓存，清空下拉
             setUserList([]);
             if (type == 1) {
@@ -543,9 +549,9 @@ const ModifyParking = (props: ModifyParkingProps) => {
               form.setFieldsValue({ ownerPhone: res.phoneNum });
             } else {
               //住户
-              form.setFieldsValue({ ownerName: res.name });
-              form.setFieldsValue({ ownerId: customerId });
-              form.setFieldsValue({ ownerPhone: res.phoneNum });
+              form.setFieldsValue({ tenantName: res.name });
+              form.setFieldsValue({ tenantId: customerId });
+              form.setFieldsValue({ tenantPhone: res.phoneNum });
             }
           });
         }

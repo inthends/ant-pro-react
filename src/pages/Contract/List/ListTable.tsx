@@ -182,7 +182,7 @@ function ListTable(props: ListTableProps) {
       key: 'leasePrice',
       width: 100,
       render: (text, record) => {
-        return text + ' ' + record.leasePriceUnit;
+        return text + record.leasePriceUnit;
       }
     },
     {
@@ -223,7 +223,7 @@ function ListTable(props: ListTableProps) {
       key: 'operation',
       width: 140,
       fixed: 'right',
-      render: (text, record) => { 
+      render: (text, record) => {
         //新建
         if (record.status == 0) {
           return [

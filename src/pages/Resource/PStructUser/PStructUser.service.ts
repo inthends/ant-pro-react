@@ -63,3 +63,24 @@ export function CheckCustomer(organizeId, name): Promise<any> {
     .get(process.env.basePath + `/PStructUser/CheckCustomer?organizeId=${organizeId}&name=${name}`)
     .then(getResult as any);
 }
+
+//查询客户数据
+export function GetCustomerList(keyword,organizeId): Promise<any> {
+  return request
+    .get(process.env.basePath + `/PStructUser/GetCustomerList?keyword=${keyword}&organizeId=${organizeId}`)
+    .then(getResult as any);
+}
+
+//合同承租方验证
+export function CheckContractCustomer(name): Promise<any> {
+  return request
+    .get(process.env.basePath + `/PStructUser/CheckContractCustomer?name=${name}`)
+    .then(getResult as any);
+}
+
+//查询客户数据
+export function GetContractCustomerList(keyword): Promise<any> {
+  return request
+    .get(process.env.basePath + `/PStructUser/GetContractCustomerList?keyword=${keyword}`)
+    .then(getResult as any);
+}

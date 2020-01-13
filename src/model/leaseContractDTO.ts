@@ -57,7 +57,7 @@ export interface LeaseContractDTO {
    */
   calcPrecisionMode?: string;
   /**
-   * 租客代码
+   * 租客id
    */
   customerId?: string;
   /**
@@ -68,10 +68,10 @@ export interface LeaseContractDTO {
    * 行业
    */
   industry?: string;
-//   /**
-//  * 行业
-//  */
-//   industryId?: string;
+  //   /**
+  //  * 行业
+  //  */
+  //   industryId?: string;
   /**
    * 法人
    */
@@ -87,12 +87,15 @@ export interface LeaseContractDTO {
   /**
    * 租客联系人
    */
-  customerContact?: string;
-
+  linkMan?: string;
   /**
-     * 租客联系人
+   * 租客联系人电话
+   */
+  linkPhone?: string;
+  /**
+     * 租客地址
      */
-  customerContactId?: string;
+  address?: string;
 
   /**
    * 滞纳金比例
@@ -127,18 +130,18 @@ export interface LeaseContractDTO {
    */
   chargeId?: string;
 
- /**
-   * 计费单元Id
-   */
+  /**
+    * 计费单元Id
+    */
   billUnitId?: string;
-   /**
-   * 机构Id
-   */
+  /**
+  * 机构Id
+  */
   organizeId?: string;
-  
-    /**
-   * 续租前合同Id
-   */
+
+  /**
+ * 续租前合同Id
+ */
   preContractId?: string;
-  
+
 }
