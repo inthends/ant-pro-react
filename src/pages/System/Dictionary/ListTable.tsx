@@ -2,7 +2,7 @@ import Page from "@/components/Common/Page";
 import { Divider, message, Modal, Switch, Table } from "antd";
 import { ColumnProps, PaginationConfig } from "antd/lib/table";
 import React from "react";
-import { SaveForm, RemoveDetailForm } from "./Dictionary.service";
+import { SaveDetailForm, RemoveDetailForm } from "./Dictionary.service";
 
 interface ListTableProps {
   loading: boolean;
@@ -42,7 +42,7 @@ function ListTable(props: ListTableProps) {
   const toggleDisabled = record => {
     record.enabledMark = record.enabledMark === 0 ? 1 : 0;
     let keyValue = record.itemDetailId;
-    SaveForm({ ...record, keyValue }).then(() => {
+    SaveDetailForm({ ...record, keyValue }).then(() => {
       setData([...data]);
     });
   };

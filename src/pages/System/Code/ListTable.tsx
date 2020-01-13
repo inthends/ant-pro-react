@@ -43,7 +43,7 @@ function ListTable(props: ListTableProps) {
       title: "编号",
       dataIndex: "enCode",
       key: "enCode",
-      width: 80,
+      width: 100,
     },
     {
       title: "名称",
@@ -57,12 +57,12 @@ function ListTable(props: ListTableProps) {
     //   key: "orgName",
     //   width: 150
     // },
-    {
-      title: "当前流水号",
-      dataIndex: "currentNumber",
-      key: "currentNumber",
-      width: 200
-    },
+    // {
+    //   title: "当前流水号",
+    //   dataIndex: "currentNumber",
+    //   key: "currentNumber",
+    //   width: 200
+    // },
     {
       title: "创建用户",
       dataIndex: "createUserName",
@@ -73,7 +73,7 @@ function ListTable(props: ListTableProps) {
       title: "创建时间",
       dataIndex: "createDate",
       key: "createDate",
-      width: 120
+      width: 160
     },
     // {
     //   title: "有效",
@@ -95,15 +95,15 @@ function ListTable(props: ListTableProps) {
     {
       title: "说明",
       dataIndex: "description",
-      key: "description",
-      width: 100,
+      key: "description", 
+      width: 160
     },
     {
       title: "操作",
       dataIndex: "operation",
       key: "operation",
       align: 'center',
-      width: 85,
+      width: 60,
       render: (text, record) => {
         return [
           <span>

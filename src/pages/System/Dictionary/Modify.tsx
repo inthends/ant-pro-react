@@ -3,7 +3,7 @@ import ModifyItem from "@/components/BaseModifyDrawer/ModifyItem";
 import { Card, Form, Row } from "antd";
 import { WrappedFormUtils } from "antd/lib/form/Form";
 import React from "react";
-import { SaveForm } from "./Dictionary.service";
+import { SaveDetailForm } from "./Dictionary.service";
 import styles from './style.less';
 
 interface ModifyProps {
@@ -12,15 +12,16 @@ interface ModifyProps {
   form: WrappedFormUtils<any>;
   closeDrawer(): void;
   reload(): void;
+  itemId: any;
 }
 
 const Modify = (props: ModifyProps) => {
-  const { data, form } = props;
-  let initData = data ? data : { enabledMark: 1 }; 
+  const { itemId, data, form } = props;
+  let initData = data ? data : { enabledMark: 1, itemId: itemId };
   const baseFormProps = { form, initData };
-  const doSave = dataDetail => {
+  const doSave = dataDetail => { 
     let modifyData = { ...initData, ...dataDetail, keyValue: initData.itemDetailId };
-    return SaveForm(modifyData);
+    return SaveDetailForm(modifyData);
   };
 
   return (
