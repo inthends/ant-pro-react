@@ -113,7 +113,7 @@ function Main() {
             onClick={() => showDrawer()}
           >
             <Icon type="plus" />
-            联系人
+            渠道联系人
           </Button>
         </div>
 

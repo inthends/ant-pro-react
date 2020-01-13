@@ -15,10 +15,11 @@ interface ModifyProps {
 };
 
 const Modify = (props: ModifyProps) => {
-  const { visible, data, form } = props;
+  const { visible, data, form } = props; 
   let initData = data ? data : {};
   const baseFormProps = { form, initData };
   const [area, setArea] = useState<any[]>([]);//商圈
+  const [channel, setChannel] = useState<any[]>([]);//渠道
   const doSave = dataDetail => {
     let modifyData = { ...initData, ...dataDetail, keyValue: initData.id };
     return SaveForm(modifyData);
@@ -26,8 +27,15 @@ const Modify = (props: ModifyProps) => {
 
   useEffect(() => {
     if (visible) {
+
+      //商圈
       getCommonItems('TradingArea').then(res => {
         setArea(res || []);
+      });
+
+      //渠道
+      getCommonItems('VisitChannel').then(res => {
+        setChannel(res || []);
       });
     }
   }, [visible]);
@@ -52,13 +60,25 @@ const Modify = (props: ModifyProps) => {
           </Row>
 
           <Row gutter={24}>
+
+            <ModifyItem
+              {...baseFormProps}
+              field="channelType"
+              label="渠道类型"
+              type='select'
+              items={channel}
+              rules={[{ required: true, message: "请选择渠道类型" }]}
+            ></ModifyItem>
+
             <ModifyItem
               {...baseFormProps}
               field="company"
               label="公司"
             // rules={[{ required: true, message: "请输入公司" }]}
             ></ModifyItem>
+          </Row>
 
+          <Row gutter={24}> 
             <ModifyItem
               {...baseFormProps}
               field="tradingArea"
@@ -66,17 +86,18 @@ const Modify = (props: ModifyProps) => {
               type='select'
               items={area}
             // rules={[{ required: true, message: "请输入商圈" }]}
-            ></ModifyItem>
-          </Row>
-
-          <Row gutter={24}>
+            ></ModifyItem> 
             <ModifyItem
               {...baseFormProps}
               field="email"
               label="电子邮箱"
             // rules={[{ required: true, message: "请输入电子邮箱" }]}
             ></ModifyItem>
+          </Row>
+
+          <Row gutter={24}>
             <ModifyItem
+              lg={24}
               {...baseFormProps}
               field="addresss"
               label="通讯地址"

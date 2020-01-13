@@ -42,7 +42,7 @@ const Modify = (props: ModifyProps) => {
   const title = id === undefined ? '新增费项' : '修改费项';
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [feetypes, setFeetype] = useState<TreeEntity[]>([]);
-  const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
+  const [feeItems, setFeeItems] = useState<TreeEntity[]>([]);
   const [isFormula, setIsFormula] = useState<boolean>(false);
   const [addFormulaVisible, setAddFormulaVisible] = useState<boolean>(false);
   const [selectOrgVisible, setSelectOrgVisible] = useState<boolean>(false);
@@ -60,7 +60,7 @@ const Modify = (props: ModifyProps) => {
   useEffect(() => {
     //加载关联收费项目
     GetAllFeeItems().then(res => {
-      setFeeitems(res || []);
+      setFeeItems(res || []);
     });
     GetFeeItemName().then(res => {
       setFeeItemNames(res || []);
@@ -811,7 +811,7 @@ const Modify = (props: ModifyProps) => {
                       })(
                         <Select placeholder="请选择费项类别" >
                           {feetypes.map(item => (
-                            <Option key={item.title} value={item.title}>
+                            <Option key={item.key} value={item.value}>
                               {item.title}
                             </Option>
                           ))}
@@ -971,8 +971,8 @@ const Modify = (props: ModifyProps) => {
                         <Select
                           placeholder="请选择关联收费项目" disabled={linkFeeDisable}
                         >
-                          {feeitems.map(item => (
-                            <Option key={item.value} value={item.value}>
+                          {feeItems.map(item => (
+                            <Option key={item.key} value={item.value}>
                               {item.title}
                             </Option>
                           ))}
@@ -1520,7 +1520,7 @@ const Modify = (props: ModifyProps) => {
                       })(
                         <Select placeholder="==请选择==">
                           {feeItemNames.map(item => (
-                            <Option value={item.key} key={item.key}>
+                            <Option value={item.value} key={item.key}>
                               {item.title}
                             </Option>
                           ))}

@@ -51,7 +51,7 @@ const Renewal = (props: RenewalProps) => {
   const [depositData, setDepositData] = useState<any[]>([]);//保证金
   const [chargeData, setChargeData] = useState<any[]>([]);//租金 
   const [industryType, setIndustryType] = useState<any[]>([]); //行业 
-  const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
+  const [feeItems, setFeeItems] = useState<TreeEntity[]>([]);
   const [isCal, setIsCal] = useState<boolean>(false);
   const [TermJson, setTermJson] = useState<string>();
   const [RateJson, setRateJson] = useState<string>();
@@ -72,7 +72,7 @@ const Renewal = (props: RenewalProps) => {
     });
     //加载关联收费项目
     // GetAllFeeItems().then(res => {
-    //   setFeeitems(res || []);
+    //   setFeeItems(res || []);
     // });
 
     //获取房产树
@@ -98,7 +98,7 @@ const Renewal = (props: RenewalProps) => {
           }
 
           GetFeeItemsByUnitId(tempInfo.billUnitId).then(res => {
-            setFeeitems(res || []);
+            setFeeItems(res || []);
           });
 
           setInfoDetail(tempInfo);
@@ -146,13 +146,13 @@ const Renewal = (props: RenewalProps) => {
     //多个房屋的时候，默认获取第一个房屋作为计费单元
     if (value.length == 0) {
       form.setFieldsValue({ billUnitId: '' });
-      setFeeitems([]);
+      setFeeItems([]);
     } else {
       form.setFieldsValue({ billUnitId: value[0] });
       //加载房屋费项
       //加载关联收费项目
       GetFeeItemsByUnitId(value[0]).then(res => {
-        setFeeitems(res || []);
+        setFeeItems(res || []);
       });
     }
 
@@ -757,7 +757,7 @@ const Renewal = (props: RenewalProps) => {
                         <Select placeholder="请选择费项"
                           onChange={changeFeeItem}
                         >
-                          {feeitems.map(item => (
+                          {feeItems.map(item => (
                             <Option value={item.key} key={item.key}>
                               {item.title}
                             </Option>
@@ -802,7 +802,7 @@ const Renewal = (props: RenewalProps) => {
               </Card>
               <LeaseTermRenewal
                 form={form}
-                feeitems={feeitems}
+                feeItems={feeItems}
               ></LeaseTermRenewal>
               <IncreasingRate
                 form={form}

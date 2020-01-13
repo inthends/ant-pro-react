@@ -333,7 +333,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                         placeholder="请选择费项名称"
                       >
                         {feeitems.map(item => (
-                          <Option key={item.value} value={item.value}>
+                          <Option key={item.key} value={item.value}>
                             {item.title}
                           </Option>
                         ))}
@@ -351,7 +351,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                         disabled={linkFeeDisable}
                       >
                         {feeitems.map(item => (
-                          <Option key={item.value} value={item.value}>
+                          <Option key={item.key} value={item.value}>
                             {item.title}
                           </Option>
                         ))}
@@ -1049,7 +1049,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                     })(
                       <Select placeholder="==应付款项==">
                         {feeItemNames.map(item => (
-                          <Option value={item.key} key={item.key}>
+                          <Option value={item.value} key={item.key}>
                             {item.title}
                           </Option>
                         ))}

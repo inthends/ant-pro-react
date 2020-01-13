@@ -37,7 +37,7 @@ const Add = (props: AddProps) => {
   const { visible, closeDrawer, form, reload } = props;
   const { getFieldDecorator } = form;
   const [industryType, setIndustryType] = useState<any[]>([]); //行业  
-  const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
+  const [feeItems, setFeeItems] = useState<TreeEntity[]>([]);
   //租金计算结果
   const [depositData, setDepositData] = useState<HtChargefeeresult[]>([]);//保证金
   const [chargeData, setChargeData] = useState<HtChargefeeresult[]>([]);//租金 
@@ -305,14 +305,14 @@ const Add = (props: AddProps) => {
     if (value.length == 0) {
       // setBillUnitId('');
       form.setFieldsValue({ billUnitId: '' });
-      setFeeitems([]);
+      setFeeItems([]);
     } else {
       form.setFieldsValue({ billUnitId: value[0] });
       // setBillUnitId(value[0]);
       //加载房屋费项
       //加载关联收费项目
       GetFeeItemsByUnitId(value[0]).then(res => {
-        setFeeitems(res || []);
+        setFeeItems(res || []);
       });
     }
 
@@ -550,7 +550,7 @@ const Add = (props: AddProps) => {
                             ))} */}
 
                               {industryType.map(item => (
-                                <Option value={item.title} key={item.title}>
+                                <Option value={item.value} key={item.key}>
                                   {item.title}
                                 </Option>
                               ))}
@@ -672,8 +672,8 @@ const Add = (props: AddProps) => {
                         <Select placeholder="请选择费项"
                           onChange={changeFeeItem}
                         >
-                          {feeitems.map(item => (
-                            <Option value={item.key} key={item.key}>
+                          {feeItems.map(item => (
+                            <Option value={item.value} key={item.key}>
                               {item.title}
                             </Option>
                           ))}
@@ -714,7 +714,7 @@ const Add = (props: AddProps) => {
                 </Col> */}
                 </Row>
               </Card>
-              <LeaseTerm form={form} feeitems={feeitems}></LeaseTerm>
+              <LeaseTerm form={form} feeItems={feeItems}></LeaseTerm>
               <IncreasingRate form={form}></IncreasingRate>
               <Rebate form={form}></Rebate>
               <Button style={{ width: '100%', marginBottom: '10px' }} onClick={calculation}>点击生成租金明细</Button>

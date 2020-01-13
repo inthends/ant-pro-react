@@ -56,6 +56,7 @@ const PstructInfo = (props: PstructInfoProps) => {
   useEffect(() => {
     if (modifyVisible) {
       if (data) {
+
         setInfoDetail(data);
         //加载图片
         let files: any[]; files = [];
@@ -146,55 +147,55 @@ const PstructInfo = (props: PstructInfoProps) => {
   };
 
 
- //业主
- const ownerSearch = value => {
-  if (value == '') {
-    setUserList([]);
-  }
-  else {
-    setUserList([]);
-    GetCustomerList(value, organizeId).then(res => {
-      // setUserSource(res || []); 
-      const list = res.map(item =>
-        <Option key={item.id}
-          value={item.name.trim()}>{item.name.trim()}
-          <span className={styles.phoneNum}>{item.phoneNum}</span>
-        </Option>
-      ).concat([
-        <Option disabled key="all" className={styles.addCustomer}>
-          <a onClick={() => showCustomerDrawer('', 1)}>
-            新增住户
+  //业主
+  const ownerSearch = value => {
+    if (value == '') {
+      setUserList([]);
+    }
+    else {
+      setUserList([]);
+      GetCustomerList(value, organizeId).then(res => {
+        // setUserSource(res || []); 
+        const list = res.map(item =>
+          <Option key={item.id}
+            value={item.name.trim()}>{item.name.trim()}
+            <span className={styles.phoneNum}>{item.phoneNum}</span>
+          </Option>
+        ).concat([
+          <Option disabled key="all" className={styles.addCustomer}>
+            <a onClick={() => showCustomerDrawer('', 1)}>
+              新增住户
           </a>
-        </Option>]);//新增 
-      setUserList(list);
-    })
-  }
-};
+          </Option>]);//新增 
+        setUserList(list);
+      })
+    }
+  };
 
- //住户
- const tenantSearch = value => {
-  if (value == '') {
-    setUserList([]);
-  }
-  else {
-    setUserList([]);
-    GetCustomerList(value, organizeId).then(res => {
-      // setUserSource(res || []); 
-      const list = res.map(item =>
-        <Option key={item.id}
-          value={item.name.trim()}>{item.name.trim()}
-          <span className={styles.phoneNum}>{item.phoneNum}</span>
-        </Option>
-      ).concat([
-        <Option disabled key="all" className={styles.addCustomer}>
-          <a onClick={() => showCustomerDrawer('', 1)}>
-            新增住户
+  //住户
+  const tenantSearch = value => {
+    if (value == '') {
+      setUserList([]);
+    }
+    else {
+      setUserList([]);
+      GetCustomerList(value, organizeId).then(res => {
+        // setUserSource(res || []); 
+        const list = res.map(item =>
+          <Option key={item.id}
+            value={item.name.trim()}>{item.name.trim()}
+            <span className={styles.phoneNum}>{item.phoneNum}</span>
+          </Option>
+        ).concat([
+          <Option disabled key="all" className={styles.addCustomer}>
+            <a onClick={() => showCustomerDrawer('', 1)}>
+              新增住户
           </a>
-        </Option>]);//新增 
-      setUserList(list);
-    })
-  }
-};
+          </Option>]);//新增 
+        setUserList(list);
+      })
+    }
+  };
 
 
   // const userList = userSource.map
@@ -417,7 +418,7 @@ const PstructInfo = (props: PstructInfoProps) => {
               <Col lg={8}>
                 <Form.Item label="业态">
                   {getFieldDecorator('buildingFormat', {
-                    initialValue: infoDetail.buildingFormat ? '多层' : infoDetail.buildingFormat,
+                    initialValue: infoDetail.buildingFormat ? infoDetail.buildingFormat : '多层',
                   })(
                     <Select>
                       <Option value="多层">多层</Option>
@@ -452,10 +453,10 @@ const PstructInfo = (props: PstructInfoProps) => {
             {type == 4 || type == 5 ? (
               <Row gutter={24}>
                 <Col lg={12}>
-                <Form.Item label={infoDetail.ownerName ? <div>业主名称 <a onClick={() => { showCustomerDrawer(infoDetail.ownerId, 1) }}>编辑</a></div> : '业主名称'}>
+                  <Form.Item label={infoDetail.ownerName ? <div>业主名称 <a onClick={() => { showCustomerDrawer(infoDetail.ownerId, 1) }}>编辑</a></div> : '业主名称'}>
                     {getFieldDecorator('ownerName', {
                       initialValue: infoDetail.ownerName,
-                      rules: [{ required: true, message: '业主不存在，请先新增' }, {  validator: checkExist  }]
+                      rules: [{ required: true, message: '业主不存在，请先新增' }, { validator: checkExist }]
                     })(
                       <AutoComplete
                         dropdownClassName={styles.searchdropdown}
@@ -472,25 +473,25 @@ const PstructInfo = (props: PstructInfoProps) => {
                       initialValue: infoDetail.ownerId,
                     })(
                       <input type='hidden' />
-                    )} 
+                    )}
                   </Form.Item>
                 </Col>
                 <Col lg={12}>
-                <Form.Item label={infoDetail.tenantName ? <div>住户名称 <a onClick={() => { showCustomerDrawer(infoDetail.tenantId, 2) }}>编辑</a></div> : '住户名称'}>
+                  <Form.Item label={infoDetail.tenantName ? <div>住户名称 <a onClick={() => { showCustomerDrawer(infoDetail.tenantId, 2) }}>编辑</a></div> : '住户名称'}>
                     {getFieldDecorator('tenantName', {
                       initialValue: infoDetail.tenantName,
-                      rules: [{ required: true, message: '住户不存在，请先新增' }, {  validator: checkExist  }]
+                      rules: [{ required: true, message: '住户不存在，请先新增' }, { validator: checkExist }]
                     })(
                       <AutoComplete
-                      dropdownClassName={styles.searchdropdown}
-                      optionLabelProp="value"
-                      dropdownMatchSelectWidth={false}
-                      dataSource={userList}
-                      style={{ width: '100%' }}
-                      onSearch={tenantSearch}
-                      placeholder="请输入住户名称"
-                      onSelect={onTenantSelect}
-                    />
+                        dropdownClassName={styles.searchdropdown}
+                        optionLabelProp="value"
+                        dropdownMatchSelectWidth={false}
+                        dataSource={userList}
+                        style={{ width: '100%' }}
+                        onSearch={tenantSearch}
+                        placeholder="请输入住户名称"
+                        onSelect={onTenantSelect}
+                      />
                     )}
                     {getFieldDecorator('tenantId', {
                       initialValue: infoDetail.tenantId,
@@ -501,7 +502,7 @@ const PstructInfo = (props: PstructInfoProps) => {
                 </Col>
               </Row>) : null}
 
-              {type == 4 || type == 5 ? (
+            {type == 4 || type == 5 ? (
               <Row gutter={24}>
                 <Col lg={12}>
                   <Form.Item label="业主电话">

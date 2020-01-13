@@ -34,7 +34,7 @@ function Main() {
   const [houseLoading, setHouseLoading] = useState<boolean>(false);
   const [housePagination, setHousePagination] = useState<PaginationConfig>(new DefaultPagination());
   const [houseData, setHouseData] = useState<any[]>([]);
-  const [feeitems, setFeeitems] = useState<any[]>([]);
+  const [feeItems, setFeeItems] = useState<any[]>([]);
   const { hideSider, setHideSider } = useContext(SiderContext);
   const [selectedTreeNode, setSelectTreeNode] = useState<any>({});
   const [isInit, setIsInit] = useState<boolean>(false);
@@ -86,7 +86,7 @@ function Main() {
     });
 
     GetAllFeeItems().then(res => {
-      setFeeitems(res || []);
+      setFeeItems(res || []);
     });
 
     //获取房产树
@@ -326,8 +326,8 @@ function Main() {
                 placeholder="请选择费项"
                 onChange={(value) => houseLoadData(houseSearch, value)}
               >
-                {feeitems.map(item => (
-                  <Select.Option key={item.value} value={item.value}>
+                {feeItems.map(item => (
+                  <Select.Option key={item.key} value={item.value}>
                     {item.title}
                   </Select.Option>
                 ))}

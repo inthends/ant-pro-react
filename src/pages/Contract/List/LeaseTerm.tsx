@@ -10,13 +10,13 @@ const { Option } = Select;
 
 interface LeaseTermProps {
   form: WrappedFormUtils;
-  feeitems: TreeEntity[];
+  feeItems: TreeEntity[];
 }
 
 //动态数量
 let index = 1;
 function LeaseTerm(props: LeaseTermProps) {
-  const { form, feeitems } = props;
+  const { form, feeItems } = props;
   const { getFieldDecorator, getFieldValue, setFieldsValue } = form;
   const [priceUnit, setPriceUnit] = useState<string>("元/m²·天");//单价单位
 
@@ -84,8 +84,8 @@ function LeaseTerm(props: LeaseTermProps) {
               <Select placeholder="请选择费项"
                 onChange={(value, option) => changeFee(value, option, k)}
               >
-                {feeitems.map(item => (
-                  <Option value={item.value} >
+                {feeItems.map(item => (
+                  <Option value={item.value} key={item.key}>
                     {item.title}
                   </Option>
                 ))}
@@ -243,8 +243,8 @@ function LeaseTerm(props: LeaseTermProps) {
                 <Select placeholder="请选择费项"
                   onChange={(value, option) => changeFee(value, option, 0)}
                 >
-                  {feeitems.map(item => (
-                    <Option value={item.value} key={item.value}>
+                  {feeItems.map(item => (
+                    <Option value={item.value} key={item.key}>
                       {item.title}
                     </Option>
                   ))}

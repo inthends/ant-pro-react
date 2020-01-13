@@ -363,7 +363,7 @@ const Modify = (props: ModifyProps) => {
                           }
                         >
                           {pro.map(item => (
-                            <Option key={item.value} value={item.value}>
+                            <Option key={item.key} value={item.value}>
                               {item.title}
                             </Option>
                           ))}
@@ -384,7 +384,7 @@ const Modify = (props: ModifyProps) => {
                           }
                         >
                           {city.map(item => (
-                            <Option key={item.value} value={item.value}>
+                            <Option key={item.key} value={item.value}>
                               {item.title}
                             </Option>
                           ))}
@@ -404,7 +404,7 @@ const Modify = (props: ModifyProps) => {
                           }
                         >
                           {area.map(item => (
-                            <Option key={item.value} value={item.value}>
+                            <Option key={item.key} value={item.value}>
                               {item.title}
                             </Option>
                           ))}
@@ -504,7 +504,7 @@ const Modify = (props: ModifyProps) => {
                   })(
                     <Select placeholder="请选择项目类型">
                       {project.map(item => (
-                        <Option key={item.key} value={item.title}>
+                        <Option key={item.key} value={item.value}>
                           {item.title}
                         </Option>
                       ))}

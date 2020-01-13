@@ -34,14 +34,14 @@ function ListTable(props: ListTableProps) {
 
   const columns = [
     {
-      title: '联系人',
+      title: '姓名',
       dataIndex: 'name',
       key: 'name',
       width: 150,
     },
 
     {
-      title: '联系方式',
+      title: '电话',
       dataIndex: 'telephone',
       key: 'telephone',
       width: 100,
@@ -51,27 +51,27 @@ function ListTable(props: ListTableProps) {
       title: '公司',
       dataIndex: 'company',
       key: 'company',
-      width: 100,
+      width: 150,
     },
 
     {
       title: '商圈',
       dataIndex: 'tradingArea', 
       key: 'tradingArea',
-      width: 100,
+      width: 150,
     },
     {
       title: '渠道类型',
       dataIndex: 'channelType',
       key: 'channelType',
-      width: 100
+      width: 150
     },
-    // {
-    //   title: '带看量',
-    //   dataIndex: 'demandMinSize',
-    //   key: 'demandMinSize',
-    //   width: 100,
-    // },
+    {
+      title: '电子邮箱',
+      dataIndex: 'email',
+      key: 'email',
+      width: 100,
+    },
     // {
     //   title: '最新带看时间',
     //   dataIndex: 'visitDate',
@@ -84,11 +84,11 @@ function ListTable(props: ListTableProps) {
       align: 'center',
       dataIndex: 'operation',
       key: 'operation',
-      width: 95,
+      width: 75,
       render: (text, record) => {
         return [
           <span key='span1'>
-            <a onClick={() => modify(record.id)} key="modify">修改</a>
+            <a onClick={() => modify(record)} key="modify">修改</a>
             <Divider type="vertical" key='spilt1' />
             <a onClick={() => doDelete(record)} key="delete">删除</a>
           </span>

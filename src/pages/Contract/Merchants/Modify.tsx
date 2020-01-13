@@ -207,7 +207,7 @@ const Modify = (props: ModifyProps) => {
                       })(
                         <Select placeholder="请选择行业">
                           {industryType.map(item => (
-                            <Option value={item.title} key={item.title}>
+                            <Option value={item.value} key={item.key}>
                               {item.title}
                             </Option>
                           ))}
@@ -330,7 +330,7 @@ const Modify = (props: ModifyProps) => {
                       })(
                         <Select placeholder="请选择来访渠道" >
                           {industryType.map(item => (
-                            <Option value={item.title} key={item.title}>
+                            <Option value={item.value} key={item.key}>
                               {item.title}
                             </Option>
                           ))}
@@ -408,7 +408,7 @@ const Modify = (props: ModifyProps) => {
                       })(
                         <Select placeholder="请选择商圈">
                           {area.map(item => (
-                            <Option value={item.title} key={item.title}>
+                            <Option value={item.value} key={item.key}>
                               {item.title}
                             </Option>
                           ))}
