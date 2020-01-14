@@ -113,10 +113,10 @@ function Main() {
     setId('');
   };
 
-  const showVerifyDrawer = (id, ifVerify) => {
-    setVerifyVisible(true);
+  const showVerifyDrawer = (id, ifVerify) => { 
     setId(id);
     setIfVerify(ifVerify);
+    setVerifyVisible(true);
   };
 
   //查看收款单

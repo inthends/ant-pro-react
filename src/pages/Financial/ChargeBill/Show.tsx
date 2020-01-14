@@ -36,7 +36,7 @@ const Show = (props: ShowProps) => {
         GetEntityShow(id).then(res => {
           setInfoDetail(res.entity);
           setLinkno(res.linkno);
-          initLoadFeeDetail(res.entity.billId);  
+          initLoadFeeDetail(res.entity.billId);
           setLoading(false);
         })
       }
@@ -94,8 +94,8 @@ const Show = (props: ShowProps) => {
       dataIndex: 'amount',
       key: 'amount',
       width: 100,
-    }, 
-    
+    },
+
     {
       title: '减免金额',
       dataIndex: 'reductionAmount',
@@ -189,11 +189,11 @@ const Show = (props: ShowProps) => {
       case 0:
         return <Tag color="#e4aa5b">未收</Tag>;
       case 1:
-        return <Tag color="#86db47">已收</Tag>;
+        return <Tag color="#19d54e">已收</Tag>;
       case 2:
         return <Tag color="#19d54e">冲红</Tag>;
       case -1:
-        return <Tag color="#19d54e">作废</Tag>;
+        return <Tag color="#e4aa5b">作废</Tag>;
       default:
         return '';
     }
@@ -202,7 +202,7 @@ const Show = (props: ShowProps) => {
   const GetVerifyStatus = (status) => {
     switch (status) {
       case 0:
-        return <Tag color="#e4aa5b">待处理</Tag>;
+        return <Tag color="#86db47">待处理</Tag>;
       case 1:
         return <Tag color="#e4aa4b">已送审</Tag>;
       case 2:
@@ -212,12 +212,11 @@ const Show = (props: ShowProps) => {
     }
   };
 
-
   return (
     <Drawer
       title={title}
       placement="right"
-      width={850}
+      width={1000}
       onClose={closeShow}
       visible={showVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
@@ -302,7 +301,7 @@ const Show = (props: ShowProps) => {
                   {infoDetail.memo}
                 </Form.Item>
               </Col>
-            </Row> 
+            </Row>
             <Table
               // title={() => '费用明细'}
               size="middle"
@@ -310,12 +309,9 @@ const Show = (props: ShowProps) => {
               columns={columns}
               rowKey={record => record.id}
               pagination={pagination}
-              scroll={{ y: 500, x: 1300 }}
+              scroll={{ y: 500, x: 1400 }}
               loading={loading}
             />
-
-
-
           </Form>
         </Card>
       </Spin>

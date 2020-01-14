@@ -1,6 +1,6 @@
 //已收列表
 import Page from '@/components/Common/Page';
-import {Tag, Icon, Menu, Dropdown, Divider, message, Table, Modal } from 'antd';
+import { Tag, Icon, Menu, Dropdown, Divider, message, Table, Modal } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState } from 'react';
 import moment from 'moment';
@@ -147,11 +147,11 @@ function ChargeListTable(props: ChargeListTableProps) {
           case 0:
             return <Tag color="#e4aa5b">未收</Tag>;
           case 1:
-            return <Tag color="#86db47">已收</Tag>;
+            return <Tag color="#19d54e">已收</Tag>;
           case 2:
             return <Tag color="#19d54e">冲红</Tag>;
           case -1:
-            return <Tag color="#19d54e">作废</Tag>; 
+            return <Tag color="#e4aa5b">作废</Tag>;
           default:
             return '';
         }
@@ -167,11 +167,11 @@ function ChargeListTable(props: ChargeListTableProps) {
       render: (text, record) => {
         switch (text) {
           case 0:
-            return <Tag color="#e4aa5b">待处理</Tag>;
+            return <Tag color="#86db47">待处理</Tag>;
           case 1:
             return <Tag color="#e4aa4b">已送审</Tag>;
           case 2:
-            return <Tag color="#19d54e">已审核</Tag>; 
+            return <Tag color="#19d54e">已审核</Tag>;
           default:
             return '';
         }
@@ -208,16 +208,23 @@ function ChargeListTable(props: ChargeListTableProps) {
       align: 'center',
       width: 110,
       render: (text, record) => {
-        return [
-          <span>
-            <a onClick={() => showDetail(record.billId)} key="view">查看</a>
-            <Divider type="vertical" />
-            {/* {!record.ifVerify ? <a onClick={() => showVertify(record.billId, false)} key="approve">审核</a> : <a onClick={() => showVertify(record.id, true)} key="unapprove">反审</a>}
-            <Divider type="vertical" /> */}
-            {record.status == 1 && record.linkId == null ? <MoreBtn key="more" item={record} /> : null}
-          </span>
 
-        ];
+        if (record.status == 1 && record.linkId == null) {
+          //更多操作
+          return [
+            <span>
+              <a onClick={() => showDetail(record.billId)} key="view">查看</a>
+              {/* {!record.ifVerify ? <a onClick={() => showVertify(record.billId, false)} key="approve">审核</a> : <a onClick={() => showVertify(record.id, true)} key="unapprove">反审</a>}*/}
+              <Divider type="vertical" />
+              {record.status == 1 && record.linkId == null ? <MoreBtn key="more" item={record} /> : null}
+            </span>
+          ];
+
+        } else {
+          return [
+            <a onClick={() => showDetail(record.billId)} key="view">查看</a>
+          ];
+        }
       },
     },
   ] as ColumnProps<any>[];

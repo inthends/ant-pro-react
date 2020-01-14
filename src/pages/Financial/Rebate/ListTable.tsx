@@ -44,7 +44,8 @@ function ListTable(props: ListTableProps) {
     });
   };
 
-  const doVerify = (billId, flag) => {
+  const doVerify = (billId, flag) => { 
+
     //如果关联的计费单收款已经审核，减免单则无法反审
     CheckCharge(billId).then((res) => {
       if (res) { 
@@ -56,7 +57,8 @@ function ListTable(props: ListTableProps) {
       }else{
         verify(billId, flag);
       }
-    }); 
+    });
+     
   };
 
   const columns = [

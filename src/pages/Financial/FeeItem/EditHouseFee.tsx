@@ -546,7 +546,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                   </Form.Item>
                 </Col>
                 <Col lg={12}>
-                  <Form.Item label="计费终止日期">
+                  <Form.Item label="计费截止日期">
                     {getFieldDecorator('endDate', {
                       initialValue: infoDetail.endDate
                         ? moment(new Date(infoDetail.endDate))

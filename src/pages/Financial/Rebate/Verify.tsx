@@ -36,10 +36,10 @@ const Verify= (props: VerifyProps) => {
 
   // 打开抽屉时初始化
   useEffect(() => {
-    if (modalVisible) {
+    if (modalVisible) { 
       if (id) {
         GetFormJson(id).then(res => {
-          var entity = { ...res.entity, receiveId: res.receiveId, receiveCode: res.receiveCode }; 
+          var entity = { ...res.entity, receiveId: res.receiveId, receiveCode: res.receiveCode };//收款单id 
           setInfoDetail(entity);
           form.resetFields();
           //分页查询
