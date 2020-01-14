@@ -657,7 +657,7 @@ const Add = (props: AddProps) => {
                               multiple={true}>
                             </TreeSelect>
                           )}
-                          <span style={{ marginLeft: 8, color: "green" }}>多个房屋的时候，默认获取第一个房屋作为计费单元</span>
+                          <span style={{ marginLeft: 8, color: "blue" }}>多个房屋的时候，默认获取第一个房屋作为计费单元</span>
 
                           {getFieldDecorator('billUnitId', {
                           })(

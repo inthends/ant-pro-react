@@ -676,7 +676,7 @@ const Modify = (props: ModifyProps) => {
                               multiple={true}>
                             </TreeSelect>
                           )}
-                          <span style={{ marginLeft: 8, color: "green" }}>多个房屋的时候，默认获取第一个房屋作为计费单元</span>
+                          <span style={{ marginLeft: 8, color: "blue" }}>多个房屋的时候，默认获取第一个房屋作为计费单元</span>
                           {getFieldDecorator('billUnitId', {
                             initialValue: infoDetail.billUnitId
                           })(
@@ -767,7 +767,7 @@ const Modify = (props: ModifyProps) => {
               <Card title="基本条款" className={styles.card} >
                 <Row gutter={24}>
                   <Col lg={4}>
-                    <Form.Item label="租赁数量（㎡）" required>
+                    <Form.Item label="租赁数量/㎡" required>
                       {getFieldDecorator('leaseArea', {
                         initialValue: contractCharge.leaseArea
                       })(<Input readOnly />)}

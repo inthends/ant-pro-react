@@ -34,7 +34,7 @@ export interface HtLeasecontractchargeincre {
     /**
      * Desc:  Default:  Nullable:True
      */
-    increDate?: Date;
+    increType?: string;
     /**
      * Desc:  Default:  Nullable:True
      */

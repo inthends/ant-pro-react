@@ -118,7 +118,7 @@ const Detail = (props: DetailProps) => {
       onClose={closeDrawer}
       visible={visible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
-      <PageHeader title={GetStatus(infoDetail.status)} 
+      <PageHeader title={GetStatus(infoDetail.status)}
         style={{
           border: '1px solid rgb(235, 237, 240)'
         }}
@@ -223,10 +223,18 @@ const Detail = (props: DetailProps) => {
                 <Card title="租客信息" className={styles.card}>
                   <Row gutter={24}>
                     <Col lg={12}>
-                      <Form.Item label="租客"  >
+                      <Form.Item label="承租方"  >
                         {infoDetail.customer}
                       </Form.Item>
                     </Col>
+
+                    <Col lg={12}>
+                      <Form.Item label="类别">
+                        {infoDetail.type}
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Row gutter={24}>
                     <Col lg={12}>
                       <Form.Item label="行业"  >
                         {
@@ -234,23 +242,34 @@ const Detail = (props: DetailProps) => {
                         }
                       </Form.Item>
                     </Col>
-                  </Row>
-                  <Row gutter={24}>
+
                     <Col lg={12}>
                       <Form.Item label="法人"  >
                         {infoDetail.legalPerson}
                       </Form.Item>
                     </Col>
+                  </Row>
+                  <Row gutter={24}>
                     <Col lg={12}>
-                      <Form.Item label="签订人">
-                        {infoDetail.signer}
+                      <Form.Item label="联系人">
+                        {infoDetail.linkMan}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={12}>
+                      <Form.Item label="联系电话">
+                        {infoDetail.linkPhone}
                       </Form.Item>
                     </Col>
                   </Row>
                   <Row gutter={24}>
-                    <Col lg={24}>
-                      <Form.Item label="租客联系人">
-                        {infoDetail.customerContact}
+                    <Col lg={12}>
+                      <Form.Item label="联系地址"  >
+                        {infoDetail.address}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={12}>
+                      <Form.Item label="签订人">
+                        {infoDetail.signer}
                       </Form.Item>
                     </Col>
                   </Row>
@@ -287,7 +306,7 @@ const Detail = (props: DetailProps) => {
             </Card>
             {
               chargeFeeList ? chargeFeeList.map((k, index) => (
-                <Card title={'租期条款' + (index + 1)} className={styles.card}>
+                <Card title='租期条款' className={styles.card}>
                   <Row gutter={24}>
                     <Col lg={4}>
                       <Form.Item label="开始时间"  >
@@ -351,11 +370,11 @@ const Detail = (props: DetailProps) => {
             }
 
             {chargeIncreList ? chargeIncreList.map((k, index) => (
-              <Card title={'递增率' + (index + 1)} className={styles.card}>
+              <Card title='递增率' className={styles.card}>
                 <Row gutter={24}>
                   <Col lg={8}>
                     <Form.Item label="递增时间点"  >
-                      {String(k.increDate).substr(0, 10)}
+                      {k.increType}
                     </Form.Item>
                   </Col>
                   <Col lg={8}>
@@ -376,7 +395,7 @@ const Detail = (props: DetailProps) => {
             }
 
             {chargeOfferList ? chargeOfferList.map((k, index) => (
-              <Card title={'优惠' + (index + 1)} className={styles.card}>
+              <Card title='优惠' className={styles.addcard}>
                 <Row gutter={24}>
                   <Col lg={4}>
                     <Form.Item label="优惠类型"  >
@@ -419,8 +438,7 @@ const Detail = (props: DetailProps) => {
                 </Row>
               </Card>
             )) : null
-            }
-
+            } 
           </TabPane>
           <TabPane tab="租金明细" key="3">
             <ResultList

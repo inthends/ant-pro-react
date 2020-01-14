@@ -49,7 +49,7 @@ function ResultList(props: ResultListProps) {
           unit = '元/天';
 
         if (row.price)
-          return row.price + ' ' + unit;
+          return row.price + unit;
         else
           return '';
       }
