@@ -1,4 +1,4 @@
-//房产信息
+//房态图点击进入，房产信息
 import { Icon, Upload, Modal, Select, AutoComplete, Button, Card, Col, Drawer, Form, Input, Row, message, InputNumber } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
@@ -42,11 +42,9 @@ const Room = (props: RoomProps) => {
   //     formLabel = '房间';
   //   }
   // }
-
   // 打开抽屉时初始化
   // useEffect(() => {
   // }, []);
-
 
   const [userList, setUserList] = useState<any[]>([]);
   const [usertype, setUserType] = useState<any>(1);
@@ -172,11 +170,16 @@ const Room = (props: RoomProps) => {
   };
 
   const showCustomerDrawer = (customerId, type) => {
-    GetCustomerInfo(customerId).then(res => {
-      setCustomer(res);
+
+    if (customerId != '') {
+      GetCustomerInfo(customerId).then(res => {
+        setCustomer(res);
+        setUserType(type);
+        setCustomerVisible(true);
+      })
+    } else {
       setCustomerVisible(true);
-      setUserType(type);
-    })
+    }
   };
 
   //住户

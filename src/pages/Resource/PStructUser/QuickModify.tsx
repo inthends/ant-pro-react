@@ -55,7 +55,7 @@ const QuickModify = (props: QuickModifyProps) => {
 
   // 打开抽屉时初始化
   useEffect(() => {
-    if (modifyVisible) {
+    if (modifyVisible) {  
 
       GetOrgs().then((res: any[]) => {
         setTreeData(res || []);
@@ -65,7 +65,8 @@ const QuickModify = (props: QuickModifyProps) => {
         setIndustryType(res || []);
       });
 
-      if (data) {
+      if (data) { 
+
         setInfoDetail(data);
         form.resetFields();
       } else {
@@ -221,8 +222,8 @@ const QuickModify = (props: QuickModifyProps) => {
                       {getFieldDecorator('birthdate', {
                         initialValue: infoDetail.birthdate
                           ? moment(new Date(infoDetail.birthdate))
-                          : moment(new Date()),
-                      })(<DatePicker style={{ width: '100%' }} />)}
+                          : '',
+                      })(<DatePicker style={{ width: '100%' }}  placeholder='请选择生日'/>)}
                     </Form.Item>
                   </Col>
                 </Row>

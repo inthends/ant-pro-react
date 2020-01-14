@@ -2,8 +2,8 @@
 import { Icon, Upload, Modal, Select, AutoComplete, Button, Card, Col, Drawer, Form, Input, Row, message, InputNumber } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { ExistEnCode, SaveForm  } from './House.service';
-import { GetCustomerInfo, CheckCustomer,GetCustomerList } from '../PStructUser/PStructUser.service';
+import { ExistEnCode, SaveForm } from './House.service';
+import { GetCustomerInfo, CheckCustomer, GetCustomerList } from '../PStructUser/PStructUser.service';
 import QuickModify from '../PStructUser/QuickModify';
 import styles from './style.less';
 const { TextArea } = Input;
@@ -134,12 +134,17 @@ const PstructInfo = (props: PstructInfoProps) => {
   //   }
   // };
 
-  const showCustomerDrawer = (customerId, type) => {
-    GetCustomerInfo(customerId).then(res => {
-      setCustomer(res);
+  const showCustomerDrawer = (customerId, type) => { 
+
+    if (customerId != '') {
+      GetCustomerInfo(customerId).then(res => {
+        setCustomer(res);
+        setUserType(type);
+        setCustomerVisible(true);
+      }) 
+    }else{
       setCustomerVisible(true);
-      setUserType(type);
-    })
+    } 
   };
 
   const closeCustomerDrawer = () => {

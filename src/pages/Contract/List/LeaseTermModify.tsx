@@ -1,7 +1,7 @@
 
 //租期条款动态组件，编辑
 import { HtLeasecontractchargefee, TreeEntity } from '@/model/models';
-import { InputNumber, Select, DatePicker, Card, Col, Row, Icon, Form, Button } from 'antd';
+import { InputNumber, Select, DatePicker, Card, Col, Row, Form } from 'antd';
 import React, { useState } from 'react';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import styles from './style.less';
@@ -15,53 +15,49 @@ interface LeaseTermModifyProps {
 }
 
 //动态数量
-let index = 1;
+// let index = 1;
 function LeaseTermModify(props: LeaseTermModifyProps) {
   const { form, feeItems, chargeFeeList } = props;
-  const { getFieldDecorator, getFieldValue, setFieldsValue } = form;
+  const { getFieldDecorator, getFieldValue } = form;
   const [priceUnit, setPriceUnit] = useState<string>("元/m²·天");//单价单位
   //单位切换
   const changeUnit = value => {
     setPriceUnit(value);
   };
 
-  const remove = k => {
-    const keys = getFieldValue('LeaseTerms');
-    setFieldsValue({
-      LeaseTerms: keys.filter(key => key !== k),
-    });
-    index--;
-  };
+  // const remove = k => {
+  //   const keys = getFieldValue('LeaseTerms');
+  //   setFieldsValue({
+  //     LeaseTerms: keys.filter(key => key !== k),
+  //   });
+  //   index--;
+  // };
 
-  const add = () => {
-    const keys = getFieldValue('LeaseTerms');
-    const nextKeys = keys.concat(index++);
-    setFieldsValue({
-      LeaseTerms: nextKeys,
-    });
-  };
+  // const add = () => {
+  //   const keys = getFieldValue('LeaseTerms');
+  //   const nextKeys = keys.concat(index++);
+  //   setFieldsValue({
+  //     LeaseTerms: nextKeys,
+  //   });
+  // };
 
   //费项选择
   const changeFee = (value, option, index) => {
     //更新费项id和name
     // option._owner.pendingProps.chargeFeeList[index].feeItemName = option.props.children;
     // option._owner.pendingProps.chargeFeeList[index].feeItemId = value;
-
     form.setFieldsValue({
       ['feeItemName[' + index + ']']
         : option.props.children
     });
-
   };
-
 
   //初始化 租赁条款 
   getFieldDecorator('LeaseTerms', { initialValue: chargeFeeList });
   const keys = getFieldValue('LeaseTerms');
   const formItems = keys.map((k, index) =>
     (
-      <Card key={index} className={styles.card} title={index == 0 ? '租期条款' : ''}
-        extra={index > 0 ? <Icon type="minus-circle-o" onClick={() => remove(index)} /> : null}>
+      <Card key={index} className={styles.card} title='租期条款'>
         <Row gutter={24}>
           <Col lg={4}>
             <Form.Item label="开始时间" required >
@@ -221,15 +217,15 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
             </Form.Item>
           </Col>
         </Row>
-      </Card>
+      </Card >
     ));
 
   return (
     <div style={{ marginBottom: '10px' }}  >
       {formItems}
-      <Button type="dashed" onClick={add}>
+      {/* <Button type="dashed" onClick={add}>
         <Icon type="plus" />添加租期条款
-        </Button>
+        </Button> */}
     </div>
   );
 }

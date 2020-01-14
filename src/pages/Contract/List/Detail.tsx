@@ -230,26 +230,29 @@ const Detail = (props: DetailProps) => {
 
                     <Col lg={12}>
                       <Form.Item label="类别">
-                        {infoDetail.type}
+                        {infoDetail.customerType == '2' ? '单位' : '个人'}
                       </Form.Item>
                     </Col>
                   </Row>
-                  <Row gutter={24}>
-                    <Col lg={12}>
-                      <Form.Item label="行业"  >
-                        {
-                          infoDetail.industry
-                        }
-                      </Form.Item>
-                    </Col>
+                  
+                  {infoDetail.customerType == '2' ? (
+                    <Row gutter={24}>
+                      <Col lg={12}>
+                        <Form.Item label="行业"  >
+                          {
+                            infoDetail.industry
+                          }
+                        </Form.Item>
+                      </Col>
 
-                    <Col lg={12}>
-                      <Form.Item label="法人"  >
-                        {infoDetail.legalPerson}
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                  <Row gutter={24}>
+                      <Col lg={12}>
+                        <Form.Item label="法人"  >
+                          {infoDetail.legalPerson}
+                        </Form.Item>
+                      </Col>
+                    </Row>) : null}
+
+                   <Row gutter={24}>
                     <Col lg={12}>
                       <Form.Item label="联系人">
                         {infoDetail.linkMan}
@@ -438,7 +441,7 @@ const Detail = (props: DetailProps) => {
                 </Row>
               </Card>
             )) : null
-            } 
+            }
           </TabPane>
           <TabPane tab="租金明细" key="3">
             <ResultList

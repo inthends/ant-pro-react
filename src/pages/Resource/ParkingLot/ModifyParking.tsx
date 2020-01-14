@@ -90,11 +90,13 @@ const ModifyParking = (props: ModifyParkingProps) => {
   const showCustomerDrawer = (customerId, type) => {
     if (customerId != '') {
       GetCustomerInfo(customerId).then(res => {
-        setCustomer(res); 
+        setCustomer(res);
         setType(type);
+        setCustomerVisible(true);
       })
-    } 
-    setCustomerVisible(true);
+    } else {
+      setCustomerVisible(true);
+    }
   };
 
   const close = () => {

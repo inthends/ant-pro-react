@@ -1,12 +1,12 @@
 
 //递增率条款动态组件,编辑
-import { Input, Select, DatePicker, Card, Col, Row, Icon, Form, Button } from 'antd';
+import { InputNumber, Select, Card, Col, Row, Form } from 'antd';
 import React from 'react';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import styles from './style.less';
 const { Option } = Select;
 import { HtLeasecontractchargeincre } from '@/model/models';
-import moment from 'moment';
+// import moment from 'moment';
 
 interface IncreasingRateModifyProps {
   form: WrappedFormUtils;
@@ -14,77 +14,87 @@ interface IncreasingRateModifyProps {
 }
 
 //动态数量
-let index = 1;
+// let index = 1;
 function IncreasingRateModify(props: IncreasingRateModifyProps) {
   const { form, chargeIncreList } = props;
-  const { getFieldDecorator, getFieldValue, setFieldsValue } = form;
+  const { getFieldDecorator, getFieldValue } = form;
 
-  const remove = k => {
-    const keys = getFieldValue('IncreasingRates');
-    setFieldsValue({
-      IncreasingRates: keys.filter(key => key !== k),
-    });
-    index--;
-  };
+  // const remove = k => {
+  //   const keys = getFieldValue('IncreasingRates');
+  //   setFieldsValue({
+  //     IncreasingRates: keys.filter(key => key !== k),
+  //   });
+  //   index--;
+  // };
 
-  const add = () => {
-    const keys = getFieldValue('IncreasingRates');
-    const nextKeys = keys.concat(index++);
-    setFieldsValue({
-      IncreasingRates: nextKeys,
-    });
-  };
+  // const add = () => {
+  //   const keys = getFieldValue('IncreasingRates');
+  //   const nextKeys = keys.concat(index++);
+  //   setFieldsValue({
+  //     IncreasingRates: nextKeys,
+  //   });
+  // };
 
   getFieldDecorator('IncreasingRates', { initialValue: chargeIncreList });
   const keys = getFieldValue('IncreasingRates');
   const formItems = keys.map((k, index) => (
-    <Card key={index} className={styles.card} title="递增率"
-      extra={index > 0 ? <Icon type="minus-circle-o" onClick={() => remove(k)} /> : null}>
+    <Card key={index} className={styles.card} title="递增率" >
       <Row gutter={24}>
-        <Col lg={4}>
-          <Form.Item label="递增时间点" required >
-            {getFieldDecorator(`increDate[${index}]`, {
-              initialValue: k.increDate
-                ? moment(new Date(k.increDate))
-                : moment(new Date()),
-              rules: [{ required: true, message: '请选择递增时间点' }],
-            })(<DatePicker />)}
+        <Col lg={6}>
+          <Form.Item label="递增类型" required >
+            {getFieldDecorator(`increType[${index}]`, {
+              initialValue: k.increType,
+              // rules: [{ required: true, message: '请选择递增时间点' }],
+            })(<Select placeholder="请选择递增类型" allowClear>
+              <Option value="三个月后递增">三个月后开始递增</Option>
+              <Option value="半年后递增">半年后递增</Option>
+              <Option value="一年后递增">一年后递增</Option>
+              <Option value="两年后递增">两年后递增</Option>
+              <Option value="三年后递增">三年后递增</Option>
+            </Select>)}
           </Form.Item>
         </Col>
 
-        <Col lg={4}>
-          <Form.Item label="单价递增" required>
+        <Col lg={6}>
+          <Form.Item label="单价递增"  >
             {getFieldDecorator(`increPrice[${index}]`, {
               initialValue: k.increPrice,
-              rules: [{ required: true, message: '请输入递增率' }],
-            })(<Input placeholder="请输入递增率" />)}
+              rules: [{ required: form.getFieldValue('increType'), message: '请输入递增率' }],
+            })(<InputNumber placeholder="请输入递增率" style={{ width: '100%' }}
+              disabled={!form.getFieldValue('increType')} />)}
           </Form.Item>
         </Col>
-        <Col lg={4}>
+        <Col lg={3}>
           <Form.Item label="&nbsp;">
             {getFieldDecorator(`increPriceUnit[${index}]`, {
-              initialValue: k.increPriceUnit ? k.increPriceUnit : '%'
+              initialValue: k.increPriceUnit,
+              rules: [{ required: form.getFieldValue('increType'), message: '请选择单位' }],
             })(
-              <Select>
+              <Select placeholder="请选择" allowClear
+                disabled={!form.getFieldValue('increType')}>
                 <Option value="%">%</Option>
                 <Option value="元" >元</Option>
               </Select>)}
           </Form.Item>
         </Col>
-        <Col lg={4}>
-          <Form.Item label="保证金递增" required>
+        <Col lg={6}>
+          <Form.Item label="保证金递增"  >
             {getFieldDecorator(`increDeposit[${index}]`, {
               initialValue: k.increDeposit,
-              rules: [{ required: true, message: '请输入递增率' }],
-            })(<Input placeholder="请输入递增率" />)}
+              rules: [{ required: form.getFieldValue('increType'), message: '请输入递增率' }],
+            })(<InputNumber placeholder="请输入递增率"
+              style={{ width: '100%' }}
+              disabled={!form.getFieldValue('increType')} />)}
           </Form.Item>
         </Col>
-        <Col lg={4}>
+        <Col lg={3}>
           <Form.Item label="&nbsp;">
             {getFieldDecorator(`increDepositUnit[${index}]`, {
-              initialValue: k.increDepositUnit ? k.increDepositUnit : '%'
+              initialValue: k.increDepositUnit,
+              rules: [{ required: form.getFieldValue('increType'), message: '请选择单位' }],
             })(
-              <Select>
+              <Select allowClear
+                disabled={!form.getFieldValue('increType')}>
                 <Option value="%">%</Option>
                 <Option value="元" >元</Option>
               </Select>)}
@@ -96,10 +106,9 @@ function IncreasingRateModify(props: IncreasingRateModifyProps) {
   return (
     <div style={{ marginBottom: '10px' }}>
       {formItems}
-      <Button type="dashed" onClick={add}>
+      {/* <Button type="dashed" onClick={add}>
         <Icon type="plus" />添加递增率
-            </Button>
-
+            </Button> */}
     </div>
   );
 }

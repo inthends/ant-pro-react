@@ -121,7 +121,7 @@ const Add = (props: AddProps) => {
 
         let RateJson: HtLeasecontractchargeincre[] = [];
         let rate: HtLeasecontractchargeincre = {};
-        rate.increDate = values.increDate;
+        rate.increType = values.increType;
         rate.increPrice = values.increPrice;
         rate.increPriceUnit = values.increPriceUnit;
         rate.increDeposit = values.increDeposit;
@@ -229,19 +229,19 @@ const Add = (props: AddProps) => {
         Contract.calcPrecisionMode = values.calcPrecisionMode;
         Contract.customer = values.customer;
         Contract.customerId = values.customerId;
+        Contract.customerType = values.customerType;
         Contract.industry = values.industry;
         //Contract.industryId = values.industryId;
         Contract.legalPerson = values.legalPerson;
-        Contract.signer = values.signer;
-        Contract.signerId = values.signerId;
         Contract.linkMan = values.linkMan;
         Contract.address = values.address;
+        Contract.signer = values.signer;
+        Contract.signerId = values.signerId;
         Contract.lateFee = values.lateFee;
         Contract.lateFeeUnit = values.lateFeeUnit;
         Contract.maxLateFee = values.maxLateFee;
         Contract.maxLateFeeUnit = values.maxLateFeeUnit;
         Contract.billUnitId = values.billUnitId;
-
         SaveForm({
           ...Contract,
           ...ContractCharge,
@@ -439,9 +439,8 @@ const Add = (props: AddProps) => {
   const onCustomerSelect = (value, option) => {
     //props.children[1].props.children
     form.setFieldsValue({ customerId: option.key });
-
     GetCustomerInfo(option.key).then(res => {
-      form.setFieldsValue({ type: res.type });
+      form.setFieldsValue({ customerType: res.type });
       form.setFieldsValue({ linkMan: res.linkMan });
       form.setFieldsValue({ linkPhone: res.phoneNum });
       form.setFieldsValue({ industry: res.industry });
@@ -458,9 +457,11 @@ const Add = (props: AddProps) => {
     if (customerId != '') {
       GetCustomerInfo(customerId).then(res => {
         setCustomer(res);
+        setCustomerVisible(true);
       })
+    } else {
+      setCustomerVisible(true);
     }
-    setCustomerVisible(true);
   };
 
   const [priceUnit, setPriceUnit] = useState<string>("元/m²·天");//单价单位
@@ -658,7 +659,6 @@ const Add = (props: AddProps) => {
                             </TreeSelect>
                           )}
                           <span style={{ marginLeft: 8, color: "blue" }}>多个房屋的时候，默认获取第一个房屋作为计费单元</span>
-
                           {getFieldDecorator('billUnitId', {
                           })(
                             <input type='hidden' />
@@ -705,7 +705,7 @@ const Add = (props: AddProps) => {
 
                       <Col lg={12}>
                         <Form.Item label="类别" required>
-                          {getFieldDecorator('type', {
+                          {getFieldDecorator('customerType', {
                             rules: [{ required: true, message: '请选择类别' }],
                           })(
                             <Select disabled placeholder="自动带出">
@@ -722,14 +722,17 @@ const Add = (props: AddProps) => {
                         <Form.Item label="联系人" required>
                           {getFieldDecorator('linkMan', {
                             rules: [{ required: true, message: '请输入联系人' }],
-                          })(<Input placeholder="请输入联系人" disabled={form.getFieldValue('customerId') == '' ? true : false} />)}
+                          })(<Input placeholder="请输入联系人"
+                            disabled={form.getFieldValue('customerId') == '' ? true : false}
+                          />)}
                         </Form.Item>
                       </Col>
                       <Col lg={12}>
                         <Form.Item label="联系电话" required>
                           {getFieldDecorator('linkPhone', {
                             rules: [{ required: true, message: '请输入联系电话' }],
-                          })(<Input placeholder="请输入联系电话" disabled={form.getFieldValue('customerId') == '' ? true : false} />)}
+                          })(<Input placeholder="请输入联系电话"
+                            disabled={form.getFieldValue('customerId') == '' ? true : false} />)}
                         </Form.Item>
                       </Col>
                     </Row>
@@ -848,7 +851,6 @@ const Add = (props: AddProps) => {
                       })(
                         <input type='hidden' />
                       )}
-
                     </Form.Item>
                   </Col>
                   <Col lg={5}>
@@ -1051,9 +1053,7 @@ const Add = (props: AddProps) => {
                         rules: [{ required: form.getFieldValue('increType'), message: '请输入递增率' }],
                       })(
                         <InputNumber placeholder="请输入递增率" style={{ width: '100%' }}
-
                           disabled={!form.getFieldValue('increType')}
-
                         />
                       )}
                     </Form.Item>
@@ -1117,7 +1117,7 @@ const Add = (props: AddProps) => {
                     <Form.Item label="开始时间" >
                       {getFieldDecorator('rebateStartDate', {
                         rules: [{ required: form.getFieldValue('rebateType'), message: '请选择开始时间' }],
-                      })(<DatePicker placeholder="请输入开始时间"
+                      })(<DatePicker placeholder="请选择开始时间"
                         disabled={!form.getFieldValue('rebateType')}
                       />)}
                     </Form.Item>
@@ -1126,7 +1126,7 @@ const Add = (props: AddProps) => {
                     <Form.Item label="结束时间" >
                       {getFieldDecorator('rebateEndDate', {
                         rules: [{ required: form.getFieldValue('rebateType'), message: '请选择结束时间' }],
-                      })(<DatePicker placeholder="请输入结束时间" disabled={!form.getFieldValue('rebateType')} />)}
+                      })(<DatePicker placeholder="请选择结束时间" disabled={!form.getFieldValue('rebateType')} />)}
                     </Form.Item>
                   </Col>
                   <Col lg={3}>
@@ -1161,7 +1161,6 @@ const Add = (props: AddProps) => {
                     </Form.Item>
                   </Col>
                 </Row>
-
               </Card>
 
               <Button style={{ width: '100%', marginBottom: '10px' }} onClick={calculation}>点击生成租金明细</Button>

@@ -64,10 +64,16 @@ export interface LeaseContractDTO {
    * 租客名称
    */
   customer?: string;
-  /**
+
+   /**
    * 行业
    */
   industry?: string;
+
+  /**
+   * 承租方类别
+   */
+  customerType?: string;
   //   /**
   //  * 行业
   //  */

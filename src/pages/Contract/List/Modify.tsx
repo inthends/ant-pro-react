@@ -1,27 +1,17 @@
-import {
-  Tag, Spin, Divider, PageHeader, AutoComplete, InputNumber, TreeSelect, message,
-  Tabs, Select, Button, Card, Col, DatePicker, Drawer, Form, Input, Row
-} from 'antd';
+import { Tag, Spin, Divider, PageHeader, AutoComplete, InputNumber, TreeSelect, message, Tabs, Select, Button, Card, Col, DatePicker, Drawer, Form, Input, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import {
-  TreeEntity,
-  HtLeasecontractcharge,
-  HtLeasecontractchargefee,
-  HtLeasecontractchargeincre,
-  HtLeasecontractchargefeeoffer,
-  LeaseContractDTO,
-  ChargeDetailDTO
-} from '@/model/models';
+import { TreeEntity, HtLeasecontractcharge, HtLeasecontractchargefee, HtLeasecontractchargeincre, HtLeasecontractchargefeeoffer, LeaseContractDTO, ChargeDetailDTO } from '@/model/models';
 import React, { useEffect, useState } from 'react';
 import ResultList from './ResultList';
 import { SubmitForm, SaveForm, GetFeeItemsByUnitId, GetCharge, GetFormJson, GetChargeDetail } from './Main.service';
 import { GetOrgTreeSimple, GetAsynChildBuildingsSimple, getCommonItems, GetUserList } from '@/services/commonItem';
+import { GetCustomerInfo, CheckContractCustomer, GetContractCustomerList } from '../../Resource/PStructUser/PStructUser.service';
 import moment from 'moment';
 import styles from './style.less';
 import LeaseTermModify from './LeaseTermModify';
 import IncreasingRateModify from './IncreasingRateModify';
 import RebateModify from './RebateModify';
-
+import QuickModify from '../../Resource/PStructUser/QuickModify';
 const { Option } = Select;
 const { TabPane } = Tabs;
 
@@ -66,9 +56,11 @@ const Modify = (props: ModifyProps) => {
 
   //打开抽屉时初始化
   useEffect(() => {
+
     getCommonItems('IndustryType').then(res => {
       setIndustryType(res || []);
     });
+
     //加载关联收费项目
     // GetAllFeeItems().then(res => {
     //   setFeeitems(res || []);
@@ -130,8 +122,7 @@ const Modify = (props: ModifyProps) => {
     })
   };
 
-  const userList = userSource.map
-    (item => <Option key={item.id} value={item.name}>{item.name}</Option>);
+  // const userList = userSource.map(item => <Option key={item.id} value={item.name}>{item.name}</Option>);
 
   const onFollowerSelect = (value, option) => {
     form.setFieldsValue({ followerId: option.key });
@@ -145,9 +136,12 @@ const Modify = (props: ModifyProps) => {
     //多个房屋的时候，默认获取第一个房屋作为计费单元
     if (value.length == 0) {
       form.setFieldsValue({ billUnitId: '' });
+      setOrganizeId('');
       setFeeItems([]);
     } else {
       form.setFieldsValue({ billUnitId: value[0] });
+      //机构Id
+      setOrganizeId(extra.triggerNode.props.organizeId);
       //加载房屋费项
       //加载关联收费项目
       GetFeeItemsByUnitId(value[0]).then(res => {
@@ -214,21 +208,21 @@ const Modify = (props: ModifyProps) => {
           // data.payCycle = k.payCycle;
           // data.rentalPeriodDivided = k.rentalPeriodDivided; 
 
-          data.feeItemId = values.feeItemId[index];
-          data.feeItemName = values.feeItemName[index];
-          data.startDate = values.startDate[index];
-          data.endDate = values.endDate[index];
-          data.price = values.price[index];
-          data.priceUnit = values.priceUnit[index];
-          data.advancePayTime = values.advancePayTime[index];
-          data.advancePayTimeUnit = values.advancePayTimeUnit[index];
-          data.billType = values.billType[index];
+          data.feeItemId = values.feeItemId;
+          data.feeItemName = values.feeItemName;
+          data.startDate = values.startDate;
+          data.endDate = values.endDate;
+          data.price = values.price;
+          data.priceUnit = values.priceUnit;
+          data.advancePayTime = values.advancePayTime;
+          data.advancePayTimeUnit = values.advancePayTimeUnit;
+          data.billType = values.billType;
           if (data.priceUnit == "元/m²·天" || data.priceUnit == "元/天") {
-            data.dayPriceConvertRule = values.dayPriceConvertRule[index];
+            data.dayPriceConvertRule = values.dayPriceConvertRule;
           }
-          data.yearDays = values.yearDays[index];
-          data.payCycle = values.payCycle[index];
-          data.rentalPeriodDivided = values.rentalPeriodDivided[index];
+          data.yearDays = values.yearDays;
+          data.payCycle = values.payCycle;
+          data.rentalPeriodDivided = values.rentalPeriodDivided;
           TermJson.push(data);
         });
 
@@ -236,11 +230,11 @@ const Modify = (props: ModifyProps) => {
         let RateJson: HtLeasecontractchargeincre[] = [];
         values.IncreasingRates.map(function (k, index, arr) {
           let rate: HtLeasecontractchargeincre = {};
-          rate.increDate = values.increDate[index];
-          rate.increPrice = values.increPrice[index];
-          rate.increPriceUnit = values.increPriceUnit[index];
-          rate.increDeposit = values.increDeposit[index];
-          rate.increDepositUnit = values.increDepositUnit[index];
+          rate.increType = values.increType;
+          rate.increPrice = values.increPrice;
+          rate.increPriceUnit = values.increPriceUnit;
+          rate.increDeposit = values.increDeposit;
+          rate.increDepositUnit = values.increDepositUnit;
           RateJson.push(rate);
         });
 
@@ -248,13 +242,13 @@ const Modify = (props: ModifyProps) => {
         let RebateJson: HtLeasecontractchargefeeoffer[] = [];
         values.Rebates.map(function (k, index, arr) {
           let rebate: HtLeasecontractchargefeeoffer = {};
-          rebate.type = values.rebateType[index];
-          rebate.startDate = values.rebateStartDate[index];
-          rebate.endDate = values.rebateEndDate[index];
-          rebate.startPeriod = values.startPeriod[index];
-          rebate.periodLength = values.periodLength[index];
-          rebate.discount = values.discount[index];
-          rebate.remark = values.remark[index];
+          rebate.type = values.rebateType;
+          rebate.startDate = values.rebateStartDate;
+          rebate.endDate = values.rebateEndDate;
+          rebate.startPeriod = values.startPeriod;
+          rebate.periodLength = values.periodLength;
+          rebate.discount = values.discount;
+          rebate.remark = values.remark;
           RebateJson.push(rebate);
         });
 
@@ -342,13 +336,14 @@ const Modify = (props: ModifyProps) => {
         Contract.calcPrecisionMode = values.calcPrecisionMode;
         Contract.customer = values.customer;
         Contract.customerId = values.customerId;
+        Contract.customerType = values.customerType;
         Contract.industry = values.industry;
         //Contract.industryId = values.industryId; 
         Contract.legalPerson = values.legalPerson;
+        Contract.linkMan = values.linkMan;
+        Contract.address = values.address;
         Contract.signer = values.signer;
         Contract.signerId = values.signerId;
-        Contract.customerContact = values.customerContact;
-        Contract.customerContactId = values.customerContactId;
         Contract.lateFee = values.lateFee;
         Contract.lateFeeUnit = values.lateFeeUnit;
         Contract.maxLateFee = values.maxLateFee;
@@ -419,13 +414,14 @@ const Modify = (props: ModifyProps) => {
         Contract.calcPrecisionMode = values.calcPrecisionMode;
         Contract.customer = values.customer;
         Contract.customerId = values.customerId;
+        Contract.customerType = values.customerType;
         Contract.industry = values.industry;
         //Contract.industryId = values.industryId; 
         Contract.legalPerson = values.legalPerson;
+        Contract.linkMan = values.linkMan;
+        Contract.address = values.address;
         Contract.signer = values.signer;
         Contract.signerId = values.signerId;
-        Contract.customerContact = values.customerContact;
-        Contract.customerContactId = values.customerContactId;
         Contract.lateFee = values.lateFee;
         Contract.lateFeeUnit = values.lateFeeUnit;
         Contract.maxLateFee = values.maxLateFee;
@@ -505,6 +501,79 @@ const Modify = (props: ModifyProps) => {
     form.setFieldsValue({ depositFeeItemName: option.props.children });
   };
 
+  //验证用户
+  const checkExist = (rule, value, callback) => {
+    if (value == undefined || value == '') {
+      callback();//'承租方不能为空');
+    }
+    else {
+      CheckContractCustomer(value).then(res => {
+        if (res)
+          callback('承租方不存在，请先新增');
+        else
+          callback();
+      })
+    }
+  };
+
+  const [organizeId, setOrganizeId] = useState<string>('');//所属机构id
+  const [userList, setUserList] = useState<any[]>([]);
+  const [customerVisible, setCustomerVisible] = useState<boolean>(false);
+  const [customer, setCustomer] = useState<any>();
+
+  const closeCustomerDrawer = () => {
+    setCustomerVisible(false);
+  };
+
+  const showCustomerDrawer = (customerId) => {
+    if (customerId != '') {
+      GetCustomerInfo(customerId).then(res => {
+        setCustomer(res);
+        setCustomerVisible(true);
+      })
+    }else{
+      setCustomerVisible(true);
+    } 
+  };
+
+  //承租方
+  const customerSearch = value => {
+    if (value == '') {
+      setUserList([]);
+    }
+    else {
+      setUserList([]);
+      GetContractCustomerList(value).then(res => {
+        // setUserSource(res || []); 
+        const list = res.map(item =>
+          <Option key={item.id}
+            value={item.name.trim()}>{item.name.trim()}
+            <span className={styles.phoneNum}>{item.phoneNum}</span>
+          </Option>
+        ).concat([
+          <Option disabled key="all" className={styles.addCustomer}>
+            <a onClick={() => showCustomerDrawer('')}>
+              新增承租方
+            </a>
+          </Option>]);//新增 
+        setUserList(list);
+      })
+    }
+  };
+
+  const onCustomerSelect = (value, option) => {
+    //props.children[1].props.children
+    form.setFieldsValue({ customerId: option.key });
+    GetCustomerInfo(option.key).then(res => {
+      form.setFieldsValue({ customerType: res.type });
+      form.setFieldsValue({ linkMan: res.linkMan });
+      form.setFieldsValue({ linkPhone: res.phoneNum });
+      form.setFieldsValue({ industry: res.industry });
+      form.setFieldsValue({ legalPerson: res.legal });
+      form.setFieldsValue({ address: res.address });
+    })
+  };
+
   return (
     <Drawer
       title={title}
@@ -538,7 +607,7 @@ const Modify = (props: ModifyProps) => {
                       </Col>
                       <Col lg={12}>
                         <Form.Item label="跟进人" >
-                          {getFieldDecorator('follower', {
+                          {/* {getFieldDecorator('follower', {
                             initialValue: infoDetail.follower
                           })(
                             <AutoComplete
@@ -547,7 +616,25 @@ const Modify = (props: ModifyProps) => {
                               placeholder="请输入跟进人"
                               onSelect={onFollowerSelect}
                             />
+                          )} */}
+
+                          {getFieldDecorator('follower', {
+                          })(
+                            <Select
+                              showSearch
+                              // onSearch={handleSearch}
+                              // optionFilterProp="children"
+                              placeholder="请选择跟进人"
+                              onSelect={onFollowerSelect}
+                            >
+                              {userSource.map(item => (
+                                <Option key={item.id} value={item.name}>
+                                  {item.name}
+                                </Option>
+                              ))}
+                            </Select>
                           )}
+
                           {getFieldDecorator('followerId', {
                             initialValue: infoDetail.followerId
                           })(
@@ -687,46 +774,116 @@ const Modify = (props: ModifyProps) => {
                     </Row>
                     <Row gutter={24}>
                       <Col lg={12}>
-                        <Form.Item label="租客" required>
+                        <Form.Item label="承租方" required>
                           {getFieldDecorator('customer', {
                             initialValue: infoDetail.customer,
-                            rules: [{ required: true, message: '请填写姓名或公司' }],
-                          })(<Input placeholder="请填写姓名或公司" />)}
+                            rules: [{
+                              required: true,
+                              message: '请输入承租方'
+                            },
+                            { validator: checkExist }]
+                          })(<AutoComplete
+                            dropdownClassName={styles.searchdropdown}
+                            optionLabelProp="value"
+                            dropdownMatchSelectWidth={false}
+                            dataSource={userList}
+                            onSearch={customerSearch}
+                            placeholder="请输入承租方"
+                            onSelect={onCustomerSelect}
+                            disabled={organizeId == '' ? true : false}
+                          />)}
+                          {getFieldDecorator('customerId', {
+                            initialValue: ''
+                          })(
+                            <input type='hidden' />
+                          )}
                         </Form.Item>
                       </Col>
+
                       <Col lg={12}>
-                        <Form.Item label="行业" required>
-                          {getFieldDecorator('industry', {
-                            initialValue: infoDetail.industry,
-                            rules: [{ required: true, message: '请选择行业' }],
+                        <Form.Item label="类别" required>
+                          {getFieldDecorator('customerType', {
+                            rules: [{ required: true, message: '请选择类别' }],
                           })(
-                            <Select placeholder="请选择行业"
-                            // onSelect={onIndustrySelect}
-                            >
-                              {industryType.map(item => (
-                                <Option value={item.value} key={item.key}>
-                                  {item.title}
-                                </Option>
-                              ))}
-                            </Select>
+                            <Select disabled placeholder="自动带出">
+                              <Option value="1" key="1">个人</Option>
+                              <Option value="2" key="2">单位</Option>
+                            </Select>,
                           )}
-                          {/* {getFieldDecorator('industry', {
+                        </Form.Item>
+                      </Col>
+                    </Row>
+
+                    <Row gutter={24}>
+                      <Col lg={12}>
+                        <Form.Item label="联系人">
+                          {getFieldDecorator('linkMan', {
+                            initialValue: infoDetail.linkMan,
+                            rules: [{ required: true, message: '请输入联系人' }],
+                          })(<Input placeholder="请输入联系人"
+                            disabled={form.getFieldValue('customerId') == '' ? true : false}
+                          />)}
+                        </Form.Item>
+                      </Col>
+
+                      <Col lg={12}>
+                        <Form.Item label="联系电话">
+                          {getFieldDecorator('linkPhone', {
+                            initialValue: infoDetail.linkPhone,
+                            rules: [{ required: true, message: '请输入联系电话' }],
+                          })(<Input placeholder="请输入联系电话"
+                            disabled={form.getFieldValue('customerId') == '' ? true : false} />)}
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    {form.getFieldValue('type') === '2' ? (
+                      <Row gutter={24}>
+                        <Col lg={12}>
+                          <Form.Item label="行业" required>
+                            {getFieldDecorator('industry', {
+                              initialValue: infoDetail.industry,
+                              rules: [{ required: true, message: '请选择行业' }],
+                            })(
+                              <Select placeholder="请选择行业"
+                                disabled={form.getFieldValue('customerId') == '' ? true : false}
+                              // onSelect={onIndustrySelect}
+                              >
+                                {industryType.map(item => (
+                                  <Option value={item.value} key={item.key}>
+                                    {item.title}
+                                  </Option>
+                                ))}
+                              </Select>
+                            )}
+                            {/* {getFieldDecorator('industry', {
                             initialValue: infoDetail.industry
                           })(
                             <input type='hidden' />
                           )} */}
-                        </Form.Item>
-                      </Col>
-                    </Row>
+                          </Form.Item>
+                        </Col>
+                        <Col lg={12}>
+                          <Form.Item label="法人" required>
+                            {getFieldDecorator('legalPerson', {
+                              initialValue: infoDetail.legalPerson,
+                              rules: [{ required: true, message: '请填写法人' }],
+                            })(<Input placeholder="请填写法人"
+                              disabled={form.getFieldValue('customerId') == '' ? true : false}
+                            />)}
+                          </Form.Item>
+                        </Col>
+                      </Row>) : null}
+
                     <Row gutter={24}>
                       <Col lg={12}>
-                        <Form.Item label="法人" required>
-                          {getFieldDecorator('legalPerson', {
-                            initialValue: infoDetail.legalPerson,
-                            rules: [{ required: true, message: '请填写法人' }],
-                          })(<Input placeholder="请填写法人" />)}
+                        <Form.Item label="联系地址" required>
+                          {getFieldDecorator('address', {
+                            initialValue: infoDetail.address,
+                            rules: [{ required: true, message: '请输入联系地址' }],
+                          })(<Input placeholder="请输入联系地址" disabled={form.getFieldValue('customerId') == '' ? true : false} />)}
                         </Form.Item>
                       </Col>
+
                       <Col lg={12}>
                         <Form.Item label="签订人" required>
                           {getFieldDecorator('signer', {
@@ -746,19 +903,8 @@ const Modify = (props: ModifyProps) => {
                             <input type='hidden' />
                           )}
                         </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row gutter={24}>
-                      <Col lg={24}>
-                        <Form.Item label="租客联系人">
-                          {getFieldDecorator('customerContact', {
-                            initialValue: infoDetail.customerContact,
-                            rules: [{ required: true, message: '请输入租客联系人' }],
-                          })(<Input placeholder="请输入租客联系人" />)}
-                        </Form.Item>
-                      </Col>
-                    </Row>
-
+                      </Col> 
+                    </Row> 
                   </Card>
                 </Col>
               </Row>
@@ -846,7 +992,6 @@ const Modify = (props: ModifyProps) => {
                 className={styles.addcard}
               ></ResultList>
             </TabPane>
-
           </Tabs>
         </Spin>
       </Form>
@@ -873,7 +1018,26 @@ const Modify = (props: ModifyProps) => {
           提交
           </Button>
       </div>
-    </Drawer >
+
+      <QuickModify
+        modifyVisible={customerVisible}
+        closeDrawer={closeCustomerDrawer}
+        data={customer}
+        organizeId={organizeId}
+        // type={type}
+        reload={(customerId) => {
+          GetCustomerInfo(customerId).then(res => {
+            //防止旧数据缓存，清空下拉
+            setUserList([]);
+            form.setFieldsValue({ ownerName: res.name });
+            form.setFieldsValue({ ownerId: customerId });
+            form.setFieldsValue({ ownerPhone: res.phoneNum });
+          });
+        }
+        }
+      />
+
+    </Drawer>
   );
 };
 
