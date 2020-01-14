@@ -150,12 +150,12 @@ const SelectReadingMeterHouse = (props: SelectReadingMeterHouseProps) => {
                 <Col span={24}>
                   <Form.Item required label="计费起始日期">
                     {getFieldDecorator('beginDate', {
-                      rules: [{ required: true, message: '请选择计费终止日期' }],
+                      rules: [{ required: true, message: '请选择计费截止日期' }],
                     })(
                       <DatePicker
                         disabled={form.getFieldValue('isCustomizeDate')}
                         style={{ width: '100%' }}
-                        placeholder='请选择计费终止日期'
+                        placeholder='请选择计费截止日期'
                       />
                     )}
                   </Form.Item>
@@ -163,14 +163,14 @@ const SelectReadingMeterHouse = (props: SelectReadingMeterHouseProps) => {
               </Row>
               <Row gutter={24}>
                 <Col span={24}>
-                  <Form.Item required label="计费终止日期">
+                  <Form.Item required label="计费截止日期">
                     {getFieldDecorator('endDate', {
-                      rules: [{ required: true, message: '请选择计费终止日期' }],
+                      rules: [{ required: true, message: '请选择计费截止日期' }],
                     })(
                       <DatePicker
                         disabled={form.getFieldValue('isCustomizeDate')}
                         style={{ width: '100%' }}
-                        placeholder='请选择计费终止日期' />
+                        placeholder='请选择计费截止日期' />
                     )}
                   </Form.Item>
                 </Col>

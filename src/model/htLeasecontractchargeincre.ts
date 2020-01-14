@@ -32,7 +32,7 @@ export interface HtLeasecontractchargeincre {
      */
     modifyUserId?: string;
     /**
-     * Desc:  Default:  Nullable:True
+     * Desc:递增类型  Default:  Nullable:True
      */
     increType?: string;
     /**

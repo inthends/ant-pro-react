@@ -76,7 +76,7 @@ function ListTable(props: ListTableProps) {
       align: 'center',
       render: (text, record) => {
         if (text != null) {
-          return moment(text).format('YYYY-MM-DD') + '至' + moment(record['计费终止日期']).format('YYYY-MM-DD');
+          return moment(text).format('YYYY-MM-DD') + '至' + moment(record['计费截止日期']).format('YYYY-MM-DD');
         }
         else
           return '';

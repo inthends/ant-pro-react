@@ -551,8 +551,8 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                       initialValue: infoDetail.endDate
                         ? moment(new Date(infoDetail.endDate))
                         : moment(getEndDate()),
-                      rules: [{ required: true, message: '计费终止日期' }],
-                    })(<DatePicker disabled={true} placeholder="计费终止日期" style={{ width: '100%' }} />)}
+                      rules: [{ required: true, message: '计费截止日期' }],
+                    })(<DatePicker disabled={true} placeholder="计费截止日期" style={{ width: '100%' }} />)}
                   </Form.Item>
                 </Col>
               </Row> */}
@@ -567,13 +567,13 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                   </Form.Item>
                 </Col>
                 <Col lg={12}>
-                  <Form.Item label="计费终止日期">
+                  <Form.Item label="计费截止日期">
                     {getFieldDecorator('endDate', {
                       initialValue: form.getFieldValue('beginDate') ? getEndDate() : null,
                       // initialValue: form.getFieldValue('isNullDate') ? null : getEndDate(),
                       //infoDetail.endDate ? moment(new Date(infoDetail.endDate)) : moment(getEndDate()),
-                      rules: [{ required: !form.getFieldValue('isNullDate'), message: '计费终止日期' }],
-                    })(<DatePicker disabled placeholder="计费终止日期"
+                      rules: [{ required: !form.getFieldValue('isNullDate'), message: '计费截止日期' }],
+                    })(<DatePicker disabled placeholder="计费截止日期"
                       style={{ width: '100%' }} onChange={(date, dateString) => {
                         setEndDate(dateString, infoDetail.cycleValue, infoDetail.cycleType);
                       }} />)}
@@ -742,7 +742,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                       <Select placeholder="==选择应收期间==">
                         <Option value={1}>同一季度费用,每季度首月为应收期间</Option>
                         <Option value={2} >计费起始日期</Option>
-                        <Option value={3}>计费终止日期</Option>
+                        <Option value={3}>计费截止日期</Option>
                       </Select>
                     )}
                   </Form.Item>
@@ -778,7 +778,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                       <Select placeholder="==选择应收期间==">
                         <Option value={1}>同一季度费用,每季度首月为账单期间</Option>
                         <Option value={2}>计费起始日期</Option>
-                        <Option value={3}>计费终止日期</Option>
+                        <Option value={3}>计费截止日期</Option>
                       </Select>
                     )}
                   </Form.Item>
@@ -862,7 +862,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                       <Select placeholder="==选择收款截止日==">
                         <Option value={1}>同一季度费用,每季度首月</Option>
                         <Option value={2}>计费起始日期</Option>
-                        <Option value={3}>计费终止日期</Option>
+                        <Option value={3}>计费截止日期</Option>
                       </Select>
                     )}
                   </Form.Item>
@@ -946,7 +946,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                       <Select placeholder="==选择滞纳金起算日==">
                         <Option value={1}>同一季度费用,每季度首月</Option>
                         <Option value={2}>计费起始日期</Option>
-                        <Option value={3}>计费终止日期</Option>
+                        <Option value={3}>计费截止日期</Option>
                       </Select>
                     )}
                   </Form.Item>

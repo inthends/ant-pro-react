@@ -442,7 +442,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
                 </Form.Item>
               </Col>
               <Col lg={12}>
-                <Form.Item label="终止日期">
+                <Form.Item label="截止日期">
                   {getFieldDecorator('endRentDate', {
                     initialValue: infoDetail.endRentDate
                       ? moment(new Date(infoDetail.endRentDate))

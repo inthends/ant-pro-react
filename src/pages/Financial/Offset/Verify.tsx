@@ -232,7 +232,7 @@ const Verify = (props: VerifyProps) => {
         }
       }
     }, {
-      title: '计费终止日期',
+      title: '计费截止日期',
       dataIndex: 'billEndDate',
       key: 'billEndDate',
       sorter: true,

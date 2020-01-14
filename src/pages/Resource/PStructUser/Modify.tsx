@@ -1,7 +1,5 @@
 // import { TreeEntity } from '@/model/models';
-import {
-  DatePicker, Button, Card, Col, Drawer, Form, Input, message, Row, Select, TreeSelect, Checkbox,
-} from 'antd';
+import { DatePicker, Button, Card, Col, Drawer, Form, Input, message, Row, Select, TreeSelect, Checkbox} from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { SaveForm } from './PStructUser.service';
@@ -219,7 +217,7 @@ const Modify = (props: ModifyProps) => {
                         </Select>,
                       )}
                     </Form.Item>
-                  </Col> 
+                  </Col>
                   <Col lg={12}>
                     <Form.Item label="生日">
                       {getFieldDecorator('birthdate', {
@@ -228,7 +226,7 @@ const Modify = (props: ModifyProps) => {
                           : moment(new Date()),
                       })(<DatePicker style={{ width: '100%' }} />)}
                     </Form.Item>
-                  </Col> 
+                  </Col>
                 </Row>
 
                 <Row gutter={24}>
@@ -424,7 +422,7 @@ const Modify = (props: ModifyProps) => {
                   })(<Input placeholder="请输入联系地址" />)}
                 </Form.Item>
               </Col>
-            </Row>  
+            </Row>
             <Row gutter={24}>
               <Col lg={24}>
                 <Form.Item label="附加说明">

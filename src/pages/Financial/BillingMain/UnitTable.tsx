@@ -86,7 +86,7 @@ function UnitTable(props: UnitTableProps) {
       width: 100
     },
     {
-      title: '起始日期',
+      title: '计费起始日期',
       key: 'beginDate',
       dataIndex: 'beginDate',
       sorter: true,
@@ -96,7 +96,7 @@ function UnitTable(props: UnitTableProps) {
       }
     },
     {
-      title: '终止日期',
+      title: '计费截止日期',
       key: 'endDate',
       dataIndex: 'endDate',
       sorter: true,

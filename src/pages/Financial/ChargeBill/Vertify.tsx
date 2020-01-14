@@ -149,7 +149,7 @@ const Vertify = (props: VertifyProps) => {
       width: 120,
       render: val => val != null ? moment(val).format('YYYY-MM-DD') : ''
     }, {
-      title: '计费终止日期',
+      title: '计费截止日期',
       dataIndex: 'endDate',
       key: 'endDate',
       width: 120,

@@ -157,7 +157,7 @@ function ListTable(props: ListTableProps) {
       width: 100,
       render: val => moment(val).format('YYYY-MM-DD')
     }, {
-      title: '计费终止日期',
+      title: '计费截止日期',
       dataIndex: 'endDate',
       key: 'endDate',
       align: 'center',

@@ -52,9 +52,9 @@ export interface HtLeasecontractchargefeeoffer {
      */
     leaseContractChargeId?: string;
     /**
-     * Desc:  Default:  Nullable:True
+     * Desc:优惠类型  Default:  Nullable:True
      */
-    type?: string;
+    rebateType?: string;
     /**
      * Desc:  Default:  Nullable:True
      */

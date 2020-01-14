@@ -138,7 +138,7 @@ const Split = (props: SplitProps) => {
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item label="计费终止日期" >
+              <Form.Item label="计费截止日期" >
                 {String(infoDetail.endDate).substr(0, 10)}
               </Form.Item>
             </Col>
@@ -207,14 +207,14 @@ const Split = (props: SplitProps) => {
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item label="计费终止日期" required >
+              <Form.Item label="计费截止日期" required >
                 {getFieldDecorator('firstEndDate', {
                   initialValue: infoDetail.firstEndDate == null ? moment(new Date) : moment(infoDetail.firstEndDate),
-                  rules: [{ required: true, message: '请输入计费终止日期' },
+                  rules: [{ required: true, message: '请输入计费截止日期' },
                     //   {
                     //   validator: (rules, value, callback) => {
                     //     if (value.isBefore(moment(infoDetail.beginDate).format('YYYY-MM-DD')) || value.isAfter(moment(infoDetail.endDate).format('YYYY-MM-DD'))) {
-                    //       callback('拆分日期必须早于拆分前终止日期');
+                    //       callback('拆分日期必须早于拆分前截止日期');
                     //     }
                     //   }
                     // }
@@ -225,7 +225,7 @@ const Split = (props: SplitProps) => {
                     // onChange={(date, datestr) => {
                     //   /*if(date.isBefore(moment(infoDetail.beginDate).format('YYYY-MM-DD'))||date.isAfter(moment(infoDetail.endDate).format('YYYY-MM-DD')))
                     //   {
-                    //     message.warning('计费终止日期必须晚于起始日期且早于第二次计费截止日期');
+                    //     message.warning('计费截止日期必须晚于起始日期且早于第二次计费截止日期');
                     //     var tempInfo=Object.assign({},infoDetail,{firstEndDate:null});
                     //     setInfoDetail(tempInfo);
                     //   }else{*/
@@ -280,7 +280,7 @@ const Split = (props: SplitProps) => {
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item label="计费终止日期"  >
+              <Form.Item label="计费截止日期"  >
                 {getFieldDecorator('secondEndDate', {
                   initialValue: infoDetail.endDate == null ? moment(new Date) : moment(infoDetail.endDate),
                 })(

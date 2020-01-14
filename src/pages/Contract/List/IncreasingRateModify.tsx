@@ -10,14 +10,14 @@ import { HtLeasecontractchargeincre } from '@/model/models';
 
 interface IncreasingRateModifyProps {
   form: WrappedFormUtils;
-  chargeIncreList: HtLeasecontractchargeincre[];
+  chargeIncre: HtLeasecontractchargeincre;
 }
 
 //动态数量
 // let index = 1;
 function IncreasingRateModify(props: IncreasingRateModifyProps) {
-  const { form, chargeIncreList } = props;
-  const { getFieldDecorator, getFieldValue } = form;
+  const { form, chargeIncre } = props;
+  const { getFieldDecorator } = form;
 
   // const remove = k => {
   //   const keys = getFieldValue('IncreasingRates');
@@ -35,15 +35,25 @@ function IncreasingRateModify(props: IncreasingRateModifyProps) {
   //   });
   // };
 
-  getFieldDecorator('IncreasingRates', { initialValue: chargeIncreList });
-  const keys = getFieldValue('IncreasingRates');
-  const formItems = keys.map((k, index) => (
-    <Card key={index} className={styles.card} title="递增率" >
+
+
+  return (
+    // <div style={{ marginBottom: '10px' }}>
+    //   {formItems}
+    //   <Button type="dashed" onClick={add}>
+    //     <Icon type="plus" />添加递增率
+    //         </Button>
+    // </div> 
+    // getFieldDecorator('IncreasingRates', { initialValue: chargeIncre });
+    // const keys = getFieldValue('IncreasingRates');
+    // const formItems = keys.map((k, index) => (
+       
+    <Card className={styles.card} title="递增率" >
       <Row gutter={24}>
         <Col lg={6}>
-          <Form.Item label="递增类型" required >
-            {getFieldDecorator(`increType[${index}]`, {
-              initialValue: k.increType,
+          <Form.Item label="递增类型" >
+            {getFieldDecorator('increType', {
+              initialValue: chargeIncre.increType,
               // rules: [{ required: true, message: '请选择递增时间点' }],
             })(<Select placeholder="请选择递增类型" allowClear>
               <Option value="三个月后递增">三个月后开始递增</Option>
@@ -57,8 +67,8 @@ function IncreasingRateModify(props: IncreasingRateModifyProps) {
 
         <Col lg={6}>
           <Form.Item label="单价递增"  >
-            {getFieldDecorator(`increPrice[${index}]`, {
-              initialValue: k.increPrice,
+            {getFieldDecorator('increPrice', {
+              initialValue: chargeIncre.increPrice,
               rules: [{ required: form.getFieldValue('increType'), message: '请输入递增率' }],
             })(<InputNumber placeholder="请输入递增率" style={{ width: '100%' }}
               disabled={!form.getFieldValue('increType')} />)}
@@ -66,8 +76,8 @@ function IncreasingRateModify(props: IncreasingRateModifyProps) {
         </Col>
         <Col lg={3}>
           <Form.Item label="&nbsp;">
-            {getFieldDecorator(`increPriceUnit[${index}]`, {
-              initialValue: k.increPriceUnit,
+            {getFieldDecorator('increPriceUnit', {
+              initialValue: chargeIncre.increPriceUnit,
               rules: [{ required: form.getFieldValue('increType'), message: '请选择单位' }],
             })(
               <Select placeholder="请选择" allowClear
@@ -79,8 +89,8 @@ function IncreasingRateModify(props: IncreasingRateModifyProps) {
         </Col>
         <Col lg={6}>
           <Form.Item label="保证金递增"  >
-            {getFieldDecorator(`increDeposit[${index}]`, {
-              initialValue: k.increDeposit,
+            {getFieldDecorator('increDeposit', {
+              initialValue: chargeIncre.increDeposit,
               rules: [{ required: form.getFieldValue('increType'), message: '请输入递增率' }],
             })(<InputNumber placeholder="请输入递增率"
               style={{ width: '100%' }}
@@ -89,8 +99,8 @@ function IncreasingRateModify(props: IncreasingRateModifyProps) {
         </Col>
         <Col lg={3}>
           <Form.Item label="&nbsp;">
-            {getFieldDecorator(`increDepositUnit[${index}]`, {
-              initialValue: k.increDepositUnit,
+            {getFieldDecorator('increDepositUnit', {
+              initialValue: chargeIncre.increDepositUnit,
               rules: [{ required: form.getFieldValue('increType'), message: '请选择单位' }],
             })(
               <Select allowClear
@@ -102,14 +112,9 @@ function IncreasingRateModify(props: IncreasingRateModifyProps) {
         </Col>
       </Row>
     </Card>
-  ));
-  return (
-    <div style={{ marginBottom: '10px' }}>
-      {formItems}
-      {/* <Button type="dashed" onClick={add}>
-        <Icon type="plus" />添加递增率
-            </Button> */}
-    </div>
+    // ));
+
+
   );
 }
 

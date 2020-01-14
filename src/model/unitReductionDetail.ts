@@ -36,7 +36,7 @@ export interface UnitReductionDetail {
      */
     beginDate?: Date;
     /**
-     * 计费终止日期
+     * 计费截止日期
      */
     endDate?: Date;
     /**

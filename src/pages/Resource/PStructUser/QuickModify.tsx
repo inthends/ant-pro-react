@@ -1,8 +1,6 @@
 // import { TreeEntity } from '@/model/models';
 //快速添加修改用户
-import {
-  DatePicker, Button, Card, Col, Drawer, Form, Input, message, Row, Select, TreeSelect
-} from 'antd';
+import { DatePicker, Button, Card, Col, Drawer, Form, Input, message, Row, Select, TreeSelect } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { SaveForm } from './PStructUser.service';
@@ -55,7 +53,7 @@ const QuickModify = (props: QuickModifyProps) => {
 
   // 打开抽屉时初始化
   useEffect(() => {
-    if (modifyVisible) {  
+    if (modifyVisible) {
 
       GetOrgs().then((res: any[]) => {
         setTreeData(res || []);
@@ -65,8 +63,7 @@ const QuickModify = (props: QuickModifyProps) => {
         setIndustryType(res || []);
       });
 
-      if (data) { 
-
+      if (data) {
         setInfoDetail(data);
         form.resetFields();
       } else {
@@ -135,8 +132,8 @@ const QuickModify = (props: QuickModifyProps) => {
               </Col>
               <Col lg={12}>
                 <Form.Item label="客户类别" required>
-                  {getFieldDecorator('flag', {
-                    initialValue: infoDetail.flag ? infoDetail.flag : '1',
+                  {getFieldDecorator('type', {
+                    initialValue: infoDetail.type ? infoDetail.type : '1',
                     rules: [{ required: true, message: '请选择客户类别' }],
                   })(
                     <Select>
@@ -223,7 +220,7 @@ const QuickModify = (props: QuickModifyProps) => {
                         initialValue: infoDetail.birthdate
                           ? moment(new Date(infoDetail.birthdate))
                           : '',
-                      })(<DatePicker style={{ width: '100%' }}  placeholder='请选择生日'/>)}
+                      })(<DatePicker style={{ width: '100%' }} placeholder='请选择生日' />)}
                     </Form.Item>
                   </Col>
                 </Row>

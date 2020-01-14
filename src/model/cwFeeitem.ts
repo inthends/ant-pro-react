@@ -161,7 +161,7 @@ export interface CwFeeitem {
      */
     // calResultScale?: number;
     /**
-     * Desc:计费终止日期  Default:  Nullable:True
+     * Desc:计费截止日期  Default:  Nullable:True
      */
     endDate?: Date;
     /**

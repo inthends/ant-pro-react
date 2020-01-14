@@ -118,20 +118,20 @@ const Modify = (props: ModifyProps) => {
               <Form layout="vertical" hideRequiredMark>
                 <Row gutter={24}>
                   <Col span={8}>
-                    <Form.Item required label="账单日起">
+                    <Form.Item required label="计费起始日期">
                       {getFieldDecorator('beginDate', {
                         initialValue: infoDetail.beginDate == null ? moment(new Date()).startOf('month') : moment(infoDetail.beginDate),
-                        rules: [{ required: true, message: '请选择账单日起' }],
+                        rules: [{ required: true, message: '请选择计费起始日期' }],
                       })(
                         <DatePicker style={{ width: '100%' }} disabled={!isEdit} />
                       )}
                     </Form.Item>
                   </Col>
                   <Col span={8}>
-                    <Form.Item required label="账单日止"  >
+                    <Form.Item required label="计费截止日期"  >
                       {getFieldDecorator('endDate', {
                         initialValue: infoDetail.endDate == null ? moment(new Date()).endOf('month') : moment(infoDetail.endDate),
-                        rules: [{ required: true, message: '请选择计费终止日期' }],
+                        rules: [{ required: true, message: '请选择计费截止日期' }],
                       })(
                         <DatePicker style={{ width: '100%' }} disabled={!isEdit} />
                       )}

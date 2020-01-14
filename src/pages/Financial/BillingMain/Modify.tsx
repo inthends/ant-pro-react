@@ -292,7 +292,7 @@ const Modify = (props: ModifyProps) => {
       editable: true
     },
     {
-      title: '起始日期',
+      title: '计费起始日期',
       key: 'beginDate',
       dataIndex: 'beginDate',
       width: 100,
@@ -305,7 +305,7 @@ const Modify = (props: ModifyProps) => {
       }
     },
     {
-      title: '终止日期',
+      title: '计费截止日期',
       key: 'endDate',
       dataIndex: 'endDate',
       width: 100,

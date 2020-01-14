@@ -91,7 +91,7 @@ function DetailTable(props: DetailTableProps) {
         }
       }
     }, {
-      title: '计费终止日期',
+      title: '计费截止日期',
       dataIndex: 'billEndDate',
       key: 'billEndDate', 
       width: 120,

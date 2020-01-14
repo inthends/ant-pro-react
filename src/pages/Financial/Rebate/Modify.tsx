@@ -299,7 +299,7 @@ const Modify = (props: ModifyProps) => {
       }
     },
     {
-      title: '计费终止日期',
+      title: '计费截止日期',
       dataIndex: 'endDate',
       key: 'endDate',
       width: '120px',
@@ -488,24 +488,24 @@ const Modify = (props: ModifyProps) => {
               </Form.Item>
             </Col>
             <Col lg={8}>
-              <Form.Item label="起始日期" required>
+              <Form.Item label="优惠开始日期" required>
                 {getFieldDecorator('beginDate', {
                   initialValue: infoDetail.beginDate == null ? moment(new Date()) :
                     moment(new Date(infoDetail.beginDate)),
-                  rules: [{ required: true, message: '请选择起始日期' }]
+                  rules: [{ required: true, message: '请选择优惠开始日期' }]
                 })(
-                  <DatePicker placeholder="请选择起始日期" style={{ width: '100%' }} />
+                  <DatePicker placeholder="请选择优惠开始日期" style={{ width: '100%' }} />
                 )}
               </Form.Item>
             </Col>
             <Col lg={8}>
-              <Form.Item label="结束日期" required >
+              <Form.Item label="优惠结束日期" required >
                 {getFieldDecorator('endDate', {
                   initialValue: infoDetail.endDate == null ? moment(new Date()) :
                     moment(new Date(infoDetail.endDate)),
-                  rules: [{ required: true, message: '请选择结束日期' }]
+                  rules: [{ required: true, message: '请选择优惠结束日期' }]
                 })(
-                  <DatePicker placeholder="请选择结束日期" style={{ width: '100%' }} />
+                  <DatePicker placeholder="请选择优惠结束日期" style={{ width: '100%' }} />
                 )}
               </Form.Item></Col>
           </Row>

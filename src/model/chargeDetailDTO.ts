@@ -27,15 +27,28 @@ export interface ChargeDetailDTO {
     /**
      * 条款
      */
-    chargeFeeList?: Array<HtLeasecontractchargefee>;
+    // chargeFeeList?: Array<HtLeasecontractchargefee>;
+
+
+    /**
+        * 条款
+        */
+    chargeFee?: HtLeasecontractchargefee;
+
     /**
      * 递增率
      */
-    chargeIncreList?: Array<HtLeasecontractchargeincre>;
+    // chargeIncreList?: Array<HtLeasecontractchargeincre>;
+
+    chargeIncre?: HtLeasecontractchargeincre;
+
     /**
      * 优惠
      */
-    chargeFeeOfferList?: Array<HtLeasecontractchargefeeoffer>;
+    // chargeFeeOfferList?: Array<HtLeasecontractchargefeeoffer>;
+
+    chargeFeeOffer?: HtLeasecontractchargefeeoffer;
+
     /**
      * 保证金明细
      */
@@ -49,5 +62,5 @@ export interface ChargeDetailDTO {
      * 审批记录
      */
     contractapproveLog?: Array<htContractapprovelog>;
-    
+
 }
