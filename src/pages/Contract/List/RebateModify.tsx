@@ -67,20 +67,20 @@ function RebateModify(props: RebateModifyProps) {
         </Col>
         <Col lg={5}>
           <Form.Item label="开始时间"  >
-            {getFieldDecorator('startDate', {
-              initialValue: chargeOffer.startDate
-                ? moment(new Date(chargeOffer.startDate))
-                : moment(new Date()),
+            {getFieldDecorator('rebateStartDate', {
+              initialValue: chargeOffer.rebateStartDate
+                ? moment(new Date(chargeOffer.rebateStartDate))
+                : '',
               rules: [{ required: form.getFieldValue('rebateType'), message: '请选择开始时间' }],
             })(<DatePicker placeholder="请选择开始时间" disabled={!form.getFieldValue('rebateType')} />)}
           </Form.Item>
         </Col>
         <Col lg={5}>
           <Form.Item label="结束时间"  >
-            {getFieldDecorator('endDate', {
-              initialValue: chargeOffer.endDate
-                ? moment(new Date(chargeOffer.endDate))
-                : moment(new Date()),
+            {getFieldDecorator('rebateEndDate', {
+              initialValue: chargeOffer.rebateEndDate
+                ? moment(new Date(chargeOffer.rebateEndDate))
+                : '',
               rules: [{ required: form.getFieldValue('rebateType'), message: '请选择结束时间' }],
             })(<DatePicker placeholder="请选择结束时间" disabled={!form.getFieldValue('rebateType')} />)}
           </Form.Item>

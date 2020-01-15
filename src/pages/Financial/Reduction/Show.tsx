@@ -105,13 +105,13 @@ const Show = (props: ShowProps) => {
     });
   };
 
-  const columns = [ 
+  const columns = [
     {
       title: '单元全称',
       dataIndex: 'allName',
       key: 'allName',
       width: '250px'
-    }, 
+    },
 
     // {
     //   title: '单元编号',
@@ -177,7 +177,7 @@ const Show = (props: ShowProps) => {
       title: '减免后金额',
       dataIndex: 'lastAmount',
       key: 'lastAmount',
-      width: '100px' 
+      width: '100px'
     },
     {
       title: '备注',
@@ -191,7 +191,7 @@ const Show = (props: ShowProps) => {
     <Drawer
       title={title}
       placement="right"
-      width={900}
+      width={1100}
       onClose={closeModal}
       visible={modalVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
@@ -256,7 +256,7 @@ const Show = (props: ShowProps) => {
               // rowKey={record => record.id}
               rowKey="billId"
               pagination={pagination}
-              scroll={{ x: 1300, y: 500 }}
+              scroll={{ y: 500, x: 1400 }}
               loading={loading}
               onChange={(pagination: PaginationConfig, filters, sorter) =>
                 changePage(pagination, filters, sorter)

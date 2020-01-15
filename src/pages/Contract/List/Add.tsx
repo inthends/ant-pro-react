@@ -59,29 +59,30 @@ const Add = (props: AddProps) => {
     form.validateFields((errors, values) => {
       if (!errors) {
         //租赁条款     
-        // setLoading(true);
+        setLoading(true);
+
         // let TermJson: HtLeasecontractchargefee[] = [];
         // let data: HtLeasecontractchargefee = {};
         //const TermJson=[];
         //const data = {}; 
         //data["FeeItemId"] = values.feeItemId[0];
 
-        let chargefee: HtLeasecontractchargefee = {};
-        chargefee.feeItemId = values.feeItemId;
-        chargefee.feeItemName = values.feeItemName;
-        chargefee.startDate = values.startDate;
-        chargefee.endDate = values.endDate;
-        chargefee.price = values.price;
-        chargefee.priceUnit = values.priceUnit;
-        chargefee.advancePayTime = values.advancePayTime;
-        chargefee.advancePayTimeUnit = values.advancePayTimeUnit;
-        chargefee.billType = values.billType;
-        if (chargefee.priceUnit == "元/m²·天" || chargefee.priceUnit == "元/天") {
-          chargefee.dayPriceConvertRule = values.dayPriceConvertRule;
+        let mychargefee: HtLeasecontractchargefee = {};
+        mychargefee.feeItemId = values.feeItemId;
+        mychargefee.feeItemName = values.feeItemName;
+        mychargefee.startDate = values.startDate;
+        mychargefee.endDate = values.endDate;
+        mychargefee.price = values.price;
+        mychargefee.priceUnit = values.priceUnit;
+        mychargefee.advancePayTime = values.advancePayTime;
+        mychargefee.advancePayTimeUnit = values.advancePayTimeUnit;
+        mychargefee.billType = values.billType;
+        if (mychargefee.priceUnit == "元/m²·天" || mychargefee.priceUnit == "元/天") {
+          mychargefee.dayPriceConvertRule = values.dayPriceConvertRule;
         }
-        chargefee.yearDays = values.yearDays;
-        chargefee.payCycle = values.payCycle;
-        chargefee.rentalPeriodDivided = values.rentalPeriodDivided;
+        mychargefee.yearDays = values.yearDays;
+        mychargefee.payCycle = values.payCycle;
+        mychargefee.rentalPeriodDivided = values.rentalPeriodDivided;
         //TermJson.push(data);
 
         //动态添加的租期
@@ -118,12 +119,12 @@ const Add = (props: AddProps) => {
         // });
 
         // let RateJson: HtLeasecontractchargeincre[] = [];
-        let chargeincre: HtLeasecontractchargeincre = {};
-        chargeincre.increType = values.increType;
-        chargeincre.increPrice = values.increPrice;
-        chargeincre.increPriceUnit = values.increPriceUnit;
-        chargeincre.increDeposit = values.increDeposit;
-        chargeincre.increDepositUnit = values.increDepositUnit;
+        let mychargeincre: HtLeasecontractchargeincre = {};
+        mychargeincre.increType = values.increType;
+        mychargeincre.increPrice = values.increPrice;
+        mychargeincre.increPriceUnit = values.increPriceUnit;
+        mychargeincre.increDeposit = values.increDeposit;
+        mychargeincre.increDepositUnit = values.increDepositUnit;
         // RateJson.push(rate);
 
         //优惠
@@ -140,14 +141,14 @@ const Add = (props: AddProps) => {
         // });
 
         // let RebateJson: HtLeasecontractchargefeeoffer[] = [];
-        let chargefeeoffer: HtLeasecontractchargefeeoffer = {};
-        chargefeeoffer.rebateType = values.rebateType;
-        chargefeeoffer.startDate = values.rebateStartDate;
-        chargefeeoffer.endDate = values.rebateEndDate;
-        chargefeeoffer.startPeriod = values.startPeriod;
-        chargefeeoffer.periodLength = values.periodLength;
-        chargefeeoffer.discount = values.discount;
-        chargefeeoffer.remark = values.remark;
+        let mychargefeeoffer: HtLeasecontractchargefeeoffer = {};
+        mychargefeeoffer.rebateType = values.rebateType;
+        mychargefeeoffer.startDate = values.rebateStartDate;
+        mychargefeeoffer.endDate = values.rebateEndDate;
+        mychargefeeoffer.startPeriod = values.startPeriod;
+        mychargefeeoffer.periodLength = values.periodLength;
+        mychargefeeoffer.discount = values.discount;
+        mychargefeeoffer.remark = values.remark;
         // RebateJson.push(rebate);
 
         //let entity = values; 
@@ -161,18 +162,19 @@ const Add = (props: AddProps) => {
         entity.startDate = values.billingDate.format('YYYY-MM-DD');
         entity.endDate = values.contractEndDate.format('YYYY-MM-DD');
         entity.payDate = values.contractStartDate.format('YYYY-MM-DD');
+
         // let strTermJson = JSON.stringify(TermJson);
-        setChargefee(chargefee);
+        setChargefee(mychargefee);
         // let strRateJson = JSON.stringify(RateJson);
-        setChargeincre(chargeincre);
+        setChargeincre(mychargeincre);
         // let strRebateJson = JSON.stringify(RebateJson);
-        setChargefeeoffer(chargefeeoffer);
+        setChargefeeoffer(mychargefeeoffer);
 
         GetChargeDetail({
           ...entity,
-          chargefee: chargefee,
-          chargeincre: chargeincre,
-          chargefeeoffer: chargefeeoffer,
+          chargefee: mychargefee,
+          chargeincre: mychargeincre,
+          chargefeeoffer: mychargefeeoffer,
           BillUnitId: values.billUnitId,//计费单元id
           LeaseContractId: '',
           CalcPrecision: values.calcPrecision,
@@ -183,7 +185,7 @@ const Add = (props: AddProps) => {
           setChargeData(res.chargeFeeResultList);//租金明细  
           // setDepositResult(res.depositFeeResultList);
           // setChargeFeeResult(res.chargeFeeResultList); 
-          // setLoading(false);
+          setLoading(false);
         });
       }
     });
@@ -241,6 +243,7 @@ const Add = (props: AddProps) => {
         Contract.maxLateFee = values.maxLateFee;
         Contract.maxLateFeeUnit = values.maxLateFeeUnit;
         Contract.billUnitId = values.billUnitId;
+        Contract.organizeId = organizeId;
         SaveForm({
           ...Contract,
           ...ContractCharge,
@@ -254,11 +257,11 @@ const Add = (props: AddProps) => {
           // ChargeFeeResult:JSON.stringify(ChargeFeeResult) 
           DepositResult: JSON.stringify(depositData),
           ChargeFeeResult: JSON.stringify(chargeData)
-        }).then(res => {
-          setLoading(false);
+        }).then(res => { 
           message.success('保存成功');
           closeDrawer();
           reload();
+          setLoading(false);
         });
       }
     });
@@ -730,7 +733,7 @@ const Add = (props: AddProps) => {
                           {getFieldDecorator('linkPhone', {
                             rules: [{ required: true, message: '请输入联系电话' }],
                           })(<Input placeholder="请输入联系电话"
-                            disabled={form.getFieldValue('customerId') == '' ? true : false} />)}
+                            disabled={form.getFieldValue('customerId') != '' ? false : true} />)}
                         </Form.Item>
                       </Col>
                     </Row>
@@ -742,7 +745,7 @@ const Add = (props: AddProps) => {
                               rules: [{ required: true, message: '请选择行业' }],
                             })(
                               <Select placeholder="请选择行业"
-                                disabled={form.getFieldValue('customerId') == '' ? true : false}
+                                disabled={form.getFieldValue('customerId') != '' ? false : true}
                               // onSelect={onIndustrySelect}
                               >
                                 {/* {industryType.map(item => (
@@ -769,7 +772,7 @@ const Add = (props: AddProps) => {
                           <Form.Item label="法人" required>
                             {getFieldDecorator('legalPerson', {
                               rules: [{ required: true, message: '请输入法人' }],
-                            })(<Input placeholder="请输入法人" disabled={form.getFieldValue('customerId') == '' ? true : false} />)}
+                            })(<Input placeholder="请输入法人" disabled={form.getFieldValue('customerId') != '' ? false : true} />)}
                           </Form.Item>
                         </Col>
                       </Row>) : null
@@ -779,7 +782,7 @@ const Add = (props: AddProps) => {
                         <Form.Item label="联系地址" required>
                           {getFieldDecorator('address', {
                             rules: [{ required: true, message: '请输入联系地址' }],
-                          })(<Input placeholder="请输入联系地址" disabled={form.getFieldValue('customerId') == '' ? true : false} />)}
+                          })(<Input placeholder="请输入联系地址" disabled={form.getFieldValue('customerId') != '' ? false : true} />)}
                         </Form.Item>
                       </Col>
 

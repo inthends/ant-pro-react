@@ -58,22 +58,28 @@ const Modify = (props: ModifyProps) => {
 
   //打开抽屉时初始化
   useEffect(() => {
+    if (visible) {
 
-    getCommonItems('IndustryType').then(res => {
-      setIndustryType(res || []);
-    });
+      getCommonItems('IndustryType').then(res => {
+        setIndustryType(res || []);
+      });
 
-    //加载关联收费项目
-    // GetAllFeeItems().then(res => {
-    //   setFeeitems(res || []);
-    // });
+      //加载关联收费项目
+      // GetAllFeeItems().then(res => {
+      //   setFeeitems(res || []);
+      // });
 
-    //获取房产树
-    GetOrgTreeSimple().then((res: any[]) => {
-      setTreeData(res || []);
-    });
+      //获取房产树
+      GetOrgTreeSimple().then((res: any[]) => {
+        setTreeData(res || []);
+      });
 
-  }, []);
+      GetUserList('', '员工').then(res => {
+        setUserSource(res || []);
+      });
+
+    }
+  }, [visible]);
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -115,13 +121,13 @@ const Modify = (props: ModifyProps) => {
     }
   }, [visible]);
 
-  const handleSearch = value => {
-    if (value == '')
-      return;
-    GetUserList(value, '员工').then(res => {
-      setUserSource(res || []);
-    })
-  };
+  // const handleSearch = value => {
+  //   if (value == '')
+  //     return;
+  //   GetUserList(value, '员工').then(res => {
+  //     setUserSource(res || []);
+  //   })
+  // };
 
   // const userList = userSource.map(item => <Option key={item.id} value={item.name}>{item.name}</Option>);
 
@@ -137,12 +143,18 @@ const Modify = (props: ModifyProps) => {
     //多个房屋的时候，默认获取第一个房屋作为计费单元
     if (value.length == 0) {
       form.setFieldsValue({ billUnitId: '' });
-      setOrganizeId('');
+      // setOrganizeId('');
+
+      form.setFieldsValue({ organizeId: '' });
+
       setFeeItems([]);
     } else {
       form.setFieldsValue({ billUnitId: value[0] });
       //机构Id
-      setOrganizeId(extra.triggerNode.props.organizeId);
+      // setOrganizeId(extra.triggerNode.props.organizeId);
+
+      form.setFieldsValue({ organizeId: extra.triggerNode.props.organizeId });
+
       //加载房屋费项
       //加载关联收费项目
       GetFeeItemsByUnitId(value[0]).then(res => {
@@ -170,6 +182,7 @@ const Modify = (props: ModifyProps) => {
     form.validateFields((errors, values) => {
       if (!errors) {
         setLoading(true);
+
         //数据处理  
         //租赁条款     
         // let TermJson: HtLeasecontractchargefee[] = [];
@@ -192,7 +205,7 @@ const Modify = (props: ModifyProps) => {
 
         //动态添加的租期
         // values.LeaseTerms.map(function (k, index, arr) {
-        let chargefee: HtLeasecontractchargefee = {};
+        let mychargefee: HtLeasecontractchargefee = {};
         // data.feeItemId = k.feeItemId;
         // data.feeItemName = k.feeItemName;
         // data.startDate = k.startDate;
@@ -207,49 +220,49 @@ const Modify = (props: ModifyProps) => {
         // }
         // data.yearDays = k.yearDays;
         // data.payCycle = k.payCycle;
-        // data.rentalPeriodDivided = k.rentalPeriodDivided; 
+        // data.rentalPeriodDivided = k.rentalPeriodDivided;  
 
-        chargefee.feeItemId = values.feeItemId;
-        chargefee.feeItemName = values.feeItemName;
-        chargefee.startDate = values.startDate;
-        chargefee.endDate = values.endDate;
-        chargefee.price = values.price;
-        chargefee.priceUnit = values.priceUnit;
-        chargefee.advancePayTime = values.advancePayTime;
-        chargefee.advancePayTimeUnit = values.advancePayTimeUnit;
-        chargefee.billType = values.billType;
-        if (chargefee.priceUnit == "元/m²·天" || chargefee.priceUnit == "元/天") {
-          chargefee.dayPriceConvertRule = values.dayPriceConvertRule;
+        mychargefee.feeItemId = values.feeItemId;
+        mychargefee.feeItemName = values.feeItemName;
+        mychargefee.startDate = values.startDate;
+        mychargefee.endDate = values.endDate;
+        mychargefee.price = values.price;
+        mychargefee.priceUnit = values.priceUnit;
+        mychargefee.advancePayTime = values.advancePayTime;
+        mychargefee.advancePayTimeUnit = values.advancePayTimeUnit;
+        mychargefee.billType = values.billType;
+        if (mychargefee.priceUnit == "元/m²·天" || mychargefee.priceUnit == "元/天") {
+          mychargefee.dayPriceConvertRule = values.dayPriceConvertRule;
         }
-        chargefee.yearDays = values.yearDays;
-        chargefee.payCycle = values.payCycle;
-        chargefee.rentalPeriodDivided = values.rentalPeriodDivided;
+        mychargefee.yearDays = values.yearDays;
+        mychargefee.payCycle = values.payCycle;
+        mychargefee.rentalPeriodDivided = values.rentalPeriodDivided;
         //   TermJson.push(data);
         // });
 
         //递增率
         // let RateJson: HtLeasecontractchargeincre[] = [];
         // values.IncreasingRates.map(function (k, index, arr) {
-        let chargeincre: HtLeasecontractchargeincre = {};
-        chargeincre.increType = values.increType;
-        chargeincre.increPrice = values.increPrice;
-        chargeincre.increPriceUnit = values.increPriceUnit;
-        chargeincre.increDeposit = values.increDeposit;
-        chargeincre.increDepositUnit = values.increDepositUnit;
+        let mychargeincre: HtLeasecontractchargeincre = {};
+        mychargeincre.increType = values.increType;
+        mychargeincre.increPrice = values.increPrice;
+        mychargeincre.increPriceUnit = values.increPriceUnit;
+        mychargeincre.increDeposit = values.increDeposit;
+        mychargeincre.increDepositUnit = values.increDepositUnit;
         //   RateJson.push(rate);
         // });
 
         //优惠
         // let RebateJson: HtLeasecontractchargefeeoffer[] = [];
         // values.Rebates.map(function (k, index, arr) {
-        let chargefeeoffer: HtLeasecontractchargefeeoffer = {};
-        chargefeeoffer.rebateType = values.rebateType;
-        chargefeeoffer.startDate = values.rebateStartDate;
-        chargefeeoffer.endDate = values.rebateEndDate;
-        chargefeeoffer.startPeriod = values.startPeriod;
-        chargefeeoffer.periodLength = values.periodLength;
-        chargefeeoffer.discount = values.discount;
-        chargefeeoffer.remark = values.remark;
+        let mychargefeeoffer: HtLeasecontractchargefeeoffer = {};
+        mychargefeeoffer.rebateType = values.rebateType;
+        mychargefeeoffer.rebateStartDate = values.rebateStartDate;
+        mychargefeeoffer.rebateEndDate = values.rebateEndDate;
+        mychargefeeoffer.startPeriod = values.startPeriod;
+        mychargefeeoffer.periodLength = values.periodLength;
+        mychargefeeoffer.discount = values.discount;
+        mychargefeeoffer.remark = values.remark;
         //   RebateJson.push(rebate);
         // });
 
@@ -266,27 +279,28 @@ const Modify = (props: ModifyProps) => {
         entity.payDate = values.contractStartDate.format('YYYY-MM-DD');
 
         // let strTermJson = JSON.stringify(TermJson);
-        setChargefee(chargefee);
+        setChargefee(mychargefee);
         // let strRateJson = JSON.stringify(RateJson);
-        setChargeincre(chargeincre);
+        setChargeincre(mychargeincre);
         // let strRebateJson = JSON.stringify(RebateJson);
-        setChargefeeoffer(chargefeeoffer);
+        setChargefeeoffer(mychargefeeoffer);
 
         GetChargeDetail({
           ...entity,
-          chargefee: chargefee,
-          chargeincre: chargeincre,
-          chargefeeoffer: chargefeeoffer,
+          ...mychargefee,
+          ...mychargeincre,
+          ...mychargefeeoffer,
           BillUnitId: values.billUnitId,//计费单元id
           LeaseContractId: '',
           CalcPrecision: values.calcPrecision,
-          CalcPrecisionMode: values.calcPrecisionMode 
+          CalcPrecisionMode: values.calcPrecisionMode
         }).then(res => {
           setIsCal(true);//计算了租金
           setDepositData(res.depositFeeResultList);//保证金明细
           setChargeData(res.chargeFeeResultList);//租金明细  
           // setDepositResult(res.depositFeeResultList);
           // setChargeFeeResult(res.chargeFeeResultList); 
+
           setLoading(false);
         });
       }
@@ -310,6 +324,9 @@ const Modify = (props: ModifyProps) => {
           message.warning('请生成租金明细！');
           return;
         }
+
+        setLoading(true);
+
         //保存合同数据
         let ContractCharge: HtLeasecontractcharge = {};
         //费用条款-基本条款 
@@ -350,7 +367,7 @@ const Modify = (props: ModifyProps) => {
         Contract.maxLateFee = values.maxLateFee;
         Contract.maxLateFeeUnit = values.maxLateFeeUnit;
         Contract.billUnitId = values.billUnitId;
-        Contract.organizeId = infoDetail.organizeId;
+        Contract.organizeId = values.organizeId;
         SubmitForm({
           ...Contract,
           ...ContractCharge,
@@ -371,8 +388,10 @@ const Modify = (props: ModifyProps) => {
             message.success('提交成功');
             closeDrawer();
             reload();
+            setLoading(false);
           } else {
             message.warning(res.message);
+            setLoading(false);
           }
         });
       }
@@ -392,6 +411,8 @@ const Modify = (props: ModifyProps) => {
           message.warning('请生成租金明细！');
           return;
         }
+
+        setLoading(true);
         //保存合同数据
         let ContractCharge: HtLeasecontractcharge = {};
         //费用条款-基本条款 
@@ -432,7 +453,7 @@ const Modify = (props: ModifyProps) => {
         Contract.maxLateFee = values.maxLateFee;
         Contract.maxLateFeeUnit = values.maxLateFeeUnit;
         Contract.billUnitId = values.billUnitId;
-        Contract.organizeId = infoDetail.organizeId;
+        Contract.organizeId = values.organizeId;
         SaveForm({
           ...Contract,
           ...ContractCharge,
@@ -452,6 +473,7 @@ const Modify = (props: ModifyProps) => {
           message.success('保存成功');
           closeDrawer();
           reload();
+          setLoading(false);
         });
       }
     });
@@ -524,7 +546,7 @@ const Modify = (props: ModifyProps) => {
     }
   };
 
-  const [organizeId, setOrganizeId] = useState<string>('');//所属机构id
+  // const [organizeId, setOrganizeId] = useState<string>('');//所属机构id
   const [userList, setUserList] = useState<any[]>([]);
   const [customerVisible, setCustomerVisible] = useState<boolean>(false);
   const [customer, setCustomer] = useState<any>();
@@ -627,6 +649,7 @@ const Modify = (props: ModifyProps) => {
                           )} */}
 
                           {getFieldDecorator('follower', {
+                            initialValue: infoDetail.follower
                           })(
                             <Select
                               showSearch
@@ -777,6 +800,13 @@ const Modify = (props: ModifyProps) => {
                           })(
                             <input type='hidden' />
                           )}
+
+                          {getFieldDecorator('organizeId', {
+                            initialValue: infoDetail.organizeId
+                          })(
+                            <input type='hidden' />
+                          )}
+
                         </Form.Item>
                       </Col>
                     </Row>
@@ -798,13 +828,17 @@ const Modify = (props: ModifyProps) => {
                             onSearch={customerSearch}
                             placeholder="请输入承租方"
                             onSelect={onCustomerSelect}
-                            disabled={organizeId == '' ? true : false}
+                            disabled={form.getFieldValue('organizeId') == '' ? true : false}
                           />)}
+
                           {getFieldDecorator('customerId', {
-                            initialValue: ''
+                            initialValue: infoDetail.customerId,
                           })(
                             <input type='hidden' />
                           )}
+
+
+
                         </Form.Item>
                       </Col>
 
@@ -895,7 +929,7 @@ const Modify = (props: ModifyProps) => {
 
                       <Col lg={12}>
                         <Form.Item label="签订人" required>
-                          {getFieldDecorator('signer', {
+                          {/* {getFieldDecorator('signer', {
                             initialValue: infoDetail.signer,
                             rules: [{ required: true, message: '请输入签订人' }],
                           })(
@@ -905,7 +939,23 @@ const Modify = (props: ModifyProps) => {
                               placeholder="请输入签订人"
                               onSelect={onSignerSelect}
                             />
+                          )} */}
+
+                          {getFieldDecorator('signer', {
+                            rules: [{ required: true, message: '请选择签订人' }],
+                          })(
+                            <Select
+                              showSearch
+                              placeholder="请选择签订人"
+                              onSelect={onSignerSelect}>
+                              {userSource.map(item => (
+                                <Option key={item.id} value={item.name}>
+                                  {item.name}
+                                </Option>
+                              ))}
+                            </Select>
                           )}
+
                           {getFieldDecorator('signerId', {
                             initialValue: infoDetail.signerId,
                           })(
@@ -1031,7 +1081,7 @@ const Modify = (props: ModifyProps) => {
         modifyVisible={customerVisible}
         closeDrawer={closeCustomerDrawer}
         data={customer}
-        organizeId={organizeId}
+        organizeId={form.getFieldValue('organizeId')}
         // type={type}
         reload={(customerId) => {
           GetCustomerInfo(customerId).then(res => {

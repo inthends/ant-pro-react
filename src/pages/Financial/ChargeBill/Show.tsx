@@ -234,16 +234,14 @@ const Show = (props: ShowProps) => {
                 <Form.Item label="收款日期" >
                   {infoDetail.billDate}
                 </Form.Item>
-              </Col>
-
+              </Col> 
               <Col span={6}>
                 <Form.Item label="收款人"  >
                   {infoDetail.createUserName}
                 </Form.Item>
-              </Col>
-
+              </Col> 
               <Col span={6}>
-                <Form.Item label="付款编号"  >
+                <Form.Item label="付款单号"  >
                   {infoDetail.payCode}
                 </Form.Item>
               </Col>

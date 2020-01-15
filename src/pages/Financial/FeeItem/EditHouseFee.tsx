@@ -735,7 +735,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
             <Card title="账单日设置" className={styles.card2} >
               <Row gutter={8}>
                 <Col span={6}>
-                  <Form.Item label="应收期间 距">
+                  <Form.Item label="应收期间距">
                     {getFieldDecorator('accPeriodBase', {
                       initialValue: infoDetail.accPeriodBase ? infoDetail.accPeriodBase : 2,
                     })(
@@ -771,7 +771,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
               </Row>
               <Row gutter={8}>
                 <Col span={6}>
-                  <Form.Item label="账单日 距">
+                  <Form.Item label="账单日距">
                     {getFieldDecorator('accBillDateBase', {
                       initialValue: infoDetail.accBillDateBase ? infoDetail.accBillDateBase : 2,
                     })(
@@ -816,37 +816,37 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                       initialValue: infoDetail.accBillDateFixed,
                     })(
                       <Select disabled={accFixedDisabled}>
-                        <Option key="1"> 1日</Option>
-                        <Option key="2"> 2日</Option>
-                        <Option key="3"> 3日</Option>
-                        <Option key="4"> 4日</Option>
-                        <Option key="5"> 5日</Option>
-                        <Option key="6"> 6日</Option>
-                        <Option key="7"> 7日</Option>
-                        <Option key="8"> 8日</Option>
-                        <Option key="9"> 9日</Option>
-                        <Option key="10"> 10日</Option>
-                        <Option key="11"> 11日</Option>
-                        <Option key="12"> 12日</Option>
-                        <Option key="13"> 13日</Option>
-                        <Option key="14"> 14日</Option>
-                        <Option key="15"> 15日</Option>
-                        <Option key="16"> 16日</Option>
-                        <Option key="17"> 17日</Option>
-                        <Option key="18"> 18日</Option>
-                        <Option key="19"> 19日</Option>
-                        <Option key="20"> 20日</Option>
-                        <Option key="21"> 21日</Option>
-                        <Option key="22"> 22日</Option>
-                        <Option key="23"> 23日</Option>
-                        <Option key="24"> 24日</Option>
-                        <Option key="25"> 25日</Option>
-                        <Option key="26"> 26日</Option>
-                        <Option key="27"> 27日</Option>
-                        <Option key="28"> 28日</Option>
-                        <Option key="29"> 29日</Option>
-                        <Option key="30"> 30日</Option>
-                        <Option key="31"> 31日</Option>
+                        <Option key="1">1日</Option>
+                        <Option key="2">2日</Option>
+                        <Option key="3">3日</Option>
+                        <Option key="4">4日</Option>
+                        <Option key="5">5日</Option>
+                        <Option key="6">6日</Option>
+                        <Option key="7">7日</Option>
+                        <Option key="8">8日</Option>
+                        <Option key="9">9日</Option>
+                        <Option key="10">10日</Option>
+                        <Option key="11">11日</Option>
+                        <Option key="12">12日</Option>
+                        <Option key="13">13日</Option>
+                        <Option key="14">14日</Option>
+                        <Option key="15">15日</Option>
+                        <Option key="16">16日</Option>
+                        <Option key="17">17日</Option>
+                        <Option key="18">18日</Option>
+                        <Option key="19">19日</Option>
+                        <Option key="20">20日</Option>
+                        <Option key="21">21日</Option>
+                        <Option key="22">22日</Option>
+                        <Option key="23">23日</Option>
+                        <Option key="24">24日</Option>
+                        <Option key="25">25日</Option>
+                        <Option key="26">26日</Option>
+                        <Option key="27">27日</Option>
+                        <Option key="28">28日</Option>
+                        <Option key="29">29日</Option>
+                        <Option key="30">30日</Option>
+                        <Option key="31">31日</Option>
                       </Select>
                     )}
                   </Form.Item>
@@ -854,7 +854,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
               </Row>
               <Row gutter={8}>
                 <Col span={6}>
-                  <Form.Item label="收款截止日 距">
+                  <Form.Item label="收款截止日距">
                     {getFieldDecorator('payDeadlineBase', {
                       initialValue: infoDetail.payDeadlineBase ? infoDetail.payDeadlineBase : 3,
                       rules: [{ required: true, message: '请选择收款截止日' }],
@@ -921,16 +921,16 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                         <Option key="19">19日</Option>
                         <Option key="20">20日</Option>
                         <Option key="21">21日</Option>
-                        <Option key="22"> 22日</Option>
-                        <Option key="23"> 23日</Option>
-                        <Option key="24"> 24日</Option>
-                        <Option key="25"> 25日</Option>
-                        <Option key="26"> 26日</Option>
-                        <Option key="27"> 27日</Option>
-                        <Option key="28"> 28日</Option>
-                        <Option key="29"> 29日</Option>
-                        <Option key="30"> 30日</Option>
-                        <Option key="31"> 31日</Option>
+                        <Option key="22">22日</Option>
+                        <Option key="23">23日</Option>
+                        <Option key="24">24日</Option>
+                        <Option key="25">25日</Option>
+                        <Option key="26">26日</Option>
+                        <Option key="27">27日</Option>
+                        <Option key="28">28日</Option>
+                        <Option key="29">29日</Option>
+                        <Option key="30">30日</Option>
+                        <Option key="31">31日</Option>
                       </Select>
                     )}
                   </Form.Item>

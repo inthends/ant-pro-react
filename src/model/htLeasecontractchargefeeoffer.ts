@@ -27,18 +27,18 @@ export interface HtLeasecontractchargefeeoffer {
      * Desc:  Default:  Nullable:True
      */
     discount?: number;
+   
+
+      /**
+     * Desc:  Default:  Nullable:True
+     */
+    rebateStartDate?: Date;
+
     /**
      * Desc:  Default:  Nullable:True
      */
-    remark?: string;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    endDate?: Date;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    startDate?: Date;
+    rebateEndDate?: Date;
+  
     /**
      * Desc:  Default:  Nullable:False
      */
@@ -75,4 +75,9 @@ export interface HtLeasecontractchargefeeoffer {
      * Desc:  Default:  Nullable:True
      */
     modifyUserName?: string;
+
+     /**
+     * Desc:  Default:  Nullable:True
+     */
+    remark?: string;
 }

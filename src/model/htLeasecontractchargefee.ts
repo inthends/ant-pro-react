@@ -39,6 +39,10 @@ export interface HtLeasecontractchargefee {
      * Desc:  Default:  Nullable:True
      */
     startDate?: Date;
+     /**
+     * Desc:  Default:  Nullable:True
+     */
+    endDate?: Date;
     /**
      * Desc:  Default:  Nullable:True
      */
@@ -67,10 +71,7 @@ export interface HtLeasecontractchargefee {
      * Desc:  Default:  Nullable:True
      */
     modifyUserName?: string;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    endDate?: Date;
+   
     /**
      * Desc:  Default:0  Nullable:True
      */

@@ -65,8 +65,8 @@ const Modify = (props: ModifyProps) => {
         GetFormJson(id).then(res => {
           setCode(1);
 
-          var entity = { ...res.entity, receiveId: res.receiveId, receiveCode: res.receiveCode }; 
-          setInfoDetail(entity); 
+          var entity = { ...res.entity, receiveId: res.receiveId, receiveCode: res.receiveCode };
+          setInfoDetail(entity);
           form.resetFields();
           //分页查询
           const { current: pageIndex, pageSize, total } = pagination;
@@ -212,7 +212,6 @@ const Modify = (props: ModifyProps) => {
           closeDrawer();
           reload();
         });
-
         // }).then(() => {
         //   closeDrawer();
         // });
@@ -253,7 +252,6 @@ const Modify = (props: ModifyProps) => {
   //     });
   //   }
   // };
-
 
   const columns = [
     {
@@ -319,7 +317,7 @@ const Modify = (props: ModifyProps) => {
       width: '100px',
     },
     {
-      title: '备注', 
+      title: '备注',
       dataIndex: 'memo',
       key: 'memo'
     },
@@ -368,7 +366,6 @@ const Modify = (props: ModifyProps) => {
       }
     })
   };
-
 
   //选择减免费项
   // const onFeeItemSelect = (value, option) => {
@@ -420,6 +417,16 @@ const Modify = (props: ModifyProps) => {
   //选择优惠政策
   const change = (value, option) => {
     form.setFieldsValue({ rebateName: option.props.children });
+  };
+
+   //起始日期控制
+   const disabledStartDate = (current) => {
+    return current < moment(form.getFieldValue('endDate'));
+  };
+
+   //结束日期控制
+   const disabledEndDate = (current) => {
+    return current < moment(form.getFieldValue('beginDate'));
   };
 
   return (
@@ -494,7 +501,8 @@ const Modify = (props: ModifyProps) => {
                     moment(new Date(infoDetail.beginDate)),
                   rules: [{ required: true, message: '请选择优惠开始日期' }]
                 })(
-                  <DatePicker placeholder="请选择优惠开始日期" style={{ width: '100%' }} />
+                  <DatePicker placeholder="请选择优惠开始日期" style={{ width: '100%' }}  
+                  disabledDate={disabledStartDate} />
                 )}
               </Form.Item>
             </Col>
@@ -505,7 +513,7 @@ const Modify = (props: ModifyProps) => {
                     moment(new Date(infoDetail.endDate)),
                   rules: [{ required: true, message: '请选择优惠结束日期' }]
                 })(
-                  <DatePicker placeholder="请选择优惠结束日期" style={{ width: '100%' }} />
+                  <DatePicker placeholder="请选择优惠结束日期" style={{ width: '100%' }} disabledDate={disabledEndDate} />
                 )}
               </Form.Item></Col>
           </Row>
