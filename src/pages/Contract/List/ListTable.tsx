@@ -27,10 +27,10 @@ function ListTable(props: ListTableProps) {
   const doDelete = record => {
     Modal.confirm({
       title: '请确认',
-      content: `您是否要作废${record.name}？`,
+      content: `您是否要删除${record.no}？`,
       onOk: () => {
         RemoveForm(record.id).then(() => {
-          message.success('作废成功');
+          message.success('删除成功');
           reload();
         });
       },
@@ -94,20 +94,6 @@ function ListTable(props: ListTableProps) {
     },
 
     {
-      title: '租客',
-      dataIndex: 'customer',
-      key: 'customer',
-      width: 120,
-    },
-
-    {
-      title: '开始日',
-      dataIndex: 'billingDate',
-      key: 'billingDate',
-      width: 100,
-      render: val => moment(val).format('YYYY-MM-DD')
-    },
-    {
       title: '合同状态',
       dataIndex: 'status',
       align: 'center',
@@ -140,19 +126,12 @@ function ListTable(props: ListTableProps) {
         }
       }
     },
-    {
-      title: '退租日',
-      dataIndex: 'contractEndDate',
-      key: 'contractEndDate',
-      width: 100,
-      render: val => moment(val).format('YYYY-MM-DD')
-    },
 
     {
-      title: '总计租金',
-      dataIndex: 'leaseAmount',
-      key: 'leaseAmount',
-      width: 100,
+      title: '租客',
+      dataIndex: 'customer',
+      key: 'customer',
+      width: 120,
     },
 
     {
@@ -164,12 +143,35 @@ function ListTable(props: ListTableProps) {
     },
 
     {
-      title: '租赁数(㎡)',
+      title: '开始日',
+      dataIndex: 'billingDate',
+      key: 'billingDate',
+      width: 100,
+      render: val => moment(val).format('YYYY-MM-DD')
+    },
+
+    {
+      title: '退租日',
+      dataIndex: 'contractEndDate',
+      key: 'contractEndDate',
+      width: 100,
+      render: val => moment(val).format('YYYY-MM-DD')
+    },
+
+    {
+      title: '租赁数/㎡',
       dataIndex: 'leaseSize',
       key: 'leaseSize',
       width: 100,
     },
 
+    {
+      title: '总计租金',
+      dataIndex: 'leaseAmount',
+      key: 'leaseAmount',
+      width: 100,
+    },
+ 
     {
       title: '保证金',
       dataIndex: 'leaseDeposit',
@@ -177,7 +179,7 @@ function ListTable(props: ListTableProps) {
       width: 100,
     },
     {
-      title: '租赁条款单价',
+      title: '合同基础单价',
       dataIndex: 'leasePrice',
       key: 'leasePrice',
       width: 100,

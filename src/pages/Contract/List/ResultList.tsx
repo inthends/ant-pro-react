@@ -79,6 +79,7 @@ function ResultList(props: ResultListProps) {
           size="middle"
           columns={columns}
           dataSource={chargeData}
+          
         />
       </Card>
     </div>

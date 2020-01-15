@@ -65,9 +65,9 @@ export interface LeaseContractDTO {
    */
   customer?: string;
 
-   /**
-   * 行业
-   */
+  /**
+  * 行业
+  */
   industry?: string;
 
   /**
@@ -153,5 +153,5 @@ export interface LeaseContractDTO {
   /**
  * 备注
  */
-  memo;
+  memo?: string;
 }

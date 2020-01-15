@@ -1,5 +1,5 @@
 
-import { AutoComplete, Spin, message, InputNumber, TreeSelect, Tabs, Select, Button, Card, Col, DatePicker, Drawer, Form, Input, Row } from 'antd';
+import { Upload, Icon, AutoComplete, Spin, message, InputNumber, TreeSelect, Tabs, Select, Button, Card, Col, DatePicker, Drawer, Form, Input, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { TreeEntity, HtLeasecontractcharge, HtLeasecontractchargefee, HtLeasecontractchargefeeoffer, HtLeasecontractchargeincre, HtChargefeeresult, LeaseContractDTO } from '@/model/models';
 import React, { useEffect, useState } from 'react';
@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react';
 import ResultList from './ResultList';
 import moment from 'moment';
 import { getCommonItems, GetUserList } from '@/services/commonItem';
-import { SaveForm, GetFeeItemsByUnitId, GetChargeDetail } from './Main.service';
+import { RemoveFile, SaveForm, GetFeeItemsByUnitId, GetChargeDetail } from './Main.service';
 import { GetOrgTreeSimple, GetAsynChildBuildingsSimple } from '@/services/commonItem';
 import styles from './style.less';
 import { GetCustomerInfo, CheckContractCustomer, GetContractCustomerList } from '../../Resource/PStructUser/PStructUser.service';
@@ -243,6 +243,7 @@ const Add = (props: AddProps) => {
         Contract.maxLateFeeUnit = values.maxLateFeeUnit;
         Contract.billUnitId = values.billUnitId;
         Contract.organizeId = organizeId;
+        Contract.memo = values.memo;
         SaveForm({
           ...Contract,
           ...ContractCharge,
@@ -476,6 +477,24 @@ const Add = (props: AddProps) => {
     form.setFieldsValue({ feeItemName: option.props.children });
   };
 
+
+  //附件上传
+  const [fileList, setFileList] = useState<any[]>([]);
+  // const uploadButton = (
+  //   <div>
+  //     <Icon type="plus" />
+  //     <div className="ant-upload-text">点击上传附件</div>
+  //   </div>
+  // );
+
+  //重新设置state
+  const handleChange = ({ fileList }) => setFileList([...fileList]);
+  const handleRemove = (file) => {
+    const fileid = file.fileid || file.response.fileid;
+    RemoveFile(fileid).then(res => {
+    });
+  };
+
   return (
     <Drawer
       title={title}
@@ -643,7 +662,7 @@ const Add = (props: AddProps) => {
                   <Card title="租赁信息" className={styles.addcard}>
                     <Row gutter={24}>
                       <Col lg={24}>
-                        <Form.Item label="房源选择" required>
+                        <Form.Item label={<div>房源选择(<a>多个房屋的时候，默认获取第一个房屋作为计费单元</a>)</div>} required>
                           {getFieldDecorator('room', {
                             rules: [{ required: true, message: '请选择房源' }],
                           })(
@@ -658,7 +677,7 @@ const Add = (props: AddProps) => {
                               multiple={true}>
                             </TreeSelect>
                           )}
-                          <span style={{ marginLeft: 8, color: "blue" }}>多个房屋的时候，默认获取第一个房屋作为计费单元</span>
+                          {/* <span style={{ marginLeft: 8, color: "blue" }}>多个房屋的时候，默认获取第一个房屋作为计费单元</span> */}
                           {getFieldDecorator('billUnitId', {
                           })(
                             <input type='hidden' />
@@ -705,7 +724,6 @@ const Add = (props: AddProps) => {
                     </Row>
 
                     <Row gutter={24}>
-
                       <Col lg={12}>
                         <Form.Item label="签订人" required>
                           {/* {getFieldDecorator('signer', {
@@ -1026,7 +1044,6 @@ const Add = (props: AddProps) => {
                   </Col>
                 </Row>
               </Card>
-
               <Card title="递增率" className={styles.card} >
                 <Row gutter={24}>
                   <Col lg={6}>
@@ -1091,7 +1108,6 @@ const Add = (props: AddProps) => {
                   </Col>
                 </Row>
               </Card>
-
               <Card title="优惠" className={styles.card} >
                 <Row gutter={24}>
                   <Col lg={5}>
@@ -1108,7 +1124,6 @@ const Add = (props: AddProps) => {
                       </Select>)}
                     </Form.Item>
                   </Col>
-
                   <Col lg={5}>
                     <Form.Item label="开始时间" >
                       {getFieldDecorator('rebateStartDate', {
@@ -1165,6 +1180,40 @@ const Add = (props: AddProps) => {
                 chargeData={chargeData}
                 className={styles.addcard}
               ></ResultList>
+            </TabPane>
+
+            <TabPane tab="其他条款" key="3">
+              <Row gutter={24}>
+                <Col lg={24}>
+                  <Form.Item label="&nbsp;">
+                    {getFieldDecorator('memo', {
+                    })(
+                      <TextArea rows={10} placeholder="请输入" />
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row>
+
+              <Row gutter={24}>
+                <Col lg={24}>
+                  <div className="clearfix">
+                    <Upload
+                      // accept='.doc,.docx,.pdf,image/*'
+                      action={process.env.basePath + '/Contract/Upload'}
+                      fileList={fileList}
+                      listType='picture'
+                      onChange={handleChange}
+                      onRemove={handleRemove}>
+                      {/* {uploadButton} */}
+
+                      <Button>
+                        <Icon type="upload" />上传附件
+                      </Button>
+
+                    </Upload>
+                  </div>
+                </Col>
+              </Row>
             </TabPane>
           </Tabs>
         </Spin>

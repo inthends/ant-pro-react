@@ -1,9 +1,12 @@
-import { Tag, Spin, Divider, PageHeader, AutoComplete, InputNumber, TreeSelect, message, Tabs, Select, Button, Card, Col, DatePicker, Drawer, Form, Input, Row } from 'antd';
+import { Tooltip, Upload, Icon, Tag, Spin, Divider, PageHeader, AutoComplete, InputNumber, TreeSelect, message, Tabs, Select, Button, Card, Col, DatePicker, Drawer, Form, Input, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { TreeEntity, HtLeasecontractcharge, HtLeasecontractchargefee, HtLeasecontractchargeincre, HtLeasecontractchargefeeoffer, LeaseContractDTO, ChargeDetailDTO } from '@/model/models';
 import React, { useEffect, useState } from 'react';
 import ResultList from './ResultList';
-import { SubmitForm, SaveForm, GetFeeItemsByUnitId, GetCharge, GetFormJson, GetChargeDetail } from './Main.service';
+import {
+  RemoveFile, GetFilesData, SubmitForm, SaveForm, GetFeeItemsByUnitId,
+  GetCharge, GetContractInfo, GetModifyChargeDetail, GetFollowCount
+} from './Main.service';
 import { GetOrgTreeSimple, GetAsynChildBuildingsSimple, getCommonItems, GetUserList } from '@/services/commonItem';
 import { GetCustomerInfo, CheckContractCustomer, GetContractCustomerList } from '../../Resource/PStructUser/PStructUser.service';
 import moment from 'moment';
@@ -12,8 +15,10 @@ import LeaseTermModify from './LeaseTermModify';
 import IncreasingRateModify from './IncreasingRateModify';
 import RebateModify from './RebateModify';
 import QuickModify from '../../Resource/PStructUser/QuickModify';
+import Follow from './Follow';
 const { Option } = Select;
 const { TabPane } = Tabs;
+const { TextArea } = Input;
 
 interface ModifyProps {
   visible: boolean;
@@ -86,7 +91,7 @@ const Modify = (props: ModifyProps) => {
     if (visible) {
       if (id) {
         setLoading(true);
-        GetFormJson(id).then((tempInfo: LeaseContractDTO) => {
+        GetContractInfo(id).then((tempInfo) => {
           //处理一下房间
           let rooms: any[] = [];
           if (tempInfo != null && tempInfo.houseList != null) {
@@ -96,11 +101,14 @@ const Modify = (props: ModifyProps) => {
             setRooms(rooms);
           }
 
-          GetFeeItemsByUnitId(tempInfo.billUnitId).then(res => {
+          //加载费项
+          GetFeeItemsByUnitId(tempInfo.contract.billUnitId).then(res => {
             setFeeItems(res || []);
           });
 
-          setInfoDetail(tempInfo);
+          setInfoDetail(tempInfo.contract);
+          setCount(tempInfo.followCount);
+
           //获取条款
           GetCharge(chargeId).then((charge: ChargeDetailDTO) => {
             setContractCharge(charge.contractCharge || {});
@@ -109,12 +117,22 @@ const Modify = (props: ModifyProps) => {
             setChargefeeoffer(charge.chargeFeeOffer || {});
             setDepositData(charge.depositFeeResultList || []);//保证金明细
             setChargeData(charge.chargeFeeResultList || []);//租金明细    
-          })
+          });
+
+          //附件
+          GetFilesData(id).then(res => {
+            setFileList(res || []);
+          });
+
+          //合计信息
+          setTotalInfo({ leasePrice: tempInfo.leasePrice, totalDeposit: tempInfo.totalDeposit, totalAmount: tempInfo.totalAmount });
+
           form.resetFields();
           setLoading(false);
         });
       } else {
         form.resetFields();
+        setFileList([]);
       }
     } else {
       form.setFieldsValue({});
@@ -287,7 +305,7 @@ const Modify = (props: ModifyProps) => {
         // let strRebateJson = JSON.stringify(RebateJson);
         setChargefeeoffer(mychargefeeoffer);
 
-        GetChargeDetail({
+        GetModifyChargeDetail({
           ...entity,
           ...mychargefee,
           ...mychargeincre,
@@ -296,12 +314,14 @@ const Modify = (props: ModifyProps) => {
           LeaseContractId: '',
           CalcPrecision: values.calcPrecision,
           CalcPrecisionMode: values.calcPrecisionMode
-        }).then(res => {
+        }).then(tempInfo => {
           setIsCal(true);//计算了租金
-          setDepositData(res.depositFeeResultList);//保证金明细
-          setChargeData(res.chargeFeeResultList);//租金明细  
+          setDepositData(tempInfo.dataInfo.depositFeeResultList);//保证金明细
+          setChargeData(tempInfo.dataInfo.chargeFeeResultList);//租金明细  
           // setDepositResult(res.depositFeeResultList);
-          // setChargeFeeResult(res.chargeFeeResultList); 
+          // setChargeFeeResult(res.chargeFeeResultList);  
+          //合计信息
+          setTotalInfo({ leasePrice: tempInfo.leasePrice, totalDeposit: tempInfo.totalDeposit, totalAmount: tempInfo.totalAmount });
 
           setLoading(false);
         });
@@ -370,6 +390,7 @@ const Modify = (props: ModifyProps) => {
         Contract.maxLateFeeUnit = values.maxLateFeeUnit;
         Contract.billUnitId = values.billUnitId;
         Contract.organizeId = values.organizeId;
+        Contract.memo = values.memo;
         SubmitForm({
           ...Contract,
           ...ContractCharge,
@@ -456,6 +477,7 @@ const Modify = (props: ModifyProps) => {
         Contract.maxLateFeeUnit = values.maxLateFeeUnit;
         Contract.billUnitId = values.billUnitId;
         Contract.organizeId = values.organizeId;
+        Contract.memo = values.memo;
         SaveForm({
           ...Contract,
           ...ContractCharge,
@@ -606,6 +628,36 @@ const Modify = (props: ModifyProps) => {
     })
   };
 
+
+  //附件上传
+  const [fileList, setFileList] = useState<any[]>([]);
+  // const uploadButton = (
+  //   <div>
+  //     <Icon type="plus" />
+  //     <div className="ant-upload-text">点击上传附件</div>
+  //   </div>
+  // );
+
+  //重新设置state
+  const handleChange = ({ fileList }) => setFileList([...fileList]);
+  const handleRemove = (file) => {
+    const fileid = file.fileid || file.response.fileid;
+    RemoveFile(fileid).then(res => {
+    });
+  };
+
+
+  //跟进 
+  const [totalInfo, setTotalInfo] = useState<any>({});//合计信息
+  const [followVisible, setFollowVisible] = useState<boolean>(false);
+  const [count, setCount] = useState<string>('0');
+  const showFollowDrawer = () => {
+    setFollowVisible(true);
+  };
+  const closeFollowDrawer = () => {
+    setFollowVisible(false);
+  };
+
   return (
     <Drawer
       title={title}
@@ -614,12 +666,66 @@ const Modify = (props: ModifyProps) => {
       onClose={closeDrawer}
       visible={visible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
-      <PageHeader title={GetStatus(infoDetail.status)}
+      <PageHeader
+        title={null}
+        subTitle={
+          <div>
+            <label style={{ color: '#4494f0', fontSize: '24px' }}>{infoDetail.customer}</label>
+          </div>
+        }
+        //title={GetStatus(infoDetail.status)}
+        style={{
+          border: '1px solid rgb(235, 237, 240)'
+        }}
+        extra={[
+          <Tooltip title='跟进人'>
+            <Button key="1" icon="user"> {infoDetail.follower}</Button>
+          </Tooltip>,
+          // <Button key="2" icon="edit" onClick={() => modify(id)}>编辑</Button>,
+          <Button key="2" icon="message" onClick={showFollowDrawer} >跟进({count})</Button>
+        ]}
       // extra={[
       //   <Button key="1">附件</Button>, 
       //   <Button key="2">打印</Button>,
       // ]}
-      />
+      >
+        <Divider dashed />
+        <Form layout='vertical'>
+          <Row gutter={24}>
+            <Col lg={4}>
+              <Form.Item label="合同状态" >
+                {GetStatus(infoDetail.status)}
+              </Form.Item>
+            </Col>
+            <Col lg={4}>
+              <Form.Item label="合同基础单价" >
+                {totalInfo.leasePrice}
+              </Form.Item>
+            </Col>
+            <Col lg={4}>
+              <Form.Item label="租金合计" >
+                {totalInfo.totalAmount}
+              </Form.Item>
+            </Col>
+            <Col lg={4}>
+              <Form.Item label="保证金" >
+                {totalInfo.totalDeposit}
+              </Form.Item>
+            </Col>
+            <Col lg={4}>
+              <Form.Item label="联系人" >
+                {form.getFieldValue('linkMan')}
+              </Form.Item>
+            </Col>
+            <Col lg={4}>
+              <Form.Item label="联系电话" >
+                {form.getFieldValue('linkPhone')}
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
+      </PageHeader>
+
       <Divider dashed />
       <Form layout="vertical" hideRequiredMark>
         <Spin tip="数据处理中..." spinning={loading}>
@@ -633,8 +739,8 @@ const Modify = (props: ModifyProps) => {
                         <Form.Item label="合同编号" required>
                           {getFieldDecorator('no', {
                             initialValue: infoDetail.no,
-                            rules: [{ required: true, message: '未选择模版时，请输入编号' }],
-                          })(<Input placeholder="如不填写系统将自动生成" />)}
+                            rules: [{ required: true, message: '请输入合同编号' }],
+                          })(<Input placeholder="请输入合同编号" />)}
                         </Form.Item>
                       </Col>
                       <Col lg={12}>
@@ -837,11 +943,9 @@ const Modify = (props: ModifyProps) => {
                           })(
                             <input type='hidden' />
                           )}
-
                         </Form.Item>
                       </Col>
                     </Row>
-
                     <Row gutter={24}>
                       <Col lg={12}>
                         <Form.Item label="签订人" required>
@@ -856,8 +960,8 @@ const Modify = (props: ModifyProps) => {
                               onSelect={onSignerSelect}
                             />
                           )} */}
-
                           {getFieldDecorator('signer', {
+                            initialValue: infoDetail.signer,
                             rules: [{ required: true, message: '请选择签订人' }],
                           })(
                             <Select
@@ -871,7 +975,6 @@ const Modify = (props: ModifyProps) => {
                               ))}
                             </Select>
                           )}
-
                           {getFieldDecorator('signerId', {
                             initialValue: infoDetail.signerId,
                           })(
@@ -932,7 +1035,6 @@ const Modify = (props: ModifyProps) => {
                           </Form.Item>
                         </Col>
                       </Row>) : null}
-
                     <Row gutter={24}>
                       <Col lg={12}>
                         <Form.Item label="联系人">
@@ -965,8 +1067,6 @@ const Modify = (props: ModifyProps) => {
                           })(<Input placeholder="请输入联系地址" disabled={form.getFieldValue('customerId') == '' ? true : false} />)}
                         </Form.Item>
                       </Col>
-
-
                     </Row>
                   </Card>
                 </Col>
@@ -1054,6 +1154,40 @@ const Modify = (props: ModifyProps) => {
                 className={styles.addcard}
               ></ResultList>
             </TabPane>
+            <TabPane tab="其他条款" key="3">
+              <div style={{ marginBottom: '50px' }}>
+                <Row gutter={24}>
+                  <Col lg={24}>
+                    <Form.Item label="&nbsp;">
+                      {getFieldDecorator('memo', {
+                        initialValue: infoDetail.memo,
+                      })(
+                        <TextArea rows={10} placeholder="请输入" />
+                      )}
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={24}>
+                  <Col lg={24}>
+                    <div className="clearfix">
+                      <Upload
+                        //accept='.doc,.docx,.pdf,image/*'
+                        action={process.env.basePath + '/Contract/Upload?keyValue=' + id}
+                        fileList={fileList}
+                        //listType="picture-card"
+                        listType='picture'
+                        onChange={handleChange}
+                        onRemove={handleRemove}>
+                        {/* {uploadButton} */}
+                        <Button>
+                          <Icon type="upload" />上传附件
+                      </Button>
+                      </Upload>
+                    </div>
+                  </Col>
+                </Row>
+              </div>
+            </TabPane>
           </Tabs>
         </Spin>
       </Form>
@@ -1099,7 +1233,20 @@ const Modify = (props: ModifyProps) => {
         }
       />
 
-    </Drawer>
+      <Follow
+        visible={followVisible}
+        closeDrawer={closeFollowDrawer}
+        id={id}
+        reload={() => {
+          GetFollowCount(id).then(res => {
+            setCount(res);
+            // setNewFlow(res.newFollow);
+            setLoading(false);
+          })
+        }}
+      />
+
+    </Drawer >
   );
 };
 

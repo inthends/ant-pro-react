@@ -19,7 +19,7 @@ const Detail = (props: DetailProps) => {
   const title = '客户详情';
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [house, setHouse] = useState<any[]>([]);
-  const [followVisible, setFollowVisible] = useState<boolean>(false);//修改 
+  const [followVisible, setFollowVisible] = useState<boolean>(false);
   const [count, setCount] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   //最新跟进
@@ -39,8 +39,8 @@ const Detail = (props: DetailProps) => {
         setLoading(true);
         GetFormJson(id).then((res) => {
           setInfoDetail(res.data);
-          setHouse(res.houseList || []);
-          setCount(res.followCount);
+          setHouse(res.houseList || []);//意向房源
+          setCount(res.followCount);//跟进
           setNewFlow(res.newFollow);
           form.resetFields();
           setLoading(false);

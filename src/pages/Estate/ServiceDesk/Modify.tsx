@@ -456,7 +456,7 @@ const Modify = (props: ModifyProps) => {
                   </Row>
                 </Card>
               ) :
-                <Card className={infoDetail.status == 2 ? styles.card2 : styles.card} title="基础信息" >
+                (<Card className={infoDetail.status == 2 ? styles.card2 : styles.card} title="基础信息" >
                   <Row gutter={24}>
                     <Col lg={4}>
                       <Form.Item label="单据来源"  >
@@ -539,6 +539,7 @@ const Modify = (props: ModifyProps) => {
                         // onChange={handleChange}
                         // onRemove={handleRemove}
                         >
+                          {/* 只能查看 */}
                           {/* {fileList.length > 1 ? null : uploadButton} */}
                         </Upload>
                         <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
@@ -546,10 +547,8 @@ const Modify = (props: ModifyProps) => {
                         </Modal>
                       </div>
                     </Col>
-                  </Row>
-
-
-                </Card>
+                  </Row> 
+                </Card>)
               }
 
               {infoDetail.status == 3 ? (

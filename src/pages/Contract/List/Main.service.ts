@@ -1,4 +1,4 @@
-import { ChargeDetailDTO, TreeEntity, LeaseContractDTO } from '@/model/models';
+import { ChargeDetailDTO, TreeEntity } from '@/model/models';
 import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
 
@@ -28,13 +28,19 @@ export function GetFeeItemsByUnitId(unitId): Promise<TreeEntity[]> {
     .then(getResult as any);
 }
 
-// 计算费用明细
+// 新增页面计算费用明细
 export function GetChargeDetail(data): Promise<any> {
   return request
     .post(process.env.basePath + `/Contract/GetChargeDetail`, { data: objToFormdata(data) })
     .then(getResult as any);
 }
 
+//编辑页面计算费用明细
+export function GetModifyChargeDetail(data): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Contract/GetModifyChargeDetail`, { data: objToFormdata(data) })
+    .then(getResult as any);
+}
 
 // 保存合同
 export function SaveForm(data): Promise<any> {
@@ -51,9 +57,16 @@ export function SubmitForm(data): Promise<any> {
 }
 
 // 获取合同信息
-export function GetFormJson(keyValue): Promise<LeaseContractDTO> {
+// export function GetContractInfo(keyValue): Promise<LeaseContractDTO> {
+//   return request
+//     .get(process.env.basePath + `/Contract/GetContractInfo?keyValue=${keyValue}`)
+//     .then(getResult as any);
+// }
+
+//获取合同信息
+export function GetContractInfo(keyValue): Promise<any> {
   return request
-    .get(process.env.basePath + `/Contract/GetFormJson?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/Contract/GetContractInfo?keyValue=${keyValue}`)
     .then(getResult as any);
 }
 
@@ -95,5 +108,39 @@ export function GetUserList(DepartmentId): Promise<any> {
 export function WithdrawalForm(data): Promise<any> {
   return request
     .post(process.env.basePath + `/Contract/WithdrawalForm`, { data: objToFormdata(data) })
+    .then(getResult as any);
+}
+
+//删除附件
+export function RemoveFile(keyValue): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Contract/RemoveFile?keyValue=${keyValue}`, {})
+    .then(getResult as any);
+}
+
+//获取附件
+export function GetFilesData(keyValue): Promise<any> {
+  return request
+    .get(process.env.basePath + `/Contract/GetFilesData?keyValue=${keyValue}`)
+    .then(getResult as any);
+}
+
+//刷新跟进
+export function GetFollowCount(keyValue): Promise<any> {
+  return request
+    .get(process.env.basePath + `/Contract/GetFollowCount?keyValue=${keyValue}`)
+    .then(getResult as any);
+}
+
+// 提交跟进
+export function SaveFollow(data): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Contract/SaveFollow`, { data: objToFormdata(data) })
+    .then(getResult as any);
+}
+
+export function GetFollow(keyValue): Promise<any> {
+  return request
+    .get(process.env.basePath + `/Contract/GetFollow?keyValue=${keyValue}`)
     .then(getResult as any);
 }
