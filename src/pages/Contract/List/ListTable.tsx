@@ -62,7 +62,7 @@ function ListTable(props: ListTableProps) {
           <Menu.Item key="invalid">作废</Menu.Item>
         </Menu>}>
       <a>
-        操作<Icon type="down" />
+        操作<Icon type="down" key='down' />
       </a>
     </Dropdown>
   );
@@ -238,7 +238,7 @@ function ListTable(props: ListTableProps) {
             // <Button type="danger" key="delete" onClick={() => doDelete(record)}>
             //   删除
             // </Button>, 
-            <span>
+            <span key='span'>
               <a onClick={() => modify(record.id, record.chargeId)} key="modify">修改</a>
               <Divider type="vertical" key='spilt1' />
               <a onClick={() => detail(record.id, record.chargeId)} key="detail">查看</a>
@@ -249,7 +249,7 @@ function ListTable(props: ListTableProps) {
         } else if (record.status == 1 || record.status == 4) {
           //新建提交和退租待审核
           return [
-            <span>
+            <span key='span'>
               {/* <a onClick={() => approve(record.id, record.chargeId)} key="modify">审核</a>
               <Divider type="vertical" key='spilt1' /> */}
               <a onClick={() => detail(record.id, record.chargeId)} key="detail">查看</a>
@@ -257,7 +257,7 @@ function ListTable(props: ListTableProps) {
           ];
         } else {
           return [
-            <span>
+            <span key='span'>
               {/* <a onClick={() => change(record.id, record.chargeId)} key="change">变更</a> */}
               <a onClick={() => detail(record.id, record.chargeId)} key="detail">查看</a>
               <Divider type="vertical" key='spilt1' />

@@ -150,4 +150,8 @@ export interface LeaseContractDTO {
  */
   preContractId?: string;
 
+  /**
+ * 备注
+ */
+  memo;
 }

@@ -224,8 +224,8 @@ const Modify = (props: ModifyProps) => {
 
         mychargefee.feeItemId = values.feeItemId;
         mychargefee.feeItemName = values.feeItemName;
-        mychargefee.startDate = values.startDate;
-        mychargefee.endDate = values.endDate;
+        mychargefee.startDate = values.startDate.format('YYYY-MM-DD');;
+        mychargefee.endDate = values.endDate.format('YYYY-MM-DD');;
         mychargefee.price = values.price;
         mychargefee.priceUnit = values.priceUnit;
         mychargefee.advancePayTime = values.advancePayTime;
@@ -257,8 +257,10 @@ const Modify = (props: ModifyProps) => {
         // values.Rebates.map(function (k, index, arr) {
         let mychargefeeoffer: HtLeasecontractchargefeeoffer = {};
         mychargefeeoffer.rebateType = values.rebateType;
-        mychargefeeoffer.rebateStartDate = values.rebateStartDate;
-        mychargefeeoffer.rebateEndDate = values.rebateEndDate;
+        if (values.rebateStartDate != '')
+          mychargefeeoffer.rebateStartDate = values.rebateStartDate.format('YYYY-MM-DD');
+        if (values.rebateEndDate != '')
+          mychargefeeoffer.rebateEndDate = values.rebateEndDate.format('YYYY-MM-DD');
         mychargefeeoffer.startPeriod = values.startPeriod;
         mychargefeeoffer.periodLength = values.periodLength;
         mychargefeeoffer.discount = values.discount;
@@ -371,9 +373,9 @@ const Modify = (props: ModifyProps) => {
         SubmitForm({
           ...Contract,
           ...ContractCharge,
-          chargefee: chargefee,
-          chargeincre: chargeincre,
-          chargefeeoffer: chargefeeoffer,
+          ...chargefee,
+          ...chargeincre,
+          ...chargefeeoffer,
           keyValue: id,
           ChargeId: chargeId,
           room: values.room,
@@ -457,9 +459,9 @@ const Modify = (props: ModifyProps) => {
         SaveForm({
           ...Contract,
           ...ContractCharge,
-          chargefee: chargefee,
-          chargeincre: chargeincre,
-          chargefeeoffer: chargefeeoffer,
+          ...chargefee,
+          ...chargeincre,
+          ...chargefeeoffer,
           keyValue: id,
           ChargeId: chargeId,
           room: values.room,
@@ -778,7 +780,7 @@ const Modify = (props: ModifyProps) => {
                   <Card title="租赁信息" className={styles.addcard}>
                     <Row gutter={24}>
                       <Col lg={24}>
-                        <Form.Item label="房源选择" required>
+                        <Form.Item label={<div>房源选择(<a>多个房屋的时候，默认获取第一个房屋作为计费单元</a>)</div>} required>
                           {getFieldDecorator('room', {
                             initialValue: rooms,
                             rules: [{ required: true, message: '请选择房源' }],
@@ -794,7 +796,6 @@ const Modify = (props: ModifyProps) => {
                               multiple={true}>
                             </TreeSelect>
                           )}
-                          <span style={{ marginLeft: 8, color: "blue" }}>多个房屋的时候，默认获取第一个房屋作为计费单元</span>
                           {getFieldDecorator('billUnitId', {
                             initialValue: infoDetail.billUnitId
                           })(
@@ -811,7 +812,7 @@ const Modify = (props: ModifyProps) => {
                       </Col>
                     </Row>
                     <Row gutter={24}>
-                      <Col lg={12}>
+                      <Col lg={24}>
                         <Form.Item label="承租方" required>
                           {getFieldDecorator('customer', {
                             initialValue: infoDetail.customer,
@@ -837,8 +838,45 @@ const Modify = (props: ModifyProps) => {
                             <input type='hidden' />
                           )}
 
+                        </Form.Item>
+                      </Col>
+                    </Row>
 
+                    <Row gutter={24}>
+                      <Col lg={12}>
+                        <Form.Item label="签订人" required>
+                          {/* {getFieldDecorator('signer', {
+                            initialValue: infoDetail.signer,
+                            rules: [{ required: true, message: '请输入签订人' }],
+                          })(
+                            <AutoComplete
+                              dataSource={userList}
+                              onSearch={handleSearch}
+                              placeholder="请输入签订人"
+                              onSelect={onSignerSelect}
+                            />
+                          )} */}
 
+                          {getFieldDecorator('signer', {
+                            rules: [{ required: true, message: '请选择签订人' }],
+                          })(
+                            <Select
+                              showSearch
+                              placeholder="请选择签订人"
+                              onSelect={onSignerSelect}>
+                              {userSource.map(item => (
+                                <Option key={item.id} value={item.name}>
+                                  {item.name}
+                                </Option>
+                              ))}
+                            </Select>
+                          )}
+
+                          {getFieldDecorator('signerId', {
+                            initialValue: infoDetail.signerId,
+                          })(
+                            <input type='hidden' />
+                          )}
                         </Form.Item>
                       </Col>
 
@@ -857,28 +895,6 @@ const Modify = (props: ModifyProps) => {
                       </Col>
                     </Row>
 
-                    <Row gutter={24}>
-                      <Col lg={12}>
-                        <Form.Item label="联系人">
-                          {getFieldDecorator('linkMan', {
-                            initialValue: infoDetail.linkMan,
-                            rules: [{ required: true, message: '请输入联系人' }],
-                          })(<Input placeholder="请输入联系人"
-                            disabled={form.getFieldValue('customerId') == '' ? true : false}
-                          />)}
-                        </Form.Item>
-                      </Col>
-
-                      <Col lg={12}>
-                        <Form.Item label="联系电话">
-                          {getFieldDecorator('linkPhone', {
-                            initialValue: infoDetail.linkPhone,
-                            rules: [{ required: true, message: '请输入联系电话' }],
-                          })(<Input placeholder="请输入联系电话"
-                            disabled={form.getFieldValue('customerId') == '' ? true : false} />)}
-                        </Form.Item>
-                      </Col>
-                    </Row>
                     {form.getFieldValue('type') === '2' ? (
                       <Row gutter={24}>
                         <Col lg={12}>
@@ -919,6 +935,29 @@ const Modify = (props: ModifyProps) => {
 
                     <Row gutter={24}>
                       <Col lg={12}>
+                        <Form.Item label="联系人">
+                          {getFieldDecorator('linkMan', {
+                            initialValue: infoDetail.linkMan,
+                            rules: [{ required: true, message: '请输入联系人' }],
+                          })(<Input placeholder="请输入联系人"
+                            disabled={form.getFieldValue('customerId') == '' ? true : false}
+                          />)}
+                        </Form.Item>
+                      </Col>
+
+                      <Col lg={12}>
+                        <Form.Item label="联系电话">
+                          {getFieldDecorator('linkPhone', {
+                            initialValue: infoDetail.linkPhone,
+                            rules: [{ required: true, message: '请输入联系电话' }],
+                          })(<Input placeholder="请输入联系电话"
+                            disabled={form.getFieldValue('customerId') == '' ? true : false} />)}
+                        </Form.Item>
+                      </Col>
+                    </Row>
+
+                    <Row gutter={24}>
+                      <Col lg={24}>
                         <Form.Item label="联系地址" required>
                           {getFieldDecorator('address', {
                             initialValue: infoDetail.address,
@@ -927,42 +966,7 @@ const Modify = (props: ModifyProps) => {
                         </Form.Item>
                       </Col>
 
-                      <Col lg={12}>
-                        <Form.Item label="签订人" required>
-                          {/* {getFieldDecorator('signer', {
-                            initialValue: infoDetail.signer,
-                            rules: [{ required: true, message: '请输入签订人' }],
-                          })(
-                            <AutoComplete
-                              dataSource={userList}
-                              onSearch={handleSearch}
-                              placeholder="请输入签订人"
-                              onSelect={onSignerSelect}
-                            />
-                          )} */}
 
-                          {getFieldDecorator('signer', {
-                            rules: [{ required: true, message: '请选择签订人' }],
-                          })(
-                            <Select
-                              showSearch
-                              placeholder="请选择签订人"
-                              onSelect={onSignerSelect}>
-                              {userSource.map(item => (
-                                <Option key={item.id} value={item.name}>
-                                  {item.name}
-                                </Option>
-                              ))}
-                            </Select>
-                          )}
-
-                          {getFieldDecorator('signerId', {
-                            initialValue: infoDetail.signerId,
-                          })(
-                            <input type='hidden' />
-                          )}
-                        </Form.Item>
-                      </Col>
                     </Row>
                   </Card>
                 </Col>

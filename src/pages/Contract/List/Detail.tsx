@@ -283,20 +283,20 @@ const Detail = (props: DetailProps) => {
           <TabPane tab="租赁条款" key="2">
             <Card title="基本条款" className={styles.card} >
               <Row gutter={24}>
-                <Col lg={7}>
+                <Col lg={8}>
                   <Form.Item label="租赁数量（㎡）">
                     {contractCharge.leaseArea}
                   </Form.Item>
                 </Col>
-                <Col lg={10}>
+                <Col lg={8}>
                   <Form.Item label="保证金关联费项">
                     {contractCharge.depositFeeItemName}
                   </Form.Item>
                 </Col>
-                <Col lg={7}>
+                <Col lg={8}>
                   <Form.Item label="保证金数量">
                     {contractCharge.deposit}
-                    {contractCharge.depositUnit == '1' ? '月' : '元'}
+                    {contractCharge.depositUnit}
                   </Form.Item>
                 </Col>
                 {/* <Col lg={4}>
@@ -321,7 +321,7 @@ const Detail = (props: DetailProps) => {
                     {String(chargeFee.endDate).substr(0, 10)}
                   </Form.Item>
                 </Col>
-                <Col lg={8}>
+                <Col lg={4}>
                   <Form.Item label="费项" >
                     {chargeFee.feeItemName}
                   </Form.Item>
@@ -332,9 +332,6 @@ const Detail = (props: DetailProps) => {
                     {chargeFee.priceUnit}
                   </Form.Item>
                 </Col>
-              </Row>
-              <Row gutter={24}>
-
                 <Col lg={4}>
                   <Form.Item label="提前付款时间">
                     ({chargeFee.advancePayTimeUnit})
@@ -346,6 +343,8 @@ const Detail = (props: DetailProps) => {
                     {chargeFee.billType}
                   </Form.Item>
                 </Col>
+              </Row>
+              <Row gutter={24}> 
                 {(chargeFee.priceUnit == '元/m²·天' || chargeFee.priceUnit == '元/天') ?
                   <Col lg={4}>
                     <Form.Item label="天单价换算规则">
@@ -363,7 +362,7 @@ const Detail = (props: DetailProps) => {
                     {chargeFee.payCycle}月一付
                       </Form.Item>
                 </Col>
-                <Col lg={8}>
+                <Col >
                   <Form.Item label="租期划分方式">
                     {chargeFee.rentalPeriodDivided}
                   </Form.Item>
@@ -406,12 +405,12 @@ const Detail = (props: DetailProps) => {
                 </Col>
                 <Col lg={5}>
                   <Form.Item label="开始时间" >
-                    {chargeOffer.startDate}
+                    {chargeOffer.rebateStartDate}
                   </Form.Item>
                 </Col>
                 <Col lg={5}>
                   <Form.Item label="结束时间">
-                    {chargeOffer.endDate}
+                    {chargeOffer.rebateEndDate}
                   </Form.Item>
                 </Col>
                 <Col lg={3}>

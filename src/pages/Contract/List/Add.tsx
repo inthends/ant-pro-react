@@ -60,18 +60,16 @@ const Add = (props: AddProps) => {
       if (!errors) {
         //租赁条款     
         setLoading(true);
-
         // let TermJson: HtLeasecontractchargefee[] = [];
         // let data: HtLeasecontractchargefee = {};
         //const TermJson=[];
         //const data = {}; 
         //data["FeeItemId"] = values.feeItemId[0];
-
         let mychargefee: HtLeasecontractchargefee = {};
         mychargefee.feeItemId = values.feeItemId;
         mychargefee.feeItemName = values.feeItemName;
-        mychargefee.startDate = values.startDate;
-        mychargefee.endDate = values.endDate;
+        mychargefee.startDate = values.startDate.format('YYYY-MM-DD');;
+        mychargefee.endDate = values.endDate.format('YYYY-MM-DD');;
         mychargefee.price = values.price;
         mychargefee.priceUnit = values.priceUnit;
         mychargefee.advancePayTime = values.advancePayTime;
@@ -143,14 +141,15 @@ const Add = (props: AddProps) => {
         // let RebateJson: HtLeasecontractchargefeeoffer[] = [];
         let mychargefeeoffer: HtLeasecontractchargefeeoffer = {};
         mychargefeeoffer.rebateType = values.rebateType;
-        mychargefeeoffer.startDate = values.rebateStartDate;
-        mychargefeeoffer.endDate = values.rebateEndDate;
+        if (values.rebateStartDate != undefined)
+          mychargefeeoffer.rebateStartDate = values.rebateStartDate.format('YYYY-MM-DD');
+        if (values.rebateEndDate != undefined)
+          mychargefeeoffer.rebateEndDate = values.rebateEndDate.format('YYYY-MM-DD');
         mychargefeeoffer.startPeriod = values.startPeriod;
         mychargefeeoffer.periodLength = values.periodLength;
         mychargefeeoffer.discount = values.discount;
         mychargefeeoffer.remark = values.remark;
         // RebateJson.push(rebate);
-
         //let entity = values; 
         let entity: HtLeasecontractcharge = {};
         //费用条款-基本条款 
@@ -172,9 +171,9 @@ const Add = (props: AddProps) => {
 
         GetChargeDetail({
           ...entity,
-          chargefee: mychargefee,
-          chargeincre: mychargeincre,
-          chargefeeoffer: mychargefeeoffer,
+          ...mychargefee,
+          ...mychargeincre,
+          ...mychargefeeoffer,
           BillUnitId: values.billUnitId,//计费单元id
           LeaseContractId: '',
           CalcPrecision: values.calcPrecision,
@@ -184,7 +183,7 @@ const Add = (props: AddProps) => {
           setDepositData(res.depositFeeResultList);//保证金明细
           setChargeData(res.chargeFeeResultList);//租金明细  
           // setDepositResult(res.depositFeeResultList);
-          // setChargeFeeResult(res.chargeFeeResultList); 
+          // setChargeFeeResult(res.chargeFeeResultList);  
           setLoading(false);
         });
       }
@@ -247,9 +246,9 @@ const Add = (props: AddProps) => {
         SaveForm({
           ...Contract,
           ...ContractCharge,
-          chargefee: chargefee,
-          chargeincre: chargeincre,
-          chargefeeoffer: chargefeeoffer,
+          ...chargefee,
+          ...chargeincre,
+          ...chargefeeoffer,
           keyValue: '',
           ChargeId: '',
           room: values.room,
@@ -257,7 +256,7 @@ const Add = (props: AddProps) => {
           // ChargeFeeResult:JSON.stringify(ChargeFeeResult) 
           DepositResult: JSON.stringify(depositData),
           ChargeFeeResult: JSON.stringify(chargeData)
-        }).then(res => { 
+        }).then(res => {
           message.success('保存成功');
           closeDrawer();
           reload();
@@ -669,7 +668,7 @@ const Add = (props: AddProps) => {
                       </Col>
                     </Row>
                     <Row gutter={24}>
-                      <Col lg={12}>
+                      <Col lg={24}>
 
                         {/* <Form.Item label="承租方" required>
                           {getFieldDecorator('customer', {
@@ -703,88 +702,9 @@ const Add = (props: AddProps) => {
                           )}
                         </Form.Item>
                       </Col>
-
-                      <Col lg={12}>
-                        <Form.Item label="类别" required>
-                          {getFieldDecorator('customerType', {
-                            rules: [{ required: true, message: '请选择类别' }],
-                          })(
-                            <Select disabled placeholder="自动带出">
-                              <Option value="1" key="1">个人</Option>
-                              <Option value="2" key="2">单位</Option>
-                            </Select>,
-                          )}
-                        </Form.Item>
-                      </Col>
                     </Row>
 
                     <Row gutter={24}>
-                      <Col lg={12}>
-                        <Form.Item label="联系人" required>
-                          {getFieldDecorator('linkMan', {
-                            rules: [{ required: true, message: '请输入联系人' }],
-                          })(<Input placeholder="请输入联系人"
-                            disabled={form.getFieldValue('customerId') == '' ? true : false}
-                          />)}
-                        </Form.Item>
-                      </Col>
-                      <Col lg={12}>
-                        <Form.Item label="联系电话" required>
-                          {getFieldDecorator('linkPhone', {
-                            rules: [{ required: true, message: '请输入联系电话' }],
-                          })(<Input placeholder="请输入联系电话"
-                            disabled={form.getFieldValue('customerId') != '' ? false : true} />)}
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    {form.getFieldValue('type') === '2' ? (
-                      <Row gutter={24}>
-                        <Col lg={12}>
-                          <Form.Item label="行业" required>
-                            {getFieldDecorator('industry', {
-                              rules: [{ required: true, message: '请选择行业' }],
-                            })(
-                              <Select placeholder="请选择行业"
-                                disabled={form.getFieldValue('customerId') != '' ? false : true}
-                              // onSelect={onIndustrySelect}
-                              >
-                                {/* {industryType.map(item => (
-                              <Option value={item.value} key={item.key}>
-                                {item.title}
-                              </Option>
-                            ))} */}
-                                {industryType.map(item => (
-                                  <Option value={item.value} key={item.key}>
-                                    {item.title}
-                                  </Option>
-                                ))}
-                              </Select>
-                            )}
-
-                            {/* {getFieldDecorator('industry', {
-                          })(
-                            <input type='hidden' />
-                          )} */}
-
-                          </Form.Item>
-                        </Col>
-                        <Col lg={12}>
-                          <Form.Item label="法人" required>
-                            {getFieldDecorator('legalPerson', {
-                              rules: [{ required: true, message: '请输入法人' }],
-                            })(<Input placeholder="请输入法人" disabled={form.getFieldValue('customerId') != '' ? false : true} />)}
-                          </Form.Item>
-                        </Col>
-                      </Row>) : null
-                    }
-                    <Row gutter={24}>
-                      <Col lg={12}>
-                        <Form.Item label="联系地址" required>
-                          {getFieldDecorator('address', {
-                            rules: [{ required: true, message: '请输入联系地址' }],
-                          })(<Input placeholder="请输入联系地址" disabled={form.getFieldValue('customerId') != '' ? false : true} />)}
-                        </Form.Item>
-                      </Col>
 
                       <Col lg={12}>
                         <Form.Item label="签订人" required>
@@ -816,6 +736,85 @@ const Add = (props: AddProps) => {
                           })(
                             <input type='hidden' />
                           )}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={12}>
+                        <Form.Item label="类别" required>
+                          {getFieldDecorator('customerType', {
+                            rules: [{ required: true, message: '请选择类别' }],
+                          })(
+                            <Select disabled placeholder="自动带出">
+                              <Option value="1" key="1">个人</Option>
+                              <Option value="2" key="2">单位</Option>
+                            </Select>,
+                          )}
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    {form.getFieldValue('type') === '2' ? (
+                      <Row gutter={24}>
+                        <Col lg={12}>
+                          <Form.Item label="行业" required>
+                            {getFieldDecorator('industry', {
+                              rules: [{ required: true, message: '请选择行业' }],
+                            })(
+                              <Select placeholder="请选择行业"
+                                disabled={form.getFieldValue('customerId') != '' ? false : true}
+                              // onSelect={onIndustrySelect}
+                              >
+                                {/* {industryType.map(item => (
+                              <Option value={item.value} key={item.key}>
+                                {item.title}
+                              </Option>
+                            ))} */}
+                                {industryType.map(item => (
+                                  <Option value={item.value} key={item.key}>
+                                    {item.title}
+                                  </Option>
+                                ))}
+                              </Select>
+                            )}
+
+                            {/* {getFieldDecorator('industry', {
+                          })(
+                            <input type='hidden' />
+                          )} */}
+                          </Form.Item>
+                        </Col>
+                        <Col lg={12}>
+                          <Form.Item label="法人" required>
+                            {getFieldDecorator('legalPerson', {
+                              rules: [{ required: true, message: '请输入法人' }],
+                            })(<Input placeholder="请输入法人" disabled={form.getFieldValue('customerId') != '' ? false : true} />)}
+                          </Form.Item>
+                        </Col>
+                      </Row>) : null
+                    }
+                    <Row gutter={24}>
+                      <Col lg={12}>
+                        <Form.Item label="联系人" required>
+                          {getFieldDecorator('linkMan', {
+                            rules: [{ required: true, message: '请输入联系人' }],
+                          })(<Input placeholder="请输入联系人"
+                            disabled={form.getFieldValue('customerId') == '' ? true : false}
+                          />)}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={12}>
+                        <Form.Item label="联系电话" required>
+                          {getFieldDecorator('linkPhone', {
+                            rules: [{ required: true, message: '请输入联系电话' }],
+                          })(<Input placeholder="请输入联系电话"
+                            disabled={form.getFieldValue('customerId') != '' ? false : true} />)}
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row gutter={24}>
+                      <Col lg={24}>
+                        <Form.Item label="联系地址" required>
+                          {getFieldDecorator('address', {
+                            rules: [{ required: true, message: '请输入联系地址' }],
+                          })(<Input placeholder="请输入联系地址" disabled={form.getFieldValue('customerId') != '' ? false : true} />)}
                         </Form.Item>
                       </Col>
                     </Row>
