@@ -144,8 +144,7 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
                 showLine
                 expandedKeys={expandedKeys} 
                 onExpand={clickExpend}
-                onSelect={onSelect}>
-               
+                onSelect={onSelect}> 
                 {renderTreeNodes(treeData)}
               </Tree>
             </Page>

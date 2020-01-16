@@ -7,7 +7,7 @@ import ListTable from './ListTable';
 import Modify from './Modify';
 import { GetPublicAreas } from './Main.service';
 import { GetQuickSimpleTreeAllForArea } from '@/services/commonItem';
-import { getResult } from '@/utils/networkUtils';
+// import { getResult } from '@/utils/networkUtils';
 
 const { Content } = Layout;
 const { Search } = Input;
@@ -34,13 +34,18 @@ function Main() {
     //   SetOrganize(rootOrg);
     //   initLoadData('', '');
     // });
+
     //获取房产树
-    GetQuickSimpleTreeAllForArea()
-      .then(getResult)
-      .then((res: any[]) => {
-        setTreeData(res || []);
-        return res || [];
-      });
+    // GetQuickSimpleTreeAllForArea()
+    //   .then(getResult)
+    //   .then((res: any[]) => {
+    //     setTreeData(res || []);
+    //     return res || [];
+    //   });F
+
+    GetQuickSimpleTreeAllForArea().then(res => {
+      setTreeData(res || []);
+    })
 
     initLoadData('', '');
 

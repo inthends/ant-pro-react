@@ -1,16 +1,16 @@
 import { getResult } from '@/utils/networkUtils';
-import { ResponseObject,TreeEntity } from '@/model/models';
+import { ResponseObject, TreeEntity } from '@/model/models';
 import request from '@/utils/request';
 
 //获取通用代码
 export function getCommonItems(code: string): Promise<Array<TreeEntity>> {
-    return request
-      .get(process.env.basePath + `/Common/GetDataItemTreeJson?EnCode=${code}`)
-      .then(getResult as any);
-  }
+  return request
+    .get(process.env.basePath + `/Common/GetDataItemTreeJson?EnCode=${code}`)
+    .then(getResult as any);
+}
 
-  //查询客户数据
-export function GetUserList(keyword,type): Promise<any> {
+//查询客户数据
+export function GetUserList(keyword, type): Promise<any> {
   return request
     .get(process.env.basePath + `/Common/GetUserList?keyword=${keyword}&type=${type}`)
     .then(getResult as any);
@@ -19,22 +19,26 @@ export function GetUserList(keyword,type): Promise<any> {
 //下拉房屋树
 export function GetQuickSimpleTreeAll(): Promise<ResponseObject<any>> {
   return request.get(process.env.basePath + `/Common/GetQuickSimpleTreeAll`, {});
-} 
+}
 
 //服务单下拉房屋树，可以选择小区，楼栋，楼层和房间
 export function GetQuickSimpleTreeAllForDeskService(): Promise<ResponseObject<any>> {
   return request.get(process.env.basePath + `/Common/GetQuickSimpleTreeAllForDeskService`, {});
-} 
+}
 
 //合同页面调用
 export function GetQuickSimpleTreeAllForContract(): Promise<ResponseObject<any[]>> {
   return request.get(process.env.basePath + `/Common/GetQuickSimpleTreeAllForContract`, {});
-} 
+}
 
 //公共区域页面调用
-export function GetQuickSimpleTreeAllForArea(): Promise<ResponseObject<any[]>> {
-  return request.get(process.env.basePath + `/Common/GetQuickSimpleTreeAllForArea`, {});
-} 
+// export function GetQuickSimpleTreeAllForArea(): Promise<ResponseObject<any[]>> {
+//   return request.get(process.env.basePath + `/Common/GetQuickSimpleTreeAllForArea`, {});
+// } 
+
+export function GetQuickSimpleTreeAllForArea(): Promise<any[]> {
+  return request.get(process.env.basePath + `/Common/GetQuickSimpleTreeAllForArea`).then(getResult as any);
+}
 
 // //获取小区以及楼栋
 // export function GetBuildings(pstructid): Promise<any[]> {
@@ -44,21 +48,21 @@ export function GetQuickSimpleTreeAllForArea(): Promise<ResponseObject<any[]>> {
 // }
 
 //获取下级
-export function GetAsynChildBuildings(pstructid,type): Promise<any[]> {
+export function GetAsynChildBuildings(pstructid, type): Promise<any[]> {
   return request
     .get(process.env.basePath + `/Common/GetAsynChildBuildings?parentId=${pstructid}&type=${type}`)
     .then(getResult as any);
 }
 
 //获取下级
-export function GetAsynChildBuildingsForHouse(pstructid,type): Promise<any[]> {
+export function GetAsynChildBuildingsForHouse(pstructid, type): Promise<any[]> {
   return request
     .get(process.env.basePath + `/Common/GetAsynChildBuildingsForHouse?parentId=${pstructid}&type=${type}`)
     .then(getResult as any);
 }
 
 //获取公共区域下级
-export function GetAsynChildBuildingsForArea(pstructid,type): Promise<any[]> { 
+export function GetAsynChildBuildingsForArea(pstructid, type): Promise<any[]> {
   return request
     .get(process.env.basePath + `/Common/GetAsynChildBuildingsForArea?parentId=${pstructid}&type=${type}`)
     .then(getResult as any);
@@ -83,7 +87,7 @@ export function GetOrgTreeSimple(): Promise<any[]> {
 }
 
 //获取下级
-export function GetAsynChildBuildingsSimple(pstructid,type): Promise<any[]> {
+export function GetAsynChildBuildingsSimple(pstructid, type): Promise<any[]> {
   return request
     .get(process.env.basePath + `/Common/GetAsynChildBuildingsSimple?parentId=${pstructid}&type=${type}`)
     .then(getResult as any);
@@ -102,7 +106,7 @@ export function GetAllOrgIds(pstructid): Promise<string[]> {
 //加载全部checkbox房间树
 export function GetUnitTreeAll(): Promise<ResponseObject<TreeEntity[]>> {
   return request.get(process.env.basePath + `/Common/GetUnitTreeAll`, {});
-} 
+}
 
 // 查询机构管理处
 export function GetOrgs(): Promise<any[]> {

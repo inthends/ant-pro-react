@@ -114,7 +114,7 @@ function House() {
   };
   const load = formData => {
     setLoading(true);
-    formData.sidx = formData.sidx || 'name';
+    formData.sidx = formData.sidx || 'id';
     formData.sord = formData.sord || 'asc';
     return GetStatistics(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -136,7 +136,7 @@ function House() {
   const initLoadData = (orgId: string, searchText) => {
     setSearch(searchText);
     const queryJson = { OrganizeId: orgId, keyword: searchText };
-    const sidx = 'name';
+    const sidx = 'id';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
@@ -157,8 +157,7 @@ function House() {
           <Search
             className="search-input"
             placeholder="搜索项目名称"
-            onSearch={value => {
-
+            onSearch={value => { 
               //刷新统计
               GetStatisticsTotal(
                 {

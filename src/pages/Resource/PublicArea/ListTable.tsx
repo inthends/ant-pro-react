@@ -52,7 +52,7 @@ function ListTable(props: ListTableProps) {
       title: '全称',
       dataIndex: 'psAllName',
       key: 'psAllName',
-      width: 200,
+      width: 250,
       sorter: true,
     },
     {
