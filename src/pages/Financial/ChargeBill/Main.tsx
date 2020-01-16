@@ -72,12 +72,15 @@ function Main() {
 
   //点击左侧树，加载数据
   const selectTree = (organizeId, search) => {
-    if (tabIndex == '1')
+    if (tabIndex == "1") {
       initLoadData(search, organizeId, showCustomerFee);
-    else if (tabIndex == '2')
+    }
+    else if (tabIndex == "2") {
       initChargeLoadData(organizeId);
-    else
+    }
+    else {
       initChargeCheckLoadData(organizeId);
+    }
   };
 
   // useEffect(() => {
@@ -156,7 +159,8 @@ function Main() {
     });
   };
 
-  const initLoadData = (search, unitId = '', showCustomerFee = false) => {
+  const initLoadData = (search, unitId = '', showCustomerFee = false) => { 
+
     setSearch(search);
     // setShowCustomerFee(showCustomerFee);
     const queryJson = { keyword: search, unitId: unitId, showCustomerFee: showCustomerFee };
@@ -429,7 +433,7 @@ function Main() {
       {/* <Sider theme="light" style={{ overflow: 'hidden', height: '100%' }} width="245px"> */}
       <AsynLeftTree
         parentid={'0'}
-        selectTree={(id, type, info?) => { 
+        selectTree={(id, type, info?) => {
 
           //点击前重置 
           setAddButtonDisable(true);

@@ -40,7 +40,6 @@ const Detail = (props: DetailProps) => {
   const [chargeData, setChargeData] = useState<any[]>([]);//租金
   // const [appData, setAppData] = useState<any[]>([]);//审批记录 
   const [fileList, setFileList] = useState<any[]>([]);
-
   const [houseList, setHouseList] = useState<any[]>([]);
   const [totalInfo, setTotalInfo] = useState<any>({});//合计信息
 
@@ -59,7 +58,6 @@ const Detail = (props: DetailProps) => {
   //   // });
   // }, []);
 
-
   const [loading, setLoading] = useState<boolean>(false);
 
   // 打开抽屉时初始化
@@ -67,12 +65,15 @@ const Detail = (props: DetailProps) => {
     if (visible) {
       if (id) {
         setLoading(true);
-        GetContractInfo(id).then((tempInfo) => { 
+        GetContractInfo(id).then((tempInfo) => {
           setInfoDetail(tempInfo.contract);
-          setHouseList(tempInfo.houseList); 
+          setHouseList(tempInfo.houseList);
           setCount(tempInfo.followCount);
-
-          setTotalInfo({ leasePrice: tempInfo.leasePrice, totalDeposit: tempInfo.totalDeposit, totalAmount: tempInfo.totalAmount });
+          setTotalInfo({
+            leasePrice: tempInfo.leasePrice,
+            totalDeposit: tempInfo.totalDeposit,
+            totalAmount: tempInfo.totalAmount
+          });
           //获取条款
           GetCharge(chargeId).then((charge: ChargeDetailDTO) => {
             setContractCharge(charge.contractCharge || {});
@@ -87,10 +88,9 @@ const Detail = (props: DetailProps) => {
           //附件
           GetFilesData(id).then(res => {
             setFileList(res || []);
-          });
-
-          setLoading(false);
+          });  
           form.resetFields();
+          setLoading(false);
         });
       } else {
         form.resetFields();
@@ -134,7 +134,7 @@ const Detail = (props: DetailProps) => {
   const [count, setCount] = useState<string>('0');
   const showFollowDrawer = () => {
     setFollowVisible(true);
-  }; 
+  };
   const closeFollowDrawer = () => {
     setFollowVisible(false);
   };
@@ -240,7 +240,6 @@ const Detail = (props: DetailProps) => {
                         </Form.Item>
                       </Col>
                     </Row>
-
                     <Row gutter={24}>
                       <Col lg={12}>
                         <Form.Item label="合同计租时间">
@@ -266,7 +265,6 @@ const Detail = (props: DetailProps) => {
                       </Col>
                     </Row>
                   </Card>
-
                   <Card title="滞纳金" className={styles.addcard}>
                     <Row gutter={24}>
                       <Col lg={12}>
@@ -280,9 +278,7 @@ const Detail = (props: DetailProps) => {
                         </Form.Item>
                       </Col>
                     </Row>
-
                   </Card>
-
                 </Col>
                 <Col span={12}>
                   <Card title="房源信息" className={styles.card}>
@@ -300,7 +296,6 @@ const Detail = (props: DetailProps) => {
                       </Col>
                     </Row>
                   </Card>
-
                   <Card title="租客信息" className={styles.card}>
                     <Row gutter={24}>
                       <Col lg={12}>
@@ -308,14 +303,12 @@ const Detail = (props: DetailProps) => {
                           {infoDetail.customer}
                         </Form.Item>
                       </Col>
-
                       <Col lg={12}>
                         <Form.Item label="类别">
                           {infoDetail.customerType == '2' ? '单位' : '个人'}
                         </Form.Item>
                       </Col>
                     </Row>
-
                     {infoDetail.customerType == '2' ? (
                       <Row gutter={24}>
                         <Col lg={12}>
@@ -367,7 +360,7 @@ const Detail = (props: DetailProps) => {
               <Card title="基本条款" className={styles.card} >
                 <Row gutter={24}>
                   <Col lg={8}>
-                    <Form.Item label="租赁数量（㎡）">
+                    <Form.Item label="租赁数量/㎡">
                       {contractCharge.leaseArea}
                     </Form.Item>
                   </Col>

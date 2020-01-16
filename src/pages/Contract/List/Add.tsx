@@ -286,7 +286,8 @@ const Add = (props: AddProps) => {
 
       GetUserList('', '员工').then(res => {
         setUserSource(res || []);
-      })
+      });
+      
     }
   }, [visible]);
 
@@ -526,7 +527,16 @@ const Add = (props: AddProps) => {
                             rules: [{ required: true, message: '请输入合同编号' }],
                           })(<Input placeholder="请输入合同编号" />)}
                         </Form.Item>
-                      </Col>
+                      </Col> 
+                      <Col lg={12}>
+                        <Form.Item label="租赁数量/㎡">
+                          {getFieldDecorator('leaseSize', {
+                            rules: [{ required: true, message: '请输入租赁数量' }],
+                          })(<InputNumber placeholder="请输入租赁数量" style={{ width: '100%' }} />)}
+                        </Form.Item>
+                      </Col> 
+                    </Row>
+                    <Row gutter={24}>
                       <Col lg={12}>
                         <Form.Item label="跟进人">
                           {/* {getFieldDecorator('follower', {
@@ -560,15 +570,6 @@ const Add = (props: AddProps) => {
                           })(
                             <input type='hidden' />
                           )}
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row gutter={24}>
-                      <Col lg={12}>
-                        <Form.Item label="租赁数量/㎡">
-                          {getFieldDecorator('leaseSize', {
-                            rules: [{ required: true, message: '请输入租赁数量' }],
-                          })(<InputNumber placeholder="请输入租赁数量" style={{ width: '100%' }} />)}
                         </Form.Item>
                       </Col>
                       <Col lg={12}>

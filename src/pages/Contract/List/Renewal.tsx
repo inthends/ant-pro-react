@@ -1,6 +1,6 @@
 //续租
 import {
-  Tag, Spin, Divider, PageHeader, AutoComplete, InputNumber, TreeSelect, message,
+  Icon, Upload, Tooltip, Tag, Spin, Divider, PageHeader, AutoComplete, InputNumber, TreeSelect, message,
   Tabs, Select, Button, Card, Col, DatePicker, Drawer, Form, Input, Row
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
@@ -15,16 +15,21 @@ import {
 } from '@/model/models';
 import React, { useEffect, useState } from 'react';
 import ResultList from './ResultList';
-import { SubmitForm, SaveForm, GetFeeItemsByUnitId, GetCharge, GetFormJson, GetChargeDetail } from './Main.service';
+import { RemoveFile, GetFilesData, SubmitForm, SaveForm, GetFeeItemsByUnitId, GetCharge, GetContractInfo, GetChargeDetail } from './Main.service';
 import { GetOrgTreeSimple, GetAsynChildBuildingsSimple, getCommonItems, GetUserList } from '@/services/commonItem';
 import moment from 'moment';
 import styles from './style.less';
-import LeaseTermRenewal from './LeaseTermRenewal';
-import IncreasingRate from './IncreasingRate';
-import Rebate from './Rebate';
+// import LeaseTermRenewal from './LeaseTermRenewal';
+// import IncreasingRate from './IncreasingRate';
+// import Rebate from './Rebate';
+
+import LeaseTermModify from './LeaseTermModify';
+import IncreasingRateModify from './IncreasingRateModify';
+import RebateModify from './RebateModify';
 
 const { Option } = Select;
 const { TabPane } = Tabs;
+const { TextArea } = Input;
 
 interface RenewalProps {
   visible: boolean;
@@ -53,13 +58,22 @@ const Renewal = (props: RenewalProps) => {
   const [industryType, setIndustryType] = useState<any[]>([]); //行业 
   const [feeItems, setFeeItems] = useState<TreeEntity[]>([]);
   const [isCal, setIsCal] = useState<boolean>(false);
-  const [TermJson, setTermJson] = useState<string>();
-  const [RateJson, setRateJson] = useState<string>();
-  const [RebateJson, setRebateJson] = useState<string>();
+
+  // const [TermJson, setTermJson] = useState<string>();
+  // const [RateJson, setRateJson] = useState<string>();
+  // const [RebateJson, setRebateJson] = useState<string>();
+
+  const [chargefee, setChargefee] = useState<HtLeasecontractchargefee>({});
+  const [chargeincre, setChargeincre] = useState<HtLeasecontractchargeincre>({});
+  const [chargefeeoffer, setChargefeeoffer] = useState<HtLeasecontractchargefeeoffer>({});
+  const [totalInfo, setTotalInfo] = useState<any>({});//合计信息
   const [userSource, setUserSource] = useState<any[]>([]);
   const [rooms, setRooms] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [treeData, setTreeData] = useState<any[]>([]);
+
+  //附件上传
+  const [fileList, setFileList] = useState<any[]>([]);
 
   // const close = () => {
   //   closeDrawer();
@@ -67,27 +81,34 @@ const Renewal = (props: RenewalProps) => {
 
   //打开抽屉时初始化
   useEffect(() => {
-    getCommonItems('IndustryType').then(res => {
-      setIndustryType(res || []);
-    });
-    //加载关联收费项目
-    // GetAllFeeItems().then(res => {
-    //   setFeeItems(res || []);
-    // });
+    if (visible) {
+      getCommonItems('IndustryType').then(res => {
+        setIndustryType(res || []);
+      });
+      //加载关联收费项目
+      // GetAllFeeItems().then(res => {
+      //   setFeeItems(res || []);
+      // });
 
-    //获取房产树
-    GetOrgTreeSimple().then((res: any[]) => {
-      setTreeData(res || []);
-    });
+      //获取房产树
+      GetOrgTreeSimple().then((res: any[]) => {
+        setTreeData(res || []);
+      });
 
-  }, []);
+      GetUserList('', '员工').then(res => {
+        setUserSource(res || []);
+      });
+
+    }
+
+  }, [visible]);
 
   // 打开抽屉时初始化
   useEffect(() => {
     if (visible) {
       if (id) {
         setLoading(true);
-        GetFormJson(id).then((tempInfo: LeaseContractDTO) => {
+        GetContractInfo(id).then((tempInfo) => {
           //处理一下房间
           let rooms: any[] = [];
           if (tempInfo != null && tempInfo.houseList != null) {
@@ -97,21 +118,31 @@ const Renewal = (props: RenewalProps) => {
             setRooms(rooms);
           }
 
-          GetFeeItemsByUnitId(tempInfo.billUnitId).then(res => {
+          //加载费项
+          GetFeeItemsByUnitId(tempInfo.contract.billUnitId).then(res => {
             setFeeItems(res || []);
           });
 
-          setInfoDetail(tempInfo);
+          setInfoDetail(tempInfo.contract);
 
           //获取条款
           GetCharge(chargeId).then((charge: ChargeDetailDTO) => {
             setContractCharge(charge.contractCharge || {});
-            // setChargeFeeList(charge.chargeFeeList || []);
-            // setChargeIncreList(charge.chargeIncreList || []);
-            // setChargeOfferList(charge.chargeFeeOfferList || []);
-            // setDepositData(charge.depositFeeResultList || []);//保证金明细
-            // setChargeData(charge.chargeFeeResultList || []);//租金明细    
-          })
+            setChargefee(charge.chargeFee || {});
+            setChargeincre(charge.chargeIncre || {});
+            setChargefeeoffer(charge.chargeFeeOffer || {});
+            setDepositData(charge.depositFeeResultList || []);//保证金明细
+            setChargeData(charge.chargeFeeResultList || []);//租金明细     
+          });
+
+          //附件
+          GetFilesData(id).then(res => {
+            setFileList(res || []);
+          });
+
+          //合计信息
+          setTotalInfo({ leasePrice: tempInfo.leasePrice, totalDeposit: tempInfo.totalDeposit, totalAmount: tempInfo.totalAmount });
+
           form.resetFields();
           setLoading(false);
         });
@@ -177,74 +208,77 @@ const Renewal = (props: RenewalProps) => {
       if (!errors) {
         setLoading(true);
         //数据处理  租赁条款     
-        let TermJson: HtLeasecontractchargefee[] = [];
-        let data: HtLeasecontractchargefee = {};
+        // let TermJson: HtLeasecontractchargefee[] = [];
+        let mychargefee: HtLeasecontractchargefee = {};
         //const TermJson=[];
         //const data = {}; 
         //data["FeeItemId"] = values.feeItemId[0];
-        data.feeItemId = values.feeItemId[0];
-        data.feeItemName = values.feeItemName[0];
-        data.startDate = values.startDate[0];
-        data.endDate = values.endDate[0];
-        data.price = values.price[0];
-        data.priceUnit = values.priceUnit[0];
-        data.advancePayTime = values.advancePayTime[0];
-        data.advancePayTimeUnit = values.advancePayTimeUnit[0];
-        data.billType = values.billType[0];
-        if (data.priceUnit == "元/m²·天" || data.priceUnit == "元/天") {
-          data.dayPriceConvertRule = values.dayPriceConvertRule[0];
+        mychargefee.feeItemId = values.feeItemId;
+        mychargefee.feeItemName = values.feeItemName;
+        mychargefee.startDate = values.startDate;
+        mychargefee.endDate = values.endDate;
+        mychargefee.price = values.price;
+        mychargefee.priceUnit = values.priceUnit;
+        mychargefee.advancePayTime = values.advancePayTime;
+        mychargefee.advancePayTimeUnit = values.advancePayTimeUnit;
+        mychargefee.billType = values.billType;
+        if (mychargefee.priceUnit == "元/m²·天" || mychargefee.priceUnit == "元/天") {
+          mychargefee.dayPriceConvertRule = values.dayPriceConvertRule;
         }
-        data.yearDays = values.yearDays[0];
-        data.payCycle = values.payCycle[0];
-        data.rentalPeriodDivided = values.rentalPeriodDivided[0];
-        TermJson.push(data);
+        mychargefee.yearDays = values.yearDays;
+        mychargefee.payCycle = values.payCycle;
+        mychargefee.rentalPeriodDivided = values.rentalPeriodDivided;
+
+        // TermJson.push(data);
 
         //动态添加的租期
-        values.LeaseTerms.map(function (k, index, arr) {
-          let data: HtLeasecontractchargefee = {};
-          data.feeItemId = values.feeItemId[k];
-          data.feeItemName = values.feeItemName[k];
-          data.startDate = values.startDate[k];
-          data.endDate = values.endDate[k];
-          data.price = values.price[k];
-          data.priceUnit = values.priceUnit[k];
-          data.advancePayTime = values.advancePayTime[k];
-          data.advancePayTimeUnit = values.advancePayTimeUnit[k];
-          data.billType = values.billType[k];
-          if (data.priceUnit == "元/m²·天" || data.priceUnit == "元/天") {
-            data.dayPriceConvertRule = values.dayPriceConvertRule[k];
-          }
-          data.yearDays = values.yearDays[k];
-          data.payCycle = values.payCycle[k];
-          data.rentalPeriodDivided = values.rentalPeriodDivided[k];
-          TermJson.push(data);
-        });
+        // values.LeaseTerms.map(function (k, index, arr) {
+        //   let data: HtLeasecontractchargefee = {};
+        //   data.feeItemId = values.feeItemId[k];
+        //   data.feeItemName = values.feeItemName[k];
+        //   data.startDate = values.startDate[k];
+        //   data.endDate = values.endDate[k];
+        //   data.price = values.price[k];
+        //   data.priceUnit = values.priceUnit[k];
+        //   data.advancePayTime = values.advancePayTime[k];
+        //   data.advancePayTimeUnit = values.advancePayTimeUnit[k];
+        //   data.billType = values.billType[k];
+        //   if (data.priceUnit == "元/m²·天" || data.priceUnit == "元/天") {
+        //     data.dayPriceConvertRule = values.dayPriceConvertRule[k];
+        //   }
+        //   data.yearDays = values.yearDays[k];
+        //   data.payCycle = values.payCycle[k];
+        //   data.rentalPeriodDivided = values.rentalPeriodDivided[k];
+        //   TermJson.push(data);
+        // });
 
         //递增率
-        let RateJson: HtLeasecontractchargeincre[] = [];
-        values.IncreasingRates.map(function (k, index, arr) {
-          let rate: HtLeasecontractchargeincre = {};
-          rate.increDate = values.increDate[k];
-          rate.increPrice = values.increPrice[k];
-          rate.increPriceUnit = values.increPriceUnit[k];
-          rate.increDeposit = values.increDeposit[k];
-          rate.increDepositUnit = values.increDepositUnit[k];
-          RateJson.push(rate);
-        });
+        // let RateJson: HtLeasecontractchargeincre[] = [];
+        // values.IncreasingRates.map(function (k, index, arr) {
+        let mychargeincre: HtLeasecontractchargeincre = {};
+        mychargeincre.increType = values.increType;
+        mychargeincre.increPrice = values.increPrice;
+        mychargeincre.increPriceUnit = values.increPriceUnit;
+        mychargeincre.increDeposit = values.increDeposit;
+        mychargeincre.increDepositUnit = values.increDepositUnit;
+        // RateJson.push(rate);
+        // });
 
         //优惠
-        let RebateJson: HtLeasecontractchargefeeoffer[] = [];
-        values.Rebates.map(function (k, index, arr) {
-          let rebate: HtLeasecontractchargefeeoffer = {};
-          rebate.type = values.rebateType[k];
-          rebate.startDate = values.rebateStartDate[k];
-          rebate.endDate = values.rebateEndDate[k];
-          rebate.startPeriod = values.startPeriod[k];
-          rebate.periodLength = values.periodLength[k];
-          rebate.discount = values.discount[k];
-          rebate.remark = values.remark[k];
-          RebateJson.push(rebate);
-        });
+        // let RebateJson: HtLeasecontractchargefeeoffer[] = [];
+        // values.Rebates.map(function (k, index, arr) {
+        let mychargefeeoffer: HtLeasecontractchargefeeoffer = {};
+        mychargefeeoffer.rebateType = values.rebateType;
+        if (values.rebateStartDate != '')
+          mychargefeeoffer.rebateStartDate = values.rebateStartDate.format('YYYY-MM-DD');
+        if (values.rebateEndDate != '')
+          mychargefeeoffer.rebateEndDate = values.rebateEndDate.format('YYYY-MM-DD');
+        mychargefeeoffer.startPeriod = values.startPeriod;
+        mychargefeeoffer.periodLength = values.periodLength;
+        mychargefeeoffer.discount = values.discount;
+        mychargefeeoffer.remark = values.remark;
+        // RebateJson.push(rebate);
+        // });
 
         //let entity = values; 
         let entity: HtLeasecontractcharge = {};
@@ -257,27 +291,28 @@ const Renewal = (props: RenewalProps) => {
         entity.startDate = values.billingDate.format('YYYY-MM-DD');
         entity.endDate = values.contractEndDate.format('YYYY-MM-DD');
         entity.payDate = values.contractStartDate.format('YYYY-MM-DD');
-        let strTermJson = JSON.stringify(TermJson);
-        setTermJson(strTermJson);
-        let strRateJson = JSON.stringify(RateJson);
-        setRateJson(strRateJson);
-        let strRebateJson = JSON.stringify(RebateJson);
-        setRebateJson(strRebateJson);
+        // let strTermJson = JSON.stringify(TermJson);
+        setChargefee(mychargefee);
+        // let strRateJson = JSON.stringify(RateJson);
+        setChargeincre(mychargeincre);
+        // let strRebateJson = JSON.stringify(RebateJson);
+        setChargefeeoffer(mychargefeeoffer);
 
         GetChargeDetail({
           ...entity,
+          ...mychargefee,
+          ...mychargeincre,
+          ...mychargefeeoffer,
           BillUnitId: values.billUnitId,//计费单元id
           LeaseContractId: '',
           CalcPrecision: values.calcPrecision,
-          CalcPrecisionMode: values.calcPrecisionMode,
-          TermJson: strTermJson,
-          RateJson: strRateJson,
-          RebateJson: strRebateJson
-
-        }).then(res => {
+          CalcPrecisionMode: values.calcPrecisionMode
+        }).then(tempInfo => {
           setIsCal(true);//计算租金
-          setDepositData(res.depositFeeResultList);//保证金明细
-          setChargeData(res.chargeFeeResultList);//租金明细  
+          setDepositData(tempInfo.depositFeeResultList);//保证金明细
+          setChargeData(tempInfo.chargeFeeResultList);//租金明细  
+          //合计信息
+          setTotalInfo({ leasePrice: tempInfo.leasePrice, totalDeposit: tempInfo.totalDeposit, totalAmount: tempInfo.totalAmount });
           // setDepositResult(res.depositFeeResultList);
           // setChargeFeeResult(res.chargeFeeResultList); 
           setLoading(false);
@@ -332,25 +367,33 @@ const Renewal = (props: RenewalProps) => {
         Contract.industry = values.industry;
         //Contract.industryId = values.industryId; 
         Contract.legalPerson = values.legalPerson;
+        Contract.linkMan = values.linkMan;
+        Contract.linkPhone = values.linkPhone;
+        Contract.address = values.address;
+        // Contract.customerContact = values.customerContact;
+        // Contract.customerContactId = values.customerContactId;
         Contract.signer = values.signer;
         Contract.signerId = values.signerId;
-        Contract.customerContact = values.customerContact;
-        Contract.customerContactId = values.customerContactId;
         Contract.lateFee = values.lateFee;
         Contract.lateFeeUnit = values.lateFeeUnit;
         Contract.maxLateFee = values.maxLateFee;
         Contract.maxLateFeeUnit = values.maxLateFeeUnit;
         Contract.billUnitId = values.billUnitId;
+        Contract.organizeId = values.organizeId;
+        Contract.memo = values.memo;
 
         SubmitForm({
           ...Contract,
           ...ContractCharge,
+          ...chargefee,
+          ...chargeincre,
+          ...chargefeeoffer,
           keyValue: id,
           ChargeId: chargeId,
           room: values.room,
-          TermJson: TermJson,
-          RateJson: RateJson,
-          RebateJson: RebateJson,
+          // TermJson: TermJson,
+          // RateJson: RateJson,
+          // RebateJson: RebateJson,
           DepositResult: JSON.stringify(depositData),
           ChargeFeeResult: JSON.stringify(chargeData)
 
@@ -376,6 +419,7 @@ const Renewal = (props: RenewalProps) => {
           message.warning('请生成租金明细！');
           return;
         }
+        setLoading(true);
         //保存合同数据
         let ContractCharge: HtLeasecontractcharge = {};
         //费用条款-基本条款 
@@ -405,32 +449,40 @@ const Renewal = (props: RenewalProps) => {
         Contract.industry = values.industry;
         //Contract.industryId = values.industryId; 
         Contract.legalPerson = values.legalPerson;
+        // Contract.customerContact = values.customerContact;
+        // Contract.customerContactId = values.customerContactId;
+        Contract.linkMan = values.linkMan;
+        Contract.linkPhone = values.linkPhone;
+        Contract.address = values.address;
         Contract.signer = values.signer;
         Contract.signerId = values.signerId;
-        Contract.customerContact = values.customerContact;
-        Contract.customerContactId = values.customerContactId;
         Contract.lateFee = values.lateFee;
         Contract.lateFeeUnit = values.lateFeeUnit;
         Contract.maxLateFee = values.maxLateFee;
         Contract.maxLateFeeUnit = values.maxLateFeeUnit;
         Contract.billUnitId = values.billUnitId;
+        Contract.organizeId = values.organizeId;
         Contract.preContractId = id;
+        Contract.memo = values.memo;
         SaveForm({
           ...Contract,
           ...ContractCharge,
+          ...chargefee,
+          ...chargeincre,
+          ...chargefeeoffer,
           keyValue: '',
           ChargeId: '',
           room: values.room,
-          TermJson: TermJson,
-          RateJson: RateJson,
-          RebateJson: RebateJson,
+          // TermJson: TermJson,
+          // RateJson: RateJson,
+          // RebateJson: RebateJson,
           DepositResult: JSON.stringify(depositData),
           ChargeFeeResult: JSON.stringify(chargeData)
-
         }).then(res => {
           message.success('保存成功');
           closeDrawer();
           reload();
+          setLoading(false);
         });
       }
     });
@@ -457,18 +509,21 @@ const Renewal = (props: RenewalProps) => {
 
   //转换状态
   const GetStatus = (status) => {
-    switch (status) {
-      case 0:
-        return <Tag color="#e4aa5b">新建</Tag>;
-      case 1:
-        return <Tag color="#e4aa4b">待审核</Tag>;
-      case 2:
-        return <Tag color="#19d54e">已审核</Tag>;
-      case -1:
-        return <Tag color="#d82d2d">已作废</Tag>
-      default:
-        return '';
-    }
+
+    return <Tag color="#19d54e">续租</Tag>;
+
+    // switch (status) {
+    //   case 0:
+    //     return <Tag color="#e4aa5b">新建</Tag>;
+    //   case 1:
+    //     return <Tag color="#e4aa4b">待审核</Tag>;
+    //   case 2:
+    //     return <Tag color="#19d54e">已审核</Tag>;
+    //   case -1:
+    //     return <Tag color="#d82d2d">已作废</Tag>
+    //   default:
+    //     return '';
+    // }
   };
 
   //保证金单位切换
@@ -481,6 +536,13 @@ const Renewal = (props: RenewalProps) => {
     return current < moment(infoDetail.contractEndDate).add(1, 'days');
   };
 
+  //重新设置state
+  const handleChange = ({ fileList }) => setFileList([...fileList]);
+  const handleRemove = (file) => {
+    const fileid = file.fileid || file.response.fileid;
+    RemoveFile(fileid).then(res => {
+    });
+  };
 
   return (
     <Drawer
@@ -490,12 +552,71 @@ const Renewal = (props: RenewalProps) => {
       onClose={closeDrawer}
       visible={visible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
-      <PageHeader title={GetStatus(infoDetail.status)}
+      {/* <PageHeader title={GetStatus(infoDetail.status)}
       // extra={[
       //   <Button key="1">附件</Button>, 
       //   <Button key="2">打印</Button>,
       // ]}
-      />
+      /> */}
+
+      <PageHeader
+        title={null}
+        subTitle={
+          <div>
+            <label style={{ color: '#4494f0', fontSize: '24px' }}>{infoDetail.customer}</label>
+          </div>
+        }
+        //title={GetStatus(infoDetail.status)}
+        style={{
+          border: '1px solid rgb(235, 237, 240)'
+        }}
+        extra={[
+          <Tooltip title='跟进人'>
+            <Button key="1" icon="user"> {infoDetail.follower}</Button>
+          </Tooltip>
+        ]}
+      // extra={[
+      //   <Button key="1">附件</Button>, 
+      //   <Button key="2">打印</Button>,
+      // ]}
+      >
+        <Divider dashed />
+        <Form layout='vertical'>
+          <Row gutter={24}>
+            <Col lg={4}>
+              <Form.Item label="合同状态" >
+                {GetStatus(infoDetail.status)}
+              </Form.Item>
+            </Col>
+            <Col lg={4}>
+              <Form.Item label="合同基础单价" >
+                {totalInfo.leasePrice}
+              </Form.Item>
+            </Col>
+            <Col lg={4}>
+              <Form.Item label="租金合计" >
+                {totalInfo.totalAmount}
+              </Form.Item>
+            </Col>
+            <Col lg={4}>
+              <Form.Item label="保证金" >
+                {totalInfo.totalDeposit}
+              </Form.Item>
+            </Col>
+            <Col lg={4}>
+              <Form.Item label="联系人" >
+                {form.getFieldValue('linkMan')}
+              </Form.Item>
+            </Col>
+            <Col lg={4}>
+              <Form.Item label="联系电话" >
+                {form.getFieldValue('linkPhone')}
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
+      </PageHeader>
+
       <Divider dashed />
       <Form layout="vertical" hideRequiredMark>
         <Spin tip="数据处理中..." spinning={loading}>
@@ -508,10 +629,20 @@ const Renewal = (props: RenewalProps) => {
                       <Col lg={12}>
                         <Form.Item label="合同编号" required>
                           {getFieldDecorator('no', {
-                            rules: [{ required: true, message: '未选择模版时，请输入编号' }],
-                          })(<Input placeholder="如不填写系统将自动生成" />)}
+                            rules: [{ required: true, message: '请输入合同编号' }],
+                          })(<Input placeholder="请输入合同编号" />)}
                         </Form.Item>
                       </Col>
+                      <Col lg={12}>
+                        <Form.Item label="租赁数量/m²">
+                          {getFieldDecorator('leaseSize', {
+                            initialValue: infoDetail.leaseSize,
+                            rules: [{ required: true, message: '请输入租赁数量' }],
+                          })(<InputNumber placeholder="请输入租赁数量" style={{ width: '100%' }} />)}
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row gutter={24}>
                       <Col lg={12}>
                         <Form.Item label="跟进人" >
                           {getFieldDecorator('follower', {
@@ -531,16 +662,7 @@ const Renewal = (props: RenewalProps) => {
                           )}
                         </Form.Item>
                       </Col>
-                    </Row>
-                    <Row gutter={24}>
-                      <Col lg={12}>
-                        <Form.Item label="租赁数量（m²)">
-                          {getFieldDecorator('leaseSize', {
-                            initialValue: infoDetail.leaseSize,
-                            rules: [{ required: true, message: '请输入租赁数量' }],
-                          })(<InputNumber placeholder="请输入租赁数量" style={{ width: '100%' }} />)}
-                        </Form.Item>
-                      </Col>
+
                       <Col lg={12}>
                         <Form.Item label="合同签订时间" required>
                           {getFieldDecorator('contractStartDate', {
@@ -635,7 +757,7 @@ const Renewal = (props: RenewalProps) => {
                   <Card title="租赁信息" className={styles.addcard}>
                     <Row gutter={24}>
                       <Col lg={24}>
-                        <Form.Item label="房源选择" required>
+                        <Form.Item label={<div>房源选择(<a>多个房屋的时候，默认获取第一个房屋作为计费单元</a>)</div>} required>
                           {getFieldDecorator('room', {
                             initialValue: rooms,
                             rules: [{ required: true, message: '请选择房源' }],
@@ -651,9 +773,14 @@ const Renewal = (props: RenewalProps) => {
                               multiple={true}>
                             </TreeSelect>
                           )}
-                          <span style={{ marginLeft: 8, color: "green" }}>多个房屋的时候，默认获取第一个房屋作为计费单元</span>
+                          {/* <span style={{ marginLeft: 8, color: "green" }}>多个房屋的时候，默认获取第一个房屋作为计费单元</span> */}
                           {getFieldDecorator('billUnitId', {
                             initialValue: infoDetail.billUnitId
+                          })(
+                            <input type='hidden' />
+                          )}
+                          {getFieldDecorator('organizeId', {
+                            initialValue: infoDetail.organizeId
                           })(
                             <input type='hidden' />
                           )}
@@ -661,15 +788,22 @@ const Renewal = (props: RenewalProps) => {
                       </Col>
                     </Row>
                     <Row gutter={24}>
-                      <Col lg={12}>
-                        <Form.Item label="租客" required>
+                      <Col lg={24}>
+                        <Form.Item label="承租方" >
                           {getFieldDecorator('customer', {
                             initialValue: infoDetail.customer,
-                            rules: [{ required: true, message: '请填写姓名或公司' }],
-                          })(<Input placeholder="请填写姓名或公司" />)}
+                            // rules: [{ required: true, message: '请填写姓名或公司' }],
+                          })(<Input placeholder="请填写姓名或公司" disabled />)}
+
+                          {getFieldDecorator('customerId', {
+                            initialValue: infoDetail.customerId,
+                          })(
+                            <input type='hidden' />
+                          )}
+
                         </Form.Item>
                       </Col>
-                      <Col lg={12}>
+                      {/* <Col lg={12}>
                         <Form.Item label="行业" required>
                           {getFieldDecorator('industry', {
                             initialValue: infoDetail.industry,
@@ -685,26 +819,19 @@ const Renewal = (props: RenewalProps) => {
                               ))}
                             </Select>
                           )}
-                          {/* {getFieldDecorator('industry', {
+                          {getFieldDecorator('industry', {
                             initialValue: infoDetail.industry
                           })(
                             <input type='hidden' />
-                          )} */}
+                          )}
                         </Form.Item>
-                      </Col>
+                      </Col> */}
                     </Row>
+
                     <Row gutter={24}>
                       <Col lg={12}>
-                        <Form.Item label="法人" required>
-                          {getFieldDecorator('legalPerson', {
-                            initialValue: infoDetail.legalPerson,
-                            rules: [{ required: true, message: '请填写法人' }],
-                          })(<Input placeholder="请填写法人" />)}
-                        </Form.Item>
-                      </Col>
-                      <Col lg={12}>
                         <Form.Item label="签订人" required>
-                          {getFieldDecorator('signer', {
+                          {/* {getFieldDecorator('signer', {
                             initialValue: infoDetail.signer,
                             rules: [{ required: true, message: '请输入签订人' }],
                           })(
@@ -714,6 +841,21 @@ const Renewal = (props: RenewalProps) => {
                               placeholder="请输入签订人"
                               onSelect={onSignerSelect}
                             />
+                          )} */}
+                          {getFieldDecorator('signer', {
+                            initialValue: infoDetail.signer,
+                            rules: [{ required: true, message: '请选择签订人' }],
+                          })(
+                            <Select
+                              showSearch
+                              placeholder="请选择签订人"
+                              onSelect={onSignerSelect}>
+                              {userSource.map(item => (
+                                <Option key={item.id} value={item.name}>
+                                  {item.name}
+                                </Option>
+                              ))}
+                            </Select>
                           )}
                           {getFieldDecorator('signerId', {
                             initialValue: infoDetail.signerId,
@@ -722,18 +864,91 @@ const Renewal = (props: RenewalProps) => {
                           )}
                         </Form.Item>
                       </Col>
-                    </Row>
-                    <Row gutter={24}>
-                      <Col lg={24}>
-                        <Form.Item label="租客联系人">
-                          {getFieldDecorator('customerContact', {
-                            initialValue: infoDetail.customerContact,
-                            rules: [{ required: true, message: '请输入租客联系人' }],
-                          })(<Input placeholder="请输入租客联系人" />)}
+
+                      <Col lg={12}>
+                        <Form.Item label="类别" required>
+                          {getFieldDecorator('customerType', {
+                            initialValue: infoDetail.customerType,
+                            rules: [{ required: true, message: '请选择类别' }],
+                          })(
+                            <Select disabled placeholder="自动带出">
+                              <Option value="1" key="1">个人</Option>
+                              <Option value="2" key="2">单位</Option>
+                            </Select>,
+                          )}
                         </Form.Item>
                       </Col>
                     </Row>
 
+                    {form.getFieldValue('type') === '2' ? (
+                      <Row gutter={24}>
+                        <Col lg={12}>
+                          <Form.Item label="行业" required>
+                            {getFieldDecorator('industry', {
+                              initialValue: infoDetail.industry,
+                              rules: [{ required: true, message: '请选择行业' }],
+                            })(
+                              <Select placeholder="请选择行业"
+                                disabled={form.getFieldValue('customerId') == '' ? true : false}
+                              // onSelect={onIndustrySelect}
+                              >
+                                {industryType.map(item => (
+                                  <Option value={item.value} key={item.key}>
+                                    {item.title}
+                                  </Option>
+                                ))}
+                              </Select>
+                            )}
+                            {/* {getFieldDecorator('industry', {
+                            initialValue: infoDetail.industry
+                          })(
+                            <input type='hidden' />
+                          )} */}
+                          </Form.Item>
+                        </Col>
+                        <Col lg={12}>
+                          <Form.Item label="法人" required>
+                            {getFieldDecorator('legalPerson', {
+                              initialValue: infoDetail.legalPerson,
+                              rules: [{ required: true, message: '请填写法人' }],
+                            })(<Input placeholder="请填写法人"
+                              disabled={form.getFieldValue('customerId') == '' ? true : false}
+                            />)}
+                          </Form.Item>
+                        </Col>
+                      </Row>) : null}
+
+                    <Row gutter={24}>
+                      <Col lg={12}>
+                        <Form.Item label="联系人">
+                          {getFieldDecorator('linkMan', {
+                            initialValue: infoDetail.linkMan,
+                            rules: [{ required: true, message: '请输入联系人' }],
+                          })(<Input placeholder="请输入联系人"
+                            disabled={form.getFieldValue('customerId') == '' ? true : false}
+                          />)}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={12}>
+                        <Form.Item label="联系电话">
+                          {getFieldDecorator('linkPhone', {
+                            initialValue: infoDetail.linkPhone,
+                            rules: [{ required: true, message: '请输入联系电话' }],
+                          })(<Input placeholder="请输入联系电话"
+                            disabled={form.getFieldValue('customerId') == '' ? true : false} />)}
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row gutter={24}>
+                      <Col lg={24}>
+                        <Form.Item label="联系地址" required>
+                          {getFieldDecorator('address', {
+                            initialValue: infoDetail.address,
+                            rules: [{ required: true, message: '请输入联系地址' }],
+                          })(<Input placeholder="请输入联系地址" disabled={form.getFieldValue('customerId') == '' ? true : false} />)}
+                        </Form.Item>
+                      </Col>
+                    </Row>
                   </Card>
                 </Col>
               </Row>
@@ -742,7 +957,7 @@ const Renewal = (props: RenewalProps) => {
               <Card title="基本条款" className={styles.card} >
                 <Row gutter={24}>
                   <Col lg={4}>
-                    <Form.Item label="租赁数量（㎡）" required>
+                    <Form.Item label="租赁数量/㎡" required>
                       {getFieldDecorator('leaseArea', {
                         initialValue: contractCharge.leaseArea
                       })(<Input readOnly />)}
@@ -764,13 +979,11 @@ const Renewal = (props: RenewalProps) => {
                           ))}
                         </Select>
                       )}
-
                       {getFieldDecorator('depositFeeItemName', {
                         initialValue: contractCharge.depositFeeItemName,
                       })(
                         <input type='hidden' />
                       )}
-
                     </Form.Item>
                   </Col>
                   <Col lg={5}>
@@ -800,7 +1013,7 @@ const Renewal = (props: RenewalProps) => {
                 </Col> */}
                 </Row>
               </Card>
-              <LeaseTermRenewal
+              {/* <LeaseTermRenewal
                 form={form}
                 feeItems={feeItems}
               ></LeaseTermRenewal>
@@ -809,7 +1022,22 @@ const Renewal = (props: RenewalProps) => {
               ></IncreasingRate>
               <Rebate
                 form={form}
-              ></Rebate>
+              ></Rebate> */}
+
+              <LeaseTermModify
+                form={form}
+                feeItems={feeItems}
+                chargeFee={chargefee}
+              ></LeaseTermModify>
+              <IncreasingRateModify
+                form={form}
+                chargeIncre={chargeincre}
+              ></IncreasingRateModify>
+              <RebateModify
+                form={form}
+                chargeOffer={chargefeeoffer}
+              ></RebateModify>
+
               <Button style={{ width: '100%', marginBottom: '10px' }}
                 onClick={calculation}>点击生成租金明细</Button>
               <ResultList
@@ -819,6 +1047,40 @@ const Renewal = (props: RenewalProps) => {
               ></ResultList>
             </TabPane>
 
+            <TabPane tab="其他条款" key="3">
+              <div style={{ marginBottom: '50px' }}>
+                <Row gutter={24}>
+                  <Col lg={24}>
+                    <Form.Item label="&nbsp;">
+                      {getFieldDecorator('memo', {
+                        initialValue: infoDetail.memo,
+                      })(
+                        <TextArea rows={10} placeholder="请输入" />
+                      )}
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={24}>
+                  <Col lg={24}>
+                    <div className="clearfix">
+                      <Upload
+                        //accept='.doc,.docx,.pdf,image/*'
+                        action={process.env.basePath + '/Contract/Upload?keyValue=' + id}
+                        fileList={fileList}
+                        //listType="picture-card"
+                        listType='picture'
+                        onChange={handleChange}
+                        onRemove={handleRemove}>
+                        {/* {uploadButton} */}
+                        <Button>
+                          <Icon type="upload" />上传附件
+                      </Button>
+                      </Upload>
+                    </div>
+                  </Col>
+                </Row>
+              </div>
+            </TabPane>
           </Tabs>
         </Spin>
       </Form>

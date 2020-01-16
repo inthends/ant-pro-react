@@ -492,7 +492,6 @@ const Modify = (props: ModifyProps) => {
           // RebateJson: RebateJson,
           DepositResult: JSON.stringify(depositData),
           ChargeFeeResult: JSON.stringify(chargeData)
-
         }).then(res => {
           message.success('保存成功');
           closeDrawer();
@@ -1056,8 +1055,7 @@ const Modify = (props: ModifyProps) => {
                             disabled={form.getFieldValue('customerId') == '' ? true : false} />)}
                         </Form.Item>
                       </Col>
-                    </Row>
-
+                    </Row> 
                     <Row gutter={24}>
                       <Col lg={24}>
                         <Form.Item label="联系地址" required>

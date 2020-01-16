@@ -224,7 +224,7 @@ function ListTable(props: ListTableProps) {
           // <Button type="danger" key="delete" onClick={() => doDelete(record)}>
           //   删除
           // </Button>, 
-          <span>
+          <span key='span'>
             <a onClick={() => modify(record.id)} key="modify">修改</a>
             <Divider type="vertical" />
             <a onClick={() => doInvalid(record)} key="invalid">作废</a>
