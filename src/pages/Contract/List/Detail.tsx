@@ -519,8 +519,7 @@ const Detail = (props: DetailProps) => {
               <ResultList
                 depositData={depositData}
                 chargeData={chargeData}
-                className={styles.addcard}
-              ></ResultList>
+                className={styles.addcard}></ResultList>
             </TabPane>
             {/* <TabPane tab="审批记录" key="4">
             <AppLog appData={appData}></AppLog>

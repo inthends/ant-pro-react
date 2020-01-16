@@ -28,7 +28,7 @@ interface ApproveProps {
 
 const Approve = (props: ApproveProps) => {
   const { reload, visible, closeDrawer, flowId, id, instanceId, form } = props;
-  const title = '单据详情';
+  const title = '合同审批';
   const { getFieldDecorator } = form;
   //const [industryType, setIndustryType] = useState<any[]>([]); //行业  
   //const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
