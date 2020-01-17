@@ -4,9 +4,10 @@ import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import ChooseUser from './ChooseUser';
 import RoleAuth from './RoleAuth';
+import DataAuth from './DataAuth';
 import ListTable from './ListTable';
 import Modify from './Modify';
-import { getDataList } from './Role.service'; 
+import { getDataList } from './Role.service';
 
 // const { Option } = Select;
 const { Content } = Layout;
@@ -157,11 +158,19 @@ const Role = () => {
         reload={() => initLoadData(search)}
       />
       <ChooseUser visible={userVisible} close={() => setUserVisible(false)} data={currData} />
+      
       <RoleAuth
         visible={authVisible}
         close={() => setAuthVisible(false)}
         roleId={currData && currData.roleId}
       />
+
+      <DataAuth
+        visible={authVisible}
+        close={() => setAuthVisible(false)}
+        roleId={currData && currData.roleId}
+      />
+
     </Layout>
   );
 };

@@ -99,7 +99,7 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'operation',
       key: 'operation',
       align: 'center',
-      width: 140,
+      width: 200,
       render: (text, record) => {
         return [
           <span key='span'>
@@ -116,8 +116,14 @@ function ListTable(props: ListTableProps) {
           </a>
             <Divider type="vertical" key='divider2' />
             <a key="auth" type='link' onClick={() => showAuth(record)}>
-              角色授权
+              模块权限
           </a>
+
+            <Divider type="vertical" key='divider2' />
+            <a key="auth" type='link' onClick={() => showAuth(record)}>
+              楼盘权限
+          </a>
+
             <Divider type="vertical" key='divider3' />
             <a key="delete" type="link" onClick={() => doDelete(record)}>
               删除

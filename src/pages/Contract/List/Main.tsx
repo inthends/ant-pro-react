@@ -1,6 +1,6 @@
 
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { Button, Icon, Input, Layout } from 'antd';
+import { Row, Col, Card, Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import { GetPageListJson } from './Main.service';
@@ -12,10 +12,10 @@ import Detail from './Detail';
 // import Approve from './Approve';
 import Change from './Change';
 import Renewal from './Renewal';
-import Withdrawal from './Withdrawal'; 
+import Withdrawal from './Withdrawal';
 // import ChooseUser from './ChooseUser';
 // import { GetQuickSimpleTreeAllForContract } from '@/services/commonItem';
-
+import styles from './style.less';
 const { Content } = Layout;
 const { Search } = Input;
 
@@ -35,7 +35,7 @@ function Main() {
   const [search, setSearch] = useState<string>('');
   // const [treeData, setTreeData] = useState<any[]>([]); 
   // const [userVisible, setUserVisible] = useState<boolean>(false); 
- 
+
 
   const closeAddDrawer = () => {
     setAddVisible(false);
@@ -98,7 +98,7 @@ function Main() {
 
   const closeWithdrawalDrawer = () => {
     setWithdrawalVisible(false);
-  }; 
+  };
 
   const loadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(search);
@@ -171,6 +171,19 @@ function Main() {
   //   // setCurrData(item);
   // };
 
+  //显示信息
+  const Info: React.FC<{
+    title: React.ReactNode;
+    value: React.ReactNode;
+    bordered?: boolean;
+  }> = ({ title, value, bordered }) => (
+    <div className={styles.headerInfo}>
+      <span>{title}</span>
+      <p>{value}</p>
+      {bordered && <em />}
+    </div>
+  );
+
   return (
     <Layout style={{ height: '100%' }}>
       <Content  >
@@ -189,6 +202,31 @@ function Main() {
           </Button>
         </div>
 
+        <Card className={styles.card}>
+          <Row>
+            <Col sm={4} xs={24}>
+              <Info title="新建待审核" value="8" bordered />
+            </Col>
+            <Col sm={4} xs={24}>
+              <Info title="变更待审核" value="2" bordered />
+            </Col>
+            <Col sm={4} xs={24}>
+              <Info title="退租待审核" value="5" bordered/>
+            </Col>
+
+            <Col sm={4} xs={24}>
+              <Info title="作废待审核" value="4" bordered/>
+            </Col>
+
+            <Col sm={4} xs={24}>
+              <Info title="到期未处理" value="7" bordered/>
+            </Col>
+            <Col sm={4} xs={24}>
+              <Info title="正常执行" value="8" />
+            </Col>
+          </Row>
+        </Card>
+
         <ListTable
           onchange={(paginationConfig, filters, sorter) =>
             loadData(search, paginationConfig, sorter)
@@ -201,7 +239,7 @@ function Main() {
           // approve={showApproveDrawer}
           change={showChangeDrawer}
           renewal={showRenewalDrawer}
-          withdrawal={showWithdrawalDrawer} 
+          withdrawal={showWithdrawalDrawer}
           reload={() => initLoadData(search)} />
       </Content>
 
@@ -231,7 +269,7 @@ function Main() {
         reload={() => initLoadData(search)}
       />
 
-   
+
 
       {/* <ChooseUser
         visible={userVisible}
@@ -264,7 +302,7 @@ function Main() {
         id={id}
         chargeId={chargeId}
         reload={() => initLoadData(search)}
-      /> 
+      />
 
     </Layout>
   );

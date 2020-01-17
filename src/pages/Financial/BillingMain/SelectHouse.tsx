@@ -42,8 +42,7 @@ const SelectHouse = (props: SelectHouseProps) => {
 
   const [unitData, setUnitData] = useState<string[]>([]);
   const [selectedFeeId, setSelectedFeeId] = useState<string>('');
-  // const [startDate, setStartDate] = useState<string>();
-
+  // const [startDate, setStartDate] = useState<string>(); 
   // const selectStartDate = (date) => {
   //   setStartDate(date);
   // };
@@ -55,12 +54,9 @@ const SelectHouse = (props: SelectHouseProps) => {
       okText="确认"
       cancelText="取消"
       onCancel={() => closeModal()}
-      onOk={() => {
-
-        form.validateFields((errors, values) => {
-
-          if (!errors) {
-
+      onOk={() => { 
+        form.validateFields((errors, values) => { 
+          if (!errors) { 
             if (unitData.length == 0) {
               message.warning('请选择房间');
             } else {
@@ -98,31 +94,29 @@ const SelectHouse = (props: SelectHouseProps) => {
       }}
       destroyOnClose={true}
       bodyStyle={{ background: '#f6f7fb' }}
-      width='600px'
+      width='650px'
     >
       {/* <Row style={{ height: '600px', overflow: 'hidden', marginTop: '5px', backgroundColor: 'rgb(255,255,255)' }}> */}
       <Spin tip="数据处理中..." spinning={loading}>
 
         <Form layout='inline' hideRequiredMark >
           <Row gutter={24}>
-            <Col  >
+            <Col span={24} >
               <Form.Item label="计费起始日在此之前" required >
                 {getFieldDecorator('startDate', {
                   initialValue: moment(new Date()),
                   rules: [{ required: true, message: '请选择日期' }],
                 })(
-                  <DatePicker style={{ width: '132px' }}
+                  <DatePicker style={{ width: '155px' }}
                   //  onChange={(date, dateString) => selectStartDate(dateString)}
                   />
                 )}
               </Form.Item>
-            </Col>
-
+            </Col> 
           </Row>
-        </Form>
+        </Form> 
 
-
-        <Row gutter={8}>
+        <Row gutter={12}>
           <Col span={12} style={{ height: '500px', overflow: 'auto' }}>
             <SelectTree
               checkable={true}
