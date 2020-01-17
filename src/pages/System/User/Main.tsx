@@ -7,7 +7,8 @@ import Modify from './Modify';
 import { TreeNode } from 'antd/lib/tree-select';
 import { getDataList } from './User.service';
 import { GetOrgs } from '@/services/commonItem';
-import UserAuth from './UserAuth';
+import ModuleAuth from './ModuleAuth';
+import DataAuth from './DataAuth';
 
 const { Content } = Layout;
 const { Search } = Input;
@@ -15,7 +16,7 @@ interface SearchParam {
   condition: 'Account' | 'Name' | 'Code';
   keyword: string;
 }
-const User = () => {
+const Main = () => {
   const [search, setSearch] = useState<SearchParam>({
     condition: 'Account',
     keyword: '',
@@ -26,7 +27,8 @@ const User = () => {
   const [currData, setCurrData] = useState<any>();
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [orgs, setOrgs] = useState<TreeNode[]>([]);
-  const [authVisible, setAuthVisible] = useState<boolean>(false);
+  const [dataAuthVisible, setDataAuthVisible] = useState<boolean>(false);
+  const [moduleAuthVisible, setModuleAuthVisible] = useState<boolean>(false);
 
   useEffect(() => {
     initLoadData(search);
@@ -99,7 +101,12 @@ const User = () => {
     });
   };
 
-  const showAuth = (item?) => {
+  const showModuleAuth = (item?) => {
+    setAuthVisible(true);
+    setCurrData(item);
+  };
+
+  const showDataAuth = (item?) => {
     setAuthVisible(true);
     setCurrData(item);
   };
@@ -144,7 +151,8 @@ const User = () => {
           modify={showDrawer}
           reload={() => initLoadData(search)}
           setData={setData}
-          showAuth={showAuth}
+          showModuleAuth={showModuleAuth}
+          showDataAuth={showDataAuth}
         />
       </Content>
       <Modify
@@ -155,9 +163,15 @@ const User = () => {
         reload={() => initLoadData({ ...search })}
       />
 
-      <UserAuth
-        visible={authVisible}
-        close={() => setAuthVisible(false)}
+      <ModuleAuth
+        visible={moduleAuthVisible}
+        close={() => setModuleAuthVisible(false)}
+        userId={currData && currData.id}
+      />
+
+      <DataAuth
+        visible={dataAuthVisible}
+        close={() => setDataAuthVisible(false)}
         userId={currData && currData.id}
       />
 
@@ -165,4 +179,4 @@ const User = () => {
   );
 }
 
-export default User;
+export default Main;

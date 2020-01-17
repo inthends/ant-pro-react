@@ -4,23 +4,23 @@ import { Modal, Tree, message, Spin } from 'antd';
 import styles from './style.less';
 import { GetDataHalfCheckIds, GetDataCheckIds, GetHalfCheckIds, GetCheckIds, GetAuths, GetDataAuths, SaveDataAuthorize, SaveModuleAuthorize } from './Role.service';
 // const { TabPane } = Tabs;
-interface DataAuthProps {
+interface ModuleAuthProps {
   visible: boolean;
   roleId?;
   close(): void;
 }
-const DataAuth = (props: DataAuthProps) => {
+const ModuleAuth = (props: ModuleAuthProps) => {
   const { visible, close, roleId } = props;
   const treeRef = useRef(null);
   useEffect(() => {
     if (visible) {
-      changeTab(ACTIVEKEYS.楼盘权限);
+      changeTab(ACTIVEKEYS.功能权限);
     }
   }, [visible]);
 
   const [auths, setAuths] = useState<any[]>([]);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
-  const [activeKey, setActiveKey] = useState<string>(ACTIVEKEYS.楼盘权限);
+  const [activeKey, setActiveKey] = useState<string>(ACTIVEKEYS.功能权限);
   const [checkedKeys, setCheckedKeys] = useState<string[]>([]);//选中的模块节点 
   const [halfCheckedKeys, setHalfCheckedKeys] = useState<string[]>([]);//半选中节点
 
@@ -53,7 +53,7 @@ const DataAuth = (props: DataAuthProps) => {
   };
 
   //点击事件
-  const onCheck = (checkedKeys, info) => {
+  const onCheck = (checkedKeys, info) => { 
     //let checkedKeysResult = [...checkedKeys, ...info.halfCheckedKeys];
     setCheckedKeys(checkedKeys);
     setHalfCheckedKeys(info.halfCheckedKeys);//半选中节点
@@ -88,7 +88,6 @@ const DataAuth = (props: DataAuthProps) => {
       GetDataAuths(roleId).then(res => {
         //console.log(JSON.parse(res));
 
-
         //半选
         GetDataHalfCheckIds(roleId).then(res => {
           setHalfCheckedKeys(res || []);
@@ -114,7 +113,8 @@ const DataAuth = (props: DataAuthProps) => {
       //     <TabPane tab="数据权限" key={ACTIVEKEYS.数据权限} disabled={!isLoaded}></TabPane>
       //   </Tabs>
       // }
-      title='楼盘权限'
+
+      title='功能权限' 
       visible={visible}
       okText="保存"
       cancelText="取消"
@@ -135,16 +135,16 @@ const DataAuth = (props: DataAuthProps) => {
               treeData={auths}
               key={activeKey}
               defaultExpandAll
-              ref={treeRef}
+              ref={treeRef} 
             ></Tree>
-          ) : <Spin tip="数据处理中..." className={styles.spin} />}
+          ) : <Spin tip="数据处理中..."  className={styles.spin}   />}
         </div>
       ) : null}
     </Modal>
   );
 };
 
-export default DataAuth;
+export default ModuleAuth;
 enum ACTIVEKEYS {
   功能权限 = '1',
   // 操作权限 = '2',

@@ -395,13 +395,13 @@ export default [
             name: 'user',
             path: '/system/user',
             icon: 'user',
-            component: './System/User/User',
+            component: './System/User/Main',
           },
           {
             name: 'role',
             path: '/system/role',
             icon: 'solution',
-            component: './System/Role/Role',
+            component: './System/Role/Main',
           },
           {
             name: 'code',

@@ -3,7 +3,7 @@ import { Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import ChooseUser from './ChooseUser';
-import RoleAuth from './RoleAuth';
+import ModuleAuth from './ModuleAuth';
 import DataAuth from './DataAuth';
 import ListTable from './ListTable';
 import Modify from './Modify';
@@ -17,14 +17,15 @@ interface SearchParam {
   keyword: string;
 };
 
-const Role = () => {
+const Main = () => {
   const [search, setSearch] = useState<SearchParam>({
     // condition: 'EnCode',
     keyword: '',
   });
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   const [userVisible, setUserVisible] = useState<boolean>(false);
-  const [authVisible, setAuthVisible] = useState<boolean>(false);
+  const [moduleAuthVisible, setModuleAuthVisible] = useState<boolean>(false);
+  const [dataAuthVisible, setDataAuthVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<any[]>([]);
   const [currData, setCurrData] = useState<any>();
@@ -45,8 +46,14 @@ const Role = () => {
     setUserVisible(true);
     setCurrData(item);
   };
-  const showAuth = (item?) => {
-    setAuthVisible(true);
+
+  const showDataAuth = (item?) => {
+    setDataAuthVisible(true);
+    setCurrData(item);
+  };
+
+  const showModuleAuth = (item?) => {
+    setModuleAuthVisible(true);
     setCurrData(item);
   };
 
@@ -145,7 +152,8 @@ const Role = () => {
           data={data}
           modify={showDrawer}
           choose={showChoose}
-          showAuth={showAuth}
+          showModuleAuth={showModuleAuth}
+          showDataAuth={showDataAuth}
           reload={() => initLoadData(search)}
           setData={setData}
         />
@@ -158,16 +166,16 @@ const Role = () => {
         reload={() => initLoadData(search)}
       />
       <ChooseUser visible={userVisible} close={() => setUserVisible(false)} data={currData} />
-      
-      <RoleAuth
-        visible={authVisible}
-        close={() => setAuthVisible(false)}
+
+      <ModuleAuth
+        visible={moduleAuthVisible}
+        close={() => setModuleAuthVisible(false)}
         roleId={currData && currData.roleId}
       />
 
       <DataAuth
-        visible={authVisible}
-        close={() => setAuthVisible(false)}
+        visible={dataAuthVisible}
+        close={() => setDataAuthVisible(false)}
         roleId={currData && currData.roleId}
       />
 
@@ -175,4 +183,4 @@ const Role = () => {
   );
 };
 
-export default Role;
+export default Main;

@@ -90,20 +90,20 @@ const Modify = (props: ModifyProps) => {
     }
   };
 
-  const checkNameExist = (rule, value, callback) => {
-    if (value == undefined) {
-      callback();
-    }
-    else {
-      const keyValue = initData.departmentId == undefined ? '' : initData.departmentId;
-      ExistName(keyValue, value).then(res => {
-        if (res)
-          callback('部门名称重复');
-        else
-          callback();
-      })
-    }
-  };
+  // const checkNameExist = (rule, value, callback) => {
+  //   if (value == undefined) {
+  //     callback();
+  //   }
+  //   else {
+  //     const keyValue = initData.departmentId == undefined ? '' : initData.departmentId;
+  //     ExistName(keyValue, value).then(res => {
+  //       if (res)
+  //         callback('部门名称重复');
+  //       else
+  //         callback();
+  //     })
+  //   }
+  // };
 
   const getDepts = (value) => {
     GetDepartmentTree(value).then(res => {
@@ -146,11 +146,8 @@ const Modify = (props: ModifyProps) => {
               {...baseFormProps}
               field="fullName"
               label="部门名称"
-              rules={[{ required: true, message: '请输入部门名称' },
-              {
-                validator: checkNameExist
-              }
-              ]}
+              rules={[{ required: true, message: '请输入部门名称' }]}
+              // rules={[{ required: true, message: '请输入部门名称' }, { validator: checkNameExist }]}
             ></ModifyItem>
             <ModifyItem
               {...baseFormProps}

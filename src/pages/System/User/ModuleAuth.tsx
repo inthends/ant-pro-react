@@ -7,12 +7,12 @@ import {
   GetAuths, GetDataAuths, SaveDataAuthorize, SaveModuleAuthorize
 } from './User.service';
 const { TabPane } = Tabs;
-interface UserAuthProps {
+interface ModuleAuthProps {
   visible: boolean;
   userId?;
   close(): void;
 }
-const UserAuth = (props: UserAuthProps) => {
+const ModuleAuth = (props: ModuleAuthProps) => {
   const { visible, close, userId } = props;
   const treeRef = useRef(null);
   useEffect(() => {
@@ -145,12 +145,12 @@ const UserAuth = (props: UserAuthProps) => {
   );
 };
 
-export default UserAuth;
+export default ModuleAuth;
 
 enum ACTIVEKEYS {
   功能权限 = '1',
   // 操作权限 = '2',
-  数据权限 = '3',
+  数据权限 = '2',
 }
 
 const getMenu = (keys: string[], treeData: any[], type: string, list: string[] = []) => {

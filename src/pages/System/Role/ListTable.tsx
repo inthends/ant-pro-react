@@ -10,14 +10,15 @@ interface ListTableProps {
   data: any[];
   modify(record: any): void;
   choose(record: any): void;
-  showAuth(record: any): void;
+  showModuleAuth(record: any): void;
+  showDataAuth(record: any): void;
   onchange(page: any, filter: any, sort: any): any;
   reload(): void;
   setData(data: any[]): void;
 }
 
 function ListTable(props: ListTableProps) {
-  const { onchange, loading, data, modify, reload, pagination, setData, choose, showAuth } = props;
+  const { onchange, loading, data, modify, reload, pagination, setData, choose, showModuleAuth, showDataAuth } = props;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
   };
@@ -109,22 +110,20 @@ function ListTable(props: ListTableProps) {
               onClick={() => doModify(record)}
             >
               编辑
-          </a>
+           </a>
             <Divider type="vertical" key='divider1' />
             <a key="choose" type='link' onClick={() => choose(record)}>
               角色成员
-          </a>
+           </a>
             <Divider type="vertical" key='divider2' />
-            <a key="auth" type='link' onClick={() => showAuth(record)}>
-              模块权限
-          </a>
-
-            <Divider type="vertical" key='divider2' />
-            <a key="auth" type='link' onClick={() => showAuth(record)}>
-              楼盘权限
-          </a>
-
+            <a key="auth" type='link' onClick={() => showModuleAuth(record)}>
+              功能权限
+           </a>
             <Divider type="vertical" key='divider3' />
+            <a key="auth" type='link' onClick={() => showDataAuth(record)}>
+              楼盘权限
+            </a>
+            <Divider type="vertical" key='divider4' />
             <a key="delete" type="link" onClick={() => doDelete(record)}>
               删除
           </a>
