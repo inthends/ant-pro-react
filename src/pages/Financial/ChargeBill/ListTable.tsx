@@ -380,6 +380,7 @@ function ListTable(props: ListTableProps) {
 
   const pay = (url) => {
     let temp = Modal.confirm({
+      title:'请扫码', 
       content: (<img src={url}></img>),
       onCancel() {
         if (timer) {
@@ -406,8 +407,7 @@ function ListTable(props: ListTableProps) {
             reload();
             //弹出查看页面
             showDetail(billId);
-          } else {
-
+          } else { 
             if (timer) {
               retry();
             }
