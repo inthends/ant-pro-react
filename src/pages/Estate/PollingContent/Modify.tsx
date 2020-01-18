@@ -32,15 +32,13 @@ const Modify = (props: ModifyProps) => {
 
 
   useEffect(() => {
-    if (visible) {
-      GetOrgs().then(res => {
-        setOrgs(res);
-      });
-      getCommonItems('PollingType').then(res => {
-        setPollingType(res || []);
-      });
-    }
-  }, [visible]);
+    GetOrgs().then(res => {
+      setOrgs(res);
+    });
+    getCommonItems('PollingType').then(res => {
+      setPollingType(res || []);
+    });
+  }, []);
 
   const onTypeSelect = (value, option) => {
     form.setFieldsValue({ typeName: option.props.children });

@@ -3,7 +3,7 @@ import ModifyItem, { SelectItem } from '@/components/BaseModifyDrawer/ModifyItem
 import { Card, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useState, useEffect } from 'react';
-import { SaveForm, searchUser, ExistEnCode, ExistName, GetDepartmentTree } from './Main.service';
+import { SaveForm, searchUser, ExistEnCode, GetDepartmentTree } from './Main.service';
 import { GetOrgs } from '@/services/commonItem';
 import { TreeNode } from 'antd/lib/tree-select';
 import styles from './style.less';
@@ -45,12 +45,10 @@ const Modify = (props: ModifyProps) => {
   const baseFormProps = { form, initData };
 
   useEffect(() => {
-    if (visible) {
-      GetOrgs().then(res => {
-        setOrgs(res);
-      });
-    }
-  }, [visible]);
+    GetOrgs().then(res => {
+      setOrgs(res);
+    });
+  }, []);
 
   const searchManager = value => {
     searchUser(value).then(res => {
@@ -147,7 +145,7 @@ const Modify = (props: ModifyProps) => {
               field="fullName"
               label="部门名称"
               rules={[{ required: true, message: '请输入部门名称' }]}
-              // rules={[{ required: true, message: '请输入部门名称' }, { validator: checkNameExist }]}
+            // rules={[{ required: true, message: '请输入部门名称' }, { validator: checkNameExist }]}
             ></ModifyItem>
             <ModifyItem
               {...baseFormProps}

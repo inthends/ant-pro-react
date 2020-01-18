@@ -37,7 +37,7 @@ const Modify = (props: ModifyProps) => {
   const [search, setSearch] = useState<string>('');
   const [selectPointVisible, setSelectPointVisible] = useState<boolean>(false);
   const [isAdd, setIsAdd] = useState<boolean>(true);
-  const [lineId, setLineId] = useState<string>(''); 
+  const [lineId, setLineId] = useState<string>('');
 
   const doSave = dataDetail => {
     let modifyData = {
@@ -57,12 +57,16 @@ const Modify = (props: ModifyProps) => {
     });
   }
 
+
+  useEffect(() => {
+    GetOrgEsates().then(res => {
+      setOrgs(res);
+    });
+  }, []);
+
   useEffect(() => {
     if (visible) {
-      GetOrgEsates().then(res => {
-        setOrgs(res);
-      });
-
+      
       //巡检角色
       // GetTreeRoleJson().then(res => {
       //   setRoles(res || []);

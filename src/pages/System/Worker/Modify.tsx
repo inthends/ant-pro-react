@@ -3,7 +3,7 @@ import ModifyItem, { SelectItem } from '@/components/BaseModifyDrawer/ModifyItem
 import { Card, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useState, useEffect } from 'react';
-import {ExistCode,  GetDepartmentTreeByOrgId, SaveForm } from './Worker.service';
+import { ExistCode, GetDepartmentTreeByOrgId, SaveForm } from './Worker.service';
 import { TreeNode } from 'antd/lib/tree-select';
 import styles from './style.less';
 import { GetOrgs } from '@/services/commonItem';
@@ -24,14 +24,16 @@ const Modify = (props: ModifyProps) => {
   // initData.expDate = initData.expDate ? initData.expDate : new Date();
   const baseFormProps = { form, initData };
 
-  const getOrgs = () => {
+  // const getOrgs = () => {
+  //   GetOrgs().then(res => {
+  //     setOrgs(res);
+  //   });
+  // };
+
+  useEffect(() => {
     GetOrgs().then(res => {
       setOrgs(res);
     });
-  };
-
-  useEffect(() => {
-    getOrgs();
   }, []);
 
   useEffect(() => {

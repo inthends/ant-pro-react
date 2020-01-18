@@ -55,8 +55,7 @@ const PstructInfo = (props: PstructInfoProps) => {
   // 打开抽屉时初始化
   useEffect(() => {
     if (modifyVisible) {
-      if (data) {
-
+      if (data) { 
         setInfoDetail(data);
         //加载图片
         let files: any[]; files = [];

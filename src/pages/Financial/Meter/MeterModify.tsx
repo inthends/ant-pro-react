@@ -48,6 +48,16 @@ const MeterModify = (props: MeterModifyProps) => {
   const [keyValue, setKeyValue] = useState<string>('');
 
   useEffect(() => {
+    //获取费表种类
+    GetDataItemTreeJson('EnergyMeterType').then(res => {
+      setMeterTypes(res);
+    });
+    GetOrgTree().then(res => {
+      setOrgTreeData(res);
+    });
+  }, []);
+
+  useEffect(() => {
     if (modifyVisible) {
       form.resetFields();
       //获取费表类型
@@ -55,13 +65,6 @@ const MeterModify = (props: MeterModifyProps) => {
       //   setMeterKinds(res);
       // });
 
-      //获取费表种类
-      GetDataItemTreeJson('EnergyMeterType').then(res => {
-        setMeterTypes(res);
-      });
-      GetOrgTree().then(res => {
-        setOrgTreeData(res);
-      });
       if (id) {
         setKeyValue(id);
         setIsAdd(false);

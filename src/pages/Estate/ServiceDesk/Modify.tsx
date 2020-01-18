@@ -1,5 +1,5 @@
 
-import { Upload, Modal, Menu, Dropdown, Icon, Tabs, Select, Button, Card, Col, Drawer, Form, Input, message, Row, TreeSelect } from 'antd';
+import { Spin, Upload, Modal, Menu, Dropdown, Icon, Tabs, Select, Button, Card, Col, Drawer, Form, Input, message, Row, TreeSelect } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { Visit, GetFilesData, RemoveFile, GetRoomUser, SaveForm, ChangeToRepair, ChangeToComplaint } from './Main.service';
@@ -34,7 +34,7 @@ const Modify = (props: ModifyProps) => {
   const [fileList, setFileList] = useState<any[]>([]);
   const [previewImage, setPreviewImage] = useState<string>('');
   const [addMemoVisible, setAddMemoVisible] = useState<boolean>(false);
-
+  const [loading, setLoading] = useState<boolean>(false);
   // 打开抽屉时初始化
   // useEffect(() => { 
   //获取房产树
@@ -48,7 +48,9 @@ const Modify = (props: ModifyProps) => {
 
   // 打开抽屉时初始化
   useEffect(() => {
+
     if (modifyVisible) {
+      setLoading(true);
       if (data) {
         setkeyValue(data.id);
         setInfoDetail(data);
@@ -58,12 +60,18 @@ const Modify = (props: ModifyProps) => {
           setFileList(res || []);
         });
 
+        setLoading(false);
+
       } else {
+
         setkeyValue(guid());
         setInfoDetail({});
         form.resetFields();
         setFileList([]);
+        setLoading(false);
+
       }
+
     } else {
       form.resetFields();
     }
@@ -264,7 +272,9 @@ const Modify = (props: ModifyProps) => {
       visible={modifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
-      {modifyVisible ? (
+      <Spin tip="数据处理中..." spinning={loading}>
+
+        {/* {modifyVisible ? ( */}
         <Tabs defaultActiveKey="1" >
           <TabPane tab="基础信息" key="1">
             <Form layout="vertical" hideRequiredMark>
@@ -547,7 +557,7 @@ const Modify = (props: ModifyProps) => {
                         </Modal>
                       </div>
                     </Col>
-                  </Row> 
+                  </Row>
                 </Card>)
               }
 
@@ -650,7 +660,10 @@ const Modify = (props: ModifyProps) => {
             </TabPane>
           ) : null}
 
-        </Tabs>) : null}
+        </Tabs>
+        {/* ) : null} */}
+
+      </Spin>
 
       <AddMemo
         visible={addMemoVisible}
@@ -659,7 +672,6 @@ const Modify = (props: ModifyProps) => {
         closeDrawer={closeDrawer}
         keyValue={keyValue}
       />
-
 
       <div
         style={{

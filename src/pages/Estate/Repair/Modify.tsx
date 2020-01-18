@@ -30,7 +30,6 @@ const Modify = (props: ModifyProps) => {
     getCommonItems('RepairMajor').then(res => {
       setRepairMajors(res || []);
     });
-
   }, []);
 
   // 打开抽屉时初始化 

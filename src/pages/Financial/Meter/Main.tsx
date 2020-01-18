@@ -18,35 +18,28 @@ const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
 const { Option } = Select;
-function Meter() {
+function Main() {
   const [organize, SetOrganize] = useState<any>({});
   // const [treeSearch, SetTreeSearch] = useState<any>({});
-  const [id, setId] = useState<string>();
-
-  const [readingMeterId, setReadingMeterId] = useState<string>();
-
+  const [id, setId] = useState<string>(); 
+  const [readingMeterId, setReadingMeterId] = useState<string>(); 
   const [meterLoading, setMeterLoading] = useState<boolean>(false);
   const [meterFormsLoading, setMeterFormsLoading] = useState<boolean>(false);
   const [readingMeterLoading, setReadingMeterLoading] = useState<boolean>(false);
-  const [unitMeterLoading, setUnitMeterLoading] = useState<boolean>(false);
-
+  const [unitMeterLoading, setUnitMeterLoading] = useState<boolean>(false); 
   const [meterData, setMeterData] = useState<any>();
   const [unitMeterData, setUnitMeterData] = useState<any>();
   const [readingMeterData, setReadingMeterData] = useState<any>();
-  const [meterFormsData, setMeterFormsData] = useState<any>();
-
+  const [meterFormsData, setMeterFormsData] = useState<any>(); 
   const [meterSearch, setMeterSearch] = useState<string>('');
-  const [meterKind, setMeterKind] = useState<string>('');
-
+  const [meterKind, setMeterKind] = useState<string>(''); 
   const [unitMeterSearch, setUnitMeterSearch] = useState<string>('');
   const [readingMeterSearch, setReadingMeterSearch] = useState<string>('');
-  const [meterFormsSearch, setMeterFormsSearch] = useState<string>('');
-
+  const [meterFormsSearch, setMeterFormsSearch] = useState<string>(''); 
   const [meterPagination, setMeterPagination] = useState<DefaultPagination>(new DefaultPagination());
   const [unitMeterPagination, setUnitMeterPagination] = useState<DefaultPagination>(new DefaultPagination());
   const [readingMeterPagination, setReadingMeterPagination] = useState<DefaultPagination>(new DefaultPagination());
-  const [meterFormsPagination, setMeterFormsPagination] = useState<DefaultPagination>(new DefaultPagination());
-
+  const [meterFormsPagination, setMeterFormsPagination] = useState<DefaultPagination>(new DefaultPagination()); 
   const [unitTreeData, setUnitTreeData] = useState<any[]>([]);
 
   // const [meterKinds, setMeterKinds] = useState<any>([]);
@@ -681,4 +674,4 @@ function Meter() {
   );
 }
 
-export default Meter;
+export default Main;

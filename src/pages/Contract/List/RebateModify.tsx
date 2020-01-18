@@ -36,7 +36,6 @@ function RebateModify(props: RebateModifyProps) {
   //   });
   // };
 
-
   return (
     // <div style={{ marginBottom: '10px' }}>
     //   {formItems}

@@ -40,7 +40,6 @@ const Modify = (props: ModifyProps) => {
     }
   };
 
-
   return (
     <BaseModifyProvider {...props} name="分类" save={doSave}>
       <Card className={styles.card}>

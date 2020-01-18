@@ -413,9 +413,10 @@ const Modify = (props: ModifyProps) => {
       style={{ height: 'calc(100vh-50px)' }}
       bodyStyle={{ background: '#f6f7fb', height: 'calc(100vh -50px)' }}
     >
-      <Card className={styles.card} >
-        <Form layout="vertical" hideRequiredMark>
-          <Spin tip="数据处理中..." spinning={loading}>
+      <Spin tip="数据处理中..." spinning={loading}>
+        <Card className={styles.card} >
+          <Form layout="vertical" hideRequiredMark>
+
             <Row gutter={24}>
               <Col span={8}>
                 <Form.Item required label="计费单号">
@@ -550,10 +551,10 @@ const Modify = (props: ModifyProps) => {
                 scroll={{ y: 500, x: 1200 }}
               // loading={loading}
               />
-            </Row>
-          </Spin>
-        </Form>
-      </Card>
+            </Row> 
+          </Form>
+        </Card>
+      </Spin>
       <div
         style={{
           position: 'absolute',

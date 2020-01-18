@@ -1,7 +1,7 @@
 // 费项编辑页面
 import { CwFeeitem, TreeEntity } from '@/model/models';
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { Spin,message, Modal, Checkbox, Tabs, Select, Table, Button, Card, Icon, Divider, Col, DatePicker, Drawer, Form, Input, Row, InputNumber } from 'antd';
+import { Spin, message, Modal, Checkbox, Tabs, Select, Table, Button, Card, Icon, Divider, Col, DatePicker, Drawer, Form, Input, Row, InputNumber } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
@@ -89,6 +89,7 @@ const Modify = (props: ModifyProps) => {
   // 打开抽屉时初始化
   useEffect(() => {
     if (modifyVisible) {
+
       if (id) {
         setLoading(true);
         GetFormJson(id).then((tempInfo: CwFeeitem) => {
@@ -102,17 +103,19 @@ const Modify = (props: ModifyProps) => {
           tempInfo.accBillDateUnit == 2 ? setAccFixedDisabled(false) : setAccFixedDisabled(true);
           tempInfo.payDeadlineUnit == 2 ? setPayFixedDisabled(false) : setPayFixedDisabled(true);
           tempInfo.lateStartDateUnit == 2 ? setLateFixedDisabled(false) : setLateFixedDisabled(true);
+
+          //if (id !== undefined) {
+          //加载所属机构
+          initOrgLoadData('');
+          //加载优惠政策
+          // initRebateLoadData('');
+          //加载房屋费项
+          initHouseLoadData('');
           form.resetFields();
+          setLoading(false);
+
         });
 
-        //if (id !== undefined) {
-        //加载所属机构
-        initOrgLoadData('');
-        //加载优惠政策
-        // initRebateLoadData('');
-        //加载房屋费项
-        initHouseLoadData('');
-        setLoading(false);
         //}
       } else {
         form.resetFields();
@@ -140,7 +143,7 @@ const Modify = (props: ModifyProps) => {
   // };
 
   const save = () => {
-    form.validateFields((errors, values) => { 
+    form.validateFields((errors, values) => {
       if (!errors) {
         setLoading(true);
         const newData = infoDetail ? { ...infoDetail, ...values } : values;
@@ -325,14 +328,14 @@ const Modify = (props: ModifyProps) => {
     }, {
       title: '房屋全称',
       dataIndex: 'allName',
-      key: 'allName',  
+      key: 'allName',
     },
     {
       title: '操作',
       dataIndex: 'operation',
       align: 'center',
       key: 'operation',
-      fixed:'right',
+      fixed: 'right',
       width: 75,
       render: (text, record) => {
         return [
@@ -1138,7 +1141,7 @@ const Modify = (props: ModifyProps) => {
                       )}
                     </Form.Item>
                   </Col>
-               
+
                   <Col lg={7}>
                     <Form.Item label="最终结果保留小数位数">
                       {getFieldDecorator('lastResultScale', {

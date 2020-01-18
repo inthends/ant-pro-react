@@ -80,8 +80,8 @@ const Renewal = (props: RenewalProps) => {
   // };
 
   //打开抽屉时初始化
-  useEffect(() => {
-    if (visible) {
+  useEffect(() => { 
+
       getCommonItems('IndustryType').then(res => {
         setIndustryType(res || []);
       });
@@ -98,10 +98,8 @@ const Renewal = (props: RenewalProps) => {
       GetUserList('', '员工').then(res => {
         setUserSource(res || []);
       });
-
-    }
-
-  }, [visible]);
+ 
+  }, []);
 
   // 打开抽屉时初始化
   useEffect(() => {

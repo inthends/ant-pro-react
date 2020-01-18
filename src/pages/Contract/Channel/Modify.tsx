@@ -15,7 +15,7 @@ interface ModifyProps {
 };
 
 const Modify = (props: ModifyProps) => {
-  const { visible, data, form } = props; 
+  const { data, form } = props;
   let initData = data ? data : {};
   const baseFormProps = { form, initData };
   const [area, setArea] = useState<any[]>([]);//商圈
@@ -26,19 +26,17 @@ const Modify = (props: ModifyProps) => {
   };
 
   useEffect(() => {
-    if (visible) {
 
-      //商圈
-      getCommonItems('TradingArea').then(res => {
-        setArea(res || []);
-      });
+    //商圈
+    getCommonItems('TradingArea').then(res => {
+      setArea(res || []);
+    });
 
-      //渠道
-      getCommonItems('VisitChannel').then(res => {
-        setChannel(res || []);
-      });
-    }
-  }, [visible]);
+    //渠道
+    getCommonItems('VisitChannel').then(res => {
+      setChannel(res || []);
+    });
+  }, []);
 
   return (
     <BaseModifyProvider {...props} name="联系人" save={doSave}>
@@ -78,7 +76,7 @@ const Modify = (props: ModifyProps) => {
             ></ModifyItem>
           </Row>
 
-          <Row gutter={24}> 
+          <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
               field="tradingArea"
@@ -86,7 +84,7 @@ const Modify = (props: ModifyProps) => {
               type='select'
               items={area}
             // rules={[{ required: true, message: "请输入商圈" }]}
-            ></ModifyItem> 
+            ></ModifyItem>
             <ModifyItem
               {...baseFormProps}
               field="email"

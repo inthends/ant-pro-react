@@ -27,57 +27,29 @@ const Modify = (props: ModifyProps) => {
   // const [banks, setBanks] = useState<any[]>([]); // 证件类别
   // const [banks, setBanks] = useState<any[]>([]); // 企业性质
   // 打开抽屉时初始化
-  // useEffect(() => {
-  //   GetOrgs().then((res: any[]) => {
-  //     setTreeData(res || []);
-  //   });
-  //   // 获取开户银行
-  //   getCommonItems('Bank').then(res => {
-  //     setBanks(res || []);
-  //   });
-
-  //   getCommonItems('IndustryType').then(res => {
-  //     setIndustryType(res || []);
-  //   });
-
-  //   // // 获取证件类别
-  //   // getCommonItems('Bank').then(res => {
-  //   //   setBanks(res || []);
-  //   // });
-
-  //   // // 获取企业性质
-  //   // getCommonItems('Bank').then(res => {
-  //   //   setBanks(res || []);
-  //   // });
-  // }, []);
-
-  // 打开抽屉时初始化
   useEffect(() => {
-    if (modifyVisible) {
+    GetOrgs().then((res: any[]) => {
+      setTreeData(res || []);
+    });
+    // 获取开户银行
+    getCommonItems('Bank').then(res => {
+      setBanks(res || []);
+    });
 
-      GetOrgs().then((res: any[]) => {
-        setTreeData(res || []);
-      });
-      // 获取开户银行
-      getCommonItems('Bank').then(res => {
-        setBanks(res || []);
-      });
+    getCommonItems('IndustryType').then(res => {
+      setIndustryType(res || []);
+    });
 
-      getCommonItems('IndustryType').then(res => {
-        setIndustryType(res || []);
-      });
+    // // 获取证件类别
+    // getCommonItems('Bank').then(res => {
+    //   setBanks(res || []);
+    // });
 
-      if (data) {
-        setInfoDetail({ ...data });
-        form.resetFields();
-      } else {
-        setInfoDetail({});
-        form.resetFields();
-      }
-    } else {
-      form.resetFields();
-    }
-  }, [modifyVisible]);
+    // // 获取企业性质
+    // getCommonItems('Bank').then(res => {
+    //   setBanks(res || []);
+    // });
+  }, []);
 
   const close = () => {
     closeDrawer();

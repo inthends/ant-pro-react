@@ -13,7 +13,7 @@ import { GetOrgs } from '@/services/commonItem';
 const { Content } = Layout;
 const { Search } = Input;
 
-function ParkingLot() {
+function Main() {
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   const [treeData, setTreeData] = useState<TreeEntity[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -220,4 +220,4 @@ function ParkingLot() {
     </Layout>
   );
 }
-export default ParkingLot;
+export default Main;

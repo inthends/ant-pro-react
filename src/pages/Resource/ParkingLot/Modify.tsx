@@ -24,7 +24,7 @@ const Modify = (props: ModifyProps) => {
   const [infoDetail, setInfoDetail] = useState<any>({});
 
   // 打开抽屉时初始化
-  useEffect(() => { }, []);
+  // useEffect(() => { }, []);
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -46,14 +46,15 @@ const Modify = (props: ModifyProps) => {
   const close = () => {
     closeDrawer();
   };
+
   const save = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
         let newData = data ? { ...data, ...values } : values;
-        console.log(newData.auditMark);
+        // console.log(newData.auditMark);
         if (newData.auditMark) {
           Modal.confirm({
-            title: '警告',
+            title: '提示',
             content: '数据审核后将无法进行修改！',
             onOk: () => {
               newData.auditMark = 1;

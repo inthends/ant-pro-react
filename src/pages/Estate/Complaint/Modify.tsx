@@ -17,6 +17,7 @@ interface ModifyProps {
   closeDrawer(): void;
   reload(): void;
 }
+
 const Modify = (props: ModifyProps) => {
   const { modifyVisible, data, closeDrawer, form, reload } = props;
   const { getFieldDecorator } = form;
@@ -26,15 +27,15 @@ const Modify = (props: ModifyProps) => {
   const [userSource, setUserSource] = useState<any[]>([]);
 
   // 打开抽屉时初始化
-  useEffect(() => {
-    // 获取房产树
-    // GetQuickSimpleTreeAll()
-    //   .then(getResult)
-    //   .then((res: TreeEntity[]) => {
-    //     setTreeData(res || []);
-    //     return res || [];
-    //   }); 
-  }, []);
+  // useEffect(() => {
+  // 获取房产树
+  // GetQuickSimpleTreeAll()
+  //   .then(getResult)
+  //   .then((res: TreeEntity[]) => {
+  //     setTreeData(res || []);
+  //     return res || [];
+  //   }); 
+  // }, []);
 
   // 打开抽屉时初始化 
   useEffect(() => {
@@ -226,7 +227,7 @@ const Modify = (props: ModifyProps) => {
       form.setFieldsValue({ handleId: option.key });
     }
     else {
-      form.setFieldsValue({ handleId: '' }); 
+      form.setFieldsValue({ handleId: '' });
     }
   };
 
@@ -267,7 +268,7 @@ const Modify = (props: ModifyProps) => {
       {modifyVisible ? (
         <Form layout="vertical" hideRequiredMark>
           {infoDetail.status == 1 ? (
-            <Card title="立项信息"  className={infoDetail.status == 1 ? styles.card2 : styles.card} >
+            <Card title="立项信息" className={infoDetail.status == 1 ? styles.card2 : styles.card} >
               <Row gutter={24}>
                 <Col lg={6}>
                   <Form.Item label="对象类别" required>

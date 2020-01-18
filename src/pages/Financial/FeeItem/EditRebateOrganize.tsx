@@ -19,6 +19,7 @@ const EditRebateOrganize = (props: EditRebateOrganizeProps) => {
   const { visible, closeModal, id, form, reload } = props;
   const { getFieldDecorator } = form;
   const [infoDetail, setInfoDetail] = useState<any>({});
+  
   useEffect(() => {
     if (visible) {
       if (id != null) {

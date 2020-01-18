@@ -26,16 +26,12 @@ const Modify = (props: ModifyProps) => {
   // initData.expDate = initData.expDate ? initData.expDate : new Date();
   const baseFormProps = { form, initData };
   const [fileList, setFileList] = useState<any[]>([]);
-  const getOrgs = () => {
+
+  useEffect(() => {
     GetOrgs().then(res => {
       setOrgs(res);
     });
-  };
-
-  useEffect(() => {
-    getOrgs();
   }, []);
-
 
   useEffect(() => {
     //加载图片
@@ -51,10 +47,9 @@ const Modify = (props: ModifyProps) => {
 
   }, [visible]);
 
-
   //数据保存
   const doSave = dataDetail => {
-    let modifyData = { ...initData, ...dataDetail, keyValue: initData.id }; 
+    let modifyData = { ...initData, ...dataDetail, keyValue: initData.id };
     modifyData.categoryId = modifyData.categoryId ? modifyData.categoryId : typeId;
     return SaveForm(modifyData);
   };

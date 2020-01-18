@@ -269,27 +269,25 @@ const Add = (props: AddProps) => {
 
   //打开抽屉时初始化
   useEffect(() => {
-    if (visible) {
-      getCommonItems('IndustryType').then(res => {
-        setIndustryType(res || []);
-      });
+    getCommonItems('IndustryType').then(res => {
+      setIndustryType(res || []);
+    });
 
-      // //加载关联收费项目
-      // GetAllFeeItems().then(res => {
-      //   setFeeitems(res || []);
-      // });
+    // //加载关联收费项目
+    // GetAllFeeItems().then(res => {
+    //   setFeeitems(res || []);
+    // });
 
-      //获取房产树
-      GetOrgTreeSimple().then((res: any[]) => {
-        setTreeData(res || []);
-      });
+    //获取房产树
+    GetOrgTreeSimple().then((res: any[]) => {
+      setTreeData(res || []);
+    });
 
-      GetUserList('', '员工').then(res => {
-        setUserSource(res || []);
-      });
-      
-    }
-  }, [visible]);
+    GetUserList('', '员工').then(res => {
+      setUserSource(res || []);
+    });
+
+  }, []);
 
   // 打开抽屉时初始化
   // useEffect(() => {
@@ -527,14 +525,14 @@ const Add = (props: AddProps) => {
                             rules: [{ required: true, message: '请输入合同编号' }],
                           })(<Input placeholder="请输入合同编号" />)}
                         </Form.Item>
-                      </Col> 
+                      </Col>
                       <Col lg={12}>
                         <Form.Item label="租赁数量/㎡">
                           {getFieldDecorator('leaseSize', {
                             rules: [{ required: true, message: '请输入租赁数量' }],
                           })(<InputNumber placeholder="请输入租赁数量" style={{ width: '100%' }} />)}
                         </Form.Item>
-                      </Col> 
+                      </Col>
                     </Row>
                     <Row gutter={24}>
                       <Col lg={12}>

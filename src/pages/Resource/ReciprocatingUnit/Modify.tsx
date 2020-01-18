@@ -39,7 +39,7 @@ const Modify = (props: ModifyProps) => {
   const [banks, setBanks] = useState<any[]>([]); // 开户银行
   const [states, setStates] = useState<any[]>([]); // 状态
   const [creditLevels, setCreditLevels] = useState<any[]>([]); // 信誉等级 
-  const [natures, setNatures] = useState<any[]>([]); 
+  const [natures, setNatures] = useState<any[]>([]);
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -59,12 +59,10 @@ const Modify = (props: ModifyProps) => {
     getCommonItems('TypeState').then(res => {
       setStates(res || []);
     });
-
     // 单位性质
     getCommonItems('Bank').then(res => {
       setNatures(res || []);
     });
-
   }, []);
 
   // 打开抽屉时初始化

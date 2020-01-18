@@ -53,11 +53,9 @@ const Modify = (props: ModifyProps) => {
     getCommonItems('ProjectType').then(res => {
       setProject(res || []);
     });
-
     GetUserList('', '员工').then(res => {
       setUserSource(res || []);
     })
-
   }, []);
 
   const getCity = (areaId: string, init = false) => {
@@ -169,6 +167,7 @@ const Modify = (props: ModifyProps) => {
   const close = () => {
     closeDrawer();
   };
+
   const save = () => {
     form.validateFields((errors, values) => {
       if (!errors) {

@@ -3,7 +3,7 @@ import { Card, Button, Col, Select, Form, Input, Row, InputNumber, Drawer, DateP
 import { TreeEntity } from '@/model/models';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetUserRoomsByRelationId,GetTempPaymentFeeItemTreeJson, GetRoomUsers, GetUserRooms, GetPayFeeItemDetail, SaveForm, GetShowDetail } from './Payment.service';
+import { GetUserRoomsByRelationId, GetTempPaymentFeeItemTreeJson, GetRoomUsers, GetUserRooms, GetPayFeeItemDetail, SaveForm, GetShowDetail } from './Payment.service';
 import LeftTree from '../LeftTree';
 import moment from 'moment';
 
@@ -28,16 +28,18 @@ const FeeModify = (props: FeeModifyProps) => {
   const title = id ? "修改应付费用" : "新增应付费用";
 
   useEffect(() => {
+    //付款费项不控制房间
+    GetTempPaymentFeeItemTreeJson().then(res => {
+      setFeeTreeData(res);
+    });
+  }, []);
+
+  useEffect(() => {
     if (visible) {
 
       // GetTempPaymentFeeItemTreeJson(organize.eventKey).then(res => {
       //   setFeeTreeData(res);
       // });
-
-      //付款费项不控制房间
-      GetTempPaymentFeeItemTreeJson().then(res => {
-        setFeeTreeData(res);
-      });
 
       // setInfoDetail({});//数据重置
 
@@ -103,7 +105,7 @@ const FeeModify = (props: FeeModifyProps) => {
                   form.resetFields();
                 }
               });
-           
+
           }
         })
         //}
@@ -217,7 +219,7 @@ const FeeModify = (props: FeeModifyProps) => {
                     rules: [{ required: true, message: '请选择付款对象' }]
                   })(
                     <Select placeholder="=请选择=" disabled={isEdit || (id != "") ? false : true}
-                      onSelect={(key) => { 
+                      onSelect={(key) => {
                         GetUserRoomsByRelationId(key).then(res => {
                           //加载房间列表
                           setUnitIds(res);

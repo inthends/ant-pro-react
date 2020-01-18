@@ -32,17 +32,14 @@ const Modify = (props: ModifyProps) => {
   const [deviceLevel, setDeviceLevel] = useState<any[]>([]);
 
   useEffect(() => {
-    if (visible) {
-      GetOrgs().then(res => {
-        setOrgs(res);
-      });
-      //设备等级
-      getCommonItems('DeviceLevel').then(res => {
-        setDeviceLevel(res || []);
-      });
-    }
-
-  }, [visible]);
+    GetOrgs().then(res => {
+      setOrgs(res);
+    });
+    //设备等级
+    getCommonItems('DeviceLevel').then(res => {
+      setDeviceLevel(res || []);
+    });
+  }, []);
 
 
   return (
@@ -158,7 +155,7 @@ const Modify = (props: ModifyProps) => {
               treeData={unitData}
               rules={[{ required: true, message: "请选择安装位置" }]}
             ></ModifyItem> */}
-            
+
             <Col lg={16}>
               <Form.Item label="安装位置" required>
                 {getFieldDecorator('pStructId', {
