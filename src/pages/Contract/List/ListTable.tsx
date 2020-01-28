@@ -139,7 +139,7 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'contractStartDate',
       key: 'contractStartDate',
       width: 100,
-      render: val => moment(val).format('YYYY-MM-DD')
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
 
     {
@@ -147,7 +147,7 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'billingDate',
       key: 'billingDate',
       width: 100,
-      render: val => moment(val).format('YYYY-MM-DD')
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
 
     {
@@ -155,7 +155,7 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'contractEndDate',
       key: 'contractEndDate',
       width: 100,
-      render: val => moment(val).format('YYYY-MM-DD')
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
 
     {

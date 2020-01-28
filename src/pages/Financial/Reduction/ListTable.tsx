@@ -72,13 +72,7 @@ function ListTable(props: ListTableProps) {
       key: 'billDate',
       width: 100,
       sorter: true,
-      render: val => {
-        if (val == null) {
-          return '';
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     // {
     //   title: '减免费项',

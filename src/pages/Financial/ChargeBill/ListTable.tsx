@@ -150,26 +150,26 @@ function ListTable(props: ListTableProps) {
       width: 80,
     },
     {
-      title: '计费起始日期',
+      title: '起始日期',
       dataIndex: 'beginDate',
       key: 'beginDate',
       align: 'center',
       width: 100,
-      render: val => moment(val).format('YYYY-MM-DD')
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     }, {
-      title: '计费截止日期',
+      title: '截止日期',
       dataIndex: 'endDate',
       key: 'endDate',
       align: 'center',
       width: 100,
-      render: val => moment(val).format('YYYY-MM-DD')
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     }, {
       title: '账单日',
       dataIndex: 'billDate',
       key: 'billDate',
       align: 'center',
       width: 100,
-      render: val => moment(val).format('YYYY-MM-DD')
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     }, {
       title: '房屋全称',
       dataIndex: 'allname',
@@ -380,7 +380,7 @@ function ListTable(props: ListTableProps) {
 
   const pay = (url) => {
     let temp = Modal.confirm({
-      title:'请扫码', 
+      title: '请扫码',
       content: (<img src={url}></img>),
       onCancel() {
         if (timer) {
@@ -407,7 +407,7 @@ function ListTable(props: ListTableProps) {
             reload();
             //弹出查看页面
             showDetail(billId);
-          } else { 
+          } else {
             if (timer) {
               retry();
             }

@@ -143,9 +143,7 @@ const Show = (props: ShowProps) => {
       key: 'beginDate',
       width: '120px',
       sorter: true,
-      render: val => {
-        return moment(val).format('YYYY-MM-DD')
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '计费截止日期',
@@ -153,9 +151,7 @@ const Show = (props: ShowProps) => {
       key: 'endDate',
       width: '120px',
       sorter: true,
-      render: val => {
-        return moment(val).format('YYYY-MM-DD')
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '原金额',

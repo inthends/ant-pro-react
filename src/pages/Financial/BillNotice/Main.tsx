@@ -237,11 +237,9 @@ function Main() {
 
   const handleMenuClick = (e) => {
     if (e.key == '1') {
-
       if (selectIds == undefined) {
         message.error('请选择需要审核的账单！');
       } else {
-
         //如果选择了多条 在批量审核
         if (selectIds && selectIds.length > 1) {
           Modal.confirm({
@@ -273,31 +271,37 @@ function Main() {
     else if (e.key == '2') {
       // if (selectIds && selectIds.length > 1) {
       if (selectIds == undefined) {
-        Modal.confirm({
-          title: '请确认',
-          content: `您是否要取消审核这些账单?`,
-          onOk: () => {
-            BatchAudit({
-              keyValues: JSON.stringify(selectIds),
-              IfVerify: false
-            })
-              .then(() => {
-                message.success('审核成功');
-                initBillCheckLoadData('', '');
-              })
-              .catch(e => { });
-          },
-        });
-      } else {
+        message.error('请选择需要反审的账单！');
+      }
+
+      else {
         /* if (id == null || id == '') {
            message.warning('请先选择账单');
          } else {*/
-        showVerify(id, false);
+
+        if (selectIds && selectIds.length > 1) {
+          Modal.confirm({
+            title: '请确认',
+            content: `您是否要取消审核这些账单?`,
+            onOk: () => {
+              BatchAudit({
+                keyValues: JSON.stringify(selectIds),
+                IfVerify: false
+              })
+                .then(() => {
+                  message.success('审核成功');
+                  initBillCheckLoadData('', '');
+                })
+                .catch(e => { });
+            },
+          });
+        } else { 
+          showVerify(id, false);
+        }
         // }
       }
     } else if (e.key == '3') {
-      //打印
-
+      //打印 
     }
     else {
       //删除
@@ -354,7 +358,7 @@ function Main() {
                 var params = Object.assign({}, billCheckSearchParams, { billChecktype: value });
                 setBillCheckSearchParams(params);
               }}>
-              <Select placeholder="==账单类型==" style={{ width: '150px', marginRight: '5px' }}
+              <Select placeholder="账单类型" style={{ width: '150px', marginRight: '5px' }}
                 onChange={(value: string) => {
                   setBillType(value);
                 }}>
@@ -363,7 +367,7 @@ function Main() {
                 <Select.Option value="催缴函">催缴函</Select.Option>
                 <Select.Option value="律师函">律师函</Select.Option>
               </Select>
-              <Select placeholder="==模版类型==" style={{ width: '150px', marginRight: '5px' }}
+              <Select placeholder="模版类型" style={{ width: '150px', marginRight: '5px' }}
                 onChange={(value: string) => {
                   setTemplateId(value);
                 }}
@@ -377,7 +381,7 @@ function Main() {
               <Search
                 className="search-input"
                 placeholder="请输入要查询的单号"
-                style={{ width: 200 }}
+                style={{ width: 180 }}
                 onChange={e => {
                   var params = Object.assign({}, billCheckSearchParams, { search: e.target.value });
                   setBillCheckSearchParams(params);
@@ -505,7 +509,7 @@ function Main() {
               <Search
                 className="search-input"
                 placeholder="请输入要查询的单号"
-                style={{ width: 280 }}
+                style={{ width: 180 }}
                 onSearch={value => loadBillNoticeData(value)}
               />
             </div>

@@ -3,10 +3,7 @@ import { TreeEntity } from '@/model/models';
 import { Spin, Card, Select, Button, Col, DatePicker, Drawer, Form, Input, InputNumber, Row, message } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import {
-  GetUserRoomsByRelationId, SaveDetail, GetReceivablesFeeItemTreeJson, GetRoomUsers,
-  GetUserRooms, GetFeeItemDetail, SaveTempBill, GetShowDetail, Call
-} from './Main.service';
+import { GetUserRoomsByRelationId, SaveDetail, GetReceivablesFeeItemTreeJson, GetRoomUsers, GetUserRooms, GetFeeItemDetail, SaveTempBill, GetShowDetail, Call } from './Main.service';
 import LeftTree from '../LeftTree';
 import moment from 'moment';
 import styles from './style.less';
@@ -195,6 +192,7 @@ const Modify = (props: ModifyProps) => {
       // if (infoDetail.feeItemId == null || infoDetail.feeItemId == '') {
       // }
       if (!errors) {
+
         var guid = getGuid();
         var unit = {
           BillId: id != null && id != "" ? infoDetail.billId : guid,
@@ -204,8 +202,8 @@ const Modify = (props: ModifyProps) => {
           Price: "" + values.price,
           Amount: "" + values.amount,
           Period: moment(values.period).format("YYYY-MM-DD"),//"2019-04-08",
-          BeginDate: moment(values.beginDate).format("YYYY-MM-DD"),//"2019-04-01",
-          EndDate: moment(values.endDate).format("YYYY-MM-DD"),//"2019-04-30",
+          BeginDate: values.beginDate == null ? null : moment(values.beginDate).format("YYYY-MM-DD"),//"2019-04-01",
+          EndDate: values.endDate == null ? null : moment(values.endDate).format("YYYY-MM-DD"),//"2019-04-30",
           Memo: values.memo,
           RelationId: values.relationId,//getRelationId(values.relationId),
           CycleValue: "" + values.cycleValue,
@@ -264,66 +262,66 @@ const Modify = (props: ModifyProps) => {
     var info = Object.assign({}, infoDetail, { endDate: endDate, cycleValue: cycleValue, cycleType: cycleType });
     setInfoDetail(info);
   }
-  //求自然月日期
-  const getMonthBeforeFormatAndDay = (num, format, date) => {
 
-    let day = date.get('date');
-    let month = date.get('month');
-    date.set('month', month + num * 1, 'date', 1); //周期月一号
-    //读取日期自动会减一，所以要加一
-    let mo = date.get('month') + 1;
-    //小月
-    if (mo == 4 || mo == 6 || mo == 9 || mo == 11) {
-      if (day > 30) {
-        day = 30;
-      }
-    }
-    //2月
-    else if (mo == 2) {
-      //闰年
-      if (date.isLeapYear()) {
-        if (day > 29) {
-          day = 29;
-        } else {
-          day = 28;
-        }
-      }
-      if (day > 28) {
-        day = 28;
-      }
-    }
-    //大月
-    else {
-      if (day > 31) {
-        day = 31;
-      }
-    }
-    date.set('date', day);
-    return date;
-  };
+  //求自然月日期
+  // const getMonthBeforeFormatAndDay = (num, format, date) => { 
+  //   let day = date.get('date');
+  //   let month = date.get('month');
+  //   date.set('month', month + num * 1, 'date', 1); //周期月一号
+  //   //读取日期自动会减一，所以要加一
+  //   let mo = date.get('month') + 1;
+  //   //小月
+  //   if (mo == 4 || mo == 6 || mo == 9 || mo == 11) {
+  //     if (day > 30) {
+  //       day = 30;
+  //     }
+  //   }
+  //   //2月
+  //   else if (mo == 2) {
+  //     //闰年
+  //     if (date.isLeapYear()) {
+  //       if (day > 29) {
+  //         day = 29;
+  //       } else {
+  //         day = 28;
+  //       }
+  //     }
+  //     if (day > 28) {
+  //       day = 28;
+  //     }
+  //   }
+  //   //大月
+  //   else {
+  //     if (day > 31) {
+  //       day = 31;
+  //     }
+  //   }
+  //   date.set('date', day);
+  //   return date;
+  // };
 
   //设置结束日期
-  const getEndDate = () => {
-    const cycle = form.getFieldValue('cycleValue');
-    const cycletype = form.getFieldValue('cycleType')
-    let d = form.getFieldValue('beginDate');
-    if (d != "") {
-      let endDate = moment(d);
-      if (cycletype == "日") {
-        //日
-        endDate.set('date', endDate.get('date') + cycle);
-      } else if (cycletype == "月") {
-        // 月
-        endDate = getMonthBeforeFormatAndDay(cycle, "-", endDate);
-      } else {
-        //年
-        endDate.set('year', endDate.get('year') + cycle);
-      }
-      endDate.set('date', endDate.get('date') - 1);
-      return endDate;
-    }
-    return '';
-  };
+  // const getEndDate = () => {
+  //   const cycle = form.getFieldValue('cycleValue');
+  //   const cycletype = form.getFieldValue('cycleType')
+  //   let d = form.getFieldValue('beginDate');
+  //   if (d != "") {
+  //     let endDate = moment(d);
+  //     if (cycletype == "日") {
+  //       //日
+  //       endDate.set('date', endDate.get('date') + cycle);
+  //     } else if (cycletype == "月") {
+  //       // 月
+  //       endDate = getMonthBeforeFormatAndDay(cycle, "-", endDate);
+  //     } else {
+  //       //年
+  //       endDate.set('year', endDate.get('year') + cycle);
+  //     }
+  //     endDate.set('date', endDate.get('date') - 1);
+  //     return endDate;
+  //   }
+  //   return '';
+  // };
 
   const disabledDate = (current) => {
     return current < moment(form.getFieldValue('beginDate'));
@@ -583,22 +581,27 @@ const Modify = (props: ModifyProps) => {
                   <Col span={12}>
                     <Form.Item label="起始日期" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}  >
                       {getFieldDecorator('beginDate', {
-                        initialValue: infoDetail.beginDate == null ? moment(new Date()) : moment(infoDetail.beginDate),
-                        rules: [{ required: true, message: '请选择起始日期' }]
+                        initialValue: !infoDetail.isNullDate ? moment(infoDetail.beginDate) : null,
+                        rules: [{ required: !infoDetail.isNullDate, message: '请选择起始日期' }]
                       })(
-                        <DatePicker disabled={!infoDetail.isModifyDate} style={{ width: '100%' }} />
+                        <DatePicker
+                          disabled={!infoDetail.isModifyDate}
+                          placeholder='请选择起始日期'
+                          style={{ width: '100%' }} />
                       )}
                     </Form.Item>
                   </Col>
 
                   <Col span={12}>
-                    <Form.Item label="结束日期" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
+                    <Form.Item label="截止日期" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
                       {getFieldDecorator('endDate', {
-                        initialValue: infoDetail.endDate == null ? moment(getEndDate()) : moment(infoDetail.endDate),
-                        rules: [{ required: true, message: '请选择结束日期' }]
+                        initialValue: !infoDetail.isNullDate ? moment(infoDetail.endDate) : null,
+                        // initialValue: infoDetail.endDate == null ? moment(getEndDate()) : moment(infoDetail.endDate),
+                        rules: [{ required: !infoDetail.isNullDate, message: '请选择截止日期' }]
                       })(
                         <DatePicker disabled={!infoDetail.isModifyDate}
                           disabledDate={disabledDate}
+                          placeholder='请选择截止日期'
                           style={{ width: '100%' }} />
                       )}
                     </Form.Item>
