@@ -102,12 +102,12 @@ const Main = () => {
   };
 
   const showModuleAuth = (item?) => {
-    setAuthVisible(true);
+    setModuleAuthVisible(true);
     setCurrData(item);
   };
 
   const showDataAuth = (item?) => {
-    setAuthVisible(true);
+    setDataAuthVisible(true);
     setCurrData(item);
   };
 

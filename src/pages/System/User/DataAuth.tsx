@@ -1,12 +1,12 @@
-//权限设置备份
+
 import React, { useEffect, useState, useRef } from 'react';
-import { Modal, Tree, Tabs, message, Spin } from 'antd';
+import { Modal, Tree,   message, Spin } from 'antd';
 import styles from './style.less';
 import {
   GetDataHalfCheckIds, GetDataCheckIds, GetHalfCheckIds, GetCheckIds,
   GetAuths, GetDataAuths, SaveDataAuthorize, SaveModuleAuthorize
 } from './User.service';
-const { TabPane } = Tabs;
+ 
 interface DataAuthProps {
   visible: boolean;
   userId?;
@@ -17,13 +17,13 @@ const DataAuth = (props: DataAuthProps) => {
   const treeRef = useRef(null);
   useEffect(() => {
     if (visible) {
-      changeTab(ACTIVEKEYS.功能权限);
+      changeTab(ACTIVEKEYS.楼盘权限);
     }
   }, [visible]);
 
   const [auths, setAuths] = useState<any[]>([]);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
-  const [activeKey, setActiveKey] = useState<string>(ACTIVEKEYS.功能权限);
+  const [activeKey, setActiveKey] = useState<string>(ACTIVEKEYS.楼盘权限);
   const [checkedKeys, setCheckedKeys] = useState<string[]>([]);//选中的模块节点 
   const [halfCheckedKeys, setHalfCheckedKeys] = useState<string[]>([]);//半选中节点
 
@@ -38,7 +38,7 @@ const DataAuth = (props: DataAuthProps) => {
     if (checkedKeys.length == 0)
       return;
 
-    if (tab === ACTIVEKEYS.数据权限) {
+    if (tab === ACTIVEKEYS.楼盘权限) {
       //const halfchecks = halfCheckedKeys.join(',');//半选节点 
       SaveDataAuthorize({ userId, halfchecks: halfCheckedKeys.join(','), authorizeDataJson: checkedKeys.join(',') }).then(() => {
         message.success('保存成功！');
@@ -87,7 +87,7 @@ const DataAuth = (props: DataAuthProps) => {
       //     setAuths(res);
       //     setIsLoaded(true);
       //   });
-    } else if (e === ACTIVEKEYS.数据权限) {
+    } else if (e === ACTIVEKEYS.楼盘权限) {
       GetDataAuths(userId).then(res => {
         //console.log(JSON.parse(res));
         //半选
@@ -108,19 +108,20 @@ const DataAuth = (props: DataAuthProps) => {
   };
   return (
     <Modal
-      title={
-        <Tabs size="small" style={{ height: 30 }} activeKey={activeKey} onChange={changeTab}>
-          <TabPane tab="功能权限" key={ACTIVEKEYS.功能权限} disabled={!isLoaded}></TabPane>
-          {/* <TabPane tab="操作权限" key={ACTIVEKEYS.操作权限}></TabPane> */}
-          <TabPane tab="数据权限" key={ACTIVEKEYS.数据权限} disabled={!isLoaded}></TabPane>
-        </Tabs>
-      }
+      // title={
+      //   <Tabs size="small" style={{ height: 30 }} activeKey={activeKey} onChange={changeTab}>
+      //     <TabPane tab="功能权限" key={ACTIVEKEYS.功能权限} disabled={!isLoaded}></TabPane>
+      //     {/* <TabPane tab="操作权限" key={ACTIVEKEYS.操作权限}></TabPane> */}
+      //     <TabPane tab="数据权限" key={ACTIVEKEYS.数据权限} disabled={!isLoaded}></TabPane>
+      //   </Tabs>
+      // }
+      title='楼盘权限'
       visible={visible}
       okText="保存"
       cancelText="取消"
       onCancel={() => close()}
       onOk={() => save(activeKey, auths)}
-      destroyOnClose={true}
+      // bodyStyle={{ background: '#f6f7fb' }}    
       // bodyStyle={{ background: '#f6f7fb' }}
       width="500px"
     >
@@ -138,7 +139,7 @@ const DataAuth = (props: DataAuthProps) => {
               defaultExpandAll
               ref={treeRef}
             ></Tree>
-          ) : <Spin tip="数据处理中..."  className={styles.spin} />}
+          ) : <Spin tip="数据处理中..." className={styles.spin} />}
         </div>
       ) : null}
     </Modal>
@@ -150,7 +151,7 @@ export default DataAuth;
 enum ACTIVEKEYS {
   功能权限 = '1',
   // 操作权限 = '2',
-  数据权限 = '3',
+  楼盘权限 = '3',
 }
 
 const getMenu = (keys: string[], treeData: any[], type: string, list: string[] = []) => {

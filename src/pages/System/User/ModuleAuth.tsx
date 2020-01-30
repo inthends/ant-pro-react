@@ -108,19 +108,12 @@ const ModuleAuth = (props: ModuleAuthProps) => {
   };
   return (
     <Modal
-      title={
-        <Tabs size="small" style={{ height: 30 }} activeKey={activeKey} onChange={changeTab}>
-          <TabPane tab="功能权限" key={ACTIVEKEYS.功能权限} disabled={!isLoaded}></TabPane>
-          {/* <TabPane tab="操作权限" key={ACTIVEKEYS.操作权限}></TabPane> */}
-          <TabPane tab="数据权限" key={ACTIVEKEYS.数据权限} disabled={!isLoaded}></TabPane>
-        </Tabs>
-      }
+      title='功能权限'
       visible={visible}
       okText="保存"
       cancelText="取消"
       onCancel={() => close()}
       onOk={() => save(activeKey, auths)}
-      destroyOnClose={true}
       // bodyStyle={{ background: '#f6f7fb' }}
       width="500px"
     >
@@ -138,7 +131,7 @@ const ModuleAuth = (props: ModuleAuthProps) => {
               defaultExpandAll
               ref={treeRef}
             ></Tree>
-          ) : <Spin tip="数据处理中..."  className={styles.spin} />}
+          ) : <Spin tip="数据处理中..." className={styles.spin} />}
         </div>
       ) : null}
     </Modal>
