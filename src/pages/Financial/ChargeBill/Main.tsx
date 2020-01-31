@@ -159,8 +159,7 @@ function Main() {
     });
   };
 
-  const initLoadData = (search, unitId = '', showCustomerFee = false) => { 
-
+  const initLoadData = (search, unitId = '', showCustomerFee = false) => {
     setSearch(search);
     // setShowCustomerFee(showCustomerFee);
     const queryJson = { keyword: search, unitId: unitId, showCustomerFee: showCustomerFee };

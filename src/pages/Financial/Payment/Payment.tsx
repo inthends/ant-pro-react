@@ -18,6 +18,9 @@ function Payment() {
 
   // const [treeSearch, SetTreeSearch] = useState<any>({});
   const [id, setId] = useState<string>();
+  const [organizeId, setOrganizeId] = useState<string>('');//左侧树选择的id
+  const [adminOrgId, setAdminOrgId] = useState<string>('');//当前房间的管理处Id
+
   const [notPaymentLoading, setNotPaymentLoading] = useState<boolean>(false);
   const [paymentLoading, setPaymentLoading] = useState<boolean>(false);
 
@@ -194,7 +197,7 @@ function Payment() {
     setIfVerify(ifVerify);
   };
 
-  
+
   const showViewDrawer = (id?) => {
     setShowVisible(true);
     setId(id);
@@ -253,7 +256,9 @@ function Payment() {
       <AsynLeftTree
         parentid={'0'}
         selectTree={(id, type, info) => {
-          selectTree(id, type, info);
+          setAdminOrgId(info.node.props.organizeId);//管理处Id
+          setOrganizeId(id);
+          selectTree(id, type, info); 
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>
@@ -359,7 +364,7 @@ function Payment() {
               <Search
                 className="search-input"
                 placeholder="请输入付款单号"
-                style={{ width: 200 }}
+                style={{ width: 180 }}
                 onSearch={value => {
                   setPaymentSearchParams(Object.assign({}, paymentSearchParams, { search: value }));
                   loadPaymentData();
@@ -439,7 +444,9 @@ function Payment() {
         id={id}
         isEdit={isEdit}
         reload={() => initNotPaymentLoadData({ id: organize.code, type: organize.type }, '')}
-        organize={organize}
+        // organize={organize}
+        roomId={organizeId}
+        adminOrgId={adminOrgId}
       />
       <PaymentVerify
         vertifyVisible={vertifyVisible}
