@@ -21,7 +21,7 @@ interface AddDrawerProps {
 };
 
 const AddDrawer = (props: AddDrawerProps) => {
-  const { treeData, addDrawerVisible, closeDrawer, form, id,reload } = props;
+  const { treeData, addDrawerVisible, closeDrawer, form, id, reload } = props;
   const title = id === undefined ? '新增冲抵单' : '修改冲抵单';
   const [loading, setLoading] = useState<boolean>(false);
   const { getFieldDecorator } = form;
@@ -42,30 +42,30 @@ const AddDrawer = (props: AddDrawerProps) => {
     // getCheckTreeData().then(res => {
     // }).then(() => {
     //   getBillTreeData();
-    // });
-
+    // }); 
     GetPaymentTree().then((res) => {
       setCheckTreeData(res || []);
     });
-
     GetReceivablesTree().then((res) => {
       setBillTreeData(res || []);
     });
-
-    if (id) {
-      setLoading(true);
-      GetFormJson(id).then(res => {
-        setInfoDetail(res);
-        setLoading(false);
-      })
-    } else {
-      // setPayBeginDate(getCurrentMonthFirstDay);
-      // setPayEndDate(getCurrentMonthLastDay);
-      // setBeginDate(getCurrentMonthFirstDay);
-      // setEndDate(getCurrentMonthLastDay);
-      setLoading(false);
-    }
   }, []);
+
+  // 打开抽屉时初始化
+  useEffect(() => {
+    if (addDrawerVisible) {
+      if (id) {
+        GetFormJson(id).then(res => {
+          setInfoDetail(res);
+          setLoading(false);
+        })
+      } else {
+        form.resetFields();
+      }
+    } else {
+      form.resetFields();
+    }
+  }, [addDrawerVisible]);
 
   // const close = () => {
   //   closeDrawer();
