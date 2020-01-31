@@ -4,7 +4,7 @@ import ModifyItem from '@/components/BaseModifyDrawer/ModifyItem';
 import { Card, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useState } from 'react';
-import { SaveForm, searchUser } from './User.service';
+import { SaveForm, SearchUser } from './User.service';
 import { JcAccount } from '@/model/jcAccount';
 import md5 from 'blueimp-md5';
 
@@ -45,7 +45,8 @@ const Modify = (props: ModifyProps) => {
   };
 
   const searchName = value => {
-    searchUser(value).then(res => {
+    const organizeId = form.getFieldValue('organizeId');
+    SearchUser(organizeId, value).then(res => {
       const users = res.map(item => {
         return {
           label: item.name,
@@ -57,7 +58,7 @@ const Modify = (props: ModifyProps) => {
     });
   };
 
-  const onSelect = (value, option) => { 
+  const onSelect = (value, option) => {
     form.setFieldsValue({ sourceId: option.key });
   };
 
@@ -99,7 +100,7 @@ const Modify = (props: ModifyProps) => {
               label="用户名"
               rules={[{ required: true, message: '请输入用户名' }]}
             ></ModifyItem>
- 
+
             {initData.id == undefined ?
               <ModifyItem
                 {...baseFormProps}
@@ -109,8 +110,8 @@ const Modify = (props: ModifyProps) => {
                 rules={[{ required: true, message: '请输入密码' }]}
                 visibilityToggle={initData.id == undefined}
               ></ModifyItem> : null}
-
           </Row>
+
           {/* <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
@@ -135,6 +136,7 @@ const Modify = (props: ModifyProps) => {
               ></ModifyItem>
             ) : null}
           </Row>  */}
+
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
@@ -145,6 +147,7 @@ const Modify = (props: ModifyProps) => {
               label="备注"
             ></ModifyItem>
           </Row>
+
         </Form>
       </Card>
     </BaseModifyProvider>

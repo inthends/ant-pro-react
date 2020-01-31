@@ -14,12 +14,20 @@ export function SaveForm(data): Promise<JcAccount> {
     .then(getResult as any);
 }
 // 查询用户
-export function searchUser(keyword): Promise<any[]> {
-  const type = '员工';
+// export function searchUser(keyword): Promise<any[]> {
+//   const type = '员工';
+//   return request
+//     .get(process.env.basePath + `/Common/GetUserList?${objToUrl({ keyword, type })}`)
+//     .then(getResult as any);
+// }
+
+
+export function SearchUser(organizeId, keyword): Promise<any[]> {
   return request
-    .get(process.env.basePath + `/Common/GetUserList?${objToUrl({ keyword, type })}`)
+    .get(process.env.basePath + `/Common/GetSystemUserList?${objToUrl({ organizeId, keyword })}`)
     .then(getResult as any);
 }
+
 // 删除
 export function RemoveForm(keyValue): Promise<any> {
   return request
@@ -34,7 +42,7 @@ export function ResetPwd(keyValue): Promise<any> {
     .post(process.env.basePath + `/Account/ResetPwd?keyValue=${keyValue}`, {})
     .then(getResult as any);
 }
- 
+
 // 禁用切换
 export function DisabledToggle(keyValue, disabled: boolean): Promise<any> {
   if (disabled) {
@@ -47,7 +55,7 @@ export function DisabledToggle(keyValue, disabled: boolean): Promise<any> {
       .then(getResult as any);
   }
 }
- 
+
 //权限操作
 
 // 系统功能列表
