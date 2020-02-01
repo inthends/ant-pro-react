@@ -188,14 +188,13 @@ const Show = (props: ShowProps) => {
   // };
 
   const columns = [
-    {
-      title: '单号',
-      dataIndex: 'billCode',
-      key: 'billCode',
-      width: 180,
-      sorter: true
-    },
-  
+    // {
+    //   title: '单号',
+    //   dataIndex: 'billCode',
+    //   key: 'billCode',
+    //   width: 180,
+    //   sorter: true
+    // }, 
     {
       title: '付款项目',
       dataIndex: 'payFeeName',
@@ -224,20 +223,13 @@ const Show = (props: ShowProps) => {
       sorter: true,
       width: 100
     },
-    {
-      title: '应付余额',
-      dataIndex: 'lastAmount',
-      sorter: true,
-      key: 'lastAmount',
-      width: 100,
-      // render: val => {
-      //   if (val == null) {
-      //     return <span></span>
-      //   } else {
-      //     return <span> {val} </span>
-      //   }
-      // }
-    },
+    // {
+    //   title: '应付余额',
+    //   dataIndex: 'lastAmount',
+    //   sorter: true,
+    //   key: 'lastAmount',
+    //   width: 100, 
+    // },
     {
       title: '计费起始日期',
       dataIndex: 'billBeginDate',

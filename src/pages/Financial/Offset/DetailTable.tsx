@@ -32,13 +32,7 @@ function DetailTable(props: DetailTableProps) {
       width: 180,
       sorter: true
     },
-    {
-      title: '房屋名称',
-      dataIndex: 'allName',
-      key: 'allName',
-      width: 180,
-      sorter: true
-    },
+    
     {
       title: '付款项目',
       dataIndex: 'payFeeName',
@@ -65,19 +59,12 @@ function DetailTable(props: DetailTableProps) {
       key: 'billAmount', 
       width: 100
     },
-    {
-      title: '应付余额',
-      dataIndex: 'lastAmount', 
-      key: 'lastAmount',
-      width: 100,
-      // render: val => {
-      //   if (val == null) {
-      //     return <span></span>
-      //   } else {
-      //     return <span> {val} </span>
-      //   }
-      // }
-    },
+    // {
+    //   title: '应付余额',
+    //   dataIndex: 'lastAmount', 
+    //   key: 'lastAmount',
+    //   width: 100, 
+    // },
     {
       title: '计费起始日期',
       dataIndex: 'billBeginDate',
@@ -102,6 +89,11 @@ function DetailTable(props: DetailTableProps) {
           return moment(val).format('YYYY-MM-DD');
         }
       }
+    },
+    {
+      title: '房屋名称',
+      dataIndex: 'allName',
+      key: 'allName', 
     }
   ] as ColumnProps<any>[];
 
