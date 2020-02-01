@@ -1,4 +1,4 @@
-//修改冲抵单
+//查看冲抵单
 import { Card, Button, Col, Drawer, Form, Row, Table } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
@@ -195,13 +195,7 @@ const Show = (props: ShowProps) => {
       width: 180,
       sorter: true
     },
-    {
-      title: '房屋名称',
-      dataIndex: 'allName',
-      key: 'allName',
-      width: 180,
-      sorter: true
-    },
+  
     {
       title: '付款项目',
       dataIndex: 'payFeeName',
@@ -270,6 +264,11 @@ const Show = (props: ShowProps) => {
           return moment(val).format('YYYY-MM-DD');
         }
       }
+    },
+    {
+      title: '房屋名称',
+      dataIndex: 'allName',
+      key: 'allName',  
     }
   ] as ColumnProps<any>[];
 
