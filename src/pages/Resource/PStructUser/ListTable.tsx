@@ -50,7 +50,7 @@ function ListTable(props: ListTableProps) {
 
   const columns = [
     {
-      title: '客户类别',
+      title: '住户类别',
       dataIndex: 'flag',
       key: 'flag',
       width: 80,
@@ -73,7 +73,7 @@ function ListTable(props: ListTableProps) {
     //   sorter: true,
     // },
     {
-      title: '客户名称',
+      title: '住户名称',
       dataIndex: 'name',
       key: 'name',
       width: 200,

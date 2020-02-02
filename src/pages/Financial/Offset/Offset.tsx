@@ -344,7 +344,7 @@ function Offset() {
         reload={() => initLoadData('', search)}
       />
       <Show
-        modifyVisible={modifyVisible}
+        showVisible={modifyVisible}
         closeDrawer={closeModify}
         // organizeId={organize}
         id={id}

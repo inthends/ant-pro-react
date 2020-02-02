@@ -32,17 +32,17 @@ const Show = (props: ShowProps) => {
     form.resetFields();
     if (showVisible) {
       if (id != null && id != '') {
-        setLoading(true);
+        // setLoading(true);
         GetEntityShow(id).then(res => {
           setInfoDetail(res.entity);
           setLinkno(res.linkno);
           initLoadFeeDetail(res.entity.billId);
-          setLoading(false);
+          // setLoading(false);
         })
       }
       else {
         setInfoDetail({});
-        setLoading(false);
+        // setLoading(false);
       }
     }
   }, [showVisible]);
@@ -145,7 +145,7 @@ const Show = (props: ShowProps) => {
 
   const load = data => {
     setLoading(true);
-    data.sidx = data.sidx || 'c';
+    data.sidx = data.sidx || 'beginDate';
     data.sord = data.sord || 'asc';
     return ChargeFeeDetail(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -180,7 +180,6 @@ const Show = (props: ShowProps) => {
   //     });
   //   },
   // });
-
   //弹出选择打印模板  
   //};
 

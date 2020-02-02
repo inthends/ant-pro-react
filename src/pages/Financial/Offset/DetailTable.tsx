@@ -32,7 +32,20 @@ function DetailTable(props: DetailTableProps) {
       width: 180,
       sorter: true
     },
-    
+    {
+      title: '应付日期',
+      dataIndex: 'period',
+      key: 'period',
+      sorter: true,
+      width: 120,
+      render: val => {
+        if (val == null) {
+          return ''
+        } else {
+          return moment(val).format('YYYY-MM-DD');
+        }
+      }
+    }, 
     {
       title: '付款项目',
       dataIndex: 'payFeeName',
@@ -55,8 +68,8 @@ function DetailTable(props: DetailTableProps) {
     },
     {
       title: '冲抵金额',
-      dataIndex: 'billAmount',
-      key: 'billAmount', 
+      dataIndex: 'offsetAmount',
+      key: 'offsetAmount', 
       width: 100
     },
     // {
@@ -106,7 +119,7 @@ function DetailTable(props: DetailTableProps) {
         dataSource={data}
         rowKey="billId"
         pagination={pagination}
-        scroll={{ y: 500, x: 1100 }}
+        scroll={{ y: 500, x: 1200 }}
         loading={loading}
         rowClassName={getClassName} //样式
       />

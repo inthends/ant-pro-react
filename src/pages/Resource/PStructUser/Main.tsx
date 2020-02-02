@@ -104,7 +104,7 @@ function Main() {
           />
           <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer()}>
             <Icon type="plus" />
-            客户
+            住户
           </Button>
         </div>
         <ListTable

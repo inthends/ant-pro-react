@@ -145,7 +145,6 @@ const AddDrawer = (props: AddDrawerProps) => {
           return;
         }
 
-
         let newData = {
           payBeginDate: values.payBeginDate.format('YYYY-MM-DD'),//"2019-07-01",//
           payEndDate: values.payEndDate.format('YYYY-MM-DD'),

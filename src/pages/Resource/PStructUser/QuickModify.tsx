@@ -23,7 +23,7 @@ interface QuickModifyProps {
 const QuickModify = (props: QuickModifyProps) => {
   const { organizeId, modifyVisible, data, closeDrawer, form, reload } = props;
   const { getFieldDecorator } = form;
-  const title = data === undefined ? '添加客户' : '修改客户';
+  const title = data === undefined ? '添加住户' : '修改住户';
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [treeData, setTreeData] = useState<any[]>([]); //所属机构
   // const [banks, setBanks] = useState<any[]>([]); // 开户银行
@@ -129,10 +129,10 @@ const QuickModify = (props: QuickModifyProps) => {
                 </Form.Item>
               </Col>
               <Col lg={12}>
-                <Form.Item label="客户类别" required>
+                <Form.Item label="住户类别" required>
                   {getFieldDecorator('type', {
                     initialValue: infoDetail.type ? infoDetail.type : '1',
-                    rules: [{ required: true, message: '请选择客户类别' }],
+                    rules: [{ required: true, message: '请选择住户类别' }],
                   })(
                     <Select>
                       <Option value="1" key="1">
@@ -148,11 +148,11 @@ const QuickModify = (props: QuickModifyProps) => {
             </Row>
             <Row gutter={24}>
               <Col lg={12}>
-                <Form.Item label="客户名称" required>
+                <Form.Item label="住户名称" required>
                   {getFieldDecorator('name', {
                     initialValue: infoDetail.name,
-                    rules: [{ required: true, message: '请输入客户名称' }],
-                  })(<Input placeholder="请输入客户名称" />)}
+                    rules: [{ required: true, message: '请输入住户名称' }],
+                  })(<Input placeholder="请输入住户名称" />)}
                 </Form.Item>
               </Col>
               {/* <Col lg={12}>
@@ -192,7 +192,7 @@ const QuickModify = (props: QuickModifyProps) => {
               </Col> 
             </Row> */}
 
-            {form.getFieldValue('flag') === '1' ? (
+            {form.getFieldValue('type') === '1' ? (
               <>
                 <Row gutter={24}>
                   <Col lg={12}>

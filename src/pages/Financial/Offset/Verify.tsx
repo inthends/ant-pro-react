@@ -193,8 +193,8 @@ const Verify = (props: VerifyProps) => {
     },
     {
       title: '冲抵金额',
-      dataIndex: 'billAmount',
-      key: 'billAmount',
+      dataIndex: 'offsetAmount',
+      key: 'offsetAmount',
       sorter: true,
       width: 100
     },

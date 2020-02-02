@@ -30,7 +30,7 @@ export function GetOffsetPageDetailData(data): Promise<any> {
 
 //根据主单id查询冲抵明细列表
 export function GetListByID(data): Promise<any> {
-  return request.post(process.env.basePath + `/Offset/GetListByID`, {data:objToFormdata(data)}).then(getResult as any);
+  return request.post(process.env.basePath + `/Offset/GetListById`, {data:objToFormdata(data)}).then(getResult as any);
 }
 
 //作废冲抵单
