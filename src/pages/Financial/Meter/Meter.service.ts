@@ -16,6 +16,11 @@ export function GetMeterPageList(data): Promise<any> {
   return request.post(process.env.basePath + `/Meter/GetMeterPageList`, { data: objToFormdata(data) }).then(getResult as any);
 }
 
+//生成二维码
+export function CreateQrCodeFrom(): Promise<any> {
+  return request.post(process.env.basePath + `/Meter/CreateQrCodeFrom`).then(getResult as any);
+}
+
 //获取装表列表
 export function GetUnitMeterPageList(data): Promise<any> {
   return request.post(process.env.basePath + `/Meter/GetUnitMeterPageList`, { data: objToFormdata(data) }).then(getResult as any);

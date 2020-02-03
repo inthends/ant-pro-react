@@ -1,9 +1,9 @@
 //水电费管理
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { Tabs, Button, Icon, Input, Layout, Select } from 'antd';
+import { message, Modal, Tabs, Button, Icon, Input, Layout, Select } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { GetMeterPageList, GetUnitMeterPageList, GetReadingMeterPageList, GetMeterFormsPageList } from './Meter.service';
+import { CreateQrCodeFrom, GetMeterPageList, GetUnitMeterPageList, GetReadingMeterPageList, GetMeterFormsPageList } from './Meter.service';
 import AsynLeftTree from '../AsynLeftTree';
 import MeterTable from './MeterTable';
 import MeterFormsTable from './MeterFormsTable';
@@ -21,25 +21,25 @@ const { Option } = Select;
 function Main() {
   const [organize, SetOrganize] = useState<any>({});
   // const [treeSearch, SetTreeSearch] = useState<any>({});
-  const [id, setId] = useState<string>(); 
-  const [readingMeterId, setReadingMeterId] = useState<string>(); 
+  const [id, setId] = useState<string>();
+  const [readingMeterId, setReadingMeterId] = useState<string>();
   const [meterLoading, setMeterLoading] = useState<boolean>(false);
   const [meterFormsLoading, setMeterFormsLoading] = useState<boolean>(false);
   const [readingMeterLoading, setReadingMeterLoading] = useState<boolean>(false);
-  const [unitMeterLoading, setUnitMeterLoading] = useState<boolean>(false); 
+  const [unitMeterLoading, setUnitMeterLoading] = useState<boolean>(false);
   const [meterData, setMeterData] = useState<any>();
   const [unitMeterData, setUnitMeterData] = useState<any>();
   const [readingMeterData, setReadingMeterData] = useState<any>();
-  const [meterFormsData, setMeterFormsData] = useState<any>(); 
+  const [meterFormsData, setMeterFormsData] = useState<any>();
   const [meterSearch, setMeterSearch] = useState<string>('');
-  const [meterKind, setMeterKind] = useState<string>(''); 
+  const [meterKind, setMeterKind] = useState<string>('');
   const [unitMeterSearch, setUnitMeterSearch] = useState<string>('');
   const [readingMeterSearch, setReadingMeterSearch] = useState<string>('');
-  const [meterFormsSearch, setMeterFormsSearch] = useState<string>(''); 
+  const [meterFormsSearch, setMeterFormsSearch] = useState<string>('');
   const [meterPagination, setMeterPagination] = useState<DefaultPagination>(new DefaultPagination());
   const [unitMeterPagination, setUnitMeterPagination] = useState<DefaultPagination>(new DefaultPagination());
   const [readingMeterPagination, setReadingMeterPagination] = useState<DefaultPagination>(new DefaultPagination());
-  const [meterFormsPagination, setMeterFormsPagination] = useState<DefaultPagination>(new DefaultPagination()); 
+  const [meterFormsPagination, setMeterFormsPagination] = useState<DefaultPagination>(new DefaultPagination());
   const [unitTreeData, setUnitTreeData] = useState<any[]>([]);
 
   // const [meterKinds, setMeterKinds] = useState<any>([]);
@@ -464,6 +464,22 @@ function Main() {
   };
   // const [meterSearchParams, setMeterSearchParams] = useState<any>({});
 
+  //生成二维码
+  const CreateQrCode = () => {
+    Modal.confirm({
+      title: '请确认',
+      content: `您是否要生成费表二维码？`,
+      okText: '确认',
+      cancelText: '取消',
+      onOk: () => {
+        CreateQrCodeFrom().then(() => {
+          message.success('生成成功，请到服务器wwwroot/upload/qcode目录下查看');
+        });
+
+      },
+    });
+  }
+
   return (
     <Layout>
       <AsynLeftTree
@@ -545,6 +561,14 @@ function Main() {
                 style={{ width: 230 }}
                 onSearch={value => loadUnitMeterData(value)}
               />
+
+              <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
+                onClick={() => { CreateQrCode() }}
+              >
+                <Icon type="qrcode" />
+                生成二维码
+              </Button>
+
             </div>
             <UnitMeterTable
               onchange={(paginationConfig, filters, sorter) =>
