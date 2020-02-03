@@ -542,7 +542,7 @@ function Main() {
               <Search
                 className="search-input"
                 placeholder="请输入要查询的名称或者编号"
-                style={{ width: 280 }}
+                style={{ width: 230 }}
                 onSearch={value => loadUnitMeterData(value)}
               />
             </div>

@@ -633,8 +633,7 @@ const MeterModify = (props: MeterModifyProps) => {
       <ChargeFeeItem
         visible={chargeFeeItemVisible}
         closeModal={closeChargeFeeItem}
-        getSelectTree={(item) => {
-          debugger
+        getSelectTree={(item) => { 
           var info = Object.assign({}, infoDetail, { feeItemName: item.name, feeItemId: item.id });
           setInfoDetail(info);
         }}

@@ -45,9 +45,10 @@ const SelectHouse = (props: SelectHouseProps) => {
             message.success('添加成功');
             reload();
           })
-          //.catch(() => {
-          //message.warning('数据保存错误');
-          //});
+            .catch(() => {
+              //message.warning('数据保存错误');
+              setLoading(false);
+            });
         }
       }}
       destroyOnClose={true}
