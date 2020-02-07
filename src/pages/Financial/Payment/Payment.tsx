@@ -2,7 +2,7 @@
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { Tabs, Button, Icon, Input, Layout, Select, DatePicker } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { NotPaymentFeeData, ChargeFeePageData } from './Payment.service';
 import AsynLeftTree from '../AsynLeftTree';
 import NotPaymentTable from './NotPaymentTable';
@@ -48,10 +48,10 @@ function Payment() {
     }
   };
 
-  useEffect(() => {
-    initPaymentLoadData('', '');
-    initNotPaymentLoadData('', '');
-  }, []);
+  // useEffect(() => {
+  //   initPaymentLoadData('', '');
+  //   initNotPaymentLoadData('', '');
+  // }, []);
 
   const loadPaymentData = (paginationConfig?: PaginationConfig, sorter?) => {
     const { current: pageIndex, pageSize, total } = paginationConfig || {
