@@ -83,7 +83,7 @@ const ApproveView = (props: ApproveViewProps) => {
       key: 'billDate',
       width: 120,
       sorter: true,
-      render: val => moment(val).format('YYYY-MM-DD')
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '单元编号',

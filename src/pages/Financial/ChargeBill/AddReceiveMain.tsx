@@ -140,7 +140,7 @@ const AddReceiveMain = (props: AddReceiveMainProps) => {
       key: 'billDate',
       width: 100,
       sorter: true,
-      render: val => moment(val).format('YYYY-MM-DD')
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '单元编号',

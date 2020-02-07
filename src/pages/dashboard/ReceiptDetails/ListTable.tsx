@@ -125,7 +125,7 @@ function ListTable(props: ListTableProps) {
       key: '账单日期',
       width: 100,
       sorter: true,
-      render: val => moment(val).format('YYYY-MM-DD') 
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '收款截止日期',
@@ -133,7 +133,7 @@ function ListTable(props: ListTableProps) {
       key: '收款截止日期',
       width: 130,
       sorter: true,
-      render: val => moment(val).format('YYYY-MM-DD') 
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '是否逾期',

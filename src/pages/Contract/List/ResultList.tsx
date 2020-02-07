@@ -32,7 +32,7 @@ function ResultList(props: ResultListProps) {
       dataIndex: 'deadline',
       key: 'deadline',
       width: 60,
-      render: val => moment(val).format('YYYY-MM-DD')
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '最终单价',

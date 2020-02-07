@@ -82,7 +82,7 @@ function ChargeCheckTable(props: ChargeCheckTableProps) {
       key: 'billDate',
       width: 100,
       sorter: true,
-      render: val => moment(val).format('YYYY-MM-DD')
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '订单来源',
@@ -116,7 +116,7 @@ function ChargeCheckTable(props: ChargeCheckTableProps) {
       dataIndex: 'rBillDate',
       key: 'rBillDate',
       width: 100,
-      render: val => moment(val).format('YYYY-MM-DD')
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '收款方式',

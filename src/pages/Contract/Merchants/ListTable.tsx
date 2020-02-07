@@ -60,7 +60,7 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'visitDate',
       key: 'visitDate',
       width: 100,
-      render: val => moment(val).format('YYYY-MM-DD')
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
 
     {

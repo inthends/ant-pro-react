@@ -41,7 +41,7 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'bBillDate',
       key: 'bBillDate',
       width: 80,
-      render: val => moment(val).format('YYYY-MM-DD')
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '计费来源',
@@ -127,14 +127,14 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'beginDate',
       key: 'beginDate',
       width: 100,
-      render: val => moment(val).format('YYYY-MM-DD')
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     }, 
     {
       title: '计费截止日期',
       dataIndex: 'endDate',
       key: 'endDate',
       width: 100,
-      render: val => moment(val).format('YYYY-MM-DD')
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     }
   ] as ColumnProps<any>[];
 
