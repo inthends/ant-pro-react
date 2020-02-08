@@ -124,7 +124,7 @@ const LineContent = (props: LineContentProps) => {
       title: '执行频率',
       dataIndex: 'frequency',
       key: 'frequency',
-      width: 80,
+      width: 100,
       render: (text, record) => {
         if (text == 1) {
           return '单次执行';
@@ -240,7 +240,7 @@ const LineContent = (props: LineContentProps) => {
           dataSource={data}
           rowKey="id"
           pagination={pagination}
-          scroll={{ y: 500, x: 850 }}
+          scroll={{ y: 500, x: 1000 }}
           loading={loading}
         />
       </Card>

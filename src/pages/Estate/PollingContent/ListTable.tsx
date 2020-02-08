@@ -38,6 +38,12 @@ function ListTable(props: ListTableProps) {
 
   const columns = [
     {
+      title: "类别",
+      dataIndex: "typeName",
+      key: "typeName",
+      width: 100
+    },
+    {
       title: "编号",
       dataIndex: "code",
       key: "code",
@@ -49,24 +55,19 @@ function ListTable(props: ListTableProps) {
       key: "name",
       width: 150
     },
-    {
-      title: "类别",
-      dataIndex: "typeName",
-      key: "typeName",
-      width: 80
-    },
+   
 
     {
       title: "标准要求",
       dataIndex: "criterion",
       key: "criterion",
-      width: 120
+      width: 200
     },
     {
       title: "检查方法",
       dataIndex: "checkWay",
       key: "checkWay",
-      width: 100
+      width: 200
     },
 
     // {

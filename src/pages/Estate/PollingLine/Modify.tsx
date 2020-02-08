@@ -3,7 +3,7 @@ import ModifyItem from "@/components/BaseModifyDrawer/ModifyItem";
 import { message, Divider, Icon, Table, Modal, Button, Input, Form, Row, Card } from "antd";
 import { WrappedFormUtils } from "antd/lib/form/Form";
 import React, { useState, useEffect } from 'react';
-import { SaveFormLine, GetLinePonitPageListByID, RemoveLinePoint, RemoveLinePointAll } from "./Main.service";
+import {MovePoint, SaveFormLine, GetLinePonitPageListByID, RemoveLinePoint, RemoveLinePointAll } from "./Main.service";
 import { GetOrgEsates } from '@/services/commonItem';
 import { TreeNode } from 'antd/lib/tree-select';
 import { DefaultPagination } from '@/utils/defaultSetting';
@@ -66,7 +66,7 @@ const Modify = (props: ModifyProps) => {
 
   useEffect(() => {
     if (visible) {
-      
+
       //巡检角色
       // GetTreeRoleJson().then(res => {
       //   setRoles(res || []);
@@ -184,14 +184,18 @@ const Modify = (props: ModifyProps) => {
       dataIndex: 'code',
       key: 'code',
       width: 120,
-      sorter: true
     },
     {
       title: '点位名称',
       dataIndex: 'name',
       key: 'name',
       width: 120,
-      sorter: true
+    },
+    {
+      title: '序号',
+      dataIndex: 'sort',
+      key: 'sort',
+      width: 60,
     },
     {
       title: '描述',
@@ -203,11 +207,28 @@ const Modify = (props: ModifyProps) => {
       key: 'operation',
       align: 'center',
       fixed: 'right',
-      width: 125,
+      width: 220,
       render: (text, record) => {
         return [
           <span key='span'>
             <a onClick={() => doModify(record)} key="modify">巡检内容</a>
+            <Divider type="vertical" key='divider2' />
+            <a onClick={() => { 
+              MovePoint(record.id,0).then(res => {
+                initLoadData(search, lineId);
+              })
+            }
+            } key="modify">上移</a>
+
+            <Divider type="vertical" key='divider3' />
+            <a onClick={() =>   
+            { 
+              MovePoint(record.id,1).then(res => {
+                initLoadData(search, lineId);
+              })
+            }
+            
+            } key="modify">下移</a>
             <Divider type="vertical" key='divider' />
             <a onClick={() => {
               Modal.confirm({
@@ -349,7 +370,7 @@ const Modify = (props: ModifyProps) => {
             dataSource={linepointData}
             rowKey={record => record.id}
             pagination={pagination}
-            scroll={{ y: 500, x: 700 }}
+            scroll={{ y: 500, x: 800 }}
             loading={loading}
           />
         </Form>

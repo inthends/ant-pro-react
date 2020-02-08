@@ -49,7 +49,7 @@ function ListTable(props: ListTableProps) {
       title: "路线名称",
       dataIndex: "name",
       key: "name",
-      width: 150
+      width: 180
     },
     {
       title: "所属机构",

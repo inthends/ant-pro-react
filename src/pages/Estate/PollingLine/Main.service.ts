@@ -88,6 +88,14 @@ export function RemoveLinePoint(keyValue): Promise<any> {
     .then(getResult as any);
 }
 
+
+//移动路线下的点位排序
+export function MovePoint(keyValue,sort): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Polling/MovePoint?keyValue=${keyValue}&sort=${sort}`, {})
+    .then(getResult as any);
+}
+
 //删除巡检路线下的全部点位
 export function RemoveLinePointAll(keyValue): Promise<any> {
   return request

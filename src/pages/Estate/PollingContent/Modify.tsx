@@ -3,8 +3,8 @@ import ModifyItem from "@/components/BaseModifyDrawer/ModifyItem";
 import { Form, Row, Card } from "antd";
 import { WrappedFormUtils } from "antd/lib/form/Form";
 import React, { useState, useEffect } from 'react';
-import { SaveContentForm } from "./Main.service";
-import { GetOrgs, getCommonItems } from '@/services/commonItem';
+import { SaveContentForm ,GetCommonItemsNew} from "./Main.service";
+import { GetOrgs } from '@/services/commonItem';
 import { TreeNode } from 'antd/lib/tree-select';
 
 interface ModifyProps {
@@ -13,12 +13,12 @@ interface ModifyProps {
   form: WrappedFormUtils<any>;
   closeDrawer(): void;
   reload(): void;
-  typeId: string;
+  // typeId: string;
   typeName: string;
 };
 
 const Modify = (props: ModifyProps) => {
-  const { data, form, visible } = props;
+  const { data, form } = props;
   const { getFieldDecorator } = form;
   let initData = data ? data : {};
   const baseFormProps = { form, initData };
@@ -30,12 +30,12 @@ const Modify = (props: ModifyProps) => {
     return SaveContentForm(modifyData);
   };
 
-
   useEffect(() => {
     GetOrgs().then(res => {
       setOrgs(res);
     });
-    getCommonItems('PollingType').then(res => {
+    
+    GetCommonItemsNew('PollingType').then(res => {
       setPollingType(res || []);
     });
   }, []);

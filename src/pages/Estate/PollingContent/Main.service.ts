@@ -36,3 +36,10 @@ export function GetPageContentListJson(data): Promise<any> {
     .then(getResult as any);
 }
  
+
+//获取通用代码
+export function GetCommonItemsNew(code: string): Promise<Array<TreeEntity>> {
+  return request
+    .get(process.env.basePath + `/Polling/GetDataItemTreeJson?EnCode=${code}`)
+    .then(getResult as any);
+}
