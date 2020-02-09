@@ -201,13 +201,13 @@ const Show = (props: ShowProps) => {
   const GetVerifyStatus = (status) => {
     switch (status) {
       case 0:
-        return <Tag color="#D7443A">待对账</Tag>;
+        return <Tag color="#D7443A">待审核</Tag>;
       case 1:
-        return <Tag color="#19d54e">已对账</Tag>;
+        return <Tag color="#19d54e">已审核</Tag>;
       case 2:
         return <Tag color="#e4aa4b">已送审</Tag>;
       case 3:
-        return <Tag color="#19d54e">已审核</Tag>;
+        return <Tag color="#19d54e">已复核</Tag>;
       default:
         return '';
     }
@@ -220,8 +220,7 @@ const Show = (props: ShowProps) => {
       width={1000}
       onClose={closeShow}
       visible={showVisible}
-      bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
-    >
+      bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
       <Spin tip="数据处理中..." spinning={loading}>
         <Card className={styles.card}>
           <Form layout="vertical" >
@@ -273,17 +272,17 @@ const Show = (props: ShowProps) => {
             </Row>
             <Row gutter={24}>
               <Col span={6}>
-                <Form.Item label="对账人">
+                <Form.Item label="审核人">
                   {infoDetail.verifyPerson}
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item label="对账时间"   >
+                <Form.Item label="审核时间">
                   {infoDetail.verifyDate}
                 </Form.Item>
               </Col>
               <Col span={12} >
-                <Form.Item label="对账说明"   >
+                <Form.Item label="审核说明">
                   {infoDetail.verifyMemo}
                 </Form.Item>
               </Col>

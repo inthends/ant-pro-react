@@ -1,4 +1,4 @@
-//收款单对账
+//收款单审核
 import { Tag, message, Card, Button, Col, Drawer, Form, Input, Row, Table } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
@@ -20,7 +20,7 @@ interface VertifyProps {
 const Vertify = (props: VertifyProps) => {
   const { vertifyVisible, closeVertify, id, form, ifVertify, reload } = props;
   const { getFieldDecorator } = form;
-  const title = ifVertify ? "收款单反审" : "收款单对账";
+  const title = ifVertify ? "收款单取消审核" : "收款单审核";
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [chargeBillData, setChargeBillData] = useState<any[]>([]);
@@ -90,13 +90,13 @@ const Vertify = (props: VertifyProps) => {
   const GetVerifyStatus = (status) => {
     switch (status) {
       case 0:
-        return <Tag color="#D7443A">待对账</Tag>;
+        return <Tag color="#D7443A">待审核</Tag>;
       case 1:
-        return <Tag color="#19d54e">已对账</Tag>;
+        return <Tag color="#19d54e">已审核</Tag>;
       case 2:
         return <Tag color="#e4aa4b">已送审</Tag>;
       case 3:
-        return <Tag color="#19d54e">已审核</Tag>;
+        return <Tag color="#19d54e">已复核</Tag>;
       default:
         return '';
     }
@@ -204,8 +204,7 @@ const Vertify = (props: VertifyProps) => {
       width={1000}
       onClose={closeVertify}
       visible={vertifyVisible}
-      bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
-    >
+      bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
       <Card className={styles.card}>
         <Form layout="vertical">
 
@@ -279,12 +278,11 @@ const Vertify = (props: VertifyProps) => {
             pagination={pagination}
             scroll={{ y: 500, x: 1500 }}
             loading={loading}
-          />
-
+          /> 
           {!ifVertify ?
             <Row gutter={24}>
               <Col span={24}>
-                <Form.Item label="对账说明" >
+                <Form.Item label="审核说明" >
                   {getFieldDecorator('verifyMemo', {
                     initialValue: infoDetail.verifyMemo,
                   })(
@@ -294,7 +292,6 @@ const Vertify = (props: VertifyProps) => {
               </Col>
             </Row> : null
           }
-
         </Form>
       </Card>
       <div

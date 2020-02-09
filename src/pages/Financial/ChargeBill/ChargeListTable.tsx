@@ -166,32 +166,32 @@ function ChargeListTable(props: ChargeListTableProps) {
       render: (text, record) => {
         switch (text) {
           case 0:
-            return <Tag color="#D7443A">待对账</Tag>;
+            return <Tag color="#D7443A">待审核</Tag>;
           case 1:
-            return <Tag color="#19d54e">已对账</Tag>;
+            return <Tag color="#19d54e">已审核</Tag>;
           case 2:
             return <Tag color="#e4aa4b">已送审</Tag>;
           case 3:
-            return <Tag color="#19d54e">已审核</Tag>;
+            return <Tag color="#19d54e">已复核</Tag>;
           default:
             return '';
         }
       }
     },
     {
-      title: '对账日期',
+      title: '审核日期',
       dataIndex: 'verifyDate',
       key: 'verifyDate',
       width: 160,
       // render: val => val == null || val == "" ? '' : moment(val).format('YYYY-MM-DD')
     }, {
-      title: '对账人',
+      title: '审核人',
       dataIndex: 'verifyPerson',
       key: 'verifyPerson',
       width: 80
     },
     {
-      title: '对账说明',
+      title: '审核说明',
       dataIndex: 'verifyMemo',
       key: 'verifyMemo',
       width: 120
@@ -213,11 +213,12 @@ function ChargeListTable(props: ChargeListTableProps) {
           //更多操作
           return [
             <span key='span1'>
-              {!record.ifVerify ? <a onClick={() => showVertify(record.billId, false)} key="approve">对账</a> : <a onClick={() => showVertify(record.billId, true)} key="unapprove">反审</a>}
+              {!record.ifVerify ? <a onClick={() => showVertify(record.billId, false)} key="approve">审核</a> : <a onClick={() => showVertify(record.billId, true)} key="unapprove">反审</a>}
               <Divider type="vertical" />
               <a onClick={() => showDetail(record.billId)} key="view">查看</a>
               <Divider type="vertical" />
-              {record.status == 1 && record.linkId == null ? <MoreBtn key="more" item={record} /> : null}
+              {/* {record.status == 1 && record.linkId == null ? <MoreBtn key="more" item={record} /> : null} */} 
+              {record.status == 0 ? <MoreBtn key="more" item={record} /> : null} 
             </span>
           ];
 
