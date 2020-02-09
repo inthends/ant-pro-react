@@ -1,6 +1,6 @@
 //项目修改
 import { TreeEntity } from '@/model/models';
-import { Switch, Upload, Modal, Icon, Button, Card, Col, DatePicker, Drawer, Form, Input, Row, Select, TreeSelect, message } from 'antd';
+import { Spin, Switch, Upload, Modal, Icon, Button, Card, Col, DatePicker, Drawer, Form, Input, Row, Select, TreeSelect, message } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { ExistEnCode, GetFormInfoJson, GetTreeAreaJson, SaveForm } from './House.service';
@@ -44,6 +44,7 @@ const Modify = (props: ModifyProps) => {
   const [previewVisible, setPreviewVisible] = useState<boolean>(false);
   const [fileList, setFileList] = useState<any[]>([]);
   const [previewImage, setPreviewImage] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
   //打开抽屉时初始化
   useEffect(() => {
@@ -126,6 +127,7 @@ const Modify = (props: ModifyProps) => {
   useEffect(() => {
     if (modifyVisible) {
       if (id) {
+        setLoading(true);
         getInfo(id).then((tempInfo: any) => {
           if (tempInfo.province) {
             getCity(tempInfo.province, true);
@@ -154,6 +156,7 @@ const Modify = (props: ModifyProps) => {
             })
           }, 500)
           form.resetFields();
+          setLoading(false);
         });
       } else {
         setInfoDetail({ organizeId });
@@ -169,17 +172,21 @@ const Modify = (props: ModifyProps) => {
   };
 
   const save = () => {
+    setLoading(true);
     form.validateFields((errors, values) => {
       if (!errors) {
         getInfo(id).then(tempInfo => {
-          const newvalue = { ...values, date: values.date.format('YYYY-MM-DD') };
+          const newvalue = { ...values, handoverDate: values.handoverDate.format('YYYY-MM-DD') };
           newvalue.description = values.description.toHTML();//toRAW(); 
           SaveForm({ ...tempInfo, ...newvalue, keyValue: tempInfo.id }).then(res => {
-            message.success('保存成功');
+            message.success('提交成功');
             closeDrawer();
             reload();
+            setLoading(false);
           });
         });
+      } else {
+        setLoading(false);
       }
     });
   };
@@ -302,128 +309,129 @@ const Modify = (props: ModifyProps) => {
       visible={modifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
-      <Card className={styles.card} >
-        {modifyVisible ? (
-          <Form layout="vertical" hideRequiredMark>
-            <Row gutter={24}>
-              <Col lg={24}>
-                <Form.Item label="隶属机构" required>
-                  {getFieldDecorator('organizeId', {
-                    initialValue: infoDetail.organizeId,
-                    rules: [{ required: true, message: '请选择隶属机构' }],
-                  })(
-                    <TreeSelect placeholder="请选择隶属机构"
-                      treeData={treeData}
-                      dropdownStyle={{ maxHeight: 400 }}
-                      allowClear
-                      treeDefaultExpandAll>
-                      {/* {renderTree(treeData, '0')} */}
-                    </TreeSelect>
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
+      <Spin tip="数据处理中..." spinning={loading}>
+        <Card className={styles.card} >
+          {modifyVisible ? (
+            <Form layout="vertical" hideRequiredMark>
+              <Row gutter={24}>
+                <Col lg={24}>
+                  <Form.Item label="隶属机构" required>
+                    {getFieldDecorator('organizeId', {
+                      initialValue: infoDetail.organizeId,
+                      rules: [{ required: true, message: '请选择隶属机构' }],
+                    })(
+                      <TreeSelect placeholder="请选择隶属机构"
+                        treeData={treeData}
+                        dropdownStyle={{ maxHeight: 400 }}
+                        allowClear
+                        treeDefaultExpandAll>
+                        {/* {renderTree(treeData, '0')} */}
+                      </TreeSelect>
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row>
 
-            <Row gutter={24}>
-              <Col lg={12}>
-                <Form.Item label="项目名称" required>
-                  {getFieldDecorator('name', {
-                    initialValue: infoDetail.name,
-                    rules: [{ required: true, message: '请输入项目名称' }],
-                  })(<Input placeholder="请输入项目名称" />)}
-                </Form.Item>
-              </Col>
-              <Col lg={12}>
-                <Form.Item label="项目编号" required>
-                  {getFieldDecorator('code', {
-                    initialValue: infoDetail.code,
-                    rules: [{ required: true, message: '请输入项目编号' },
-                    {
-                      validator: checkExist
-                    }
-                    ],
-                  })(<Input placeholder="请输入项目编号" />)}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={24}>
-              <Col lg={24}>
-                <Row gutter={24}>
-                  <Col lg={8}>
-                    <Form.Item label="所属省">
-                      {getFieldDecorator('province', {
-                        initialValue: infoDetail.province,
-                      })(
-                        <Select
-                          showSearch
-                          onChange={getCity}
-                          filterOption={(input, option) =>
-                            option.props.children.indexOf(input) >= 0
-                          }
-                        >
-                          {pro.map(item => (
-                            <Option key={item.key} value={item.value}>
-                              {item.title}
-                            </Option>
-                          ))}
-                        </Select>
-                      )}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={8}>
-                    <Form.Item label="所属市">
-                      {getFieldDecorator('city', {
-                        initialValue: infoDetail.city,
-                      })(
-                        <Select
-                          showSearch
-                          onChange={getArea}
-                          filterOption={(input, option) =>
-                            option.props.children.indexOf(input) >= 0
-                          }
-                        >
-                          {city.map(item => (
-                            <Option key={item.key} value={item.value}>
-                              {item.title}
-                            </Option>
-                          ))}
-                        </Select>
-                      )}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={8}>
-                    <Form.Item label="所属区/县">
-                      {getFieldDecorator('region', {
-                        initialValue: infoDetail.region,
-                      })(
-                        <Select
-                          showSearch
-                          filterOption={(input, option) =>
-                            option.props.children.indexOf(input) >= 0
-                          }
-                        >
-                          {area.map(item => (
-                            <Option key={item.key} value={item.value}>
-                              {item.title}
-                            </Option>
-                          ))}
-                        </Select>
-                      )}
-                    </Form.Item>
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
-            <Row gutter={24}>
-              <Col lg={24}>
-                <Form.Item label="详细地址">
-                  {getFieldDecorator('address', {
-                    initialValue: infoDetail.address,
-                  })(<Input placeholder="请输入详细地址" />)}
-                </Form.Item>
-              </Col>
-            </Row>
-            {/* <Row gutter={24}>
+              <Row gutter={24}>
+                <Col lg={12}>
+                  <Form.Item label="项目名称" required>
+                    {getFieldDecorator('name', {
+                      initialValue: infoDetail.name,
+                      rules: [{ required: true, message: '请输入项目名称' }],
+                    })(<Input placeholder="请输入项目名称" />)}
+                  </Form.Item>
+                </Col>
+                <Col lg={12}>
+                  <Form.Item label="项目编号" required>
+                    {getFieldDecorator('code', {
+                      initialValue: infoDetail.code,
+                      rules: [{ required: true, message: '请输入项目编号' },
+                      {
+                        validator: checkExist
+                      }
+                      ],
+                    })(<Input placeholder="请输入项目编号" />)}
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row gutter={24}>
+                <Col lg={24}>
+                  <Row gutter={24}>
+                    <Col lg={8}>
+                      <Form.Item label="所属省">
+                        {getFieldDecorator('province', {
+                          initialValue: infoDetail.province,
+                        })(
+                          <Select
+                            showSearch
+                            onChange={getCity}
+                            filterOption={(input, option) =>
+                              option.props.children.indexOf(input) >= 0
+                            }
+                          >
+                            {pro.map(item => (
+                              <Option key={item.key} value={item.value}>
+                                {item.title}
+                              </Option>
+                            ))}
+                          </Select>
+                        )}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={8}>
+                      <Form.Item label="所属市">
+                        {getFieldDecorator('city', {
+                          initialValue: infoDetail.city,
+                        })(
+                          <Select
+                            showSearch
+                            onChange={getArea}
+                            filterOption={(input, option) =>
+                              option.props.children.indexOf(input) >= 0
+                            }
+                          >
+                            {city.map(item => (
+                              <Option key={item.key} value={item.value}>
+                                {item.title}
+                              </Option>
+                            ))}
+                          </Select>
+                        )}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={8}>
+                      <Form.Item label="所属区/县">
+                        {getFieldDecorator('region', {
+                          initialValue: infoDetail.region,
+                        })(
+                          <Select
+                            showSearch
+                            filterOption={(input, option) =>
+                              option.props.children.indexOf(input) >= 0
+                            }
+                          >
+                            {area.map(item => (
+                              <Option key={item.key} value={item.value}>
+                                {item.title}
+                              </Option>
+                            ))}
+                          </Select>
+                        )}
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Col>
+              </Row>
+              <Row gutter={24}>
+                <Col lg={24}>
+                  <Form.Item label="详细地址">
+                    {getFieldDecorator('address', {
+                      initialValue: infoDetail.address,
+                    })(<Input placeholder="请输入详细地址" />)}
+                  </Form.Item>
+                </Col>
+              </Row>
+              {/* <Row gutter={24}>
               <Col lg={12}>
                 <Form.Item label="环线">
                   {getFieldDecorator('cicleLine', {
@@ -439,47 +447,47 @@ const Modify = (props: ModifyProps) => {
                 </Form.Item>
               </Col>
             </Row> */}
-            <Row gutter={24}>
-              <Col lg={12}>
-                <Form.Item label="经度">
-                  {getFieldDecorator('lat', {
-                    initialValue: infoDetail.lat,
-                  })(<Input placeholder="请输入经度" />)}
-                </Form.Item>
-              </Col>
-              <Col lg={12}>
-                <Form.Item label="纬度">
-                  {getFieldDecorator('lon', {
-                    initialValue: infoDetail.lon,
-                  })(<Input placeholder="请输入纬度" />)}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={24}>
-              <Col lg={8}>
-                <Form.Item label="占地面积(㎡)">
-                  {getFieldDecorator('coverArea', {
-                    initialValue: infoDetail.coverArea || 0,
-                  })(<Input placeholder="请输入占地面积" />)}
-                </Form.Item>
-              </Col>
-              <Col lg={8}>
-                <Form.Item label="建筑面积(㎡)">
-                  {console.log(infoDetail.area)}
-                  {getFieldDecorator('area', {
-                    initialValue: infoDetail.area || 0,
-                  })(<Input placeholder="请输入总建筑面积" />)}
-                </Form.Item>
-              </Col>
-              <Col lg={8}>
-                <Form.Item label="产权面积(㎡)">
-                  {getFieldDecorator('propertyArea', {
-                    initialValue: infoDetail.propertyArea || 0,
-                  })(<Input placeholder="请输入产权面积" />)}
-                </Form.Item>
-              </Col>
-            </Row>
-            {/* <Row gutter={24}>
+              <Row gutter={24}>
+                <Col lg={12}>
+                  <Form.Item label="经度">
+                    {getFieldDecorator('lat', {
+                      initialValue: infoDetail.lat,
+                    })(<Input placeholder="请输入经度" />)}
+                  </Form.Item>
+                </Col>
+                <Col lg={12}>
+                  <Form.Item label="纬度">
+                    {getFieldDecorator('lon', {
+                      initialValue: infoDetail.lon,
+                    })(<Input placeholder="请输入纬度" />)}
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row gutter={24}>
+                <Col lg={8}>
+                  <Form.Item label="占地面积(㎡)">
+                    {getFieldDecorator('coverArea', {
+                      initialValue: infoDetail.coverArea || 0,
+                    })(<Input placeholder="请输入占地面积" />)}
+                  </Form.Item>
+                </Col>
+                <Col lg={8}>
+                  <Form.Item label="建筑面积(㎡)">
+                    {console.log(infoDetail.area)}
+                    {getFieldDecorator('area', {
+                      initialValue: infoDetail.area || 0,
+                    })(<Input placeholder="请输入总建筑面积" />)}
+                  </Form.Item>
+                </Col>
+                <Col lg={8}>
+                  <Form.Item label="产权面积(㎡)">
+                    {getFieldDecorator('propertyArea', {
+                      initialValue: infoDetail.propertyArea || 0,
+                    })(<Input placeholder="请输入产权面积" />)}
+                  </Form.Item>
+                </Col>
+              </Row>
+              {/* <Row gutter={24}>
               <Col lg={12}>
                 <Form.Item label="容积率">
                   {getFieldDecorator('volumeRate', {
@@ -495,34 +503,35 @@ const Modify = (props: ModifyProps) => {
                 </Form.Item>
               </Col>
             </Row> */}
-            <Row gutter={24}>
-              <Col lg={12}>
-                <Form.Item label="项目类型">
-                  {getFieldDecorator('propertyType', {
-                    initialValue: infoDetail.propertyType,
-                  })(
-                    <Select placeholder="请选择项目类型">
-                      {project.map(item => (
-                        <Option key={item.key} value={item.value}>
-                          {item.title}
-                        </Option>
-                      ))}
-                    </Select>
-                  )}
-                </Form.Item>
-              </Col>
+              <Row gutter={24}>
+                <Col lg={12}>
+                  <Form.Item label="项目类型">
+                    {getFieldDecorator('propertyType', {
+                      initialValue: infoDetail.propertyType,
+                    })(
+                      <Select placeholder="请选择项目类型">
+                        {project.map(item => (
+                          <Option key={item.key} value={item.value}>
+                            {item.title}
+                          </Option>
+                        ))}
+                      </Select>
+                    )}
+                  </Form.Item>
+                </Col>
 
-              <Col lg={12}>
-                <Form.Item label="接盘日期">
-                  {getFieldDecorator('date', {
-                    initialValue: infoDetail.date
-                      ? moment(new Date(infoDetail.date))
-                      : moment(new Date()),
-                  })(<DatePicker style={{ width: '100%' }} />)}
-                </Form.Item>
-              </Col>
-            </Row>
-            {/* <Row gutter={24}>
+                <Col lg={12}>
+                  <Form.Item label="接盘日期" required>
+                    {getFieldDecorator('handoverDate', {
+                      initialValue: infoDetail.handoverDate
+                        ? moment(new Date(infoDetail.handoverDate))
+                        : moment(new Date()),
+                      rules: [{ required: true, message: '请选择接盘日期' }],
+                    })(<DatePicker style={{ width: '100%' }} />)}
+                  </Form.Item>
+                </Col>
+              </Row>
+              {/* <Row gutter={24}>
               <Col lg={12}>
                 <Form.Item label="开发商">
                   {getFieldDecorator('developerName', {
@@ -538,121 +547,122 @@ const Modify = (props: ModifyProps) => {
                 </Form.Item>
               </Col>
             </Row> */}
-            <Row gutter={24}>
-              <Col lg={8}>
-                <Form.Item label="管家">
-                  {getFieldDecorator('housekeeperName', {
-                    initialValue: infoDetail.housekeeperName,
-                  })(
-                    // <AutoComplete
-                    //   dataSource={userList}
-                    //   onSearch={handleSearch}
-                    //   placeholder="请选择楼栋管家"
-                    //   onSelect={onHousekeeperNameSelect}
-                    // />
+              <Row gutter={24}>
+                <Col lg={8}>
+                  <Form.Item label="管家">
+                    {getFieldDecorator('housekeeperName', {
+                      initialValue: infoDetail.housekeeperName,
+                    })(
+                      // <AutoComplete
+                      //   dataSource={userList}
+                      //   onSearch={handleSearch}
+                      //   placeholder="请选择楼栋管家"
+                      //   onSelect={onHousekeeperNameSelect}
+                      // />
 
-                    <Select
-                      showSearch
-                      onSelect={onHousekeeperNameSelect}
+                      <Select
+                        showSearch
+                        onSelect={onHousekeeperNameSelect}
+                      >
+                        {userSource.map(item => (
+                          <Option key={item.id} value={item.name}>
+                            {item.name}
+                          </Option>
+                        ))}
+                      </Select>
+                    )}
+
+                    {getFieldDecorator('housekeeperId', {
+                      initialValue: infoDetail.housekeeperId,
+                    })(
+                      <input type='hidden' />
+                    )}
+
+                  </Form.Item>
+                </Col>
+                <Col lg={10}>
+                  <Form.Item label="电子发票">
+                    {getFieldDecorator('invoiceTitle', {
+                      initialValue: infoDetail.invoiceTitle,
+                    })(<Input placeholder="请输入电子发票" />)}
+                  </Form.Item>
+                </Col>
+
+
+                <Col lg={6}>
+                  <Form.Item label="微信端项目风采">
+                    {getFieldDecorator('isPublish', {
+                      initialValue: infoDetail.isPublish,
+                    })(
+                      <Switch
+                        onChange={value => form.setFieldsValue({ isPublish: value })}
+                        checked={form.getFieldValue('isPublish')}
+                      ></Switch>
+                    )}
+
+                  </Form.Item>
+                </Col>
+              </Row>
+
+              <Row gutter={24}>
+                <Col lg={24}>
+                  <Form.Item label="备注">
+                    {getFieldDecorator('memo', {
+                      initialValue: infoDetail.memo,
+                    })(<TextArea rows={4} placeholder="请输入备注" maxLength={500} />)}
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row gutter={24}>
+                <Col lg={24}>
+                  <Form.Item required label="">
+                    {getFieldDecorator('description', {
+                      rules: [{ required: true, message: '请输入详细介绍' }]
+                    })(
+                      <BraftEditor
+                        // value={state.editorState}
+                        onChange={handleEditorChange}
+                        controls={controls}
+                        extendControls={extendControls}
+                        placeholder="请输入详细介绍"
+                      />
+                    )}
+
+                    {/* 首页图片 */}
+                    {getFieldDecorator('mainPic', {
+                      initialValue: infoDetail.mainPic,
+                    })(
+                      <input type='hidden' />
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row>
+
+              <Row gutter={24}>
+                <Col lg={24}>
+                  <div className="clearfix">
+                    <Upload
+                      accept='image/*'
+                      action={process.env.basePath + '/PStructs/Upload'}
+                      listType="picture-card"
+                      fileList={fileList}
+                      onPreview={handlePreview}
+                      onChange={handleChange}
+                      onRemove={handleRemove}
                     >
-                      {userSource.map(item => (
-                        <Option key={item.id} value={item.name}>
-                          {item.name}
-                        </Option>
-                      ))}
-                    </Select> 
-                  )}
+                      {fileList.length > 1 ? null : uploadButton}
+                    </Upload>
+                    <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
+                      <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                    </Modal>
+                  </div>
+                </Col>
+              </Row>
 
-                  {getFieldDecorator('housekeeperId', {
-                    initialValue: infoDetail.housekeeperId,
-                  })(
-                    <input type='hidden' />
-                  )}
-
-                </Form.Item>
-              </Col>
-              <Col lg={10}>
-                <Form.Item label="电子发票">
-                  {getFieldDecorator('invoiceTitle', {
-                    initialValue: infoDetail.invoiceTitle,
-                  })(<Input placeholder="请输入电子发票" />)}
-                </Form.Item>
-              </Col>
-
-
-              <Col lg={6}>
-                <Form.Item label="微信端项目风采">
-                  {getFieldDecorator('isPublish', {
-                    initialValue: infoDetail.isPublish,
-                  })(
-                    <Switch
-                      onChange={value => form.setFieldsValue({ isPublish: value })}
-                      checked={form.getFieldValue('isPublish')}
-                    ></Switch>
-                  )}
-
-                </Form.Item>
-              </Col>
-            </Row>
-
-            <Row gutter={24}>
-              <Col lg={24}>
-                <Form.Item label="备注">
-                  {getFieldDecorator('memo', {
-                    initialValue: infoDetail.memo,
-                  })(<TextArea rows={4} placeholder="请输入备注" maxLength={500} />)}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={24}>
-              <Col lg={24}>
-                <Form.Item required label="">
-                  {getFieldDecorator('description', {
-                    rules: [{ required: true, message: '请输入详细介绍' }]
-                  })(
-                    <BraftEditor
-                      // value={state.editorState}
-                      onChange={handleEditorChange}
-                      controls={controls}
-                      extendControls={extendControls}
-                      placeholder="请输入详细介绍"
-                    />
-                  )}
-
-                  {/* 首页图片 */}
-                  {getFieldDecorator('mainPic', {
-                    initialValue: infoDetail.mainPic,
-                  })(
-                    <input type='hidden' />
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-
-            <Row gutter={24}>
-              <Col lg={24}>
-                <div className="clearfix">
-                  <Upload
-                    accept='image/*'
-                    action={process.env.basePath + '/PStructs/Upload'}
-                    listType="picture-card"
-                    fileList={fileList}
-                    onPreview={handlePreview}
-                    onChange={handleChange}
-                    onRemove={handleRemove}
-                  >
-                    {fileList.length > 1 ? null : uploadButton}
-                  </Upload>
-                  <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
-                    <img alt="example" style={{ width: '100%' }} src={previewImage} />
-                  </Modal>
-                </div>
-              </Col>
-            </Row>
-
-          </Form>
-        ) : null}
-      </Card>
+            </Form>
+          ) : null}
+        </Card>
+      </Spin>
       <div
         style={{
           position: 'absolute',
@@ -663,12 +673,13 @@ const Modify = (props: ModifyProps) => {
           padding: '10px 16px',
           background: '#fff',
           textAlign: 'right',
+          zIndex: 999,
         }}
       >
-        <Button onClick={close} style={{ marginRight: 8 }}>
+        <Button onClick={close} style={{ marginRight: 8 }} disabled={loading}>
           取消
         </Button>
-        <Button onClick={save} type="primary">
+        <Button onClick={save} type="primary" disabled={loading}>
           提交
         </Button>
       </div>
