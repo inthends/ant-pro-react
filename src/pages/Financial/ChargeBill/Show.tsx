@@ -201,10 +201,12 @@ const Show = (props: ShowProps) => {
   const GetVerifyStatus = (status) => {
     switch (status) {
       case 0:
-        return <Tag color="#86db47">待处理</Tag>;
+        return <Tag color="#D7443A">待对账</Tag>;
       case 1:
-        return <Tag color="#e4aa4b">已送审</Tag>;
+        return <Tag color="#19d54e">已对账</Tag>;
       case 2:
+        return <Tag color="#e4aa4b">已送审</Tag>;
+      case 3:
         return <Tag color="#19d54e">已审核</Tag>;
       default:
         return '';
@@ -230,23 +232,6 @@ const Show = (props: ShowProps) => {
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item label="收款日期" >
-                  {infoDetail.billDate}
-                </Form.Item>
-              </Col> 
-              <Col span={6}>
-                <Form.Item label="收款人"  >
-                  {infoDetail.createUserName}
-                </Form.Item>
-              </Col> 
-              <Col span={6}>
-                <Form.Item label="付款单号"  >
-                  {infoDetail.payCode}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={24}>
-              <Col span={6}>
                 <Form.Item label="发票编号"  >
                   {infoDetail.invoiceCdde}
                 </Form.Item>
@@ -257,12 +242,30 @@ const Show = (props: ShowProps) => {
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item label="单据状态"   >
+                <Form.Item label="付款单号"  >
+                  {infoDetail.payCode}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={24}> 
+              <Col span={6}>
+                <Form.Item label="收款人"  >
+                  {infoDetail.createUserName}
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item label="收款日期" >
+                  {/* {infoDetail.billDate} */}
+                  {String(infoDetail.billDate).substr(0, 10)}
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item label="费用状态"   >
                   {GetStatus(infoDetail.status)}
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item label="审核状态"   >
+                <Form.Item label="单据状态"   >
                   {/* {infoDetail.ifVerify ? '已审核' : '未审核'} */}
                   {GetVerifyStatus(infoDetail.ifVerify)}
                 </Form.Item>
@@ -270,17 +273,17 @@ const Show = (props: ShowProps) => {
             </Row>
             <Row gutter={24}>
               <Col span={6}>
-                <Form.Item label="审核人"   >
+                <Form.Item label="对账人">
                   {infoDetail.verifyPerson}
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item label="审核时间"   >
+                <Form.Item label="对账时间"   >
                   {infoDetail.verifyDate}
                 </Form.Item>
               </Col>
               <Col span={12} >
-                <Form.Item label="审核情况"   >
+                <Form.Item label="对账说明"   >
                   {infoDetail.verifyMemo}
                 </Form.Item>
               </Col>
@@ -306,7 +309,7 @@ const Show = (props: ShowProps) => {
               columns={columns}
               rowKey={record => record.id}
               pagination={pagination}
-              scroll={{ y: 500, x: 1400 }}
+              scroll={{ y: 500, x: 1500 }}
               loading={loading}
             />
           </Form>

@@ -13,18 +13,17 @@ interface ChargeListTableProps {
   pagination: PaginationConfig;
   data: any[];
   showDetail(billId): void;
-  // showVertify(id: string, ifVertify: boolean): void;
+  showVertify(id: string, ifVertify: boolean): void;
   reload(): void;
   // getRowSelect(record): void;
   rowSelect(rowSelectedKeys): void;
 }
 
 function ChargeListTable(props: ChargeListTableProps) {
-  const { onchange, loading, pagination, data, reload, rowSelect, showDetail } = props;
+  const { onchange, loading, pagination, data, reload, rowSelect, showDetail, showVertify } = props;
   // const changePage = (pagination: PaginationConfig, filters, sorter) => {
   //   onchange(pagination, filters, sorter);
   // };
-
 
   const MoreBtn: React.FC<{
     item: any;
@@ -137,7 +136,7 @@ function ChargeListTable(props: ChargeListTableProps) {
       width: 80,
     },
     {
-      title: '收款状态',
+      title: '费用状态',
       dataIndex: 'status',
       key: 'status',
       align: 'center',
@@ -158,7 +157,7 @@ function ChargeListTable(props: ChargeListTableProps) {
       }
     },
     {
-      title: '审核状态',
+      title: '单据状态',
       dataIndex: 'ifVerify',
       key: 'ifVerify',
       align: 'center',
@@ -167,10 +166,12 @@ function ChargeListTable(props: ChargeListTableProps) {
       render: (text, record) => {
         switch (text) {
           case 0:
-            return <Tag color="#86db47">待处理</Tag>;
+            return <Tag color="#D7443A">待对账</Tag>;
           case 1:
-            return <Tag color="#e4aa4b">已送审</Tag>;
+            return <Tag color="#19d54e">已对账</Tag>;
           case 2:
+            return <Tag color="#e4aa4b">已送审</Tag>;
+          case 3:
             return <Tag color="#19d54e">已审核</Tag>;
           default:
             return '';
@@ -178,19 +179,19 @@ function ChargeListTable(props: ChargeListTableProps) {
       }
     },
     {
-      title: '审核日期',
+      title: '对账日期',
       dataIndex: 'verifyDate',
       key: 'verifyDate',
       width: 160,
       // render: val => val == null || val == "" ? '' : moment(val).format('YYYY-MM-DD')
     }, {
-      title: '审核人',
+      title: '对账人',
       dataIndex: 'verifyPerson',
       key: 'verifyPerson',
       width: 80
     },
     {
-      title: '审核情况',
+      title: '对账说明',
       dataIndex: 'verifyMemo',
       key: 'verifyMemo',
       width: 120
@@ -206,15 +207,15 @@ function ChargeListTable(props: ChargeListTableProps) {
       key: 'operation',
       fixed: 'right',
       align: 'center',
-      width: 110,
+      width: 150,
       render: (text, record) => {
-
         if (record.status == 1 && record.linkId == null) {
           //更多操作
           return [
-            <span>
+            <span key='span1'>
+              {!record.ifVerify ? <a onClick={() => showVertify(record.billId, false)} key="approve">对账</a> : <a onClick={() => showVertify(record.billId, true)} key="unapprove">反审</a>}
+              <Divider type="vertical" />
               <a onClick={() => showDetail(record.billId)} key="view">查看</a>
-              {/* {!record.ifVerify ? <a onClick={() => showVertify(record.billId, false)} key="approve">审核</a> : <a onClick={() => showVertify(record.id, true)} key="unapprove">反审</a>}*/}
               <Divider type="vertical" />
               {record.status == 1 && record.linkId == null ? <MoreBtn key="more" item={record} /> : null}
             </span>
@@ -279,7 +280,7 @@ function ChargeListTable(props: ChargeListTableProps) {
         columns={columns}
         rowKey={record => record.billId}
         pagination={pagination}
-        scroll={{ y: 500, x: 1600 }}
+        scroll={{ y: 500, x: 1700 }}
         rowClassName={setClassName} //表格行点击高亮
         loading={loading}
         onRow={onRow}

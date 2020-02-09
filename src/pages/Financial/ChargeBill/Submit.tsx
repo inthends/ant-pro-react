@@ -9,15 +9,15 @@ import styles from './style.less';
 import moment from 'moment';
 
 interface SubmitProps {
-  vertifyVisible: boolean;
-  closeVertify(): void;
+  visible: boolean;
+  close(): void;
   form: WrappedFormUtils;
   ids?: string[];
   reload(): void;
 }
 
 const Submit = (props: SubmitProps) => {
-  const { vertifyVisible, closeVertify, ids, form, reload } = props;
+  const { visible, close, ids, form, reload } = props;
   const { getFieldDecorator } = form;
   const title = "收款单送审";
   const [loading, setLoading] = useState<boolean>(false);
@@ -29,7 +29,7 @@ const Submit = (props: SubmitProps) => {
   // 打开抽屉时初始化
   useEffect(() => {
     form.resetFields();
-    if (vertifyVisible) {
+    if (visible) {
       if (ids != null) {
         setLoading(true);
         GetTotalAmount({ ids: JSON.stringify(ids) }).then(res => {
@@ -40,7 +40,7 @@ const Submit = (props: SubmitProps) => {
         })
       }
     }
-  }, [vertifyVisible]);
+  }, [visible]);
 
   // const close = () => {
   //   closeVertify();
@@ -61,7 +61,7 @@ const Submit = (props: SubmitProps) => {
         else {
           message.success('送审成功');
           reload();
-          closeVertify();
+          close();
         }
 
       });
@@ -197,8 +197,8 @@ const Submit = (props: SubmitProps) => {
       title={title}
       placement="right"
       width={700}
-      onClose={closeVertify}
-      visible={vertifyVisible}
+      onClose={close}
+      visible={visible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
       <Card className={styles.card}>
@@ -276,7 +276,7 @@ const Submit = (props: SubmitProps) => {
           textAlign: 'right',
         }}
       >
-        <Button onClick={closeVertify} style={{ marginRight: 8 }}>
+        <Button onClick={close} style={{ marginRight: 8 }}>
           取消
         </Button>
         <Button onClick={doSubmit} type="primary">

@@ -174,10 +174,10 @@ export function CheckRedFlush(keyValue): Promise<any> {
   return request.get(process.env.basePath + `/Receivable/CheckRedFlush?keyValue=${keyValue}`).then(getResult as any);
 }
 
-//审核接口
-// export function Audit(data): Promise<any> {
-//   return request.post(process.env.basePath + `/Receivable/Audit`, { data: objToFormdata(data) }).then(getResult as any);
-// }
+//收款单对账
+export function CheckBill(data): Promise<any> {
+  return request.post(process.env.basePath + `/Receivable/CheckBill`, { data: objToFormdata(data) }).then(getResult as any);
+}
 
 //送审
 export function SubmitForm(data): Promise<any> {

@@ -9,7 +9,7 @@ import ChargeListTable from './ChargeListTable';
 import ChargeCheckTable from './ChargeCheckTable';
 import Modify from './Modify';
 import Show from './Show';
-// import Vertify from './Vertify';
+import Vertify from './Vertify';
 import Split from './Split';
 import Transform from './Transform';
 import Submit from './Submit';
@@ -52,8 +52,13 @@ function Main() {
   // const [billDetailVisible, setBillDetailVisible] = useState<boolean>(false);
 
   const [showVisible, setShowVisible] = useState<boolean>(false);
+
+  //对账
   const [vertifyVisible, setVertifyVisible] = useState<boolean>(false);
-  // const [ifVertify, setIfVertify] = useState<boolean>(false);
+  const [ifVertify, setIfVertify] = useState<boolean>(false);
+
+  //送审
+  const [submitVisible, setSubmitVisible] = useState<boolean>(false);
 
   // const [flushVisible, setflushVisible] = useState<boolean>(false);
   // const [chargeRowStatus, setChargeRowStatus] = useState<number>(0);
@@ -316,11 +321,22 @@ function Main() {
   const showVertify = (id: string, ifVertify: boolean) => {
     setId(id);
     setVertifyVisible(true);
-    // setIfVertify(ifVertify);
+    setIfVertify(ifVertify);
   }
 
   const closeVertify = () => {
     setVertifyVisible(false);
+  }
+
+  //送审
+  const showSubmit = (id: string, ifVertify: boolean) => {
+    setId(id);
+    setSubmitVisible(true);
+    setIfVertify(ifVertify);
+  }
+
+  const closeSubmit = () => {
+    setSubmitVisible(false);
   }
 
   //拆费
@@ -604,7 +620,7 @@ function Main() {
               </Button> */}
 
               <Button type="primary" style={{ float: 'right', marginLeft: '3px' }}
-                onClick={() => showVertify('', true)}
+                onClick={() => showSubmit('', true)}
                 disabled={chargeSelectedKeys.length == 0 ? true : false}
               >
                 <Icon type="plus" />
@@ -620,7 +636,7 @@ function Main() {
               pagination={paginationCharge}
               data={dataCharge}
               showDetail={showDetail}
-              // showVertify={showVertify}
+              showVertify={showVertify}
               reload={() => initChargeLoadData(organizeId)}
               // getRowSelect={GetChargedSelectedKey}
               rowSelect={GetChargeSelectedKeys}
@@ -689,9 +705,19 @@ function Main() {
       // id={chargedRowSelectedKey.billId}
       />
 
-      <Submit
+      <Vertify
+        //对账
         vertifyVisible={vertifyVisible}
         closeVertify={closeVertify}
+        id={id}
+        ifVertify={ifVertify}
+        reload={() => initChargeLoadData(organizeId)}
+      />
+
+      <Submit
+        //送审
+        visible={submitVisible}
+        close={closeSubmit}
         ids={chargeSelectedKeys}
         reload={() => initChargeLoadData(organizeId)}
       />

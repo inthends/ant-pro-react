@@ -1,14 +1,5 @@
 //拆费
-import {
-  Button,
-  Col,
-  DatePicker,
-  Drawer,
-  Form,
-  Input, InputNumber,
-  Row,
-  Card
-} from 'antd';
+import { message, Button, Col, DatePicker, Drawer, Form, Input, InputNumber, Row, Card } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { GetShowDetail, SplitBilling } from './Main.service';
@@ -63,7 +54,6 @@ const Split = (props: SplitProps) => {
           SecondEndDate: moment(values.secondEndDate).format('YYYY-MM-DD'),
           Memo: values.memo
         }
-
         var splitData = {
           Data: JSON.stringify(data),
           keyValue: id

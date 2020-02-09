@@ -1,17 +1,8 @@
-//审核，废弃
-import {
-  Card,
-  Button,
-  Col,
-  Drawer,
-  Form,
-  Input,
-  Row,
-  Table
-} from 'antd';
+//收款单对账
+import { Tag, message, Card, Button, Col, Drawer, Form, Input, Row, Table } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetEntityShow, ChargeFeeDetail, Audit } from './Main.service';
+import { GetEntityShow, ChargeFeeDetail, CheckBill } from './Main.service';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import styles from './style.less';
@@ -25,27 +16,27 @@ interface VertifyProps {
   ifVertify: boolean;
   reload(): void;
 }
+
 const Vertify = (props: VertifyProps) => {
   const { vertifyVisible, closeVertify, id, form, ifVertify, reload } = props;
   const { getFieldDecorator } = form;
-  const title = ifVertify ? "收款单取消审核" : "收款单审核";
+  const title = ifVertify ? "收款单反审" : "收款单对账";
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [chargeBillData, setChargeBillData] = useState<any[]>([]);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [linkno, setLinkno] = useState<any>('');
- 
-   // 打开抽屉时初始化
-   useEffect(() => {
+  // 打开抽屉时初始化
+  useEffect(() => {
     form.resetFields();
     if (vertifyVisible) {
       if (id != null && id != '') {
-        setLoading(true);
+        //setLoading(true);
         GetEntityShow(id).then(res => {
           setInfoDetail(res.entity);
           setLinkno(res.linkno);
           initLoadFeeDetail(res.entity.billId);
-          setLoading(false);
+          //setLoading(false);
         })
       }
       else {
@@ -61,7 +52,7 @@ const Vertify = (props: VertifyProps) => {
 
   const audit = () => {
     form.validateFields((errors, values) => {
-      // console.log(values, infoDetail);
+      // console.log(values, infoDetail); 
       var newData = Object.assign({}, infoDetail,
         {
           // verifyPerson: localStorage.getItem('userid'),
@@ -70,9 +61,10 @@ const Vertify = (props: VertifyProps) => {
           keyValue: infoDetail.billId,
           billDate: moment(values.billDate).format('YYYY-MM-DD'),
           //status: ifVertify ? 1 : 2//，已收未审核1，已审核2，已冲红3
-          ifVerify: !ifVertify
+          check: !ifVertify
         });
-      Audit(newData).then(res => {
+
+      CheckBill(newData).then(res => {
         message.success('提交成功');
         reload();
         closeVertify();
@@ -80,18 +72,31 @@ const Vertify = (props: VertifyProps) => {
     });
   };
 
-
-
   const GetStatus = (status) => {
     switch (status) {
       case 0:
-        return '未收';
+        return <Tag color="#e4aa5b">未收</Tag>;
       case 1:
-        return '已收';
+        return <Tag color="#19d54e">已收</Tag>;
       case 2:
-        return '冲红';
+        return <Tag color="#19d54e">冲红</Tag>;
       case -1:
-        return '作废';
+        return <Tag color="#e4aa5b">作废</Tag>;
+      default:
+        return '';
+    }
+  };
+
+  const GetVerifyStatus = (status) => {
+    switch (status) {
+      case 0:
+        return <Tag color="#D7443A">待对账</Tag>;
+      case 1:
+        return <Tag color="#19d54e">已对账</Tag>;
+      case 2:
+        return <Tag color="#e4aa4b">已送审</Tag>;
+      case 3:
+        return <Tag color="#19d54e">已审核</Tag>;
       default:
         return '';
     }
@@ -158,12 +163,12 @@ const Vertify = (props: VertifyProps) => {
     {
       title: '备注',
       dataIndex: 'memo',
-      key: 'memo', 
+      key: 'memo',
     }
   ] as ColumnProps<any>[];
 
-  const initLoadFeeDetail = (billid) => {
-    const queryJson = { billid: billid };
+  const initLoadFeeDetail = (billId) => {
+    const queryJson = { billId: billId };
     const sidx = 'beginDate';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
@@ -196,82 +201,13 @@ const Vertify = (props: VertifyProps) => {
     <Drawer
       title={title}
       placement="right"
-      width={800}
+      width={1000}
       onClose={closeVertify}
       visible={vertifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
       <Card className={styles.card}>
         <Form layout="vertical">
-          {/* <Row gutter={24}>
-            <Col span={6}>
-              <Form.Item label="收款单号"  >
-                {infoDetail.billCode} 
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item label="收款日期" >
-                {String(infoDetail.billDate).substr(0, 10)}
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item label="收据编号" >
-                {infoDetail.payCode}
-              </Form.Item>
-            </Col>
-
-            <Col span={6}>
-              <Form.Item label="发票编号"  >
-                {infoDetail.invoiceCdde}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={24}>
-            <Col span={6}>
-              <Form.Item label="收款方式A"   >
-                {infoDetail.payTypeA}
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item label="收款金额A" >
-                <span style={{ color: "red" }}> {infoDetail.payAmountA} </span>
-              </Form.Item>
-            </Col>
-
-            <Col span={6}>
-              <Form.Item label="收款方式B"  >
-                {infoDetail.payTypeB}
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item label="收款金额B"  >
-                <span style={{ color: "red" }}>  {infoDetail.payAmountB} </span>
-              </Form.Item>
-            </Col>
-
-          </Row>
-          <Row gutter={24}>
-            <Col span={6}>
-              <Form.Item label="收款方式C"   >
-                {infoDetail.payTypeC}
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item label="收款金额C" >
-                <span style={{ color: "red" }}>  {infoDetail.payAmountC}</span>
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item label="收款人" >
-                {infoDetail.createUserName}
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item label="审核人"  >
-                {infoDetail.verifyPerson}
-              </Form.Item>
-            </Col>
-          </Row> */}
 
           <Row gutter={24}>
             <Col span={6}>
@@ -281,18 +217,16 @@ const Vertify = (props: VertifyProps) => {
             </Col>
             <Col span={6}>
               <Form.Item label="收款日期" >
-                {infoDetail.billDate}
+                {String(infoDetail.billDate).substr(0, 10)}
               </Form.Item>
             </Col>
-
             <Col span={6}>
               <Form.Item label="收款人"  >
                 {infoDetail.createUserName}
               </Form.Item>
             </Col>
-
             <Col span={6}>
-              <Form.Item label="收款编号"  >
+              <Form.Item label="付款单号"  >
                 {infoDetail.payCode}
               </Form.Item>
             </Col>
@@ -309,28 +243,33 @@ const Vertify = (props: VertifyProps) => {
               </Form.Item>
             </Col>
             <Col span={6}>
-              <Form.Item label="单据状态"   >
+              <Form.Item label="费用状态"   >
                 {GetStatus(infoDetail.status)}
               </Form.Item>
-            </Col> 
-          </Row> 
+            </Col>
+            <Col span={6}>
+              <Form.Item label="单据状态"   >
+                {/* {infoDetail.ifVerify ? '已审核' : '未审核'} */}
+                {GetVerifyStatus(infoDetail.ifVerify)}
+              </Form.Item>
+            </Col>
+          </Row>
 
           <Row gutter={24}>
             <Col span={24}>
-              <Form.Item label="收款金额" style={{ color: "green" }}>
+              <Form.Item label="收款金额" style={{ color: "red" }}>
                 {`${infoDetail.payAmountA + infoDetail.payAmountB + infoDetail.payAmountC}元，其中${infoDetail.payTypeA}${infoDetail.payAmountA}元，${infoDetail.payTypeB}${infoDetail.payAmountB}元，${infoDetail.payTypeC}${infoDetail.payAmountC}元`}
               </Form.Item>
             </Col>
           </Row>
 
           <Row gutter={24}>
-              <Col span={24}>
-                <Form.Item label="备注"   >
-                  {infoDetail.memo}
-                </Form.Item>
-              </Col> 
-            </Row>
-
+            <Col span={24}>
+              <Form.Item label="备注">
+                {infoDetail.memo}
+              </Form.Item>
+            </Col>
+          </Row>
           <Table
             // title={() => '费用明细'}
             size="middle"
@@ -338,20 +277,24 @@ const Vertify = (props: VertifyProps) => {
             columns={columns}
             rowKey={record => record.billId}
             pagination={pagination}
-            scroll={{ y: 500, x: 1300 }}
+            scroll={{ y: 500, x: 1500 }}
             loading={loading}
           />
-          <Row gutter={24}>
-            <Col span={24}>
-              <Form.Item label="审核情况" >
-                {getFieldDecorator('verifyMemo', {
-                  initialValue: infoDetail.verifyMemo,
-                })(
-                  <Input.TextArea rows={5} style={{ width: '100%' }} />
-                )}
-              </Form.Item>
-            </Col>
-          </Row>
+
+          {!ifVertify ?
+            <Row gutter={24}>
+              <Col span={24}>
+                <Form.Item label="对账说明" >
+                  {getFieldDecorator('verifyMemo', {
+                    initialValue: infoDetail.verifyMemo,
+                  })(
+                    <Input.TextArea rows={5} style={{ width: '100%' }} />
+                  )}
+                </Form.Item>
+              </Col>
+            </Row> : null
+          }
+
         </Form>
       </Card>
       <div
