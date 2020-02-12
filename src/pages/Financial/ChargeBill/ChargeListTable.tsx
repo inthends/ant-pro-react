@@ -216,9 +216,9 @@ function ChargeListTable(props: ChargeListTableProps) {
               {!record.ifVerify ? <a onClick={() => showVertify(record.billId, false)} key="approve">审核</a> : <a onClick={() => showVertify(record.billId, true)} key="unapprove">反审</a>}
               <Divider type="vertical" />
               <a onClick={() => showDetail(record.billId)} key="view">查看</a>
-              <Divider type="vertical" />
-              {/* {record.status == 1 && record.linkId == null ? <MoreBtn key="more" item={record} /> : null} */} 
-              {record.status == 0 ? <MoreBtn key="more" item={record} /> : null} 
+              {record.status == 0 ? <Divider type="vertical" /> : null}
+              {/* {record.status == 1 && record.linkId == null ? <MoreBtn key="more" item={record} /> : null} */}
+              {record.status == 0 ? <MoreBtn key="more" item={record} /> : null}
             </span>
           ];
 

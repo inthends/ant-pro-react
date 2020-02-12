@@ -74,6 +74,15 @@ export function GetAsynChildBuildingsForArea(pstructid, type): Promise<any[]> {
 //       .then(getResult as any);
 // }
 
+
+//获取合同管理房产下级，只加载到楼栋
+export function GetAsynChildBuildingsForContract(pstructid,type): Promise<any[]> {
+  return request
+    .get(process.env.basePath + `/Common/GetAsynChildBuildingsForContract?parentId=${pstructid}&type=${type}`)
+    .then(getResult as any);
+}
+
+
 export function GetOrgTree(): Promise<TreeEntity[]> {
   return request
     .get(process.env.basePath + `/Common/GetOrgTree`)

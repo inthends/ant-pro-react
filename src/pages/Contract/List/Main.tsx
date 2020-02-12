@@ -1,6 +1,6 @@
 
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { Row, Col, Card, Button, Icon, Input, Layout } from 'antd';
+import { Tabs, Row, Col, Card, Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import { GetPageListJson } from './Main.service';
@@ -18,6 +18,8 @@ import Withdrawal from './Withdrawal';
 import styles from './style.less';
 const { Content } = Layout;
 const { Search } = Input;
+const { TabPane } = Tabs;
+import AsynLeftTree from '../AsynLeftTree';
 
 function Main() {
   const [addVisible, setAddVisible] = useState<boolean>(false);//新建
@@ -35,7 +37,6 @@ function Main() {
   const [search, setSearch] = useState<string>('');
   // const [treeData, setTreeData] = useState<any[]>([]); 
   // const [userVisible, setUserVisible] = useState<boolean>(false); 
-
 
   const closeAddDrawer = () => {
     setAddVisible(false);
@@ -186,63 +187,74 @@ function Main() {
 
   return (
     <Layout style={{ height: '100%' }}>
-      <Content  >
-        <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
-          <Search
-            className="search-input"
-            placeholder="搜索合同编号"
-            style={{ width: 160 }}
-            onSearch={value => loadData(value)}
-          />
-          <Button type="primary" style={{ float: 'right' }}
-            onClick={() => showAddDrawer()}
-          >
-            <Icon type="plus" />
-            合同
-          </Button>
-        </div>
+      <AsynLeftTree
+        parentid={'0'} 
+      />
 
-        <Card className={styles.card}>
-          <Row>
-            <Col sm={4} xs={24}>
-              <Info title="新建待审核" value="8" bordered />
-            </Col>
-            <Col sm={4} xs={24}>
-              <Info title="变更待审核" value="2" bordered />
-            </Col>
-            <Col sm={4} xs={24}>
-              <Info title="退租待审核" value="5" bordered/>
-            </Col>
+    <Content style={{ paddingLeft: '18px' }}>
+        <Tabs defaultActiveKey="1" >
+          <TabPane tab="租控图" key="1" >
 
-            <Col sm={4} xs={24}>
-              <Info title="作废待审核" value="4" bordered/>
-            </Col>
 
-            <Col sm={4} xs={24}>
-              <Info title="到期未处理" value="7" bordered/>
-            </Col>
-            <Col sm={4} xs={24}>
-              <Info title="正常执行" value="8" />
-            </Col>
-          </Row>
-        </Card>
 
-        <ListTable
-          onchange={(paginationConfig, filters, sorter) =>
-            loadData(search, paginationConfig, sorter)
-          }
-          loading={loading}
-          pagination={pagination}
-          data={data}
-          detail={showDetailDrawer}
-          modify={showModifyDrawer}
-          // approve={showApproveDrawer}
-          change={showChangeDrawer}
-          renewal={showRenewalDrawer}
-          withdrawal={showWithdrawalDrawer}
-          reload={() => initLoadData(search)} />
+          </TabPane>
+
+          <TabPane tab="合同列表" key="2" >
+            <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
+              <Search
+                className="search-input"
+                placeholder="搜索合同编号"
+                style={{ width: 160 }}
+                onSearch={value => loadData(value)}
+              />
+              <Button type="primary" style={{ float: 'right' }}
+                onClick={() => showAddDrawer()}
+              >
+                <Icon type="plus" />
+                合同
+              </Button>
+            </div>
+            <Card className={styles.card}>
+              <Row>
+                <Col sm={4} xs={24}>
+                  <Info title="新建待审核" value="8" bordered />
+                </Col>
+                <Col sm={4} xs={24}>
+                  <Info title="变更待审核" value="2" bordered />
+                </Col>
+                <Col sm={4} xs={24}>
+                  <Info title="退租待审核" value="5" bordered />
+                </Col>
+
+                <Col sm={4} xs={24}>
+                  <Info title="作废待审核" value="4" bordered />
+                </Col>
+
+                <Col sm={4} xs={24}>
+                  <Info title="到期未处理" value="7" bordered />
+                </Col>
+                <Col sm={4} xs={24}>
+                  <Info title="正常执行" value="8" />
+                </Col>
+              </Row>
+            </Card>
+            <ListTable
+              onchange={(paginationConfig, filters, sorter) =>
+                loadData(search, paginationConfig, sorter)
+              }
+              loading={loading}
+              pagination={pagination}
+              data={data}
+              detail={showDetailDrawer}
+              modify={showModifyDrawer}
+              // approve={showApproveDrawer}
+              change={showChangeDrawer}
+              renewal={showRenewalDrawer}
+              withdrawal={showWithdrawalDrawer}
+              reload={() => initLoadData(search)} />
+          </TabPane>
+        </Tabs>
       </Content>
-
       <Add
         visible={addVisible}
         closeDrawer={closeAddDrawer}
@@ -250,7 +262,6 @@ function Main() {
         id={id}
         reload={() => initLoadData(search)}
       />
-
       <Modify
         visible={modifyVisible}
         closeDrawer={closeModifyDrawer}

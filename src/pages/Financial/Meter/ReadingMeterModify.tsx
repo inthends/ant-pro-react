@@ -840,7 +840,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                 </Form.Item>
               </Col>
               <Col span={8}>
-                <Form.Item required={true} label="结束抄表日期"  >
+                <Form.Item required={true} label="结束抄表日期">
                   {getFieldDecorator('endReadDate', {
                     initialValue: infoDetail.endReadDate == null ? moment(new Date()) : moment(infoDetail.endReadDate),
                     rules: [{ required: true, message: '请选择结束抄表日期' }],
@@ -850,7 +850,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                 </Form.Item>
               </Col>
               <Col span={8}>
-                <Form.Item required={true} label="结束标识"  >
+                <Form.Item required={true} label="结束标识">
                   {getFieldDecorator('batchCode', {
                     initialValue: infoDetail.batchCode == null ? "" : infoDetail.batchCode,
                   })(
@@ -920,13 +920,13 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                           message.success('删除成功');
                           initHouseLoadData(houseSearch);
                         });
-
                         
                       }}
                     >
                       <Icon type="delete" />
                       全部删除
-                </Button>
+                    </Button>
+
                     <Button type="link" style={{ float: 'right', marginLeft: '1px' }}
                       onClick={() => {
                         form.validateFields((errors, values) => {

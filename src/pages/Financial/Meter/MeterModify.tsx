@@ -181,7 +181,7 @@ const MeterModify = (props: MeterModifyProps) => {
           Memo: values.memo,
           FeeItemId: infoDetail.feeItemId,
           FeeItemName: infoDetail.feeItemName,
-          IsStop: values.isStop == null ? false : true
+          IsStop: values.isStop
         }
         setFeeDetail(
           meterEntity
@@ -456,16 +456,16 @@ const MeterModify = (props: MeterModifyProps) => {
                     {getFieldDecorator('meterAddress', {
                       initialValue: infoDetail.meterAddress,
                     })(
-                      <Input></Input>
+                      <Input />
                     )}
                   </Form.Item>
                 </Col>
                 <Col span={4}>
-                  <Form.Item required label="是否停用"   >
+                  <Form.Item required label="是否停用">
                     {getFieldDecorator('isStop', {
-                      initialValue: infoDetail.isStop == null ? false : true
+                      initialValue: infoDetail.isStop
                     })(
-                      <Checkbox />
+                      <Checkbox checked={form.getFieldValue('isStop')} />
                     )}
                   </Form.Item>
                 </Col>
@@ -616,9 +616,10 @@ const MeterModify = (props: MeterModifyProps) => {
                   Memo: values.memo,
                   FeeItemId: infoDetail.feeItemId,
                   FeeItemName: infoDetail.feeItemName,
-                  IsStop: values.isStop == null ? false : true,
+                  IsStop: values.isStop,
                   type: isAdd ? 1 : 0
                 }
+
                 SaveForm(meterEntity).then(() => {
                   closeDrawer();
                   reload();
@@ -633,7 +634,7 @@ const MeterModify = (props: MeterModifyProps) => {
       <ChargeFeeItem
         visible={chargeFeeItemVisible}
         closeModal={closeChargeFeeItem}
-        getSelectTree={(item) => { 
+        getSelectTree={(item) => {
           var info = Object.assign({}, infoDetail, { feeItemName: item.name, feeItemId: item.id });
           setInfoDetail(info);
         }}

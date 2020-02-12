@@ -448,8 +448,7 @@ function Main() {
       {/* <Sider theme="light" style={{ overflow: 'hidden', height: '100%' }} width="245px"> */}
       <AsynLeftTree
         parentid={'0'}
-        selectTree={(id, type, info?) => {
-
+        selectTree={(id, type, info?) => { 
           //点击前重置 
           setAddButtonDisable(true);
           selectTree(id, search);
