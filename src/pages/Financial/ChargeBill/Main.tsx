@@ -227,10 +227,11 @@ function Main() {
     });
   };
 
+  //收款单
   const initChargeLoadData = (id) => {
     const queryJson = {
       keyword: chargedSearchParams.search ? chargedSearchParams.search : '',
-      TreeType: "5",
+      TreeType:chargedSearchParams.type? chargedSearchParams.type : '',
       TreeTypeId: id,
       Status: chargedSearchParams.status ? chargedSearchParams.status : '',
       StartDate: chargedSearchParams.startDate ? chargedSearchParams.startDate : '',
@@ -456,6 +457,12 @@ function Main() {
           setShowname('');
           setAdminOrgId(info.node.props.organizeId);//管理处Id
           setOrganizeId(id);
+
+          //type
+          var params = Object.assign({}, chargedSearchParams, { type: type });
+          setChargedSearchParams(params);
+          //type
+
           // SetOrganize(info);
           if (type == 5 || type == 9) {
             setAddButtonDisable(false);
@@ -572,7 +579,7 @@ function Main() {
                 }} style={{ marginLeft: '5px', marginRight: '5px', width: '120px' }} />
               <Search
                 className="search-input"
-                placeholder="请输入收款单号"
+                placeholder="收款单号"
                 style={{ width: 160 }}
                 onChange={e => {
                   var params = Object.assign({}, chargedSearchParams, { search: e.target.value });
@@ -658,7 +665,7 @@ function Main() {
                 }} style={{ marginLeft: '5px', marginRight: '5px', width: '140px' }} />
               <Search
                 className="search-input"
-                placeholder="请输入收款单号"
+                placeholder="收款单号"
                 style={{ width: 160 }}
                 onChange={e => {
                   var params = Object.assign({}, chargedSearchParams, { search: e.target.value });

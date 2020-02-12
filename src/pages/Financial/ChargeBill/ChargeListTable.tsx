@@ -92,7 +92,7 @@ function ChargeListTable(props: ChargeListTableProps) {
       title: '收款单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 180,
+      width: 200,
       sorter: true,
     },
     {
@@ -209,20 +209,30 @@ function ChargeListTable(props: ChargeListTableProps) {
       align: 'center',
       width: 150,
       render: (text, record) => {
-        if (record.status == 1 && record.linkId == null) {
-          //更多操作
+        if (record.ifVerify == 0) {
+          //待审核
           return [
             <span key='span1'>
-              {!record.ifVerify ? <a onClick={() => showVertify(record.billId, false)} key="approve">审核</a> : <a onClick={() => showVertify(record.billId, true)} key="unapprove">反审</a>}
+              <a onClick={() => showVertify(record.billId, false)} key="approve">审核</a>
               <Divider type="vertical" />
               <a onClick={() => showDetail(record.billId)} key="view">查看</a>
-              {record.status == 0 ? <Divider type="vertical" /> : null}
-              {/* {record.status == 1 && record.linkId == null ? <MoreBtn key="more" item={record} /> : null} */}
-              {record.status == 0 ? <MoreBtn key="more" item={record} /> : null}
+              <Divider type="vertical" />
+              <MoreBtn key="more" item={record} />
             </span>
           ];
-
+        } else if (record.ifVerify == 1) {
+          //已审核
+          return [
+            <span key='span1'>
+              <a onClick={() => showVertify(record.billId, true)} key="unapprove">反审</a>
+              <Divider type="vertical" />
+              <a onClick={() => showDetail(record.billId)} key="view">查看</a>
+              <Divider type="vertical" />
+              <MoreBtn key="more" item={record} />
+            </span>
+          ];
         } else {
+          //已送审或已复核
           return [
             <a onClick={() => showDetail(record.billId)} key="view">查看</a>
           ];
