@@ -306,9 +306,8 @@ function Main() {
               </Button>
             </div>
             <ListTable
-              onchange={(paginationConfig, filters, sorter) => {
+              onchange={(paginationConfig, filters, sorter) =>
                 loadData(search, paginationConfig, sorter)
-              }
               }
               showDivide={showDivide}
               loading={loading}

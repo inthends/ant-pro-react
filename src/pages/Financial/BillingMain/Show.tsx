@@ -16,10 +16,10 @@ interface ShowProps {
   id?: string;
 }
 
-interface SearchParam {
-  // condition: 'EnCode' | 'FullName';
-  keyword: string;
-};
+// interface SearchParam {
+//   // condition: 'EnCode' | 'FullName';
+//   keyword: string;
+// };
 
 const Show = (props: ShowProps) => {
   const { visible, close, form, id } = props;
@@ -27,10 +27,12 @@ const Show = (props: ShowProps) => {
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [unitFeeData, setUnitFeeData] = useState<any>();
   const [pagination, setPagination] = useState<DefaultPagination>(new DefaultPagination());
-  const [search, setSearch] = useState<SearchParam>({
-    // condition: 'EnCode',
-    keyword: '',
-  });
+  // const [search, setSearch] = useState<SearchParam>({
+  //   // condition: 'EnCode',
+  //   keyword: '',
+  // });
+  const [search, setSearch] = useState<any>('');
+
   useEffect(() => {
     if (visible) {
       form.resetFields();
@@ -39,7 +41,7 @@ const Show = (props: ShowProps) => {
         GetBilling(id).then(res => {
           setInfoDetail(res);
           //initUnitFeeLoadData('');
-          initLoadData(search);
+          initLoadData();
           setLoading(false);
         })
       } else {
@@ -84,9 +86,13 @@ const Show = (props: ShowProps) => {
   // };
 
   //初始化
-  const initLoadData = (searchParam: SearchParam) => {
+  // const initLoadData = (searchParam: SearchParam) => {
+  const initLoadData = () => {
     // setSearch(searchParam);
-    const queryJson = searchParam;
+    // const queryJson = searchParam;
+    const queryJson = {
+      billId: id
+    };
     const sidx = 'id';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
@@ -117,19 +123,25 @@ const Show = (props: ShowProps) => {
 
 
   //刷新
-  const loadData = (searchParam: any, paginationConfig?: PaginationConfig, sorter?) => {
-    setSearch(searchParam);
+  const loadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
+    setSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: pagination.pageSize,
       total: 0,
     };
+
     const searchCondition: any = {
       pageIndex,
       pageSize,
       total,
-      queryJson: searchParam,
+      // queryJson: searchParam,
+      queryJson: {
+        billId: id,
+        keyword: search
+      }
     };
+
     if (sorter) {
       const { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
@@ -246,8 +258,8 @@ const Show = (props: ShowProps) => {
       sorter: true,
       width: 100
     },
-   
-     {
+
+    {
       title: '备注',
       dataIndex: 'memo',
       key: 'memo'
@@ -256,7 +268,7 @@ const Show = (props: ShowProps) => {
 
   return (
     <Drawer
-      className="offsetVerify"
+      // className="offsetVerify"
       title='查看计费单'
       placement="right"
       width={1000}
@@ -315,7 +327,7 @@ const Show = (props: ShowProps) => {
                 </Form.Item>
               </Col>
             </Row>
-           
+
             <Row>
               <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
                 <Search
@@ -326,10 +338,9 @@ const Show = (props: ShowProps) => {
                   // var params = Object.assign({}, meterSearchParams, { search: value })
                   // setMeterSearchParams(params);
                   //initUnitFeeLoadData(value);
-                  //}}
-
-                  onSearch={keyword => loadData({ ...search, keyword })}
-
+                  //}} 
+                  // onSearch={keyword => loadData({ ...search, keyword })}
+                  onSearch={value => loadData(value)}
                 />
               </div>
 
@@ -343,7 +354,7 @@ const Show = (props: ShowProps) => {
                 scroll={{ y: 500, x: 1300 }}
                 loading={loading}
                 // onChange={onchange} 
-                onChange={(pagination: PaginationConfig, filters, sorter) => 
+                onChange={(pagination: PaginationConfig, filters, sorter) =>
                   loadData(search, pagination, sorter)
                 }
               />
