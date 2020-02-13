@@ -207,7 +207,7 @@ const Modify = (props: ModifyProps) => {
             <ModifyItem {...baseFormProps} field="fax" label="传真"></ModifyItem>
           </Row>
           <Row gutter={24}>
-            <ModifyItem  {...baseFormProps} field="PosType" label="POS机类型"
+            <ModifyItem  {...baseFormProps} field="posType" label="POS机类型"
               type="select"
               rules={[{ required: true, message: '请选择POS机类型' }]}
               items={
