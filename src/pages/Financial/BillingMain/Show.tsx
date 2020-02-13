@@ -208,7 +208,7 @@ const Show = (props: ShowProps) => {
       key: 'beginDate',
       dataIndex: 'beginDate',
       sorter: true,
-      width: 100,
+      width: 120,
       render: val => {
         if (val == null) {
           return '';
@@ -222,7 +222,7 @@ const Show = (props: ShowProps) => {
       key: 'endDate',
       dataIndex: 'endDate',
       sorter: true,
-      width: 100,
+      width: 120,
       render: val => {
         if (val == null) {
           return '';
@@ -244,7 +244,7 @@ const Show = (props: ShowProps) => {
       key: 'cycleType',
       dataIndex: 'cycleType',
       sorter: true,
-      width: 80
+      width: 100
     },
    
      {
@@ -340,7 +340,7 @@ const Show = (props: ShowProps) => {
                 dataSource={unitFeeData}
                 rowKey="unitmeterid"
                 pagination={pagination}
-                scroll={{ y: 500, x: 1200 }}
+                scroll={{ y: 500, x: 1300 }}
                 loading={loading}
                 // onChange={onchange} 
                 onChange={(pagination: PaginationConfig, filters, sorter) => 

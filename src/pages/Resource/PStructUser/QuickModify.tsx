@@ -32,7 +32,7 @@ const QuickModify = (props: QuickModifyProps) => {
   // const [banks, setBanks] = useState<any[]>([]); // 企业性质
   // 打开抽屉时初始化
   useEffect(() => {
-   
+
     GetOrgs().then((res: any[]) => {
       setTreeData(res || []);
     });
@@ -59,7 +59,7 @@ const QuickModify = (props: QuickModifyProps) => {
 
   // 打开抽屉时初始化
   useEffect(() => {
-    if (modifyVisible) { 
+    if (modifyVisible) {
 
       if (data) {
         setInfoDetail(data);
@@ -217,7 +217,7 @@ const QuickModify = (props: QuickModifyProps) => {
                       {getFieldDecorator('birthdate', {
                         initialValue: infoDetail.birthdate
                           ? moment(new Date(infoDetail.birthdate))
-                          : '',
+                          : null,
                       })(<DatePicker style={{ width: '100%' }} placeholder='请选择生日' />)}
                     </Form.Item>
                   </Col>
