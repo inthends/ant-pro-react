@@ -118,7 +118,7 @@ function Main() {
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'BillingDate';
+      searchCondition.sidx = field ? field : 'signingDate';
     }
 
     return load(searchCondition).then(res => {
@@ -127,7 +127,7 @@ function Main() {
   };
   const load = data => {
     setLoading(true);
-    data.sidx = data.sidx || 'BillingDate';
+    data.sidx = data.sidx || 'signingDate';
     data.sord = data.sord || 'asc';
     return GetPageListJson(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -148,7 +148,7 @@ function Main() {
   const initLoadData = (search) => {
     setSearch(search);
     const queryJson = { keyword: search };
-    const sidx = 'BillingDate';
+    const sidx = 'signingDate';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {

@@ -9,13 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { LeaseContractHouseDTO } from './leaseContractHouseDTO';
-
+ 
 
 /**
  * 合同信息
  */
-export interface LeaseContractDTO {
+export interface htLeasecontract {
   /**
    * 唯一键
    */
@@ -25,37 +24,61 @@ export interface LeaseContractDTO {
    */
   no?: string;
   /**
-   * 跟进人代码
+   * 租赁数量
    */
+  leaseSize?: number;
+  /**
+  * 签订人代码
+  */
+  signerId?: string;
+  /**
+   * 签订人
+   */
+  signer?: string;
+  /**
+   * 合同签约日期
+   */
+  signingDate?: Date;
+  /**
+   * 合同开始日期
+   */
+  startDate?: Date;
+  /**
+   * 合同结束日期
+   */
+  endDate?: Date;
+  /**
+ * 跟进人代码
+ */
   followerId?: string;
   /**
    * 跟进人
    */
   follower?: string;
+
   /**
-   * 租赁数量
-   */
-  leaseSize?: number;
+ * 经营主体
+ */
+  businessEntity?: string;
+
   /**
-   * 合同签约日期
-   */
-  contractStartDate?: Date;
+* 付款方式
+*/
+  payType?: string;
+
   /**
-   * 合同计租日期
-   */
-  billingDate?: Date;
-  /**
-   * 合同结束日期
-   */
-  contractEndDate?: Date;
-  /**
-   * 单价保留小数点位数
-   */
-  calcPrecision?: number;
-  /**
-   * 计算精度的方式  0-精确计算结果保留2位小数  1-每步计算保留2位小数
-   */
-  calcPrecisionMode?: string;
+ * 渠道类型
+ */
+  channelType?: string;
+
+  // /**
+  //  * 单价保留小数点位数
+  //  */
+  // calcPrecision?: number;
+  // /**
+  //  * 计算精度的方式  0-精确计算结果保留2位小数  1-每步计算保留2位小数
+  //  */
+  // calcPrecisionMode?: string;
   /**
    * 租客id
    */
@@ -82,14 +105,7 @@ export interface LeaseContractDTO {
    * 法人
    */
   legalPerson?: string;
-  /**
-   * 签订人代码
-   */
-  signerId?: string;
-  /**
-   * 签订人
-   */
-  signer?: string;
+
   /**
    * 租客联系人
    */
@@ -103,22 +119,22 @@ export interface LeaseContractDTO {
      */
   address?: string;
 
-  /**
-   * 滞纳金比例
-   */
-  lateFee?: number;
-  /**
-   * 滞纳金比例单位
-   */
-  lateFeeUnit?: string;
-  /**
-   * 滞纳金上限
-   */
-  maxLateFee?: number;
-  /**
-   * 滞纳金上限单位
-   */
-  maxLateFeeUnit?: string;
+  // /**
+  //  * 滞纳金比例
+  //  */
+  // lateFee?: number;
+  // /**
+  //  * 滞纳金比例单位
+  //  */
+  // lateFeeUnit?: string;
+  // /**
+  //  * 滞纳金上限
+  //  */
+  // maxLateFee?: number;
+  // /**
+  //  * 滞纳金上限单位
+  //  */
+  // maxLateFeeUnit?: string;
   /**
    * 合同状态
    */
@@ -130,7 +146,7 @@ export interface LeaseContractDTO {
   /**
    * 租出合同房源
    */
-  houseList?: Array<LeaseContractHouseDTO>;
+  // houseList?: Array<LeaseContractHouseDTO>;
   /**
    * 合同条款Id
    */

@@ -25,8 +25,7 @@ const Modify = (props: ModifyProps) => {
     return SaveForm(modifyData);
   };
 
-  useEffect(() => {
-
+  useEffect(() => { 
     //商圈
     getCommonItems('TradingArea').then(res => {
       setArea(res || []);

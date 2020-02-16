@@ -10,7 +10,6 @@
  * Do not edit the class manually.
  */
 
-
 /**
  * 
  */
@@ -47,18 +46,41 @@ export interface HtLeasecontractcharge {
      * Desc:  Default:  Nullable:True
      */
     depositUnit?: string;
+
     /**
-     * Desc:  Default:  Nullable:True
+     * Desc:  滞纳金起算日期
      */
-    payDate?: Date;
+    lateDate?: Date;
+
     /**
-     * Desc:  Default:  Nullable:True
-     */
-    endDate?: Date;
+    * 滞纳金比例
+    */
+    lateFee?: number;
+
     /**
-     * Desc:  Default:  Nullable:True
+   * Desc: 滞纳金算法
+   */
+    lateMethod?: string;
+
+    /**
+    * 物业费单价
+    */
+    propertyFee?: number;
+
+    /**
+     * 单价保留小数点位数
      */
-    startDate?: Date;
+    calcPrecision?: number;
+
+    // /**
+    //  * Desc:  Default:  Nullable:True
+    //  */
+    // endDate?: Date;
+    // /**
+    //  * Desc:  Default:  Nullable:True
+    //  */
+    // startDate?: Date;
+
     /**
      * Desc:  Default:  Nullable:False
      */

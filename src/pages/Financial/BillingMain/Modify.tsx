@@ -476,7 +476,7 @@ const Modify = (props: ModifyProps) => {
                 </Form.Item>
               </Col>
             </Row>
-            <Row>
+            <Row gutter={24}>
               <Col span={24}>
                 <Form.Item label="备注">
                   {getFieldDecorator('memo', {
