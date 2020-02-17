@@ -63,9 +63,14 @@ export interface HtLeasecontractcharge {
     lateMethod?: string;
 
     /**
-    * 物业费单价
+    * 物业费
     */
-    propertyFee?: number;
+    propertyFeeId?: string;
+
+     /**
+    * 物业费
+    */
+   propertyFeeName?: string;
 
     /**
      * 单价保留小数点位数

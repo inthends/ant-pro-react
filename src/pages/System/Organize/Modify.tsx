@@ -228,7 +228,7 @@ const Modify = (props: ModifyProps) => {
           </Row>
 
           <Row gutter={24}>
-            <ModifyItem  {...baseFormProps} field="ySEMchId" label="银盛商户号"></ModifyItem>
+            <ModifyItem  {...baseFormProps} field="yseMchId" label="银盛商户号"></ModifyItem>
             <ModifyItem  {...baseFormProps} field="swiftMchId" label="威富通商户号"></ModifyItem>
           </Row>
 

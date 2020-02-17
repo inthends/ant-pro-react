@@ -15,10 +15,10 @@
  * 合同条款
  */
 export interface HtLeasecontractchargefee {
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    billType?: string;
+    // /**
+    //  * Desc:  Default:  Nullable:True
+    //  */
+    // billType?: string;
     /**
      * Desc:  Default:  Nullable:False
      */
@@ -35,14 +35,31 @@ export interface HtLeasecontractchargefee {
      * Desc:  Default:  Nullable:False
      */
     leaseContractChargeId?: string;
+
+
+    /**
+     * Desc:递增类型  Default:  Nullable:True
+     */
+    increType?: string;
+
     /**
      * Desc:  Default:  Nullable:True
      */
-    startDate?: Date;
-     /**
+    increPrice?: number;
+
+    /**
      * Desc:  Default:  Nullable:True
      */
-    endDate?: Date;
+    increPriceUnit?: string;
+
+    // /**
+    //  * Desc:  Default:  Nullable:True
+    //  */
+    // startDate?: Date;
+    //  /**
+    //  * Desc:  Default:  Nullable:True
+    //  */
+    // endDate?: Date;
     /**
      * Desc:  Default:  Nullable:True
      */
@@ -76,10 +93,7 @@ export interface HtLeasecontractchargefee {
      * Desc:  Default:0  Nullable:True
      */
     payCycle?: number;
-    /**
-     * Desc:  Default:0  Nullable:True
-     */
-    advancePayTime?: number;
+  
      /**
      * Desc:  Default:  Nullable:True
      */
@@ -88,6 +102,10 @@ export interface HtLeasecontractchargefee {
      * Desc:  Default:  Nullable:True
      */
     price?: number;
+      /**
+     * Desc:  Default:0  Nullable:True
+     */
+    advancePayTime?: number;
     /**
      * Desc:  Default:  Nullable:True
      */

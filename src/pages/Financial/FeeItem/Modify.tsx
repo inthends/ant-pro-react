@@ -1016,7 +1016,7 @@ const Modify = (props: ModifyProps) => {
                     <Form.Item label="计费起始日期">
                       {getFieldDecorator('beginDate', {
                         // initialValue: form.getFieldValue('isNullDate') ? null : infoDetail.beginDate ? moment(infoDetail.beginDate) : moment(new Date()),
-                        initialValue: infoDetail.beginDate ? moment(infoDetail.beginDate) : moment(new Date()),
+                        initialValue: infoDetail.isNullDate ? null : (infoDetail.beginDate ? moment(infoDetail.beginDate) : moment(new Date())),
                         rules: [{ required: !form.getFieldValue('isNullDate'), message: '请选择计费起始日期' }],
                       })(<DatePicker placeholder="请选择计费起始日期" style={{ width: '100%' }} />)}
                     </Form.Item>
