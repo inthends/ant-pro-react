@@ -564,21 +564,21 @@ const Add = (props: AddProps) => {
 
                     <Row gutter={24}>
                       <Col lg={12}>
-                        <Form.Item label="起始日期">
+                        <Form.Item label="合同起始日期">
                           {getFieldDecorator('startDate', {
                             initialValue: moment(new Date()),
-                            rules: [{ required: true, message: '请选择起始日期' }],
-                          })(<DatePicker placeholder="请选择起始日期"
+                            rules: [{ required: true, message: '请选择合同起始日期' }],
+                          })(<DatePicker placeholder="请选择合同起始日期"
                             disabledDate={disabledStartDate}
                             style={{ width: '100%' }} />)}
                         </Form.Item>
                       </Col>
                       <Col lg={12}>
-                        <Form.Item label="终止日期" required>
+                        <Form.Item label="合同终止日期" required>
                           {getFieldDecorator('endDate', {
                             initialValue: moment(new Date()).add(1, 'years').add(-1, 'days'),
-                            rules: [{ required: true, message: '请选择终止日期' }],
-                          })(<DatePicker placeholder="请选择终止日期"
+                            rules: [{ required: true, message: '请选择合同终止日期' }],
+                          })(<DatePicker placeholder="请选择合同终止日期"
                             disabledDate={disabledEndDate}
                             style={{ width: '100%' }} />)}
                         </Form.Item>
@@ -990,31 +990,30 @@ const Add = (props: AddProps) => {
               <Rebate form={form}></Rebate> */}
 
               {/* 修改为单个租期条款 */}
-
-              <Card title="租期条款" className={styles.card}  >
+              <Card title="租金条款" className={styles.card}  >
                 <Row gutter={24}>
-                  <Col lg={4}>
-                    <Form.Item label="开始时间" required >
-                      {getFieldDecorator('startDate', {
+                  {/* <Col lg={4}>
+                    <Form.Item label="合同起始日期" required >
+                      {getFieldDecorator('cstartDate', {
                         initialValue: moment(new Date()),
-                        rules: [{ required: true, message: '请选择开始时间' }],
-                      })(<DatePicker disabled placeholder='请选择开始时间' />)}
+                        rules: [{ required: true, message: '请选择合同起始日期' }],
+                      })(<DatePicker disabled placeholder='请选择合同起始日期' />)}
                     </Form.Item>
                   </Col>
                   <Col lg={4}>
-                    <Form.Item label="结束时间" required>
-                      {getFieldDecorator('endDate', {
+                    <Form.Item label="合同终止日期" required>
+                      {getFieldDecorator('cendDate', {
                         initialValue: moment(new Date()).add(1, 'years').add(-1, 'days'),
-                        rules: [{ required: true, message: '请选择结束时间' }],
-                      })(<DatePicker disabled placeholder='请选择结束时间' />)}
+                        rules: [{ required: true, message: '请选择合同终止日期' }],
+                      })(<DatePicker disabled placeholder='请选择合同终止日期' />)}
                     </Form.Item>
-                  </Col>
-                  <Col lg={8}>
-                    <Form.Item label="费项" required>
+                  </Col> */}
+                  <Col lg={6}>
+                    <Form.Item label="租金费项" required>
                       {getFieldDecorator('feeItemId', {
-                        rules: [{ required: true, message: '请选择费项' }]
+                        rules: [{ required: true, message: '请选择租金费项' }]
                       })(
-                        <Select placeholder="请选择费项"
+                        <Select placeholder="请选择租金费项"
                           onChange={(value, option) => changeFee(value, option)} >
                           {feeItems.map(item => (
                             <Option value={item.value} key={item.key}>
@@ -1030,13 +1029,13 @@ const Add = (props: AddProps) => {
                     </Form.Item>
                   </Col>
                   <Col lg={4}>
-                    <Form.Item label='合同单价' required>
+                    <Form.Item label='租金单价' required>
                       {getFieldDecorator('price', {
-                        rules: [{ required: true, message: '请输入合同单价' }],
-                      })(<InputNumber placeholder="请输入合同单价" style={{ width: '100%' }} />)}
+                        rules: [{ required: true, message: '请输入租金单价' }],
+                      })(<InputNumber placeholder="请输入租金单价" style={{ width: '100%' }} />)}
                     </Form.Item>
                   </Col>
-                  <Col lg={4}>
+                  <Col lg={3}>
                     <Form.Item label="&nbsp;">
                       {getFieldDecorator('priceUnit', {
                         initialValue: '元/m²·天'
@@ -1049,9 +1048,49 @@ const Add = (props: AddProps) => {
                         </Select>)}
                     </Form.Item>
                   </Col>
+                  <Col lg={5}>
+                    <Form.Item label="递增类型">
+                      {getFieldDecorator('increType', {
+                      })(
+                        <Select placeholder="请选择递增类型" allowClear>
+                          <Option value="三个月后递增">三个月后开始递增</Option>
+                          <Option value="半年后递增">半年后递增</Option>
+                          <Option value="一年后递增">一年后递增</Option>
+                          <Option value="两年后递增">两年后递增</Option>
+                          <Option value="三年后递增">三年后递增</Option>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={3}>
+                    <Form.Item label="单价递增" required>
+                      {getFieldDecorator('increPrice', {
+                        rules: [{ required: form.getFieldValue('increType'), message: '请输入' }],
+                      })(
+                        <InputNumber placeholder="请输入" style={{ width: '100%' }}
+                          disabled={!form.getFieldValue('increType')}
+                        />
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={3}>
+                    <Form.Item label="&nbsp;">
+                      {getFieldDecorator('increPriceUnit', {
+                        rules: [{ required: form.getFieldValue('increType'), message: '请选择单位' }],
+                      })(
+                        <Select placeholder="请选择" allowClear
+                          disabled={!form.getFieldValue('increType')}
+                        >
+                          <Option value="%">%</Option>
+                          <Option value="元" >元</Option>
+                        </Select>)}
+                    </Form.Item>
+                  </Col>
+
                 </Row>
                 <Row gutter={24}>
-                  <Col lg={4}>
+
+                  {/* <Col lg={4}>
                     <Form.Item label="提前付款时间" required>
                       {getFieldDecorator('advancePayTime', {
                         initialValue: 1,
@@ -1070,6 +1109,17 @@ const Add = (props: AddProps) => {
                           <Option value="指定日期">指定日期</Option>
                         </Select>)}
                     </Form.Item>
+                  </Col> */}
+
+                  <Col lg={4}>
+                    <Form.Item label="付款周期（月）" required>
+                      {getFieldDecorator('payCycle', {
+                        initialValue: 1,
+                        rules: [{ required: true, message: '请输入付款周期' }]
+                      })(
+                        <InputNumber min={1} placeholder="请输入付款周期" style={{ width: '100%' }} />
+                      )}
+                    </Form.Item>
                   </Col>
                   <Col lg={4}>
                     <Form.Item label="计费类型">
@@ -1082,6 +1132,7 @@ const Add = (props: AddProps) => {
                         </Select>)}
                     </Form.Item>
                   </Col>
+
                   {
                     (priceUnit == "元/m²·天" || priceUnit == "元/天") ?
                       <Col lg={4}>
@@ -1097,25 +1148,17 @@ const Add = (props: AddProps) => {
                         </Form.Item>
                       </Col>
                       : null}
-
                   <Col lg={4}>
                     <Form.Item label="年天数" required>
                       {getFieldDecorator('yearDays', {
                         initialValue: 365,
                         rules: [{ required: true, message: '请输入年天数' }],
-                      })(<InputNumber placeholder="请输入年天数" style={{ width: '100%' }} />)}
+                      })(<InputNumber placeholder="请输入年天数" style={{ width: '100%' }}
+                        max={365} min={1}
+                      />)}
                     </Form.Item>
                   </Col>
-                  <Col lg={4}>
-                    <Form.Item label="付款周期（月）" required>
-                      {getFieldDecorator('payCycle', {
-                        initialValue: 1,
-                        rules: [{ required: true, message: '请输入付款周期' }]
-                      })(
-                        <InputNumber placeholder="请输入付款周期" style={{ width: '100%' }} />
-                      )}
-                    </Form.Item>
-                  </Col>
+
                   <Col lg={8}>
                     <Form.Item label="租期划分方式">
                       {getFieldDecorator('rentalPeriodDivided', {
@@ -1123,7 +1166,7 @@ const Add = (props: AddProps) => {
                       })(
                         <Select  >
                           <Option value="按起始日划分">按起始日划分</Option>
-                          <Option value="次月按自然月划分(仅一月一付有效)">次月按自然月划分(仅一月一付有效)</Option>
+                          {/* <Option value="次月按自然月划分(仅一月一付有效)">次月按自然月划分(仅一月一付有效)</Option> */}
                           <Option value="按自然月划分(首月非整自然月划入第一期)">按自然月划分(首月非整自然月划入第一期)</Option>
                           <Option value="按自然月划分(首月非整自然月算一个月)">按自然月划分(首月非整自然月算一个月)</Option>
                         </Select>)}
@@ -1131,7 +1174,7 @@ const Add = (props: AddProps) => {
                   </Col>
                 </Row>
               </Card>
-              <Card title="递增率" className={styles.card} >
+              {/* <Card title="递增率" className={styles.card} >
                 <Row gutter={24}>
                   <Col lg={6}>
                     <Form.Item label="递增类型">
@@ -1194,7 +1237,7 @@ const Add = (props: AddProps) => {
                     </Form.Item>
                   </Col>
                 </Row>
-              </Card>
+              </Card> */}
               <Card title="免租期" className={styles.card} >
                 <Row gutter={24}>
                   {/* <Col lg={5}>
@@ -1227,6 +1270,15 @@ const Add = (props: AddProps) => {
                       })(<DatePicker placeholder="请选择结束时间" disabled={!form.getFieldValue('rebateType')} />)}
                     </Form.Item>
                   </Col>
+
+                  <Col lg={14}>
+                    <Form.Item label="备注" >
+                      {getFieldDecorator('remark', {
+                        //rules: [{ required: true, message: '请输入备注' }],
+                      })(<Input placeholder="请输入备注" />)}
+                    </Form.Item>
+                  </Col>
+
                   {/* <Col lg={3}>
                     <Form.Item label="开始期数" >
                       {getFieldDecorator('startPeriod', {
@@ -1250,7 +1302,7 @@ const Add = (props: AddProps) => {
                   </Col> */}
                 </Row>
 
-                <Row gutter={24}>
+                {/* <Row gutter={24}>
                   <Col lg={24}>
                     <Form.Item label="备注" >
                       {getFieldDecorator('remark', {
@@ -1258,7 +1310,7 @@ const Add = (props: AddProps) => {
                       })(<TextArea placeholder="请输入备注" rows={3} />)}
                     </Form.Item>
                   </Col>
-                </Row>
+                </Row> */}
               </Card>
 
               <Button style={{ width: '100%', marginBottom: '10px' }} onClick={calculation}>点击生成租金明细</Button>
