@@ -35,12 +35,12 @@ export interface ChargeDetailDTO {
         */
     chargeFee?: HtLeasecontractchargefee;
 
-    /**
-     * 递增率
-     */
-    // chargeIncreList?: Array<HtLeasecontractchargeincre>;
+    // /**
+    //  * 递增率
+    //  */
+    // // chargeIncreList?: Array<HtLeasecontractchargeincre>;
 
-    chargeIncre?: HtLeasecontractchargeincre;
+    // chargeIncre?: HtLeasecontractchargeincre;
 
     /**
      * 优惠
@@ -59,8 +59,13 @@ export interface ChargeDetailDTO {
     chargeFeeResultList?: Array<HtChargefeeresult>;
 
     /**
-     * 审批记录
-     */
-    contractapproveLog?: Array<htContractapprovelog>;
+ * 物业费明细
+ */
+    propertyFeeResultList?: Array<HtChargefeeresult>;
+
+    // /**
+    //  * 审批记录
+    //  */
+    // contractapproveLog?: Array<htContractapprovelog>;
 
 }

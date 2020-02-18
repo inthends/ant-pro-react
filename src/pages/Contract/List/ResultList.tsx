@@ -6,13 +6,14 @@ import moment from 'moment';
 import styles from './style.less';
 
 interface ResultListProps {
-  depositData: any[];
-  chargeData: any[];
+  depositData: any[];//保证金
+  chargeData: any[];//租金
+  propertyData: any[];//物业费
   className: any;
 }
 
 function ResultList(props: ResultListProps) {
-  const { depositData, chargeData, className } = props;
+  const { depositData, chargeData,propertyData, className } = props;
   const columns = [
     {
       title: '区间',
@@ -72,14 +73,24 @@ function ResultList(props: ResultListProps) {
           columns={columns}
           dataSource={depositData} />
       </Card>
-      <Card title="租金" className={className} >
+
+      <Card title="租金" className={styles.card} >
         <Table
           style={{ border: 'none' }}
           bordered={false}
           size="middle"
           columns={columns}
-          dataSource={chargeData}
-          
+          dataSource={chargeData} 
+        />
+      </Card>
+
+      <Card title="物业费" className={className} >
+        <Table
+          style={{ border: 'none' }}
+          bordered={false}
+          size="middle"
+          columns={columns}
+          dataSource={propertyData} 
         />
       </Card>
     </div>

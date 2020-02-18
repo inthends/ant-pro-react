@@ -70,7 +70,7 @@ function ListTable(props: ListTableProps) {
 
   const columns = [
     {
-      title: '计费单元',
+      title: '默认计费单元',
       dataIndex: 'billUnitId',
       key: 'billUnitId',
       width: 200,
@@ -157,13 +157,12 @@ function ListTable(props: ListTableProps) {
       width: 100,
       render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
-
     {
       title: '租赁数(㎡)',
       dataIndex: 'leaseSize',
       key: 'leaseSize',
       width: 100,
-    }, 
+    },
     {
       title: '总租金',
       dataIndex: 'leaseAmount',
@@ -174,6 +173,12 @@ function ListTable(props: ListTableProps) {
       title: '保证金',
       dataIndex: 'leaseDeposit',
       key: 'leaseDeposit',
+      width: 100,
+    },
+    {
+      title: '物业费',
+      dataIndex: 'propertyAmount',
+      key: 'propertyAmount',
       width: 100,
     },
     {
@@ -200,7 +205,7 @@ function ListTable(props: ListTableProps) {
       width: 100,
     },
     {
-      title: '招商人',
+      title: '跟进人',
       dataIndex: 'follower',
       key: 'follower',
       width: 100,

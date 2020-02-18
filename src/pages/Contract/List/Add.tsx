@@ -39,7 +39,9 @@ const Add = (props: AddProps) => {
   const [feeItems, setFeeItems] = useState<TreeEntity[]>([]);
   //租金计算结果
   const [depositData, setDepositData] = useState<HtChargefeeresult[]>([]);//保证金
-  const [chargeData, setChargeData] = useState<HtChargefeeresult[]>([]);//租金 
+  const [chargeData, setChargeData] = useState<HtChargefeeresult[]>([]);//租金  
+  const [propertyData, setPropertyData] = useState<HtChargefeeresult[]>([]);//物业费
+
   const [treeData, setTreeData] = useState<any[]>([]);
   const [isCal, setIsCal] = useState<boolean>(false);
 
@@ -51,6 +53,8 @@ const Add = (props: AddProps) => {
   // const [DepositResult, setDepositResult] = useState<HtChargefeeresult[]>([]);
   // const [ChargeFeeResult, setChargeFeeResult] = useState<HtChargefeeresult[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const [channel, setChannel] = useState<any[]>([]);//渠道
 
   // const [billUnitId, setBillUnitId] = useState<string>();//计费房屋Id 
   // const close = () => {
@@ -152,9 +156,9 @@ const Add = (props: AddProps) => {
           mychargefeeoffer.rebateStartDate = values.rebateStartDate.format('YYYY-MM-DD');
         if (values.rebateEndDate != undefined)
           mychargefeeoffer.rebateEndDate = values.rebateEndDate.format('YYYY-MM-DD');
-        mychargefeeoffer.startPeriod = values.startPeriod;
-        mychargefeeoffer.periodLength = values.periodLength;
-        mychargefeeoffer.discount = values.discount;
+        // mychargefeeoffer.startPeriod = values.startPeriod;
+        // mychargefeeoffer.periodLength = values.periodLength;
+        // mychargefeeoffer.discount = values.discount;
         mychargefeeoffer.remark = values.remark;
         // RebateJson.push(rebate);
         //let entity = values; 
@@ -173,7 +177,6 @@ const Add = (props: AddProps) => {
         entity.lateMethod = values.lateMethod;
         if (values.lateDate != null)
           entity.lateDate = values.lateDate.format('YYYY-MM-DD');
-
         entity.propertyFeeId = values.propertyFeeId;
         entity.propertyFeeName = values.propertyFeeName;
         // let strTermJson = JSON.stringify(TermJson);
@@ -198,6 +201,7 @@ const Add = (props: AddProps) => {
           setIsCal(true);//计算租金
           setDepositData(res.depositFeeResultList);//保证金明细
           setChargeData(res.chargeFeeResultList);//租金明细  
+          setPropertyData(res.propertyFeeResultList);//物业费  
           // setDepositResult(res.depositFeeResultList);
           // setChargeFeeResult(res.chargeFeeResultList);  
           setLoading(false);
@@ -280,7 +284,8 @@ const Add = (props: AddProps) => {
           // DepositResult: JSON.stringify(DepositResult),
           // ChargeFeeResult:JSON.stringify(ChargeFeeResult) 
           DepositResult: JSON.stringify(depositData),
-          ChargeFeeResult: JSON.stringify(chargeData)
+          ChargeFeeResult: JSON.stringify(chargeData),
+          PropertyFeeResult: JSON.stringify(propertyData)
         }).then(res => {
           message.success('保存成功');
           closeDrawer();
@@ -318,7 +323,7 @@ const Add = (props: AddProps) => {
 
   }, []);
 
-  const [channel, setChannel] = useState<any[]>([]);//渠道
+
 
   // 打开抽屉时初始化
   // useEffect(() => {
@@ -569,21 +574,21 @@ const Add = (props: AddProps) => {
 
                     <Row gutter={24}>
                       <Col lg={12}>
-                        <Form.Item label="合同起始日期">
+                        <Form.Item label="起始日期">
                           {getFieldDecorator('startDate', {
                             initialValue: moment(new Date()),
-                            rules: [{ required: true, message: '请选择合同起始日期' }],
-                          })(<DatePicker placeholder="请选择合同起始日期"
+                            rules: [{ required: true, message: '请选择起始日期' }],
+                          })(<DatePicker placeholder="请选择起始日期"
                             disabledDate={disabledStartDate}
                             style={{ width: '100%' }} />)}
                         </Form.Item>
                       </Col>
                       <Col lg={12}>
-                        <Form.Item label="合同终止日期" required>
+                        <Form.Item label="终止日期" required>
                           {getFieldDecorator('endDate', {
                             initialValue: moment(new Date()).add(1, 'years').add(-1, 'days'),
-                            rules: [{ required: true, message: '请选择合同终止日期' }],
-                          })(<DatePicker placeholder="请选择合同终止日期"
+                            rules: [{ required: true, message: '请选择终止日期' }],
+                          })(<DatePicker placeholder="请选择终止日期"
                             disabledDate={disabledEndDate}
                             style={{ width: '100%' }} />)}
                         </Form.Item>
@@ -609,7 +614,7 @@ const Add = (props: AddProps) => {
 
                     <Row gutter={24}>
                       <Col lg={12}>
-                        <Form.Item label="签订人">
+                        <Form.Item label="签约人">
                           {/* {getFieldDecorator('follower', {
                           })(
                             <AutoComplete
@@ -668,12 +673,12 @@ const Add = (props: AddProps) => {
                         </Form.Item>
                       </Col>
                       <Col lg={12}>
-                        <Form.Item label="招商人">
+                        <Form.Item label="跟进人">
                           {getFieldDecorator('follower', {
                           })(
                             <Select
                               showSearch
-                              placeholder="请选择招商人"
+                              placeholder="请选择跟进人"
                               onSelect={onFollowerSelect}
                             >
                               {userSource.map(item => (
@@ -733,7 +738,6 @@ const Add = (props: AddProps) => {
                     </Row>
                     <Row gutter={24}>
                       <Col lg={24}>
-
                         {/* <Form.Item label="承租方" required>
                           {getFieldDecorator('customer', {
                             rules: [{ required: true, message: '请填写姓名或公司' }],
@@ -1111,7 +1115,7 @@ const Add = (props: AddProps) => {
                           <Option value="元" >元</Option>
                         </Select>)}
                     </Form.Item>
-                  </Col> 
+                  </Col>
                 </Row>
                 <Row gutter={24}>
                   <Col lg={3}>
@@ -1155,8 +1159,7 @@ const Add = (props: AddProps) => {
                           <Option value="按月计费">按月计费</Option>
                         </Select>)}
                     </Form.Item>
-                  </Col> */}
-
+                  </Col> */} 
                   {
                     (priceUnit == "元/m²·天" || priceUnit == "元/天") ?
                       <Col lg={4}>
@@ -1181,7 +1184,7 @@ const Add = (props: AddProps) => {
                         max={365} min={1}
                       />)}
                     </Form.Item>
-                  </Col> 
+                  </Col>
                   <Col lg={8}>
                     <Form.Item label="租期划分方式">
                       {getFieldDecorator('rentalPeriodDivided', {
@@ -1340,6 +1343,7 @@ const Add = (props: AddProps) => {
               <ResultList
                 depositData={depositData}
                 chargeData={chargeData}
+                propertyData={propertyData}
                 className={styles.addcard}
               ></ResultList>
             </TabPane>

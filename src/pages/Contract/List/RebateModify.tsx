@@ -47,10 +47,10 @@ function RebateModify(props: RebateModifyProps) {
     // getFieldDecorator('Rebates', { initialValue: chargeOfferList });
     // const keys = getFieldValue('Rebates');
     // const formItems = keys.map((k, index) => (
-    <Card className={styles.card} title="优惠"  >
+    <Card className={styles.card} title="免租期"  >
       <Row gutter={24}>
-        <Col lg={5}>
-          <Form.Item label="优惠类型" required>
+        {/* <Col lg={5}>
+           <Form.Item label="优惠类型" required>
             {getFieldDecorator('rebateType', {
               initialValue: chargeOffer.rebateType
             })(<Select
@@ -63,7 +63,7 @@ function RebateModify(props: RebateModifyProps) {
               <Option value="单价减免">单价减免</Option>
             </Select>)}
           </Form.Item>
-        </Col>
+        </Col> */}
         <Col lg={5}>
           <Form.Item label="开始时间"  >
             {getFieldDecorator('rebateStartDate', {
@@ -84,7 +84,7 @@ function RebateModify(props: RebateModifyProps) {
             })(<DatePicker placeholder="请选择结束时间" disabled={!form.getFieldValue('rebateType')} />)}
           </Form.Item>
         </Col>
-        <Col lg={3}>
+        {/* <Col lg={3}>
           <Form.Item label="开始期数"  >
             {getFieldDecorator('startPeriod', {
               initialValue: chargeOffer.startPeriod,
@@ -107,9 +107,18 @@ function RebateModify(props: RebateModifyProps) {
               rules: [{ required: form.getFieldValue('rebateType'), message: '请输入折扣' }],
             })(<InputNumber placeholder="请输入折扣" style={{ width: '100%' }} disabled={!form.getFieldValue('rebateType')} />)}
           </Form.Item>
+        </Col> */}
+
+        <Col lg={14}>
+          <Form.Item label="备注" >
+            {getFieldDecorator('remark', {
+               initialValue: chargeOffer.remark,
+              //rules: [{ required: true, message: '请输入备注' }],
+            })(<Input placeholder="请输入备注" />)}
+          </Form.Item>
         </Col>
       </Row>
-      <Row gutter={24}>
+      {/* <Row gutter={24}>
         <Col lg={24}>
           <Form.Item label="备注">
             {getFieldDecorator('remark', {
@@ -118,7 +127,7 @@ function RebateModify(props: RebateModifyProps) {
             })(<TextArea placeholder="请输入备注" rows={3} />)}
           </Form.Item>
         </Col>
-      </Row>
+      </Row> */}
     </Card>
     // )); 
   );
