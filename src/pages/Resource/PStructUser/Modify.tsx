@@ -51,6 +51,21 @@ const Modify = (props: ModifyProps) => {
     // });
   }, []);
 
+   // 打开抽屉时初始化
+   useEffect(() => {
+    if (modifyVisible) { 
+      if (data) {
+        setInfoDetail(data);
+        form.resetFields();
+      } else {
+        setInfoDetail({});
+        form.resetFields();
+      }
+    } else {
+      form.resetFields();
+    }
+  }, [modifyVisible]);
+
   const close = () => {
     closeDrawer();
   };
