@@ -1,4 +1,4 @@
-import React  from 'react';
+import React from 'react';
 import styles from './index.less';
 interface RoomProps {
   inline: boolean;
@@ -30,35 +30,41 @@ const inlineStyle = {
 const notInlineStyle = {
   flex: '0 0 16%',
 };
+
 const RoomStates = {
   0: {
-    // 未售
-    borderColor: '#c32c2b',
-    background: '#dc7b78',
-  },
-  1: {
-    //待交房
-    borderColor: '#cf366f',
-    background: '#de7b9e',
-  },
-  2: {
-    //装修
-    borderColor: '#e97d1c',
-    background: '#feb97a',
-  },
-  3: {
-    //空置
-    borderColor: '#e7ba0d',
-    background: '#fee067',
-  },
-  4: {
-    //出租
-    borderColor: '#9ac82b',
-    background: '#bfe06c',
-  },
-  5: {
-    //自用
+    //未租
     borderColor: '#566485',
     background: '#728db0',
   },
+  1: {
+    //1-3个月
+    borderColor: '#c32c2b',
+    background: '#dc7b78',
+  },
+  2: {
+    //4-6个月
+    borderColor: '#cf366f',
+    background: '#de7b9e',
+  },
+  3: {
+    //7-12个月
+    borderColor: '#e97d1c',
+    background: '#feb97a',
+  },
+  4: {
+    //12个月以上
+    borderColor: '#e7ba0d',
+    background: '#fee067',
+  },
+  // 4: {
+  //   //出租
+  //   borderColor: '#9ac82b',
+  //   background: '#bfe06c',
+  // },
+  // 5: {
+  //   //自用
+  //   borderColor: '#566485',
+  //   background: '#728db0',
+  // },
 };

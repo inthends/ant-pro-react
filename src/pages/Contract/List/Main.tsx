@@ -20,6 +20,7 @@ const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
 import AsynLeftTree from '../AsynLeftTree';
+import Atlas from './Atlas/Atlas';
 
 function Main() {
   const [addVisible, setAddVisible] = useState<boolean>(false);//新建
@@ -28,7 +29,6 @@ function Main() {
   const [changeVisible, setChangeVisible] = useState<boolean>(false);//变更
   const [renewalVisible, setRenewalVisible] = useState<boolean>(false);//续租 
   const [withdrawalVisible, setWithdrawalVisible] = useState<boolean>(false);//退租  
-
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [data, setData] = useState<any[]>([]);
@@ -185,17 +185,61 @@ function Main() {
     </div>
   );
 
+  const [type, setType] = useState<number>(1);
+  const [parentId, setParentId] = useState<string>('');//左侧树点击的节点id
+  const [currData, setCurrData] = useState<any>();
+  const [roomVisible, setRoomVisible] = useState<boolean>(false);
+  const [organizeId, setOrganizeId] = useState<string>(''); //列表选中的节点组织id
+  //房态图弹出房间
+  const showAtlasDrawer = (item?) => {
+    setCurrData(item);
+    setRoomVisible(true);
+  };
+  const closeAtlasDrawer = () => {
+    setRoomVisible(false);
+  };
+
+  const selectTree = (parentId, type, searchText) => {
+    //初始化页码
+    const page = new DefaultPagination();
+    refresh(parentId, type, searchText, page);//, pstructId); 
+    setParentId(parentId);
+    setPagination(page);
+    setType(type);
+  };
+
+  //点击树刷新列表
+  const refresh = (parentId, type, searchText, page) => {
+    setSearch(searchText);
+    const queryJson = {
+      keyword: search,
+      //PStructId: psid,
+      ParentId: parentId,//== null ? psid : parentId,
+      Type: type == null ? 1 : type,
+    };
+    const sidx = 'id';
+    const sord = 'asc';
+    const { current: pageIndex, pageSize, total } = page;
+    return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
+      return res;
+    });
+  };
+
   return (
     <Layout style={{ height: '100%' }}>
       <AsynLeftTree
         parentid={'0'}
         selectTree={(pid, type, info) => {
+          selectTree(pid, type, search);
         }}
-      /> 
+      />
       <Content style={{ paddingLeft: '18px' }}>
         <Tabs defaultActiveKey="1" >
-          <TabPane tab="租控图" key="1" >
+
+          <TabPane tab="租控图" key="1">
+            <Atlas parentId={parentId} showDrawer={showAtlasDrawer}></Atlas>
           </TabPane> 
+
           <TabPane tab="合同列表" key="2" >
             <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
               <Search
@@ -221,17 +265,15 @@ function Main() {
                 </Col>
                 <Col sm={4} xs={24}>
                   <Info title="退租待审核" value="5" bordered />
-                </Col>
-
+                </Col> 
                 <Col sm={4} xs={24}>
                   <Info title="作废待审核" value="4" bordered />
-                </Col>
-
+                </Col> 
                 <Col sm={4} xs={24}>
-                  <Info title="到期未处理" value="7" bordered />
+                  <Info title="正常执行" value="7" bordered />
                 </Col>
                 <Col sm={4} xs={24}>
-                  <Info title="正常执行" value="8" />
+                  <Info title="已作废" value="1" />
                 </Col>
               </Row>
             </Card>
@@ -276,7 +318,7 @@ function Main() {
         chargeId={chargeId}
         reload={() => initLoadData(search)}
       />
- 
+
       {/* <ChooseUser
         visible={userVisible}
         close={() => setUserVisible(false)}

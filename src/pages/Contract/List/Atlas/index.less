@@ -1,0 +1,93 @@
+.buildingInfo {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 45px;
+  height: 50px;
+  background: #fff;
+  border: 1px solid #eff2f4;
+
+  .blockAndTitle {
+    width: 106px;
+    margin-right: 30px;
+
+    .block {
+      width: 15px;
+      height: 15px;
+      vertical-align: middle;
+      border-radius: 2px;
+      border-width: 1px;
+      border-style: solid;
+      display: inline-block;
+    }
+
+    & > span {
+      position: relative;
+      vertical-align: middle;
+      left: 10px;
+    }
+  }
+
+  .buildingIcon {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    right: 0;
+    cursor: pointer;
+    line-height: 50px;
+    text-align: center;
+
+    :global {
+      svg {
+        vertical-align: middle;
+      }
+    }
+  }
+}
+
+.buildingTable {
+  width: 100%;
+
+  .buildingRow {
+    display: flex;
+
+    .buildingTtitle {
+      min-width: 100px;
+      line-height: 100px;
+      font-size: 18px;
+      font-weight: 500;
+      color: #4a5267;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-align: center;
+    }
+
+    .buildingRooms {
+      display: flex;
+    }
+  }
+}
+
+.buildingRoom {
+  height: 100px;
+  margin-left: 2px;
+  margin-right: 2px;
+  padding: 4px 0;
+
+  .roomInnner {
+    overflow: hidden;
+    border: 1px solid;
+    height: 100%;
+    cursor: pointer;
+    div {
+      height: 20px;
+      overflow: hidden;
+      word-break: break-all;
+      font-size: 12px;
+      &:first-child{
+        font-size: 14px;
+      }
+    }
+  }
+}

@@ -63,6 +63,16 @@ export function SubmitForm(data): Promise<any> {
 //     .then(getResult as any);
 // }
 
+//获取租赁房态图楼层和房间数据
+export function GetContranctFloorData(keyValue): Promise<any> {
+  // const data = {
+  //   keyValue
+  // };
+  return request
+    .get(process.env.basePath + `/PStructs/GetContranctFloorData?keyValue=${keyValue}`)
+    .then(getResult as any);
+}
+
 //获取合同信息
 export function GetContractInfo(keyValue): Promise<any> {
   return request

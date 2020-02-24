@@ -28,7 +28,6 @@ function HouseMore(props) {
   const [parentId, setParentId] = useState<string>('');//左侧树点击的节点id
   const [selectId, setSelectId] = useState<string>(''); //列表选中的节点id  
   const [organizeId, setOrganizeId] = useState<string>(''); //列表选中的节点组织id  
-
   const [roomVisible, setRoomVisible] = useState<boolean>(false);
 
   const selectTree = (parentId, type, searchText) => {

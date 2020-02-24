@@ -4,8 +4,8 @@ import Block from './Block';
 import Room from './Room';
 import { Icon, Spin } from 'antd';
 import {
-  GetFloorData//, GetRoomData
-} from '../House.service';
+  GetContranctFloorData//, GetRoomData
+} from '../Main.service';
 
 interface AtlasProps {
   parentId?: string;
@@ -19,7 +19,7 @@ const Atlas = (props: AtlasProps) => {
   useEffect(() => {
     setLoading(true);
     // 获取楼层信息
-    GetFloorData(parentId).then(res => {
+    GetContranctFloorData(parentId).then(res => {
       const floors = res || [];
       // const promises = floors.map(item => {
       //   // 获取房间信息
@@ -34,7 +34,8 @@ const Atlas = (props: AtlasProps) => {
       // Promise.all(promises).then(() => {
       //   setData(floors);
       //   setLoading(false);
-      // }); 
+      // });
+
       setData(floors);
       setLoading(false);
 
@@ -43,12 +44,11 @@ const Atlas = (props: AtlasProps) => {
   return (
     <>
       <div className={styles.buildingInfo}>
-        <Block title="未售" borderColor="#c32c2b" background="#dc7b78" />
-        <Block title="待交房" borderColor="#cf366f" background="#de7b9e" />
-        <Block title="装修" borderColor="#e97d1c" background="#feb97a" />
-        <Block title="空置" borderColor="#e7ba0d" background="#fee067" />
-        <Block title="出租" borderColor="#9ac82b" background="#bfe06c" />
-        <Block title="自用" borderColor="#566485" background="#728db0" />
+        <Block title="未租" borderColor="#566485" background="#728db0" />
+        <Block title="1-3个月" borderColor="#c32c2b" background="#dc7b78" />
+        <Block title="4-6个月" borderColor="#cf366f" background="#de7b9e" />
+        <Block title="7-12个月" borderColor="#e97d1c" background="#feb97a" />
+        <Block title="12个月以上" borderColor="#e7ba0d" background="#fee067" />
         {inline ? (
           <Icon
             type="fullscreen"
@@ -70,22 +70,19 @@ const Atlas = (props: AtlasProps) => {
         </div>
       ) : null} */}
 
-
       <Spin spinning={loading}>
         <div style={{ paddingTop: 20 }}>
           <div className={styles.buildingTable}>
             {data.map(floor => (
               <div className={styles.buildingRow}>
-                <div className={styles.buildingTtitle}>{floor.item.name}</div>
+                <div className={styles.buildingTtitle}>{floor.name}</div>
                 <div style={{ flexGrow: 1 }}>
-                  <div
-                    className={styles.buildingRooms}
-                    style={inline ? undefined : { flexFlow: 'row wrap' }}
-                  >
+                  <div className={styles.buildingRooms} style={inline ? undefined : { flexFlow: 'row wrap' }}>
                     {floor.rooms.map(room => (
                       <Room inline={inline} state={room.state} onClick={() => showDrawer(room)}>
                         <div>{room.name}</div>
                         <div>{room.area}㎡</div>
+                        <div>{room.endDate != null ? '至' + room.endDate : ''}</div>
                         <div>{room.tenantName}</div>
                       </Room>
                     ))}
@@ -95,9 +92,7 @@ const Atlas = (props: AtlasProps) => {
             ))}
           </div>
         </div>
-
       </Spin>
-
     </>
   );
 };
