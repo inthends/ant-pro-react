@@ -509,7 +509,7 @@ const Change = (props: ChangeProps) => {
             <TabPane tab="基本信息" key="1">
               <Row gutter={24}>
                 <Col span={12}>
-                  <Card title="基本信息" className={styles.addcard}>
+                  <Card title="基本信息" className={styles.addcard} hoverable>
                     <Row gutter={24}>
                       <Col lg={12}>
                         <Form.Item label="合同编号" required>
@@ -640,7 +640,7 @@ const Change = (props: ChangeProps) => {
                   </Card>
                 </Col>
                 <Col span={12}>
-                  <Card title="租赁信息" className={styles.addcard}>
+                  <Card title="租赁信息" className={styles.addcard} hoverable>
                     <Row gutter={24}>
                       <Col lg={24}>
                         <Form.Item label="房源选择" required>
@@ -747,7 +747,7 @@ const Change = (props: ChangeProps) => {
               </Row>
             </TabPane>
             <TabPane tab="租赁条款" key="2">
-              <Card title="基本条款" className={styles.card} >
+              <Card title="基本条款" className={styles.card} hoverable>
                 <Row gutter={24}>
                   <Col lg={4}>
                     <Form.Item label="租赁数量（㎡）" required>

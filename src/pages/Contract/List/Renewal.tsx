@@ -622,7 +622,7 @@ const Renewal = (props: RenewalProps) => {
             <TabPane tab="基本信息" key="1">
               <Row gutter={24}>
                 <Col span={12}>
-                  <Card title="基本信息" className={styles.addcard}>
+                  <Card title="基本信息" className={styles.addcard} hoverable>
                     <Row gutter={24}>
                       <Col lg={12}>
                         <Form.Item label="合同编号" required>
@@ -752,7 +752,7 @@ const Renewal = (props: RenewalProps) => {
                   </Card>
                 </Col>
                 <Col span={12}>
-                  <Card title="租赁信息" className={styles.addcard}>
+                  <Card title="租赁信息" className={styles.addcard} hoverable>
                     <Row gutter={24}>
                       <Col lg={24}>
                         <Form.Item label={<div>房源选择(<a>多个房屋的时候，默认获取第一个房屋作为计费单元</a>)</div>} required>
@@ -952,7 +952,7 @@ const Renewal = (props: RenewalProps) => {
               </Row>
             </TabPane>
             <TabPane tab="租赁条款" key="2">
-              <Card title="基本条款" className={styles.card} >
+              <Card title="基本条款" className={styles.card} hoverable>
                 <Row gutter={24}>
                   <Col lg={4}>
                     <Form.Item label="租赁数量/㎡" required>

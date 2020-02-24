@@ -256,7 +256,7 @@ const Modify = (props: ModifyProps) => {
         modifyVisible ? (
           <Form layout="vertical" hideRequiredMark>
             {infoDetail.status == 1 ? (
-              <Card title="派单" className={styles.card}  >
+              <Card title="派单" className={styles.card}  hoverable>
                 <Row gutter={24}>
                   <Col lg={5}>
                     <Form.Item label="维修专业" required>
@@ -313,7 +313,7 @@ const Modify = (props: ModifyProps) => {
                   </Col>
                 </Row>
               </Card>) : (
-                <Card title="派单" className={styles.card}  >
+                <Card title="派单" className={styles.card}  hoverable>
                   <Row gutter={24}>
                     <Col lg={5}>
                       <Form.Item label="维修专业">
@@ -347,7 +347,7 @@ const Modify = (props: ModifyProps) => {
                 </Card>
               )}
             {infoDetail.status == 3 ? (
-              <Card title="开工" className={styles.card}  >
+              <Card title="开工" className={styles.card}  hoverable>
                 <Row gutter={24}>
                   <Col lg={7}>
                     <Form.Item label="开工时间" required>
@@ -368,7 +368,7 @@ const Modify = (props: ModifyProps) => {
                 </Row>
               </Card>
             ) : infoDetail.status > 3 ? (
-              <Card title="开工" className={styles.card}  >
+              <Card title="开工" className={styles.card}  hoverable>
                 <Row gutter={24}>
                   <Col lg={6}>
                     <Form.Item label="开工时间"  >
@@ -385,7 +385,7 @@ const Modify = (props: ModifyProps) => {
             ) : null}
 
             {infoDetail.status == 4 ? (
-              <Card title="完成情况" className={styles.card}  >
+              <Card title="完成情况" className={styles.card}  hoverable>
                 <Row gutter={24}>
                   <Col lg={7}>
                     <Form.Item label="完成时间" required>
@@ -590,7 +590,7 @@ const Modify = (props: ModifyProps) => {
             </Card>) : null} */}
 
             {infoDetail.status == 6 ? (
-              <Card title="检验情况" className={styles.card}  >
+              <Card title="检验情况" className={styles.card}  hoverable>
                 <Row gutter={24}>
                   <Col lg={7}>
                     <Form.Item label="检验时间" required>
@@ -638,7 +638,7 @@ const Modify = (props: ModifyProps) => {
                 </Row>
               </Card>
             ) : (infoDetail.status > 7 && infoDetail.repairArea == '公共区域') ? (
-              <Card title="检验情况" className={styles.card}  >
+              <Card title="检验情况" className={styles.card} hoverable >
                 <Row gutter={24}>
                   <Col lg={5}>
                     <Form.Item label="检验时间" >

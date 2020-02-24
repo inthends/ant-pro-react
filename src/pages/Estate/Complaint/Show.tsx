@@ -204,9 +204,8 @@ const Show = (props: ShowProps) => {
       </PageHeader>
       <Divider dashed />
       {modifyVisible ? (
-        <Form layout="vertical" hideRequiredMark>
-
-          <Card title="立项信息" className={styles.card}  >
+        <Form layout="vertical" hideRequiredMark> 
+          <Card title="立项信息" className={styles.card} hoverable >
             <Row gutter={24}>
               <Col lg={6}>
                 <Form.Item label="对象类别" >
@@ -266,10 +265,8 @@ const Show = (props: ShowProps) => {
                 </Form.Item>
               </Col>
             </Row>
-          </Card>
-
-
-          <Card title="处理过程" className={styles.card}  >
+          </Card> 
+          <Card title="处理过程" className={styles.card} hoverable >
             <Row gutter={24}>
               <Col lg={6}>
                 <Form.Item label="实际处理人" >
@@ -296,7 +293,7 @@ const Show = (props: ShowProps) => {
             </Row>
           </Card>
 
-          <Card title="回访情况" className={styles.card2}  >
+          <Card title="回访情况" className={styles.card2} hoverable >
             <Row gutter={24}>
               <Col lg={6}>
                 <Form.Item label="回访方式"  >

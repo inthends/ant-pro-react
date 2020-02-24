@@ -562,7 +562,7 @@ const Modify = (props: ModifyProps) => {
               }
 
               {infoDetail.status == 3 ? (
-                <Card title="回访情况" className={styles.card2}  >
+                <Card title="回访情况" className={styles.card2}  hoverable>
                   <Row gutter={24}>
                     <Col lg={6}>
                       <Form.Item label="回访方式" required>

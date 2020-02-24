@@ -223,7 +223,7 @@ const Withdrawal = (props: WithdrawalProps) => {
             <TabPane tab="基本信息" key="1">
               <Row gutter={24}>
                 <Col span={12}>
-                  <Card title="基本信息" className={styles.card}>
+                  <Card title="基本信息" className={styles.card} hoverable>
                     <Row gutter={24}>
                       <Col lg={12}>
                         <Form.Item label="合同编号">
@@ -273,7 +273,7 @@ const Withdrawal = (props: WithdrawalProps) => {
                       </Col>
                     </Row>
                   </Card>
-                  <Card title="滞纳金" className={styles.card}>
+                  <Card title="滞纳金" className={styles.card} hoverable>
                     <Row gutter={24}>
                       <Col lg={12}>
                         <Form.Item label="滞纳金比例" >
@@ -289,7 +289,7 @@ const Withdrawal = (props: WithdrawalProps) => {
                   </Card> 
                 </Col>
                 <Col span={12}>
-                  <Card title="房源信息" className={styles.card}>
+                  <Card title="房源信息" className={styles.card} hoverable>
                     <Row gutter={24}>
                       <Col lg={24}>
                         <List
@@ -305,7 +305,7 @@ const Withdrawal = (props: WithdrawalProps) => {
                     </Row>
                   </Card>
 
-                  <Card title="租客信息" className={styles.card}>
+                  <Card title="租客信息" className={styles.card} hoverable>
                     <Row gutter={24}>
                       <Col lg={12}>
                         <Form.Item label="承租方"  >
@@ -363,7 +363,7 @@ const Withdrawal = (props: WithdrawalProps) => {
               </Row>
             </TabPane>
             <TabPane tab="租赁条款" key="2">
-              <Card title="基本条款" className={styles.card} >
+              <Card title="基本条款" className={styles.card} hoverable >
                 <Row gutter={24}>
                   <Col lg={8}>
                     <Form.Item label="租赁数量（㎡）">
@@ -390,7 +390,7 @@ const Withdrawal = (props: WithdrawalProps) => {
                 </Row>
               </Card>
 
-              <Card title='租期条款' className={styles.card}>
+              <Card title='租期条款' className={styles.card} hoverable>
                 <Row gutter={24}>
                   <Col lg={4}>
                     <Form.Item label="开始时间"  >
@@ -451,7 +451,7 @@ const Withdrawal = (props: WithdrawalProps) => {
                 </Row>
               </Card>
 
-              <Card title='递增率' className={styles.card}>
+              <Card title='递增率' className={styles.card} hoverable> 
                 <Row gutter={24}>
                   <Col lg={8}>
                     <Form.Item label="递增时间点"  >
@@ -473,7 +473,7 @@ const Withdrawal = (props: WithdrawalProps) => {
                 </Row>
               </Card>
 
-              <Card title='优惠' className={styles.addcard}>
+              <Card title='优惠' className={styles.addcard} hoverable>
                 <Row gutter={24}>
                   <Col lg={5}>
                     <Form.Item label="优惠类型"  >
@@ -546,7 +546,7 @@ const Withdrawal = (props: WithdrawalProps) => {
               </Card>
             </TabPane>
           </Tabs>
-          <Card title="退租" className={styles.addcard}>
+          <Card title="退租" className={styles.addcard} hoverable>
             <Form.Item label="退租日期" required>
               {getFieldDecorator('withdrawalDate', {
                 initialValue: moment(new Date()),

@@ -206,7 +206,7 @@ const ApproveView = (props: ApproveViewProps) => {
             <TabPane tab="基本信息" key="1">
               <Row gutter={24}>
                 <Col span={12}>
-                  <Card title="基本信息" className={styles.card}>
+                  <Card title="基本信息" className={styles.card} hoverable>
                     <Row gutter={24}>
                       <Col lg={12}>
                         <Form.Item label="合同编号">
@@ -255,9 +255,8 @@ const ApproveView = (props: ApproveViewProps) => {
                         </Form.Item>
                       </Col>
                     </Row>
-                  </Card>
-
-                  <Card title="滞纳金" className={styles.addcard}>
+                  </Card> 
+                  <Card title="滞纳金" className={styles.addcard} hoverable>
                     <Row gutter={24}>
                       <Col lg={12}>
                         <Form.Item label="滞纳金比例" >
@@ -273,7 +272,7 @@ const ApproveView = (props: ApproveViewProps) => {
                   </Card>
                 </Col>
                 <Col span={12}>
-                  <Card title="房源信息" className={styles.card}>
+                  <Card title="房源信息" className={styles.card} hoverable>
                     <Row gutter={24}>
                       <Col lg={24}>
                         <List
@@ -288,7 +287,7 @@ const ApproveView = (props: ApproveViewProps) => {
                       </Col>
                     </Row>
                   </Card>
-                  <Card title="租客信息" className={styles.card}>
+                  <Card title="租客信息" className={styles.card} hoverable>
                     <Row gutter={24}>
                       <Col lg={12}>
                         <Form.Item label="承租方"  >
@@ -374,7 +373,7 @@ const ApproveView = (props: ApproveViewProps) => {
                 </Row>
               </Card>
 
-              <Card title='租期条款' className={styles.card}>
+              <Card title='租期条款' className={styles.card} hoverable>
                 <Row gutter={24}>
                   <Col lg={4}>
                     <Form.Item label="开始时间"  >
@@ -435,7 +434,7 @@ const ApproveView = (props: ApproveViewProps) => {
                 </Row>
               </Card>
 
-              <Card title='递增率' className={styles.card}>
+              <Card title='递增率' className={styles.card} hoverable>
                 <Row gutter={24}>
                   <Col lg={8}>
                     <Form.Item label="递增时间点"  >
@@ -457,7 +456,7 @@ const ApproveView = (props: ApproveViewProps) => {
                 </Row>
               </Card>
 
-              <Card title='优惠' className={styles.addcard}>
+              <Card title='优惠' className={styles.addcard} hoverable>
                 <Row gutter={24}>
                   <Col lg={5}>
                     <Form.Item label="优惠类型"  >

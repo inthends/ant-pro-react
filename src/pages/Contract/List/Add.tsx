@@ -545,7 +545,7 @@ const Add = (props: AddProps) => {
             <TabPane tab="基本信息" key="1">
               <Row gutter={24}>
                 <Col span={12}>
-                  <Card title="基本信息" className={styles.addcard}>
+                  <Card title="基本信息" className={styles.addcard} hoverable>
                     {/* <Row gutter={24}>
                       <Col lg={24}>
                         <Form.Item label="模板选择">
@@ -656,22 +656,7 @@ const Add = (props: AddProps) => {
                       </Col>
                     </Row>
 
-                    <Row gutter={24}>
-                      <Col lg={12}>
-                        <Form.Item label="渠道"  >
-                          {getFieldDecorator('channelType', {
-                            // rules: [{ required: true, message: '请选择渠道' }],
-                          })(
-                            <Select placeholder="请选择渠道"  >
-                              {channel.map(item => (
-                                <Option value={item.value} key={item.key}>
-                                  {item.title}
-                                </Option>
-                              ))}
-                            </Select>
-                          )}
-                        </Form.Item>
-                      </Col>
+                    <Row gutter={24}> 
                       <Col lg={12}>
                         <Form.Item label="跟进人">
                           {getFieldDecorator('follower', {
@@ -694,9 +679,24 @@ const Add = (props: AddProps) => {
                           )}
                         </Form.Item>
                       </Col>
+                      <Col lg={12}>
+                        <Form.Item label="渠道"  >
+                          {getFieldDecorator('channelType', {
+                            // rules: [{ required: true, message: '请选择渠道' }],
+                          })(
+                            <Select placeholder="请选择渠道"  >
+                              {channel.map(item => (
+                                <Option value={item.value} key={item.key}>
+                                  {item.title}
+                                </Option>
+                              ))}
+                            </Select>
+                          )}
+                        </Form.Item>
+                      </Col>
                     </Row>
 
-                    <Row gutter={24}>
+                    {/* <Row gutter={24}>
                       <Col span={24}>
                         <Form.Item label="备注">
                           {getFieldDecorator('memo', {
@@ -705,11 +705,11 @@ const Add = (props: AddProps) => {
                           )}
                         </Form.Item>
                       </Col>
-                    </Row>
+                    </Row> */}
                   </Card>
                 </Col>
                 <Col span={12}>
-                  <Card title="租赁信息" className={styles.addcard}>
+                  <Card title="租赁信息" className={styles.addcard} hoverable>
                     <Row gutter={24}>
                       <Col lg={24}>
                         <Form.Item label={<div>房源选择(<a>多个房屋的时候，默认获取第一个房屋作为计费单元</a>)</div>} required>
@@ -854,7 +854,7 @@ const Add = (props: AddProps) => {
               </Row>
             </TabPane>
             <TabPane tab="费用条款" key="2">
-              <Card title="基本条款" className={styles.card} >
+              <Card title="基本条款" className={styles.card} hoverable>
                 <Row gutter={24}>
                   <Col lg={5}>
                     <Form.Item label="合同面积(㎡)" >
@@ -1020,7 +1020,7 @@ const Add = (props: AddProps) => {
               <Rebate form={form}></Rebate> */}
 
               {/* 修改为单个租期条款 */}
-              <Card title="租金条款" className={styles.card}  >
+              <Card title="租金条款" className={styles.card} hoverable >
                 <Row gutter={24}>
                   {/* <Col lg={4}>
                     <Form.Item label="合同起始日期" required >
@@ -1264,7 +1264,7 @@ const Add = (props: AddProps) => {
                   </Col>
                 </Row>
               </Card> */}
-              <Card title="免租期" className={styles.card} >
+              <Card title="免租期" className={styles.card} hoverable>
                 <Row gutter={24}>
                   {/* <Col lg={5}>
                     <Form.Item label="优惠类型" required>

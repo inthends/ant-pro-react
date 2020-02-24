@@ -1109,7 +1109,7 @@ const Modify = (props: ModifyProps) => {
               </Card>
             </TabPane>
             <TabPane tab="高级" key="2">
-              <Card title="小数精度" className={styles.card2}  >
+              <Card title="小数精度" className={styles.card2} hoverable >
                 <Row gutter={24}>
                   <Col lg={7}>
                     <Form.Item label="中间每一步计算结果保留">
@@ -1196,7 +1196,7 @@ const Modify = (props: ModifyProps) => {
                 </Row> */}
 
               </Card>
-              <Card title="账单日设置" className={styles.card2} >
+              <Card title="账单日设置" className={styles.card2} hoverable>
                 <Row gutter={8}>
                   <Col span={6}>
                     <Form.Item label="应收期间 距">
@@ -1495,7 +1495,7 @@ const Modify = (props: ModifyProps) => {
                   </Col>
                 </Row>
               </Card>
-              <Card title="其他" className={styles.card}>
+              <Card title="其他" className={styles.card} hoverable>
                 <Row gutter={24}>
                   <Col span={6}  >
                     <Form.Item label='&nbsp;'>

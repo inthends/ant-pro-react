@@ -268,7 +268,7 @@ const Modify = (props: ModifyProps) => {
       {modifyVisible ? (
         <Form layout="vertical" hideRequiredMark>
           {infoDetail.status == 1 ? (
-            <Card title="立项信息" className={infoDetail.status == 1 ? styles.card2 : styles.card} >
+            <Card title="立项信息" className={infoDetail.status == 1 ? styles.card2 : styles.card} hoverable >
               <Row gutter={24}>
                 <Col lg={6}>
                   <Form.Item label="对象类别" required>
@@ -401,7 +401,7 @@ const Modify = (props: ModifyProps) => {
               </Row>
             </Card>
           ) : (
-              <Card title="立项信息" className={styles.card}  >
+              <Card title="立项信息" className={styles.card}  hoverable>
                 <Row gutter={24}>
                   <Col lg={6}>
                     <Form.Item label="对象类别" >
@@ -465,7 +465,7 @@ const Modify = (props: ModifyProps) => {
             )}
 
           {infoDetail.status == 2 ? (
-            <Card title="处理过程" className={infoDetail.status == 2 ? styles.card2 : styles.card}  >
+            <Card title="处理过程" className={infoDetail.status == 2 ? styles.card2 : styles.card} hoverable >
               <Row gutter={24}>
                 <Col lg={6}>
                   <Form.Item label="实际处理人" required>
@@ -518,7 +518,7 @@ const Modify = (props: ModifyProps) => {
           ) : null}
 
           {infoDetail.status == 3 ? (
-            <Card title="回访情况" className={styles.card}  >
+            <Card title="回访情况" className={styles.card} hoverable >
               <Row gutter={24}>
                 <Col lg={6}>
                   <Form.Item label="回访方式" required>

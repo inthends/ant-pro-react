@@ -65,7 +65,7 @@ function ResultList(props: ResultListProps) {
 
   return (
     <div>
-      <Card title="保证金" className={styles.card} >
+      <Card title="保证金" className={styles.card} hoverable>
         <Table
           style={{ border: 'none' }}
           bordered={false}
@@ -74,7 +74,7 @@ function ResultList(props: ResultListProps) {
           dataSource={depositData} />
       </Card>
 
-      <Card title="租金" className={styles.card} >
+      <Card title="租金" className={styles.card} hoverable>
         <Table
           style={{ border: 'none' }}
           bordered={false}
@@ -84,7 +84,7 @@ function ResultList(props: ResultListProps) {
         />
       </Card>
 
-      <Card title="物业费" className={className} >
+      <Card title="物业费" className={className} hoverable>
         <Table
           style={{ border: 'none' }}
           bordered={false}

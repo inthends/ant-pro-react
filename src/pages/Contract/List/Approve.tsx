@@ -4,17 +4,17 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import {
   HtLeasecontractcharge,
   HtLeasecontractchargefee,
-  HtLeasecontractchargeincre,
   HtLeasecontractchargefeeoffer,
-  LeaseContractDTO,
+  htLeasecontract,
   ChargeDetailDTO
 } from '@/model/models';
 import React, { useEffect, useState } from 'react';
 import ResultList from './ResultList';
-import { GetFilesData, GetChargeByContractId, GetContractInfo } from './Main.service';
+import { GetFilesData, GetChargeByContractId, GetContractInfo, GetFollowCount } from './Main.service';
 import { ApproveForm, RejectForm } from '../../Workflow/FlowTask/FlowTask.service'
 import styles from './style.less';
 const { TabPane } = Tabs;
+import Follow from './Follow';
 
 interface ApproveProps {
   visible: boolean;
@@ -32,13 +32,14 @@ const Approve = (props: ApproveProps) => {
   const { getFieldDecorator } = form;
   //const [industryType, setIndustryType] = useState<any[]>([]); //行业  
   //const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
-  const [infoDetail, setInfoDetail] = useState<LeaseContractDTO>({});
+  const [infoDetail, setInfoDetail] = useState<htLeasecontract>({});
   const [contractCharge, setContractCharge] = useState<HtLeasecontractcharge>({});
   const [chargeFee, setChargeFee] = useState<HtLeasecontractchargefee>({});
-  const [chargeIncre, setChargeIncre] = useState<HtLeasecontractchargeincre>({});
+  // const [chargeIncre, setChargeIncre] = useState<HtLeasecontractchargeincre>({});
   const [chargeOffer, setChargeOffer] = useState<HtLeasecontractchargefeeoffer>({});
   const [depositData, setDepositData] = useState<any[]>([]);//保证金
   const [chargeData, setChargeData] = useState<any[]>([]);//租金
+  const [propertyData, setPropertyData] = useState<any[]>([]);//物业费
   const [totalInfo, setTotalInfo] = useState<any>({});//合计信息
   const [houseList, setHouseList] = useState<any[]>([]);
   const [fileList, setFileList] = useState<any[]>([]);
@@ -72,16 +73,18 @@ const Approve = (props: ApproveProps) => {
           setTotalInfo({
             leasePrice: tempInfo.leasePrice,
             totalDeposit: tempInfo.totalDeposit,
-            totalAmount: tempInfo.totalAmount
+            totalAmount: tempInfo.totalAmount,
+            totalPropertyAmount: tempInfo.totalPropertyAmount
           });
           //获取条款
           GetChargeByContractId(instanceId).then((charge: ChargeDetailDTO) => {
             setContractCharge(charge.contractCharge || {});
             setChargeFee(charge.chargeFee || {});
-            setChargeIncre(charge.chargeIncre || {});
+            // setChargeIncre(charge.chargeIncre || {});
             setChargeOffer(charge.chargeFeeOffer || {});
             setDepositData(charge.depositFeeResultList || []);//保证金明细
             setChargeData(charge.chargeFeeResultList || []);//租金明细    
+            setPropertyData(charge.propertyFeeResultList || []);//物业费明细  
           });
 
           //附件
@@ -163,6 +166,16 @@ const Approve = (props: ApproveProps) => {
     });
   };
 
+  //跟进 
+  const [followVisible, setFollowVisible] = useState<boolean>(false);
+  const [count, setCount] = useState<string>('0');
+  const showFollowDrawer = () => {
+    setFollowVisible(true);
+  };
+  const closeFollowDrawer = () => {
+    setFollowVisible(false);
+  };
+
   return (
     <Drawer
       title={title}
@@ -187,7 +200,7 @@ const Approve = (props: ApproveProps) => {
             <Tooltip title='跟进人'>
               <Button key="1" icon="user"> {infoDetail.follower}</Button>
             </Tooltip>,
-
+            <Button key="2" icon="message" onClick={showFollowDrawer} >跟进({count})</Button>
           ]}
         // extra={[
         //   <Button key="1">附件</Button>, 
@@ -203,21 +216,26 @@ const Approve = (props: ApproveProps) => {
                 </Form.Item>
               </Col>
               <Col lg={4}>
-                <Form.Item label="合同基础单价" >
+                <Form.Item label="合同单价" >
                   {totalInfo.leasePrice}
                 </Form.Item>
               </Col>
-              <Col lg={4}>
-                <Form.Item label="租金合计" >
+              <Col lg={3}>
+                <Form.Item label="总租金" >
                   {totalInfo.totalAmount}
                 </Form.Item>
               </Col>
-              <Col lg={4}>
+              <Col lg={3}>
                 <Form.Item label="保证金" >
                   {totalInfo.totalDeposit}
                 </Form.Item>
               </Col>
-              <Col lg={4}>
+              <Col lg={3}>
+                <Form.Item label="物业费" >
+                  {totalInfo.totalPropertyAmount}
+                </Form.Item>
+              </Col>
+              <Col lg={3}>
                 <Form.Item label="联系人" >
                   {infoDetail.linkMan}
                 </Form.Item>
@@ -236,7 +254,7 @@ const Approve = (props: ApproveProps) => {
             <TabPane tab="基本信息" key="1">
               <Row gutter={24}>
                 <Col span={12}>
-                  <Card title="基本信息" className={styles.card}>
+                  <Card title="基本信息" className={styles.addcard} hoverable >
                     <Row gutter={24}>
                       <Col lg={12}>
                         <Form.Item label="合同编号">
@@ -244,65 +262,70 @@ const Approve = (props: ApproveProps) => {
                         </Form.Item>
                       </Col>
                       <Col lg={12}>
-                        <Form.Item label="租赁数量/m²">
+                        <Form.Item label="合同面积(㎡)">
                           {infoDetail.leaseSize}
                         </Form.Item>
                       </Col>
                     </Row>
                     <Row gutter={24}>
                       <Col lg={12}>
-                        <Form.Item label="跟进人" >
+                        <Form.Item label="起始日期">
+                          {String(infoDetail.startDate).substr(0, 10)}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={12}>
+                        <Form.Item label="终止日期">
+                          {String(infoDetail.endDate).substr(0, 10)}
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row gutter={24}>
+                      <Col lg={12}>
+                        <Form.Item label="经营主体">
+                          {infoDetail.businessEntity}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={12}>
+                        <Form.Item label="付款方式">
+                          {infoDetail.payType}
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row gutter={24}>
+                      <Col lg={12}>
+                        <Form.Item label="签约人">
+                          {infoDetail.signer}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={12}>
+                        <Form.Item label="签约日期">
+                          {String(infoDetail.signingDate).substr(0, 10)}
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row gutter={24}>
+                      <Col lg={12}>
+                        <Form.Item label="跟进人">
                           {infoDetail.follower}
                         </Form.Item>
                       </Col>
                       <Col lg={12}>
-                        <Form.Item label="合同签订时间">
-                          {String(infoDetail.contractStartDate).substr(0, 10)}
+                        <Form.Item label="渠道">
+                          {infoDetail.channelType}
                         </Form.Item>
                       </Col>
                     </Row>
-                    <Row gutter={24}>
-                      <Col lg={12}>
-                        <Form.Item label="合同计租时间">
-                          {String(infoDetail.billingDate).substr(0, 10)}
+                    {/* <Row gutter={24}>
+                      <Col span={24}>
+                        <Form.Item label="备注">
+                          {infoDetail.memo}
                         </Form.Item>
                       </Col>
-                      <Col lg={12}>
-                        <Form.Item label="合同失效时间">
-                          {String(infoDetail.contractEndDate).substr(0, 10)}
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row gutter={24}>
-                      <Col lg={12}>
-                        <Form.Item label="单价保留小数点">
-                          {infoDetail.calcPrecision}
-                        </Form.Item>
-                      </Col>
-                      <Col lg={12}>
-                        <Form.Item label="计算精度">
-                          {infoDetail.calcPrecisionMode == '1' ? '最终计算结果保留2位' : '每步计算结果保留2位'}
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                  </Card>
-                  <Card title="滞纳金" className={styles.card}>
-                    <Row gutter={24}>
-                      <Col lg={12}>
-                        <Form.Item label="滞纳金比例" >
-                          {infoDetail.lateFee ? infoDetail.lateFee + '%/天' : '-'}
-                        </Form.Item>
-                      </Col>
-                      <Col lg={12}>
-                        <Form.Item label="滞纳金上限" >
-                          {infoDetail.maxLateFee ? infoDetail.maxLateFee + '%' : '-'}
-                        </Form.Item>
-                      </Col>
-                    </Row>
+                    </Row> */}
                   </Card>
                 </Col>
                 <Col span={12}>
-                  <Card title="房源信息" className={styles.card}>
+                  <Card title="房源信息" className={styles.card} hoverable>
                     <Row gutter={24}>
                       <Col lg={24}>
                         <List
@@ -317,22 +340,26 @@ const Approve = (props: ApproveProps) => {
                       </Col>
                     </Row>
                   </Card>
-
-                  <Card title="租客信息" className={styles.card}>
+                  <Card title="租客信息" className={styles.addcard} hoverable>
                     <Row gutter={24}>
-                      <Col lg={12}>
+                      <Col lg={24}>
                         <Form.Item label="承租方"  >
                           {infoDetail.customer}
                         </Form.Item>
                       </Col>
-
+                    </Row>
+                    <Row gutter={24}>
+                      <Col lg={12}>
+                        <Form.Item label="联系人">
+                          {infoDetail.linkMan}
+                        </Form.Item>
+                      </Col>
                       <Col lg={12}>
                         <Form.Item label="类别">
                           {infoDetail.customerType == '2' ? '单位' : '个人'}
                         </Form.Item>
                       </Col>
                     </Row>
-
                     {infoDetail.customerType == '2' ? (
                       <Row gutter={24}>
                         <Col lg={12}>
@@ -342,131 +369,136 @@ const Approve = (props: ApproveProps) => {
                             }
                           </Form.Item>
                         </Col>
-
                         <Col lg={12}>
                           <Form.Item label="法人"  >
                             {infoDetail.legalPerson}
                           </Form.Item>
                         </Col>
                       </Row>) : null}
-                    {/* 
+
                     <Row gutter={24}>
-                      <Col lg={12}>
-                        <Form.Item label="联系人">
-                          {infoDetail.linkMan}
-                        </Form.Item>
-                      </Col>
                       <Col lg={12}>
                         <Form.Item label="联系电话">
                           {infoDetail.linkPhone}
                         </Form.Item>
                       </Col>
-                    </Row> */}
-                    <Row gutter={24}>
                       <Col lg={12}>
-                        <Form.Item label="联系地址"  >
+                        <Form.Item label="联系地址">
                           {infoDetail.address}
-                        </Form.Item>
-                      </Col>
-                      <Col lg={12}>
-                        <Form.Item label="签订人">
-                          {infoDetail.signer}
                         </Form.Item>
                       </Col>
                     </Row>
                   </Card>
+
                 </Col>
               </Row>
             </TabPane>
             <TabPane tab="租赁条款" key="2">
-              <Card title="基本条款" className={styles.card} >
+
+              <Card title="基本条款" className={styles.card} hoverable>
                 <Row gutter={24}>
-                  <Col lg={8}>
-                    <Form.Item label="租赁数量/㎡">
+                  <Col lg={6}>
+                    <Form.Item label="合同面积(㎡)">
                       {contractCharge.leaseArea}
                     </Form.Item>
                   </Col>
-                  <Col lg={8}>
-                    <Form.Item label="保证金关联费项">
-                      {contractCharge.depositFeeItemName}
+                  <Col lg={6}>
+                    <Form.Item label="小数位数">
+                      {contractCharge.calcPrecision}
                     </Form.Item>
                   </Col>
-                  <Col lg={8}>
+                  <Col lg={6}>
                     <Form.Item label="保证金数量">
                       {contractCharge.deposit}
                       {contractCharge.depositUnit}
                     </Form.Item>
                   </Col>
-                  {/* <Col lg={4}>
-                  <Form.Item label="保证金金额" >
-                    {getFieldDecorator('totalDeposit', {
-                    })(<Input readOnly />)}
-                  </Form.Item>
-                </Col> */}
+                  <Col lg={6}>
+                    <Form.Item label="保证金费项">
+                      {contractCharge.depositFeeItemName}
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={24}>
+                  <Col lg={6}>
+                    <Form.Item label="滞纳金比例(‰)" >
+                      {contractCharge.lateFee}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={6}>
+                    <Form.Item label="滞纳金起算日期" >
+                      {contractCharge.lateDate == null ? '' : String(contractCharge.lateDate).substr(0, 10)}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={6}>
+                    <Form.Item label="滞纳金算法" >
+                      {contractCharge.lateMethod}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={6}>
+                    <Form.Item label="物业费项" >
+                      {contractCharge.propertyFeeName}
+                    </Form.Item>
+                  </Col>
                 </Row>
               </Card>
-
-              <Card title='租期条款' className={styles.card}>
+              <Card title='租期条款' className={styles.card} hoverable>
                 <Row gutter={24}>
-                  <Col lg={4}>
-                    <Form.Item label="开始时间"  >
-                      {String(chargeFee.startDate).substr(0, 10)}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={4}>
-                    <Form.Item label="结束时间" >
-                      {String(chargeFee.endDate).substr(0, 10)}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={4}>
-                    <Form.Item label="费项" >
+                  <Col lg={6}>
+                    <Form.Item label="租金费项" >
                       {chargeFee.feeItemName}
                     </Form.Item>
                   </Col>
                   <Col lg={4}>
-                    <Form.Item label="合同单价" >
+                    <Form.Item label="租金单价" >
                       {chargeFee.price}
                       {chargeFee.priceUnit}
                     </Form.Item>
                   </Col>
                   <Col lg={4}>
-                    <Form.Item label="提前付款时间">
-                      ({chargeFee.advancePayTimeUnit})
-                        {chargeFee.advancePayTime}天
-                      </Form.Item>
+                    <Form.Item label="递增类型" >
+                      {chargeFee.increType}
+                    </Form.Item>
                   </Col>
                   <Col lg={4}>
-                    <Form.Item label="计费类型">
-                      {chargeFee.billType}
+                    <Form.Item label="单价递增" >
+                      {chargeFee.increPrice}
+                      {chargeFee.increPriceUnit}
                     </Form.Item>
+                  </Col>
+                  <Col lg={4}>
+                    <Form.Item label="付款周期(月)" >
+                      {chargeFee.payCycle}月一付
+                      </Form.Item>
                   </Col>
                 </Row>
                 <Row gutter={24}>
+                  <Col lg={6}>
+                    <Form.Item label="提前付款时间">
+                      {chargeFee.advancePayTime}{chargeFee.advancePayTimeUnit}
+                    </Form.Item>
+                  </Col>
                   {(chargeFee.priceUnit == '元/m²·天' || chargeFee.priceUnit == '元/天') ?
-                    <Col lg={4}>
+                    <Col lg={6}>
                       <Form.Item label="天单价换算规则">
                         {chargeFee.dayPriceConvertRule}
                       </Form.Item>
                     </Col>
                     : null}
-                  <Col lg={4}>
+                  <Col lg={6}>
                     <Form.Item label="年天数">
                       {chargeFee.yearDays}
                     </Form.Item>
                   </Col>
-                  <Col lg={4}>
-                    <Form.Item label="付款周期（月）" >
-                      {chargeFee.payCycle}月一付
-                      </Form.Item>
-                  </Col>
-                  <Col >
+                  <Col lg={6}>
                     <Form.Item label="租期划分方式">
                       {chargeFee.rentalPeriodDivided}
                     </Form.Item>
                   </Col>
                 </Row>
               </Card>
-              <Card title='递增率' className={styles.card}>
+
+              {/* <Card title='递增率' className={styles.card} hoverable>
                 <Row gutter={24}>
                   <Col lg={8}>
                     <Form.Item label="递增时间点"  >
@@ -486,15 +518,15 @@ const Approve = (props: ApproveProps) => {
                     </Form.Item>
                   </Col>
                 </Row>
-              </Card>
+              </Card> */}
 
-              <Card title='优惠' className={styles.addcard}>
+              <Card title='优惠' className={styles.addcard} hoverable>
                 <Row gutter={24}>
-                  <Col lg={5}>
+                  {/* <Col lg={5}>
                     <Form.Item label="优惠类型"  >
                       {chargeOffer.rebateType}
                     </Form.Item>
-                  </Col>
+                  </Col> */}
                   <Col lg={5}>
                     <Form.Item label="开始时间" >
                       {chargeOffer.rebateStartDate}
@@ -505,7 +537,8 @@ const Approve = (props: ApproveProps) => {
                       {chargeOffer.rebateEndDate}
                     </Form.Item>
                   </Col>
-                  <Col lg={3}>
+
+                  {/* <Col lg={3}>
                     <Form.Item label="开始期数">
                       {chargeOffer.startPeriod}
                     </Form.Item>
@@ -519,26 +552,32 @@ const Approve = (props: ApproveProps) => {
                     <Form.Item label="折扣">
                       {chargeOffer.discount}
                     </Form.Item>
+                  </Col> */}
+
+                  <Col lg={14}>
+                    <Form.Item label="备注">
+                      {chargeOffer.remark}
+                    </Form.Item>
                   </Col>
+
                 </Row>
-                <Row gutter={24}>
+                {/* <Row gutter={24}>
                   <Col lg={24}>
                     <Form.Item label="备注">
                       {chargeOffer.remark}
                     </Form.Item>
                   </Col>
-                </Row>
+                </Row> */}
               </Card>
-
             </TabPane>
             <TabPane tab="租金明细" key="3">
               <ResultList
                 depositData={depositData}
                 chargeData={chargeData}
+                propertyData={propertyData}
                 className={styles.addcard}
               ></ResultList>
             </TabPane>
-
             <TabPane tab="其他条款" key="4">
               <Card className={styles.addcard}   >
                 <Row gutter={24}>
@@ -563,11 +602,8 @@ const Approve = (props: ApproveProps) => {
                 </Row>
               </Card>
             </TabPane>
-
-
           </Tabs>
-
-          <Card title="审核意见" className={styles.addcard}>
+          <Card title="审核意见" className={styles.addcard} hoverable>
             <Form.Item label="">
               {getFieldDecorator('verifyMemo', {
                 rules: [{ required: true, message: '请输入审核意见' }]
@@ -576,10 +612,22 @@ const Approve = (props: ApproveProps) => {
               )}
             </Form.Item>
           </Card>
-
-
         </Form>
       </Spin>
+
+      <Follow
+        visible={followVisible}
+        closeDrawer={closeFollowDrawer}
+        id={id}
+        reload={() => {
+          GetFollowCount(id).then(res => {
+            setCount(res);
+            // setNewFlow(res.newFollow);
+            setLoading(false);
+          })
+        }}
+      />
+
       <div
         style={{
           position: 'absolute',

@@ -188,17 +188,14 @@ function Main() {
   return (
     <Layout style={{ height: '100%' }}>
       <AsynLeftTree
-        parentid={'0'} 
-      />
-
-    <Content style={{ paddingLeft: '18px' }}>
+        parentid={'0'}
+        selectTree={(pid, type, info) => {
+        }}
+      /> 
+      <Content style={{ paddingLeft: '18px' }}>
         <Tabs defaultActiveKey="1" >
           <TabPane tab="租控图" key="1" >
-
-
-
-          </TabPane>
-
+          </TabPane> 
           <TabPane tab="合同列表" key="2" >
             <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
               <Search
@@ -279,9 +276,7 @@ function Main() {
         chargeId={chargeId}
         reload={() => initLoadData(search)}
       />
-
-
-
+ 
       {/* <ChooseUser
         visible={userVisible}
         close={() => setUserVisible(false)}

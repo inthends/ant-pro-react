@@ -168,7 +168,7 @@ const Modify = (props: ModifyProps) => {
         <Spin tip="数据处理中..." spinning={loading}>
           <Row gutter={24}>
             <Col span={12}>
-              <Card title="基本信息" className={styles.addcard}>
+              <Card title="基本信息" className={styles.addcard} hoverable>
                 <Row gutter={24}>
                   <Col lg={24}>
                     <Form.Item label="客户名称" required>
@@ -377,7 +377,7 @@ const Modify = (props: ModifyProps) => {
             </Col>
 
             <Col span={12}>
-              <Card title="意向房源" className={styles.card}>
+              <Card title="意向房源" className={styles.card} hoverable>
                 <Row gutter={24}>
                   <Col lg={24}>
                     <Form.Item label="意向房源选择" required>
@@ -399,7 +399,7 @@ const Modify = (props: ModifyProps) => {
                 </Row>
               </Card>
 
-              <Card title="需求信息" className={styles.card}>
+              <Card title="需求信息" className={styles.card} hoverable>
                 <Row gutter={24}>
                   <Col lg={24}>
                     <Form.Item label="城市/区域/商圈" >
@@ -447,7 +447,7 @@ const Modify = (props: ModifyProps) => {
                   </Col>
                 </Row>
               </Card>
-              <Card title="客户当前信息" className={styles.addcard}>
+              <Card title="客户当前信息" className={styles.addcard} hoverable>
                 <Row gutter={24}>
                   <Col lg={12}>
                     <Form.Item label="联系地址" >

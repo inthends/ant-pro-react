@@ -5,7 +5,7 @@ import {
   HtLeasecontractcharge,
   HtLeasecontractchargefee,
   HtLeasecontractchargefeeoffer,
-  LeaseContractDTO,
+  htLeasecontract,
   ChargeDetailDTO
 } from '@/model/models';
 import React, { useEffect, useState } from 'react';
@@ -30,7 +30,7 @@ const Detail = (props: DetailProps) => {
   const title = '合同详情';
   //const [industryType, setIndustryType] = useState<any[]>([]); //行业  
   //const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
-  const [infoDetail, setInfoDetail] = useState<LeaseContractDTO>({});
+  const [infoDetail, setInfoDetail] = useState<htLeasecontract>({});
   const [contractCharge, setContractCharge] = useState<HtLeasecontractcharge>({});
   const [chargeFee, setChargeFee] = useState<HtLeasecontractchargefee>({});
   // const [chargeIncre, setChargeIncre] = useState<HtLeasecontractchargeincre>({});
@@ -221,7 +221,7 @@ const Detail = (props: DetailProps) => {
             <TabPane tab="基本信息" key="1">
               <Row gutter={24}>
                 <Col span={12}>
-                  <Card title="基本信息" className={styles.card} hoverable >
+                  <Card title="基本信息" className={styles.addcard} hoverable >
                     <Row gutter={24}>
                       <Col lg={12}>
                         <Form.Item label="合同编号">
@@ -269,27 +269,26 @@ const Detail = (props: DetailProps) => {
                           {String(infoDetail.signingDate).substr(0, 10)}
                         </Form.Item>
                       </Col>
-                    </Row>
-
-                    <Row gutter={24}>
-                      <Col lg={12}>
-                        <Form.Item label="渠道">
-                          {infoDetail.channelType}
-                        </Form.Item>
-                      </Col>
+                    </Row> 
+                    <Row gutter={24}> 
                       <Col lg={12}>
                         <Form.Item label="跟进人">
                           {infoDetail.follower}
                         </Form.Item>
                       </Col>
+                      <Col lg={12}>
+                        <Form.Item label="渠道">
+                          {infoDetail.channelType}
+                        </Form.Item>
+                      </Col>
                     </Row>
-                    <Row gutter={24}>
+                    {/* <Row gutter={24}>
                       <Col span={24}>
                         <Form.Item label="备注">
                           {infoDetail.memo}
                         </Form.Item>
                       </Col>
-                    </Row>
+                    </Row> */}
                   </Card>
                   {/* <Card title="滞纳金" className={styles.addcard} hoverable>
                     <Row gutter={24}>
@@ -307,7 +306,7 @@ const Detail = (props: DetailProps) => {
                   </Card> */}
                 </Col>
                 <Col span={12}>
-                  <Card title="房源信息" className={styles.card}>
+                  <Card title="房源信息" className={styles.card} hoverable>
                     <Row gutter={24}>
                       <Col lg={24}>
                         <List
@@ -322,15 +321,14 @@ const Detail = (props: DetailProps) => {
                       </Col>
                     </Row>
                   </Card>
-                  <Card title="租客信息" className={styles.card} hoverable>
+                  <Card title="租客信息" className={styles.addcard} hoverable>
                     <Row gutter={24}>
                       <Col lg={24}>
                         <Form.Item label="承租方"  >
                           {infoDetail.customer}
                         </Form.Item>
                       </Col>
-                    </Row>
-
+                    </Row> 
                     <Row gutter={24}>
                       <Col lg={12}>
                         <Form.Item label="联系人">
@@ -342,8 +340,7 @@ const Detail = (props: DetailProps) => {
                           {infoDetail.customerType == '2' ? '单位' : '个人'}
                         </Form.Item>
                       </Col>
-                    </Row>
-
+                    </Row> 
                     {infoDetail.customerType == '2' ? (
                       <Row gutter={24}>
                         <Col lg={12}>
@@ -472,9 +469,8 @@ const Detail = (props: DetailProps) => {
                   </Col> */}
                 <Row gutter={24}>
                   <Col lg={6}>
-                    <Form.Item label="提前付款时间">
-                      ({chargeFee.advancePayTimeUnit})
-                        {chargeFee.advancePayTime}天
+                    <Form.Item label="提前付款时间"> 
+                        {chargeFee.advancePayTime}{chargeFee.advancePayTimeUnit}
                       </Form.Item>
                   </Col>
                   {(chargeFee.priceUnit == '元/m²·天' || chargeFee.priceUnit == '元/天') ?

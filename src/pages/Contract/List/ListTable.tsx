@@ -158,7 +158,7 @@ function ListTable(props: ListTableProps) {
       render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
-      title: '租赁数(㎡)',
+      title: '合同面积(㎡)',
       dataIndex: 'leaseSize',
       key: 'leaseSize',
       width: 100,

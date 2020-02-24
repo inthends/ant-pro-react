@@ -649,7 +649,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
             </Card>
           </TabPane>
           <TabPane tab="高级" key="2">
-            <Card title="小数精度" className={styles.card2}>
+            <Card title="小数精度" className={styles.card2} hoverable>
               {/* <Row gutter={24}>
                 <Col lg={12}>
                   <Form.Item label="单价保留小数点">
@@ -732,7 +732,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                 </Col>
               </Row>
             </Card>
-            <Card title="账单日设置" className={styles.card2} >
+            <Card title="账单日设置" className={styles.card2} hoverable>
               <Row gutter={8}>
                 <Col span={6}>
                   <Form.Item label="应收期间距">
@@ -1021,7 +1021,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                 </Col>
               </Row>
             </Card>
-            <Card title="其他" className={styles.card2}>
+            <Card title="其他" className={styles.card2} hoverable>
               <Row gutter={8}>
                 <Col span={6} style={{ marginTop: '29px' }}>
                   <Form.Item>
