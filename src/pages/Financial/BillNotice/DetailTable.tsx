@@ -49,7 +49,7 @@ function DetailTable(props: DetailTableProps) {
       title: '房屋名称',
       dataIndex: 'allName',
       key: 'allName',
-      width: 180,
+      width: 220,
       sorter: true,
     },
     {

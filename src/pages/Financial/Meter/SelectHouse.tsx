@@ -44,8 +44,7 @@ const SelectHouse = (props: SelectHouseProps) => {
             closeModal();
             message.success('添加成功');
             reload();
-          })
-            .catch(() => {
+          }).catch(() => {
               //message.warning('数据保存错误');
               setLoading(false);
             });

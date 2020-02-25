@@ -40,11 +40,9 @@ function Main() {
   const [unitMeterPagination, setUnitMeterPagination] = useState<DefaultPagination>(new DefaultPagination());
   const [readingMeterPagination, setReadingMeterPagination] = useState<DefaultPagination>(new DefaultPagination());
   const [meterFormsPagination, setMeterFormsPagination] = useState<DefaultPagination>(new DefaultPagination());
-  const [unitTreeData, setUnitTreeData] = useState<any[]>([]);
-
+  const [unitTreeData, setUnitTreeData] = useState<any[]>([]); 
   // const [meterKinds, setMeterKinds] = useState<any>([]);
-  // const [meterTypes, setMeterTypes] = useState<any>([]);
-
+  // const [meterTypes, setMeterTypes] = useState<any>([]); 
   const [ifVertify, setIfVertify] = useState<boolean>(false);
   const [vertifyVisible, setVertifyVisible] = useState<boolean>(false);
   const selectTree = (pid, type, info) => {
@@ -465,7 +463,7 @@ function Main() {
   // const [meterSearchParams, setMeterSearchParams] = useState<any>({});
 
   //生成二维码
-  const CreateQrCode = () => {
+  const CreateQrCode = () => { 
     Modal.confirm({
       title: '请确认',
       content: `您是否要生成费表二维码？`,
@@ -473,9 +471,9 @@ function Main() {
       cancelText: '取消',
       onOk: () => {
         CreateQrCodeFrom().then(() => {
-          message.success('生成成功，请到服务器wwwroot/upload/qcode目录下查看');
-        });
-
+          message.success('生成成功，请到服务器wwwroot/upload/Qcode目录下查看');
+        }).catch(() => { 
+        });;
       },
     });
   }

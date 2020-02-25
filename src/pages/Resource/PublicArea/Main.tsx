@@ -1,11 +1,11 @@
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { Button, Icon, Input, Layout } from 'antd';
+import { Modal,message,Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
-import { GetPublicAreas } from './Main.service';
+import {CreateQrCodeFrom, GetPublicAreas } from './Main.service';
 import { GetQuickSimpleTreeAllForArea } from '@/services/commonItem';
 // import { getResult } from '@/utils/networkUtils';
 
@@ -141,6 +141,22 @@ function Main() {
     });
   };
 
+    //生成二维码
+    const CreateQrCode = () => { 
+      Modal.confirm({
+        title: '请确认',
+        content: `您是否要生成二维码？`,
+        okText: '确认',
+        cancelText: '取消',
+        onOk: () => {
+          CreateQrCodeFrom().then(() => {
+            message.success('生成成功，请到服务器wwwroot/upload/Area目录下查看');
+          }).catch(() => { 
+          });;
+        },
+      });
+    }
+
   return (
     <Layout style={{ height: '100%' }}>
       <AsynLeftTree
@@ -162,6 +178,13 @@ function Main() {
             <Icon type="plus" />
             区域
           </Button>
+
+          <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
+            onClick={() => { CreateQrCode() }} >
+            <Icon type="qrcode" />
+            生成二维码
+           </Button>
+
         </div>
         <ListTable
           onchange={(paginationConfig, filters, sorter) =>

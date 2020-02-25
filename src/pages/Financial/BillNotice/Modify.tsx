@@ -79,7 +79,7 @@ const Modify = (props: ModifyProps) => {
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
       <Spin tip="数据处理中..." spinning={loading}>
-        <Row gutter={24} style={{ height: 'calc(100vh - 55px)', overflow: 'hidden' }}>
+        <Row gutter={12} style={{ height: 'calc(100vh - 55px)', overflow: 'hidden' }}>
           <Col span={6} style={{ height: 'calc(100vh - 100px)', overflow: 'auto' }}>
             {/* <AsynSelectTree
               parentid='0'

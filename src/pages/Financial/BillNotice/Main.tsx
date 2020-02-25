@@ -238,7 +238,7 @@ function Main() {
   const handleMenuClick = (e) => {
     if (e.key == '1') {
       if (selectIds == undefined) {
-        message.error('请选择需要审核的账单！');
+        message.error('请选择需要审核的账单');
       } else {
         //如果选择了多条 在批量审核
         if (selectIds && selectIds.length > 1) {

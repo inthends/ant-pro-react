@@ -26,6 +26,12 @@ export function GetProjectType(): Promise<TreeEntity[]> {
     .then(getResult as any);
 }
 
+
+//生成二维码
+export function CreateQrCodeFrom(): Promise<any> {
+  return request.post(process.env.basePath + `/PStructs/CreateQrCodeFrom`).then(getResult as any);
+}
+
 // 获取房产信息
 export function GetFormInfoJson(keyValue): Promise<GmPstructure> {
   return request
