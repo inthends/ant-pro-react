@@ -1,5 +1,5 @@
 //新增抄表单
-import { Modal, message, Card, Button, Col, DatePicker, Drawer, Tabs, Form, Row, Icon, Spin, Input, Table } from 'antd';
+import { Select, Modal, message, Card, Button, Col, DatePicker, Drawer, Tabs, Form, Row, Icon, Spin, Input, Table } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
@@ -8,6 +8,7 @@ import {
   SaveMainForm, GetVirtualReadPageList, SaveReadPublicForm, SaveReadUnitForm, RemoveReadUnitFormAll, RemoveReadingUnitForm, RemoveReadPublicFormAll,
   RemoveReadPublicForm, GetPublicReadPageList, GetUnitReadPageList, GetMeterRead, RemoveReadVirtualFormAll
 } from './Meter.service';
+import { GetUserList } from '@/services/commonItem';
 import styles from './style.less';
 import ChargeFeeItem from './ChargeFeeItem';
 import SelectReadingMeterPublic from './SelectReadingMeterPublic';
@@ -17,6 +18,7 @@ import moment from 'moment';
 const Search = Input.Search;
 const { TabPane } = Tabs;
 const { TextArea } = Input;
+const { Option } = Select;
 
 interface ReadingMeterModifyProps {
   modifyVisible: boolean;
@@ -40,7 +42,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
   };
 
   const [loading, setLoading] = useState<boolean>(false);
-  const {getFieldDecorator } = form;
+  const { getFieldDecorator } = form;
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [chargeFeeItemVisible, setChargeFeeItemVisible] = useState<boolean>(false);
   const [unitFeeVisible, setUnitFeeVisible] = useState<boolean>(false);
@@ -68,6 +70,9 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
 
   const [keyValue, setKeyValue] = useState<string>('');
   useEffect(() => {
+    GetUserList('', '员工').then(res => {
+      setUserSource(res || []);
+    });
     if (modifyVisible) {
       // //获取费表类型
       // GetDataItemTreeJson('EnergyMeterKind').then(res => {
@@ -95,7 +100,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
         setKeyValue(getGuid());
         form.resetFields();
         //数据重置
-        setInfoDetail({}); 
+        setInfoDetail({});
         setHouseData([]);
         setPublicData([]);
         setVirtualData([]);
@@ -113,7 +118,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
     const sidx = 'id';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = housePagination;
-    return houseload({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
+    return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
       return res;
     });
   };
@@ -140,13 +145,13 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
       searchCondition.sidx = field ? field : 'id';
     }
-    return houseload(searchCondition).then(res => {
+    return load(searchCondition).then(res => {
       return res;
     });
   };
 
   //加载数据
-  const houseload = data => {
+  const load = data => {
     setHouseLoading(true);
     data.sidx = data.sidx || 'id';
     data.sord = data.sord || 'asc';
@@ -317,10 +322,11 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
         // }; 
         const newData = infoDetail ? { ...infoDetail, ...values } : values;
         newData.keyValue = keyValue;
-        newData.isAdd = false;//houseData.length == 0 ? true: false;
+        newData.isAdd = false;//houseData.length == 0 ? true: false; 
+        newData.billDate = newData.billDate.format('YYYY-MM-DD');
+        newData.belongDate = newData.belongDate.format('YYYY-MM-DD');
         newData.endReadDate = newData.endReadDate.format('YYYY-MM-DD');
-        newData.readDate = newData.readDate.format('YYYY-MM-DD');
-        newData.meterCode = newData.meterCode.format('YYYYMM');
+        //newData.meterCode = newData.meterCode.format('YYYYMM');
         newData.IfVerify = false;
         SaveMainForm(newData).then((res) => {
           close();
@@ -740,6 +746,8 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
     });
   };
 
+  const [userSource, setUserSource] = useState<any[]>([]);
+
   const virtualFeeColumns = [
     {
       title: '种类',
@@ -810,8 +818,8 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
               </Col>
               <Col span={8}>
                 <Form.Item required={true} label="单据日期">
-                  {getFieldDecorator('readDate', {
-                    initialValue: infoDetail.readDate == null ? moment(new Date()) : moment(infoDetail.readDate),
+                  {getFieldDecorator('billDate', {
+                    initialValue: infoDetail.billDate == null ? moment(new Date()) : moment(infoDetail.billDate),
                     rules: [{ required: true, message: '请选择单据日期' }],
                   })(
                     <DatePicker style={{ width: '100%' }} ></DatePicker>
@@ -819,10 +827,10 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                 </Form.Item>
               </Col>
               <Col span={8}>
-                <Form.Item required={true} label="抄表月份" >
-                  {getFieldDecorator('meterCode', {
-                    initialValue: infoDetail.meterCode == null ? moment(new Date()) : moment(infoDetail.readDate),
-                    rules: [{ required: true, message: '请选择抄表月份' }],
+                <Form.Item required={true} label="抄表年月" >
+                  {getFieldDecorator('belongDate', {
+                    initialValue: infoDetail.belongDate == null ? moment(new Date()) : moment(infoDetail.belongDate),
+                    rules: [{ required: true, message: '请选择抄表年月' }],
                   })(
                     <DatePicker.MonthPicker style={{ width: '100%' }}  ></DatePicker.MonthPicker>
                   )}
@@ -835,7 +843,17 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                   {getFieldDecorator('meterReader', {
                     initialValue: infoDetail.meterReader,
                   })(
-                    <Input style={{ width: '100%' }} placeholder="自动获取当前用户" readOnly ></Input>
+                    // <Input style={{ width: '100%' }} placeholder="自动获取当前用户" readOnly ></Input> 
+                    <Select
+                      showSearch
+                      placeholder="请选择抄表人"
+                    >
+                      {userSource.map(item => (
+                        <Option key={item.id} value={item.name}>
+                          {item.name}
+                        </Option>
+                      ))}
+                    </Select> 
                   )}
                 </Form.Item>
               </Col>
@@ -851,8 +869,8 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
               </Col>
               <Col span={8}>
                 <Form.Item required={true} label="结束标识">
-                  {getFieldDecorator('batchCode', {
-                    initialValue: infoDetail.batchCode == null ? "" : infoDetail.batchCode,
+                  {getFieldDecorator('endMark', {
+                    initialValue: infoDetail.endMark == null ? "" : infoDetail.endMark,
                   })(
                     <Input style={{ width: '100%' }} />
                   )}
@@ -920,7 +938,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                           message.success('删除成功');
                           initHouseLoadData(houseSearch);
                         });
-                        
+
                       }}
                     >
                       <Icon type="delete" />
@@ -936,7 +954,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                               keyValue: keyValue,//== null || id == '' ? guid : id,
                               BillId: keyValue,//== null || id == '' ? guid : id,
                               BatchCode: values.batchCode,
-                              MeterCode: moment(values.meterCode).format('YYYYMM'),
+                              //MeterCode: moment(values.meterCode).format('YYYYMM'),
                               ReadDate: moment(values.readDate).format('YYYY-MM-DD'),
                               EndReadDate: moment(values.endReadDate).format('YYYY-MM-DD'),
                               IfVerify: false,
@@ -1003,7 +1021,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                               keyValue: keyValue,//== null || id == '' ? guid : id,
                               BillId: keyValue,//== null || id == '' ? guid : id,
                               BatchCode: values.batchCode,
-                              MeterCode: moment(values.meterCode).format('YYYYMM'),
+                              //MeterCode: moment(values.meterCode).format('YYYYMM'),
                               ReadDate: moment(values.readDate).format('YYYY-MM-DD'),
                               EndReadDate: moment(values.endReadDate).format('YYYY-MM-DD'),
                               IfVerify: false,
@@ -1069,7 +1087,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                               keyValue: keyValue,//== null || id == '' ? guid : id,
                               BillId: keyValue,//== null || id == '' ? guid : id,
                               BatchCode: values.batchCode,
-                              MeterCode: moment(values.meterCode).format('YYYYMM'),
+                              //MeterCode: moment(values.meterCode).format('YYYYMM'),
                               ReadDate: moment(values.readDate).format('YYYY-MM-DD'),
                               EndReadDate: moment(values.endReadDate).format('YYYY-MM-DD'),
                               IfVerify: false,
@@ -1135,7 +1153,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
         reload={() => {
           initPublicLoadData(publicSearch);
         }}
-        // id={publicFeeItemRowId}
+      // id={publicFeeItemRowId}
       />
       <SelectReadingMeterVirtual
         visible={virtualFeeVisible}
@@ -1146,7 +1164,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
         reload={() => {
           initVirtualLoadData(virtualSearch);
         }}
-        // id={publicFeeItemRowId}
+      // id={publicFeeItemRowId}
       />
       <div
         style={{

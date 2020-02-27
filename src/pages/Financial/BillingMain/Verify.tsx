@@ -9,7 +9,7 @@ import moment from 'moment';
 const { TextArea } = Input;
 const Search = Input.Search;
 interface VerifyProps {
-  vertifyVisible: boolean;
+  verifyVisible: boolean;
   ifVerify: boolean;
   closeVerify(result?): void;
   form: WrappedFormUtils;
@@ -18,7 +18,7 @@ interface VerifyProps {
 }
 
 const Verify = (props: VerifyProps) => {
-  const { vertifyVisible, closeVerify, form, id, ifVerify, reload } = props;
+  const { verifyVisible, closeVerify, form, id, ifVerify, reload } = props;
   const title = ifVerify ? '计费单审核' : '计费单取消审核';
   const [loading, setLoading] = useState<boolean>(false);
   const { getFieldDecorator } = form;
@@ -27,7 +27,7 @@ const Verify = (props: VerifyProps) => {
   const [pagination, setPagination] = useState<DefaultPagination>(new DefaultPagination());
 
   useEffect(() => {
-    if (vertifyVisible) {
+    if (verifyVisible) {
       form.resetFields();
       if (id != null && id != '') {
         setLoading(true);
@@ -42,7 +42,7 @@ const Verify = (props: VerifyProps) => {
         setLoading(false);
       }
     }
-  }, [vertifyVisible]);
+  }, [verifyVisible]);
 
   const close = () => {
     closeVerify(false);
@@ -91,9 +91,15 @@ const Verify = (props: VerifyProps) => {
         //   VerifyDate: ifVerify ? moment(new Date()).format('YYYY-MM-DD HH:mm:ss') : moment(values.verifyDate).format('YYYY-MM-DD HH:mm:ss'),
         //   VerifyMemo: values.verifyMemo
         // };
-        let modifyData = { ...infoDetail, ...values, keyValue: infoDetail.billId };
-        modifyData.ifVerify = ifVerify;
-        Audit(modifyData).then(() => {
+        //let modifyData = { ...infoDetail, ...values, keyValue: infoDetail.billId };
+
+        let newData = {
+          keyValue: infoDetail.billId, 
+          IfVerify: ifVerify,
+          VerifyMemo: values.verifymemo
+        }; 
+        //modifyData.ifVerify = ifVerify;
+        Audit(newData).then(() => {
           closeVerify(true);
           reload();
         });
@@ -215,7 +221,7 @@ const Verify = (props: VerifyProps) => {
       placement="right"
       width={1000}
       onClose={close}
-      visible={vertifyVisible}
+      visible={verifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
       <Card className={styles.card} >

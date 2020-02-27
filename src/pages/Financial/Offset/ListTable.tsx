@@ -17,7 +17,7 @@ interface ListTableProps {
   reload(): void;
   form: WrappedFormUtils;
   // deleteData(id): void;
-  showVerify(id?, ifVertify?): any;
+  showVerify(id?, ifVerify?): any;
   closeVerify(result?): any;
   showModify(id?): any;
   closeModify(result?): any;
@@ -149,7 +149,7 @@ function ListTable(props: ListTableProps) {
             //   type="primary"
             //   key="verify"
             //   style={{ marginRight: '10px' }}
-            //   onClick={() => showVertify(record.billId, false)}
+            //   onClick={() => showVerify(record.billId, false)}
             // >
             //   反审
             // </Button>,
@@ -185,7 +185,7 @@ function ListTable(props: ListTableProps) {
               //     type="primary"
               //     key="verify"
               //     style={{ marginRight: '10px' }}
-              //     onClick={() => showVertify(record.billId, true)}   >
+              //     onClick={() => showVerify(record.billId, true)}   >
               //     审核
               //     </Button>,
               //      <Button type="danger"

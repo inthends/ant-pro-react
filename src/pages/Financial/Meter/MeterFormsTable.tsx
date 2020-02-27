@@ -25,9 +25,9 @@ function MeterFormsTable(props: MeterFormsTableProps) {
       sorter: true
     },
     {
-      title: '抄表期间',
-      dataIndex: 'meterDate',
-      key: 'meterDate',
+      title: '抄表年月',
+      dataIndex: 'belongDate',
+      key: 'belongDate',
       width: 100,
       sorter: true
     },

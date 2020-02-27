@@ -43,7 +43,7 @@ const Submit = (props: SubmitProps) => {
   }, [visible]);
 
   // const close = () => {
-  //   closeVertify();
+  //   closeVerify();
   // };
 
   const doSubmit = () => {

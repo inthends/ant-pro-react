@@ -6,7 +6,7 @@ import './style.less';
 import moment from 'moment';
 
 interface VerifyProps {
-  vertifyVisible: boolean;
+  verifyVisible: boolean;
   ifVerify: boolean;
   closeVerify(result?): void;
   form: WrappedFormUtils;
@@ -15,14 +15,14 @@ interface VerifyProps {
 }
 
 const Verify = (props: VerifyProps) => {
-  const { vertifyVisible, closeVerify, form, id, ifVerify } = props;
+  const { verifyVisible, closeVerify, form, id, ifVerify } = props;
   const title = ifVerify ? '账单审核' : '账单取消审核';
   // const [loading, setLoading] = useState<boolean>(false);
   const { getFieldDecorator } = form;
   const [infoDetail, setInfoDetail] = useState<any>({});
 
   useEffect(() => {
-    if (vertifyVisible) {
+    if (verifyVisible) {
       form.resetFields();
       if (id != null && id != '') {
         // setLoading(true);
@@ -35,7 +35,7 @@ const Verify = (props: VerifyProps) => {
         // setLoading(false);
       }
     }
-  }, [vertifyVisible]);
+  }, [verifyVisible]);
 
   const close = () => {
     closeVerify(false);
@@ -78,7 +78,7 @@ const Verify = (props: VerifyProps) => {
       placement="right"
       width={600}
       onClose={close}
-      visible={vertifyVisible}
+      visible={verifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
       <Card>

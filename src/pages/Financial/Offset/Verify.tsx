@@ -131,9 +131,9 @@ const Verify = (props: VerifyProps) => {
   //     if (!errors) {
   //       let newData = {
   //         ...infoDetail,
-  //         // verifyPerson:ifVertify?localStorage.getItem('userid'):'',
+  //         // verifyPerson:ifVerify?localStorage.getItem('userid'):'',
   //         ifVerify: ifVerify,
-  //         // verifyDate:ifVertify?moment(new Date()).format('YYYY-MM-DD HH:mm:ss'):''
+  //         // verifyDate:ifVerify?moment(new Date()).format('YYYY-MM-DD HH:mm:ss'):''
   //       };
   //       Audit(newData).then(() => {
   //         closeVerify(true);
@@ -241,7 +241,7 @@ const Verify = (props: VerifyProps) => {
 
   return (
     <Drawer
-      // className="offsetVertify"
+      // className="offsetVerify"
       title={title}
       placement="right"
       width={880}

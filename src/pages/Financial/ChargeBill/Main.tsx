@@ -9,7 +9,7 @@ import ChargeListTable from './ChargeListTable';
 import ChargeCheckTable from './ChargeCheckTable';
 import Modify from './Modify';
 import Show from './Show';
-import Vertify from './Vertify';
+import Verify from './Verify';
 import Split from './Split';
 import Transform from './Transform';
 import Submit from './Submit';
@@ -54,8 +54,8 @@ function Main() {
   const [showVisible, setShowVisible] = useState<boolean>(false);
 
   //对账
-  const [vertifyVisible, setVertifyVisible] = useState<boolean>(false);
-  const [ifVertify, setIfVertify] = useState<boolean>(false);
+  const [verifyVisible, setVerifyVisible] = useState<boolean>(false);
+  const [ifVerify, setIfVerify] = useState<boolean>(false);
 
   //送审
   const [submitVisible, setSubmitVisible] = useState<boolean>(false);
@@ -319,21 +319,21 @@ function Main() {
     initLoadData(search, organizeId, e.target.checked);
   }
 
-  const showVertify = (id: string, ifVertify: boolean) => {
+  const showVerify = (id: string, ifVerify: boolean) => {
     setId(id);
-    setVertifyVisible(true);
-    setIfVertify(ifVertify);
+    setVerifyVisible(true);
+    setIfVerify(ifVerify);
   }
 
-  const closeVertify = () => {
-    setVertifyVisible(false);
+  const closeVerify = () => {
+    setVerifyVisible(false);
   }
 
   //送审
-  const showSubmit = (id: string, ifVertify: boolean) => {
+  const showSubmit = (id: string, ifVerify: boolean) => {
     setId(id);
     setSubmitVisible(true);
-    setIfVertify(ifVertify);
+    setIfVerify(ifVerify);
   }
 
   const closeSubmit = () => {
@@ -518,7 +518,7 @@ function Main() {
                 加费
               </Button>
               {/* <Button type="primary" style={{ float: 'right',marginLeft:'3px' }}
-                onClick={() => showVertify('',false)}
+                onClick={() => showVerify('',false)}
               >
                 <Icon type="minus-square" />
                 刷新
@@ -610,7 +610,7 @@ function Main() {
                 冲红
               </Button>
               <Button type="primary" style={{ float: 'right', marginLeft: '3px' }}
-                onClick={() => showVertify('', false)}
+                onClick={() => showVerify('', false)}
                 disabled={chargedRowSelectedKey.status == null || chargedRowSelectedKey.status == 3 || chargedRowSelectedKey.status == -1 || chargedRowSelectedKey.status == 1 || chargedRowSelectedKey.status == 0 ? true : false}
               >
                 <Icon type="minus-square" />
@@ -642,7 +642,7 @@ function Main() {
               pagination={paginationCharge}
               data={dataCharge}
               showDetail={showDetail}
-              showVertify={showVertify}
+              showVerify={showVerify}
               reload={() => initChargeLoadData(organizeId)}
               // getRowSelect={GetChargedSelectedKey}
               rowSelect={GetChargeSelectedKeys}
@@ -711,12 +711,12 @@ function Main() {
       // id={chargedRowSelectedKey.billId}
       />
 
-      <Vertify
+      <Verify
         //对账
-        vertifyVisible={vertifyVisible}
-        closeVertify={closeVertify}
+        verifyVisible={verifyVisible}
+        closeVerify={closeVerify}
         id={id}
-        ifVertify={ifVertify}
+        ifVerify={ifVerify}
         reload={() => initChargeLoadData(organizeId)}
       />
 

@@ -32,7 +32,7 @@ function Main() {
   const [billCheckPagination, setBillCheckPagination] = useState<DefaultPagination>(new DefaultPagination());
   const [billNoticePagination, setBillNoticePagination] = useState<DefaultPagination>(new DefaultPagination());
   const [ifVerify, setIfVerify] = useState<boolean>(false);
-  const [vertifyVisible, setVerifyVisible] = useState<boolean>(false);
+  const [verifyVisible, setVerifyVisible] = useState<boolean>(false);
   const [showCheckBillVisible, setShowCheckBillVisible] = useState<boolean>(false);
   const [tempListData, setTempListData] = useState<any[]>([]);
   const [unitTreeData, setUnitTreeData] = useState<any[]>([]);
@@ -552,7 +552,7 @@ function Main() {
         id={id}
       />
       <Verify
-        vertifyVisible={vertifyVisible}
+        verifyVisible={verifyVisible}
         closeVerify={closeVerify}
         ifVerify={ifVerify}
         id={id}

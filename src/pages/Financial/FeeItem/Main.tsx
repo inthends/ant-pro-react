@@ -336,7 +336,7 @@ function Main() {
                 key='search'
                 className="search-input"
                 placeholder="搜索房屋编号"
-                style={{ width: 180 }}
+                style={{ width: 200 }}
                 onSearch={(value) => houseLoadData(value, houseFeeItemId)}
               />
             </div>

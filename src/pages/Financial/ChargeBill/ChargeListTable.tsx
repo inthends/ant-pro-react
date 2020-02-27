@@ -13,14 +13,14 @@ interface ChargeListTableProps {
   pagination: PaginationConfig;
   data: any[];
   showDetail(billId): void;
-  showVertify(id: string, ifVertify: boolean): void;
+  showVerify(id: string, ifVerify: boolean): void;
   reload(): void;
   // getRowSelect(record): void;
   rowSelect(rowSelectedKeys): void;
 }
 
 function ChargeListTable(props: ChargeListTableProps) {
-  const { onchange, loading, pagination, data, reload, rowSelect, showDetail, showVertify } = props;
+  const { onchange, loading, pagination, data, reload, rowSelect, showDetail, showVerify } = props;
   // const changePage = (pagination: PaginationConfig, filters, sorter) => {
   //   onchange(pagination, filters, sorter);
   // };
@@ -213,7 +213,7 @@ function ChargeListTable(props: ChargeListTableProps) {
           //待审核
           return [
             <span key='span1'>
-              <a onClick={() => showVertify(record.billId, false)} key="approve">审核</a>
+              <a onClick={() => showVerify(record.billId, false)} key="approve">审核</a>
               <Divider type="vertical" />
               <a onClick={() => showDetail(record.billId)} key="view">查看</a>
               <Divider type="vertical" />
@@ -224,7 +224,7 @@ function ChargeListTable(props: ChargeListTableProps) {
           //已审核
           return [
             <span key='span1'>
-              <a onClick={() => showVertify(record.billId, true)} key="unapprove">反审</a>
+              <a onClick={() => showVerify(record.billId, true)} key="unapprove">反审</a>
               <Divider type="vertical" />
               <a onClick={() => showDetail(record.billId)} key="view">查看</a>
               <Divider type="vertical" />

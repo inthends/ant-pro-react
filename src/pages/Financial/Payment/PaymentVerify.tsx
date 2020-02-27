@@ -9,7 +9,7 @@ import styles from './style.less';
 import moment from 'moment';
 
 interface PaymentVerifyProps {
-  vertifyVisible: boolean;
+  verifyVisible: boolean;
   ifVerify: boolean;
   closeVerify(result?): void;
   form: WrappedFormUtils;
@@ -18,7 +18,7 @@ interface PaymentVerifyProps {
 }
 
 const PaymentVerify = (props: PaymentVerifyProps) => {
-  const { vertifyVisible, closeVerify, form, id, ifVerify, reload } = props;
+  const { verifyVisible, closeVerify, form, id, ifVerify, reload } = props;
   const title = ifVerify ? '付款单审核' : '付款单取消审核';
   // const [loading, setLoading] = useState<boolean>(false);
   const { getFieldDecorator } = form;
@@ -28,7 +28,7 @@ const PaymentVerify = (props: PaymentVerifyProps) => {
   const [pagination, setPagination] = useState<DefaultPagination>(new DefaultPagination());
 
   useEffect(() => {
-    if (vertifyVisible) {
+    if (verifyVisible) {
       form.resetFields();
       if (id != null && id != '') {
         //setLoading(true);
@@ -42,7 +42,7 @@ const PaymentVerify = (props: PaymentVerifyProps) => {
         //setLoading(false);
       }
     }
-  }, [vertifyVisible]);
+  }, [verifyVisible]);
 
   const close = () => {
     closeVerify(false);
@@ -212,7 +212,7 @@ const PaymentVerify = (props: PaymentVerifyProps) => {
       placement="right"
       width={700}
       onClose={close}
-      visible={vertifyVisible}
+      visible={verifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
       <Card className={styles.card}>

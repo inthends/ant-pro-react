@@ -29,7 +29,7 @@ function Main() {
   const [pagination, setPagination] = useState<DefaultPagination>(new DefaultPagination());
   const [detailPagination, setDetailPagination] = useState<DefaultPagination>(new DefaultPagination());
   const [ifVerify, setIfVerify] = useState<boolean>(false);
-  const [vertifyVisible, setVerifyVisible] = useState<boolean>(false);
+  const [verifyVisible, setVerifyVisible] = useState<boolean>(false);
   const [unitTreeData, setUnitTreeData] = useState<any[]>([]);
   const [divideVisible, setDivideVisible] = useState<boolean>(false);
   const [showVisible, setShowVisible] = useState<boolean>(false);
@@ -364,7 +364,7 @@ function Main() {
         treeData={unitTreeData}
       />
       <Verify
-        vertifyVisible={vertifyVisible}
+        verifyVisible={verifyVisible}
         closeVerify={closeVerify}
         ifVerify={ifVerify}
         id={id}

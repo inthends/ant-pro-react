@@ -31,7 +31,7 @@ function Payment() {
   const [notPaymentPagination, setNotPaymentPagination] = useState<DefaultPagination>(new DefaultPagination());
 
   const [ifVerify, setIfVerify] = useState<boolean>(false);
-  const [vertifyVisible, setVerifyVisible] = useState<boolean>(false);
+  const [verifyVisible, setVerifyVisible] = useState<boolean>(false);
   const [showVisible, setShowVisible] = useState<boolean>(false);
   const [addBtnDisable, setAddBtnDisable] = useState<boolean>(true);
 
@@ -449,7 +449,7 @@ function Payment() {
         adminOrgId={adminOrgId}
       />
       <PaymentVerify
-        vertifyVisible={vertifyVisible}
+        verifyVisible={verifyVisible}
         closeVerify={closeVerify}
         ifVerify={ifVerify}
         id={id}

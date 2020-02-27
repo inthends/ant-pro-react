@@ -357,10 +357,10 @@ const Room = (props: RoomProps) => {
                 </Form.Item>
               </Col>
               <Col lg={12}>
-                <Form.Item label="联系电话">
+                <Form.Item label="管家电话">
                   {getFieldDecorator('phoneNum', {
                     initialValue: infoDetail.phoneNum,
-                  })(<Input placeholder="请输入联系电话" />)}
+                  })(<Input placeholder="请输入管家电话" />)}
                 </Form.Item>
               </Col>
             </Row>

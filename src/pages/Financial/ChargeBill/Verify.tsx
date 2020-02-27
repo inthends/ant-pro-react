@@ -8,19 +8,19 @@ import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import styles from './style.less';
 import moment from 'moment';
 
-interface VertifyProps {
-  vertifyVisible: boolean;
-  closeVertify(): void;
+interface VerifyProps {
+  verifyVisible: boolean;
+  closeVerify(): void;
   form: WrappedFormUtils;
   id?: string;
-  ifVertify: boolean;
+  ifVerify: boolean;
   reload(): void;
 }
 
-const Vertify = (props: VertifyProps) => {
-  const { vertifyVisible, closeVertify, id, form, ifVertify, reload } = props;
+const Verify = (props: VerifyProps) => {
+  const { verifyVisible, closeVerify, id, form, ifVerify, reload } = props;
   const { getFieldDecorator } = form;
-  const title = ifVertify ? "收款单取消审核" : "收款单审核";
+  const title = ifVerify ? "收款单取消审核" : "收款单审核";
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [chargeBillData, setChargeBillData] = useState<any[]>([]);
@@ -29,7 +29,7 @@ const Vertify = (props: VertifyProps) => {
   // 打开抽屉时初始化
   useEffect(() => {
     form.resetFields();
-    if (vertifyVisible) {
+    if (verifyVisible) {
       if (id != null && id != '') {
         //setLoading(true);
         GetEntityShow(id).then(res => {
@@ -44,10 +44,10 @@ const Vertify = (props: VertifyProps) => {
         setLoading(false);
       }
     }
-  }, [vertifyVisible]);
+  }, [verifyVisible]);
 
   // const close = () => {
-  //   closeVertify();
+  //   closeVerify();
   // };
 
   const audit = () => {
@@ -60,14 +60,14 @@ const Vertify = (props: VertifyProps) => {
           verifyMemo: values.verifyMemo,
           keyValue: infoDetail.billId,
           billDate: moment(values.billDate).format('YYYY-MM-DD'),
-          //status: ifVertify ? 1 : 2//，已收未审核1，已审核2，已冲红3
-          check: !ifVertify
+          //status: ifVerify ? 1 : 2//，已收未审核1，已审核2，已冲红3
+          check: !ifVerify
         });
 
       CheckBill(newData).then(res => {
         message.success('提交成功');
         reload();
-        closeVertify();
+        closeVerify();
       });
     });
   };
@@ -202,8 +202,8 @@ const Vertify = (props: VertifyProps) => {
       title={title}
       placement="right"
       width={1000}
-      onClose={closeVertify}
-      visible={vertifyVisible}
+      onClose={closeVerify}
+      visible={verifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
       <Card className={styles.card}>
         <Form layout="vertical">
@@ -279,7 +279,7 @@ const Vertify = (props: VertifyProps) => {
             scroll={{ y: 500, x: 1500 }}
             loading={loading}
           /> 
-          {!ifVertify ?
+          {!ifVerify ?
             <Row gutter={24}>
               <Col span={24}>
                 <Form.Item label="审核说明" >
@@ -306,7 +306,7 @@ const Vertify = (props: VertifyProps) => {
           textAlign: 'right',
         }}
       >
-        <Button onClick={closeVertify} style={{ marginRight: 8 }}>
+        <Button onClick={closeVerify} style={{ marginRight: 8 }}>
           取消
         </Button>
         <Button onClick={audit} type="primary">
@@ -316,5 +316,5 @@ const Vertify = (props: VertifyProps) => {
     </Drawer>
   );
 };
-export default Form.create<VertifyProps>()(Vertify);
+export default Form.create<VerifyProps>()(Verify);
 

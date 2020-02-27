@@ -97,6 +97,11 @@ export default [
             path: '/dashboard/receiveddivide',
             component: './Dashboard/Receiveddivide/Receiveddivide',
           },
+          {
+            name: 'reports',
+            path: '/dashboard/reports',
+            component: './Dashboard/Reports/Reports',
+          },
 
         ],
       },

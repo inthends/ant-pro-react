@@ -1,6 +1,6 @@
 //费表列表
 import Page from '@/components/Common/Page';
-import { message, Modal, Divider, Form, Table } from 'antd';
+import {  Modal, Divider, Form, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import { WrappedFormUtils } from 'antd/lib/form/Form';

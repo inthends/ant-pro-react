@@ -4,25 +4,25 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import React, { useEffect, useState } from 'react';
-import { Audit, GetMeterRead, GetVirtualReadPageList, GetPublicReadPageList, GetUnitReadPageList } from './Meter.service';
+import { AuditReading, GetMeterRead, GetVirtualReadPageList, GetPublicReadPageList, GetUnitReadPageList } from './Meter.service';
 import styles from './style.less';
-import moment from 'moment';
+// import moment from 'moment';
 const { TabPane } = Tabs;
 const { TextArea } = Input;
 const Search = Input.Search;
 
-interface ReadingMeterVertifyProps {
-  vertifyVisible: boolean;
-  ifVertify: boolean;
-  closeVertify(result?): void;
+interface ReadingMeterVerifyProps {
+  verifyVisible: boolean;
+  ifVerify: boolean;
+  closeVerify(result?): void;
   form: WrappedFormUtils;
   id?: string;
   reload(): void;
 }
 
-const ReadingMeterVertify = (props: ReadingMeterVertifyProps) => {
-  const { vertifyVisible, closeVertify, form, id, ifVertify, reload } = props;
-  const title = ifVertify ? '抄表单取消审核' : '抄表单审核';
+const ReadingMeterVerify = (props: ReadingMeterVerifyProps) => {
+  const { verifyVisible, closeVerify, form, id, ifVerify , reload } = props;
+  const title = ifVerify ? '抄表单取消审核' : '抄表单审核';
   const [loading, setLoading] = useState<boolean>(false);
   const { getFieldDecorator } = form;
   const [infoDetail, setInfoDetail] = useState<any>({});
@@ -44,7 +44,7 @@ const ReadingMeterVertify = (props: ReadingMeterVertifyProps) => {
 
 
   useEffect(() => {
-    if (vertifyVisible) {
+    if (verifyVisible) {
       form.resetFields();
       if (id != null && id != '') {
         setLoading(true);
@@ -61,10 +61,10 @@ const ReadingMeterVertify = (props: ReadingMeterVertifyProps) => {
         setLoading(false);
       }
     }
-  }, [vertifyVisible]);
+  }, [verifyVisible]);
 
   const close = () => {
-    closeVertify(false);
+    closeVerify(false);
   };
 
   const onSave = () => {
@@ -73,22 +73,22 @@ const ReadingMeterVertify = (props: ReadingMeterVertifyProps) => {
         setLoading(true);
         let newData = {
           keyValue: infoDetail.billId,
-          BillId: infoDetail.billId,
-          OrganizeId: infoDetail.organizeId,
-          BillCode: infoDetail.billCode,
-          BatchCode: infoDetail.batchCode,
-          MeterCode: infoDetail.meterCode,
-          ReadDate: infoDetail.readDate,
-          EndReadDate: infoDetail.endReadDate,
-          Memo: infoDetail.memo,
-          MeterReader: infoDetail.meterReader,
-          IfVerify: !infoDetail.ifVertify,
-          VerifyDate: ifVertify ? moment(new Date()).format('YYYY-MM-DD HH:mm:ss') : moment(values.verifyDate).format('YYYY-MM-DD HH:mm:ss'),
+          // BillId: infoDetail.billId,
+          // OrganizeId: infoDetail.organizeId,
+          // BillCode: infoDetail.billCode,
+          // BatchCode: infoDetail.batchCode,
+          // MeterCode: infoDetail.meterCode,
+          // ReadDate: infoDetail.readDate,
+          // EndReadDate: infoDetail.endReadDate,
+          // Memo: infoDetail.memo,
+          // MeterReader: infoDetail.meterReader,
+          IfVerify: ifVerify,//!infoDetail.ifVerify,
+          // VerifyDate: ifVerify ? moment(new Date()).format('YYYY-MM-DD HH:mm:ss') : moment(values.verifyDate).format('YYYY-MM-DD HH:mm:ss'),
           VerifyMemo: values.verifymemo
         };
-        Audit(newData).then(() => {
+        AuditReading(newData).then(() => {
           setLoading(false);
-          closeVertify(true);
+          closeVerify(true);
           reload();
         });
       }
@@ -505,12 +505,12 @@ const ReadingMeterVertify = (props: ReadingMeterVertifyProps) => {
 
   return (
     <Drawer
-      className="offsetVertify"
+      className="offsetVerify"
       title={title}
       placement="right"
       width={880}
       onClose={close}
-      visible={vertifyVisible}
+      visible={verifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
       <Form layout="vertical" hideRequiredMark>
@@ -526,12 +526,12 @@ const ReadingMeterVertify = (props: ReadingMeterVertifyProps) => {
                   </Col>
                   <Col span={8}>
                     <Form.Item required={true} label="单据日期">
-                      {String(infoDetail.readDate).substr(0, 10)}
+                      {String(infoDetail.billDate).substr(0, 10)}
                     </Form.Item>
                   </Col>
                   <Col span={8}>
                     <Form.Item required={true} label="抄表月份" >
-                      {String(infoDetail.meterCode).substr(0, 7)}
+                      {String(infoDetail.belongDate).substr(0, 7)}
                     </Form.Item>
                   </Col>
                 </Row>
@@ -548,8 +548,8 @@ const ReadingMeterVertify = (props: ReadingMeterVertifyProps) => {
                     </Form.Item>
                   </Col>
                   <Col span={8}>
-                    <Form.Item required={true} label="结束标识"  >
-                      {infoDetail.batchCode}
+                    <Form.Item required={true} label="结束标识">
+                      {infoDetail.endMark}
                     </Form.Item>
                   </Col>
                 </Row>
@@ -662,7 +662,7 @@ const ReadingMeterVertify = (props: ReadingMeterVertifyProps) => {
         }}
       >
         <Button style={{ marginRight: 8 }}
-          onClick={() => closeVertify()}
+          onClick={() => closeVerify()}
         >
           取消
             </Button>
@@ -676,5 +676,5 @@ const ReadingMeterVertify = (props: ReadingMeterVertifyProps) => {
   );
 };
 
-export default Form.create<ReadingMeterVertifyProps>()(ReadingMeterVertify);
+export default Form.create<ReadingMeterVerifyProps>()(ReadingMeterVerify);
 

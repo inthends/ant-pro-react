@@ -16,14 +16,12 @@ interface ReadingMeterTableProps {
   reload(): void;
   form: WrappedFormUtils;
   showModify(id?): any;
-  getRowSelect(record): void;
-
-  showVertify(id: string, ifVertify: boolean): void;
+  getRowSelect(record): void; 
+  showVerify(id: string, ifVerify: boolean): void;
 }
 
 function ReadingMeterTable(props: ReadingMeterTableProps) {
-  const { showVertify , onchange, loading, pagination, data, reload, showModify, getRowSelect } = props;
-
+  const { showVerify, onchange, loading, pagination, data, reload, showModify, getRowSelect } = props; 
   const doDelete = record => {
     Modal.confirm({
       title: '请确认',
@@ -44,15 +42,16 @@ function ReadingMeterTable(props: ReadingMeterTableProps) {
       title: '抄表单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 180,
+      width: 150,
       sorter: true
     },
     {
-      title: '抄表期间',
-      dataIndex: 'meterCode',
-      key: 'meterCode',
+      title: '抄表年月',
+      dataIndex: 'belongDate',
+      key: 'belongDate',
       width: 100,
-      sorter: true
+      sorter: true,
+      render: val =>  moment(val).format('YYYY-MM')
     },
     {
       title: '抄表人',
@@ -63,17 +62,11 @@ function ReadingMeterTable(props: ReadingMeterTableProps) {
     },
     {
       title: '抄表日期',
-      dataIndex: 'readDate',
-      key: 'readDate',
+      dataIndex: 'billDate',
+      key: 'billDate',
       width: 100,
       sorter: true,
-      render: val => {
-        if (val == null) {
-          return <span></span>
-        } else {
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
-        }
-      }
+      render: val =>  moment(val).format('YYYY-MM-DD')
     },
     {
       title: '单元金额合计',
@@ -98,20 +91,22 @@ function ReadingMeterTable(props: ReadingMeterTableProps) {
     },
     {
       title: '审核状态',
-      dataIndex: 'isverifyName',
-      key: 'isverifyName', 
-      width: 100
+      dataIndex: 'ifVerify',
+      key: 'ifVerify',
+      align:'center',
+      width: 100,
+      render: val => val ? '已审核' : '未审核'
     },
     {
       title: '审核人',
       dataIndex: 'verifyPerson',
-      key: 'verifyPerson', 
+      key: 'verifyPerson',
       width: 80
     },
     {
       title: '审核日期',
       dataIndex: 'verifyDate',
-      key: 'verifyDate', 
+      key: 'verifyDate',
       width: 100,
       render: val => {
         if (val == null) {
@@ -124,13 +119,13 @@ function ReadingMeterTable(props: ReadingMeterTableProps) {
     {
       title: '审核情况',
       dataIndex: 'verifyMemo',
-      key: 'verifyMemo', 
+      key: 'verifyMemo',
       width: 100
     },
     {
       title: '备注',
       dataIndex: 'memo',
-      key: 'memo', 
+      key: 'memo',
     },
     {
       title: '操作',
@@ -143,14 +138,14 @@ function ReadingMeterTable(props: ReadingMeterTableProps) {
           <span>
             <a onClick={() => { showModify(record.billId) }} key="modify">修改</a>
             <Divider type="vertical" />
-            {record.ifVerify==0 ? <a onClick={() => showVertify(record.billId, false)} key="delete">审核</a> : <a onClick={() => showVertify(record.billId, true)} key="delete">反审</a>}
-            <Divider type="vertical" />  
+            {record.ifVerify == 0 ? <a onClick={() => showVerify(record.billId, false)} key="delete">审核</a> : <a onClick={() => showVerify(record.billId, true)} key="delete">反审</a>}
+            <Divider type="vertical" />
             {/* <a onClick={() => {
             RemoveReadForm(record.billId).then(res => {
               if (res.code != 0) { reload(); message.success('删除成功');}
             });
-          }} key="delete">删除</a> */} 
-            <a onClick={() => doDelete(record)} key="delete">删除</a> 
+          }} key="delete">删除</a> */}
+            <a onClick={() => doDelete(record)} key="delete">删除</a>
           </span>
         ];
       }

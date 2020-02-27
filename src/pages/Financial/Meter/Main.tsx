@@ -11,7 +11,7 @@ import ReadingMeterTable from './ReadingMeterTable';
 import UnitMeterTable from './UnitMeterTable';
 import MeterModify from './MeterModify';
 import ReadingMeterModify from './ReadingMeterModify';
-import ReadingMeterVertify from './ReadingMeterVertify';
+import ReadingMeterVerify from './ReadingMeterVerify';
 import { GetUnitTreeAll } from '@/services/commonItem';//获取全部房间树
 import { getResult } from '@/utils/networkUtils';
 const { Content } = Layout;
@@ -43,8 +43,8 @@ function Main() {
   const [unitTreeData, setUnitTreeData] = useState<any[]>([]); 
   // const [meterKinds, setMeterKinds] = useState<any>([]);
   // const [meterTypes, setMeterTypes] = useState<any>([]); 
-  const [ifVertify, setIfVertify] = useState<boolean>(false);
-  const [vertifyVisible, setVertifyVisible] = useState<boolean>(false);
+  const [ifVerify, setIfVerify] = useState<boolean>(false);
+  const [verifyVisible, setVerifyVisible] = useState<boolean>(false);
   const selectTree = (pid, type, info) => {
     SetOrganize(info.node.props.dataRef);
     initMeterLoadData(info.node.props.dataRef, meterSearch, '');
@@ -392,17 +392,17 @@ function Main() {
     return meterFormsload({ pageIndex, pageSize, sidx, sord, total, queryJson });
   };
 
-  const closeVertify = (result?) => {
-    setVertifyVisible(false);
+  const closeVerify = (result?) => {
+    setVerifyVisible(false);
     // if (result) {
     //   loadReadingMeterData(readingMeterSearch);
     // }
     setId('');
   };
 
-  const showVertify = (id?, ifVertify?) => {
-    setVertifyVisible(true);
-    setIfVertify(ifVertify);
+  const showVerify = (id?, ifVerify?) => {
+    setVerifyVisible(true);
+    setIfVerify(ifVerify);
     setId(id);
   };
 
@@ -509,7 +509,7 @@ function Main() {
               </Select>
               <Search
                 className="search-input"
-                placeholder="请输入要查询的费表名称"
+                placeholder="搜索费表名称"
                 style={{ width: 200 }}
                 onSearch={value => {
                   // var params = Object.assign({}, meterSearchParams, { search: e.target.value });
@@ -555,8 +555,8 @@ function Main() {
             <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
               <Search
                 className="search-input"
-                placeholder="请输入要查询的名称或者编号"
-                style={{ width: 230 }}
+                placeholder="搜索费表名称或者编号"
+                style={{ width: 200 }}
                 onSearch={value => loadUnitMeterData(value)}
               />
 
@@ -582,12 +582,12 @@ function Main() {
             <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
               <Search
                 className="search-input"
-                placeholder="请输入要查询的单号"
+                placeholder="搜索抄表单号"
                 style={{ width: 200 }}
                 onSearch={value => loadReadingMeterData(value)}
               />
               {/* <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
-                onClick={() => { }} disabled={ifVertify ? false : true}
+                onClick={() => { }} disabled={ifVerify ? false : true}
               >
                 <Icon type="minus-square" />
                 取消审核
@@ -597,10 +597,10 @@ function Main() {
                   if (readingMeterId == null || readingMeterId == '') {
                     message.warning('请先选择抄表单');
                   } else {
-                    showVertify(true);
+                    showVerify(true);
                   }
                 }}
-                disabled={!ifVertify ? false : true}
+                disabled={!ifVerify ? false : true}
               >
                 <Icon type="check-square" />
                 审核
@@ -625,7 +625,7 @@ function Main() {
                 loadReadingMeterData(readingMeterSearch, paginationConfig, sorter)
               }
               loading={readingMeterLoading}
-              showVertify={showVertify}
+              showVerify={showVerify}
               pagination={readingMeterPagination}
               data={readingMeterData}
               reload={() => initReadingMeterLoadData('', readingMeterSearch)}
@@ -638,9 +638,9 @@ function Main() {
               getRowSelect={(record) => {
                 setReadingMeterId(record.billId);
                 if (record.ifverify == 1) {
-                  setIfVertify(true);
+                  setIfVerify(true);
                 } else {
-                  setIfVertify(false);
+                  setIfVerify(false);
                 }
               }}
             />
@@ -649,7 +649,7 @@ function Main() {
             <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
               <Search
                 className="search-input"
-                placeholder="请输入要查询的单号"
+                placeholder="搜索抄表单号"
                 style={{ width: 200 }}
                 onSearch={value => loadUnitMeterData(value)}
               />
@@ -685,10 +685,10 @@ function Main() {
         reload={() => loadReadingMeterData('')}
         treeData={unitTreeData}
       />
-      <ReadingMeterVertify
-        vertifyVisible={vertifyVisible}
-        closeVertify={closeVertify}
-        ifVertify={ifVertify}
+      <ReadingMeterVerify
+        verifyVisible={verifyVisible}
+        closeVerify={closeVerify}
+        ifVerify={ifVerify}
         id={readingMeterId}
         reload={() => loadReadingMeterData('')}
       />

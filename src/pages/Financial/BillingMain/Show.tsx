@@ -258,7 +258,12 @@ const Show = (props: ShowProps) => {
       sorter: true,
       width: 100
     },
-
+    {
+      title: '房屋全称',
+      key: 'allName',
+      dataIndex: 'allName', 
+      width: 320
+    },
     {
       title: '备注',
       dataIndex: 'memo',
@@ -351,7 +356,7 @@ const Show = (props: ShowProps) => {
                 dataSource={unitFeeData}
                 rowKey="unitmeterid"
                 pagination={pagination}
-                scroll={{ y: 500, x: 1300 }}
+                scroll={{ y: 500, x: 1500 }}
                 loading={loading}
                 // onChange={onchange} 
                 onChange={(pagination: PaginationConfig, filters, sorter) =>

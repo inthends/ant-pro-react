@@ -13,7 +13,7 @@ interface ChargeCheckTableProps {
   pagination: PaginationConfig;
   data: any[];
   // showDetail(): void;
-  // showVertify(id: string, ifVertify: boolean): void;
+  // showVerify(id: string, ifVerify: boolean): void;
   reload(): void;
   // getRowSelect(record): void;
 }
@@ -153,8 +153,8 @@ function ChargeCheckTable(props: ChargeCheckTableProps) {
           <span>
             {record.status == 0 ? <a onClick={() => confirm(record)} key="exit">确认</a> : null}
             {/* <Divider type="vertical" />
-            {!record.ifVerify ? <a onClick={() => showVertify(record.billId, false)} key="approve">审核</a>
-              : <a onClick={() => showVertify(record.id, true)} key="unapprove">反审</a>} */}
+            {!record.ifVerify ? <a onClick={() => showVerify(record.billId, false)} key="approve">审核</a>
+              : <a onClick={() => showVerify(record.id, true)} key="unapprove">反审</a>} */}
           </span>
         ];
       },

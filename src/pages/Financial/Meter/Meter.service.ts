@@ -185,8 +185,8 @@ export function RemoveReadForm(data): Promise<any> {
 }
 
 //审核抄表单
-export function Audit(data): Promise<any> {
-  return request.post(process.env.basePath + `/Meter/Audit`, { data: objToFormdata(data) }).then(getResult as any);;
+export function AuditReading(data): Promise<any> {
+  return request.post(process.env.basePath + `/Meter/AuditReading`, { data: objToFormdata(data) }).then(getResult as any);;
 }
 //直接修改房屋费表
 export function SaveReadUnitForm(data): Promise<any> {

@@ -54,35 +54,18 @@ function UnitTable(props: UnitTableProps) {
       title: '数量',
       dataIndex: 'quantity',
       key: 'quantity',
-      width: 100,
-      sorter: true,
+      width: 100, 
     },
     {
       title: '单价',
       dataIndex: 'price',
-      key: 'price',
-      sorter: true,
+      key: 'price', 
       width: 80
-    },
-    {
-      title: '周期',
-      key: 'cycleValue',
-      dataIndex: 'cycleValue',
-      sorter: true,
-      width: 80
-    },
-    {
-      title: '周期单位',
-      key: 'cycleType',
-      dataIndex: 'cycleType',
-      sorter: true,
-      width: 100
-    },
+    }, 
     {
       title: '金额',
       key: 'amount',
-      dataIndex: 'amount',
-      sorter: true,
+      dataIndex: 'amount', 
       width: 100
     },
     {
@@ -90,7 +73,7 @@ function UnitTable(props: UnitTableProps) {
       key: 'beginDate',
       dataIndex: 'beginDate',
       sorter: true,
-      width: 100,
+      width: 120,
       render: val => {
         return moment(val).format('YYYY-MM-DD')
       }
@@ -100,10 +83,28 @@ function UnitTable(props: UnitTableProps) {
       key: 'endDate',
       dataIndex: 'endDate',
       sorter: true,
-      width: 100,
+      width: 120,
       render: val => {
         return moment(val).format('YYYY-MM-DD')
       }
+    },
+    {
+      title: '周期',
+      key: 'cycleValue',
+      dataIndex: 'cycleValue', 
+      width: 80
+    },
+    {
+      title: '周期单位',
+      key: 'cycleType',
+      dataIndex: 'cycleType', 
+      width: 100
+    },
+    {
+      title: '房屋全称',
+      key: 'allName',
+      dataIndex: 'allName', 
+      width: 320
     },
     {
       title: '备注',
@@ -121,7 +122,7 @@ function UnitTable(props: UnitTableProps) {
         dataSource={data}
         rowKey="id"
         pagination={pagination}
-        scroll={{ y: 500, x: 1300 }}
+        scroll={{ y: 500, x: 1700 }}
         loading={loading}
         onChange={onchange}
       />
