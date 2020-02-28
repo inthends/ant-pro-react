@@ -81,4 +81,5 @@ export default {
   'menu.system.code': '编码管理',
   'menu.system.dictionary': '词典管理',
   'menu.system.template': '模板管理',
+  'menu.system.wechatmenu': '微信菜单',
 };

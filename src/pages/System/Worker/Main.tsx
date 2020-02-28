@@ -4,15 +4,26 @@ import { PaginationConfig } from "antd/lib/table";
 import React, { useContext, useEffect, useState } from "react";
 import ListTable from "./ListTable";
 import Modify from "./Modify";
-import { GetDataItemTreeList, GetDataList } from "./Dictionary.service";
+import { GetDepartmentTree, GetDataList } from "./Worker.service";
 import { SiderContext } from '../../SiderContext';
 import LeftTree from '../LeftTree';
 const { Sider } = Layout;
 const { Content } = Layout;
 const { Search } = Input;
 
-const Dictionary = () => {
-  const [itemId, setItemId] = useState<string>('');
+interface SearchParam {
+  // condition: 'EnCode' | 'FullName';
+  orgId: string;
+  type: string;
+  keyword: string;
+};
+
+const Main = () => {
+  const [search, setSearch] = useState<SearchParam>({
+    orgId: '',
+    type: '',
+    keyword: '',
+  });
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<any[]>([]);
@@ -20,33 +31,30 @@ const Dictionary = () => {
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const { hideSider, setHideSider } = useContext(SiderContext);
   const [treeData, setTreeData] = useState<any[]>([]);
-  const [search, setSearch] = useState<any>('');
-  const [addButtonDisable, setAddButtonDisable] = useState<boolean>(true);
 
   useEffect(() => {
-    GetDataItemTreeList().then((res) => {
+    GetDepartmentTree().then((res) => {
       setTreeData(res || []);
     });
-    initLoadData(itemId, search);
+    initLoadData(search);
   }, []);
 
   const closeDrawer = () => {
     setModifyVisible(false);
   };
-
-  const showDrawer = (data?) => {
-    setCurrData(data);
+  const showDrawer = (item?) => {
+    setCurrData(item);
     setModifyVisible(true);
   };
-
   const showChoose = (item?) => {
     setCurrData(item);
   };
-
-  const loadData = (keyword: any, itemId: any, paginationConfig?: PaginationConfig, sorter?
+  const loadData = (
+    searchParam: any,
+    paginationConfig?: PaginationConfig,
+    sorter?
   ) => {
-    setSearch(keyword);//查询的时候，必须赋值，否则查询条件会不起作用 
-    setItemId(itemId);
+    setSearch(searchParam);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: pagination.pageSize,
@@ -56,8 +64,7 @@ const Dictionary = () => {
       pageIndex,
       pageSize,
       total,
-      itemId: itemId,
-      keyword: keyword
+      queryJson: searchParam
     };
 
     if (sorter) {
@@ -69,6 +76,7 @@ const Dictionary = () => {
       return res;
     });
   };
+
   const load = formData => {
     setLoading(true);
     formData.sidx = formData.sidx || "CreateDate";
@@ -83,19 +91,20 @@ const Dictionary = () => {
           pageSize
         };
       });
+
       setData(res.data);
       setLoading(false);
       return res;
     });
   };
 
-  const initLoadData = (itemId, search) => {
-    setItemId(itemId);
-    //const queryJson = searchParam;
+  const initLoadData = (searchParam: SearchParam) => {
+    setSearch(searchParam);
+    const queryJson = searchParam;
     const sidx = "CreateDate";
     const sord = "desc";
     const { current: pageIndex, pageSize, total } = pagination;
-    return load({ pageIndex, pageSize, sidx, sord, total, itemId, search }).then(
+    return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(
       res => {
         return res;
       }
@@ -103,15 +112,13 @@ const Dictionary = () => {
   };
 
   const selectTree = (item) => {
-    var value = item.node.props.value;
-    initLoadData(value, search);
-    setItemId(value);
-    setAddButtonDisable(false);
+    let orgId = item.node.props.value;
+    let type = item.node.props.type; 
+    initLoadData({ ...search, orgId, type })
   };
 
   return (
     <Layout style={{ height: "100%" }}>
-
       <Sider
         theme="light"
         style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh + 10px)' }}
@@ -156,41 +163,37 @@ const Dictionary = () => {
             className="search-input"
             placeholder="请输入要查询的关键词"
             style={{ width: 200 }}
-            onSearch={keyword => loadData(keyword, itemId)}
+            onSearch={keyword => loadData({ ...search, keyword })}
           />
+
           <Button
             type="primary"
             style={{ float: "right" }}
             onClick={() => showDrawer()}
-            disabled={addButtonDisable}
           >
             <Icon type="plus" />
-            词典
+            员工
           </Button>
         </div>
         <ListTable
           onchange={(paginationConfig, filters, sorter) =>
-            loadData(itemId, paginationConfig, sorter)
+            loadData(search, paginationConfig, sorter)
           }
           loading={loading}
           pagination={pagination}
           data={data}
           modify={showDrawer}
           choose={showChoose}
-          reload={() => initLoadData(itemId, search)}
-          setData={setData}
+          reload={() => initLoadData(search)}
         />
       </Content>
       <Modify
         visible={modifyVisible}
         closeDrawer={closeDrawer}
-        itemId={itemId}
         data={currData}
-        reload={() => initLoadData(itemId, search)}
+        reload={() => initLoadData({ ...search })}
       />
-
     </Layout>
   );
 };
-
-export default Dictionary;
+export default Main;

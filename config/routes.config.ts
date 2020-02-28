@@ -382,7 +382,7 @@ export default [
             name: 'organize',
             path: '/system/organize',
             icon: 'home',
-            component: './System/Organize/Organize',
+            component: './System/Organize/Main',
           },
           {
             name: 'department',
@@ -394,7 +394,7 @@ export default [
             name: 'worker',
             path: '/system/worker',
             icon: 'team',
-            component: './System/Worker/Worker',
+            component: './System/Worker/Main',
           },
           {
             name: 'user',
@@ -412,20 +412,26 @@ export default [
             name: 'code',
             path: '/system/code',
             icon: 'code',
-            component: './System/Code/Code',
+            component: './System/Code/Main',
           },
           {
             name: 'dictionary',
             path: '/system/dictionary',
             icon: 'profile',
-            component: './System/Dictionary/Dictionary',
+            component: './System/Dictionary/Main',
           },
           {
             name: 'template',
             path: '/system/template',
             icon: 'file-done',
-            component: './System/Template/Template',
-          }
+            component: './System/Template/Main',
+          },
+          {
+            name: 'wechatmenu',
+            path: '/system/wechatmenu',
+            icon: 'code',
+            component: './System/WechatMenu/Main',
+          },
           // {
           //   name: '接口管理',
           //   path: '/resource/test1',

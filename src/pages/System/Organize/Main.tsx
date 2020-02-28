@@ -8,7 +8,7 @@ import Modify from './Modify';
 const { Content } = Layout;
 // const { Search } = Input;
 
-const Organize = () => {
+const Main = () => {
   const [search, setSearch] = useState<string>('');
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -116,4 +116,4 @@ const Organize = () => {
   );
 }
 
-export default Organize;
+export default Main;

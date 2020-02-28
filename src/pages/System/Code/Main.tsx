@@ -1,58 +1,51 @@
 import { DefaultPagination } from "@/utils/defaultSetting";
 import { Button, Icon, Input, Layout } from "antd";
 import { PaginationConfig } from "antd/lib/table";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ListTable from "./ListTable";
+import Add from "./Add";
 import Modify from "./Modify";
-import { GetDataItemTreeList, GetDataList } from "./Template.service";
-import { SiderContext } from '../../SiderContext';
-import LeftTree from '../LeftTree';
-const { Sider } = Layout;
+import { GetPageListJson } from "./Code.service";
 const { Content } = Layout;
 const { Search } = Input;
-
 interface SearchParam {
-  typeId: string;
-  type: string;
+  condition: "EnCode" | "FullName";
   keyword: string;
-}
+};
 
-const Template = () => {
-  // const [itemId, setItemId] = useState<string>(); 
+const Main = () => {
   const [search, setSearch] = useState<SearchParam>({
-    typeId: '',
-    type: '',
-    keyword: '',
+    condition: "EnCode",
+    keyword: ""
   });
 
-  const [modifyVisible, setModifyVisible] = useState<boolean>(false);
+  const [modifyVisible, setModifyVisible] = useState<boolean>(false); 
+  const [addVisible, setAddVisible] = useState<boolean>(false); 
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<any[]>([]);
   const [currData, setCurrData] = useState<any>();
-  const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
-  const { hideSider, setHideSider } = useContext(SiderContext);
-  const [treeData, setTreeData] = useState<any[]>([]);
-
-  //是否能新增
-  const [isDisabled, setDisabled] = useState<boolean>(true);
+  const [pagination, setPagination] = useState<PaginationConfig>(
+    new DefaultPagination()
+  );
 
   useEffect(() => {
-    GetDataItemTreeList().then((res) => {
-      setTreeData(res || []);
-    });
     initLoadData(search);
   }, []);
 
   const closeDrawer = () => {
     setModifyVisible(false);
   };
+
   const showDrawer = (item?) => {
     setCurrData(item);
     setModifyVisible(true);
   };
-  const showChoose = (item?) => {
-    setCurrData(item);
-  };
+
+  // const showChoose = (item?) => {
+  //   // setUserVisible(true);
+  //   setCurrData(item);
+  // };
+
   const loadData = (
     searchParam: any,
     paginationConfig?: PaginationConfig,
@@ -76,6 +69,7 @@ const Template = () => {
       searchCondition.sord = order === "ascend" ? "asc" : "desc";
       searchCondition.sidx = field ? field : "CreateDate";
     }
+
     return load(searchCondition).then(res => {
       return res;
     });
@@ -84,7 +78,7 @@ const Template = () => {
     setLoading(true);
     formData.sidx = formData.sidx || "CreateDate";
     formData.sord = formData.sord || "desc";
-    return GetDataList(formData).then(res => {
+    return GetPageListJson(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
         return {
@@ -114,79 +108,26 @@ const Template = () => {
     );
   };
 
-  const selectTree = (item) => {
-    var type = item.node.props.type;
-    if (type == '1') {
-      setDisabled(true);
-      type = '';
-    }
-    else if (type == '2') {
-      setDisabled(true);
-    } else {
-      setDisabled(false);
-    }
-
-    var typeId = item.node.props.value;
-    initLoadData({ ...search, typeId, type });
-  };
-
   return (
     <Layout style={{ height: "100%" }}>
-      <Sider
-        theme="light"
-        style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh + 10px)' }}
-        width={hideSider ? 20 : 245}
-      >
-        {hideSider ? (
-          <div style={{ position: 'absolute', top: '40%', left: 5 }}>
-            <Icon
-              type="double-right"
-              onClick={() => {
-                setHideSider(false);
-              }}
-              style={{ color: '#1890ff' }}
-            />
-          </div>
-        ) : (
-            <>
-              {treeData != null && treeData.length > 0 ?
-                (<LeftTree 
-                  key='lefttree'
-                  treeData={treeData}
-                  selectTree={(id, item) => {
-                    selectTree(item);
-                  }}
-                />) : null}
-              <div
-                style={{ position: 'absolute', top: '40%', right: -15 }}
-                onClick={() => {
-                  setHideSider(true);
-                }}
-              >
-                <Icon type="double-left" style={{ color: '#1890ff', cursor: 'pointer' }} />
-              </div>
-            </>
-          )}
-      </Sider>
-
-      <Content style={{ paddingLeft: '18px' }}>
+      <Content  >
         <div style={{ marginBottom: 20, padding: "3px 0" }}>
           <Search
-            key='search'
             className="search-input"
             placeholder="请输入要查询的关键词"
-            style={{ width: 200 }}
             onSearch={keyword => loadData({ ...search, keyword })}
+            style={{ width: 200 }}
           />
-
           <Button
             type="primary"
             style={{ float: "right" }}
-            onClick={() => showDrawer()}
-            disabled={isDisabled}
+            onClick={() => {
+              setCurrData(undefined);
+              setAddVisible(true);
+            }}
           >
             <Icon type="plus" />
-            模板
+            编码
           </Button>
         </div>
         <ListTable
@@ -197,20 +138,27 @@ const Template = () => {
           pagination={pagination}
           data={data}
           modify={showDrawer}
-          choose={showChoose}
+          // choose={showChoose}
           reload={() => initLoadData(search)}
+          setData={setData}
         />
       </Content>
+
+      <Add
+        visible={addVisible}
+        closeDrawer={() => setAddVisible(false)}
+        data={currData}
+        reload={() => initLoadData({ ...search })}
+      />
+
       <Modify
         visible={modifyVisible}
         closeDrawer={closeDrawer}
-        typeId={search.typeId}
         data={currData}
-        reload={() => initLoadData(search)}
+        reload={() => initLoadData({ ...search })}
       />
-
     </Layout>
   );
 };
 
-export default Template;
+export default Main;
