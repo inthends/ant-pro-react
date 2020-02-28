@@ -2,44 +2,42 @@ import { BaseModifyProvider } from "@/components/BaseModifyDrawer/BaseModifyDraw
 import ModifyItem from "@/components/BaseModifyDrawer/ModifyItem";
 import { Card, Form, Row } from "antd";
 import { WrappedFormUtils } from "antd/lib/form/Form";
-import React, { useState } from "react";
-import { SaveForm } from "./WechatMenu.service";
-// import RuleItem from './RuleItem';
-// import { GetOrgs } from '@/services/commonItem';
-// import { TreeNode } from 'antd/lib/tree-select';
+import React, { useEffect, useState } from "react";
+import { SaveItemForm } from "./WechatMenu.service";
 
-interface AddProps {
+interface SubItemProps {
   visible: boolean;
+  menuId: string;
   data?: any;
   form: WrappedFormUtils<any>;
   closeDrawer(): void;
   reload(): void;
-};
+}
 
-const Add = (props: AddProps) => {
-  const { data, form } = props;
+const SubItem = (props: SubItemProps) => {
+  const { data, form, menuId, visible } = props;
   const { getFieldDecorator } = form;
-  let initData = data ? data : {};
-  // initData.expDate = initData.expDate ? initData.expDate : new Date();
+  let initData = data ? data : { menuId: menuId };
   const baseFormProps = { form, initData };
-  // const [ruleItemVisible, setRuleItemVisible] = useState<boolean>(false);
-  // const [ruleItem, setRuleItem] = useState<any>();
-  // const [orgs, setOrgs] = useState<TreeNode[]>();
+  const [myitemType, setMyItemType] = useState<string>(''); 
+  //打开抽屉时初始化
+  useEffect(() => {
+    if (visible) {
+      if (data) {
+        setMyItemType(data.type);
+      }
+    }
+  }, [visible]);
 
   const doSave = dataDetail => {
     let modifyData = { ...initData, ...dataDetail, keyValue: initData.id };
-    return SaveForm(modifyData);
+    return SaveItemForm(modifyData);
   };
 
-  const [myitemType, setMyItemType] = useState<string>('');
-
   return (
-    <BaseModifyProvider {...props}
-      name="菜单"
-      width={700}
-      save={doSave}>
+    <BaseModifyProvider {...props} name="二级菜单" save={doSave}>
       <Card>
-        <Form layout="vertical" hideRequiredMark> 
+        <Form layout="vertical" hideRequiredMark>
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
@@ -54,15 +52,13 @@ const Add = (props: AddProps) => {
               type='select'
               rules={[{ required: true, message: "请选择菜单类型" }]}
               items={[
-                { label: '无', value: '无', title: '无' },
                 { label: '自定义链接', value: '自定义链接', title: '自定义链接' },
                 { label: '系统功能', value: '系统功能', title: '系统功能' }]}
               onChange={(value, option) => {
                 setMyItemType(value);
               }}
             ></ModifyItem>
-          </Row>
-
+          </Row> 
           {myitemType == '自定义链接' ?
             <Row gutter={24}>
               <ModifyItem
@@ -105,39 +101,9 @@ const Add = (props: AddProps) => {
             ></ModifyItem>
           </Row>
         </Form>
-
-        {/* <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
-          <Button type="link" style={{ float: 'right', marginLeft: '10px' }}
-            onClick={() => doAdd()}  >
-            <Icon type="plus" />新增</Button>
-        </div>
-        <Table
-          key='list'
-          style={{ border: 'none' }}
-          bordered={false}
-          size="middle"
-          dataSource={ruleList}
-          columns={columns}
-        // rowKey={record => record.allName}
-        // pagination={orgPagination}
-        // scroll={{ y: 420 }}
-        // onChange={(pagination: PaginationConfig, filters, sorter) =>
-        //   orgLoadData(pagination, sorter)
-        // }
-        // loading={orgLoading}
-        /> */}
       </Card>
-
-      {/* <RuleItem
-        visible={ruleItemVisible}
-        closeDrawer={closeRuleItem}
-        data={ruleItem}
-        reload={reload}
-      /> */}
-
     </BaseModifyProvider >
-
   );
 };
 
-export default Form.create<AddProps>()(Add);
+export default Form.create<SubItemProps>()(SubItem);

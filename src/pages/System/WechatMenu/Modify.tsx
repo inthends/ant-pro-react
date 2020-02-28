@@ -4,7 +4,7 @@ import { message, Modal, Divider, Card, Form, Row, Table, Button, Icon } from "a
 import { WrappedFormUtils } from "antd/lib/form/Form";
 import React, { useEffect, useState } from "react";
 import { SaveForm, GetPageItemListJson, RemoveItemForm } from "./WechatMenu.service";
-import RuleItem from './RuleItem';
+import SubItem from './SubItem';
 import { DefaultPagination } from "@/utils/defaultSetting";
 import { ColumnProps, PaginationConfig } from "antd/lib/table";
 import styles from './style.less';
@@ -21,11 +21,12 @@ interface ModifyProps {
 
 const Modify = (props: ModifyProps) => {
   const { data, form, visible } = props;
-  let initData = data ? data : { enabledMark: 1 };
+  const { getFieldDecorator } = form;
+  let initData = data ? data : {}; 
   const baseFormProps = { form, initData };
   const [ruleItemVisible, setRuleItemVisible] = useState<boolean>(false);
   const [ruleItem, setRuleItem] = useState<any>();
-  let ruleId = data ? data.ruleId : '';
+  let menuId = data ? data.id : '';
   const doSave = dataDetail => {
     let modifyData = { ...initData, ...dataDetail, keyValue: initData.ruleId };
     return SaveForm(modifyData);
@@ -43,6 +44,7 @@ const Modify = (props: ModifyProps) => {
   useEffect(() => {
     if (visible) {
       if (data) {
+        setMyItemType(data.type);
         //获取明细
         initLoadData();
         // GetOrgs().then(res => {
@@ -101,7 +103,7 @@ const Modify = (props: ModifyProps) => {
   };
 
   const initLoadData = () => {
-    const queryJson = { ruleId: ruleId };
+    const queryJson = { menuId: menuId };
     const sidx = "id";
     const sord = "desc";
     const { current: pageIndex, pageSize, total } = pagination;
@@ -151,34 +153,28 @@ const Modify = (props: ModifyProps) => {
 
   const columns = [
     {
-      title: "前缀",
-      dataIndex: "itemTypeName",
-      key: "itemTypeName",
-      width: 80,
+      title: "菜单名称",
+      dataIndex: "name",
+      key: "name",
+      width: 150,
     },
     {
-      title: "格式",
-      dataIndex: "formatStr",
-      key: "formatStr",
+      title: "菜单类型",
+      dataIndex: "type",
+      key: "type",
       width: 100
     },
     {
-      title: "步长",
-      dataIndex: "stepValue",
-      key: "stepValue",
-      width: 60
-    },
-    {
-      title: "初始值",
-      dataIndex: "initValue",
-      key: "initValue",
+      title: "系统功能",
+      dataIndex: "moduleName",
+      key: "moduleName",
       width: 100
     },
     {
-      title: "说明",
-      dataIndex: "description",
-      key: "description",
-      width: 100,
+      title: "排序号",
+      dataIndex: "sortCode",
+      key: "sortCode",
+      width: 80
     },
     {
       title: "操作",
@@ -198,49 +194,83 @@ const Modify = (props: ModifyProps) => {
     }
   ] as ColumnProps<any>[];
 
+  const [myitemType, setMyItemType] = useState<string>('');
+
   return (
     <BaseModifyProvider {...props}
-      name="编码"
+      name="菜单"
       width={700}
       save={doSave}>
       <Card className={styles.card}>
         <Form layout="vertical" hideRequiredMark>
-          {/* <Row gutter={24}> 
-            <ModifyItem
-              {...baseFormProps}
-              field="organizeId"
-              label="所属机构"
-              type="tree"
-              treeData={orgs}
-              disabled={initData.organizeId != undefined}
-              rules={[{ required: true, message: '请选择所属机构' }]}
-            ></ModifyItem> 
-          </Row> */}
+        
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
-              field="enCode"
-              label="编号"
-              rules={[{ required: true, message: "请输入编号" }]}
-              disabled={true}
+              field="name"
+              label="菜单名称"
+              rules={[{ required: true, message: "请输入菜单名称" }]}
             ></ModifyItem>
             <ModifyItem
               {...baseFormProps}
-              field="fullName"
-              label="名称"
-              rules={[{ required: true, message: "请输入名称" }]}
+              field="type"
+              label="菜单类型"
+              type='select'
+              rules={[{ required: true, message: "请选择菜单类型" }]}
+              items={[
+                { label: '无', value: '无', title: '无' },
+                { label: '自定义链接', value: '自定义链接', title: '自定义链接' },
+                { label: '系统功能', value: '系统功能', title: '系统功能' }]}
+              onChange={(value, option) => {
+                setMyItemType(value);
+              }}
             ></ModifyItem>
           </Row>
+
+         
+          {myitemType == '自定义链接' ?
+            <Row gutter={24}>
+              <ModifyItem
+                {...baseFormProps}
+                lg={24}
+                field="url"
+                label="自定义链接"
+                rules={[{ required: true, message: "请输入自定义链接" }]}
+              ></ModifyItem>
+            </Row> : null}
+          {myitemType == '系统功能' ?
+            <Row gutter={24}>
+              <ModifyItem
+                {...baseFormProps}
+                lg={24}
+                field="modulePath"
+                type='select'
+                label="系统功能"
+                items={[
+                  { label: '物业', value: 'home', title: '物业' },
+                  { label: '我的', value: 'user', title: '我的' }]}
+                onChange={(value, option) => {
+                  form.setFieldsValue({ moduleName: option.props.children });
+                }}
+                rules={[{ required: true, message: "请选择系统功能" }]}
+              ></ModifyItem>
+              {getFieldDecorator('moduleName', {
+                initialValue: initData.modulePath,
+              })(
+                <input type='hidden' />
+              )}
+            </Row> : null}
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
-              // wholeLine={true}
-              lg={24}
-              type="textarea"
-              field="description"
-              label="备注"
+              field="sortCode"
+              label="排序号"
+              type="inputNumber"
+              rules={[{ required: true, message: "请输入排序号" }]}
             ></ModifyItem>
-          </Row>
+          </Row> 
+
+         
         </Form>
 
         <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
@@ -262,12 +292,12 @@ const Modify = (props: ModifyProps) => {
         /> 
       </Card>
 
-      <RuleItem
+      <SubItem
         visible={ruleItemVisible}
         closeDrawer={() => setRuleItemVisible(false)}
         data={ruleItem}
         reload={initLoadData}
-        ruleId={ruleId}
+        menuId={menuId}
       />
 
     </BaseModifyProvider >

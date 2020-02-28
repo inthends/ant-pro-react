@@ -23,9 +23,9 @@ function ListTable(props: ListTableProps) {
   const doDelete = record => {
     Modal.confirm({
       title: "请确认",
-      content: `您确认要删除${record.fullName}吗？`,
+      content: `您确认要删除${record.name}吗？`,
       onOk: () => {
-        RemoveForm(record.ruleId)
+        RemoveForm(record.id)
           .then(() => {
             message.success("删除成功");
             reload();
@@ -41,27 +41,27 @@ function ListTable(props: ListTableProps) {
   const columns = [
     {
       title: "菜单名称",
-      dataIndex: "enCode",
-      key: "enCode",
-      width: 100,
+      dataIndex: "name",
+      key: "name",
+      width: 150,
     },
     {
       title: "菜单类型",
-      dataIndex: "fullName",
-      key: "fullName",
-      width: 150
+      dataIndex: "type",
+      key: "type",
+      width: 100
     },
     {
       title: "系统功能",
-      dataIndex: "orgName",
-      key: "orgName",
-      width: 150
+      dataIndex: "moduleName",
+      key: "moduleName",
+      width: 100
     },
     {
       title: "排序号",
-      dataIndex: "currentNumber",
-      key: "currentNumber",
-      width: 200
+      dataIndex: "sortCode",
+      key: "sortCode",
+      width: 80
     },
     {
       title: "创建用户",
@@ -118,7 +118,7 @@ function ListTable(props: ListTableProps) {
         size="middle"
         dataSource={data}
         columns={columns}
-        rowKey={record => record.ruleId}
+        rowKey={record => record.id}
         scroll={{ y: 500 }}
         loading={loading}
         pagination={pagination}

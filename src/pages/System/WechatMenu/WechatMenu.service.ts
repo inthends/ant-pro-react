@@ -41,6 +41,12 @@ export function RemoveItemForm(keyValue): Promise<any> {
     .then(getResult as any);
 }
 
+//创建微信菜单
+export function CreateMenu(): Promise<any> {
+  return request
+    .post(process.env.basePath + `/WechatMenu/CreateMenu`, {})
+    .then(getResult as any);
+}
 
 // 查询用户
 // export function searchUser(keyword): Promise<any[]> {
