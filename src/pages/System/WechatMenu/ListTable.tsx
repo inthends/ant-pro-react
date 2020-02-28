@@ -40,29 +40,29 @@ function ListTable(props: ListTableProps) {
 
   const columns = [
     {
-      title: "编号",
+      title: "菜单名称",
       dataIndex: "enCode",
       key: "enCode",
       width: 100,
     },
     {
-      title: "名称",
+      title: "菜单类型",
       dataIndex: "fullName",
       key: "fullName",
       width: 150
     },
-    // {
-    //   title: "所属机构",
-    //   dataIndex: "orgName",
-    //   key: "orgName",
-    //   width: 150
-    // },
-    // {
-    //   title: "当前流水号",
-    //   dataIndex: "currentNumber",
-    //   key: "currentNumber",
-    //   width: 200
-    // },
+    {
+      title: "系统功能",
+      dataIndex: "orgName",
+      key: "orgName",
+      width: 150
+    },
+    {
+      title: "排序号",
+      dataIndex: "currentNumber",
+      key: "currentNumber",
+      width: 200
+    },
     {
       title: "创建用户",
       dataIndex: "createUserName",
@@ -92,12 +92,7 @@ function ListTable(props: ListTableProps) {
     //     );
     //   }
     // },
-    {
-      title: "说明",
-      dataIndex: "description",
-      key: "description", 
-      width: 160
-    },
+   
     {
       title: "操作",
       dataIndex: "operation",

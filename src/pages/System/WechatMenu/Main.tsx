@@ -127,7 +127,7 @@ const Main = () => {
             }}
           >
             <Icon type="plus" />
-            编码
+            菜单
           </Button>
         </div>
         <ListTable
