@@ -4,7 +4,7 @@ import { DefaultPagination } from '@/utils/defaultSetting';
 import { PaginationConfig } from 'antd/lib/table';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetFormJson, GetListByID, Audit } from './Main.service';
+import { GetFormJson, GetListById, Audit } from './Main.service';
 import moment from 'moment';
 const { TextArea } = Input;
 import styles from './style.less'
@@ -53,7 +53,7 @@ const Verify= (props: VerifyProps) => {
             keyValue: entity.billId
           };
           setLoading(true);
-          GetListByID(searchCondition).then(res => {
+          GetListById(searchCondition).then(res => {
             //明细
             setListData(res.data);
             setLoading(false);
@@ -108,7 +108,7 @@ const Verify= (props: VerifyProps) => {
       searchCondition.sidx = field ? field : 'billId';
     }
     setLoading(true);
-    return GetListByID(searchCondition).then(res => {
+    return GetListById(searchCondition).then(res => {
       //设置查询后的分页
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {

@@ -5,7 +5,7 @@ import { PaginationConfig } from 'antd/lib/table';
 import AddReductionItem from './AddReductionItem';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { RemoveFormAll, GetFormJson, GetListByID, GetUnitBillDetail, SaveForm } from './Main.service';
+import { RemoveFormAll, GetFormJson, GetListById, GetUnitBillDetail, SaveForm } from './Main.service';
 import moment from 'moment';
 import styles from './style.less';
 
@@ -146,8 +146,7 @@ const Modify = (props: ModifyProps) => {
         //    return GetListByID(tempInfo.billId);
         // }).then(res => {
         //   setListData(res.data);
-        // });
-
+        // }); 
         GetFormJson(id).then(res => {
           setCode(1);
           var entity = { ...res.entity, receiveId: res.receiveId, receiveCode: res.receiveCode };
@@ -164,7 +163,7 @@ const Modify = (props: ModifyProps) => {
             keyValue: entity.billId
           };
 
-          GetListByID(searchCondition).then(res => {
+          GetListById(searchCondition).then(res => {
             //设置查询后的分页
             const { pageIndex: current, total, pageSize } = res;
             setPagination(pagesetting => {
@@ -341,7 +340,7 @@ const Modify = (props: ModifyProps) => {
       dataIndex: 'allName',
       key: 'allName',
       width: '250px'
-    }, 
+    },
     // {
     //   title: '单元编号',
     //   dataIndex: 'unitId',
@@ -543,7 +542,7 @@ const Modify = (props: ModifyProps) => {
       searchCondition.sidx = field ? field : 'billId';
     }
     setLoading(true);
-    return GetListByID(searchCondition).then(res => {
+    return GetListById(searchCondition).then(res => {
       //设置查询后的分页
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
@@ -641,10 +640,10 @@ const Modify = (props: ModifyProps) => {
             <Col lg={12}>
               <Form.Item label="批量减免金额">
                 {getFieldDecorator('reductionAmount', {
-                  initialValue: infoDetail.reductionAmount ? infoDetail.reductionAmount : 0,
+                  initialValue: infoDetail.reductionAmount ? infoDetail.reductionAmount : null,
                   rules: [{ required: true, message: '请输入批量减免金额' }],
                 })(
-                  <InputNumber step={0.1} style={{ width: '100%' }}></InputNumber>
+                  <InputNumber step={0.1} style={{ width: '100%' }} min={0.01}></InputNumber>
                 )}
               </Form.Item>
             </Col>
@@ -668,7 +667,7 @@ const Modify = (props: ModifyProps) => {
                   Modal.confirm({
                     title: '请确认',
                     content: `您是否确定删除？`,
-                    onOk: () => { 
+                    onOk: () => {
                       if (id && id != "") {
                         RemoveFormAll(id).then(res => {
                           message.success('删除成功');
