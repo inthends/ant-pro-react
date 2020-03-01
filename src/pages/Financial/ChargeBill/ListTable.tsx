@@ -176,8 +176,7 @@ function ListTable(props: ListTableProps) {
       key: 'allname',
       align: 'center',
       width: 280
-    },
-
+    }, 
     {
       title: '优惠政策',
       dataIndex: 'rebateName',

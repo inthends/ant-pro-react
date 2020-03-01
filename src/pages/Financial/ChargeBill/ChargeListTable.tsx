@@ -143,8 +143,8 @@ function ChargeListTable(props: ChargeListTableProps) {
       width: 80,
       render: (text, record) => {
         switch (text) {
-          case 0:
-            return <Tag color="#e4aa5b">未收</Tag>;
+          // case 0:
+          //   return <Tag color="#e4aa5b">未收</Tag>;
           case 1:
             return <Tag color="#19d54e">已收</Tag>;
           case 2:
