@@ -93,11 +93,19 @@ const Modify = (props: ModifyProps) => {
       if (id) {
         setLoading(true);
         GetFormJson(id).then((tempInfo: CwFeeitem) => {
+            //加载费项类别
           // if (tempInfo.feeKind) {
           //   // var kind = tempInfo.feeKind == "收款费项" ? "ReceivablesItem" : "PaymentItem";
           //   changeFeeType(tempInfo.feeKind);
           //   setIsInit(false);
           // }
+
+          //加载费项类别
+          var newvalue = tempInfo.feeKind == "收款费项" ? "ReceivablesItem" : "PaymentItem";
+          GetFeeType(newvalue).then(res => {
+            setFeetype(res || []);
+          });
+
           setInfoDetail(tempInfo);
           //设置状态
           tempInfo.accBillDateUnit == 2 ? setAccFixedDisabled(false) : setAccFixedDisabled(true);
@@ -121,7 +129,7 @@ const Modify = (props: ModifyProps) => {
         form.resetFields();
         //设置checkbox默认值 
         var info = Object.assign({}, { isEnable: true, isInContract: true, isTax: true });
-        if (isInit && selectTreeItem != null && selectTreeItem.feeKind != '') {
+        if (isInit && selectTreeItem != null && selectTreeItem.feeKind) {
           info = Object.assign({}, info, { feeKind: selectTreeItem.feeKind });
           form.setFieldsValue({ feeKind: selectTreeItem.feeKind });
           changeFeeType(selectTreeItem.feeKind, info);
@@ -133,7 +141,7 @@ const Modify = (props: ModifyProps) => {
       }
     } else {
       // form.setFieldsValue({});
-      // form.resetFields([]);
+      // form.resetFields([]); 
       form.resetFields();
     }
   }, [modifyVisible]);

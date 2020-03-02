@@ -28,6 +28,7 @@ export default {
   'menu.dashboard.receiptdetails': '实收明细',
   'menu.dashboard.receivabledivide': '应收权责摊销',
   'menu.dashboard.receiveddivide': '已收权责摊销',
+  'menu.dashboard.reports': '报表中心',
 
   'menu.resource': '资源管理',
   'menu.resource.house': '项目资料',

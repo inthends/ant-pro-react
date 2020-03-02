@@ -76,15 +76,18 @@ function Main() {
   const [tabIndex, setTabIndex] = useState<string>('1');
 
   //点击左侧树，加载数据
-  const selectTree = (organizeId, search) => {
+  const selectTree = (organizeId, type, search) => {
     if (tabIndex == "1") {
+      //未收款
       initLoadData(search, organizeId, showCustomerFee);
     }
     else if (tabIndex == "2") {
-      initChargeLoadData(organizeId);
+      //已收款
+      initChargeLoadData(organizeId, type);
     }
     else {
-      initChargeCheckLoadData(organizeId);
+      //对账单
+      initChargeCheckLoadData(organizeId, type);
     }
   };
 
@@ -189,7 +192,8 @@ function Main() {
       total,
       queryJson: {
         keyword: chargedSearchParams.search ? chargedSearchParams.search : '',
-        TreeType: "5",
+        TreeType: chargedSearchParams.type ? chargedSearchParams.type : '',
+        //TreeType: "5",
         TreeTypeId: organizeId,
         Status: chargedSearchParams.status ? chargedSearchParams.status : '',
         StartDate: chargedSearchParams.startDate ? chargedSearchParams.startDate : '',
@@ -228,11 +232,11 @@ function Main() {
   };
 
   //收款单
-  const initChargeLoadData = (id) => {
+  const initChargeLoadData = (id, type) => {
     const queryJson = {
-      keyword: chargedSearchParams.search ? chargedSearchParams.search : '',
-      TreeType:chargedSearchParams.type? chargedSearchParams.type : '',
+      TreeType: type,
       TreeTypeId: id,
+      keyword: chargedSearchParams.search ? chargedSearchParams.search : '', 
       Status: chargedSearchParams.status ? chargedSearchParams.status : '',
       StartDate: chargedSearchParams.startDate ? chargedSearchParams.startDate : '',
       EndDate: chargedSearchParams.endDate ? chargedSearchParams.endDate : ''
@@ -258,8 +262,9 @@ function Main() {
       total,
       queryJson: {
         keyword: chargedSearchParams.search ? chargedSearchParams.search : '',
-        TreeType: "5",
+        // TreeType: "5",
         TreeTypeId: organizeId,
+        TreeType: chargedSearchParams.type ? chargedSearchParams.type : '',
         Status: chargedSearchParams.status ? chargedSearchParams.status : '',
         StartDate: chargedSearchParams.startDate ? chargedSearchParams.startDate : '',
         EndDate: chargedSearchParams.endDate ? chargedSearchParams.endDate : ''
@@ -296,11 +301,11 @@ function Main() {
     });
   };
 
-  const initChargeCheckLoadData = (id) => {
+  const initChargeCheckLoadData = (id,type) => {
     const queryJson = {
-      keyword: chargedSearchParams.search ? chargedSearchParams.search : '',
-      TreeType: "5",
+      TreeType: type,
       TreeTypeId: id,
+      keyword: chargedSearchParams.search ? chargedSearchParams.search : '', 
       Status: chargedSearchParams.status ? chargedSearchParams.status : '',
       StartDate: chargedSearchParams.startDate ? chargedSearchParams.startDate : '',
       EndDate: chargedSearchParams.endDate ? chargedSearchParams.endDate : ''
@@ -449,10 +454,10 @@ function Main() {
       {/* <Sider theme="light" style={{ overflow: 'hidden', height: '100%' }} width="245px"> */}
       <AsynLeftTree
         parentid={'0'}
-        selectTree={(id, type, info?) => { 
+        selectTree={(id, type, info?) => {
           //点击前重置 
           setAddButtonDisable(true);
-          selectTree(id, search);
+          selectTree(id, type, search);
           setCustomerName('');
           setShowname('');
           setAdminOrgId(info.node.props.organizeId);//管理处Id
@@ -580,7 +585,7 @@ function Main() {
               <Search
                 className="search-input"
                 placeholder="收款单号"
-                style={{ width: 160 }}
+                style={{ width: 200 }}
                 onChange={e => {
                   var params = Object.assign({}, chargedSearchParams, { search: e.target.value });
                   setChargedSearchParams(params);
