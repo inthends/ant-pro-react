@@ -76,7 +76,7 @@ function Main() {
   const [tabIndex, setTabIndex] = useState<string>('1');
 
   //点击左侧树，加载数据
-  const selectTree = (organizeId, type, search) => {
+  const selectTree = (organizeId, type, search) => { 
     if (tabIndex == "1") {
       //未收款
       initLoadData(search, organizeId, showCustomerFee);
@@ -192,9 +192,8 @@ function Main() {
       total,
       queryJson: {
         keyword: chargedSearchParams.search ? chargedSearchParams.search : '',
-        TreeType: chargedSearchParams.type ? chargedSearchParams.type : '',
-        //TreeType: "5",
         TreeTypeId: organizeId,
+        TreeType: chargedSearchParams.type ? chargedSearchParams.type : '',  
         Status: chargedSearchParams.status ? chargedSearchParams.status : '',
         StartDate: chargedSearchParams.startDate ? chargedSearchParams.startDate : '',
         EndDate: chargedSearchParams.endDate ? chargedSearchParams.endDate : ''
@@ -236,7 +235,7 @@ function Main() {
     const queryJson = {
       TreeType: type,
       TreeTypeId: id,
-      keyword: chargedSearchParams.search ? chargedSearchParams.search : '', 
+      keyword: chargedSearchParams.search ? chargedSearchParams.search : '',
       Status: chargedSearchParams.status ? chargedSearchParams.status : '',
       StartDate: chargedSearchParams.startDate ? chargedSearchParams.startDate : '',
       EndDate: chargedSearchParams.endDate ? chargedSearchParams.endDate : ''
@@ -301,11 +300,11 @@ function Main() {
     });
   };
 
-  const initChargeCheckLoadData = (id,type) => {
+  const initChargeCheckLoadData = (id, type) => {
     const queryJson = {
       TreeType: type,
       TreeTypeId: id,
-      keyword: chargedSearchParams.search ? chargedSearchParams.search : '', 
+      keyword: chargedSearchParams.search ? chargedSearchParams.search : '',
       Status: chargedSearchParams.status ? chargedSearchParams.status : '',
       StartDate: chargedSearchParams.startDate ? chargedSearchParams.startDate : '',
       EndDate: chargedSearchParams.endDate ? chargedSearchParams.endDate : ''
@@ -439,13 +438,13 @@ function Main() {
   //tab切换刷新数据
   const changeTab = (e: string) => {
     setTabIndex(e);
-    if (e === '1') {
+    if (e == '1') {
       if (organizeId)
         initLoadData(search, organizeId);
-    } else if (e === '2') {
-      initChargeLoadData(organizeId);
+    } else if (e == '2') {
+      initChargeLoadData(organizeId, chargedSearchParams.type);
     } else {
-      initChargeCheckLoadData(organizeId);
+      initChargeCheckLoadData(organizeId, chargedSearchParams.type);
     }
   };
 
@@ -585,7 +584,7 @@ function Main() {
               <Search
                 className="search-input"
                 placeholder="收款单号"
-                style={{ width: 200 }}
+                style={{ width: 220 }}
                 onChange={e => {
                   var params = Object.assign({}, chargedSearchParams, { search: e.target.value });
                   setChargedSearchParams(params);
@@ -593,7 +592,7 @@ function Main() {
               />
               <Button type="primary" style={{ marginLeft: '3px' }}
                 onClick={() => {
-                  initChargeLoadData(organizeId);
+                  initChargeLoadData(organizeId,chargedSearchParams.type);
                 }}
               >
                 <Icon type="search" />
@@ -648,7 +647,7 @@ function Main() {
               data={dataCharge}
               showDetail={showDetail}
               showVerify={showVerify}
-              reload={() => initChargeLoadData(organizeId)}
+              reload={() => initChargeLoadData(organizeId,chargedSearchParams.type)}
               // getRowSelect={GetChargedSelectedKey}
               rowSelect={GetChargeSelectedKeys}
             />
@@ -679,7 +678,7 @@ function Main() {
               />
               <Button type="primary" style={{ marginLeft: '3px' }}
                 onClick={() => {
-                  initChargeLoadData(organizeId);
+                  initChargeLoadData(organizeId,chargedSearchParams.type);
                 }}>
                 <Icon type="search" />
                 搜索
@@ -693,7 +692,7 @@ function Main() {
               loading={loadingChargeCheck}
               pagination={paginationChargeCheck}
               data={dataChargeCheck}
-              reload={() => initChargeCheckLoadData(organizeId)}
+              reload={() => initChargeCheckLoadData(organizeId,chargedSearchParams.type)}
             // rowSelect={GetChargedSelectedKey}
             />
           </TabPane>
@@ -722,7 +721,7 @@ function Main() {
         closeVerify={closeVerify}
         id={id}
         ifVerify={ifVerify}
-        reload={() => initChargeLoadData(organizeId)}
+        reload={() => initChargeLoadData(organizeId,chargedSearchParams.type)}
       />
 
       <Submit
@@ -730,7 +729,7 @@ function Main() {
         visible={submitVisible}
         close={closeSubmit}
         ids={chargeSelectedKeys}
-        reload={() => initChargeLoadData(organizeId)}
+        reload={() => initChargeLoadData(organizeId,chargedSearchParams.type)}
       />
 
       <Split
