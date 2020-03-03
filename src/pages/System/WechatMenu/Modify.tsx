@@ -28,7 +28,7 @@ const Modify = (props: ModifyProps) => {
   const [ruleItem, setRuleItem] = useState<any>();
   let menuId = data ? data.id : '';
   const doSave = dataDetail => {
-    let modifyData = { ...initData, ...dataDetail, keyValue: initData.ruleId };
+    let modifyData = { ...initData, ...dataDetail, keyValue: initData.id };
     return SaveForm(modifyData);
   };
 
@@ -84,8 +84,8 @@ const Modify = (props: ModifyProps) => {
 
   const load = formData => {
     setLoading(true);
-    formData.sidx = formData.sidx || "id";
-    formData.sord = formData.sord || "desc";
+    formData.sidx = formData.sidx || "sortCode";
+    formData.sord = formData.sord || "asc";
     return GetPageItemListJson(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
@@ -104,8 +104,8 @@ const Modify = (props: ModifyProps) => {
 
   const initLoadData = () => {
     const queryJson = { menuId: menuId };
-    const sidx = "id";
-    const sord = "desc";
+    const sidx = "sortCode";
+    const sord = "asc";
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(
       res => {
@@ -225,9 +225,7 @@ const Modify = (props: ModifyProps) => {
                 setMyItemType(value);
               }}
             ></ModifyItem>
-          </Row>
-
-         
+          </Row> 
           {myitemType == '自定义链接' ?
             <Row gutter={24}>
               <ModifyItem
