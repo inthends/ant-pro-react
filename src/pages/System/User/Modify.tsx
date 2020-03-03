@@ -4,7 +4,7 @@ import ModifyItem from '@/components/BaseModifyDrawer/ModifyItem';
 import { Card, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useState } from 'react';
-import { SaveForm, SearchUser } from './User.service';
+import { SaveForm, SearchUser,ExistAccount } from './User.service';
 import { JcAccount } from '@/model/jcAccount';
 import md5 from 'blueimp-md5';
 
@@ -62,6 +62,21 @@ const Modify = (props: ModifyProps) => {
     form.setFieldsValue({ sourceId: option.key });
   };
 
+  const checkAccountExist = (rule, value, callback) => {
+    if (value == undefined) {
+      callback();
+    }
+    else {
+      const keyValue = initData.id == undefined ? '' : initData.id;
+      ExistAccount(keyValue, value).then(res => {
+        if (res)
+          callback('请输入用户名重复');
+        else
+          callback();
+      })
+    }
+  };
+
   return (
     <BaseModifyProvider {...props} name="用户" save={doSave}>
       <Card>
@@ -98,7 +113,8 @@ const Modify = (props: ModifyProps) => {
               {...baseFormProps}
               field="account"
               label="用户名"
-              rules={[{ required: true, message: '请输入用户名' }]}
+              // rules={[{ required: true, message: '请输入用户名' }]}
+              rules={[{ required: true, message: '请输入用户名' }, { validator: checkAccountExist }]} 
             ></ModifyItem>
 
             {initData.id == undefined ?

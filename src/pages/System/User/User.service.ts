@@ -56,8 +56,14 @@ export function DisabledToggle(keyValue, disabled: boolean): Promise<any> {
   }
 }
 
-//权限操作
+// 验证用户名
+export function ExistAccount(keyValue, account): Promise<any> {
+  return request
+    .get(process.env.basePath + `/Account/ExistAccount?keyValue=${keyValue}&account=${account}`)
+    .then(getResult as any);
+}
 
+//权限操作
 // 系统功能列表
 export function GetAuths(userId): Promise<any> {
   return request

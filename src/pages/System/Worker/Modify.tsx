@@ -86,12 +86,7 @@ const Modify = (props: ModifyProps) => {
               field="code"
               label="工号"
               // rules={[{ required: true, message: '请输入工号' }]} 
-              rules={[{ required: true, message: '请输入工号' },
-              {
-                validator: checkCodeExist
-              }
-              ]}
-
+              rules={[{ required: true, message: '请输入工号' }, { validator: checkCodeExist }]} 
             ></ModifyItem>
           </Row>
 

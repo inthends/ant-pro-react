@@ -174,7 +174,7 @@ function Main() {
             onSearch={value => loadData(value, organize)}
             style={{ width: 200 }}
           />
-          <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer()}>
+          <Button type="primary" style={{ float: 'right',marginLeft: '10px' }} onClick={() => showDrawer()}>
             <Icon type="plus" />
             区域
           </Button>
