@@ -219,21 +219,24 @@ const Verify = (props: VerifyProps) => {
                 {String(infoDetail.billDate).substr(0, 10)}
               </Form.Item>
             </Col>
+           
+
             <Col span={6}>
-              <Form.Item label="收款人"  >
-                {infoDetail.createUserName}
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item label="付款单号"  >
+              <Form.Item label="收据编号">
                 {infoDetail.payCode}
               </Form.Item>
             </Col>
+            <Col span={6}>
+              <Form.Item label="发票编号">
+                {infoDetail.invoiceCode}
+              </Form.Item>
+            </Col>
+            
           </Row>
           <Row gutter={24}>
             <Col span={6}>
-              <Form.Item label="发票编号"  >
-                {infoDetail.invoiceCdde}
+              <Form.Item label="收款人"  >
+                {infoDetail.createUserName}
               </Form.Item>
             </Col>
             <Col span={6}>
@@ -242,12 +245,12 @@ const Verify = (props: VerifyProps) => {
               </Form.Item>
             </Col>
             <Col span={6}>
-              <Form.Item label="费用状态"   >
+              <Form.Item label="费用状态">
                 {GetStatus(infoDetail.status)}
               </Form.Item>
             </Col>
             <Col span={6}>
-              <Form.Item label="单据状态"   >
+              <Form.Item label="单据状态">
                 {/* {infoDetail.ifVerify ? '已审核' : '未审核'} */}
                 {GetVerifyStatus(infoDetail.ifVerify)}
               </Form.Item>
@@ -278,7 +281,7 @@ const Verify = (props: VerifyProps) => {
             pagination={pagination}
             scroll={{ y: 500, x: 1500 }}
             loading={loading}
-          /> 
+          />
           {!ifVerify ?
             <Row gutter={24}>
               <Col span={24}>
