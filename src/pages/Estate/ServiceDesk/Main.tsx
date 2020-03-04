@@ -7,8 +7,8 @@ import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
 import { GetPageListJson } from './Main.service';
-import { GetQuickSimpleTreeAllForDeskService } from '@/services/commonItem';
-import { getResult } from '@/utils/networkUtils';
+// import { GetQuickSimpleTreeAllForDeskService } from '@/services/commonItem';
+// import { getResult } from '@/utils/networkUtils';
 const { Content } = Layout;
 const { Search } = Input;
 
@@ -20,7 +20,7 @@ function Main() {
   const [data, setData] = useState<any[]>([]);
   const [currData, setCurrData] = useState<any>();
   const [search, setSearch] = useState<string>('');
-  const [treeData, setTreeData] = useState<any[]>([]);
+  // const [treeData, setTreeData] = useState<any[]>([]);
 
   const selectTree = (id, type, info) => {
     initLoadData(info.node.props.dataRef, search);
@@ -36,16 +36,16 @@ function Main() {
     // });
 
     //获取房产树
-    GetQuickSimpleTreeAllForDeskService()
-      .then(getResult)
-      .then((res: any[]) => {
-        setTreeData(res || []);
-        // return res || [];
-      });
-
+    // GetQuickSimpleTreeAllForDeskService()
+    //   .then(getResult)
+    //   .then((res: any[]) => {
+    //     setTreeData(res || []);
+    //     // return res || [];
+    //   }); 
     initLoadData('', '');
 
   }, []);
+
   // 获取属性数据
   // const getTreeData = () => {
   //   return GetQuickPStructsTree().then((res: any[]) => {
@@ -173,7 +173,7 @@ function Main() {
       <Modify
         modifyVisible={modifyVisible}
         closeDrawer={closeDrawer}
-        treeData={treeData}
+        // treeData={treeData}
         data={currData}
         reload={() => initLoadData(organize, search)}
       />

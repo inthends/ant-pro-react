@@ -731,8 +731,7 @@ const Add = (props: AddProps) => {
                           {getFieldDecorator('billUnitId', {
                           })(
                             <input type='hidden' />
-                          )}
-
+                          )} 
                         </Form.Item>
                       </Col>
                     </Row>

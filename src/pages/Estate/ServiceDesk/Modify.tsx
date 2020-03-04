@@ -3,6 +3,7 @@ import { Spin, Upload, Modal, Menu, Dropdown, Icon, Tabs, Select, Button, Card, 
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { Visit, GetFilesData, RemoveFile, GetRoomUser, SaveForm, ChangeToRepair, ChangeToComplaint } from './Main.service';
+import { GetOrgTreeSimple, GetAsynChildBuildingsSimple } from '@/services/commonItem';
 import styles from './style.less';
 import CommentBox from './CommentBox';
 import AddMemo from './AddMemo';
@@ -16,11 +17,11 @@ interface ModifyProps {
   form: WrappedFormUtils;
   closeDrawer(): void;
   reload(): void;
-  treeData: any[];
+  // treeData: any[];
 }
 
 const Modify = (props: ModifyProps) => {
-  const { modifyVisible, data, closeDrawer, form, reload, treeData } = props;
+  const { modifyVisible, data, closeDrawer, form, reload } = props;
   const { getFieldDecorator } = form;
   var title = data === undefined ? '添加服务单' : '修改服务单';
   if (data && data.status != 1 && data.status != 3) {
@@ -35,16 +36,16 @@ const Modify = (props: ModifyProps) => {
   const [previewImage, setPreviewImage] = useState<string>('');
   const [addMemoVisible, setAddMemoVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const [treeData, setTreeData] = useState<any[]>([]);
+
   // 打开抽屉时初始化
-  // useEffect(() => { 
-  //获取房产树
-  // GetQuickSimpleTreeAll()
-  //   .then(getResult)
-  //   .then((res: TreeEntity[]) => {
-  //     setTreeData(res || []);
-  //     return res || [];
-  //   }); 
-  // }, []);
+  useEffect(() => {
+    //获取房产树 
+    GetOrgTreeSimple().then((res: any[]) => {
+      setTreeData(res || []);
+    });
+  }, []);
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -163,6 +164,25 @@ const Modify = (props: ModifyProps) => {
       }
     });
   };
+
+  //异步加载房产
+  const onLoadData = treeNode =>
+    new Promise<any>(resolve => {
+      if (treeNode.props.children && treeNode.props.children.length > 0 && treeNode.props.type != 'D') {
+        resolve();
+        return;
+      }
+      setTimeout(() => {
+        GetAsynChildBuildingsSimple(treeNode.props.eventKey, treeNode.props.type).then((res: any[]) => {
+          // treeNode.props.children = res || [];
+          let newtree = treeData.concat(res);
+          // setTreeData([...treeData]);
+          setTreeData(newtree);
+        });
+        resolve();
+      }, 50);
+    });
+
 
   const menu = (
     <Menu onClick={handleMenuClick}>
@@ -381,7 +401,7 @@ const Modify = (props: ModifyProps) => {
 
                   <Row gutter={24}>
                     <Col lg={8}>
-                      <Form.Item label="联系位置" required>
+                      {/* <Form.Item label="联系位置" required>
                         {getFieldDecorator('roomId', {
                           initialValue: infoDetail.roomId,
                           rules: [{ required: true, message: '请选择联系位置' }],
@@ -395,7 +415,31 @@ const Modify = (props: ModifyProps) => {
                             treeDataSimpleMode={true} >
                           </TreeSelect>
                         )}
+                      </Form.Item> */}
+
+                      <Form.Item label="联系位置" required>
+                        {getFieldDecorator('roomId', {
+                          initialValue: infoDetail.roomId,
+                          rules: [{ required: true, message: '请选择联系位置' }],
+                        })(
+                          <TreeSelect
+                            placeholder="请选择联系位置"
+                            allowClear
+                            dropdownStyle={{ maxHeight: 300 }}
+                            treeData={treeData}
+                            loadData={onLoadData}
+                            onChange={onChange}
+                            treeDataSimpleMode={true} >
+                          </TreeSelect>
+                        )}
+                        {/* <span style={{ marginLeft: 8, color: "blue" }}>多个房屋的时候，默认获取第一个房屋作为计费单元</span> */}
+                        {getFieldDecorator('billUnitId', {
+                        })(
+                          <input type='hidden' />
+                        )}
                       </Form.Item>
+
+
                     </Col>
                     <Col lg={8}>
                       <Form.Item label="联系人">
@@ -562,7 +606,7 @@ const Modify = (props: ModifyProps) => {
               }
 
               {infoDetail.status == 3 ? (
-                <Card title="回访情况" className={styles.card2}  hoverable>
+                <Card title="回访情况" className={styles.card2} hoverable>
                   <Row gutter={24}>
                     <Col lg={6}>
                       <Form.Item label="回访方式" required>
