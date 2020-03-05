@@ -15,7 +15,7 @@ interface ListTableProps {
   data: any[];
   reload(): void;
   showModify(id?, isedit?): void;
-  // showVerify(id?, flag?): void;
+  //showVerify(id?, flag?): void;
   showVerify(id?): void;
   showDivide(): void;
   showFee(id?): void;

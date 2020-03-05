@@ -94,10 +94,10 @@ const Verify = (props: VerifyProps) => {
         //let modifyData = { ...infoDetail, ...values, keyValue: infoDetail.billId };
 
         let newData = {
-          keyValue: infoDetail.billId, 
+          keyValue: infoDetail.billId,
           IfVerify: ifVerify,
-          VerifyMemo: values.verifymemo
-        }; 
+          VerifyMemo: values.verifyMemo
+        };
         //modifyData.ifVerify = ifVerify;
         Audit(newData).then(() => {
           closeVerify(true);
@@ -261,17 +261,18 @@ const Verify = (props: VerifyProps) => {
                 </Form.Item>
               </Col>
             </Row>
-            <Row>
-              <Col span={24}>
-                <Form.Item label="审核情况"  >
-                  {getFieldDecorator('verifyMemo', {
-                    initialValue: infoDetail.verifyMemo
-                  })(
-                    <TextArea rows={4} placeholder="请输入审核情况" />
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
+            {ifVerify ?
+              <Row>
+                <Col span={24}>
+                  <Form.Item label="审核情况"  >
+                    {getFieldDecorator('verifyMemo', {
+                      initialValue: infoDetail.verifyMemo
+                    })(
+                      <TextArea rows={4} placeholder="请输入审核情况" />
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row> : null}
             <Row>
               <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
                 <Search
