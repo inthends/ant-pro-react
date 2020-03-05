@@ -317,6 +317,12 @@ const Modify = (props: ModifyProps) => {
       width: '100px',
     },
     {
+      title: '房屋全称',
+      dataIndex: 'allName',
+      key: 'allName',
+      width: '240px', 
+    },  
+    {
       title: '备注',
       dataIndex: 'memo',
       key: 'memo'
@@ -565,7 +571,7 @@ const Modify = (props: ModifyProps) => {
               columns={columns}
               rowKey={record => record.id}
               pagination={pagination}
-              scroll={{ x: 850, y: 500 }}
+              scroll={{ x: 1200, y: 500 }}
               loading={loading}
               onChange={(pagination: PaginationConfig, filters, sorter) =>
                 changePage(pagination, filters, sorter)

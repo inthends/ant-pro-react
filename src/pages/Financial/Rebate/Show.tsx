@@ -169,11 +169,16 @@ const Show = (props: ShowProps) => {
       width: '100px',
     },
     {
-      title: '备注',
-      width: '150px',
+      title: '房屋全称',
+      dataIndex: 'allName',
+      key: 'allName',
+      width: '240px', 
+    },  
+    {
+      title: '备注', 
       dataIndex: 'memo',
       key: 'memo',
-      editable: true
+      // editable: true
     },
   ] as ColumnProps<any>[];
 
@@ -256,7 +261,7 @@ const Show = (props: ShowProps) => {
               columns={columns}
               rowKey={record => record.id}
               pagination={pagination}
-              scroll={{ x: 850, y: 500 }}
+              scroll={{ x: 1200, y: 500 }}
               loading={loading}
               onChange={(pagination: PaginationConfig, filters, sorter) =>
                 changePage(pagination, filters, sorter)

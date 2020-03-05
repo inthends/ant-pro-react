@@ -102,6 +102,13 @@ export function GetAsynChildBuildingsSimple(pstructid, type): Promise<any[]> {
     .then(getResult as any);
 }
 
+//获取下级服务单使用
+export function GetAsynChildBuildingsForDesk(pstructid, type): Promise<any[]> {
+  return request
+    .get(process.env.basePath + `/Common/GetAsynChildBuildingsForDesk?parentId=${pstructid}&type=${type}`)
+    .then(getResult as any);
+}
+
 // //只加载到管理处，项目管理模块左侧树使用
 // export function GetOrgTreeOnly(): Promise<TreeEntity[]> {
 //   return request.get(process.env.basePath + `/Common/GetOrgTreeOnly`, {}).then(getResult);

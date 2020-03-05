@@ -3,7 +3,7 @@ import { Spin, Upload, Modal, Menu, Dropdown, Icon, Tabs, Select, Button, Card, 
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { Visit, GetFilesData, RemoveFile, GetRoomUser, SaveForm, ChangeToRepair, ChangeToComplaint } from './Main.service';
-import { GetOrgTreeSimple, GetAsynChildBuildingsSimple } from '@/services/commonItem';
+import { GetOrgTreeSimple, GetAsynChildBuildingsForDesk } from '@/services/commonItem';
 import styles from './style.less';
 import CommentBox from './CommentBox';
 import AddMemo from './AddMemo';
@@ -173,7 +173,7 @@ const Modify = (props: ModifyProps) => {
         return;
       }
       setTimeout(() => {
-        GetAsynChildBuildingsSimple(treeNode.props.eventKey, treeNode.props.type).then((res: any[]) => {
+        GetAsynChildBuildingsForDesk(treeNode.props.eventKey, treeNode.props.type).then((res: any[]) => {
           // treeNode.props.children = res || [];
           let newtree = treeData.concat(res);
           // setTreeData([...treeData]);
