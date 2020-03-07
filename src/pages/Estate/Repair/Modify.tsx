@@ -6,7 +6,7 @@ import { Dispatch, Change, Receive, Start, Handle, Check, Approve } from './Main
 import { GetUserList, getCommonItems } from '@/services/commonItem';
 import moment from 'moment';
 import styles from './style.less';
-const { Paragraph } = Typography;
+// const { Paragraph } = Typography;
 const { Option } = Select;
 
 interface ModifyProps {
@@ -76,7 +76,7 @@ const Modify = (props: ModifyProps) => {
         return '';
     }
   };
- 
+
   const handleSearch = value => {
     if (value == '')
       return;
@@ -233,22 +233,71 @@ const Modify = (props: ModifyProps) => {
     <Drawer
       title={title}
       placement="right"
-      width={800}
+      width={850}
       onClose={close}
       visible={modifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
       <PageHeader
 
-        title={infoDetail.billCode}
-        subTitle={GetStatus(infoDetail.status)}
-      // extra={[
-      //   <Button key="3">附件</Button>,
-      // ]}
-      >
-        <Paragraph>
+        // title={infoDetail.billCode}
+        // subTitle={GetStatus(infoDetail.status)}
+        // extra={[
+        //   <Button key="3">附件</Button>,
+        // ]}
+
+        title={null}
+        subTitle={
+          <div>
+            <label style={{ color: '#4494f0', fontSize: '24px' }}>{infoDetail.address}</label>
+          </div>
+        }
+        style={{
+          border: '1px solid rgb(235, 237, 240)'
+        }}  >
+
+        {/* <Paragraph>
           来自{infoDetail.repairArea}，联系人：{infoDetail.contactName}，地址：{infoDetail.address}，电话：<a>{infoDetail.contactLink}</a>，属于{infoDetail.isPaid == '是' ? '有偿服务' : '无偿服务'}，报修时间：{infoDetail.billDate}，内容如下
         </Paragraph>
+        {infoDetail.repairContent} */}
+
+       
+        <Form layout='vertical'>
+          <Row gutter={6}>
+            <Col lg={5}>
+              <Form.Item label="单号" >
+                {infoDetail.billCode}
+              </Form.Item>
+            </Col>
+            <Col lg={3}>
+              <Form.Item label="状态" >
+                {GetStatus(infoDetail.status)}
+              </Form.Item>
+            </Col>
+            <Col lg={4}>
+              <Form.Item label="联系人" >
+                {infoDetail.contactName}
+              </Form.Item>
+            </Col>
+            <Col lg={4}>
+              <Form.Item label="电话" >
+                {infoDetail.contactLink}
+              </Form.Item>
+            </Col>
+            <Col lg={3}>
+              <Form.Item label="是否有偿" >
+                {infoDetail.isPaid}
+              </Form.Item>
+            </Col>
+            <Col lg={5}>
+              <Form.Item label="报修时间" >
+                {infoDetail.billDate}
+              </Form.Item>
+            </Col>
+          </Row>
+        
+        </Form>
+        <Divider dashed />
         {infoDetail.repairContent}
       </PageHeader>
       <Divider dashed />
@@ -256,7 +305,7 @@ const Modify = (props: ModifyProps) => {
         modifyVisible ? (
           <Form layout="vertical" hideRequiredMark>
             {infoDetail.status == 1 ? (
-              <Card title="派单" className={styles.card}  hoverable>
+              <Card title="派单" className={styles.card} hoverable>
                 <Row gutter={24}>
                   <Col lg={5}>
                     <Form.Item label="维修专业" required>
@@ -313,7 +362,7 @@ const Modify = (props: ModifyProps) => {
                   </Col>
                 </Row>
               </Card>) : (
-                <Card title="派单" className={styles.card}  hoverable>
+                <Card title="派单" className={styles.card} hoverable>
                   <Row gutter={24}>
                     <Col lg={5}>
                       <Form.Item label="维修专业">
@@ -347,7 +396,7 @@ const Modify = (props: ModifyProps) => {
                 </Card>
               )}
             {infoDetail.status == 3 ? (
-              <Card title="开工" className={styles.card}  hoverable>
+              <Card title="开工" className={styles.card} hoverable>
                 <Row gutter={24}>
                   <Col lg={7}>
                     <Form.Item label="开工时间" required>
@@ -368,7 +417,7 @@ const Modify = (props: ModifyProps) => {
                 </Row>
               </Card>
             ) : infoDetail.status > 3 ? (
-              <Card title="开工" className={styles.card}  hoverable>
+              <Card title="开工" className={styles.card} hoverable>
                 <Row gutter={24}>
                   <Col lg={6}>
                     <Form.Item label="开工时间"  >
@@ -385,7 +434,7 @@ const Modify = (props: ModifyProps) => {
             ) : null}
 
             {infoDetail.status == 4 ? (
-              <Card title="完成情况" className={styles.card}  hoverable>
+              <Card title="完成情况" className={styles.card} hoverable>
                 <Row gutter={24}>
                   <Col lg={7}>
                     <Form.Item label="完成时间" required>
@@ -590,7 +639,7 @@ const Modify = (props: ModifyProps) => {
             </Card>) : null} */}
 
             {infoDetail.status == 6 ? (
-              <Card title="检验情况" className={styles.card}  hoverable>
+              <Card title="检验情况" className={styles.card} hoverable>
                 <Row gutter={24}>
                   <Col lg={7}>
                     <Form.Item label="检验时间" required>
@@ -732,7 +781,7 @@ const Modify = (props: ModifyProps) => {
         {infoDetail.status == 5 ? (
           <div>
             <Button onClick={close} style={{ marginRight: 8 }}>
-            关闭
+              关闭
         </Button>
             {/* <Button onClick={visit} type="primary">
               回访

@@ -548,7 +548,7 @@ const Modify = (props: ModifyProps) => {
                       <Form.Item label="联系人">
                         {infoDetail.contactName}
                       </Form.Item>
-                    </Col> 
+                    </Col>
                     <Col lg={6}>
                       <Form.Item label="联系电话">
                         {infoDetail.contactPhone}
@@ -565,6 +565,21 @@ const Modify = (props: ModifyProps) => {
                       </Form.Item>
                     </Col>
                   </Row>
+
+                  {infoDetail.billType == '报修' ?
+                    <Row gutter={24}>
+                      <Col lg={8}>
+                        <Form.Item label="维修区域">
+                          {infoDetail.repairArea}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={8}>
+                        <Form.Item label="是否有偿">
+                          {infoDetail.isPaid}
+                        </Form.Item>
+                      </Col>
+                    </Row> : null}
+
                   <Row gutter={24}>
                     <Col lg={24}>
                       <Form.Item label="详细地址">
