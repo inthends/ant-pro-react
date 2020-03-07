@@ -287,9 +287,10 @@ const Modify = (props: ModifyProps) => {
     <Drawer
       title={title}
       placement="right"
-      width={760}
+      width={800}
       onClose={close}
       visible={modifyVisible}
+      destroyOnClose={true}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
       <Spin tip="数据处理中..." spinning={loading}>
@@ -417,13 +418,13 @@ const Modify = (props: ModifyProps) => {
                         )}
                       </Form.Item> */}
 
-                      <Form.Item label="联系位置" required>
+                      <Form.Item label="所属位置" required>
                         {getFieldDecorator('roomId', {
                           initialValue: infoDetail.roomId,
-                          rules: [{ required: true, message: '请选择联系位置' }],
+                          rules: [{ required: true, message: '请选择所属位置' }],
                         })(
                           <TreeSelect
-                            placeholder="请选择联系位置"
+                            placeholder="请选择所属位置"
                             allowClear
                             dropdownStyle={{ maxHeight: 300 }}
                             treeData={treeData}
@@ -438,8 +439,6 @@ const Modify = (props: ModifyProps) => {
                           <input type='hidden' />
                         )}
                       </Form.Item>
-
-
                     </Col>
                     <Col lg={8}>
                       <Form.Item label="联系人">
@@ -512,16 +511,17 @@ const Modify = (props: ModifyProps) => {
               ) :
                 (<Card className={infoDetail.status == 2 ? styles.card2 : styles.card} title="基础信息" >
                   <Row gutter={24}>
-                    <Col lg={4}>
-                      <Form.Item label="单据来源"  >
-                        {infoDetail.source}
-                      </Form.Item>
-                    </Col>
                     <Col lg={5}>
                       <Form.Item label="服务单号">
                         {infoDetail.billCode}
                       </Form.Item>
                     </Col>
+                    <Col lg={4}>
+                      <Form.Item label="单据来源"  >
+                        {infoDetail.source}
+                      </Form.Item>
+                    </Col>
+
                     <Col lg={6}>
                       <Form.Item label="单据时间">
                         {infoDetail.billDate}
@@ -539,17 +539,16 @@ const Modify = (props: ModifyProps) => {
                     </Col>
                   </Row>
                   <Row gutter={24}>
+                    <Col lg={5}>
+                      <Form.Item label="位置编号">
+                        {infoDetail.roomId}
+                      </Form.Item>
+                    </Col>
                     <Col lg={4}>
                       <Form.Item label="联系人">
                         {infoDetail.contactName}
                       </Form.Item>
-                    </Col>
-                    <Col lg={5}>
-                      <Form.Item label="房号"  >
-                        {infoDetail.roomId}
-                      </Form.Item>
-                    </Col>
-
+                    </Col> 
                     <Col lg={6}>
                       <Form.Item label="联系电话">
                         {infoDetail.contactPhone}
@@ -691,9 +690,6 @@ const Modify = (props: ModifyProps) => {
                   </Col>
                 </Row>
               </Card>) : null}
-
-
-
             </Form>
           </TabPane>
           {data ? (
@@ -732,7 +728,6 @@ const Modify = (props: ModifyProps) => {
         <Button onClick={close} style={{ marginRight: 8 }}>
           取消
         </Button>
-
         {data === undefined ? (
           <Button onClick={save} type="primary">
             保存

@@ -39,14 +39,13 @@ const AddMemo = (props: AddMemoProps) => {
       cancelText="取消"
       onCancel={() => closeModal()}
       onOk={save}
+      destroyOnClose={true}
       bodyStyle={{ background: '#f6f7fb', height: '250px' }}
-      width='400px'
-    >
-
+      width='400px' > 
       <Form layout="vertical" hideRequiredMark>
         <Row gutter={24}>
           <Col lg={24}>
-            <Form.Item label="说明">
+            <Form.Item label="&nbsp;">
               {getFieldDecorator('memo', {
                 rules: [{ required: true, message: '请输入说明' }]
               })(<TextArea rows={7} placeholder="请输入说明" />)}
