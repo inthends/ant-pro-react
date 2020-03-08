@@ -76,6 +76,25 @@ const Split = (props: SplitProps) => {
     return current < moment(infoDetail.beginDate) || current > moment(infoDetail.endDate).add(1, 'days');
   };
 
+  //计算张总天数
+  //  const GetDays = (max: moment.Moment, min: moment.Moment) => {
+  //   const iMonth = max.diff(min, 'months');
+  //   if (iMonth == 0) {
+  //     return max.diff(min, 'days')+1;//不足一个月
+  //   }
+  //   else { 
+  //     let days = (iMonth - 1) * 30;
+  //     let minEnd = min.clone();//防止影响原来的日期
+  //     let maxBegin = max.clone();//防止影响原来的日期
+  //     minEnd = minEnd.endOf('month');//月底
+  //     maxBegin = maxBegin.startOf('month');//月底
+  //     let pdays = minEnd.diff(min, 'days')+1;
+  //     let adays = max.diff(maxBegin, 'days')+1;
+  //     alert(days + pdays + adays);
+  //     return days + pdays + adays;
+  //   }
+  // }
+
   return (
     <Drawer
       title={title}
@@ -164,30 +183,24 @@ const Split = (props: SplitProps) => {
                     <InputNumber style={{ width: '100%' }}
                       min={0} max={infoDetail.amount}
                       precision={2}
-                      // onChange={(value) => {
-                      //   if (value && value < infoDetail.amount) {
-                      //     var tempInfo = Object.assign({}, infoDetail, { firstAmount: value });
-                      //     setInfoDetail(tempInfo);
-                      //   }
-                      // }}
-
-                      onChange={(value) => {
-                        var secondAmount = infoDetail.amount - Number(value);
-                        form.setFieldsValue({ secondAmount: secondAmount });
-                        //修改金额的时候，改变日期 
-                        const a = moment(infoDetail.beginDate);
-                        const b = moment(infoDetail.endDate);
-                        const iDays = b.diff(a, 'days');
-                        const firstdays = Math.ceil(iDays * Number(value) / infoDetail.amount);
-                        const firstEndDate = a.add(firstdays, 'days');
-                        form.setFieldsValue({ firstEndDate: firstEndDate });
-                        if (firstEndDate < b) {
-                          form.setFieldsValue({ secondBeginDate: moment(firstEndDate).add(1, 'days') });
-                        } else {
-                          form.setFieldsValue({ secondBeginDate: firstEndDate });
-                        }
-                      }
-                      }
+                    //取消改变金额变动日期
+                    // onChange={(value) => {
+                    //   var secondAmount = infoDetail.amount - Number(value);
+                    //   form.setFieldsValue({ secondAmount: secondAmount });
+                    //   //修改金额的时候，改变日期 
+                    //   const a = moment(infoDetail.beginDate);
+                    //   const b = moment(infoDetail.endDate);
+                    //   const iDays = b.diff(a, 'days');
+                    //   const firstdays = Math.ceil(iDays * Number(value) / infoDetail.amount);
+                    //   const firstEndDate = a.add(firstdays, 'days');
+                    //   form.setFieldsValue({ firstEndDate: firstEndDate });
+                    //   if (firstEndDate < b) {
+                    //     form.setFieldsValue({ secondBeginDate: moment(firstEndDate).add(1, 'days') });
+                    //   } else {
+                    //     form.setFieldsValue({ secondBeginDate: firstEndDate });
+                    //   }
+                    // }
+                    //}
                     />
                   )}
                 </Form.Item>
@@ -231,12 +244,12 @@ const Split = (props: SplitProps) => {
                       // }} 
 
                       onChange={(date, datestr) => {
-                        //改变日期，计算金额
-                        const a = moment(infoDetail.beginDate);
-                        const b = moment(infoDetail.endDate);
-                        const iDays = b.diff(a, 'days');
+                        //改变日期，计算金额 
+                        const a = moment("2020-01-01");//(infoDetail.beginDate);
+                        const b = moment("2020-12-31");//(infoDetail.endDate);
+                        const iDays = b.diff(a, 'days') + 1;
                         const firstEndDate = moment(datestr);
-                        const firstDays = firstEndDate.diff(a, 'days');
+                        const firstDays = firstEndDate.diff(a, 'days') + 1;
                         const firstamount = (infoDetail.amount / iDays * firstDays).toFixed(2);
                         form.setFieldsValue({ firstAmount: firstamount });
                         form.setFieldsValue({ secondAmount: infoDetail.amount - Number(firstamount) });
