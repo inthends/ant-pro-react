@@ -1,5 +1,5 @@
 
-import { DatePicker, AutoComplete, Select, Typography, Tag, Divider, PageHeader, Button, Card, Col, Drawer, Form, Input, message, Row } from 'antd';
+import { DatePicker, AutoComplete, Select, Tag, Divider, PageHeader, Button, Card, Col, Drawer, Form, Input, message, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { Dispatch, Change, Receive, Start, Handle, Check, Approve } from './Main.service';
@@ -62,13 +62,13 @@ const Modify = (props: ModifyProps) => {
         return <Tag color="#e4aa5b">待开工</Tag>;
       case 4:
         return <Tag color="#61c33a">待完成</Tag>;
+      // case 5:
+      //   return <Tag color="#ff5722">待回访</Tag>;
       case 5:
-        return <Tag color="#ff5722">待回访</Tag>;
-      case 6:
         return <Tag color="#5fb878">待检验</Tag>;
-      case 7:
+      case 6:
         return <Tag color="#29cc63">待审核</Tag>;
-      case 8:
+      case 7:
         return <Tag color="#e48f27">已审核</Tag>;
       case -1:
         return <Tag color="#c31818">已作废</Tag>;
@@ -260,8 +260,7 @@ const Modify = (props: ModifyProps) => {
           来自{infoDetail.repairArea}，联系人：{infoDetail.contactName}，地址：{infoDetail.address}，电话：<a>{infoDetail.contactLink}</a>，属于{infoDetail.isPaid == '是' ? '有偿服务' : '无偿服务'}，报修时间：{infoDetail.billDate}，内容如下
         </Paragraph>
         {infoDetail.repairContent} */}
-
-       
+ 
         <Form layout='vertical'>
           <Row gutter={6}>
             <Col lg={5}>
@@ -778,19 +777,18 @@ const Modify = (props: ModifyProps) => {
         </Button></div>
         ) : null}
 
-        {infoDetail.status == 5 ? (
+        {/* {infoDetail.status == 5 ? (
           <div>
             <Button onClick={close} style={{ marginRight: 8 }}>
               关闭
         </Button>
-            {/* <Button onClick={visit} type="primary">
+            <Button onClick={visit} type="primary">
               回访
-        </Button> */}
+        </Button>
           </div>
-        ) : null}
-
-
-        {infoDetail.status == 6 ? (
+        ) : null} */}
+ 
+        {infoDetail.status == 5 ? (
           <div>
             <Button onClick={close} style={{ marginRight: 8 }}>
               取消
@@ -800,7 +798,7 @@ const Modify = (props: ModifyProps) => {
         </Button></div>
         ) : null}
 
-        {infoDetail.status == 7 ? (
+        {infoDetail.status == 6 ? (
           <div>
             <Button onClick={close} style={{ marginRight: 8 }}>
               取消
@@ -810,7 +808,7 @@ const Modify = (props: ModifyProps) => {
         </Button></div>
         ) : null}
 
-        {infoDetail.status == 8 ? (
+        {infoDetail.status == 7 ? (
           <div>
             <Button onClick={close} style={{ marginRight: 8 }}>
               关闭
