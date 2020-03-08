@@ -64,11 +64,11 @@ function ListTable(props: ListTableProps) {
               return <Tag color="#e4aa5b">待处理</Tag>
             case 2:
               return <Tag color="#e2aa5c">待完成</Tag>
+            // case 3:
+            //   return <Tag color="#e4aa5b">待回访</Tag>
             case 3:
-              return <Tag color="#e4aa5b">待回访</Tag>
-            case 4:
               return <Tag color="#61c33a">待审核</Tag>
-            case 5:
+            case 4:
               return <Tag color="#40A9FF">已审核</Tag>
             case -1:
               return <Tag color="#40A9FF">已作废</Tag>

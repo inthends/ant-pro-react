@@ -1,13 +1,12 @@
 
-import { DatePicker, AutoComplete, Select, Tag, Typography, Row, Divider, PageHeader, Button, Card, Col, Drawer, Form, Input, message } from 'antd';
+import { DatePicker, AutoComplete, Select, Tag, Row, Divider, PageHeader, Button, Card, Col, Drawer, Form, Input, message } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 // import { getResult } from '@/utils/networkUtils';
-import { GetUserByCustomerId, Visit, Handle, Approve, Project } from './Main.service';
+import { GetUserByCustomerId,  Handle, Approve, Project } from './Main.service';
 import { GetUserList } from '@/services/commonItem';
 // import { TreeEntity } from '@/model/models';
 import styles from './style.less';
-const { Paragraph } = Typography;
 const { Option } = Select;
 
 interface ModifyProps {
@@ -87,20 +86,20 @@ const Modify = (props: ModifyProps) => {
     });
   };
 
-  const visit = () => {
-    form.validateFields((errors, values) => {
-      if (!errors) {
-        const newData = data ? { ...data, ...values } : values;
-        //doSave(newData);
-        //newData.keyValue = newData.id;
-        Visit({ ...newData, keyValue: newData.id }).then(res => {
-          message.success('回访成功！');
-          closeDrawer();
-          reload();
-        });
-      }
-    });
-  };
+  // const visit = () => {
+  //   form.validateFields((errors, values) => {
+  //     if (!errors) {
+  //       const newData = data ? { ...data, ...values } : values;
+  //       //doSave(newData);
+  //       //newData.keyValue = newData.id;
+  //       Visit({ ...newData, keyValue: newData.id }).then(res => {
+  //         message.success('回访成功！');
+  //         closeDrawer();
+  //         reload();
+  //       });
+  //     }
+  //   });
+  // };
 
   const approve = () => {
     form.validateFields((errors, values) => {
@@ -127,20 +126,20 @@ const Modify = (props: ModifyProps) => {
   // };
 
   //转换状态
-  const GetStatus = (infoDetail) => {
-    if (infoDetail.isEnable == 0) {
+  const GetStatus = (status,isEnable) => {
+    if (isEnable == 0) {
       return <Tag color="#d82d2d">无效投诉</Tag>
     } else {
-      switch (infoDetail.status) {
+      switch (status) {
         case 1:
           return <Tag color="#e4aa5b">待处理</Tag>;
         case 2:
           return <Tag color="#e2aa5c">待完成</Tag>;
+        // case 3:
+        //   return <Tag color="#e4aa5b">待回访</Tag>;
         case 3:
-          return <Tag color="#e4aa5b">待回访</Tag>;
-        case 4:
           return <Tag color="#61c33a">待审核</Tag>;
-        case 5:
+        case 4:
           return <Tag color="#40A9FF">已审核</Tag>;
         case -1:
           return <Tag color="#40A9FF">已作废</Tag>;
@@ -253,15 +252,53 @@ const Modify = (props: ModifyProps) => {
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
       <PageHeader
-        title={infoDetail.billCode}
-        subTitle={GetStatus(infoDetail)}
-      // extra={[
-      //   <Button key="1">附件</Button>
-      // ]}
+        // title={infoDetail.billCode}
+        // subTitle={GetStatus(infoDetail)}
+        title={null}
+        subTitle={
+          <div>
+            <label style={{ color: '#4494f0', fontSize: '24px' }}>{infoDetail.complaintAddress}</label>
+          </div>
+        }
+        style={{
+          border: '1px solid rgb(235, 237, 240)'
+        }}
+
       >
-        <Paragraph>
+        {/* <Paragraph>
           投诉来自于{infoDetail.complaintAddress}，联系人：{infoDetail.complaintUser ? infoDetail.complaintUser : '匿名'}，电话：{infoDetail.complaintLink ? infoDetail.complaintLink : '无'}，在 {infoDetail.billDate} 投诉，内容如下
         </Paragraph>
+        {infoDetail.contents} */} 
+        <Form layout='vertical'>
+          <Row gutter={6}>
+            <Col lg={5}>
+              <Form.Item label="单号" >
+                {infoDetail.billCode}
+              </Form.Item>
+            </Col>
+            <Col lg={3}>
+              <Form.Item label="状态" >
+                {GetStatus(infoDetail.status,infoDetail.isEnable)}
+              </Form.Item>
+            </Col>
+            <Col lg={4}>
+              <Form.Item label="联系人" >
+                {infoDetail.complaintUser ? infoDetail.complaintUser : '匿名'}
+              </Form.Item>
+            </Col>
+            <Col lg={4}>
+              <Form.Item label="电话" >
+                {infoDetail.complaintLink ? infoDetail.complaintLink : '无'}
+              </Form.Item>
+            </Col>
+            <Col lg={5}>
+              <Form.Item label="投诉时间" >
+                {infoDetail.billDate}
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
+        <Divider dashed />
         {infoDetail.contents}
       </PageHeader>
       <Divider dashed />
@@ -401,7 +438,7 @@ const Modify = (props: ModifyProps) => {
               </Row>
             </Card>
           ) : (
-              <Card title="立项信息" className={styles.card}  hoverable>
+              <Card title="立项信息" className={styles.card} hoverable>
                 <Row gutter={24}>
                   <Col lg={6}>
                     <Form.Item label="对象类别" >
@@ -465,7 +502,8 @@ const Modify = (props: ModifyProps) => {
             )}
 
           {infoDetail.status == 2 ? (
-            <Card title="处理过程" className={infoDetail.status == 2 ? styles.card2 : styles.card} hoverable >
+            // <Card title="处理过程" className={infoDetail.status == 2 ? styles.card2 : styles.card} hoverable >
+            <Card title="处理过程" className={styles.card2} hoverable >
               <Row gutter={24}>
                 <Col lg={6}>
                   <Form.Item label="实际处理人" required>
@@ -517,7 +555,7 @@ const Modify = (props: ModifyProps) => {
             </Card>
           ) : null}
 
-          {infoDetail.status == 3 ? (
+          {/* {infoDetail.status == 3 ? (
             <Card title="回访情况" className={styles.card} hoverable >
               <Row gutter={24}>
                 <Col lg={6}>
@@ -534,7 +572,6 @@ const Modify = (props: ModifyProps) => {
                     )}
                   </Form.Item>
                 </Col>
-
                 <Col lg={6}>
                   <Form.Item label="回访时间"  >
                     {getFieldDecorator('returnVisitDate', {
@@ -559,7 +596,6 @@ const Modify = (props: ModifyProps) => {
                   </Form.Item>
                 </Col>
               </Row>
-
               <Row gutter={24}>
                 <Col lg={24}>
                   <Form.Item label="回访结果" required>
@@ -571,8 +607,7 @@ const Modify = (props: ModifyProps) => {
                 </Col>
               </Row>
             </Card>
-          ) : null}
-
+          ) : null} */} 
         </Form>
       ) : null}
       <div
@@ -603,13 +638,13 @@ const Modify = (props: ModifyProps) => {
           </Button>
         ) : null}
 
-        {infoDetail.status == 3 ? (
+        {/* {infoDetail.status == 3 ? (
           <Button onClick={visit} type="primary">
             回访
           </Button>
-        ) : null}
+        ) : null} */}
 
-        {infoDetail.status == 4 ? (
+        {infoDetail.status == 3 ? (
           <Button onClick={approve} type="primary">
             审核
           </Button>

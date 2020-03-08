@@ -95,7 +95,6 @@ function ListTable(props: ListTableProps) {
       sorter: true,
       render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
-
     {
       title: '联系人',
       dataIndex: 'contactName',
@@ -120,7 +119,7 @@ function ListTable(props: ListTableProps) {
       align: 'center',
       width: 95,
       fixed: 'right',
-      render: (text, record) => { 
+      render: (text, record) => {
         if (record.status != 5 && record.status != 8) {
           return [
             // <Button

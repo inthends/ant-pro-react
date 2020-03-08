@@ -1,48 +1,32 @@
 
-import { Tag,   Row, Divider, PageHeader, Button, Card, Col, Drawer, Form, message } from 'antd';
+import { Tag,  Row, Divider, PageHeader, Button, Card, Col, Drawer, Form } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-// import { getResult } from '@/utils/networkUtils';
-import { Handle, Approve, Project } from './Main.service';
-// import { GetUserList } from '@/services/commonItem';
-// import { TreeEntity } from '@/model/models';
-import styles from './style.less';
+import { GetEntityShow } from './Main.service';
+import styles from './style.less'; 
 // const { Option } = Select;
 
-interface ShowProps {
-  modifyVisible: boolean;
-  data?: any;
+interface ShowLinkProps {
+  showVisible: boolean;
+  billCode?: string;
   form: WrappedFormUtils;
-  closeDrawer(): void;
-  reload(): void;
+  closeDrawer(type): void;
 }
-const Show = (props: ShowProps) => {
-  const { modifyVisible, data, closeDrawer, form, reload } = props;
-  // const { getFieldDecorator } = form;
-  const title = data === undefined ? '添加投诉单' : '查看投诉单';
+const ShowLink = (props: ShowLinkProps) => {
+  const { showVisible, billCode, closeDrawer, form } = props;
+  const title = '查看投诉单';
   const [infoDetail, setInfoDetail] = useState<any>({});
-  // const [treeData, setTreeData] = useState<any[]>([]);
-  // const [userSource, setUserSource] = useState<any[]>([]);
-
-  // 打开抽屉时初始化
-  useEffect(() => {
-
-    // 获取房产树
-    // GetQuickSimpleTreeAll()
-    //   .then(getResult)
-    //   .then((res: TreeEntity[]) => {
-    //     setTreeData(res || []);
-    //     return res || [];
-    //   }); 
-
-  }, []);
 
   // 打开抽屉时初始化 
   useEffect(() => {
-    if (modifyVisible) {
-      if (data) {
-        setInfoDetail(data);
-        form.resetFields();
+    if (showVisible) {
+      if (billCode) {
+        GetEntityShow(billCode).then(res => {
+          setInfoDetail(res);
+          // setLoading(false);
+        })
+        // setInfoDetail(billCode);
+        // form.resetFields();
       } else {
         setInfoDetail({});
         form.resetFields();
@@ -50,87 +34,18 @@ const Show = (props: ShowProps) => {
     } else {
       form.resetFields();
     }
-  }, [modifyVisible]);
+  }, [showVisible]);
 
   const close = () => {
-    closeDrawer();
+    closeDrawer("Complaint");
   };
 
-  const project = () => {
-    form.validateFields((errors, values) => {
-      if (!errors) {
-        const newData = data ? { ...data, ...values } : values;
-        //doSave(newData);
-        //newData.keyValue = newData.id;
-        Project({ ...newData, keyValue: newData.id }).then(res => {
-          message.success('立项成功');
-          closeDrawer();
-          reload();
-        });
-      }
-    });
-  };
-
-  const handle = () => {
-    form.validateFields((errors, values) => {
-      if (!errors) {
-        const newData = data ? { ...data, ...values } : values;
-        //doSave(newData);
-        //newData.keyValue = newData.id;
-        Handle({ ...newData, keyValue: newData.id }).then(res => {
-          message.success('处理成功！');
-          closeDrawer();
-          reload();
-        });
-      }
-    });
-  };
-
-  // const visit = () => {
-  //   form.validateFields((errors, values) => {
-  //     if (!errors) {
-  //       const newData = data ? { ...data, ...values } : values;
-  //       //doSave(newData);
-  //       //newData.keyValue = newData.id;
-  //       Visit({ ...newData, keyValue: newData.id }).then(res => {
-  //         message.success('回访成功！');
-  //         closeDrawer();
-  //         reload();
-  //       });
-  //     }
-  //   });
-  // };
-
-  const approve = () => {
-    form.validateFields((errors, values) => {
-      if (!errors) {
-        const newData = data ? { ...data, ...values } : values;
-        //doSave(newData);
-        //newData.keyValue = newData.id;
-        Approve({ ...newData, keyValue: newData.id }).then(res => {
-          message.success('审核成功！');
-          closeDrawer();
-          reload();
-        });
-      }
-    });
-  };
-
-  // const doSave = dataDetail => {
-  //   dataDetail.keyValue = dataDetail.id;
-  //   SaveForm({ ...dataDetail, type: 5 }).then(res => {
-  //     message.success('保存成功');
-  //     closeDrawer();
-  //     reload();
-  //   });
-  // };
 
   //转换状态
   const GetStatus = (status,isEnable) => {
     if ( isEnable == 0) {
       return <Tag color="#d82d2d">无效投诉</Tag>
     } else {
-
       switch ( status) {
         case 1:
           return <Tag color="#e4aa5b">待处理</Tag>
@@ -148,65 +63,26 @@ const Show = (props: ShowProps) => {
     }
   }
 
-  // const handleSearch = value => {
-  //   if (value == '')
-  //     return;
-  //   GetUserList(value, '业主').then(res => {
-  //     setUserSource(res || []);
-  //   })
-  // };
-
-  //实际处理人
-  // const handleUserSearch = value => {
-  //   if (value == '')
-  //     return;
-  //   GetUserList(value, '员工').then(res => {
-  //     setUserSource(res || []);
-  //   })
-  // };
-
-  // const userList = userSource.map
-  //   (item => <Option key={item.id} value={item.name}>{item.name}</Option>);
-
-  // //选择投诉对象
-  // const onOwnerSelect = (value, option) => {
-  //   //form.setFieldsValue({ownerId: option.key });
-  // }
-
-  // //选择投诉对象类型
-  // const onSelectType = (value, option) => {
-  //   GetUserList('', value).then(res => {
-  //     setUserSource(res || []);
-  //   })
-  // }
-
   return (
     <Drawer
       title={title}
       placement="right"
       width={800}
       onClose={close}
-      visible={modifyVisible}
+      visible={showVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
       <PageHeader
-        // title={infoDetail.billCode}
-        // subTitle={GetStatus(infoDetail)}
         title={null}
         subTitle={
           <div>
-            <label style={{ color: '#4494f0', fontSize: '24px' }}>{infoDetail.byComplaintUserName}</label>
+            <label style={{ color: '#4494f0', fontSize: '24px' }}>{infoDetail.complaintAddress}</label>
           </div>
         }
         style={{
           border: '1px solid rgb(235, 237, 240)'
         }}
-
       >
-        {/* <Paragraph>
-          {infoDetail.complaintAddress}，{infoDetail.complaintUser}，电话：<a>{infoDetail.complaintLink}</a>，在 {infoDetail.billDate} 投诉，内容如下
-        </Paragraph>
-        {infoDetail.contents} */} 
         <Form layout='vertical'>
           <Row gutter={6}>
             <Col lg={5}>
@@ -240,7 +116,7 @@ const Show = (props: ShowProps) => {
         {infoDetail.contents}
       </PageHeader>
       <Divider dashed />
-      {modifyVisible ? (
+      {showVisible ? (
         <Form layout="vertical" hideRequiredMark>
           <Card title="立项信息" className={styles.card} hoverable >
             <Row gutter={24}>
@@ -257,13 +133,11 @@ const Show = (props: ShowProps) => {
               <Col lg={6}>
                 <Form.Item label="联系电话"  >
                   {infoDetail.byComplaintUerTel}
-
                 </Form.Item>
               </Col>
               <Col lg={6}>
                 <Form.Item label="地址"  >
                   {infoDetail.byComplaintRoomAllName}
-
                 </Form.Item>
               </Col>
             </Row>
@@ -281,7 +155,6 @@ const Show = (props: ShowProps) => {
               <Col lg={6}>
                 <Form.Item label="联系电话"  >
                   {infoDetail.handleChargeTel}
-
                 </Form.Item>
               </Col>
               <Col lg={6}>
@@ -361,8 +234,8 @@ const Show = (props: ShowProps) => {
                   {infoDetail.returnVisitResult}
                 </Form.Item>
               </Col>
-            </Row> 
-          </Card>*/}
+            </Row>
+          </Card> */}
         </Form>
       ) : null}
       <div
@@ -378,36 +251,11 @@ const Show = (props: ShowProps) => {
         }}
       >
         <Button onClick={close} style={{ marginRight: 8 }}>
-          取消
+          关闭
         </Button>
-
-        {infoDetail.status == 1 ? (
-          <Button onClick={project} type="primary">
-            立项
-         </Button>
-        ) : null}
-
-        {infoDetail.status == 2 ? (
-          <Button onClick={handle} type="primary">
-            处理
-          </Button>
-        ) : null}
-
-        {/* {infoDetail.status == 3 ? (
-          <Button onClick={visit} type="primary">
-            回访
-          </Button>
-        ) : null} */}
-
-        {infoDetail.status == 4 ? (
-          <Button onClick={approve} type="primary">
-            审核
-          </Button>
-        ) : null}
-
       </div>
     </Drawer>
   );
 };
 
-export default Form.create<ShowProps>()(Show); 
+export default Form.create<ShowLinkProps>()(ShowLink); 

@@ -45,12 +45,10 @@ function Main() {
   const [addButtonDisable, setAddButtonDisable] = useState<boolean>(true);
 
   //显示该户其他费用
-  const [showCustomerFee, setShowCustomerFee] = useState<boolean>(true)
-
+  const [showCustomerFee, setShowCustomerFee] = useState<boolean>(true);
   const [splitVisible, setSplitVisible] = useState<boolean>(false);
   const [transVisible, setTransVisible] = useState<boolean>(false);
-  // const [billDetailVisible, setBillDetailVisible] = useState<boolean>(false);
-
+  // const [billDetailVisible, setBillDetailVisible] = useState<boolean>(false); 
   const [showVisible, setShowVisible] = useState<boolean>(false);
 
   //对账
@@ -461,7 +459,6 @@ function Main() {
           setShowname('');
           setAdminOrgId(info.node.props.organizeId);//管理处Id
           setOrganizeId(id);
-
           //type
           var params = Object.assign({}, chargedSearchParams, { type: type });
           setChargedSearchParams(params);

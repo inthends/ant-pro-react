@@ -1,5 +1,5 @@
 
-import { DatePicker, AutoComplete, Select, Tag, Divider, PageHeader, Button, Card, Col, Drawer, Form, Input, message, Row } from 'antd';
+import { Icon, DatePicker, AutoComplete, Select, Tag, Divider, PageHeader, Button, Card, Col, Drawer, Form, Input, message, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { Dispatch, Change, Receive, Start, Handle, Check, Approve } from './Main.service';
@@ -8,6 +8,7 @@ import moment from 'moment';
 import styles from './style.less';
 // const { Paragraph } = Typography;
 const { Option } = Select;
+import AddFee from '../../Financial/ChargeBill/Modify';
 
 interface ModifyProps {
   modifyVisible: boolean;
@@ -31,21 +32,6 @@ const Modify = (props: ModifyProps) => {
       setRepairMajors(res || []);
     });
   }, []);
-
-  // 打开抽屉时初始化 
-  useEffect(() => {
-    if (modifyVisible) {
-      if (data) {
-        setInfoDetail(data);
-        form.resetFields();
-      } else {
-        setInfoDetail({});
-        form.resetFields();
-      }
-    } else {
-      form.resetFields();
-    }
-  }, [modifyVisible]);
 
   const close = () => {
     closeDrawer();
@@ -197,8 +183,12 @@ const Modify = (props: ModifyProps) => {
   const onEndDateChange = (date) => {
     //var sbegin = new Date(data.beginDate).getTime(), send = new Date(date).getTime();
     //var total = (send - sbegin) / 1000 / 60; 
-    const total = date.unix() - moment(data.beginDate).unix();
-    form.setFieldsValue({ useTime: (total / 60).toFixed(2) });
+    if (date != null) {
+      const total = date.unix() - moment(data.beginDate).unix();
+      form.setFieldsValue({ useTime: (total / 60).toFixed(0) });
+    } else {
+      form.setFieldsValue({ useTime: null });
+    }
   }
 
   const disabledDate = (current) => {
@@ -229,6 +219,34 @@ const Modify = (props: ModifyProps) => {
   //   };
   // }
 
+  //临时加费是否显示
+  const [addFeelaVisible, setAddFeeVisible] = useState<boolean>(false);
+  const closeAddFee = () => {
+    setAddFeeVisible(false);
+  };
+
+  const [id, setId] = useState<string>('');//当前费用Id
+  const [organizeId, setOrganizeId] = useState<string>('');//左侧树选择的id
+  // const [modifyEdit, setModifyEdit] = useState<boolean>(true);
+  const [adminOrgId, setAdminOrgId] = useState<string>('');//当前房间的管理处Id
+
+  // 打开抽屉时初始化 
+  useEffect(() => {
+    if (modifyVisible) {
+      if (data) {
+        setInfoDetail(data);
+        setAdminOrgId(data.organizeId);//管理处Id
+        setOrganizeId(data.roomId);
+        form.resetFields();
+      } else {
+        setInfoDetail({});
+        form.resetFields();
+      }
+    } else {
+      form.resetFields();
+    }
+  }, [modifyVisible]);
+
   return (
     <Drawer
       title={title}
@@ -239,13 +257,11 @@ const Modify = (props: ModifyProps) => {
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
       <PageHeader
-
         // title={infoDetail.billCode}
         // subTitle={GetStatus(infoDetail.status)}
         // extra={[
         //   <Button key="3">附件</Button>,
         // ]}
-
         title={null}
         subTitle={
           <div>
@@ -254,13 +270,13 @@ const Modify = (props: ModifyProps) => {
         }
         style={{
           border: '1px solid rgb(235, 237, 240)'
-        }}  >
+        }}>
 
         {/* <Paragraph>
           来自{infoDetail.repairArea}，联系人：{infoDetail.contactName}，地址：{infoDetail.address}，电话：<a>{infoDetail.contactLink}</a>，属于{infoDetail.isPaid == '是' ? '有偿服务' : '无偿服务'}，报修时间：{infoDetail.billDate}，内容如下
         </Paragraph>
         {infoDetail.repairContent} */}
- 
+
         <Form layout='vertical'>
           <Row gutter={6}>
             <Col lg={5}>
@@ -294,7 +310,7 @@ const Modify = (props: ModifyProps) => {
               </Form.Item>
             </Col>
           </Row>
-        
+
         </Form>
         <Divider dashed />
         {infoDetail.repairContent}
@@ -433,7 +449,7 @@ const Modify = (props: ModifyProps) => {
             ) : null}
 
             {infoDetail.status == 4 ? (
-              <Card title="完成情况" className={styles.card} hoverable>
+              <Card title="完成情况" className={styles.card2} hoverable>
                 <Row gutter={24}>
                   <Col lg={7}>
                     <Form.Item label="完成时间" required>
@@ -449,7 +465,7 @@ const Modify = (props: ModifyProps) => {
                       />)}
                     </Form.Item>
                   </Col>
-                  <Col lg={4}>
+                  <Col lg={5}>
                     <Form.Item label="用时(分钟)">
                       {getFieldDecorator('useTime', {
                         initialValue: infoDetail.useTime
@@ -457,7 +473,7 @@ const Modify = (props: ModifyProps) => {
                     </Form.Item>
                   </Col>
 
-                  <Col lg={4}>
+                  {/* <Col lg={4}>
                     <Form.Item label="人工费"  >
                       {getFieldDecorator('laborFee', {
                         initialValue: infoDetail.laborFee
@@ -470,31 +486,35 @@ const Modify = (props: ModifyProps) => {
                         initialValue: infoDetail.stuffFee
                       })(<Input placeholder="请输入" />)}
                     </Form.Item>
-                  </Col>
-                  <Col lg={5}>
+                  </Col> */}
+                  <Col lg={6}>
                     <Form.Item label="费用合计">
                       {getFieldDecorator('totalFee', {
                         initialValue: infoDetail.totalFee
-                      })(<Input placeholder="请输入" />)}
+                      })(<Input placeholder="请添加费用"
+                        readOnly
+                        addonAfter={<Icon type="setting" onClick={() => {
+                          setAddFeeVisible(true);
+                        }} />} />)}
                     </Form.Item>
                   </Col>
-                </Row>
-                <Row gutter={24}>
-                  <Col lg={7}>
+                  <Col lg={6}>
                     <Form.Item label="完成情况" required>
                       {getFieldDecorator('achieved', {
                         rules: [{ required: true, message: '请输入完成情况' }],
                       })(<Input placeholder="请输入完成情况" />)}
                     </Form.Item>
                   </Col>
-                  <Col lg={8}>
+                </Row>
+                <Row gutter={24}>
+                  <Col lg={12}>
                     <Form.Item label="现场评价"  >
                       {getFieldDecorator('fieldEvaluation', {
                         initialValue: infoDetail.fieldEvaluation
                       })(<Input placeholder="请输入现场评价" />)}
                     </Form.Item>
                   </Col>
-                  <Col lg={9}>
+                  <Col lg={12}>
                     <Form.Item label="业主意见"  >
                       {getFieldDecorator('ownerOpinion', {
                         initialValue: infoDetail.ownerOpinion
@@ -503,15 +523,15 @@ const Modify = (props: ModifyProps) => {
                   </Col>
                 </Row>
               </Card>
-            ) : infoDetail.status > 4 ? (<Card title="完成情况" className={infoDetail.status == 5 ? styles.card2 : styles.card} >
-              <Row gutter={24}>
-
-                <Col lg={6}>
-                  <Form.Item label="用时(分钟)">
-                    {infoDetail.useTime}
-                  </Form.Item>
-                </Col>
-                <Col lg={6}>
+            ) : infoDetail.status > 4 ?
+                (<Card title="完成情况" className={infoDetail.status == 5 ? styles.card2 : styles.card} >
+                  <Row gutter={24}>
+                    <Col lg={6}>
+                      <Form.Item label="用时(分钟)">
+                        {infoDetail.useTime}
+                      </Form.Item>
+                    </Col>
+                    {/* <Col lg={6}>
                   <Form.Item label="人工费"  >
                     {infoDetail.laborFee}
                   </Form.Item>
@@ -520,36 +540,36 @@ const Modify = (props: ModifyProps) => {
                   <Form.Item label="材料费"  >
                     {infoDetail.stuffFee}
                   </Form.Item>
-                </Col>
-                <Col lg={6}>
-                  <Form.Item label="费用合计">
-                    {infoDetail.totalFee}
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={24}>
-                <Col lg={6}>
-                  <Form.Item label="完成时间">
-                    {infoDetail.endDate}
-                  </Form.Item>
-                </Col>
-                <Col lg={6}>
-                  <Form.Item label="完成情况" >
-                    {infoDetail.achieved}
-                  </Form.Item>
-                </Col>
-                <Col lg={6}>
-                  <Form.Item label="现场评价"  >
-                    {infoDetail.fieldEvaluation}
-                  </Form.Item>
-                </Col>
-                <Col lg={6}>
-                  <Form.Item label="业主意见"  >
-                    {infoDetail.ownerOpinion}
-                  </Form.Item>
-                </Col>
-              </Row>
-            </Card>) : null}
+                </Col> */}
+                    <Col lg={6}>
+                      <Form.Item label="费用合计">
+                        {infoDetail.totalFee}
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Row gutter={24}>
+                    <Col lg={6}>
+                      <Form.Item label="完成时间">
+                        {infoDetail.endDate}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={6}>
+                      <Form.Item label="完成情况" >
+                        {infoDetail.achieved}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={6}>
+                      <Form.Item label="现场评价"  >
+                        {infoDetail.fieldEvaluation}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={6}>
+                      <Form.Item label="业主意见"  >
+                        {infoDetail.ownerOpinion}
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Card>) : null}
 
             {/* {infoDetail.status == 5 ? (
               <Card title="回访情况" className={styles.card}  >
@@ -714,6 +734,16 @@ const Modify = (props: ModifyProps) => {
           </Form>
         ) : null
       }
+
+      <AddFee
+        modifyVisible={addFeelaVisible}
+        closeDrawer={closeAddFee}
+        id={id}
+        roomId={organizeId}
+        adminOrgId={adminOrgId}
+        edit={true}
+        reload={() => { }}
+      />
       <div
         style={{
           position: 'absolute',
@@ -763,12 +793,12 @@ const Modify = (props: ModifyProps) => {
             <Button onClick={close} style={{ marginRight: 8 }}>
               取消
         </Button>
-            <Button onClick={start} type="primary" style={{ marginRight: 8 }}>
+            {/* <Button onClick={start} type="primary" style={{ marginRight: 8 }}>
               呼叫增援
          </Button>
             <Button onClick={start} type="primary" style={{ marginRight: 8 }}>
               暂停
-        </Button>
+        </Button> */}
             <Button onClick={start} type="primary" style={{ marginRight: 8 }}>
               退单
         </Button>
@@ -787,7 +817,7 @@ const Modify = (props: ModifyProps) => {
         </Button>
           </div>
         ) : null} */}
- 
+
         {infoDetail.status == 5 ? (
           <div>
             <Button onClick={close} style={{ marginRight: 8 }}>

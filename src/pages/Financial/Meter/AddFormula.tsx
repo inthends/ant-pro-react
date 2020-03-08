@@ -6,7 +6,7 @@ import {
   Row, Modal, Tabs
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import React, { useEffect } from 'react';
+import React  from 'react';
 import './style.less';
 
 const { TabPane } = Tabs;
@@ -21,11 +21,10 @@ interface AddFormulaProps {
 const AddFormula = (props: AddFormulaProps) => {
   const { visible, closeModal, getFormulaStr, isFormula } = props;
 
-  useEffect(() => {
-    if (visible) {
-
-    };
-  }, [visible]);
+  // useEffect(() => {
+  //   if (visible) { 
+  //   };
+  // }, [visible]);
 
   const pushSelectKey = () => {
     const { textAreaRef } = inputRef;

@@ -66,3 +66,8 @@ export function Project(data): Promise<any> {
     .post(process.env.basePath + `/Complaint/Project`, { data: objToFormdata(data) })
     .then(getResult as any);
 }
+
+//获取实体
+export function GetEntityShow(keyValue): Promise<any> {
+  return request.get(process.env.basePath + `/Complaint/GetEntityShow?keyValue=${keyValue}`).then(getResult as any);
+}

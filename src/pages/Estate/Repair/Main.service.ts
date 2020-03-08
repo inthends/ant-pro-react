@@ -78,3 +78,9 @@ export function Approve(data): Promise<any> {
     .then(getResult as any);
 }
 
+
+//获取实体
+export function GetEntityShow(keyValue): Promise<any> {
+  return request.get(process.env.basePath + `/Repair/GetEntityShow?keyValue=${keyValue}`).then(getResult as any);
+}
+

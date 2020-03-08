@@ -9,21 +9,21 @@ import moment from 'moment';
 import styles from './style.less';
 const { Option } = Select;
 
-interface ModifyProps {
-  modifyVisible: boolean;
+interface ModifyProps { 
   closeDrawer(): void;
+  reload(): void;
+  modifyVisible: boolean;
   form: WrappedFormUtils;
   roomId?: string;
   id?: string;
-  adminOrgId?: String;//管理处Id
-  reload(): void;
+  adminOrgId?: String;//管理处Id 
   edit: boolean;
 }
 
 const Modify = (props: ModifyProps) => {
-  const { modifyVisible, closeDrawer, form, roomId, id, reload, edit, adminOrgId } = props;
-  const { getFieldDecorator } = form;
+  const { modifyVisible, closeDrawer, form, roomId, id, reload, edit, adminOrgId } = props; 
   const title = id == "" ? '新增费用' : "修改费用";
+  const { getFieldDecorator } = form;
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [feeTreeData, setFeeTreeData] = useState<TreeEntity[]>([]);
   const [relationIds, setRelationIds] = useState<any[]>([]);
@@ -337,8 +337,7 @@ const Modify = (props: ModifyProps) => {
       destroyOnClose={true}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 50px)' }}>
       <Spin tip="数据处理中..." spinning={loading}>
-        <Row gutter={8}>
-
+        <Row gutter={8}> 
           {
             id != '' ?
               null :

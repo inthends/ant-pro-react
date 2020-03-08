@@ -11,6 +11,9 @@ import { GetPageListJson } from './Main.service';
 // import { getResult } from '@/utils/networkUtils';
 const { Content } = Layout;
 const { Search } = Input;
+//查看
+import RShowLink from '../Repair/ShowLink';
+import CShowLink from '../Complaint/ShowLink';
 
 function Main() {
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
@@ -137,6 +140,29 @@ function Main() {
     });
   };
 
+  const [repairVisible, setRepairVisible] = useState<boolean>(false);//查看 
+  const [complaintVisible, setComplaintVisible] = useState<boolean>(false);//查看 
+  const [billCode, setBillCode] = useState<any>({});
+
+  //查看关联单据
+  const showLinkDrawer = (type, code) => {
+    if (type == "Repair") {
+      setRepairVisible(true);
+    } else {
+      setComplaintVisible(true);
+    }
+    setBillCode(code);
+  };
+
+  const closeLinkDrawer = (type) => {
+    if (type == "Repair") {
+      setRepairVisible(false);
+    }
+    else {
+      setComplaintVisible(false);
+    }
+  };
+
   return (
     <Layout style={{ height: '100%' }}>
       <AsynLeftTree
@@ -176,7 +202,21 @@ function Main() {
         // treeData={treeData}
         data={currData}
         reload={() => initLoadData(organize, search)}
+        showLink={showLinkDrawer}
       />
+
+      <RShowLink
+        showVisible={repairVisible}
+        closeDrawer={closeLinkDrawer}
+        billCode={billCode}
+      />
+
+      <CShowLink
+        showVisible={complaintVisible}
+        closeDrawer={closeLinkDrawer}
+        billCode={billCode}
+      />
+
     </Layout>
   );
 }
