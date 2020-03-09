@@ -8,7 +8,7 @@ import BaseView from './components/base';
 // import BindingView from './components/binding';
 import { CurrentUser } from './data.d';
 // import NotificationView from './components/notification';
-// import SecurityView from './components/security';
+import SecurityView from './components/security';
 import styles from './style.less';
 const { Item } = Menu;
 
@@ -29,7 +29,6 @@ interface SettingsState {
 @connect(({ accountSettings }: {
   accountSettings: {
     currentUser: CurrentUser
-
   }
 }) => ({
 
@@ -47,9 +46,9 @@ SettingsState
     super(props);
     const menuMap = {
       base: <FormattedMessage id="account-settings.menuMap.basic" defaultMessage="Basic Settings" />,
-      // security: (
-      //   <FormattedMessage id="account-settings.menuMap.security" defaultMessage="Security Settings" />
-      // ),
+      security: (
+        <FormattedMessage id="account-settings.menuMap.security" defaultMessage="Security Settings" />
+      ),
       // binding: (
       //   <FormattedMessage id="account-settings.menuMap.binding" defaultMessage="Account Binding" />
       // ),
@@ -124,8 +123,8 @@ SettingsState
     switch (selectKey) {
       case 'base':
         return <BaseView />;
-      // case 'security':
-      //   return <SecurityView />;
+      case 'security':
+        return <SecurityView />;
       // case 'binding':
       //   return <BindingView />;
       // case 'notification':

@@ -35,23 +35,23 @@ class SecurityView extends Component {
         </Fragment>
       ),
       actions: [
-        <a key="Modify">
+        <a key="Modify" >
           <FormattedMessage id="account-settings.security.modify" defaultMessage="Modify" />
         </a>,
       ],
     },
-    {
-      title: formatMessage({ id: 'account-settings.security.phone' }, {}),
-      description: `${formatMessage(
-        { id: 'account-settings.security.phone-description' },
-        {},
-      )}138****8293`,
-      actions: [
-        <a key="Modify">
-          <FormattedMessage id="account-settings.security.modify" defaultMessage="Modify" />
-        </a>,
-      ],
-    },
+    // {
+    //   title: formatMessage({ id: 'account-settings.security.phone' }, {}),
+    //   description: `${formatMessage(
+    //     { id: 'account-settings.security.phone-description' },
+    //     {},
+    //   )}138****8293`,
+    //   actions: [
+    //     <a key="Modify">
+    //       <FormattedMessage id="account-settings.security.modify" defaultMessage="Modify" />
+    //     </a>,
+    //   ],
+    // },
     // {
     //   title: formatMessage({ id: 'account-settings.security.question' }, {}),
     //   description: formatMessage({ id: 'account-settings.security.question-description' }, {}),
@@ -100,6 +100,10 @@ class SecurityView extends Component {
       </Fragment>
     );
   }
+
+
+  //修改密码页面 to do
+
 }
 
 export default SecurityView;

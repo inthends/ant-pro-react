@@ -150,8 +150,7 @@ class BaseView extends Component<BaseViewProps> {
 
 
   render() {
-    const { form: { getFieldDecorator } } = this.props;
-
+    const { form: { getFieldDecorator } } = this.props; 
     return (
       <div className={styles.baseView} ref={this.getViewDom}>
         <div className={styles.left}>

@@ -96,7 +96,7 @@ function ListTable(props: ListTableProps) {
   const [mlAmount, setMlAmount] = useState<number>(0);//抹零金额
   const [lastAmount, setLastAmount] = useState<number>(0);//剩余金额
 
-  const onSelectChange = (selectedRowKeys, selectedRows) => { 
+  const onSelectChange = (selectedRowKeys, selectedRows) => {
     if (selectedRowKeys.length > 0) {
       //如果该笔费用存在优惠，则需要选中与此费项有关的全部费用，一起缴款，否则给出提示 
       const data = {
@@ -139,7 +139,7 @@ function ListTable(props: ListTableProps) {
     _sumEntity['sumreductionAmount'] = sumreductionAmount.toFixed(2);//减免金额
     _sumEntity['sumoffsetAmount'] = sumoffsetAmount.toFixed(2);//冲抵金额
     _sumEntity['sumlastAmount'] = sumlastAmount.toFixed(2);//原始剩余应收金额
-    setSumEntity(_sumEntity); 
+    setSumEntity(_sumEntity);
     //抹零 
     if (isML) {
       // const data = {
@@ -150,19 +150,19 @@ function ListTable(props: ListTableProps) {
       // };
 
       // CalML(data).then((res) => {
-        CalML(sumlastAmount,mlType,mlScale).then((res) => {
-        setMlAmount(res.ml); 
+      CalML(sumlastAmount, mlType, mlScale).then((res) => {
+        setMlAmount(res.ml);
         setLastAmount(res.lastAmount);
-        form.setFieldsValue({ payAmountA: res.lastAmount});
+        form.setFieldsValue({ payAmountA: res.lastAmount });
         form.setFieldsValue({ payAmountB: 0 });
-        form.setFieldsValue({ payAmountC: 0 }); 
+        form.setFieldsValue({ payAmountC: 0 });
       });
 
     } else {
-      setLastAmount(sumlastAmount); 
+      setLastAmount(sumlastAmount);
       form.setFieldsValue({ payAmountA: sumlastAmount });
       form.setFieldsValue({ payAmountB: 0 });
-      form.setFieldsValue({ payAmountC: 0 });   
+      form.setFieldsValue({ payAmountC: 0 });
     }
   };
 
@@ -193,8 +193,9 @@ function ListTable(props: ListTableProps) {
               billDate: values.billDate.format('YYYY-MM-DD HH:mm:ss'),
               //organize.title.split(' ')[1]
               isML: isML,
-              mlType: mlType,
-              mlScale: mlScale
+              mlAmount: mlAmount,
+              // mlType: mlType,
+              // mlScale: mlScale
             });
             if (lastAmount != Number(info.payAmountA + info.payAmountB + info.payAmountC)) {
               message.warning('本次收款金额小于本次选中未收金额合计，不允许收款，请拆费或者重新选择收款项');
@@ -291,7 +292,8 @@ function ListTable(props: ListTableProps) {
     if (selectedRowKeys.length == 0) {
       //message.warning('请选择收款项目！');
       return;
-    } 
+    }
+   
     if (isml) {
       // const data = {
       //   sumAmount: lastAmount, 
@@ -300,21 +302,21 @@ function ListTable(props: ListTableProps) {
       //   mlScale: scale
       // };
       // CalML(data).then((res) => {
-        CalML(lastAmount,mlType,mlScale).then((res) => {
+      CalML(sumEntity.sumlastAmount, type, scale).then((res) => {
         setMlAmount(res.ml);
         setLastAmount(res.lastAmount);
-        form.setFieldsValue({ payAmountA: res.lastAmount});
+        form.setFieldsValue({ payAmountA: res.lastAmount });
         form.setFieldsValue({ payAmountB: 0 });
-        form.setFieldsValue({ payAmountC: 0 }); 
+        form.setFieldsValue({ payAmountC: 0 });
       });
     }
     else {
       //还原
-      setMlAmount(0);
       setLastAmount(sumEntity.sumlastAmount);//还原未抹零之前的剩余应收金额
+      setMlAmount(0); 
       form.setFieldsValue({ payAmountA: sumEntity.sumlastAmount });
       form.setFieldsValue({ payAmountB: 0 });
-      form.setFieldsValue({ payAmountC: 0 }); 
+      form.setFieldsValue({ payAmountC: 0 });
     }
   }
 
@@ -333,7 +335,7 @@ function ListTable(props: ListTableProps) {
       </a>
     </Dropdown>
   );
- 
+
 
   const columns = [
     {
@@ -622,8 +624,7 @@ function ListTable(props: ListTableProps) {
             <Checkbox
               style={{ marginLeft: '10px' }}
               onChange={(e) => { setIsQrcode(e.target.checked); }}
-            >生成收款码</Checkbox>
-
+            >生成收款码</Checkbox> 
             <Checkbox
               style={{ marginLeft: '10px' }}
               disabled={isQrcode}
@@ -632,8 +633,7 @@ function ListTable(props: ListTableProps) {
                 //算抹零金额
                 mlCal(e.target.checked, mlType, mlScale);
               }}
-            >自动抹零</Checkbox>
-
+            >自动抹零</Checkbox> 
             <Select
               style={{
                 marginLeft: '10px',
@@ -643,9 +643,9 @@ function ListTable(props: ListTableProps) {
               defaultValue='1'
               disabled={isQrcode}
               onChange={(value) => { setMlType(value); mlCal(isML, value, mlScale); }} >
-              <Option value='1'>抹去角和分</Option>
-              <Option value='2'>抹去角</Option>
-              <Option value='3'>抹去分</Option>
+              {/* <Option value='1'>抹去角和分</Option> */}
+              <Option value='1'>抹去角</Option>
+              <Option value='2'>抹去分</Option>
             </Select>
             <Select style={{
               marginLeft: '10px', width: '96px',
@@ -653,8 +653,7 @@ function ListTable(props: ListTableProps) {
             }}
               defaultValue='1'
               disabled={isQrcode}
-              onChange={(value) => { setMlScale(value); mlCal(isML, mlType, value); }}
-            >
+              onChange={(value) => { setMlScale(value); mlCal(isML, mlType, value); }} >
               <Option value='1'>四舍五入</Option>
               <Option value='2'>直接舍去</Option>
               <Option value='3'>有数进一</Option>

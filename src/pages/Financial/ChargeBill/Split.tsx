@@ -182,26 +182,24 @@ const Split = (props: SplitProps) => {
                   })(
                     <InputNumber style={{ width: '100%' }}
                       min={0} max={infoDetail.amount}
-                      readOnly
                       precision={2}
-                    //取消改变金额变动日期
-                    // onChange={(value) => {
-                    //   var secondAmount = infoDetail.amount - Number(value);
-                    //   form.setFieldsValue({ secondAmount: secondAmount });
-                    //   //修改金额的时候，改变日期 
-                    //   const a = moment(infoDetail.beginDate);
-                    //   const b = moment(infoDetail.endDate);
-                    //   const iDays = b.diff(a, 'days');
-                    //   const firstdays = Math.ceil(iDays * Number(value) / infoDetail.amount);
-                    //   const firstEndDate = a.add(firstdays, 'days');
-                    //   form.setFieldsValue({ firstEndDate: firstEndDate });
-                    //   if (firstEndDate < b) {
-                    //     form.setFieldsValue({ secondBeginDate: moment(firstEndDate).add(1, 'days') });
-                    //   } else {
-                    //     form.setFieldsValue({ secondBeginDate: firstEndDate });
-                    //   }
-                    // }
-                    //}
+                      //取消改变金额变动日期
+                      onChange={(value) => {
+                        var secondAmount = infoDetail.amount - Number(value);
+                        form.setFieldsValue({ secondAmount: secondAmount });
+                        //   //修改金额的时候，改变日期 
+                        //   const a = moment(infoDetail.beginDate);
+                        //   const b = moment(infoDetail.endDate);
+                        //   const iDays = b.diff(a, 'days');
+                        //   const firstdays = Math.ceil(iDays * Number(value) / infoDetail.amount);
+                        //   const firstEndDate = a.add(firstdays, 'days');
+                        //   form.setFieldsValue({ firstEndDate: firstEndDate });
+                        //   if (firstEndDate < b) {
+                        //     form.setFieldsValue({ secondBeginDate: moment(firstEndDate).add(1, 'days') });
+                        //   } else {
+                        //     form.setFieldsValue({ secondBeginDate: firstEndDate });
+                        //   }
+                      }}
                     />
                   )}
                 </Form.Item>
