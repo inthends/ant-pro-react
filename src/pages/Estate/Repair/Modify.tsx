@@ -810,7 +810,7 @@ const Modify = (props: ModifyProps) => {
             <Button onClick={start} type="primary" style={{ marginRight: 8 }}>
               暂停
         </Button> */}
-            <Button onClick={start} type="primary" style={{ marginRight: 8 }}>
+            <Button onClick={start} type="danger"  style={{ marginRight: 8 }}>
               退单
         </Button>
             <Button onClick={handle} type="primary">

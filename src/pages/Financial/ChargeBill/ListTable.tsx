@@ -5,7 +5,7 @@ import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import { CheckRebateFee, InvalidBillDetailForm, Charge, GetQrCode, GetPayState } from './Main.service';
+import { CheckRebateFee, InvalidBillDetailForm, Charge, GetQrCode, GetPayState, CalML } from './Main.service';
 // import QRCode from 'qrcode.react';
 // import styles from './style.less';
 const { Option } = Select;
@@ -88,6 +88,236 @@ function ListTable(props: ListTableProps) {
     }
   };
 
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [sumEntity, setSumEntity] = useState();
+  // const [unitId, setUnitId] = useState();
+  // const [customerName, setCustomerName] = useState();
+  const [isDisabled, setIsDisabled] = useState<boolean>(true);
+  const [mlAmount, setMlAmount] = useState<number>(0);//抹零金额
+  const [lastAmount, setLastAmount] = useState<number>(0);//剩余金额
+
+  const onSelectChange = (selectedRowKeys, selectedRows) => { 
+    if (selectedRowKeys.length > 0) {
+      //如果该笔费用存在优惠，则需要选中与此费项有关的全部费用，一起缴款，否则给出提示 
+      const data = {
+        mainId: selectedRows[0].rmid,
+        feeId: selectedRowKeys[0],
+        unitId: selectedRows[0].unitId,
+        selectFeeIds: JSON.stringify(selectedRowKeys)
+      };
+      CheckRebateFee(data).then((res) => {
+        if (res.flag) {
+          //message.error('当前选中的费用还有' + res.count + '笔也是属于优惠的，请一起勾选缴费！'); 
+          // Modal.warning({
+          //   title: '提示信息',
+          //   content: '当前选中的费用包含优惠费用，还有' + res.count + '笔优惠，请一起勾选缴费！',
+          //   okText: '确定'
+          // });
+          setIsDisabled(true);
+          //收款确认不可用 
+        } else {
+          setIsDisabled(false);
+        }
+      });
+    } else {
+      setIsDisabled(true);
+    }
+    setHasSelected(selectedRowKeys.length > 0);
+    // console.log(selectedRows);
+    setSelectedRowKeys(selectedRowKeys);
+    rowSelect(selectedRows);//选中行
+    //应收金额
+    var _sumEntity = {};
+    var sumAmount = 0, sumreductionAmount = 0, sumoffsetAmount = 0, sumlastAmount = 0;
+    selectedRows.map(item => {
+      sumAmount = selectedRows.reduce((sum, row) => { return sum + row.amount; }, 0);
+      sumreductionAmount = selectedRows.reduce((sum, row) => { return sum + row.reductionAmount; }, 0);
+      sumoffsetAmount = selectedRows.reduce((sum, row) => { return sum + row.offsetAmount; }, 0);
+      sumlastAmount = selectedRows.reduce((sum, row) => { return sum + row.lastAmount; }, 0);
+    });
+    _sumEntity['sumAmount'] = sumAmount.toFixed(2);//应收金额
+    _sumEntity['sumreductionAmount'] = sumreductionAmount.toFixed(2);//减免金额
+    _sumEntity['sumoffsetAmount'] = sumoffsetAmount.toFixed(2);//冲抵金额
+    _sumEntity['sumlastAmount'] = sumlastAmount.toFixed(2);//原始剩余应收金额
+    setSumEntity(_sumEntity); 
+    //抹零 
+    if (isML) {
+      // const data = {
+      //   sumAmount: sumlastAmount, 
+      //   isML: isML,
+      //   mlType: mlType,
+      //   mlScale: mlScale
+      // };
+
+      // CalML(data).then((res) => {
+        CalML(sumlastAmount,mlType,mlScale).then((res) => {
+        setMlAmount(res.ml); 
+        setLastAmount(res.lastAmount);
+        form.setFieldsValue({ payAmountA: res.lastAmount});
+        form.setFieldsValue({ payAmountB: 0 });
+        form.setFieldsValue({ payAmountC: 0 }); 
+      });
+
+    } else {
+      setLastAmount(sumlastAmount); 
+      form.setFieldsValue({ payAmountA: sumlastAmount });
+      form.setFieldsValue({ payAmountB: 0 });
+      form.setFieldsValue({ payAmountC: 0 });   
+    }
+  };
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  };
+
+  //收款
+  const charge = () => {
+    if (selectedRowKeys.length == 0) {
+      message.warning('请选择收款项目！');
+      return;
+    }
+    form.validateFields((errors, values) => {
+      if (!errors) {
+        Modal.confirm({
+          title: '请确认',
+          content: `确定要执行收款操作吗？`,
+          cancelText: '取消',
+          okText: '确定',
+          onOk: () => {
+            let info = Object.assign({}, values, {
+              // roomId: organizeId,
+              ids: JSON.stringify(selectedRowKeys),
+              UnitId: organizeId,
+              CustomerName: customerName,
+              billDate: values.billDate.format('YYYY-MM-DD HH:mm:ss'),
+              //organize.title.split(' ')[1]
+              isML: isML,
+              mlType: mlType,
+              mlScale: mlScale
+            });
+            if (lastAmount != Number(info.payAmountA + info.payAmountB + info.payAmountC)) {
+              message.warning('本次收款金额小于本次选中未收金额合计，不允许收款，请拆费或者重新选择收款项');
+              return;
+            }
+            //弹出支付宝扫码
+            if (isQrcode) {
+              // GetQrCode(info).then(res => {
+              //   // setQrUrl(res);  
+              //   Modal.confirm({
+              //     title: "请扫码",
+              //     // okText: "确认",
+              //     // cancelText: "取消", 
+              //     // content: (<QRCode
+              //     //   value={res} //value参数为生成二维码的链接
+              //     //   size={200} //二维码的宽高尺寸
+              //     //   fgColor="#000000"  //二维码的颜色 
+              //     // />) 
+              //     content: (<img src={res}></img>),
+              //     onOk() {
+              //       //收款
+              //       // QrCodeCharge(info).then(billId => {
+              //       //   message.success('收款成功');
+              //       //   reload();
+              //       //   //弹出查看页面
+              //       //   showDetail(billId);
+              //       // });
+              //     },
+              //     onCancel() {
+              //     } 
+              //   }); 
+              // });
+              GetQrCode(info).then(res => {
+                pay(res.code_img_url);
+                form.setFieldsValue({ tradenoId: res.tradenoId });
+              })
+
+            } else {
+              //直接收款
+              Charge(info).then(billId => {
+                message.success('收款成功');
+                reload();
+                //弹出查看页面
+                showDetail(billId);
+              });
+            }
+          }
+        });
+      }
+    });
+  };
+
+  const pay = (url) => {
+    let temp = Modal.confirm({
+      title: '请扫码',
+      content: (<img src={url}></img>),
+      onCancel() {
+        if (timer) {
+          timer = null;//关闭弹窗后不轮询
+        }
+      }
+    })
+    retry().then(() => {
+      temp.destroy();
+    })
+  };
+
+  //轮询支付回调数据
+  let timer;
+  const retry = () => {
+    return new Promise((resolve, reject) => {
+      timer = setTimeout(() => {
+        const tradenoId = form.getFieldValue('tradenoId');
+        GetPayState(tradenoId).then(billId => {
+          if (billId) {
+            //支付成功
+            resolve();
+            message.success('收款成功');
+            reload();
+            //弹出查看页面
+            showDetail(billId);
+          } else {
+            if (timer) {
+              retry();
+            }
+          }
+        })
+      }, 1000);//每秒轮询一次  
+    })
+  };
+
+  //抹零计算
+  const mlCal = (isml, type, scale) => {
+    if (selectedRowKeys.length == 0) {
+      //message.warning('请选择收款项目！');
+      return;
+    } 
+    if (isml) {
+      // const data = {
+      //   sumAmount: lastAmount, 
+      //   isML: isml,
+      //   mlType: type,
+      //   mlScale: scale
+      // };
+      // CalML(data).then((res) => {
+        CalML(lastAmount,mlType,mlScale).then((res) => {
+        setMlAmount(res.ml);
+        setLastAmount(res.lastAmount);
+        form.setFieldsValue({ payAmountA: res.lastAmount});
+        form.setFieldsValue({ payAmountB: 0 });
+        form.setFieldsValue({ payAmountC: 0 }); 
+      });
+    }
+    else {
+      //还原
+      setMlAmount(0);
+      setLastAmount(sumEntity.sumlastAmount);//还原未抹零之前的剩余应收金额
+      form.setFieldsValue({ payAmountA: sumEntity.sumlastAmount });
+      form.setFieldsValue({ payAmountB: 0 });
+      form.setFieldsValue({ payAmountC: 0 }); 
+    }
+  }
+
   const MoreBtn: React.FC<{
     item: any;
   }> = ({ item }) => (
@@ -103,6 +333,7 @@ function ListTable(props: ListTableProps) {
       </a>
     </Dropdown>
   );
+ 
 
   const columns = [
     {
@@ -176,7 +407,7 @@ function ListTable(props: ListTableProps) {
       key: 'allname',
       align: 'center',
       width: 280
-    }, 
+    },
     {
       title: '优惠政策',
       dataIndex: 'rebateName',
@@ -236,186 +467,6 @@ function ListTable(props: ListTableProps) {
     },
   ] as ColumnProps<any>[];
 
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [sumEntity, setSumEntity] = useState();
-  // const [unitId, setUnitId] = useState();
-  // const [customerName, setCustomerName] = useState();
-  const [isDisabled, setIsDisabled] = useState<boolean>(true);
-  const onSelectChange = (selectedRowKeys, selectedRows) => {
-    if (selectedRowKeys.length > 0) {
-      //如果该笔费用存在优惠，则需要选中与此费项有关的全部费用，一起缴款，否则给出提示 
-      const data = {
-        mainId: selectedRows[0].rmid,
-        feeId: selectedRowKeys[0],
-        unitId: selectedRows[0].unitId,
-        selectFeeIds: JSON.stringify(selectedRowKeys)
-      };
-      CheckRebateFee(data).then((res) => {
-        if (res.flag) {
-          //message.error('当前选中的费用还有' + res.count + '笔也是属于优惠的，请一起勾选缴费！'); 
-          // Modal.warning({
-          //   title: '提示信息',
-          //   content: '当前选中的费用包含优惠费用，还有' + res.count + '笔优惠，请一起勾选缴费！',
-          //   okText: '确定'
-          // });
-          setIsDisabled(true);
-          //收款确认不可用 
-        } else {
-          setIsDisabled(false);
-        }
-      });
-    } else {
-      setIsDisabled(true);
-    }
-
-    setHasSelected(selectedRowKeys.length > 0);
-    // console.log(selectedRows);
-    setSelectedRowKeys(selectedRowKeys);
-    rowSelect(selectedRows);//选中行
-    //应收金额
-    var sumEntity = {};
-    var sumAmount = 0, sumreductionAmount = 0, sumoffsetAmount = 0, sumlastAmount = 0;
-    selectedRows.map(item => {
-      sumAmount = selectedRows.reduce((sum, row) => { return sum + row.amount; }, 0);
-      sumreductionAmount = selectedRows.reduce((sum, row) => { return sum + row.reductionAmount; }, 0);
-      sumoffsetAmount = selectedRows.reduce((sum, row) => { return sum + row.offsetAmount; }, 0);
-      sumlastAmount = selectedRows.reduce((sum, row) => { return sum + row.lastAmount; }, 0);
-    });
-
-    sumEntity['sumAmount'] = sumAmount.toFixed(2);
-    sumEntity['sumreductionAmount'] = sumreductionAmount.toFixed(2);
-    sumEntity['sumoffsetAmount'] = sumoffsetAmount.toFixed(2);
-    sumEntity['sumlastAmount'] = sumlastAmount.toFixed(2);
-    setSumEntity(sumEntity);
-    form.setFieldsValue({ payAmountA: sumEntity['sumAmount'] });
-    form.setFieldsValue({ payAmountB: 0 });
-    form.setFieldsValue({ payAmountC: 0 });
-  };
-
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectChange,
-  };
-
-  //收款
-  const charge = () => {
-    if (selectedRowKeys.length == 0) {
-      message.warning('请选择收款项目！');
-      return;
-    }
-
-    form.validateFields((errors, values) => {
-      if (!errors) {
-        Modal.confirm({
-          title: '请确认',
-          content: `确定要执行收款操作吗？`,
-          cancelText: '取消',
-          okText: '确定',
-          onOk: () => {
-            let info = Object.assign({}, values, {
-              // roomId: organizeId,
-              ids: JSON.stringify(selectedRowKeys),
-              UnitId: organizeId,
-              CustomerName: customerName,
-              billDate: values.billDate.format('YYYY-MM-DD HH:mm:ss'),
-              //organize.title.split(' ')[1]
-              isML: isML,
-              mlType: mlType,
-              mlScale: mlScale
-            });
-
-            if (Number(sumEntity.sumlastAmount) != Number(info.payAmountA + info.payAmountB + info.payAmountC)) {
-              message.warning('本次收款金额小于本次选中未收金额合计，不允许收款，请拆费或者重新选择收款项');
-              return;
-            }
-
-            //弹出支付宝扫码
-            if (isQrcode) {
-              // GetQrCode(info).then(res => {
-              //   // setQrUrl(res);  
-              //   Modal.confirm({
-              //     title: "请扫码",
-              //     // okText: "确认",
-              //     // cancelText: "取消", 
-              //     // content: (<QRCode
-              //     //   value={res} //value参数为生成二维码的链接
-              //     //   size={200} //二维码的宽高尺寸
-              //     //   fgColor="#000000"  //二维码的颜色 
-              //     // />) 
-              //     content: (<img src={res}></img>),
-              //     onOk() {
-              //       //收款
-              //       // QrCodeCharge(info).then(billId => {
-              //       //   message.success('收款成功');
-              //       //   reload();
-              //       //   //弹出查看页面
-              //       //   showDetail(billId);
-              //       // });
-              //     },
-              //     onCancel() {
-              //     } 
-              //   }); 
-              // });
-
-              GetQrCode(info).then(res => {
-                pay(res.code_img_url);
-                form.setFieldsValue({ tradenoId: res.tradenoId });
-              })
-
-            } else {
-              //直接收款
-              Charge(info).then(billId => {
-                message.success('收款成功');
-                reload();
-                //弹出查看页面
-                showDetail(billId);
-              });
-            }
-          }
-        });
-      }
-    });
-  };
-
-  const pay = (url) => {
-    let temp = Modal.confirm({
-      title: '请扫码',
-      content: (<img src={url}></img>),
-      onCancel() {
-        if (timer) {
-          timer = null;//关闭弹窗后不轮询
-        }
-      }
-    })
-    retry().then(() => {
-      temp.destroy();
-    })
-  };
-
-  //轮询支付回调数据
-  let timer;
-  const retry = () => {
-    return new Promise((resolve, reject) => {
-      timer = setTimeout(() => {
-        const tradenoId = form.getFieldValue('tradenoId');
-        GetPayState(tradenoId).then(billId => {
-          if (billId) {
-            //支付成功
-            resolve();
-            message.success('收款成功');
-            reload();
-            //弹出查看页面
-            showDetail(billId);
-          } else {
-            if (timer) {
-              retry();
-            }
-          }
-        })
-      }, 1000);//每秒轮询一次  
-    })
-  };
-
   return (
     <Page>
       <Form layout="vertical" hideRequiredMark>
@@ -442,23 +493,20 @@ function ListTable(props: ListTableProps) {
             <Col lg={4}>
               <Form.Item required>
                 {getFieldDecorator('payAmountA', {
-                  initialValue: hasSelected ? sumEntity.sumAmount : 0,
+                  //initialValue: hasSelected ? lastAmount : 0,
                   rules: [{ required: true, message: '请输入金额' }],
                 })(<InputNumber onChange={(value) => {
-                  if (sumEntity != undefined && Number(value) < sumEntity.sumAmount) {
-                    var amountB = sumEntity.sumAmount - Number(value);
-                    // form.setFieldsValue({payAmountB:amountB.toFixed(2)});
-                    form.setFieldsValue({ payAmountB: amountB });
+                  if (sumEntity != undefined && Number(value) < lastAmount) {
+                    var amountB = lastAmount - Number(value);
+                    form.setFieldsValue({ payAmountB: amountB.toFixed(2) });
                     form.setFieldsValue({ payAmountC: 0.00 });
                   }
                 }}
                   precision={2}
                   min={0}
-                  max={hasSelected ? sumEntity.sumAmount : 0}
+                  max={hasSelected ? lastAmount : 0}
                   style={{ width: '100%' }}
                 />)}
-
-
                 {getFieldDecorator('tradenoId', {
                 })(
                   <input type='hidden' />
@@ -471,7 +519,7 @@ function ListTable(props: ListTableProps) {
                 {getFieldDecorator('payTypeB', {
                   initialValue: '微信扫码'
                 })(
-                  <Select  >
+                  <Select>
                     <Option value="现金">现金</Option>
                     <Option value="支付宝扫码" >支付宝扫码</Option>
                     <Option value="支付宝转账">支付宝转账</Option>
@@ -493,13 +541,13 @@ function ListTable(props: ListTableProps) {
                   <InputNumber
                     precision={2}
                     min={0}
-                    max={hasSelected ? sumEntity.sumAmount - Number(form.getFieldValue('payAmountA')) : 0}
+                    max={hasSelected ? lastAmount - Number(form.getFieldValue('payAmountA')) : 0}
                     style={{ width: '100%' }}
                     onChange={(value) => {
                       var sumAmountA = form.getFieldValue('payAmountA');
-                      if (sumEntity != undefined && sumAmountA + Number(value) < sumEntity.sumAmount) {
-                        var amountC = sumEntity.sumAmount - Number(value) - sumAmountA;
-                        form.setFieldsValue({ payAmountC: amountC });
+                      if (sumEntity != undefined && sumAmountA + Number(value) < lastAmount) {
+                        var amountC = lastAmount - Number(value) - sumAmountA;
+                        form.setFieldsValue({ payAmountC: amountC.toFixed(2) });
                       }
                     }}
                   />
@@ -534,9 +582,7 @@ function ListTable(props: ListTableProps) {
                     style={{ width: '100%' }}
                     precision={2}
                     min={0}
-                    max={hasSelected ? sumEntity.sumAmount -
-                      Number(form.getFieldValue('payAmountA')) -
-                      Number(form.getFieldValue('payAmountB')) : 0}
+                    max={hasSelected ? lastAmount - Number(form.getFieldValue('payAmountA')) - Number(form.getFieldValue('payAmountB')) : 0}
                   />
                 )}
 
@@ -571,10 +617,8 @@ function ListTable(props: ListTableProps) {
               </Form.Item>
             </Col>
           </Row>
-
           <Row>
             <Button type="primary" disabled={isDisabled} onClick={charge}>收款确认</Button>
-
             <Checkbox
               style={{ marginLeft: '10px' }}
               onChange={(e) => { setIsQrcode(e.target.checked); }}
@@ -582,8 +626,12 @@ function ListTable(props: ListTableProps) {
 
             <Checkbox
               style={{ marginLeft: '10px' }}
-              onChange={(e) => { setIsML(e.target.checked); }}
               disabled={isQrcode}
+              onChange={(e) => {
+                setIsML(e.target.checked);
+                //算抹零金额
+                mlCal(e.target.checked, mlType, mlScale);
+              }}
             >自动抹零</Checkbox>
 
             <Select
@@ -594,8 +642,7 @@ function ListTable(props: ListTableProps) {
               }}
               defaultValue='1'
               disabled={isQrcode}
-              onChange={(value) => { setMlType(value); }}
-            >
+              onChange={(value) => { setMlType(value); mlCal(isML, value, mlScale); }} >
               <Option value='1'>抹去角和分</Option>
               <Option value='2'>抹去角</Option>
               <Option value='3'>抹去分</Option>
@@ -606,7 +653,7 @@ function ListTable(props: ListTableProps) {
             }}
               defaultValue='1'
               disabled={isQrcode}
-              onChange={(value) => { setMlScale(value); }}
+              onChange={(value) => { setMlScale(value); mlCal(isML, mlType, value); }}
             >
               <Option value='1'>四舍五入</Option>
               <Option value='2'>直接舍去</Option>
@@ -614,12 +661,13 @@ function ListTable(props: ListTableProps) {
             </Select>
           </Row>
 
-          <Row style={{ marginTop: '10px' }}>
+          <Row style={{ marginTop: '15px' }}>
             <span style={{ marginLeft: 8, color: "red" }}>
               {hasSelected ? `应收金额：${sumEntity.sumAmount} ，
             减免金额：${sumEntity.sumreductionAmount}，
-            冲抵金额：${sumEntity.sumoffsetAmount}，
-            未收金额：${sumEntity.sumlastAmount}` : ''}
+            冲抵金额：${sumEntity.sumoffsetAmount}， 
+            抹零金额：${mlAmount.toFixed(2)}，
+            未收金额：${lastAmount}` : ''}
             </span>
           </Row>
           <Table
@@ -641,7 +689,6 @@ function ListTable(props: ListTableProps) {
 
     </Page >
   );
-}
-
+};
 //export default ListTable;
 export default Form.create<ListTableProps>()(ListTable);

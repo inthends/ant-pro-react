@@ -1,10 +1,10 @@
 //新增维修收费，ok
 import { TreeEntity } from '@/model/models';
-import { Spin, Card, Select, Button, Col, DatePicker, Drawer, Form, Input, InputNumber, Row, message } from 'antd';
+import { Modal, Spin, Card, Select, Button, Col, DatePicker, Drawer, Form, Input, InputNumber, Row, message } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import {
-  GetUserRoomsByRelationId, SaveDetail, GetReceivablesFeeItemTreeJson,
+  GetUserRoomsByRelationId, SaveDetail, GetReceivablesFeeItemTreeJson, InvalidBillDetailForm,
   GetRoomUsers, GetUserRooms, GetFeeItemDetail, SaveTempBill, GetShowDetailByMainId, Call
 } from './Main.service';
 import LeftTree from '../LeftTree';
@@ -152,6 +152,22 @@ const AddRepairFee = (props: AddRepairFeeProps) => {
       }
     });
   }
+
+  const doInvalid = () => {
+    Modal.confirm({
+      title: '请确认',
+      content: `您是否要作废改费用？`,
+      okText: '确认',
+      cancelText: '取消',
+      onOk: () => {
+        //console.log(record);
+        InvalidBillDetailForm(infoDetail.id).then(() => {
+          message.success('作废成功');
+          closeDrawer();
+        });
+      },
+    });
+  };
 
   const setEndDate = (beginDate: string, cycleValue: number, cycleType: string) => {
     var startDate = moment(beginDate);
@@ -407,7 +423,7 @@ const AddRepairFee = (props: AddRepairFeeProps) => {
                                   form.setFieldsValue({ amount: res });
                                 });
                               }
-                            }); 
+                            });
                           }}></InputNumber>
                       )}
                     </Form.Item>
@@ -529,7 +545,6 @@ const AddRepairFee = (props: AddRepairFeeProps) => {
                       )}
                     </Form.Item>
                   </Col>
-
                   <Col span={12}>
                     <Form.Item label="账单日" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
                       {getFieldDecorator('billDate', {
@@ -570,14 +585,17 @@ const AddRepairFee = (props: AddRepairFeeProps) => {
             padding: '10px 16px',
             background: '#fff',
             textAlign: 'right',
-          }}
-        >
+          }}>
           <Button onClick={() => close()} style={{ marginRight: 8 }}>
             取消
         </Button>
-          <Button onClick={onSave} type="primary">
-            提交
+          <Button onClick={onSave} type="primary" style={{ marginRight: 8 }}>
+            保存
         </Button>
+          {mainId ?
+            <Button onClick={doInvalid} type="danger" >
+              作废
+        </Button> : null}
         </div> : null
       }
 

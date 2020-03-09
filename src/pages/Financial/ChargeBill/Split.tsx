@@ -182,6 +182,7 @@ const Split = (props: SplitProps) => {
                   })(
                     <InputNumber style={{ width: '100%' }}
                       min={0} max={infoDetail.amount}
+                      readOnly
                       precision={2}
                     //取消改变金额变动日期
                     // onChange={(value) => {
@@ -217,7 +218,7 @@ const Split = (props: SplitProps) => {
               <Col span={8}>
                 <Form.Item label="计费截止日期" required >
                   {getFieldDecorator('firstEndDate', {
-                    initialValue: infoDetail.firstEndDate == null ? moment(new Date) : moment(infoDetail.firstEndDate),
+                    // initialValue: infoDetail.firstEndDate == null ? moment(new Date) : moment(infoDetail.firstEndDate),
                     rules: [{ required: true, message: '请输入计费截止日期' },
                       //   {
                       //   validator: (rules, value, callback) => {
@@ -272,7 +273,7 @@ const Split = (props: SplitProps) => {
                   {getFieldDecorator('secondAmount', {
                     initialValue: infoDetail.secondAmount,
                   })(
-                    <InputNumber disabled={true} style={{ width: '100%' }}
+                    <InputNumber readOnly style={{ width: '100%' }}
                       precision={2}
                     />
                   )}
