@@ -197,10 +197,13 @@ function ListTable(props: ListTableProps) {
               // mlType: mlType,
               // mlScale: mlScale
             });
-            if (lastAmount != Number(info.payAmountA + info.payAmountB + info.payAmountC)) {
+ 
+
+            if (lastAmount != Number(info.payAmountA) + Number(info.payAmountB) + Number(info.payAmountC)) {
               message.warning('本次收款金额小于本次选中未收金额合计，不允许收款，请拆费或者重新选择收款项');
               return;
             }
+
             //弹出支付宝扫码
             if (isQrcode) {
               // GetQrCode(info).then(res => {
@@ -293,7 +296,7 @@ function ListTable(props: ListTableProps) {
       //message.warning('请选择收款项目！');
       return;
     }
-   
+
     if (isml) {
       // const data = {
       //   sumAmount: lastAmount, 
@@ -313,7 +316,7 @@ function ListTable(props: ListTableProps) {
     else {
       //还原
       setLastAmount(sumEntity.sumlastAmount);//还原未抹零之前的剩余应收金额
-      setMlAmount(0); 
+      setMlAmount(0);
       form.setFieldsValue({ payAmountA: sumEntity.sumlastAmount });
       form.setFieldsValue({ payAmountB: 0 });
       form.setFieldsValue({ payAmountC: 0 });
@@ -501,7 +504,7 @@ function ListTable(props: ListTableProps) {
                   if (sumEntity != undefined && Number(value) < lastAmount) {
                     var amountB = lastAmount - Number(value);
                     form.setFieldsValue({ payAmountB: amountB.toFixed(2) });
-                    form.setFieldsValue({ payAmountC: 0.00 });
+                    form.setFieldsValue({ payAmountC: 0 });
                   }
                 }}
                   precision={2}
@@ -624,7 +627,7 @@ function ListTable(props: ListTableProps) {
             <Checkbox
               style={{ marginLeft: '10px' }}
               onChange={(e) => { setIsQrcode(e.target.checked); }}
-            >生成收款码</Checkbox> 
+            >生成收款码</Checkbox>
             <Checkbox
               style={{ marginLeft: '10px' }}
               disabled={isQrcode}
@@ -633,7 +636,7 @@ function ListTable(props: ListTableProps) {
                 //算抹零金额
                 mlCal(e.target.checked, mlType, mlScale);
               }}
-            >自动抹零</Checkbox> 
+            >自动抹零</Checkbox>
             <Select
               style={{
                 marginLeft: '10px',
@@ -666,7 +669,7 @@ function ListTable(props: ListTableProps) {
             减免金额：${sumEntity.sumreductionAmount}，
             冲抵金额：${sumEntity.sumoffsetAmount}， 
             抹零金额：${mlAmount.toFixed(2)}，
-            未收金额：${lastAmount}` : ''}
+            未收金额：${lastAmount.toFixed(2)}` : ''}
             </span>
           </Row>
           <Table
