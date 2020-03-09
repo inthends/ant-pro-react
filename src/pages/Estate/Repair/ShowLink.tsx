@@ -3,7 +3,7 @@ import {   Tag, Divider, PageHeader, Button, Card, Col, Drawer, Form, Row } from
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 // import { GetUserList, getCommonItems } from '@/services/commonItem';
-import { GetEntityShow } from './Main.service'; 
+import { GetEntityByCode } from './Main.service'; 
 import styles from './style.less'; 
 
 interface ShowLinkProps {
@@ -31,7 +31,7 @@ const ShowLink = (props: ShowLinkProps) => {
   useEffect(() => {
     if (showVisible) {
       if (billCode) {
-        GetEntityShow(billCode).then(res => {
+        GetEntityByCode(billCode).then(res => {
           setInfoDetail(res);
           // setLoading(false);
         })

@@ -66,6 +66,13 @@ export function GetShowDetail(keyValue): Promise<any> {
     .get(process.env.basePath + `/BillingMain/GetShowDetail?keyvalue=${keyValue}`)
     .then(getResult as any);
 }
+
+export function GetShowDetailByMainId(keyValue): Promise<any> {
+  return request
+    .get(process.env.basePath + `/BillingMain/GetShowDetailByMainId?keyvalue=${keyValue}`)
+    .then(getResult as any);
+}
+
 //获取转费时候历史的房间住户
 export function GetTransferRoomUsers(roomid, relationid): Promise<any[]> {
   return request

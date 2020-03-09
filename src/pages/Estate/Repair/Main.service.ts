@@ -56,7 +56,6 @@ export function Handle(data): Promise<any> {
     .then(getResult as any);
 }
 
-
 //转单
 export function Change(data): Promise<any> {
   return request
@@ -80,7 +79,13 @@ export function Approve(data): Promise<any> {
 
 
 //获取实体
-export function GetEntityShow(keyValue): Promise<any> {
-  return request.get(process.env.basePath + `/Repair/GetEntityShow?keyValue=${keyValue}`).then(getResult as any);
+export function GetEntityByCode(code): Promise<any> {
+  return request.get(process.env.basePath + `/Repair/GetEntityByCode?code=${code}`).then(getResult as any);
+}
+
+
+//获取实体
+export function GetEntity(keyValue): Promise<any> {
+  return request.get(process.env.basePath + `/Repair/GetEntity?keyValue=${keyValue}`).then(getResult as any);
 }
 

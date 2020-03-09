@@ -2,26 +2,28 @@
 import { Icon, DatePicker, AutoComplete, Select, Tag, Divider, PageHeader, Button, Card, Col, Drawer, Form, Input, message, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { Dispatch, Change, Receive, Start, Handle, Check, Approve } from './Main.service';
+import { Dispatch, Change, Receive, Start, Handle, Check, Approve, GetEntity } from './Main.service';
 import { GetUserList, getCommonItems } from '@/services/commonItem';
 import moment from 'moment';
 import styles from './style.less';
 // const { Paragraph } = Typography;
 const { Option } = Select;
-import AddFee from '../../Financial/ChargeBill/Modify';
+import AddRepairFee from '../../Financial/ChargeBill/AddRepairFee';
 
 interface ModifyProps {
   modifyVisible: boolean;
-  data?: any;
+  // data?: any;
+  id?: string;
   form: WrappedFormUtils;
   closeDrawer(): void;
   reload(): void;
 };
 
 const Modify = (props: ModifyProps) => {
-  const { modifyVisible, data, closeDrawer, form, reload } = props;
+  const { modifyVisible, id, closeDrawer, form, reload } = props;
   const { getFieldDecorator } = form;
-  const title = data === undefined ? '添加维修单' : data.status == 8 ? '查看维修单' : '修改维修单';
+  // const title = data === undefined ? '添加维修单' : data.status == 8 ? '查看维修单' : '修改维修单'; 
+  const title = id == "" ? '添加维修单' : "修改维修单";
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [repairMajors, setRepairMajors] = useState<any[]>([]); // 维修专业
   const [userSource, setUserSource] = useState<any[]>([]);
@@ -84,7 +86,7 @@ const Modify = (props: ModifyProps) => {
   const dispatch = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        const newData = data ? { ...data, ...values } : values;
+        const newData = infoDetail ? { ...infoDetail, ...values } : values;
         Dispatch({ ...newData, keyValue: newData.id }).then(res => {
           message.success('派单成功');
           closeDrawer();
@@ -98,7 +100,7 @@ const Modify = (props: ModifyProps) => {
   const receive = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        Receive(data.id).then(res => {
+        Receive(infoDetail.id).then(res => {
           message.success('接单成功！');
           closeDrawer();
           reload();
@@ -111,7 +113,7 @@ const Modify = (props: ModifyProps) => {
   const change = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        Change(data.id).then(res => {
+        Change(infoDetail.id).then(res => {
           message.success('转单成功！');
           closeDrawer();
           reload();
@@ -124,7 +126,7 @@ const Modify = (props: ModifyProps) => {
   const start = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        const newData = data ? { ...data, ...values } : values;
+        const newData = infoDetail ? { ...infoDetail, ...values } : values;
         newData.beginDate = values.beginDate.format('YYYY-MM-DD HH:mm');
         Start({ ...newData, keyValue: newData.id }).then(res => {
           message.success('已开工！');
@@ -139,7 +141,7 @@ const Modify = (props: ModifyProps) => {
   const handle = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        const newData = data ? { ...data, ...values } : values;
+        const newData = infoDetail ? { ...infoDetail, ...values } : values;
         newData.endDate = values.endDate.format('YYYY-MM-DD HH:mm');
         Handle({ ...newData, keyValue: newData.id }).then(res => {
           message.success('处理完成！');
@@ -154,7 +156,7 @@ const Modify = (props: ModifyProps) => {
   const check = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        const newData = data ? { ...data, ...values } : values;
+        const newData = infoDetail ? { ...infoDetail, ...values } : values;
         newData.testDate = values.testDate.format('YYYY-MM-DD HH:mm');
         Check({ ...newData, keyValue: newData.id }).then(res => {
           message.success('检验完成！');
@@ -169,7 +171,7 @@ const Modify = (props: ModifyProps) => {
   const approve = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        const newData = data ? { ...data, ...values } : values;
+        const newData = infoDetail ? { ...infoDetail, ...values } : values;
         Approve({ ...newData, keyValue: newData.id }).then(res => {
           message.success('审核完成！');
           closeDrawer();
@@ -184,7 +186,7 @@ const Modify = (props: ModifyProps) => {
     //var sbegin = new Date(data.beginDate).getTime(), send = new Date(date).getTime();
     //var total = (send - sbegin) / 1000 / 60; 
     if (date != null) {
-      const total = date.unix() - moment(data.beginDate).unix();
+      const total = date.unix() - moment(infoDetail.beginDate).unix();
       form.setFieldsValue({ useTime: (total / 60).toFixed(0) });
     } else {
       form.setFieldsValue({ useTime: null });
@@ -193,12 +195,12 @@ const Modify = (props: ModifyProps) => {
 
   const disabledDate = (current) => {
     // Can not select days before today and today
-    return current && current <= moment(data.beginDate);
+    return current && current <= moment(infoDetail.beginDate);
   };
 
   const disabledTestDate = (current) => {
     // Can not select days before today and today
-    return current && current <= moment(data.endDate);
+    return current && current <= moment(infoDetail.endDate);
   };
 
   // const range = (start, end) => {
@@ -219,25 +221,34 @@ const Modify = (props: ModifyProps) => {
   //   };
   // }
 
-  //临时加费是否显示
-  const [addFeelaVisible, setAddFeeVisible] = useState<boolean>(false);
-  const closeAddFee = () => {
-    setAddFeeVisible(false);
-  };
 
-  const [id, setId] = useState<string>('');//当前费用Id
+
+  const [feeId, setFeeId] = useState<string>('');//当前费用Id
   const [organizeId, setOrganizeId] = useState<string>('');//左侧树选择的id
   // const [modifyEdit, setModifyEdit] = useState<boolean>(true);
   const [adminOrgId, setAdminOrgId] = useState<string>('');//当前房间的管理处Id
 
+  //临时加费是否显示
+  const [addFeelaVisible, setAddFeeVisible] = useState<boolean>(false);
+  const closeAddFee = (id, amount) => {
+    setFeeId(id);
+    form.setFieldsValue({ totalFee: amount });
+    setAddFeeVisible(false);
+  };
+
   // 打开抽屉时初始化 
   useEffect(() => {
     if (modifyVisible) {
-      if (data) {
-        setInfoDetail(data);
-        setAdminOrgId(data.organizeId);//管理处Id
-        setOrganizeId(data.roomId);
-        form.resetFields();
+      // if (data) {
+      if (id) {
+        GetEntity(id).then(info => {
+          //赋值
+          setInfoDetail(info.entity);
+          setAdminOrgId(info.entity.organizeId);//管理处Id
+          setOrganizeId(info.entity.roomId);
+          setFeeId(info.feeId);
+        })
+
       } else {
         setInfoDetail({});
         form.resetFields();
@@ -735,14 +746,14 @@ const Modify = (props: ModifyProps) => {
         ) : null
       }
 
-      <AddFee
+      <AddRepairFee
         modifyVisible={addFeelaVisible}
         closeDrawer={closeAddFee}
-        id={id}
+        mainId={feeId}
         roomId={organizeId}
         adminOrgId={adminOrgId}
+        linkId={id}
         edit={true}
-        reload={() => { }}
       />
       <div
         style={{

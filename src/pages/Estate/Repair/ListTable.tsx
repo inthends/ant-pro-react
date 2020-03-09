@@ -10,7 +10,7 @@ interface ListTableProps {
   pagination: PaginationConfig;
   data: any[];
   onchange(page: any, filter: any, sort: any): any;
-  modify(data: any): void;
+  modify(id: any): void;
   reload(): void;
 }
 
@@ -133,7 +133,7 @@ function ListTable(props: ListTableProps) {
             //   删除
             // </Button>
             <span>
-              <a onClick={() => modify(record)} key="modify">修改</a>
+              <a onClick={() => modify(record.id)} key="modify">修改</a>
               <Divider type="vertical" />
               <a onClick={() => doInvalid(record)} key="invalid">作废</a>
             </span>

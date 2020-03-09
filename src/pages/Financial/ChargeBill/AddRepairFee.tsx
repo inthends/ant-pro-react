@@ -1,28 +1,31 @@
-//新增临时收费，ok
+//新增维修收费，ok
 import { TreeEntity } from '@/model/models';
 import { Spin, Card, Select, Button, Col, DatePicker, Drawer, Form, Input, InputNumber, Row, message } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetUserRoomsByRelationId, SaveDetail, GetReceivablesFeeItemTreeJson, GetRoomUsers, GetUserRooms, GetFeeItemDetail, SaveTempBill, GetShowDetail, Call } from './Main.service';
+import {
+  GetUserRoomsByRelationId, SaveDetail, GetReceivablesFeeItemTreeJson,
+  GetRoomUsers, GetUserRooms, GetFeeItemDetail, SaveTempBill, GetShowDetailByMainId, Call
+} from './Main.service';
 import LeftTree from '../LeftTree';
 import moment from 'moment';
 import styles from './style.less';
 const { Option } = Select;
 
-interface ModifyProps { 
-  closeDrawer(): void;
-  reload(): void;
+interface AddRepairFeeProps {
+  closeDrawer(feeId?, amount?): void;
   modifyVisible: boolean;
   form: WrappedFormUtils;
   roomId?: string;
-  id?: string;
+  mainId?: string;//计费主单id
+  linkId?: string;
   adminOrgId?: String;//管理处Id 
   edit: boolean;
 }
 
-const Modify = (props: ModifyProps) => {
-  const { modifyVisible, closeDrawer, form, roomId, id, reload, edit, adminOrgId } = props; 
-  const title = id == "" ? '新增费用' : "修改费用";
+const AddRepairFee = (props: AddRepairFeeProps) => {
+  const { modifyVisible, closeDrawer, form, roomId, mainId, edit, adminOrgId, linkId } = props;
+  const title = mainId == "" ? '新增费用' : "修改费用";
   const { getFieldDecorator } = form;
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [feeTreeData, setFeeTreeData] = useState<TreeEntity[]>([]);
@@ -38,42 +41,11 @@ const Modify = (props: ModifyProps) => {
       GetReceivablesFeeItemTreeJson(roomId).then(res => {
         setFeeTreeData(res);
       });
-
-      // if (id != null && id != "") {
-      if (id) {
-        // var infoTemp = {}; 
-        // GetShowDetail(id).then(res => {
-        //   infoTemp = Object.assign({}, res.entity, { number: res.number });
-        //   return GetRoomUsers(res.entity.unitId);
-        // }).then(res => {
-        //   setRelationIds(res);
-        //   if (res.length > 0) {
-        //     infoTemp = Object.assign({}, infoTemp, { relationId: res[0].key });
-        //   }
-        //   setInfoDetail(infoTemp);
-        //   return res;
-        // }).then(relations => {
-        //   if (infoTemp.relationId) {
-        //     var selectId = '';
-        //     for (var i = 0; i < relations.length; i++) {
-        //       if (relations[i].key == infoTemp.relationId) {
-        //         selectId = relations[i].value;
-        //       }
-        //     }
-        //     return GetUserRooms(selectId);
-        //   }
-        // }).then(res => {
-        //   setUnitIds(res);
-        //   if (res.length > 0) {
-        //     infoTemp = Object.assign({}, infoTemp, { householdId: res[0].value })
-        //     setInfoDetail(infoTemp);
-        //   }
-        // });
-
+      if (mainId) {
         //加载数据
         GetRoomUsers(roomId).then(res => {
           setRelationIds(res);
-          GetShowDetail(id).then(info => {
+          GetShowDetailByMainId(mainId).then(info => {
             // let info = value.entity;
             // info.number = value.number;  
             let customerid = '';
@@ -114,71 +86,12 @@ const Modify = (props: ModifyProps) => {
           }
           // return info;
         });
-
-        // .then(infoDetail => {
-        //   GetUserRooms(getRelationId(infoDetail.relationId))
-        //     .then(res => {
-        //       setUnitIds(res);
-        //       if (res.length > 0) {
-        //         var info = Object.assign({}, infoDetail, { householdId: res[0].value });
-        //         setInfoDetail(info);
-        //       }
-        //     });
-        // });
-
-        // if (relationIds == null) {
-        //   setInfoDetail({});
-        // }
-
-        // GetReceivablesFeeItemTreeJson().then(res => {
-        // const treeList = (res || []).map(item => {
-        //   return Object.assign({}, item, {
-        //     id: item.key,
-        //     text: item.text,
-        //     parentId: item.parentId
-        //   });
-        // });
-        //   setFeeTreeData(res);
-        // });
-        //重置之前选择加载的费项类别
-        // setInfoDetail({});
-        // form.resetFields();
       }
-
     }
     // else {
     //   form.setFieldsValue({});
     // }
   }, [modifyVisible]);
-
-  const close = (refresh: boolean) => {
-    if (refresh) {
-      reload();
-    }
-    closeDrawer();
-  };
-
-  // const getRelationId = (key) => {
-  //   if (relationIds == null) {
-  //     return null
-  //   }
-  //   for (var i = 0; i < relationIds.length; i++) {
-  //     if (relationIds[i].key == key) {
-  //       return relationIds[i].value;
-  //     }
-  //   }
-  // }
-
-  // const getUnitId = (value) => {
-  //   if (unitIds == null) {
-  //     return null
-  //   }
-  //   for (var i = 0; i < unitIds.length; i++) {
-  //     if (unitIds[i].value == value) {
-  //       return unitIds[i].key;
-  //     }
-  //   }
-  // }
 
   const getGuid = () => {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -189,12 +102,10 @@ const Modify = (props: ModifyProps) => {
 
   const onSave = () => {
     form.validateFields((errors, values) => {
-      // if (infoDetail.feeItemId == null || infoDetail.feeItemId == '') {
-      // }
-      if (!errors) { 
+      if (!errors) {
         var guid = getGuid();
         var unit = {
-          BillId: id != null && id != "" ? infoDetail.billId : guid,
+          BillId: mainId != null && mainId != "" ? infoDetail.billId : guid,
           UnitId: values.unitId,
           FeeItemId: infoDetail.feeItemId,
           Quantity: "" + values.quantity,
@@ -210,38 +121,32 @@ const Modify = (props: ModifyProps) => {
           BillDate: moment(values.billDate).format("YYYY-MM-DD"),
           Deadline: moment(values.deadline).format("YYYY-MM-DD")
         }
-        if (id != null && id != "") {
-          unit = Object.assign({}, unit, { Id: id, keyValue: id });
+        if (infoDetail.id != null && infoDetail.id != "") {
+          unit = Object.assign({}, unit, { Id: infoDetail.id, keyValue: infoDetail.id });
           SaveDetail(unit).then(res => {
-            close(true);
+            closeDrawer(mainId, values.amount);
           })
         } else {
           let units: any[];
           units = [];
           units.push(unit);
           let newData = {
-            BillId: id != null && id != "" ? infoDetail.billId : guid,
+            BillId: mainId != null && mainId != "" ? infoDetail.billId : guid,
             OrganizeId: adminOrgId,
-            BillSource: "临时加费",
+            BillSource: "维修单",
             Units: JSON.stringify(units),
-            keyValue: id != null && id != "" ? infoDetail.billId : guid,
-            // CreateUserId: localStorage.getItem('userid'),
-            // CreateUserName: localStorage.getItem('username'),
-            // CreateDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
-            // ModifyUserId: localStorage.getItem('userid'),
-            // ModifyUserName: localStorage.getItem('username'),
-            // ModifyDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
-            LinkId: '',
+            keyValue: mainId != null && mainId != "" ? infoDetail.billId : guid,
+            LinkId: linkId,
             IfVerify: false,
-            VerifyPerson: '',
-            VerifyDate: '',
-            VerifyMemo: '',
+            // VerifyPerson: '',
+            // VerifyDate: '',
+            // VerifyMemo: '',
             Status: 0,//0正常 1 删除
-            code: id != null && id != "" ? 1 : 0
+            code: mainId != null && mainId != "" ? 1 : 0
           };
           SaveTempBill(newData).then((res) => {
             message.success('提交成功');
-            close(true);
+            closeDrawer(newData.BillId, values.amount);
           });
         }
       }
@@ -330,15 +235,15 @@ const Modify = (props: ModifyProps) => {
     <Drawer
       title={title}
       placement="right"
-      width={id != '' ? 600 : 840}
-      onClose={() => close(false)}
+      width={mainId != '' ? 600 : 840}
+      onClose={() => close()}
       visible={modifyVisible}
       destroyOnClose={true}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 50px)' }}>
       <Spin tip="数据处理中..." spinning={loading}>
-        <Row gutter={8}> 
+        <Row gutter={8}>
           {
-            id != '' ?
+            mainId != '' ?
               null :
               <Col span={7} style={{
                 overflow: 'visible', position: 'relative',
@@ -386,10 +291,8 @@ const Modify = (props: ModifyProps) => {
               </Col>
           }
 
-          <Col span={id != '' ? 24 : 17}>
-
-
-            <Card className={styles.card} >
+          <Col span={mainId != '' ? 24 : 17}>
+            <Card className={styles.card}>
               <Form hideRequiredMark>
                 <Row>
                   <Form.Item label="加费对象" required labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} >
@@ -397,7 +300,7 @@ const Modify = (props: ModifyProps) => {
                       initialValue: infoDetail.relationId == null ? null : infoDetail.relationId,// getRelationId(infoDetail.relationId),
                       rules: [{ required: true, message: '请选择加费对象' }]
                     })(
-                      <Select placeholder="=请选择=" disabled={id === '' && edit ? false : true}
+                      <Select placeholder="=请选择=" disabled={mainId === '' && edit ? false : true}
                         onSelect={(key) => {
                           GetUserRoomsByRelationId(key).then(res => {
                             setUnitIds(res);
@@ -422,7 +325,7 @@ const Modify = (props: ModifyProps) => {
                       initialValue: infoDetail.unitId == null ? null : infoDetail.unitId,
                       rules: [{ required: true, message: '请选择房屋' }]
                     })(
-                      <Select placeholder="=请选择=" disabled={id === '' && edit ? false : true} >
+                      <Select placeholder="=请选择=" disabled={mainId === '' && edit ? false : true} >
                         {unitIds.map(item => (
                           <Option value={item.key}>
                             {item.title}
@@ -492,11 +395,6 @@ const Modify = (props: ModifyProps) => {
                           style={{ width: '100%' }}
                           disabled={edit ? false : true}
                           onChange={(value) => {
-                            // if (value != undefined) {
-                            //   var amount = infoDetail.price * infoDetail.quantity * value;
-                            //   var info = Object.assign({}, infoDetail, { number: value, amount: amount });
-                            //   setInfoDetail(info);
-                            // }
 
                             form.validateFields((errors, values) => {
                               if (!errors) {
@@ -509,8 +407,7 @@ const Modify = (props: ModifyProps) => {
                                   form.setFieldsValue({ amount: res });
                                 });
                               }
-                            });
-
+                            }); 
                           }}></InputNumber>
                       )}
                     </Form.Item>
@@ -675,7 +572,7 @@ const Modify = (props: ModifyProps) => {
             textAlign: 'right',
           }}
         >
-          <Button onClick={() => close(false)} style={{ marginRight: 8 }}>
+          <Button onClick={() => close()} style={{ marginRight: 8 }}>
             取消
         </Button>
           <Button onClick={onSave} type="primary">
@@ -687,5 +584,5 @@ const Modify = (props: ModifyProps) => {
     </Drawer >
   );
 };
-export default Form.create<ModifyProps>()(Modify);
+export default Form.create<AddRepairFeeProps>()(AddRepairFee);
 

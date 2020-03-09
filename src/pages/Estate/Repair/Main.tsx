@@ -17,8 +17,9 @@ function Main() {
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [organize, SetOrganize] = useState<any>({});
   const [data, setData] = useState<any[]>([]);
-  const [currData, setCurrData] = useState<any>();
+  // const [currData, setCurrData] = useState<any>();
   const [search, setSearch] = useState<string>('');
+  const [id, setId] = useState<any>();
 
   const selectTree = (id, type, info) => {
     initLoadData(info.node.props.dataRef, search);
@@ -54,8 +55,9 @@ function Main() {
   const closeDrawer = () => {
     setModifyVisible(false);
   };
-  const showDrawer = (item?) => {
-    setCurrData(item);
+  const showDrawer = (id?) => {
+    //setCurrData(item);
+    setId(id);
     setModifyVisible(true);
   };
   const loadData = (searchText, org, paginationConfig?: PaginationConfig, sorter?) => {
@@ -156,7 +158,7 @@ function Main() {
       <Modify
         modifyVisible={modifyVisible}
         closeDrawer={closeDrawer}
-        data={currData}
+        id={id}
         reload={() => initLoadData(organize, search)}
       />
     </Layout>
