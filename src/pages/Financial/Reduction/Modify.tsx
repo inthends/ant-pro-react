@@ -633,7 +633,7 @@ const Modify = (props: ModifyProps) => {
                   initialValue: infoDetail.rebate ? infoDetail.rebate : 10,
                   rules: [{ required: true, message: '请输入批量折扣' }],
                 })(
-                  <InputNumber step={0.1} style={{ width: '100%' }} max={10} ></InputNumber>
+                  <InputNumber style={{ width: '100%' }} max={10}  min={1} ></InputNumber>
                 )}
               </Form.Item>
             </Col>
@@ -643,7 +643,7 @@ const Modify = (props: ModifyProps) => {
                   initialValue: infoDetail.reductionAmount ? infoDetail.reductionAmount : null,
                   rules: [{ required: true, message: '请输入批量减免金额' }],
                 })(
-                  <InputNumber step={0.1} style={{ width: '100%' }} min={0.01}></InputNumber>
+                  <InputNumber precision={2} style={{ width: '100%' }} min={0} ></InputNumber>
                 )}
               </Form.Item>
             </Col>
