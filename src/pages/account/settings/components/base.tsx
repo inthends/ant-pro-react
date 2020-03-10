@@ -128,18 +128,19 @@ class BaseView extends Component<BaseViewProps> {
     event.preventDefault();
     const { form, currentUser } = this.props;
     form.validateFields((errors, values) => {
-      if (!errors) {  
+      if (!errors) {
         //save 
         saveCurrent({
           //...values,
-          description: values.description,
-          headImg: values.avatar,
-          keyValue: currentUser.userid
+          // description: values.description,
+          keyValue: currentUser.userid,
+          avatar: values.avatar,
+          newpassword: values.newpassword
         }
         ).then((res) => {
           message.success(formatMessage({ id: 'account-settings.basic.update.success' }));
         })
-      } 
+      }
     });
   };
 
@@ -150,7 +151,7 @@ class BaseView extends Component<BaseViewProps> {
 
 
   render() {
-    const { form: { getFieldDecorator } } = this.props; 
+    const { form: { getFieldDecorator } } = this.props;
     return (
       <div className={styles.baseView} ref={this.getViewDom}>
         <div className={styles.left}>
@@ -174,7 +175,51 @@ class BaseView extends Component<BaseViewProps> {
                   },
                 ],
               })(<Input readOnly />)}
+
+              {getFieldDecorator('avatar', {
+              })(
+                <input type='hidden' />
+              )}
             </FormItem>
+
+
+
+            <FormItem label='密码'>
+              {getFieldDecorator('password', {
+                rules: [
+                  {
+                    required: true,
+                    message: '请设置您的密码',
+                  },
+                ],
+              })(<Input.Password readOnly visibilityToggle={false} />)}
+            </FormItem>
+
+            <FormItem label='新密码'>
+              {getFieldDecorator('newpassword', {
+                // rules: [
+                //   {
+                //     required: true,
+                //     message: '请设置您的密码',
+                //   },
+                // ],
+              })(<Input.Password />)}
+            </FormItem>
+
+
+            {/* 
+            
+             <FormItem label={formatMessage({ id: 'account-settings.basic.phone' })}>
+              {getFieldDecorator('phonenum', {
+                rules: [
+                  {
+                    required: true,
+                    message: formatMessage({ id: 'account-settings.basic.phone-message' }, {}),
+                  },
+                ],
+              })(<Input disabled />)}
+            </FormItem>
+
             <FormItem label='备注'>
               {getFieldDecorator('description', {
                 rules: [
@@ -189,13 +234,8 @@ class BaseView extends Component<BaseViewProps> {
                   rows={5}
                 />,
               )}
-
-              {getFieldDecorator('avatar', {
-              })(
-                <input type='hidden' />
-              )}
-            </FormItem>
-            {/* <FormItem label={formatMessage({ id: 'account-settings.basic.country' })}>
+            </FormItem>  
+             <FormItem label={formatMessage({ id: 'account-settings.basic.country' })}>
               {getFieldDecorator('country', {
                 rules: [
                   {
@@ -244,7 +284,8 @@ class BaseView extends Component<BaseViewProps> {
               })(<PhoneView />)}
             </FormItem> */}
             <Button type="primary" onClick={this.handlerSubmit}>
-              <FormattedMessage id="account-settings.basic.update" defaultMessage="Update Information" />
+              修改密码
+              {/* <FormattedMessage id="account-settings.basic.update" defaultMessage="Update Information" /> */}
             </Button>
           </Form>
         </div>
@@ -279,8 +320,6 @@ class BaseView extends Component<BaseViewProps> {
               </div>
             </Upload>
           </Fragment>
-
-
         </div>
       </div>
     );

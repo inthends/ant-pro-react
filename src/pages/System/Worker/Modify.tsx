@@ -124,8 +124,8 @@ const Modify = (props: ModifyProps) => {
             <ModifyItem
               {...baseFormProps}
               field="phoneNum"
-              label="手机号码"
-              rules={[{ required: true, message: '请输入手机号码' }]}
+              label="联系电话"
+              rules={[{ required: true, message: '请输入联系电话' }]}
             ></ModifyItem>
           </Row>
 

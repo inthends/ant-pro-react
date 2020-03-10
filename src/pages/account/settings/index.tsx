@@ -46,9 +46,9 @@ SettingsState
     super(props);
     const menuMap = {
       base: <FormattedMessage id="account-settings.menuMap.basic" defaultMessage="Basic Settings" />,
-      security: (
-        <FormattedMessage id="account-settings.menuMap.security" defaultMessage="Security Settings" />
-      ),
+      // security: (
+      //   <FormattedMessage id="account-settings.menuMap.security" defaultMessage="Security Settings" />
+      // ),
       // binding: (
       //   <FormattedMessage id="account-settings.menuMap.binding" defaultMessage="Account Binding" />
       // ),

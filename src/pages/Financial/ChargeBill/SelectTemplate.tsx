@@ -14,7 +14,7 @@ interface SelectTemplateProps {
 }
 
 const SelectTemplate = (props: SelectTemplateProps) => {
-  const { visible, closeModal, id, unitId,form } = props;
+  const { visible, closeModal, id, unitId, form } = props;
   const [loading, setLoading] = useState<boolean>(false);
   const { getFieldDecorator } = form;
   const [tempListData, setTempListData] = useState<any[]>([]);
@@ -41,6 +41,8 @@ const SelectTemplate = (props: SelectTemplateProps) => {
         Print(id, values.templateId).then(res => {
           //window.location.href = res;
           window.open(res);
+          //setLoading(false);
+        }).finally(() => {
           setLoading(false);
         });
         //   },
@@ -61,8 +63,7 @@ const SelectTemplate = (props: SelectTemplateProps) => {
       onOk={() => onOk()}
       destroyOnClose={true}
       bodyStyle={{ background: '#f6f7fb' }}
-      width='330px'
-    >
+      width='330px'>
       <Spin tip="数据处理中..." spinning={loading}>
         <Form layout="vertical" hideRequiredMark>
           <Row>

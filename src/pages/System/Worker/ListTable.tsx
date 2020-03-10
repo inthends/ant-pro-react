@@ -63,7 +63,7 @@ function ListTable(props: ListTableProps) {
       }
     },
     {
-      title: "电话号码",
+      title: "联系电话",
       dataIndex: "phoneNum",
       key: "phoneNum",
       width: 100
