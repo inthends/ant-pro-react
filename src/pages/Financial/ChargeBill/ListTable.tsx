@@ -6,6 +6,7 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { CheckRebateFee, InvalidBillDetailForm, Charge, GetQrCode, GetPayState, CalFee } from './Main.service';
+import { getCommonItems } from '@/services/commonItem';
 // import QRCode from 'qrcode.react';
 // import styles from './style.less';
 const { Option } = Select;
@@ -40,11 +41,11 @@ function ListTable(props: ListTableProps) {
   const [mlType, setMlType] = useState<any>('1');
   //小数位处理
   const [mlScale, setMlScale] = useState<any>('1');
-
   //二维码地址
   // const [qrUrl, setQrUrl] = useState<any>('1');
   //是否生成收款码
   const [isQrcode, setIsQrcode] = useState<boolean>(false);
+  const [banks, setBanks] = useState<any[]>([]); //入账银行
 
   useEffect(() => {
     setSelectedRowKeys([]);
@@ -52,6 +53,11 @@ function ListTable(props: ListTableProps) {
     form.setFieldsValue({ payAmountA: 0 });
     form.setFieldsValue({ payAmountB: 0 });
     form.setFieldsValue({ payAmountC: 0 });
+    // 获取开户银行
+    getCommonItems('AccountBank').then(res => {
+      setBanks(res || []);
+    });
+
   }, [data])
 
   const doInvalid = record => {
@@ -614,17 +620,30 @@ function ListTable(props: ListTableProps) {
                 })(<DatePicker style={{ width: '100%' }} />)}
               </Form.Item>
             </Col>
-            <Col lg={6}>
+            <Col lg={4}>
               <Form.Item >
                 {getFieldDecorator('payCode', {
                 })(<Input placeholder="请输入收据编号" />)}
               </Form.Item>
 
             </Col>
-            <Col lg={6}>
+            <Col lg={4}>
               <Form.Item >
                 {getFieldDecorator('invoiceCode', {
                 })(<Input placeholder="请输入发票编号" />)}
+              </Form.Item>
+            </Col>
+
+            <Col lg={4}>
+              <Form.Item >
+                {getFieldDecorator('accountBank', {
+                })(<Select placeholder="请选择入账银行">
+                  {banks.map(item => (
+                    <Option value={item.value} key={item.key}>
+                      {item.title}
+                    </Option>
+                  ))}
+                </Select>)}
               </Form.Item>
             </Col>
 
