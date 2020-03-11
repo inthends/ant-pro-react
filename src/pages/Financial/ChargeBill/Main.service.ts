@@ -94,18 +94,18 @@ export function Charge(data): Promise<any> {
     .then(getResult as any);
 }
 
-//计算抹零
-// export function CalML(data): Promise<any> {
-//   return request
-//     .post(process.env.basePath + `/Receivable/CalML`, { data: objToFormdata(data) })
-//     .then(getResult as any);
-// }
-
-export function CalML(sumAmount,mlType, mlScale): Promise<any> {
+//计算
+export function CalFee(data): Promise<any> {
   return request
-    .get(process.env.basePath + `/Receivable/CalML?sumAmount=${sumAmount}&mlType=${mlType}&mlScale=${mlScale}`)
+    .post(process.env.basePath + `/Receivable/CalFee`, { data: objToFormdata(data) })
     .then(getResult as any);
 }
+
+// export function CalFee(sumAmount,mlType, mlScale): Promise<any> {
+//   return request
+//     .get(process.env.basePath + `/Receivable/CalFee?sumAmount=${sumAmount}&mlType=${mlType}&mlScale=${mlScale}`)
+//     .then(getResult as any);
+// }
 
 //二维码收款
 // export function QrCodeCharge(data): Promise<any> {

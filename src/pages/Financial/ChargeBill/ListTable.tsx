@@ -5,7 +5,7 @@ import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import { CheckRebateFee, InvalidBillDetailForm, Charge, GetQrCode, GetPayState, CalML } from './Main.service';
+import { CheckRebateFee, InvalidBillDetailForm, Charge, GetQrCode, GetPayState, CalFee } from './Main.service';
 // import QRCode from 'qrcode.react';
 // import styles from './style.less';
 const { Option } = Select;
@@ -89,10 +89,11 @@ function ListTable(props: ListTableProps) {
   };
 
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [sumEntity, setSumEntity] = useState();
+  const [sumEntity, setSumEntity] = useState<any>();
   // const [unitId, setUnitId] = useState();
   // const [customerName, setCustomerName] = useState();
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
+  const [rebateAmount, setRebateAmount] = useState<number>(0);//优惠金额
   const [mlAmount, setMlAmount] = useState<number>(0);//抹零金额
   const [lastAmount, setLastAmount] = useState<number>(0);//剩余金额
 
@@ -119,9 +120,13 @@ function ListTable(props: ListTableProps) {
           setIsDisabled(false);
         }
       });
+
+
     } else {
       setIsDisabled(true);
     }
+
+    //勾选
     setHasSelected(selectedRowKeys.length > 0);
     // console.log(selectedRows);
     setSelectedRowKeys(selectedRowKeys);
@@ -138,32 +143,36 @@ function ListTable(props: ListTableProps) {
     _sumEntity['sumAmount'] = sumAmount.toFixed(2);//应收金额
     _sumEntity['sumreductionAmount'] = sumreductionAmount.toFixed(2);//减免金额
     _sumEntity['sumoffsetAmount'] = sumoffsetAmount.toFixed(2);//冲抵金额
-    _sumEntity['sumlastAmount'] = sumlastAmount.toFixed(2);//原始剩余应收金额
+    _sumEntity['sumlastAmount'] = sumlastAmount;//).toFixed(2);//原始剩余应收金额
     setSumEntity(_sumEntity);
     //抹零 
-    if (isML) {
-      // const data = {
-      //   sumAmount: sumlastAmount, 
-      //   isML: isML,
-      //   mlType: mlType,
-      //   mlScale: mlScale
-      // };
+    // if (isML) {
+    const data = {
+      isML: isML,
+      mlType: mlType,
+      mlScale: mlScale,
+      sumAmount: sumlastAmount,
+      ids: JSON.stringify(selectedRowKeys)
+    };
 
-      // CalML(data).then((res) => {
-      CalML(sumlastAmount, mlType, mlScale).then((res) => {
-        setMlAmount(res.ml);
-        setLastAmount(res.lastAmount);
-        form.setFieldsValue({ payAmountA: res.lastAmount });
-        form.setFieldsValue({ payAmountB: 0 });
-        form.setFieldsValue({ payAmountC: 0 });
-      });
-
-    } else {
-      setLastAmount(sumlastAmount);
-      form.setFieldsValue({ payAmountA: sumlastAmount });
+    CalFee(data).then((res) => {
+      //CalML(sumlastAmount, mlType, mlScale).then((res) => {
+      setMlAmount(res.mlAmount);
+      setRebateAmount(res.rebateAmount);
+      setLastAmount(Number(res.lastAmount));
+      form.setFieldsValue({ payAmountA: res.lastAmount });
       form.setFieldsValue({ payAmountB: 0 });
       form.setFieldsValue({ payAmountC: 0 });
-    }
+    });
+
+    // } 
+    // else { 
+    //   setLastAmount(sumlastAmount - tRebate);
+    //   form.setFieldsValue({ payAmountA: sumlastAmount - tRebate });
+    //   form.setFieldsValue({ payAmountB: 0 });
+    //   form.setFieldsValue({ payAmountC: 0 });
+    // }
+
   };
 
   const rowSelection = {
@@ -197,7 +206,6 @@ function ListTable(props: ListTableProps) {
               // mlType: mlType,
               // mlScale: mlScale
             });
- 
 
             if (lastAmount != Number(info.payAmountA) + Number(info.payAmountB) + Number(info.payAmountC)) {
               message.warning('本次收款金额小于本次选中未收金额合计，不允许收款，请拆费或者重新选择收款项');
@@ -297,31 +305,33 @@ function ListTable(props: ListTableProps) {
       return;
     }
 
-    if (isml) {
-      // const data = {
-      //   sumAmount: lastAmount, 
-      //   isML: isml,
-      //   mlType: type,
-      //   mlScale: scale
-      // };
-      // CalML(data).then((res) => {
-      CalML(sumEntity.sumlastAmount, type, scale).then((res) => {
-        setMlAmount(res.ml);
-        setLastAmount(res.lastAmount);
-        form.setFieldsValue({ payAmountA: res.lastAmount });
-        form.setFieldsValue({ payAmountB: 0 });
-        form.setFieldsValue({ payAmountC: 0 });
-      });
-    }
-    else {
-      //还原
-      setLastAmount(sumEntity.sumlastAmount);//还原未抹零之前的剩余应收金额
-      setMlAmount(0);
-      form.setFieldsValue({ payAmountA: sumEntity.sumlastAmount });
+    const data = {
+      isML: isml,
+      mlType: type,
+      mlScale: scale,
+      sumAmount: sumEntity.sumlastAmount, //lastAmount,
+      ids: JSON.stringify(selectedRowKeys)
+    };
+    CalFee(data).then((res) => {
+      //CalFee(sumEntity.sumlastAmount, type, scale).then((res) => {
+      setMlAmount(res.mlAmount);
+      setRebateAmount(res.rebateAmount);
+      setLastAmount(Number(res.lastAmount));
+      form.setFieldsValue({ payAmountA: res.lastAmount });
       form.setFieldsValue({ payAmountB: 0 });
       form.setFieldsValue({ payAmountC: 0 });
-    }
-  }
+    });
+
+    // }
+    // else {
+    //   //还原
+    //   setLastAmount(sumEntity.sumlastAmount);//还原未抹零之前的剩余应收金额
+    //   setMlAmount(0);
+    //   form.setFieldsValue({ payAmountA: sumEntity.sumlastAmount });
+    //   form.setFieldsValue({ payAmountB: 0 });
+    //   form.setFieldsValue({ payAmountC: 0 });
+    // }
+  };
 
   const MoreBtn: React.FC<{
     item: any;
@@ -421,7 +431,7 @@ function ListTable(props: ListTableProps) {
       width: 160
     },
     {
-      title: '优惠期间',
+      title: '优惠有效期',
       dataIndex: 'rBegin',
       key: 'rBegin',
       align: 'center',
@@ -516,7 +526,10 @@ function ListTable(props: ListTableProps) {
                 })(
                   <input type='hidden' />
                 )}
-
+                {getFieldDecorator('rebateAmount', {
+                })(
+                  <input type='hidden' />
+                )}
               </Form.Item>
             </Col>
             <Col lg={4}>
@@ -667,7 +680,8 @@ function ListTable(props: ListTableProps) {
             <span style={{ marginLeft: 8, color: "red" }}>
               {hasSelected ? `应收金额：${sumEntity.sumAmount} ，
             减免金额：${sumEntity.sumreductionAmount}，
-            冲抵金额：${sumEntity.sumoffsetAmount}， 
+            冲抵金额：${sumEntity.sumoffsetAmount}，
+            优惠金额：${rebateAmount}， 
             抹零金额：${mlAmount.toFixed(2)}，
             未收金额：${lastAmount.toFixed(2)}` : ''}
             </span>
