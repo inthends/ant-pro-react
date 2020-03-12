@@ -199,13 +199,13 @@ export default [
             name: 'payment',
             path: '/financial/payment',
             icon: 'pay-circle',
-            component: './Financial/Payment/Payment',
+            component: './Financial/Payment/Main',
           },
           {
             name: 'offset',
             path: '/financial/offset',
             icon: 'swap',
-            component: './Financial/Offset/Offset',
+            component: './Financial/Offset/Main',
           },
           {
             name: 'reduction',

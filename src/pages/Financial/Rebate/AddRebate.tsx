@@ -1,25 +1,27 @@
-import { Spin, message, Form, Row, Col, DatePicker, Modal } from 'antd';
+import { notification, Spin, message, Form, Row, Col, DatePicker, Modal } from 'antd';
 import React, { useEffect, useState } from 'react';
 // import AsynSelectTree from '../AsynSelectTree';
 import SelectTree from '../SelectTree';
-
 import LeftTree from '../LeftTree';
 import { TreeEntity } from '@/model/models';
-import { GetReceivablesTree } from './Main.service';
+import { GetReceivablesTree, SaveUnitForm } from './Main.service';
 // import { getResult } from '@/utils/networkUtils';
 import moment from 'moment';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 
-interface AddReductionItemProps {
-  visible: boolean;
-  getReducetionItem(data?): void;
-  closeModal(): void;
+interface AddRebateProps {
   form: WrappedFormUtils;
+  visible: boolean;
+  id?: string;
+  entity: any;
   treeData: any[];
+  // getReducetionItem(data?): void;
+  closeModal(): void;
+  reload(billId): void;
 }
 
-const AddReductionItem = (props: AddReductionItemProps) => {
-  const { form, visible, getReducetionItem, closeModal, treeData } = props;
+const AddRebate = (props: AddRebateProps) => {
+  const { form, visible, closeModal, treeData, entity, reload, id } = props;
   const { getFieldDecorator } = form;
   const [feetreeData, setFeeTreeData] = useState<TreeEntity[]>([]);
   //单元选择多选
@@ -57,15 +59,14 @@ const AddReductionItem = (props: AddReductionItemProps) => {
   const onOk = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-
         //验证房屋和费项
         if (unitData.length == 0) {
-          message.warning('请选择房屋！');
+          message.warning('请选择房屋');
           return;
         }
 
         if (feeItemId == undefined) {
-          message.warning('请选择费项！');
+          message.warning('请选择费项');
           return;
         }
 
@@ -73,14 +74,34 @@ const AddReductionItem = (props: AddReductionItemProps) => {
         var data = {
           // units: '["' + unitData + '"]', 
           units: JSON.stringify(unitData),
-          feeitemid: feeItemId,
-          begin: moment(startDate).format('YYYY-MM-DD'),
-          end: moment(endDate).format('YYYY-MM-DD'),
-          // Rebate: 1,
-          // ReductionAmount: 1
+          feeItemId: feeItemId,
+          calBeginDate: moment(startDate).format('YYYY-MM-DD'),
+          calEndDate: moment(endDate).format('YYYY-MM-DD')
         };
-        getReducetionItem(data);
-        setLoading(false);
+        //getReducetionItem(data); 
+        setLoading(true);
+        var newdata = Object.assign({}, entity, data);
+        newdata.beginDate = newdata.beginDate.format('YYYY-MM-DD');
+        newdata.endDate = newdata.endDate.format('YYYY-MM-DD');
+        newdata.billDate = moment(newdata.billDate).format('YYYY-MM-DD HH:mm:ss');
+        newdata.keyValue = id;
+        SaveUnitForm(newdata).then(res => {
+          setLoading(false);
+          if (res != null) {
+            closeModal();
+            message.success('添加成功');
+            reload(res);//返回主单id
+          } else {
+            notification['warning']({
+              message: '系统提示',
+              description:
+                '没有找到要优惠的费用！'
+            });
+          }
+        }).catch(() => {
+          //message.warning('数据保存错误');
+          setLoading(false);
+        });
       }
     });
   }
@@ -90,7 +111,6 @@ const AddReductionItem = (props: AddReductionItemProps) => {
     //   const root = res.filter(item => item.parentId === '0');
     //   const rootOrg = root.length === 1 ? root[0] : undefined;
     // });
-
     GetReceivablesTree().then(res => {
       setFeeTreeData(res || []);
       // const root = res.filter(item => item.parentId === '0');
@@ -163,6 +183,7 @@ const AddReductionItem = (props: AddReductionItemProps) => {
       monthStr = '0' + month
     } else {
       monthStr = '' + month
+
     }
     if (day < 10) {
       dayStr = '0' + day
@@ -200,7 +221,7 @@ const AddReductionItem = (props: AddReductionItemProps) => {
 
   return (
     <Modal
-      title="新增减免费项"
+      title="新增优惠费项"
       visible={visible}
       okText="确认"
       cancelText="取消"
@@ -213,25 +234,26 @@ const AddReductionItem = (props: AddReductionItemProps) => {
         <Form layout='inline' hideRequiredMark >
           <Row gutter={24}>
             <Col lg={12}>
-              <Form.Item label="计费起始日" required >
+              <Form.Item label="计费起始日期" required >
                 {getFieldDecorator('startDate', {
                   initialValue: moment(startDate),
-                  rules: [{ required: true, message: '请选择计费起始日' }],
+                  rules: [{ required: true, message: '请选择计费起始日期' }],
                 })(
                   <DatePicker onChange={(date, dateString) => selectStartDate(dateString)} />
                 )}
-              </Form.Item> 
+              </Form.Item>
             </Col>
             <Col lg={12}>
-              <Form.Item label="计费截止日" required >
+              <Form.Item label="计费截止日期" required >
                 {getFieldDecorator('endDate', {
                   initialValue: moment(endDate),
-                  rules: [{ required: true, message: '请选择计费截止日' }],
+                  rules: [{ required: true, message: '请选择计费截止日期' }],
                 })(
                   <DatePicker onChange={(date, dateString) => selectEndDate(dateString)} />
                 )}
               </Form.Item>
-            </Col> 
+            </Col>
+
           </Row>
         </Form>
         <Row gutter={12}>
@@ -272,4 +294,4 @@ const AddReductionItem = (props: AddReductionItemProps) => {
 };
 
 //export default AddReductionItem; 
-export default Form.create<AddReductionItemProps>()(AddReductionItem);
+export default Form.create<AddRebateProps>()(AddRebate);

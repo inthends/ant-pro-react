@@ -10,7 +10,7 @@ import { GetUnitTreeAll } from '@/services/commonItem';//获取全部房间树
 import { getResult } from '@/utils/networkUtils';
 // import Page from '@/components/Common/Page';
 // import { SiderContext } from './SiderContext'; 
-import AddDrawer from './AddDrawer';
+import AddOffset from './AddOffset';
 import Verify from './Verify';
 import Show from './Show';
 import ListTable from './ListTable';
@@ -20,7 +20,7 @@ const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
 
-function Offset() {
+function Main() {
   // const [treeData, setTreeData] = useState<TreeEntity[]>([]);
   const [organize, setOrganize] = useState<any>({});
   // const [search, setSearch] = useState<any>({});
@@ -335,13 +335,13 @@ function Offset() {
           </TabPane>
         </Tabs>
       </Content>
-      <AddDrawer
+      <AddOffset
         treeData={unitTreeData}
         addDrawerVisible={addDrawerVisible}
         closeDrawer={closeDrawer}
-        organizeId={organize}
-        id={id}
+        // organizeId={organize} 
         reload={() => initLoadData('', search)}
+        id={id}
       />
       <Show
         showVisible={modifyVisible}
@@ -360,4 +360,4 @@ function Offset() {
     </Layout>
   );
 }
-export default Offset;
+export default Main;

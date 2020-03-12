@@ -10,7 +10,7 @@ import { GetReceivablesTree } from './Main.service';
 import moment from 'moment';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 
-interface AddItemProps {
+interface AddReductionProps {
   visible: boolean;
   getReducetionItem(data?): void;
   closeModal(): void;
@@ -18,7 +18,7 @@ interface AddItemProps {
   treeData: any[];
 }
 
-const AddItem = (props: AddItemProps) => {
+const AddReduction = (props: AddReductionProps) => {
   const { form, visible, getReducetionItem, closeModal, treeData } = props;
   const { getFieldDecorator } = form;
   const [feetreeData, setFeeTreeData] = useState<TreeEntity[]>([]);
@@ -56,7 +56,8 @@ const AddItem = (props: AddItemProps) => {
 
   const onOk = () => {
     form.validateFields((errors, values) => {
-      if (!errors) { 
+      if (!errors) {
+
         //验证房屋和费项
         if (unitData.length == 0) {
           message.warning('请选择房屋！');
@@ -73,8 +74,10 @@ const AddItem = (props: AddItemProps) => {
           // units: '["' + unitData + '"]', 
           units: JSON.stringify(unitData),
           feeitemid: feeItemId,
-          beginDate: moment(startDate).format('YYYY-MM-DD'),
-          endDate: moment(endDate).format('YYYY-MM-DD')
+          begin: moment(startDate).format('YYYY-MM-DD'),
+          end: moment(endDate).format('YYYY-MM-DD'),
+          // Rebate: 1,
+          // ReductionAmount: 1
         };
         getReducetionItem(data);
         setLoading(false);
@@ -160,7 +163,6 @@ const AddItem = (props: AddItemProps) => {
       monthStr = '0' + month
     } else {
       monthStr = '' + month
-
     }
     if (day < 10) {
       dayStr = '0' + day
@@ -198,7 +200,7 @@ const AddItem = (props: AddItemProps) => {
 
   return (
     <Modal
-      title="新增优惠费项"
+      title="新增减免费项"
       visible={visible}
       okText="确认"
       cancelText="取消"
@@ -211,26 +213,25 @@ const AddItem = (props: AddItemProps) => {
         <Form layout='inline' hideRequiredMark >
           <Row gutter={24}>
             <Col lg={12}>
-              <Form.Item label="计费起始日期" required >
+              <Form.Item label="计费起始日" required >
                 {getFieldDecorator('startDate', {
                   initialValue: moment(startDate),
-                  rules: [{ required: true, message: '请选择计费起始日期' }],
+                  rules: [{ required: true, message: '请选择计费起始日' }],
                 })(
                   <DatePicker onChange={(date, dateString) => selectStartDate(dateString)} />
                 )}
               </Form.Item> 
             </Col>
             <Col lg={12}>
-              <Form.Item label="计费截止日期" required >
+              <Form.Item label="计费截止日" required >
                 {getFieldDecorator('endDate', {
                   initialValue: moment(endDate),
-                  rules: [{ required: true, message: '请选择计费截止日期' }],
+                  rules: [{ required: true, message: '请选择计费截止日' }],
                 })(
                   <DatePicker onChange={(date, dateString) => selectEndDate(dateString)} />
                 )}
               </Form.Item>
-            </Col>
-
+            </Col> 
           </Row>
         </Form>
         <Row gutter={12}>
@@ -271,4 +272,4 @@ const AddItem = (props: AddItemProps) => {
 };
 
 //export default AddReductionItem; 
-export default Form.create<AddItemProps>()(AddItem);
+export default Form.create<AddReductionProps>()(AddReduction);

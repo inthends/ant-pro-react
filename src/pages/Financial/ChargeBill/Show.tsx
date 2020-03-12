@@ -235,25 +235,28 @@ const Show = (props: ShowProps) => {
                   {/* {infoDetail.billDate} */}
                   {String(infoDetail.billDate).substr(0, 10)}
                 </Form.Item>
-              </Col> 
-            
-
-              <Col span={6}>
-                <Form.Item label="收据编号">
-                  {infoDetail.payCode}
-                </Form.Item>
-              </Col> 
-              <Col span={6}>
-                <Form.Item label="发票编号"  >
-                  {infoDetail.invoiceCode}
-                </Form.Item>
               </Col>
-            
-            </Row>
-            <Row gutter={24}>
               <Col span={6}>
                 <Form.Item label="收款人"  >
                   {infoDetail.createUserName}
+                </Form.Item>
+              </Col>
+
+              <Col span={6}>
+                <Form.Item label="入账银行" >
+                  {infoDetail.accountBank}
+                </Form.Item>
+              </Col>  
+            </Row>
+            <Row gutter={24}>
+              <Col span={6}>
+                <Form.Item label="费用状态"   >
+                  {GetStatus(infoDetail.status)}
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item label="收据编号">
+                  {infoDetail.payCode}
                 </Form.Item>
               </Col>
               <Col span={6}>
@@ -262,18 +265,18 @@ const Show = (props: ShowProps) => {
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item label="费用状态"   >
-                  {GetStatus(infoDetail.status)}
+                <Form.Item label="发票编号"  >
+                  {infoDetail.invoiceCode}
                 </Form.Item>
               </Col> 
+            </Row>
+            <Row gutter={24}>
               <Col span={6}>
                 <Form.Item label="单据状态"   >
                   {/* {infoDetail.ifVerify ? '已审核' : '未审核'} */}
                   {GetVerifyStatus(infoDetail.ifVerify)}
                 </Form.Item>
               </Col>
-            </Row>
-            <Row gutter={24}> 
               <Col span={6}>
                 <Form.Item label="审核人">
                   {infoDetail.verifyPerson}
@@ -284,12 +287,11 @@ const Show = (props: ShowProps) => {
                   {infoDetail.verifyDate}
                 </Form.Item>
               </Col>
-              <Col span={12} >
+              <Col span={6} >
                 <Form.Item label="审核说明">
                   {infoDetail.verifyMemo}
                 </Form.Item>
               </Col>
-             
             </Row>
             <Row gutter={24}>
               <Col span={24}>

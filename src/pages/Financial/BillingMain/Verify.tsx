@@ -169,7 +169,7 @@ const Verify = (props: VerifyProps) => {
       key: 'beginDate',
       dataIndex: 'beginDate',
       sorter: true,
-      width: 100,
+      width: 120,
       render: val => {
         if (val == null) {
           return '';
@@ -183,7 +183,7 @@ const Verify = (props: VerifyProps) => {
       key: 'endDate',
       dataIndex: 'endDate',
       sorter: true,
-      width: 100,
+      width: 120,
       render: val => {
         if (val == null) {
           return '';
@@ -243,7 +243,8 @@ const Verify = (props: VerifyProps) => {
                   {infoDetail.createUserName}
                 </Form.Item>
               </Col>
-            </Row>
+            </Row> 
+
             <Row gutter={24}>
               <Col span={8}>
                 <Form.Item required label="状态"   >
@@ -261,6 +262,15 @@ const Verify = (props: VerifyProps) => {
                 </Form.Item>
               </Col>
             </Row>
+
+            <Row gutter={24}>
+              <Col span={24}>
+                <Form.Item label="备注">
+                  {infoDetail.memo}
+                </Form.Item>
+              </Col>
+            </Row>
+
             {ifVerify ?
               <Row>
                 <Col span={24}>
@@ -277,8 +287,8 @@ const Verify = (props: VerifyProps) => {
               <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
                 <Search
                   className="search-input"
-                  placeholder="请输入要查询的单元编号"
-                  style={{ width: 280 }}
+                  placeholder="请输入单元编号"
+                  style={{ width: 180 }}
                   onSearch={(value) => {
                     // var params = Object.assign({}, meterSearchParams, { search: value })
                     // setMeterSearchParams(params);
@@ -294,7 +304,7 @@ const Verify = (props: VerifyProps) => {
                 dataSource={unitFeeData}
                 rowKey="unitmeterid"
                 pagination={pagination}
-                scroll={{ y: 500, x: 1200 }}
+                scroll={{ y: 500, x: 1300 }}
                 loading={loading}
               />
             </Row>

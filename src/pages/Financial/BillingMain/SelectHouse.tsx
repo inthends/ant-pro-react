@@ -49,14 +49,14 @@ const SelectHouse = (props: SelectHouseProps) => {
 
   return (
     <Modal
-      title="选择需要计费的房屋和费项"
+      title="选择房屋和费项"
       visible={visible}
       okText="确认"
       cancelText="取消"
       onCancel={() => closeModal()}
-      onOk={() => { 
-        form.validateFields((errors, values) => { 
-          if (!errors) { 
+      onOk={() => {
+        form.validateFields((errors, values) => {
+          if (!errors) {
             if (unitData.length == 0) {
               message.warning('请选择房间');
             } else {
@@ -70,7 +70,6 @@ const SelectHouse = (props: SelectHouseProps) => {
                   startDate: values.startDate.format('YYYY-MM-DD')
                 });
                 CalcUnitFee(newdata).then(res => {
-
                   if (res.data != null) {
                     message.warning(res.data);
                     setLoading(false);
@@ -80,12 +79,12 @@ const SelectHouse = (props: SelectHouseProps) => {
                     getBillID(feeDetail.keyValue);
                     setLoading(false);
                   }
+                }).finally(() => {
+                  setLoading(false); 
                 })
-
                 // .catch(() => {
                 // message.warning('保存失败！');
                 // });
-
               }
             }
           }
@@ -112,9 +111,9 @@ const SelectHouse = (props: SelectHouseProps) => {
                   />
                 )}
               </Form.Item>
-            </Col> 
+            </Col>
           </Row>
-        </Form> 
+        </Form>
 
         <Row gutter={12}>
           <Col span={12} style={{ height: '500px', overflow: 'auto' }}>

@@ -2,7 +2,7 @@
 import { Modal, message, Table, Button, Card, Col, Icon, DatePicker, InputNumber, Drawer, Form, Input, Row, notification } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { PaginationConfig } from 'antd/lib/table';
-import AddReductionItem from './AddReductionItem';
+import AddReduction from './AddReduction';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { RemoveFormAll, GetFormJson, GetListById, GetUnitBillDetail, SaveForm } from './Main.service';
@@ -10,17 +10,6 @@ import moment from 'moment';
 import styles from './style.less';
 
 // const { Option } = Select;
-
-interface ModifyProps {
-  modifyVisible: boolean;
-  data?: any;
-  closeDrawer(): void;
-  form: WrappedFormUtils;
-  id?: string;
-  // organizeId?: string;
-  reload(): void;
-  treeData: any[];
-};
 
 /*详情可编辑单元格*/
 const EditableContext = React.createContext('');
@@ -105,6 +94,19 @@ class EditableCell extends React.Component {
     );
   }
 };
+
+
+interface ModifyProps {
+  modifyVisible: boolean;
+  // data?: any;
+  closeDrawer(): void;
+  form: WrappedFormUtils;
+  id?: string;
+  // organizeId?: string;
+  reload(): void;
+  treeData: any[];
+};
+
 
 /*详情可编辑单元格*/
 const Modify = (props: ModifyProps) => {
@@ -633,14 +635,14 @@ const Modify = (props: ModifyProps) => {
                   initialValue: infoDetail.rebate ? infoDetail.rebate : 10,
                   rules: [{ required: true, message: '请输入批量折扣' }],
                 })(
-                  <InputNumber style={{ width: '100%' }} max={10}  min={1} ></InputNumber>
+                  <InputNumber style={{ width: '100%' }} max={10} min={1} ></InputNumber>
                 )}
               </Form.Item>
             </Col>
             <Col lg={12}>
               <Form.Item label="批量减免金额">
                 {getFieldDecorator('reductionAmount', {
-                  initialValue: infoDetail.reductionAmount ? infoDetail.reductionAmount : null,
+                  initialValue: infoDetail.reductionAmount ? infoDetail.reductionAmount : 0,
                   rules: [{ required: true, message: '请输入批量减免金额' }],
                 })(
                   <InputNumber precision={2} style={{ width: '100%' }} min={0} ></InputNumber>
@@ -732,7 +734,7 @@ const Modify = (props: ModifyProps) => {
         </Button>
         </div>
       </Form>
-      <AddReductionItem
+      <AddReduction
         treeData={treeData}
         visible={modalvisible}
         getReducetionItem={getReducetionItem}

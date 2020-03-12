@@ -24,8 +24,8 @@ export function GetDetailPageListJson(data): Promise<any> {
 }
 
 // 根据id查询明细列表
-export function GetListByID(data): Promise<any> {
-  return request.post(process.env.basePath + `/Rebate/GetListByID`, {data:objToFormdata(data)}).then(getResult as any);
+export function GetListById(data): Promise<any> {
+  return request.post(process.env.basePath + `/Rebate/GetListById`, {data:objToFormdata(data)}).then(getResult as any);
 }
 
 // 查询列表
@@ -81,6 +81,14 @@ export function InvalidForm(keyValue): Promise<any> {
     .post(process.env.basePath + `/Rebate/InvalidForm?keyValue=${keyValue}`)
     .then(getResult as any);
 }
+
+//保存减免单和明细
+export function SaveUnitForm(data): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Rebate/SaveUnitForm`, {data:objToFormdata(data)})
+    .then(getResult as any);
+}
+
 //保存减免单
 export function SaveForm(data): Promise<any> {
   return request
@@ -96,9 +104,9 @@ export function CheckBill(keyValue): Promise<any[]> {
 }
 
 //删除优惠单里面的全部房屋
-export function RemoveFormUnitAll(keyValue): Promise<any> {
+export function RemoveFormAll(keyValue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Rebate/RemoveFormUnitAll?keyValue=${keyValue}`)
+    .post(process.env.basePath + `/Rebate/RemoveFormAll?keyValue=${keyValue}`)
     .then(getResult as any);
 }
 

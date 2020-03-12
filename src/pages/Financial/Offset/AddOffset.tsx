@@ -9,18 +9,18 @@ import moment from 'moment';
 import SelectTree from '../SelectTree';
 import LeftTree from '../LeftTree';
 
-interface AddDrawerProps {
+interface AddOffsetProps {
   addDrawerVisible: boolean;
-  data?: any;
-  closeDrawer(): void;
+  // data?: any;
+  treeData: any[];
   form: WrappedFormUtils;
   id?: string;
-  organizeId?: string;
+  // organizeId?: string;
   reload(): void;
-  treeData: any[];
+  closeDrawer(): void;
 };
 
-const AddDrawer = (props: AddDrawerProps) => {
+const AddOffset = (props: AddOffsetProps) => {
   const { treeData, addDrawerVisible, closeDrawer, form, id, reload } = props;
   const title = id === undefined ? '新增冲抵单' : '修改冲抵单';
   const [loading, setLoading] = useState<boolean>(false);
@@ -337,13 +337,11 @@ const AddDrawer = (props: AddDrawerProps) => {
           }}
         >
           <Button style={{ marginRight: 8 }}
-            onClick={closeDrawer}
-          >
+            onClick={closeDrawer} >
             取消
         </Button>
           <Button type="primary"
-            onClick={onSave}
-          >
+            onClick={onSave}>
             提交
         </Button>
         </div>
@@ -352,5 +350,5 @@ const AddDrawer = (props: AddDrawerProps) => {
   );
 };
 
-export default Form.create<AddDrawerProps>()(AddDrawer);
+export default Form.create<AddOffsetProps>()(AddOffset);
 

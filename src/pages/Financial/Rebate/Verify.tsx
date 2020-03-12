@@ -4,7 +4,7 @@ import { DefaultPagination } from '@/utils/defaultSetting';
 import { PaginationConfig } from 'antd/lib/table';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetFormJson, GetListByID, Audit } from './Main.service';
+import { GetFormJson, GetListById, Audit } from './Main.service';
 import moment from 'moment';
 const { TextArea } = Input;
 import styles from './style.less'
@@ -17,10 +17,10 @@ interface VerifyProps {
   reload(): void;
 };
 
-const Verify= (props: VerifyProps) => {
+const Verify = (props: VerifyProps) => {
   const { modalVisible, closeModal, form, id, reload, ifVerify } = props;
-  const { getFieldDecorator } = form; 
-  const title = ifVerify ? '优惠单审核' : '优惠单取消审核'; 
+  const { getFieldDecorator } = form;
+  const title = ifVerify ? '优惠单审核' : '优惠单取消审核';
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
@@ -36,26 +36,27 @@ const Verify= (props: VerifyProps) => {
 
   // 打开抽屉时初始化
   useEffect(() => {
-    if (modalVisible) { 
+    if (modalVisible) {
       if (id) {
         GetFormJson(id).then(res => {
           var entity = { ...res.entity, receiveId: res.receiveId, receiveCode: res.receiveCode };//收款单id 
           setInfoDetail(entity);
           form.resetFields();
+          initLoadData(id);
           //分页查询
-          const { current: pageIndex, pageSize, total } = pagination;
-          const searchCondition: any = {
-            pageIndex,
-            pageSize,
-            total,
-            keyValue: entity.billId
-          };
-          setLoading(true);
-          GetListByID(searchCondition).then(res => {
-            //明细
-            setListData(res.data);
-            setLoading(false);
-          })
+          // const { current: pageIndex, pageSize, total } = pagination;
+          // const searchCondition: any = {
+          //   pageIndex,
+          //   pageSize,
+          //   total,
+          //   keyValue: entity.billId
+          // };
+          // setLoading(true);
+          // GetListById(searchCondition).then(res => {
+          //   //明细
+          //   setListData(res.data);
+          //   setLoading(false);
+          // })
         });
       }
     } else {
@@ -63,23 +64,32 @@ const Verify= (props: VerifyProps) => {
     }
   }, [modalVisible]);
 
-  //提交审核
-  const onSave = () => {
-    form.validateFields((errors, values) => {
-      if (!errors) {
-        // const newvalue = { ...values, ifVerify: ifVerify };
-        const newData = infoDetail ? { ...infoDetail, ...values } : values;
-        newData.keyValue = infoDetail.billId;
-        newData.ifVerify = ifVerify;
-        Audit(newData).then(res => {
-          message.success('提交成功');
-          closeModal();
-          reload();
-        }); 
-        // }).then(() => {
-        //   closeDrawer();
-        // });
-      }
+  const initLoadData = (id) => {
+    const sidx = 'billId';
+    const sord = 'asc';
+    const { current: pageIndex, pageSize, total } = pagination;
+    return load({ pageIndex, pageSize, sidx, sord, total, keyValue: id }).then(res => {
+      return res;
+    });
+  };
+
+  const load = data => {
+    setLoading(true);
+    data.sidx = data.sidx || 'billId';
+    data.sord = data.sord || 'asc';
+    return GetListById(data).then(res => {
+      const { pageIndex: current, total, pageSize } = res;
+      setPagination(pagesetting => {
+        return {
+          ...pagesetting,
+          current,
+          total,
+          pageSize,
+        };
+      });
+      setListData(res.data);
+      setLoading(false);
+      return res;
     });
   };
 
@@ -106,7 +116,7 @@ const Verify= (props: VerifyProps) => {
       searchCondition.sidx = field ? field : 'billId';
     }
     setLoading(true);
-    return GetListByID(searchCondition).then(res => {
+    return GetListById(searchCondition).then(res => {
       //设置查询后的分页
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
@@ -124,12 +134,32 @@ const Verify= (props: VerifyProps) => {
     });
   };
 
+  //提交审核
+  const onSave = () => {
+    form.validateFields((errors, values) => {
+      if (!errors) {
+        // const newvalue = { ...values, ifVerify: ifVerify };
+        const newData = infoDetail ? { ...infoDetail, ...values } : values;
+        newData.keyValue = infoDetail.billId;
+        newData.ifVerify = ifVerify;
+        Audit(newData).then(res => {
+          message.success('提交成功');
+          closeModal();
+          reload();
+        });
+        // }).then(() => {
+        //   closeDrawer();
+        // });
+      }
+    });
+  };
+
   const columns = [
     {
       title: '单元编号',
       dataIndex: 'unitId',
       key: 'unitId',
-      width: '120px',
+      width: '180px',
       sorter: true,
     },
     {
@@ -169,21 +199,20 @@ const Verify= (props: VerifyProps) => {
       title: '金额',
       dataIndex: 'amount',
       key: 'amount',
-      width: '100px', 
-    }, 
+      width: '100px',
+    },
     {
       title: '房屋全称',
       dataIndex: 'allName',
       key: 'allName',
-      width: '240px', 
-    },  
+      width: '240px',
+    },
     {
-      title: '备注', 
+      title: '备注',
       dataIndex: 'memo',
       key: 'memo'
     },
   ]; //as ColumnProps<any>[];
-
 
   return (
     <Drawer
@@ -192,11 +221,10 @@ const Verify= (props: VerifyProps) => {
       width={780}
       onClose={closeModal}
       visible={modalVisible}
-      bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
-    >
+      bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
 
       <Form layout="vertical" hideRequiredMark>
-        <Card  className={styles.card}>
+        <Card className={styles.card}>
           <Row gutter={24}>
             <Col lg={8}>
               <Form.Item label="优惠单号">
@@ -221,12 +249,12 @@ const Verify= (props: VerifyProps) => {
               </Form.Item>
             </Col>
             <Col lg={8}>
-              <Form.Item label="起始日期"> 
+              <Form.Item label="起始日期">
                 {String(infoDetail.beginDate).substr(0, 10)}
               </Form.Item>
             </Col>
             <Col lg={8}>
-              <Form.Item label="结束日期"> 
+              <Form.Item label="结束日期">
                 {String(infoDetail.endDate).substr(0, 10)}
               </Form.Item>
             </Col>
@@ -248,7 +276,7 @@ const Verify= (props: VerifyProps) => {
                 })(<TextArea rows={4} placeholder="请输入审核意见" />)}
               </Form.Item>
             </Col>
-          </Row> 
+          </Row>
           <Row style={{ marginTop: '15px' }}>
             <Table
               bordered={false}

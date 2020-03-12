@@ -4,7 +4,7 @@ import { DefaultPagination } from '@/utils/defaultSetting';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetFormJson, GetListByID } from './Main.service';
+import { GetFormJson, GetListById } from './Main.service';
 import moment from 'moment';
 // const { TextArea } = Input;
 import styles from './style.less';
@@ -43,26 +43,56 @@ const Show = (props: ShowProps) => {
           var entity = { ...res.entity, receiveId: res.receiveId, receiveCode: res.receiveCode };
           setInfoDetail(entity);
           form.resetFields();
+          initLoadData(id);
           //分页查询
-          const { current: pageIndex, pageSize, total } = pagination;
-          const searchCondition: any = {
-            pageIndex,
-            pageSize,
-            total,
-            keyValue: entity.billId
-          };
-          setLoading(true);
-          GetListByID(searchCondition).then(res => {
-            //明细
-            setListData(res.data);
-            setLoading(false);
-          })
+          // const { current: pageIndex, pageSize, total } = pagination;
+          // const searchCondition: any = {
+          //   pageIndex,
+          //   pageSize,
+          //   total,
+          //   keyValue: entity.billId
+          // };
+          // setLoading(true);
+          // GetListById(searchCondition).then(res => {
+          //   //明细
+          //   setListData(res.data);
+          //   setLoading(false);
+          // })
         });
       }
     } else {
       form.setFieldsValue({});
     }
   }, [modalVisible]);
+
+  const initLoadData = (id) => {
+    const sidx = 'billId';
+    const sord = 'asc';
+    const { current: pageIndex, pageSize, total } = pagination;
+    return load({ pageIndex, pageSize, sidx, sord, total, keyValue: id }).then(res => {
+      return res;
+    });
+  };
+
+  const load = data => {
+    setLoading(true);
+    data.sidx = data.sidx || 'billId';
+    data.sord = data.sord || 'asc';
+    return GetListById(data).then(res => {
+      const { pageIndex: current, total, pageSize } = res;
+      setPagination(pagesetting => {
+        return {
+          ...pagesetting,
+          current,
+          total,
+          pageSize,
+        };
+      });
+      setListData(res.data);
+      setLoading(false);
+      return res;
+    });
+  };
 
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     loadData(pagination, sorter);
@@ -87,7 +117,7 @@ const Show = (props: ShowProps) => {
       searchCondition.sidx = field ? field : 'billId';
     }
     setLoading(true);
-    return GetListByID(searchCondition).then(res => {
+    return GetListById(searchCondition).then(res => {
       //设置查询后的分页
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
@@ -110,7 +140,7 @@ const Show = (props: ShowProps) => {
       title: '单元编号',
       dataIndex: 'unitId',
       key: 'unitId',
-      width: '120px',
+      width: '180px',
       sorter: true,
     },
     {
@@ -172,10 +202,10 @@ const Show = (props: ShowProps) => {
       title: '房屋全称',
       dataIndex: 'allName',
       key: 'allName',
-      width: '240px', 
-    },  
+      width: '240px',
+    },
     {
-      title: '备注', 
+      title: '备注',
       dataIndex: 'memo',
       key: 'memo',
       // editable: true
@@ -283,8 +313,7 @@ const Show = (props: ShowProps) => {
           textAlign: 'right',
         }}
       >
-        <Button style={{ marginRight: 8 }} onClick={() => closeModal()}
-        >
+        <Button style={{ marginRight: 8 }} onClick={() => closeModal()}  >
           关闭
         </Button>
       </div>

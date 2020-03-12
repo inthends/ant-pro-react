@@ -219,8 +219,28 @@ const Verify = (props: VerifyProps) => {
                 {String(infoDetail.billDate).substr(0, 10)}
               </Form.Item>
             </Col>
-           
 
+            <Col span={6}>
+              <Form.Item label="收款人"  >
+                {infoDetail.createUserName}
+              </Form.Item>
+            </Col>
+
+            <Col span={6}>
+              <Form.Item label="入账银行" >
+                {infoDetail.accountBank}
+              </Form.Item>
+            </Col>
+
+
+
+          </Row>
+          <Row gutter={24}>
+            <Col span={6}>
+              <Form.Item label="费用状态">
+                {GetStatus(infoDetail.status)}
+              </Form.Item>
+            </Col>
             <Col span={6}>
               <Form.Item label="收据编号">
                 {infoDetail.payCode}
@@ -231,40 +251,25 @@ const Verify = (props: VerifyProps) => {
                 {infoDetail.invoiceCode}
               </Form.Item>
             </Col>
-            
-          </Row>
-          <Row gutter={24}>
-            <Col span={6}>
-              <Form.Item label="收款人"  >
-                {infoDetail.createUserName}
-              </Form.Item>
-            </Col>
             <Col span={6}>
               <Form.Item label="冲红单号" >
                 {linkno}
               </Form.Item>
             </Col>
-            <Col span={6}>
-              <Form.Item label="费用状态">
-                {GetStatus(infoDetail.status)}
-              </Form.Item>
-            </Col>
+          </Row>
+          <Row gutter={24}>
             <Col span={6}>
               <Form.Item label="单据状态">
                 {/* {infoDetail.ifVerify ? '已审核' : '未审核'} */}
                 {GetVerifyStatus(infoDetail.ifVerify)}
               </Form.Item>
             </Col>
-          </Row>
-
-          <Row gutter={24}>
-            <Col span={24}>
+            <Col span={18}>
               <Form.Item label="收款金额" style={{ color: "red" }}>
                 {`${infoDetail.payAmountA + infoDetail.payAmountB + infoDetail.payAmountC}元，其中${infoDetail.payTypeA}${infoDetail.payAmountA}元，${infoDetail.payTypeB}${infoDetail.payAmountB}元，${infoDetail.payTypeC}${infoDetail.payAmountC}元`}
               </Form.Item>
             </Col>
           </Row>
-
           <Row gutter={24}>
             <Col span={24}>
               <Form.Item label="备注">

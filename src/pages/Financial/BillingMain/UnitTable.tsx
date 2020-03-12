@@ -122,7 +122,7 @@ function UnitTable(props: UnitTableProps) {
         dataSource={data}
         rowKey="id"
         pagination={pagination}
-        scroll={{ y: 500, x: 1700 }}
+        scroll={{ y: 500, x: 1800 }}
         loading={loading}
         onChange={onchange}
       />

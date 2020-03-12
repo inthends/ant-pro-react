@@ -14,8 +14,8 @@ import Show from './Show';
 const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
-function Payment() {
 
+function Main() {
   // const [treeSearch, SetTreeSearch] = useState<any>({});
   const [id, setId] = useState<string>();
   const [organizeId, setOrganizeId] = useState<string>('');//左侧树选择的id
@@ -463,4 +463,4 @@ function Payment() {
     </Layout>
   );
 }
-export default Payment;
+export default Main;

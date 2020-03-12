@@ -540,8 +540,7 @@ const Modify = (props: ModifyProps) => {
                 components={components}
                 onChange={(paginationConfig, filters, sorter) => {
                   initUnitFeeLoadData('', paginationConfig, sorter)
-                }
-                }
+                }}
                 bordered={false}
                 size="middle"
                 columns={eidtColumns}

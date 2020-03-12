@@ -36,19 +36,19 @@ const SelectHouse = (props: SelectHouseProps) => {
       onOk={() => {
         if (unitData.length == 0) {
           message.warning('请选择房间');
-        } else {
-          setLoading(true);
-          var newdata = Object.assign({}, feeDetail, { units: JSON.stringify(unitData) });
-          UnitMeterSaveForm(newdata).then(res => {
-            setLoading(false);
-            closeModal();
-            message.success('添加成功');
-            reload();
-          }).catch(() => {
-              //message.warning('数据保存错误');
-              setLoading(false);
-            });
+          return;
         }
+        setLoading(true);
+        var newdata = Object.assign({}, feeDetail, { units: JSON.stringify(unitData) });
+        UnitMeterSaveForm(newdata).then(res => {
+          setLoading(false);
+          closeModal();
+          message.success('添加成功');
+          reload();
+        }).catch(() => {
+          //message.warning('数据保存错误');
+          setLoading(false);
+        });
       }}
       destroyOnClose={true}
       bodyStyle={{ background: '#f6f7fb' }}

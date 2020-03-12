@@ -123,7 +123,7 @@ function Main() {
     data.sidx = data.sidx || 'id';
     data.sord = data.sord || 'asc';
     return GetPageDetailListJson(data).then(res => {
-      console.log(res);
+      // console.log(res);
       const { pageIndex: current, total, pageSize } = res;
       setDetailPagination(pagesetting => {
         return {
@@ -337,8 +337,8 @@ function Main() {
             <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
               <Search
                 className="search-input"
-                placeholder="请输入要查询的计费单号或单元编号"
-                style={{ width: 280 }}
+                placeholder="请输入计费单号或单元编号"
+                style={{ width: 220 }}
                 onSearch={value => loadUnitMeterData(value)}
               />
             </div>
