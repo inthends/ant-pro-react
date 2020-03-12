@@ -142,7 +142,7 @@ function Main() {
 
   const [repairVisible, setRepairVisible] = useState<boolean>(false);//查看 
   const [complaintVisible, setComplaintVisible] = useState<boolean>(false);//查看 
-  const [billCode, setBillCode] = useState<any>({});
+  const [billCode, setBillCode] = useState<any>();
 
   //查看关联单据
   const showLinkDrawer = (type, code) => {

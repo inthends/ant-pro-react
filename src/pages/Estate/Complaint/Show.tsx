@@ -1,9 +1,9 @@
 
-import { Tag,   Row, Divider, PageHeader, Button, Card, Col, Drawer, Form, message } from 'antd';
+import { Tag, Row, Divider, PageHeader, Button, Card, Col, Drawer, Form } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 // import { getResult } from '@/utils/networkUtils';
-import { Handle, Approve, Project } from './Main.service';
+import { GetEntity } from './Main.service';
 // import { GetUserList } from '@/services/commonItem';
 // import { TreeEntity } from '@/model/models';
 import styles from './style.less';
@@ -11,38 +11,48 @@ import styles from './style.less';
 
 interface ShowProps {
   modifyVisible: boolean;
-  data?: any;
+  // data?: any;
+  id?: string;
   form: WrappedFormUtils;
   closeDrawer(): void;
-  reload(): void;
+  // reload(): void;
+  showLink(billId): void;
 }
 const Show = (props: ShowProps) => {
-  const { modifyVisible, data, closeDrawer, form, reload } = props;
+  const {showLink, modifyVisible, id, closeDrawer, form } = props;
   // const { getFieldDecorator } = form;
-  const title = data === undefined ? '添加投诉单' : '查看投诉单';
+  const title = id === undefined ? '添加投诉单' : '查看投诉单';
   const [infoDetail, setInfoDetail] = useState<any>({});
   // const [treeData, setTreeData] = useState<any[]>([]);
   // const [userSource, setUserSource] = useState<any[]>([]);
 
   // 打开抽屉时初始化
-  useEffect(() => {
+  // useEffect(() => { 
+  //   // 获取房产树
+  //   // GetQuickSimpleTreeAll()
+  //   //   .then(getResult)
+  //   //   .then((res: TreeEntity[]) => {
+  //   //     setTreeData(res || []);
+  //   //     return res || [];
+  //   //   });  
+  // }, []);
 
-    // 获取房产树
-    // GetQuickSimpleTreeAll()
-    //   .then(getResult)
-    //   .then((res: TreeEntity[]) => {
-    //     setTreeData(res || []);
-    //     return res || [];
-    //   }); 
 
-  }, []);
+  const [serverCode, setServerCode] = useState<string>('');
+  const [serverId, setServerId] = useState<string>('');
 
   // 打开抽屉时初始化 
   useEffect(() => {
     if (modifyVisible) {
-      if (data) {
-        setInfoDetail(data);
-        form.resetFields();
+      if (id) { 
+        GetEntity(id).then(info => {
+          //赋值
+          setInfoDetail(info.entity);
+          setServerCode(info.serverCode);
+          setServerId(info.serverId);
+        })
+        // setInfoDetail(data);
+        // form.resetFields();
       } else {
         setInfoDetail({});
         form.resetFields();
@@ -56,35 +66,35 @@ const Show = (props: ShowProps) => {
     closeDrawer();
   };
 
-  const project = () => {
-    form.validateFields((errors, values) => {
-      if (!errors) {
-        const newData = data ? { ...data, ...values } : values;
-        //doSave(newData);
-        //newData.keyValue = newData.id;
-        Project({ ...newData, keyValue: newData.id }).then(res => {
-          message.success('立项成功');
-          closeDrawer();
-          reload();
-        });
-      }
-    });
-  };
+  // const project = () => {
+  //   form.validateFields((errors, values) => {
+  //     if (!errors) {
+  //       const newData = data ? { ...data, ...values } : values;
+  //       //doSave(newData);
+  //       //newData.keyValue = newData.id;
+  //       Project({ ...newData, keyValue: newData.id }).then(res => {
+  //         message.success('立项成功');
+  //         closeDrawer();
+  //         reload();
+  //       });
+  //     }
+  //   });
+  // };
 
-  const handle = () => {
-    form.validateFields((errors, values) => {
-      if (!errors) {
-        const newData = data ? { ...data, ...values } : values;
-        //doSave(newData);
-        //newData.keyValue = newData.id;
-        Handle({ ...newData, keyValue: newData.id }).then(res => {
-          message.success('处理成功！');
-          closeDrawer();
-          reload();
-        });
-      }
-    });
-  };
+  // const handle = () => {
+  //   form.validateFields((errors, values) => {
+  //     if (!errors) {
+  //       const newData = data ? { ...data, ...values } : values;
+  //       //doSave(newData);
+  //       //newData.keyValue = newData.id;
+  //       Handle({ ...newData, keyValue: newData.id }).then(res => {
+  //         message.success('处理成功！');
+  //         closeDrawer();
+  //         reload();
+  //       });
+  //     }
+  //   });
+  // };
 
   // const visit = () => {
   //   form.validateFields((errors, values) => {
@@ -101,20 +111,20 @@ const Show = (props: ShowProps) => {
   //   });
   // };
 
-  const approve = () => {
-    form.validateFields((errors, values) => {
-      if (!errors) {
-        const newData = data ? { ...data, ...values } : values;
-        //doSave(newData);
-        //newData.keyValue = newData.id;
-        Approve({ ...newData, keyValue: newData.id }).then(res => {
-          message.success('审核成功！');
-          closeDrawer();
-          reload();
-        });
-      }
-    });
-  };
+  // const approve = () => {
+  //   form.validateFields((errors, values) => {
+  //     if (!errors) {
+  //       const newData = data ? { ...data, ...values } : values;
+  //       //doSave(newData);
+  //       //newData.keyValue = newData.id;
+  //       Approve({ ...newData, keyValue: newData.id }).then(res => {
+  //         message.success('审核成功！');
+  //         closeDrawer();
+  //         reload();
+  //       });
+  //     }
+  //   });
+  // };
 
   // const doSave = dataDetail => {
   //   dataDetail.keyValue = dataDetail.id;
@@ -126,12 +136,12 @@ const Show = (props: ShowProps) => {
   // };
 
   //转换状态
-  const GetStatus = (status,isEnable) => {
-    if ( isEnable == 0) {
+  const GetStatus = (status, isEnable) => {
+    if (isEnable == 0) {
       return <Tag color="#d82d2d">无效投诉</Tag>
     } else {
 
-      switch ( status) {
+      switch (status) {
         case 1:
           return <Tag color="#e4aa5b">待处理</Tag>
         case 2:
@@ -206,7 +216,7 @@ const Show = (props: ShowProps) => {
         {/* <Paragraph>
           {infoDetail.complaintAddress}，{infoDetail.complaintUser}，电话：<a>{infoDetail.complaintLink}</a>，在 {infoDetail.billDate} 投诉，内容如下
         </Paragraph>
-        {infoDetail.contents} */} 
+        {infoDetail.contents} */}
         <Form layout='vertical'>
           <Row gutter={6}>
             <Col lg={5}>
@@ -216,15 +226,15 @@ const Show = (props: ShowProps) => {
             </Col>
             <Col lg={3}>
               <Form.Item label="状态" >
-                {GetStatus(infoDetail.status,infoDetail.isEnable)}
+                {GetStatus(infoDetail.status, infoDetail.isEnable)}
               </Form.Item>
             </Col>
-            <Col lg={4}>
+            <Col lg={3}>
               <Form.Item label="联系人" >
                 {infoDetail.complaintUser ? infoDetail.complaintUser : '匿名'}
               </Form.Item>
             </Col>
-            <Col lg={4}>
+            <Col lg={3}>
               <Form.Item label="电话" >
                 {infoDetail.complaintLink ? infoDetail.complaintLink : '无'}
               </Form.Item>
@@ -232,6 +242,11 @@ const Show = (props: ShowProps) => {
             <Col lg={5}>
               <Form.Item label="投诉时间" >
                 {infoDetail.billDate}
+              </Form.Item>
+            </Col> 
+            <Col lg={5}>
+              <Form.Item label="关联单号" >
+                <a onClick={() => showLink(serverId)}>{serverCode}</a>
               </Form.Item>
             </Col>
           </Row>
@@ -262,8 +277,7 @@ const Show = (props: ShowProps) => {
               </Col>
               <Col lg={6}>
                 <Form.Item label="地址"  >
-                  {infoDetail.byComplaintRoomAllName}
-
+                  {infoDetail.byComplaintRoomAllName} 
                 </Form.Item>
               </Col>
             </Row>
@@ -280,8 +294,7 @@ const Show = (props: ShowProps) => {
               </Col>
               <Col lg={6}>
                 <Form.Item label="联系电话"  >
-                  {infoDetail.handleChargeTel}
-
+                  {infoDetail.handleChargeTel} 
                 </Form.Item>
               </Col>
               <Col lg={6}>
@@ -379,32 +392,7 @@ const Show = (props: ShowProps) => {
       >
         <Button onClick={close} style={{ marginRight: 8 }}>
           取消
-        </Button>
-
-        {infoDetail.status == 1 ? (
-          <Button onClick={project} type="primary">
-            立项
-         </Button>
-        ) : null}
-
-        {infoDetail.status == 2 ? (
-          <Button onClick={handle} type="primary">
-            处理
-          </Button>
-        ) : null}
-
-        {/* {infoDetail.status == 3 ? (
-          <Button onClick={visit} type="primary">
-            回访
-          </Button>
-        ) : null} */}
-
-        {infoDetail.status == 4 ? (
-          <Button onClick={approve} type="primary">
-            审核
-          </Button>
-        ) : null}
-
+        </Button> 
       </div>
     </Drawer>
   );

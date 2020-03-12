@@ -7,6 +7,8 @@ import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
 import { GetPageListJson } from './Main.service';
+import ShowLink from '../ServiceDesk/ShowLink';
+
 
 const { Content } = Layout;
 const { Search } = Input;
@@ -126,6 +128,20 @@ function Main() {
     });
   };
 
+
+  const [serverVisible, setServerVisible] = useState<boolean>(false);
+  const [billId, setBillId] = useState<any>('');
+
+  //查看关联单据
+  const showLinkDrawer = (billId) => {
+    setServerVisible(true);
+    setBillId(billId);
+  };
+
+  const closeLinkDrawer = () => {
+    setServerVisible(false);
+  };
+
   return (
     <Layout style={{ height: '100%' }}>
       <AsynLeftTree
@@ -160,7 +176,15 @@ function Main() {
         closeDrawer={closeDrawer}
         id={id}
         reload={() => initLoadData(organize, search)}
+        showLink={showLinkDrawer}
       />
+
+      <ShowLink 
+        showVisible={serverVisible}
+        closeDrawer={closeLinkDrawer}
+        billId={billId}
+      />
+
     </Layout>
   );
 }

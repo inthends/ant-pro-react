@@ -92,3 +92,9 @@ export function Visit(data): Promise<any> {
     .then(getResult as any);
 }
 
+//获取实体
+export function GetEntity(keyValue): Promise<any> {
+  return request.get(process.env.basePath + `/ServiceDesk/GetEntity?keyValue=${keyValue}`).then(getResult as any);
+}
+
+

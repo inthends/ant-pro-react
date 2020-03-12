@@ -68,6 +68,6 @@ export function Project(data): Promise<any> {
 }
 
 //获取实体
-export function GetEntityShow(keyValue): Promise<any> {
-  return request.get(process.env.basePath + `/Complaint/GetEntityShow?keyValue=${keyValue}`).then(getResult as any);
+export function GetEntity(keyValue): Promise<any> {
+  return request.get(process.env.basePath + `/Complaint/GetEntity?keyValue=${keyValue}`).then(getResult as any);
 }

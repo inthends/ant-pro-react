@@ -3,7 +3,7 @@ import { DatePicker, AutoComplete, Select, Tag, Row, Divider, PageHeader, Button
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 // import { getResult } from '@/utils/networkUtils';
-import { GetUserByCustomerId,  Handle, Approve, Project } from './Main.service';
+import { GetEntity,GetUserByCustomerId, Handle, Approve, Project } from './Main.service';
 import { GetUserList } from '@/services/commonItem';
 // import { TreeEntity } from '@/model/models';
 import styles from './style.less';
@@ -11,20 +11,23 @@ const { Option } = Select;
 
 interface ModifyProps {
   modifyVisible: boolean;
-  data?: any;
+  // data?: any;
+  id?: string;
   form: WrappedFormUtils;
   closeDrawer(): void;
   reload(): void;
+  showLink(billId): void;
 }
 
 const Modify = (props: ModifyProps) => {
-  const { modifyVisible, data, closeDrawer, form, reload } = props;
+  const {showLink, modifyVisible, id, closeDrawer, form, reload } = props;
   const { getFieldDecorator } = form;
-  const title = data === undefined ? '添加投诉单' : '修改投诉单';
+  const title = id === undefined ? '添加投诉单' : '修改投诉单';
   const [infoDetail, setInfoDetail] = useState<any>({});
   // const [treeData, setTreeData] = useState<any[]>([]);
   const [userSource, setUserSource] = useState<any[]>([]);
-
+  const [serverCode, setServerCode] = useState<string>('');
+  const [serverId, setServerId] = useState<string>('');
   // 打开抽屉时初始化
   // useEffect(() => {
   // 获取房产树
@@ -39,9 +42,14 @@ const Modify = (props: ModifyProps) => {
   // 打开抽屉时初始化 
   useEffect(() => {
     if (modifyVisible) {
-      if (data) {
-        setInfoDetail(data);
-        form.resetFields();
+      if (id) {
+        GetEntity(id).then(info => {
+          //赋值
+          setInfoDetail(info.entity);
+          setServerCode(info.serverCode);
+          setServerId(info.serverId);
+        })
+        // form.resetFields();
       } else {
         setInfoDetail({});
         form.resetFields();
@@ -58,7 +66,7 @@ const Modify = (props: ModifyProps) => {
   const project = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        const newData = data ? { ...data, ...values } : values;
+        const newData = infoDetail ? { ...infoDetail, ...values } : values;
         //doSave(newData);
         //newData.keyValue = newData.id;
         Project({ ...newData, keyValue: newData.id }).then(res => {
@@ -73,7 +81,7 @@ const Modify = (props: ModifyProps) => {
   const handle = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        const newData = data ? { ...data, ...values } : values;
+        const newData = infoDetail ? { ...infoDetail, ...values } : values;
         //doSave(newData);
         //newData.keyValue = newData.id;
         newData.finishTime = values.finishTime.format('YYYY-MM-DD HH:mm');
@@ -104,7 +112,7 @@ const Modify = (props: ModifyProps) => {
   const approve = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        const newData = data ? { ...data, ...values } : values;
+        const newData = infoDetail ? { ...infoDetail, ...values } : values;
         //doSave(newData);
         //newData.keyValue = newData.id;
         Approve({ ...newData, keyValue: newData.id }).then(res => {
@@ -126,7 +134,7 @@ const Modify = (props: ModifyProps) => {
   // };
 
   //转换状态
-  const GetStatus = (status,isEnable) => {
+  const GetStatus = (status, isEnable) => {
     if (isEnable == 0) {
       return <Tag color="#d82d2d">无效投诉</Tag>
     } else {
@@ -246,7 +254,7 @@ const Modify = (props: ModifyProps) => {
     <Drawer
       title={title}
       placement="right"
-      width={800}
+      width={850}
       onClose={close}
       visible={modifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
@@ -268,7 +276,7 @@ const Modify = (props: ModifyProps) => {
         {/* <Paragraph>
           投诉来自于{infoDetail.complaintAddress}，联系人：{infoDetail.complaintUser ? infoDetail.complaintUser : '匿名'}，电话：{infoDetail.complaintLink ? infoDetail.complaintLink : '无'}，在 {infoDetail.billDate} 投诉，内容如下
         </Paragraph>
-        {infoDetail.contents} */} 
+        {infoDetail.contents} */}
         <Form layout='vertical'>
           <Row gutter={6}>
             <Col lg={5}>
@@ -278,15 +286,15 @@ const Modify = (props: ModifyProps) => {
             </Col>
             <Col lg={3}>
               <Form.Item label="状态" >
-                {GetStatus(infoDetail.status,infoDetail.isEnable)}
+                {GetStatus(infoDetail.status, infoDetail.isEnable)}
               </Form.Item>
             </Col>
-            <Col lg={4}>
+            <Col lg={3}>
               <Form.Item label="联系人" >
                 {infoDetail.complaintUser ? infoDetail.complaintUser : '匿名'}
               </Form.Item>
             </Col>
-            <Col lg={4}>
+            <Col lg={3}>
               <Form.Item label="电话" >
                 {infoDetail.complaintLink ? infoDetail.complaintLink : '无'}
               </Form.Item>
@@ -295,7 +303,12 @@ const Modify = (props: ModifyProps) => {
               <Form.Item label="投诉时间" >
                 {infoDetail.billDate}
               </Form.Item>
-            </Col>
+            </Col> 
+            <Col lg={5}>
+              <Form.Item label="关联单号" >
+                <a onClick={() => showLink(serverId)}>{serverCode}</a>
+              </Form.Item>
+            </Col> 
           </Row>
         </Form>
         <Divider dashed />
@@ -607,7 +620,7 @@ const Modify = (props: ModifyProps) => {
                 </Col>
               </Row>
             </Card>
-          ) : null} */} 
+          ) : null} */}
         </Form>
       ) : null}
       <div
@@ -629,7 +642,7 @@ const Modify = (props: ModifyProps) => {
         {infoDetail.status == 1 ? (
           <Button onClick={project} type="primary">
             立项
-         </Button>
+          </Button>
         ) : null}
 
         {infoDetail.status == 2 ? (

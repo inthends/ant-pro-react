@@ -246,6 +246,10 @@ const AddRepairFee = (props: AddRepairFeeProps) => {
   const disabledDate = (current) => {
     return current < moment(form.getFieldValue('beginDate'));
   };
+ 
+  const close = () => {
+    closeDrawer();
+  };
 
   return (
     <Drawer

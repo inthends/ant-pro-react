@@ -8,6 +8,7 @@ import ListTable from './ListTable';
 import Modify from './Modify';
 import Show from './Show';
 import { GetPageListJson } from './Main.service';
+import ShowLink from '../ServiceDesk/ShowLink';
 
 const { Content } = Layout;
 const { Search } = Input;
@@ -19,7 +20,8 @@ function Main() {
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [organize, SetOrganize] = useState<any>({});
   const [data, setData] = useState<any[]>([]);
-  const [currData, setCurrData] = useState<any>();
+  // const [currData, setCurrData] = useState<any>();
+  const [id, setId] = useState<any>();
   const [search, setSearch] = useState<string>('');
 
   const selectTree = (pid, type, info) => {
@@ -56,8 +58,9 @@ function Main() {
   const closeDrawer = () => {
     setModifyVisible(false);
   };
-  const showDrawer = (item?) => {
-    setCurrData(item);
+  const showDrawer = (id?) => {
+    setId(id);
+    // setCurrData(item);
     setModifyVisible(true);
   };
 
@@ -65,8 +68,9 @@ function Main() {
     setViewVisible(false);
   };
 
-  const showViewDrawer = (item?) => {
-    setCurrData(item);
+  const showViewDrawer = (id?) => {
+    setId(id);
+    // setCurrData(item);
     setViewVisible(true);
   };
 
@@ -137,6 +141,18 @@ function Main() {
     });
   };
 
+  const [serverVisible, setServerVisible] = useState<boolean>(false);
+  const [billId, setBillId] = useState<any>('');
+  //查看关联单据
+  const showLinkDrawer = (billId) => {
+    setServerVisible(true);
+    setBillId(billId);
+  };
+
+  const closeLinkDrawer = () => {
+    setServerVisible(false);
+  };
+
   return (
     <Layout style={{ height: '100%' }}>
       <AsynLeftTree
@@ -170,14 +186,24 @@ function Main() {
       <Modify
         modifyVisible={modifyVisible}
         closeDrawer={closeDrawer}
-        data={currData}
+        // data={currData}
+        id={id}
         reload={() => initLoadData(organize, search)}
+        showLink={showLinkDrawer}
       />
 
       <Show
         modifyVisible={viewVisible}
         closeDrawer={closeViewDrawer}
-        data={currData}
+        // data={currData}
+        id={id}
+        showLink={showLinkDrawer}
+      />
+
+      <ShowLink
+        showVisible={serverVisible}
+        closeDrawer={closeLinkDrawer}
+        billId={billId}
       />
 
     </Layout>

@@ -17,10 +17,11 @@ interface ModifyProps {
   form: WrappedFormUtils;
   closeDrawer(): void;
   reload(): void;
+  showLink(billId): void;
 };
 
 const Modify = (props: ModifyProps) => {
-  const { modifyVisible, id, closeDrawer, form, reload } = props;
+  const { modifyVisible, id, closeDrawer, form, reload, showLink } = props;
   const { getFieldDecorator } = form;
   // const title = data === undefined ? '添加维修单' : data.status == 8 ? '查看维修单' : '修改维修单'; 
   const title = id == "" ? '添加维修单' : "修改维修单";
@@ -220,13 +221,13 @@ const Modify = (props: ModifyProps) => {
   //     //disabledSeconds: () => [55, 56],
   //   };
   // }
-
-
-
+ 
   const [feeId, setFeeId] = useState<string>('');//当前费用Id
   const [organizeId, setOrganizeId] = useState<string>('');//左侧树选择的id
   // const [modifyEdit, setModifyEdit] = useState<boolean>(true);
   const [adminOrgId, setAdminOrgId] = useState<string>('');//当前房间的管理处Id
+  const [serverCode, setServerCode] = useState<string>('');
+  const [serverId, setServerId] = useState<string>('');
 
   //临时加费是否显示
   const [addFeelaVisible, setAddFeeVisible] = useState<boolean>(false);
@@ -247,6 +248,8 @@ const Modify = (props: ModifyProps) => {
           setAdminOrgId(info.entity.organizeId);//管理处Id
           setOrganizeId(info.entity.roomId);
           setFeeId(info.feeId);
+          setServerCode(info.serverCode);
+          setServerId(info.serverId);
         })
 
       } else {
@@ -262,7 +265,7 @@ const Modify = (props: ModifyProps) => {
     <Drawer
       title={title}
       placement="right"
-      width={850}
+      width={980}
       onClose={close}
       visible={modifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
@@ -289,8 +292,8 @@ const Modify = (props: ModifyProps) => {
         {infoDetail.repairContent} */}
 
         <Form layout='vertical'>
-          <Row gutter={6}>
-            <Col lg={5}>
+          <Row gutter={4}>
+            <Col lg={4}>
               <Form.Item label="单号" >
                 {infoDetail.billCode}
               </Form.Item>
@@ -300,12 +303,12 @@ const Modify = (props: ModifyProps) => {
                 {GetStatus(infoDetail.status)}
               </Form.Item>
             </Col>
-            <Col lg={4}>
+            <Col lg={3}>
               <Form.Item label="联系人" >
                 {infoDetail.contactName}
               </Form.Item>
             </Col>
-            <Col lg={4}>
+            <Col lg={3}>
               <Form.Item label="电话" >
                 {infoDetail.contactLink}
               </Form.Item>
@@ -315,13 +318,17 @@ const Modify = (props: ModifyProps) => {
                 {infoDetail.isPaid}
               </Form.Item>
             </Col>
-            <Col lg={5}>
+            <Col lg={4}>
               <Form.Item label="报修时间" >
                 {infoDetail.billDate}
               </Form.Item>
             </Col>
+            <Col lg={4}>
+              <Form.Item label="关联单号" >
+                <a onClick={() => showLink(serverId)}>{serverCode}</a>
+              </Form.Item>
+            </Col>
           </Row>
-
         </Form>
         <Divider dashed />
         {infoDetail.repairContent}
@@ -460,7 +467,7 @@ const Modify = (props: ModifyProps) => {
             ) : null}
 
             {infoDetail.status == 4 ? (
-              <Card title="完成情况" className={styles.card2} hoverable>
+              <Card title="完成情况" className={styles.card} hoverable>
                 <Row gutter={24}>
                   <Col lg={7}>
                     <Form.Item label="完成时间" required>
@@ -669,7 +676,7 @@ const Modify = (props: ModifyProps) => {
             </Card>) : null} */}
 
             {infoDetail.status == 6 ? (
-              <Card title="检验情况" className={styles.card} hoverable>
+              <Card title="检验情况" className={styles.card2} hoverable>
                 <Row gutter={24}>
                   <Col lg={7}>
                     <Form.Item label="检验时间" required>
@@ -810,7 +817,7 @@ const Modify = (props: ModifyProps) => {
             <Button onClick={start} type="primary" style={{ marginRight: 8 }}>
               暂停
         </Button> */}
-            <Button onClick={start} type="danger"  style={{ marginRight: 8 }}>
+            <Button onClick={start} type="danger" style={{ marginRight: 8 }}>
               退单
         </Button>
             <Button onClick={handle} type="primary">

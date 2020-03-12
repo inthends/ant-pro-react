@@ -124,13 +124,13 @@ function ListTable(props: ListTableProps) {
             //   删除
             // </Button>  
             <span>
-              <a onClick={() => modify(record)} key="modify">修改</a>
+              <a onClick={() => modify(record.id)} key="modify">修改</a>
               <Divider type="vertical" key='split' />
               <a onClick={() => doInvalid(record)} key="invalid">作废</a>
             </span>
           ];
         } else {
-          return [<a onClick={() => show(record)} key="view">查看</a>];
+          return [<a onClick={() => show(record.id)} key="view">查看</a>];
         }
       },
     },

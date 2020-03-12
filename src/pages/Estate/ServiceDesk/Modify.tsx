@@ -2,7 +2,7 @@
 import { Spin, Upload, Modal, Menu, Dropdown, Icon, Tabs, Select, Button, Card, Col, Drawer, Form, Input, message, Row, TreeSelect } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import {GetFilesData, RemoveFile, GetRoomUser, SaveForm, ChangeToRepair, ChangeToComplaint } from './Main.service';
+import { GetFilesData, RemoveFile, GetRoomUser, SaveForm, ChangeToRepair, ChangeToComplaint } from './Main.service';
 import { GetOrgTreeSimple, GetAsynChildBuildingsForDesk } from '@/services/commonItem';
 import styles from './style.less';
 import CommentBox from './CommentBox';
@@ -18,11 +18,11 @@ interface ModifyProps {
   closeDrawer(): void;
   reload(): void;
   // treeData: any[];
-  showLink(type,code): void;
+  showLink(type, code): void;
 }
 
 const Modify = (props: ModifyProps) => {
-  const { modifyVisible, data, closeDrawer, form, reload,showLink } = props;
+  const { modifyVisible, data, closeDrawer, form, reload, showLink } = props;
   const { getFieldDecorator } = form;
   var title = data === undefined ? '添加服务单' : '修改服务单';
   if (data && data.status != 1 && data.status != 3) {
@@ -37,7 +37,6 @@ const Modify = (props: ModifyProps) => {
   const [previewImage, setPreviewImage] = useState<string>('');
   const [addMemoVisible, setAddMemoVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-
   const [treeData, setTreeData] = useState<any[]>([]);
 
   // 打开抽屉时初始化
@@ -61,9 +60,7 @@ const Modify = (props: ModifyProps) => {
         GetFilesData(data.id).then(res => {
           setFileList(res || []);
         });
-
         setLoading(false);
-
       } else {
         setkeyValue(guid());
         setInfoDetail({});
@@ -286,14 +283,13 @@ const Modify = (props: ModifyProps) => {
     <Drawer
       title={title}
       placement="right"
-      width={800}
+      width={820}
       onClose={close}
       visible={modifyVisible}
       destroyOnClose={true}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
-      <Spin tip="数据处理中..." spinning={loading}>
-
+      <Spin tip="数据处理中..." spinning={loading}> 
         {/* {modifyVisible ? ( */}
         <Tabs defaultActiveKey="1" >
           <TabPane tab="基础信息" key="1">
@@ -373,7 +369,7 @@ const Modify = (props: ModifyProps) => {
                   </Row>
                   {form.getFieldValue('billType') == '报修' ?
                     <Row gutter={24}>
-                      <Col lg={8}>
+                      <Col lg={6}>
                         <Form.Item label="维修区域">
                           {getFieldDecorator('repairArea', {
                             initialValue: infoDetail.repairArea == undefined ? '客户区域' : infoDetail.repairArea
@@ -385,12 +381,12 @@ const Modify = (props: ModifyProps) => {
                           )}
                         </Form.Item>
                       </Col>
-                      <Col lg={8}>
+                      <Col lg={4}>
                         <Form.Item label="是否有偿">
                           {getFieldDecorator('isPaid', {
                             initialValue: infoDetail.isPaid == undefined ? '否' : infoDetail.isPaid
                           })(
-                            <Select  >
+                            <Select>
                               <Option value="否">否</Option>
                               <Option value="是">是</Option>
                             </Select>
@@ -508,9 +504,9 @@ const Modify = (props: ModifyProps) => {
                   </Row>
                 </Card>
               ) :
-                (<Card className={infoDetail.status == 2 ? styles.card2 : styles.card} title="基础信息" >
+                (<Card className={infoDetail.status > 2 ? styles.card2 : styles.card} title="基础信息" >
                   <Row gutter={24}>
-                    <Col lg={5}>
+                    <Col lg={6}>
                       <Form.Item label="服务单号">
                         {infoDetail.billCode}
                       </Form.Item>
@@ -519,28 +515,10 @@ const Modify = (props: ModifyProps) => {
                       <Form.Item label="单据来源"  >
                         {infoDetail.source}
                       </Form.Item>
-                    </Col>
-
-                    <Col lg={6}>
+                    </Col> 
+                    <Col lg={5}>
                       <Form.Item label="单据时间">
                         {infoDetail.billDate}
-                      </Form.Item>
-                    </Col>
-                    <Col lg={3}>
-                      <Form.Item label="业务类型">
-                        {infoDetail.billType}
-                      </Form.Item>
-                    </Col>
-                    <Col lg={6}>
-                      <Form.Item label="关联单号">
-                        <a onClick={() => showLink(infoDetail.businessType, infoDetail.businessCode)}>{infoDetail.businessCode}</a>
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                  <Row gutter={24}>
-                    <Col lg={5}>
-                      <Form.Item label="位置编号">
-                        {infoDetail.roomId}
                       </Form.Item>
                     </Col>
                     <Col lg={4}>
@@ -548,17 +526,35 @@ const Modify = (props: ModifyProps) => {
                         {infoDetail.contactName}
                       </Form.Item>
                     </Col>
-                    <Col lg={6}>
+                    <Col lg={5}>
                       <Form.Item label="联系电话">
                         {infoDetail.contactPhone}
                       </Form.Item>
                     </Col>
-                    <Col lg={3}>
+                  </Row>
+                  <Row gutter={24}>
+                    <Col lg={6}>
+                      <Form.Item label="关联单号">
+                        <a onClick={() => showLink(infoDetail.businessType, infoDetail.businessCode)}>{infoDetail.businessCode}</a>
+                      </Form.Item>
+                    </Col>
+                    <Col lg={4}>
+                      <Form.Item label="业务类型">
+                        {infoDetail.billType}
+                      </Form.Item>
+                    </Col> 
+                    <Col lg={5}>
+                      <Form.Item label="位置编号">
+                        {infoDetail.roomId}
+                      </Form.Item>
+                    </Col>
+
+                    <Col lg={4}>
                       <Form.Item label="紧急程度">
                         {infoDetail.emergencyLevel}
                       </Form.Item>
                     </Col>
-                    <Col lg={6}>
+                    <Col lg={5}>
                       <Form.Item label="重要程度">
                         {infoDetail.importance}
                       </Form.Item>
@@ -567,12 +563,12 @@ const Modify = (props: ModifyProps) => {
 
                   {infoDetail.billType == '报修' ?
                     <Row gutter={24}>
-                      <Col lg={8}>
+                      <Col lg={6}>
                         <Form.Item label="维修区域">
                           {infoDetail.repairArea}
                         </Form.Item>
                       </Col>
-                      <Col lg={8}>
+                      <Col lg={4}>
                         <Form.Item label="是否有偿">
                           {infoDetail.isPaid}
                         </Form.Item>
@@ -592,8 +588,7 @@ const Modify = (props: ModifyProps) => {
                         {infoDetail.contents}
                       </Form.Item>
                     </Col>
-                  </Row>
-
+                  </Row> 
                   <Row gutter={24}>
                     <Col lg={24}>
                       <div className="clearfix">
@@ -615,98 +610,97 @@ const Modify = (props: ModifyProps) => {
                       </div>
                     </Col>
                   </Row>
-                </Card>)
-              }
+                </Card>)  }
 
               {
-              // infoDetail.status == 3 ? (
-              //   <Card title="回访情况" className={styles.card2} hoverable>
-              //     <Row gutter={24}>
-              //       <Col lg={6}>
-              //         <Form.Item label="回访方式" required>
-              //           {getFieldDecorator('returnVisitMode', {
-              //             initialValue: '在线'
-              //           })(
-              //             <Select >
-              //               <Option value="在线">在线</Option>
-              //               <Option value="电话">电话</Option>
-              //               <Option value="上门">上门</Option>
-              //               <Option value="其他">其他</Option>
-              //             </Select>
-              //           )}
-              //         </Form.Item>
-              //       </Col>
-              //       <Col lg={6}>
-              //         <Form.Item label="客户评价" required>
-              //           {getFieldDecorator('custEvaluate', {
-              //             initialValue: '4'
-              //           })(
-              //             <Select >
-              //               <Option value="5">非常满意</Option>
-              //               <Option value="4">满意</Option>
-              //               <Option value="3">一般</Option>
-              //               <Option value="2">不满意</Option>
-              //               <Option value="1">非常不满意</Option>
-              //             </Select>
-              //           )}
-              //         </Form.Item>
-              //       </Col>
-              //       <Col lg={6}>
-              //         <Form.Item label="回访时间" >
-              //           {getFieldDecorator('returnVisitDate', {
-              //           })(<Input placeholder="自动获取时间" readOnly />)}
-              //         </Form.Item>
-              //       </Col>
-              //       <Col lg={6}>
-              //         <Form.Item label="回访人">
-              //           {getFieldDecorator('returnVisiterName', {
-              //           })(<Input placeholder="自动获取回访人" readOnly />)}
-              //         </Form.Item>
-              //       </Col>
-              //     </Row>
-              //     <Row gutter={24}>
-              //       <Col lg={24}>
-              //         <Form.Item label="回访结果" required>
-              //           {getFieldDecorator('returnVisitResult', {
-              //             rules: [{ required: true, message: '请输入回访结果' }],
-              //           })(<Input placeholder="请输入回访结果" />)}
-              //         </Form.Item>
-              //       </Col>
-              //     </Row>
-              //   </Card>
-              // ) : 
-              
-              infoDetail.status > 3 ? (<Card title="回访情况" className={styles.card2}  >
-                <Row gutter={24}>
-                  <Col lg={6}>
-                    <Form.Item label="回访方式"  >
-                      {infoDetail.returnVisitMode}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={6}>
-                    <Form.Item label="客户评价"  >
-                      {GetCustEvaluate(infoDetail.custEvaluate)}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={6}>
-                    <Form.Item label="回访时间" >
-                      {infoDetail.returnVisitDate}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={6}>
-                    <Form.Item label="回访人">
-                      {infoDetail.returnVisiterName}
-                    </Form.Item>
-                  </Col>
-                </Row>
-                <Row gutter={24}>
-                  <Col lg={24}>
-                    <Form.Item label="回访结果" >
-                      {infoDetail.returnVisitResult}
-                    </Form.Item>
-                  </Col>
-                </Row>
-              </Card>) : null}
+                // infoDetail.status == 3 ? (
+                //   <Card title="回访情况" className={styles.card2} hoverable>
+                //     <Row gutter={24}>
+                //       <Col lg={6}>
+                //         <Form.Item label="回访方式" required>
+                //           {getFieldDecorator('returnVisitMode', {
+                //             initialValue: '在线'
+                //           })(
+                //             <Select >
+                //               <Option value="在线">在线</Option>
+                //               <Option value="电话">电话</Option>
+                //               <Option value="上门">上门</Option>
+                //               <Option value="其他">其他</Option>
+                //             </Select>
+                //           )}
+                //         </Form.Item>
+                //       </Col>
+                //       <Col lg={6}>
+                //         <Form.Item label="客户评价" required>
+                //           {getFieldDecorator('custEvaluate', {
+                //             initialValue: '4'
+                //           })(
+                //             <Select >
+                //               <Option value="5">非常满意</Option>
+                //               <Option value="4">满意</Option>
+                //               <Option value="3">一般</Option>
+                //               <Option value="2">不满意</Option>
+                //               <Option value="1">非常不满意</Option>
+                //             </Select>
+                //           )}
+                //         </Form.Item>
+                //       </Col>
+                //       <Col lg={6}>
+                //         <Form.Item label="回访时间" >
+                //           {getFieldDecorator('returnVisitDate', {
+                //           })(<Input placeholder="自动获取时间" readOnly />)}
+                //         </Form.Item>
+                //       </Col>
+                //       <Col lg={6}>
+                //         <Form.Item label="回访人">
+                //           {getFieldDecorator('returnVisiterName', {
+                //           })(<Input placeholder="自动获取回访人" readOnly />)}
+                //         </Form.Item>
+                //       </Col>
+                //     </Row>
+                //     <Row gutter={24}>
+                //       <Col lg={24}>
+                //         <Form.Item label="回访结果" required>
+                //           {getFieldDecorator('returnVisitResult', {
+                //             rules: [{ required: true, message: '请输入回访结果' }],
+                //           })(<Input placeholder="请输入回访结果" />)}
+                //         </Form.Item>
+                //       </Col>
+                //     </Row>
+                //   </Card>
+                // ) : 
+
+                infoDetail.status > 3 ? (<Card title="回访情况" className={styles.card2}  >
+                  <Row gutter={24}>
+                    <Col lg={6}>
+                      <Form.Item label="回访方式"  >
+                        {infoDetail.returnVisitMode}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={6}>
+                      <Form.Item label="客户评价"  >
+                        {GetCustEvaluate(infoDetail.custEvaluate)}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={6}>
+                      <Form.Item label="回访时间" >
+                        {infoDetail.returnVisitDate}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={6}>
+                      <Form.Item label="回访人">
+                        {infoDetail.returnVisiterName}
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Row gutter={24}>
+                    <Col lg={24}>
+                      <Form.Item label="回访结果" >
+                        {infoDetail.returnVisitResult}
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Card>) : null}
             </Form>
           </TabPane>
           {data ? (
@@ -748,7 +742,7 @@ const Modify = (props: ModifyProps) => {
         {data === undefined ? (
           <Button onClick={save} type="primary">
             保存
-            </Button>) : null}
+          </Button>) : null}
 
         {(infoDetail.status && infoDetail.status == 1) ? (
           <span>
