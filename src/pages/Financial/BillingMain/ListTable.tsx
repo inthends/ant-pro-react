@@ -1,6 +1,6 @@
 //计费单列表
 import Page from '@/components/Common/Page';
-import { message, Dropdown, Menu, Icon, Modal, Divider, Form, Table } from 'antd';
+import {Tag, message, Dropdown, Menu, Icon, Modal, Divider, Form, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState } from 'react';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
@@ -111,7 +111,7 @@ function ListTable(props: ListTableProps) {
       key: 'ifVerify',
       align:'center',
       width: 100,
-      render: val => val ? '已审核' : '未审核'
+      render: val => val ? <Tag color="#61c33a">已审核</Tag> : <Tag color="#d82d2d">待审核</Tag>
     },
     {
       title: '审核人',

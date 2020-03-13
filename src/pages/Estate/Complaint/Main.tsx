@@ -9,7 +9,6 @@ import Modify from './Modify';
 import Show from './Show';
 import { GetPageListJson } from './Main.service';
 import ShowLink from '../ServiceDesk/ShowLink';
-
 const { Content } = Layout;
 const { Search } = Input;
 

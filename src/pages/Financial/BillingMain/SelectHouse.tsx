@@ -97,7 +97,6 @@ const SelectHouse = (props: SelectHouseProps) => {
     >
       {/* <Row style={{ height: '600px', overflow: 'hidden', marginTop: '5px', backgroundColor: 'rgb(255,255,255)' }}> */}
       <Spin tip="数据处理中..." spinning={loading}>
-
         <Form layout='inline' hideRequiredMark >
           <Row gutter={24}>
             <Col span={24} >
@@ -113,8 +112,7 @@ const SelectHouse = (props: SelectHouseProps) => {
               </Form.Item>
             </Col>
           </Row>
-        </Form>
-
+        </Form> 
         <Row gutter={12}>
           <Col span={12} style={{ height: '500px', overflow: 'auto' }}>
             <SelectTree

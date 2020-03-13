@@ -48,8 +48,7 @@ const Modify = (props: ModifyProps) => {
   }, []);
 
   // 打开抽屉时初始化
-  useEffect(() => {
-
+  useEffect(() => { 
     if (modifyVisible) {
       setLoading(true);
       if (data) {
@@ -67,8 +66,7 @@ const Modify = (props: ModifyProps) => {
         form.resetFields();
         setFileList([]);
         setLoading(false);
-      }
-
+      } 
     } else {
       form.resetFields();
     }
@@ -742,8 +740,7 @@ const Modify = (props: ModifyProps) => {
         {data === undefined ? (
           <Button onClick={save} type="primary">
             保存
-          </Button>) : null}
-
+          </Button>) : null} 
         {(infoDetail.status && infoDetail.status == 1) ? (
           <span>
             <Dropdown overlay={menu} >

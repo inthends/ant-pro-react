@@ -279,3 +279,8 @@ export function Call(data): Promise<any> {
     .post(process.env.basePath + `/BillingMain/Call`, { data: objToFormdata(data) })
     .then(getResult as any);
 }
+
+//保存票据
+export function SaveNote(data): Promise<any> {
+  return request.post(process.env.basePath + `/Receivable/SaveNote`, { data: objToFormdata(data) }).then(getResult as any);
+}

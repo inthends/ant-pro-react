@@ -1,5 +1,5 @@
 //收款单审核
-import { Tag, message, Card, Button, Col, Drawer, Form, Input, Row, Table } from 'antd';
+import { Divider, PageHeader, Spin, Tag, message, Card, Button, Col, Drawer, Form, Input, Row, Table } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { GetEntityShow, ChargeFeeDetail, CheckBill } from './Main.service';
@@ -201,107 +201,122 @@ const Verify = (props: VerifyProps) => {
     <Drawer
       title={title}
       placement="right"
-      width={1000}
+      width={850}
       onClose={closeVerify}
       visible={verifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
-      <Card className={styles.card}>
-        <Form layout="vertical">
+      <Spin tip="数据处理中..." spinning={loading}>
 
-          <Row gutter={24}>
-            <Col span={6}>
-              <Form.Item label="收款单号"  >
-                {infoDetail.billCode}
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item label="收款日期" >
-                {String(infoDetail.billDate).substr(0, 10)}
-              </Form.Item>
-            </Col>
-
-            <Col span={6}>
-              <Form.Item label="收款人"  >
-                {infoDetail.createUserName}
-              </Form.Item>
-            </Col>
-
-            <Col span={6}>
-              <Form.Item label="入账银行" >
-                {infoDetail.accountBank}
-              </Form.Item>
-            </Col>
-
-
-
-          </Row>
-          <Row gutter={24}>
-            <Col span={6}>
-              <Form.Item label="费用状态">
-                {GetStatus(infoDetail.status)}
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item label="收据编号">
-                {infoDetail.payCode}
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item label="发票编号">
-                {infoDetail.invoiceCode}
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item label="冲红单号" >
-                {linkno}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={24}>
-            <Col span={6}>
-              <Form.Item label="单据状态">
-                {/* {infoDetail.ifVerify ? '已审核' : '未审核'} */}
-                {GetVerifyStatus(infoDetail.ifVerify)}
-              </Form.Item>
-            </Col>
-            <Col span={18}>
-              <Form.Item label="收款金额" style={{ color: "red" }}>
-                {`${infoDetail.payAmountA + infoDetail.payAmountB + infoDetail.payAmountC}元，其中${infoDetail.payTypeA}${infoDetail.payAmountA}元，${infoDetail.payTypeB}${infoDetail.payAmountB}元，${infoDetail.payTypeC}${infoDetail.payAmountC}元`}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={24}>
-            <Col span={24}>
-              <Form.Item label="备注">
-                {infoDetail.memo}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Table
-            // title={() => '费用明细'}
-            size="middle"
-            dataSource={chargeBillData}
-            columns={columns}
-            rowKey={record => record.billId}
-            pagination={pagination}
-            scroll={{ y: 500, x: 1500 }}
-            loading={loading}
-          />
-          {!ifVerify ?
-            <Row gutter={24}>
-              <Col span={24}>
-                <Form.Item label="审核说明" >
-                  {getFieldDecorator('verifyMemo', {
-                    initialValue: infoDetail.verifyMemo,
-                  })(
-                    <Input.TextArea rows={5} style={{ width: '100%' }} />
-                  )}
+        <PageHeader
+          title={null}
+          subTitle={
+            <div>
+              <label style={{ color: '#4494f0', fontSize: '24px' }}>{infoDetail.billCode}</label>
+            </div>
+          }
+          style={{
+            border: '1px solid rgb(235, 237, 240)'
+          }}  >
+          <Form layout='vertical'>
+            <Row gutter={6}>
+              <Col span={5}>
+                <Form.Item label="收款日期" >
+                  {String(infoDetail.billDate).substr(0, 10)}
                 </Form.Item>
               </Col>
-            </Row> : null
-          }
-        </Form>
-      </Card>
+              <Col span={5}>
+                <Form.Item label="收款人"  >
+                  {infoDetail.createUserName}
+                </Form.Item>
+              </Col>
+              <Col span={4}>
+                <Form.Item label="费用状态"   >
+                  {GetStatus(infoDetail.status)}
+                </Form.Item>
+              </Col>
+              <Col span={5}>
+                <Form.Item label="收据编号">
+                  {infoDetail.payCode}
+                </Form.Item>
+              </Col>
+              <Col span={5}>
+                <Form.Item label="发票编号"  >
+                  {infoDetail.invoiceCode}
+                </Form.Item>
+              </Col>
+            </Row>
+          </Form>
+          <Divider dashed />
+          <span style={{ color: "red" }}>
+            {`${infoDetail.payAmountA + infoDetail.payAmountB + infoDetail.payAmountC}元，其中${infoDetail.payTypeA}${infoDetail.payAmountA}元，${infoDetail.payTypeB}${infoDetail.payAmountB}元，${infoDetail.payTypeC}${infoDetail.payAmountC}元`}
+          </span>
+        </PageHeader>
+        <Divider dashed />
+        <Card className={styles.card}>
+          <Form layout="vertical">
+
+            <Row gutter={24}>
+              <Col span={5}>
+                <Form.Item label="入账银行" >
+                  {infoDetail.accountBank}
+                </Form.Item>
+              </Col>
+              <Col span={5}>
+                <Form.Item label="冲红单号" >
+                  {linkno}
+                </Form.Item>
+              </Col>
+              <Col span={4}>
+                <Form.Item label="审核状态"   >
+                  {/* {infoDetail.ifVerify ? '已审核' : '未审核'} */}
+                  {GetVerifyStatus(infoDetail.ifVerify)}
+                </Form.Item>
+              </Col>
+              <Col span={5}>
+                <Form.Item label="审核人">
+                  {infoDetail.verifyPerson}
+                </Form.Item>
+              </Col>
+              <Col span={5}>
+                <Form.Item label="审核时间">
+                  {infoDetail.verifyDate}
+                </Form.Item>
+              </Col>
+            </Row>
+
+            <Row gutter={24}>
+              <Col span={24}>
+                <Form.Item label="备注">
+                  {infoDetail.memo}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Table
+              // title={() => '费用明细'}
+              size="middle"
+              dataSource={chargeBillData}
+              columns={columns}
+              rowKey={record => record.billId}
+              pagination={pagination}
+              scroll={{ y: 500, x: 1500 }}
+              loading={loading}
+            />
+            {!ifVerify ?
+              <Row gutter={24}>
+                <Col span={24}>
+                  <Form.Item label="审核说明" >
+                    {getFieldDecorator('verifyMemo', {
+                      initialValue: infoDetail.verifyMemo,
+                    })(
+                      <Input.TextArea rows={5} style={{ width: '100%' }} />
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row> : null
+            }
+          </Form>
+        </Card>
+      </Spin>
       <div
         style={{
           position: 'absolute',
@@ -312,6 +327,7 @@ const Verify = (props: VerifyProps) => {
           padding: '10px 16px',
           background: '#fff',
           textAlign: 'right',
+          zIndex: 999,
         }}
       >
         <Button onClick={closeVerify} style={{ marginRight: 8 }}>

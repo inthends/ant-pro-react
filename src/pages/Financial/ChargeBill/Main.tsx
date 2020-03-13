@@ -13,6 +13,9 @@ import Verify from './Verify';
 import Split from './Split';
 import Transform from './Transform';
 import Submit from './Submit';
+import RoomShow from '../../Resource/House/RoomShow';
+import AddNote from './AddNote';
+
 const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
@@ -21,22 +24,19 @@ const { Option } = Select;
 function Main() {
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   // const [addFeeVisible, setAddFeeVisibleisible] = useState<boolean>(false);
-  // const [treeData, setTreeData] = useState<TreeEntity[]>([]);
-
+  // const [treeData, setTreeData] = useState<TreeEntity[]>([]); 
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
-
+  const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination()); 
+  //收款单
   const [dataCharge, setChargeData] = useState<any[]>([]);
   const [loadingCharge, setLoadingCharge] = useState<boolean>(false);
-  const [paginationCharge, setPaginationCharge] = useState<PaginationConfig>(new DefaultPagination());
-
+  const [paginationCharge, setPaginationCharge] = useState<PaginationConfig>(new DefaultPagination()); 
   //对账单
   const [dataChargeCheck, setChargeCheckData] = useState<any[]>([]);
   const [loadingChargeCheck, setLoadingChargeCheck] = useState<boolean>(false);
   const [paginationChargeCheck, setPaginationChargeCheck] = useState<PaginationConfig>(new DefaultPagination());
-
-  const [id, setId] = useState<string>('');//当前费用Id
+ 
   const [organizeId, setOrganizeId] = useState<string>('');//左侧树选择的id
   const [adminOrgId, setAdminOrgId] = useState<string>('');//当前房间的管理处Id
   const [search, setSearch] = useState<string>('');
@@ -57,24 +57,22 @@ function Main() {
 
   //送审
   const [submitVisible, setSubmitVisible] = useState<boolean>(false);
-
   // const [flushVisible, setflushVisible] = useState<boolean>(false);
   // const [chargeRowStatus, setChargeRowStatus] = useState<number>(0);
-  // const [billRowKey, setBillRowKey] = useState<number>(0);
-
+  // const [billRowKey, setBillRowKey] = useState<number>(0); 
   const [unChargeSelectedKeys, setUnChargeSelectedKeys] = useState<any[]>([]);
   const [modifyEdit, setModifyEdit] = useState<boolean>(true);
   // const [organize, SetOrganize] = useState<any>({});
   const [chargedSearchParams, setChargedSearchParams] = useState<any>({});
-
   //收款单送审
   const [chargeSelectedKeys, setChargeSelectedKeys] = useState<any[]>([]);
-
   //点击的tab
   const [tabIndex, setTabIndex] = useState<string>('1');
 
+  const [id, setId] = useState<string>('');//当前费用Id
+
   //点击左侧树，加载数据
-  const selectTree = (organizeId, type, search) => { 
+  const selectTree = (organizeId, type, search) => {
     if (tabIndex == "1") {
       //未收款
       initLoadData(search, organizeId, showCustomerFee);
@@ -191,7 +189,7 @@ function Main() {
       queryJson: {
         keyword: chargedSearchParams.search ? chargedSearchParams.search : '',
         TreeTypeId: organizeId,
-        TreeType: chargedSearchParams.type ? chargedSearchParams.type : '',  
+        TreeType: chargedSearchParams.type ? chargedSearchParams.type : '',
         Status: chargedSearchParams.status ? chargedSearchParams.status : '',
         StartDate: chargedSearchParams.startDate ? chargedSearchParams.startDate : '',
         EndDate: chargedSearchParams.endDate ? chargedSearchParams.endDate : ''
@@ -322,7 +320,7 @@ function Main() {
   }
 
   const showVerify = (id: string, ifVerify: boolean) => {
-    setId(id);
+    setBillId(id);
     setVerifyVisible(true);
     setIfVerify(ifVerify);
   }
@@ -343,32 +341,37 @@ function Main() {
   }
 
   //拆费
-  const [splitId, setSplitId] = useState<string>('');
+  // const [splitId, setSplitId] = useState<string>('');
   const showSplit = (id) => {
+    setId(id);
     // console.log(id);
-    setSplitId(id);
+    // setSplitId(id);
     setSplitVisible(true);
   }
 
   const closeSplit = () => {
-    setSplitId('');
+    setId('');
+    // setSplitId('');
     setSplitVisible(false);
   }
 
   //转费
-  const [transId, setTransId] = useState<string>('');
+  // const [transId, setTransId] = useState<string>('');
   const showTrans = (id) => {
-    setTransId(id);
+    setId(id);
+    // setTransId(id);
     setTransVisible(true);
   }
 
   const closeTrans = () => {
-    setTransId('');
+    setId('');
+    // setTransId('');
     setTransVisible(false);
   }
 
   //收款单Id
   const [billId, setBillId] = useState<string>('');
+
   const showDetail = (id?) => {
     setBillId(id);
     setShowVisible(true);
@@ -446,6 +449,28 @@ function Main() {
     }
   };
 
+  const [roomVisible, setRoomVisible] = useState<boolean>(false);
+
+  //查看关联单据
+  const showRoomDrawer = () => {
+    setRoomVisible(true);
+  };
+
+  const closeRoomDrawer = () => {
+    setRoomVisible(false);
+  };
+
+  const [addNoteVisible, setAddNoteVisible] = useState<boolean>(false);
+
+  const showAddNote = (id: string) => {
+    setBillId(id);
+    setAddNoteVisible(true);
+  }
+
+  const closeAddNote = () => {
+    setAddNoteVisible(false);
+  };
+
   return (
     <Layout style={{ height: '100%' }}>
       {/* <Sider theme="light" style={{ overflow: 'hidden', height: '100%' }} width="245px"> */}
@@ -507,9 +532,9 @@ function Main() {
                 查看
               </Button> */}
 
-              <span style={{ marginLeft: 8, color: "red" }}>
-                已选择：{showname}
-              </span>
+              <a style={{ marginLeft: 8 }} onClick={showRoomDrawer}>
+                {showname}
+              </a>
 
               <Button type="primary" style={{ float: 'right' }}
                 onClick={() => showDrawer()}
@@ -589,7 +614,7 @@ function Main() {
               />
               <Button type="primary" style={{ marginLeft: '3px' }}
                 onClick={() => {
-                  initChargeLoadData(organizeId,chargedSearchParams.type);
+                  initChargeLoadData(organizeId, chargedSearchParams.type);
                 }}
               >
                 <Icon type="search" />
@@ -644,7 +669,8 @@ function Main() {
               data={dataCharge}
               showDetail={showDetail}
               showVerify={showVerify}
-              reload={() => initChargeLoadData(organizeId,chargedSearchParams.type)}
+              showNote={showAddNote}
+              reload={() => initChargeLoadData(organizeId, chargedSearchParams.type)}
               // getRowSelect={GetChargedSelectedKey}
               rowSelect={GetChargeSelectedKeys}
             />
@@ -675,7 +701,7 @@ function Main() {
               />
               <Button type="primary" style={{ marginLeft: '3px' }}
                 onClick={() => {
-                  initChargeLoadData(organizeId,chargedSearchParams.type);
+                  initChargeLoadData(organizeId, chargedSearchParams.type);
                 }}>
                 <Icon type="search" />
                 搜索
@@ -689,12 +715,13 @@ function Main() {
               loading={loadingChargeCheck}
               pagination={paginationChargeCheck}
               data={dataChargeCheck}
-              reload={() => initChargeCheckLoadData(organizeId,chargedSearchParams.type)}
+              reload={() => initChargeCheckLoadData(organizeId, chargedSearchParams.type)}
             // rowSelect={GetChargedSelectedKey}
             />
           </TabPane>
         </Tabs>
       </Content>
+
       <Modify
         modifyVisible={modifyVisible}
         closeDrawer={closeDrawer}
@@ -706,6 +733,7 @@ function Main() {
       />
 
       <Show
+        //查看收款单
         showVisible={showVisible}
         closeShow={closeDetail}
         id={billId}
@@ -713,12 +741,12 @@ function Main() {
       />
 
       <Verify
-        //对账
+        //审核收款单
         verifyVisible={verifyVisible}
         closeVerify={closeVerify}
-        id={id}
+        id={billId}
         ifVerify={ifVerify}
-        reload={() => initChargeLoadData(organizeId,chargedSearchParams.type)}
+        reload={() => initChargeLoadData(organizeId, chargedSearchParams.type)}
       />
 
       <Submit
@@ -726,22 +754,38 @@ function Main() {
         visible={submitVisible}
         close={closeSubmit}
         ids={chargeSelectedKeys}
-        reload={() => initChargeLoadData(organizeId,chargedSearchParams.type)}
+        reload={() => initChargeLoadData(organizeId, chargedSearchParams.type)}
       />
 
       <Split
         splitVisible={splitVisible}
         closeSplit={closeSplit}
-        id={splitId}
+        id={id}
+        // id={splitId}
         reload={() => initLoadData(search, organizeId)}
       />
 
       <Transform
         transVisible={transVisible}
         closeTrans={closeTrans}
-        id={transId}
+        id={id}
+        // id={transId}
         reload={() => initLoadData(search, organizeId)}
       />
+
+      <RoomShow
+        showVisible={roomVisible}
+        closeDrawer={closeRoomDrawer}
+        unitId={organizeId}
+      />
+
+      <AddNote
+        visible={addNoteVisible}
+        closeModal={closeAddNote}
+        reload={() => initChargeLoadData(organizeId, chargedSearchParams.type)}
+        keyValue={billId}
+      />
+
     </Layout>
   );
 }

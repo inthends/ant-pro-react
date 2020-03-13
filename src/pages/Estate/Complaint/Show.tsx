@@ -210,9 +210,7 @@ const Show = (props: ShowProps) => {
         }
         style={{
           border: '1px solid rgb(235, 237, 240)'
-        }}
-
-      >
+        }} >
         {/* <Paragraph>
           {infoDetail.complaintAddress}，{infoDetail.complaintUser}，电话：<a>{infoDetail.complaintLink}</a>，在 {infoDetail.billDate} 投诉，内容如下
         </Paragraph>

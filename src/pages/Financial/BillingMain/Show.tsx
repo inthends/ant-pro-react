@@ -1,5 +1,5 @@
 //查看
-import { Table, Card, Button, Col, Drawer, Form, Row, Input, Spin } from 'antd';
+import { Tag, Divider, PageHeader, Table, Card, Button, Col, Drawer, Form, Row, Input, Spin } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { GetPageDetailListJson, GetBilling } from './Main.service';
@@ -156,6 +156,14 @@ const Show = (props: ShowProps) => {
   //   loadData(pagination, sorter);
   // };
 
+  //转换状态
+  const GetStatus = (ifVerify) => {
+    if (ifVerify)
+      return <Tag color="#61c33a">已审核</Tag>;
+    else
+      return <Tag color="#d82d2d">待审核</Tag>;
+  }
+
   const columns = [
     // {
     //   title: '计费单号',
@@ -243,7 +251,6 @@ const Show = (props: ShowProps) => {
         }
       }
     },
-
     {
       title: '周期',
       key: 'cycleValue',
@@ -261,7 +268,7 @@ const Show = (props: ShowProps) => {
     {
       title: '房屋全称',
       key: 'allName',
-      dataIndex: 'allName', 
+      dataIndex: 'allName',
       width: 320
     },
     {
@@ -276,96 +283,93 @@ const Show = (props: ShowProps) => {
       // className="offsetVerify"
       title='查看计费单'
       placement="right"
-      width={1000}
+      width={850}
       onClose={close}
       visible={visible}
-      bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
-    >
-      <Card className={styles.card} >
-        <Form layout="vertical" hideRequiredMark>
-          <Spin tip="数据处理中..." spinning={loading}>
-            <Row gutter={24}>
-              <Col span={8}>
-                <Form.Item label="计费单号">
-                  {infoDetail.billCode}
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item label="单据日期"  >
-                  {String(infoDetail.billDate).substr(0, 10)}
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item label="计费人"  >
-                  {infoDetail.createUserName}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={24}>
-              <Col span={8}>
-                <Form.Item required label="状态"   >
-                  {infoDetail.ifVerify == null || !infoDetail.ifVerify ? '未审核' : '已审核'}
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item required label="审核人"  >
-                  {infoDetail.verifyPerson ? infoDetail.verifyPerson : ''}
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item required label="审核日期"   >
-                  {infoDetail.verifyDate == null ? '' : String(infoDetail.verifyDate).substr(0, 10)}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={24}>
-                <Form.Item label="备注"  >
-                  {infoDetail.memo}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={24}>
-                <Form.Item label="审核情况"  >
-                  {infoDetail.verifyMemo}
-                </Form.Item>
-              </Col>
-            </Row>
-
-            <Row>
-              <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
-                <Search
-                  className="search-input"
-                  placeholder="请输入要查询的单元编号"
-                  style={{ width: 200 }}
-                  //onSearch={(value) => {
-                  // var params = Object.assign({}, meterSearchParams, { search: value })
-                  // setMeterSearchParams(params);
-                  //initUnitFeeLoadData(value);
-                  //}} 
-                  // onSearch={keyword => loadData({ ...search, keyword })}
-                  onSearch={value => loadData(value)}
-                />
-              </div>
-
-              <Table
-                bordered={false}
-                size="middle"
-                columns={columns}
-                dataSource={unitFeeData}
-                rowKey="unitmeterid"
-                pagination={pagination}
-                scroll={{ y: 500, x: 1500 }}
-                loading={loading}
-                // onChange={onchange} 
-                onChange={(pagination: PaginationConfig, filters, sorter) =>
-                  loadData(search, pagination, sorter)
-                }
-              />
-            </Row>
-          </Spin>
+      bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
+      <PageHeader
+        title={null}
+        subTitle={
+          <div>
+            <label style={{ color: '#4494f0', fontSize: '24px' }}>{infoDetail.billCode}</label>
+          </div>
+        }
+        style={{
+          border: '1px solid rgb(235, 237, 240)'
+        }}  >
+        <Form layout='vertical'>
+          <Row gutter={6}>
+            <Col lg={6}>
+              <Form.Item label="单据时间" >
+                {infoDetail.billDate}
+              </Form.Item>
+            </Col>
+            <Col lg={4}>
+              <Form.Item label="计费人" >
+                {infoDetail.createUserName}
+              </Form.Item>
+            </Col>
+            <Col lg={4}>
+              <Form.Item label="审核状态" >
+                {GetStatus(infoDetail.ifVerify)}
+              </Form.Item>
+            </Col>
+            <Col lg={4}>
+              <Form.Item label="审核人" >
+                {infoDetail.verifyPerson ? infoDetail.verifyPerson : ''}
+              </Form.Item>
+            </Col>
+            <Col lg={6}>
+              <Form.Item label="审核时间" >
+                {infoDetail.verifyDate  }
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={24}>
+              <Form.Item label="备注">
+                {infoDetail.memo}
+              </Form.Item>
+            </Col>
+          </Row>
         </Form>
+        <Divider dashed />
+        {infoDetail.verifyMemo}
+      </PageHeader>
+      <Divider dashed />
+      <Card className={styles.card} >
+        <Spin tip="数据处理中..." spinning={loading}>
+          <Row>
+            <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
+              <Search
+                className="search-input"
+                placeholder="请输入要查询的单元编号"
+                style={{ width: 200 }}
+                //onSearch={(value) => {
+                // var params = Object.assign({}, meterSearchParams, { search: value })
+                // setMeterSearchParams(params);
+                //initUnitFeeLoadData(value);
+                //}} 
+                // onSearch={keyword => loadData({ ...search, keyword })}
+                onSearch={value => loadData(value)}
+              />
+            </div>
+            <Table
+              bordered={false}
+              size="middle"
+              columns={columns}
+              dataSource={unitFeeData}
+              rowKey="unitmeterid"
+              pagination={pagination}
+              scroll={{ y: 500, x: 1800 }}
+              loading={loading}
+              // onChange={onchange} 
+              onChange={(pagination: PaginationConfig, filters, sorter) =>
+                loadData(search, pagination, sorter)
+              }
+            />
+          </Row>
+        </Spin>
       </Card>
       <div
         style={{

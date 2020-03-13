@@ -17,10 +17,11 @@ interface ChargeListTableProps {
   reload(): void;
   // getRowSelect(record): void;
   rowSelect(rowSelectedKeys): void;
+  showNote(id: string): void;
 }
 
 function ChargeListTable(props: ChargeListTableProps) {
-  const { onchange, loading, pagination, data, reload, rowSelect, showDetail, showVerify } = props;
+  const { onchange, loading, pagination, data, reload, rowSelect, showDetail, showVerify, showNote } = props;
   // const changePage = (pagination: PaginationConfig, filters, sorter) => {
   //   onchange(pagination, filters, sorter);
   // };
@@ -31,8 +32,9 @@ function ChargeListTable(props: ChargeListTableProps) {
     <Dropdown
       overlay={
         <Menu onClick={({ key }) => editAndDelete(key, item)}>
-          < Menu.Item key="redflush">冲红</Menu.Item>
-          < Menu.Item key="invalid">作废</Menu.Item>
+          <Menu.Item key="note">票据</Menu.Item>
+          <Menu.Item key="redflush">冲红</Menu.Item>
+          <Menu.Item key="invalid">作废</Menu.Item>
         </Menu >
       }>
       <a>
@@ -42,11 +44,13 @@ function ChargeListTable(props: ChargeListTableProps) {
   );
 
   const editAndDelete = (key: string, currentItem: any) => {
-    if (key === 'redflush') {
+    if (key === 'note') {
+      showNote(currentItem.billId);
+    }
+    else if (key === 'redflush') {
       //this.showEditModal(currentItem);  
       //check
       CheckRedFlush(currentItem.billId).then((res) => {
-
         if (res.flag) {
           Modal.confirm({
             title: '请确认',
@@ -59,7 +63,6 @@ function ChargeListTable(props: ChargeListTableProps) {
             },
           });
         } else {
-
           Modal.confirm({
             title: '请确认',
             content: `该收款单已经生成付款单${res.billCode}不允许冲红！`,
@@ -67,11 +70,8 @@ function ChargeListTable(props: ChargeListTableProps) {
               //to do
             },
           });
-
         }
-
       });
-
     }
     else if (key === 'invalid') {
       Modal.confirm({
@@ -133,6 +133,12 @@ function ChargeListTable(props: ChargeListTableProps) {
       title: '收据编号',
       dataIndex: 'payCode',
       key: 'payCode',
+      width: 80,
+    },
+    {
+      title: '发票编号',
+      dataIndex: 'invoiceCode',
+      key: 'invoiceCode',
       width: 80,
     },
     {
@@ -291,7 +297,7 @@ function ChargeListTable(props: ChargeListTableProps) {
         columns={columns}
         rowKey={record => record.billId}
         pagination={pagination}
-        scroll={{ y: 500, x: 1700 }}
+        scroll={{ y: 500, x: 1800 }}
         rowClassName={setClassName} //表格行点击高亮
         loading={loading}
         onRow={onRow}
