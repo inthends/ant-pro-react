@@ -205,8 +205,7 @@ const Verify = (props: VerifyProps) => {
       onClose={closeVerify}
       visible={verifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
-      <Spin tip="数据处理中..." spinning={loading}>
-
+      <Spin tip="数据处理中..." spinning={loading}> 
         <PageHeader
           title={null}
           subTitle={
