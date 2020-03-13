@@ -90,6 +90,7 @@ const Modify = (props: ModifyProps) => {
         // reductionAmount: ""
         // })
         // })
+        setInfoDetail({});
         setListData([]);
         // setReductionItem([]);
         // form.resetFields();

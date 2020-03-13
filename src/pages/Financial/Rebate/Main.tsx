@@ -92,8 +92,8 @@ function Main() {
   };
 
   const showDrawer = (id?) => {
-    setModifyVisible(true);
     setId(id);
+    setModifyVisible(true); 
   };
 
   //查看
