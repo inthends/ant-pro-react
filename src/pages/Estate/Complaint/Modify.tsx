@@ -1,10 +1,10 @@
 
-import { DatePicker, AutoComplete, Select, Tag, Row, Divider, PageHeader, Button, Card, Col, Drawer, Form, Input, message } from 'antd';
+import { DatePicker, AutoComplete, Select, Tag, Row, Divider, PageHeader, TreeSelect, Button, Card, Col, Drawer, Form, Input, message } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 // import { getResult } from '@/utils/networkUtils';
-import { GetEntity,GetUserByCustomerId, Handle, Approve, Project } from './Main.service';
-import { GetUserList } from '@/services/commonItem';
+import { GetEntity, GetUserByCustomerId, Handle, Approve, Project } from './Main.service';
+import { GetRoomUser, GetOrgTreeSimple, GetUserList, GetAsynChildBuildingsForRoom } from '@/services/commonItem';
 // import { TreeEntity } from '@/model/models';
 import styles from './style.less';
 const { Option } = Select;
@@ -20,7 +20,7 @@ interface ModifyProps {
 }
 
 const Modify = (props: ModifyProps) => {
-  const {showLink, modifyVisible, id, closeDrawer, form, reload } = props;
+  const { showLink, modifyVisible, id, closeDrawer, form, reload } = props;
   const { getFieldDecorator } = form;
   const title = id === undefined ? '添加投诉单' : '修改投诉单';
   const [infoDetail, setInfoDetail] = useState<any>({});
@@ -39,9 +39,23 @@ const Modify = (props: ModifyProps) => {
   //   }); 
   // }, []);
 
+  // useEffect(() => {
+  //   //获取房产树 
+  //   GetOrgTreeSimple().then((res: any[]) => {
+  //     setTreeData(res || []);
+  //   });
+  // }, []);
+
+  const [treeData, setTreeData] = useState<any[]>([]);
+
   // 打开抽屉时初始化 
   useEffect(() => {
     if (modifyVisible) {
+      //默认加载机构
+      GetOrgTreeSimple().then((res: any[]) => {
+        setTreeData(res || []);
+      });
+
       if (id) {
         GetEntity(id).then(info => {
           //赋值
@@ -201,8 +215,7 @@ const Modify = (props: ModifyProps) => {
           form.setFieldsValue({ byComplaintUserId: res.custId });
           form.setFieldsValue({ byComplaintRoomAllName: res.contactAddress });
         }
-      });
-
+      }); 
     } else {
       form.setFieldsValue({ byComplaintUserName: '' });
       form.setFieldsValue({ byComplaintUerTel: '' });
@@ -227,7 +240,6 @@ const Modify = (props: ModifyProps) => {
     }
   };
 
-
   //实际处理人
   const onHandleUserSelect = (value, option) => {
     if (value) {
@@ -240,6 +252,13 @@ const Modify = (props: ModifyProps) => {
 
   //选择投诉对象类型
   const onSelectType = (value, option) => {
+    if (value == "员工") {
+      setTreeData([]);
+    } else {
+      GetOrgTreeSimple().then((res: any[]) => {
+        setTreeData(res || []);
+      });
+    }
     //先清空
     form.setFieldsValue({ byComplaintUserName: '' });
     form.setFieldsValue({ byComplaintUerTel: '' });
@@ -248,6 +267,50 @@ const Modify = (props: ModifyProps) => {
     GetUserList('', value).then(res => {
       setUserSource(res || []);
     })
+  };
+
+
+  //异步加载房产
+  const onLoadData = treeNode =>
+    new Promise<any>(resolve => {
+      if (treeNode.props.children && treeNode.props.children.length > 0 && treeNode.props.type != 'D') {
+        resolve();
+        return;
+      }
+      setTimeout(() => {
+        GetAsynChildBuildingsForRoom(treeNode.props.eventKey, treeNode.props.type).then((res: any[]) => {
+          // treeNode.props.children = res || [];
+          let newtree = treeData.concat(res);
+          // setTreeData([...treeData]);
+          setTreeData(newtree);
+        });
+        resolve();
+      }, 50);
+    });
+
+
+  const onChange = (value, label, extr) => {
+    //加载房间联系人以及联系电话 
+    if (value) {
+      GetRoomUser(value).then((res: any) => {
+        //setRoomUser(res || null); 
+        form.setFieldsValue({ byComplaintRoomAllName: extr.triggerNode.props.allname });
+        if (res != null) {
+          form.setFieldsValue({ byComplaintUserName: res.contactName });
+          form.setFieldsValue({ byComplaintUerTel: res.contactPhone });
+          form.setFieldsValue({ byComplaintUserId: res.custId });
+        } else {
+          form.setFieldsValue({ byComplaintUserName: '' });
+          form.setFieldsValue({ byComplaintUerTel: '' });
+          form.setFieldsValue({ byComplaintUserId: '' });
+        }
+      });
+    } else {
+      form.setFieldsValue({ byComplaintRoomAllName: '' });
+      form.setFieldsValue({ byComplaintUserName: '' });
+      form.setFieldsValue({ byComplaintUerTel: '' });
+      form.setFieldsValue({ byComplaintUserId: '' });
+    }
   };
 
   return (
@@ -303,12 +366,12 @@ const Modify = (props: ModifyProps) => {
               <Form.Item label="投诉时间" >
                 {infoDetail.billDate}
               </Form.Item>
-            </Col> 
+            </Col>
             <Col lg={5}>
               <Form.Item label="关联单号" >
                 <a onClick={() => showLink(serverId)}>{serverCode}</a>
               </Form.Item>
-            </Col> 
+            </Col>
           </Row>
         </Form>
         <Divider dashed />
@@ -335,32 +398,55 @@ const Modify = (props: ModifyProps) => {
                   </Form.Item>
                 </Col>
                 <Col lg={6}>
-                  <Form.Item label="投诉对象" required>
-                    {getFieldDecorator('byComplaintUserName', {
-                      initialValue: infoDetail.byComplaintUserName,
-                      rules: [{ required: true, message: '请输入投诉对象' }],
-                    })(
-                      // <TreeSelect
-                      //   placeholder="请选择投诉对象"
-                      //   allowClear
-                      //   dropdownStyle={{ maxHeight: 300 }}
-                      //   treeData={treeData}
-                      //   treeDataSimpleMode={true} /> 
-                      <AutoComplete
-                        dataSource={userList}
-                        onSearch={handleSearch}
-                        placeholder="请输入投诉对象"
-                        onSelect={onByComplaintUserSelect}
-                      />
-                    )}
 
-                    {getFieldDecorator('byComplaintUserId', {
-                      initialValue: infoDetail.byComplaintUserId,
-                    })(
-                      <input type='hidden' />
-                    )}
+                  {form.getFieldValue('byComplaintType') == "员工" ?
+                    <Form.Item label="投诉对象" required>
+                      {getFieldDecorator('byComplaintUserName', {
+                        initialValue: infoDetail.byComplaintUserName,
+                        rules: [{ required: true, message: '请输入投诉对象' }],
+                      })(
+                        // <TreeSelect
+                        //   placeholder="请选择投诉对象"
+                        //   allowClear
+                        //   dropdownStyle={{ maxHeight: 300 }}
+                        //   treeData={treeData}
+                        //   treeDataSimpleMode={true} /> 
+                        <AutoComplete
+                          dataSource={userList}
+                          onSearch={handleSearch}
+                          placeholder="请输入投诉对象"
+                          onSelect={onByComplaintUserSelect} />
+                      )}
+                      {getFieldDecorator('byComplaintUserId', {
+                        initialValue: infoDetail.byComplaintUserId,
+                      })(
+                        <input type='hidden' />
+                      )}
+                    </Form.Item> :
 
-                  </Form.Item>
+                    <Form.Item label="投诉对象" required>
+                      {getFieldDecorator('byComplaintUserName', {
+                        initialValue: infoDetail.byComplaintUserName,
+                        rules: [{ required: true, message: '请选择投诉对象' }],
+                      })(
+                        <TreeSelect
+                          placeholder="请选择投诉对象"
+                          allowClear
+                          dropdownStyle={{ maxHeight: 300 }}
+                          treeData={treeData}
+                          loadData={onLoadData}
+                          onChange={onChange}
+                          treeDataSimpleMode={true} >
+                        </TreeSelect>
+                      )}
+                      {getFieldDecorator('byComplaintUserId', {
+                        initialValue: infoDetail.byComplaintUserId,
+                      })(
+                        <input type='hidden' />
+                      )}
+                    </Form.Item>
+
+                  }
                 </Col>
                 <Col lg={6}>
                   <Form.Item label="联系电话" required>
@@ -399,16 +485,13 @@ const Modify = (props: ModifyProps) => {
                       initialValue: infoDetail.handleCharger,
                       rules: [{ required: true, message: '请选择处理负责人' }],
                     })(
-
-                      // <Input placeholder="请选择处理负责人" />
-
+                      // <Input placeholder="请选择处理负责人" /> 
                       <AutoComplete
                         dataSource={userList}
                         onSearch={handleChargerSearch}
                         placeholder="请选择处理负责人"
                         onSelect={onHandleChargerSelect}
                       />
-
                     )}
                     {getFieldDecorator('handleChargerId', {
                       initialValue: infoDetail.handleChargerId
@@ -466,13 +549,11 @@ const Modify = (props: ModifyProps) => {
                   <Col lg={6}>
                     <Form.Item label="联系电话"  >
                       {infoDetail.byComplaintUerTel}
-
                     </Form.Item>
                   </Col>
                   <Col lg={6}>
                     <Form.Item label="地址"  >
                       {infoDetail.byComplaintRoomAllName}
-
                     </Form.Item>
                   </Col>
                 </Row>
@@ -490,7 +571,6 @@ const Modify = (props: ModifyProps) => {
                   <Col lg={6}>
                     <Form.Item label="联系电话"  >
                       {infoDetail.handleChargeTel}
-
                     </Form.Item>
                   </Col>
                   <Col lg={6}>

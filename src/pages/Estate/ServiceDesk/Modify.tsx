@@ -2,8 +2,8 @@
 import { Spin, Upload, Modal, Menu, Dropdown, Icon, Tabs, Select, Button, Card, Col, Drawer, Form, Input, message, Row, TreeSelect } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetFilesData, RemoveFile, GetRoomUser, SaveForm, ChangeToRepair, ChangeToComplaint } from './Main.service';
-import { GetOrgTreeSimple, GetAsynChildBuildingsForDesk } from '@/services/commonItem';
+import { GetFilesData, RemoveFile, SaveForm, ChangeToRepair, ChangeToComplaint } from './Main.service';
+import { GetRoomUser, GetOrgTreeSimple, GetAsynChildBuildingsForServerDesk } from '@/services/commonItem';
 import styles from './style.less';
 import CommentBox from './CommentBox';
 import AddMemo from './AddMemo';
@@ -48,7 +48,7 @@ const Modify = (props: ModifyProps) => {
   }, []);
 
   // 打开抽屉时初始化
-  useEffect(() => { 
+  useEffect(() => {
     if (modifyVisible) {
       setLoading(true);
       if (data) {
@@ -66,7 +66,7 @@ const Modify = (props: ModifyProps) => {
         form.resetFields();
         setFileList([]);
         setLoading(false);
-      } 
+      }
     } else {
       form.resetFields();
     }
@@ -113,6 +113,10 @@ const Modify = (props: ModifyProps) => {
           form.setFieldsValue({ contactName: res.contactName });
           form.setFieldsValue({ contactPhone: res.contactPhone });
           form.setFieldsValue({ contactId: res.custId });
+        } else {
+          form.setFieldsValue({ contactName: '' });
+          form.setFieldsValue({ contactPhone: '' });
+          form.setFieldsValue({ contactId: '' }); 
         }
       });
     } else {
@@ -167,7 +171,7 @@ const Modify = (props: ModifyProps) => {
         return;
       }
       setTimeout(() => {
-        GetAsynChildBuildingsForDesk(treeNode.props.eventKey, treeNode.props.type).then((res: any[]) => {
+        GetAsynChildBuildingsForServerDesk(treeNode.props.eventKey, treeNode.props.type).then((res: any[]) => {
           // treeNode.props.children = res || [];
           let newtree = treeData.concat(res);
           // setTreeData([...treeData]);
@@ -176,7 +180,6 @@ const Modify = (props: ModifyProps) => {
         resolve();
       }, 50);
     });
-
 
   const menu = (
     <Menu onClick={handleMenuClick}>
@@ -276,7 +279,6 @@ const Modify = (props: ModifyProps) => {
   //   });
   // };
 
-
   return (
     <Drawer
       title={title}
@@ -287,7 +289,7 @@ const Modify = (props: ModifyProps) => {
       destroyOnClose={true}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
-      <Spin tip="数据处理中..." spinning={loading}> 
+      <Spin tip="数据处理中..." spinning={loading}>
         {/* {modifyVisible ? ( */}
         <Tabs defaultActiveKey="1" >
           <TabPane tab="基础信息" key="1">
@@ -513,7 +515,7 @@ const Modify = (props: ModifyProps) => {
                       <Form.Item label="单据来源"  >
                         {infoDetail.source}
                       </Form.Item>
-                    </Col> 
+                    </Col>
                     <Col lg={5}>
                       <Form.Item label="单据时间">
                         {infoDetail.billDate}
@@ -540,7 +542,7 @@ const Modify = (props: ModifyProps) => {
                       <Form.Item label="业务类型">
                         {infoDetail.billType}
                       </Form.Item>
-                    </Col> 
+                    </Col>
                     <Col lg={5}>
                       <Form.Item label="位置编号">
                         {infoDetail.roomId}
@@ -586,7 +588,7 @@ const Modify = (props: ModifyProps) => {
                         {infoDetail.contents}
                       </Form.Item>
                     </Col>
-                  </Row> 
+                  </Row>
                   <Row gutter={24}>
                     <Col lg={24}>
                       <div className="clearfix">
@@ -608,7 +610,7 @@ const Modify = (props: ModifyProps) => {
                       </div>
                     </Col>
                   </Row>
-                </Card>)  }
+                </Card>)}
 
               {
                 // infoDetail.status == 3 ? (
@@ -740,7 +742,7 @@ const Modify = (props: ModifyProps) => {
         {data === undefined ? (
           <Button onClick={save} type="primary">
             保存
-          </Button>) : null} 
+          </Button>) : null}
         {(infoDetail.status && infoDetail.status == 1) ? (
           <span>
             <Dropdown overlay={menu} >

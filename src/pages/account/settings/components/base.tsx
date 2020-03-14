@@ -284,7 +284,7 @@ class BaseView extends Component<BaseViewProps> {
               })(<PhoneView />)}
             </FormItem> */}
             <Button type="primary" onClick={this.handlerSubmit}>
-              修改密码
+              保存
               {/* <FormattedMessage id="account-settings.basic.update" defaultMessage="Update Information" /> */}
             </Button>
           </Form>

@@ -463,7 +463,7 @@ const MeterModify = (props: MeterModifyProps) => {
                 <Col span={4}>
                   <Form.Item required label="是否停用">
                     {getFieldDecorator('isStop', {
-                      initialValue: infoDetail.isStop
+                      initialValue: infoDetail.isStop ? true : false,
                     })(
                       <Checkbox checked={form.getFieldValue('isStop')} />
                     )}

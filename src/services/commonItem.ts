@@ -95,6 +95,13 @@ export function GetOrgTreeSimple(): Promise<any[]> {
     .then(getResult as any);
 }
 
+// 获取房间住户信息
+export function GetRoomUser(keyValue): Promise<any> {
+  return request
+    .get(process.env.basePath + `/Common/GetRoomUser?keyValue=${keyValue}`)
+    .then(getResult as any);
+}
+
 //获取下级
 export function GetAsynChildBuildingsSimple(pstructid, type): Promise<any[]> {
   return request
@@ -103,9 +110,16 @@ export function GetAsynChildBuildingsSimple(pstructid, type): Promise<any[]> {
 }
 
 //获取下级服务单使用
-export function GetAsynChildBuildingsForDesk(pstructid, type): Promise<any[]> {
+export function GetAsynChildBuildingsForServerDesk(pstructid, type): Promise<any[]> {
   return request
-    .get(process.env.basePath + `/Common/GetAsynChildBuildingsForDesk?parentId=${pstructid}&type=${type}`)
+    .get(process.env.basePath + `/Common/GetAsynChildBuildingsForServerDesk?parentId=${pstructid}&type=${type}`)
+    .then(getResult as any);
+}
+
+//异步获取下级房产，选择房间使用
+export function GetAsynChildBuildingsForRoom(pstructid, type): Promise<any[]> {
+  return request
+    .get(process.env.basePath + `/Common/GetAsynChildBuildingsForRoom?parentId=${pstructid}&type=${type}`)
     .then(getResult as any);
 }
 

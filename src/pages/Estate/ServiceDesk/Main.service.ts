@@ -56,13 +56,6 @@ export function RemoveFile(keyValue): Promise<any> {
     .then(getResult as any);
 }
 
-// 获取房间住户信息
-export function GetRoomUser(keyValue): Promise<any> {
-  return request
-    .get(process.env.basePath + `/ServiceDesk/GetRoomUser?keyValue=${keyValue}`)
-    .then(getResult as any);
-}
-
 // 转报修
 export function ChangeToRepair(data): Promise<any> { 
   return request
