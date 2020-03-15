@@ -9,7 +9,7 @@ import moment from 'moment';
 import styles from './style.less';
 const { Option } = Select;
 
-interface ModifyProps { 
+interface ModifyProps {
   closeDrawer(): void;
   reload(): void;
   modifyVisible: boolean;
@@ -21,7 +21,7 @@ interface ModifyProps {
 }
 
 const Modify = (props: ModifyProps) => {
-  const { modifyVisible, closeDrawer, form, roomId, id, reload, edit, adminOrgId } = props; 
+  const { modifyVisible, closeDrawer, form, roomId, id, reload, edit, adminOrgId } = props;
   const title = id == "" ? '新增费用' : "修改费用";
   const { getFieldDecorator } = form;
   const [infoDetail, setInfoDetail] = useState<any>({});
@@ -191,7 +191,7 @@ const Modify = (props: ModifyProps) => {
     form.validateFields((errors, values) => {
       // if (infoDetail.feeItemId == null || infoDetail.feeItemId == '') {
       // }
-      if (!errors) { 
+      if (!errors) {
         var guid = getGuid();
         var unit = {
           BillId: id != null && id != "" ? infoDetail.billId : guid,
@@ -336,7 +336,7 @@ const Modify = (props: ModifyProps) => {
       destroyOnClose={true}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 50px)' }}>
       <Spin tip="数据处理中..." spinning={loading}>
-        <Row gutter={8}> 
+        <Row gutter={8}>
           {
             id != '' ?
               null :
@@ -524,7 +524,7 @@ const Modify = (props: ModifyProps) => {
                         // initialValue: infoDetail.price == null || infoDetail.quantity == null || infoDetail.number == null ? 0 : infoDetail.price * infoDetail.quantity * infoDetail.number,
                         rules: [{ required: true, message: '请输入金额' }]
                       })(
-                        <InputNumber precision={2} readOnly style={{ width: '100%' }} ></InputNumber>
+                        <InputNumber precision={2} style={{ width: '100%' }} ></InputNumber>
                       )}
                     </Form.Item>
                   </Col>
@@ -548,7 +548,6 @@ const Modify = (props: ModifyProps) => {
                       )}
                     </Form.Item>
                   </Col>
-
                   <Col span={12}>
                     <Form.Item label="周期单位" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
                       {getFieldDecorator('cycleType', {
@@ -606,8 +605,7 @@ const Modify = (props: ModifyProps) => {
                   </Col>
                 </Row>
                 <Row>
-                  <Col span={12}>
-
+                  <Col span={12}> 
                     {/* <Form.Item label="应收期间" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
                     {getFieldDecorator('period', {
                       initialValue: infoDetail.period == null ? moment(new Date()) : moment(infoDetail.period),
@@ -615,14 +613,12 @@ const Modify = (props: ModifyProps) => {
                     })(
                       <DatePicker disabled={true} style={{ width: '100%' }} />
                     )}
-                    </Form.Item> */}
-
+                    </Form.Item> */} 
                     {getFieldDecorator('period', {
                       initialValue: infoDetail.period,
                     })(
                       <input type='hidden' />
-                    )}
-
+                    )} 
                     <Form.Item label="收款截止日" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
                       {getFieldDecorator('deadline', {
                         initialValue: infoDetail.deadline == null ? moment(new Date()) : moment(infoDetail.deadline),
