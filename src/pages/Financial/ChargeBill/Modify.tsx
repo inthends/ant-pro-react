@@ -524,7 +524,7 @@ const Modify = (props: ModifyProps) => {
                         // initialValue: infoDetail.price == null || infoDetail.quantity == null || infoDetail.number == null ? 0 : infoDetail.price * infoDetail.quantity * infoDetail.number,
                         rules: [{ required: true, message: '请输入金额' }]
                       })(
-                        <InputNumber precision={2} style={{ width: '100%' }} ></InputNumber>
+                        <InputNumber precision={2} style={{ width: '100%' }}></InputNumber>
                       )}
                     </Form.Item>
                   </Col>
