@@ -116,7 +116,7 @@ const Modify = (props: ModifyProps) => {
         } else {
           form.setFieldsValue({ contactName: '' });
           form.setFieldsValue({ contactPhone: '' });
-          form.setFieldsValue({ contactId: '' }); 
+          form.setFieldsValue({ contactId: '' });
         }
       });
     } else {
@@ -203,7 +203,7 @@ const Modify = (props: ModifyProps) => {
   const uploadButton = (
     <div>
       <Icon type="plus" />
-      <div className="ant-upload-text">点击上传图片</div>
+      <div className="ant-upload-text">上传图片(5张)</div>
     </div>
   );
   const handleCancel = () => setPreviewVisible(false);
@@ -369,7 +369,7 @@ const Modify = (props: ModifyProps) => {
                   </Row>
                   {form.getFieldValue('billType') == '报修' ?
                     <Row gutter={24}>
-                      <Col lg={6}>
+                      <Col lg={8}>
                         <Form.Item label="维修区域">
                           {getFieldDecorator('repairArea', {
                             initialValue: infoDetail.repairArea == undefined ? '客户区域' : infoDetail.repairArea
@@ -381,7 +381,7 @@ const Modify = (props: ModifyProps) => {
                           )}
                         </Form.Item>
                       </Col>
-                      <Col lg={4}>
+                      <Col lg={8}>
                         <Form.Item label="是否有偿">
                           {getFieldDecorator('isPaid', {
                             initialValue: infoDetail.isPaid == undefined ? '否' : infoDetail.isPaid
@@ -394,7 +394,6 @@ const Modify = (props: ModifyProps) => {
                         </Form.Item>
                       </Col>
                     </Row> : null}
-
                   <Row gutter={24}>
                     <Col lg={8}>
                       {/* <Form.Item label="联系位置" required>
@@ -502,9 +501,11 @@ const Modify = (props: ModifyProps) => {
                       </div>
                     </Col>
                   </Row>
+
+                  
                 </Card>
               ) :
-                (<Card className={infoDetail.status > 2 ? styles.card2 : styles.card} title="基础信息" >
+                (<Card className={infoDetail.status > 1 ? styles.card2 : styles.card} title="基础信息" >
                   <Row gutter={24}>
                     <Col lg={6}>
                       <Form.Item label="服务单号">
@@ -598,6 +599,7 @@ const Modify = (props: ModifyProps) => {
                           listType="picture-card"
                           fileList={fileList}
                           onPreview={handlePreview}
+                          disabled={true}
                         // onChange={handleChange}
                         // onRemove={handleRemove}
                         >
@@ -710,7 +712,6 @@ const Modify = (props: ModifyProps) => {
               />
             </TabPane>
           ) : null}
-
         </Tabs>
         {/* ) : null} */}
 

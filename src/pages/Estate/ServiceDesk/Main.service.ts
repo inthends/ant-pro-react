@@ -34,7 +34,6 @@ export function GetFilesData(keyValue): Promise<any> {
     .then(getResult as any);
 }
 
-
 // 保存
 export function SaveForm(data): Promise<any> { 
   return request

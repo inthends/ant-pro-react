@@ -89,3 +89,16 @@ export function GetEntity(keyValue): Promise<any> {
   return request.get(process.env.basePath + `/Repair/GetEntity?keyValue=${keyValue}`).then(getResult as any);
 }
 
+//获取图片
+export function GetFilesData(keyValue): Promise<any> {
+  return request
+    .get(process.env.basePath + `/Repair/GetFilesData?keyValue=${keyValue}`)
+    .then(getResult as any);
+}
+
+//删除附件
+export function RemoveFile(keyValue): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Repair/RemoveFile?keyValue=${keyValue}`, {})
+    .then(getResult as any);
+}

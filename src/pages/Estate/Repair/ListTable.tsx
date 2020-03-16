@@ -67,7 +67,7 @@ function ListTable(props: ListTableProps) {
           case 1:
             return <Tag color="#e4aa5b">待派单</Tag>
           case 2:
-            return <Tag color="#19d54e">待接单</Tag>
+            return <Tag color="#e48f27">待接单</Tag>
           case 3:
             return <Tag color="#e4aa5b">待开工</Tag>
           case 4:
@@ -79,7 +79,7 @@ function ListTable(props: ListTableProps) {
           case 6:
             return <Tag color="#29cc63">待审核</Tag>
           case 7:
-            return <Tag color="#e48f27">已审核</Tag>
+            return <Tag color="#19d54e">已审核</Tag>
           case -1:
             return <Tag color="#d82d2d">已作废</Tag>
           default:
@@ -120,7 +120,7 @@ function ListTable(props: ListTableProps) {
       width: 95,
       fixed: 'right',
       render: (text, record) => {
-        if (record.status != 5 && record.status != 8) {
+        if (record.status != 7) {
           return [
             // <Button
             //   type="primary"
@@ -139,12 +139,7 @@ function ListTable(props: ListTableProps) {
             </span>
           ];
         } else {
-          return [<span>
-            <a onClick={() => modify(record)} key="modify">查看</a>
-            {/* <Divider type="vertical" />
-            <a onClick={() => doInvalid(record)} key="invalid">作废</a> */}
-          </span>
-          ];
+          return [<a onClick={() => modify(record.id)} key="modify">查看</a>];
         }
       },
     },

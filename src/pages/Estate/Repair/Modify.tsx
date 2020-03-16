@@ -1,8 +1,8 @@
 
-import { Icon, DatePicker, AutoComplete, Select, Tag, Divider, PageHeader, Button, Card, Col, Drawer, Form, Input, message, Row } from 'antd';
+import { Modal, Upload, Icon, DatePicker, AutoComplete, Select, Tag, Divider, PageHeader, Button, Card, Col, Drawer, Form, Input, message, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { Dispatch, Change, Receive, Start, Handle, Check, Approve, GetEntity } from './Main.service';
+import { GetFilesData, RemoveFile, Dispatch, Change, Receive, Start, Handle, Check, Approve, GetEntity } from './Main.service';
 import { GetUserList, getCommonItems } from '@/services/commonItem';
 import moment from 'moment';
 import styles from './style.less';
@@ -46,7 +46,7 @@ const Modify = (props: ModifyProps) => {
       case 1:
         return <Tag color="#e4aa5b">待派单</Tag>;
       case 2:
-        return <Tag color="#19d54e">待接单</Tag>;
+        return <Tag color="#e48f27">待接单</Tag>;
       case 3:
         return <Tag color="#e4aa5b">待开工</Tag>;
       case 4:
@@ -58,7 +58,7 @@ const Modify = (props: ModifyProps) => {
       case 6:
         return <Tag color="#29cc63">待审核</Tag>;
       case 7:
-        return <Tag color="#e48f27">已审核</Tag>;
+        return <Tag color="#19d54e">已审核</Tag>;
       case -1:
         return <Tag color="#c31818">已作废</Tag>;
       default:
@@ -221,7 +221,7 @@ const Modify = (props: ModifyProps) => {
   //     //disabledSeconds: () => [55, 56],
   //   };
   // }
- 
+
   const [feeId, setFeeId] = useState<string>('');//当前费用Id
   const [organizeId, setOrganizeId] = useState<string>('');//左侧树选择的id
   // const [modifyEdit, setModifyEdit] = useState<boolean>(true);
@@ -252,6 +252,11 @@ const Modify = (props: ModifyProps) => {
           setServerId(info.serverId);
         })
 
+        //图片
+        GetFilesData(id).then(res => {
+          setFileList(res || []);
+        });
+
       } else {
         setInfoDetail({});
         form.resetFields();
@@ -260,6 +265,64 @@ const Modify = (props: ModifyProps) => {
       form.resetFields();
     }
   }, [modifyVisible]);
+
+
+  //图片上传
+  const [previewVisible, setPreviewVisible] = useState<boolean>(false);
+  const [fileList, setFileList] = useState<any[]>([]);
+  const [previewImage, setPreviewImage] = useState<string>('');
+
+  const getBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
+  };
+
+  const uploadButton = (
+    <div>
+      <Icon type="plus" />
+      <div className="ant-upload-text">上传图片(5张)</div>
+    </div>
+  );
+  const handleCancel = () => setPreviewVisible(false);
+  const handlePreview = async file => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewVisible(true);
+  };
+
+  //重新设置state
+  const handleChange = ({ fileList }) => setFileList([...fileList]);
+  //等价上面的
+  // const handleChange = (info) => {
+  //   console.log(info);
+  //   //把fileList拿出来
+  //   let { fileList } = info;
+  //   const status = info.file.status;
+  //   if (status !== 'uploading') {
+  //     console.log(info.file, info.fileList);
+  //   }
+  //   if (status === 'done') {
+  //     message.success(`${info.file.name} file uploaded successfully.`);
+  //   } else if (status === 'error') {
+  //     message.error(`${info.file.name} file upload failed.`);
+  //   } 
+  //   //重新设置state
+  //   setFileList([...fileList]);
+  // } 
+
+  const handleRemove = (file) => {
+    const fileid = file.fileid || file.response.fileid;
+    RemoveFile(fileid).then(res => {
+    });
+  };
+  //图片上传结束
+
 
   return (
     <Drawer
@@ -397,30 +460,28 @@ const Modify = (props: ModifyProps) => {
               </Card>) : (
                 <Card title="派单" className={styles.card} hoverable>
                   <Row gutter={24}>
-                    <Col lg={5}>
+                    <Col lg={4}>
                       <Form.Item label="维修专业">
                         {infoDetail.repairMajor}
                       </Form.Item>
                     </Col>
-
-                    <Col lg={4}>
+                    <Col lg={5}>
                       <Form.Item label="指派给">
                         {infoDetail.receiverName}
                       </Form.Item>
                     </Col>
-
-                    <Col lg={3}>
+                    <Col lg={5}>
                       <Form.Item label="派单人" >
                         {infoDetail.senderName}
                       </Form.Item>
                     </Col>
-                    <Col lg={6}>
+                    <Col lg={5}>
                       <Form.Item label="派单时间"  >
                         {infoDetail.sendDate}
                       </Form.Item>
                     </Col>
 
-                    <Col lg={6}>
+                    <Col lg={5}>
                       <Form.Item label="接单时间">
                         {infoDetail.receiverDate}
                       </Form.Item>
@@ -429,7 +490,7 @@ const Modify = (props: ModifyProps) => {
                 </Card>
               )}
             {infoDetail.status == 3 ? (
-              <Card title="开工" className={styles.card} hoverable>
+              <Card title="开工" className={styles.card2} hoverable>
                 <Row gutter={24}>
                   <Col lg={7}>
                     <Form.Item label="开工时间" required>
@@ -448,16 +509,37 @@ const Modify = (props: ModifyProps) => {
                     </Form.Item>
                   </Col>
                 </Row>
+
+                <Row gutter={24}>
+                  <Col lg={24}>
+                    <div className="clearfix">
+                      <Upload
+                        accept='image/*'
+                        action={process.env.basePath + '/Repair/Upload?keyValue=' + id}
+                        listType="picture-card"
+                        fileList={fileList}
+                        onPreview={handlePreview}
+                        onChange={handleChange}
+                        onRemove={handleRemove} >
+                        {fileList.length >= 5 ? null : uploadButton}
+                      </Upload>
+                      <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
+                        <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                      </Modal>
+                    </div>
+                  </Col>
+                </Row>
+
               </Card>
             ) : infoDetail.status > 3 ? (
               <Card title="开工" className={styles.card} hoverable>
                 <Row gutter={24}>
-                  <Col lg={6}>
+                  <Col lg={5}>
                     <Form.Item label="开工时间"  >
                       {infoDetail.beginDate}
                     </Form.Item>
                   </Col>
-                  <Col lg={18}>
+                  <Col lg={19}>
                     <Form.Item label="故障判断">
                       {infoDetail.faultJudgement}
                     </Form.Item>
@@ -467,7 +549,7 @@ const Modify = (props: ModifyProps) => {
             ) : null}
 
             {infoDetail.status == 4 ? (
-              <Card title="完成情况" className={styles.card} hoverable>
+              <Card title="完成情况" className={styles.card2} hoverable>
                 <Row gutter={24}>
                   <Col lg={7}>
                     <Form.Item label="完成时间" required>
@@ -540,11 +622,37 @@ const Modify = (props: ModifyProps) => {
                     </Form.Item>
                   </Col>
                 </Row>
+
+                <Row gutter={24}>
+                  <Col lg={24}>
+                    <div className="clearfix">
+                      <Upload
+                        accept='image/*'
+                        action={process.env.basePath + '/Repair/Upload?keyValue=' + id}
+                        listType="picture-card"
+                        fileList={fileList}
+                        onPreview={handlePreview}
+                        onChange={handleChange}
+                        onRemove={handleRemove} >
+                        {fileList.length >= 5 ? null : uploadButton}
+                      </Upload>
+                      <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
+                        <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                      </Modal>
+                    </div>
+                  </Col>
+                </Row>
+
               </Card>
             ) : infoDetail.status > 4 ?
-                (<Card title="完成情况" className={infoDetail.status == 5 ? styles.card2 : styles.card} >
+                (<Card title="完成情况" className={infoDetail.status > 5 && infoDetail.repairArea == '客户区域' ? styles.card2 : styles.card} >
                   <Row gutter={24}>
-                    <Col lg={6}>
+                    <Col lg={5}>
+                      <Form.Item label="完成时间">
+                        {infoDetail.endDate}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={4}>
                       <Form.Item label="用时(分钟)">
                         {infoDetail.useTime}
                       </Form.Item>
@@ -559,32 +667,44 @@ const Modify = (props: ModifyProps) => {
                     {infoDetail.stuffFee}
                   </Form.Item>
                 </Col> */}
-                    <Col lg={6}>
+                    <Col lg={4}>
                       <Form.Item label="费用合计">
                         {infoDetail.totalFee}
                       </Form.Item>
                     </Col>
-                  </Row>
-                  <Row gutter={24}>
-                    <Col lg={6}>
-                      <Form.Item label="完成时间">
-                        {infoDetail.endDate}
-                      </Form.Item>
-                    </Col>
-                    <Col lg={6}>
+                    <Col lg={7}>
                       <Form.Item label="完成情况" >
                         {infoDetail.achieved}
                       </Form.Item>
                     </Col>
-                    <Col lg={6}>
+                  </Row>
+                  <Row gutter={24}>
+                    <Col lg={5}>
                       <Form.Item label="现场评价"  >
                         {infoDetail.fieldEvaluation}
                       </Form.Item>
                     </Col>
-                    <Col lg={6}>
+                    <Col lg={19}>
                       <Form.Item label="业主意见"  >
                         {infoDetail.ownerOpinion}
                       </Form.Item>
+                    </Col>
+                  </Row>
+                  <Row gutter={24}>
+                    <Col lg={24}>
+                      <div className="clearfix">
+                        <Upload
+                          accept='image/*'
+                          action={process.env.basePath + '/Repair/Upload?keyValue=' + id}
+                          listType="picture-card"
+                          fileList={fileList}
+                          onPreview={handlePreview}
+                          disabled={true}>
+                        </Upload>
+                        <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
+                          <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                        </Modal>
+                      </div>
                     </Col>
                   </Row>
                 </Card>) : null}
@@ -675,7 +795,7 @@ const Modify = (props: ModifyProps) => {
               </Row>
             </Card>) : null} */}
 
-            {infoDetail.status == 6 ? (
+            {infoDetail.status == 5 ? (
               <Card title="检验情况" className={styles.card2} hoverable>
                 <Row gutter={24}>
                   <Col lg={7}>
@@ -723,8 +843,8 @@ const Modify = (props: ModifyProps) => {
                   </Col>
                 </Row>
               </Card>
-            ) : (infoDetail.status > 7 && infoDetail.repairArea == '公共区域') ? (
-              <Card title="检验情况" className={styles.card} hoverable >
+            ) : (infoDetail.status > 5 && infoDetail.repairArea == '公共区域') ? (
+              <Card title="检验情况" className={styles.card2} hoverable >
                 <Row gutter={24}>
                   <Col lg={5}>
                     <Form.Item label="检验时间" >
