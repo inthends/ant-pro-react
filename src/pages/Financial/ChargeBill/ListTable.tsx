@@ -254,6 +254,17 @@ function ListTable(props: ListTableProps) {
               //直接收款
               Charge(info).then(billId => {
                 message.success('收款成功');
+                //重置收款页面信息
+
+                form.setFieldsValue({ payAmountA: 0 });
+                form.setFieldsValue({ payAmountB: 0 });
+                form.setFieldsValue({ payAmountC: 0 });
+
+                form.setFieldsValue({ payCode: '' });
+                form.setFieldsValue({ invoiceCode: '' });
+                form.setFieldsValue({ accountBank: null });
+                form.setFieldsValue({ memo: '' });
+
                 reload();
                 //弹出查看页面
                 showDetail(billId);
