@@ -54,7 +54,7 @@ function ChargeCheckTable(props: ChargeCheckTableProps) {
       width: 80,
     },
     {
-      title: '房屋名称',
+      title: '房号',
       dataIndex: 'unitName',
       key: 'unitName',
       width: 80,
@@ -64,7 +64,7 @@ function ChargeCheckTable(props: ChargeCheckTableProps) {
       title: '商户订单号',
       dataIndex: 'tradeNo',
       key: 'tradeNo',
-      width: 150,
+      width: 230,
       sorter: true,
     },
 
@@ -72,7 +72,7 @@ function ChargeCheckTable(props: ChargeCheckTableProps) {
       title: '平台订单号',
       dataIndex: 'transactionId',
       key: 'transactionId',
-      width: 250,
+      width: 260,
       sorter: true,
     },
 
@@ -122,7 +122,7 @@ function ChargeCheckTable(props: ChargeCheckTableProps) {
       title: '收款方式',
       dataIndex: 'payTypeA',
       key: 'payTypeA',
-      width: 120,
+      width: 130,
     },
     {
       title: '收款金额',
@@ -195,7 +195,7 @@ function ChargeCheckTable(props: ChargeCheckTableProps) {
         columns={columns}
         rowKey={record => record.billId}
         pagination={pagination}
-        scroll={{ y: 500, x: 2000 }}
+        scroll={{ y: 500, x: 2200 }}
         rowClassName={setClassName} //表格行点击高亮
         loading={loading}
         onRow={onRow}

@@ -95,23 +95,14 @@ const AddFormula = (props: AddFormulaProps) => {
               </Row>
               <Row style={{ marginBottom: '2px' }}>
                 <Button style={{ width: '95%' }} onClick={() => {
-                  InsterText('<套内面积>');
-                  InsterMemo('当前房屋的套内面积');
-
-                }}>套内面积</Button>
-              </Row>
-              <Row style={{ marginBottom: '2px' }}>
-                <Button style={{ width: '95%' }} onClick={() => {
-                  InsterText('<实用面积>');
-                  InsterMemo('当前房屋的实用面积');
-
-                }}>实用面积</Button>
-              </Row>
+                  InsterText('<产权面积>');
+                  InsterMemo('当前房屋的产权面积'); 
+                }}>产权面积</Button>
+              </Row> 
               <Row style={{ marginBottom: '2px' }}>
                 <Button style={{ width: '95%' }} onClick={() => {
                   InsterText('<计费面积>');
-                  InsterMemo('当前房屋的计费面积');
-
+                  InsterMemo('当前房屋的计费面积'); 
                 }}>计费面积</Button>
               </Row>
               <Row style={{ marginBottom: '2px' }}>

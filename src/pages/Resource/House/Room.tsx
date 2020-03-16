@@ -388,8 +388,7 @@ const Room = (props: RoomProps) => {
                     })(<InputNumber placeholder="请输入产权面积" style={{ width: '100%' }} />)}
                   </Form.Item>
                 </Col>
-              </Row>) : type == 2 ?
-
+              </Row>) : type == 2 ? 
                 (<Row gutter={24}>
                   <Col lg={12}>
                     <Form.Item label="建筑面积(㎡)">
