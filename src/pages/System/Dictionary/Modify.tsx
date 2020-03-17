@@ -1,8 +1,8 @@
 import { BaseModifyProvider } from "@/components/BaseModifyDrawer/BaseModifyDrawer";
 import ModifyItem from "@/components/BaseModifyDrawer/ModifyItem";
-import { Card, Form, Row } from "antd";
+import { Checkbox, Col, Card, Form, Row } from "antd";
 import { WrappedFormUtils } from "antd/lib/form/Form";
-import React from "react";
+import React from 'react';
 import { SaveDetailForm } from "./Dictionary.service";
 import styles from './style.less';
 
@@ -17,9 +17,10 @@ interface ModifyProps {
 
 const Modify = (props: ModifyProps) => {
   const { itemId, data, form } = props;
-  let initData = data ? data : { enabledMark: 1, itemId: itemId };
+  const { getFieldDecorator } = form;
+  let initData = data ? data : { enabledMark: 1, isDefault: false, itemId: itemId };
   const baseFormProps = { form, initData };
-  const doSave = dataDetail => { 
+  const doSave = dataDetail => {
     let modifyData = { ...initData, ...dataDetail, keyValue: initData.itemDetailId };
     return SaveDetailForm(modifyData);
   };
@@ -42,6 +43,38 @@ const Modify = (props: ModifyProps) => {
               rules={[{ required: true, message: "请输入值" }]}
             ></ModifyItem>
           </Row>
+
+          <Row gutter={24}>
+            <ModifyItem
+              {...baseFormProps}
+              field="sortCode"
+              label="排序"
+              type='inputNumber'
+              rules={[{ required: true, message: "请输入排序" }]}
+            ></ModifyItem>
+
+            {/* <ModifyItem
+              {...baseFormProps}
+              type='checkbox'
+              field="isDefault"
+              label="默认"
+              checked={
+                form.getFieldValue('isDefault')
+              }
+            ></ModifyItem> */}
+
+
+            <Col lg={12}>
+              <Form.Item label='默认' >
+                {getFieldDecorator('isDefault', {
+                  initialValue: initData.isDefault ? true : false,
+                })(<Checkbox checked={form.getFieldValue('isDefault')}>
+                </Checkbox>
+                )}
+              </Form.Item>
+            </Col> 
+          </Row>
+
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}

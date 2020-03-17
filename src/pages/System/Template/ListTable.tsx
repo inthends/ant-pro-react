@@ -99,7 +99,7 @@ function ListTable(props: ListTableProps) {
         size="middle"
         dataSource={data}
         columns={columns}
-        rowKey={record => record.roleId}
+        rowKey={record => record.id}
         scroll={{ y: 500 }}
         loading={loading}
         pagination={pagination}

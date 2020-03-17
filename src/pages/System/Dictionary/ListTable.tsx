@@ -1,5 +1,5 @@
 import Page from "@/components/Common/Page";
-import { Divider, message, Modal, Switch, Table } from "antd";
+import {Tag, Divider, message, Modal, Switch, Table } from "antd";
 import { ColumnProps, PaginationConfig } from "antd/lib/table";
 import React from "react";
 import { SaveDetailForm, RemoveDetailForm } from "./Dictionary.service";
@@ -59,29 +59,31 @@ function ListTable(props: ListTableProps) {
       key: "itemValue",
       width: 100
     },
-    {
-      title: "简拼",
-      dataIndex: "simpleSpelling",
-      key: "simpleSpelling",
-      width: 100
-    },
+    // {
+    //   title: "简拼",
+    //   dataIndex: "simpleSpelling",
+    //   key: "simpleSpelling",
+    //   width: 100
+    // },
     {
       title: "排序",
       dataIndex: "sortCode",
       key: "sortCode",
       width: 80
-    },
+    }, 
     {
-      title: "默认",
-      dataIndex: "isDefault",
-      key: "isDefault",
-      width: 80
+      title: '默认',
+      dataIndex: 'isDefault',
+      key: 'isDefault',
+      width: 60,
+      render: val => val == 1 ? <Tag color="#19d54e">是</Tag> : <Tag color="#e4aa5b">否</Tag>
     },
+
     {
       title: "有效",
       dataIndex: "enabledMark",
       key: "enabledMark",
-      width: 100,
+      width: 60,
       render: (text: any, record, index) => {
         return (
           <Switch
@@ -98,7 +100,7 @@ function ListTable(props: ListTableProps) {
       title: "备注",
       dataIndex: "description",
       key: "description",
-      width: 100,
+      width: 250,
     },
     {
       title: "操作",
@@ -124,7 +126,7 @@ function ListTable(props: ListTableProps) {
         size="middle"
         dataSource={data}
         columns={columns}
-        rowKey={record => record.roleId}
+        rowKey={record => record.itemDetailId}
         scroll={{ y: 500 }}
         loading={loading}
         pagination={pagination}

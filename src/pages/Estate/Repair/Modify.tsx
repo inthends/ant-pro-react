@@ -972,7 +972,7 @@ const Modify = (props: ModifyProps) => {
               取消
           </Button>
             <Button onClick={approve} type="primary">
-              通过
+              审核
         </Button></div>
         ) : null}
 

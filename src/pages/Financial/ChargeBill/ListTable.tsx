@@ -47,15 +47,31 @@ function ListTable(props: ListTableProps) {
   const [isQrcode, setIsQrcode] = useState<boolean>(false);
   const [banks, setBanks] = useState<any[]>([]); //入账银行
 
+  const [payTypeA, setPayTypeA] = useState<any[]>([]); //收款方式A
+  const [payTypeB, setPayTypeB] = useState<any[]>([]); //收款方式B
+  const [payTypeC, setPayTypeC] = useState<any[]>([]); //收款方式C
+
   useEffect(() => {
     setSelectedRowKeys([]);
     setHasSelected(false);
     form.setFieldsValue({ payAmountA: 0 });
     form.setFieldsValue({ payAmountB: 0 });
     form.setFieldsValue({ payAmountC: 0 });
-    // 获取开户银行
+    //获取开户银行
     getCommonItems('AccountBank').then(res => {
       setBanks(res || []);
+    });
+
+    getCommonItems('PayTypeA').then(res => {
+      setPayTypeA(res || []);
+    });
+
+    getCommonItems('PayTypeB').then(res => {
+      setPayTypeB(res || []);
+    });
+
+    getCommonItems('PayTypeC').then(res => {
+      setPayTypeC(res || []);
     });
 
   }, [data])
@@ -260,9 +276,14 @@ function ListTable(props: ListTableProps) {
                 form.setFieldsValue({ payAmountB: 0 });
                 form.setFieldsValue({ payAmountC: 0 });
 
+                form.setFieldsValue({ payTypeA: '支付宝扫码' });
+                form.setFieldsValue({ payTypeB: '微信扫码' });
+                form.setFieldsValue({ payTypeC: '现金' });
+
                 form.setFieldsValue({ payCode: '' });
                 form.setFieldsValue({ invoiceCode: '' });
                 form.setFieldsValue({ accountBank: null });
+
                 form.setFieldsValue({ memo: '' });
 
                 reload();
@@ -349,6 +370,12 @@ function ListTable(props: ListTableProps) {
     //   form.setFieldsValue({ payAmountC: 0 });
     // }
   };
+
+  // const payTypeList = payType.map
+  //   (item =>
+  //     <Option key={item.key} value={item.value}>{item.title}
+  //     </Option>
+  //   );
 
   const MoreBtn: React.FC<{
     item: any;
@@ -510,14 +537,20 @@ function ListTable(props: ListTableProps) {
                   initialValue: '支付宝扫码'
                 })(
                   <Select >
-                    <Option value="现金">现金</Option>
+                    {/* <Option value="现金">现金</Option>
                     <Option value="支付宝扫码" >支付宝扫码</Option>
                     <Option value="支付宝转账">支付宝转账</Option>
                     <Option value="微信扫码">微信扫码</Option>
                     <Option value="微信转账">微信转账</Option>
                     <Option value="刷卡">刷卡</Option>
                     <Option value="转账">转账</Option>
-                    <Option value="抵扣券">抵扣券</Option>
+                    <Option value="抵扣券">抵扣券</Option> */}
+
+                    {payTypeA.map(item => (
+                      <Option value={item.value} key={item.key}>
+                        {item.title}
+                      </Option>
+                    ))} 
                   </Select>
                 )}
               </Form.Item>
@@ -555,14 +588,11 @@ function ListTable(props: ListTableProps) {
                   initialValue: '微信扫码'
                 })(
                   <Select>
-                    <Option value="现金">现金</Option>
-                    <Option value="支付宝扫码" >支付宝扫码</Option>
-                    <Option value="支付宝转账">支付宝转账</Option>
-                    <Option value="微信扫码">微信扫码</Option>
-                    <Option value="微信转账">微信转账</Option>
-                    <Option value="刷卡">刷卡</Option>
-                    <Option value="转账">转账</Option>
-                    <Option value="抵扣券">抵扣券</Option>
+                    {payTypeB.map(item => (
+                      <Option value={item.value} key={item.key}>
+                        {item.title}
+                      </Option>
+                    ))}
                   </Select>
                 )}
               </Form.Item>
@@ -595,14 +625,11 @@ function ListTable(props: ListTableProps) {
                   initialValue: '现金'
                 })(
                   <Select>
-                    <Option value="现金">现金</Option>
-                    <Option value="支付宝扫码" >支付宝扫码</Option>
-                    <Option value="支付宝转账">支付宝转账</Option>
-                    <Option value="微信扫码">微信扫码</Option>
-                    <Option value="微信转账">微信转账</Option>
-                    <Option value="刷卡">刷卡</Option>
-                    <Option value="转账">转账</Option>
-                    <Option value="抵扣券">抵扣券</Option>
+                    {payTypeC.map(item => (
+                      <Option value={item.value} key={item.key}>
+                        {item.title}
+                      </Option>
+                    ))}
                   </Select>
                 )}
               </Form.Item>

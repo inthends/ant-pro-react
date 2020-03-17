@@ -1,8 +1,9 @@
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { Checkbox, Tabs, Button, Icon, Input, Layout, Select, DatePicker, message } from 'antd';
+import { AutoComplete, Checkbox, Tabs, Button, Icon, Input, Layout, Select, DatePicker, message } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useState } from 'react';
 import { NotChargeFeeData, ChargeFeePageData, ChargeCheckPageData } from './Main.service';
+import { GetUserList } from '@/services/commonItem';
 import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
 import ChargeListTable from './ChargeListTable';
@@ -27,16 +28,16 @@ function Main() {
   // const [treeData, setTreeData] = useState<TreeEntity[]>([]); 
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination()); 
+  const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   //收款单
   const [dataCharge, setChargeData] = useState<any[]>([]);
   const [loadingCharge, setLoadingCharge] = useState<boolean>(false);
-  const [paginationCharge, setPaginationCharge] = useState<PaginationConfig>(new DefaultPagination()); 
+  const [paginationCharge, setPaginationCharge] = useState<PaginationConfig>(new DefaultPagination());
   //对账单
   const [dataChargeCheck, setChargeCheckData] = useState<any[]>([]);
   const [loadingChargeCheck, setLoadingChargeCheck] = useState<boolean>(false);
   const [paginationChargeCheck, setPaginationChargeCheck] = useState<PaginationConfig>(new DefaultPagination());
- 
+
   const [organizeId, setOrganizeId] = useState<string>('');//左侧树选择的id
   const [adminOrgId, setAdminOrgId] = useState<string>('');//当前房间的管理处Id
   const [search, setSearch] = useState<string>('');
@@ -192,7 +193,8 @@ function Main() {
         TreeType: chargedSearchParams.type ? chargedSearchParams.type : '',
         Status: chargedSearchParams.status ? chargedSearchParams.status : '',
         StartDate: chargedSearchParams.startDate ? chargedSearchParams.startDate : '',
-        EndDate: chargedSearchParams.endDate ? chargedSearchParams.endDate : ''
+        EndDate: chargedSearchParams.endDate ? chargedSearchParams.endDate : '',
+        receiverId: chargedSearchParams.receiverId ? chargedSearchParams.receiverId : ''
       },
     };
 
@@ -234,7 +236,8 @@ function Main() {
       keyword: chargedSearchParams.search ? chargedSearchParams.search : '',
       Status: chargedSearchParams.status ? chargedSearchParams.status : '',
       StartDate: chargedSearchParams.startDate ? chargedSearchParams.startDate : '',
-      EndDate: chargedSearchParams.endDate ? chargedSearchParams.endDate : ''
+      EndDate: chargedSearchParams.endDate ? chargedSearchParams.endDate : '',
+      receiverId: chargedSearchParams.receiverId ? chargedSearchParams.receiverId : ''
     };
     const sidx = 'createDate';
     const sord = 'desc';
@@ -471,6 +474,28 @@ function Main() {
     setAddNoteVisible(false);
   };
 
+  //收款人
+  const [userSource, setUserSource] = useState<any[]>([]);
+  const handleSearch = value => {
+    if (value == '')
+      return;
+    GetUserList(value, '员工').then(res => {
+      setUserSource(res || []);
+    })
+  };
+  const userList = userSource.map
+    (item => <Option key={item.id} value={item.id}>{item.name}</Option>);
+
+  // const onReceiverNameSelect = (value, option) => {
+  //   var params = Object.assign({}, chargedSearchParams, { receiverId: option.key });
+  //   setChargedSearchParams(params);
+  // };
+
+  const onReceiverNameChange = (value) => {
+    var params = Object.assign({}, chargedSearchParams, { receiverId: value });
+    setChargedSearchParams(params);
+  };
+
   return (
     <Layout style={{ height: '100%' }}>
       {/* <Sider theme="light" style={{ overflow: 'hidden', height: '100%' }} width="245px"> */}
@@ -571,6 +596,17 @@ function Main() {
           </TabPane>
           <TabPane tab="收款单列表" key="2">
             <div style={{ marginBottom: '10px' }}>
+
+              <AutoComplete
+                allowClear={true}
+                dataSource={userList}
+                onSearch={handleSearch}
+                placeholder="搜索收款人"
+                // onSelect={onReceiverNameSelect}
+                onChange={onReceiverNameChange}
+                style={{ width: '120px', marginRight: '5px' }}
+              />
+
               <Select placeholder="收款单状态"
                 allowClear={true}
                 style={{ width: '120px', marginRight: '5px' }} onChange={(value) => {
@@ -598,15 +634,15 @@ function Main() {
                 }} style={{ marginRight: '5px', width: '120px' }} />
               至
               <DatePicker
-                placeholder='收款日期至'
+                placeholder='收款日期止'
                 onChange={(date, dateStr) => {
                   var params = Object.assign({}, chargedSearchParams, { endDate: dateStr });
                   setChargedSearchParams(params);
                 }} style={{ marginLeft: '5px', marginRight: '5px', width: '120px' }} />
               <Search
                 className="search-input"
-                placeholder="收款单号"
-                style={{ width: 220 }}
+                placeholder="搜索收款单号"
+                style={{ width: 180 }}
                 onChange={e => {
                   var params = Object.assign({}, chargedSearchParams, { search: e.target.value });
                   setChargedSearchParams(params);

@@ -111,7 +111,7 @@ function ListTable(props: ListTableProps) {
       width: 95,
       fixed: 'right',
       render: (text, record) => {
-        if (record.status != 3 && record.status != 5) {
+        if (record.status == 1) {
           return [
             // <Button
             //   type="primary"

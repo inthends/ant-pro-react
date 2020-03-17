@@ -4,7 +4,7 @@ import ModifyItem from '@/components/BaseModifyDrawer/ModifyItem';
 import { Card, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useState } from 'react';
-import { SaveForm, SearchUser,ExistAccount } from './User.service';
+import { SaveForm, SearchUser, ExistAccount } from './User.service';
 import { JcAccount } from '@/model/jcAccount';
 import md5 from 'blueimp-md5';
 
@@ -81,52 +81,101 @@ const Modify = (props: ModifyProps) => {
     <BaseModifyProvider {...props} name="用户" save={doSave}>
       <Card>
         <Form layout="vertical" hideRequiredMark>
-          <Row gutter={24}>
-            <ModifyItem
-              {...baseFormProps}
-              field="organizeId"
-              label="所属机构"
-              type="tree"
-              treeData={treeDate}
-              rules={[{ required: true, message: '请选择所属机构' }]}
-            ></ModifyItem>
 
-            <ModifyItem
-              {...baseFormProps}
-              field="name"
-              label="关联员工"
-              type="autoComplete"
-              onSearch={searchName}
-              items={names}
-              onSelect={onSelect}
-            ></ModifyItem>
+          {initData.id == undefined ? <div>
 
-            {getFieldDecorator('sourceId', {
-              initialValue: initData.sourceId,
-            })(
-              <input type='hidden' />
-            )}
-          </Row>
-
-          <Row gutter={24}>
-            <ModifyItem
-              {...baseFormProps}
-              field="account"
-              label="用户名"
-              // rules={[{ required: true, message: '请输入用户名' }]}
-              rules={[{ required: true, message: '请输入用户名' }, { validator: checkAccountExist }]} 
-            ></ModifyItem>
-
-            {initData.id == undefined ?
+            <Row gutter={24}>
               <ModifyItem
                 {...baseFormProps}
-                field="password"
-                // type="password"
-                label="密码"
-                rules={[{ required: true, message: '请输入密码' }]}
-                visibilityToggle={initData.id == undefined}
-              ></ModifyItem> : null}
-          </Row>
+                field="organizeId"
+                label="所属机构"
+                type="tree"
+                treeData={treeDate}
+                rules={[{ required: true, message: '请选择所属机构' }]}
+              ></ModifyItem>
+
+              <ModifyItem
+                {...baseFormProps}
+                field="name"
+                label="关联员工"
+                type="autoComplete"
+                onSearch={searchName}
+                items={names}
+                onSelect={onSelect}
+              ></ModifyItem>
+
+              {getFieldDecorator('sourceId', {
+                initialValue: initData.sourceId,
+              })(
+                <input type='hidden' />
+              )}
+            </Row>
+
+            <Row gutter={24}>
+              <ModifyItem
+                {...baseFormProps}
+                field="account"
+                label="用户名"
+                // rules={[{ required: true, message: '请输入用户名' }]}
+                rules={[{ required: true, message: '请输入用户名' }, { validator: checkAccountExist }]}
+              ></ModifyItem>
+
+              {initData.id == undefined ?
+                <ModifyItem
+                  {...baseFormProps}
+                  field="password"
+                  // type="password"
+                  label="密码"
+                  rules={[{ required: true, message: '请输入密码' }]}
+                  visibilityToggle={initData.id == undefined}
+                ></ModifyItem> : null}
+            </Row>
+
+          </div> :
+            <div>
+
+              <Row gutter={24}>
+                <ModifyItem
+                  {...baseFormProps}
+                  field="organizeId"
+                  label="所属机构"
+                  type="tree"
+                  lg={24}
+                  treeData={treeDate}
+                  rules={[{ required: true, message: '请选择所属机构' }]}
+                ></ModifyItem>
+              </Row>
+              <Row gutter={24}>
+                <ModifyItem
+                  {...baseFormProps}
+                  field="name" 
+                  label="关联员工"
+                  type="autoComplete"
+                  onSearch={searchName}
+                  items={names}
+                  onSelect={onSelect}
+                ></ModifyItem>
+
+                {getFieldDecorator('sourceId', {
+                  initialValue: initData.sourceId,
+                })(
+                  <input type='hidden' />
+                )}
+
+                <ModifyItem
+                  {...baseFormProps}
+                  field="account"
+                  label="用户名"
+                  // rules={[{ required: true, message: '请输入用户名' }]}
+                  rules={[{ required: true, message: '请输入用户名' }, { validator: checkAccountExist }]}
+                ></ModifyItem>
+              </Row>
+
+
+            </div>
+
+
+          }
 
           {/* <Row gutter={24}>
             <ModifyItem

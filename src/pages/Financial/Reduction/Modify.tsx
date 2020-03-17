@@ -35,7 +35,7 @@ class EditableCell extends React.Component {
 
   save = e => {
     const { record, handleSave } = this.props;
-    this.form.validateFields((error, values) => {
+    this.form.validateFields((error, values) => { 
       if (error && error[e.currentTarget.id]) {
         return;
       }
@@ -59,7 +59,11 @@ class EditableCell extends React.Component {
             },
           ],
           initialValue: record[dataIndex],
-        })(<Input ref={node => (this.input = node)} onPressEnter={this.save} onBlur={this.save} />)}
+        })(<InputNumber
+          precision={2}
+          ref={node => (this.input = node)}  
+          // onPressEnter={this.save} 
+          onBlur={this.save} />)}
       </Form.Item>
     ) : (
         <div
@@ -377,13 +381,7 @@ const Modify = (props: ModifyProps) => {
       key: 'beginDate',
       width: '120px',
       sorter: true,
-      render: val => {
-        if (val == null) {
-          return '';
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '计费截止日期',
@@ -391,13 +389,7 @@ const Modify = (props: ModifyProps) => {
       key: 'endDate',
       width: '120px',
       sorter: true,
-      render: val => {
-        if (val == null) {
-          return '';
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '原金额',
@@ -504,9 +496,10 @@ const Modify = (props: ModifyProps) => {
 
   //详细表单列编辑保存
   const handleSave = row => {
-    row.lastAmount = row.amount - row.reductionAmount > 0 ? row.amount - row.reductionAmount : 0;
+    row.lastAmount = row.lastAmount - row.reductionAmount > 0 ? row.lastAmount - row.reductionAmount : 0;
     const newData = [...listdata];
-    const index = newData.findIndex(item => row.key === item.key);
+    //const index = newData.findIndex(item => row.key === item.key);
+    const index = newData.findIndex(item => row.billId === item.billId);
     const item = newData[index];
     newData.splice(index, 1, {
       ...item,
@@ -700,7 +693,7 @@ const Modify = (props: ModifyProps) => {
               size="middle"
               dataSource={listdata}
               columns={datacolumns}
-              rowKey={record => record.id}
+              rowKey={record => record.billId}
               pagination={pagination}
               scroll={{ x: 1300, y: 500 }}
               loading={loading}
@@ -723,8 +716,7 @@ const Modify = (props: ModifyProps) => {
             textAlign: 'right',
           }}
         >
-          <Button style={{ marginRight: 8 }} onClick={() => closeDrawer()}
-          >
+          <Button style={{ marginRight: 8 }} onClick={() => closeDrawer()} >
             取消
         </Button>
           <Button type="primary"

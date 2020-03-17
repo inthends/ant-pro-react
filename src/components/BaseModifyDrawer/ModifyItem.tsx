@@ -83,6 +83,7 @@ const ModifyItem = (props: ModifyItemProps) => {
             ))}
             style={{ width: '100%' }}
             onSearch={onSearch}
+            allowClear={true}
             placeholder={`请输入${label as string}`}
             onSelect={onSelect}
           />
@@ -164,7 +165,8 @@ const ModifyItem = (props: ModifyItemProps) => {
         );
     }
   };
-  const getInitValue = () => {
+
+  const getInitValue = () => { 
     if (initData) {
       if (type === 'date') {
         if (initData[field]) {

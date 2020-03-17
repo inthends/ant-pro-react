@@ -1,6 +1,6 @@
 import { BaseModifyProvider } from '@/components/BaseModifyDrawer/BaseModifyDrawer';
 import ModifyItem from '@/components/BaseModifyDrawer/ModifyItem';
-import { message, Tooltip, Button, Icon, Col, Upload, Card, Form, Row } from 'antd';
+import {Checkbox, message, Tooltip, Button, Icon, Col, Upload, Card, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useState, useEffect } from 'react';
 import { SaveForm } from './Template.service';
@@ -44,7 +44,6 @@ const Modify = (props: ModifyProps) => {
       files.push(filedate);
     }
     setFileList(files);
-
   }, [visible]);
 
   //数据保存
@@ -89,8 +88,7 @@ const Modify = (props: ModifyProps) => {
   //图片上传结束 
   return (
     <BaseModifyProvider {...props} name="模板" save={doSave}
-      width={750}
-    >
+      width={750} >
       <Form layout="vertical" hideRequiredMark>
         <Card className={styles.card}>
           <Row gutter={24}>
@@ -111,14 +109,26 @@ const Modify = (props: ModifyProps) => {
               label="模板名称"
               rules={[{ required: true, message: '请输入模板名称' }]}
             ></ModifyItem>
-            <ModifyItem
+
+            {/* <ModifyItem
               {...baseFormProps}
               lg={3}
               type='checkbox'
               field="fixTable"
               label="固定表格"
               checked={form.getFieldValue('fixTable')}
-            ></ModifyItem>
+            ></ModifyItem> */}
+
+            <Col lg={3}>
+              <Form.Item label='固定表格' >
+                {getFieldDecorator('fixTable', {
+                  initialValue: initData.fixTable ? true : false,
+                })(<Checkbox checked={form.getFieldValue('fixTable')}>
+                </Checkbox>
+                )}
+              </Form.Item>
+            </Col>
+
             <ModifyItem
               {...baseFormProps}
               lg={5}
@@ -220,7 +230,6 @@ const Modify = (props: ModifyProps) => {
                   {fileList.length > 1 ? null : uploadButton}
                 </Upload>
               </div>
-
               {getFieldDecorator('fileUrl', {
                 initialValue: initData.fileUrl,
               })(

@@ -110,8 +110,7 @@ const Main = () => {
   };
 
   return (
-    <Layout style={{ height: "100%" }}>
-
+    <Layout style={{ height: "100%" }}> 
       <Sider
         theme="light"
         style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh + 10px)' }}

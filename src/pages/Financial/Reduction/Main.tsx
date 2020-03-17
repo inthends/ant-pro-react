@@ -113,8 +113,8 @@ function Main() {
   };
 
   const showVerifyDrawer = (id, ifVerify) => {
-    setVerifyVisible(true);
     setId(id);
+    setVerifyVisible(true); 
     setIfVerify(ifVerify);
   };
 

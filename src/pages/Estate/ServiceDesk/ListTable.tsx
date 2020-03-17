@@ -141,7 +141,7 @@ function ListTable(props: ListTableProps) {
       fixed: 'right',
       render: (text, record) => {
         //新增
-        if (record.status == 1 || record.status == 3) {
+        if (record.status == 1 ) {
           return [
             //   <Button
             //     type="primary"

@@ -884,7 +884,7 @@ const Modify = (props: ModifyProps) => {
                     }}>减免费项</Checkbox>
                   </Form.Item> */}
 
-                    <Form.Item  >
+                    <Form.Item>
                       {getFieldDecorator('isNullDate', {
                         initialValue: infoDetail.isNullDate ? true : false,
                       })(<Checkbox checked={form.getFieldValue('isNullDate')}>

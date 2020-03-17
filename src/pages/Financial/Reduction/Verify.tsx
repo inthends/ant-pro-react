@@ -38,7 +38,7 @@ const Verify= (props: VerifyProps) => {
 
   // 打开抽屉时初始化
   useEffect(() => {
-    if (modalVisible) {
+    if (modalVisible) {  
       if (id) {
         GetFormJson(id).then(res => {
           var entity = { ...res.entity, receiveId: res.receiveId, receiveCode: res.receiveCode }; 
@@ -128,12 +128,18 @@ const Verify= (props: VerifyProps) => {
 
   const columns = [
     {
-      title: '单元编号',
-      dataIndex: 'unitId',
-      key: 'unitId',
-      width: '120px',
-      sorter: true,
+      title: '单元全称',
+      dataIndex: 'allName',
+      key: 'allName',
+      width: '250px'
     },
+    // {
+    //   title: '单元编号',
+    //   dataIndex: 'unitId',
+    //   key: 'unitId',
+    //   width: '120px',
+    //   sorter: true,
+    // },
     {
       title: '收费项目',
       dataIndex: 'feeName',
@@ -274,7 +280,7 @@ const Verify= (props: VerifyProps) => {
               columns={columns}
               rowKey={record => record.id}
               pagination={pagination}
-              scroll={{ x: 1150, y: 500 }}
+              scroll={{ x: 1400, y: 500 }}
               loading={loading}
               onChange={(pagination: PaginationConfig, filters, sorter) =>
                 changePage(pagination, filters, sorter)

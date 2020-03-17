@@ -136,7 +136,7 @@ function ListTable(props: ListTableProps) {
       title: '最后一次登录时间',
       dataIndex: 'lastVisit',
       key: 'lastVisit',
-      width: 150,
+      width: 170,
     },
 
     {
