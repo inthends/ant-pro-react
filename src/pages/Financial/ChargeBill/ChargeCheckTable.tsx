@@ -39,7 +39,7 @@ function ChargeCheckTable(props: ChargeCheckTableProps) {
       title: '管理处',
       dataIndex: 'orgName',
       key: 'orgName',
-      width: 120,
+      width: 140,
     },
     {
       title: '楼盘',
