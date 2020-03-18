@@ -721,15 +721,15 @@ function Main() {
                 }} style={{ marginRight: '5px', width: '140px' }} />
               至
               <DatePicker
-                placeholder='收款日期至'
+                placeholder='收款日期止'
                 onChange={(date, dateStr) => {
                   var params = Object.assign({}, chargedSearchParams, { endDate: dateStr });
                   setChargedSearchParams(params);
                 }} style={{ marginLeft: '5px', marginRight: '5px', width: '140px' }} />
               <Search
                 className="search-input"
-                placeholder="收款单号"
-                style={{ width: 160 }}
+                placeholder="搜索收款单号"
+                style={{ width: 180 }}
                 onChange={e => {
                   var params = Object.assign({}, chargedSearchParams, { search: e.target.value });
                   setChargedSearchParams(params);
@@ -737,7 +737,7 @@ function Main() {
               />
               <Button type="primary" style={{ marginLeft: '3px' }}
                 onClick={() => {
-                  initChargeLoadData(organizeId, chargedSearchParams.type);
+                  initChargeCheckLoadData(organizeId, chargedSearchParams.type);
                 }}>
                 <Icon type="search" />
                 搜索
