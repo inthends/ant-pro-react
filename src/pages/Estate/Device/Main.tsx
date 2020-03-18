@@ -22,7 +22,6 @@ const Device = () => {
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   // const { hideSider, setHideSider } = useContext(SiderContext);
   const [treeData, setTreeData] = useState<any[]>([]);
-
   const [unitData, setUnitData] = useState<any[]>([]);
 
   useEffect(() => {

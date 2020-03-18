@@ -1,5 +1,5 @@
 import { JcAccount } from '@/model/jcAccount';
-import { getResult, objToFormdata } from '@/utils/networkUtils';
+import { getResult, objToFormdata ,objToUrl} from '@/utils/networkUtils';
 import request from '@/utils/request';
 
 export function getDataList(data): Promise<any> {
@@ -14,8 +14,6 @@ export function SaveForm(data): Promise<JcAccount> {
     .then(getResult as any);
 }
  
-
-
 // 删除
 export function RemoveForm(keyValue): Promise<any> {
   return request
@@ -48,6 +46,13 @@ export function DisabledToggle(keyValue, disabled: boolean): Promise<any> {
 export function ExistAccount(keyValue, account): Promise<any> {
   return request
     .get(process.env.basePath + `/Account/ExistAccount?keyValue=${keyValue}&account=${account}`)
+    .then(getResult as any);
+}
+
+//用户关联员工
+export function SearchUser(organizeId, keyword): Promise<any[]> {
+  return request
+    .get(process.env.basePath + `/Common/GetSystemUserList?${objToUrl({ organizeId, keyword })}`)
     .then(getResult as any);
 }
 

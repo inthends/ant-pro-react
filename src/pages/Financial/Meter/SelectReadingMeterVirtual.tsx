@@ -3,7 +3,8 @@ import {  Col,   Form,  Row,Modal, message,Tree} from 'antd';
 import { TreeEntity } from '@/model/models';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import {GetQuickVirtualMeterTree,SaveVirtualForm} from './Meter.service';
+import {SaveVirtualForm} from './Meter.service';
+import { GetQuickVirtualMeterTree } from '@/services/commonItem'; 
 import './style.less';
 
 

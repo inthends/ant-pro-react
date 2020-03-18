@@ -1,4 +1,4 @@
-import { getResult, objToUrl } from '@/utils/networkUtils';
+import { getResult } from '@/utils/networkUtils';
 import { ResponseObject, TreeEntity } from '@/model/models';
 import request from '@/utils/request';
 
@@ -17,9 +17,9 @@ export function GetUserList(keyword, type): Promise<any> {
 }
 
 //下拉房屋树
-export function GetQuickSimpleTreeAll(): Promise<ResponseObject<any>> {
-  return request.get(process.env.basePath + `/Common/GetQuickSimpleTreeAll`, {});
-}
+// export function GetQuickSimpleTreeAll(): Promise<ResponseObject<any>> {
+//   return request.get(process.env.basePath + `/Common/GetQuickSimpleTreeAll`, {});
+// }
 
 //服务单下拉房屋树，可以选择小区，楼栋，楼层和房间
 export function GetQuickSimpleTreeAllForDeskService(): Promise<ResponseObject<any>> {
@@ -27,9 +27,9 @@ export function GetQuickSimpleTreeAllForDeskService(): Promise<ResponseObject<an
 }
 
 //合同页面调用
-export function GetQuickSimpleTreeAllForContract(): Promise<ResponseObject<any[]>> {
-  return request.get(process.env.basePath + `/Common/GetQuickSimpleTreeAllForContract`, {});
-}
+// export function GetQuickSimpleTreeAllForContract(): Promise<ResponseObject<any[]>> {
+//   return request.get(process.env.basePath + `/Common/GetQuickSimpleTreeAllForContract`, {});
+// }
 
 //公共区域页面调用
 // export function GetQuickSimpleTreeAllForArea(): Promise<ResponseObject<any[]>> {
@@ -184,13 +184,6 @@ export function GetPayFeeItemDetail(feeitemId,roomId): Promise< any > {
   return request.get(process.env.basePath + `/Common/GetPayFeeItemDetail?feeitemId=${feeitemId}&roomId=${roomId}`, {}).then(getResult as any);;
 }
 
-//用户关联员工
-export function SearchUser(organizeId, keyword): Promise<any[]> {
-  return request
-    .get(process.env.basePath + `/Common/GetSystemUserList?${objToUrl({ organizeId, keyword })}`)
-    .then(getResult as any);
-}
-
 //加载全部checkbox巡检点位
 export function GetPointTreeAll(): Promise<ResponseObject<TreeEntity[]>> {
   return request.get(process.env.basePath + `/Common/GetPointTreeAll`, {});
@@ -205,6 +198,6 @@ export function GetFeeType(code): Promise<TreeEntity[]> {
   return request.get(process.env.basePath + `/Common/GetDataItemTreeJson?code=` + code).then(getResult as any);
 }
 
-export function GetTreeJsonById(): Promise<TreeEntity[]> {
-  return request.get(process.env.basePath + `/Common/GetTreeJsonById`, {}).then(getResult);
-}
+// export function GetTreeJsonById(): Promise<TreeEntity[]> {
+//   return request.get(process.env.basePath + `/Common/GetTreeJsonById`, {}).then(getResult);
+// }

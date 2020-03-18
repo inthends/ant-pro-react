@@ -3,7 +3,8 @@ import { Col, Form, Row, Modal, message, Tree } from 'antd';
 import { TreeEntity } from '@/model/models';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetQuickPublicMeterTree, SavePublicForm } from './Meter.service';
+import { SavePublicForm } from './Meter.service';
+import { GetQuickPublicMeterTree } from '@/services/commonItem'; 
 import './style.less';
 
 interface SelectReadingMeterPublicProps {

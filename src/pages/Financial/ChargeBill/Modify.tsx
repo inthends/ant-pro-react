@@ -3,7 +3,9 @@ import { TreeEntity } from '@/model/models';
 import { Spin, Card, Select, Button, Col, DatePicker, Drawer, Form, Input, InputNumber, Row, message } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetUserRoomsByRelationId, SaveDetail, GetReceivablesFeeItemTreeJson, GetRoomUsers, GetUserRooms, GetFeeItemDetail, SaveTempBill, GetShowDetail, Call } from './Main.service';
+import { SaveDetail, GetReceivablesFeeItemTreeJson, SaveTempBill, GetShowDetail, Call } from './Main.service';
+import { GetUserRoomsByRelationId, GetRoomUsers, GetUserRooms, GetFeeItemDetail } from '@/services/commonItem';
+
 import LeftTree from '../LeftTree';
 import moment from 'moment';
 import styles from './style.less';
@@ -326,6 +328,9 @@ const Modify = (props: ModifyProps) => {
     return current < moment(form.getFieldValue('beginDate'));
   };
 
+  //缓存费项id
+  const [feeItemId, setFeeItemId] = useState<any>();
+
   return (
     <Drawer
       title={title}
@@ -347,7 +352,7 @@ const Modify = (props: ModifyProps) => {
                 <LeftTree
                   treeData={feeTreeData}
                   selectTree={(id, item) => {
-                    // setFeeItemId(id);
+                    setFeeItemId(id);//缓存费项id
                     if (roomId) {
                       setLoading(true);
                       GetFeeItemDetail(id, roomId).then(res => {
@@ -369,6 +374,7 @@ const Modify = (props: ModifyProps) => {
                         //   return null;
                         // }
                       });
+
                       // .then(info => {
                       //   if (info !== null) {
                       //     GetUserRooms(getRelationId(info.relationId))
@@ -387,7 +393,6 @@ const Modify = (props: ModifyProps) => {
           }
 
           <Col span={id != '' ? 24 : 17}>
-
             <Card className={styles.card}>
               <Form hideRequiredMark>
                 <Row>
@@ -405,8 +410,7 @@ const Modify = (props: ModifyProps) => {
                           });
                         }}>
                         {relationIds.map(item => (
-                          <Option value={item.key}
-                          >
+                          <Option value={item.key}>
                             {item.title}
                           </Option>
                         ))}
@@ -421,7 +425,22 @@ const Modify = (props: ModifyProps) => {
                       initialValue: infoDetail.unitId == null ? null : infoDetail.unitId,
                       rules: [{ required: true, message: '请选择房屋' }]
                     })(
-                      <Select placeholder="=请选择=" disabled={id === '' && edit ? false : true} >
+                      <Select placeholder="=请选择="
+                        disabled={id === '' && edit ? false : true}
+                        onSelect={(key) => {
+                          //选择房屋，加载房屋立面的费项单价和起止日期
+                          setLoading(true);
+                          GetFeeItemDetail(feeItemId, key).then(res => {
+                            if (res.feeItemId) {
+                              setInfoDetail(res);
+                              setLoading(false);
+                            } else {
+                              message.warning(res);
+                              setLoading(false);
+                            }
+                          });
+                        }}>
+
                         {unitIds.map(item => (
                           <Option value={item.key}>
                             {item.title}
@@ -604,7 +623,7 @@ const Modify = (props: ModifyProps) => {
                   </Col>
                 </Row>
                 <Row>
-                  <Col span={12}> 
+                  <Col span={12}>
                     {/* <Form.Item label="应收期间" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
                     {getFieldDecorator('period', {
                       initialValue: infoDetail.period == null ? moment(new Date()) : moment(infoDetail.period),
@@ -612,12 +631,12 @@ const Modify = (props: ModifyProps) => {
                     })(
                       <DatePicker disabled={true} style={{ width: '100%' }} />
                     )}
-                    </Form.Item> */} 
+                    </Form.Item> */}
                     {getFieldDecorator('period', {
                       initialValue: infoDetail.period,
                     })(
                       <input type='hidden' />
-                    )} 
+                    )}
                     <Form.Item label="收款截止日" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
                       {getFieldDecorator('deadline', {
                         initialValue: infoDetail.deadline == null ? moment(new Date()) : moment(infoDetail.deadline),
