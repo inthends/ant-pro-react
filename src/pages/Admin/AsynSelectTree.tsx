@@ -2,7 +2,7 @@
 import Page from '@/components/Common/Page';
 import { Tree } from 'antd';
 import React, {  useEffect, useState } from 'react'; 
-import { GetOrgTree, GetAsynChildBuildings } from './AsynLeftTree.service';
+import { GetOrgTree, GetAsynChildBuildings } from '@/services/commonItem'; 
 
 const { TreeNode } = Tree; 
 

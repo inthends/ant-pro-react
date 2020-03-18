@@ -1,5 +1,5 @@
 
-import { Card, Button, Col, Select, Form, Input, Row, Drawer, message, Spin, DatePicker, Checkbox } from 'antd';
+import { Card, Button, Col, Select, Form, Input, Row, TreeSelect, Drawer, message, Spin, DatePicker, Checkbox } from 'antd';
 import { TreeEntity } from '@/model/models';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
@@ -7,6 +7,7 @@ import {
   SaveBill, GetReceivablesFeeItemTreeJson,
   TestCalBill, GetNoticeTemplates, GetEntityShow
 } from './Main.service';
+import { GetOrgs } from '@/services/commonItem';
 import './style.less';
 // import AsynSelectTree from '../AsynSelectTree';
 import LeftSelectTree from '../LeftSelectTree';
@@ -32,11 +33,19 @@ const Modify = (props: ModifyProps) => {
   const { getFieldDecorator } = form;
   const title = id ? "修改通知单" : "新增通知单";
 
+  const [orgTreeData, setOrgTreeData] = useState<any>({});
+
   useEffect(() => {
     if (visible) {
+
+      GetOrgs().then(res => {
+        setOrgTreeData(res);
+      });
+
       form.resetFields();
       setSelectedFeeId([]);
       setUnitData([]);
+
       GetReceivablesFeeItemTreeJson().then((res) => {
         // const treeList = (res || []).map(item => {
         //   return {
@@ -153,18 +162,7 @@ const Modify = (props: ModifyProps) => {
                   </Col>
                 </Row>
                 <Row gutter={24}>
-                  <Col span={8}>
-                    <Form.Item required label="账单归属年月"  >
-                      {getFieldDecorator('belongDate', {
-                        initialValue: infoDetail.belongDate == null ?
-                          moment(new Date()) :
-                          moment(infoDetail.belongDate),
-                        rules: [{ required: true, message: '请选择账单归属年月' }],
-                      })(
-                        <MonthPicker style={{ width: '100%' }} />
-                      )}
-                    </Form.Item>
-                  </Col>
+
                   {/* <Col span={8}>
                     <Form.Item required label="最后缴费期限"  >
                       {getFieldDecorator('mustDate', {
@@ -191,6 +189,19 @@ const Modify = (props: ModifyProps) => {
                       )}
                     </Form.Item>
                   </Col>
+                  <Col span={8}>
+                    <Form.Item required label="账单归属年月"  >
+                      {getFieldDecorator('belongDate', {
+                        initialValue: infoDetail.belongDate == null ?
+                          moment(new Date()) :
+                          moment(infoDetail.belongDate),
+                        rules: [{ required: true, message: '请选择账单归属年月' }],
+                      })(
+                        <MonthPicker style={{ width: '100%' }} />
+                      )}
+                    </Form.Item>
+                  </Col>
+
                 </Row>
                 <Row gutter={24}>
                   <Col span={24}>
@@ -220,7 +231,26 @@ const Modify = (props: ModifyProps) => {
                   </Col>
                 </Row>
                 <Row gutter={24}>
-                  <Col span={24}>
+
+                  <Col span={16}>
+                    <Form.Item required label="所属机构"  >
+                      {getFieldDecorator('organieId', {
+                        initialValue: infoDetail.organizeId,
+                        rules: [{ required: true, message: '请选择所属机构' }],
+                      })(
+                        <TreeSelect
+                          style={{ width: '100%' }}
+                          dropdownStyle={{ maxHeight: 310, overflow: 'auto' }}
+                          treeData={orgTreeData}
+                          placeholder="=请选择="
+                          treeDefaultExpandAll
+                          disabled={id ? true : false}
+                        />
+                      )}
+                    </Form.Item>
+                  </Col>
+
+                  <Col span={8}>
                     <Form.Item required label="包含前期欠费">
                       {getFieldDecorator('includeBefore', {
                         initialValue: infoDetail.includeBefore == null ? false : true,
@@ -274,6 +304,7 @@ const Modify = (props: ModifyProps) => {
                             BelongDate: moment(values.belongDate).format('YYYY-MM-DD'),
                             // MustDate: moment(values.mustDate).format('YYYY-MM-DD'),
                             BillType: "通知单",
+                            OrganizeId: values.organizeId,
                             Status: values.status,
                             TemplateId: values.templateId,
                             IncludeBefore: values.includeBefore,

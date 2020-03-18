@@ -13,10 +13,6 @@ export function GetPaymentTree(): Promise<TreeEntity[]> {
 export function GetReceivablesTree(): Promise<TreeEntity[]> {
   return request.get(process.env.basePath + `/FeeItems/GetReceivablesFeeItemTreeJson`, {}).then(getResult as any);
 }
-// //加载房间数
-// export function GetRoomTreeListExpand(): Promise<TreeEntity[]> {
-//   return request.get(process.env.basePath + `/Common/GetQuickSimpleTreeAll`, {}).then(getResult as any);
-// }
 
 //查询冲抵列表
 export function GetOffsetPageData(data): Promise<any> {

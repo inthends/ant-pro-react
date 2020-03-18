@@ -3,7 +3,7 @@ import { Modal, Upload, Icon, DatePicker, AutoComplete, Select, Tag, Divider, Pa
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { GetFilesData, RemoveFile, Dispatch, Change, Receive, Start, Handle, Check, Approve, GetEntity } from './Main.service';
-import { GetUserList, getCommonItems } from '@/services/commonItem';
+import { GetUserList, GetCommonItems } from '@/services/commonItem';
 import moment from 'moment';
 import styles from './style.less';
 // const { Paragraph } = Typography;
@@ -31,7 +31,7 @@ const Modify = (props: ModifyProps) => {
   // 打开抽屉时初始化
   useEffect(() => {
     // 获取维修专业
-    getCommonItems('RepairMajor').then(res => {
+    GetCommonItems('RepairMajor').then(res => {
       setRepairMajors(res || []);
     });
   }, []);

@@ -1,15 +1,7 @@
 
 import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
-// export function GetQuickPStructsTree(): Promise<any[]> {
-//   return request
-//     .get(process.env.basePath + `/Common/GetQuickPStructsTree`, {})
-//     .then(getResult);
-// }
-
-// export function GetQuickSimpleTreeAll(): Promise<ResponseObject<any[]>> {
-//   return request.get(process.env.basePath + `/Common/GetQuickSimpleTreeAll`, {});
-// } 
+ 
 
 //获取投诉单
 export function GetPageListJson(data): Promise<any> {

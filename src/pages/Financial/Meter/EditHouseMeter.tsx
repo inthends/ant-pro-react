@@ -8,7 +8,7 @@ import AddFormula from './AddFormula';
 import SelectSingleHouse from './SelectSingleHouse';
 const { TextArea } = Input;
 
-interface EditHouseFeeItemProps {
+interface EditHouseMeterProps {
   modifyVisible: boolean;
   closeModal(): void;
   form: WrappedFormUtils;
@@ -18,7 +18,7 @@ interface EditHouseFeeItemProps {
   treeData: any[];
 };
 
-const EditHouseFeeItem = (props: EditHouseFeeItemProps) => {
+const EditHouseMeter = (props: EditHouseMeterProps) => {
   const { reload, treeData, modifyVisible, closeModal, form, id } = props;
   // const title = id === undefined ? '新增费表资料' : '修改费表资料';
   // const [loading, setLoading] = useState<boolean>(false);
@@ -308,5 +308,5 @@ const EditHouseFeeItem = (props: EditHouseFeeItemProps) => {
   );
 };
 
-export default Form.create<EditHouseFeeItemProps>()(EditHouseFeeItem);
+export default Form.create<EditHouseMeterProps>()(EditHouseMeter);
 

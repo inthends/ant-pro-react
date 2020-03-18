@@ -17,11 +17,6 @@ export function RemoveForm(keyValue): Promise<any> {
     .post(process.env.basePath + `/Polling/RemoveForm?keyValue=${keyValue}`, {})
     .then(getResult as any);
 }
- 
-// 查询机构
-// export function searchOrgs(): Promise<any[]> {
-//   return request.get(process.env.basePath + `/Common/GetOrgTreeOnly`).then(getResult as any);
-// }
 
 //获取分类
 export function GetDataItemTreeList(): Promise<TreeEntity[]> {
@@ -40,6 +35,6 @@ export function GetPageContentListJson(data): Promise<any> {
 //获取通用代码
 export function GetCommonItemsNew(code: string): Promise<Array<TreeEntity>> {
   return request
-    .get(process.env.basePath + `/Polling/GetDataItemTreeJson?EnCode=${code}`)
+    .get(process.env.basePath + `/Polling/GetDataItemTreeJson?code=${code}`)
     .then(getResult as any);
 }

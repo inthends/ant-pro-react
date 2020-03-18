@@ -16,7 +16,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import ResultList from './ResultList';
 import { RemoveFile, GetFilesData, SubmitForm, SaveForm, GetFeeItemsByUnitId, GetCharge, GetContractInfo, GetChargeDetail } from './Main.service';
-import { GetOrgTreeSimple, GetAsynChildBuildingsSimple, getCommonItems, GetUserList } from '@/services/commonItem';
+import { GetOrgTreeSimple, GetAsynChildBuildingsSimple, GetCommonItems, GetUserList } from '@/services/commonItem';
 import moment from 'moment';
 import styles from './style.less';
 // import LeaseTermRenewal from './LeaseTermRenewal';
@@ -82,7 +82,7 @@ const Renewal = (props: RenewalProps) => {
   //打开抽屉时初始化
   useEffect(() => { 
 
-      getCommonItems('IndustryType').then(res => {
+    GetCommonItems('IndustryType').then(res => {
         setIndustryType(res || []);
       });
       //加载关联收费项目

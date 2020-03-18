@@ -10,7 +10,7 @@ import {
   RemoveFile, GetFilesData, SubmitForm, SaveForm, GetFeeItemsByUnitId,
   GetCharge, GetContractInfo, GetModifyChargeDetail, GetFollowCount
 } from './Main.service';
-import { GetOrgTreeSimple, GetAsynChildBuildingsSimple, getCommonItems, GetUserList } from '@/services/commonItem';
+import { GetOrgTreeSimple, GetAsynChildBuildingsSimple, GetCommonItems, GetUserList } from '@/services/commonItem';
 import { GetCustomerInfo, CheckContractCustomer, GetContractCustomerList } from '../../Resource/PStructUser/PStructUser.service';
 import moment from 'moment';
 import styles from './style.less';
@@ -68,7 +68,7 @@ const Modify = (props: ModifyProps) => {
 
   //打开抽屉时初始化
   useEffect(() => {
-    getCommonItems('IndustryType').then(res => {
+    GetCommonItems('IndustryType').then(res => {
       setIndustryType(res || []);
     });
 
@@ -87,7 +87,7 @@ const Modify = (props: ModifyProps) => {
     });
 
     //渠道
-    getCommonItems('VisitChannel').then(res => {
+    GetCommonItems('VisitChannel').then(res => {
       setChannel(res || []);
     });
 

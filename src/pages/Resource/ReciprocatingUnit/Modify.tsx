@@ -14,7 +14,7 @@ import {
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { SaveForm } from './ReciprocatingUnit.service';
-import { getCommonItems } from '@/services/commonItem';
+import { GetCommonItems } from '@/services/commonItem';
 import styles from './style.less';
 
 const { Option } = Select;
@@ -44,23 +44,23 @@ const Modify = (props: ModifyProps) => {
   // 打开抽屉时初始化
   useEffect(() => {
     // 获取信誉等级
-    getCommonItems('CreditLevel').then(res => {
+    GetCommonItems('CreditLevel').then(res => {
       setCreditLevels(res || []);
     });
     // 获取开户银行
-    getCommonItems('Bank').then(res => {
+    GetCommonItems('Bank').then(res => {
       setBanks(res || []);
     });
     // 获取所属类别
-    getCommonItems('VenderType').then(res => {
+    GetCommonItems('VenderType').then(res => {
       setVenderTypes(res || []);
     });
     // 获取状态
-    getCommonItems('TypeState').then(res => {
+    GetCommonItems('TypeState').then(res => {
       setStates(res || []);
     });
     // 单位性质
-    getCommonItems('Bank').then(res => {
+    GetCommonItems('Bank').then(res => {
       setNatures(res || []);
     });
   }, []);

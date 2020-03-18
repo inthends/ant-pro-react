@@ -1,5 +1,5 @@
 //添加编辑费项
-import { Card, Button, DatePicker, Col, Modal, Drawer, Form, Row, Icon, Spin, Input, message, Table } from 'antd';
+import { TreeSelect, Card, Button, DatePicker, Col, Modal, Drawer, Form, Row, Icon, Spin, Input, message, Table } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
@@ -8,6 +8,7 @@ import {
   SaveForm, GetPageDetailListJson, GetBilling,
   RemoveUnitForm, RemoveUnitFormAll, SaveMain
 } from './Main.service';
+import { GetOrgs } from '@/services/commonItem';
 import styles from './style.less';
 import moment from 'moment';
 import SelectHouse from './SelectHouse';
@@ -104,7 +105,7 @@ interface ModifyProps {
   closeDrawer(): void;
   form: WrappedFormUtils;
   id?: string;
-  organizeId?: string;
+  // organizeId?: string;
   isEdit: boolean;
   reload(): void;
   treeData: any[];
@@ -126,6 +127,7 @@ const Modify = (props: ModifyProps) => {
   // const [unitFeeLoading, setUnitFeeLoading] = useState<boolean>(false);
   const [unitFeeData, setUnitFeeData] = useState<any>();
   const [unitFeePagination, setUnitFeePagination] = useState<DefaultPagination>(new DefaultPagination());
+  const [orgTreeData, setOrgTreeData] = useState<any>({});
 
   const components = {
     body: {
@@ -137,6 +139,11 @@ const Modify = (props: ModifyProps) => {
   // const [isAdd, setIsAdd] = useState<boolean>(true);
   useEffect(() => {
     if (modifyVisible) {
+
+      GetOrgs().then(res => {
+        setOrgTreeData(res);
+      });
+
       form.resetFields();
       if (id != null && id != '') {
         // setIsAdd(false);
@@ -225,15 +232,17 @@ const Modify = (props: ModifyProps) => {
   const checkEntity = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        let guid = getGuid();
+        let guid = getGuid(); 
+
         var feeEntity = {
           keyValue: (id == null || id == '') ? guid : id,
           // BillId: id == null || id == '' ? guid : id,
+          OrganizeId: values.organizeId,
           BillSource: '计算周期费',
-          BillDate: moment(values.billDate).format('YYYY-MM-DD'),
-          LinkId: '',
+          BillDate: moment(values.billDate).format('YYYY-MM-DD'), 
           IfVerify: values.ifVerify == "未审核" ? false : true,
           Status: 0,
+          LinkId: '',
           Memo: values.memo
         };
         //设置新id
@@ -407,7 +416,7 @@ const Modify = (props: ModifyProps) => {
     <Drawer
       title={title}
       placement="right"
-      width={1000}
+      width={850}
       onClose={close}
       visible={modifyVisible}
       style={{ height: 'calc(100vh-50px)' }}
@@ -418,16 +427,16 @@ const Modify = (props: ModifyProps) => {
           <Form layout="vertical" hideRequiredMark>
 
             <Row gutter={24}>
-              <Col span={8}>
+              <Col span={6}>
                 <Form.Item required label="计费单号">
                   {getFieldDecorator('billCode', {
                     initialValue: infoDetail.billCode,
                   })(
-                    <Input readOnly placeholder="自动获取编号" />
+                    <Input readOnly placeholder="自动获取单号" />
                   )}
                 </Form.Item>
               </Col>
-              <Col span={8}>
+              <Col span={6}>
                 <Form.Item required label="单据日期"  >
                   {getFieldDecorator('billDate', {
                     initialValue: infoDetail.billDate == null ? moment(new Date()) : moment(infoDetail.billDate),
@@ -437,7 +446,7 @@ const Modify = (props: ModifyProps) => {
                   )}
                 </Form.Item>
               </Col>
-              <Col span={8}>
+              <Col span={6}>
                 <Form.Item required label="计费人"  >
                   {getFieldDecorator('createUserName', {
                     initialValue: infoDetail.createUserName ? infoDetail.createUserName : localStorage.getItem("name"),
@@ -446,9 +455,8 @@ const Modify = (props: ModifyProps) => {
                   )}
                 </Form.Item>
               </Col>
-            </Row>
-            <Row gutter={24}>
-              <Col span={8}>
+
+              <Col span={6}>
                 <Form.Item required label="状态"   >
                   {getFieldDecorator('ifVerify', {
                     initialValue: infoDetail.ifVerify == null || !infoDetail.ifVerify ? '未审核' : '已审核',
@@ -457,7 +465,34 @@ const Modify = (props: ModifyProps) => {
                   )}
                 </Form.Item>
               </Col>
-              <Col span={8}>
+
+            </Row>
+            <Row gutter={24}>
+
+              <Col span={12}>
+                <Form.Item required label="所属机构"  >
+                  {getFieldDecorator('organizeId', {
+                    initialValue: infoDetail.organizeId,
+                    rules: [{ required: true, message: '请选择所属机构' }],
+                  })(
+                    <TreeSelect
+                      style={{ width: '100%' }}
+                      dropdownStyle={{ maxHeight: 310, overflow: 'auto' }}
+                      treeData={orgTreeData}
+                      placeholder="=请选择="
+                      treeDefaultExpandAll
+                      disabled={id ? true : false}
+                    // onChange={(value => {
+                    //   var info = Object.assign({}, infoDetail, { organizeId: value });
+                    //   console.log(value);
+                    //   setInfoDetail(info);
+                    // })}
+                    />
+                  )}
+                </Form.Item>
+              </Col>
+
+              <Col span={6}>
                 <Form.Item required label="审核人"  >
                   {getFieldDecorator('verifyPerson', {
                     initialValue: infoDetail.verifyPerson,
@@ -466,7 +501,7 @@ const Modify = (props: ModifyProps) => {
                   )}
                 </Form.Item>
               </Col>
-              <Col span={8}>
+              <Col span={6}>
                 <Form.Item required label="审核日期"   >
                   {getFieldDecorator('verifyDate', {
                     initialValue: infoDetail.verifyDate == null ? '' : infoDetail.verifyDate,
@@ -550,7 +585,7 @@ const Modify = (props: ModifyProps) => {
                 scroll={{ y: 500, x: 1200 }}
               // loading={loading}
               />
-            </Row> 
+            </Row>
           </Form>
         </Card>
       </Spin>

@@ -6,11 +6,6 @@ import request from '@/utils/request';
 //   return request.get(process.env.basePath + `/FeeItems/GetTreeListExpand`, {});
 // }
 
-// //加载房间树
-// export function GetHouseTreeListExpand(): Promise<ResponseObject<TreeEntity[]>> {
-//   return request.get(process.env.basePath + `/Common/GetQuickSimpleTreeAll`, {}).then(getResult as any);
-// }
-
 //费表列表
 export function GetMeterPageList(data): Promise<any> {
   return request.post(process.env.basePath + `/Meter/GetMeterPageList`, { data: objToFormdata(data) }).then(getResult as any);
@@ -51,17 +46,12 @@ export function UnitMeterSaveForm(data): Promise<any> {
   return request.post(process.env.basePath + `/Meter/UnitMeterSaveForm`, { data: objToFormdata(data) }).then(getResult as any);
 }
 
-//获取编码类型
-export function GetDataItemTreeJson(data): Promise<any> {
-  return request.get(process.env.basePath + `/Common/GetDataItemTreeJson?EnCode=${data}`, {}).then(getResult as any);;
-}
-//加载管理处
-
-export function GetOrgTree(): Promise<any> {
-  return request.get(process.env.basePath + `/Common/GetOrgTree`, {}).then(getResult as any);;
-}
 //获取所有收费列表
-export function GetReceivablesFeeItemTreeJson(): Promise<ResponseObject<TreeEntity[]>> {
+// export function GetReceivablesFeeItemTreeJson(): Promise<ResponseObject<TreeEntity[]>> {
+//   return request.get(process.env.basePath + `/FeeItems/GetReceivablesFeeItemTreeJson`, {}).then(getResult as any);;
+// }
+
+export function GetReceivablesFeeItemTreeJson(): Promise<any[]> {
   return request.get(process.env.basePath + `/FeeItems/GetReceivablesFeeItemTreeJson`, {}).then(getResult as any);;
 }
 
@@ -140,15 +130,6 @@ export function GetPublicReadPageList(data): Promise<any> {
 //房屋费表抄表明细列表
 export function GetUnitReadPageList(data): Promise<any> {
   return request.post(process.env.basePath + `/Meter/GetUnitReadPageList`, { data: objToFormdata(data) }).then(getResult as any);;
-}
-
-//Common/GetQuickVirtualMeterTree
-export function GetQuickVirtualMeterTree(): Promise<any> {
-  return request.get(process.env.basePath + `/Common/GetQuickVirtualMeterTree?queryJson=${""}`, {}).then(getResult as any);;
-}
-
-export function GetQuickPublicMeterTree(): Promise<any> {
-  return request.get(process.env.basePath + `/Common/GetQuickPublicMeterTree?queryJson=${""}`, {}).then(getResult as any);;
 }
 
 //抄表单详细

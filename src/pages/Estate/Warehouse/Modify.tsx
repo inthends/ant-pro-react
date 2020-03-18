@@ -242,7 +242,7 @@ const Modify = (props: ModifyProps) => {
                       <Form.Item label="单据编号">
                         {getFieldDecorator('billCode', {
                           initialValue: infoDetail.billCode
-                        })(<Input placeholder="自动获取编号" readOnly />)}
+                        })(<Input placeholder="自动获取单号" readOnly />)}
                       </Form.Item>
                     </Col>
                     <Col lg={8}>

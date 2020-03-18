@@ -4,12 +4,13 @@ import { DefaultPagination } from '@/utils/defaultSetting';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { GetDataItemTreeJson, GetOrgTree, GetInfoFormJson, GetPageListWithMeterID, RemoveUnitForm, RemoveFormAll, SaveForm } from './Meter.service';
+import { GetInfoFormJson, GetPageListWithMeterID, RemoveUnitForm, RemoveFormAll, SaveForm } from './Meter.service';
+import { GetOrgs, GetCommonItems } from '@/services/commonItem';
 import styles from './style.less';
 import ChargeFeeItem from './ChargeFeeItem';
 import AddFormula from './AddFormula';
 import SelectHouse from './SelectHouse';
-import EditHouseFeeItem from './EditHouseFeeItem';
+import EditHouseMeter from './EditHouseMeter';
 const { TabPane } = Tabs;
 const Search = Input.Search;
 const Option = Select.Option;
@@ -47,18 +48,21 @@ const MeterModify = (props: MeterModifyProps) => {
   const [isAdd, setIsAdd] = useState<boolean>(true);
   const [keyValue, setKeyValue] = useState<string>('');
 
-  useEffect(() => {
-    //获取费表种类
-    GetDataItemTreeJson('EnergyMeterType').then(res => {
-      setMeterTypes(res);
-    });
-    GetOrgTree().then(res => {
-      setOrgTreeData(res);
-    });
-  }, []);
+  // useEffect(() => { 
+  // }, []);
 
   useEffect(() => {
+ 
     if (modifyVisible) {
+
+      //获取费表种类
+      GetCommonItems('EnergyMeterType').then(res => {
+        setMeterTypes(res);
+      });
+      GetOrgs().then(res => {
+        setOrgTreeData(res);
+      });
+
       form.resetFields();
       //获取费表类型
       // GetDataItemTreeJson('EnergyMeterKind').then(res => {
@@ -95,7 +99,6 @@ const MeterModify = (props: MeterModifyProps) => {
       return v.toString(16);
     });
   }
-
 
   //房屋费表初始化
   const initMeterLoadData = (search) => {
@@ -385,7 +388,7 @@ const MeterModify = (props: MeterModifyProps) => {
                 </Col>
                 <Col span={8}>
                   <Form.Item required label="所属机构"  >
-                    {getFieldDecorator('organieId', {
+                    {getFieldDecorator('organizeId', {
                       initialValue: infoDetail.organizeId,
                       rules: [{ required: true, message: '请选择所属机构' }],
                     })(
@@ -664,7 +667,7 @@ const MeterModify = (props: MeterModifyProps) => {
           setIsAdd(false);
         }}
       />
-      <EditHouseFeeItem
+      <EditHouseMeter
         treeData={treeData}
         modifyVisible={editHouseFeeItemVisible}
         closeModal={() => {

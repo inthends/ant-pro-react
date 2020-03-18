@@ -3,8 +3,7 @@ import Page from '@/components/Common/Page';
 import { Icon, Layout, Tree } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import { SiderContext } from '../SiderContext';
-import { GetOrgTree, GetAsynChildBuildingsForContract } from '@/services/commonItem';
-// import { GetOrgTree, GetAsynChildBuildings } from './AsynLeftTree.service';
+import { GetOrgTree, GetAsynChildBuildingsForContract } from '@/services/commonItem'; 
 
 const { TreeNode } = Tree;
 const { Sider } = Layout;

@@ -3,7 +3,7 @@ import { Spin, Slider, message, InputNumber, TreeSelect, Select, Button, Card, C
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
-import { getCommonItems, GetUserList } from '@/services/commonItem';
+import { GetCommonItems, GetUserList } from '@/services/commonItem';
 import { GetFormJson, SaveForm } from './Main.service';
 import { GetOrgTreeSimple, GetAsynChildBuildingsSimple } from '@/services/commonItem';
 import styles from './style.less';
@@ -58,11 +58,11 @@ const Modify = (props: ModifyProps) => {
   //打开抽屉时初始化
   useEffect(() => {
     if (visible) {
-      getCommonItems('IndustryType').then(res => {
+      GetCommonItems('IndustryType').then(res => {
         setIndustryType(res || []);
       });
 
-      getCommonItems('TradingArea').then(res => {
+      GetCommonItems('TradingArea').then(res => {
         setArea(res || []);
       });
 

@@ -241,7 +241,7 @@ function NotPaymentTable(props: NotPaymentTableProps) {
                 {getFieldDecorator('billCode', {
                   initialValue: ''
                 })(
-                  <Input readOnly placeholder="自动获取编号" />
+                  <Input readOnly placeholder="自动获取单号" />
                 )}
 
               </Form.Item>

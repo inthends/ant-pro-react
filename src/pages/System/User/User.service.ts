@@ -1,5 +1,5 @@
 import { JcAccount } from '@/model/jcAccount';
-import { getResult, objToFormdata, objToUrl } from '@/utils/networkUtils';
+import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
 
 export function getDataList(data): Promise<any> {
@@ -13,20 +13,8 @@ export function SaveForm(data): Promise<JcAccount> {
     .post(process.env.basePath + `/Account/SaveForm`, { data: objToFormdata(data) })
     .then(getResult as any);
 }
-// 查询用户
-// export function searchUser(keyword): Promise<any[]> {
-//   const type = '员工';
-//   return request
-//     .get(process.env.basePath + `/Common/GetUserList?${objToUrl({ keyword, type })}`)
-//     .then(getResult as any);
-// }
+ 
 
-
-export function SearchUser(organizeId, keyword): Promise<any[]> {
-  return request
-    .get(process.env.basePath + `/Common/GetSystemUserList?${objToUrl({ organizeId, keyword })}`)
-    .then(getResult as any);
-}
 
 // 删除
 export function RemoveForm(keyValue): Promise<any> {

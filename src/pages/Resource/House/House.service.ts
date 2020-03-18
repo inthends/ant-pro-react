@@ -17,12 +17,6 @@ export function GetTreeAreaJson(id): Promise<TreeEntity[]> {
     .then(getResult as any);
 }
 
-// export function GetProjectType(): Promise<TreeEntity[]> {
-//   return request
-//     .get(process.env.basePath + `/Common/GetDataItemTreeJson?EnCode=ProjectType`)
-//     .then(getResult as any);
-// }
-
 // 获取房产信息
 export function GetFormInfoJson(keyValue): Promise<GmPstructure> {
   return request
@@ -82,12 +76,7 @@ export function GetFloorData(keyValue): Promise<any> {
 //     .then(getResult as any);
 // }
 
-// //获取小区房间
-// export function GetBuildings(pstructid): Promise<any[]> {
-//   return request
-//     .get(process.env.basePath + `/Common/GetBuildings?parentId=${pstructid}`)
-//     .then(getResult as any);
-// }
+
 
 //查询客户数据
 export function GetCustomerList(keyword,organizeId): Promise<any> {

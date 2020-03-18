@@ -17,7 +17,7 @@ export function GetTreeAreaJson(id): Promise<TreeEntity[]> {
 }
 export function GetProjectType(): Promise<TreeEntity[]> {
   return request
-    .get(process.env.basePath + `/PStructs/GetDataItemTreeJson?EnCode=ProjectType`)
+    .get(process.env.basePath + `/PStructs/GetDataItemTreeJson?code=ProjectType`)
     .then(getResult as any);
 }
 
@@ -55,12 +55,4 @@ export function RemoveForm(keyValue): Promise<any> {
     .post(process.env.basePath + `/ParkingLot/RemoveForm?keyValue=${keyValue}`, {})
     .then(getResult as any);
 }
-// export function getTreeData(): Promise<TreeEntity[]> {
-//   return request.get(process.env.basePath + `/Common/GetTreeJsonById`).then(getResult as any);
-// }
-// export function getEstateTreeData(organizeId, type?): Promise<any[]> {
-//   const typestr = type !== undefined ? `&type=${type}` : '';
-//   return request
-//     .get(process.env.basePath + `/Common/GetTreeJson?organizeId=${organizeId}${typestr}`)
-//     .then(getResult as any);
-// }
+

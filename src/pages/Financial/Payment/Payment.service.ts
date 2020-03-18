@@ -54,23 +54,7 @@ export function RemoveForm(data): Promise<any> {
 export function Pay(data): Promise<any> {
   return request.post(process.env.basePath + `/Payment/Pay`, {data:objToFormdata(data)}).then(getResult as any);
 }
-//获取房间住户
-export function GetRoomUsers(data): Promise< any[]> {
-  return request.get(process.env.basePath + `/Common/GetRoomUsers?roomid=${data}`, {}).then(getResult as any);;
-}
-//获取关联的房间
-export function GetUserRooms(data): Promise< any[]> {
-  return request.get(process.env.basePath + `/Common/GetUserRooms?customerid=${data}`, {}).then(getResult as any);;
-}
 
-export function GetUserRoomsByRelationId(data): Promise<any[]> {
-  return request.get(process.env.basePath + `/Common/GetUserRoomsByRelationId?relationId=${data}`, {}).then(getResult as any);;
-}
-
-//付款费项
-export function GetPayFeeItemDetail(feeitemid,roomid): Promise< any > {
-  return request.get(process.env.basePath + `/Common/GetPayFeeItemDetail?feeitemid=${feeitemid}&roomid=${roomid}`, {}).then(getResult as any);;
-}
 
 //付款明细
 export function PaymentFeeDetail(data): Promise<any> {

@@ -1,9 +1,7 @@
 // import { GmPstructure, ResponseObject, TreeEntity } from '@/model/models';
 import { getResult, objToFormdata, objToUrl } from '@/utils/networkUtils';
 import request from '@/utils/request';
-// export function GetTreeJsonById(): Promise<TreeEntity[]> {
-//   return request.get(process.env.basePath + `/Common/GetTreeJsonById`, {}).then(getResult);
-// }
+
 
 //获取组织机构
 export function GetTreeListJson(data): Promise<any> {
@@ -45,13 +43,14 @@ export function searchUser(keyword): Promise<any[]> {
     .get(process.env.basePath + `/Common/GetUserList?${objToUrl({ keyword, type })}`)
     .then(getResult as any);
 }
+
 // 查询类型
-export function searchTypes(): Promise<any[]> {
-  const enCode = 'OrgLevel';
-  return request
-    .get(process.env.basePath + `/Common/GetDataItemTreeJson?${objToUrl({ enCode })}`)
-    .then(getResult as any);
-}
+// export function searchTypes(): Promise<any[]> {
+//   const enCode = 'OrgLevel';
+//   return request
+//     .get(process.env.basePath + `/Common/GetDataItemTreeJson?${objToUrl({ enCode })}`)
+//     .then(getResult as any);
+// }
 
 // 验证code
 export function ExistEnCode(keyValue, code): Promise<any> {

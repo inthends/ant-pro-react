@@ -6,7 +6,7 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { CheckRebateFee, InvalidBillDetailForm, Charge, GetQrCode, GetPayState, CalFee } from './Main.service';
-import { getCommonItems } from '@/services/commonItem';
+import { GetCommonItems } from '@/services/commonItem';
 // import QRCode from 'qrcode.react';
 // import styles from './style.less';
 const { Option } = Select;
@@ -58,19 +58,19 @@ function ListTable(props: ListTableProps) {
     form.setFieldsValue({ payAmountB: 0 });
     form.setFieldsValue({ payAmountC: 0 });
     //获取开户银行
-    getCommonItems('AccountBank').then(res => {
+    GetCommonItems('AccountBank').then(res => {
       setBanks(res || []);
     });
 
-    getCommonItems('PayTypeA').then(res => {
+    GetCommonItems('PayTypeA').then(res => {
       setPayTypeA(res || []);
     });
 
-    getCommonItems('PayTypeB').then(res => {
+    GetCommonItems('PayTypeB').then(res => {
       setPayTypeB(res || []);
     });
 
-    getCommonItems('PayTypeC').then(res => {
+    GetCommonItems('PayTypeC').then(res => {
       setPayTypeC(res || []);
     });
 

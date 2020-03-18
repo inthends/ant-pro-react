@@ -50,7 +50,7 @@ const Detail = (props: DetailProps) => {
 
   //打开抽屉时初始化
   // useEffect(() => {
-  //   // getCommonItems('IndustryType').then(res => {
+  //   // GetCommonItems('IndustryType').then(res => {
   //   //   setIndustryType(res || []);
   //   // });
   //   //加载关联收费项目

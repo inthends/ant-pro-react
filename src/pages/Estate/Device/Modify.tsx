@@ -6,7 +6,7 @@ import { WrappedFormUtils } from "antd/lib/form/Form";
 import React, { useState, useEffect } from 'react';
 import { SaveDeviceForm } from "./Main.service";
 import styles from './style.less';
-import { GetOrgs, getCommonItems } from '@/services/commonItem';
+import { GetOrgs, GetCommonItems } from '@/services/commonItem';
 import { TreeNode } from 'antd/lib/tree-select';
 interface ModifyProps {
   visible: boolean;
@@ -19,7 +19,7 @@ interface ModifyProps {
 }
 
 const Modify = (props: ModifyProps) => {
-  const { data, form, types, visible, unitData } = props;
+  const { data, form, types,  unitData } = props;
   let initData = data ? data : { enabledMark: 1 };
   const baseFormProps = { form, initData };
   const { getFieldDecorator } = form;
@@ -36,7 +36,7 @@ const Modify = (props: ModifyProps) => {
       setOrgs(res);
     });
     //设备等级
-    getCommonItems('DeviceLevel').then(res => {
+    GetCommonItems('DeviceLevel').then(res => {
       setDeviceLevel(res || []);
     });
   }, []);

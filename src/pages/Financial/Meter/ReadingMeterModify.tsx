@@ -1,5 +1,5 @@
 //新增抄表单
-import { Select, Modal, message, Card, Button, Col, DatePicker, Drawer, Tabs, Form, Row, Icon, Spin, Input, Table } from 'antd';
+import { TreeSelect, Select, Modal, message, Card, Button, Col, DatePicker, Drawer, Tabs, Form, Row, Icon, Spin, Input, Table } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
@@ -8,7 +8,7 @@ import {
   SaveMainForm, GetVirtualReadPageList, SaveReadPublicForm, SaveReadUnitForm, RemoveReadUnitFormAll, RemoveReadingUnitForm, RemoveReadPublicFormAll,
   RemoveReadPublicForm, GetPublicReadPageList, GetUnitReadPageList, GetMeterRead, RemoveReadVirtualFormAll
 } from './Meter.service';
-import { GetUserList } from '@/services/commonItem';
+import { GetOrgs, GetUserList } from '@/services/commonItem';
 import styles from './style.less';
 import ChargeFeeItem from './ChargeFeeItem';
 import SelectReadingMeterPublic from './SelectReadingMeterPublic';
@@ -25,7 +25,7 @@ interface ReadingMeterModifyProps {
   closeDrawer(): void;
   form: WrappedFormUtils;
   id?: string;
-  organizeId?: string;
+  // organizeId?: string;
   reload(): void;
   treeData: any[];
 };
@@ -68,12 +68,21 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
   // const [houseFeeItemRowId, setHouseFeeItemRowId] = useState<string>('');
   // const [publicFeeItemRowId, setPublicFeeItemRowId] = useState<string>('');
 
+  const [orgTreeData, setOrgTreeData] = useState<any>({});
+
   const [keyValue, setKeyValue] = useState<string>('');
+
   useEffect(() => {
-    GetUserList('', '员工').then(res => {
-      setUserSource(res || []);
-    });
     if (modifyVisible) {
+
+      GetUserList('', '员工').then(res => {
+        setUserSource(res || []);
+      });
+
+      GetOrgs().then(res => {
+        setOrgTreeData(res);
+      });
+
       // //获取费表类型
       // GetDataItemTreeJson('EnergyMeterKind').then(res => {
       //   setMeterKinds(res);
@@ -807,17 +816,17 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
         <Form layout="vertical" hideRequiredMark>
           <Spin tip="数据处理中..." spinning={loading}>
             <Row gutter={12}>
-              <Col span={8}>
-                <Form.Item required={true} label="抄表单号"  >
+              <Col span={6}>
+                <Form.Item required label="抄表单号"  >
                   {getFieldDecorator('billCode', {
                     initialValue: infoDetail.billCode,
                   })(
-                    <Input placeholder="自动获取编号" readOnly style={{ width: '100%' }} ></Input>
+                    <Input placeholder="自动获取单号" readOnly style={{ width: '100%' }} ></Input>
                   )}
                 </Form.Item>
               </Col>
-              <Col span={8}>
-                <Form.Item required={true} label="单据日期">
+              <Col span={6}>
+                <Form.Item required label="单据日期">
                   {getFieldDecorator('billDate', {
                     initialValue: infoDetail.billDate == null ? moment(new Date()) : moment(infoDetail.billDate),
                     rules: [{ required: true, message: '请选择单据日期' }],
@@ -826,8 +835,8 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                   )}
                 </Form.Item>
               </Col>
-              <Col span={8}>
-                <Form.Item required={true} label="抄表年月" >
+              <Col span={6}>
+                <Form.Item required label="抄表年月" >
                   {getFieldDecorator('belongDate', {
                     initialValue: infoDetail.belongDate == null ? moment(new Date()) : moment(infoDetail.belongDate),
                     rules: [{ required: true, message: '请选择抄表年月' }],
@@ -836,12 +845,11 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                   )}
                 </Form.Item>
               </Col>
-            </Row>
-            <Row gutter={12}>
-              <Col span={8}>
-                <Form.Item required={true} label="抄表人">
+              <Col span={6}>
+                <Form.Item required label="抄表人">
                   {getFieldDecorator('meterReader', {
                     initialValue: infoDetail.meterReader,
+                    rules: [{ required: true, message: '请选择抄表人' }]
                   })(
                     // <Input style={{ width: '100%' }} placeholder="自动获取当前用户" readOnly ></Input> 
                     <Select
@@ -853,12 +861,35 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                           {item.name}
                         </Option>
                       ))}
-                    </Select> 
+                    </Select>
                   )}
                 </Form.Item>
               </Col>
-              <Col span={8}>
-                <Form.Item required={true} label="结束抄表日期">
+            </Row>
+            <Row gutter={12}>
+              <Col span={12}>
+                <Form.Item required label="所属机构"  >
+                  {getFieldDecorator('organizeId', {
+                    initialValue: infoDetail.organizeId,
+                    rules: [{ required: true, message: '请选择所属机构' }],
+                  })(
+                    <TreeSelect
+                      style={{ width: '100%' }}
+                      dropdownStyle={{ maxHeight: 310, overflow: 'auto' }}
+                      treeData={orgTreeData}
+                      placeholder="=请选择="
+                      treeDefaultExpandAll
+                      disabled={id ? true : false}
+                    // onChange={(value => {
+                    //   var info = Object.assign({}, infoDetail, { organizeId: value }); 
+                    //   setInfoDetail(info);
+                    // })}
+                    />
+                  )}
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item required label="结束抄表日期">
                   {getFieldDecorator('endReadDate', {
                     initialValue: infoDetail.endReadDate == null ? moment(new Date()) : moment(infoDetail.endReadDate),
                     rules: [{ required: true, message: '请选择结束抄表日期' }],
@@ -867,8 +898,8 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                   )}
                 </Form.Item>
               </Col>
-              <Col span={8}>
-                <Form.Item required={true} label="结束标识">
+              <Col span={6}>
+                <Form.Item  label="结束标识">
                   {getFieldDecorator('endMark', {
                     initialValue: infoDetail.endMark == null ? "" : infoDetail.endMark,
                   })(

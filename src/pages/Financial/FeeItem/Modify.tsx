@@ -7,9 +7,12 @@ import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import {
   HouseRemoveForm, HouseAllRemoveForm, OrganizeRemoveForm,
-  GetFormJson, GetFeeType, GetAllFeeItems, GetOrganizePageList,
+  GetFormJson, GetAllFeeItems, GetOrganizePageList,
   GetUnitFeeItemData, SaveForm, GetFeeItemName
 } from './Main.service';
+
+import { GetFeeType } from '@/services/commonItem';
+
 import styles from './style.less';
 import moment from 'moment';
 import AddFormula from './AddFormula';
@@ -93,7 +96,7 @@ const Modify = (props: ModifyProps) => {
       if (id) {
         setLoading(true);
         GetFormJson(id).then((tempInfo: CwFeeitem) => {
-            //加载费项类别
+          //加载费项类别
           // if (tempInfo.feeKind) {
           //   // var kind = tempInfo.feeKind == "收款费项" ? "ReceivablesItem" : "PaymentItem";
           //   changeFeeType(tempInfo.feeKind);

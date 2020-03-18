@@ -48,16 +48,7 @@ export function CreateMenu(): Promise<any> {
     .then(getResult as any);
 }
 
-// 查询用户
-// export function searchUser(keyword): Promise<any[]> {
-//   const type = "员工";
-//   return request
-//     .get(
-//       process.env.basePath +
-//         `/Common/GetUserList?${objToUrl({ keyword, type })}`
-//     )
-//     .then(getResult as any);
-// }
+ 
 
 // 删除
 export function RemoveForm(keyValue): Promise<any> {

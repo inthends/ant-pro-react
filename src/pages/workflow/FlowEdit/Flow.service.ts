@@ -17,11 +17,7 @@ export function RemoveForm(keyValue): Promise<any> {
     .post(process.env.basePath + `/FlowDesigner/RemoveForm?keyValue=${keyValue}`, {})
     .then(getResult as any);
 }
- 
-// 查询机构
-// export function searchOrgs(): Promise<any[]> {
-//   return request.get(process.env.basePath + `/Common/GetOrgTreeOnly`).then(getResult as any);
-// }
+
 
 //获取分类
 export function GetDataItemTreeList(): Promise<TreeEntity[]> {

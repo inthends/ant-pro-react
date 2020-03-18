@@ -25,13 +25,6 @@ export function GetHouseFormJson(keyValue): Promise<any> {
     .then(getResult as any);
 }
 
-//获取费项类型
-export function GetFeeType(code): Promise<TreeEntity[]> {
-  return request
-    .get(process.env.basePath + `/Common/GetDataItemTreeJson?EnCode=` + code)
-    .then(getResult as any);
-}
-
 //获取所有费项
 export function GetAllFeeItems(): Promise<TreeEntity[]> {
   return request
@@ -47,10 +40,6 @@ export function GetUnitFeeItemData(data): Promise<any> {
   return request.post(process.env.basePath + `/FeeItems/GetUnitFeeItemData`, { data: objToFormdata(data) }).then(getResult as any);
 }
 
-// //加载房间树
-// export function GetQuickSimpleTreeAll(data): Promise<TreeEntity[]> {
-//   return request.get(process.env.basePath + `/Common/GetQuickSimpleTreeAll?queryJson=${data}`, {}).then(getResult as any);
-// }
 export function OrganizeSaveForm(data): Promise<any> {
   return request.post(process.env.basePath + `/FeeItems/OrganizeSaveForm`, { data: objToFormdata(data) }).then(getResult as any);
 }
@@ -90,12 +79,6 @@ export function UnitFeeSaveForm(data): Promise<any> {
 export function HouseSaveForm(data): Promise<any> {
   return request.post(process.env.basePath + `/FeeItems/HouseSaveForm`, { data: objToFormdata(data) }).then(getResult as any);
 }
-//加载管理处
-// export function GetOrgTreeOnly(): Promise<TreeEntity[]> {
-//   return request
-//     .get(process.env.basePath + `/Common/GetOrgTreeOnly`)
-//     .then(getResult as any);
-// }
 
 //加载税项
 export function GetOrgTaxTateFormJson(data): Promise<TreeEntity[]> {

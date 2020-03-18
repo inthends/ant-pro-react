@@ -1,5 +1,5 @@
 // import { ParkingData } from '@/model/models';
-import { getCommonItems } from '@/services/commonItem';
+import { GetCommonItems } from '@/services/commonItem';
 import { AutoComplete, Button, Card, Col, Drawer, Form, Input, message, Row, Select, DatePicker, TreeSelect, InputNumber } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import moment from 'moment';
@@ -44,23 +44,23 @@ const ModifyParking = (props: ModifyParkingProps) => {
   // 打开抽屉时初始化
   useEffect(() => {
     // 获取车位状态
-    // getCommonItems('ParkingLotState').then(res => {
+    // GetCommonItems('ParkingLotState').then(res => {
     //   setParkingLotState(res || []);
     // });
     // 车位性质
-    getCommonItems('ParkingNature').then(res => {
+    GetCommonItems('ParkingNature').then(res => {
       setParkingNature(res || []);
     });
     // 车位类型
-    getCommonItems('ParkingLotType').then(res => {
+    GetCommonItems('ParkingLotType').then(res => {
       setParkingLotType(res || []);
     });
     // 车辆品牌
-    // getCommonItems('VehicleBrand').then(res => {
+    // GetCommonItems('VehicleBrand').then(res => {
     //   setVehicleBrand(res || []);
     // });
     // // 车辆品牌
-    // getCommonItems('Color').then(res => {
+    // GetCommonItems('Color').then(res => {
     //   setColor(res || []);
     // });
 

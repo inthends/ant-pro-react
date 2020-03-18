@@ -4,7 +4,7 @@ import { Form, Row, Card } from "antd";
 import { WrappedFormUtils } from "antd/lib/form/Form";
 import React, { useEffect, useState } from "react";
 import { SaveForm } from "./Main.service";
-import { getCommonItems } from '@/services/commonItem';
+import { GetCommonItems } from '@/services/commonItem';
 
 interface ModifyProps {
   visible: boolean;
@@ -27,12 +27,12 @@ const Modify = (props: ModifyProps) => {
 
   useEffect(() => { 
     //商圈
-    getCommonItems('TradingArea').then(res => {
+    GetCommonItems('TradingArea').then(res => {
       setArea(res || []);
     });
 
     //渠道
-    getCommonItems('VisitChannel').then(res => {
+    GetCommonItems('VisitChannel').then(res => {
       setChannel(res || []);
     });
   }, []);

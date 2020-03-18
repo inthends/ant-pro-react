@@ -571,9 +571,9 @@ const Modify = (props: ModifyProps) => {
               <Form.Item label="减免单号">
                 {getFieldDecorator('billCode', {
                   initialValue: infoDetail.billCode,
-                  rules: [{ message: '自动获取编号' }],
+                  rules: [{ message: '自动获取单号' }],
                 })(
-                  <Input readOnly placeholder="自动获取编号" ></Input>
+                  <Input readOnly placeholder="自动获取单号" ></Input>
                 )}
               </Form.Item>
             </Col>

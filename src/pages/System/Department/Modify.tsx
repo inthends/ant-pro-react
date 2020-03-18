@@ -17,7 +17,7 @@ interface ModifyProps {
 };
 
 const Modify = (props: ModifyProps) => {
-  const { data, form, visible } = props;
+  const { data, form  } = props;
   const { getFieldDecorator } = form;
   const [managers, setManagers] = useState<SelectItem[]>([]);
   // const [types, setTypes] = useState<SelectItem[]>([

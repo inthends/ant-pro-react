@@ -2,7 +2,7 @@
 import {   Tag, Divider, PageHeader, Button, Card, Col, Drawer, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-// import { GetUserList, getCommonItems } from '@/services/commonItem';
+// import { GetUserList, GetCommonItems } from '@/services/commonItem';
 import { GetEntityByCode } from './Main.service'; 
 import styles from './style.less'; 
 
@@ -22,7 +22,7 @@ const ShowLink = (props: ShowLinkProps) => {
   // 打开抽屉时初始化
   // useEffect(() => {
   //   // 获取维修专业
-  //   getCommonItems('RepairMajor').then(res => {
+  //   GetCommonItems('RepairMajor').then(res => {
   //     setRepairMajors(res || []);
   //   });
   // }, []);

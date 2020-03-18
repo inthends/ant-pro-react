@@ -357,7 +357,7 @@ function Main() {
       <Modify
         modifyVisible={modifyVisible}
         closeDrawer={closeModify}
-        organizeId={organize}
+        // organizeId={organize}
         id={id}
         isEdit={isEdit}
         reload={() => initLoadData('', '')}

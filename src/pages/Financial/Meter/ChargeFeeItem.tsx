@@ -1,11 +1,5 @@
 //添加费项
-import {
-  Button,
-  Col,
-  Form, Input,
-  Row, Icon, Modal,
-} from 'antd';
-import { TreeEntity } from '@/model/models';
+import { Col, Form, Row, Modal } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { GetReceivablesFeeItemTreeJson } from './Meter.service';

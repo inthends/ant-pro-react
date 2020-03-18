@@ -680,7 +680,7 @@ function Main() {
       <ReadingMeterModify
         modifyVisible={modifyReadingMeterVisible}
         closeDrawer={closeReadingMeterModify}
-        organizeId={organize}
+        // organizeId={organize}
         id={readingMeterId}
         reload={() => loadReadingMeterData('')}
         treeData={unitTreeData}

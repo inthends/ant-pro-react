@@ -4,7 +4,7 @@ import { DatePicker, Button, Card, Col, Drawer, Form, Input, message, Row, Selec
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { SaveForm } from './PStructUser.service';
-import { getCommonItems, GetOrgs } from '@/services/commonItem';
+import { GetCommonItems, GetOrgs } from '@/services/commonItem';
 import styles from './style.less';
 const { Option } = Select;
 import moment from 'moment';
@@ -37,22 +37,22 @@ const QuickModify = (props: QuickModifyProps) => {
       setTreeData(res || []);
     });
 
-    getCommonItems('IndustryType').then(res => {
+    GetCommonItems('IndustryType').then(res => {
       setIndustryType(res || []);
     });
 
     // 获取开户银行
-    // getCommonItems('Bank').then(res => {
+    // GetCommonItems('Bank').then(res => {
     //   setBanks(res || []);
     // });
 
     // // 获取证件类别
-    // getCommonItems('Bank').then(res => {
+    // GetCommonItems('Bank').then(res => {
     //   setBanks(res || []);
     // });
 
     // // 获取企业性质
-    // getCommonItems('Bank').then(res => {
+    // GetCommonItems('Bank').then(res => {
     //   setBanks(res || []);
     // });
   }, []);

@@ -13,10 +13,6 @@ export function GetReceivablesTree(): Promise<TreeEntity[]> {
   return request.get(process.env.basePath + `/FeeItems/GetReceivablesFeeItemTreeJson`, {}).then(getResult as any);
 }
 
-//加载房间树
-// export function GetTreeListExpand(): Promise<ResponseObject<TreeEntity[]>> {
-//   return request.get(process.env.basePath + `/Common/GetQuickPStructsTree`, {});
-// }
 
 // 查询明细列表
 export function GetDetailPageListJson(data): Promise<any> {

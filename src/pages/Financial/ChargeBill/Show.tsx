@@ -127,6 +127,12 @@ const Show = (props: ShowProps) => {
       render: val => val != null ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
+      title: '房屋全称',
+      dataIndex: 'allName',
+      key: 'allName', 
+      width: 280
+    },
+    {
       title: '备注',
       dataIndex: 'memo',
       key: 'memo'
@@ -234,31 +240,41 @@ const Show = (props: ShowProps) => {
           }}  >
           <Form layout='vertical'>
             <Row gutter={6}>
-              <Col span={5}>
+              <Col span={3}>
                 <Form.Item label="收款日期" >
                   {String(infoDetail.billDate).substr(0, 10)}
                 </Form.Item>
               </Col>
-              <Col span={5}>
-                <Form.Item label="收款人"  >
+              <Col span={3}>
+                <Form.Item label="收款人">
                   {infoDetail.createUserName}
                 </Form.Item>
               </Col>
-              <Col span={4}>
-                <Form.Item label="费用状态"   >
+              <Col span={3}>
+                <Form.Item label="费用状态">
                   {GetStatus(infoDetail.status)}
                 </Form.Item>
-              </Col>
-              <Col span={5}>
-                <Form.Item label="收据编号">
-                  {infoDetail.payCode}
+              </Col> 
+              <Col span={4}>
+                <Form.Item label="业户名称">
+                  {infoDetail.customerName}
                 </Form.Item>
-              </Col>
+              </Col> 
               <Col span={5}>
+                <Form.Item label="房号">
+                  {infoDetail.unitId}
+                </Form.Item>
+              </Col> 
+              <Col span={3}>
                 <Form.Item label="发票编号"  >
                   {infoDetail.invoiceCode}
                 </Form.Item>
               </Col>
+              <Col span={3}>
+                <Form.Item label="收据编号">
+                  {infoDetail.payCode}
+                </Form.Item>
+              </Col> 
             </Row>
           </Form>
           <Divider dashed />
@@ -316,7 +332,7 @@ const Show = (props: ShowProps) => {
               columns={columns}
               rowKey={record => record.id}
               pagination={pagination}
-              scroll={{ y: 500, x: 1500 }}
+              scroll={{ y: 500, x: 1600 }}
               loading={loading}
             />
           </Form>

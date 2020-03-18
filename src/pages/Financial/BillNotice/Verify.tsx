@@ -89,7 +89,7 @@ const Verify = (props: VerifyProps) => {
                 {getFieldDecorator('billCode', {
                   initialValue: infoDetail.billCode,
                 })(
-                  <Input disabled={true} placeholder="自动获取编号" />
+                  <Input disabled={true} placeholder="自动获取单号" />
                 )}
               </Form.Item>
             </Col>

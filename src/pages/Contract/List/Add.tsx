@@ -11,7 +11,7 @@ import React, { useEffect, useState } from 'react';
 // import Rebate from './Rebate';
 import ResultList from './ResultList';
 import moment from 'moment';
-import { getCommonItems, GetUserList } from '@/services/commonItem';
+import { GetCommonItems, GetUserList } from '@/services/commonItem';
 import { RemoveFile, SaveForm, GetFeeItemsByUnitId, GetChargeDetail } from './Main.service';
 import { GetOrgTreeSimple, GetAsynChildBuildingsSimple } from '@/services/commonItem';
 import styles from './style.less';
@@ -298,7 +298,7 @@ const Add = (props: AddProps) => {
 
   //打开抽屉时初始化
   useEffect(() => {
-    getCommonItems('IndustryType').then(res => {
+    GetCommonItems('IndustryType').then(res => {
       setIndustryType(res || []);
     });
 
@@ -317,7 +317,7 @@ const Add = (props: AddProps) => {
     });
 
     //渠道
-    getCommonItems('VisitChannel').then(res => {
+    GetCommonItems('VisitChannel').then(res => {
       setChannel(res || []);
     });
 

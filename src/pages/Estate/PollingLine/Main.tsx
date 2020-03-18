@@ -4,9 +4,9 @@ import { PaginationConfig } from "antd/lib/table";
 import React, { useEffect, useState } from "react";
 import ListTable from "./ListTable";
 import Modify from "./Modify";
-import { GetPointTreeAll, GetPageLineListJson } from "./Main.service";
+import { GetPageLineListJson } from "./Main.service";
 import { getResult } from '@/utils/networkUtils';
-import { GetOrgEsates } from '@/services/commonItem';
+import { GetPointTreeAll, GetOrgEsates } from '@/services/commonItem';
 import LeftTree from '../LeftTree';
 const { Content } = Layout;
 const { Search } = Input;
@@ -40,7 +40,7 @@ const Main = () => {
     // });
     // initLoadData(search);
 
-     
+
     //加载小区
     GetOrgEsates().then(res => {
       setTreeData(res || []);

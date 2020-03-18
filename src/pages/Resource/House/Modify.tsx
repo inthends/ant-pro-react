@@ -4,7 +4,7 @@ import { Spin, Switch, Upload, Modal, Icon, Button, Card, Col, DatePicker, Drawe
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { ExistEnCode, GetFormInfoJson, GetTreeAreaJson, SaveForm } from './House.service';
-import { GetUserList, getCommonItems } from '@/services/commonItem';
+import { GetUserList, GetCommonItems } from '@/services/commonItem';
 import styles from './style.less';
 import moment from 'moment';
 
@@ -51,7 +51,7 @@ const Modify = (props: ModifyProps) => {
     GetTreeAreaJson('100000').then(res => {
       setPro(res || []);
     });
-    getCommonItems('ProjectType').then(res => {
+    GetCommonItems('ProjectType').then(res => {
       setProject(res || []);
     });
     GetUserList('', '员工').then(res => {

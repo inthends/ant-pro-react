@@ -22,7 +22,7 @@ export function GetTreeAreaJson(id): Promise<TreeEntity[]> {
 }
 export function GetProjectType(): Promise<TreeEntity[]> {
   return request
-    .get(process.env.basePath + `/PStructs/GetDataItemTreeJson?EnCode=ProjectType`)
+    .get(process.env.basePath + `/PStructs/GetDataItemTreeJson?code=ProjectType`)
     .then(getResult as any);
 }
 

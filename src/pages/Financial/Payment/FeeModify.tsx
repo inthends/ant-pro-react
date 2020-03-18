@@ -3,7 +3,8 @@ import { Spin, Card, Button, Col, Select, Form, Input, Row, InputNumber, Drawer,
 import { TreeEntity } from '@/model/models';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetUserRoomsByRelationId, GetTempPaymentFeeItemTreeJson, GetRoomUsers, GetUserRooms, GetPayFeeItemDetail, SaveForm, GetShowDetail } from './Payment.service';
+import { GetUserRoomsByRelationId, GetTempPaymentFeeItemTreeJson,  SaveForm, GetShowDetail } from './Payment.service';
+import {GetRoomUsers, GetUserRooms, GetPayFeeItemDetail } from '@/services/commonItem';
 import LeftTree from '../LeftTree';
 import moment from 'moment';
 

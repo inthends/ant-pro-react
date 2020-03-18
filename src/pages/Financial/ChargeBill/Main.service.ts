@@ -3,35 +3,9 @@ import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
 import { CwFeeitem } from '@/model/cwFeeitem';
 
-// export function GetTreeListExpand(): Promise<ResponseObject<TreeEntity[]>> {
-//   return request.get(process.env.basePath + `/FeeItems/GetTreeListExpand`, {});
-// }
-
 //获取所有收费列表
 export function GetReceivablesFeeItemTreeJson(roomId): Promise<TreeEntity[]> {
   return request.get(process.env.basePath + `/FeeItems/GetReceivablesFeeItemTreeJson?roomId=` + roomId, {}).then(getResult as any);;
-}
-
-//获取房间住户
-export function GetRoomUsers(data): Promise<any[]> {
-  return request.get(process.env.basePath + `/Common/GetRoomUsers?roomId=${data}`, {}).then(getResult as any);;
-}
-
-//获取关联的房间
-// export function GetUserRooms(data): Promise<ResponseObject<any[]>> {
-//   return request.get(process.env.basePath + `/Common/GetUserRooms?customerid=${data}`, {}).then(getResult as any);;
-// }
-
-export function GetUserRoomsByRelationId(data): Promise<any[]> {
-  return request.get(process.env.basePath + `/Common/GetUserRoomsByRelationId?relationId=${data}`, {}).then(getResult as any);;
-}
-
-export function GetUserRooms(data): Promise<any[]> {
-  return request.get(process.env.basePath + `/Common/GetUserRooms?customerid=${data}`, {}).then(getResult as any);;
-}
-
-export function GetFeeItemDetail(feeItemId, roomId): Promise<any> {
-  return request.get(process.env.basePath + `/Common/GetFeeItemDetail?feeItemId=${feeItemId}&roomId=${roomId}`, {}).then(getResult as any);;
 }
 
 //未收
@@ -43,13 +17,6 @@ export function NotChargeFeeData(data): Promise<any> {
 export function GetFormJson(keyValue): Promise<CwFeeitem> {
   return request
     .get(process.env.basePath + `/FeeItems/GetFormJson?keyValue=${keyValue}`)
-    .then(getResult as any);
-}
-
-//获取费项类型
-export function GetFeeType(code): Promise<TreeEntity[]> {
-  return request
-    .get(process.env.basePath + `/Common/GetDataItemTreeJson?EnCode=` + code)
     .then(getResult as any);
 }
 
