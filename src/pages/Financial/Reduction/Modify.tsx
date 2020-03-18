@@ -35,7 +35,7 @@ class EditableCell extends React.Component {
 
   save = e => {
     const { record, handleSave } = this.props;
-    this.form.validateFields((error, values) => { 
+    this.form.validateFields((error, values) => {
       if (error && error[e.currentTarget.id]) {
         return;
       }
@@ -49,23 +49,36 @@ class EditableCell extends React.Component {
     this.form = form;
     const { children, dataIndex, record, title } = this.props;
     const { editing } = this.state;
-    return editing ? (
-      <Form.Item style={{ margin: 0 }}>
-        {form.getFieldDecorator(dataIndex, {
-          rules: [
-            {
-              required: true,
-              message: `${title} is required.`,
-            },
-          ],
-          initialValue: record[dataIndex],
-        })(<InputNumber
-          precision={2}
-          ref={node => (this.input = node)}  
-          // onPressEnter={this.save} 
-          onBlur={this.save} />)}
-      </Form.Item>
-    ) : (
+    return editing ?
+      (
+
+
+        <Form.Item style={{ margin: 0 }}>
+          {form.getFieldDecorator(dataIndex, {
+            rules: [
+              {
+                required: true,
+                message: `${title}不能为空`,
+              },
+            ],
+            initialValue: record[dataIndex],
+          })(
+            dataIndex == 'reductionAmount' ?
+              <InputNumber
+                precision={2}
+                ref={node => (this.input = node)}
+                // onPressEnter={this.save} 
+                onBlur={this.save} /> :
+              //备注
+              <Input
+                ref={node => (this.input = node)}
+                // onPressEnter={this.save} 
+                onBlur={this.save} />
+
+          )}
+        </Form.Item>
+
+      ) : (
         <div
           className="editable-cell-value-wrap"
           style={{ paddingRight: 24 }}
@@ -358,7 +371,7 @@ const Modify = (props: ModifyProps) => {
       title: '收费项目',
       dataIndex: 'feeName',
       key: 'feeName',
-      width: '120px',
+      width: '160px',
       sorter: true
     },
     {
@@ -379,7 +392,7 @@ const Modify = (props: ModifyProps) => {
       title: '计费起始日期',
       dataIndex: 'beginDate',
       key: 'beginDate',
-      width: '120px',
+      width: '140px',
       sorter: true,
       render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
@@ -387,7 +400,7 @@ const Modify = (props: ModifyProps) => {
       title: '计费截止日期',
       dataIndex: 'endDate',
       key: 'endDate',
-      width: '120px',
+      width: '140px',
       sorter: true,
       render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },

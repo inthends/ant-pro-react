@@ -266,7 +266,7 @@ const Show = (props: ShowProps) => {
       width: 100
     },
     {
-      title: '房屋全称',
+      title: '单元全称',
       key: 'allName',
       dataIndex: 'allName',
       width: 320

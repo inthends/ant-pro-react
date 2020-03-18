@@ -225,7 +225,7 @@ const MeterModify = (props: MeterModifyProps) => {
       sorter: true,
     },
     {
-      title: '房屋全称',
+      title: '单元全称',
       dataIndex: 'allName',
       key: 'allName',
       sorter: true

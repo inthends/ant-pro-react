@@ -284,8 +284,8 @@ function Main() {
             <div style={{ marginBottom: '10px' }}>
               <Search
                 className="search-input"
-                placeholder="请输入要查询的单号"
-                style={{ width: 200 }}
+                placeholder="搜索减免单号"
+                style={{ width: 180 }}
                 onSearch={value => loadData(value)}
               />
               <Button type="primary" style={{ float: 'right' }}

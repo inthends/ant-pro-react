@@ -124,7 +124,7 @@ const Show = (props: ShowProps) => {
       title: '收费项目',
       dataIndex: 'feeName',
       key: 'feeName',
-      width: '120px',
+      width: '160px',
       sorter: true
     },
     {

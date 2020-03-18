@@ -390,7 +390,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
             rules: [
               {
                 required: true,
-                message: `${title} is required.`,
+                message: `${title}不能为空`,
               },
             ],
             initialValue: record[dataIndex],

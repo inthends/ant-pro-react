@@ -127,7 +127,7 @@ const Show = (props: ShowProps) => {
       render: val => val != null ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
-      title: '房屋全称',
+      title: '单元全称',
       dataIndex: 'allName',
       key: 'allName', 
       width: 280

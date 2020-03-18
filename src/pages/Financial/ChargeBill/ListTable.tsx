@@ -461,7 +461,7 @@ function ListTable(props: ListTableProps) {
       width: 100,
       render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     }, {
-      title: '房屋全称',
+      title: '单元全称',
       dataIndex: 'allname',
       key: 'allname',
       align: 'center',
