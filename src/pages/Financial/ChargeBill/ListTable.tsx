@@ -324,7 +324,8 @@ function ListTable(props: ListTableProps) {
             resolve();
             message.success('收款成功');
             reload();
-            //弹出查看页面
+            timer = null;//关闭弹窗后不轮询
+            //弹出收款查看页面
             showDetail(billId);
           } else {
             if (timer) {

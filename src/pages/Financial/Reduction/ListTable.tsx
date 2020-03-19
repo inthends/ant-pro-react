@@ -74,13 +74,20 @@ function ListTable(props: ListTableProps) {
       sorter: true,
       render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
-    // {
-    //   title: '减免费项',
-    //   dataIndex: 'feeName',
-    //   key: 'feeName',
-    //   width: 150,
-    //   sorter: true,
-    // },
+    {
+      title: '折扣',
+      dataIndex: 'rebate',
+      key: 'rebate',
+      sorter: true,
+      width: 100, 
+    },
+    {
+      title: '减免金额',
+      dataIndex: 'reductionAmount',
+      key: 'reductionAmount',
+      sorter: true,
+      width: 100, 
+    },
     {
       title: '经办人',
       dataIndex: 'createUserName',
@@ -239,7 +246,7 @@ function ListTable(props: ListTableProps) {
         columns={columns}
         rowKey={record => record.unitId}
         pagination={pagination}
-        scroll={{ x: 1100, y: 500 }}
+        scroll={{ x: 1300, y: 500 }}
         onChange={(pagination: PaginationConfig, filters, sorter) =>
           changePage(pagination, filters, sorter)
         }
