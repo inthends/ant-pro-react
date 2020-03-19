@@ -17,7 +17,7 @@ const { Search } = Input;
 const { TabPane } = Tabs;
 
 //查看收款单
-import ChargeShow from '../ChargeBill/Show';
+import ChargeShow from '../ChargeBill/BillShow';
 
 function Main() {
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);//编辑

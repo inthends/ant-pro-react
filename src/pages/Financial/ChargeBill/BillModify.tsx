@@ -1,36 +1,64 @@
-//查看收款单
-import { Divider, PageHeader, Tag, Spin, Button, Card, Table, Col, Drawer, Form, Row } from 'antd';
+//修改收款单
+import { message, Input, DatePicker, Select, Divider, PageHeader, Tag, Spin, Button, Card, Table, Col, Drawer, Form, Row } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetEntityShow, ChargeFeeDetail } from './Main.service';
+import { GetEntityShow, ChargeFeeDetail, SavaReceiveForm } from './Main.service';
+import { GetCommonItems } from '@/services/commonItem';
 import moment from 'moment';
 import styles from './style.less';
-import SelectTemplate from './SelectTemplate';
+// import SelectTemplate from './SelectTemplate';
+const { Option } = Select;
 
-interface ShowProps {
+interface BillModifyProps {
   showVisible: boolean;
   closeShow(): void;
   form: WrappedFormUtils;
   id?: string;
+  reload(): void;
 }
-const Show = (props: ShowProps) => {
-  const { showVisible, closeShow, id, form } = props;
-  const title = "查看收款单";
+const BillModify = (props: BillModifyProps) => {
+  const { showVisible, closeShow, id, form, reload } = props;
+  const title = "修改收款单";
+  const { getFieldDecorator } = form;
   const [loading, setLoading] = useState<boolean>(false);
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   // const [chargeBillData, setChargeBillData] = useState<any[]>([]);
   const [chargeBillData, setChargeBillData] = useState<any>();
   const [linkno, setLinkno] = useState<any>('');
-  //选择模板
-  const [modalvisible, setModalVisible] = useState<boolean>(false);
+  //打印
+  // const [modalvisible, setModalVisible] = useState<boolean>(false);
+  const [banks, setBanks] = useState<any[]>([]); //入账银行
+  const [payTypeA, setPayTypeA] = useState<any[]>([]); //收款方式A
+  const [payTypeB, setPayTypeB] = useState<any[]>([]); //收款方式B
+  const [payTypeC, setPayTypeC] = useState<any[]>([]); //收款方式C
 
   // 打开抽屉时初始化
   useEffect(() => {
-    form.resetFields();
+
     if (showVisible) {
+
+      //获取开户银行
+      GetCommonItems('AccountBank').then(res => {
+        setBanks(res || []);
+      });
+
+      GetCommonItems('PayTypeA').then(res => {
+        setPayTypeA(res || []);
+      });
+
+      GetCommonItems('PayTypeB').then(res => {
+        setPayTypeB(res || []);
+      });
+
+      GetCommonItems('PayTypeC').then(res => {
+        setPayTypeC(res || []);
+      });
+
+      form.resetFields();
+
       if (id != null && id != '') {
         // setLoading(true);
         GetEntityShow(id).then(res => {
@@ -47,12 +75,27 @@ const Show = (props: ShowProps) => {
     }
   }, [showVisible]);
 
-  const showModal = () => {
-    setModalVisible(true);
-  };
-  const closeModal = () => {
-    setModalVisible(false);
-  };
+  // const showModal = () => {
+  //   setModalVisible(true);
+  // };
+  // const closeModal = () => {
+  //   setModalVisible(false);
+  // };
+
+  //保存
+  const onSave = () => {
+    form.validateFields((errors, values) => {
+      if (!errors) {
+        const newData = infoDetail ? { ...infoDetail, ...values } : values;
+        newData.billDate = moment(newData.billDate).format('YYYY-MM-DD'),
+          SavaReceiveForm({ ...newData }).then(res => {
+            message.success('保存成功');
+            closeShow();
+            reload();
+          });
+      }
+    })
+  }
 
   const columns = [
     {
@@ -129,7 +172,7 @@ const Show = (props: ShowProps) => {
     {
       title: '单元全称',
       dataIndex: 'allName',
-      key: 'allName', 
+      key: 'allName',
       width: 280
     },
     {
@@ -204,30 +247,15 @@ const Show = (props: ShowProps) => {
     }
   };
 
-  const GetVerifyStatus = (status) => {
-    switch (status) {
-      case 0:
-        return <Tag color="#D7443A">待审核</Tag>;
-      case 1:
-        return <Tag color="#19d54e">已审核</Tag>;
-      case 2:
-        return <Tag color="#e4aa4b">已送审</Tag>;
-      case 3:
-        return <Tag color="#19d54e">已复核</Tag>;
-      default:
-        return '';
-    }
-  };
-
   return (
     <Drawer
       title={title}
       placement="right"
-      width={850}
+      width={950}
       onClose={closeShow}
       visible={showVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
-      <Spin tip="数据处理中..." spinning={loading}> 
+      <Spin tip="数据处理中..." spinning={loading}>
         <PageHeader
           title={null}
           subTitle={
@@ -240,41 +268,31 @@ const Show = (props: ShowProps) => {
           }}  >
           <Form layout='vertical'>
             <Row gutter={6}>
-              <Col span={3}>
-                <Form.Item label="收款日期" >
-                  {String(infoDetail.billDate).substr(0, 10)}
-                </Form.Item>
-              </Col>
-              <Col span={3}>
+              <Col span={5}>
                 <Form.Item label="收款人">
                   {infoDetail.createUserName}
                 </Form.Item>
               </Col>
-              <Col span={3}>
+              <Col span={4}>
                 <Form.Item label="状态">
                   {GetStatus(infoDetail.status)}
                 </Form.Item>
-              </Col> 
-              <Col span={4}>
+              </Col>
+              <Col span={5}>
                 <Form.Item label="业户名称">
                   {infoDetail.customerName}
                 </Form.Item>
-              </Col> 
+              </Col>
               <Col span={5}>
                 <Form.Item label="房号">
                   {infoDetail.unitId}
                 </Form.Item>
-              </Col> 
-              <Col span={3}>
-                <Form.Item label="发票编号"  >
-                  {infoDetail.invoiceCode}
+              </Col>
+              <Col span={5}>
+                <Form.Item label="冲红单号" >
+                  {linkno}
                 </Form.Item>
               </Col>
-              <Col span={3}>
-                <Form.Item label="收据编号">
-                  {infoDetail.payCode}
-                </Form.Item>
-              </Col> 
             </Row>
           </Form>
           <Divider dashed />
@@ -284,47 +302,122 @@ const Show = (props: ShowProps) => {
         </PageHeader>
         <Divider dashed />
         <Card className={styles.card}>
-          <Form layout="vertical" >
+          <Form layout="vertical" hideRequiredMark>
             <Row gutter={24}>
-              <Col span={5}>
-                <Form.Item label="入账银行" >
-                  {infoDetail.accountBank}
+              <Col lg={4}>
+                <Form.Item label="收款方式A">
+                  {getFieldDecorator('payTypeA', {
+                    initialValue: infoDetail.payTypeA ? infoDetail.payTypeA : '支付宝扫码'
+                  })(
+                    <Select >
+                      {payTypeA.map(item => (
+                        <Option value={item.value} key={item.key}>
+                          {item.title}
+                        </Option>
+                      ))}
+                    </Select>
+                  )}
                 </Form.Item>
               </Col>
-              <Col span={5}>
-                <Form.Item label="冲红单号" >
-                  {linkno}
+              <Col lg={4}>
+                <Form.Item label="收款金额">
+                  {getFieldDecorator('payAmountA', {
+                    initialValue: infoDetail.payAmountA
+                  })(<Input readOnly />)}
                 </Form.Item>
               </Col>
-              <Col span={4}>
-                <Form.Item label="审核状态"   >
-                  {/* {infoDetail.ifVerify ? '已审核' : '未审核'} */}
-                  {GetVerifyStatus(infoDetail.ifVerify)}
+              <Col lg={4}>
+                <Form.Item label="收款方式B">
+                  {getFieldDecorator('payTypeB', {
+                    initialValue: infoDetail.payTypeB ? infoDetail.payTypeB : '微信扫码'
+                  })(
+                    <Select>
+                      {payTypeB.map(item => (
+                        <Option value={item.value} key={item.key}>
+                          {item.title}
+                        </Option>
+                      ))}
+                    </Select>
+                  )}
                 </Form.Item>
               </Col>
-              <Col span={5}>
-                <Form.Item label="审核人">
-                  {infoDetail.verifyPerson}
+              <Col lg={4}>
+                <Form.Item label="收款金额">
+                  {getFieldDecorator('payAmountB', {
+                    initialValue: infoDetail.payAmountB
+                  })(<Input readOnly />)}
                 </Form.Item>
               </Col>
-              <Col span={5}>
-                <Form.Item label="审核时间">
-                  {infoDetail.verifyDate}
+              <Col lg={4}>
+                <Form.Item label="收款方式C">
+                  {getFieldDecorator('payTypeC', {
+                    initialValue: infoDetail.payTypeC ? infoDetail.payTypeC : '现金'
+                  })(
+                    <Select>
+                      {payTypeC.map(item => (
+                        <Option value={item.value} key={item.key}>
+                          {item.title}
+                        </Option>
+                      ))}
+                    </Select>
+                  )}
                 </Form.Item>
               </Col>
-            </Row> 
+              <Col lg={4}>
+                <Form.Item label="收款金额">
+                  {getFieldDecorator('payAmountC', {
+                    initialValue: infoDetail.payAmountC
+                  })(<Input readOnly />)}
+                </Form.Item>
+              </Col>
+            </Row>
             <Row gutter={24}>
-              <Col span={10}>
-                <Form.Item label="审核说明">
-                  {infoDetail.verifyMemo}
+              <Col lg={4}>
+                <Form.Item label="收款日期" required>
+                  {getFieldDecorator('billDate', {
+                    initialValue: moment(new Date()),
+                    rules: [{ required: true, message: '请选择收款日期' }],
+                  })(<DatePicker style={{ width: '100%' }} />)}
                 </Form.Item>
               </Col>
-              <Col span={14}>
-                <Form.Item label="备注">
-                  {infoDetail.memo}
+              <Col lg={8}>
+                <Form.Item label="发票编号">
+                  {getFieldDecorator('invoiceCode', {
+                  })(<Input placeholder="请输入发票编号" />)}
                 </Form.Item>
               </Col>
-            </Row>  
+              <Col lg={8}>
+                <Form.Item label="收据编号">
+                  {getFieldDecorator('payCode', {
+                  })(<Input placeholder="请输入收据编号" />)}
+                </Form.Item>
+              </Col>
+              <Col lg={4}>
+                <Form.Item label="入账银行">
+                  {getFieldDecorator('accountBank', {
+                  })(<Select placeholder="请选择入账银行">
+                    {banks.map(item => (
+                      <Option value={item.value} key={item.key}>
+                        {item.title}
+                      </Option>
+                    ))}
+                  </Select>)}
+                </Form.Item>
+              </Col>
+            </Row>
+
+            <Row gutter={24}>
+              <Col lg={24}>
+                <Form.Item label="备注" >
+                  {getFieldDecorator('memo', {
+                    initialValue: infoDetail.memo,
+                  })(
+                    <Input.TextArea rows={2} />
+                  )}
+                </Form.Item>
+              </Col>
+            </Row>
+
             <Table
               // title={() => '费用明细'}
               size="middle"
@@ -352,22 +445,21 @@ const Show = (props: ShowProps) => {
         }}
       >
         <Button onClick={closeShow} style={{ marginRight: 8 }}>
-          关闭
+          取消
         </Button>
-        <Button onClick={showModal} type="primary">
-          打印
+        <Button onClick={onSave} type="primary">
+          提交
         </Button>
       </div>
 
-      <SelectTemplate
+      {/* <SelectTemplate
         id={id}
         visible={modalvisible}
         closeModal={closeModal}
         unitId={infoDetail.unitId}
-      />
-
+      /> */}
     </Drawer>
   );
 };
-export default Form.create<ShowProps>()(Show);
+export default Form.create<BillModifyProps>()(BillModify);
 

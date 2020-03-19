@@ -8,8 +8,9 @@ import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
 import ChargeListTable from './ChargeListTable';
 import ChargeCheckTable from './ChargeCheckTable';
-import Modify from './Modify';
-import Show from './Show';
+import FeeModify from './FeeModify';
+import BillShow from './BillShow';
+import BillModify from './BillModify';
 import Verify from './Verify';
 import Split from './Split';
 import Transform from './Transform';
@@ -385,6 +386,20 @@ function Main() {
     setShowVisible(false);
   }
 
+  //修改收款单
+  const [billModifyVisible, setBillModifyVisible] = useState<boolean>(false);
+  const showModify = (id?) => {
+    setBillId(id);
+    setBillModifyVisible(true);
+  }
+
+  const closeBillDetail = () => {
+    setBillId('');
+    setBillModifyVisible(false);
+  }
+
+  
+
   // const onInvalid = () => {
   //   if (chargedRowSelectedKey == null || chargedRowSelectedKey == {}) {
   //     message.warning("请选择要作废的表单");
@@ -704,6 +719,7 @@ function Main() {
               pagination={paginationCharge}
               data={dataCharge}
               showDetail={showDetail}
+              showModify={showModify}
               showVerify={showVerify}
               showNote={showAddNote}
               reload={() => initChargeLoadData(organizeId, chargedSearchParams.type)}
@@ -758,7 +774,8 @@ function Main() {
         </Tabs>
       </Content>
 
-      <Modify
+      <FeeModify
+        //新增&修改临时费
         modifyVisible={modifyVisible}
         closeDrawer={closeDrawer}
         id={id}
@@ -768,7 +785,7 @@ function Main() {
         edit={modifyEdit}
       />
 
-      <Show
+      <BillShow
         //查看收款单
         showVisible={showVisible}
         closeShow={closeDetail}
@@ -776,6 +793,14 @@ function Main() {
       // id={chargedRowSelectedKey.billId}
       />
 
+      <BillModify
+        //修改收款单
+        showVisible={billModifyVisible}
+        closeShow={closeBillDetail}
+        id={billId} 
+        reload={() => initChargeLoadData(organizeId, chargedSearchParams.type)}
+      />
+ 
       <Verify
         //审核收款单
         verifyVisible={verifyVisible}

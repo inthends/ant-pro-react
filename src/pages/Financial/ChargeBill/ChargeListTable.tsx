@@ -13,6 +13,7 @@ interface ChargeListTableProps {
   pagination: PaginationConfig;
   data: any[];
   showDetail(billId): void;
+  showModify(billId): void;
   showVerify(id: string, ifVerify: boolean): void;
   reload(): void;
   // getRowSelect(record): void;
@@ -21,7 +22,7 @@ interface ChargeListTableProps {
 }
 
 function ChargeListTable(props: ChargeListTableProps) {
-  const { onchange, loading, pagination, data, reload, rowSelect, showDetail, showVerify, showNote } = props;
+  const { onchange, loading, pagination, data, reload, rowSelect,showModify, showDetail, showVerify, showNote } = props;
   // const changePage = (pagination: PaginationConfig, filters, sorter) => {
   //   onchange(pagination, filters, sorter);
   // };
@@ -219,10 +220,10 @@ function ChargeListTable(props: ChargeListTableProps) {
           //待审核
           return [
             <span key='span1'>
+              <a onClick={() => showModify(record.billId)} key="modify">修改</a>
+              <Divider type="vertical" />
               <a onClick={() => showVerify(record.billId, false)} key="approve">审核</a>
-              <Divider type="vertical" />
-              <a onClick={() => showDetail(record.billId)} key="view">查看</a>
-              <Divider type="vertical" />
+              <Divider type="vertical" /> 
               <MoreBtn key="more" item={record} />
             </span>
           ];
@@ -230,10 +231,10 @@ function ChargeListTable(props: ChargeListTableProps) {
           //已审核
           return [
             <span key='span1'>
+               <a onClick={() => showDetail(record.billId)} key="view">查看</a>
+              <Divider type="vertical" />
               <a onClick={() => showVerify(record.billId, true)} key="unapprove">反审</a>
-              <Divider type="vertical" />
-              <a onClick={() => showDetail(record.billId)} key="view">查看</a>
-              <Divider type="vertical" />
+              <Divider type="vertical" /> 
               <MoreBtn key="more" item={record} />
             </span>
           ];

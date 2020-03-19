@@ -3,7 +3,7 @@ import { Spin, Card, Button, Col, Select, Form, Input, Row, InputNumber, Drawer,
 import { TreeEntity } from '@/model/models';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import {  GetTempPaymentFeeItemTreeJson,  SaveForm, GetShowDetail } from './Payment.service';
+import { GetTempPaymentFeeItemTreeJson, SaveForm, GetShowDetail } from './Payment.service';
 import { GetUserRoomsByRelationId, GetRoomUsers, GetUserRooms, GetPayFeeItemDetail } from '@/services/commonItem';
 import LeftTree from '../LeftTree';
 import moment from 'moment';
@@ -402,10 +402,9 @@ const FeeModify = (props: FeeModifyProps) => {
                 </Row>
                 <Row>
                   <Col span={24}>
-                    <Form.Item label="备注" required labelCol={{ span: 4 }} wrapperCol={{ span: 20 }}>
+                    <Form.Item label="备注" labelCol={{ span: 4 }} wrapperCol={{ span: 20 }}>
                       {getFieldDecorator('memo', {
                         initialValue: infoDetail.memo,
-                        rules: [{ required: false }]
                       })(
                         <Input.TextArea rows={4} />
                       )}

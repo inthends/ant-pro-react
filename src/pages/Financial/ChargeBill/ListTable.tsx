@@ -263,6 +263,7 @@ function ListTable(props: ListTableProps) {
               // });
               GetQrCode(info).then(res => {
                 pay(res.code_img_url);
+                //预订单id
                 form.setFieldsValue({ tradenoId: res.tradenoId });
               })
 
@@ -307,32 +308,38 @@ function ListTable(props: ListTableProps) {
         }
       }
     })
-    retry().then(() => {
+
+    retry().then(() => { 
+      
+      //轮训结束
       temp.destroy();
     })
+
   };
 
   //轮询支付回调数据
   let timer;
   const retry = () => {
     return new Promise((resolve, reject) => {
-      timer = setTimeout(() => {
+      timer = setTimeout(() => { 
+
         const tradenoId = form.getFieldValue('tradenoId');
         GetPayState(tradenoId).then(billId => {
           if (billId) {
-            //支付成功
-            resolve();
             message.success('收款成功');
+            //结束轮训
+            resolve();
+            //刷新列表
             reload();
-            timer = null;//关闭弹窗后不轮询
             //弹出收款查看页面
-            showDetail(billId);
+            showDetail(billId); 
           } else {
             if (timer) {
               retry();
             }
           }
         })
+
       }, 1000);//每秒轮询一次  
     })
   };

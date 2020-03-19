@@ -251,3 +251,8 @@ export function Call(data): Promise<any> {
 export function SaveNote(data): Promise<any> {
   return request.post(process.env.basePath + `/Receivable/SaveNote`, { data: objToFormdata(data) }).then(getResult as any);
 }
+
+//修改收款单
+export function SavaReceiveForm(data): Promise<any> {
+  return request.post(process.env.basePath + `/Receivable/SavaReceiveForm`, { data: objToFormdata(data) }).then(getResult as any);
+}

@@ -1,4 +1,4 @@
-//新增临时收费，ok
+//新增&修改临时收费ok
 import { TreeEntity } from '@/model/models';
 import { Spin, Card, Select, Button, Col, DatePicker, Drawer, Form, Input, InputNumber, Row, message } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
@@ -11,7 +11,7 @@ import moment from 'moment';
 import styles from './style.less';
 const { Option } = Select;
 
-interface ModifyProps {
+interface FeeModifyProps {
   closeDrawer(): void;
   reload(): void;
   modifyVisible: boolean;
@@ -22,7 +22,7 @@ interface ModifyProps {
   edit: boolean;
 }
 
-const Modify = (props: ModifyProps) => {
+const FeeModify = (props: FeeModifyProps) => {
   const { modifyVisible, closeDrawer, form, roomId, id, reload, edit, adminOrgId } = props;
   const title = id == "" ? '新增费用' : "修改费用";
   const { getFieldDecorator } = form;
@@ -697,9 +697,8 @@ const Modify = (props: ModifyProps) => {
         </Button>
         </div> : null
       }
-
     </Drawer >
   );
 };
-export default Form.create<ModifyProps>()(Modify);
+export default Form.create<FeeModifyProps>()(FeeModify);
 
