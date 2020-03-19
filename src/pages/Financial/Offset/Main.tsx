@@ -22,7 +22,7 @@ const { TabPane } = Tabs;
 
 function Main() {
   // const [treeData, setTreeData] = useState<TreeEntity[]>([]);
-  const [organize, setOrganize] = useState<any>({});
+  // const [organize, setOrganize] = useState<any>({});
   // const [search, setSearch] = useState<any>({});
   // const { hideSider, setHideSider } = useContext(SiderContext);
   const [addDrawerVisible, setAddDrawerVisible] = useState<boolean>(false);
@@ -35,18 +35,21 @@ function Main() {
   const [pagination, setPagination] = useState<DefaultPagination>(new DefaultPagination());
   const [data, setData] = useState<any>();
   const [search, setSearch] = useState<string>('');
-
   const [detailLoading, setDetailLoading] = useState<boolean>(false);
   const [detailPagination, setDetailPagination] = useState<DefaultPagination>(new DefaultPagination());
   const [detailData, setDetailData] = useState<any>();
   const [detailSearch, setDetailSearch] = useState<string>('');
-
   const [unitTreeData, setUnitTreeData] = useState<any[]>([]);
 
+  //org
+  const [orgId, setOrgId] = useState<string>();
+  const [type, setType] = useState<string>();
+
   const selectTree = (id, type, info) => {
-    initLoadData(info.node.props.dataRef, search);
-    initDetailLoadData(info.node.props.dataRef, detailSearch);
-    setOrganize(info.node.props.dataRef);
+    initLoadData(id, type, search);
+    initDetailLoadData(id, type, detailSearch);
+    setOrgId(orgId);
+    setType(type);
   };
 
   useEffect(() => {
@@ -54,7 +57,6 @@ function Main() {
     // const root = res.filter(item => item.parentId === '0');
     // const rootOrg = root.length === 1 ? root[0] : undefined;
     // SetOrganize(rootOrg);
-
     //获取房产树
     GetUnitTreeAll()
       .then(getResult)
@@ -63,8 +65,8 @@ function Main() {
         return res || [];
       });
 
-    initLoadData('', '');
-    initDetailLoadData('', '');
+    initLoadData('', '', '');
+    initDetailLoadData('', '', '');
     //});
   }, []);
 
@@ -95,6 +97,25 @@ function Main() {
     setId(id);
   };
 
+  const initLoadData = (orgId, type, searchText) => {
+    setSearch(searchText);
+    const queryJson = {
+      // OrganizeId: org.organizeId,
+      keyword: searchText,
+      TreeTypeId: orgId,
+      TreeType: type,
+    };
+    const sidx = 'createDate';
+    const sord = 'desc';
+    const { current: pageIndex, pageSize, total } = pagination;
+    setAddButtonDisable(true);
+    return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
+      return res;
+    }).then(() => {
+      setAddButtonDisable(false);
+    });
+  };
+
   //冲抵单数据
   const loadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(search);
@@ -113,19 +134,19 @@ function Main() {
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'billId';
+      searchCondition.sidx = field ? field : 'createDate';
     }
 
-    return checkload(searchCondition).then(res => {
+    return load(searchCondition).then(res => {
       return res;
     });
   };
 
-  //账单表加载
-  const checkload = data => {
+  //表加载
+  const load = data => {
     setLoading(true);
-    data.sidx = data.sidx || 'billId';
-    data.sord = data.sord || 'asc';
+    data.sidx = data.sidx || 'createDate';
+    data.sord = data.sord || 'desc';
     return GetOffsetPageData(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
@@ -138,6 +159,23 @@ function Main() {
       });
       setData(res.data);
       setLoading(false);
+      return res;
+    });
+  };
+
+  //detail
+  const initDetailLoadData = (orgId, type,  searchText) => {
+    setDetailSearch(searchText);
+    const queryJson = {
+      // OrganizeId: org.organizeId,
+      keyword: searchText,
+      TreeTypeId: orgId,
+      TreeType: type,
+    };
+    const sidx = 'id';
+    const sord = 'desc';
+    const { current: pageIndex, pageSize, total } = detailPagination;
+    return detailload({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
       return res;
     });
   };
@@ -160,7 +198,7 @@ function Main() {
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'billId';
+      searchCondition.sidx = field ? field : 'id';
     }
 
     return detailload(searchCondition).then(res => {
@@ -170,8 +208,8 @@ function Main() {
   //明细表加载
   const detailload = data => {
     setDetailLoading(true);
-    data.sidx = data.sidx || 'billId';
-    data.sord = data.sord || 'asc';
+    data.sidx = data.sidx || 'id';
+    data.sord = data.sord || 'desc';
     return GetOffsetPageDetailData(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setDetailPagination(pagesetting => {
@@ -188,45 +226,11 @@ function Main() {
     });
   };
 
-  const initLoadData = (org, searchText) => {
-    setSearch(searchText);
-    const queryJson = {
-      // OrganizeId: org.organizeId,
-      keyword: searchText,
-      TreeTypeId: org.key,
-      TreeType: org.type,
-    };
-    const sidx = 'billCode';
-    const sord = 'asc';
-    const { current: pageIndex, pageSize, total } = pagination;
-    setAddButtonDisable(true);
-    return checkload({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
-      return res;
-    }).then(() => {
-      setAddButtonDisable(false);
-    });
-  };
-
-  const initDetailLoadData = (org, searchText) => {
-    setDetailSearch(searchText);
-    const queryJson = {
-      // OrganizeId: org.organizeId,
-      keyword: searchText,
-      TreeTypeId: org.key,
-      TreeType: org.type,
-    };
-    const sidx = 'billCode';
-    const sord = 'asc';
-    const { current: pageIndex, pageSize, total } = detailPagination;
-    return detailload({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
-      return res;
-    });
-  };
 
   const closeVerify = (result?) => {
     setVerifyVisible(false);
     if (result) {
-      initLoadData(organize, null);
+      initLoadData(orgId, type,search);
     }
     setId('');
   };
@@ -282,7 +286,7 @@ function Main() {
             <div style={{ marginBottom: '10px' }}>
               <Search
                 className="search-input"
-                placeholder="请输入要查询的单号"
+                placeholder="搜索冲抵单号"
                 style={{ width: 180 }}
                 onSearch={value => loadData(value)}
               />
@@ -311,14 +315,14 @@ function Main() {
               // deleteData={deleteData}
               showModify={showModify}
               closeModify={closeModify}
-              reload={() => initLoadData('', search)}
+              reload={() => initLoadData(orgId, type,search)}
             />
           </TabPane>
           <TabPane tab="明细" key="2">
             <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
               <Search
                 className="search-input"
-                placeholder="请输入要查询的单号"
+                placeholder="搜索冲抵单号"
                 style={{ width: 180 }}
                 onSearch={value => loadDetailData(value)}
               />
@@ -330,7 +334,7 @@ function Main() {
               loading={detailLoading}
               pagination={detailPagination}
               data={detailData}
-              reload={() => initDetailLoadData('', detailSearch)}
+              reload={() => initDetailLoadData(orgId, type, detailSearch)}
             />
           </TabPane>
         </Tabs>
@@ -340,7 +344,7 @@ function Main() {
         addDrawerVisible={addDrawerVisible}
         closeDrawer={closeDrawer}
         // organizeId={organize} 
-        reload={() => initLoadData('', search)}
+        reload={() => initLoadData(orgId, type, search)}
         id={id}
       />
       <Show
@@ -355,7 +359,7 @@ function Main() {
         closeVerify={closeVerify}
         ifVerify={ifVerify}
         id={id}
-        reload={() => initLoadData('', search)}
+        reload={() => initLoadData(orgId, type, search)}
       />
     </Layout>
   );

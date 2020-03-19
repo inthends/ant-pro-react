@@ -229,7 +229,7 @@ const Verify = (props: VerifyProps) => {
                 </Form.Item>
               </Col>
               <Col span={4}>
-                <Form.Item label="费用状态"   >
+                <Form.Item label="状态"   >
                   {GetStatus(infoDetail.status)}
                 </Form.Item>
               </Col>

@@ -157,7 +157,7 @@ const EditHouseMeter = (props: EditHouseMeterProps) => {
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item label="房屋编号"   >
+              <Form.Item label="单元编号"   >
                 {/* {getFieldDecorator('unitId', {
                   initialValue: infoDetail.unitId,
                   rules: [{ required: true, message: '请输入房屋编号' }],
@@ -170,10 +170,10 @@ const EditHouseMeter = (props: EditHouseMeterProps) => {
           </Row>
           <Row gutter={24}>
             <Col  >
-              <Form.Item required label="房屋名称">
+              <Form.Item required label="单元全称">
                 {getFieldDecorator('allName', {
                   initialValue: infoDetail.allname,
-                  rules: [{ required: true, message: '请选择房屋' }],
+                  rules: [{ required: true, message: '请选择单元' }],
                 })(
                   <Input addonAfter={<Icon type="setting" onClick={() => {
                     setSelectHouseVisible(true);

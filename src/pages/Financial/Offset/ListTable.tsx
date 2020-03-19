@@ -72,8 +72,8 @@ function ListTable(props: ListTableProps) {
     },
     {
       title: '业户名称',
-      dataIndex: 'custName',
-      key: 'custName',
+      dataIndex: 'customerName',
+      key: 'customerName',
       width: 120,
       sorter: true,
       // render: val => {

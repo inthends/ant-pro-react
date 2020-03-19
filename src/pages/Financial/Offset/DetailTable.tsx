@@ -29,14 +29,12 @@ function DetailTable(props: DetailTableProps) {
       title: '冲抵单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 180,
-      sorter: true
+      width: 180, 
     },
     {
       title: '应付日期',
       dataIndex: 'period',
-      key: 'period',
-      sorter: true,
+      key: 'period', 
       width: 120,
       render: val => {
         if (val == null) {
@@ -50,8 +48,7 @@ function DetailTable(props: DetailTableProps) {
       title: '付款项目',
       dataIndex: 'payFeeName',
       key: 'payFeeName',
-      width: 120,
-      sorter: true,
+      width: 120, 
     },
     {
       title: '应付金额',
@@ -63,8 +60,7 @@ function DetailTable(props: DetailTableProps) {
       title: '收费项目',
       dataIndex: 'billFeeName',
       key: 'billFeeName',
-      width: 100,
-      sorter: true,
+      width: 100, 
     },
     {
       title: '冲抵金额',
@@ -104,7 +100,7 @@ function DetailTable(props: DetailTableProps) {
       }
     },
     {
-      title: '房屋名称',
+      title: '单元全称',
       dataIndex: 'allName',
       key: 'allName', 
     }
@@ -117,7 +113,8 @@ function DetailTable(props: DetailTableProps) {
         size="middle"
         columns={columns}
         dataSource={data}
-        rowKey="billId"
+        // rowKey="billId"
+        rowKey={record => record.id}
         pagination={pagination}
         scroll={{ y: 500, x: 1200 }}
         loading={loading}

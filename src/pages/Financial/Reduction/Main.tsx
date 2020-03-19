@@ -40,9 +40,17 @@ function Main() {
   const [chargeId, setChargeId] = useState<string>();
   const [chargeVisible, setChargeVisible] = useState<boolean>(false);//查看
 
-  const selectTree = (pid, type, info) => {
-    initLoadData(info.node.props.dataRef, search);
+  //org
+  const [orgId, setOrgId] = useState<string>();
+  const [type, setType] = useState<string>();
+
+  const selectTree = (orgid, type, info) => {
+    //info.node.props.dataRef
+    initLoadData(orgId, type, search);
+    initDetailLoadData(orgId, type, search);
     // SetOrganize(item);
+    setOrgId(orgId);
+    setType(type);
   };
 
   useEffect(() => {
@@ -62,8 +70,8 @@ function Main() {
         return res || [];
       });
 
-    initLoadData('', '');
-    initDetailLoadData('', '');
+    initLoadData('', '', '');
+    initDetailLoadData('', '', '');
   }, []);
 
   // 获取属性数据
@@ -114,7 +122,7 @@ function Main() {
 
   const showVerifyDrawer = (id, ifVerify) => {
     setId(id);
-    setVerifyVisible(true); 
+    setVerifyVisible(true);
     setIfVerify(ifVerify);
   };
 
@@ -148,7 +156,7 @@ function Main() {
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'billId';
+      searchCondition.sidx = field ? field : 'createDate';
     }
 
     return load(searchCondition).then(res => {
@@ -157,8 +165,8 @@ function Main() {
   };
   const load = data => {
     setLoading(true);
-    data.sidx = data.sidx || 'billId';
-    data.sord = data.sord || 'asc';
+    data.sidx = data.sidx || 'createDate';
+    data.sord = data.sord || 'desc';
     return GetPageListJson(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
@@ -175,17 +183,16 @@ function Main() {
     });
   };
 
-  const initLoadData = (org, searchText) => {
+  const initLoadData = (orgId, type, searchText) => {
     setSearch(searchText);
     // setAddButtonDisabled(true);
     const queryJson = {
-      // OrganizeId: org.organizeId,
       keyword: searchText,
-      TreeTypeId: org.key,
-      TreeType: org.type,
+      TreeTypeId: orgId,
+      TreeType: type,
     };
-    const sidx = 'billcode';
-    const sord = 'asc';
+    const sidx = 'createDate';
+    const sord = 'desc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
       // setAddButtonDisabled(false);
@@ -210,7 +217,7 @@ function Main() {
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'billId';
+      searchCondition.sidx = field ? field : 'id';
     }
 
     return detailload(searchCondition).then(res => {
@@ -220,8 +227,8 @@ function Main() {
   //明细表加载
   const detailload = data => {
     setDetailLoading(true);
-    data.sidx = data.sidx || 'billId';
-    data.sord = data.sord || 'asc';
+    data.sidx = data.sidx || 'id';
+    data.sord = data.sord || 'desc';
     return GetDetailPageListJson(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setDetailPagination(pagesetting => {
@@ -237,16 +244,15 @@ function Main() {
       return res;
     });
   };
-  const initDetailLoadData = (org, searchText) => {
+  const initDetailLoadData = (orgId, type, searchText) => {
     setDetailSearch(searchText);
     const queryJson = {
-      // OrganizeId: org.organizeId,
       keyword: searchText,
-      TreeTypeId: org.key,
-      TreeType: org.type,
+      TreeTypeId: orgId,
+      TreeType: type,
     };
-    const sidx = 'billCode';
-    const sord = 'asc';
+    const sidx = 'id';
+    const sord = 'desc';
     const { current: pageIndex, pageSize, total } = pagination;
     return detailload({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
       return res;
@@ -256,9 +262,9 @@ function Main() {
   //页签切换刷新
   const changeTab = key => {
     if (key == "1") {
-      initLoadData('', search);
+      initLoadData(orgId, type, search);
     } else {
-      initDetailLoadData('', detailsearch);
+      initDetailLoadData(orgId, type, detailsearch);
     }
   };
 
@@ -306,15 +312,15 @@ function Main() {
               modify={showDrawer}
               show={showViewDrawer}
               verify={(id, ifVerify) => showVerifyDrawer(id, ifVerify)}
-              reload={() => initLoadData('', search)}
+              reload={() => initLoadData(orgId, type, search)}
             />
           </TabPane>
           <TabPane tab="明细" key="2">
             <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
               <Search
                 className="search-input"
-                placeholder="请输入要查询的单号"
-                style={{ width: 200 }}
+                placeholder="搜索减免单号"
+                style={{ width: 180 }}
                 onSearch={value => loadDetailData(value)}
               />
             </div>
@@ -325,7 +331,7 @@ function Main() {
               loading={detailloading}
               pagination={detailpagination}
               data={detaildata}
-              reload={() => initDetailLoadData('', detailsearch)}
+              reload={() => initDetailLoadData(orgId, type, detailsearch)}
             />
           </TabPane>
         </Tabs>
@@ -336,7 +342,7 @@ function Main() {
         modifyVisible={modifyVisible}
         closeDrawer={closeDrawer}
         id={id}
-        reload={() => initLoadData('', search)}
+        reload={() => initLoadData(orgId, type, search)}
       />
 
       <Show
@@ -351,7 +357,7 @@ function Main() {
         closeModal={closeVerifyDrawer}
         id={id}
         ifVerify={ifVerify}
-        reload={() => initLoadData('', search)}
+        reload={() => initLoadData(orgId, type, search)}
       />
 
       <ChargeShow

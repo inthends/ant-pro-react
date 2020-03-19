@@ -362,10 +362,10 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
               </Row>
               <Row gutter={24}>
                 <Col lg={12}>
-                  <Form.Item label="房屋名称" required>
+                  <Form.Item label="单元全称" required>
                     {getFieldDecorator('allName', {
                       initialValue: infoDetail.allName,
-                      rules: [{ required: true, message: '请选择房屋' }],
+                      rules: [{ required: true, message: '请选择单元' }],
                     })(
                       <Input addonAfter={<Icon type="setting" onClick={() => {
                         setSelectHouseVisible(true);
@@ -374,7 +374,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                   </Form.Item>
                 </Col>
                 <Col lg={12}>
-                  <Form.Item label="房屋编号" >
+                  <Form.Item label="单元编号" >
                     {getFieldDecorator('unitId', {
                       initialValue: infoDetail.unitId,
                     })(

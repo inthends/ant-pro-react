@@ -530,7 +530,7 @@ function Main() {
             <div style={{ marginBottom: '10px' }}>
               <Search
                 className="search-input"
-                placeholder="请输入要查询费项"
+                placeholder="搜索费项"
                 style={{ width: 180 }}
                 onSearch={value => loadData(value)} />
               <Checkbox style={{ marginLeft: '10px' }} onChange={onShowCustomerChange}

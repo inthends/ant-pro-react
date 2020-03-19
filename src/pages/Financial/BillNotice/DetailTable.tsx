@@ -46,7 +46,7 @@ function DetailTable(props: DetailTableProps) {
       sorter: true,
     },
     {
-      title: '房屋名称',
+      title: '单元全称',
       dataIndex: 'allName',
       key: 'allName',
       width: 220,

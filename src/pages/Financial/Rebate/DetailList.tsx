@@ -31,25 +31,28 @@ function DetailList(props: DetailListProps) {
 
   const columns = [
     {
+      title: '优惠单号',
+      dataIndex: 'billCode',
+      key: 'billCode',
+      width: 180, 
+    },
+    {
       title: '单元编号',
       dataIndex: 'unitId',
       key: 'unitId',
-      width: 120,
-      sorter: true,
+      width: 120, 
     },
     {
       title: '收费项目',
       dataIndex: 'feeName',
       key: 'feeName',
-      width: 150,
-      sorter: true
+      width: 150, 
     },
     {
       title: '应收期间',
       dataIndex: 'period',
       key: 'period',
-      width: 100,
-      sorter: true,
+      width: 100, 
       render: val => {
         if (val == null) {
           return '';
@@ -62,8 +65,7 @@ function DetailList(props: DetailListProps) {
       title: '计费起始日期',
       dataIndex: 'beginDate',
       key: 'beginDate',
-      width: 120,
-      sorter: true,
+      width: 120, 
       render: val => {
         if (val == null) {
           return '';
@@ -76,8 +78,7 @@ function DetailList(props: DetailListProps) {
       title: '计费截止日期',
       dataIndex: 'endDate',
       key: 'endDate',
-      width: 120,
-      sorter: true,
+      width: 120, 
       render: val => {
         if (val == null) {
           return '';
@@ -90,8 +91,7 @@ function DetailList(props: DetailListProps) {
       title: '金额',
       dataIndex: 'amount',
       key: 'amount',
-      width: 80,
-      sorter: true,
+      width: 80, 
     }, 
     {
       title: '状态',
@@ -111,7 +111,7 @@ function DetailList(props: DetailListProps) {
         dataSource={data}
         rowClassName={getClassName} //样式
         columns={columns}
-        rowKey={record => record.unitId}
+        rowKey={record => record.id}
         pagination={pagination}
         // scroll={{ y: 500 }}
         onChange={(pagination: PaginationConfig, filters, sorter) =>

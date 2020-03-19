@@ -34,7 +34,7 @@ function Main() {
   const [verifyVisible, setVerifyVisible] = useState<boolean>(false);
   const [showVisible, setShowVisible] = useState<boolean>(false);
   const [addBtnDisable, setAddBtnDisable] = useState<boolean>(true);
-
+  //选择的单元
   const [organize, setOrganize] = useState<any>({});
 
   const selectTree = (id, type, info) => {
@@ -53,30 +53,18 @@ function Main() {
   //   initNotPaymentLoadData('', '');
   // }, []);
 
-  const loadPaymentData = (paginationConfig?: PaginationConfig, sorter?) => {
-    const { current: pageIndex, pageSize, total } = paginationConfig || {
-      current: 1,
-      pageSize: paymentPagination.pageSize,
-      total: 0,
+  const initNotPaymentLoadData = (org, searchText) => {
+    setNotPaymentSearchParams(Object.assign({}, notPaymentSearchParams, { search: searchText }));
+    const queryJson = {
+      keyword: searchText,
+      UnitId: org.id == null ? "" : org.id,
     };
-    let searchCondition: any = {
-      pageIndex,
-      pageSize,
-      total,
-      queryJson: {
-        keyword: paymentSearchParams.search,
-        UnitId: organize.id == null ? "" : organize.id,
-        Status: paymentStatus, StartDate: paymentStartDate, EndDate: paymentEndDate
-      }
-    };
+    const sidx = 'billDate';
+    const sord = 'asc';
+    const { current: pageIndex, pageSize, total } = notPaymentPagination;
+    return notPaymentload({ pageIndex, pageSize, sidx, sord, total, queryJson });
+  };
 
-    if (sorter) {
-      let { field, order } = sorter;
-      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'id';
-    }
-    return paymentload(searchCondition);
-  }
   const loadNotPaymentData = (search, paginationConfig?: PaginationConfig, sorter?) => {
     setNotPaymentSearchParams(Object.assign({}, notPaymentSearchParams, { search: search }));
     const { current: pageIndex, pageSize, total } = paginationConfig || {
@@ -98,35 +86,15 @@ function Main() {
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'id';
+      searchCondition.sidx = field ? field : 'billDate';
     }
-
     return notPaymentload(searchCondition);
   }
-  const paymentload = data => {
-    setPaymentLoading(true);
-    data.sidx = data.sidx || 'id';
-    data.sord = data.sord || 'asc';
-    return ChargeFeePageData(data).then(res => {
-      const { pageIndex: current, total, pageSize } = res;
-      setPaymentPagination(pagesetting => {
-        return {
-          ...pagesetting,
-          current,
-          total,
-          pageSize,
-        };
-      });
-      setPaymentData(res.data);
-      setPaymentLoading(false);
-      return res;
-    }).catch(err => {
-      setPaymentLoading(false);
-    });
-  };
+
+  //应付列表
   const notPaymentload = data => {
     setNotPaymentLoading(true);
-    data.sidx = data.sidx || 'id';
+    data.sidx = data.sidx || 'billDate';
     data.sord = data.sord || 'asc';
     return NotPaymentFeeData(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -145,9 +113,8 @@ function Main() {
       setNotPaymentLoading(false);
     });
   };
-  const [notPaymentSearchParams, setNotPaymentSearchParams] = useState<any>({});
-  const [paymentSearchParams, setPaymentSearchParams] = useState<any>({});
-  const [isEdit, setIsEdit] = useState<boolean>(false);
+
+  //已付列表
   const initPaymentLoadData = (org, searchText) => {
     setPaymentSearchParams(Object.assign({}, paymentSearchParams, { search: searchText }));
     const queryJson = {
@@ -155,23 +122,64 @@ function Main() {
       UnitId: organize.id == null ? "" : organize.id,
       Status: paymentStatus, StartDate: paymentStartDate, EndDate: paymentEndDate
     };
-    const sidx = 'id';
-    const sord = 'asc';
+    const sidx = 'createDate';
+    const sord = 'desc';
     const { current: pageIndex, pageSize, total } = paymentPagination;
     return paymentload({ pageIndex, pageSize, sidx, sord, total, queryJson });
   };
-  const initNotPaymentLoadData = (org, searchText) => {
-    setNotPaymentSearchParams(Object.assign({}, notPaymentSearchParams, { search: searchText }));
-    const queryJson = {
-      keyword: searchText,
-      UnitId: org.id == null ? "" : org.id,
-    };
-    const sidx = 'id';
-    const sord = 'asc';
-    const { current: pageIndex, pageSize, total } = notPaymentPagination;
-    return notPaymentload({ pageIndex, pageSize, sidx, sord, total, queryJson });
-  };
 
+  const loadPaymentData = (paginationConfig?: PaginationConfig, sorter?) => {
+    const { current: pageIndex, pageSize, total } = paginationConfig || {
+      current: 1,
+      pageSize: paymentPagination.pageSize,
+      total: 0,
+    };
+    let searchCondition: any = {
+      pageIndex,
+      pageSize,
+      total,
+      queryJson: {
+        keyword: paymentSearchParams.search,
+        UnitId: organize.id == null ? "" : organize.id,
+        Status: paymentStatus, StartDate: paymentStartDate, EndDate: paymentEndDate
+      }
+    };
+
+    if (sorter) {
+      let { field, order } = sorter;
+      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sidx = field ? field : 'createDate';
+    }
+    return paymentload(searchCondition);
+  }
+
+  //付款记录
+  const paymentload = data => {
+    setPaymentLoading(true);
+    data.sidx = data.sidx || 'createDate';
+    data.sord = data.sord || 'desc';
+    return ChargeFeePageData(data).then(res => {
+      const { pageIndex: current, total, pageSize } = res;
+      setPaymentPagination(pagesetting => {
+        return {
+          ...pagesetting,
+          current,
+          total,
+          pageSize,
+        };
+      });
+      setPaymentData(res.data);
+      setPaymentLoading(false);
+      return res;
+    }).catch(err => {
+      setPaymentLoading(false);
+    });
+  };
+ 
+  const [notPaymentSearchParams, setNotPaymentSearchParams] = useState<any>({});
+  const [paymentSearchParams, setPaymentSearchParams] = useState<any>({});
+  const [isEdit, setIsEdit] = useState<boolean>(false);
+ 
   const closeVerify = (result?) => {
     setVerifyVisible(false);
     if (result) {
@@ -258,7 +266,7 @@ function Main() {
         selectTree={(id, type, info) => {
           setAdminOrgId(info.node.props.organizeId);//管理处Id
           setOrganizeId(id);
-          selectTree(id, type, info); 
+          selectTree(id, type, info);
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>
@@ -270,8 +278,8 @@ function Main() {
             }}>
               <Search
                 className="search-input"
-                placeholder="请输入要查询费项"
-                style={{ width: 200 }}
+                placeholder="搜索费项"
+                style={{ width: 180 }}
                 onChange={e => {
                   var params = Object.assign({}, paymentSearchParams, { search: e.target.value });
                   setPaymentSearchParams(params);
@@ -342,9 +350,9 @@ function Main() {
           </TabPane>
           <TabPane tab="付款单列表" key="2">
             <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
-              <Select placeholder="==请选择=="
+              <Select placeholder="付款单状态"
                 allowClear={true}
-                style={{ width: '150px', marginRight: '5px' }}
+                style={{ width: '120px', marginRight: '5px' }}
                 onChange={(value: string) => {
                   setPaymentStatus(value);
                 }}>
@@ -353,24 +361,25 @@ function Main() {
                 <Select.Option value="-1">已作废</Select.Option>
               </Select>
               <DatePicker
-                placeholder='请选择付款日期'
+                placeholder='收款日期起'
                 onChange={(date, dateStr) => {
                   setPaymentStartDate(dateStr);
-                }} /> 至 <DatePicker style={{ marginRight: '5px' }}
-                  placeholder='请选择付款日期'
-                  onChange={(date, dateStr) => {
-                    setPaymentEndDate(dateStr);
-                  }} />
+                }} style={{ marginRight: '5px', width: '120px' }} />
+                至
+                 <DatePicker style={{ marginLeft: '5px', marginRight: '5px', width: '120px' }}
+                placeholder='收款日期止'
+                onChange={(date, dateStr) => {
+                  setPaymentEndDate(dateStr);
+                }} />
               <Search
                 className="search-input"
-                placeholder="请输入付款单号"
+                placeholder="搜索付款单号"
                 style={{ width: 180 }}
                 onSearch={value => {
                   setPaymentSearchParams(Object.assign({}, paymentSearchParams, { search: value }));
                   loadPaymentData();
                 }}
               />
-
               <Button type="primary" style={{ marginLeft: '3px' }}
                 onClick={() => {
                   loadPaymentData();
@@ -408,9 +417,7 @@ function Main() {
             </div>
 
             <PaymentTable
-
               show={showViewDrawer}
-
               // showBill={(id) => {
               //   showBill(id)
               // }}

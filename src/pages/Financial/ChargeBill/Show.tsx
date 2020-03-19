@@ -251,7 +251,7 @@ const Show = (props: ShowProps) => {
                 </Form.Item>
               </Col>
               <Col span={3}>
-                <Form.Item label="费用状态">
+                <Form.Item label="状态">
                   {GetStatus(infoDetail.status)}
                 </Form.Item>
               </Col> 
