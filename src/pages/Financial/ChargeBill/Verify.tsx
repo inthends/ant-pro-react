@@ -50,6 +50,7 @@ const Verify = (props: VerifyProps) => {
   //   closeVerify();
   // };
 
+  //收款单对账
   const audit = () => {
     form.validateFields((errors, values) => {
       // console.log(values, infoDetail); 
@@ -59,7 +60,7 @@ const Verify = (props: VerifyProps) => {
           // verifyDate: moment(new Date).format('YYYY-MM-DD'),
           verifyMemo: values.verifyMemo,
           keyValue: infoDetail.billId,
-          billDate: moment(values.billDate).format('YYYY-MM-DD'),
+          //billDate: moment(values.billDate).format('YYYY-MM-DD'),
           //status: ifVerify ? 1 : 2//，已收未审核1，已审核2，已冲红3
           check: !ifVerify
         });
