@@ -599,7 +599,7 @@ function Main() {
               pagination={pagination}
               data={data}
               modify={showDrawer}
-              reload={() => initLoadData(search, organizeId)}
+              reload={() => initLoadData(search, organizeId,showCustomerFee)}
               rowSelect={GetUnChargeSelectedKeys}
               organizeId={organizeId}
               customerName={customerName}
@@ -610,8 +610,7 @@ function Main() {
             />
           </TabPane>
           <TabPane tab="收款单列表" key="2">
-            <div style={{ marginBottom: '10px' }}>
-
+            <div style={{ marginBottom: '10px' }}> 
               <AutoComplete
                 allowClear={true}
                 dataSource={userList}

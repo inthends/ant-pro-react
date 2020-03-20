@@ -272,21 +272,16 @@ function ListTable(props: ListTableProps) {
               Charge(info).then(billId => {
                 message.success('收款成功');
                 //重置收款页面信息
-
                 form.setFieldsValue({ payAmountA: 0 });
                 form.setFieldsValue({ payAmountB: 0 });
-                form.setFieldsValue({ payAmountC: 0 });
-
+                form.setFieldsValue({ payAmountC: 0 }); 
                 form.setFieldsValue({ payTypeA: '支付宝扫码' });
                 form.setFieldsValue({ payTypeB: '微信扫码' });
-                form.setFieldsValue({ payTypeC: '现金' });
-
+                form.setFieldsValue({ payTypeC: '现金' }); 
                 form.setFieldsValue({ payCode: '' });
                 form.setFieldsValue({ invoiceCode: '' });
-                form.setFieldsValue({ accountBank: null });
-
-                form.setFieldsValue({ memo: '' });
-
+                form.setFieldsValue({ accountBank: null }); 
+                form.setFieldsValue({ memo: '' }); 
                 reload();
                 //弹出查看页面
                 showDetail(billId);
@@ -310,7 +305,6 @@ function ListTable(props: ListTableProps) {
     })
 
     retry().then(() => { 
-      
       //轮训结束
       temp.destroy();
     })
@@ -350,7 +344,6 @@ function ListTable(props: ListTableProps) {
       //message.warning('请选择收款项目！');
       return;
     }
-
     const data = {
       isML: isml,
       mlType: type,
@@ -400,7 +393,6 @@ function ListTable(props: ListTableProps) {
       </a>
     </Dropdown>
   );
-
 
   const columns = [
     {

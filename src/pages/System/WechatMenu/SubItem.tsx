@@ -65,7 +65,7 @@ const SubItem = (props: SubItemProps) => {
                 {...baseFormProps}
                 lg={24}
                 field="url"
-                label="自定义链接"
+                label="自定义链接(http://www.xxx.com)"
                 rules={[{ required: true, message: "请输入自定义链接" }]}
               ></ModifyItem>
             </Row> : null}
