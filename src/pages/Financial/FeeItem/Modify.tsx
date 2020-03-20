@@ -1597,8 +1597,8 @@ const Modify = (props: ModifyProps) => {
                     <Input.Search
                       key='orgsearch'
                       className="search-input"
-                      placeholder="请输入要查询的机构名称"
-                      style={{ width: 220 }}
+                      placeholder="搜索费项机构"
+                      style={{ width: 180 }}
                       onSearch={value => orgLoadData(value)}
                     />
                     <Button type="link" style={{ float: 'right' }}

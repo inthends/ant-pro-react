@@ -1,5 +1,5 @@
 //编辑税率
-import { Card, Col, Form, Input, Row, Modal, InputNumber } from 'antd';
+import { Card,  Form, Input,  Modal, InputNumber } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { GetOrgTaxTateFormJson, OrganizeEditForm } from './Main.service';
@@ -31,7 +31,6 @@ const EditOrganize = (props: EditOrganizeProps) => {
     }
   }, [visible]);
 
-
   return (
     <Modal
       title="编辑税率"
@@ -51,6 +50,7 @@ const EditOrganize = (props: EditOrganizeProps) => {
               TaxRate: values.taxRate,
               AllCode: infoDetail.allCode,
               FeeItemId: infoDetail.feeItemId,
+              OrganizeId:infoDetail.organizeId
             }
             OrganizeEditForm(newData).then((res) => {
               closeModal();

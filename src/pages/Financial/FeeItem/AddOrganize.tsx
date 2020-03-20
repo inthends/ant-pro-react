@@ -40,7 +40,6 @@ const AddOrganize = (props: AddOrganizeProps) => {
   }, [visible]);
 
   //const [expanded, setExpanded] = useState<string[]>([]);
-
   // const resetTreeNode = (treeNode) => {
   //   var newNode = Object.assign({}, treeNode, { checkable: true });
   //   let newSubNodes: any[] = [];
