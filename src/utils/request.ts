@@ -36,6 +36,13 @@ const errorHandler = (error: { response: Response }): Response => {
       description: errorText,
     });
   }
+  else if (!response) {
+    notification.error({
+      description: '您的网络发生异常，无法连接服务器',
+      message: '网络异常',
+    });
+  }
+
   return response;
 };
 
@@ -49,16 +56,13 @@ const request = extend({
 
 // @ts-ignore 异常拦截器
 request.interceptors.response.use(async response => { 
-
-  const { status, headers } = response;  
-  if (status === 403) { 
-
+  const { status, headers } = response; 
+  if (status === 403) {
     const redirect = headers.get('redirect') || '';
     window.location.href = redirect;
-  } else if (status === 200) {
-    const { code, msg } = await response.clone().json();
- 
-
+  }
+  else if (status === 200) { 
+    const { code, msg } = await response.clone().json(); 
     if (code !== 200) {
       notification.error({
         message: `请求错误`,
@@ -68,4 +72,5 @@ request.interceptors.response.use(async response => {
   }
   return response;
 });
+
 export default request;

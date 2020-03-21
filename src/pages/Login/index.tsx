@@ -19,20 +19,29 @@ function Login(props: ConnectFormProps) {
         setLoading(true);
         loginService(values).then(async ({ code, msg, data }) => {
           if (code === 200) {
-            //console.log(data);
-            //const { token, id } = data;
-            message.success('登录成功');
-            //localStorage.setItem('token', token);
-            const { userid, name, avatar } = data;
-            //全局记录用户id,name,src头像
-            localStorage.setItem('userid', userid);
-            localStorage.setItem('name', name);
-            // localStorage.setItem('usercode', usercode);
-            localStorage.setItem('avatar', avatar);
-            dispatch!({ type: 'user/setCurrent', payload: data });
-            await dispatch!({ type: 'auth/fetch' });
-            router.push('/dashboard');
+ 
+            if (data == null) {
+              message.error(msg);
+
+            } else {
+
+              //console.log(data);
+              //const { token, id } = data;
+              message.success('登录成功');
+              //localStorage.setItem('token', token);
+              const { userid, name, avatar } = data;
+              //全局记录用户id,name,src头像
+              localStorage.setItem('userid', userid);
+              localStorage.setItem('name', name);
+              // localStorage.setItem('usercode', usercode);
+              localStorage.setItem('avatar', avatar);
+              dispatch!({ type: 'user/setCurrent', payload: data });
+              await dispatch!({ type: 'auth/fetch' });
+              router.push('/dashboard');
+            }
+            
           }
+
         })
           .finally(() => {
             setLoading(false);

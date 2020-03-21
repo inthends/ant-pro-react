@@ -120,7 +120,7 @@ function ListTable(props: ListTableProps) {
       width: 95,
       fixed: 'right',
       render: (text, record) => {
-        if (record.status != 7) {
+        if (record.status != 7 && record.status != -1) {
           return [
             // <Button
             //   type="primary"
@@ -154,7 +154,7 @@ function ListTable(props: ListTableProps) {
         columns={columns}
         rowKey={record => record.id}
         pagination={pagination}
-        scroll={{ x: 1200 }}
+        scroll={{ x: 1300 }}
         onChange={(pag: PaginationConfig, filters, sorter) => changePage(pag, filters, sorter)}
         loading={loading}
       />

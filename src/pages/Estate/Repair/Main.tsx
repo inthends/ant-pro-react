@@ -84,7 +84,7 @@ function Main() {
     if (sorter) {
       const { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'id';
+      searchCondition.sidx = field ? field : 'billDate';
     }
 
     return load(searchCondition).then(res => {
@@ -93,8 +93,8 @@ function Main() {
   };
   const load = formData => {
     setLoading(true);
-    formData.sidx = formData.sidx || 'id';
-    formData.sord = formData.sord || 'asc';
+    formData.sidx = formData.sidx || 'billDate';
+    formData.sord = formData.sord || 'desc';
     return GetPageListJson(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
@@ -120,8 +120,8 @@ function Main() {
       TreeTypeId: org.key,
       TreeType: org.type,
     };
-    const sidx = 'id';
-    const sord = 'asc';
+    const sidx = 'billDate';
+    const sord = 'desc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
       return res;
