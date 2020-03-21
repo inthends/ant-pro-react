@@ -164,7 +164,7 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'state',
       key: 'state',
       width: 100,
-      align:'center',
+      align: 'center',
       sorter: true,
       render: (text, record) => {
         switch (text) {
@@ -174,6 +174,8 @@ function ListTable(props: ListTableProps) {
             return <Tag color="#e4aa5b">空置</Tag>
           case 4:
             return <Tag color="#61c33a">出租</Tag>
+          case 5:
+            return <Tag color="#566485">自用</Tag>
           default:
             return '';
         }

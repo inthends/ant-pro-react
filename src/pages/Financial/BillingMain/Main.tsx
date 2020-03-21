@@ -71,7 +71,7 @@ function Main() {
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'billCode';
+      searchCondition.sidx = field ? field : 'billDate';
     }
     return load(searchCondition);
   }
@@ -92,13 +92,13 @@ function Main() {
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'billCode';
+      searchCondition.sidx = field ? field : 'billDate';
     }
     return unitLoad(searchCondition);
   }
   const load = data => {
     setLoading(true);
-    data.sidx = data.sidx || 'billCode';
+    data.sidx = data.sidx || 'billDate';
     data.sord = data.sord || 'desc';
 
     return GetPageListJson(data).then(res => {
@@ -120,8 +120,8 @@ function Main() {
 
   const unitLoad = data => {
     setDetailLoading(true);
-    data.sidx = data.sidx || 'id';
-    data.sord = data.sord || 'asc';
+    data.sidx = data.sidx || 'billDate';
+    data.sord = data.sord || 'desc';
     return GetPageDetailListJson(data).then(res => {
       // console.log(res);
       const { pageIndex: current, total, pageSize } = res;
@@ -148,7 +148,7 @@ function Main() {
       TreeTypeId: org.key,
       TreeType: org.type,
     };
-    const sidx = 'billCode';
+    const sidx = 'billDate';
     const sord = 'desc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson });
@@ -162,7 +162,7 @@ function Main() {
       TreeTypeId: org.key,
       TreeType: org.type,
     };
-    const sidx = 'billCode';
+    const sidx = 'billDate';
     const sord = 'desc';
     const { current: pageIndex, pageSize, total } = detailPagination;
     return unitLoad({ pageIndex, pageSize, sidx, sord, total, queryJson });
@@ -250,7 +250,7 @@ function Main() {
             >
               <Search
                 className="search-input"
-                placeholder="请输入要查询的单号"
+                placeholder="搜索计费单号"
                 style={{ width: 180 }}
                 // onChange={e => {
                 //   var params = Object.assign({}, meterSearchParams, { search: e.target.value });

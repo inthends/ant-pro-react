@@ -30,7 +30,7 @@ function HouseMore(props) {
   const [organizeId, setOrganizeId] = useState<string>(''); //列表选中的节点组织id  
   const [roomVisible, setRoomVisible] = useState<boolean>(false);
 
-  const selectTree = (parentId, type, searchText) => {
+  const doSelectTree = (parentId, type, searchText) => {
     //初始化页码
     const page = new DefaultPagination();
     refresh(parentId, type, searchText, page);//, pstructId); 
@@ -167,7 +167,7 @@ function HouseMore(props) {
         selectId={selectId}
         // treeData={treeData}
         selectTree={(parentId, type) => {
-          selectTree(parentId, type, search);
+          doSelectTree(parentId, type, search);
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>

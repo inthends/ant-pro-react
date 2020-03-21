@@ -1,5 +1,5 @@
 import Page from '@/components/Common/Page';
-import { Divider, message, Modal, Table } from 'antd';
+import { Tag, Divider, message, Modal, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import { RemoveForm } from './Main.service';
@@ -28,7 +28,7 @@ function ListTable(props: ListTableProps) {
             message.success('删除成功');
             reload();
           })
-          .catch(e => {});
+          .catch(e => { });
       },
     });
   };
@@ -67,17 +67,17 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'auditMark',
       key: 'auditMark',
       width: 100,
-      sorter: true,
-      render: (text: any) => {
-        switch (text) {
-          case 1:
-            return '是';
-          case 0:
-            return '否';
-          default:
-            return null;
-        }
-      },
+      render: val => val == 1 ? <Tag color="#19d54e">是</Tag> : <Tag color="#e4aa5b">否</Tag>
+      // render: (text: any) => {
+      //   switch (text) {
+      //     case 1:
+      //       return '是';
+      //     case 0:
+      //       return '否';
+      //     default:
+      //       return null;
+      //   }
+      // },
     },
     {
       title: '审核人',
@@ -95,14 +95,14 @@ function ListTable(props: ListTableProps) {
     },
     {
       title: '备注',
-      dataIndex: 'memo', 
+      dataIndex: 'memo',
       key: 'memo',
     },
     {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
-      align:'center',
+      align: 'center',
       width: 95,
       fixed: 'right',
       render: (text, record) => {
@@ -119,10 +119,10 @@ function ListTable(props: ListTableProps) {
           //   删除
           // </Button>,  
           <span>
-          <a onClick={() => modify(record)} key="modify">修改</a>
-          <Divider type="vertical" />
-          <a onClick={() => doDelete(record)} key="delete">删除</a>
-        </span> 
+            <a onClick={() => modify(record)} key="modify">修改</a>
+            <Divider type="vertical" />
+            <a onClick={() => doDelete(record)} key="delete">删除</a>
+          </span>
         ];
       },
     },

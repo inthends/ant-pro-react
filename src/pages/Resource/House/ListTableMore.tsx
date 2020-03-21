@@ -207,11 +207,11 @@ function ListTableMore(props: ListTableMoreProps) {
           case 2:
             return <Tag color="#e97d1c">装修</Tag>
           case 3:
-            return <Tag color="#566485">空置</Tag>
+            return <Tag color="#e7ba0d">空置</Tag>
           case 4:
             return <Tag color="#9ac82b">出租</Tag>
           case 5:
-            return <Tag color="#e7ba0d">自用</Tag>
+            return <Tag color="#566485">自用</Tag>
           case -1:
             return <Tag color="#40A9FF">已作废</Tag>
           default:

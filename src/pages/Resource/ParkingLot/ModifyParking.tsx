@@ -291,6 +291,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
                       <Option value={0}>未售</Option>
                       <Option value={3}>空置</Option>
                       <Option value={4}>出租</Option>
+                      <Option value={5}>自用</Option> 
                     </Select>,
                   )}
                 </Form.Item>

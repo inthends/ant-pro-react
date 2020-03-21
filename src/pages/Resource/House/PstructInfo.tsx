@@ -43,8 +43,11 @@ const PstructInfo = (props: PstructInfoProps) => {
     else if (type == 2) {
       formLabel = '楼层';
     }
-    else {
+    else if (type == 4) {
       formLabel = '房间';
+    }
+    else if (type == 8) {
+      formLabel = '车位';
     }
   }
 
@@ -55,7 +58,7 @@ const PstructInfo = (props: PstructInfoProps) => {
   // 打开抽屉时初始化
   useEffect(() => {
     if (modifyVisible) {
-      if (data) { 
+      if (data) {
         setInfoDetail(data);
         //加载图片
         let files: any[]; files = [];
@@ -133,17 +136,17 @@ const PstructInfo = (props: PstructInfoProps) => {
   //   }
   // };
 
-  const showCustomerDrawer = (customerId, type) => { 
+  const showCustomerDrawer = (customerId, type) => {
 
     if (customerId != '') {
       GetCustomerInfo(customerId).then(res => {
         setCustomer(res);
         setUserType(type);
         setCustomerVisible(true);
-      }) 
-    }else{
+      })
+    } else {
       setCustomerVisible(true);
-    } 
+    }
   };
 
   const closeCustomerDrawer = () => {
@@ -374,8 +377,7 @@ const PstructInfo = (props: PstructInfoProps) => {
                     })(<InputNumber placeholder="请输入产权面积" style={{ width: '100%' }} />)}
                   </Form.Item>
                 </Col>
-              </Row>) : type == 2 ?
-
+              </Row>) : type == 2 ? 
                 (<Row gutter={24}>
                   <Col lg={12}>
                     <Form.Item label="建筑面积(㎡)">
@@ -450,11 +452,10 @@ const PstructInfo = (props: PstructInfoProps) => {
                     initialValue: infoDetail.lng,
                   })(<Input placeholder="请输入纬度" />)}
                 </Form.Item>
-              </Col>
-
+              </Col> 
             </Row>) : null}
 
-            {type == 4 || type == 5 ? (
+            {type == 4 || type == 5 || type == 8  || type == 9 ? (
               <Row gutter={24}>
                 <Col lg={12}>
                   <Form.Item label={infoDetail.ownerName ? <div>业主名称 <a onClick={() => { showCustomerDrawer(infoDetail.ownerId, 1) }}>编辑</a></div> : '业主名称'}>

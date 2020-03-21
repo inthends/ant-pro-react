@@ -296,7 +296,7 @@ const Verify = (props: VerifyProps) => {
               size="middle"
               dataSource={chargeBillData}
               columns={columns}
-              rowKey={record => record.billId}
+              rowKey={record => record.id}
               pagination={pagination}
               scroll={{ y: 500, x: 1500 }}
               loading={loading}
