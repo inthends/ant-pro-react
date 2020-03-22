@@ -59,6 +59,7 @@ function ListTable(props: ListTableProps) {
     },
     {
       title: "排序号",
+      sorter: true,
       dataIndex: "sortCode",
       key: "sortCode",
       width: 80
@@ -92,7 +93,7 @@ function ListTable(props: ListTableProps) {
     //     );
     //   }
     // },
-   
+
     {
       title: "操作",
       dataIndex: "operation",

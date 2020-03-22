@@ -42,11 +42,13 @@ function ListTable(props: ListTableProps) {
       title: "工号",
       dataIndex: "code",
       key: "code",
+      sorter: true,
       width: 100,
     },
     {
       title: "名称",
       dataIndex: "name",
+      sorter: true,
       key: "name",
       width: 100
     },

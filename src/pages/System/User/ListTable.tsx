@@ -72,12 +72,14 @@ function ListTable(props: ListTableProps) {
       title: '用户名',
       dataIndex: 'account',
       key: 'account',
+      sorter: true,
       width: 150,
     },
     {
       title: '显示名',
       dataIndex: 'name',
       key: 'name',
+      sorter: true,
       width: 200,
     },
     // {

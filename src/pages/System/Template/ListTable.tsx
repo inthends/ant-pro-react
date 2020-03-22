@@ -38,7 +38,7 @@ function ListTable(props: ListTableProps) {
     {
       title: "模板名称",
       dataIndex: "templateName",
-      key: "templateName",
+      key: "templateName", 
       width: 250,
     },
     // {

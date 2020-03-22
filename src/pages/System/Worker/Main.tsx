@@ -70,7 +70,7 @@ const Main = () => {
     if (sorter) {
       const { field, order } = sorter;
       searchCondition.sord = order === "ascend" ? "asc" : "desc";
-      searchCondition.sidx = field ? field : "CreateDate";
+      searchCondition.sidx = field ? field : "code";
     }
     return load(searchCondition).then(res => {
       return res;
@@ -79,8 +79,8 @@ const Main = () => {
 
   const load = formData => {
     setLoading(true);
-    formData.sidx = formData.sidx || "CreateDate";
-    formData.sord = formData.sord || "desc";
+    formData.sidx = formData.sidx || "code";
+    formData.sord = formData.sord || "asc";
     return GetDataList(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
@@ -101,8 +101,8 @@ const Main = () => {
   const initLoadData = (searchParam: SearchParam) => {
     setSearch(searchParam);
     const queryJson = searchParam;
-    const sidx = "CreateDate";
-    const sord = "desc";
+    const sidx = "code";
+    const sord = "asc";
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(
       res => {
