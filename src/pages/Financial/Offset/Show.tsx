@@ -1,5 +1,5 @@
 //查看冲抵单
-import { Spin,Card, Button, Col, Drawer, Form, Row, Table } from 'antd';
+import { Spin, Card, Button, Col, Drawer, Form, Row, Table } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
@@ -97,9 +97,34 @@ const Show = (props: ShowProps) => {
     });
   };
 
-  // const changePage = (pagination: PaginationConfig, filters, sorter) => {
-  //   loadData(pagination, sorter);
-  // };
+  //刷新
+  const loadData = (paginationConfig?: PaginationConfig, sorter?) => {
+    const { current: pageIndex, pageSize, total } = paginationConfig || {
+      current: 1,
+      pageSize: pagination.pageSize,
+      total: 0,
+    };
+    let searchCondition: any = {
+      pageIndex,
+      pageSize,
+      total,
+      keyValue: id,
+      //queryJson: { ruleId: ruleId },
+    };
+
+    if (sorter) {
+      let { field, order } = sorter;
+      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sidx = field ? field : 'id';
+    }
+    return load(searchCondition).then(res => {
+      return res;
+    });
+  };
+
+  const changePage = (pagination: PaginationConfig, filters, sorter) => {
+    loadData(pagination, sorter);
+  };
 
   // const loadData = (paginationConfig?: PaginationConfig, sorter?) => {
   //   const { current: pageIndex, pageSize, total } = paginationConfig || {
@@ -242,7 +267,7 @@ const Show = (props: ShowProps) => {
           return moment(val).format('YYYY-MM-DD');
         }
       }
-    }, 
+    },
     {
       title: '付款项目',
       dataIndex: 'payFeeName',
@@ -378,9 +403,9 @@ const Show = (props: ShowProps) => {
                 pagination={pagination}
                 scroll={{ y: 500, x: 1200 }}
                 loading={loading}
-              // onChange={(pagination: PaginationConfig, filters, sorter) =>
-              //   changePage(pagination, filters, sorter)
-              // }
+                onChange={(pagination: PaginationConfig, filters, sorter) =>
+                  changePage(pagination, filters, sorter)
+                }
               />
             </Row>
           </Card>

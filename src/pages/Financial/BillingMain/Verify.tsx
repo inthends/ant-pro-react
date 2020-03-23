@@ -3,7 +3,7 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { GetPageDetailListJson, Audit, GetBilling } from './Main.service';
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { ColumnProps } from 'antd/lib/table';
+import { ColumnProps,PaginationConfig } from 'antd/lib/table';
 import styles from './style.less';
 import moment from 'moment';
 const { TextArea } = Input;
@@ -76,6 +76,35 @@ const Verify = (props: VerifyProps) => {
       return res;
     });
   };
+
+   //刷新
+   const loadData = (paginationConfig?: PaginationConfig, sorter?) => {
+    const { current: pageIndex, pageSize, total } = paginationConfig || {
+      current: 1,
+      pageSize: pagination.pageSize,
+      total: 0,
+    };
+    let searchCondition: any = {
+      pageIndex,
+      pageSize,
+      total,
+      queryJson: { billId: id },
+    };
+
+    if (sorter) {
+      let { field, order } = sorter;
+      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sidx = field ? field : 'id';
+    }
+    return unitMeterload(searchCondition).then(res => {
+      return res;
+    });
+  };
+
+  const changePage = (pagination: PaginationConfig, filters, sorter) => {
+    loadData(pagination, sorter);
+  };
+
 
   const onSave = () => {
     form.validateFields((errors, values) => {
@@ -306,6 +335,9 @@ const Verify = (props: VerifyProps) => {
                 pagination={pagination}
                 scroll={{ y: 500, x: 1300 }}
                 loading={loading}
+                onChange={(pagination: PaginationConfig, filters, sorter) =>
+                  changePage(pagination, filters, sorter)
+                }
               />
             </Row>
           </Spin>

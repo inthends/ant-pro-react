@@ -36,7 +36,7 @@ const Approve = (props: ApproveProps) => {
         setLoading(true);
         GetSubmitEntity(instanceId).then(res => {
           setInfoDetail(res);
-          initLoad(instanceId);
+          initLoad();
           setLoading(false);
         })
       }
@@ -76,12 +76,12 @@ const Approve = (props: ApproveProps) => {
       }
     });
   };
- 
-  const initLoad = (id) => {
+
+  const initLoad = () => {
     const sidx = 'billCode';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
-    return load({ pageIndex, pageSize, sidx, sord, total, billId: id }).then(res => {
+    return load({ pageIndex, pageSize, sidx, sord, total, billId: instanceId }).then(res => {
       return res;
     });
   }
@@ -106,6 +106,33 @@ const Approve = (props: ApproveProps) => {
     });
   };
 
+  //刷新
+  const loadData = (paginationConfig?: PaginationConfig, sorter?) => {
+    const { current: pageIndex, pageSize, total } = paginationConfig || {
+      current: 1,
+      pageSize: pagination.pageSize,
+      total: 0,
+    };
+    let searchCondition: any = {
+      pageIndex,
+      pageSize,
+      total,
+      billId: instanceId,
+    };
+
+    if (sorter) {
+      let { field, order } = sorter;
+      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sidx = field ? field : 'billCode';
+    }
+    return load(searchCondition).then(res => {
+      return res;
+    });
+  };
+
+  const changePage = (pagination: PaginationConfig, filters, sorter) => {
+    loadData(pagination, sorter);
+  };
 
   const columns = [
     {
@@ -249,10 +276,13 @@ const Approve = (props: ApproveProps) => {
             pagination={pagination}
             scroll={{ y: 500, x: 1500 }}
             loading={loading}
+            onChange={(pagination: PaginationConfig, filters, sorter) =>
+              changePage(pagination, filters, sorter)
+            }
           />
         </Card>
 
-        <Card  className={styles.card}>
+        <Card className={styles.card}>
           <CommentBox instanceId={instanceId} />
           <Form.Item label="">
             {getFieldDecorator('verifyMemo', {

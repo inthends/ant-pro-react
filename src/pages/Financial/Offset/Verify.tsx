@@ -28,18 +28,13 @@ const Verify = (props: VerifyProps) => {
   const [listdata, setListData] = useState<any[]>([]);
   const [pagination, setPagination] = useState<DefaultPagination>(new DefaultPagination());
 
-
   useEffect(() => {
-
     if (verifyVisible) {
-
       if (id) {
         setLoading(true);
         GetFormJson(id).then(res => {
-
           setInfoDetail(res);
           form.resetFields();
-
           // if (res.customerId) {
           //   GetCustomInfo(res.customerId).then(customInfo => {
           //     setInfoDetail({

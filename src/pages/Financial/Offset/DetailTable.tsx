@@ -16,7 +16,12 @@ interface DetailTableProps {
 };
 
 function DetailTable(props: DetailTableProps) {
-  const { loading, pagination, data } = props;
+  const {onchange, loading, pagination, data } = props;
+
+  const changePage = (pagination: PaginationConfig, filters, sorter) => {
+    onchange(pagination, filters, sorter);
+  };
+
   const getClassName = (record, index) => {
     if (record.status == -1) {
       return styles.rowRed
@@ -119,6 +124,9 @@ function DetailTable(props: DetailTableProps) {
         scroll={{ y: 500, x: 1200 }}
         loading={loading}
         rowClassName={getClassName} //样式
+        onChange={(pagination: PaginationConfig, filters, sorter) =>
+          changePage(pagination, filters, sorter)
+        }
       />
     </Page>
   );

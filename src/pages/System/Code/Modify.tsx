@@ -112,6 +112,34 @@ const Modify = (props: ModifyProps) => {
     );
   };
 
+   //刷新
+   const loadData = (paginationConfig?: PaginationConfig, sorter?) => {
+    const { current: pageIndex, pageSize, total } = paginationConfig || {
+      current: 1,
+      pageSize: pagination.pageSize,
+      total: 0,
+    };
+    let searchCondition: any = {
+      pageIndex,
+      pageSize,
+      total,
+      queryJson: { ruleId: ruleId },
+    };
+
+    if (sorter) {
+      let { field, order } = sorter;
+      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sidx = field ? field : 'id';
+    }
+    return load(searchCondition).then(res => {
+      return res;
+    });
+  };
+
+  const changePage = (pagination: PaginationConfig, filters, sorter) => {
+    loadData(pagination, sorter);
+  };
+
   // //关闭弹出的规则页面
   // const closeRuleItem = () => {
   //   setRuleItemVisible(false);
@@ -259,6 +287,9 @@ const Modify = (props: ModifyProps) => {
           pagination={pagination}
           scroll={{ y: 420 }}
           loading={loading}
+          onChange={(pagination: PaginationConfig, filters, sorter) =>
+            changePage(pagination, filters, sorter)
+          }
         /> 
       </Card>
 

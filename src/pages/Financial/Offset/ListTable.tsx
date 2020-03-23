@@ -25,8 +25,10 @@ interface ListTableProps {
 
 
 function ListTable(props: ListTableProps) {
-  const { reload, loading, pagination, data, showVerify, showModify } = props;
-
+  const { onchange, reload, loading, pagination, data, showVerify, showModify } = props;
+  const changePage = (pagination: PaginationConfig, filters, sorter) => {
+    onchange(pagination, filters, sorter);
+  };
   const doInvalid = record => {
     Modal.confirm({
       title: '请确认',
@@ -219,6 +221,9 @@ function ListTable(props: ListTableProps) {
         scroll={{ x: 1100, y: 500 }}
         rowClassName={getClassName} //样式
         loading={loading}
+        onChange={(pagination: PaginationConfig, filters, sorter) =>
+          changePage(pagination, filters, sorter)
+        }
       />
     </Page>
   );

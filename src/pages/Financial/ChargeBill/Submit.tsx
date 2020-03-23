@@ -35,7 +35,7 @@ const Submit = (props: SubmitProps) => {
         GetTotalAmount({ ids: JSON.stringify(ids) }).then(res => {
           setAmount(res.amount);
           setReceiveDetail(res.receiveDetail);
-          initLoad(ids);
+          initLoad();
           setLoading(false);
         })
       }
@@ -68,7 +68,7 @@ const Submit = (props: SubmitProps) => {
     });
   };
 
-  const initLoad = (ids) => {
+  const initLoad = () => {
     // const queryJson = { billIds: JSON.stringify(ids) };
     const sidx = 'billCode';
     const sord = 'asc';
@@ -98,6 +98,35 @@ const Submit = (props: SubmitProps) => {
     });
   };
 
+  //刷新
+  const loadData = (paginationConfig?: PaginationConfig, sorter?) => {
+    const { current: pageIndex, pageSize, total } = paginationConfig || {
+      current: 1,
+      pageSize: pagination.pageSize,
+      total: 0,
+    };
+    let searchCondition: any = {
+      pageIndex,
+      pageSize,
+      total,
+      billIds: JSON.stringify(ids) 
+    };
+
+    if (sorter) {
+      let { field, order } = sorter;
+      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sidx = field ? field : 'billCode';
+    }
+    return load(searchCondition).then(res => {
+      return res;
+    });
+  };
+
+
+   //翻页
+   const changePage = (pagination: PaginationConfig, filters, sorter) => {
+    loadData(pagination, sorter);
+  };
 
   const columns = [
     {
@@ -260,6 +289,9 @@ const Submit = (props: SubmitProps) => {
             pagination={pagination}
             scroll={{ y: 500, x: 1500 }}
             loading={loading}
+            onChange={(pagination: PaginationConfig, filters, sorter) =>
+              changePage(pagination, filters, sorter)
+            }
           />
 
         </Form>

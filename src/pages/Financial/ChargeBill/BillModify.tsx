@@ -64,7 +64,7 @@ const BillModify = (props: BillModifyProps) => {
         GetEntityShow(id).then(res => {
           setInfoDetail(res.entity);
           setLinkno(res.linkno);
-          initLoadFeeDetail(res.entity.billId);
+          initLoadFeeDetail(id);
           // setLoading(false);
         })
       }
@@ -96,6 +96,101 @@ const BillModify = (props: BillModifyProps) => {
       }
     })
   }
+
+  const initLoadFeeDetail = (billId) => {
+    const queryJson = { billId: billId };
+    const sidx = 'beginDate';
+    const sord = 'asc';
+    const { current: pageIndex, pageSize, total } = pagination;
+    return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
+      return res;
+    });
+  }
+
+  const load = data => {
+    setLoading(true);
+    data.sidx = data.sidx || 'beginDate';
+    data.sord = data.sord || 'asc';
+    return ChargeFeeDetail(data).then(res => {
+      const { pageIndex: current, total, pageSize } = res;
+      setPagination(pagesetting => {
+        return {
+          ...pagesetting,
+          current,
+          total,
+          pageSize,
+        };
+      });
+      setChargeBillData(res.data);
+      setLoading(false);
+      return res;
+    });
+  };
+
+  //刷新
+  const loadData = (paginationConfig?: PaginationConfig, sorter?) => {
+    const { current: pageIndex, pageSize, total } = paginationConfig || {
+      current: 1,
+      pageSize: pagination.pageSize,
+      total: 0,
+    };
+    let searchCondition: any = {
+      pageIndex,
+      pageSize,
+      total,
+      queryJson: { billId: id },
+    };
+
+    if (sorter) {
+      let { field, order } = sorter;
+      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sidx = field ? field : 'beginDate';
+    }
+    return load(searchCondition).then(res => {
+      return res;
+    });
+  };
+
+  const changePage = (pagination: PaginationConfig, filters, sorter) => {
+    loadData(pagination, sorter);
+  };
+
+  // const close = () => {
+  //   closeShow();
+  // };
+
+  //const onPrint = () => {
+  //打印
+  // Modal.confirm({
+  //   title: '请确认',
+  //   content: `您要打印吗？`, 
+  //   onOk: () => {
+  //     setLoading(true); 
+  //     Print(id).then(res => {
+  //       //window.location.href = res;
+  //       window.open(res);
+  //       setLoading(false);
+  //     });
+  //   },
+  // });
+  //弹出选择打印模板  
+  //};
+
+  const GetStatus = (status) => {
+    switch (status) {
+      // case 0:
+      //   return <Tag color="#e4aa5b">未收</Tag>;
+      case 1:
+        return <Tag color="#19d54e">已收</Tag>;
+      case 2:
+        return <Tag color="#19d54e">冲红</Tag>;
+      case -1:
+        return <Tag color="#e4aa5b">作废</Tag>;
+      default:
+        return '';
+    }
+  };
+
 
   const columns = [
     {
@@ -181,71 +276,6 @@ const BillModify = (props: BillModifyProps) => {
       key: 'memo'
     }
   ] as ColumnProps<any>[];
-
-  const initLoadFeeDetail = (billId) => {
-    const queryJson = { billId: billId };
-    const sidx = 'beginDate';
-    const sord = 'asc';
-    const { current: pageIndex, pageSize, total } = pagination;
-    return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
-      return res;
-    });
-  }
-
-  const load = data => {
-    setLoading(true);
-    data.sidx = data.sidx || 'beginDate';
-    data.sord = data.sord || 'asc';
-    return ChargeFeeDetail(data).then(res => {
-      const { pageIndex: current, total, pageSize } = res;
-      setPagination(pagesetting => {
-        return {
-          ...pagesetting,
-          current,
-          total,
-          pageSize,
-        };
-      });
-      setChargeBillData(res.data);
-      setLoading(false);
-      return res;
-    });
-  };
-  // const close = () => {
-  //   closeShow();
-  // };
-
-  //const onPrint = () => {
-  //打印
-  // Modal.confirm({
-  //   title: '请确认',
-  //   content: `您要打印吗？`, 
-  //   onOk: () => {
-  //     setLoading(true); 
-  //     Print(id).then(res => {
-  //       //window.location.href = res;
-  //       window.open(res);
-  //       setLoading(false);
-  //     });
-  //   },
-  // });
-  //弹出选择打印模板  
-  //};
-
-  const GetStatus = (status) => {
-    switch (status) {
-      // case 0:
-      //   return <Tag color="#e4aa5b">未收</Tag>;
-      case 1:
-        return <Tag color="#19d54e">已收</Tag>;
-      case 2:
-        return <Tag color="#19d54e">冲红</Tag>;
-      case -1:
-        return <Tag color="#e4aa5b">作废</Tag>;
-      default:
-        return '';
-    }
-  };
 
   return (
     <Drawer
@@ -427,6 +457,9 @@ const BillModify = (props: BillModifyProps) => {
               pagination={pagination}
               scroll={{ y: 500, x: 1600 }}
               loading={loading}
+              onChange={(pagination: PaginationConfig, filters, sorter) =>
+                changePage(pagination, filters, sorter)
+              }
             />
           </Form>
         </Card>

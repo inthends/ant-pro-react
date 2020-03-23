@@ -35,7 +35,7 @@ const Verify = (props: VerifyProps) => {
         GetEntityShow(id).then(res => {
           setInfoDetail(res.entity);
           setLinkno(res.linkno);
-          initLoadFeeDetail(res.entity.billId);
+          initLoadFeeDetail(id);
           //setLoading(false);
         })
       }
@@ -103,6 +103,66 @@ const Verify = (props: VerifyProps) => {
     }
   };
 
+  const initLoadFeeDetail = (billId) => {
+    const queryJson = { billId: billId };
+    const sidx = 'beginDate';
+    const sord = 'asc';
+    const { current: pageIndex, pageSize, total } = pagination;
+    return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
+      return res;
+    });
+  }
+
+  const load = data => {
+    setLoading(true);
+    data.sidx = data.sidx || 'beginDate';
+    data.sord = data.sord || 'asc';
+    return ChargeFeeDetail(data).then(res => {
+      const { pageIndex: current, total, pageSize } = res;
+      setPagination(pagesetting => {
+        return {
+          ...pagesetting,
+          current,
+          total,
+          pageSize,
+        };
+      });
+      setChargeBillData(res.data);
+      setLoading(false);
+      return res;
+    });
+  };
+
+
+  //刷新
+  const loadData = (paginationConfig?: PaginationConfig, sorter?) => {
+    const { current: pageIndex, pageSize, total } = paginationConfig || {
+      current: 1,
+      pageSize: pagination.pageSize,
+      total: 0,
+    };
+    let searchCondition: any = {
+      pageIndex,
+      pageSize,
+      total,
+      queryJson: { billId: id },
+    };
+
+    if (sorter) {
+      let { field, order } = sorter;
+      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sidx = field ? field : 'beginDate';
+    }
+    return load(searchCondition).then(res => {
+      return res;
+    });
+  };
+
+  //翻页
+  const changePage = (pagination: PaginationConfig, filters, sorter) => {
+    loadData(pagination, sorter);
+  };
+
   const columns = [
     {
       title: '单元编号',
@@ -167,36 +227,6 @@ const Verify = (props: VerifyProps) => {
       key: 'memo',
     }
   ] as ColumnProps<any>[];
-
-  const initLoadFeeDetail = (billId) => {
-    const queryJson = { billId: billId };
-    const sidx = 'beginDate';
-    const sord = 'asc';
-    const { current: pageIndex, pageSize, total } = pagination;
-    return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
-      return res;
-    });
-  }
-
-  const load = data => {
-    setLoading(true);
-    data.sidx = data.sidx || 'billId';
-    data.sord = data.sord || 'asc';
-    return ChargeFeeDetail(data).then(res => {
-      const { pageIndex: current, total, pageSize } = res;
-      setPagination(pagesetting => {
-        return {
-          ...pagesetting,
-          current,
-          total,
-          pageSize,
-        };
-      });
-      setChargeBillData(res.data);
-      setLoading(false);
-      return res;
-    });
-  };
 
   return (
     <Drawer
@@ -300,6 +330,9 @@ const Verify = (props: VerifyProps) => {
               pagination={pagination}
               scroll={{ y: 500, x: 1500 }}
               loading={loading}
+              onChange={(pagination: PaginationConfig, filters, sorter) =>
+                changePage(pagination, filters, sorter)
+              }
             />
             {!ifVerify ?
               <Row gutter={24}>

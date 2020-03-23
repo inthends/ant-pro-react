@@ -33,18 +33,18 @@ const ApproveView = (props: ApproveViewProps) => {
         setLoading(true);
         GetSubmitEntity(instanceId).then(res => {
           setInfoDetail(res);
-          initLoad(instanceId);
+          initLoad();
           setLoading(false);
         })
       }
     }
   }, [visible]);
 
-  const initLoad = (id) => {
+  const initLoad = () => {
     const sidx = 'billCode';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
-    return load({ pageIndex, pageSize, sidx, sord, total, billId: id }).then(res => {
+    return load({ pageIndex, pageSize, sidx, sord, total, billId: instanceId }).then(res => {
       return res;
     });
   }
@@ -67,6 +67,34 @@ const ApproveView = (props: ApproveViewProps) => {
       setLoading(false);
       return res;
     });
+  };
+
+ //刷新
+ const loadData = (paginationConfig?: PaginationConfig, sorter?) => {
+  const { current: pageIndex, pageSize, total } = paginationConfig || {
+    current: 1,
+    pageSize: pagination.pageSize,
+    total: 0,
+  };
+  let searchCondition: any = {
+    pageIndex,
+    pageSize,
+    total,
+    billId: instanceId
+  };
+
+  if (sorter) {
+    let { field, order } = sorter;
+    searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+    searchCondition.sidx = field ? field : 'billCode';
+  }
+  return load(searchCondition).then(res => {
+    return res;
+  });
+};
+
+  const changePage = (pagination: PaginationConfig, filters, sorter) => {
+    loadData(pagination, sorter);
   };
 
   const columns = [
@@ -214,6 +242,9 @@ const ApproveView = (props: ApproveViewProps) => {
                 pagination={pagination}
                 scroll={{ y: 500, x: 1500 }}
                 loading={loading}
+                onChange={(pagination: PaginationConfig, filters, sorter) =>
+                  changePage(pagination, filters, sorter)
+                }
               />
             </Card>
           </Form>

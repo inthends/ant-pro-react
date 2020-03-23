@@ -36,7 +36,7 @@ const BillShow = (props: BillShowProps) => {
         GetEntityShow(id).then(res => {
           setInfoDetail(res.entity);
           setLinkno(res.linkno);
-          initLoadFeeDetail(res.entity.billId);
+          initLoadFeeDetail(id);//res.entity.billId);
           // setLoading(false);
         })
       }
@@ -53,6 +53,116 @@ const BillShow = (props: BillShowProps) => {
   const closeModal = () => {
     setModalVisible(false);
   };
+
+  const initLoadFeeDetail = (billId) => {
+    const queryJson = { billId: billId };
+    const sidx = 'beginDate';
+    const sord = 'asc';
+    const { current: pageIndex, pageSize, total } = pagination;
+    return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
+      return res;
+    });
+  }
+
+  const load = data => {
+    setLoading(true);
+    data.sidx = data.sidx || 'beginDate';
+    data.sord = data.sord || 'asc';
+    return ChargeFeeDetail(data).then(res => {
+      const { pageIndex: current, total, pageSize } = res;
+      setPagination(pagesetting => {
+        return {
+          ...pagesetting,
+          current,
+          total,
+          pageSize,
+        };
+      });
+      setChargeBillData(res.data);
+      setLoading(false);
+      return res;
+    });
+  };
+
+  //刷新
+  const loadData = (paginationConfig?: PaginationConfig, sorter?) => {
+    const { current: pageIndex, pageSize, total } = paginationConfig || {
+      current: 1,
+      pageSize: pagination.pageSize,
+      total: 0,
+    };
+    let searchCondition: any = {
+      pageIndex,
+      pageSize,
+      total,
+      queryJson: { billId: id },
+    };
+
+    if (sorter) {
+      let { field, order } = sorter;
+      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sidx = field ? field : 'beginDate';
+    }
+    return load(searchCondition).then(res => {
+      return res;
+    });
+  };
+
+  const changePage = (pagination: PaginationConfig, filters, sorter) => {
+    loadData(pagination, sorter);
+  };
+
+  // const close = () => {
+  //   closeShow();
+  // };
+
+  //const onPrint = () => {
+  //打印
+  // Modal.confirm({
+  //   title: '请确认',
+  //   content: `您要打印吗？`, 
+  //   onOk: () => {
+  //     setLoading(true); 
+  //     Print(id).then(res => {
+  //       //window.location.href = res;
+  //       window.open(res);
+  //       setLoading(false);
+  //     });
+  //   },
+  // });
+  //弹出选择打印模板  
+  //};
+
+  const GetStatus = (status) => {
+    switch (status) {
+      // case 0:
+      //   return <Tag color="#e4aa5b">未收</Tag>;
+      case 1:
+        return <Tag color="#19d54e">已收</Tag>;
+      case 2:
+        return <Tag color="#19d54e">冲红</Tag>;
+      case -1:
+        return <Tag color="#e4aa5b">作废</Tag>;
+      default:
+        return '';
+    }
+  };
+
+  const GetVerifyStatus = (status) => {
+    switch (status) {
+      case 0:
+        return <Tag color="#D7443A">待审核</Tag>;
+      case 1:
+        return <Tag color="#19d54e">已审核</Tag>;
+      case 2:
+        return <Tag color="#e4aa4b">已送审</Tag>;
+      case 3:
+        return <Tag color="#19d54e">已复核</Tag>;
+      default:
+        return '';
+    }
+  };
+
 
   const columns = [
     {
@@ -129,7 +239,7 @@ const BillShow = (props: BillShowProps) => {
     {
       title: '单元全称',
       dataIndex: 'allName',
-      key: 'allName', 
+      key: 'allName',
       width: 280
     },
     {
@@ -139,86 +249,6 @@ const BillShow = (props: BillShowProps) => {
     }
   ] as ColumnProps<any>[];
 
-  const initLoadFeeDetail = (billId) => {
-    const queryJson = { billId: billId };
-    const sidx = 'beginDate';
-    const sord = 'asc';
-    const { current: pageIndex, pageSize, total } = pagination;
-    return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
-      return res;
-    });
-  }
-
-  const load = data => {
-    setLoading(true);
-    data.sidx = data.sidx || 'beginDate';
-    data.sord = data.sord || 'asc';
-    return ChargeFeeDetail(data).then(res => {
-      const { pageIndex: current, total, pageSize } = res;
-      setPagination(pagesetting => {
-        return {
-          ...pagesetting,
-          current,
-          total,
-          pageSize,
-        };
-      });
-      setChargeBillData(res.data);
-      setLoading(false);
-      return res;
-    });
-  };
-  // const close = () => {
-  //   closeShow();
-  // };
-
-  //const onPrint = () => {
-  //打印
-  // Modal.confirm({
-  //   title: '请确认',
-  //   content: `您要打印吗？`, 
-  //   onOk: () => {
-  //     setLoading(true); 
-  //     Print(id).then(res => {
-  //       //window.location.href = res;
-  //       window.open(res);
-  //       setLoading(false);
-  //     });
-  //   },
-  // });
-  //弹出选择打印模板  
-  //};
-
-  const GetStatus = (status) => {
-    switch (status) {
-      // case 0:
-      //   return <Tag color="#e4aa5b">未收</Tag>;
-      case 1:
-        return <Tag color="#19d54e">已收</Tag>;
-      case 2:
-        return <Tag color="#19d54e">冲红</Tag>;
-      case -1:
-        return <Tag color="#e4aa5b">作废</Tag>;
-      default:
-        return '';
-    }
-  };
-
-  const GetVerifyStatus = (status) => {
-    switch (status) {
-      case 0:
-        return <Tag color="#D7443A">待审核</Tag>;
-      case 1:
-        return <Tag color="#19d54e">已审核</Tag>;
-      case 2:
-        return <Tag color="#e4aa4b">已送审</Tag>;
-      case 3:
-        return <Tag color="#19d54e">已复核</Tag>;
-      default:
-        return '';
-    }
-  };
-
   return (
     <Drawer
       title={title}
@@ -227,7 +257,7 @@ const BillShow = (props: BillShowProps) => {
       onClose={closeShow}
       visible={showVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
-      <Spin tip="数据处理中..." spinning={loading}> 
+      <Spin tip="数据处理中..." spinning={loading}>
         <PageHeader
           title={null}
           subTitle={
@@ -254,17 +284,17 @@ const BillShow = (props: BillShowProps) => {
                 <Form.Item label="状态">
                   {GetStatus(infoDetail.status)}
                 </Form.Item>
-              </Col> 
+              </Col>
               <Col span={4}>
                 <Form.Item label="业户名称">
                   {infoDetail.customerName}
                 </Form.Item>
-              </Col> 
+              </Col>
               <Col span={5}>
                 <Form.Item label="房号">
                   {infoDetail.unitId}
                 </Form.Item>
-              </Col> 
+              </Col>
               <Col span={3}>
                 <Form.Item label="发票编号"  >
                   {infoDetail.invoiceCode}
@@ -274,7 +304,7 @@ const BillShow = (props: BillShowProps) => {
                 <Form.Item label="收据编号">
                   {infoDetail.payCode}
                 </Form.Item>
-              </Col> 
+              </Col>
             </Row>
           </Form>
           <Divider dashed />
@@ -312,7 +342,7 @@ const BillShow = (props: BillShowProps) => {
                   {infoDetail.verifyDate}
                 </Form.Item>
               </Col>
-            </Row> 
+            </Row>
             <Row gutter={24}>
               <Col span={10}>
                 <Form.Item label="审核说明">
@@ -324,7 +354,7 @@ const BillShow = (props: BillShowProps) => {
                   {infoDetail.memo}
                 </Form.Item>
               </Col>
-            </Row>  
+            </Row>
             <Table
               // title={() => '费用明细'}
               size="middle"
@@ -334,6 +364,9 @@ const BillShow = (props: BillShowProps) => {
               pagination={pagination}
               scroll={{ y: 500, x: 1600 }}
               loading={loading}
+              onChange={(pagination: PaginationConfig, filters, sorter) =>
+                changePage(pagination, filters, sorter)
+              }
             />
           </Form>
         </Card>

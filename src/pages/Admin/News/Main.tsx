@@ -71,6 +71,7 @@ function Main() {
     setModifyVisible(true);
   };
 
+  //分页刷新
   const loadData = (type, searchText, organizeId, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(searchText);
     setType(type);
