@@ -403,7 +403,7 @@ const Modify = (props: ModifyProps) => {
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'allName';
+      searchCondition.sidx = field ? field : 'orgName';
     }
 
     return orgLoad(searchCondition).then(res => {
@@ -413,7 +413,7 @@ const Modify = (props: ModifyProps) => {
 
   const orgLoad = data => {
     setOrgLoading(true);
-    data.sidx = data.sidx || 'allName';
+    data.sidx = data.sidx || 'orgName';
     data.sord = data.sord || 'asc';
     return GetOrganizePageList(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -436,7 +436,7 @@ const Modify = (props: ModifyProps) => {
   const initOrgLoadData = (search) => {
     setOrgSearch(search);
     const queryJson = { feeItemId: id };
-    const sidx = 'allName';
+    const sidx = 'orgName';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = orgPagination;
     return orgLoad({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
