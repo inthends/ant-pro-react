@@ -25,10 +25,15 @@ function Main() {
   const [orgid, SetOrgid] = useState<string>('');
   const [orgtype, SetOrgtype] = useState<string>('');
 
-  const selectTree = (id, type,  searchText) => {
-    initLoadData(id, type,  searchText);
+  const selectTree = (id, type) => {
+    // initLoadData(id, type, searchText);
     SetOrgid(id);
     SetOrgtype(type);
+
+    //初始化页码，防止页码错乱导致数据查询出错  
+    const page = new DefaultPagination();
+    loadData(search, id, type, page);
+
   };
 
   useEffect(() => {
@@ -55,7 +60,8 @@ function Main() {
     setCurrData(item);
     setModifyVisible(true);
   };
-  const loadData = (searchText, org, paginationConfig?: PaginationConfig, sorter?) => {
+
+  const loadData = (searchText, orgid, orgtype, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(searchText);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
@@ -68,13 +74,14 @@ function Main() {
       total,
       queryJson: {
         keyword: searchText,
-        OrganizeId: org.id,
+        OrganizeId: orgid,
+        Type: orgtype
       },
     };
 
     if (sorter) {
       const { field, order } = sorter;
-      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === "descend" ? "desc" : "asc";
       searchCondition.sidx = field ? field : 'enCode';
     }
 
@@ -107,9 +114,10 @@ function Main() {
     setSearch(searchText);
     const queryJson = {
       OrganizeId: id,
+      Type: type,
       keyword: search,
     };
-    const sidx = 'EnCode';
+    const sidx = 'enCode';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
@@ -122,16 +130,16 @@ function Main() {
       <LeftTree
         treeData={treeData}
         selectTree={(id, item) => {
-          selectTree(id, item, search);
+          selectTree(id, item);
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>
         <div style={{ marginBottom: '10px' }}>
           <Search
             className="search-input"
-            placeholder="请输入要查询的关键词"
-            onSearch={value => loadData(value, orgid)}
-            style={{ width: 200 }}
+            placeholder="搜索往来单位"
+            onSearch={value => loadData(value, orgid, orgtype)}
+            style={{ width: 180 }}
           />
           <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer()}>
             <Icon type="plus" />
@@ -146,7 +154,7 @@ function Main() {
           pagination={pagination}
           data={data}
           modify={showDrawer}
-          reload={() => initLoadData(orgid, orgtype,search)}
+          reload={() => initLoadData(orgid, orgtype, search)}
         />
       </Content>
 
@@ -156,7 +164,7 @@ function Main() {
         treeData={treeData}
         organizeId={orgid}
         data={currData}
-        reload={() => initLoadData(orgid, orgtype,search)}
+        reload={() => initLoadData(orgid, orgtype, search)}
       />
     </Layout>
   );

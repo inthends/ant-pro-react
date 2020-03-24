@@ -1,7 +1,7 @@
 import { DefaultPagination } from "@/utils/defaultSetting";
 import { Button, Icon, Input, Layout } from "antd";
 import { PaginationConfig } from "antd/lib/table";
-import React, {   useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ListTable from "./ListTable";
 import Modify from "./Modify";
 import { GetDataItemTreeList, GetPageContentListJson } from "./Main.service";
@@ -75,7 +75,7 @@ const Main = () => {
 
     if (sorter) {
       const { field, order } = sorter;
-      searchCondition.sord = order === "ascend" ? "asc" : "desc";
+      searchCondition.sord = order === "descend" ? "desc" : "asc";
       searchCondition.sidx = field ? field : "typeName";
     }
     return load(searchCondition).then(res => {
@@ -86,7 +86,7 @@ const Main = () => {
   const load = formData => {
     setLoading(true);
     formData.sidx = formData.sidx || "typeName";
-    formData.sord = formData.sord || "desc";
+    formData.sord = formData.sord || "asc";
     return GetPageContentListJson(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
@@ -107,7 +107,7 @@ const Main = () => {
     setSearch(searchParam);
     const queryJson = searchParam;
     const sidx = "typeName";
-    const sord = "desc";
+    const sord = "asc";
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(
       res => {
@@ -127,7 +127,12 @@ const Main = () => {
     }
     var typeId = item.node.props.value;
     var typeName = item.node.props.title;
-    initLoadData({ ...search, typeId, typeName, type }); 
+    // initLoadData({ ...search, typeId, typeName, type }); 
+
+    //初始化页码，防止页码错乱导致数据查询出错  
+    const page = new DefaultPagination();
+    loadData({ ...search, typeId, typeName, type }, page);
+
   };
 
   return (
@@ -138,7 +143,7 @@ const Main = () => {
         selectTree={(id, item) => {
           selectTree(item);
         }}
-      /> 
+      />
       <Content style={{ paddingLeft: '18px' }}>
         <div style={{ marginBottom: 20, padding: "3px 0" }}>
           <Search
@@ -147,7 +152,7 @@ const Main = () => {
             placeholder="请输入巡检内容"
             style={{ width: 150 }}
             onSearch={keyword => loadData({ ...search, keyword })}
-          /> 
+          />
           <Button
             type="primary"
             style={{ float: "right" }}
@@ -176,7 +181,7 @@ const Main = () => {
         typeName={search.typeName}
         data={currData}
         reload={() => initLoadData(search)}
-      /> 
+      />
     </Layout>
   );
 };

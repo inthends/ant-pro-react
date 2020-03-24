@@ -40,17 +40,26 @@ function Main() {
   const [unitMeterPagination, setUnitMeterPagination] = useState<DefaultPagination>(new DefaultPagination());
   const [readingMeterPagination, setReadingMeterPagination] = useState<DefaultPagination>(new DefaultPagination());
   const [meterFormsPagination, setMeterFormsPagination] = useState<DefaultPagination>(new DefaultPagination());
-  const [unitTreeData, setUnitTreeData] = useState<any[]>([]); 
+  const [unitTreeData, setUnitTreeData] = useState<any[]>([]);
   // const [meterKinds, setMeterKinds] = useState<any>([]);
   // const [meterTypes, setMeterTypes] = useState<any>([]); 
   const [ifVerify, setIfVerify] = useState<boolean>(false);
   const [verifyVisible, setVerifyVisible] = useState<boolean>(false);
   const selectTree = (pid, type, info) => {
     SetOrganize(info.node.props.dataRef);
-    initMeterLoadData(info.node.props.dataRef, meterSearch, '');
-    initReadingMeterLoadData(info.node.props.dataRef, readingMeterSearch);
-    initMeterFormsLoadData(info.node.props.dataRef, meterFormsSearch);
-    initUnitMeterLoadData(info.node.props.dataRef, unitMeterSearch);
+
+    // initMeterLoadData(info.node.props.dataRef, meterSearch, '');
+    // initUnitMeterLoadData(info.node.props.dataRef, unitMeterSearch);
+    // initReadingMeterLoadData(info.node.props.dataRef, readingMeterSearch);
+    // initMeterFormsLoadData(info.node.props.dataRef, meterFormsSearch);
+
+    //初始化页码，防止页码错乱导致数据查询出错  
+    const page = new DefaultPagination();
+    loadMeterData(meterSearch, meterKind, page);
+    loadUnitMeterData(unitMeterSearch, page);
+    loadReadingMeterData(readingMeterSearch, page);
+    loadMeterFormsData(meterFormsSearch, page);
+
   };
 
   // let meterKind = [];
@@ -108,7 +117,7 @@ function Main() {
 
     if (sorter) {
       let { field, order } = sorter;
-      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === "descend" ? "desc" : "asc";
       searchCondition.sidx = field ? field : 'meterName';
     }
     return meterload(searchCondition);
@@ -154,7 +163,7 @@ function Main() {
 
     if (sorter) {
       let { field, order } = sorter;
-      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === "descend" ? "desc" : "asc";
       searchCondition.sidx = field ? field : 'billcode';
     }
 
@@ -176,7 +185,7 @@ function Main() {
 
     if (sorter) {
       let { field, order } = sorter;
-      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === "descend" ? "desc" : "asc";
       searchCondition.sidx = field ? field : 'billcode';
     }
 
@@ -447,7 +456,6 @@ function Main() {
   //   });
   // }
 
-
   //页签切换刷新
   const changeTab = key => {
     if (key == "1") {
@@ -463,7 +471,7 @@ function Main() {
   // const [meterSearchParams, setMeterSearchParams] = useState<any>({});
 
   //生成二维码
-  const CreateQrCode = () => { 
+  const CreateQrCode = () => {
     Modal.confirm({
       title: '请确认',
       content: `您是否要生成费表二维码？`,
@@ -472,7 +480,7 @@ function Main() {
       onOk: () => {
         CreateQrCodeFrom().then(() => {
           message.success('生成成功，请到服务器wwwroot/upload/Qcode目录下查看');
-        }).catch(() => { 
+        }).catch(() => {
         });;
       },
     });
@@ -645,7 +653,7 @@ function Main() {
               }}
             />
           </TabPane>
-          <TabPane tab="抄表列表" key="4">
+          <TabPane tab="抄表单明细列表" key="4">
             <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
               <Search
                 className="search-input"

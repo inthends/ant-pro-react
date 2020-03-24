@@ -61,7 +61,7 @@ const Main = () => {
 
     if (sorter) {
       const { field, order } = sorter;
-      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === "descend" ? "desc" : "asc";
       searchCondition.sidx = field ? field : 'account';
     }
 

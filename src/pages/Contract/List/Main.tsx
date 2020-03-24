@@ -117,7 +117,7 @@ function Main() {
 
     if (sorter) {
       let { field, order } = sorter;
-      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === "descend" ? "desc" : "asc";
       searchCondition.sidx = field ? field : 'signingDate';
     }
 
@@ -190,11 +190,13 @@ function Main() {
   const [currData, setCurrData] = useState<any>();
   const [roomVisible, setRoomVisible] = useState<boolean>(false);
   const [organizeId, setOrganizeId] = useState<string>(''); //列表选中的节点组织id
+  
   //房态图弹出房间
   const showAtlasDrawer = (item?) => {
     setCurrData(item);
     setRoomVisible(true);
   };
+
   const closeAtlasDrawer = () => {
     setRoomVisible(false);
   };

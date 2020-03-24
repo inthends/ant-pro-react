@@ -40,9 +40,13 @@ function Main() {
   const selectTree = (id, type, info) => {
     setOrganize(info.node.props.dataRef);
     if (type == 5) {
-      initNotPaymentLoadData({ id: id, type: type }, '');
-      initPaymentLoadData({ id: id, type: type }, '');
-      setAddBtnDisable(false);
+      // initNotPaymentLoadData({ id: id, type: type }, '');
+      // initPaymentLoadData({ id: id, type: type }, '');
+      setAddBtnDisable(false); 
+      //初始化页码，防止页码错乱导致数据查询出错  
+      const page = new DefaultPagination();
+      loadNotPaymentData(page);
+      loadPaymentData(page);
     } else {
       setAddBtnDisable(true);
     }
@@ -85,7 +89,7 @@ function Main() {
 
     if (sorter) {
       let { field, order } = sorter;
-      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === "descend" ? "desc" : "asc";
       searchCondition.sidx = field ? field : 'billDate';
     }
     return notPaymentload(searchCondition);
@@ -175,11 +179,11 @@ function Main() {
       setPaymentLoading(false);
     });
   };
- 
+
   const [notPaymentSearchParams, setNotPaymentSearchParams] = useState<any>({});
   const [paymentSearchParams, setPaymentSearchParams] = useState<any>({});
   const [isEdit, setIsEdit] = useState<boolean>(false);
- 
+
   const closeVerify = (result?) => {
     setVerifyVisible(false);
     if (result) {

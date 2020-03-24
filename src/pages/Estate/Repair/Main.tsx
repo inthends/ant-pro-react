@@ -24,8 +24,13 @@ function Main() {
   const [id, setId] = useState<any>();
 
   const selectTree = (id, type, info) => {
-    initLoadData(info.node.props.dataRef, search);
+    // initLoadData(info.node.props.dataRef, search);
     SetOrganize(info.node.props.dataRef);
+    
+    //初始化页码，防止页码错乱导致数据查询出错  
+    const page = new DefaultPagination();
+    loadData(search, info.node.props.dataRef, page);
+
   };
 
   useEffect(() => {
@@ -179,7 +184,7 @@ function Main() {
         showLink={showLinkDrawer}
       />
 
-      <ShowLink 
+      <ShowLink
         showVisible={serverVisible}
         closeDrawer={closeLinkDrawer}
         billId={billId}

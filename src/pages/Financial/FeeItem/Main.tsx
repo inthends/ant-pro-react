@@ -43,9 +43,7 @@ function Main() {
   const selectTree = (item, search) => {
     var value = item.node.props.value;
     var title = item.node.props.title;
-
     //console.log(item.node.props);
-
     var feeKind = "", feeType = "";
     switch (value) {
       case "All":
@@ -73,11 +71,16 @@ function Main() {
         feeType = "";
         break;
     }
-    initLoadData(feeKind, feeType, search);
-    initHouseLoadData(feeKind, feeType, search);
-
     SetFeeKind(feeKind);
     SetFeeType(feeType);
+
+    // initLoadData(feeKind, feeType, search);
+    // initHouseLoadData(feeKind, feeType, search); 
+
+    //初始化页码，防止页码错乱导致数据查询出错  
+    const page = new DefaultPagination();
+    loadData(search, page);
+    houseLoadData(search, page);
   };
 
   useEffect(() => {
@@ -175,7 +178,7 @@ function Main() {
   //加载费项房屋
   const houseLoadData = (search, feeItemId, paginationConfig?: PaginationConfig, sorter?) => {
     setHouseSearch(search);//必须赋值，否则数据不更新
-    setHouseFeeItemId(feeItemId); 
+    setHouseFeeItemId(feeItemId);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: housePagination.pageSize,
@@ -308,7 +311,6 @@ function Main() {
             <ListTable
               key='ListTable'
               onchange={(paginationConfig, filters, sorter) =>
-
                 loadData(search, paginationConfig, sorter)
               }
               loading={loading}

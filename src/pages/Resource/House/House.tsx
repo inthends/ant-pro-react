@@ -38,7 +38,7 @@ function House() {
   // };
 
   const setButton = (orgid, orgtype, searchText) => {
- 
+
     setOrganizeId(orgid);
     if (orgtype == 'D') {
       setIsDisabled(false);
@@ -46,8 +46,11 @@ function House() {
       setIsDisabled(true);
     }
 
-    initLoadData(orgid, searchText);
-    initHouseTotal(orgid, searchText); 
+    initHouseTotal(orgid, searchText);
+    //initLoadData(orgid, searchText); 
+    //初始化页码，防止页码错乱导致数据查询出错  
+    const page = new DefaultPagination();
+    loadData(searchText, orgid, page); 
   };
 
   useEffect(() => {
@@ -72,9 +75,9 @@ function House() {
   // };
 
   // 获取房产统计
-  const initHouseTotal = (orgId: string, searchText) => { 
+  const initHouseTotal = (orgId: string, searchText) => {
     setSearch(searchText);
-    const queryJson = { OrganizeId: orgId, keyword: searchText }; 
+    const queryJson = { OrganizeId: orgId, keyword: searchText };
     GetStatisticsTotal({ queryJson: queryJson })
       .then(getResult)
       .then(res => {
@@ -101,20 +104,22 @@ function House() {
       total,
       queryJson: { OrganizeId: orgid, keyword: searchText },
     };
- 
+
     if (sorter) {
       const { field, order } = sorter;
-      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'id';
+      // searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === "descend" ? "desc" : "asc";
+      searchCondition.sidx = field ? field : 'name';
     }
 
     return load(searchCondition).then(res => {
       return res;
     });
   };
+
   const load = formData => {
     setLoading(true);
-    formData.sidx = formData.sidx || 'id';
+    formData.sidx = formData.sidx || 'name';
     formData.sord = formData.sord || 'asc';
     return GetStatistics(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -132,11 +137,11 @@ function House() {
       return res;
     });
   };
-  
+
   const initLoadData = (orgId: string, searchText) => {
     setSearch(searchText);
     const queryJson = { OrganizeId: orgId, keyword: searchText };
-    const sidx = 'id';
+    const sidx = 'name';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
@@ -157,7 +162,7 @@ function House() {
           <Search
             className="search-input"
             placeholder="搜索项目名称"
-            onSearch={value => { 
+            onSearch={value => {
               //刷新统计
               GetStatisticsTotal(
                 {
@@ -176,7 +181,7 @@ function House() {
             }}
             style={{ width: 200 }}
           />
-          <AuthButton 
+          <AuthButton
             disabled={isDisabled}
             style={{ float: 'right' }}
             onClick={() => showDrawer()}

@@ -29,18 +29,23 @@ function Main() {
   // const [orgs, setOrgs] = useState<TreeNode[]>();
   const [orgs, setOrgs] = useState<any[]>([]);
 
-  const selectTree = (id, type, organizeId, searchText) => { 
-  
-    if (type == '1' || type == '8') {
+  const selectTree = (orgid, orgtype, organizeId) => {
+
+    if (orgtype == '1' || orgtype == '8') {
       setDisabledAdd(false);
     } else {
       setDisabledAdd(true);
     }
 
-    initLoadData(id, type, searchText);
-    setOrgid(id);
-    setOrgtype(type);
+    // initLoadData(orgid, orgtype, searchText);
+    setOrgid(orgid);
+    setOrgtype(orgtype);
     setOrganizeId(organizeId);
+
+    //初始化页码，防止页码错乱导致数据查询出错  
+    const page = new DefaultPagination();
+    loadData(search, page);
+
   };
 
   useEffect(() => {
@@ -93,7 +98,7 @@ function Main() {
     setModifyVisible(true);
   };
 
-  const loadData = (searchText, org, paginationConfig?: PaginationConfig, sorter?) => {
+  const loadData = (searchText, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(searchText);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
@@ -106,16 +111,16 @@ function Main() {
       total,
       queryJson: {
         keyword: searchText,
-        OrganizeId: org.organizeId,
-        TreeTypeId: org.id,
-        TreeType: org.type,
+        // OrganizeId: org.organizeId,
+        OrganizeId: orgid,
+        Type: orgtype,
       },
     };
 
     if (sorter) {
       const { field, order } = sorter;
-      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'id';
+      searchCondition.sord = order === "descend" ? "desc" : "asc";
+      searchCondition.sidx = field ? field : 'code';
     }
 
     return load(searchCondition).then(res => {
@@ -124,7 +129,7 @@ function Main() {
   };
   const load = formData => {
     setLoading(true);
-    formData.sidx = formData.sidx || 'id';
+    formData.sidx = formData.sidx || 'code';
     formData.sord = formData.sord || 'asc';
     return GetParkPageList(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -148,10 +153,10 @@ function Main() {
     const queryJson = {
       //OrganizeId: org.organizeId,
       keyword: searchText,
-      TreeTypeId: id,
-      TreeType: type,
+      OrganizeId: id,
+      Type: type,
     };
-    const sidx = 'id';
+    const sidx = 'code';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
@@ -166,7 +171,7 @@ function Main() {
       <LeftTree
         treeData={treeData}
         selectTree={(id, type, organizeId) => {
-          selectTree(id, type, organizeId, search);
+          selectTree(id, type, organizeId);
         }}
       />
       <Content style={{ paddingLeft: '18px' }} >
@@ -174,7 +179,7 @@ function Main() {
           <Search
             className="search-input"
             placeholder="请输入要查询的关键词"
-            onSearch={value => loadData(value, orgid)}
+            onSearch={value => loadData(value)}
             style={{ width: 200 }}
           />
           <Button
@@ -189,7 +194,7 @@ function Main() {
         </div>
         <ListTable
           onchange={(paginationConfig, filters, sorter) =>
-            loadData(search, orgid, paginationConfig, sorter)
+            loadData(search, paginationConfig, sorter)
           }
           loading={loading}
           pagination={pagination}

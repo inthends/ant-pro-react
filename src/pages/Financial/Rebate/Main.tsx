@@ -46,10 +46,15 @@ function Main() {
   const [type, setType] = useState<string>();
 
   const selectTree = (orgId, type, info) => {
-    initLoadData(orgId, type, search);
-    initDetailLoadData(orgId, type, search);
+    // initLoadData(orgId, type, search);
+    // initDetailLoadData(orgId, type, search);
     setOrgId(orgId);
     setType(type);
+
+    //初始化页码，防止页码错乱导致数据查询出错  
+    const page = new DefaultPagination();
+    loadData(search, page);
+    loadDetailData(detailsearch, page);
   };
 
   useEffect(() => {
@@ -140,7 +145,7 @@ function Main() {
   const initLoadData = (orgId, type, searchText) => {
     setSearch(searchText);
     // setAddButtonDisabled(true);
-    const queryJson = { 
+    const queryJson = {
       keyword: searchText,
       TreeTypeId: orgId,
       TreeType: type,
@@ -181,7 +186,7 @@ function Main() {
   const load = data => {
     setLoading(true);
     data.sidx = data.sidx || 'createDate';
-    data.sord = data.sord || 'asc';
+    data.sord = data.sord || 'desc';
     return GetPageListJson(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
@@ -215,7 +220,7 @@ function Main() {
 
     if (sorter) {
       let { field, order } = sorter;
-      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === "descend" ? "desc" : "asc";
       searchCondition.sidx = field ? field : 'id';
     }
 
@@ -227,7 +232,7 @@ function Main() {
   const detailload = data => {
     setDetailLoading(true);
     data.sidx = data.sidx || 'id';
-    data.sord = data.sord || 'desc';
+    data.sord = data.sord || 'asc';
     return GetDetailPageListJson(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setDetailPagination(pagesetting => {
@@ -243,15 +248,15 @@ function Main() {
       return res;
     });
   };
-  const initDetailLoadData = (orgId, type,  searchText) => {
+  const initDetailLoadData = (orgId, type, searchText) => {
     setDetailSearch(searchText);
-    const queryJson = { 
+    const queryJson = {
       keyword: searchText,
       TreeTypeId: orgId,
       TreeType: type,
     };
     const sidx = 'id';
-    const sord = 'desc';
+    const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
     return detailload({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
       return res;

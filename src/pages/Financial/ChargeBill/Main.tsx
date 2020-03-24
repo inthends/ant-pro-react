@@ -75,17 +75,22 @@ function Main() {
 
   //点击左侧树，加载数据
   const selectTree = (organizeId, type, search) => {
+    //初始化页码，防止页码错乱导致数据查询出错  
+    const page = new DefaultPagination();
     if (tabIndex == "1") {
       //未收款
-      initLoadData(search, organizeId, showCustomerFee);
+      // initLoadData(search, organizeId, showCustomerFee);
+      loadData(search, page);
     }
     else if (tabIndex == "2") {
       //已收款
-      initChargeLoadData(organizeId, type);
+      // initChargeLoadData(organizeId, type);
+      loadChargeData(page);
     }
     else {
       //对账单
-      initChargeCheckLoadData(organizeId, type);
+      // initChargeCheckLoadData(organizeId, type);
+      loadChargeCheckData(page);
     }
   };
 
@@ -137,7 +142,7 @@ function Main() {
 
     if (sorter) {
       let { field, order } = sorter;
-      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === "descend" ? "desc" : "asc";
       searchCondition.sidx = field ? field : 'billDate';
     }
     return load(searchCondition).then(res => {
@@ -398,7 +403,7 @@ function Main() {
     setBillModifyVisible(false);
   }
 
-  
+
 
   // const onInvalid = () => {
   //   if (chargedRowSelectedKey == null || chargedRowSelectedKey == {}) {
@@ -599,7 +604,7 @@ function Main() {
               pagination={pagination}
               data={data}
               modify={showDrawer}
-              reload={() => initLoadData(search, organizeId,showCustomerFee)}
+              reload={() => initLoadData(search, organizeId, showCustomerFee)}
               rowSelect={GetUnChargeSelectedKeys}
               organizeId={organizeId}
               customerName={customerName}
@@ -610,7 +615,7 @@ function Main() {
             />
           </TabPane>
           <TabPane tab="收款单列表" key="2">
-            <div style={{ marginBottom: '10px' }}> 
+            <div style={{ marginBottom: '10px' }}>
               <AutoComplete
                 allowClear={true}
                 dataSource={userList}
@@ -796,10 +801,10 @@ function Main() {
         //修改收款单
         showVisible={billModifyVisible}
         closeShow={closeBillDetail}
-        id={billId} 
+        id={billId}
         reload={() => initChargeLoadData(organizeId, chargedSearchParams.type)}
       />
- 
+
       <Verify
         //审核收款单
         verifyVisible={verifyVisible}

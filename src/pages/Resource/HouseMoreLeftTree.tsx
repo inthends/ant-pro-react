@@ -93,8 +93,8 @@ function HouseMoreLeftTree(props: HouseMoreLeftTreeProps) {
       //selectedKey = selectedKeys;
       setSelectedKey(selectedKeys);
       const type = info.node.props.type;
-      if ('ABCD'.indexOf(type) != -1)
-        return;
+      // if ('ABCD'.indexOf(type) != -1)
+      //   return;
       //setSelectedKey(selectedKeys[0]); 
       selectTree(selectedKeys[0], type);
     }

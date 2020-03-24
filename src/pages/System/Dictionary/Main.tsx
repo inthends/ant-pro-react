@@ -104,13 +104,16 @@ const Main = () => {
 
   const selectTree = (item) => {
     var value = item.node.props.value;
-    initLoadData(value, search);
+    // initLoadData(value, search);
     setItemId(value);
     setAddButtonDisable(false);
+    //初始化页码，防止页码错乱导致数据查询出错  
+    const page = new DefaultPagination();
+    loadData(search, value, page);
   };
 
   return (
-    <Layout style={{ height: "100%" }}> 
+    <Layout style={{ height: "100%" }}>
       <Sider
         theme="light"
         style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh + 10px)' }}

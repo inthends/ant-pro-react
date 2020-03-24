@@ -1,11 +1,11 @@
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { Modal,message,Button, Icon, Input, Layout } from 'antd';
+import { Modal, message, Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
-import {CreateQrCodeFrom, GetPublicAreas } from './Main.service';
+import { CreateQrCodeFrom, GetPublicAreas } from './Main.service';
 import { GetQuickSimpleTreeAllForArea } from '@/services/commonItem';
 // import { getResult } from '@/utils/networkUtils';
 
@@ -22,9 +22,12 @@ function Main() {
   const [currData, setCurrData] = useState<any>();
   const [search, setSearch] = useState<string>('');
 
-  const selectTree = (pid, type, info) => {
-    initLoadData(info.node.props.dataRef, search);
+  const selectTree = (id, type, info) => {
+    // initLoadData(info.node.props.dataRef, search);
     SetOrganize(info.node.props.dataRef);
+    //初始化页码，防止页码错乱导致数据查询出错  
+    const page = new DefaultPagination();
+    loadData(search,info.node.props.dataRef, page);
   };
 
   useEffect(() => {
@@ -96,8 +99,8 @@ function Main() {
 
     if (sorter) {
       const { field, order } = sorter;
-      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'id';
+      searchCondition.sord = order === "descend" ? "desc" : "asc";
+      searchCondition.sidx = field ? field : 'enCode';
     }
 
     return load(searchCondition).then(res => {
@@ -106,7 +109,7 @@ function Main() {
   };
   const load = formData => {
     setLoading(true);
-    formData.sidx = formData.sidx || 'id';
+    formData.sidx = formData.sidx || 'enCode';
     formData.sord = formData.sord || 'asc';
     return GetPublicAreas(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -133,7 +136,7 @@ function Main() {
       TreeTypeId: org.key,
       TreeType: org.type,
     };
-    const sidx = 'id';
+    const sidx = 'enCode';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
@@ -141,21 +144,24 @@ function Main() {
     });
   };
 
-    //生成二维码
-    const CreateQrCode = () => { 
-      Modal.confirm({
-        title: '请确认',
-        content: `您是否要生成二维码？`,
-        okText: '确认',
-        cancelText: '取消',
-        onOk: () => {
-          CreateQrCodeFrom().then(() => {
-            message.success('生成成功，请到服务器wwwroot/upload/Area目录下查看');
-          }).catch(() => { 
-          });;
-        },
-      });
-    }
+  //生成二维码
+  const CreateQrCode = () => {
+    Modal.confirm({
+      title: '请确认',
+      content: `您是否要生成二维码？`,
+      okText: '确认',
+      cancelText: '取消',
+      onOk: () => {
+        CreateQrCodeFrom().then(() => {
+          message.success('生成成功，请到服务器wwwroot/upload/Area目录下查看');
+        }).catch(() => {
+        });;
+      },
+    });
+  }
+
+  //是否能新增
+  const [isDisabled, setIsDisabled] = useState<boolean>(true);
 
   return (
     <Layout style={{ height: '100%' }}>
@@ -163,6 +169,11 @@ function Main() {
         parentid={'0'}
         //treeData={treeData}
         selectTree={(parentId, type, info) => {
+          if (type != 4) {
+            setIsDisabled(true);
+          } else {
+            setIsDisabled(false);
+          }
           selectTree(parentId, type, info);
         }}
       />
@@ -174,7 +185,9 @@ function Main() {
             onSearch={value => loadData(value, organize)}
             style={{ width: 200 }}
           />
-          <Button type="primary" style={{ float: 'right',marginLeft: '10px' }} onClick={() => showDrawer()}>
+          <Button type="primary"
+            disabled={isDisabled}
+            style={{ float: 'right', marginLeft: '10px' }} onClick={() => showDrawer()}>
             <Icon type="plus" />
             区域
           </Button>

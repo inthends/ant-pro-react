@@ -46,10 +46,17 @@ function Main() {
   const [type, setType] = useState<string>();
 
   const selectTree = (id, type, info) => {
-    initLoadData(id, type, search);
-    initDetailLoadData(id, type, detailSearch);
+
     setOrgId(orgId);
     setType(type);
+
+    // initLoadData(id, type, search);
+    // initDetailLoadData(id, type, detailSearch);
+
+    //初始化页码，防止页码错乱导致数据查询出错  
+    const page = new DefaultPagination();
+    loadData(search, page);
+    loadDetailData(search, page);
   };
 
   useEffect(() => {
@@ -164,7 +171,7 @@ function Main() {
   };
 
   //detail
-  const initDetailLoadData = (orgId, type,  searchText) => {
+  const initDetailLoadData = (orgId, type, searchText) => {
     setDetailSearch(searchText);
     const queryJson = {
       // OrganizeId: org.organizeId,
@@ -173,7 +180,7 @@ function Main() {
       TreeType: type,
     };
     const sidx = 'id';
-    const sord = 'desc';
+    const sord = 'asc';
     const { current: pageIndex, pageSize, total } = detailPagination;
     return detailload({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
       return res;
@@ -197,7 +204,7 @@ function Main() {
 
     if (sorter) {
       let { field, order } = sorter;
-      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === "descend" ? "desc" : "asc";
       searchCondition.sidx = field ? field : 'id';
     }
 
@@ -209,7 +216,7 @@ function Main() {
   const detailload = data => {
     setDetailLoading(true);
     data.sidx = data.sidx || 'id';
-    data.sord = data.sord || 'desc';
+    data.sord = data.sord || 'asc';
     return GetOffsetPageDetailData(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setDetailPagination(pagesetting => {
@@ -230,7 +237,7 @@ function Main() {
   const closeVerify = (result?) => {
     setVerifyVisible(false);
     if (result) {
-      initLoadData(orgId, type,search);
+      initLoadData(orgId, type, search);
     }
     setId('');
   };
@@ -305,7 +312,7 @@ function Main() {
             </div>
             <ListTable
               onchange={(paginationConfig, filters, sorter) =>
-                loadDetailData(search, paginationConfig, sorter)
+                loadData(search, paginationConfig, sorter)
               }
               loading={loading}
               pagination={pagination}
@@ -315,7 +322,7 @@ function Main() {
               // deleteData={deleteData}
               showModify={showModify}
               closeModify={closeModify}
-              reload={() => initLoadData(orgId, type,search)}
+              reload={() => initLoadData(orgId, type, search)}
             />
           </TabPane>
           <TabPane tab="明细" key="2">

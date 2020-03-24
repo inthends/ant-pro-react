@@ -95,7 +95,7 @@ function Main() {
     if (sorter) {
       const { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'id';
+      searchCondition.sidx = field ? field : 'createDate';
     }
     return load(searchCondition).then(res => {
       return res;
@@ -129,8 +129,8 @@ function Main() {
       OrganizeId: organizeId,
       keyword: searchText,
     };
-    const sidx = 'id';
-    const sord = 'asc';
+    const sidx = 'createDate';
+    const sord = 'desc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
       return res;

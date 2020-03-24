@@ -39,8 +39,13 @@ function Main() {
 
   const selectTree = (pid, type, info) => {
     SetOrganize(info.node.props.dataRef);
-    initBillCheckLoadData(info.node.props.dataRef, billCheckSearch);
-    initBillNoticeLoadData(info.node.props.dataRef, billNoticeSearch);
+    // initBillCheckLoadData(info.node.props.dataRef, billCheckSearch);
+    // initBillNoticeLoadData(info.node.props.dataRef, billNoticeSearch);
+
+    //初始化页码，防止页码错乱导致数据查询出错  
+    const page = new DefaultPagination();
+    loadBillCheckData(page);
+    loadBillNoticeData(billNoticeSearch, page); 
   };
 
   useEffect(() => {
@@ -62,6 +67,7 @@ function Main() {
 
 
   const loadBillCheckData = (paginationConfig?: PaginationConfig, sorter?) => {
+    // setBillCheckSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: billCheckPagination.pageSize,
@@ -82,7 +88,7 @@ function Main() {
 
     if (sorter) {
       let { field, order } = sorter;
-      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === "descend" ? "desc" : "asc";
       searchCondition.sidx = field ? field : 'billId';
     }
     return billCheckload(searchCondition);
@@ -107,7 +113,7 @@ function Main() {
 
     if (sorter) {
       let { field, order } = sorter;
-      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === "descend" ? "desc" : "asc";
       searchCondition.sidx = field ? field : 'billId';
     }
     return billNoticeload(searchCondition);
@@ -295,7 +301,7 @@ function Main() {
                 .catch(e => { });
             },
           });
-        } else { 
+        } else {
           showVerify(id, false);
         }
         // }

@@ -37,8 +37,13 @@ function Main() {
   const selectTree = (pid, type, info) => {
     //console.log(org,item,info);
     SetOrganize(info.node.props.dataRef);
-    initLoadData(info.node.props.dataRef, search);
-    initLoadDetailData(info.node.props.dataRef, detailSearch);
+    // initLoadData(info.node.props.dataRef, search);
+    // initLoadDetailData(info.node.props.dataRef, detailSearch);
+ 
+    //初始化页码，防止页码错乱导致数据查询出错  
+    const page = new DefaultPagination();
+    loadData(search, page);
+    loadUnitMeterData(detailSearch, page);
   };
 
   useEffect(() => {

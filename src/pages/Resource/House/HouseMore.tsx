@@ -31,7 +31,7 @@ function HouseMore(props) {
   const [roomVisible, setRoomVisible] = useState<boolean>(false);
 
   const doSelectTree = (parentId, type, searchText) => {
-    //初始化页码
+    //初始化页码，防止页码错乱导致数据查询出错 
     const page = new DefaultPagination();
     refresh(parentId, type, searchText, page);//, pstructId); 
     setParentId(parentId);
@@ -72,7 +72,8 @@ function HouseMore(props) {
     setRoomVisible(false);
   };
 
-  const loadData = (searchText, parentId, type, paginationConfig?: PaginationConfig, sorter?) => {
+  const loadData = (searchText, parentId, type, paginationConfig?: PaginationConfig, sorter?) => { 
+
     //刷新值，必须
     setSearch(searchText);
     setParentId(parentId);
@@ -97,8 +98,8 @@ function HouseMore(props) {
 
     if (sorter) {
       const { field, order } = sorter;
-      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'id';
+      searchCondition.sord = order === "descend" ? "desc" : "asc";
+      searchCondition.sidx = field ? field : 'code';
     }
 
     return load(searchCondition).then(res => {
@@ -108,7 +109,7 @@ function HouseMore(props) {
 
   const load = formData => {
     setLoading(true);
-    formData.sidx = formData.sidx || 'id';
+    formData.sidx = formData.sidx || 'code';
     formData.sord = formData.sord || 'asc';
     return GetPageListJson(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -135,7 +136,7 @@ function HouseMore(props) {
       ParentId: parentId,//== null ? psid : parentId,
       Type: type == null ? 1 : type,
     };
-    const sidx = 'id';
+    const sidx = 'code';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
@@ -152,13 +153,16 @@ function HouseMore(props) {
       ParentId: parentId,//== null ? psid : parentId,
       Type: type == null ? 1 : type,
     };
-    const sidx = 'id';
+    const sidx = 'code';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = page;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
       return res;
     });
   };
+
+  //是否能新增
+  const [isDisabled, setIsDisabled] = useState<boolean>(true);
 
   return (
     <Layout style={{ height: '100%' }}>
@@ -167,6 +171,11 @@ function HouseMore(props) {
         selectId={selectId}
         // treeData={treeData}
         selectTree={(parentId, type) => {
+          if ('ABCD'.indexOf(type) != -1) {
+            setIsDisabled(true);
+            return;
+          }
+          setIsDisabled(false);
           doSelectTree(parentId, type, search);
         }}
       />
@@ -181,7 +190,9 @@ function HouseMore(props) {
                 onSearch={value => loadData(value, parentId, type)}
                 style={{ width: 200 }}
               />
-              <Button key='add' type="primary" style={{ float: 'right', marginLeft: '10px' }}
+              <Button key='add' type="primary"
+                disabled={isDisabled}
+                style={{ float: 'right', marginLeft: '10px' }}
                 onClick={() => showDrawer()}>
                 <Icon type="plus" />
                 新增

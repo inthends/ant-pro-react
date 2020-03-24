@@ -53,7 +53,7 @@ const Show = (props: ShowProps) => {
           //   setLoading(false);
           // })
 
-          initLoadDetail(res.billId);
+          initLoad(res.billId);
 
         });
       } else {
@@ -67,9 +67,9 @@ const Show = (props: ShowProps) => {
   }, [showVisible]);
 
 
-  const initLoadDetail = (keyValue) => {
+  const initLoad = (keyValue) => {
     // const queryJson = { keyValue: billId };
-    const sidx = 'beginDate';
+    const sidx = 'id';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, keyValue }).then(res => {
@@ -79,7 +79,7 @@ const Show = (props: ShowProps) => {
 
   const load = data => {
     setLoading(true);
-    data.sidx = data.sidx || 'beginDate';
+    data.sidx = data.sidx || 'id';
     data.sord = data.sord || 'asc';
     return GetListByID(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -114,7 +114,7 @@ const Show = (props: ShowProps) => {
 
     if (sorter) {
       let { field, order } = sorter;
-      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === "descend" ? "desc" : "asc";
       searchCondition.sidx = field ? field : 'id';
     }
     return load(searchCondition).then(res => {

@@ -82,8 +82,8 @@ const Modify = (props: ModifyProps) => {
 
   const load = formData => {
     setLoading(true);
-    formData.sidx = formData.sidx || "id";
-    formData.sord = formData.sord || "desc";
+    formData.sidx = formData.sidx || "enCode";
+    formData.sord = formData.sord || "asc";
     return GetPageItemListJson(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
@@ -102,8 +102,8 @@ const Modify = (props: ModifyProps) => {
 
   const initLoadData = () => {
     const queryJson = { ruleId: ruleId };
-    const sidx = "id";
-    const sord = "desc";
+    const sidx = "enCode";
+    const sord = "asc";
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(
       res => {
@@ -128,8 +128,8 @@ const Modify = (props: ModifyProps) => {
 
     if (sorter) {
       let { field, order } = sorter;
-      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'id';
+      searchCondition.sord = order === "descend" ? "desc" : "asc";
+      searchCondition.sidx = field ? field : 'enCode';
     }
     return load(searchCondition).then(res => {
       return res;

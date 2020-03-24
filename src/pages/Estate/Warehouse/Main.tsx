@@ -6,9 +6,9 @@ import React, { useEffect, useState } from 'react';
 import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
-import { GetPageListJson } from './Main.service'; 
+import { GetPageListJson } from './Main.service';
 import { GetOrgs } from '@/services/commonItem';
- 
+
 const { Content } = Layout;
 const { Search } = Input;
 
@@ -20,11 +20,14 @@ function Main() {
   const [data, setData] = useState<any[]>([]);
   const [currData, setCurrData] = useState<any>();
   const [search, setSearch] = useState<string>('');
-  const [treeData, setTreeData] = useState<any[]>([]); 
+  const [treeData, setTreeData] = useState<any[]>([]);
 
   const selectTree = (org, item, searchText) => {
-    initLoadData(item, searchText);
+    // initLoadData(item, searchText);
     SetOrganize(item);
+    //初始化页码，防止页码错乱导致数据查询出错  
+    const page = new DefaultPagination();
+    loadData(search, item, page);
   };
 
   useEffect(() => {
@@ -33,10 +36,10 @@ function Main() {
       // const rootOrg = root.length === 1 ? root[0] : undefined;
       // SetOrganize(rootOrg);
       // initLoadData('', '');
-      setTreeData(res || []); 
-      initLoadData('', ''); 
+      setTreeData(res || []);
+      initLoadData('', '');
     });
- 
+
     //获取房产树
     // GetQuickSimpleTreeAll()
     //   .then(getResult)
@@ -89,7 +92,7 @@ function Main() {
 
     if (sorter) {
       const { field, order } = sorter;
-      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === "descend" ? "desc" : "asc";
       searchCondition.sidx = field ? field : 'id';
     }
 
@@ -101,7 +104,7 @@ function Main() {
     setLoading(true);
     formData.sidx = formData.sidx || 'id';
     formData.sord = formData.sord || 'asc';
-    return GetPageListJson(formData).then(res => {  
+    return GetPageListJson(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
         return {

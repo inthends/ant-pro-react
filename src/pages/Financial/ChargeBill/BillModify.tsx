@@ -143,7 +143,7 @@ const BillModify = (props: BillModifyProps) => {
 
     if (sorter) {
       let { field, order } = sorter;
-      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === "descend" ? "desc" : "asc";
       searchCondition.sidx = field ? field : 'beginDate';
     }
     return load(searchCondition).then(res => {

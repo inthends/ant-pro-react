@@ -37,8 +37,8 @@ const Main = () => {
 
     if (sorter) {
       const { field, order } = sorter;
-      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'id';
+      searchCondition.sord = order === "descend" ? "desc" : "asc";
+      searchCondition.sidx = field ? field : 'enCode';
     }
     return load(searchCondition).then(res => {
       return res;
@@ -46,7 +46,7 @@ const Main = () => {
   };
   const load = formData => {
     setLoading(true);
-    formData.sidx = formData.sidx || 'id';
+    formData.sidx = formData.sidx || 'enCode';
     formData.sord = formData.sord || 'asc';
     return GetTreeListJson(formData).then(res => {
       setData(res);
@@ -57,7 +57,7 @@ const Main = () => {
 
   const initLoadData = ({ searchText }) => {
     let queryJson: any = { keyword: searchText };
-    const sidx = 'id';
+    const sidx = 'enCode';
     const sord = 'asc';
     return load({ sidx, sord, queryJson }).then(res => {
       return res;

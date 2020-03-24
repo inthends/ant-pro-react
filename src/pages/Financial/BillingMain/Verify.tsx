@@ -93,7 +93,7 @@ const Verify = (props: VerifyProps) => {
 
     if (sorter) {
       let { field, order } = sorter;
-      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === "descend" ? "desc" : "asc";
       searchCondition.sidx = field ? field : 'id';
     }
     return unitMeterload(searchCondition).then(res => {

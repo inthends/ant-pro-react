@@ -48,7 +48,6 @@ const Show = (props: ShowProps) => {
     closeDrawer();
   };
 
-
   const initPaymentFeeDetail = (paginationConfig?: PaginationConfig, sorter?) => {
     //setMeterSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
@@ -65,7 +64,7 @@ const Show = (props: ShowProps) => {
 
     if (sorter) {
       let { field, order } = sorter;
-      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === "descend" ? "desc" : "asc";
       searchCondition.sidx = field ? field : 'billid';
     }
 

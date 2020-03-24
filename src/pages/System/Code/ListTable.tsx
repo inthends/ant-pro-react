@@ -43,6 +43,7 @@ function ListTable(props: ListTableProps) {
       title: "编号",
       dataIndex: "enCode",
       key: "enCode",
+      sorter: true,
       width: 100,
     },
     {
@@ -95,7 +96,7 @@ function ListTable(props: ListTableProps) {
     {
       title: "说明",
       dataIndex: "description",
-      key: "description", 
+      key: "description",
       width: 160
     },
     {

@@ -349,7 +349,7 @@ const ReadingMeterVerify = (props: ReadingMeterVerifyProps) => {
     };
     if (sorter) {
       const { field, order } = sorter;
-      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === "descend" ? "desc" : "asc";
       searchCondition.sidx = field ? field : 'id';
     }
     return houseload(searchCondition).then(res => {
@@ -412,7 +412,7 @@ const ReadingMeterVerify = (props: ReadingMeterVerifyProps) => {
     };
     if (sorter) {
       const { field, order } = sorter;
-      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === "descend" ? "desc" : "asc";
       searchCondition.sidx = field ? field : 'id';
     }
     return publicload(searchCondition).then(res => {
@@ -473,7 +473,7 @@ const ReadingMeterVerify = (props: ReadingMeterVerifyProps) => {
     };
     if (sorter) {
       const { field, order } = sorter;
-      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === "descend" ? "desc" : "asc";
       searchCondition.sidx = field ? field : 'id';
     }
     return virtualload(searchCondition).then(res => {
@@ -500,8 +500,6 @@ const ReadingMeterVerify = (props: ReadingMeterVerifyProps) => {
       return res;
     });
   };
-
-
 
   return (
     <Drawer

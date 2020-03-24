@@ -46,11 +46,16 @@ function Main() {
 
   const selectTree = (orgid, type, info) => {
     //info.node.props.dataRef
-    initLoadData(orgId, type, search);
-    initDetailLoadData(orgId, type, search);
+    // initLoadData(orgId, type, search);
+    // initDetailLoadData(orgId, type, search);
     // SetOrganize(item);
     setOrgId(orgId);
     setType(type);
+
+    //初始化页码，防止页码错乱导致数据查询出错  
+    const page = new DefaultPagination();
+    loadData(search, page);
+    loadDetailData(detailsearch, page);
   };
 
   useEffect(() => {
@@ -216,7 +221,7 @@ function Main() {
 
     if (sorter) {
       let { field, order } = sorter;
-      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === "descend" ? "desc" : "asc";
       searchCondition.sidx = field ? field : 'id';
     }
 
@@ -228,7 +233,7 @@ function Main() {
   const detailload = data => {
     setDetailLoading(true);
     data.sidx = data.sidx || 'id';
-    data.sord = data.sord || 'desc';
+    data.sord = data.sord || 'asc';
     return GetDetailPageListJson(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setDetailPagination(pagesetting => {
@@ -252,7 +257,7 @@ function Main() {
       TreeType: type,
     };
     const sidx = 'id';
-    const sord = 'desc';
+    const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
     return detailload({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
       return res;

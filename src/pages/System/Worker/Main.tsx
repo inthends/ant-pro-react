@@ -69,7 +69,7 @@ const Main = () => {
 
     if (sorter) {
       const { field, order } = sorter;
-      searchCondition.sord = order === "ascend" ? "asc" : "desc";
+      searchCondition.sord = order === "descend" ? "desc" : "asc";
       searchCondition.sidx = field ? field : "code";
     }
     return load(searchCondition).then(res => {
@@ -112,9 +112,13 @@ const Main = () => {
   };
 
   const selectTree = (item) => {
-    let orgId = item.node.props.value;
-    let type = item.node.props.type; 
-    initLoadData({ ...search, orgId, type })
+    var orgId = item.node.props.value;
+    var type = item.node.props.type;
+    // initLoadData({ ...search, orgId, type })
+
+    //初始化页码，防止页码错乱导致数据查询出错  
+    const page = new DefaultPagination();
+    loadData({ ...search, orgId, type }, page);
   };
 
   return (

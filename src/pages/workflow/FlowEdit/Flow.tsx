@@ -1,4 +1,4 @@
-import { DefaultPagination } from "@/utils/defaultSetting";   
+import { DefaultPagination } from "@/utils/defaultSetting";
 import { Button, Icon, Input, Layout } from "antd";
 import { PaginationConfig } from "antd/lib/table";
 import React, { useContext, useEffect, useState } from "react";
@@ -35,7 +35,7 @@ const Flow = () => {
   const { hideSider, setHideSider } = useContext(SiderContext);
   const [treeData, setTreeData] = useState<any[]>([]);
   //是否能新增
-  const [isDisabled, setDisabled] = useState<boolean>(true); 
+  const [isDisabled, setDisabled] = useState<boolean>(true);
   const [roles, setRoles] = useState<any[]>([]);
 
   useEffect(() => {
@@ -46,7 +46,7 @@ const Flow = () => {
     GetTreeRoleJson().then(res => {
       setRoles(res || []);
     });
-  
+
     initLoadData(search);
   }, []);
 
@@ -133,7 +133,12 @@ const Flow = () => {
 
     var typeId = item.node.props.value;
     var typeName = item.node.props.title;
-    initLoadData({ ...search, typeId, typeName, type });
+    // initLoadData({ ...search, typeId, typeName, type });
+
+    //初始化页码，防止页码错乱导致数据查询出错  
+    const page = new DefaultPagination();
+    loadData({ ...search, typeId, typeName, type }, page);
+
   };
 
   return (
@@ -212,7 +217,7 @@ const Flow = () => {
         closeDrawer={closeDrawer}
         typeId={search.typeId}
         typeName={search.typeName}
-        data={currData} 
+        data={currData}
         reload={() => initLoadData(search)}
         roles={roles}
       />

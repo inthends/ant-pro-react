@@ -58,8 +58,8 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
     if (selectedKeys.length === 1) {
       //const item = treeData.filter(treeItem => treeItem.key === selectedKeys[0])[0];
       const type = info.node.props.type;
-      if ('ABCD'.indexOf(type) != -1)
-        return;
+      // if ('ABCD'.indexOf(type) != -1)
+      //   return;
       selectTree(selectedKeys[0], type, info);
     }
   };

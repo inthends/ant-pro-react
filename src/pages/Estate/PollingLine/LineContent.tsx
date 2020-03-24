@@ -66,7 +66,7 @@ const LineContent = (props: LineContentProps) => {
     };
     if (sorter) {
       const { field, order } = sorter;
-      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === "descend" ? "desc" : "asc";
       searchCondition.sidx = field ? field : 'id';
     }
     return load(searchCondition).then(res => {

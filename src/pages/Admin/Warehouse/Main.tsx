@@ -70,7 +70,8 @@ function Main() {
     setModifyVisible(true);
   };
 
-  const loadData = (searchText, organizeId, paginationConfig?: PaginationConfig, sorter?) => {
+  const loadData = (searchText, organizeId, paginationConfig?: PaginationConfig, sorter?) => { 
+
     setSearch(searchText);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
@@ -89,8 +90,8 @@ function Main() {
 
     if (sorter) {
       const { field, order } = sorter;
-      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'id';
+      searchCondition.sord = order === "descend" ? "desc" : "asc";
+      searchCondition.sidx = field ? field : 'code';
     }
 
     return load(searchCondition).then(res => {
@@ -99,7 +100,7 @@ function Main() {
   };
   const load = formData => {
     setLoading(true);
-    formData.sidx = formData.sidx || 'id';
+    formData.sidx = formData.sidx || 'code';
     formData.sord = formData.sord || 'asc';
     return GetPageListJson(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -124,7 +125,7 @@ function Main() {
       OrganizeId: organizeId,
       keyword: searchText, 
     };
-    const sidx = 'id';
+    const sidx = 'code';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {

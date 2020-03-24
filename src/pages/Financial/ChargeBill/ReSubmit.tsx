@@ -74,7 +74,7 @@ const ReSubmit = (props: ReSubmitProps) => {
 
   const initLoad = () => {
     const sidx = 'billCode';
-    const sord = 'asc';
+    const sord = 'desc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, billId: instanceId }).then(res => {
       return res;
@@ -84,7 +84,7 @@ const ReSubmit = (props: ReSubmitProps) => {
   const load = data => {
     setLoading(true);
     data.sidx = data.sidx || 'billCode';
-    data.sord = data.sord || 'asc';
+    data.sord = data.sord || 'desc';
     return GetReceiveListByBillId(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {

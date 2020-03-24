@@ -151,7 +151,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
         ).concat([
           <Option disabled key="all" className={styles.addCustomer}>
             <a onClick={() => showCustomerDrawer('', 1)}>
-              新增住户
+              新增租户
             </a>
           </Option>]);//新增 
         setUserList(list);
@@ -177,7 +177,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
         ).concat([
           <Option disabled key="all" className={styles.addCustomer}>
             <a onClick={() => showCustomerDrawer('', 1)}>
-              新增住户
+              新增租户
             </a>
           </Option>]);//新增 
         setUserList(list);
@@ -388,13 +388,13 @@ const ModifyParking = (props: ModifyParkingProps) => {
               </Col>
 
               <Col lg={12}>
-                <Form.Item label={infoDetail.tenantName ? <div>住户名称 <a onClick={() => { showCustomerDrawer(infoDetail.tenantId, 2) }}>编辑</a></div> : '住户名称'}>
+                <Form.Item label={infoDetail.tenantName ? <div>租户名称 <a onClick={() => { showCustomerDrawer(infoDetail.tenantId, 2) }}>编辑</a></div> : '住户名称'}>
                   {/* {getFieldDecorator('customerId', {
                     initialValue: infoDetail.customerId,
                   })(<TextArea rows={4} placeholder="请输计费面积" />)} */}
                   {getFieldDecorator('tenantName', {
                     initialValue: infoDetail.tenantName,
-                    rules: [{ required: false, message: '住户不存在，请先新增' }, { validator: checkExist }]
+                    rules: [{ required: false, message: '租户不存在，请先新增' }, { validator: checkExist }]
                   })(<AutoComplete
                     dropdownClassName={styles.searchdropdown}
                     optionLabelProp="value"
@@ -402,7 +402,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
                     dataSource={userList}
                     style={{ width: '100%' }}
                     onSearch={tenantSearch}
-                    placeholder="请输入住户名称"
+                    placeholder="请输入租户名称"
                     onSelect={onTenantSelect}
                   />)}
                   {getFieldDecorator('tenantId', {
@@ -424,10 +424,10 @@ const ModifyParking = (props: ModifyParkingProps) => {
                 </Form.Item>
               </Col>
               <Col lg={12}>
-                <Form.Item label="住户电话">
+                <Form.Item label="租户电话">
                   {getFieldDecorator('tenantPhone', {
                     initialValue: infoDetail.tenantPhone,
-                  })(<Input placeholder="自动带出住户电话" readOnly />)}
+                  })(<Input placeholder="自动带出租户电话" readOnly />)}
                 </Form.Item>
               </Col>
             </Row>

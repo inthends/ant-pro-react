@@ -127,7 +127,10 @@ const Main = () => {
     }
 
     var typeId = item.node.props.value;
-    initLoadData({ ...search, typeId, type });
+    // initLoadData({ ...search, typeId, type }); 
+    //初始化页码，防止页码错乱导致数据查询出错  
+    const page = new DefaultPagination(); 
+    loadData({ ...search, typeId, type }, page);
   };
 
   return (
@@ -150,7 +153,7 @@ const Main = () => {
         ) : (
             <>
               {treeData != null && treeData.length > 0 ?
-                (<LeftTree 
+                (<LeftTree
                   key='lefttree'
                   treeData={treeData}
                   selectTree={(id, item) => {
