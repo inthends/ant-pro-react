@@ -25,17 +25,19 @@ function Main() {
   const [currData, setCurrData] = useState<any>();
   const [search, setSearch] = useState<string>('');
   //是否能新增
-  const [isAdd, setIsAdd] = useState<boolean>(false);
+  const [isDisabledAdd, setDisabledAdd] = useState<boolean>(true);
   // const [orgs, setOrgs] = useState<TreeNode[]>();
   const [orgs, setOrgs] = useState<any[]>([]);
 
-  const selectTree = (id, type, organizeId, searchText) => {
-    initLoadData(id, type, searchText);
+  const selectTree = (id, type, organizeId, searchText) => { 
+  
     if (type == '1' || type == '8') {
-      setIsAdd(false);
+      setDisabledAdd(false);
     } else {
-      setIsAdd(true);
+      setDisabledAdd(true);
     }
+
+    initLoadData(id, type, searchText);
     setOrgid(id);
     setOrgtype(type);
     setOrganizeId(organizeId);
@@ -179,7 +181,7 @@ function Main() {
             type="primary"
             style={{ float: 'right' }}
             // disabled={disabledCreate(orgid)}
-            disabled={isAdd}
+            disabled={isDisabledAdd}
             onClick={() => create(orgid)}>
             <Icon type="plus" />
             {orgtype == '8' ? '车位' : '车库'}

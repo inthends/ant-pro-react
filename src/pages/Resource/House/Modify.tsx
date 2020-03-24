@@ -178,6 +178,7 @@ const Modify = (props: ModifyProps) => {
         getInfo(id).then(tempInfo => {
           const newvalue = { ...values, handoverDate: values.handoverDate.format('YYYY-MM-DD') };
           newvalue.description = values.description.toHTML();//toRAW(); 
+          //newvalue.isPublish = newvalue.isPublish ? newvalue.isPublish : false;
           SaveForm({ ...tempInfo, ...newvalue, keyValue: tempInfo.id }).then(res => {
             message.success('提交成功');
             closeDrawer();
@@ -586,13 +587,12 @@ const Modify = (props: ModifyProps) => {
                       initialValue: infoDetail.invoiceTitle,
                     })(<Input placeholder="请输入电子发票" />)}
                   </Form.Item>
-                </Col>
-
+                </Col> 
 
                 <Col lg={6}>
                   <Form.Item label="微信端项目风采">
                     {getFieldDecorator('isPublish', {
-                      initialValue: infoDetail.isPublish,
+                      initialValue: infoDetail.isPublish? true : false,
                     })(
                       <Switch
                         onChange={value => form.setFieldsValue({ isPublish: value })}

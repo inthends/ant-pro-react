@@ -75,7 +75,7 @@ function Main() {
     if (sorter) {
       const { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'EnCode';
+      searchCondition.sidx = field ? field : 'enCode';
     }
 
     return load(searchCondition).then(res => {
@@ -84,7 +84,7 @@ function Main() {
   };
   const load = formData => {
     setLoading(true);
-    formData.sidx = formData.sidx || 'EnCode';
+    formData.sidx = formData.sidx || 'enCode';
     formData.sord = formData.sord || 'asc';
     return GetPageListJson(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
