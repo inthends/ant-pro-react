@@ -176,6 +176,8 @@ const Modify = (props: ModifyProps) => {
           const { current: pageIndex, pageSize, total } = pagination;
           setLoading(true);
           const searchCondition: any = {
+            sord: "asc",
+            sidx: 'billId',
             pageIndex,
             pageSize,
             total,

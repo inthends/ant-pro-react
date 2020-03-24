@@ -35,16 +35,14 @@ function Main() {
       setDisabledAdd(false);
     } else {
       setDisabledAdd(true);
-    }
-
+    } 
     // initLoadData(orgid, orgtype, searchText);
     setOrgid(orgid);
     setOrgtype(orgtype);
-    setOrganizeId(organizeId);
-
+    setOrganizeId(organizeId); 
     //初始化页码，防止页码错乱导致数据查询出错  
     const page = new DefaultPagination();
-    loadData(search, page);
+    loadData(search, orgid, orgtype, page);
 
   };
 
@@ -98,7 +96,7 @@ function Main() {
     setModifyVisible(true);
   };
 
-  const loadData = (searchText, paginationConfig?: PaginationConfig, sorter?) => {
+  const loadData = (searchText, orgid, orgtype, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(searchText);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
@@ -179,7 +177,7 @@ function Main() {
           <Search
             className="search-input"
             placeholder="请输入要查询的关键词"
-            onSearch={value => loadData(value)}
+            onSearch={value => loadData(value, orgid, orgtype)}
             style={{ width: 200 }}
           />
           <Button
@@ -194,7 +192,7 @@ function Main() {
         </div>
         <ListTable
           onchange={(paginationConfig, filters, sorter) =>
-            loadData(search, paginationConfig, sorter)
+            loadData(search, orgid, orgtype, paginationConfig, sorter)
           }
           loading={loading}
           pagination={pagination}

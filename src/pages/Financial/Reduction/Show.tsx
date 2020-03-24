@@ -46,6 +46,8 @@ const Show = (props: ShowProps) => {
           //分页查询
           const { current: pageIndex, pageSize, total } = pagination;
           const searchCondition: any = {
+            sord: "asc",
+            sidx: 'billId',
             pageIndex,
             pageSize,
             total,
