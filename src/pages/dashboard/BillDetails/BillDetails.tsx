@@ -14,11 +14,11 @@ function BillDetails() {
   const [loading, setLoading] = useState<boolean>(false);
   const [listData, setListData] = useState<any>();
   const [search, setSearch] = useState<string>('');
-  const [organize, setOrganize] = useState<any>({});
+  // const [organize, setOrganize] = useState<any>({});
   const [pagination, setPagination] = useState<DefaultPagination>(new DefaultPagination());
 
   const selectTree = (id, item, searchText) => {
-    setOrganize(item);
+    // setOrganize(item);
     initLoadData(item, '');
   };
 

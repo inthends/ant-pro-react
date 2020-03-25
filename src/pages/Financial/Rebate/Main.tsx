@@ -50,11 +50,10 @@ function Main() {
     // initDetailLoadData(orgId, type, search);
     setOrgId(orgId);
     setType(type);
-
     //初始化页码，防止页码错乱导致数据查询出错  
     const page = new DefaultPagination();
-    loadData(search, page);
-    loadDetailData(detailsearch, page);
+    loadData(search, orgId, type, page);
+    loadDetailData(detailsearch, orgId, type, page);
   };
 
   useEffect(() => {
@@ -159,7 +158,7 @@ function Main() {
     });
   };
 
-  const loadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
+  const loadData = (search, orgId, type, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
@@ -170,7 +169,11 @@ function Main() {
       pageIndex,
       pageSize,
       total,
-      queryJson: { keyword: search },
+      queryJson: {
+        keyword: search,
+        TreeTypeId: orgId,
+        TreeType: type
+      },
     };
 
     if (sorter) {
@@ -204,7 +207,7 @@ function Main() {
   };
 
   //明细表数据
-  const loadDetailData = (search, paginationConfig?: PaginationConfig, sorter?) => {
+  const loadDetailData = (search, orgId, type, paginationConfig?: PaginationConfig, sorter?) => {
     setDetailSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
@@ -215,7 +218,7 @@ function Main() {
       pageIndex,
       pageSize,
       total,
-      queryJson: { keyword: search },
+      queryJson: { keyword: search, TreeTypeId: orgId, TreeType: type },
     };
 
     if (sorter) {
@@ -296,7 +299,7 @@ function Main() {
                 className="search-input"
                 placeholder="搜索优惠单号"
                 style={{ width: 180 }}
-                onSearch={value => loadData(value)}
+                onSearch={value => loadData(value, orgId, type)}
               />
               <Button type="primary" style={{ float: 'right' }}
                 onClick={() => showDrawer()}
@@ -308,7 +311,7 @@ function Main() {
             </div>
             <ListTable
               onchange={(paginationConfig, filters, sorter) =>
-                loadData(search, paginationConfig, sorter)
+                loadData(search, orgId, type, paginationConfig, sorter)
               }
               loading={loading}
               pagination={pagination}
@@ -325,12 +328,12 @@ function Main() {
                 className="search-input"
                 placeholder="搜索优惠单号"
                 style={{ width: 180 }}
-                onSearch={value => loadDetailData(value)}
+                onSearch={value => loadDetailData(value, orgId, type)}
               />
             </div>
             <DetailList
               onchange={(paginationConfig, filters, sorter) =>
-                loadDetailData(detailsearch, paginationConfig, sorter)
+                loadDetailData(detailsearch, orgId, type, paginationConfig, sorter)
               }
               loading={detailloading}
               pagination={detailpagination}

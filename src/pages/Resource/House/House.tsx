@@ -75,7 +75,7 @@ function House() {
   // };
 
   // 获取房产统计
-  const initHouseTotal = (orgId: string, searchText) => {
+  const initHouseTotal = (orgId, searchText) => {
     setSearch(searchText);
     const queryJson = { OrganizeId: orgId, keyword: searchText };
     GetStatisticsTotal({ queryJson: queryJson })
@@ -91,7 +91,7 @@ function House() {
     setId(orgId);
     setModifyVisible(true);
   };
-  const loadData = (searchText, orgid, paginationConfig?: PaginationConfig, sorter?) => {
+  const loadData = (searchText, orgId, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(searchText);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
@@ -102,7 +102,7 @@ function House() {
       pageIndex,
       pageSize,
       total,
-      queryJson: { OrganizeId: orgid, keyword: searchText },
+      queryJson: { OrganizeId: orgId, keyword: searchText },
     };
 
     if (sorter) {
@@ -138,7 +138,7 @@ function House() {
     });
   };
 
-  const initLoadData = (orgId: string, searchText) => {
+  const initLoadData = (orgId, searchText) => {
     setSearch(searchText);
     const queryJson = { OrganizeId: orgId, keyword: searchText };
     const sidx = 'name';

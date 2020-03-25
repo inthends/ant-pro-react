@@ -40,23 +40,17 @@ function Main() {
   const [detailData, setDetailData] = useState<any>();
   const [detailSearch, setDetailSearch] = useState<string>('');
   const [unitTreeData, setUnitTreeData] = useState<any[]>([]);
-
   //org
   const [orgId, setOrgId] = useState<string>();
   const [type, setType] = useState<string>();
 
-  const selectTree = (id, type, info) => {
-
-    setOrgId(orgId);
-    setType(type);
-
+  const doSelectTree = (id, type, info) => {
     // initLoadData(id, type, search);
-    // initDetailLoadData(id, type, detailSearch);
-
+    // initDetailLoadData(id, type, detailSearch); 
     //初始化页码，防止页码错乱导致数据查询出错  
     const page = new DefaultPagination();
-    loadData(search, page);
-    loadDetailData(search, page);
+    loadData(search, id, type, page);
+    loadDetailData(search, id, type, page);
   };
 
   useEffect(() => {
@@ -124,7 +118,7 @@ function Main() {
   };
 
   //冲抵单数据
-  const loadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
+  const loadData = (search, orgId, orgType, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
@@ -135,7 +129,11 @@ function Main() {
       pageIndex,
       pageSize,
       total,
-      queryJson: { keyword: search }
+      queryJson: {
+        keyword: search,
+        TreeTypeId: orgId,
+        TreeType: orgType,
+      }
     };
 
     if (sorter) {
@@ -188,7 +186,7 @@ function Main() {
   };
 
   //明细表数据
-  const loadDetailData = (search, paginationConfig?: PaginationConfig, sorter?) => {
+  const loadDetailData = (search, orgId, orgType, paginationConfig?: PaginationConfig, sorter?) => {
     setDetailSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
@@ -199,7 +197,11 @@ function Main() {
       pageIndex,
       pageSize,
       total,
-      queryJson: { keyword: search },
+      queryJson: {
+        keyword: search,
+        TreeTypeId: orgId,
+        TreeType: orgType,
+      },
     };
 
     if (sorter) {
@@ -237,7 +239,7 @@ function Main() {
   const closeVerify = (result?) => {
     setVerifyVisible(false);
     if (result) {
-      initLoadData(orgId, type, search);
+      loadData(search, orgId, type);
     }
     setId('');
   };
@@ -284,7 +286,9 @@ function Main() {
       <AsynLeftTree
         parentid={'0'}
         selectTree={(id, type, info) => {
-          selectTree(id, type, info);
+          setOrgId(orgId);
+          setType(type);
+          doSelectTree(id, type, info);
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>
@@ -295,7 +299,7 @@ function Main() {
                 className="search-input"
                 placeholder="搜索冲抵单号"
                 style={{ width: 180 }}
-                onSearch={value => loadData(value)}
+                onSearch={value => loadData(value, orgId, type)}
               />
               {/* <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
                 onClick={() => initCheckLoadData(organize, null)}
@@ -312,7 +316,7 @@ function Main() {
             </div>
             <ListTable
               onchange={(paginationConfig, filters, sorter) =>
-                loadData(search, paginationConfig, sorter)
+                loadData(search, orgId, type, paginationConfig, sorter)
               }
               loading={loading}
               pagination={pagination}
@@ -331,12 +335,12 @@ function Main() {
                 className="search-input"
                 placeholder="搜索冲抵单号"
                 style={{ width: 180 }}
-                onSearch={value => loadDetailData(value)}
+                onSearch={value => loadDetailData(value, orgId, type)}
               />
             </div>
             <DetailTable
               onchange={(paginationConfig, filters, sorter) =>
-                loadDetailData(detailSearch, paginationConfig, sorter)
+                loadDetailData(detailSearch, orgId, type, paginationConfig, sorter)
               }
               loading={detailLoading}
               pagination={detailPagination}

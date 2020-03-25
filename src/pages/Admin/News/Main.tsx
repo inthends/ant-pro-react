@@ -137,21 +137,24 @@ function Main() {
     });
   };
 
-  const selectTreeLoad = (orgid, orgtype, searchText) => {
-    setOrganizeId(orgid);
-    initLoadData(orgid, searchText);
+  const selectTreeLoad = (orgId, orgType) => {
+    setOrganizeId(orgId);
+    // initLoadData(orgid, searchText); 
+    const page = new DefaultPagination();
+    loadData(type, search, orgId, page);
+
   };
 
   return (
     <Layout style={{ height: '100%' }}>
       <LeftTree
         treeData={treeData}
-        selectTree={(orgid, orgtype) => {
-          selectTreeLoad(orgid, orgtype, search);
+        selectTree={(orgid, orgtype) => { 
+          selectTreeLoad(orgid, orgtype);
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>
-        <div style={{ marginBottom: '10px' }}> 
+        <div style={{ marginBottom: '10px' }}>
           <Select
             allowClear={true}
             style={{ width: '160px', marginRight: '5px' }}

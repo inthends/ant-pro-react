@@ -18,7 +18,7 @@ const { TabPane } = Tabs;
 // const { Option } = Select;
 
 function Main() {
-  const [organize, SetOrganize] = useState<any>({});
+  // const [organize, SetOrganize] = useState<any>({});
   // const [treeSearch, SetTreeSearch] = useState<any>({});
   const [id, setId] = useState<string>();
   // const [selectRecords, setSelectRecords] = useState<any>();
@@ -27,7 +27,7 @@ function Main() {
   const [billNoticeLoading, setBillNoticeLoading] = useState<boolean>(false);
   const [billCheckData, setBillCheckData] = useState<any>();
   const [billNoticeData, setBillNoticeData] = useState<any[]>([]);
-  const [billCheckSearch, setBillCheckSearch] = useState<string>('');
+  // const [billCheckSearch, setBillCheckSearch] = useState<string>('');
   const [billNoticeSearch, setBillNoticeSearch] = useState<string>('');
   const [billCheckPagination, setBillCheckPagination] = useState<DefaultPagination>(new DefaultPagination());
   const [billNoticePagination, setBillNoticePagination] = useState<DefaultPagination>(new DefaultPagination());
@@ -36,16 +36,20 @@ function Main() {
   const [showCheckBillVisible, setShowCheckBillVisible] = useState<boolean>(false);
   const [tempListData, setTempListData] = useState<any[]>([]);
   const [unitTreeData, setUnitTreeData] = useState<any[]>([]);
+  const [search, setSearch] = useState<string>('');
+  //树查询
+  const [orgId, setOrgId] = useState<string>('');//左侧树选择的id
+  const [orgType, setOrgType] = useState<string>();//类型
 
-  const selectTree = (pid, type, info) => {
-    SetOrganize(info.node.props.dataRef);
+  const doSelectTree = (id, type, info) => {
+    // SetOrganize(info.node.props.dataRef);
     // initBillCheckLoadData(info.node.props.dataRef, billCheckSearch);
     // initBillNoticeLoadData(info.node.props.dataRef, billNoticeSearch);
 
     //初始化页码，防止页码错乱导致数据查询出错  
     const page = new DefaultPagination();
-    loadBillCheckData(page);
-    loadBillNoticeData(billNoticeSearch, page); 
+    loadBillCheckData(search, id, type, page);
+    loadBillNoticeData(billNoticeSearch, id, type, page);
   };
 
   useEffect(() => {
@@ -60,14 +64,16 @@ function Main() {
     GetNoticeTemplates().then(res => {
       setTempListData(res);
     }).then(() => {
-      initBillCheckLoadData('', '');
-      initBillNoticeLoadData('', '');
+      initBillCheckLoadData('', '', '');
+      initBillNoticeLoadData('', '', '');
     })
   }, []);
 
 
-  const loadBillCheckData = (paginationConfig?: PaginationConfig, sorter?) => {
+  const loadBillCheckData = (search, orgId, type, paginationConfig?: PaginationConfig, sorter?) => {
     // setBillCheckSearch(search);
+    //赋值,必须，否则查询条件会不起作用
+    setSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: billCheckPagination.pageSize,
@@ -78,11 +84,11 @@ function Main() {
       pageSize,
       total,
       queryJson: {
-        keyword: billCheckSearchParams.search,
+        keyword: search,//billCheckSearchParams.search,
         TemplateId: templateId,
         BillType: billType,
-        TreeTypeId: organize.id,
-        TreeType: organize.type,
+        TreeTypeId: orgId,//organize.id,
+        TreeType: type,//organize.type,
       }
     };
 
@@ -93,7 +99,8 @@ function Main() {
     }
     return billCheckload(searchCondition);
   }
-  const loadBillNoticeData = (search, paginationConfig?: PaginationConfig, sorter?) => {
+
+  const loadBillNoticeData = (search, orgId, type, paginationConfig?: PaginationConfig, sorter?) => {
     setBillNoticeSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
@@ -106,8 +113,8 @@ function Main() {
       total,
       queryJson: {
         keyword: search,
-        TreeTypeId: organize.id,
-        TreeType: organize.type
+        TreeTypeId: orgId,//organize.id,
+        TreeType: type,//organize.type
       }
     };
 
@@ -163,15 +170,16 @@ function Main() {
     });
   };
 
-  const initBillCheckLoadData = (org, searchText) => {
+  const initBillCheckLoadData = (orgId, type, searchText) => {
     //console.log(org);
-    setBillCheckSearch(searchText);
+    // setBillCheckSearch(searchText);
+    setSearch(searchText);
     const queryJson = {
       TemplateId: templateId,
       BillType: billType,
       keyword: searchText,
-      TreeTypeId: org.key,
-      TreeType: org.type,
+      TreeTypeId: orgId,//org.key,
+      TreeType: type,//org.type,
     };
     const sidx = 'billId';
     const sord = 'asc';
@@ -179,12 +187,12 @@ function Main() {
     return billCheckload({ pageIndex, pageSize, sidx, sord, total, queryJson });
   };
 
-  const initBillNoticeLoadData = (org, searchText) => {
+  const initBillNoticeLoadData = (orgId, type, searchText) => {
     setBillNoticeSearch(searchText);
     const queryJson = {
       keyword: searchText,
-      TreeTypeId: org.key,
-      TreeType: org.type,
+      TreeTypeId: orgId,//org.key,
+      TreeType: type,// org.type,
     };
     const sidx = 'billId';
     const sord = 'asc';
@@ -195,7 +203,7 @@ function Main() {
   const closeVerify = (result?) => {
     setVerifyVisible(false);
     if (result) {
-      initBillCheckLoadData(organize, '');
+      loadBillCheckData(search, orgId, orgType);
     }
     setId('');
   };
@@ -235,9 +243,10 @@ function Main() {
   //   });
   // };
 
-  const [billCheckSearchParams, setBillCheckSearchParams] = useState<any>({});
+  // const [billCheckSearchParams, setBillCheckSearchParams] = useState<any>({});
   // const [isEdit, setIsEdit] = useState<boolean>(false);
   // const [divideVisible,setDivideVisible]=useState<boolean>(false);
+
   const [templateId, setTemplateId] = useState<string>('');
   const [billType, setBillType] = useState<string>('');
 
@@ -258,7 +267,7 @@ function Main() {
               })
                 .then(() => {
                   message.success('审核成功');
-                  initBillCheckLoadData('', '');
+                  initBillCheckLoadData(orgId, orgType, search);
                 })
                 .catch(e => { });
             },
@@ -296,7 +305,7 @@ function Main() {
               })
                 .then(() => {
                   message.success('审核成功');
-                  initBillCheckLoadData('', '');
+                  initBillCheckLoadData(orgId, orgType, search);
                 })
                 .catch(e => { });
             },
@@ -321,7 +330,7 @@ function Main() {
               keyValues: JSON.stringify(selectIds)
             }).then(res => {
               message.success('删除成功');
-              initBillCheckLoadData('', '');
+              initBillCheckLoadData(orgId, orgType, search);
             });
           },
           onCancel() { },
@@ -342,9 +351,9 @@ function Main() {
   //tab切换刷新数据
   const changeTab = (e: string) => {
     if (e === '1') {
-      initBillCheckLoadData(organize, billCheckSearch);
+      loadBillCheckData(search, orgId, orgType);
     } else {
-      initBillNoticeLoadData(organize, billNoticeSearch);
+      loadBillNoticeData(billNoticeSearch, orgId, orgType);
     }
   };
 
@@ -352,18 +361,21 @@ function Main() {
     <Layout>
       <AsynLeftTree
         parentid={'0'}
-        selectTree={(pid, type, info) => {
-          selectTree(pid, type, info);
+        selectTree={(id, type, info) => {
+          setOrgId(id);
+          setOrgType(type);
+          doSelectTree(id, type, info);
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>
         <Tabs defaultActiveKey="1" onChange={changeTab}>
           <TabPane tab="账单列表" key="1">
-            <div style={{ marginBottom: '20px', padding: '3px 2px' }}
+            {/* <div style={{ marginBottom: '20px', padding: '3px 2px' }}
               onChange={(value) => {
                 var params = Object.assign({}, billCheckSearchParams, { billChecktype: value });
                 setBillCheckSearchParams(params);
-              }}>
+              }}> */}
+            <div style={{ marginBottom: '10px' }}>
               <Select placeholder="账单类型" style={{ width: '150px', marginRight: '5px' }}
                 onChange={(value: string) => {
                   setBillType(value);
@@ -389,8 +401,9 @@ function Main() {
                 placeholder="请输入要查询的单号"
                 style={{ width: 180 }}
                 onChange={e => {
-                  var params = Object.assign({}, billCheckSearchParams, { search: e.target.value });
-                  setBillCheckSearchParams(params);
+                  // var params = Object.assign({}, billCheckSearchParams, { search: e.target.value });
+                  // setBillCheckSearchParams(params);
+                  setSearch(e.target.value);
                 }}
               />
 
@@ -457,7 +470,7 @@ function Main() {
               </Button> */}
 
               <Button type="primary" style={{ marginLeft: '10px' }}
-                onClick={() => { loadBillCheckData() }}
+                onClick={() => { loadBillCheckData(search, orgId, orgType) }}
               >
                 <Icon type="search" />
                 查询
@@ -479,7 +492,7 @@ function Main() {
 
             <ListTable
               onchange={(paginationConfig, filters, sorter) => {
-                loadBillCheckData(paginationConfig, sorter)
+                loadBillCheckData(search, orgId, orgType, paginationConfig, sorter)
               }
               }
               loading={billCheckLoading}
@@ -491,7 +504,7 @@ function Main() {
                 }
                 setShowCheckBillVisible(true);
               }}
-              reload={() => initBillCheckLoadData('', billCheckSearch)}
+              reload={() => initBillCheckLoadData(orgId, orgType, search)}
               getRowSelect={(records) => {
                 // setSelectRecords(records);
                 if (records.length == 1) {
@@ -516,7 +529,7 @@ function Main() {
                 className="search-input"
                 placeholder="请输入要查询的单号"
                 style={{ width: 180 }}
-                onSearch={value => loadBillNoticeData(value)}
+                onSearch={value => loadBillNoticeData(value, orgId, orgType)}
               />
             </div>
             <DetailTable
@@ -524,12 +537,12 @@ function Main() {
                 setId(id);
               }}
               onchange={(paginationConfig, filters, sorter) =>
-                loadBillNoticeData(billNoticeSearch, paginationConfig, sorter)
+                loadBillNoticeData(billNoticeSearch, orgId, orgType, paginationConfig, sorter)
               }
               loading={billNoticeLoading}
               pagination={billNoticePagination}
               data={billNoticeData}
-              reload={() => initBillNoticeLoadData('', billNoticeSearch)}
+              reload={() => initBillNoticeLoadData(orgId, orgType, billNoticeSearch)}
               getRowSelect={(record) => {
                 setId(record.billId);
                 if (record.ifVerify == 1) {
@@ -548,7 +561,7 @@ function Main() {
         id={id}
         treeData={unitTreeData}
         isEdit={true}
-        reload={() => initBillCheckLoadData('', '')}
+        reload={() => initBillCheckLoadData(orgId, orgType, search)}
       />
       <Show
         visible={showCheckBillVisible}
@@ -562,7 +575,7 @@ function Main() {
         closeVerify={closeVerify}
         ifVerify={ifVerify}
         id={id}
-        reload={() => initBillCheckLoadData('', '')}
+        reload={() => initBillCheckLoadData(orgId, orgType, search)}
       />
     </Layout>
   );

@@ -18,7 +18,7 @@ const { TabPane } = Tabs;
 function Main() {
   // const [treeSearch, SetTreeSearch] = useState<any>({});
   const [id, setId] = useState<string>();
-  const [organizeId, setOrganizeId] = useState<string>('');//左侧树选择的id
+  //const [organizeId, setOrganizeId] = useState<string>('');//左侧树选择的id
   const [adminOrgId, setAdminOrgId] = useState<string>('');//当前房间的管理处Id
 
   const [notPaymentLoading, setNotPaymentLoading] = useState<boolean>(false);
@@ -37,16 +37,25 @@ function Main() {
   //选择的单元
   const [organize, setOrganize] = useState<any>({});
 
-  const selectTree = (id, type, info) => {
+  const [search, setSearch] = useState<string>('');
+
+  //树查询
+  const [orgId, setOrgId] = useState<string>('');//左侧树选择的id
+  const [type, setType] = useState<string>();//类型
+
+  //已付查询
+  const [paymentSearchParams, setPaymentSearchParams] = useState<any>({});
+
+  const doSelectTree = (id, type, info) => {
     setOrganize(info.node.props.dataRef);
     if (type == 5) {
       // initNotPaymentLoadData({ id: id, type: type }, '');
       // initPaymentLoadData({ id: id, type: type }, '');
-      setAddBtnDisable(false); 
+      setAddBtnDisable(false);
       //初始化页码，防止页码错乱导致数据查询出错  
       const page = new DefaultPagination();
-      loadNotPaymentData(page);
-      loadPaymentData(page);
+      loadNotPaymentData(id, page);
+      loadPaymentData(id, type, page);
     } else {
       setAddBtnDisable(true);
     }
@@ -57,11 +66,13 @@ function Main() {
   //   initNotPaymentLoadData('', '');
   // }, []);
 
-  const initNotPaymentLoadData = (org, searchText) => {
-    setNotPaymentSearchParams(Object.assign({}, notPaymentSearchParams, { search: searchText }));
+  //未付
+  const initNotPaymentLoadData = (search, unitId = '') => {
+    // setNotPaymentSearchParams(Object.assign({}, notPaymentSearchParams, { search: searchText }));
+    setSearch(search);
     const queryJson = {
-      keyword: searchText,
-      UnitId: org.id == null ? "" : org.id,
+      keyword: search,
+      UnitId: unitId//org.id == null ? "" : org.id,
     };
     const sidx = 'billDate';
     const sord = 'asc';
@@ -69,8 +80,8 @@ function Main() {
     return notPaymentload({ pageIndex, pageSize, sidx, sord, total, queryJson });
   };
 
-  const loadNotPaymentData = (search, paginationConfig?: PaginationConfig, sorter?) => {
-    setNotPaymentSearchParams(Object.assign({}, notPaymentSearchParams, { search: search }));
+  const loadNotPaymentData = (search, orgId, paginationConfig?: PaginationConfig, sorter?) => {
+    // setNotPaymentSearchParams(Object.assign({}, notPaymentSearchParams, { search: search }));
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: notPaymentPagination.pageSize,
@@ -82,7 +93,8 @@ function Main() {
       total,
       queryJson: {
         keyword: search,
-        UnitId: organize.id == null ? "" : organize.id,
+        UnitId: orgId,
+        //UnitId: organize.id == null ? "" : organize.id,
         // TreeType: organize.type
       }
     };
@@ -95,7 +107,7 @@ function Main() {
     return notPaymentload(searchCondition);
   }
 
-  //应付列表
+  //未付列表
   const notPaymentload = data => {
     setNotPaymentLoading(true);
     data.sidx = data.sidx || 'billDate';
@@ -119,12 +131,15 @@ function Main() {
   };
 
   //已付列表
-  const initPaymentLoadData = (org, searchText) => {
-    setPaymentSearchParams(Object.assign({}, paymentSearchParams, { search: searchText }));
+  const initPaymentLoadData = (orgId, type) => {
+    // setPaymentSearchParams(Object.assign({}, paymentSearchParams, { search: searchText }));
     const queryJson = {
-      keyword: searchText,
-      UnitId: organize.id == null ? "" : organize.id,
-      Status: paymentStatus, StartDate: paymentStartDate, EndDate: paymentEndDate
+      TreeTypeId: orgId,
+      TreeType: type,
+      keyword: paymentSearchParams.search ? paymentSearchParams.search : '',
+      Status: paymentSearchParams.status ? paymentSearchParams.status : '',
+      StartDate: paymentSearchParams.startDate ? paymentSearchParams.startDate : '',
+      EndDate: paymentSearchParams.endDate ? paymentSearchParams.endDate : ''
     };
     const sidx = 'createDate';
     const sord = 'desc';
@@ -132,20 +147,28 @@ function Main() {
     return paymentload({ pageIndex, pageSize, sidx, sord, total, queryJson });
   };
 
-  const loadPaymentData = (paginationConfig?: PaginationConfig, sorter?) => {
+  const loadPaymentData = (orgId, type, paginationConfig?: PaginationConfig, sorter?) => {
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: paymentPagination.pageSize,
       total: 0,
     };
+
     let searchCondition: any = {
       pageIndex,
       pageSize,
       total,
       queryJson: {
-        keyword: paymentSearchParams.search,
-        UnitId: organize.id == null ? "" : organize.id,
-        Status: paymentStatus, StartDate: paymentStartDate, EndDate: paymentEndDate
+        //keyword: paymentSearchParams.search, 
+        //UnitId: organize.id == null ? "" : organize.id,
+        //Status: paymentStatus, StartDate: paymentStartDate, EndDate: paymentEndDate 
+        TreeTypeId: orgId,
+        TreeType: type,
+        keyword: paymentSearchParams.search ? paymentSearchParams.search : '',
+        Status: paymentSearchParams.status ? paymentSearchParams.status : '',
+        StartDate: paymentSearchParams.startDate ? paymentSearchParams.startDate : '',
+        EndDate: paymentSearchParams.endDate ? paymentSearchParams.endDate : ''
+
       }
     };
 
@@ -180,14 +203,16 @@ function Main() {
     });
   };
 
-  const [notPaymentSearchParams, setNotPaymentSearchParams] = useState<any>({});
-  const [paymentSearchParams, setPaymentSearchParams] = useState<any>({});
+  // const [notPaymentSearchParams, setNotPaymentSearchParams] = useState<any>({});
+  //已付
+  // const [paymentSearchParams, setPaymentSearchParams] = useState<any>({});
+
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
   const closeVerify = (result?) => {
     setVerifyVisible(false);
     if (result) {
-      initPaymentLoadData(organize, '');
+      initPaymentLoadData(orgId, type);
     }
     setId('');
   };
@@ -249,17 +274,17 @@ function Main() {
   //   });
   // };
 
-  const [paymentStatus, setPaymentStatus] = useState<string>('');
-  const [paymentStartDate, setPaymentStartDate] = useState<string>('');
-  const [paymentEndDate, setPaymentEndDate] = useState<string>('');
+  // const [paymentStatus, setPaymentStatus] = useState<string>('');
+  // const [paymentStartDate, setPaymentStartDate] = useState<string>('');
+  // const [paymentEndDate, setPaymentEndDate] = useState<string>('');
   // const [billStatus, setBillStatus] = useState<number>(-1);
 
   //页签切换刷新
   const changeTab = key => {
     if (key == "1") {
-      initPaymentLoadData(organize, '');
+      initNotPaymentLoadData(orgId, type);
     } else {
-      initPaymentLoadData(organize, '');
+      initPaymentLoadData(orgId, type);
     }
   };
 
@@ -269,25 +294,31 @@ function Main() {
         parentid={'0'}
         selectTree={(id, type, info) => {
           setAdminOrgId(info.node.props.organizeId);//管理处Id
-          setOrganizeId(id);
-          selectTree(id, type, info);
+          // setOrganizeId(id);
+          setOrgId(id);
+          setType(type);
+          doSelectTree(id, type, info);
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>
         <Tabs defaultActiveKey="1" onChange={changeTab}>
           <TabPane tab="应付列表" key="1">
-            <div style={{ marginBottom: '20px', padding: '3px 2px' }} onChange={(value) => {
+            {/* <div style={{ marginBottom: '20px', padding: '3px 2px' }} onChange={(value) => {
               var params = Object.assign({}, paymentSearchParams, { paymenttype: value });
               setPaymentSearchParams(params);
-            }}>
+            }}> */}
+
+            <div style={{ marginBottom: '10px' }}>
+
               <Search
                 className="search-input"
                 placeholder="搜索费项"
                 style={{ width: 180 }}
-                onChange={e => {
-                  var params = Object.assign({}, paymentSearchParams, { search: e.target.value });
-                  setPaymentSearchParams(params);
-                }}
+                onSearch={value => loadNotPaymentData(value, orgId)}
+              // onChange={e => {
+              //   var params = Object.assign({}, paymentSearchParams, { search: e.target.value });
+              //   setPaymentSearchParams(params);
+              // }}
               />
               {/* <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
                 onClick={() => {
@@ -314,23 +345,23 @@ function Main() {
                 <Icon type="check-square" />
                 审核
               </Button> */}
-              <Button type="primary" style={{ marginLeft: '10px' }}
-                onClick={() => { loadPaymentData() }}
+              {/* <Button type="primary" style={{ marginLeft: '10px' }}
+                onClick={() => { loadPaymentData(orgId) }}
               >
                 <Icon type="search" />
                 查询
-              </Button>
-              <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
+              </Button> */}
+              <Button type="primary" style={{ float: 'right' }}
                 onClick={() => { showModify(null, true) }}
-                disabled={addBtnDisable}
-              >
+                disabled={addBtnDisable} >
                 <Icon type="plus" />
                 加费
               </Button>
             </div>
+
             <NotPaymentTable
               onchange={(paginationConfig, filters, sorter) => {
-                loadNotPaymentData(paginationConfig, sorter)
+                loadNotPaymentData(search, orgId, paginationConfig, sorter)
               }
               }
               loading={notPaymentLoading}
@@ -343,7 +374,7 @@ function Main() {
                 setIsEdit(isedit);
                 setModifyVisible(true);
               }}
-              reload={() => initNotPaymentLoadData({ id: organize.code, type: organize.type }, paymentSearchParams.search)}
+              reload={() => initNotPaymentLoadData(search, orgId)}
               rowSelect={(record) => {
                 setId(record.billId);
               }}
@@ -358,7 +389,9 @@ function Main() {
                 allowClear={true}
                 style={{ width: '120px', marginRight: '5px' }}
                 onChange={(value: string) => {
-                  setPaymentStatus(value);
+                  // setPaymentStatus(value);
+                  var params = Object.assign({}, paymentSearchParams, { status: value });
+                  setPaymentSearchParams(params);
                 }}>
                 <Select.Option value="2">已审核</Select.Option>
                 <Select.Option value="1">未审核</Select.Option>
@@ -367,26 +400,34 @@ function Main() {
               <DatePicker
                 placeholder='收款日期起'
                 onChange={(date, dateStr) => {
-                  setPaymentStartDate(dateStr);
+                  // setPaymentStartDate(dateStr);
+                  var params = Object.assign({}, paymentSearchParams, { startDate: dateStr });
+                  setPaymentSearchParams(params);
                 }} style={{ marginRight: '5px', width: '120px' }} />
                 至
                  <DatePicker style={{ marginLeft: '5px', marginRight: '5px', width: '120px' }}
                 placeholder='收款日期止'
                 onChange={(date, dateStr) => {
-                  setPaymentEndDate(dateStr);
+                  // setPaymentEndDate(dateStr);
+                  var params = Object.assign({}, paymentSearchParams, { endDate: dateStr });
+                  setPaymentSearchParams(params);
                 }} />
               <Search
                 className="search-input"
                 placeholder="搜索付款单号"
                 style={{ width: 180 }}
-                onSearch={value => {
-                  setPaymentSearchParams(Object.assign({}, paymentSearchParams, { search: value }));
-                  loadPaymentData();
+                onChange={e => {
+                  var params = Object.assign({}, paymentSearchParams, { search: e.target.value });
+                  setPaymentSearchParams(params);
                 }}
+              //onSearch={value => {
+              //setPaymentSearchParams(Object.assign({}, paymentSearchParams, { search: value }));
+              //loadPaymentData(orgId);
+              //}}
               />
               <Button type="primary" style={{ marginLeft: '3px' }}
                 onClick={() => {
-                  loadPaymentData();
+                  loadPaymentData(orgId, type);
                 }}
               >
                 <Icon type="search" />
@@ -426,12 +467,12 @@ function Main() {
               //   showBill(id)
               // }}
               onchange={(paginationConfig, filters, sorter) =>
-                loadPaymentData(paginationConfig, sorter)
+                loadPaymentData(orgId, type, paginationConfig, sorter)
               }
               loading={paymentLoading}
               pagination={paymentPagination}
               data={paymentData}
-              reload={() => initPaymentLoadData('', paymentSearchParams.search)}
+              reload={() => initPaymentLoadData(orgId, type)}
               // getRowSelect={(record) => {
               //   setId(record.billId);
               //   // setBillStatus(record.status); 
@@ -449,22 +490,24 @@ function Main() {
           </TabPane>
         </Tabs>
       </Content>
+
       <FeeModify
         visible={modifyVisible}
         closeDrawer={closeModify}
         id={id}
         isEdit={isEdit}
-        reload={() => initNotPaymentLoadData({ id: organize.code, type: organize.type }, '')}
+        reload={() => initNotPaymentLoadData(search, orgId)}
         // organize={organize}
-        roomId={organizeId}
+        roomId={orgId}
         adminOrgId={adminOrgId}
       />
+
       <PaymentVerify
         verifyVisible={verifyVisible}
         closeVerify={closeVerify}
         ifVerify={ifVerify}
         id={id}
-        reload={() => initPaymentLoadData({ id: organize.code, type: organize.type }, '')}
+        reload={() => initPaymentLoadData(orgId, type)}
       />
       <Show
         visible={showVisible}

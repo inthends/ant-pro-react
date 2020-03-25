@@ -131,7 +131,7 @@ function HouseMore(props) {
     setSearch(searchText);//必须赋值，否则查询条件不生效
     setParentId(parentId);
     const queryJson = {
-      keyword: search,
+      keyword: searchText,
       //PStructId: psid,
       ParentId: parentId,//== null ? psid : parentId,
       Type: type == null ? 1 : type,
@@ -148,7 +148,7 @@ function HouseMore(props) {
   const refresh = (parentId, type, searchText, page) => {
     setSearch(searchText);
     const queryJson = {
-      keyword: search,
+      keyword: searchText,
       //PStructId: psid,
       ParentId: parentId,//== null ? psid : parentId,
       Type: type == null ? 1 : type,

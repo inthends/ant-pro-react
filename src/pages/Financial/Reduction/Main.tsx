@@ -44,18 +44,15 @@ function Main() {
   const [orgId, setOrgId] = useState<string>();
   const [type, setType] = useState<string>();
 
-  const selectTree = (orgid, type, info) => {
+  const doSelectTree = (orgId, type, info) => {
     //info.node.props.dataRef
     // initLoadData(orgId, type, search);
     // initDetailLoadData(orgId, type, search);
-    // SetOrganize(item);
-    setOrgId(orgId);
-    setType(type);
-
+    // SetOrganize(item); 
     //初始化页码，防止页码错乱导致数据查询出错  
     const page = new DefaultPagination();
-    loadData(search, page);
-    loadDetailData(detailsearch, page);
+    loadData(search, orgId, type, page);
+    loadDetailData(detailsearch, orgId, type, page);
   };
 
   useEffect(() => {
@@ -131,7 +128,6 @@ function Main() {
     setIfVerify(ifVerify);
   };
 
-
   //查看收款单
   const showChargeDrawer = (id) => {
     setChargeVisible(true);
@@ -144,7 +140,7 @@ function Main() {
     setChargeId('');
   };
 
-  const loadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
+  const loadData = (search, orgId, type, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
@@ -155,7 +151,7 @@ function Main() {
       pageIndex,
       pageSize,
       total,
-      queryJson: { keyword: search },
+      queryJson: { keyword: search, TreeTypeId: orgId, TreeType: type },
     };
 
     if (sorter) {
@@ -168,6 +164,8 @@ function Main() {
       return res;
     });
   };
+
+
   const load = data => {
     setLoading(true);
     data.sidx = data.sidx || 'createDate';
@@ -205,7 +203,7 @@ function Main() {
     });
   };
   //明细表数据
-  const loadDetailData = (search, paginationConfig?: PaginationConfig, sorter?) => {
+  const loadDetailData = (search, orgId, type, paginationConfig?: PaginationConfig, sorter?) => {
     setDetailSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
@@ -216,7 +214,7 @@ function Main() {
       pageIndex,
       pageSize,
       total,
-      queryJson: { keyword: search },
+      queryJson: { keyword: search, TreeTypeId: orgId, TreeType: type },
     };
 
     if (sorter) {
@@ -277,8 +275,10 @@ function Main() {
     <Layout style={{ height: '100%' }}>
       <AsynLeftTree
         parentid={'0'}
-        selectTree={(pid, type, info) => {
-          selectTree(pid, type, info);
+        selectTree={(id, type, info) => {
+          setOrgId(id);
+          setType(type);
+          doSelectTree(id, type, info);
         }}
       />
 
@@ -297,7 +297,7 @@ function Main() {
                 className="search-input"
                 placeholder="搜索减免单号"
                 style={{ width: 180 }}
-                onSearch={value => loadData(value)}
+                onSearch={value => loadData(value, orgId, type)}
               />
               <Button type="primary" style={{ float: 'right' }}
                 onClick={() => showDrawer()}
@@ -309,7 +309,7 @@ function Main() {
             </div>
             <ListTable
               onchange={(paginationConfig, filters, sorter) =>
-                loadData(search, paginationConfig, sorter)
+                loadData(search, orgId, type, paginationConfig, sorter)
               }
               loading={loading}
               pagination={pagination}
@@ -326,12 +326,12 @@ function Main() {
                 className="search-input"
                 placeholder="搜索减免单号"
                 style={{ width: 180 }}
-                onSearch={value => loadDetailData(value)}
+                onSearch={value => loadDetailData(value, orgId, type)}
               />
             </div>
             <DetailList
               onchange={(paginationConfig, filters, sorter) =>
-                loadDetailData(detailsearch, paginationConfig, sorter)
+                loadDetailData(detailsearch, orgId, type, paginationConfig, sorter)
               }
               loading={detailloading}
               pagination={detailpagination}

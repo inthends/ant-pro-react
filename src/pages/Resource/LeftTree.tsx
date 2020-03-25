@@ -10,8 +10,7 @@ interface LeftTreeProps {
   selectTree(orgid, orgtype, organizeId): void;
 }
 
-function LeftTree(props: LeftTreeProps) {
-
+function LeftTree(props: LeftTreeProps) { 
   const { treeData, selectTree } = props;
   const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
   // const [autoExpandParent, setAutoExpandParent] = useState<boolean>(false);

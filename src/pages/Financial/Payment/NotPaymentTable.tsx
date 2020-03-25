@@ -6,7 +6,7 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { RemoveForm, Pay } from './Payment.service';
-import styles from './style.less';
+// import styles from './style.less';
 const { Option } = Select;
 
 interface NotPaymentTableProps {

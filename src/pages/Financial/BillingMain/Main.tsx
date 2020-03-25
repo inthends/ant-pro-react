@@ -17,7 +17,7 @@ const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
 function Main() {
-  const [organize, SetOrganize] = useState<any>({});
+  // const [organize, SetOrganize] = useState<any>({});
   // const [treeSearch, SetTreeSearch] = useState<any>({});
   const [id, setId] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -34,16 +34,19 @@ function Main() {
   const [divideVisible, setDivideVisible] = useState<boolean>(false);
   const [showVisible, setShowVisible] = useState<boolean>(false);
 
-  const selectTree = (pid, type, info) => {
+  //树查询
+  const [orgId, setOrgId] = useState<string>('');//左侧树选择的id
+  const [orgType, setOrgType] = useState<string>();//类型
+
+  const doSelectTree = (orgId, type, info) => {
     //console.log(org,item,info);
-    SetOrganize(info.node.props.dataRef);
+    // SetOrganize(info.node.props.dataRef);
     // initLoadData(info.node.props.dataRef, search);
-    // initLoadDetailData(info.node.props.dataRef, detailSearch);
- 
+    // initLoadDetailData(info.node.props.dataRef, detailSearch); 
     //初始化页码，防止页码错乱导致数据查询出错  
-    const page = new DefaultPagination();
-    loadData(search, page);
-    loadUnitMeterData(detailSearch, page);
+    const page = new DefaultPagination(); 
+    loadData(search, orgId, type, page);
+    loadUnitMeterData(detailSearch, orgId, type, page);
   };
 
   useEffect(() => {
@@ -54,11 +57,11 @@ function Main() {
         setUnitTreeData(res || []);
         return res || [];
       });
-    initLoadData('', '');
-    initLoadDetailData('', '');
+    initLoadData('', '', '');
+    initLoadDetailData('', '', '');
   }, []);
 
-  const loadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
+  const loadData = (search, orgId, type, paginationConfig?: PaginationConfig, sorter?) => {
     //赋值,必须，否则查询条件会不起作用
     setSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
@@ -70,7 +73,11 @@ function Main() {
       pageIndex,
       pageSize,
       total,
-      queryJson: { keyword: search }
+      queryJson: {
+        keyword: search,
+        TreeTypeId: orgId,
+        TreeType: type,
+      }
     };
 
     if (sorter) {
@@ -80,7 +87,8 @@ function Main() {
     }
     return load(searchCondition);
   }
-  const loadUnitMeterData = (search, paginationConfig?: PaginationConfig, sorter?) => {
+
+  const loadUnitMeterData = (search, orgId, type, paginationConfig?: PaginationConfig, sorter?) => {
     setDetailSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
@@ -91,7 +99,11 @@ function Main() {
       pageIndex,
       pageSize,
       total,
-      queryJson: { keyword: search }
+      queryJson: {
+        keyword: search,
+        TreeTypeId: orgId,
+        TreeType: type,
+      }
     };
 
     if (sorter) {
@@ -101,11 +113,11 @@ function Main() {
     }
     return unitLoad(searchCondition);
   }
+
   const load = data => {
     setLoading(true);
     data.sidx = data.sidx || 'billDate';
     data.sord = data.sord || 'desc';
-
     return GetPageListJson(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
@@ -116,7 +128,6 @@ function Main() {
           pageSize,
         };
       });
-
       setData(res.data);
       setLoading(false);
       return res;
@@ -144,14 +155,14 @@ function Main() {
     });
   };
 
-  const initLoadData = (org, searchText) => {
+  const initLoadData = (orgId, orgType, searchText) => {
     // console.log(org);
     // setMeterSearch(searchText);
     const queryJson = {
       //OrganizeId: org.organizeId,
       keyword: searchText,
-      TreeTypeId: org.key,
-      TreeType: org.type,
+      TreeTypeId: orgId,//org.key,
+      TreeType: orgType,//org.type,
     };
     const sidx = 'billDate';
     const sord = 'desc';
@@ -159,13 +170,13 @@ function Main() {
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson });
   };
 
-  const initLoadDetailData = (org, searchText) => {
+  const initLoadDetailData = (orgId, orgType, searchText) => {
     setDetailSearch(searchText);
     const queryJson = {
       //OrganizeId: org.organizeId,
       keyword: searchText,
-      TreeTypeId: org.key,
-      TreeType: org.type,
+      TreeTypeId: orgId,//org.key,
+      TreeType: orgType,//org.type,
     };
     const sidx = 'billDate';
     const sord = 'desc';
@@ -184,7 +195,7 @@ function Main() {
   const closeVerify = (result?) => {
     setVerifyVisible(false);
     if (result) {
-      initLoadData(organize, '');
+      loadData(search, orgId, orgType);
     }
     setId('');
   };
@@ -240,8 +251,10 @@ function Main() {
     <Layout>
       <AsynLeftTree
         parentid={'0'}
-        selectTree={(pid, type, info) => {
-          selectTree(pid, type, info);
+        selectTree={(id, type, info) => {
+          setOrgId(id);
+          setOrgType(type);
+          doSelectTree(id, type, info);
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>
@@ -261,7 +274,7 @@ function Main() {
                 //   var params = Object.assign({}, meterSearchParams, { search: e.target.value });
                 //   setMeterSearchParams(params);
                 // }}
-                onSearch={value => loadData(value)}
+                onSearch={value => loadData(value, orgId, orgType)}
 
               />
               {/* <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
@@ -312,7 +325,7 @@ function Main() {
             </div>
             <ListTable
               onchange={(paginationConfig, filters, sorter) =>
-                loadData(search, paginationConfig, sorter)
+                loadData(search, orgId, orgType, paginationConfig, sorter)
               }
               showDivide={showDivide}
               loading={loading}
@@ -327,7 +340,7 @@ function Main() {
                 setIsEdit(isedit);
                 setModifyVisible(true);
               }}
-              reload={() => initLoadData(organize, search)}
+              reload={() => initLoadData(orgId, orgType, search)}
               getRowSelect={(record) => {
                 setId(record.billId);
                 if (record.ifVerify == 0) {
@@ -344,17 +357,17 @@ function Main() {
                 className="search-input"
                 placeholder="请输入计费单号或单元编号"
                 style={{ width: 220 }}
-                onSearch={value => loadUnitMeterData(value)}
+                onSearch={value => loadUnitMeterData(value, orgId, orgType)}
               />
             </div>
             <UnitTable
               onchange={(paginationConfig, filters, sorter) =>
-                loadUnitMeterData(detailSearch, paginationConfig, sorter)
+                loadUnitMeterData(detailSearch, orgId, orgType, paginationConfig, sorter)
               }
               loading={detailLoading}
               pagination={detailPagination}
               data={undetailData}
-              reload={() => initLoadDetailData('', detailSearch)}
+              reload={() => initLoadDetailData(orgId, orgType, detailSearch)}
             />
           </TabPane>
         </Tabs>
@@ -365,7 +378,7 @@ function Main() {
         // organizeId={organize}
         id={id}
         isEdit={isEdit}
-        reload={() => initLoadData('', '')}
+        reload={() => initLoadData(orgId, orgType, search)}
         treeData={unitTreeData}
       />
       <Verify
@@ -373,7 +386,7 @@ function Main() {
         closeVerify={closeVerify}
         ifVerify={ifVerify}
         id={id}
-        reload={() => initLoadData('', '')}
+        reload={() => initLoadData(orgId, orgType, search)}
       />
 
       <Show
@@ -381,7 +394,6 @@ function Main() {
         close={closeShow}
         id={id}
       />
-
 
       <Divide
         visible={divideVisible}

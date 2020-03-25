@@ -17,10 +17,13 @@ const DeviceType = () => {
   const [types, setTypes] = useState<any[]>();
 
   useEffect(() => {
-    initLoadData({ searchText: '' });
+    
     GetTypes().then(res => {
       setTypes(res);
     });
+
+    initLoadData({ searchText: '' });
+
   }, []);
 
   const closeDrawer = () => {

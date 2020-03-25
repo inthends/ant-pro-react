@@ -22,18 +22,16 @@ function Main() {
   const [data, setData] = useState<any[]>([]);
   const [currData, setCurrData] = useState<any>();
   const [search, setSearch] = useState<string>('');
-  const [orgid, SetOrgid] = useState<string>('');
-  const [orgtype, SetOrgtype] = useState<string>('');
+  const [orgid, setOrgId] = useState<string>('');
+  const [orgtype, setOrgType] = useState<string>('');
 
   const selectTree = (id, type) => {
     // initLoadData(id, type, searchText);
-    SetOrgid(id);
-    SetOrgtype(type);
-
+    setOrgId(id);
+    setOrgType(type);
     //初始化页码，防止页码错乱导致数据查询出错  
     const page = new DefaultPagination();
     loadData(search, id, type, page);
-
   };
 
   useEffect(() => {
@@ -84,11 +82,11 @@ function Main() {
       searchCondition.sord = order === "descend" ? "desc" : "asc";
       searchCondition.sidx = field ? field : 'enCode';
     }
-
     return load(searchCondition).then(res => {
       return res;
     });
   };
+
   const load = formData => {
     setLoading(true);
     formData.sidx = formData.sidx || 'enCode';
@@ -115,7 +113,7 @@ function Main() {
     const queryJson = {
       OrganizeId: id,
       Type: type,
-      keyword: search,
+      keyword: searchText,
     };
     const sidx = 'enCode';
     const sord = 'asc';
@@ -129,8 +127,8 @@ function Main() {
     <Layout style={{ height: '100%' }}>
       <LeftTree
         treeData={treeData}
-        selectTree={(id, item) => {
-          selectTree(id, item);
+        selectTree={(orgid, orgtype, organizeId) => {
+          selectTree(orgid, orgtype);
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>
