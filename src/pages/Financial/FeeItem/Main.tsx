@@ -79,8 +79,8 @@ function Main() {
 
     //初始化页码，防止页码错乱导致数据查询出错  
     const page = new DefaultPagination();
-    loadData(search, page);
-    houseLoadData(search, page);
+    loadData(search, feeKind, feeType, page);
+    houseLoadData(search, feeKind, feeType, houseFeeItemId, page);
   };
 
   useEffect(() => {
@@ -128,7 +128,7 @@ function Main() {
     });
   };
 
-  const loadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
+  const loadData = (search, feeKind, feeType, paginationConfig?: PaginationConfig, sorter?) => {
 
     //赋值,必须，否则查询条件会不起作用
     setSearch(search);
@@ -142,7 +142,7 @@ function Main() {
       pageIndex,
       pageSize,
       total,
-      queryJson: { FeeKind: FeeKind, FeeType: FeeType, keyword: search },
+      queryJson: { FeeKind: feeKind, FeeType: feeType, keyword: search },
     };
     if (sorter) {
       let { field, order } = sorter;
@@ -176,7 +176,7 @@ function Main() {
 
 
   //加载费项房屋
-  const houseLoadData = (search, feeItemId, paginationConfig?: PaginationConfig, sorter?) => {
+  const houseLoadData = (search, feeKind, feeType, feeItemId, paginationConfig?: PaginationConfig, sorter?) => {
     setHouseSearch(search);//必须赋值，否则数据不更新
     setHouseFeeItemId(feeItemId);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
@@ -188,7 +188,7 @@ function Main() {
       pageIndex,
       pageSize,
       total,
-      queryJson: { FeeKind: FeeKind, FeeType: FeeType, keyword: search, feeItemId: feeItemId },
+      queryJson: { FeeKind: feeKind, FeeType: feeType, keyword: search, feeItemId: feeItemId },
     };
     if (sorter) {
       let { field, order } = sorter;
@@ -298,7 +298,7 @@ function Main() {
                 className="search-input"
                 placeholder="搜索费项名称"
                 style={{ width: 200 }}
-                onSearch={value => loadData(value)}
+                onSearch={value => loadData(value, FeeKind, FeeType)}
               />
               <Button type="primary" style={{ float: 'right' }} key='add'
                 onClick={() => { showDrawer(); }}
@@ -311,7 +311,7 @@ function Main() {
             <ListTable
               key='ListTable'
               onchange={(paginationConfig, filters, sorter) =>
-                loadData(search, paginationConfig, sorter)
+                loadData(search, FeeKind, FeeType, paginationConfig, sorter)
               }
               loading={loading}
               pagination={pagination}
@@ -326,7 +326,7 @@ function Main() {
                 allowClear={true}
                 style={{ width: '160px', marginRight: '5px' }}
                 placeholder="请选择费项"
-                onChange={(value) => houseLoadData(houseSearch, value)}
+                onChange={(value) => houseLoadData(houseSearch, FeeKind, FeeType, value)}
               >
                 {feeItems.map(item => (
                   <Select.Option key={item.key} value={item.value}>
@@ -339,13 +339,13 @@ function Main() {
                 className="search-input"
                 placeholder="搜索房屋编号"
                 style={{ width: 200 }}
-                onSearch={(value) => houseLoadData(value, houseFeeItemId)}
+                onSearch={(value) => houseLoadData(value, FeeKind, FeeType, houseFeeItemId)}
               />
             </div>
             <HouseInfoList
               key='HouseInfoList'
               onchange={(paginationConfig, filters, sorter) =>
-                houseLoadData(search, houseFeeItemId, paginationConfig, sorter)
+                houseLoadData(search, FeeKind, FeeType, houseFeeItemId, paginationConfig, sorter)
               }
               loading={houseLoading}
               pagination={housePagination}
