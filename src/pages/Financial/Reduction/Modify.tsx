@@ -448,6 +448,8 @@ const Modify = (props: ModifyProps) => {
     //分页查询
     const { current: pageIndex, pageSize, total } = pagination;
     const searchCondition: any = {
+      sord: 'asc',
+      sidx: 'id',
       pageIndex,
       pageSize,
       total,

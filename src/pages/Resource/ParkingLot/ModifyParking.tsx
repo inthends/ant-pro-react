@@ -127,6 +127,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
   const doSave = dataDetail => {
     dataDetail.keyValue = dataDetail.id;
     dataDetail.type = 9;
+
     SaveParkingForm(dataDetail).then(res => {
       message.success('保存成功');
       closeDrawer();
@@ -184,7 +185,6 @@ const ModifyParking = (props: ModifyParkingProps) => {
       })
     }
   };
-
 
   // const userList = userSource.map(item =>
   //   <Option key={item.id}
@@ -280,7 +280,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
               <Col lg={12}>
                 <Form.Item label="车位状态">
                   {getFieldDecorator('state', {
-                    initialValue: infoDetail.state,
+                    initialValue: infoDetail.state ? infoDetail.state : 0,
                   })(
                     <Select placeholder="请选择车位状态">
                       {/* {parkingLotState.map(item => (
@@ -291,7 +291,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
                       <Option value={0}>未售</Option>
                       <Option value={3}>空置</Option>
                       <Option value={4}>出租</Option>
-                      <Option value={5}>自用</Option> 
+                      <Option value={5}>自用</Option>
                     </Select>,
                   )}
                 </Form.Item>
