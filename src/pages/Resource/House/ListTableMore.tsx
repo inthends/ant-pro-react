@@ -21,13 +21,13 @@ function ListTableMore(props: ListTableMoreProps) {
     onchange(pag, filters, sorter);
   };
 
-  const doDelete = record => {
+  const doInvalid = record => {
     Modal.confirm({
       title: '请确认',
-      content: `您确认要删除${record.name}吗？`,
+      content: `您确认要作废${record.name}吗？`,
       onOk: () => {
         RemoveForm(record.id).then(() => {
-          message.success('删除成功');
+          message.success('作废成功');
           reload(selectId, '');
         });
       },
@@ -37,7 +37,6 @@ function ListTableMore(props: ListTableMoreProps) {
   const refresh = (id, type) => {
     reload(id, type);
   };
-
 
   const columns = [
     {
@@ -116,7 +115,7 @@ function ListTableMore(props: ListTableMoreProps) {
           <span key='buttons'>
             <a onClick={() => modify(record)} key="modify">修改</a>
             <Divider type="vertical" key='split' />
-            <a onClick={() => doDelete(record)} key="delete">删除</a>
+            <a onClick={() => doInvalid(record)} key="delete">作废</a>
           </span>
         ];
       },
@@ -181,7 +180,7 @@ function ListTableMore(props: ListTableMoreProps) {
     },
 
     {
-      title: '住户',
+      title: '租户',
       dataIndex: 'tenantName',
       key: 'tenantName',
       width: 100,
@@ -247,7 +246,7 @@ function ListTableMore(props: ListTableMoreProps) {
           <span key='buttons'>
             <a onClick={() => modify(record)} key="modify">修改</a>
             <Divider type="vertical" key='split' />
-            <a onClick={() => doDelete(record)} key="delete">删除</a>
+            <a onClick={() => doInvalid(record)} key="delete">作废</a>
             <Divider type="vertical" />
             <MoreBtn key="more" item={record} />
           </span>

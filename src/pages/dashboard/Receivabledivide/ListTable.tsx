@@ -25,7 +25,7 @@ function ListTable(props: ListTableProps) {
       width: 240,
     },
     {
-      title: '住户',
+      title: '租户',
       dataIndex: 'customerName',
       key: 'customerName',
       width: 100,

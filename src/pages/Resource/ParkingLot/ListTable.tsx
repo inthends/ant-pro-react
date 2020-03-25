@@ -25,13 +25,13 @@ function ListTable(props: ListTableProps) {
       modify(res);
     });
   };
-  const doDelete = record => {
+  const doInvalid = record => {
     Modal.confirm({
       title: '请确认',
-      content: `您确认要删除${record.name}吗？`,
+      content: `您确认要作废${record.name}吗？`,
       onOk: () => {
         RemoveForm(record.id).then(() => {
-          message.success('删除成功');
+          message.success('作废成功');
           reload();
         });
       },
@@ -96,7 +96,7 @@ function ListTable(props: ListTableProps) {
           <span>
             <a onClick={() => doModify(record.id)} key="modify">修改</a>
             <Divider type="vertical" key='split' />
-            <a onClick={() => doDelete(record)} key="delete">删除</a>
+            <a onClick={() => doInvalid(record)} key="delete">作废</a>
           </span>
         ];
       },
@@ -208,7 +208,7 @@ function ListTable(props: ListTableProps) {
           <span>
             <a onClick={() => doModify(record.id)} key="modify">修改</a>
             <Divider type="vertical" key='split' />
-            <a onClick={() => doDelete(record)} key="delete">删除</a>
+            <a onClick={() => doInvalid(record)} key="delete">作废</a>
           </span>
         ];
       },
@@ -227,7 +227,7 @@ function ListTable(props: ListTableProps) {
         columns={type == '8' ? columns : columnsGarage}
         rowKey={record => record.id}
         pagination={pagination}
-        scroll={{ x: 1200 }}
+        scroll={{ x: 1300 }}
         onChange={(pag: PaginationConfig, filters, sorter) => changePage(pag, filters, sorter)}
         loading={loading}
       />

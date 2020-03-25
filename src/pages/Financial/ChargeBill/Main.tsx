@@ -553,7 +553,7 @@ function Main() {
             setAddButtonDisable(false);
             var cusname = info.node.props.tenantname;
             setCustomerName(cusname);
-            setShowname(info.node.props.allname + ' 当前住户 ' + cusname);
+            setShowname(info.node.props.allname + ' 当前租户 ' + cusname);
           }
         }}
       />

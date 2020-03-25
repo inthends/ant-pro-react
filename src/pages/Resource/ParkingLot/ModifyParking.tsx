@@ -127,7 +127,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
   const doSave = dataDetail => {
     dataDetail.keyValue = dataDetail.id;
     dataDetail.type = 9;
-
+    dataDetail.organizeId = organizeId;
     SaveParkingForm(dataDetail).then(res => {
       message.success('保存成功');
       closeDrawer();
@@ -159,9 +159,8 @@ const ModifyParking = (props: ModifyParkingProps) => {
       })
     }
   };
-
-
-  //住户
+ 
+  //租户
   const tenantSearch = value => {
     if (value == '') {
       setUserList([]);
@@ -388,7 +387,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
               </Col>
 
               <Col lg={12}>
-                <Form.Item label={infoDetail.tenantName ? <div>租户名称 <a onClick={() => { showCustomerDrawer(infoDetail.tenantId, 2) }}>编辑</a></div> : '住户名称'}>
+                <Form.Item label={infoDetail.tenantName ? <div>租户名称 <a onClick={() => { showCustomerDrawer(infoDetail.tenantId, 2) }}>编辑</a></div> : '租户名称'}>
                   {/* {getFieldDecorator('customerId', {
                     initialValue: infoDetail.customerId,
                   })(<TextArea rows={4} placeholder="请输计费面积" />)} */}
@@ -551,7 +550,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
               form.setFieldsValue({ ownerId: customerId });
               form.setFieldsValue({ ownerPhone: res.phoneNum });
             } else {
-              //住户
+              //租户
               form.setFieldsValue({ tenantName: res.name });
               form.setFieldsValue({ tenantId: customerId });
               form.setFieldsValue({ tenantPhone: res.phoneNum });

@@ -18,14 +18,14 @@ function ListTable(props: ListTableProps) {
   const changePage = (pag: PaginationConfig, filters, sorter) => {
     onchange(pag, filters, sorter);
   };
-  const doDelete = record => {
+  const doInvalid = record => {
     Modal.confirm({
-      title: '请确认', 
-      content: `您确认要删除${record.fullName}吗？`,
+      title: '请确认',
+      content: `您确认要作废${record.fullName}吗？`,
       onOk: () => {
         RemoveForm(record.id)
           .then(() => {
-            message.success('删除成功');
+            message.success('作废成功');
             reload();
           })
           .catch(e => { });
@@ -56,17 +56,17 @@ function ListTable(props: ListTableProps) {
       // sorter: true,
     },
     {
-      title: '所属机构',
-      dataIndex: 'orgName',
-      key: 'orgName',
-      width: 100,
-      // sorter: true,
-    },
-    {
       title: '简称',
       dataIndex: 'shortName',
       key: 'shortName',
       width: 80,
+      // sorter: true,
+    },
+    {
+      title: '所属机构',
+      dataIndex: 'orgName',
+      key: 'orgName',
+      width: 100,
       // sorter: true,
     },
     {
@@ -123,7 +123,7 @@ function ListTable(props: ListTableProps) {
           <span>
             <a onClick={() => doModify(record.id)} key="modify">修改</a>
             <Divider type="vertical" />
-            <a onClick={() => doDelete(record)} key="delete">删除</a>
+            <a onClick={() => doInvalid(record)} key="delete">作废</a>
           </span>
         ];
       },

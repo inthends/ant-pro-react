@@ -40,7 +40,7 @@ export function GetShowDetailByMainId(keyValue): Promise<any> {
     .then(getResult as any);
 }
 
-//获取转费时候历史的房间住户
+//获取转费时候历史的房间租户
 export function GetTransferRoomUsers(roomid, relationid): Promise<any[]> {
   return request
     .get(process.env.basePath + `/Receivable/GetTransferRoomUsers?roomId=${roomid}&relationId=${relationid}`)

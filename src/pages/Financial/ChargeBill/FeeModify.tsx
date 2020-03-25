@@ -36,10 +36,13 @@ const FeeModify = (props: FeeModifyProps) => {
   useEffect(() => {
     // form.resetFields();
     if (modifyVisible) {
-      setLoading(true);
-      GetReceivablesFeeItemTreeJson(roomId).then(res => {
-        setFeeTreeData(res);
-      });
+      setLoading(true); 
+      if (id == '') {
+        //修改的时候不能修改费项，不加载费项
+        GetReceivablesFeeItemTreeJson(roomId).then(res => {
+          setFeeTreeData(res);
+        });
+      }
 
       // if (id != null && id != "") {
       if (id) {

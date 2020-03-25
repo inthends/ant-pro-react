@@ -132,12 +132,12 @@ const RoomShow = (props: RoomShowProps) => {
               </Form.Item>
             </Col>
             <Col lg={4}>
-              <Form.Item label="住户名称">
+              <Form.Item label="租户名称">
                 {infoDetail.tenantName}
               </Form.Item>
             </Col> 
             <Col lg={4}>
-              <Form.Item label="住户电话">
+              <Form.Item label="租户电话">
                 {infoDetail.tenantPhone}
               </Form.Item>
             </Col>

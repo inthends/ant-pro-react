@@ -29,8 +29,7 @@ function Main() {
   // const [orgs, setOrgs] = useState<TreeNode[]>();
   const [orgs, setOrgs] = useState<any[]>([]);
 
-  const selectTree = (orgid, orgtype, organizeId) => {
-
+  const selectTree = (orgid, orgtype, organizeId) => { 
     if (orgtype == '1' || orgtype == '8') {
       setDisabledAdd(false);
     } else {

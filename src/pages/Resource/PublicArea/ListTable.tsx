@@ -18,14 +18,14 @@ function ListTable(props: ListTableProps) {
   const changePage = (pag: PaginationConfig, filters, sorter) => {
     onchange(pag, filters, sorter);
   };
-  const doDelete = record => {
+  const doInvalid = record => {
     Modal.confirm({
       title: '请确认',
-      content: `您确认要删除${record.name}吗？`,
+      content: `您确认要作废${record.name}吗？`,
       onOk: () => {
         RemoveForm(record.id)
           .then(() => {
-            message.success('删除成功');
+            message.success('作废成功');
             reload();
           })
           .catch(e => { });
@@ -121,7 +121,7 @@ function ListTable(props: ListTableProps) {
           <span>
             <a onClick={() => modify(record)} key="modify">修改</a>
             <Divider type="vertical" />
-            <a onClick={() => doDelete(record)} key="delete">删除</a>
+            <a onClick={() => doInvalid(record)} key="delete">作废</a>
           </span>
         ];
       },

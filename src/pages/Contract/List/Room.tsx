@@ -182,7 +182,7 @@ const Room = (props: RoomProps) => {
     }
   };
 
-  //住户
+  //租户
   const tenantSearch = value => {
     if (value == '') {
       setUserList([]);
@@ -613,7 +613,7 @@ const Room = (props: RoomProps) => {
               form.setFieldsValue({ ownerId: customerId });
               form.setFieldsValue({ ownerPhone: res.phoneNum });
             } else {
-              //住户
+              //租户
               form.setFieldsValue({ tenantName: res.name });
               form.setFieldsValue({ tenantId: customerId });
               form.setFieldsValue({ tenantPhone: res.phoneNum });

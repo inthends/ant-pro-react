@@ -133,7 +133,7 @@ export interface GmPstructure {
     ownerId?: string;
     ownerName?: string;
     /**
-     * 住户
+     * 租户
      */
     tenantId?: string;
     tenantName?: string;

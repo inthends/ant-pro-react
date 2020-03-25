@@ -171,7 +171,7 @@ const PstructInfo = (props: PstructInfoProps) => {
         ).concat([
           <Option disabled key="all" className={styles.addCustomer}>
             <a onClick={() => showCustomerDrawer('', 1)}>
-              新增住户
+              新增租户
           </a>
           </Option>]);//新增 
         setUserList(list);
@@ -179,7 +179,7 @@ const PstructInfo = (props: PstructInfoProps) => {
     }
   };
 
-  //住户
+  //租户
   const tenantSearch = value => {
     if (value == '') {
       setUserList([]);
@@ -604,7 +604,7 @@ const PstructInfo = (props: PstructInfoProps) => {
               form.setFieldsValue({ ownerId: customerId });
               form.setFieldsValue({ ownerPhone: res.phoneNum });
             } else {
-              //住户
+              //租户
               form.setFieldsValue({ tenantName: res.name });
               form.setFieldsValue({ tenantId: customerId });
               form.setFieldsValue({ tenantPhone: res.phoneNum });
