@@ -171,7 +171,7 @@ const PstructInfo = (props: PstructInfoProps) => {
         ).concat([
           <Option disabled key="all" className={styles.addCustomer}>
             <a onClick={() => showCustomerDrawer('', 1)}>
-              新增租户
+              新增住户
           </a>
           </Option>]);//新增 
         setUserList(list);
@@ -196,7 +196,7 @@ const PstructInfo = (props: PstructInfoProps) => {
         ).concat([
           <Option disabled key="all" className={styles.addCustomer}>
             <a onClick={() => showCustomerDrawer('', 1)}>
-              新增住户
+              新增租户
           </a>
           </Option>]);//新增 
         setUserList(list);

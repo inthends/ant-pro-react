@@ -8,7 +8,6 @@ import React, { useEffect, useState } from 'react';
 import { RemoveFormAll, GetFormJson, GetListById, GetUnitBillDetail, SaveForm } from './Main.service';
 import moment from 'moment';
 import styles from './style.less';
-
 // const { Option } = Select;
 
 /*详情可编辑单元格*/
@@ -112,7 +111,6 @@ class EditableCell extends React.Component {
   }
 };
 
-
 interface ModifyProps {
   modifyVisible: boolean;
   // data?: any;
@@ -123,7 +121,6 @@ interface ModifyProps {
   reload(): void;
   treeData: any[];
 };
-
 
 /*详情可编辑单元格*/
 const Modify = (props: ModifyProps) => {
@@ -183,7 +180,6 @@ const Modify = (props: ModifyProps) => {
             total,
             keyValue: entity.billId
           };
-
           GetListById(searchCondition).then(res => {
             //设置查询后的分页
             const { pageIndex: current, total, pageSize } = res;
@@ -449,7 +445,7 @@ const Modify = (props: ModifyProps) => {
     const { current: pageIndex, pageSize, total } = pagination;
     const searchCondition: any = {
       sord: 'asc',
-      sidx: 'id',
+      sidx: 'billId',
       pageIndex,
       pageSize,
       total,

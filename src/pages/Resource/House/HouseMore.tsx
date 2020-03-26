@@ -30,10 +30,10 @@ function HouseMore(props) {
   const [organizeId, setOrganizeId] = useState<string>(''); //列表选中的节点组织id  
   const [roomVisible, setRoomVisible] = useState<boolean>(false);
 
-  const doSelectTree = (parentId, type, searchText) => {
+  const doSelectTree = (parentId, type) => {
     //初始化页码，防止页码错乱导致数据查询出错 
     const page = new DefaultPagination();
-    refresh(parentId, type, searchText, page);//, pstructId); 
+    refresh(parentId, type, search, page);//, pstructId); 
     setParentId(parentId);
     setPagination(page);
     setType(type);
@@ -99,7 +99,7 @@ function HouseMore(props) {
     if (sorter) {
       const { field, order } = sorter;
       searchCondition.sord = order === "descend" ? "desc" : "asc";
-      searchCondition.sidx = field ? field : 'code';
+      searchCondition.sidx = field ? field : 'name';
     }
 
     return load(searchCondition).then(res => {
@@ -109,7 +109,7 @@ function HouseMore(props) {
 
   const load = formData => {
     setLoading(true);
-    formData.sidx = formData.sidx || 'code';
+    formData.sidx = formData.sidx || 'name';
     formData.sord = formData.sord || 'asc';
     return GetPageListJson(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -136,7 +136,7 @@ function HouseMore(props) {
       ParentId: parentId,//== null ? psid : parentId,
       Type: type == null ? 1 : type,
     };
-    const sidx = 'code';
+    const sidx = 'name';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
@@ -153,7 +153,7 @@ function HouseMore(props) {
       ParentId: parentId,//== null ? psid : parentId,
       Type: type == null ? 1 : type,
     };
-    const sidx = 'code';
+    const sidx = 'name';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = page;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
@@ -176,7 +176,7 @@ function HouseMore(props) {
             return;
           }
           setIsDisabled(false);
-          doSelectTree(parentId, type, search);
+          doSelectTree(parentId, type);
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>

@@ -22,7 +22,7 @@ function Main() {
   const [search, setSearch] = useState<string>('');
   const [treeData, setTreeData] = useState<any[]>([]);
 
-  const selectTree = (org, item, searchText) => {
+  const selectTree = (org, item) => {
     // initLoadData(item, searchText);
     SetOrganize(item);
     //初始化页码，防止页码错乱导致数据查询出错  
@@ -142,7 +142,7 @@ function Main() {
       <AsynLeftTree
         parentid={'0'}
         selectTree={(id, item) => {
-          selectTree(id, item, search);
+          selectTree(id, item);
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>

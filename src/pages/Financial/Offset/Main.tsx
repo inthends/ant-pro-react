@@ -50,7 +50,7 @@ function Main() {
     //初始化页码，防止页码错乱导致数据查询出错  
     const page = new DefaultPagination();
     loadData(search, id, type, page);
-    loadDetailData(search, id, type, page);
+    loadDetailData(detailSearch, id, type, page);
   };
 
   useEffect(() => {

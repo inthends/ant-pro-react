@@ -468,6 +468,12 @@ function ListTable(props: ListTableProps) {
       width: 280
     },
     {
+      title: '备注',
+      dataIndex: 'memo',
+      key: 'memo',
+      width: 200
+    },
+    {
       title: '优惠政策',
       dataIndex: 'rebateName',
       key: 'rebateName',
@@ -487,11 +493,6 @@ function ListTable(props: ListTableProps) {
           return '';
         }
       }
-    },
-    {
-      title: '备注',
-      dataIndex: 'memo',
-      key: 'memo',
     },
     {
       title: '操作',

@@ -115,7 +115,6 @@ const Main = () => {
     var orgId = item.node.props.value;
     var type = item.node.props.type;
     // initLoadData({ ...search, orgId, type })
-
     //初始化页码，防止页码错乱导致数据查询出错  
     const page = new DefaultPagination();
     loadData({ ...search, orgId, type }, page);

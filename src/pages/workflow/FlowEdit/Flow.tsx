@@ -134,7 +134,6 @@ const Flow = () => {
     var typeId = item.node.props.value;
     var typeName = item.node.props.title;
     // initLoadData({ ...search, typeId, typeName, type });
-
     //初始化页码，防止页码错乱导致数据查询出错  
     const page = new DefaultPagination();
     loadData({ ...search, typeId, typeName, type }, page);

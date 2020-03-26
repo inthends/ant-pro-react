@@ -54,7 +54,7 @@ function Main() {
       setAddBtnDisable(false);
       //初始化页码，防止页码错乱导致数据查询出错  
       const page = new DefaultPagination();
-      loadNotPaymentData(id, page);
+      loadNotPaymentData(search, id, page);
       loadPaymentData(id, type, page);
     } else {
       setAddBtnDisable(true);
