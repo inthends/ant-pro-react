@@ -71,7 +71,7 @@ const Modify = (props: ModifyProps) => {
 
   //重新设置state
   const handleChange = ({ fileList }) => {
-    setFileList([...fileList]);
+    setFileList([...fileList]); 
     let url = '';
     if (fileList.length > 0)
       url = fileList[0].response;
@@ -213,7 +213,7 @@ const Modify = (props: ModifyProps) => {
               // wholeLine={true}
               type="textarea"
               field="sql"
-              label="SQL(存储过程和SQL语句必须声明单据Id参数call sp_PayNotice(@keyvalue);)"
+              label="SQL(存储过程和SQL语句必须声明单据Id参数exec sp_PayNotice(@keyvalue);)"
             ></ModifyItem>
           </Row>
           <Row gutter={24}>
@@ -227,7 +227,7 @@ const Modify = (props: ModifyProps) => {
                   onChange={handleChange}
                   onRemove={handleRemove}
                 >
-                  {fileList.length > 1 ? null : uploadButton}
+                  {fileList.length > 0 ? null : uploadButton}
                 </Upload>
               </div>
               {getFieldDecorator('fileUrl', {

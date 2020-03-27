@@ -313,7 +313,7 @@ function ListTable(props: ListTableProps) {
       //轮询结束
       temp.destroy();
     });
- 
+
   };
 
   //轮询支付回调数据
@@ -326,8 +326,8 @@ function ListTable(props: ListTableProps) {
           if (res) {
             //结束轮询 
             console.log('结束轮询');
-            resolve();
-             //刷新列表
+            resolve();//轮询结束，不销毁二维码窗体，有bug,需要研究
+            //刷新列表
             reload();
             message.success('收款成功');
             //弹出收款查看页面 
@@ -339,8 +339,8 @@ function ListTable(props: ListTableProps) {
               console.log('继续异步轮询');
               retry();
             }
-          } 
-        }) 
+          }
+        })
       }, 5000); //调用栈会越来越大，5秒一次，防止内存泄露
     })
   };

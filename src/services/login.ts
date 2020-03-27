@@ -6,7 +6,6 @@ export async function loginService(data: any): Promise<any> {
   let newData = deepCopy(data);
   //console.log(md5);
   newData.password = md5(data.password);
-
   // console.log(process.env.basePath);
   // //从中间配置库获取真正接口地址
   // // let url = 'http://hf.jslesoft.com:8008/System/GetSystemInfo?usercode=${data.usercode}';
