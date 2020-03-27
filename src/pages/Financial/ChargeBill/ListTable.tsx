@@ -274,14 +274,14 @@ function ListTable(props: ListTableProps) {
                 //重置收款页面信息
                 form.setFieldsValue({ payAmountA: 0 });
                 form.setFieldsValue({ payAmountB: 0 });
-                form.setFieldsValue({ payAmountC: 0 }); 
+                form.setFieldsValue({ payAmountC: 0 });
                 form.setFieldsValue({ payTypeA: '支付宝扫码' });
                 form.setFieldsValue({ payTypeB: '微信扫码' });
-                form.setFieldsValue({ payTypeC: '现金' }); 
+                form.setFieldsValue({ payTypeC: '现金' });
                 form.setFieldsValue({ payCode: '' });
                 form.setFieldsValue({ invoiceCode: '' });
-                form.setFieldsValue({ accountBank: null }); 
-                form.setFieldsValue({ memo: '' }); 
+                form.setFieldsValue({ accountBank: null });
+                form.setFieldsValue({ memo: '' });
                 reload();
                 //弹出查看页面
                 showDetail(billId);
@@ -293,50 +293,58 @@ function ListTable(props: ListTableProps) {
     });
   };
 
+  //弹出收款码
   const pay = (url) => {
-    let temp = Modal.confirm({
+
+    // let temp = Modal.confirm({ 
+    let temp = Modal.info({
       title: '请扫码',
       content: (<img src={url}></img>),
-      onCancel() {
+      okText: '取消',
+      // onCancel() {
+      onOk() {
         if (timer) {
           timer = null;//关闭弹窗后不轮询
         }
       }
     })
 
-    retry().then(() => { 
-      //轮训结束
+    retry().then(() => {
+      //轮询结束
       temp.destroy();
-    })
-
+    });
+ 
   };
 
   //轮询支付回调数据
   let timer;
   const retry = () => {
     return new Promise((resolve, reject) => {
-      timer = setTimeout(() => { 
-
+      timer = setTimeout(() => {
         const tradenoId = form.getFieldValue('tradenoId');
-        GetPayState(tradenoId).then(billId => {
-          if (billId) {
-            message.success('收款成功');
-            //结束轮训
+        GetPayState(tradenoId).then(res => {
+          if (res) {
+            //结束轮询 
+            console.log('结束轮询');
             resolve();
-            //刷新列表
+             //刷新列表
             reload();
-            //弹出收款查看页面
-            showDetail(billId); 
-          } else {
+            message.success('收款成功');
+            //弹出收款查看页面 
+            showDetail(res);
+          }
+          else {
             if (timer) {
+              //继续异步轮询
+              console.log('继续异步轮询');
               retry();
             }
-          }
-        })
-
-      }, 1000);//每秒轮询一次  
+          } 
+        }) 
+      }, 5000); //调用栈会越来越大，5秒一次，防止内存泄露
     })
   };
+
 
   //抹零计算
   const mlCal = (isml, type, scale) => {
@@ -551,7 +559,7 @@ function ListTable(props: ListTableProps) {
                       <Option value={item.value} key={item.key}>
                         {item.title}
                       </Option>
-                    ))} 
+                    ))}
                   </Select>
                 )}
               </Form.Item>

@@ -69,34 +69,33 @@ export default [
           //   path: '/dashboard/workplace',
           //   component: './dashboard/workplace',
           // }, 
-          {
-            name: 'reconciliation',
-            path: '/dashboard/reconciliation',
-            component: './Dashboard/Reconciliation/Reconciliation',
-          },
+          // {
+          //   name: 'reconciliation',
+          //   path: '/dashboard/reconciliation',
+          //   component: './Dashboard/Reconciliation/Reconciliation',
+          // },
 
-          {
-            name: 'billdetails',
-            path: '/dashboard/billdetails',
-            component: './Dashboard/BillDetails/BillDetails',
-          },
+          // {
+          //   name: 'billdetails',
+          //   path: '/dashboard/billdetails',
+          //   component: './Dashboard/BillDetails/BillDetails',
+          // }, 
+          // {
+          //   name: 'receiptdetails',
+          //   path: '/dashboard/receiptdetails',
+          //   component: './Dashboard/ReceiptDetails/ReceiptDetails',//js组件
+          // },
 
-          {
-            name: 'receiptdetails',
-            path: '/dashboard/receiptdetails',
-            component: './Dashboard/ReceiptDetails/ReceiptDetails',//js组件
-          },
-
-          {
-            name: 'receivabledivide',
-            path: '/dashboard/receivabledivide',
-            component: './Dashboard/Receivabledivide/Receivabledivide',
-          },
-          {
-            name: 'receiveddivide',
-            path: '/dashboard/receiveddivide',
-            component: './Dashboard/Receiveddivide/Receiveddivide',
-          },
+          // {
+          //   name: 'receivabledivide',
+          //   path: '/dashboard/receivabledivide',
+          //   component: './Dashboard/Receivabledivide/Receivabledivide',
+          // },
+          // {
+          //   name: 'receiveddivide',
+          //   path: '/dashboard/receiveddivide',
+          //   component: './Dashboard/Receiveddivide/Receiveddivide',
+          // },
           {
             name: 'reports',
             path: '/dashboard/reports',
