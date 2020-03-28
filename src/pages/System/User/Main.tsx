@@ -13,14 +13,15 @@ import DataAuth from './DataAuth';
 const { Content } = Layout;
 const { Search } = Input;
 interface SearchParam {
-  condition: 'Account' | 'Name' | 'Code';
+  // condition: 'Account' | 'Name' | 'Code';
   keyword: string;
 }
 const Main = () => {
   const [search, setSearch] = useState<SearchParam>({
-    condition: 'Account',
+    // condition: 'Account',
     keyword: '',
   });
+  
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<any[]>([]);
@@ -132,7 +133,7 @@ const Main = () => {
           </Select> */}
           <Search
             className="search-input"
-            placeholder="请输入要查询的关键词"
+            placeholder="搜索用户名和姓名"
             onSearch={keyword => loadData({ ...search, keyword })}
             style={{ width: 200 }}
           />

@@ -25,10 +25,14 @@ interface ListTableProps {
   showSplit(id: string): void;
   showTrans(id: string): void;
   showDetail(billId: string): void;//打开查看页面
+  showReduction(id: string): void;
 };
 
 function ListTable(props: ListTableProps) {
-  const { form, onchange, loading, pagination, data, modify, reload, rowSelect, organizeId, customerName, showSplit, showTrans, showDetail } = props;
+  const { form, onchange, loading, pagination, data, modify,
+    reload, rowSelect, organizeId, customerName, showSplit,
+    showTrans, showDetail, showReduction
+  } = props;
   const { getFieldDecorator } = form;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
@@ -98,7 +102,10 @@ function ListTable(props: ListTableProps) {
     //this.showEditModal(currentItem);
     //}
     //else
-    if (key === 'split') {
+    if (key === "reduction") {
+      showReduction(currentItem.id); 
+    }
+    else if (key === 'split') {
       //如果设置了优惠政策，则不允许拆费
       if (currentItem.rmid != null) {
         message.warning('设置了优惠政策，不允许拆费');
@@ -393,6 +400,7 @@ function ListTable(props: ListTableProps) {
       overlay={
         <Menu onClick={({ key }) => editAndDelete(key, item)}>
           {/* <Menu.Item key="view">查看</Menu.Item> */}
+          <Menu.Item key="reduction">减免</Menu.Item>
           <Menu.Item key="split">拆费</Menu.Item>
           <Menu.Item key="trans">转费</Menu.Item>
         </Menu>}>

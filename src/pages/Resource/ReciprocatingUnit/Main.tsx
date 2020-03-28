@@ -135,9 +135,9 @@ function Main() {
         <div style={{ marginBottom: '10px' }}>
           <Search
             className="search-input"
-            placeholder="搜索往来单位"
+            placeholder="搜索名称和编号"
             onSearch={value => loadData(value, orgid, orgtype)}
-            style={{ width: 180 }}
+            style={{ width: 200 }}
           />
           <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer()}>
             <Icon type="plus" />

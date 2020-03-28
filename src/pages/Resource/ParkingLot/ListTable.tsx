@@ -153,6 +153,14 @@ function ListTable(props: ListTableProps) {
     },
 
     {
+      title: '业主房号',
+      dataIndex: 'ownerUnitCode',
+      key: 'ownerUnitCode',
+      width: 160,
+      sorter: true,
+    },
+
+    {
       title: '车牌号',
       dataIndex: 'carno',
       key: 'carno',

@@ -47,6 +47,12 @@ const Modify = (props: ModifyProps) => {
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
+              field="itemCode"
+              label="编号"
+              rules={[{ required: true, message: "请输入编号" }]}
+            ></ModifyItem>
+            <ModifyItem
+              {...baseFormProps}
               field="sortCode"
               label="排序"
               type='inputNumber'
@@ -62,9 +68,10 @@ const Modify = (props: ModifyProps) => {
                 form.getFieldValue('isDefault')
               }
             ></ModifyItem> */}
+          </Row>
 
-
-            <Col lg={12}>
+          <Row gutter={24}>
+            <Col>
               <Form.Item label='默认' >
                 {getFieldDecorator('isDefault', {
                   initialValue: initData.isDefault ? true : false,
@@ -72,7 +79,7 @@ const Modify = (props: ModifyProps) => {
                 </Checkbox>
                 )}
               </Form.Item>
-            </Col> 
+            </Col>
           </Row>
 
           <Row gutter={24}>

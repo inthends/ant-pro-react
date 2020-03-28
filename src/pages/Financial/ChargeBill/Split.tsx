@@ -50,11 +50,11 @@ const Split = (props: SplitProps) => {
         setLoading(true);
         var data = {
           FirstAmount: values.firstAmount,
-          FirstBeginDate: moment(values.firstBeginDate).format('YYYY-MM-DD'),
-          FirstEndDate: moment(values.firstEndDate).format('YYYY-MM-DD'),
+          FirstBeginDate: values.firstBeginDate ? moment(values.firstBeginDate).format('YYYY-MM-DD') : null,
+          FirstEndDate: values.firstEndDate ? moment(values.firstEndDate).format('YYYY-MM-DD') : null,
           SecondAmount: values.secondAmount,
-          SecondBeginDate: moment(values.secondBeginDate).format('YYYY-MM-DD'),
-          SecondEndDate: moment(values.secondEndDate).format('YYYY-MM-DD'),
+          SecondBeginDate: values.secondBeginDate ? moment(values.secondBeginDate).format('YYYY-MM-DD') : null,
+          SecondEndDate: values.secondEndDate ? moment(values.secondEndDate).format('YYYY-MM-DD') : null,
           Memo: values.memo
         }
         var splitData = {
@@ -148,12 +148,12 @@ const Split = (props: SplitProps) => {
               </Col>
               <Col span={8}>
                 <Form.Item label="计费起始日期"  >
-                  {String(infoDetail.beginDate).substr(0, 10)}
+                  {infoDetail.beginDate ? String(infoDetail.beginDate).substr(0, 10) : ''}
                 </Form.Item>
               </Col>
               <Col span={8}>
                 <Form.Item label="计费截止日期" >
-                  {String(infoDetail.endDate).substr(0, 10)}
+                  {infoDetail.endDate ? String(infoDetail.endDate).substr(0, 10) : ''}
                 </Form.Item>
               </Col>
             </Row>
@@ -207,17 +207,18 @@ const Split = (props: SplitProps) => {
               <Col span={8}>
                 <Form.Item label="计费起始日期"  >
                   {getFieldDecorator('firstBeginDate', {
-                    initialValue: infoDetail.beginDate == null ? moment(new Date) : moment(infoDetail.beginDate),
+                    // initialValue: infoDetail.beginDate == null ? moment(new Date) : moment(infoDetail.beginDate),
+                    initialValue: infoDetail.beginDate ? moment(infoDetail.beginDate) : null,
                   })(
                     <DatePicker disabled={true} style={{ width: '100%' }} />
                   )}
                 </Form.Item>
               </Col>
               <Col span={8}>
-                <Form.Item label="计费截止日期" required >
+                <Form.Item label="计费截止日期" required>
                   {getFieldDecorator('firstEndDate', {
                     // initialValue: infoDetail.firstEndDate == null ? moment(new Date) : moment(infoDetail.firstEndDate),
-                    rules: [{ required: true, message: '请输入计费截止日期' },
+                    rules: [{ required: !infoDetail.beginDate == null, message: '请输入计费截止日期' },
                       //   {
                       //   validator: (rules, value, callback) => {
                       //     if (value.isBefore(moment(infoDetail.beginDate).format('YYYY-MM-DD')) || value.isAfter(moment(infoDetail.endDate).format('YYYY-MM-DD'))) {
@@ -228,6 +229,7 @@ const Split = (props: SplitProps) => {
                     ]
                   })(
                     <DatePicker style={{ width: '100%' }}
+                      disabled={infoDetail.beginDate ? false : true}
                       disabledDate={disabledDate}
                       // onChange={(date, datestr) => {
                       //   /*if(date.isBefore(moment(infoDetail.beginDate).format('YYYY-MM-DD'))||date.isAfter(moment(infoDetail.endDate).format('YYYY-MM-DD')))
@@ -280,7 +282,9 @@ const Split = (props: SplitProps) => {
               <Col span={8}>
                 <Form.Item label="计费起始日期"  >
                   {getFieldDecorator('secondBeginDate', {
-                    initialValue: infoDetail.secondBeginDate == null ? moment(new Date) : moment(infoDetail.secondBeginDate),
+                    // initialValue: infoDetail.secondBeginDate == null ? moment(new Date) : moment(infoDetail.secondBeginDate),
+                    initialValue: infoDetail.beginDate ? moment(infoDetail.beginDate) : null,
+
                   })(
                     <DatePicker disabled={true} style={{ width: '100%' }} />
                   )}
@@ -289,7 +293,8 @@ const Split = (props: SplitProps) => {
               <Col span={8}>
                 <Form.Item label="计费截止日期"  >
                   {getFieldDecorator('secondEndDate', {
-                    initialValue: infoDetail.endDate == null ? moment(new Date) : moment(infoDetail.endDate),
+                    // initialValue: infoDetail.endDate == null ? moment(new Date) : moment(infoDetail.endDate),
+                    initialValue: infoDetail.endDate ? moment(infoDetail.endDate) : null,
                   })(
                     <DatePicker disabled={true} style={{ width: '100%' }} />
                   )}

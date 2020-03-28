@@ -398,8 +398,8 @@ function Main() {
               </Select>
               <Search
                 className="search-input"
-                placeholder="请输入要查询的单号"
-                style={{ width: 180 }}
+                placeholder="搜索单号"
+                style={{ width: 200 }}
                 onChange={e => {
                   // var params = Object.assign({}, billCheckSearchParams, { search: e.target.value });
                   // setBillCheckSearchParams(params);
@@ -527,8 +527,8 @@ function Main() {
             <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
               <Search
                 className="search-input"
-                placeholder="请输入要查询的单号"
-                style={{ width: 180 }}
+                placeholder="搜索单号"
+                style={{ width: 200 }}
                 onSearch={value => loadBillNoticeData(value, orgId, orgType)}
               />
             </div>

@@ -185,7 +185,7 @@ function HouseMore(props) {
             <div style={{ marginBottom: '10px' }}>
               <Search
                 className="search-input"
-                placeholder="请输入要查询的关键词"
+                placeholder="搜索名称和编号"
                 // value={search}
                 onSearch={value => loadData(value, parentId, type)}
                 style={{ width: 200 }}

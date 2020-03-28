@@ -51,20 +51,21 @@ function ListTable(props: ListTableProps) {
       title: "词典名称",
       dataIndex: "itemName",
       key: "itemName",
-      width: 100,
+      width: 150,
+    },
+    {
+      title: "编号",
+      dataIndex: "itemCode",
+      key: "itemCode",
+      width: 150
     },
     {
       title: "词典值",
       dataIndex: "itemValue",
       key: "itemValue",
-      width: 100
+      width: 150
     },
-    // {
-    //   title: "简拼",
-    //   dataIndex: "simpleSpelling",
-    //   key: "simpleSpelling",
-    //   width: 100
-    // },
+  
     {
       title: "排序",
       dataIndex: "sortCode",
@@ -75,7 +76,7 @@ function ListTable(props: ListTableProps) {
       title: '默认',
       dataIndex: 'isDefault',
       key: 'isDefault',
-      width: 60,
+      width: 80,
       render: val => val == 1 ? <Tag color="#19d54e">是</Tag> : <Tag color="#e4aa5b">否</Tag>
     },
 
@@ -83,7 +84,7 @@ function ListTable(props: ListTableProps) {
       title: "有效",
       dataIndex: "enabledMark",
       key: "enabledMark",
-      width: 60,
+      width: 80,
       render: (text: any, record, index) => {
         return (
           <Switch
@@ -99,14 +100,14 @@ function ListTable(props: ListTableProps) {
     {
       title: "备注",
       dataIndex: "description",
-      key: "description",
-      width: 250,
+      key: "description", 
     },
     {
       title: "操作",
       dataIndex: "operation",
       key: "operation",
-      width: 70,
+      fixed:'right',
+      width: 90,
       render: (text, record) => {
         return [
           <span>

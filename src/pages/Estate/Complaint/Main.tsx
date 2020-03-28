@@ -168,7 +168,7 @@ function Main() {
         <div style={{ marginBottom: '10px' }}>
           <Search
             className="search-input"
-            placeholder="请输入要查询的单号"
+            placeholder="搜索投诉单号"
             onSearch={value => loadData(value, organize)}
             style={{ width: 200 }}
           />

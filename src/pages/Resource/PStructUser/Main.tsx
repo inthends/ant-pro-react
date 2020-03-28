@@ -98,7 +98,7 @@ function Main() {
         <div style={{ marginBottom: '20px', padding: '3px 0' }}>
           <Search
             className="search-input"
-            placeholder="请输入要查询的关键词"
+            placeholder="搜索名称和编号"
             onSearch={value =>
               loadData(value)
             }

@@ -138,6 +138,7 @@ const Modify = (props: ModifyProps) => {
               </Col>
             </Row>
             <Row gutter={24}>
+
               <Col lg={12}>
                 <Form.Item label="住户名称" required>
                   {getFieldDecorator('name', {
@@ -146,31 +147,32 @@ const Modify = (props: ModifyProps) => {
                   })(<Input placeholder="请输入客户名称" />)}
                 </Form.Item>
               </Col>
-              {/* <Col lg={12}>
+
+              <Col lg={12}>
                 <Form.Item label="客户编号" required>
                   {getFieldDecorator('code', {
                     initialValue: infoDetail.code,
                     rules: [{ required: true, message: '请输入客户编号' }],
                   })(<Input placeholder="请输入客户编号" />)}
                 </Form.Item>
-              </Col> */}
+              </Col>
 
-              <Col lg={12}>
+              {/* <Col lg={12}>
                 <Form.Item label="联系电话" required>
                   {getFieldDecorator('phoneNum', {
                     initialValue: infoDetail.phoneNum,
                     rules: [{ required: true, message: '请输入联系电话' }],
                   })(<Input placeholder="请输入联系电话" />)}
                 </Form.Item>
-              </Col>
+              </Col> */}
             </Row>
 
-            {/* <Row gutter={24}>
+            <Row gutter={24}>
               <Col lg={12}>
-                <Form.Item label="客户简称">
+                <Form.Item label="住户简称">
                   {getFieldDecorator('shortName', {
                     initialValue: infoDetail.shortName,
-                  })(<Input placeholder="请输入客户简称" />)}
+                  })(<Input placeholder="请输入住户简称" />)}
                 </Form.Item>
               </Col>
 
@@ -181,7 +183,7 @@ const Modify = (props: ModifyProps) => {
                   })(<Input placeholder="请输入手机号码" />)}
                 </Form.Item>
               </Col> 
-            </Row> */}
+            </Row>
 
             {form.getFieldValue('type') === '1' ? (
               <>

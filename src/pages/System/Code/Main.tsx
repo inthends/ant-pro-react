@@ -9,13 +9,13 @@ import { GetPageListJson } from "./Code.service";
 const { Content } = Layout;
 const { Search } = Input;
 interface SearchParam {
-  condition: "EnCode" | "FullName";
+  // condition: "EnCode" | "FullName";
   keyword: string;
 };
 
 const Main = () => {
   const [search, setSearch] = useState<SearchParam>({
-    condition: "EnCode",
+    // condition: "EnCode",
     keyword: ""
   });
 
@@ -114,7 +114,7 @@ const Main = () => {
         <div style={{ marginBottom: 20, padding: "3px 0" }}>
           <Search
             className="search-input"
-            placeholder="请输入要查询的关键词"
+            placeholder="搜索名称和编号"
             onSearch={keyword => loadData({ ...search, keyword })}
             style={{ width: 200 }}
           />

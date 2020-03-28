@@ -68,7 +68,8 @@ const ModifyParking = (props: ModifyParkingProps) => {
 
   // 打开抽屉时初始化
   useEffect(() => {
-    if (modifyVisible) {
+    if (modifyVisible) { 
+
       if (data) {
         // setInfoDetail({ ...data.baseInfo, ...data.parkingDetail });
         // getEstateTreeData(organizeId, '8').then(res => {
@@ -78,6 +79,10 @@ const ModifyParking = (props: ModifyParkingProps) => {
         setInfoDetail(data);
         form.resetFields();
       }
+      else {
+        setInfoDetail({});
+        form.resetFields();
+      } 
     } else {
       form.resetFields();
     }
@@ -159,7 +164,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
       })
     }
   };
- 
+
   //租户
   const tenantSearch = value => {
     if (value == '') {

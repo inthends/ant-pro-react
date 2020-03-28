@@ -143,7 +143,7 @@ const Main = () => {
           </Select> */}
           <Search
             className="search-input"
-            placeholder="请输入要查询的关键词"
+            placeholder="搜索流程名称和标题"
             onSearch={keyword => loadData({ ...search, keyword })}
             style={{ width: 200 }}
           />

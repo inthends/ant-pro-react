@@ -76,7 +76,7 @@ function ListTable(props: ListTableProps) {
       width: 150,
     },
     {
-      title: '显示名',
+      title: '姓名',
       dataIndex: 'name',
       key: 'name',
       sorter: true,

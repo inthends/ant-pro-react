@@ -18,6 +18,7 @@ function ListTable(props: ListTableProps) {
   const changePage = (pag: PaginationConfig, filters, sorter) => {
     onchange(pag, filters, sorter);
   };
+
   const doInvalid = record => {
     Modal.confirm({
       title: '请确认',
@@ -26,9 +27,9 @@ function ListTable(props: ListTableProps) {
         //判断是否关联房间
         CheckRelation(record.key).then((res) => {
           if (res) {
-            message.error('已经关联房间，不允许作废！');
+            message.error('已经关联房间，不允许作废');
             return;
-          } 
+          }
           RemoveForm(record.id)
             .then(() => {
               message.success('作废成功');
@@ -40,6 +41,7 @@ function ListTable(props: ListTableProps) {
       },
     });
   };
+
   // const doModify = id => {
   //   GetDetailJson(id).then(res => {
   //     const { customerInfo = {}, relationPC = {} } = res;
@@ -64,13 +66,6 @@ function ListTable(props: ListTableProps) {
         }
       },
     },
-    // {
-    //   title: '客户编号',
-    //   dataIndex: 'code',
-    //   key: 'code',
-    //   width: 160,
-    //   sorter: true,
-    // },
     {
       title: '住户名称',
       dataIndex: 'name',
@@ -79,7 +74,14 @@ function ListTable(props: ListTableProps) {
       sorter: true,
     },
     {
-      title: '联系电话',
+      title: '住户编号',
+      dataIndex: 'code',
+      key: 'code',
+      width: 160,
+      sorter: true,
+    }, 
+    {
+      title: '手机号码',
       dataIndex: 'phoneNum',
       key: 'phoneNum',
       width: 200,
@@ -98,7 +100,7 @@ function ListTable(props: ListTableProps) {
       title: '电子邮箱',
       dataIndex: 'email',
       key: 'email',
-      width: 100, 
+      width: 100,
     },
 
 
@@ -154,7 +156,7 @@ function ListTable(props: ListTableProps) {
             <a onClick={() => modify(record)} key="modify">修改</a>
             <Divider type="vertical" key="divider" />
             <a onClick={() => doInvalid(record)} key="delete">作废</a>
-          </span> 
+          </span>
         ];
       },
     },

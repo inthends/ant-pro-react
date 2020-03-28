@@ -13,6 +13,7 @@ import BillShow from './BillShow';
 import BillModify from './BillModify';
 import Verify from './Verify';
 import Split from './Split';
+import Reduction from './Reduction';
 import Transform from './Transform';
 import Submit from './Submit';
 import RoomShow from '../../Resource/House/RoomShow';
@@ -51,6 +52,8 @@ function Main() {
   const [transVisible, setTransVisible] = useState<boolean>(false);
   // const [billDetailVisible, setBillDetailVisible] = useState<boolean>(false); 
   const [showVisible, setShowVisible] = useState<boolean>(false);
+  //减免
+  const [reductionVisible, setReductionVisible] = useState<boolean>(false);
 
   //对账
   const [verifyVisible, setVerifyVisible] = useState<boolean>(false);
@@ -378,6 +381,18 @@ function Main() {
     setSplitVisible(false);
   }
 
+  //减免
+  const showReduction = (id) => {
+    setId(id);
+    setReductionVisible(true);
+  }
+
+  const closeReduction = () => {
+    setId('');
+    // setSplitId('');
+    setReductionVisible(false);
+  }
+
   //转费
   // const [transId, setTransId] = useState<string>('');
   const showTrans = (id) => {
@@ -627,6 +642,7 @@ function Main() {
               showTrans={showTrans}
               // showDetail={(billId) => { chargedRowSelectedKey.billId = billId; showDetail(); }}
               showDetail={showDetail}
+              showReduction={showReduction}
             />
 
           </TabPane>
@@ -837,6 +853,15 @@ function Main() {
         close={closeSubmit}
         ids={chargeSelectedKeys}
         reload={() => initChargeLoadData(orgId, orgType)}
+      />
+
+
+      <Reduction
+        reductionVisible={reductionVisible}
+        closeReduction={closeReduction}
+        id={id}
+        // id={splitId}
+        reload={() => initLoadData(search, orgId)}
       />
 
       <Split

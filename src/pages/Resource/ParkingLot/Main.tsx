@@ -29,20 +29,19 @@ function Main() {
   // const [orgs, setOrgs] = useState<TreeNode[]>();
   const [orgs, setOrgs] = useState<any[]>([]);
 
-  const selectTree = (orgid, orgtype, organizeId) => { 
+  const selectTree = (orgid, orgtype, organizeId) => {
     if (orgtype == '1' || orgtype == '8') {
       setDisabledAdd(false);
     } else {
       setDisabledAdd(true);
-    } 
+    }
     // initLoadData(orgid, orgtype, searchText);
     setOrgid(orgid);
     setOrgtype(orgtype);
-    setOrganizeId(organizeId); 
+    setOrganizeId(organizeId);
     //初始化页码，防止页码错乱导致数据查询出错  
     const page = new DefaultPagination();
     loadData(search, orgid, orgtype, page);
-
   };
 
   useEffect(() => {
@@ -80,15 +79,16 @@ function Main() {
   const closeDrawer = () => {
     setModifyVisible(false);
   };
-  const create = org => {
-    if (org.type === '1' || org.type === '') {
-      setCurrData({ baseInfo: { type: 8 } });
-    }
-    if (org.type === '8') {
-      setCurrData({ baseInfo: { type: 9 } });
-    }
-    setModifyVisible(true);
-  };
+
+  // const create = org => {
+  //   if (org.type === '1' || org.type === '') {
+  //     setCurrData({ baseInfo: { type: 8 } });
+  //   }
+  //   if (org.type === '8') {
+  //     setCurrData({ baseInfo: { type: 9 } });
+  //   }
+  //   setModifyVisible(true);
+  // };
 
   const showDrawer = (item?) => {
     setCurrData(item);
@@ -175,7 +175,7 @@ function Main() {
         <div style={{ marginBottom: '10px' }}>
           <Search
             className="search-input"
-            placeholder="请输入要查询的关键词"
+            placeholder="搜索名称编号和房号"
             onSearch={value => loadData(value, orgid, orgtype)}
             style={{ width: 200 }}
           />
@@ -184,7 +184,8 @@ function Main() {
             style={{ float: 'right' }}
             // disabled={disabledCreate(orgid)}
             disabled={isDisabledAdd}
-            onClick={() => create(orgid)}>
+            // onClick={() => create(orgid)}
+            onClick={() => showDrawer()}  >
             <Icon type="plus" />
             {orgtype == '8' ? '车位' : '车库'}
           </Button>

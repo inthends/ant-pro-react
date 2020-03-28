@@ -149,8 +149,8 @@ const Main = () => {
           <Search
             key='search'
             className="search-input"
-            placeholder="请输入巡检内容"
-            style={{ width: 150 }}
+            placeholder="搜索巡检内容"
+            style={{ width: 200 }}
             onSearch={keyword => loadData({ ...search, keyword })}
           />
           <Button

@@ -40,18 +40,20 @@ function ListTable(props: ListTableProps) {
 
   const columns = [
     {
+      title: "名称",
+      dataIndex: "fullName",
+      key: "fullName",
+      sorter: true,
+      width: 100
+    },
+    {
       title: "编号",
       dataIndex: "enCode",
       key: "enCode",
       sorter: true,
       width: 100,
     },
-    {
-      title: "名称",
-      dataIndex: "fullName",
-      key: "fullName",
-      width: 150
-    },
+
     // {
     //   title: "所属机构",
     //   dataIndex: "orgName",

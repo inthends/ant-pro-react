@@ -55,17 +55,17 @@ function ListTable(props: ListTableProps) {
   };
   const columns = [
     {
-      title: '角色编号',
-      dataIndex: 'enCode',
-      key: 'enCode',
-      width: 100,
-    },
-    {
       title: '角色名称',
       dataIndex: 'fullName',
       key: 'fullName',
       width: 100,
     },
+    {
+      title: '角色编号',
+      dataIndex: 'enCode',
+      key: 'enCode',
+      width: 100,
+    }, 
     {
       title: '创建时间',
       dataIndex: 'createDate',

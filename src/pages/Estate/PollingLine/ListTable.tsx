@@ -40,17 +40,17 @@ function ListTable(props: ListTableProps) {
 
   const columns = [
     {
-      title: "路线编号",
-      dataIndex: "code",
-      key: "code",
-      width: 100,
-    },
-    {
       title: "路线名称",
       dataIndex: "name",
       key: "name",
       width: 180
     },
+    {
+      title: "路线编号",
+      dataIndex: "code",
+      key: "code",
+      width: 100,
+    }, 
     {
       title: "所属机构",
       dataIndex: "orgName",
@@ -62,7 +62,7 @@ function ListTable(props: ListTableProps) {
       dataIndex: "psName",
       key: "psName",
       width: 150
-    }, 
+    },
     // {
     //   title: "巡检角色",
     //   dataIndex: "roleName",
@@ -73,7 +73,7 @@ function ListTable(props: ListTableProps) {
       title: "开始日期",
       dataIndex: "beginDate",
       key: "beginDate",
-      width: 100, 
+      width: 100,
       render: val => {
         if (val == null) {
           return ''
@@ -81,7 +81,7 @@ function ListTable(props: ListTableProps) {
           return moment(val).format('YYYY-MM-DD');
         }
       }
-    }, 
+    },
     {
       title: "结束日期",
       dataIndex: "endDate",
@@ -94,7 +94,7 @@ function ListTable(props: ListTableProps) {
           return moment(val).format('YYYY-MM-DD');
         }
       }
-    }, 
+    },
 
     {
       title: "说明",
