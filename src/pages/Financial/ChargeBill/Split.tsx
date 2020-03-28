@@ -182,7 +182,7 @@ const Split = (props: SplitProps) => {
                   })(
                     <InputNumber style={{ width: '100%' }}
                       min={0} max={infoDetail.amount}
-                      precision={2}
+                      precision={infoDetail.lastResultScale}
                       //取消改变金额变动日期
                       onChange={(value) => {
                         var secondAmount = infoDetail.amount - Number(value);
@@ -217,8 +217,8 @@ const Split = (props: SplitProps) => {
               <Col span={8}>
                 <Form.Item label="计费截止日期" required>
                   {getFieldDecorator('firstEndDate', {
-                    // initialValue: infoDetail.firstEndDate == null ? moment(new Date) : moment(infoDetail.firstEndDate),
-                    rules: [{ required: !infoDetail.beginDate == null, message: '请输入计费截止日期' },
+                    // initialValue: infoDetail.beginDate ? moment(infoDetail.beginDate) : null,
+                    rules: [{ required: infoDetail.beginDate ? true : false, message: '请输入计费截止日期' },
                       //   {
                       //   validator: (rules, value, callback) => {
                       //     if (value.isBefore(moment(infoDetail.beginDate).format('YYYY-MM-DD')) || value.isAfter(moment(infoDetail.endDate).format('YYYY-MM-DD'))) {
@@ -229,6 +229,7 @@ const Split = (props: SplitProps) => {
                     ]
                   })(
                     <DatePicker style={{ width: '100%' }}
+                      defaultPickerValue={infoDetail.beginDate ? moment(infoDetail.beginDate) : moment(new Date)}
                       disabled={infoDetail.beginDate ? false : true}
                       disabledDate={disabledDate}
                       // onChange={(date, datestr) => {
@@ -246,8 +247,10 @@ const Split = (props: SplitProps) => {
 
                       onChange={(date, datestr) => {
                         //改变日期，计算金额 
-                        const a = moment("2020-01-01");//(infoDetail.beginDate);
-                        const b = moment("2020-12-31");//(infoDetail.endDate);
+                        // const a = moment("2020-01-01"); 
+                        // const b = moment("2020-12-31"); 
+                        const a = moment(infoDetail.beginDate);
+                        const b = moment(infoDetail.endDate);
                         const iDays = b.diff(a, 'days') + 1;
                         const firstEndDate = moment(datestr);
                         const firstDays = firstEndDate.diff(a, 'days') + 1;
@@ -274,7 +277,7 @@ const Split = (props: SplitProps) => {
                     initialValue: infoDetail.secondAmount,
                   })(
                     <InputNumber readOnly style={{ width: '100%' }}
-                      precision={2}
+                      precision={infoDetail.lastResultScale}
                     />
                   )}
                 </Form.Item>

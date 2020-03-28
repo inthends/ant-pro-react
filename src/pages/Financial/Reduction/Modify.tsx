@@ -613,6 +613,7 @@ const Modify = (props: ModifyProps) => {
             </Col>
           </Row>
           <Row gutter={24}>
+
             {/* <Col lg={8}>
               <Form.Item label="减免费项">
                 {getFieldDecorator('reductionFeeItemId', {
@@ -635,6 +636,8 @@ const Modify = (props: ModifyProps) => {
                 )}
               </Form.Item>
             </Col> */}
+
+ 
             <Col lg={12}>
               <Form.Item label="批量折扣(默认10不打折)">
                 {getFieldDecorator('rebate', {

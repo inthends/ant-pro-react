@@ -156,29 +156,74 @@ const Reduction = (props: ReductionProps) => {
               <p style={{ fontSize: '18px', fontWeight: 'bold' }}>减免为</p>
             </Row>
             <Row gutter={24}>
-              <Col span={12}>
+              <Col span={6}>
                 <Form.Item label="折扣(默认10不打折)" required>
                   {getFieldDecorator('rebate', {
                     initialValue: 10,
                     rules: [{ required: true, message: '请输入折扣' }],
                   })(
-                    <InputNumber style={{ width: '100%' }} max={10} min={1} ></InputNumber>
+                    <InputNumber style={{ width: '100%' }}
+                      max={10} min={1}
+                      onChange={(value) => {
+                        var reductionAmount = form.getFieldValue('reductionAmount');
+                        var sumReductionAmount = (infoDetail.amount * (1 - Number(value) / 10)) + Number(reductionAmount);
+                        form.setFieldsValue({ sumReductionAmount: sumReductionAmount });
+                        form.setFieldsValue({ lastAmount: infoDetail.amount - sumReductionAmount }); 
+                      }}
+                    ></InputNumber>
                   )}
                 </Form.Item>
               </Col>
-              <Col span={12}>
+              <Col span={6}>
                 <Form.Item label="减免金额"  >
                   {getFieldDecorator('reductionAmount', {
                     initialValue: 0,
                     rules: [{ required: true, message: '请输入减免金额' }],
                   })(
-                    <InputNumber precision={2} style={{ width: '100%' }}
+                    <InputNumber precision={infoDetail.lastResultScale}
+                      style={{ width: '100%' }}
                       min={0}
                       max={infoDetail.amount}
+                      onChange={(value) => {
+                        var rebate = form.getFieldValue('rebate');
+                        var sumReductionAmount = (infoDetail.amount * (1 - Number(rebate) / 10)) + Number(value);
+                        form.setFieldsValue({ sumReductionAmount: sumReductionAmount });
+                        form.setFieldsValue({ lastAmount: infoDetail.amount - sumReductionAmount }); 
+                      }}
                     ></InputNumber>
                   )}
                 </Form.Item>
               </Col>
+              <Col span={6}>
+                <Form.Item label="合计减免">
+                  {getFieldDecorator('sumReductionAmount', {
+                    initialValue: 0,
+                    rules: [{ required: true, message: '请输入减免金额' }],
+                  })(
+                    <InputNumber
+                      precision={infoDetail.lastResultScale}
+                      style={{ width: '100%' }}
+                      readOnly
+                    ></InputNumber>
+                  )}
+                </Form.Item>
+              </Col>
+
+              <Col span={6}>
+                <Form.Item label="剩余应收">
+                  {getFieldDecorator('lastAmount', {
+                    initialValue: 0,
+                    rules: [{ required: true, message: '请输入剩余应收' }],
+                  })(
+                    <InputNumber
+                      precision={infoDetail.lastResultScale}
+                      style={{ width: '100%' }}
+                      readOnly
+                    ></InputNumber>
+                  )}
+                </Form.Item>
+              </Col>
+
             </Row>
             <Row gutter={24}>
               <Col span={24}>

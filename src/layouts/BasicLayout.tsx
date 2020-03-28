@@ -16,10 +16,11 @@ import ProLayout, {
 } from '@ant-design/pro-layout';
 import { connect } from 'dva';
 import React, { useEffect } from 'react';
-import { formatMessage, getLocale } from 'umi-plugin-react/locale';
+import { formatMessage } from 'umi-plugin-react/locale';//, getLocale }
 import Link from 'umi/link';
 import logo from '../assets/logo.svg';
-import { LocaleProvider } from 'antd';
+// import { LocaleProvider } from 'antd';
+import { ConfigProvider } from 'antd';
 
 export interface BasicLayoutProps extends ProLayoutProps {
   breadcrumbNameMap: {
@@ -54,30 +55,31 @@ const menuDataRender = (menuList: MenuDataItem[], auth: any[]): MenuDataItem[] =
       return Authorized.check(item.authority, localItem, null) as MenuDataItem;
     });
 };
-const footerRender: BasicLayoutProps['footerRender'] = (_, defaultDom) => {
-  // if (!isAntDesignPro()) {
-  //   return defaultDom;
-  // }
-  return (
-    <>
-      {/* {defaultDom}
-      <div
-        style={{
-          padding: '0px 24px 24px',
-          textAlign: 'center',
-        }}
-      >
-        <a href="https://www.netlify.com" target="_blank" rel="noopener noreferrer">
-          <img
-            src="https://www.netlify.com/img/global/badges/netlify-color-bg.svg"
-            width="82px"
-            alt="netlify logo"
-          />
-        </a>
-      </div> */}
-    </>
-  );
-};
+
+// const footerRender: BasicLayoutProps['footerRender'] = (_, defaultDom) => {
+//   if (!isAntDesignPro()) {
+//     return defaultDom;
+//   }
+//   return (
+//     <>
+//       {defaultDom}
+//       <div
+//         style={{
+//           padding: '0px 24px 24px',
+//           textAlign: 'center',
+//         }}
+//       >
+//         <a href="https://www.netlify.com" target="_blank" rel="noopener noreferrer">
+//           <img
+//             src="https://www.netlify.com/img/global/badges/netlify-color-bg.svg"
+//             width="82px"
+//             alt="netlify logo"
+//           />
+//         </a>
+//       </div>
+//     </>
+//   );
+// };
 
 const BasicLayout: React.FC<BasicLayoutProps> = props => {
   const {
@@ -107,7 +109,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
           type: 'menu/refresh',
         });
       });
-    
+
     }
   }, []);
 
@@ -129,7 +131,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
   //console.log(getLocale());
   return (
     <>
-      <LocaleProvider
+      {/* <LocaleProvider
         locale={{
           locale: getLocale(),
           Modal: {
@@ -137,8 +139,10 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
             cancelText: getLocale() === 'zh-CN' ? '取消' : 'Cancel',
             justOkText: '',
           },
-        }}
-      >
+        }}> */}
+
+      <ConfigProvider >
+        {/* 采用新的国际化组件 */}
         <ProLayout
           logo={logo}
           onCollapse={handleMenuCollapse}
@@ -166,7 +170,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
           //     <span>{route.breadcrumbName}</span>
           //   );
           // }}
-          footerRender={footerRender}
+          // footerRender={footerRender}
+          footerRender={false}
           menuDataRender={menuList => menuDataRender(menuList, auths)}
           formatMessage={formatMessage}
           rightContentRender={rightProps => <RightContent {...rightProps} />}
@@ -177,7 +182,9 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
         </ProLayout>
 
         <SettingDrawer settings={settings} onSettingChange={config => setSettings(config)} />
-      </LocaleProvider>
+        {/* </LocaleProvider> */}
+      </ConfigProvider>
+
     </>
   );
 };

@@ -517,8 +517,7 @@ const FeeModify = (props: FeeModifyProps) => {
                             //   var amount = infoDetail.price * infoDetail.quantity * value;
                             //   var info = Object.assign({}, infoDetail, { number: value, amount: amount });
                             //   setInfoDetail(info);
-                            // }
-
+                            // } 
                             form.validateFields((errors, values) => {
                               if (!errors) {
                                 const price = Number(form.getFieldValue('price'));
