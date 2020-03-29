@@ -234,7 +234,7 @@ const Modify = (props: ModifyProps) => {
 
                   <Col span={16}>
                     <Form.Item required label="所属机构"  >
-                      {getFieldDecorator('organieId', {
+                      {getFieldDecorator('organizeId', {
                         initialValue: infoDetail.organizeId,
                         rules: [{ required: true, message: '请选择所属机构' }],
                       })(
@@ -290,11 +290,14 @@ const Modify = (props: ModifyProps) => {
                         message.warning('请选择房屋');
                         return;
                       }
+
                       if (selectedFeeId.length == 0) {
                         message.warning('请选择费项');
                         return;
                       }
-                      form.validateFields((errors, values) => {
+
+                      form.validateFields((errors, values) => { 
+
                         if (!errors) {
                           setLoading(true);
                           // console.log(infoDetail);
@@ -369,6 +372,7 @@ const Modify = (props: ModifyProps) => {
                     EndDate: moment(values.endDate).format('YYYY-MM-DD'),
                     MustDate: moment(values.mustDate).format('YYYY-MM-DD'),
                     BelongDate: moment(values.belongDate).format('YYYY-MM-DD'),
+                    OrganizeId: values.organizeId,
                     BillType: "通知单",
                     Status: values.status,
                     TemplateId: values.templateId,
