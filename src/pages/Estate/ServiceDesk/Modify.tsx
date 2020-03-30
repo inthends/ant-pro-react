@@ -299,7 +299,8 @@ const Modify = (props: ModifyProps) => {
                   <Row gutter={24}>
                     <Col lg={8}>
                       <Form.Item label="单据来源" required>
-                        {getFieldDecorator('source', {
+
+                        {/* {getFieldDecorator('source', {
                           initialValue: infoDetail.source == undefined ? '服务总台' : infoDetail.source
                         })(
                           <Select >
@@ -308,7 +309,12 @@ const Modify = (props: ModifyProps) => {
                             <Option value="微信公众号">微信公众号</Option>
                             <Option value="员工APP">员工APP</Option>
                           </Select>
-                        )}
+                        )} */}
+
+                        {getFieldDecorator('billCode', {
+                          initialValue: '服务总台'
+                        })(<Input disabled />)}
+
                       </Form.Item>
                     </Col>
                     <Col lg={8}>
@@ -419,6 +425,7 @@ const Modify = (props: ModifyProps) => {
                         })(
                           <TreeSelect
                             placeholder="请选择所属位置"
+                            disabled={infoDetail.source == "微信公众号" ? true : false}
                             allowClear
                             dropdownStyle={{ maxHeight: 300 }}
                             treeData={treeData}
@@ -438,7 +445,7 @@ const Modify = (props: ModifyProps) => {
                       <Form.Item label="联系人">
                         {getFieldDecorator('contactName', {
                           initialValue: infoDetail.contactName
-                        })(<Input placeholder="自动获取联系人" readOnly />)}
+                        })(<Input placeholder="自动获取联系人" disabled  />)}
 
                         {getFieldDecorator('contactId', {
                           initialValue: infoDetail.contactId,
@@ -457,7 +464,7 @@ const Modify = (props: ModifyProps) => {
                       <Form.Item label="联系电话">
                         {getFieldDecorator('contactPhone', {
                           initialValue: infoDetail.contactPhone
-                        })(<Input placeholder="自动获取联系电话" readOnly />)}
+                        })(<Input placeholder="自动获取联系电话" disabled />)}
                       </Form.Item>
                     </Col>
                   </Row>
@@ -502,7 +509,7 @@ const Modify = (props: ModifyProps) => {
                     </Col>
                   </Row>
 
-                  
+
                 </Card>
               ) :
                 (<Card className={infoDetail.status > 1 ? styles.card2 : styles.card} title="基础信息" >

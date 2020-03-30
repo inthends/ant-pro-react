@@ -106,8 +106,8 @@ function ChargeListTable(props: ChargeListTableProps) {
     },
     {
       title: '单元编号',
-      dataIndex: 'unitId',
-      key: 'unitId',
+      dataIndex: 'unitCode',
+      key: 'unitCode',
       width: 150,
       sorter: true,
     },
