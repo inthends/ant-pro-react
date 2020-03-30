@@ -8,8 +8,14 @@ export function SaveForm(data): Promise<any> {
 }
 
 //审批
+// export function Audit(data): Promise<any> {
+//   return request.post(process.env.basePath + `/Payment/Audit?keyValue=${data.keyValue}`, {data:data.entity});
+// }
+
 export function Audit(data): Promise<any> {
-  return request.post(process.env.basePath + `/Payment/Audit?keyValue=${data.keyValue}`, {data:data.entity});
+  return request
+    .post(process.env.basePath + `/Payment/Audit`, {data:objToFormdata(data)})
+    .then(getResult as any);
 }
 
 //应付列表

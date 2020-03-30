@@ -116,13 +116,13 @@ const Show = (props: ShowProps) => {
       title: '单元编号',
       dataIndex: 'code',
       key: 'code',
-      width: 120
+      width: 160
     },
     {
       title: '付款项目',
       dataIndex: 'feeName',
       key: 'feeName',
-      width: 120
+      width: 160
     },
     {
       title: '应付期间',
@@ -255,7 +255,7 @@ const Show = (props: ShowProps) => {
               dataSource={data}
               rowKey="billId"
               pagination={pagination}
-              scroll={{ y: 500, x: 1000 }}
+              scroll={{ y: 500, x: 1100 }}
               loading={loading}
               onChange={(pagination: PaginationConfig, filters, sorter) =>
                 initPaymentFeeDetail(pagination, sorter)

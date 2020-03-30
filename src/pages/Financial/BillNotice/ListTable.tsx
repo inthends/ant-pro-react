@@ -64,8 +64,8 @@ function ListTable(props: ListTableProps) {
     },
     {
       title: '单元编号',
-      dataIndex: 'unitId',
-      key: 'unitId',
+      dataIndex: 'unitCode',
+      key: 'unitCode',
       width: 140,
       sorter: true,
     },

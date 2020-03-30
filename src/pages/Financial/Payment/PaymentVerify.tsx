@@ -98,23 +98,27 @@ const PaymentVerify = (props: PaymentVerifyProps) => {
   const onSave = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        let newData = {
-          keyValue: id,
-          entity: {
-            billId: id,
-            verifyDate: ifVerify ? moment(new Date()).format('YYYY-MM-DD HH:mm:ss') : moment(values.verifyDate).format('YYYY-MM-DD HH:mm:ss'),
-            verifyMemo: values.verifyMemo,
-            billCode: infoDetail.billCode,
-            billDate: moment(values.billDate).format('YYYY-MM-DD'),
-            status: ifVerify ? 1 : 0,//-1 已作废  0未审核  1已审核
-            payAmount: infoDetail.payAmount,
-            createDate: moment(infoDetail.createDate).format('YYYY-MM-DD'),
-            payType: infoDetail.payType,
-            organizeId: infoDetail.organizeId,
-            createUserId: infoDetail.createUserId,
-            createUserName: infoDetail.createUserName
-          }
-        };
+        // let newData = {
+        //   keyValue: id,
+        //   entity: {
+        //     billId: id,
+        //     // verifyDate: ifVerify ? moment(new Date()).format('YYYY-MM-DD HH:mm:ss') : moment(values.verifyDate).format('YYYY-MM-DD HH:mm:ss'),
+        //     verifyMemo: values.verifyMemo,
+        //     billCode: infoDetail.billCode,
+        //     billDate: moment(values.billDate).format('YYYY-MM-DD'),
+        //     status: ifVerify ? 1 : 0,//-1 已作废  0未审核  1已审核
+        //     payAmount: infoDetail.payAmount,
+        //     createDate: moment(infoDetail.createDate).format('YYYY-MM-DD'),
+        //     payType: infoDetail.payType,
+        //     organizeId: infoDetail.organizeId,
+        //     createUserId: infoDetail.createUserId,
+        //     createUserName: infoDetail.createUserName
+        //   }
+        // };
+
+        const newData = infoDetail ? { ...infoDetail, ...values } : values;
+        newData.keyValue = infoDetail.billId;
+        newData.ifVerify = ifVerify; 
         Audit(newData).then(() => {
           closeVerify(true);
           reload();
@@ -128,13 +132,13 @@ const PaymentVerify = (props: PaymentVerifyProps) => {
       title: '单元编号',
       dataIndex: 'code',
       key: 'code',
-      width: 120
+      width: 160
     },
     {
       title: '付款项目',
       dataIndex: 'feeName',
       key: 'feeName',
-      width: 120
+      width: 160
     },
     {
       title: '应付期间',
@@ -327,7 +331,7 @@ const PaymentVerify = (props: PaymentVerifyProps) => {
               dataSource={data}
               rowKey="billId"
               pagination={pagination}
-              scroll={{ y: 500, x: 1000 }}
+              scroll={{ y: 500, x: 1100 }}
               loading={loading}
               onChange={(pagination: PaginationConfig, filters, sorter) =>
                 initPaymentFeeDetail(pagination, sorter)

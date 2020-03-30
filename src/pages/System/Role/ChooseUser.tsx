@@ -104,7 +104,7 @@ const ChooseUser = (props: ModifyProps) => {
               style={{ width: 240 }}
             />
           </div>
-          <div style={{ paddingTop: 24 }}>
+          <div style={{ height: 440, paddingTop: 24 ,overflowY:'auto' , overflowX:'hidden'}}>
             <Row gutter={16}>
               {userList
                 .filter(item => item.organizeId === depId || item.departmentId === depId || depId === '')

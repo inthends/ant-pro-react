@@ -6,7 +6,7 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import { GetEntityShow, ChargeFeeDetail } from './Main.service';
-import './style.less';
+import styles from './style.less';
 import moment from 'moment';
 
 interface ShowProps {
@@ -109,13 +109,7 @@ const Show = (props: ShowProps) => {
       width: 140,
       sorter: true
     },
-    {
-      title: '单元全称',
-      dataIndex: 'allName',
-      key: 'allName',
-      width: 240,
-      sorter: true,
-    },
+
     {
       title: '收费项目',
       dataIndex: 'feeName',
@@ -176,6 +170,11 @@ const Show = (props: ShowProps) => {
           return moment(val).format('YYYY-MM-DD');
         }
       }
+    },
+    {
+      title: '单元全称',
+      dataIndex: 'allName',
+      key: 'allName',
     }
   ] as ColumnProps<any>[];
 
@@ -189,73 +188,72 @@ const Show = (props: ShowProps) => {
       style={{ height: 'calc(100vh-50px)' }}
       bodyStyle={{ background: '#f6f7fb', height: 'calc(100vh -50px)' }}
     >
-      <Card>
-        <Form layout="vertical" hideRequiredMark>
+      <Spin tip="数据处理中..." spinning={loading}>
+        <Card className={styles.card}>
+          <Form layout="vertical" hideRequiredMark>
 
-          <Row gutter={24}>
-            <Col span={8}>
-              <Form.Item required label="通知单号">
-                <a>{infoDetail.billCode}</a>
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item required label="通知单日期"  >
-                {String(infoDetail.beginDate).substr(0, 10)}
-              </Form.Item>
-            </Col>
-            {/* <Col span={6}>
+            <Row gutter={24}>
+              <Col span={8}>
+                <Form.Item required label="通知单号">
+                  <a>{infoDetail.billCode}</a>
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item required label="通知单日期"  >
+                  {String(infoDetail.beginDate).substr(0, 10)}
+                </Form.Item>
+              </Col>
+              {/* <Col span={6}>
               <Form.Item required label="缴费日期"  >
                 {String(infoDetail.mustDate).substr(0, 10)}
               </Form.Item>
             </Col> */}
-            <Col span={8}>
-              <Form.Item required label="类型"   >
-                {infoDetail.billType}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={24}>
-            <Col span={8}>
-              <Form.Item required label="业户名称"  >
-                {infoDetail.customer}
-              </Form.Item>
-            </Col>
-            {/* <Col span={6}>
+              <Col span={8}>
+                <Form.Item required label="类型"   >
+                  {infoDetail.billType}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={24}>
+              <Col span={8}>
+                <Form.Item required label="业户名称"  >
+                  {infoDetail.customer}
+                </Form.Item>
+              </Col>
+              {/* <Col span={6}>
               <Form.Item required label="打印模板" >
                 {infoDetail.templateName}
               </Form.Item>
             </Col> */}
-            <Col span={8}>
-              <Form.Item label="审核人"  >
-                {infoDetail.verifyPerson}
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item label="审核情况"  >
-                {infoDetail.verifyMemo}
-              </Form.Item>
-            </Col>
-          </Row> 
-        </Form>
-      </Card>
+              <Col span={8}>
+                <Form.Item label="审核人"  >
+                  {infoDetail.verifyPerson}
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item label="审核情况"  >
+                  {infoDetail.verifyMemo}
+                </Form.Item>
+              </Col>
+            </Row>
+          </Form>
 
-      <Spin tip="数据处理中..." spinning={loading}>
-        <Table<any>
-          onChange={(paginationConfig, filters, sorter) => {
-            initBillCheckLoadData(paginationConfig, sorter)
-          }
-          }
-          bordered={false}
-          size="middle"
-          columns={columns}
-          dataSource={billCheckData}
-          rowKey="billId"
-          pagination={billCheckPagination}
-          scroll={{ y: 500, x: 1400 }}
-          loading={billCheckLoading}
-        />
-      </Spin>
-
+          <Table<any>
+            onChange={(paginationConfig, filters, sorter) => {
+              initBillCheckLoadData(paginationConfig, sorter)
+            }
+            }
+            bordered={false}
+            size="middle"
+            columns={columns}
+            dataSource={billCheckData}
+            rowKey="billId"
+            pagination={billCheckPagination}
+            scroll={{ y: 500, x: 1400 }}
+            loading={billCheckLoading}
+          />
+        </Card>
+      </Spin> 
       <div
         style={{
           position: 'absolute',
@@ -272,7 +270,7 @@ const Show = (props: ShowProps) => {
         <Button style={{ marginRight: 8 }}
           onClick={() => closeDrawer()}
         >
-          取消
+          关闭
         </Button>
         <Button type="primary"
           onClick={() => {

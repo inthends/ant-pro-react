@@ -112,7 +112,8 @@ const Show = (props: ShowProps) => {
       title: '单元全称',
       dataIndex: 'allName',
       key: 'allName',
-      width: '250px'
+      width: 280,
+      fixed: 'left',
     },
 
     // {
