@@ -95,9 +95,9 @@ export function GetOrganizeForm(data): Promise<any[]> {
 }
 
 //收款后生成应付款
-export function GetFeeItemName(): Promise<TreeEntity[]> {
+export function GetFeeItemNames(): Promise<TreeEntity[]> {
   return request
-    .get(process.env.basePath + `/FeeItems/GetFeeItemName`)
+    .get(process.env.basePath + `/FeeItems/GetFeeItemNames`)
     .then(getResult as any);
 }
 //

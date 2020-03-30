@@ -3,7 +3,7 @@ import { TreeEntity } from '@/model/models';
 import { Modal, Checkbox, Tabs, Select, Button, Card, Icon, Col, DatePicker, Form, Input, Row, InputNumber } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { HouseSaveForm, GetHouseFormJson, GetAllFeeItems, GetFeeItemName } from './Main.service';
+import { HouseSaveForm, GetHouseFormJson, GetAllFeeItems, GetFeeItemNames } from './Main.service';
 import styles from './style.less';
 import moment from 'moment';
 import AddFormula from './AddFormula';
@@ -26,13 +26,11 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
   const [infoDetail, setInfoDetail] = useState<any>({});
   // const [feetypes, setFeetype] = useState<TreeEntity[]>([]);
   const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
-
+  const [feeItemNames, setFeeItemNames] = useState<TreeEntity[]>([]);
   const [isFormula, setIsFormula] = useState<boolean>(false);
   const [addFormulaVisible, setAddFormulaVisible] = useState<boolean>(false);
   const [selectHouseVisible, setSelectHouseVisible] = useState<boolean>(false);
-  const [feeItemNames, setFeeItemNames] = useState<any[]>([]);
   const [linkFeeDisable, setLinkFeeDisable] = useState<boolean>(true);
-
   const [showFeeField, setShowFeeField] = useState<boolean>(false);
   const [accFixedDisabled, setAccFixedDisabled] = useState<boolean>(true);
   const [payFixedDisabled, setPayFixedDisabled] = useState<boolean>(true);
@@ -46,7 +44,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
     GetAllFeeItems().then(res => {
       setFeeitems(res || []);
     });
-    GetFeeItemName().then(res => {
+    GetFeeItemNames().then(res => {
       setFeeItemNames(res || []);
     })
   }, []);
@@ -67,6 +65,12 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
           //   changeFeeType(kind);
           // }
           setInfoDetail(tempInfo);
+          //如果是减免费用，则关联收费项目可用
+          if (tempInfo.isCancel) {
+            setLinkFeeDisable(false);
+          } else {
+            setLinkFeeDisable(true);
+          }
           form.resetFields();
         });
       } else {

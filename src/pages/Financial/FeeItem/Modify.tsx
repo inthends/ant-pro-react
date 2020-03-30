@@ -8,7 +8,7 @@ import React, { useEffect, useState } from 'react';
 import {
   HouseRemoveForm, HouseAllRemoveForm, OrganizeRemoveForm,
   GetFormJson, GetAllFeeItems, GetOrganizePageList,
-  GetUnitFeeItemData, SaveForm, GetFeeItemName
+  GetUnitFeeItemData, SaveForm, GetFeeItemNames
 } from './Main.service';
 
 import { GetFeeType } from '@/services/commonItem';
@@ -46,12 +46,12 @@ const Modify = (props: ModifyProps) => {
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [feetypes, setFeetype] = useState<TreeEntity[]>([]);
   const [feeItems, setFeeItems] = useState<TreeEntity[]>([]);
+  const [feeItemNames, setFeeItemNames] = useState<TreeEntity[]>([]);
   const [isFormula, setIsFormula] = useState<boolean>(false);
   const [addFormulaVisible, setAddFormulaVisible] = useState<boolean>(false);
   const [selectOrgVisible, setSelectOrgVisible] = useState<boolean>(false);
   const [selectHouseVisible, setSelectHouseVisible] = useState<boolean>(false);
   const [editOrgVisible, setEditOrgVisible] = useState<boolean>(false);
-  const [feeItemNames, setFeeItemNames] = useState<any[]>([]);
   const [editHouseVisible, setEditHouseVisible] = useState<boolean>(false);
   const [linkFeeDisable, setLinkFeeDisable] = useState<boolean>(true);
   //优惠政策
@@ -65,7 +65,7 @@ const Modify = (props: ModifyProps) => {
     GetAllFeeItems().then(res => {
       setFeeItems(res || []);
     });
-    GetFeeItemName().then(res => {
+    GetFeeItemNames().then(res => {
       setFeeItemNames(res || []);
     })
   }, []);
@@ -114,6 +114,13 @@ const Modify = (props: ModifyProps) => {
           tempInfo.accBillDateUnit == 2 ? setAccFixedDisabled(false) : setAccFixedDisabled(true);
           tempInfo.payDeadlineUnit == 2 ? setPayFixedDisabled(false) : setPayFixedDisabled(true);
           tempInfo.lateStartDateUnit == 2 ? setLateFixedDisabled(false) : setLateFixedDisabled(true);
+
+          //如果是减免费用，则关联收费项目可用
+          if (tempInfo.isCancel) {
+            setLinkFeeDisable(false);
+          } else {
+            setLinkFeeDisable(true);
+          }
 
           //if (id !== undefined) {
           //加载所属机构
@@ -982,9 +989,7 @@ const Modify = (props: ModifyProps) => {
                       {getFieldDecorator('linkFee', {
                         initialValue: infoDetail.linkFee,
                       })(
-                        <Select
-                          placeholder="请选择关联收费项目" disabled={linkFeeDisable}
-                        >
+                        <Select placeholder="请选择关联收费项目" disabled={linkFeeDisable} >
                           {feeItems.map(item => (
                             <Option key={item.key} value={item.value}>
                               {item.title}
