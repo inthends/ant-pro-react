@@ -166,7 +166,10 @@ const PstructInfo = (props: PstructInfoProps) => {
         const list = res.map(item =>
           <Option key={item.id}
             value={item.name.trim()}>{item.name.trim()}
-            <span className={styles.phoneNum}>{item.phoneNum}</span>
+            <span className={styles.code}>{item.code}</span>
+            <br></br>
+            {item.phoneNum}
+            <span className={styles.allName}>{item.allName}</span>
           </Option>
         ).concat([
           <Option disabled key="all" className={styles.addCustomer}>
@@ -191,7 +194,10 @@ const PstructInfo = (props: PstructInfoProps) => {
         const list = res.map(item =>
           <Option key={item.id}
             value={item.name.trim()}>{item.name.trim()}
-            <span className={styles.phoneNum}>{item.phoneNum}</span>
+            <span className={styles.code}>{item.code}</span>
+            <br></br>
+            {item.phoneNum}
+            <span className={styles.allName}>{item.allName}</span>
           </Option>
         ).concat([
           <Option disabled key="all" className={styles.addCustomer}>
@@ -211,15 +217,15 @@ const PstructInfo = (props: PstructInfoProps) => {
   const onOwnerSelect = (value, option) => {
     //props.children[1].props.children
     form.setFieldsValue({ ownerId: option.key });
-    if (option.props.children.length == 2) {
-      form.setFieldsValue({ ownerPhone: option.props.children[1].props.children });
+    if (option.props.children.length == 5) {
+      form.setFieldsValue({ ownerPhone: option.props.children[3]  });
     }
   };
 
   const onTenantSelect = (value, option) => {
     form.setFieldsValue({ tenantId: option.key });
-    if (option.props.children.length == 2) {
-      form.setFieldsValue({ tenantPhone: option.props.children[1].props.children });
+    if (option.props.children.length == 5) {
+      form.setFieldsValue({ tenantPhone: option.props.children[3]  });
     }
   };
 
@@ -377,7 +383,7 @@ const PstructInfo = (props: PstructInfoProps) => {
                     })(<InputNumber placeholder="请输入产权面积" style={{ width: '100%' }} />)}
                   </Form.Item>
                 </Col>
-              </Row>) : type == 2 ? 
+              </Row>) : type == 2 ?
                 (<Row gutter={24}>
                   <Col lg={12}>
                     <Form.Item label="建筑面积(㎡)">
@@ -452,10 +458,10 @@ const PstructInfo = (props: PstructInfoProps) => {
                     initialValue: infoDetail.lng,
                   })(<Input placeholder="请输入纬度" />)}
                 </Form.Item>
-              </Col> 
+              </Col>
             </Row>) : null}
 
-            {type == 4 || type == 5 || type == 8  || type == 9 ? (
+            {type == 4 || type == 5 || type == 8 || type == 9 ? (
               <Row gutter={24}>
                 <Col lg={12}>
                   <Form.Item label={infoDetail.ownerName ? <div>业主名称 <a onClick={() => { showCustomerDrawer(infoDetail.ownerId, 1) }}>编辑</a></div> : '业主名称'}>

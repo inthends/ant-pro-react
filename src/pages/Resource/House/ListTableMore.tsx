@@ -180,7 +180,7 @@ function ListTableMore(props: ListTableMoreProps) {
     },
 
     {
-      title: '租户',
+      title: '住户',
       dataIndex: 'tenantName',
       key: 'tenantName',
       width: 100,

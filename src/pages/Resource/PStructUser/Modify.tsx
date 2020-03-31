@@ -143,17 +143,17 @@ const Modify = (props: ModifyProps) => {
                 <Form.Item label="住户名称" required>
                   {getFieldDecorator('name', {
                     initialValue: infoDetail.name,
-                    rules: [{ required: true, message: '请输入客户名称' }],
-                  })(<Input placeholder="请输入客户名称" />)}
+                    rules: [{ required: true, message: '请输入住户名称' }],
+                  })(<Input placeholder="请输入住户名称" />)}
                 </Form.Item>
               </Col>
 
               <Col lg={12}>
-                <Form.Item label="客户编号" required>
+                <Form.Item label="住户编号" required>
                   {getFieldDecorator('code', {
                     initialValue: infoDetail.code,
-                    rules: [{ required: true, message: '请输入客户编号' }],
-                  })(<Input placeholder="请输入客户编号" />)}
+                    rules: [{ required: true, message: '请输入住户编号' }],
+                  })(<Input placeholder="请输入住户编号" />)}
                 </Form.Item>
               </Col>
 

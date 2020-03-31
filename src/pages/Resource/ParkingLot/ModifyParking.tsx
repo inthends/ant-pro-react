@@ -68,7 +68,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
 
   // 打开抽屉时初始化
   useEffect(() => {
-    if (modifyVisible) { 
+    if (modifyVisible) {
 
       if (data) {
         // setInfoDetail({ ...data.baseInfo, ...data.parkingDetail });
@@ -82,7 +82,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
       else {
         setInfoDetail({});
         form.resetFields();
-      } 
+      }
     } else {
       form.resetFields();
     }
@@ -152,7 +152,10 @@ const ModifyParking = (props: ModifyParkingProps) => {
         const list = res.map(item =>
           <Option key={item.id}
             value={item.name.trim()}>{item.name.trim()}
-            <span className={styles.phoneNum}>{item.phoneNum}</span>
+            <span className={styles.code}>{item.code}</span>
+            <br></br>
+            {item.phoneNum}
+            <span className={styles.allName}>{item.allName}</span>
           </Option>
         ).concat([
           <Option disabled key="all" className={styles.addCustomer}>
@@ -177,7 +180,10 @@ const ModifyParking = (props: ModifyParkingProps) => {
         const list = res.map(item =>
           <Option key={item.id}
             value={item.name.trim()}>{item.name.trim()}
-            <span className={styles.phoneNum}>{item.phoneNum}</span>
+            <span className={styles.code}>{item.code}</span>
+            <br></br>
+            {item.phoneNum}
+            <span className={styles.allName}>{item.allName}</span>
           </Option>
         ).concat([
           <Option disabled key="all" className={styles.addCustomer}>
@@ -204,17 +210,19 @@ const ModifyParking = (props: ModifyParkingProps) => {
   // //新增
 
   const onOwnerSelect = (value, option) => {
-    //props.children[1].props.children
+    //props.children[1].props.children  
     form.setFieldsValue({ ownerId: option.key });
-    if (option.props.children.length == 2) {
-      form.setFieldsValue({ ownerPhone: option.props.children[1].props.children });
+    if (option.props.children.length == 5) { 
+      form.setFieldsValue({ ownerPhone: option.props.children[3] });
+      form.setFieldsValue({ ownerUnitAllName: option.props.children[4].props.children });
     }
   };
 
   const onTenantSelect = (value, option) => {
     form.setFieldsValue({ tenantId: option.key });
-    if (option.props.children.length == 2) {
-      form.setFieldsValue({ tenantPhone: option.props.children[1].props.children });
+    if (option.props.children.length == 5) {
+      form.setFieldsValue({ tenantPhone: option.props.children[3] });
+      form.setFieldsValue({ tenantUnitAllName: option.props.children[4].props.children });
     }
   };
 
@@ -377,6 +385,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
                       dropdownClassName={styles.searchdropdown}
                       optionLabelProp="value"
                       dropdownMatchSelectWidth={false}
+                      style={{ width: '100%' }}
                       dataSource={userList}
                       onSearch={ownerSearch}
                       placeholder="请输入业主名称"
@@ -385,6 +394,12 @@ const ModifyParking = (props: ModifyParkingProps) => {
                   )}
                   {getFieldDecorator('ownerId', {
                     initialValue: infoDetail.ownerId,
+                  })(
+                    <input type='hidden' />
+                  )}
+
+                  {getFieldDecorator('ownerUnitAllName', {
+                    initialValue: infoDetail.ownerUnitAllName,
                   })(
                     <input type='hidden' />
                   )}
@@ -414,6 +429,13 @@ const ModifyParking = (props: ModifyParkingProps) => {
                   })(
                     <input type='hidden' />
                   )}
+
+                  {getFieldDecorator('tenantUnitAllName', {
+                    initialValue: infoDetail.tenantUnitAllName,
+                  })(
+                    <input type='hidden' />
+                  )}
+
                 </Form.Item>
               </Col>
             </Row>

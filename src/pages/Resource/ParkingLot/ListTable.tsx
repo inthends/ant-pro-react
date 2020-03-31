@@ -153,10 +153,10 @@ function ListTable(props: ListTableProps) {
     },
 
     {
-      title: '业主房号',
-      dataIndex: 'ownerUnitCode',
-      key: 'ownerUnitCode',
-      width: 160,
+      title: '业主房屋',
+      dataIndex: 'ownerUnitAllName',
+      key: 'ownerUnitAllName',
+      width: 250,
       sorter: true,
     },
 
@@ -235,7 +235,7 @@ function ListTable(props: ListTableProps) {
         columns={type == '8' ? columns : columnsGarage}
         rowKey={record => record.id}
         pagination={pagination}
-        scroll={{ x: 1300 }}
+        scroll={{ x: 1500 }}
         onChange={(pag: PaginationConfig, filters, sorter) => changePage(pag, filters, sorter)}
         loading={loading}
       />

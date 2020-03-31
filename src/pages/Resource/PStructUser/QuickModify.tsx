@@ -155,21 +155,30 @@ const QuickModify = (props: QuickModifyProps) => {
                   })(<Input placeholder="请输入住户名称" />)}
                 </Form.Item>
               </Col>
-              {/* <Col lg={12}>
-                <Form.Item label="客户编号" required>
+              <Col lg={12}>
+                <Form.Item label="住户编号" required>
                   {getFieldDecorator('code', {
                     initialValue: infoDetail.code,
-                    rules: [{ required: true, message: '请输入客户编号' }],
-                  })(<Input placeholder="请输入客户编号" />)}
+                    rules: [{ required: true, message: '请输入住户编号' }],
+                  })(<Input placeholder="请输入住户编号" />)}
                 </Form.Item>
-              </Col> */}
+              </Col>
+            </Row>
 
+            <Row gutter={24}>
               <Col lg={12}>
                 <Form.Item label="联系电话" required>
                   {getFieldDecorator('phoneNum', {
                     initialValue: infoDetail.phoneNum,
                     rules: [{ required: true, message: '请输入联系电话' }],
                   })(<Input placeholder="请输入联系电话" />)}
+                </Form.Item>
+              </Col>
+              <Col lg={12}>
+                <Form.Item label="联系地址">
+                  {getFieldDecorator('address', {
+                    initialValue: infoDetail.address,
+                  })(<Input placeholder="请输入联系地址" />)}
                 </Form.Item>
               </Col>
             </Row>
@@ -374,15 +383,7 @@ const QuickModify = (props: QuickModifyProps) => {
                 </Form.Item>
               </Col>
             </Row>  */}
-            <Row gutter={24}>
-              <Col lg={24}>
-                <Form.Item label="联系地址">
-                  {getFieldDecorator('address', {
-                    initialValue: infoDetail.address,
-                  })(<Input placeholder="请输入联系地址" />)}
-                </Form.Item>
-              </Col>
-            </Row>
+
             {/* <Row gutter={24}>
               <Col lg={12}>
                 <Form.Item label="经营业态">
