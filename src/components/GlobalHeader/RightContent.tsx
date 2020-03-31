@@ -19,7 +19,7 @@ export interface GlobalHeaderRightProps extends ConnectProps {
 }
 
 const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
-  const { currentUser, theme, layout } = props;
+  const {  theme, layout } = props;
   let className = styles.right;
   // const menu = (
   //   <Menu className={styles.menu}>

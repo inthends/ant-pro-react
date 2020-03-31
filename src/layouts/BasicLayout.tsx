@@ -18,7 +18,7 @@ import { connect } from 'dva';
 import React, { useEffect } from 'react';
 import { formatMessage } from 'umi-plugin-react/locale';//, getLocale }
 import Link from 'umi/link';
-import logo from '../assets/logo.svg';
+import logo from '../assets/logo.png';
 // import { LocaleProvider } from 'antd';
 import { ConfigProvider } from 'antd';
 

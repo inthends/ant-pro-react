@@ -31,13 +31,10 @@ const Modify = (props: ModifyProps) => {
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [loading, setLoading] = useState<boolean>(false);
   const { getFieldDecorator } = form;
-  const title = id ? "修改通知单" : "新增通知单";
-
-  const [orgTreeData, setOrgTreeData] = useState<any>({});
-
+  const title = id ? "修改通知单" : "新增通知单"; 
+  const [orgTreeData, setOrgTreeData] = useState<any>({}); 
   useEffect(() => {
-    if (visible) {
-
+    if (visible) { 
       GetOrgs().then(res => {
         setOrgTreeData(res);
       });
@@ -382,11 +379,10 @@ const Modify = (props: ModifyProps) => {
                     units: JSON.stringify(unitData),
                     items: JSON.stringify(selectedFeeId)
                   }
-                  SaveBill(newData).then((res) => {
-                    // console.log(res);
-                    setLoading(true);
+                  SaveBill(newData).then((res) => { 
                     closeDrawer();
                     reload();
+                    setLoading(false);
                   });
                 }
               });
