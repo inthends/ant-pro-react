@@ -114,7 +114,7 @@ const Show = (props: ShowProps) => {
       title: '收费项目',
       dataIndex: 'feeName',
       key: 'feeName',
-      width: 100,
+      width: 160,
       sorter: true,
     },
     {
@@ -200,7 +200,7 @@ const Show = (props: ShowProps) => {
               </Col>
               <Col span={8}>
                 <Form.Item required label="通知单日期"  >
-                  {String(infoDetail.beginDate).substr(0, 10)}
+                  {String(infoDetail.createDate).substr(0, 10)}
                 </Form.Item>
               </Col>
               {/* <Col span={6}>
@@ -247,7 +247,7 @@ const Show = (props: ShowProps) => {
             size="middle"
             columns={columns}
             dataSource={billCheckData}
-            rowKey="billId"
+            rowKey="Id"
             pagination={billCheckPagination}
             scroll={{ y: 500, x: 1400 }}
             loading={billCheckLoading}

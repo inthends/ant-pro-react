@@ -53,7 +53,7 @@ function ListTable(props: ListTableProps) {
       sorter: true
     },
     {
-      title: '账单日',
+      title: '单据日期',
       dataIndex: 'createDate',
       key: 'createDate',
       width: 100,
@@ -73,7 +73,7 @@ function ListTable(props: ListTableProps) {
       title: '业户名称',
       dataIndex: 'custName',
       key: 'custName',
-      width: 140,
+      width: 160,
       sorter: true,
     },
     {
