@@ -103,7 +103,7 @@ function ListTable(props: ListTableProps) {
     //}
     //else
     if (key === "reduction") {
-      showReduction(currentItem.id); 
+      showReduction(currentItem.id);
     }
     else if (key === 'split') {
       //如果设置了优惠政策，则不允许拆费
@@ -300,57 +300,91 @@ function ListTable(props: ListTableProps) {
     });
   };
 
+  let temp;
   //弹出收款码
   const pay = (url) => {
-
     // let temp = Modal.confirm({ 
-    let temp = Modal.info({
+    temp = Modal.info({
       title: '请扫码',
       content: (<img src={url}></img>),
       okText: '取消',
       // onCancel() {
       onOk() {
-        if (timer) {
-          timer = null;//关闭弹窗后不轮询
+        // if (timer) {
+        //   timer = null;//关闭弹窗后不轮询
+        // } 
+        if (interval != null) {
+          //判断计时器是否为空
+          clearInterval(interval);
+          interval = null;
         }
       }
     })
 
-    retry().then(() => {
-      //轮询结束
-      temp.destroy();
-    });
+    // retry().then(() => {
+    //   //轮询结束
+    //   alert('ok');
+    //   temp.destroy();
+    // });
 
+    start();
   };
+
+  let interval;//计时器 
+  const start = () => {//启动计时器函数
+    if (interval != null) {//判断计时器是否为空
+      clearInterval(interval);
+      interval = null;
+    }
+    interval = setInterval(retry, 3000);//启动计时器，调用函数，
+  }
+
+  const retry = () => {
+    const tradenoId = form.getFieldValue('tradenoId');
+    if (tradenoId) {
+      GetPayState(tradenoId).then(res => {
+        if (res != "") {
+          clearInterval(interval);
+          interval = null;
+          temp.destroy();//关闭收款码窗体
+          reload();
+          message.success('收款成功');
+          showDetail(res);
+        }
+      })
+    }
+  }
 
   //轮询支付回调数据
-  let timer;
-  const retry = () => {
-    return new Promise((resolve, reject) => {
-      timer = setTimeout(() => {
-        const tradenoId = form.getFieldValue('tradenoId');
-        GetPayState(tradenoId).then(res => {
-          if (res) {
-            //结束轮询 
-            console.log('结束轮询');
-            resolve();//轮询结束，不销毁二维码窗体，有bug,需要研究
-            //刷新列表
-            reload();
-            message.success('收款成功');
-            //弹出收款查看页面 
-            showDetail(res);
-          }
-          else {
-            if (timer) {
-              //继续异步轮询
-              console.log('继续异步轮询');
-              retry();
-            }
-          }
-        })
-      }, 5000); //调用栈会越来越大，5秒一次，防止内存泄露
-    })
-  };
+  // let timer;
+  // const retry = () => {
+  //   return new Promise((resolve, reject) => {
+  //     timer = setTimeout(() => {
+  //       const tradenoId = form.getFieldValue('tradenoId');
+  //       if (tradenoId) {
+  //         GetPayState(tradenoId).then(res => {
+  //           if (res != "") {
+  //             //结束轮询 
+  //             //console.log('结束轮询');
+  //             resolve();//轮询结束，不销毁二维码窗体，有bug,需要研究
+  //             //刷新列表
+  //             reload();
+  //             message.success('收款成功');
+  //             //弹出收款查看页面 
+  //             showDetail(res);
+  //           }
+  //           else {
+  //             if (timer) {
+  //               //继续异步轮询
+  //               // console.log('继续异步轮询');
+  //               retry();
+  //             }
+  //           }
+  //         })
+  //       }
+  //     }, 3000); //调用栈会越来越大，5秒一次，防止内存泄露
+  //   })
+  // };
 
 
   //抹零计算
