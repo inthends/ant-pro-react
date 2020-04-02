@@ -136,8 +136,7 @@ const PstructInfo = (props: PstructInfoProps) => {
   //   }
   // };
 
-  const showCustomerDrawer = (customerId, type) => {
-
+  const showCustomerDrawer = (customerId, type) => { 
     if (customerId != '') {
       GetCustomerInfo(customerId).then(res => {
         setCustomer(res);
@@ -153,11 +152,18 @@ const PstructInfo = (props: PstructInfoProps) => {
     setCustomerVisible(false);
   };
 
+  const ownerChange= value => {
+    form.setFieldsValue({ ownerId: '' });
+    form.setFieldsValue({ ownerPhone: ''});
+    form.setFieldsValue({ ownerUnitAllName: '' });
+  }
 
   //业主
   const ownerSearch = value => {
     if (value == '') {
       setUserList([]);
+      form.setFieldsValue({ ownerId: '' });
+      form.setFieldsValue({ ownerPhone: ''}); 
     }
     else {
       setUserList([]);
@@ -182,10 +188,18 @@ const PstructInfo = (props: PstructInfoProps) => {
     }
   };
 
+  const tenantChange= value => {
+    form.setFieldsValue({ tenantId: '' });
+    form.setFieldsValue({ tenantPhone: ''});
+    form.setFieldsValue({ tenantUnitAllName: '' });
+  }
+
   //租户
   const tenantSearch = value => {
     if (value == '') {
       setUserList([]);
+      form.setFieldsValue({ tenantId: '' });
+      form.setFieldsValue({ tenantPhone: ''}); 
     }
     else {
       setUserList([]);
@@ -476,6 +490,7 @@ const PstructInfo = (props: PstructInfoProps) => {
                         dataSource={userList}
                         style={{ width: '100%' }}
                         onSearch={ownerSearch}
+                        onChange={ownerChange}
                         placeholder="请输入业主名称"
                         onSelect={onOwnerSelect}
                       />
@@ -500,6 +515,7 @@ const PstructInfo = (props: PstructInfoProps) => {
                         dataSource={userList}
                         style={{ width: '100%' }}
                         onSearch={tenantSearch}
+                        onChange={tenantChange}
                         placeholder="请输入住户名称"
                         onSelect={onTenantSelect}
                       />
