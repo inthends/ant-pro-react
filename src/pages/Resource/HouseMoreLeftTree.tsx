@@ -11,7 +11,7 @@ const { Sider } = Layout;
 
 interface HouseMoreLeftTreeProps {
   //treeData: any[];
-  selectTree(parentId, type): void;
+  selectTree(parentId, type, organizeId): void;
   organizeId?: string;//管理处组织id
   selectId?: string;//选中的节点 
 }
@@ -84,19 +84,17 @@ function HouseMoreLeftTree(props: HouseMoreLeftTreeProps) {
     setSelectedKey([selectId || '']);
   }, [selectId]);
 
-
-
-
   const onSelect = (selectedKeys, info) => {
     if (selectedKeys.length === 1) {
       //const item = treeData.filter(treeItem => treeItem.key === selectedKeys[0])[0]; 
       //selectedKey = selectedKeys;
       setSelectedKey(selectedKeys);
       const type = info.node.props.type;
+      const organizeId = info.node.props.organizeId;
       // if ('ABCD'.indexOf(type) != -1)
       //   return;
       //setSelectedKey(selectedKeys[0]); 
-      selectTree(selectedKeys[0], type);
+      selectTree(selectedKeys[0], type, organizeId);
     }
   };
 

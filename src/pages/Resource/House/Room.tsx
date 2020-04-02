@@ -156,12 +156,15 @@ const Room = (props: RoomProps) => {
         const list = res.map(item =>
           <Option key={item.id}
             value={item.name.trim()}>{item.name.trim()}
-            <span className={styles.phoneNum}>{item.phoneNum}</span>
+            <span className={styles.code}>{item.code}</span>
+            <br></br>
+            {item.phoneNum}
+            <span className={styles.allName}>{item.allName}</span>
           </Option>
         ).concat([
           <Option disabled key="all" className={styles.addCustomer}>
             <a onClick={() => showCustomerDrawer('', 1)}>
-              新增租户
+              新增业主
             </a>
           </Option>]);//新增 
         setUserList(list);
@@ -182,7 +185,7 @@ const Room = (props: RoomProps) => {
     }
   };
 
-  //租户
+  //住户
   const tenantSearch = value => {
     if (value == '') {
       setUserList([]);
@@ -194,7 +197,10 @@ const Room = (props: RoomProps) => {
         const list = res.map(item =>
           <Option key={item.id}
             value={item.name.trim()}>{item.name.trim()}
-            <span className={styles.phoneNum}>{item.phoneNum}</span>
+            <span className={styles.code}>{item.code}</span>
+            <br></br>
+            {item.phoneNum}
+            <span className={styles.allName}>{item.allName}</span>
           </Option>
         ).concat([
           <Option disabled key="all" className={styles.addCustomer}>
@@ -388,7 +394,7 @@ const Room = (props: RoomProps) => {
                     })(<InputNumber placeholder="请输入产权面积" style={{ width: '100%' }} />)}
                   </Form.Item>
                 </Col>
-              </Row>) : type == 2 ? 
+              </Row>) : type == 2 ?
                 (<Row gutter={24}>
                   <Col lg={12}>
                     <Form.Item label="建筑面积(㎡)">

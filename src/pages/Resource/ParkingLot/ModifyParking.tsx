@@ -140,16 +140,16 @@ const ModifyParking = (props: ModifyParkingProps) => {
     });
   };
 
-  const ownerChange= value => {
+  const ownerChange = value => {
     form.setFieldsValue({ ownerId: '' });
-    form.setFieldsValue({ ownerPhone: ''});
+    form.setFieldsValue({ ownerPhone: '' });
     form.setFieldsValue({ ownerUnitAllName: '' });
   }
 
   //业主
   const ownerSearch = value => {
     if (value == '') {
-      setUserList([]); 
+      setUserList([]);
     }
     else {
       setUserList([]);
@@ -157,16 +157,16 @@ const ModifyParking = (props: ModifyParkingProps) => {
         // setUserSource(res || []); 
         const list = res.map(item =>
           <Option key={item.id}
-            value={item.name.trim()}>{item.name.trim()}
-            <span className={styles.code}>{item.code}</span>
-            <br></br>
-            {item.phoneNum}
-            <span className={styles.allName}>{item.allName}</span>
-          </Option>
+          value={item.name.trim()}>{item.name.trim()}
+          <span className={styles.right}>{item.phoneNum}</span>
+          <br></br>
+          {item.code}
+          <span className={styles.right}>{item.allName}</span> 
+        </Option>
         ).concat([
           <Option disabled key="all" className={styles.addCustomer}>
             <a onClick={() => showCustomerDrawer('', 1)}>
-              新增租户
+              新增业主
             </a>
           </Option>]);//新增 
         setUserList(list);
@@ -174,16 +174,16 @@ const ModifyParking = (props: ModifyParkingProps) => {
     }
   };
 
-  const tenantChange= value => {
+  const tenantChange = value => {
     form.setFieldsValue({ tenantId: '' });
-    form.setFieldsValue({ tenantPhone: ''});
+    form.setFieldsValue({ tenantPhone: '' });
     form.setFieldsValue({ tenantUnitAllName: '' });
   }
 
   //租户
   const tenantSearch = value => {
     if (value == '') {
-      setUserList([]); 
+      setUserList([]);
     }
     else {
       setUserList([]);
@@ -191,12 +191,12 @@ const ModifyParking = (props: ModifyParkingProps) => {
         // setUserSource(res || []); 
         const list = res.map(item =>
           <Option key={item.id}
-            value={item.name.trim()}>{item.name.trim()}
-            <span className={styles.code}>{item.code}</span>
-            <br></br>
-            {item.phoneNum}
-            <span className={styles.allName}>{item.allName}</span>
-          </Option>
+          value={item.name.trim()}>{item.name.trim()}
+          <span className={styles.right}>{item.phoneNum}</span>
+          <br></br>
+          {item.code}
+          <span className={styles.right}>{item.allName}</span> 
+        </Option>
         ).concat([
           <Option disabled key="all" className={styles.addCustomer}>
             <a onClick={() => showCustomerDrawer('', 1)}>
@@ -222,10 +222,9 @@ const ModifyParking = (props: ModifyParkingProps) => {
   // //新增
 
   const onOwnerSelect = (value, option) => {
-    //props.children[1].props.children  
-    form.setFieldsValue({ ownerId: option.key }); 
-    if (option.props.children.length == 5) { 
-      form.setFieldsValue({ ownerPhone: option.props.children[3] });
+    form.setFieldsValue({ ownerId: option.key });
+    if (option.props.children.length == 5) {
+      form.setFieldsValue({ ownerPhone: option.props.children[1].props.children });
       form.setFieldsValue({ ownerUnitAllName: option.props.children[4].props.children });
     }
   };
@@ -233,7 +232,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
   const onTenantSelect = (value, option) => {
     form.setFieldsValue({ tenantId: option.key });
     if (option.props.children.length == 5) {
-      form.setFieldsValue({ tenantPhone: option.props.children[3] });
+      form.setFieldsValue({ tenantPhone: option.props.children[1].props.children });
       form.setFieldsValue({ tenantUnitAllName: option.props.children[4].props.children });
     }
   };

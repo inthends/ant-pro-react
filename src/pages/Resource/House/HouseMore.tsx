@@ -30,6 +30,8 @@ function HouseMore(props) {
   const [organizeId, setOrganizeId] = useState<string>(''); //列表选中的节点组织id  
   const [roomVisible, setRoomVisible] = useState<boolean>(false);
 
+  const [selectOrganizeId, setSelectOrganizeId] = useState<string>(''); //点击树获取的机构id
+
   const doSelectTree = (parentId, type) => {
     //初始化页码，防止页码错乱导致数据查询出错 
     const page = new DefaultPagination();
@@ -46,12 +48,13 @@ function HouseMore(props) {
     setSelectId(pid);
     setOrganizeId(orgid);
     setParentId(pid);//设置首页列表点击的房产Id为父节点Id
+    setSelectOrganizeId(orgid);
     //setPstructId(psid);
     // GetBuildings(psid).then((res: any[]) => {
     //   setTreeData(res || []);
     // }); 
     initLoadData(pid, type, '');//, psid);
-  }, []);
+  }, [organizeId]);
 
   const closeDrawer = () => {
     setModifyVisible(false);
@@ -72,12 +75,10 @@ function HouseMore(props) {
     setRoomVisible(false);
   };
 
-  const loadData = (searchText, parentId, type, paginationConfig?: PaginationConfig, sorter?) => { 
-
+  const loadData = (searchText, parentId, type, paginationConfig?: PaginationConfig, sorter?) => {
     //刷新值，必须
     setSearch(searchText);
     setParentId(parentId);
-
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: pagination.pageSize,
@@ -170,13 +171,14 @@ function HouseMore(props) {
         organizeId={organizeId}
         selectId={selectId}
         // treeData={treeData}
-        selectTree={(parentId, type) => {
+        selectTree={(parentId, type, organizeId) => {
           if ('ABCD'.indexOf(type) != -1) {
             setIsDisabled(true);
             return;
-          }
+          } 
+          setSelectOrganizeId(organizeId);
           setIsDisabled(false);
-          doSelectTree(parentId, type);
+          doSelectTree(parentId, type); 
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>
@@ -236,7 +238,8 @@ function HouseMore(props) {
       <PstructInfo
         modifyVisible={modifyVisible}
         closeDrawer={closeDrawer}
-        organizeId={organizeId}
+        // organizeId={organizeId}
+        organizeId={selectOrganizeId}
         parentId={parentId}
         data={currData}
         type={type}
@@ -249,7 +252,7 @@ function HouseMore(props) {
       <Room
         modifyVisible={roomVisible}
         closeDrawer={closeAtlasDrawer}
-        organizeId={organizeId}
+        organizeId={selectOrganizeId} //{organizeId}
         parentId={parentId}
         data={currData}
         type={5}

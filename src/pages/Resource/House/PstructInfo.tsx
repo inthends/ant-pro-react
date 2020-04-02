@@ -136,7 +136,7 @@ const PstructInfo = (props: PstructInfoProps) => {
   //   }
   // };
 
-  const showCustomerDrawer = (customerId, type) => { 
+  const showCustomerDrawer = (customerId, type) => {
     if (customerId != '') {
       GetCustomerInfo(customerId).then(res => {
         setCustomer(res);
@@ -152,9 +152,9 @@ const PstructInfo = (props: PstructInfoProps) => {
     setCustomerVisible(false);
   };
 
-  const ownerChange= value => {
+  const ownerChange = value => {
     form.setFieldsValue({ ownerId: '' });
-    form.setFieldsValue({ ownerPhone: ''});
+    form.setFieldsValue({ ownerPhone: '' });
     form.setFieldsValue({ ownerUnitAllName: '' });
   }
 
@@ -163,7 +163,7 @@ const PstructInfo = (props: PstructInfoProps) => {
     if (value == '') {
       setUserList([]);
       form.setFieldsValue({ ownerId: '' });
-      form.setFieldsValue({ ownerPhone: ''}); 
+      form.setFieldsValue({ ownerPhone: '' });
     }
     else {
       setUserList([]);
@@ -172,10 +172,46 @@ const PstructInfo = (props: PstructInfoProps) => {
         const list = res.map(item =>
           <Option key={item.id}
             value={item.name.trim()}>{item.name.trim()}
-            <span className={styles.code}>{item.code}</span>
+            <span className={styles.right}>{item.phoneNum}</span>
             <br></br>
-            {item.phoneNum}
-            <span className={styles.allName}>{item.allName}</span>
+            {item.code}
+            <span className={styles.right}>{item.allName}</span>
+          </Option>
+        ).concat([
+          <Option disabled key="all" className={styles.addCustomer}>
+            <a onClick={() => showCustomerDrawer('', 1)}>
+              新增业主
+          </a>
+          </Option>]);//新增 
+        setUserList(list);
+      })
+    }
+  };
+
+  const tenantChange = value => {
+    form.setFieldsValue({ tenantId: '' });
+    form.setFieldsValue({ tenantPhone: '' });
+    form.setFieldsValue({ tenantUnitAllName: '' });
+  }
+
+  //住户
+  const tenantSearch = value => {
+    if (value == '') {
+      setUserList([]);
+      form.setFieldsValue({ tenantId: '' });
+      form.setFieldsValue({ tenantPhone: '' });
+    }
+    else {
+      setUserList([]);
+      GetCustomerList(value, organizeId).then(res => {
+        // setUserSource(res || []); 
+        const list = res.map(item =>
+          <Option key={item.id}
+            value={item.name.trim()}>{item.name.trim()}
+            <span className={styles.right}>{item.phoneNum}</span>
+            <br></br>
+            {item.code}
+            <span className={styles.right}>{item.allName}</span>
           </Option>
         ).concat([
           <Option disabled key="all" className={styles.addCustomer}>
@@ -188,58 +224,23 @@ const PstructInfo = (props: PstructInfoProps) => {
     }
   };
 
-  const tenantChange= value => {
-    form.setFieldsValue({ tenantId: '' });
-    form.setFieldsValue({ tenantPhone: ''});
-    form.setFieldsValue({ tenantUnitAllName: '' });
-  }
-
-  //租户
-  const tenantSearch = value => {
-    if (value == '') {
-      setUserList([]);
-      form.setFieldsValue({ tenantId: '' });
-      form.setFieldsValue({ tenantPhone: ''}); 
-    }
-    else {
-      setUserList([]);
-      GetCustomerList(value, organizeId).then(res => {
-        // setUserSource(res || []); 
-        const list = res.map(item =>
-          <Option key={item.id}
-            value={item.name.trim()}>{item.name.trim()}
-            <span className={styles.code}>{item.code}</span>
-            <br></br>
-            {item.phoneNum}
-            <span className={styles.allName}>{item.allName}</span>
-          </Option>
-        ).concat([
-          <Option disabled key="all" className={styles.addCustomer}>
-            <a onClick={() => showCustomerDrawer('', 1)}>
-              新增租户
-          </a>
-          </Option>]);//新增 
-        setUserList(list);
-      })
-    }
-  };
-
 
   // const userList = userSource.map
   //   (item => <Option key={item.id} value={item.name}>{item.name}</Option>);
 
-  const onOwnerSelect = (value, option) => {
-    //props.children[1].props.children
+  const onOwnerSelect = (value, option) => { 
     form.setFieldsValue({ ownerId: option.key });
     if (option.props.children.length == 5) {
-      form.setFieldsValue({ ownerPhone: option.props.children[3]  });
+      form.setFieldsValue({ ownerPhone: option.props.children[1].props.children });
+      form.setFieldsValue({ ownerUnitAllName: option.props.children[4].props.children });
     }
   };
 
   const onTenantSelect = (value, option) => {
     form.setFieldsValue({ tenantId: option.key });
     if (option.props.children.length == 5) {
-      form.setFieldsValue({ tenantPhone: option.props.children[3]  });
+      form.setFieldsValue({ tenantPhone: option.props.children[1].props.children });
+      form.setFieldsValue({ tenantUnitAllName: option.props.children[4].props.children });
     }
   };
 
@@ -478,7 +479,7 @@ const PstructInfo = (props: PstructInfoProps) => {
             {type == 4 || type == 5 || type == 8 || type == 9 ? (
               <Row gutter={24}>
                 <Col lg={12}>
-                  <Form.Item label={infoDetail.ownerName ? <div>业主名称 <a onClick={() => { showCustomerDrawer(infoDetail.ownerId, 1) }}>编辑</a></div> : '业主名称'}>
+                  <Form.Item label={infoDetail.ownerName ? <div>业主名称<a onClick={() => { showCustomerDrawer(infoDetail.ownerId, 1) }}>编辑</a></div> : '业主名称'}>
                     {getFieldDecorator('ownerName', {
                       initialValue: infoDetail.ownerName,
                       rules: [{ required: false, message: '业主不存在，请先新增' }, { validator: checkExist }]
@@ -500,10 +501,16 @@ const PstructInfo = (props: PstructInfoProps) => {
                     })(
                       <input type='hidden' />
                     )}
+
+                    {getFieldDecorator('ownerUnitAllName', {
+                      initialValue: infoDetail.ownerUnitAllName,
+                    })(
+                      <input type='hidden' />
+                    )}
                   </Form.Item>
                 </Col>
                 <Col lg={12}>
-                  <Form.Item label={infoDetail.tenantName ? <div>住户名称 <a onClick={() => { showCustomerDrawer(infoDetail.tenantId, 2) }}>编辑</a></div> : '住户名称'}>
+                  <Form.Item label={infoDetail.tenantName ? <div>住户名称<a onClick={() => { showCustomerDrawer(infoDetail.tenantId, 2) }}>编辑</a></div> : '住户名称'}>
                     {getFieldDecorator('tenantName', {
                       initialValue: infoDetail.tenantName,
                       rules: [{ required: false, message: '住户不存在，请先新增' }, { validator: checkExist }]
@@ -525,6 +532,13 @@ const PstructInfo = (props: PstructInfoProps) => {
                     })(
                       <input type='hidden' />
                     )}
+
+                    {getFieldDecorator('tenantUnitAllName', {
+                      initialValue: infoDetail.tenantUnitAllName,
+                    })(
+                      <input type='hidden' />
+                    )}
+
                   </Form.Item>
                 </Col>
               </Row>) : null}

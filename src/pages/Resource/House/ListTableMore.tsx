@@ -149,7 +149,7 @@ function ListTableMore(props: ListTableMoreProps) {
       title: '名称',
       dataIndex: 'name',
       key: 'name',
-      width: 180,
+      width: 150,
       fixed: 'left',
       sorter: true,
       render: (text, record) => {
@@ -160,7 +160,7 @@ function ListTableMore(props: ListTableMoreProps) {
       title: '编号',
       dataIndex: 'code',
       key: 'code',
-      width: 150,
+      width: 180,
       sorter: true,
     },
     {
