@@ -282,8 +282,8 @@ function ListTable(props: ListTableProps) {
                 form.setFieldsValue({ payAmountA: 0 });
                 form.setFieldsValue({ payAmountB: 0 });
                 form.setFieldsValue({ payAmountC: 0 });
-                form.setFieldsValue({ payTypeA: '支付宝扫码' });
-                form.setFieldsValue({ payTypeB: '微信扫码' });
+                form.setFieldsValue({ payTypeA: '支付宝' });
+                form.setFieldsValue({ payTypeB: '微信' });
                 form.setFieldsValue({ payTypeC: '现金' });
                 form.setFieldsValue({ payCode: '' });
                 form.setFieldsValue({ invoiceCode: '' });
@@ -585,18 +585,17 @@ function ListTable(props: ListTableProps) {
             <Col lg={4}>
               <Form.Item >
                 {getFieldDecorator('payTypeA', {
-                  initialValue: '支付宝扫码'
+                  initialValue: '支付宝'
                 })(
                   <Select >
                     {/* <Option value="现金">现金</Option>
-                    <Option value="支付宝扫码" >支付宝扫码</Option>
-                    <Option value="支付宝转账">支付宝转账</Option>
-                    <Option value="微信扫码">微信扫码</Option>
-                    <Option value="微信转账">微信转账</Option>
+                    <Option value="支付宝">支付宝</Option>
+                    <Option value="微信">微信</Option>
                     <Option value="刷卡">刷卡</Option>
-                    <Option value="转账">转账</Option>
-                    <Option value="抵扣券">抵扣券</Option> */}
-
+                    <Option value="借记卡二维码">借记卡二维码</Option>
+                    <Option value="信用卡二维码">信用卡二维码</Option>
+                    <Option value="抵扣券">抵扣券</Option>
+                    <Option value="其它">其它</Option> */}
                     {payTypeA.map(item => (
                       <Option value={item.value} key={item.key}>
                         {item.title}
@@ -636,7 +635,7 @@ function ListTable(props: ListTableProps) {
             <Col lg={4}>
               <Form.Item >
                 {getFieldDecorator('payTypeB', {
-                  initialValue: '微信扫码'
+                  initialValue: '微信'
                 })(
                   <Select>
                     {payTypeB.map(item => (

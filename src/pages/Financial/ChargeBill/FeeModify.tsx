@@ -677,7 +677,6 @@ const FeeModify = (props: FeeModifyProps) => {
           </Col>
         </Row>
       </Spin>
-
       {
         edit ? <div
           style={{

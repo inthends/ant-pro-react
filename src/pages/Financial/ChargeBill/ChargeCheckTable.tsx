@@ -130,6 +130,21 @@ function ChargeCheckTable(props: ChargeCheckTableProps) {
       key: 'payAmountA',
       width: 100,
     },
+
+    {
+      title: '收续费',
+      dataIndex: 'serviceFee',
+      key: 'serviceFee',
+      width: 100,
+    },
+
+    {
+      title: '提现金额',
+      dataIndex: 'actualAmount',
+      key: 'actualAmount',
+      width: 100,
+    }, 
+
     {
       title: '发票编号',
       dataIndex: 'invoiceCode',
