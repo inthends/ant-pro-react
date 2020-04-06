@@ -37,7 +37,7 @@ const Modify = (props: ModifyProps) => {
   const [pro, setPro] = useState<TreeEntity[]>([]);
   const [city, setCity] = useState<TreeEntity[]>([]);
   const [area, setArea] = useState<TreeEntity[]>([]);
-  const [project, setProject] = useState<TreeEntity[]>([]);
+  const [buildingFormat, setBuildingFormat] = useState<TreeEntity[]>([]);
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [userSource, setUserSource] = useState<any[]>([]);
   //图片上传
@@ -51,8 +51,9 @@ const Modify = (props: ModifyProps) => {
     GetTreeAreaJson('100000').then(res => {
       setPro(res || []);
     });
-    GetCommonItems('ProjectType').then(res => {
-      setProject(res || []);
+    //项目类型
+    GetCommonItems('BuildingFormat').then(res => {
+      setBuildingFormat(res || []);
     });
     GetUserList('', '员工').then(res => {
       setUserSource(res || []);
@@ -507,11 +508,11 @@ const Modify = (props: ModifyProps) => {
               <Row gutter={24}>
                 <Col lg={12}>
                   <Form.Item label="项目类型">
-                    {getFieldDecorator('propertyType', {
-                      initialValue: infoDetail.propertyType,
+                    {getFieldDecorator('buildingFormat', {
+                      initialValue: infoDetail.buildingFormat,
                     })(
                       <Select placeholder="请选择项目类型">
-                        {project.map(item => (
+                        {buildingFormat.map(item => (
                           <Option key={item.key} value={item.value}>
                             {item.title}
                           </Option>

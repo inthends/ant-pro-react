@@ -2,8 +2,10 @@
 import { Icon, Upload, Modal, Select, AutoComplete, Button, Card, Col, Drawer, Form, Input, Row, message, InputNumber } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
+import { TreeEntity } from '@/model/models';
 import { ExistEnCode, SaveForm } from './House.service';
 import { GetCustomerInfo, CheckCustomer, GetCustomerList } from '../PStructUser/PStructUser.service';
+import { GetCommonItems } from '@/services/commonItem';
 import QuickModify from '../PStructUser/QuickModify';
 import styles from './style.less';
 const { TextArea } = Input;
@@ -33,6 +35,7 @@ const PstructInfo = (props: PstructInfoProps) => {
   const [userList, setUserList] = useState<any[]>([]);
   const [usertype, setUserType] = useState<any>(1);
   const [customer, setCustomer] = useState<any>();
+  const [propertyType, setPropertyType] = useState<TreeEntity[]>([]);
 
   const title = data === undefined ? '添加' : '修改';
   let formLabel = '楼栋';
@@ -58,6 +61,11 @@ const PstructInfo = (props: PstructInfoProps) => {
   // 打开抽屉时初始化
   useEffect(() => {
     if (modifyVisible) {
+      //物业类型
+      GetCommonItems('PropertyType').then(res => {
+        setPropertyType(res || []);
+      });
+
       if (data) {
         setInfoDetail(data);
         //加载图片
@@ -228,7 +236,7 @@ const PstructInfo = (props: PstructInfoProps) => {
   // const userList = userSource.map
   //   (item => <Option key={item.id} value={item.name}>{item.name}</Option>);
 
-  const onOwnerSelect = (value, option) => { 
+  const onOwnerSelect = (value, option) => {
     form.setFieldsValue({ ownerId: option.key });
     if (option.props.children.length == 5) {
       form.setFieldsValue({ ownerPhone: option.props.children[1].props.children });
@@ -350,7 +358,7 @@ const PstructInfo = (props: PstructInfoProps) => {
               </Col>
             </Row>
             <Row gutter={24}>
-              <Col lg={12}>
+              <Col lg={8}>
                 <Form.Item label="编号" required>
                   {getFieldDecorator('code', {
                     initialValue: infoDetail.code,
@@ -366,7 +374,31 @@ const PstructInfo = (props: PstructInfoProps) => {
                   })(<Input placeholder="请输入编号" />)}
                 </Form.Item>
               </Col>
-              <Col lg={12}>
+
+              <Col lg={8}>
+                <Form.Item label="物业类型">
+                  {getFieldDecorator('propertyType', {
+                    initialValue: infoDetail.propertyType //? infoDetail.buildingFormat : '多层',
+                  })(
+                    <Select>
+                      {/* <Option value="多层">多层</Option>
+                      <Option value="小高层">小高层</Option>
+                      <Option value="高层">高层</Option>
+                      <Option value="超高层">超高层</Option>
+                      <Option value="联排别墅">联排别墅</Option>
+                      <Option value="独栋别墅">独栋别墅</Option>
+                      <Option value="叠加别墅">叠加别墅</Option> */} 
+                      {propertyType.map(item => (
+                        <Option key={item.key} value={item.value}>
+                          {item.title}
+                        </Option>
+                      ))} 
+                    </Select>
+                  )}
+                </Form.Item>
+              </Col>
+
+              <Col lg={8}>
                 <Form.Item label="联系电话">
                   {getFieldDecorator('phoneNum', {
                     initialValue: infoDetail.phoneNum,
@@ -442,32 +474,14 @@ const PstructInfo = (props: PstructInfoProps) => {
                 )
             }
             {type == 1 ? (<Row gutter={24}>
-              <Col lg={8}>
-                <Form.Item label="业态">
-                  {getFieldDecorator('buildingFormat', {
-                    initialValue: infoDetail.buildingFormat ? infoDetail.buildingFormat : '多层',
-                  })(
-                    <Select>
-                      <Option value="多层">多层</Option>
-                      <Option value="小高层">小高层</Option>
-                      <Option value="高层">高层</Option>
-                      <Option value="超高层">超高层</Option>
-                      <Option value="联排别墅">联排别墅</Option>
-                      <Option value="独栋别墅">独栋别墅</Option>
-                      <Option value="叠加别墅">叠加别墅</Option>
-                    </Select>
-                  )}
-                </Form.Item>
-              </Col>
-
-              <Col lg={8}>
+              <Col lg={12}>
                 <Form.Item label="经度">
                   {getFieldDecorator('lat', {
                     initialValue: infoDetail.lat,
                   })(<Input placeholder="请输入经度" />)}
                 </Form.Item>
               </Col>
-              <Col lg={8}>
+              <Col lg={12}>
                 <Form.Item label="纬度">
                   {getFieldDecorator('lng', {
                     initialValue: infoDetail.lng,

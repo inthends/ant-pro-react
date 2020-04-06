@@ -210,7 +210,7 @@ function ChargeCheckTable(props: ChargeCheckTableProps) {
         columns={columns}
         rowKey={record => record.billId}
         pagination={pagination}
-        scroll={{ y: 500, x: 2200 }}
+        scroll={{ y: 500, x: 2300 }}
         rowClassName={setClassName} //表格行点击高亮
         loading={loading}
         onRow={onRow}

@@ -589,11 +589,10 @@ function ListTable(props: ListTableProps) {
                 })(
                   <Select >
                     {/* <Option value="现金">现金</Option>
-                    <Option value="支付宝">支付宝</Option>
-                    <Option value="微信">微信</Option>
-                    <Option value="刷卡">刷卡</Option>
-                    <Option value="借记卡二维码">借记卡二维码</Option>
-                    <Option value="信用卡二维码">信用卡二维码</Option>
+                    <Option value="支付宝转账">支付宝转账</Option>
+                    <Option value="微信转账">微信转账</Option> 
+                    <Option value="银联转账">银联转账</Option> 
+                    <Option value="银联刷卡">银联刷卡</Option> 
                     <Option value="抵扣券">抵扣券</Option>
                     <Option value="其它">其它</Option> */}
                     {payTypeA.map(item => (
