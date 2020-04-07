@@ -585,14 +585,13 @@ function ListTable(props: ListTableProps) {
             <Col lg={4}>
               <Form.Item >
                 {getFieldDecorator('payTypeA', {
-                  initialValue: '支付宝'
+                  initialValue: '转账'
                 })(
                   <Select >
-                    {/* <Option value="现金">现金</Option>
-                    <Option value="支付宝转账">支付宝转账</Option>
-                    <Option value="微信转账">微信转账</Option> 
-                    <Option value="银联转账">银联转账</Option> 
-                    <Option value="银联刷卡">银联刷卡</Option> 
+                    {/* 
+                       <Option value="转账">转账</Option>
+                    <Option value="现金">现金</Option> 
+                    <Option value="刷卡">刷卡</Option>  
                     <Option value="抵扣券">抵扣券</Option>
                     <Option value="其它">其它</Option> */}
                     {payTypeA.map(item => (
@@ -634,7 +633,7 @@ function ListTable(props: ListTableProps) {
             <Col lg={4}>
               <Form.Item >
                 {getFieldDecorator('payTypeB', {
-                  initialValue: '微信'
+                  initialValue: '现金'
                 })(
                   <Select>
                     {payTypeB.map(item => (
@@ -671,7 +670,7 @@ function ListTable(props: ListTableProps) {
             <Col lg={4}>
               <Form.Item >
                 {getFieldDecorator('payTypeC', {
-                  initialValue: '现金'
+                  initialValue: '刷卡'
                 })(
                   <Select>
                     {payTypeC.map(item => (
