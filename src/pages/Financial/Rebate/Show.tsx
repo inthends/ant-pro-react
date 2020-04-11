@@ -202,7 +202,7 @@ const Show = (props: ShowProps) => {
       title: '单元全称',
       dataIndex: 'allName',
       key: 'allName',
-      width: '240px',
+      width: '260px',
     },
     {
       title: '备注',

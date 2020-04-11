@@ -272,7 +272,7 @@ const Verify = (props: VerifyProps) => {
               <Form.Item label="审核意见" required>
                 {getFieldDecorator('verifyMemo', {
                   initialValue: infoDetail.verifyMemo,
-                  rules: [{ required: true, message: '请输入审核意见' }],
+                  rules: [{ required: ifVerify, message: '请输入审核意见' }],
                 })(<TextArea rows={4} placeholder="请输入审核意见" />)}
               </Form.Item>
             </Col>

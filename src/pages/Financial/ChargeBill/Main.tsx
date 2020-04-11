@@ -533,7 +533,7 @@ function Main() {
     })
   };
   const userList = userSource.map
-    (item => <Option key={item.id} value={item.id}>{item.name}</Option>);
+    (item => <Option key={item.id} value={item.userId}>{item.name}</Option>);
 
   // const onReceiverNameSelect = (value, option) => {
   //   var params = Object.assign({}, chargedSearchParams, { receiverId: option.key });
@@ -648,6 +648,17 @@ function Main() {
           </TabPane>
           <TabPane tab="收款单列表" key="2">
             <div style={{ marginBottom: '10px' }}>
+
+            <Search
+                className="search-input"
+                placeholder="搜索收款单号"
+                style={{ width: 180,marginRight: '5px' }}
+                onChange={e => {
+                  var params = Object.assign({}, chargedSearchParams, { search: e.target.value });
+                  setChargedSearchParams(params);
+                }}
+              />
+
               <AutoComplete
                 allowClear={true}
                 dataSource={userList}
@@ -690,15 +701,7 @@ function Main() {
                   var params = Object.assign({}, chargedSearchParams, { endDate: dateStr });
                   setChargedSearchParams(params);
                 }} style={{ marginLeft: '5px', marginRight: '5px', width: '120px' }} />
-              <Search
-                className="search-input"
-                placeholder="搜索收款单号"
-                style={{ width: 180 }}
-                onChange={e => {
-                  var params = Object.assign({}, chargedSearchParams, { search: e.target.value });
-                  setChargedSearchParams(params);
-                }}
-              />
+            
               <Button type="primary" style={{ marginLeft: '3px' }}
                 onClick={() => {
                   // initChargeLoadData(organizeId, chargedSearchParams.type); 
