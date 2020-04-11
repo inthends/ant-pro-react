@@ -1,7 +1,7 @@
 
 //租期条款动态组件，新增
-import { TreeEntity } from '@/model/models';
-import { InputNumber, Select, DatePicker, Card, Col, Row, Icon, Form, Button } from 'antd';
+// import { TreeEntity } from '@/model/models';
+import { Input, InputNumber, Select, DatePicker, Card, Col, Row, Icon, Form, Button } from 'antd';
 import React, { useState } from 'react';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import styles from './style.less';
@@ -10,7 +10,7 @@ const { Option } = Select;
 
 interface LeaseTermProps {
   form: WrappedFormUtils;
-  feeItems: TreeEntity[];
+  feeItems: any[];//TreeEntity[];
 }
 
 //动态数量
@@ -59,25 +59,25 @@ function LeaseTerm(props: LeaseTermProps) {
   getFieldDecorator('LeaseTerms', { initialValue: [] });
   const keys = getFieldValue('LeaseTerms');
   const formItems = keys.map((k, index) => (
-    <Card key={k} className={styles.card}
+    <Card key={k} className={styles.card} title={'费用条款' + (index + 2)}
       extra={<Icon type="minus-circle-o" onClick={() => remove(k)} />}>
       <Row gutter={24}>
         <Col lg={4}>
           <Form.Item label="开始时间" required >
-            {getFieldDecorator(`startDate[${k}]`, {
-              rules: [{ required: true, message: '请选择开始时间' }],
-            })(<DatePicker placeholder='请选择开始时间' />)}
+            {getFieldDecorator(`chargeStartDate[${k}]`, {
+              rules: [{ required: true, message: '请选择' }],
+            })(<DatePicker placeholder='请选择' />)}
           </Form.Item>
         </Col>
         <Col lg={4}>
           <Form.Item label="结束时间" required>
-            {getFieldDecorator(`endDate[${k}]`, {
-              rules: [{ required: true, message: '请选择结束时间' }],
-            })(<DatePicker placeholder='请选择结束时间' />)}
+            {getFieldDecorator(`chargeEndDate[${k}]`, {
+              rules: [{ required: true, message: '请选择' }],
+            })(<DatePicker placeholder='请选择' />)}
           </Form.Item>
         </Col>
         <Col lg={8}>
-          <Form.Item label="关联费项" required>
+          <Form.Item label="费项" required>
             {getFieldDecorator(`feeItemId[${k}]`, {
               rules: [{ required: true, message: '请选择费项' }]
             })(
@@ -91,7 +91,6 @@ function LeaseTerm(props: LeaseTermProps) {
                 ))}
               </Select>
             )}
-
             {getFieldDecorator(`feeItemName[${k}]`, {
             })(
               <input type='hidden' />
@@ -100,10 +99,10 @@ function LeaseTerm(props: LeaseTermProps) {
         </Col>
 
         <Col lg={4}>
-          <Form.Item label="合同单价" required>
+          <Form.Item label="单价" required>
             {getFieldDecorator(`price[${k}]`, {
-              rules: [{ required: true, message: '请输入合同单价' }],
-            })(<InputNumber placeholder="请输入合同单价" style={{ width: '100%' }} />)}
+              rules: [{ required: true, message: '请输入单价' }],
+            })(<InputNumber placeholder="请输入单价" style={{ width: '100%' }} />)}
           </Form.Item>
         </Col>
         <Col lg={4}>
@@ -121,6 +120,65 @@ function LeaseTerm(props: LeaseTermProps) {
         </Col>
       </Row>
       <Row gutter={24}>
+
+        <Col lg={4}>
+          <Form.Item label="计费类型">
+            {getFieldDecorator(`billType[${k}]`, {
+              initialValue: '按月计费'
+            })(
+              <Select>
+                <Option value="按实际天数计费">按实际天数计费</Option>
+                <Option value="按月计费" >按月计费</Option>
+              </Select>)}
+          </Form.Item>
+        </Col>
+
+        {/* {
+          (priceUnit != "元/m²·天" && priceUnit != "元/天") ?
+            <Col lg={4}>
+              <Form.Item label="天单价换算规则">
+                {getFieldDecorator(`dayPriceConvertRule[${k}]`, {
+                  initialValue: '按年换算',
+                })(
+                  <Select>
+                    <Option value="按自然月换算">按自然月换算</Option>
+                    <Option value="按年换算" >按年换算</Option>
+                  </Select>
+                )}
+              </Form.Item>
+            </Col>
+            : null} */}
+
+        <Col lg={4}>
+          <Form.Item label="天单价换算规则">
+            {getFieldDecorator(`dayPriceConvertRule[${k}]`, {
+              initialValue: '按年换算',
+            })(
+              <Select
+                disabled={!(priceUnit != "元/m²·天" && priceUnit != "元/天")}>
+                <Option value="按自然月换算">按自然月换算</Option>
+                <Option value="按年换算" >按年换算</Option>
+              </Select>
+            )}
+          </Form.Item>
+        </Col>
+        <Col lg={4}>
+          <Form.Item label="年天数">
+            {getFieldDecorator(`yearDays[${k}]`, {
+              initialValue: 365,
+              rules: [{ required: true, message: '请输入年天数' }],
+            })(<InputNumber placeholder="请输入年天数" style={{ width: '100%' }} />)}
+          </Form.Item>
+        </Col>
+        <Col lg={4}>
+          <Form.Item label="付款周期（月）" required>
+            {getFieldDecorator(`payCycle[${k}]`, {
+              rules: [{ required: true, message: '请填写付款周期' }]
+            })(
+              <InputNumber placeholder="请填写付款周期" style={{ width: '100%' }} />
+            )}
+          </Form.Item>
+        </Col>
         <Col lg={4}>
           <Form.Item label="提前付款时间">
             {getFieldDecorator(`advancePayTime[${k}]`, {
@@ -141,62 +199,7 @@ function LeaseTerm(props: LeaseTermProps) {
               </Select>)}
           </Form.Item>
         </Col>
-        <Col lg={4}>
-          <Form.Item label="计费类型">
-            {getFieldDecorator(`billType[${k}]`, {
-              initialValue: '按月计费'
-            })(
-              <Select>
-                <Option value="按实际天数计费">按实际天数计费</Option>
-                <Option value="按月计费" >按月计费</Option>
-              </Select>)}
-          </Form.Item>
-        </Col>
-        {/* <Col lg={4}>
-          <Form.Item label="天单价换算规则">
-            {getFieldDecorator(`dayPriceConvertRule[${k}]`, {
-              initialValue: '按年换算',
-            })(
-              <Select>
-                <Option value="按自然月换算">按自然月换算</Option>
-                <Option value="按年换算" >按年换算</Option>
-              </Select>
-            )}
-          </Form.Item>
-        </Col> */}
-        {
-          (priceUnit == "元/m²·天" || priceUnit == "元/天") ?
-            <Col lg={4}>
-              <Form.Item label="天单价换算规则">
-                {getFieldDecorator(`dayPriceConvertRule[${k}]`, {
-                  initialValue: '按年换算',
-                })(
-                  <Select>
-                    <Option value="按自然月换算">按自然月换算</Option>
-                    <Option value="按年换算" >按年换算</Option>
-                  </Select>
-                )}
-              </Form.Item>
-            </Col>
-            : null}
 
-        <Col lg={4}>
-          <Form.Item label="年天数">
-            {getFieldDecorator(`yearDays[${k}]`, {
-              initialValue: 365,
-              rules: [{ required: true, message: '请输入年天数' }],
-            })(<InputNumber placeholder="请输入年天数" style={{ width: '100%' }} />)}
-          </Form.Item>
-        </Col>
-        <Col lg={4}>
-          <Form.Item label="付款周期（月）" required>
-            {getFieldDecorator(`payCycle[${k}]`, {
-              rules: [{ required: true, message: '请填写付款周期' }]
-            })(
-              <InputNumber placeholder="请填写付款周期" style={{ width: '100%' }} />
-            )}
-          </Form.Item>
-        </Col>
         <Col lg={8}>
           <Form.Item label="租期划分方式">
             {getFieldDecorator(`rentalPeriodDivided[${k}]`, {
@@ -210,17 +213,114 @@ function LeaseTerm(props: LeaseTermProps) {
               </Select>)}
           </Form.Item>
         </Col>
+
+        <Col lg={4}>
+          <Form.Item label="递增开始时间" required >
+            {getFieldDecorator(`increStartDate[${k}]`, {
+              rules: [{ required: true, message: '请选择' }],
+            })(<DatePicker placeholder='请选择' />)}
+          </Form.Item>
+        </Col>
+        <Col lg={4}>
+          <Form.Item label="递增结束时间" required>
+            {getFieldDecorator(`increEndDate[${k}]`, {
+              rules: [{ required: true, message: '请选择' }],
+            })(<DatePicker placeholder='请选择' />)}
+          </Form.Item>
+        </Col>
+        <Col lg={4}>
+          <Form.Item label="单价递增" required>
+            {getFieldDecorator(`increPrice[${k}]`, {
+              rules: [{ required: form.getFieldValue(`increType[${k}]`), message: '请输入' }],
+            })(
+              <InputNumber placeholder="请输入" style={{ width: '100%' }}
+                disabled={!form.getFieldValue(`increType[${k}]`)}
+              />
+            )}
+          </Form.Item>
+        </Col>
+        <Col lg={4}>
+          <Form.Item label="&nbsp;">
+            {getFieldDecorator(`increPriceUnit[${k}]`, {
+              rules: [{ required: form.getFieldValue(`increType[${k}]`), message: '请选择单位' }],
+            })(
+              <Select placeholder="请选择" allowClear
+                disabled={!form.getFieldValue(`increType[${k}]`)}
+              >
+                <Option value="%">%</Option>
+                <Option value="元" >元</Option>
+              </Select>)}
+          </Form.Item>
+        </Col>
+
+        <Col lg={4}>
+          <Form.Item label="优惠类型" required>
+            {getFieldDecorator(`rebateType[${k}]`, {
+            })(<Select placeholder="请选择"
+              allowClear>
+              <Option value="免租期">免租期</Option>
+              <Option value="装修期">装修期</Option>
+              <Option value="单价折扣">单价折扣</Option>
+              <Option value="减免金额">减免金额</Option>
+              <Option value="单价减免">单价减免</Option>
+            </Select>)}
+          </Form.Item>
+        </Col>
+        <Col lg={4}>
+          <Form.Item label="开始时间" >
+            {getFieldDecorator(`rebateStartDate[${k}]`, {
+              rules: [{ required: form.getFieldValue(`rebateType[${k}]`), message: '请选择' }],
+            })(<DatePicker placeholder="请选择"
+              disabled={!form.getFieldValue(`rebateType[${k}]`)}
+            />)}
+          </Form.Item>
+        </Col>
+        <Col lg={5}>
+          <Form.Item label="结束时间" >
+            {getFieldDecorator(`rebateEndDate[${k}]`, {
+              rules: [{ required: form.getFieldValue(`rebateType[${k}]`), message: '请选择' }],
+            })(<DatePicker placeholder="请选择" disabled={!form.getFieldValue(`rebateType[${k}]`)} />)}
+          </Form.Item>
+        </Col>
+        <Col lg={4}>
+          <Form.Item label="开始期数" >
+            {getFieldDecorator(`startPeriod[${k}]`, {
+              rules: [{ required: form.getFieldValue(`rebateType[${k}]`), message: '请输入' }],
+            })(<InputNumber placeholder="请输入" style={{ width: '100%' }} disabled={!form.getFieldValue(`rebateType[${k}]`)} />)}
+          </Form.Item>
+        </Col>
+        <Col lg={4}>
+          <Form.Item label="期长" >
+            {getFieldDecorator(`periodLength[${k}]`, {
+              rules: [{ required: form.getFieldValue(`rebateType[${k}]`), message: '请输入期长' }],
+            })(<InputNumber placeholder="请输入期长" style={{ width: '100%' }} disabled={!form.getFieldValue(`rebateType[${k}]`)} />)}
+          </Form.Item>
+        </Col>
+        <Col lg={4}>
+          <Form.Item label="折扣" >
+            {getFieldDecorator(`discount[${k}]`, {
+              rules: [{ required: form.getFieldValue(`rebateType[${k}]`), message: '请输入折扣' }],
+            })(<InputNumber placeholder="请输入折扣" style={{ width: '100%' }} disabled={!form.getFieldValue(`rebateType[${k}]`)} />)}
+          </Form.Item>
+        </Col>
+        <Col lg={24}>
+          <Form.Item label="优惠备注" >
+            {getFieldDecorator(`rebateRemark[${k}]`, {
+              //rules: [{ required: true, message: '请输入备注' }],
+            })(<Input placeholder="请输入优惠备注" />)}
+          </Form.Item>
+        </Col>
       </Row>
     </Card>
   ));
 
   return (
     <div style={{ marginBottom: '10px' }}  >
-      <Card key='0' title="租期条款" className={styles.card}  >
-        <Row gutter={24}>
+      <Card key='0' title="费用条款1" className={styles.card}  >
+        <Row gutter={24}> 
           <Col lg={4}>
             <Form.Item label="开始时间" required >
-              {getFieldDecorator(`startDate[0]`, {
+              {getFieldDecorator(`chargeStartDate[0]`, {
                 initialValue: moment(new Date()),
                 rules: [{ required: true, message: '请选择开始时间' }],
               })(<DatePicker placeholder='请选择开始时间' />)}
@@ -228,13 +328,12 @@ function LeaseTerm(props: LeaseTermProps) {
           </Col>
           <Col lg={4}>
             <Form.Item label="结束时间" required>
-              {getFieldDecorator(`endDate[0]`, {
+              {getFieldDecorator(`chargeEndDate[0]`, {
                 initialValue: moment(new Date()).add(1, 'years').add(-1, 'days'),
                 rules: [{ required: true, message: '请选择结束时间' }],
               })(<DatePicker placeholder='请选择结束时间' />)}
             </Form.Item>
           </Col>
-
           <Col lg={8}>
             <Form.Item label="费项" required>
               {getFieldDecorator(`feeItemId[0]`, {
@@ -250,20 +349,18 @@ function LeaseTerm(props: LeaseTermProps) {
                   ))}
                 </Select>
               )}
-
               {getFieldDecorator(`feeItemName[0]`, {
               })(
                 <input type='hidden' />
               )}
-
             </Form.Item>
           </Col>
 
           <Col lg={4}>
-            <Form.Item label='合同单价' required>
+            <Form.Item label='单价' required>
               {getFieldDecorator(`price[0]`, {
-                rules: [{ required: true, message: '请输入合同单价' }],
-              })(<InputNumber placeholder="请输入合同单价" style={{ width: '100%' }} />)}
+                rules: [{ required: true, message: '请输入单价' }],
+              })(<InputNumber placeholder="请输入单价" style={{ width: '100%' }} />)}
             </Form.Item>
           </Col>
           <Col lg={4}>
@@ -281,6 +378,67 @@ function LeaseTerm(props: LeaseTermProps) {
           </Col>
         </Row>
         <Row gutter={24}>
+
+          <Col lg={4}>
+            <Form.Item label="计费类型">
+              {getFieldDecorator(`billType[0]`, {
+                initialValue: '按月计费'
+              })(
+                <Select>
+                  <Option value="按实际天数计费">按实际天数计费</Option>
+                  <Option value="按月计费">按月计费</Option>
+                </Select>)}
+            </Form.Item>
+          </Col>
+
+          {/* {
+            (priceUnit != "元/m²·天" && priceUnit != "元/天") ?
+              <Col lg={4}>
+                <Form.Item label="天单价换算规则">
+                  {getFieldDecorator(`dayPriceConvertRule[0]`, {
+                    initialValue: '按年换算',
+                  })(
+                    <Select>
+                      <Option value="按自然月换算">按自然月换算</Option>
+                      <Option value="按年换算" >按年换算</Option>
+                    </Select>
+                  )}
+                </Form.Item>
+              </Col>
+              : null} */}
+
+          <Col lg={4}>
+            <Form.Item label="天单价换算规则">
+              {getFieldDecorator(`dayPriceConvertRule[0]`, {
+                initialValue: '按年换算',
+              })(
+                <Select
+                  disabled={!(priceUnit != "元/m²·天" && priceUnit != "元/天")}>
+                  <Option value="按自然月换算">按自然月换算</Option>
+                  <Option value="按年换算" >按年换算</Option>
+                </Select>
+              )}
+            </Form.Item>
+          </Col>
+
+          <Col lg={4}>
+            <Form.Item label="年天数">
+              {getFieldDecorator(`yearDays[0]`, {
+                initialValue: 365,
+                rules: [{ required: true, message: '请输入年天数' }],
+              })(<InputNumber placeholder="请输入年天数" style={{ width: '100%' }} />)}
+            </Form.Item>
+          </Col>
+          <Col lg={4}>
+            <Form.Item label="付款周期（月）" required>
+              {getFieldDecorator(`payCycle[0]`, {
+                initialValue: 1,
+                rules: [{ required: true, message: '请输入付款周期' }]
+              })(
+                <InputNumber placeholder="请输入付款周期" style={{ width: '100%' }} />
+              )}
+            </Form.Item>
+          </Col>
           <Col lg={4}>
             <Form.Item label="提前付款时间">
               {getFieldDecorator(`advancePayTime[0]`, {
@@ -301,53 +459,7 @@ function LeaseTerm(props: LeaseTermProps) {
                 </Select>)}
             </Form.Item>
           </Col>
-          <Col lg={4}>
-            <Form.Item label="计费类型">
-              {getFieldDecorator(`billType[0]`, {
-                initialValue: '按月计费'
-              })(
-                <Select>
-                  <Option value="按实际天数计费">按实际天数计费</Option>
-                  <Option value="按月计费">按月计费</Option>
-                </Select>)}
-            </Form.Item>
-          </Col>
-
-          {
-            (priceUnit == "元/m²·天" || priceUnit == "元/天") ?
-              <Col lg={4}>
-                <Form.Item label="天单价换算规则">
-                  {getFieldDecorator(`dayPriceConvertRule[0]`, {
-                    initialValue: '按年换算',
-                  })(
-                    <Select>
-                      <Option value="按自然月换算">按自然月换算</Option>
-                      <Option value="按年换算" >按年换算</Option>
-                    </Select>
-                  )}
-                </Form.Item>
-              </Col>
-              : null}
-
-          <Col lg={4}>
-            <Form.Item label="年天数">
-              {getFieldDecorator(`yearDays[0]`, {
-                initialValue: 365,
-                rules: [{ required: true, message: '请输入年天数' }],
-              })(<InputNumber placeholder="请输入年天数" style={{ width: '100%' }} />)}
-            </Form.Item>
-          </Col>
-          <Col lg={4}>
-            <Form.Item label="付款周期（月）" required>
-              {getFieldDecorator(`payCycle[0]`, {
-                initialValue: 1,
-                rules: [{ required: true, message: '请输入付款周期' }]
-              })(
-                <InputNumber placeholder="请输入付款周期" style={{ width: '100%' }} />
-              )}
-            </Form.Item>
-          </Col>
-          <Col lg={9}>
+          <Col lg={8}>
             <Form.Item label="租期划分方式">
               {getFieldDecorator(`rentalPeriodDivided[0]`, {
                 initialValue: '按起始日划分'
@@ -360,11 +472,104 @@ function LeaseTerm(props: LeaseTermProps) {
                 </Select>)}
             </Form.Item>
           </Col>
+
+          <Col lg={4}>
+            <Form.Item label="递增开始时间"  >
+              {getFieldDecorator(`increStartDate[0]`, {
+                // rules: [{ required: true, message: '请选择' }],
+              })(<DatePicker placeholder='请选择' />)}
+            </Form.Item>
+          </Col>
+          <Col lg={4}>
+            <Form.Item label="递增结束时间" >
+              {getFieldDecorator(`increEndDate[0]`, {
+                // rules: [{ required: true, message: '请选择' }],
+              })(<DatePicker placeholder='请选择' />)}
+            </Form.Item>
+          </Col>
+
+          <Col lg={4}>
+            <Form.Item label="单价递增" >
+              {getFieldDecorator(`increPrice[0]`, {
+                // rules: [{ required: form.getFieldValue(`increType[0]`), message: '请输入' }],
+              })(
+                <InputNumber placeholder="请输入" style={{ width: '100%' }} />
+              )}
+            </Form.Item>
+          </Col>
+          <Col lg={4}>
+            <Form.Item label="&nbsp;">
+              {getFieldDecorator(`increPriceUnit[0]`, {
+                // rules: [{ required: form.getFieldValue(`increType[0]`), message: '请选择单位' }],
+              })(
+                <Select placeholder="请选择" allowClear >
+                  <Option value="%">%</Option>
+                  <Option value="元" >元</Option>
+                </Select>)}
+            </Form.Item>
+          </Col> 
+          <Col lg={4}>
+            <Form.Item label="优惠类型" >
+              {getFieldDecorator(`rebateType[0]`, {
+              })(<Select placeholder="请选择优惠类型"
+                allowClear>
+                <Option value="免租期">免租期</Option>
+                <Option value="装修期">装修期</Option>
+                <Option value="单价折扣">单价折扣</Option>
+                <Option value="减免金额">减免金额</Option>
+                <Option value="单价减免">单价减免</Option>
+              </Select>)}
+            </Form.Item>
+          </Col>
+          <Col lg={4}>
+            <Form.Item label="优惠开始时间" >
+              {getFieldDecorator(`rebateStartDate[0]`, {
+                rules: [{ required: form.getFieldValue(`rebateType[0]`), message: '请选择' }],
+              })(<DatePicker placeholder="请选择"
+                disabled={!form.getFieldValue(`rebateType[0]`)}
+              />)}
+            </Form.Item>
+          </Col>
+          <Col lg={4}>
+            <Form.Item label="优惠结束时间" >
+              {getFieldDecorator(`rebateEndDate[0]`, {
+                rules: [{ required: form.getFieldValue(`rebateType[0]`), message: '请选择' }],
+              })(<DatePicker placeholder="请选择" disabled={!form.getFieldValue(`rebateType[0]`)} />)}
+            </Form.Item>
+          </Col>
+          <Col lg={4}>
+            <Form.Item label="开始期数" >
+              {getFieldDecorator(`startPeriod[0]`, {
+                rules: [{ required: form.getFieldValue(`rebateType[0]`), message: '请输入' }],
+              })(<InputNumber placeholder="请输入" style={{ width: '100%' }} disabled={!form.getFieldValue(`rebateType[0]`)} />)}
+            </Form.Item>
+          </Col>
+          <Col lg={4}>
+            <Form.Item label="期长" >
+              {getFieldDecorator(`periodLength[0]`, {
+                rules: [{ required: form.getFieldValue(`rebateType[0]`), message: '请输入期长' }],
+              })(<InputNumber placeholder="请输入期长" style={{ width: '100%' }} disabled={!form.getFieldValue(`rebateType[0]`)} />)}
+            </Form.Item>
+          </Col>
+          <Col lg={4}>
+            <Form.Item label="折扣" >
+              {getFieldDecorator(`discount[0]`, {
+                rules: [{ required: form.getFieldValue(`rebateType[0]`), message: '请输入折扣' }],
+              })(<InputNumber placeholder="请输入折扣" style={{ width: '100%' }} disabled={!form.getFieldValue(`rebateType[0]`)} />)}
+            </Form.Item>
+          </Col>
+          <Col lg={24}>
+            <Form.Item label="优惠备注" >
+              {getFieldDecorator(`rebateRemark[0]`, {
+                //rules: [{ required: true, message: '请输入备注' }],
+              })(<Input placeholder="请输入优惠备注" />)}
+            </Form.Item>
+          </Col>
         </Row>
       </Card>
       {formItems}
       <Button type="dashed" onClick={add}>
-        <Icon type="plus" />添加租期条款
+        <Icon type="plus" />添加费用条款
         </Button>
     </div>
   );

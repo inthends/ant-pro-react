@@ -1,12 +1,11 @@
-
+//添加合同
 import { Upload, Icon, AutoComplete, Spin, message, InputNumber, TreeSelect, Tabs, Select, Button, Card, Col, DatePicker, Drawer, Form, Input, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import {
-  TreeEntity, HtLeasecontractcharge, HtLeasecontractchargefee,
-  HtLeasecontractchargefeeoffer, HtChargefeeresult, htLeasecontract
+  TreeEntity, HtLeasecontractcharge, HtLeasecontractchargefee, HtChargefeeresult, htLeasecontract
 } from '@/model/models';
 import React, { useEffect, useState } from 'react';
-// import LeaseTerm from './LeaseTerm';
+import LeaseTerm from './LeaseTerm';
 // import IncreasingRate from './IncreasingRate';
 // import Rebate from './Rebate';
 import ResultList from './ResultList';
@@ -38,82 +37,104 @@ const Add = (props: AddProps) => {
   const [industryType, setIndustryType] = useState<any[]>([]); //行业  
   const [feeItems, setFeeItems] = useState<TreeEntity[]>([]);
   //租金计算结果
-  const [depositData, setDepositData] = useState<HtChargefeeresult[]>([]);//保证金
+  // const [depositData, setDepositData] = useState<HtChargefeeresult[]>([]);//保证金
   const [chargeData, setChargeData] = useState<HtChargefeeresult[]>([]);//租金  
-  const [propertyData, setPropertyData] = useState<HtChargefeeresult[]>([]);//物业费
-
+  // const [propertyData, setPropertyData] = useState<HtChargefeeresult[]>([]);//物业费 
   const [treeData, setTreeData] = useState<any[]>([]);
   const [isCal, setIsCal] = useState<boolean>(false);
-
-  const [chargefee, setChargefee] = useState<HtLeasecontractchargefee>({});
+  // const [chargefee, setChargefee] = useState<HtLeasecontractchargefee>({});
   // const [chargeincre, setChargeincre] = useState<HtLeasecontractchargeincre>();
-  const [chargefeeoffer, setChargefeeoffer] = useState<HtLeasecontractchargefeeoffer>({});
-
+  // const [chargefeeoffer, setChargefeeoffer] = useState<HtLeasecontractchargefeeoffer>({}); 
   const [userSource, setUserSource] = useState<any[]>([]);
   // const [DepositResult, setDepositResult] = useState<HtChargefeeresult[]>([]);
   // const [ChargeFeeResult, setChargeFeeResult] = useState<HtChargefeeresult[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-
-  const [channel, setChannel] = useState<any[]>([]);//渠道
-
+  const [channel, setChannel] = useState<any[]>([]);//渠道 
   // const [billUnitId, setBillUnitId] = useState<string>();//计费房屋Id 
   // const close = () => {
   //   closeDrawer();
   // };
+  const [TermJson, setTermJson] = useState<string>();
 
   //计算租金明细
-  const calculation = () => {
+  const calculation = () => { 
+
     form.validateFields((errors, values) => {
       if (!errors) {
         //租赁条款     
-        setLoading(true);
-        // let TermJson: HtLeasecontractchargefee[] = [];
-        // let data: HtLeasecontractchargefee = {};
+        // setLoading(true);
+        let TermJson: HtLeasecontractchargefee[] = [];
+        let data: HtLeasecontractchargefee = {};
         //const TermJson=[];
         //const data = {}; 
-        //data["FeeItemId"] = values.feeItemId[0];
-        let mychargefee: HtLeasecontractchargefee = {};
-        mychargefee.feeItemId = values.feeItemId;
-        mychargefee.feeItemName = values.feeItemName;
-        // mychargefee.startDate = values.startDate.format('YYYY-MM-DD');
-        // mychargefee.endDate = values.endDate.format('YYYY-MM-DD');
-        mychargefee.price = values.price;
-        mychargefee.priceUnit = values.priceUnit;
-        mychargefee.advancePayTime = values.advancePayTime;
-        mychargefee.advancePayTimeUnit = values.advancePayTimeUnit;
-        // mychargefee.billType = values.billType;
-        if (mychargefee.priceUnit == "元/m²·天" || mychargefee.priceUnit == "元/天") {
-          mychargefee.dayPriceConvertRule = values.dayPriceConvertRule;
+        //data["FeeItemId"] = values.feeItemId[0]; 
+        // let mychargefee: HtLeasecontractchargefee = {}; 
+        data.feeItemId = values.feeItemId[0];
+        data.feeItemName = values.feeItemName[0];
+        data.chargeStartDate = values.chargeStartDate[0];//.format('YYYY-MM-DD');
+        data.chargeEndDate = values.chargeEndDate[0];//.format('YYYY-MM-DD');
+        data.price = values.price[0];
+        data.priceUnit = values.priceUnit[0];
+        data.advancePayTime = values.advancePayTime[0];
+        data.advancePayTimeUnit = values.advancePayTimeUnit[0];
+        data.billType = values.billType[0];
+        if (data.priceUnit != "元/m²·天" && data.priceUnit != "元/天") {
+          //天单价转换规则
+          data.dayPriceConvertRule = values.dayPriceConvertRule[0];
         }
-        mychargefee.yearDays = values.yearDays;
-        mychargefee.payCycle = values.payCycle;
-        mychargefee.rentalPeriodDivided = values.rentalPeriodDivided;
-        mychargefee.increType = values.increType;
-        mychargefee.increPrice = values.increPrice;
-        mychargefee.increPriceUnit = values.increPriceUnit;
-
-        //TermJson.push(data);
+        data.yearDays = values.yearDays[0];
+        data.payCycle = values.payCycle[0];
+        //租期划分方式
+        data.rentalPeriodDivided = values.rentalPeriodDivided[0];
+        //递增率
+        // data.increType = values.increType;
+        data.increStartDate = values.increStartDate[0];
+        data.increEndDate = values.increEndDate[0];
+        data.increPrice = values.increPrice[0];
+        data.increPriceUnit = values.increPriceUnit[0];
+        //优惠
+        data.rebateType = values.rebateType[0];
+        data.rebateStartDate = values.rebateStartDate[0];
+        data.rebateEndDate = values.rebateEndDate[0];
+        data.startPeriod = values.startPeriod[0];
+        data.periodLength = values.periodLength[0];
+        data.discount = values.discount[0];
+        data.rebateRemark = values.rebateRemark[0];
+        TermJson.push(data);
 
         //动态添加的租期
-        // values.LeaseTerms.map(function (k, index, arr) {
-        //   let data: HtLeasecontractchargefee = {};
-        //   data.feeItemId = values.feeItemId[k];
-        //   data.feeItemName = values.feeItemName[k];
-        //   data.startDate = values.startDate[k];
-        //   data.endDate = values.endDate[k];
-        //   data.price = values.price[k];
-        //   data.priceUnit = values.priceUnit[k];
-        //   data.advancePayTime = values.advancePayTime[k];
-        //   data.advancePayTimeUnit = values.advancePayTimeUnit[k];
-        //   data.billType = values.billType[k];
-        //   if (data.priceUnit == "元/m²·天" || data.priceUnit == "元/天") {
-        //     data.dayPriceConvertRule = values.dayPriceConvertRule[k];
-        //   }
-        //   data.yearDays = values.yearDays[k];
-        //   data.payCycle = values.payCycle[k];
-        //   data.rentalPeriodDivided = values.rentalPeriodDivided[k];
-        //   TermJson.push(data);
-        // });
+        values.LeaseTerms.map(function (k, index, arr) {
+          let data: HtLeasecontractchargefee = {};
+          data.feeItemId = values.feeItemId[k];
+          data.feeItemName = values.feeItemName[k];
+          data.chargeStartDate = values.chargeStartDate[k];
+          data.chargeEndDate = values.chargeEndDate[k];
+          data.price = values.price[k];
+          data.priceUnit = values.priceUnit[k];
+          data.advancePayTime = values.advancePayTime[k];
+          data.advancePayTimeUnit = values.advancePayTimeUnit[k];
+          data.billType = values.billType[k];
+          if (data.priceUnit != "元/m²·天" && data.priceUnit != "元/天") {
+            data.dayPriceConvertRule = values.dayPriceConvertRule[k];
+          }
+          data.yearDays = values.yearDays[k];
+          data.payCycle = values.payCycle[k];
+          data.rentalPeriodDivided = values.rentalPeriodDivided[k]; 
+          //递增率 
+          data.increStartDate = values.increStartDate[k];
+          data.increEndDate = values.increEndDate[k];
+          data.increPrice = values.increPrice[k];
+          data.increPriceUnit = values.increPriceUnit[k];
+          //优惠
+          data.rebateType = values.rebateType[k];
+          data.rebateStartDate = values.rebateStartDate[k];
+          data.rebateEndDate = values.rebateEndDate[k];
+          data.startPeriod = values.startPeriod[k];
+          data.periodLength = values.periodLength[k];
+          data.discount = values.discount[k];
+          data.rebateRemark = values.rebateRemark[k]; 
+          TermJson.push(data);
+        });
 
         //递增率
         // let RateJson: HtLeasecontractchargeincre[] = [];
@@ -150,26 +171,26 @@ const Add = (props: AddProps) => {
         // });
 
         // let RebateJson: HtLeasecontractchargefeeoffer[] = [];
-        let mychargefeeoffer: HtLeasecontractchargefeeoffer = {};
-        mychargefeeoffer.rebateType = values.rebateType;
-        if (values.rebateStartDate != undefined)
-          mychargefeeoffer.rebateStartDate = values.rebateStartDate.format('YYYY-MM-DD');
-        if (values.rebateEndDate != undefined)
-          mychargefeeoffer.rebateEndDate = values.rebateEndDate.format('YYYY-MM-DD');
+        // let mychargefeeoffer: HtLeasecontractchargefeeoffer = {};
+        // mychargefeeoffer.rebateType = values.rebateType;
+        // if (values.rebateStartDate != undefined)
+        //   mychargefeeoffer.rebateStartDate = values.rebateStartDate.format('YYYY-MM-DD');
+        // if (values.rebateEndDate != undefined)
+        //   mychargefeeoffer.rebateEndDate = values.rebateEndDate.format('YYYY-MM-DD');
         // mychargefeeoffer.startPeriod = values.startPeriod;
         // mychargefeeoffer.periodLength = values.periodLength;
         // mychargefeeoffer.discount = values.discount;
-        mychargefeeoffer.remark = values.remark;
+        // mychargefeeoffer.remark = values.remark;
         // RebateJson.push(rebate);
         //let entity = values; 
 
         let entity: HtLeasecontractcharge = {};
         //费用条款-基本条款 
-        entity.depositFeeItemId = values.depositFeeItemId;
-        entity.depositFeeItemName = values.depositFeeItemName;
+        // entity.depositFeeItemId = values.depositFeeItemId;
+        // entity.depositFeeItemName = values.depositFeeItemName;
         entity.leaseArea = values.leaseArea;
-        entity.deposit = values.deposit;
-        entity.depositUnit = values.depositUnit;
+        // entity.deposit = values.deposit;
+        // entity.depositUnit = values.depositUnit;
         // entity.startDate = values.billingDate.format('YYYY-MM-DD');
         // entity.endDate = values.contractEndDate.format('YYYY-MM-DD');
         entity.calcPrecision = values.calcPrecision;
@@ -177,31 +198,34 @@ const Add = (props: AddProps) => {
         entity.lateMethod = values.lateMethod;
         if (values.lateDate != null)
           entity.lateDate = values.lateDate.format('YYYY-MM-DD');
-        entity.propertyFeeId = values.propertyFeeId;
-        entity.propertyFeeName = values.propertyFeeName;
-        // let strTermJson = JSON.stringify(TermJson);
-        setChargefee(mychargefee);
+        // entity.propertyFeeId = values.propertyFeeId;
+        // entity.propertyFeeName = values.propertyFeeName;
+ 
+        let strTermJson = JSON.stringify(TermJson);
+        setTermJson(strTermJson);
+        // setChargefee(mychargefee);
         // let strRateJson = JSON.stringify(RateJson);
         // setChargeincre(mychargeincre);
         // let strRebateJson = JSON.stringify(RebateJson);
-        setChargefeeoffer(mychargefeeoffer);
+        // setChargefeeoffer(mychargefeeoffer);
 
         GetChargeDetail({
           ...entity,
-          ...mychargefee,
+          // ...mychargefee,
           // ...mychargeincre,
-          ...mychargefeeoffer,
+          // ...mychargefeeoffer,
           BillUnitId: values.billUnitId,//计费单元id
           //LeaseContractId: '',
           startDate: values.startDate.format('YYYY-MM-DD'),
-          endDate: values.endDate.format('YYYY-MM-DD')
+          endDate: values.endDate.format('YYYY-MM-DD'),
+          TermJson: strTermJson,
           // CalcPrecision: values.calcPrecision,
           // CalcPrecisionMode: values.calcPrecisionMode,
         }).then(res => {
           setIsCal(true);//计算租金
-          setDepositData(res.depositFeeResultList);//保证金明细
+          //setDepositData(res.depositFeeResultList);//保证金明细
           setChargeData(res.chargeFeeResultList);//租金明细  
-          setPropertyData(res.propertyFeeResultList);//物业费  
+          //setPropertyData(res.propertyFeeResultList);//物业费  
           // setDepositResult(res.depositFeeResultList);
           // setChargeFeeResult(res.chargeFeeResultList);  
           setLoading(false);
@@ -234,8 +258,7 @@ const Add = (props: AddProps) => {
         ContractCharge.depositUnit = values.depositUnit;
         // ContractCharge.startDate = values.billingDate.format('YYYY-MM-DD');
         // ContractCharge.endDate = values.contractEndDate.format('YYYY-MM-DD');
-        // ContractCharge.payDate = values.contractStartDate.format('YYYY-MM-DD');
-
+        // ContractCharge.payDate = values.contractStartDate.format('YYYY-MM-DD'); 
         ContractCharge.calcPrecision = values.calcPrecision;
         ContractCharge.lateFee = values.lateFee;
         ContractCharge.lateMethod = values.lateMethod;
@@ -275,17 +298,18 @@ const Add = (props: AddProps) => {
         SaveForm({
           ...Contract,
           ...ContractCharge,
-          ...chargefee,
+          // ...chargefee,
           // ...chargeincre,
-          ...chargefeeoffer,
+          // ...chargefeeoffer,
           keyValue: '',
           ChargeId: '',
           room: values.room,
+          TermJson: TermJson,
           // DepositResult: JSON.stringify(DepositResult),
           // ChargeFeeResult:JSON.stringify(ChargeFeeResult) 
-          DepositResult: JSON.stringify(depositData),
+          // DepositResult: JSON.stringify(depositData),
           ChargeFeeResult: JSON.stringify(chargeData),
-          PropertyFeeResult: JSON.stringify(propertyData)
+          // PropertyFeeResult: JSON.stringify(propertyData)
         }).then(res => {
           message.success('保存成功');
           closeDrawer();
@@ -413,10 +437,10 @@ const Add = (props: AddProps) => {
 
 
   //保证金单位切换
-  const changeFeeItem = (value, option) => {
-    //const changeFeeItem = e => {
-    form.setFieldsValue({ depositFeeItemName: option.props.children });
-  };
+  // const changeFeeItem = (value, option) => {
+  //   //const changeFeeItem = e => {
+  //   form.setFieldsValue({ depositFeeItemName: option.props.children });
+  // };
 
   //结束日期控制
   const disabledEndDate = (current) => {
@@ -501,16 +525,16 @@ const Add = (props: AddProps) => {
     }
   };
 
-  const [priceUnit, setPriceUnit] = useState<string>("元/m²·天");//单价单位
-  //单位切换
-  const changeUnit = value => {
-    setPriceUnit(value);
-  };
+  // const [priceUnit, setPriceUnit] = useState<string>("元/m²·天");//单价单位
+  // //单位切换
+  // const changeUnit = value => {
+  //   setPriceUnit(value);
+  // };
 
   //动态条款里面选择费项
-  const changeFee = (value, option) => {
-    form.setFieldsValue({ feeItemName: option.props.children });
-  };
+  // const changeFee = (value, option) => {
+  //   form.setFieldsValue({ feeItemName: option.props.children });
+  // };
 
 
   //附件上传
@@ -656,7 +680,7 @@ const Add = (props: AddProps) => {
                       </Col>
                     </Row>
 
-                    <Row gutter={24}> 
+                    <Row gutter={24}>
                       <Col lg={12}>
                         <Form.Item label="跟进人">
                           {getFieldDecorator('follower', {
@@ -731,7 +755,7 @@ const Add = (props: AddProps) => {
                           {getFieldDecorator('billUnitId', {
                           })(
                             <input type='hidden' />
-                          )} 
+                          )}
                         </Form.Item>
                       </Col>
                     </Row>
@@ -855,11 +879,11 @@ const Add = (props: AddProps) => {
             <TabPane tab="费用条款" key="2">
               <Card title="基本条款" className={styles.card} hoverable>
                 <Row gutter={24}>
-                  <Col lg={5}>
+                  <Col lg={4}>
                     <Form.Item label="合同面积(㎡)" >
                       {getFieldDecorator('leaseArea', {
                         // rules: [{ required: true, message: '请输入合同面积' }]
-                      })(<Input readOnly placeholder='自动获取房屋的计费面积' />)}
+                      })(<Input readOnly placeholder='自动获取' />)}
                     </Form.Item>
                   </Col>
                   <Col lg={4}>
@@ -875,65 +899,6 @@ const Add = (props: AddProps) => {
                     </Form.Item>
                   </Col>
                   <Col lg={4}>
-                    <Form.Item label="保证金数量" required>
-                      {getFieldDecorator('deposit', {
-                        initialValue: 1,
-                        rules: [{ required: true, message: '请输入保证金数量' }],
-                      })(<InputNumber placeholder="请输入保证金数量" style={{ width: '100%' }} />)}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={4}>
-                    <Form.Item label="&nbsp;" >
-                      {getFieldDecorator('depositUnit', {
-                        initialValue: "月"
-                      })(
-                        <Select>
-                          <Option value="月">月</Option>
-                          <Option value="元">元</Option>
-                        </Select>)}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={7}>
-                    <Form.Item label="保证金费项" required>
-                      {getFieldDecorator('depositFeeItemId', {
-                        rules: [{ required: true, message: '请选择保证金费项' }]
-                      })(
-                        <Select placeholder="请选择保证金费项"
-                          onChange={changeFeeItem}  >
-                          {feeItems.map(item => (
-                            <Option value={item.value} key={item.key}>
-                              {item.title}
-                            </Option>
-                          ))}
-                        </Select>
-                      )}
-                      {getFieldDecorator('depositFeeItemName', {
-                      })(
-                        <input type='hidden' />
-                      )}
-                    </Form.Item>
-                  </Col>
-
-                  {/* <Col lg={4}>
-                  <Form.Item label="保证金金额" >
-                    {getFieldDecorator('totalDeposit', {
-                    })(<Input readOnly />)}
-                  </Form.Item>
-                </Col> */}
-                </Row>
-                <Row gutter={24}>
-                  {/* <Col lg={5}>
-                    <Form.Item label="计算精度">
-                      {getFieldDecorator('calcPrecisionMode', {
-                        initialValue: "最终计算结果保留2位"
-                      })(<Select>
-                        <Option value="最终计算结果保留2位" >最终计算结果保留2位</Option>
-                        <Option value="每步计算结果保留2位" >每步计算结果保留2位</Option>
-                      </Select>
-                      )}
-                    </Form.Item>
-                  </Col> */}
-                  <Col lg={5}>
                     <Form.Item label="滞纳金比例(‰)" >
                       {getFieldDecorator('lateFee', {
                         initialValue: 3
@@ -947,7 +912,6 @@ const Add = (props: AddProps) => {
                       })(<DatePicker placeholder="请选择滞纳金起算日期" style={{ width: '100%' }} />)}
                     </Form.Item>
                   </Col>
-
                   <Col lg={6}>
                     <Form.Item label="滞纳金算法" >
                       {getFieldDecorator('lateMethod', {
@@ -958,391 +922,12 @@ const Add = (props: AddProps) => {
                       )}
                     </Form.Item>
                   </Col>
-                  {/* <Col lg={3}>
-                    <Form.Item label="物业费单价" >
-                      {getFieldDecorator('PropertyFee', {
-                      })(<InputNumber placeholder="请输入" style={{ width: '100%' }} />)}
-                    </Form.Item>
-                  </Col> */}
-
-                  <Col lg={7}>
-                    <Form.Item label="物业费项" >
-                      {getFieldDecorator('propertyFeeId', {
-                        // rules: [{ required: true, message: '请选择物业费项' }]
-                      })(
-                        <Select placeholder="请选择物业费项"
-                          onChange={changeFeeItem}  >
-                          {feeItems.map(item => (
-                            <Option value={item.value} key={item.key}>
-                              {item.title}
-                            </Option>
-                          ))}
-                        </Select>
-                      )}
-                      {getFieldDecorator('propertyFeeName', {
-                      })(
-                        <input type='hidden' />
-                      )}
-                    </Form.Item>
-                  </Col>
-
-                  {/* <Col lg={4}>
-                    <Form.Item label="&nbsp;" >
-                      {getFieldDecorator('lateFeeUnit', {
-                        initialValue: "%/天"
-                      })(
-                        <Select>
-                          <Option value="%/天">%/天</Option>
-                        </Select>)}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={4}>
-                    <Form.Item label="滞纳金上限" >
-                      {getFieldDecorator('maxLateFee', {
-                      })(<InputNumber placeholder="请输入滞纳金上限" style={{ width: '120px' }} />)}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={4}>
-                    <Form.Item label="&nbsp;" >
-                      {getFieldDecorator('maxLateFeeUnit', {
-                        initialValue: "%"
-                      })(<Select>
-                        <Option value="%">%</Option>
-                      </Select>)}
-                    </Form.Item>
-                  </Col> */}
                 </Row>
               </Card>
-
-              {/* <LeaseTerm form={form} feeItems={feeItems}></LeaseTerm>
-              <IncreasingRate form={form}></IncreasingRate>
-              <Rebate form={form}></Rebate> */}
-
-              {/* 修改为单个租期条款 */}
-              <Card title="租金条款" className={styles.card} hoverable >
-                <Row gutter={24}>
-                  {/* <Col lg={4}>
-                    <Form.Item label="合同起始日期" required >
-                      {getFieldDecorator('cstartDate', {
-                        initialValue: moment(new Date()),
-                        rules: [{ required: true, message: '请选择合同起始日期' }],
-                      })(<DatePicker disabled placeholder='请选择合同起始日期' />)}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={4}>
-                    <Form.Item label="合同终止日期" required>
-                      {getFieldDecorator('cendDate', {
-                        initialValue: moment(new Date()).add(1, 'years').add(-1, 'days'),
-                        rules: [{ required: true, message: '请选择合同终止日期' }],
-                      })(<DatePicker disabled placeholder='请选择合同终止日期' />)}
-                    </Form.Item>
-                  </Col> */}
-                  <Col lg={6}>
-                    <Form.Item label="租金费项" required>
-                      {getFieldDecorator('feeItemId', {
-                        rules: [{ required: true, message: '请选择租金费项' }]
-                      })(
-                        <Select placeholder="请选择租金费项"
-                          onChange={(value, option) => changeFee(value, option)} >
-                          {feeItems.map(item => (
-                            <Option value={item.value} key={item.key}>
-                              {item.title}
-                            </Option>
-                          ))}
-                        </Select>
-                      )}
-                      {getFieldDecorator('feeItemName', {
-                      })(
-                        <input type='hidden' />
-                      )}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={4}>
-                    <Form.Item label='租金单价' required>
-                      {getFieldDecorator('price', {
-                        rules: [{ required: true, message: '请输入租金单价' }],
-                      })(<InputNumber placeholder="请输入租金单价" style={{ width: '100%' }} />)}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={3}>
-                    <Form.Item label="&nbsp;">
-                      {getFieldDecorator('priceUnit', {
-                        initialValue: '元/m²·天'
-                      })(
-                        <Select onChange={changeUnit}>
-                          <Option value="元/m²·月">元/m²·月</Option>
-                          <Option value="元/m²·天">元/m²·天</Option>
-                          <Option value="元/月">元/月</Option>
-                          <Option value="元/天">元/天</Option>
-                        </Select>)}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={5}>
-                    <Form.Item label="递增类型">
-                      {getFieldDecorator('increType', {
-                      })(
-                        <Select placeholder="请选择递增类型" allowClear>
-                          <Option value="三个月后递增">三个月后开始递增</Option>
-                          <Option value="半年后递增">半年后递增</Option>
-                          <Option value="一年后递增">一年后递增</Option>
-                          <Option value="两年后递增">两年后递增</Option>
-                          <Option value="三年后递增">三年后递增</Option>
-                        </Select>
-                      )}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={3}>
-                    <Form.Item label="单价递增" required>
-                      {getFieldDecorator('increPrice', {
-                        rules: [{ required: form.getFieldValue('increType'), message: '请输入' }],
-                      })(
-                        <InputNumber placeholder="请输入" style={{ width: '100%' }}
-                          disabled={!form.getFieldValue('increType')}
-                        />
-                      )}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={3}>
-                    <Form.Item label="&nbsp;">
-                      {getFieldDecorator('increPriceUnit', {
-                        rules: [{ required: form.getFieldValue('increType'), message: '请选择单位' }],
-                      })(
-                        <Select placeholder="请选择" allowClear
-                          disabled={!form.getFieldValue('increType')}
-                        >
-                          <Option value="%">%</Option>
-                          <Option value="元" >元</Option>
-                        </Select>)}
-                    </Form.Item>
-                  </Col>
-                </Row>
-                <Row gutter={24}>
-                  <Col lg={3}>
-                    <Form.Item label="付款周期(月)" required>
-                      {getFieldDecorator('payCycle', {
-                        initialValue: 1,
-                        rules: [{ required: true, message: '请输入付款周期' }]
-                      })(
-                        <InputNumber min={1} placeholder="请输入付款周期" style={{ width: '100%' }} />
-                      )}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={3}>
-                    <Form.Item label="提前付款时间" required>
-                      {getFieldDecorator('advancePayTime', {
-                        initialValue: 1,
-                        rules: [{ required: true, message: '请输入提前付款时间' }],
-                      })(<InputNumber placeholder="请输入" style={{ width: '100%' }} />)}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={3}>
-                    <Form.Item label="&nbsp;">
-                      {getFieldDecorator('advancePayTimeUnit', {
-                        initialValue: '工作日'
-                      })(
-                        <Select>
-                          <Option value="工作日">工作日</Option>
-                          <Option value="自然日">自然日</Option>
-                          <Option value="指定日期">指定日期</Option>
-                        </Select>)}
-                    </Form.Item>
-                  </Col>
-
-                  {/* <Col lg={4}>
-                    <Form.Item label="计费类型">
-                      {getFieldDecorator('billType', {
-                        initialValue: '按月计费'
-                      })(
-                        <Select>
-                          <Option value="按实际天数计费">按实际天数计费</Option>
-                          <Option value="按月计费">按月计费</Option>
-                        </Select>)}
-                    </Form.Item>
-                  </Col> */} 
-                  {
-                    (priceUnit == "元/m²·天" || priceUnit == "元/天") ?
-                      <Col lg={4}>
-                        <Form.Item label="天单价换算规则">
-                          {getFieldDecorator('dayPriceConvertRule', {
-                            initialValue: '按年换算',
-                          })(
-                            <Select>
-                              <Option value="按自然月换算">按自然月换算</Option>
-                              <Option value="按年换算" >按年换算</Option>
-                            </Select>
-                          )}
-                        </Form.Item>
-                      </Col>
-                      : null}
-                  <Col lg={3}>
-                    <Form.Item label="年天数" required>
-                      {getFieldDecorator('yearDays', {
-                        initialValue: 365,
-                        rules: [{ required: true, message: '请输入年天数' }],
-                      })(<InputNumber placeholder="请输入年天数" style={{ width: '100%' }}
-                        max={365} min={1}
-                      />)}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={8}>
-                    <Form.Item label="租期划分方式">
-                      {getFieldDecorator('rentalPeriodDivided', {
-                        initialValue: '按起始日划分'
-                      })(
-                        <Select  >
-                          <Option value="按起始日划分">按起始日划分</Option>
-                          {/* <Option value="次月按自然月划分(仅一月一付有效)">次月按自然月划分(仅一月一付有效)</Option> */}
-                          <Option value="按自然月划分(首月非整自然月划入第一期)">按自然月划分(首月非整自然月划入第一期)</Option>
-                          <Option value="按自然月划分(首月非整自然月算一个月)">按自然月划分(首月非整自然月算一个月)</Option>
-                        </Select>)}
-                    </Form.Item>
-                  </Col>
-                </Row>
-              </Card>
-              {/* <Card title="递增率" className={styles.card} >
-                <Row gutter={24}>
-                  <Col lg={6}>
-                    <Form.Item label="递增类型">
-                      {getFieldDecorator('increType', {
-                      })(
-                        <Select placeholder="请选择递增类型" allowClear>
-                          <Option value="三个月后递增">三个月后开始递增</Option>
-                          <Option value="半年后递增">半年后递增</Option>
-                          <Option value="一年后递增">一年后递增</Option>
-                          <Option value="两年后递增">两年后递增</Option>
-                          <Option value="三年后递增">三年后递增</Option>
-                        </Select>
-                      )}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={6}>
-                    <Form.Item label="单价递增" required>
-                      {getFieldDecorator('increPrice', {
-                        rules: [{ required: form.getFieldValue('increType'), message: '请输入递增率' }],
-                      })(
-                        <InputNumber placeholder="请输入递增率" style={{ width: '100%' }}
-                          disabled={!form.getFieldValue('increType')}
-                        />
-                      )}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={3}>
-                    <Form.Item label="&nbsp;">
-                      {getFieldDecorator('increPriceUnit', {
-                        rules: [{ required: form.getFieldValue('increType'), message: '请选择单位' }],
-                      })(
-                        <Select placeholder="请选择" allowClear
-                          disabled={!form.getFieldValue('increType')}
-                        >
-                          <Option value="%">%</Option>
-                          <Option value="元" >元</Option>
-                        </Select>)}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={6}>
-                    <Form.Item label="保证金递增" required>
-                      {getFieldDecorator('increDeposit', {
-                        rules: [{ required: form.getFieldValue('increType'), message: '请输入递增率' }],
-                      })(<InputNumber placeholder="请输入递增率" style={{ width: '100%' }}
-                        disabled={!form.getFieldValue('increType')}
-                      />)}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={3}>
-                    <Form.Item label="&nbsp;">
-                      {getFieldDecorator('increDepositUnit', {
-                        rules: [{ required: form.getFieldValue('increType'), message: '请选择单位' }],
-                      })(
-                        <Select
-                          placeholder="请选择" allowClear
-                          disabled={!form.getFieldValue('increType')}>
-                          <Option value="%">%</Option>
-                          <Option value="元" >元</Option>
-                        </Select>)}
-                    </Form.Item>
-                  </Col>
-                </Row>
-              </Card> */}
-              <Card title="免租期" className={styles.card} hoverable>
-                <Row gutter={24}>
-                  {/* <Col lg={5}>
-                    <Form.Item label="优惠类型" required>
-                      {getFieldDecorator('rebateType', {
-                      })(<Select placeholder="请选择优惠类型"
-                        allowClear
-                      >
-                        <Option value="免租期">免租期</Option>
-                        <Option value="装修期">装修期</Option>
-                        <Option value="单价折扣">单价折扣</Option>
-                        <Option value="减免金额">减免金额</Option>
-                        <Option value="单价减免">单价减免</Option>
-                      </Select>)}
-                    </Form.Item>
-                  </Col> */}
-                  <Col lg={5}>
-                    <Form.Item label="开始时间" >
-                      {getFieldDecorator('rebateStartDate', {
-                        rules: [{ required: form.getFieldValue('rebateType'), message: '请选择开始时间' }],
-                      })(<DatePicker placeholder="请选择开始时间"
-                        disabled={!form.getFieldValue('rebateType')}
-                      />)}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={5}>
-                    <Form.Item label="结束时间" >
-                      {getFieldDecorator('rebateEndDate', {
-                        rules: [{ required: form.getFieldValue('rebateType'), message: '请选择结束时间' }],
-                      })(<DatePicker placeholder="请选择结束时间" disabled={!form.getFieldValue('rebateType')} />)}
-                    </Form.Item>
-                  </Col>
-
-                  <Col lg={14}>
-                    <Form.Item label="备注" >
-                      {getFieldDecorator('remark', {
-                        //rules: [{ required: true, message: '请输入备注' }],
-                      })(<Input placeholder="请输入备注" />)}
-                    </Form.Item>
-                  </Col>
-
-                  {/* <Col lg={3}>
-                    <Form.Item label="开始期数" >
-                      {getFieldDecorator('startPeriod', {
-                        rules: [{ required: form.getFieldValue('rebateType'), message: '请输入' }],
-                      })(<InputNumber placeholder="请输入" style={{ width: '100%' }} disabled={!form.getFieldValue('rebateType')} />)}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={3}>
-                    <Form.Item label="期长" >
-                      {getFieldDecorator('periodLength', {
-                        rules: [{ required: form.getFieldValue('rebateType'), message: '请输入期长' }],
-                      })(<InputNumber placeholder="请输入期长" style={{ width: '100%' }} disabled={!form.getFieldValue('rebateType')} />)}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={3}>
-                    <Form.Item label="折扣" >
-                      {getFieldDecorator('discount', {
-                        rules: [{ required: form.getFieldValue('rebateType'), message: '请输入折扣' }],
-                      })(<InputNumber placeholder="请输入折扣" style={{ width: '100%' }} disabled={!form.getFieldValue('rebateType')} />)}
-                    </Form.Item>
-                  </Col> */}
-                </Row>
-
-                {/* <Row gutter={24}>
-                  <Col lg={24}>
-                    <Form.Item label="备注" >
-                      {getFieldDecorator('remark', {
-                        //rules: [{ required: true, message: '请输入备注' }],
-                      })(<TextArea placeholder="请输入备注" rows={3} />)}
-                    </Form.Item>
-                  </Col>
-                </Row> */}
-              </Card>
-
-              <Button style={{ width: '100%', marginBottom: '10px' }} onClick={calculation}>点击生成租金明细</Button>
+              <LeaseTerm form={form} feeItems={feeItems}></LeaseTerm>
+              <Button style={{ width: '100%', marginBottom: '10px' }} onClick={calculation}>点击生成费用明细</Button>
               <ResultList
-                depositData={depositData}
                 chargeData={chargeData}
-                propertyData={propertyData}
                 className={styles.addcard}
               ></ResultList>
             </TabPane>

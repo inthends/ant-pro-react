@@ -5,15 +5,13 @@ import React from 'react';
 import moment from 'moment';
 import styles from './style.less';
 
-interface ResultListProps {
-  depositData: any[];//保证金
-  chargeData: any[];//租金
-  propertyData: any[];//物业费
+interface ResultListProps { 
+  chargeData: any[];//费用明细
   className: any;
 }
 
 function ResultList(props: ResultListProps) {
-  const { depositData, chargeData,propertyData, className } = props;
+  const {  chargeData,  className } = props;
   const columns = [
     {
       title: '区间',
@@ -65,32 +63,15 @@ function ResultList(props: ResultListProps) {
 
   return (
     <div>
-      <Card title="保证金" className={styles.card} hoverable>
-        <Table
-          style={{ border: 'none' }}
-          bordered={false}
-          size="middle"
-          columns={columns}
-          dataSource={depositData} />
-      </Card>
+       
 
-      <Card title="租金" className={styles.card} hoverable>
+      <Card title="费用" className={className} hoverable>
         <Table
           style={{ border: 'none' }}
           bordered={false}
           size="middle"
           columns={columns}
           dataSource={chargeData} 
-        />
-      </Card>
-
-      <Card title="物业费" className={className} hoverable>
-        <Table
-          style={{ border: 'none' }}
-          bordered={false}
-          size="middle"
-          columns={columns}
-          dataSource={propertyData} 
         />
       </Card>
     </div>

@@ -15,107 +15,149 @@
  * 合同条款
  */
 export interface HtLeasecontractchargefee {
-    // /**
-    //  * Desc:  Default:  Nullable:True
-    //  */
-    // billType?: string;
-    /**
-     * Desc:  Default:  Nullable:False
-     */
-    id?: string;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    rentalPeriodDivided?: string;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    createDate?: Date;
-    /**
-     * Desc:  Default:  Nullable:False
-     */
-    leaseContractChargeId?: string;
+  /**
+   * Desc:  Default:  Nullable:True
+   */
+  billType?: string;
+  /**
+   * Desc:  Default:  Nullable:False
+   */
+  id?: string;
+  /**
+   * Desc:  Default:  Nullable:True
+   */
+  rentalPeriodDivided?: string;
+  /**
+   * Desc:  Default:  Nullable:True
+   */
+  createDate?: Date;
+  /**
+   * Desc:  Default:  Nullable:False
+   */
+  leaseContractChargeId?: string;
+
+  // /**
+  //  * Desc:递增类型  Default:  Nullable:True
+  //  */
+  // increType?: string;
 
 
-    /**
-     * Desc:递增类型  Default:  Nullable:True
-     */
-    increType?: string;
+  /**
+   * Desc:  Default:  Nullable:True
+   */
+  chargeStartDate?: Date;
+  /**
+  * Desc:  Default:  Nullable:True
+  */
+ chargeEndDate?: Date;
+  /**
+   * Desc:  Default:  Nullable:True
+   */
+  createUserId?: string;
+  /**
+   * Desc:  Default:  Nullable:True
+   */
+  modifyDate?: Date;
+  /**
+   * Desc:  Default:0  Nullable:True
+   */
+  yearDays?: number;
+  /**
+   * Desc:  Default:  Nullable:True
+   */
+  createUserName?: string;
+  /**
+   * Desc:  Default:  Nullable:True
+   */
+  modifyUserId?: string;
+  /**
+   * Desc:  Default:  Nullable:True
+   */
+  dayPriceConvertRule?: string;
+  /**
+   * Desc:  Default:  Nullable:True
+   */
+  modifyUserName?: string;
 
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    increPrice?: number;
+  /**
+   * Desc:  Default:0  Nullable:True
+   */
+  payCycle?: number;
 
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    increPriceUnit?: string;
+  /**
+  * Desc:  Default:  Nullable:True
+  */
+  feeItemId?: string;
+  /**
+   * Desc:  Default:  Nullable:True
+   */
+  price?: number;
+  /**
+ * Desc:  Default:0  Nullable:True
+ */
+  advancePayTime?: number;
+  /**
+   * Desc:  Default:  Nullable:True
+   */
+  advancePayTimeUnit?: string;
+  /**
+   * Desc:  Default:  Nullable:True
+   */
+  feeItemName?: string;
+  /**
+   * Desc:  Default:  Nullable:True
+   */
+  priceUnit?: string;
 
-    // /**
-    //  * Desc:  Default:  Nullable:True
-    //  */
-    // startDate?: Date;
-    //  /**
-    //  * Desc:  Default:  Nullable:True
-    //  */
-    // endDate?: Date;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    createUserId?: string;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    modifyDate?: Date;
-    /**
-     * Desc:  Default:0  Nullable:True
-     */
-    yearDays?: number;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    createUserName?: string;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    modifyUserId?: string;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    dayPriceConvertRule?: string;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    modifyUserName?: string;
-   
-    /**
-     * Desc:  Default:0  Nullable:True
-     */
-    payCycle?: number;
-  
-     /**
-     * Desc:  Default:  Nullable:True
-     */
-    feeItemId?: string;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    price?: number;
-      /**
-     * Desc:  Default:0  Nullable:True
-     */
-    advancePayTime?: number;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    advancePayTimeUnit?: string;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    feeItemName?: string;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    priceUnit?: string;
+  /**
+  * Desc:  Default:  Nullable:True
+  */
+  increStartDate?: Date;
+  /**
+  * Desc:  Default:  Nullable:True
+  */
+  increEndDate?: Date;
+
+  /**
+ * Desc:  Default:  Nullable:True
+ */
+  increPrice?: number;
+
+  /**
+   * Desc:  Default:  Nullable:True
+   */
+  increPriceUnit?: string;
+
+  /**
+* Desc:  Default:  Nullable:True
+*/
+  rebateType?: string;
+
+  /**
+* Desc:  Default:  Nullable:True
+*/
+  rebateStartDate?: Date;
+  /**
+  * Desc:  Default:  Nullable:True
+  */
+  rebateEndDate?: Date;
+
+  /**
+      * Desc:  Default:  Nullable:True
+      */
+  periodLength?: number;
+  /**
+   * Desc:  Default:  Nullable:True
+   */
+  discount?: number;
+
+  /**
+   * Desc:  Default:  Nullable:True
+   */
+  startPeriod?: number;
+
+  /**
+   * Desc:  Default:  Nullable:True
+   */
+  rebateRemark?: string;
 }
