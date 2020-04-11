@@ -458,7 +458,7 @@ const BillModify = (props: BillModifyProps) => {
               columns={columns}
               rowKey={record => record.id}
               pagination={pagination}
-              scroll={{ y: 500, x: 1600 }}
+              scroll={{ y: 500, x: 1700 }}
               loading={loading}
               onChange={(pagination: PaginationConfig, filters, sorter) =>
                 changePage(pagination, filters, sorter)
