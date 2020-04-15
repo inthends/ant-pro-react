@@ -1,9 +1,7 @@
 //添加合同
 import { Upload, Icon, AutoComplete, Spin, message, InputNumber, TreeSelect, Tabs, Select, Button, Card, Col, DatePicker, Drawer, Form, Input, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import {
-  TreeEntity, HtLeasecontractcharge, HtLeasecontractchargefee, HtChargefeeresult, htLeasecontract
-} from '@/model/models';
+import { TreeEntity, HtLeasecontractcharge, HtLeasecontractchargefee, HtChargefeeresult, htLeasecontract } from '@/model/models';
 import React, { useEffect, useState } from 'react';
 import LeaseTerm from './LeaseTerm';
 // import IncreasingRate from './IncreasingRate';
@@ -54,13 +52,41 @@ const Add = (props: AddProps) => {
   // const close = () => {
   //   closeDrawer();
   // };
+
+
+  //打开抽屉时初始化
+  useEffect(() => {
+    GetCommonItems('IndustryType').then(res => {
+      setIndustryType(res || []);
+    });
+
+    // //加载关联收费项目
+    // GetAllFeeItems().then(res => {
+    //   setFeeitems(res || []);
+    // });
+
+    //获取房产树
+    GetOrgTreeSimple().then((res: any[]) => {
+      setTreeData(res || []);
+    });
+
+    GetUserList('', '员工').then(res => {
+      setUserSource(res || []);
+    });
+
+    //渠道
+    GetCommonItems('VisitChannel').then(res => {
+      setChannel(res || []);
+    });
+
+  }, [visible]);
+
   const [TermJson, setTermJson] = useState<string>();
-
   //计算租金明细
-  const calculation = () => { 
-
+  const calculation = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
+        debugger
         //租赁条款     
         // setLoading(true);
         let TermJson: HtLeasecontractchargefee[] = [];
@@ -71,8 +97,8 @@ const Add = (props: AddProps) => {
         // let mychargefee: HtLeasecontractchargefee = {}; 
         data.feeItemId = values.feeItemId[0];
         data.feeItemName = values.feeItemName[0];
-        data.chargeStartDate = values.chargeStartDate[0];//.format('YYYY-MM-DD');
-        data.chargeEndDate = values.chargeEndDate[0];//.format('YYYY-MM-DD');
+        data.chargeStartDate = values.chargeStartDate[0].format('YYYY-MM-DD');
+        data.chargeEndDate = values.chargeEndDate[0].format('YYYY-MM-DD');
         data.price = values.price[0];
         data.priceUnit = values.priceUnit[0];
         data.advancePayTime = values.advancePayTime[0];
@@ -88,17 +114,18 @@ const Add = (props: AddProps) => {
         data.rentalPeriodDivided = values.rentalPeriodDivided[0];
         //递增率
         // data.increType = values.increType;
-        data.increStartDate = values.increStartDate[0];
-        data.increEndDate = values.increEndDate[0];
+        data.increStartDate = values.increStartDate[0] ? values.increStartDate[0].format('YYYY-MM-DD') : null;
+        //data.increEndDate = values.increEndDate[0] ? values.increEndDate[0].format('YYYY-MM-DD') : null;
+        data.increGap = values.increGap[0];
         data.increPrice = values.increPrice[0];
         data.increPriceUnit = values.increPriceUnit[0];
         //优惠
-        data.rebateType = values.rebateType[0];
-        data.rebateStartDate = values.rebateStartDate[0];
-        data.rebateEndDate = values.rebateEndDate[0];
-        data.startPeriod = values.startPeriod[0];
-        data.periodLength = values.periodLength[0];
-        data.discount = values.discount[0];
+        // data.rebateType = values.rebateType[0];
+        data.rebateStartDate = values.rebateStartDate[0] ? values.rebateStartDate[0].format('YYYY-MM-DD') : null;
+        data.rebateEndDate = values.rebateEndDate[0] ? values.rebateEndDate[0].format('YYYY-MM-DD') : null;
+        // data.startPeriod = values.startPeriod[0];
+        // data.periodLength = values.periodLength[0];
+        // data.discount = values.discount[0];
         data.rebateRemark = values.rebateRemark[0];
         TermJson.push(data);
 
@@ -119,20 +146,21 @@ const Add = (props: AddProps) => {
           }
           data.yearDays = values.yearDays[k];
           data.payCycle = values.payCycle[k];
-          data.rentalPeriodDivided = values.rentalPeriodDivided[k]; 
+          data.rentalPeriodDivided = values.rentalPeriodDivided[k];
           //递增率 
-          data.increStartDate = values.increStartDate[k];
-          data.increEndDate = values.increEndDate[k];
+          data.increStartDate = values.increStartDate[k] ? values.increStartDate[k].format('YYYY-MM-DD') : null;
+          //data.increEndDate = values.increEndDate[k] ? values.increEndDate[k].format('YYYY-MM-DD') : null;
+          data.increGap = values.increGap[k];
           data.increPrice = values.increPrice[k];
           data.increPriceUnit = values.increPriceUnit[k];
           //优惠
-          data.rebateType = values.rebateType[k];
-          data.rebateStartDate = values.rebateStartDate[k];
-          data.rebateEndDate = values.rebateEndDate[k];
-          data.startPeriod = values.startPeriod[k];
-          data.periodLength = values.periodLength[k];
-          data.discount = values.discount[k];
-          data.rebateRemark = values.rebateRemark[k]; 
+          // data.rebateType = values.rebateType[k];
+          data.rebateStartDate = values.rebateStartDate[k] ? values.rebateStartDate[k].format('YYYY-MM-DD') : null;
+          data.rebateEndDate = values.rebateEndDate[k] ? values.rebateEndDate[k].format('YYYY-MM-DD') : null;
+          // data.startPeriod = values.startPeriod[k];
+          // data.periodLength = values.periodLength[k];
+          // data.discount = values.discount[k];
+          data.rebateRemark = values.rebateRemark[k];
           TermJson.push(data);
         });
 
@@ -193,14 +221,14 @@ const Add = (props: AddProps) => {
         // entity.depositUnit = values.depositUnit;
         // entity.startDate = values.billingDate.format('YYYY-MM-DD');
         // entity.endDate = values.contractEndDate.format('YYYY-MM-DD');
-        entity.calcPrecision = values.calcPrecision;
+        // entity.calcPrecision = values.calcPrecision;
         entity.lateFee = values.lateFee;
         entity.lateMethod = values.lateMethod;
         if (values.lateDate != null)
           entity.lateDate = values.lateDate.format('YYYY-MM-DD');
         // entity.propertyFeeId = values.propertyFeeId;
         // entity.propertyFeeName = values.propertyFeeName;
- 
+
         let strTermJson = JSON.stringify(TermJson);
         setTermJson(strTermJson);
         // setChargefee(mychargefee);
@@ -214,10 +242,10 @@ const Add = (props: AddProps) => {
           // ...mychargefee,
           // ...mychargeincre,
           // ...mychargefeeoffer,
-          BillUnitId: values.billUnitId,//计费单元id
-          //LeaseContractId: '',
-          startDate: values.startDate.format('YYYY-MM-DD'),
-          endDate: values.endDate.format('YYYY-MM-DD'),
+          billUnitId: values.billUnitId,//计费单元id
+          // leaseContractId: '',
+          // startDate: values.startDate.format('YYYY-MM-DD'),
+          // endDate: values.endDate.format('YYYY-MM-DD'),
           TermJson: strTermJson,
           // CalcPrecision: values.calcPrecision,
           // CalcPrecisionMode: values.calcPrecisionMode,
@@ -251,21 +279,21 @@ const Add = (props: AddProps) => {
         //保存合同数据
         let ContractCharge: HtLeasecontractcharge = {};
         //费用条款-基本条款 
-        ContractCharge.depositFeeItemId = values.depositFeeItemId;
-        ContractCharge.depositFeeItemName = values.depositFeeItemName;
+        // ContractCharge.depositFeeItemId = values.depositFeeItemId;
+        // ContractCharge.depositFeeItemName = values.depositFeeItemName;
         ContractCharge.leaseArea = values.leaseArea;
-        ContractCharge.deposit = values.deposit;
-        ContractCharge.depositUnit = values.depositUnit;
+        // ContractCharge.deposit = values.deposit;
+        // ContractCharge.depositUnit = values.depositUnit;
         // ContractCharge.startDate = values.billingDate.format('YYYY-MM-DD');
         // ContractCharge.endDate = values.contractEndDate.format('YYYY-MM-DD');
         // ContractCharge.payDate = values.contractStartDate.format('YYYY-MM-DD'); 
-        ContractCharge.calcPrecision = values.calcPrecision;
+        // ContractCharge.calcPrecision = values.calcPrecision;
         ContractCharge.lateFee = values.lateFee;
         ContractCharge.lateMethod = values.lateMethod;
         if (values.lateDate != null)
           ContractCharge.lateDate = values.lateDate.format('YYYY-MM-DD');
-        ContractCharge.propertyFeeId = values.propertyFeeId;
-        ContractCharge.propertyFeeName = values.propertyFeeName;
+        // ContractCharge.propertyFeeId = values.propertyFeeId;
+        // ContractCharge.propertyFeeName = values.propertyFeeName;
 
         let Contract: htLeasecontract = {};
         Contract.no = values.no;
@@ -298,18 +326,11 @@ const Add = (props: AddProps) => {
         SaveForm({
           ...Contract,
           ...ContractCharge,
-          // ...chargefee,
-          // ...chargeincre,
-          // ...chargefeeoffer,
           keyValue: '',
-          ChargeId: '',
+          chargeId: '',
           room: values.room,
-          TermJson: TermJson,
-          // DepositResult: JSON.stringify(DepositResult),
-          // ChargeFeeResult:JSON.stringify(ChargeFeeResult) 
-          // DepositResult: JSON.stringify(depositData),
-          ChargeFeeResult: JSON.stringify(chargeData),
-          // PropertyFeeResult: JSON.stringify(propertyData)
+          termJson: TermJson,
+          chargeFeeResult: JSON.stringify(chargeData),
         }).then(res => {
           message.success('保存成功');
           closeDrawer();
@@ -319,35 +340,6 @@ const Add = (props: AddProps) => {
       }
     });
   };
-
-  //打开抽屉时初始化
-  useEffect(() => {
-    GetCommonItems('IndustryType').then(res => {
-      setIndustryType(res || []);
-    });
-
-    // //加载关联收费项目
-    // GetAllFeeItems().then(res => {
-    //   setFeeitems(res || []);
-    // });
-
-    //获取房产树
-    GetOrgTreeSimple().then((res: any[]) => {
-      setTreeData(res || []);
-    });
-
-    GetUserList('', '员工').then(res => {
-      setUserSource(res || []);
-    });
-
-    //渠道
-    GetCommonItems('VisitChannel').then(res => {
-      setChannel(res || []);
-    });
-
-  }, []);
-
-
 
   // 打开抽屉时初始化
   // useEffect(() => {
@@ -879,14 +871,14 @@ const Add = (props: AddProps) => {
             <TabPane tab="费用条款" key="2">
               <Card title="基本条款" className={styles.card} hoverable>
                 <Row gutter={24}>
-                  <Col lg={4}>
+                  <Col lg={6}>
                     <Form.Item label="合同面积(㎡)" >
                       {getFieldDecorator('leaseArea', {
                         // rules: [{ required: true, message: '请输入合同面积' }]
                       })(<Input readOnly placeholder='自动获取' />)}
                     </Form.Item>
                   </Col>
-                  <Col lg={4}>
+                  {/* <Col lg={4}>
                     <Form.Item label="小数位数">
                       {getFieldDecorator('calcPrecision', {
                         initialValue: 2,
@@ -897,8 +889,8 @@ const Add = (props: AddProps) => {
                         <Option value={2}>2</Option>
                       </Select>)}
                     </Form.Item>
-                  </Col>
-                  <Col lg={4}>
+                  </Col> */}
+                  <Col lg={6}>
                     <Form.Item label="滞纳金比例(‰)" >
                       {getFieldDecorator('lateFee', {
                         initialValue: 3

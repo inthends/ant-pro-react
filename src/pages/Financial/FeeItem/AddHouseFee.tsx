@@ -65,7 +65,7 @@ const AddHouseFee = (props: AddHouseFeeProps) => {
       {/* <Row style={{ height: '400px', overflow: 'hidden', marginTop: '5px', backgroundColor: 'rgb(255,255,255)' }}> */}
       <Spin tip="数据处理中..." spinning={loading}>
         <Row gutter={8}>
-          <Col span={12} style={{ height: '420px', overflow: 'auto' }}>
+          <Col span={16} style={{ height: '420px', overflow: 'auto' }}>
             <SelectTree
               checkable={true}
               treeData={treeData}
@@ -76,7 +76,7 @@ const AddHouseFee = (props: AddHouseFeeProps) => {
               }}
             />
           </Col>
-          <Col span={12}  >
+          <Col span={8}>
             <Card >
               <Checkbox.Group
                 options={["入住", "空置"]}

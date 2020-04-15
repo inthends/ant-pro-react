@@ -41,7 +41,6 @@ export interface HtLeasecontractchargefee {
   //  */
   // increType?: string;
 
-
   /**
    * Desc:  Default:  Nullable:True
    */
@@ -113,10 +112,12 @@ export interface HtLeasecontractchargefee {
   * Desc:  Default:  Nullable:True
   */
   increStartDate?: Date;
-  /**
-  * Desc:  Default:  Nullable:True
-  */
-  increEndDate?: Date;
+  // /**
+  // * Desc:  Default:  Nullable:True
+  // */
+  // increEndDate?: Date;
+
+  increGap?: number;
 
   /**
  * Desc:  Default:  Nullable:True
@@ -142,19 +143,19 @@ export interface HtLeasecontractchargefee {
   */
   rebateEndDate?: Date;
 
-  /**
-      * Desc:  Default:  Nullable:True
-      */
-  periodLength?: number;
-  /**
-   * Desc:  Default:  Nullable:True
-   */
-  discount?: number;
+  // /**
+  //     * Desc:  Default:  Nullable:True
+  //     */
+  // periodLength?: number;
+  // /**
+  //  * Desc:  Default:  Nullable:True
+  //  */
+  // discount?: number;
 
-  /**
-   * Desc:  Default:  Nullable:True
-   */
-  startPeriod?: number;
+  // /**
+  //  * Desc:  Default:  Nullable:True
+  //  */
+  // startPeriod?: number;
 
   /**
    * Desc:  Default:  Nullable:True

@@ -12,9 +12,9 @@
 import { HtChargefeeresult } from './htChargefeeresult';
 import { HtLeasecontractcharge } from './htLeasecontractcharge';
 import { HtLeasecontractchargefee } from './htLeasecontractchargefee';
-import { HtLeasecontractchargefeeoffer } from './htLeasecontractchargefeeoffer';
-import { HtLeasecontractchargeincre } from './htLeasecontractchargeincre';
-import { htContractapprovelog } from './htContractapprovelog';
+// import { HtLeasecontractchargefeeoffer } from './htLeasecontractchargefeeoffer';
+// import { HtLeasecontractchargeincre } from './htLeasecontractchargeincre';
+// import { htContractapprovelog } from './htContractapprovelog';
 
 /**
  * 费用明细
@@ -27,13 +27,13 @@ export interface ChargeDetailDTO {
     /**
      * 条款
      */
-    // chargeFeeList?: Array<HtLeasecontractchargefee>;
+    chargeFeeList?: Array<HtLeasecontractchargefee>;
 
 
     /**
         * 条款
         */
-    chargeFee?: HtLeasecontractchargefee;
+    // chargeFee?: HtLeasecontractchargefee;
 
     // /**
     //  * 递增率
@@ -47,21 +47,21 @@ export interface ChargeDetailDTO {
      */
     // chargeFeeOfferList?: Array<HtLeasecontractchargefeeoffer>;
 
-    chargeFeeOffer?: HtLeasecontractchargefeeoffer;
+    // chargeFeeOffer?: HtLeasecontractchargefeeoffer;
 
     /**
      * 保证金明细
      */
-    depositFeeResultList?: Array<HtChargefeeresult>;
+    // depositFeeResultList?: Array<HtChargefeeresult>;
     /**
-     * 租金明细
+     * 费用明细
      */
     chargeFeeResultList?: Array<HtChargefeeresult>;
 
     /**
  * 物业费明细
  */
-    propertyFeeResultList?: Array<HtChargefeeresult>;
+    // propertyFeeResultList?: Array<HtChargefeeresult>;
 
     // /**
     //  * 审批记录

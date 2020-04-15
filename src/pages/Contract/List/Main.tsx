@@ -190,8 +190,8 @@ function Main() {
   const [currData, setCurrData] = useState<any>();
   const [roomVisible, setRoomVisible] = useState<boolean>(false);
   const [organizeId, setOrganizeId] = useState<string>(''); //列表选中的节点组织id
-  
-  //房态图弹出房间
+
+  //租控图弹出合同
   const showAtlasDrawer = (item?) => {
     setCurrData(item);
     setRoomVisible(true);
@@ -237,12 +237,7 @@ function Main() {
       />
       <Content style={{ paddingLeft: '18px' }}>
         <Tabs defaultActiveKey="1" >
-
-          <TabPane tab="租控图" key="1">
-            <Atlas parentId={parentId} showDrawer={showAtlasDrawer}></Atlas>
-          </TabPane> 
-
-          <TabPane tab="合同列表" key="2" >
+          <TabPane tab="合同列表" key="1" >
             <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
               <Search
                 className="search-input"
@@ -267,10 +262,10 @@ function Main() {
                 </Col>
                 <Col sm={4} xs={24}>
                   <Info title="退租待审核" value="5" bordered />
-                </Col> 
+                </Col>
                 <Col sm={4} xs={24}>
                   <Info title="作废待审核" value="4" bordered />
-                </Col> 
+                </Col>
                 <Col sm={4} xs={24}>
                   <Info title="正常执行" value="7" bordered />
                 </Col>
@@ -293,6 +288,9 @@ function Main() {
               renewal={showRenewalDrawer}
               withdrawal={showWithdrawalDrawer}
               reload={() => initLoadData(search)} />
+          </TabPane>
+          <TabPane tab="租控图" key="2">
+            <Atlas parentId={parentId} showDrawer={showAtlasDrawer}></Atlas>
           </TabPane>
         </Tabs>
       </Content>

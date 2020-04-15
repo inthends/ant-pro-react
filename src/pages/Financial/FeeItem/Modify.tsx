@@ -290,7 +290,7 @@ const Modify = (props: ModifyProps) => {
 
   const housecolumns = [
     {
-      title: '房屋编号',
+      title: '房产编号',
       dataIndex: 'code',
       key: 'code',
       width: 160,

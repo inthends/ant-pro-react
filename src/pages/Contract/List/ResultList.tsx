@@ -5,13 +5,13 @@ import React from 'react';
 import moment from 'moment';
 import styles from './style.less';
 
-interface ResultListProps { 
+interface ResultListProps {
   chargeData: any[];//费用明细
   className: any;
 }
 
 function ResultList(props: ResultListProps) {
-  const {  chargeData,  className } = props;
+  const { chargeData, className } = props;
   const columns = [
     {
       title: '区间',
@@ -37,20 +37,23 @@ function ResultList(props: ResultListProps) {
       title: '最终单价',
       width: 60,
       render: (text, row, index) => {
-        let unit = '';
-        if (row.priceUnit == "1")
-          unit = '元/m²·月';
-        else if (row.priceUnit == "2")
-          unit = '元/m²·天';
-        else if (row.priceUnit == "3")
-          unit = '元/月';
-        else
-          unit = '元/天';
 
-        if (row.price)
-          return row.price + unit;
-        else
-          return '';
+        return row.price + row.priceUnit;
+
+        // let unit = '';
+        // if (row.priceUnit == "1")
+        //   unit = '元/m²·月';
+        // else if (row.priceUnit == "2")
+        //   unit = '元/m²·天';
+        // else if (row.priceUnit == "3")
+        //   unit = '元/月';
+        // else
+        //   unit = '元/天';
+
+        // if (row.price)
+        //   return row.price + unit;
+        // else
+        //   return '';
       }
     },
     {
@@ -63,7 +66,7 @@ function ResultList(props: ResultListProps) {
 
   return (
     <div>
-       
+
 
       <Card title="费用" className={className} hoverable>
         <Table
@@ -71,7 +74,7 @@ function ResultList(props: ResultListProps) {
           bordered={false}
           size="middle"
           columns={columns}
-          dataSource={chargeData} 
+          dataSource={chargeData}
         />
       </Card>
     </div>

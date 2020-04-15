@@ -22,30 +22,30 @@ export interface HtLeasecontractcharge {
      * Desc:  Default:  Nullable:True
      */
     modifyDate?: Date;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    deposit?: number;
+    // /**
+    //  * Desc:  Default:  Nullable:True
+    //  */
+    // deposit?: number;
     /**
      * Desc:  Default:  Nullable:True
      */
     modifyUserId?: string;
-    /**
-    * Desc:  Default:  Nullable:True
-    */
-    depositFeeItemId?: string;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    depositFeeItemName?: string;
+    // /**
+    // * Desc:  Default:  Nullable:True
+    // */
+    // depositFeeItemId?: string;
+    // /**
+    //  * Desc:  Default:  Nullable:True
+    //  */
+    // depositFeeItemName?: string;
     /**
      * Desc:  Default:  Nullable:True
      */
     modifyUserName?: string;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    depositUnit?: string;
+    // /**
+    //  * Desc:  Default:  Nullable:True
+    //  */
+    // depositUnit?: string;
 
     /**
      * Desc:  滞纳金起算日期
@@ -62,20 +62,20 @@ export interface HtLeasecontractcharge {
    */
     lateMethod?: string;
 
-    /**
-    * 物业费
-    */
-    propertyFeeId?: string;
+    //     /**
+    //     * 物业费
+    //     */
+    //     propertyFeeId?: string;
 
-     /**
-    * 物业费
-    */
-   propertyFeeName?: string;
+    //      /**
+    //     * 物业费
+    //     */
+    //    propertyFeeName?: string;
 
-    /**
-     * 单价保留小数点位数
-     */
-    calcPrecision?: number;
+    // /**
+    //  * 单价保留小数点位数
+    //  */
+    // calcPrecision?: number;
 
     // /**
     //  * Desc:  Default:  Nullable:True

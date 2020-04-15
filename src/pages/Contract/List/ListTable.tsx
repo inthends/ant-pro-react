@@ -163,24 +163,24 @@ function ListTable(props: ListTableProps) {
       key: 'leaseSize',
       width: 100,
     },
-    {
-      title: '总租金',
-      dataIndex: 'leaseAmount',
-      key: 'leaseAmount',
-      width: 100,
-    },
-    {
-      title: '保证金',
-      dataIndex: 'leaseDeposit',
-      key: 'leaseDeposit',
-      width: 100,
-    },
-    {
-      title: '物业费',
-      dataIndex: 'propertyAmount',
-      key: 'propertyAmount',
-      width: 100,
-    },
+    // {
+    //   title: '总租金',
+    //   dataIndex: 'leaseAmount',
+    //   key: 'leaseAmount',
+    //   width: 100,
+    // },
+    // {
+    //   title: '保证金',
+    //   dataIndex: 'leaseDeposit',
+    //   key: 'leaseDeposit',
+    //   width: 100,
+    // },
+    // {
+    //   title: '物业费',
+    //   dataIndex: 'propertyAmount',
+    //   key: 'propertyAmount',
+    //   width: 100,
+    // },
     {
       title: '合同单价',
       dataIndex: 'leasePrice',

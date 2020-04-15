@@ -135,7 +135,7 @@ export function GetAllOrgIds(pstructId): Promise<string[]> {
   return request.get(process.env.basePath + `/Common/GetAllOrgIds?pstructId=${pstructId}`, {}).then(getResult);
 }
 
-//加载全部checkbox房间树
+//加载全部checkbox房间树包括车库车位
 export function GetUnitTreeAll(): Promise<ResponseObject<TreeEntity[]>> {
   return request.get(process.env.basePath + `/Common/GetUnitTreeAll`, {});
 }
