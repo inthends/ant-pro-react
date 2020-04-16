@@ -292,7 +292,10 @@ function LeaseTerm(props: LeaseTermProps) {
             {getFieldDecorator(`rebateStartDate[${k}]`, {
             })(<DatePicker placeholder="请选择"
               disabledDate={(currentDate) => {
-                return currentDate && currentDate > moment(form.getFieldValue(`chargeEndDate[${k}]`)) ? true : false;
+                return currentDate && (
+                  currentDate < moment(form.getFieldValue(`chargeStartDate[${k}]`)) ||
+                  currentDate > moment(form.getFieldValue(`chargeEndDate[${k}]`)).add(1, 'days')
+                ) ? true : false;
               }}
             />)}
           </Form.Item>
@@ -302,7 +305,10 @@ function LeaseTerm(props: LeaseTermProps) {
             {getFieldDecorator(`rebateEndDate[${k}]`, {
             })(<DatePicker placeholder="请选择"
               disabledDate={(currentDate) => {
-                return currentDate && currentDate > moment(form.getFieldValue(`chargeEndDate[${k}]`)) ? true : false;
+                return currentDate && (
+                  currentDate < moment(form.getFieldValue(`chargeStartDate[${k}]`)) ||
+                  currentDate > moment(form.getFieldValue(`chargeEndDate[${k}]`)).add(1, 'days')
+                ) ? true : false;
               }}
             />)}
           </Form.Item>
@@ -551,7 +557,10 @@ function LeaseTerm(props: LeaseTermProps) {
               {getFieldDecorator(`rebateStartDate[0]`, {
               })(<DatePicker placeholder="请选择"
                 disabledDate={(currentDate) => {
-                  return currentDate && currentDate < moment(form.getFieldValue(`chargeStartDate[0]`)) ? true : false;
+                  return currentDate && (
+                    currentDate < moment(form.getFieldValue(`chargeStartDate[0]`)) ||
+                    currentDate > moment(form.getFieldValue(`chargeEndDate[0]`)).add(1, 'days')
+                  ) ? true : false;
                 }}
               />)}
             </Form.Item>
@@ -562,8 +571,8 @@ function LeaseTerm(props: LeaseTermProps) {
               })(<DatePicker placeholder="请选择"
                 disabledDate={(currentDate) => {
                   return currentDate && (
-                    currentDate > moment(form.getFieldValue(`chargeEndDate[0]`)) ||
-                    currentDate < moment(form.getFieldValue(`chargeStartDate[0]`))
+                    currentDate < moment(form.getFieldValue(`chargeStartDate[0]`)) ||
+                    currentDate > moment(form.getFieldValue(`chargeEndDate[0]`)).add(1, 'days')
                   ) ? true : false;
                 }}
               />)}

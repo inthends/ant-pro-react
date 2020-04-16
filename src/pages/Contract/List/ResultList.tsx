@@ -3,7 +3,7 @@ import { Card, Table } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import React from 'react';
 import moment from 'moment';
-import styles from './style.less';
+// import styles from './style.less';
 
 interface ResultListProps {
   chargeData: any[];//费用明细
@@ -17,7 +17,11 @@ function ResultList(props: ResultListProps) {
       title: '区间',
       width: 100,
       render: (text, row, index) => {
-        return moment(row.beginDate).format('YYYY-MM-DD') + " - " + moment(row.endDate).format('YYYY-MM-DD');
+        // return moment(row.beginDate).format('YYYY-MM-DD') + " - " + moment(row.endDate).format('YYYY-MM-DD'); 
+        if (row.isReduction)
+          return <span>{moment(row.beginDate).format('YYYY-MM-DD') + " - " + moment(row.endDate).format('YYYY-MM-DD') + ' '}<span style={{ color: 'red', fontSize: '4px', verticalAlign: 'super' }}>免</span></span>;
+        else
+          return moment(row.beginDate).format('YYYY-MM-DD') + " - " + moment(row.endDate).format('YYYY-MM-DD'); 
       }
     },
     {

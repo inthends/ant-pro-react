@@ -109,4 +109,9 @@ export interface HtChargefeeresult {
      * Desc:  Default:  Nullable:True
      */
     modifyUserName?: string;  
+
+      /**
+     * Desc:  是否免租期
+     */
+    isReduction?: boolean;
 }

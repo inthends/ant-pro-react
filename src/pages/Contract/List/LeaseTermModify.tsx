@@ -319,7 +319,10 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
                   : null,
               })(<DatePicker placeholder="请选择"
                 disabledDate={(currentDate) => {
-                  return currentDate && currentDate < moment(form.getFieldValue(`chargeStartDate[${index}]`)) ? true : false;
+                  return currentDate && (
+                    currentDate < moment(form.getFieldValue(`chargeStartDate[${index}]`)) ||
+                    currentDate > moment(form.getFieldValue(`chargeEndDate[${index}]`)).add(1, 'days')
+                  ) ? true : false;
                 }}
               />)}
             </Form.Item>
@@ -333,8 +336,8 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
               })(<DatePicker placeholder="请选择"
                 disabledDate={(currentDate) => {
                   return currentDate && (
-                    currentDate > moment(form.getFieldValue(`chargeEndDate[${index}]`)) ||
-                    currentDate < moment(form.getFieldValue(`chargeStartDate[${index}]`))
+                    currentDate < moment(form.getFieldValue(`chargeStartDate[${index}]`)) ||
+                    currentDate > moment(form.getFieldValue(`chargeEndDate[${index}]`)).add(1, 'days')
                   ) ? true : false;
                 }}
               />)}
