@@ -1,5 +1,5 @@
 //修改合同
-import { Tooltip, Upload, Icon, Tag, Spin, Divider, PageHeader, AutoComplete, InputNumber, TreeSelect, message, Tabs, Select, Button, Card, Col, DatePicker, Drawer, Form, Input, Row } from 'antd';
+import { List, Tooltip, Upload, Icon, Tag, Spin, Divider, PageHeader, AutoComplete, InputNumber, TreeSelect, message, Tabs, Select, Button, Card, Col, DatePicker, Drawer, Form, Input, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { TreeEntity, HtLeasecontractcharge, HtLeasecontractchargefee, htLeasecontract, ChargeDetailDTO } from '@/model/models';
 import React, { useEffect, useState } from 'react';
@@ -59,6 +59,7 @@ const Modify = (props: ModifyProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [treeData, setTreeData] = useState<any[]>([]);
   const [channel, setChannel] = useState<any[]>([]);//渠道
+  const [houseList, setHouseList] = useState<any[]>([]);//房屋列表
 
   // const close = () => {
   //   closeDrawer();
@@ -112,6 +113,7 @@ const Modify = (props: ModifyProps) => {
           });
 
           setInfoDetail(tempInfo.contract);
+          setHouseList(tempInfo.houseList);
           setCount(tempInfo.followCount);
 
           //获取条款
@@ -318,7 +320,12 @@ const Modify = (props: ModifyProps) => {
         // entity.endDate = values.contractEndDate.format('YYYY-MM-DD');
         // entity.payDate = values.contractStartDate.format('YYYY-MM-DD');
 
-        // entity.calcPrecision = values.calcPrecision;
+        //精度处理
+        entity.midResultScale = values.midResultScale;
+        entity.midScaleDispose = values.midScaleDispose;
+        entity.lastResultScale = values.lastResultScale;
+        entity.lastScaleDispose = values.lastScaleDispose;
+
         entity.lateFee = values.lateFee;
         entity.lateMethod = values.lateMethod;
         if (values.lateDate != null)
@@ -748,17 +755,17 @@ const Modify = (props: ModifyProps) => {
                 {GetStatus(infoDetail.status)}
               </Form.Item>
             </Col>
-            <Col lg={4}>
+            <Col lg={5}>
               <Form.Item label="合同单价" >
                 {totalInfo.leasePrice}
               </Form.Item>
             </Col>
-            <Col lg={3}>
-              <Form.Item label="总租金" >
+            <Col lg={5}>
+              <Form.Item label="总价" >
                 {totalInfo.totalAmount}
               </Form.Item>
             </Col>
-            <Col lg={3}>
+            {/* <Col lg={3}>
               <Form.Item label="保证金" >
                 {totalInfo.totalDeposit}
               </Form.Item>
@@ -767,13 +774,13 @@ const Modify = (props: ModifyProps) => {
               <Form.Item label="物业费" >
                 {totalInfo.totalPropertyAmount}
               </Form.Item>
-            </Col>
-            <Col lg={3}>
+            </Col> */}
+            <Col lg={5}>
               <Form.Item label="联系人" >
                 {form.getFieldValue('linkMan')}
               </Form.Item>
             </Col>
-            <Col lg={4}>
+            <Col lg={5}>
               <Form.Item label="联系电话" >
                 {form.getFieldValue('linkPhone')}
               </Form.Item>
@@ -1021,7 +1028,20 @@ const Modify = (props: ModifyProps) => {
                   </Card>
                 </Col>
                 <Col span={12}>
-                  <Card title="租赁信息" className={styles.addcard} hoverable>
+                  <Card title="租赁信息" className={styles.addcard} hoverable> 
+                    <Row gutter={24}>
+                      <Col lg={24}>
+                        <List
+                          dataSource={houseList}
+                          renderItem={item =>
+                            <List.Item  >
+                              <List.Item.Meta title={item.allName} />
+                              <div>{item.area}㎡</div>
+                            </List.Item>
+                          }
+                        />
+                      </Col>
+                    </Row> 
                     <Row gutter={24}>
                       <Col lg={24}>
                         <Form.Item label={<div>房源选择(<a>多个房屋的时候，默认获取第一个房屋作为计费单元</a>)</div>} required>
@@ -1054,6 +1074,9 @@ const Modify = (props: ModifyProps) => {
                         </Form.Item>
                       </Col>
                     </Row>
+
+
+
                     <Row gutter={24}>
                       <Col lg={24}>
                         <Form.Item label="承租方" required>
@@ -1083,6 +1106,7 @@ const Modify = (props: ModifyProps) => {
                         </Form.Item>
                       </Col>
                     </Row>
+
                     <Row gutter={24}>
                       <Col lg={12}>
                         <Form.Item label="联系人">
@@ -1177,63 +1201,7 @@ const Modify = (props: ModifyProps) => {
                         initialValue: contractCharge.leaseArea
                       })(<Input placeholder='自动获取房屋的计费面积' />)}
                     </Form.Item>
-                  </Col>
-                  {/* <Col lg={4}>
-                    <Form.Item label="小数位数">
-                      {getFieldDecorator('calcPrecision', {
-                        initialValue: contractCharge.calcPrecision ? contractCharge.calcPrecision : 2,
-                        rules: [{ required: true, message: '请选择小数位数' }],
-                      })(<Select>
-                        <Option value={0}>0</Option>
-                        <Option value={1}>1</Option>
-                        <Option value={2}>2</Option>
-                      </Select>)}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={4}>
-                    <Form.Item label="保证金数量" required>
-                      {getFieldDecorator('deposit', {
-                        initialValue: contractCharge.deposit ? contractCharge.deposit : 1,
-                        rules: [{ required: true, message: '请输入保证金数量' }],
-                      })(<InputNumber placeholder="请输入保证金数量" style={{ width: '100%' }} />)}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={4}>
-                    <Form.Item label="&nbsp;" >
-                      {getFieldDecorator('depositUnit', {
-                        initialValue: contractCharge.depositUnit ? contractCharge.depositUnit : "月"
-                      })(
-                        <Select>
-                          <Option value="月">月</Option>
-                          <Option value="元">元</Option>
-                        </Select>)}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={7}>
-                    <Form.Item label="保证金费项" required>
-                      {getFieldDecorator('depositFeeItemId', {
-                        initialValue: contractCharge.depositFeeItemId,
-                        rules: [{ required: true, message: '请选择保证金费项' }]
-                      })(
-                        <Select placeholder="请选择保证金费项"
-                          onChange={changeFeeItem}
-                        >
-                          {feeItems.map(item => (
-                            <Option value={item.value} key={item.key}>
-                              {item.title}
-                            </Option>
-                          ))}
-                        </Select>
-                      )}
-                      {getFieldDecorator('depositFeeItemName', {
-                        initialValue: contractCharge.depositFeeItemName,
-                      })(
-                        <input type='hidden' />
-                      )}
-                    </Form.Item>
-                  </Col>
-                </Row>
-                <Row gutter={24}> */}
+                  </Col> 
                   <Col lg={6}>
                     <Form.Item label="滞纳金比例(‰)" >
                       {getFieldDecorator('lateFee', {
@@ -1283,6 +1251,70 @@ const Modify = (props: ModifyProps) => {
                       )}
                     </Form.Item>
                   </Col> */}
+                </Row>
+                <Row gutter={24}>
+                  <Col lg={6}>
+                    <Form.Item label="中间每一步计算结果保留">
+                      {getFieldDecorator('midResultScale', {
+                        initialValue: contractCharge.midResultScale || contractCharge.midResultScale == 0 ? contractCharge.midResultScale : 2,
+                        rules: [{ required: true, message: '请选择小数位数' }],
+                      })(
+                        <Select placeholder="请选择小数位数">
+                          <Option value={0}>0</Option>
+                          <Option value={1}>1</Option>
+                          <Option value={2}>2</Option>
+                          <Option value={3}>3</Option>
+                          <Option value={4}>4</Option>
+                          <Option value={5}>5</Option>
+                          <Option value={6}>6</Option>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={6}>
+                    <Form.Item label="对最后一位">
+                      {getFieldDecorator('midScaleDispose', {
+                        initialValue: contractCharge.midScaleDispose ? contractCharge.midScaleDispose : 1,
+                        rules: [{ required: true, message: '请选择小数处理方法' }],
+                      })(
+                        <Select placeholder="请选择小数处理方法">
+                          <Option value={1}>四舍五入</Option>
+                          <Option value={2}>直接舍去</Option>
+                          <Option value={3}>有数进一</Option>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col> 
+                  <Col lg={6}>
+                    <Form.Item label="最终结果保留小数位数">
+                      {getFieldDecorator('lastResultScale', {
+                        initialValue: contractCharge.lastResultScale || contractCharge.lastResultScale == 0 ? contractCharge.lastResultScale : 2,
+                        rules: [{ required: true, message: '请选择小数位数' }],
+                      })(
+                        <Select placeholder="请选择小数位数">
+                          <Option value={0}>0</Option>
+                          <Option value={1}>1</Option>
+                          <Option value={2}>2</Option>
+                          {/* <Option value={3}>3</Option>
+                        <Option value={4}>4</Option> */}
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={6}>
+                    <Form.Item label="对最后一位">
+                      {getFieldDecorator('lastScaleDispose', {
+                        initialValue: contractCharge.lastScaleDispose ? contractCharge.lastScaleDispose : 1,
+                        rules: [{ required: true, message: '请选择小数处理方法' }],
+                      })(
+                        <Select placeholder="请选择小数处理方法">
+                          <Option value={1}>四舍五入</Option>
+                          <Option value={2}>直接舍去</Option>
+                          <Option value={3}>有数进一</Option>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
                 </Row>
               </Card>
               <LeaseTermModify
@@ -1361,7 +1393,7 @@ const Modify = (props: ModifyProps) => {
           关闭
           </Button>
         <Button onClick={save} style={{ marginRight: 8 }}>
-          保存
+          暂存
           </Button>
         <Button onClick={submit} type="primary">
           提交

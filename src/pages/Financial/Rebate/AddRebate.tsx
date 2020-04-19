@@ -234,20 +234,20 @@ const AddRebate = (props: AddRebateProps) => {
         <Form layout='inline' hideRequiredMark >
           <Row gutter={24}>
             <Col lg={12}>
-              <Form.Item label="计费起始日期" required >
+              <Form.Item label="账单日起" required >
                 {getFieldDecorator('startDate', {
                   initialValue: moment(startDate),
-                  rules: [{ required: true, message: '请选择计费起始日期' }],
+                  rules: [{ required: true, message: '请选择账单日起' }],
                 })(
                   <DatePicker onChange={(date, dateString) => selectStartDate(dateString)} />
                 )}
               </Form.Item>
             </Col>
             <Col lg={12}>
-              <Form.Item label="计费截止日期" required >
+              <Form.Item label="账单日止" required >
                 {getFieldDecorator('endDate', {
                   initialValue: moment(endDate),
-                  rules: [{ required: true, message: '请选择计费截止日期' }],
+                  rules: [{ required: true, message: '请选择账单日止' }],
                 })(
                   <DatePicker onChange={(date, dateString) => selectEndDate(dateString)} />
                 )}

@@ -262,11 +262,15 @@ const Add = (props: AddProps) => {
     });
   };
 
-  const save = () => {
+  //是否启用验证
+  const [isValidate, setIsValidate] = useState<boolean>(false);
+
+  const save = (submit) => {
+    setIsValidate(submit);
     form.validateFields((errors, values) => {
       if (!errors) {
         //是否生成租金明细
-        if (!isCal) {
+        if (!isCal && submit) {
           // Modal.warning({
           //   title: '提示',
           //   content: '请生成租金明细！',
@@ -281,7 +285,7 @@ const Add = (props: AddProps) => {
         //费用条款-基本条款 
         // ContractCharge.depositFeeItemId = values.depositFeeItemId;
         // ContractCharge.depositFeeItemName = values.depositFeeItemName;
-        ContractCharge.leaseArea = values.leaseArea;
+        ContractCharge.leaseArea = values.leaseArea ;
         // ContractCharge.deposit = values.deposit;
         // ContractCharge.depositUnit = values.depositUnit;
         // ContractCharge.startDate = values.billingDate.format('YYYY-MM-DD');
@@ -294,12 +298,11 @@ const Add = (props: AddProps) => {
           ContractCharge.lateDate = values.lateDate.format('YYYY-MM-DD');
         // ContractCharge.propertyFeeId = values.propertyFeeId;
         // ContractCharge.propertyFeeName = values.propertyFeeName;
-
         let Contract: htLeasecontract = {};
         Contract.no = values.no;
         Contract.follower = values.follower;
         Contract.followerId = values.followerId;
-        Contract.leaseSize = values.leaseSize;
+        Contract.leaseSize = values.leaseSize ;
         Contract.signingDate = values.signingDate.format('YYYY-MM-DD');
         Contract.startDate = values.startDate.format('YYYY-MM-DD');
         Contract.endDate = values.endDate.format('YYYY-MM-DD');
@@ -323,6 +326,7 @@ const Add = (props: AddProps) => {
         Contract.billUnitId = values.billUnitId;
         Contract.organizeId = organizeId;
         Contract.memo = values.memo;
+
         SaveForm({
           ...Contract,
           ...ContractCharge,
@@ -916,7 +920,7 @@ const Add = (props: AddProps) => {
                   </Col>
                 </Row>
               </Card>
-              <LeaseTerm form={form} feeItems={feeItems}></LeaseTerm>
+              <LeaseTerm form={form} feeItems={feeItems} isValidate={isValidate} ></LeaseTerm>
               <Button style={{ width: '100%', marginBottom: '10px' }} onClick={calculation}>点击生成费用明细</Button>
               <ResultList
                 chargeData={chargeData}
@@ -976,8 +980,11 @@ const Add = (props: AddProps) => {
         <Button onClick={closeDrawer} style={{ marginRight: 8 }}>
           取消
           </Button>
-        <Button onClick={save} type="primary">
-          确定
+        <Button onClick={() => save(false)}  style={{ marginRight: 8 }}>
+          暂存
+          </Button>
+        <Button onClick={() => save(true)} type="primary">
+          提交
           </Button>
       </div>
 

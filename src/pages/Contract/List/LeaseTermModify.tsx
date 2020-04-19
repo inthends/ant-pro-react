@@ -58,9 +58,8 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
   getFieldDecorator('LeaseTerms', { initialValue: chargeFeeList });
   const keys = getFieldValue('LeaseTerms');
   const formItems = keys.map((k, index) =>
-    (
-
-      <Card key={index} className={styles.card} title={index == 0 ? '租期条款' : ''}
+    ( 
+      <Card hoverable key={index} className={styles.card} title={index == 0 ? '租期条款' : ''}
         extra={index > 0 ? <Icon type="minus-circle-o" onClick={() => remove(index)} /> : null}>
         <Row gutter={24}>
           <Col lg={4}>

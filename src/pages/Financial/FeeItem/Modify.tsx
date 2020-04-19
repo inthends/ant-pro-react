@@ -954,7 +954,6 @@ const Modify = (props: ModifyProps) => {
                       setInfoDetail(info);
                     }}>是否停用</Checkbox>
                   </Form.Item> */}
-
                     <Form.Item  >
                       {getFieldDecorator('isInContract', {
                         initialValue: infoDetail.isInContract ? true : false,
@@ -1139,6 +1138,8 @@ const Modify = (props: ModifyProps) => {
                           <Option value={2}>2</Option>
                           <Option value={3}>3</Option>
                           <Option value={4}>4</Option>
+                          <Option value={5}>5</Option>
+                          <Option value={6}>6</Option>
                         </Select>
                       )}
                     </Form.Item>
@@ -1156,8 +1157,7 @@ const Modify = (props: ModifyProps) => {
                         </Select>
                       )}
                     </Form.Item>
-                  </Col>
-
+                  </Col> 
                   <Col lg={7}>
                     <Form.Item label="最终结果保留小数位数">
                       {getFieldDecorator('lastResultScale', {

@@ -106,4 +106,24 @@ export interface HtLeasecontractcharge {
      * Desc:  Default:  Nullable:False
      */
     leaseContractId?: string;
+
+       /**
+     * Desc:  Default:0  Nullable:True
+     */
+    midResultScale?: number;
+
+       /**
+     * Desc:  Default:0  Nullable:True
+     */
+    midScaleDispose?: number;
+
+       /**
+     * Desc:  Default:0  Nullable:True
+     */
+    lastResultScale?: number;
+
+        /**
+     * Desc:  Default:0  Nullable:True
+     */
+    lastScaleDispose?: number;
 }
