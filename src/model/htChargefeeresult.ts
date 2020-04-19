@@ -78,7 +78,7 @@ export interface HtChargefeeresult {
     /**
  * Desc:费用类型，1保证金2租金  Default:  Nullable:True
  */
-    feeType?: number;
+    // feeType?: number;
 
     /**
    * Desc:  Default:  Nullable:True
