@@ -3,7 +3,7 @@ import { DefaultPagination } from '@/utils/defaultSetting';
 import { Tabs, Row, Col, Card, Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { GetPageListJson } from './Main.service';
+import { GetPageListJson, GetTotalJson } from './Main.service';
 import ListTable from './ListTable';
 // import { getResult } from '@/utils/networkUtils';
 import Add from './Add';
@@ -32,6 +32,7 @@ function Main() {
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [data, setData] = useState<any[]>([]);
+  const [totalInfo, setTotalInfo] = useState<any>({});//合计信息
   const [id, setId] = useState<string>();
   const [chargeId, setChargeId] = useState<string>();
   const [search, setSearch] = useState<string>('');
@@ -120,11 +121,11 @@ function Main() {
       searchCondition.sord = order === "descend" ? "desc" : "asc";
       searchCondition.sidx = field ? field : 'signingDate';
     }
-
     return load(searchCondition).then(res => {
       return res;
     });
   };
+
   const load = data => {
     setLoading(true);
     data.sidx = data.sidx || 'signingDate';
@@ -139,12 +140,12 @@ function Main() {
           pageSize,
         };
       });
-
       setData(res.data);
       setLoading(false);
       return res;
     });
   };
+
   const initLoadData = (search) => {
     setSearch(search);
     const queryJson = { keyword: search };
@@ -156,6 +157,27 @@ function Main() {
     });
   };
 
+
+  const loadTotalData = (search) => {
+    setSearch(search);
+    let searchCondition: any = {
+      queryJson: { keyword: search },
+    };
+    loadTotal(searchCondition);
+  };
+
+  const loadTotal = data => {
+    return GetTotalJson(data).then(res => {
+      setTotalInfo(res);
+    });
+  };
+
+  const initLoadTotal = (search) => {
+    setSearch(search);
+    const queryJson = { keyword: search };
+    loadTotal({ queryJson });
+  };
+
   useEffect(() => {
     //获取房产树
     // GetQuickSimpleTreeAllForContract()
@@ -164,7 +186,9 @@ function Main() {
     //     setTreeData(res || []);
     //     return res || [];
     //   });
-    initLoadData('');
+    initLoadTotal('');//统计
+    initLoadData('');//明细
+
   }, []);
 
   // const showChoose = () => {
@@ -197,9 +221,9 @@ function Main() {
     setRoomVisible(true);
   };
 
-  const closeAtlasDrawer = () => {
-    setRoomVisible(false);
-  };
+  // const closeAtlasDrawer = () => {
+  //   setRoomVisible(false);
+  // };
 
   const selectTree = (parentId, type, searchText) => {
     //初始化页码
@@ -243,7 +267,7 @@ function Main() {
                 className="search-input"
                 placeholder="搜索合同编号"
                 style={{ width: 160 }}
-                onSearch={value => loadData(value)}
+                onSearch={value => { loadData(value); loadTotalData(value); }}
               />
               <Button type="primary" style={{ float: 'right' }}
                 onClick={() => showAddDrawer()}
@@ -255,22 +279,22 @@ function Main() {
             <Card className={styles.card}>
               <Row>
                 <Col sm={4} xs={24}>
-                  <Info title="新建待审核" value="8" bordered />
+                  <Info title="新建待修改" value={totalInfo ? totalInfo.newModify : 0} bordered />
                 </Col>
                 <Col sm={4} xs={24}>
-                  <Info title="变更待审核" value="2" bordered />
+                  <Info title="新建待审核" value={totalInfo ? totalInfo.newAudit : 0} bordered />
                 </Col>
                 <Col sm={4} xs={24}>
-                  <Info title="退租待审核" value="5" bordered />
+                  <Info title="变更待审核" value={totalInfo ? totalInfo.changeAudit : 0} bordered />
                 </Col>
                 <Col sm={4} xs={24}>
-                  <Info title="作废待审核" value="4" bordered />
+                  <Info title="退租待审核" value={totalInfo ? totalInfo.exitAudit : 0} bordered />
                 </Col>
                 <Col sm={4} xs={24}>
-                  <Info title="正常执行" value="7" bordered />
+                  <Info title="正常执行" value={totalInfo ? totalInfo.normal : 0} bordered />
                 </Col>
                 <Col sm={4} xs={24}>
-                  <Info title="已作废" value="1" />
+                  <Info title="已作废" value={totalInfo ? totalInfo.invalid : 0} />
                 </Col>
               </Row>
             </Card>

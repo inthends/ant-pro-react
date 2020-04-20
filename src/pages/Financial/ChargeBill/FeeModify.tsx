@@ -36,7 +36,7 @@ const FeeModify = (props: FeeModifyProps) => {
   useEffect(() => {
     // form.resetFields();
     if (modifyVisible) {
-      setLoading(true); 
+      setLoading(true);
       if (id == '') {
         //修改的时候不能修改费项，不加载费项
         GetReceivablesFeeItemTreeJson(roomId).then(res => {
@@ -328,7 +328,7 @@ const FeeModify = (props: FeeModifyProps) => {
   // };
 
   const disabledDate = (current) => {
-    return current < moment(form.getFieldValue('beginDate'));
+    return current && current.isBefore(moment(form.getFieldValue('beginDate')), 'day');
   };
 
   //缓存费项id

@@ -115,7 +115,7 @@ function ChargeListTable(props: ChargeListTableProps) {
       title: '业户名称',
       dataIndex: 'customerName',
       key: 'customerName',
-      width: 150,
+      width: 200,
       sorter: true,
     },
     {

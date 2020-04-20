@@ -7,6 +7,9 @@ export function GetPageListJson(data): Promise<any> {
   return request.post(process.env.basePath + `/Contract/GetPageListJson`, { data: objToFormdata(data) }).then(getResult as any);
 }
  
+export function GetTotalJson(data): Promise<any> {
+  return request.post(process.env.basePath + `/Contract/GetTotal`, { data: objToFormdata(data) }).then(getResult as any);
+}
 
 //获取所有费项
 // export function GetAllFeeItems(): Promise<TreeEntity[]> {
@@ -147,4 +150,9 @@ export function GetFollow(keyValue): Promise<any> {
   return request
     .get(process.env.basePath + `/Contract/GetFollow?keyValue=${keyValue}`)
     .then(getResult as any);
+}
+
+//删除合同
+export function RemoveForm(keyValue): Promise<any> {
+  return request.post(process.env.basePath + `/Receivable/RemoveForm?keyValue=${keyValue}`).then(getResult as any);
 }

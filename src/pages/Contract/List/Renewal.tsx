@@ -80,25 +80,25 @@ const Renewal = (props: RenewalProps) => {
   // };
 
   //打开抽屉时初始化
-  useEffect(() => { 
+  useEffect(() => {
 
     GetCommonItems('IndustryType').then(res => {
-        setIndustryType(res || []);
-      });
-      //加载关联收费项目
-      // GetAllFeeItems().then(res => {
-      //   setFeeItems(res || []);
-      // });
+      setIndustryType(res || []);
+    });
+    //加载关联收费项目
+    // GetAllFeeItems().then(res => {
+    //   setFeeItems(res || []);
+    // });
 
-      //获取房产树
-      GetOrgTreeSimple().then((res: any[]) => {
-        setTreeData(res || []);
-      });
+    //获取房产树
+    GetOrgTreeSimple().then((res: any[]) => {
+      setTreeData(res || []);
+    });
 
-      GetUserList('', '员工').then(res => {
-        setUserSource(res || []);
-      });
- 
+    GetUserList('', '员工').then(res => {
+      setUserSource(res || []);
+    });
+
   }, []);
 
   // 打开抽屉时初始化
@@ -531,7 +531,7 @@ const Renewal = (props: RenewalProps) => {
 
   //合同续租，起租日和签订日都要大于原来合同的结束日期
   const disabledDate = (current) => {
-    return current < moment(infoDetail.contractEndDate).add(1, 'days');
+    return current && current.isBefore(moment(infoDetail.contractEndDate), 'day');
   };
 
   //重新设置state

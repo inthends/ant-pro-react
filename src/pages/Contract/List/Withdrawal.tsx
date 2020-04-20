@@ -148,7 +148,7 @@ const Withdrawal = (props: WithdrawalProps) => {
 
   //退租日期不能小于合同计租日期
   const disabledDate = (current) => {
-    return current < moment(infoDetail.billingDate);
+    return current && current.isBefore(moment(infoDetail.billingDate), 'day');
   };
 
   return (
@@ -234,7 +234,7 @@ const Withdrawal = (props: WithdrawalProps) => {
                         <Form.Item label="租赁数量（m²)">
                           {infoDetail.leaseSize}
                         </Form.Item>
-                      </Col> 
+                      </Col>
                     </Row>
                     <Row gutter={24}>
                       <Col lg={12}>
@@ -285,8 +285,8 @@ const Withdrawal = (props: WithdrawalProps) => {
                           {infoDetail.maxLateFee ? infoDetail.maxLateFee + '%' : '-'}
                         </Form.Item>
                       </Col>
-                    </Row> 
-                  </Card> 
+                    </Row>
+                  </Card>
                 </Col>
                 <Col span={12}>
                   <Card title="房源信息" className={styles.card} hoverable>
@@ -326,7 +326,7 @@ const Withdrawal = (props: WithdrawalProps) => {
                               infoDetail.industry
                             }
                           </Form.Item>
-                        </Col> 
+                        </Col>
                         <Col lg={12}>
                           <Form.Item label="法人"  >
                             {infoDetail.legalPerson}
@@ -451,7 +451,7 @@ const Withdrawal = (props: WithdrawalProps) => {
                 </Row>
               </Card>
 
-              <Card title='递增率' className={styles.card} hoverable> 
+              <Card title='递增率' className={styles.card} hoverable>
                 <Row gutter={24}>
                   <Col lg={8}>
                     <Form.Item label="递增时间点"  >

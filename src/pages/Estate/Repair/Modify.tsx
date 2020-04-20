@@ -196,12 +196,12 @@ const Modify = (props: ModifyProps) => {
 
   const disabledDate = (current) => {
     // Can not select days before today and today
-    return current && current <= moment(infoDetail.beginDate);
+    return current && current.isBefore(moment(infoDetail.beginDate), 'day');
   };
 
   const disabledTestDate = (current) => {
     // Can not select days before today and today
-    return current && current <= moment(infoDetail.endDate);
+    return current && current.isAfter(moment(infoDetail.endDate), 'day');
   };
 
   // const range = (start, end) => {

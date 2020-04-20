@@ -73,7 +73,7 @@ const Split = (props: SplitProps) => {
 
   //禁用日期
   const disabledDate = (current) => {
-    return current < moment(infoDetail.beginDate) || current > moment(infoDetail.endDate).add(1, 'days');
+    return current && (current.isBefore(moment(infoDetail.beginDate), 'day') || current.isAfter(moment(infoDetail.endDate), 'day'));
   };
 
   //计算张总天数

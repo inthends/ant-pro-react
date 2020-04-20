@@ -69,7 +69,7 @@ const Detail = (props: DetailProps) => {
           setHouseList(tempInfo.houseList);
           setCount(tempInfo.followCount);
           setTotalInfo({
-            leasePrice: tempInfo.leasePrice,
+            // leasePrice: tempInfo.leasePrice,
             // totalDeposit: tempInfo.totalDeposit,
             totalAmount: tempInfo.totalAmount,
             // totalPropertyAmount: tempInfo.totalPropertyAmount
@@ -182,7 +182,14 @@ const Detail = (props: DetailProps) => {
         // ]}
         >
           <Divider dashed />
-          <Form layout='vertical'>
+          {GetStatus(infoDetail.status)}
+      合同摘要 【合同期间
+      {String(infoDetail.startDate).substr(0, 10)}
+      到{String(infoDetail.endDate).substr(0, 10)}，
+      租赁数为{infoDetail.leaseSize}㎡。
+      付款周期{chargeFeeList.length>0?chargeFeeList[0].payCycle:''}月一付，
+      总金额{totalInfo.totalAmount}】
+          {/* <Form layout='vertical'>
             <Row gutter={24}>
               <Col lg={4}>
                 <Form.Item label="合同状态" >
@@ -210,7 +217,7 @@ const Detail = (props: DetailProps) => {
                 </Form.Item>
               </Col>
             </Row>
-          </Form>
+          </Form> */}
         </PageHeader>
         <Divider dashed />
         <Form layout="vertical">
@@ -402,7 +409,7 @@ const Detail = (props: DetailProps) => {
                     </Form.Item>
                   </Col>
                   <Col lg={6}>
-                    <Form.Item label="对最后一位"> 
+                    <Form.Item label="对最后一位">
                       {GetScaleDispose(contractCharge.midScaleDispose)}
 
                     </Form.Item>
@@ -414,7 +421,7 @@ const Detail = (props: DetailProps) => {
                   </Col>
                   <Col lg={6}>
                     <Form.Item label="对最后一位">
-                      {GetScaleDispose(contractCharge.lastScaleDispose)} 
+                      {GetScaleDispose(contractCharge.lastScaleDispose)}
                     </Form.Item>
                   </Col>
                 </Row>

@@ -285,7 +285,7 @@ const Add = (props: AddProps) => {
         //费用条款-基本条款 
         // ContractCharge.depositFeeItemId = values.depositFeeItemId;
         // ContractCharge.depositFeeItemName = values.depositFeeItemName;
-        ContractCharge.leaseArea = values.leaseArea ;
+        ContractCharge.leaseArea = values.leaseArea;
         // ContractCharge.deposit = values.deposit;
         // ContractCharge.depositUnit = values.depositUnit;
         // ContractCharge.startDate = values.billingDate.format('YYYY-MM-DD');
@@ -302,7 +302,7 @@ const Add = (props: AddProps) => {
         Contract.no = values.no;
         Contract.follower = values.follower;
         Contract.followerId = values.followerId;
-        Contract.leaseSize = values.leaseSize ;
+        Contract.leaseSize = values.leaseSize;
         Contract.signingDate = values.signingDate.format('YYYY-MM-DD');
         Contract.startDate = values.startDate.format('YYYY-MM-DD');
         Contract.endDate = values.endDate.format('YYYY-MM-DD');
@@ -440,12 +440,12 @@ const Add = (props: AddProps) => {
 
   //结束日期控制
   const disabledEndDate = (current) => {
-    return current < moment(form.getFieldValue('billingDate'));
+    return current&&current.isBefore(moment(form.getFieldValue('startDate')), 'day');
   };
 
   //起始日期控制
   const disabledStartDate = (current) => {
-    return current < moment(form.getFieldValue('contractEndDate'));
+    return current&&current.isAfter(moment(form.getFieldValue('endDate')), 'day'); 
   };
 
   //验证用户
@@ -600,7 +600,8 @@ const Add = (props: AddProps) => {
                             rules: [{ required: true, message: '请选择起始日期' }],
                           })(<DatePicker placeholder="请选择起始日期"
                             disabledDate={disabledStartDate}
-                            style={{ width: '100%' }} />)}
+                            style={{ width: '100%' }}
+                          />)}
                         </Form.Item>
                       </Col>
                       <Col lg={12}>
@@ -611,23 +612,6 @@ const Add = (props: AddProps) => {
                           })(<DatePicker placeholder="请选择终止日期"
                             disabledDate={disabledEndDate}
                             style={{ width: '100%' }} />)}
-                        </Form.Item>
-                      </Col>
-                    </Row>
-
-                    <Row gutter={24}>
-                      <Col lg={12}>
-                        <Form.Item label="经营主体" >
-                          {getFieldDecorator('businessEntity', {
-                            // rules: [{ required: true, message: '请输入经营主体' }],
-                          })(<Input placeholder="请输入经营主体" />)}
-                        </Form.Item>
-                      </Col>
-                      <Col lg={12}>
-                        <Form.Item label="付款方式">
-                          {getFieldDecorator('payType', {
-                            // rules: [{ required: true, message: '请输入付款方式' }],
-                          })(<Input placeholder="请输入付款方式" />)}
                         </Form.Item>
                       </Col>
                     </Row>
@@ -672,6 +656,23 @@ const Add = (props: AddProps) => {
                             initialValue: moment(new Date()),
                             rules: [{ required: true, message: '请选择签约日期' }],
                           })(<DatePicker placeholder="请选择签约日期" style={{ width: '100%' }} />)}
+                        </Form.Item>
+                      </Col>
+                    </Row>
+
+                    <Row gutter={24}>
+                      <Col lg={12}>
+                        <Form.Item label="经营主体" >
+                          {getFieldDecorator('businessEntity', {
+                            // rules: [{ required: true, message: '请输入经营主体' }],
+                          })(<Input placeholder="请输入经营主体" />)}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={12}>
+                        <Form.Item label="付款方式">
+                          {getFieldDecorator('payType', {
+                            // rules: [{ required: true, message: '请输入付款方式' }],
+                          })(<Input placeholder="请输入付款方式" />)}
                         </Form.Item>
                       </Col>
                     </Row>
@@ -980,7 +981,7 @@ const Add = (props: AddProps) => {
         <Button onClick={closeDrawer} style={{ marginRight: 8 }}>
           取消
           </Button>
-        <Button onClick={() => save(false)}  style={{ marginRight: 8 }}>
+        <Button onClick={() => save(false)} style={{ marginRight: 8 }}>
           暂存
           </Button>
         <Button onClick={() => save(true)} type="primary">

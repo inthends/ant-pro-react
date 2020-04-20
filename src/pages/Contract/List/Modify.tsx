@@ -135,10 +135,10 @@ const Modify = (props: ModifyProps) => {
 
           //合计信息
           setTotalInfo({
-            leasePrice: tempInfo.leasePrice,
-            totalDeposit: tempInfo.totalDeposit,
+            // leasePrice: tempInfo.leasePrice,
+            // totalDeposit: tempInfo.totalDeposit,
             totalAmount: tempInfo.totalAmount,
-            totalPropertyAmount: tempInfo.totalPropertyAmount
+            // totalPropertyAmount: tempInfo.totalPropertyAmount
           });
 
           form.resetFields();
@@ -210,7 +210,7 @@ const Modify = (props: ModifyProps) => {
   const calculation = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        setLoading(true);
+        // setLoading(true);
         //租赁条款     
         let TermJson: HtLeasecontractchargefee[] = [];
         // let data: HtLeasecontractchargefee = {}; 
@@ -363,10 +363,10 @@ const Modify = (props: ModifyProps) => {
           // setChargeFeeResult(res.chargeFeeResultList);  
           //合计信息
           setTotalInfo({
-            leasePrice: tempInfo.leasePrice,
-            totalDeposit: tempInfo.totalDeposit,
+            // leasePrice: tempInfo.leasePrice,
+            // totalDeposit: tempInfo.totalDeposit,
             totalAmount: tempInfo.totalAmount,
-            totalPropertyAmount: tempInfo.totalPropertyAmount
+            // totalPropertyAmount: tempInfo.totalPropertyAmount
           });
           setLoading(false);
         });
@@ -716,6 +716,17 @@ const Modify = (props: ModifyProps) => {
     setFollowVisible(false);
   };
 
+  //结束日期控制
+  const disabledEndDate = (current) => {
+    return current && current.isBefore(moment(form.getFieldValue('startDate')), 'day');
+  };
+
+  //起始日期控制
+  const disabledStartDate = (current) => {
+    return current && current.isAfter(moment(form.getFieldValue('endDate')), 'day');
+  };
+
+
   return (
     <Drawer
       title={title}
@@ -748,45 +759,13 @@ const Modify = (props: ModifyProps) => {
       // ]}
       >
         <Divider dashed />
-        <Form layout='vertical'>
-          <Row gutter={24}>
-            <Col lg={4}>
-              <Form.Item label="合同状态" >
-                {GetStatus(infoDetail.status)}
-              </Form.Item>
-            </Col>
-            <Col lg={5}>
-              <Form.Item label="合同单价" >
-                {totalInfo.leasePrice}
-              </Form.Item>
-            </Col>
-            <Col lg={5}>
-              <Form.Item label="总价" >
-                {totalInfo.totalAmount}
-              </Form.Item>
-            </Col>
-            {/* <Col lg={3}>
-              <Form.Item label="保证金" >
-                {totalInfo.totalDeposit}
-              </Form.Item>
-            </Col>
-            <Col lg={3}>
-              <Form.Item label="物业费" >
-                {totalInfo.totalPropertyAmount}
-              </Form.Item>
-            </Col> */}
-            <Col lg={5}>
-              <Form.Item label="联系人" >
-                {form.getFieldValue('linkMan')}
-              </Form.Item>
-            </Col>
-            <Col lg={5}>
-              <Form.Item label="联系电话" >
-                {form.getFieldValue('linkPhone')}
-              </Form.Item>
-            </Col>
-          </Row>
-        </Form>
+        {GetStatus(infoDetail.status)}
+      合同摘要 【合同期间
+      {form.getFieldValue('startDate') ? moment(form.getFieldValue('startDate')).format('YYYY-MM-DD') : ''}
+      到{form.getFieldValue('endDate') ? moment(form.getFieldValue('endDate')).format('YYYY-MM-DD') : ''}，
+      租赁数为{form.getFieldValue('leaseSize')}㎡。
+      付款周期{form.getFieldValue(`payCycle[0]`)}月一付，
+      总金额{totalInfo.totalAmount}】
       </PageHeader>
       <Divider dashed />
       <Form layout="vertical" hideRequiredMark>
@@ -822,7 +801,9 @@ const Modify = (props: ModifyProps) => {
                               ? moment(new Date(infoDetail.startDate))
                               : moment(new Date()),
                             rules: [{ required: true, message: '请选择起始日期' }],
-                          })(<DatePicker placeholder="请选择起始日期" style={{ width: '100%' }} />)}
+                          })(<DatePicker placeholder="请选择起始日期" style={{ width: '100%' }}
+                            disabledDate={disabledStartDate}
+                          />)}
                         </Form.Item>
                       </Col>
                       <Col lg={12}>
@@ -832,29 +813,13 @@ const Modify = (props: ModifyProps) => {
                               ? moment(new Date(infoDetail.endDate))
                               : moment(new Date()).add(1, 'years').add(-1, 'days'),
                             rules: [{ required: true, message: '请选择终止日期' }],
-                          })(<DatePicker placeholder="请选择终止日期" style={{ width: '100%' }} />)}
+                          })(<DatePicker placeholder="请选择终止日期"
+                            style={{ width: '100%' }}
+                            disabledDate={disabledEndDate}
+                          />)}
                         </Form.Item>
                       </Col>
                     </Row>
-                    <Row gutter={24}>
-                      <Col lg={12}>
-                        <Form.Item label="经营主体" >
-                          {getFieldDecorator('businessEntity', {
-                            initialValue: infoDetail.businessEntity
-                            // rules: [{ required: true, message: '请输入经营主体' }],
-                          })(<Input placeholder="请输入经营主体" />)}
-                        </Form.Item>
-                      </Col>
-                      <Col lg={12}>
-                        <Form.Item label="付款方式">
-                          {getFieldDecorator('payType', {
-                            initialValue: infoDetail.payType
-                            // rules: [{ required: true, message: '请输入付款方式' }],
-                          })(<Input placeholder="请输入付款方式" />)}
-                        </Form.Item>
-                      </Col>
-                    </Row>
-
                     {/* <Row gutter={24}>
                       <Col lg={12}>
                         <Form.Item label="单价保留小数点">
@@ -912,7 +877,6 @@ const Modify = (props: ModifyProps) => {
                       </Col>
                     </Row>  */}
 
-
                     <Row gutter={24}>
                       <Col lg={12}>
                         <Form.Item label="签约人">
@@ -957,6 +921,25 @@ const Modify = (props: ModifyProps) => {
                               : moment(new Date()),
                             rules: [{ required: true, message: '请选择签约日期' }],
                           })(<DatePicker placeholder="请选择签约日期" style={{ width: '100%' }} />)}
+                        </Form.Item>
+                      </Col>
+                    </Row>
+
+                    <Row gutter={24}>
+                      <Col lg={12}>
+                        <Form.Item label="经营主体" >
+                          {getFieldDecorator('businessEntity', {
+                            initialValue: infoDetail.businessEntity
+                            // rules: [{ required: true, message: '请输入经营主体' }],
+                          })(<Input placeholder="请输入经营主体" />)}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={12}>
+                        <Form.Item label="付款方式">
+                          {getFieldDecorator('payType', {
+                            initialValue: infoDetail.payType
+                            // rules: [{ required: true, message: '请输入付款方式' }],
+                          })(<Input placeholder="请输入付款方式" />)}
                         </Form.Item>
                       </Col>
                     </Row>
@@ -1028,7 +1011,7 @@ const Modify = (props: ModifyProps) => {
                   </Card>
                 </Col>
                 <Col span={12}>
-                  <Card title="租赁信息" className={styles.addcard} hoverable> 
+                  <Card title="租赁信息" className={styles.addcard} hoverable>
                     <Row gutter={24}>
                       <Col lg={24}>
                         <List
@@ -1041,7 +1024,7 @@ const Modify = (props: ModifyProps) => {
                           }
                         />
                       </Col>
-                    </Row> 
+                    </Row>
                     <Row gutter={24}>
                       <Col lg={24}>
                         <Form.Item label={<div>房源选择(<a>多个房屋的时候，默认获取第一个房屋作为计费单元</a>)</div>} required>
@@ -1201,7 +1184,7 @@ const Modify = (props: ModifyProps) => {
                         initialValue: contractCharge.leaseArea
                       })(<Input placeholder='自动获取房屋的计费面积' />)}
                     </Form.Item>
-                  </Col> 
+                  </Col>
                   <Col lg={6}>
                     <Form.Item label="滞纳金比例(‰)" >
                       {getFieldDecorator('lateFee', {
@@ -1284,7 +1267,7 @@ const Modify = (props: ModifyProps) => {
                         </Select>
                       )}
                     </Form.Item>
-                  </Col> 
+                  </Col>
                   <Col lg={6}>
                     <Form.Item label="最终结果保留小数位数">
                       {getFieldDecorator('lastResultScale', {

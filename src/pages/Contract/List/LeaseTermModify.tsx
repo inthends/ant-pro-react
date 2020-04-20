@@ -58,7 +58,7 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
   getFieldDecorator('LeaseTerms', { initialValue: chargeFeeList });
   const keys = getFieldValue('LeaseTerms');
   const formItems = keys.map((k, index) =>
-    ( 
+    (
       <Card hoverable key={index} className={styles.card} title={index == 0 ? '租期条款' : ''}
         extra={index > 0 ? <Icon type="minus-circle-o" onClick={() => remove(index)} /> : null}>
         <Row gutter={24}>
@@ -69,7 +69,14 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
                   ? moment(new Date(k.chargeStartDate))
                   : moment(new Date()),
                 rules: [{ required: true, message: '请选择' }],
-              })(<DatePicker placeholder='请选择' />)}
+              })(<DatePicker placeholder='请选择'
+                disabledDate={(currentDate) => {
+                  return currentDate && (
+                    currentDate.isBefore(moment(form.getFieldValue(`startDate`)), 'day') ||
+                    currentDate.isAfter(moment(form.getFieldValue(`endDate`)), 'day')
+                  ) ? true : false;
+                }}
+              />)}
             </Form.Item>
           </Col>
           <Col lg={4}>
@@ -79,7 +86,13 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
                   ? moment(new Date(k.chargeEndDate))
                   : moment(new Date()),
                 rules: [{ required: true, message: '请选择' }],
-              })(<DatePicker placeholder='请选择' />)}
+              })(<DatePicker placeholder='请选择'
+                disabledDate={(currentDate) => {
+                  return currentDate && (
+                    currentDate.isBefore(moment(form.getFieldValue(`startDate`)), 'day') ||
+                    currentDate.isAfter(moment(form.getFieldValue(`endDate`)), 'day')
+                  ) ? true : false;
+                }} />)}
             </Form.Item>
           </Col>
           <Col lg={8}>
@@ -319,8 +332,8 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
               })(<DatePicker placeholder="请选择"
                 disabledDate={(currentDate) => {
                   return currentDate && (
-                    currentDate < moment(form.getFieldValue(`chargeStartDate[${index}]`)) ||
-                    currentDate > moment(form.getFieldValue(`chargeEndDate[${index}]`)).add(1, 'days')
+                    currentDate.isBefore(moment(form.getFieldValue(`chargeStartDate[${index}]`)), 'day') ||
+                    currentDate.isAfter(moment(form.getFieldValue(`chargeEndDate[${index}]`)), 'day')
                   ) ? true : false;
                 }}
               />)}
@@ -335,8 +348,8 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
               })(<DatePicker placeholder="请选择"
                 disabledDate={(currentDate) => {
                   return currentDate && (
-                    currentDate < moment(form.getFieldValue(`chargeStartDate[${index}]`)) ||
-                    currentDate > moment(form.getFieldValue(`chargeEndDate[${index}]`)).add(1, 'days')
+                    currentDate.isBefore(moment(form.getFieldValue(`chargeStartDate[${index}]`)), 'day') ||
+                    currentDate.isAfter(moment(form.getFieldValue(`chargeEndDate[${index}]`)), 'day')
                   ) ? true : false;
                 }}
               />)}

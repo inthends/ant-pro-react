@@ -361,12 +361,12 @@ const Modify = (props: ModifyProps) => {
 
   //起始日期控制
   const disabledStartDate = (current) => {
-    return current < moment(form.getFieldValue('endDate'));
+    return current&&current.isAfter(moment(form.getFieldValue('endDate')), 'day');
   };
 
   //结束日期控制
   const disabledEndDate = (current) => {
-    return current < moment(form.getFieldValue('beginDate'));
+    return current&&current.isBefore(moment(form.getFieldValue('beginDate')), 'day');
   };
 
   //添加优惠
@@ -546,7 +546,8 @@ const Modify = (props: ModifyProps) => {
                     moment(new Date(infoDetail.endDate)),
                   rules: [{ required: true, message: '请选择优惠结束日期' }]
                 })(
-                  <DatePicker placeholder="请选择优惠结束日期" style={{ width: '100%' }} disabledDate={disabledEndDate} />
+                  <DatePicker placeholder="请选择优惠结束日期" style={{ width: '100%' }} 
+                  disabledDate={disabledEndDate} />
                 )}
               </Form.Item></Col>
           </Row>

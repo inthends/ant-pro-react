@@ -3,8 +3,8 @@ import { TreeEntity } from '@/model/models';
 import { Modal, Spin, Card, Select, Button, Col, DatePicker, Drawer, Form, Input, InputNumber, Row, message } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { SaveDetail, GetReceivablesFeeItemTreeJson, InvalidBillDetailForm,SaveTempBill, GetShowDetailByMainId, Call} from './Main.service';
-import { GetUserRoomsByRelationId,GetRoomUsers, GetUserRooms, GetFeeItemDetail } from '@/services/commonItem';
+import { SaveDetail, GetReceivablesFeeItemTreeJson, InvalidBillDetailForm, SaveTempBill, GetShowDetailByMainId, Call } from './Main.service';
+import { GetUserRoomsByRelationId, GetRoomUsers, GetUserRooms, GetFeeItemDetail } from '@/services/commonItem';
 
 import LeftTree from '../LeftTree';
 import moment from 'moment';
@@ -243,9 +243,9 @@ const AddRepairFee = (props: AddRepairFeeProps) => {
   // };
 
   const disabledDate = (current) => {
-    return current < moment(form.getFieldValue('beginDate'));
+    return current&&current.isBefore(moment(form.getFieldValue('beginDate')), 'day');
   };
- 
+
   const close = () => {
     closeDrawer();
   };

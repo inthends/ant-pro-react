@@ -67,14 +67,30 @@ function LeaseTerm(props: LeaseTermProps) {
           <Form.Item label="开始时间" required >
             {getFieldDecorator(`chargeStartDate[${k}]`, {
               rules: [{ required: isValidate, message: '请选择' }],
-            })(<DatePicker placeholder='请选择' />)}
+            })(<DatePicker placeholder='请选择'
+              disabledDate={(currentDate) => {
+                return currentDate && (
+                  currentDate.isBefore(moment(form.getFieldValue('startDate')), 'day') ||
+                  currentDate.isAfter(moment(form.getFieldValue('endDate')), 'day')
+                ) ? true : false;
+              }}
+            />)}
           </Form.Item>
         </Col>
         <Col lg={4}>
           <Form.Item label="结束时间" required>
             {getFieldDecorator(`chargeEndDate[${k}]`, {
               rules: [{ required: isValidate, message: '请选择' }],
-            })(<DatePicker placeholder='请选择' />)}
+            })(<DatePicker placeholder='请选择'
+
+              disabledDate={(currentDate) => {
+                return currentDate && (
+                  currentDate.isBefore(moment(form.getFieldValue('startDate')), 'day') ||
+                  currentDate.isAfter(moment(form.getFieldValue('endDate')), 'day')
+                ) ? true : false;
+              }}
+
+            />)}
           </Form.Item>
         </Col>
         <Col lg={8}>
@@ -277,8 +293,8 @@ function LeaseTerm(props: LeaseTermProps) {
             })(<DatePicker placeholder="请选择"
               disabledDate={(currentDate) => {
                 return currentDate && (
-                  currentDate < moment(form.getFieldValue(`chargeStartDate[${k}]`)) ||
-                  currentDate > moment(form.getFieldValue(`chargeEndDate[${k}]`)).add(1, 'days')
+                  currentDate.isBefore(moment(form.getFieldValue(`chargeStartDate[${k}]`)), 'day') ||
+                  currentDate.isAfter(moment(form.getFieldValue(`chargeEndDate[${k}]`)), 'day')
                 ) ? true : false;
               }}
             />)}
@@ -290,8 +306,8 @@ function LeaseTerm(props: LeaseTermProps) {
             })(<DatePicker placeholder="请选择"
               disabledDate={(currentDate) => {
                 return currentDate && (
-                  currentDate < moment(form.getFieldValue(`chargeStartDate[${k}]`)) ||
-                  currentDate > moment(form.getFieldValue(`chargeEndDate[${k}]`)).add(1, 'days')
+                  currentDate.isBefore(moment(form.getFieldValue(`chargeStartDate[${k}]`)), 'day') ||
+                  currentDate.isAfter(moment(form.getFieldValue(`chargeEndDate[${k}]`)), 'day')
                 ) ? true : false;
               }}
             />)}
@@ -338,7 +354,15 @@ function LeaseTerm(props: LeaseTermProps) {
               {getFieldDecorator(`chargeStartDate[0]`, {
                 initialValue: moment(new Date()),
                 rules: [{ required: isValidate, message: '请选择开始时间' }],
-              })(<DatePicker placeholder='请选择开始时间' />)}
+              })(<DatePicker placeholder='请选择开始时间'
+                disabledDate={(currentDate) => {
+                  return currentDate && (
+                    currentDate.isBefore(moment(form.getFieldValue(`startDate`)), 'day') ||
+                    currentDate.isAfter(moment(form.getFieldValue(`endDate`)), 'day')
+                  ) ? true : false;
+                }}
+
+              />)}
             </Form.Item>
           </Col>
           <Col lg={4}>
@@ -346,7 +370,14 @@ function LeaseTerm(props: LeaseTermProps) {
               {getFieldDecorator(`chargeEndDate[0]`, {
                 initialValue: moment(new Date()).add(1, 'years').add(-1, 'days'),
                 rules: [{ required: isValidate, message: '请选择结束时间' }],
-              })(<DatePicker placeholder='请选择结束时间' />)}
+              })(<DatePicker placeholder='请选择结束时间'
+                disabledDate={(currentDate) => {
+                  return currentDate && (
+                    currentDate.isBefore(moment(form.getFieldValue(`startDate`)), 'day') ||
+                    currentDate.isAfter(moment(form.getFieldValue(`endDate`)), 'day')
+                  ) ? true : false;
+                }}
+              />)}
             </Form.Item>
           </Col>
           <Col lg={8}>
@@ -542,8 +573,8 @@ function LeaseTerm(props: LeaseTermProps) {
               })(<DatePicker placeholder="请选择"
                 disabledDate={(currentDate) => {
                   return currentDate && (
-                    currentDate < moment(form.getFieldValue(`chargeStartDate[0]`)) ||
-                    currentDate > moment(form.getFieldValue(`chargeEndDate[0]`)).add(1, 'days')
+                    currentDate.isBefore(moment(form.getFieldValue(`chargeStartDate[0]`)), 'day') ||
+                    currentDate.isAfter(moment(form.getFieldValue(`chargeEndDate[0]`)), 'day')
                   ) ? true : false;
                 }}
               />)}
@@ -555,8 +586,8 @@ function LeaseTerm(props: LeaseTermProps) {
               })(<DatePicker placeholder="请选择"
                 disabledDate={(currentDate) => {
                   return currentDate && (
-                    currentDate < moment(form.getFieldValue(`chargeStartDate[0]`)) ||
-                    currentDate > moment(form.getFieldValue(`chargeEndDate[0]`)).add(1, 'days')
+                    currentDate.isBefore(moment(form.getFieldValue(`chargeStartDate[0]`)), 'day') ||
+                    currentDate.isAfter(moment(form.getFieldValue(`chargeEndDate[0]`)), 'day')
                   ) ? true : false;
                 }}
               />)}
