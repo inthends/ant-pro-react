@@ -48,6 +48,7 @@ export default {
   'menu.financial.billingmain': '周期费计算',
   'menu.financial.payment': '付款管理',
   'menu.financial.rebate': '优惠政策',
+  'menu.financial.lastschrift': '划账管理',
 
   'menu.estate': '物业管理',
   'menu.estate.servicedesk': '服务总台',

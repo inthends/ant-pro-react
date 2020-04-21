@@ -218,6 +218,12 @@ export default [
             icon: 'percentage',
             component: './Financial/Rebate/Main',
           },
+          {
+            name: 'lastschrift',
+            path: '/financial/lastschrift',
+            icon: 'export',
+            component: './Financial/Lastschrift/Main',
+          },
         ],
       },
       {

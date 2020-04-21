@@ -134,8 +134,9 @@ function ListTableMore(props: ListTableMoreProps) {
     <Dropdown
       overlay={
         <Menu onClick={({ key }) => editAndDelete(key, item)}>
-          < Menu.Item key="split">拆分</Menu.Item>
-          < Menu.Item key="merge">合并</Menu.Item>
+          {/* 暂时未实现 */}
+          {/* < Menu.Item key="split">拆分</Menu.Item>
+          < Menu.Item key="merge">合并</Menu.Item> */}
         </Menu >
       }>
       <a>
