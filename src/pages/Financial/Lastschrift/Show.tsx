@@ -218,7 +218,7 @@ const Show = (props: ShowProps) => {
                 </Form.Item>
               </Col>
               <Col lg={8}>
-                <Form.Item label="操作人" >
+                <Form.Item label="划账人" >
                   {infoDetail.createUserName}
                 </Form.Item>
               </Col>

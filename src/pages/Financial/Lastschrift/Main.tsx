@@ -1,5 +1,5 @@
 //划账管理
-import { DefaultPagination } from '@/utils/defaultSetting'; 
+import { DefaultPagination } from '@/utils/defaultSetting';
 import { Tabs, Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
@@ -14,6 +14,7 @@ import Verify from './Verify';
 import Show from './Show';
 import ListTable from './ListTable';
 import DetailTable from './DetailTable';
+import Check from './Check';
 
 const { Content } = Layout;
 const { Search } = Input;
@@ -280,6 +281,17 @@ function Main() {
   //   });
   // }
 
+  const [checkVisible, setCheckVisible] = useState<boolean>(false);
+
+  const showCheck = (id: string) => {
+    setId(id);
+    setCheckVisible(true);
+  }
+
+  const closeCheck = () => {
+    setCheckVisible(false);
+  };
+
   return (
     <Layout>
       <AsynLeftTree
@@ -325,6 +337,7 @@ function Main() {
               // deleteData={deleteData}
               showModify={showModify}
               closeModify={closeModify}
+              showCheck={showCheck}
               reload={() => initLoadData(orgId, type, search)}
             />
           </TabPane>
@@ -371,6 +384,14 @@ function Main() {
         id={id}
         reload={() => initLoadData(orgId, type, search)}
       />
+
+      <Check
+        visible={checkVisible}
+        closeModal={closeCheck}
+        reload={() => initLoadData(orgId, type, search)}
+        id={id}
+      />
+
     </Layout>
   );
 }

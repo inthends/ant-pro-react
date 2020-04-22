@@ -51,6 +51,7 @@
     "not ie <= 10"
   ],
   "dependencies": {
+    "@ant-design/icons": "^4.0.6",
     "@ant-design/pro-layout": "^4.5.9",
     "@antv/data-set": "^0.10.2",
     "antd": "^3.20.0",
@@ -62,6 +63,7 @@
     "dva": "^2.4.1",
     "gg-editor": "^2.0.2",
     "ifanrx-react-ueditor": "^2.3.0",
+    "js-export-excel": "^1.1.2",
     "lodash": "^4.17.15",
     "lodash-decorators": "^6.0.1",
     "memoize-one": "^5.0.4",

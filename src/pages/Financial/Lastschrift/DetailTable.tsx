@@ -45,9 +45,9 @@ function DetailTable(props: DetailTableProps) {
       render: (text, record) => {
         switch (text) {
           case 0:
-            return <Tag color="#e4aa5b">未扣</Tag>;
+            return <Tag color="#e4aa5b">未扣款</Tag>;
           case 1:
-            return <Tag color="#19d54e">已扣</Tag>; 
+            return <Tag color="#19d54e">已扣款</Tag>; 
           case -1:
             return <Tag color="#e4aa5b">作废</Tag>;
           default:
