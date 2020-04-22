@@ -125,6 +125,9 @@ function ListTableMore(props: ListTableMoreProps) {
   //更多
   const editAndDelete = (key: string, currentItem: any) => {
     if (key === 'split') {
+
+    } else if (key === 'merge') {
+
     }
   }
 
@@ -134,9 +137,8 @@ function ListTableMore(props: ListTableMoreProps) {
     <Dropdown
       overlay={
         <Menu onClick={({ key }) => editAndDelete(key, item)}>
-          {/* 暂时未实现 */}
-          {/* < Menu.Item key="split">拆分</Menu.Item>
-          < Menu.Item key="merge">合并</Menu.Item> */}
+          < Menu.Item key="split">拆分</Menu.Item>
+          < Menu.Item key="merge">合并</Menu.Item>
         </Menu >
       }>
       <a>
@@ -197,7 +199,7 @@ function ListTableMore(props: ListTableMoreProps) {
       title: '状态',
       dataIndex: 'state',
       key: 'state',
-      width: 60, 
+      width: 60,
       render: (text, record) => {
         switch (text) {
           case 0:
@@ -229,7 +231,7 @@ function ListTableMore(props: ListTableMoreProps) {
       title: '操作',
       dataIndex: 'operation',
       key: 'operation',
-      align:'center',
+      align: 'center',
       fixed: 'right',
       width: 150,
       render: (text, record) => {

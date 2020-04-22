@@ -213,9 +213,9 @@ const FeeModify = (props: FeeModifyProps) => {
           CycleValue: "" + values.cycleValue,
           CycleType: values.cycleType,
           BillDate: moment(values.billDate).format("YYYY-MM-DD"),
-          Deadline: moment(values.deadline).format("YYYY-MM-DD"),
-          number: values.number
+          Deadline: moment(values.deadline).format("YYYY-MM-DD"), 
         }
+  
         if (id != null && id != "") {
           unit = Object.assign({}, unit, { Id: id, keyValue: id });
           SaveDetail(unit).then(res => {
@@ -228,8 +228,7 @@ const FeeModify = (props: FeeModifyProps) => {
           let newData = {
             BillId: id != null && id != "" ? infoDetail.billId : guid,
             OrganizeId: adminOrgId,
-            BillSource: "临时加费",
-            Units: JSON.stringify(units),
+            BillSource: "临时加费", 
             keyValue: id != null && id != "" ? infoDetail.billId : guid,
             // CreateUserId: localStorage.getItem('userid'),
             // CreateUserName: localStorage.getItem('username'),
@@ -243,7 +242,9 @@ const FeeModify = (props: FeeModifyProps) => {
             VerifyDate: '',
             VerifyMemo: '',
             Status: 0,//0正常 1 删除
-            code: id != null && id != "" ? 1 : 0
+            number: values.number,
+            code: id != null && id != "" ? 1 : 0,
+            Units: JSON.stringify(units)
           };
           SaveTempBill(newData).then((res) => {
             message.success('提交成功');
