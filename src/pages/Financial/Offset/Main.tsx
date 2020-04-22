@@ -282,7 +282,7 @@ function Main() {
   // }
 
   return (
-    <Layout className="offsetMain">
+    <Layout  >
       <AsynLeftTree
         parentid={'0'}
         selectTree={(id, type, info) => {

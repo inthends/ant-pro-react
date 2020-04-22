@@ -1,9 +1,8 @@
 //明细
 import Page from '@/components/Common/Page';
-import { Form, Table } from 'antd';
+import {Tag, Form, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
-import React from 'react';
-import moment from 'moment';
+import React from 'react'; 
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import styles from './style.less';
 interface DetailTableProps {
@@ -16,7 +15,7 @@ interface DetailTableProps {
 };
 
 function DetailTable(props: DetailTableProps) {
-  const {onchange, loading, pagination, data } = props;
+  const { onchange, loading, pagination, data } = props;
 
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
@@ -29,85 +28,80 @@ function DetailTable(props: DetailTableProps) {
       return '';
     }
   };
+
   const columns = [
     {
-      title: '冲抵单号',
+      title: '划账单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 180, 
+      width: 180,
     },
     {
-      title: '应付日期',
-      dataIndex: 'period',
-      key: 'period', 
-      width: 120,
-      render: val => {
-        if (val == null) {
-          return ''
-        } else {
-          return moment(val).format('YYYY-MM-DD');
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      align: 'center',
+      width: 80,
+      render: (text, record) => {
+        switch (text) {
+          case 0:
+            return <Tag color="#e4aa5b">未扣</Tag>;
+          case 1:
+            return <Tag color="#19d54e">已扣</Tag>; 
+          case -1:
+            return <Tag color="#e4aa5b">作废</Tag>;
+          default:
+            return '';
         }
       }
     }, 
     {
-      title: '付款项目',
-      dataIndex: 'payFeeName',
-      key: 'payFeeName',
-      width: 120, 
+      title: '划账费项',
+      dataIndex: 'feeName',
+      key: 'feeName',
+      width: 100,
     },
     {
-      title: '应付金额',
-      dataIndex: 'payAmount',
-      key: 'payAmount',
-      width: 100, 
+      title: '划账金额',
+      dataIndex: 'amount',
+      key: 'amount',
+      width: 100,
     },
     {
-      title: '收费项目',
-      dataIndex: 'billFeeName',
-      key: 'billFeeName',
-      width: 100, 
+      title: '扣款金额',
+      dataIndex: 'deductionAmount',
+      key: 'deductionAmount',
+      width: 100,
     },
     {
-      title: '冲抵金额',
-      dataIndex: 'offsetAmount',
-      key: 'offsetAmount', 
-      width: 100
-    },
-    // {
-    //   title: '应付余额',
-    //   dataIndex: 'lastAmount', 
-    //   key: 'lastAmount',
-    //   width: 100, 
-    // },
-    {
-      title: '计费起始日期',
-      dataIndex: 'billBeginDate',
-      key: 'billBeginDate', 
+      title: '户名',
+      dataIndex: 'name',
+      key: 'name',
       width: 120,
-      render: val => {
-        if (val == null) {
-          return ''
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
-    }, {
-      title: '计费截止日期',
-      dataIndex: 'billEndDate',
-      key: 'billEndDate', 
-      width: 120,
-      render: val => {
-        if (val == null) {
-          return '';
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
     },
+    {
+      title: '房号',
+      dataIndex: 'code',
+      key: 'code',
+      width: 120,
+    },
+    {
+      title: '开户银行',
+      dataIndex: 'accountBank',
+      key: 'accountBank',
+      width: 120,
+    },
+    {
+      title: '账号',
+      dataIndex: 'bankAccount',
+      key: 'bankAccount',
+      width: 120,
+    }, 
+    
     {
       title: '单元全称',
       dataIndex: 'allName',
-      key: 'allName', 
+      key: 'allName',
     }
   ] as ColumnProps<any>[];
 
@@ -121,7 +115,7 @@ function DetailTable(props: DetailTableProps) {
         // rowKey="billId"
         rowKey={record => record.id}
         pagination={pagination}
-        scroll={{ y: 500, x: 1200 }}
+        scroll={{ y: 500, x: 1300 }}
         loading={loading}
         rowClassName={getClassName} //样式
         onChange={(pagination: PaginationConfig, filters, sorter) =>

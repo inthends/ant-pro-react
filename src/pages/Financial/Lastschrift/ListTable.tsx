@@ -5,7 +5,7 @@ import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import moment from 'moment';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import { InvalidForm } from './Offset.service';
+import { InvalidForm } from './Lastschrift.service';
 import styles from './style.less';
 
 interface ListTableProps {
@@ -49,6 +49,11 @@ function ListTable(props: ListTableProps) {
       return '';
     }
   };
+
+  //导出
+  const doExport=(billId)=>{
+
+  }
 
   const columns = [
     {
@@ -148,14 +153,15 @@ function ListTable(props: ListTableProps) {
             //   删除
             // </Button>
             <span>
-              <a onClick={() => showModify(record.billId)} key="modify">查看</a>
+              <a onClick={() => showModify(record.billId)} key="show">查看</a>
               <Divider type="vertical" />
               <a onClick={() => showVerify(record.billId, false)} key="modify">反审</a>
+              <Divider type="vertical" />
+              <a onClick={() => doExport(record.billId)} key="export">导出</a>
             </span>
           ];
         }
-        else {
-
+        else { 
           if (record.status == -1) {
             //作废，只能查看
             return [<a onClick={() => showModify(record.billId)} key="modify">查看</a>]
@@ -181,7 +187,7 @@ function ListTable(props: ListTableProps) {
               //  </Button>,  
               <span>
                 {/* <a onClick={() => showModify(record.billId)} key="modify">编辑</a> */}
-                <a onClick={() => showModify(record.billId)} key="modify">查看</a>
+                <a onClick={() => showModify(record.billId)} key="show">查看</a>
                 <Divider type="vertical" />
                 <a onClick={() => showVerify(record.billId, true)} key="verify">审核</a>
                 <Divider type="vertical" />

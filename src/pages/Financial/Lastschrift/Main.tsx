@@ -1,10 +1,9 @@
 //划账管理
-import { DefaultPagination } from '@/utils/defaultSetting';
-// import { getResult } from '@/utils/networkUtils';
+import { DefaultPagination } from '@/utils/defaultSetting'; 
 import { Tabs, Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { GetOffsetPageDetailData, GetOffsetPageData } from './Lastschrift.service';
+import { GetPageDetailData, GetPageData } from './Lastschrift.service';
 import AsynLeftTree from '../AsynLeftTree';
 import { GetUnitTreeAll } from '@/services/commonItem';//获取全部房间树
 import { getResult } from '@/utils/networkUtils';
@@ -152,7 +151,7 @@ function Main() {
     setLoading(true);
     data.sidx = data.sidx || 'createDate';
     data.sord = data.sord || 'desc';
-    return GetOffsetPageData(data).then(res => {
+    return GetPageData(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
         return {
@@ -219,7 +218,7 @@ function Main() {
     setDetailLoading(true);
     data.sidx = data.sidx || 'id';
     data.sord = data.sord || 'asc';
-    return GetOffsetPageDetailData(data).then(res => {
+    return GetPageDetailData(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setDetailPagination(pagesetting => {
         return {
@@ -282,7 +281,7 @@ function Main() {
   // }
 
   return (
-    <Layout className="offsetMain">
+    <Layout>
       <AsynLeftTree
         parentid={'0'}
         selectTree={(id, type, info) => {

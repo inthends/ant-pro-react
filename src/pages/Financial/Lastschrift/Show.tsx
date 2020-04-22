@@ -1,12 +1,11 @@
-//查看冲抵单
-import { Spin, Card, Button, Col, Drawer, Form, Row, Table } from 'antd';
+//查看
+import { Tag, Spin, Card, Button, Col, Drawer, Form, Row, Table } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { GetFormJson, GetListByID } from './Lastschrift.service';
+import { GetFormJson, GetListById } from './Lastschrift.service';
 import styles from './style.less';
-import moment from 'moment';
 
 interface ShowProps {
   showVisible: boolean;
@@ -20,7 +19,7 @@ interface ShowProps {
 const Show = (props: ShowProps) => {
   const { showVisible, closeDrawer, id, form } = props;
   // const title = id === undefined ? '新增冲抵单' : '修改冲抵单';
-  const title = '查看冲抵单';
+  const title = '查看划账单';
   const [loading, setLoading] = useState<boolean>(false);
   // const [units,setUnits] = useState<string>([]);
   const [infoDetail, setInfoDetail] = useState<any>({});
@@ -36,8 +35,7 @@ const Show = (props: ShowProps) => {
           setInfoDetail(res);
           form.resetFields();
           // loadNoticeData('', res.organizeId);
-          // setLoading(false);
-
+          // setLoading(false); 
           //分页查询
           // const { current: pageIndex, pageSize, total } = pagination;
           // const searchCondition: any = {
@@ -51,10 +49,8 @@ const Show = (props: ShowProps) => {
           //   //明细
           //   setListData(res.data);
           //   setLoading(false);
-          // })
-
+          // }) 
           initLoad(res.billId);
-
         });
       } else {
         setInfoDetail({});
@@ -81,7 +77,7 @@ const Show = (props: ShowProps) => {
     setLoading(true);
     data.sidx = data.sidx || 'id';
     data.sord = data.sord || 'asc';
-    return GetListByID(data).then(res => {
+    return GetListById(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
         return {
@@ -126,210 +122,69 @@ const Show = (props: ShowProps) => {
     loadData(pagination, sorter);
   };
 
-  // const loadData = (paginationConfig?: PaginationConfig, sorter?) => {
-  //   const { current: pageIndex, pageSize, total } = paginationConfig || {
-  //     current: 1,
-  //     pageSize: pagination.pageSize,
-  //     total: 0,
-  //   };
-  //   let searchCondition: any = {
-  //     pageIndex,
-  //     pageSize,
-  //     total,
-  //     keyValue: infoDetail.billId
-  //   };
-
-  //   if (sorter) {
-  //     let { field, order } = sorter;
-  //     searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-  //     searchCondition.sidx = field ? field : 'billId';
-  //   }
-  //   setLoading(true);
-  //   return GetListByID(searchCondition).then(res => {
-  //     //设置查询后的分页
-  //     const { pageIndex: current, total, pageSize } = res;
-  //     setPagination(pagesetting => {
-  //       return {
-  //         ...pagesetting,
-  //         current,
-  //         total,
-  //         pageSize,
-  //       };
-  //     });
-  //     //明细
-  //     setListData(res.data);
-  //     setLoading(false);
-  //     return res;
-  //   });
-  // };
-
-  // const close = () => {
-  //   closeDrawer();
-  // };
-
-  // const guid=()=> {
-  //   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-  //       var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-  //       return v.toString(16);
-  //   });
-  // }
-
-  //明细表数据
-  // const loadNoticeData = (search, organizeId, paginationConfig?: PaginationConfig, sorter?) => {
-  //   const { current: pageIndex, pageSize, total } = paginationConfig || {
-  //     current: 1,
-  //     pageSize: pagination.pageSize,
-  //     total: 0,
-  //   };
-  //   let searchCondition: any = {
-  //     pageIndex,
-  //     pageSize,
-  //     total,
-  //     queryJson: { keyword: '', billId: infoDetail.billId },
-  //   };
-  //   if (sorter) {
-  //     let { field, order } = sorter;
-  //     searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-  //     searchCondition.sidx = field ? field : 'billId';
-  //   }
-  //   return noticeload(searchCondition).then(res => {
-  //     return res;
-  //   });
-  // };
-
-  //明细表加载
-  // const noticeload = data => {
-  //   data.sidx = data.sidx || 'billId';
-  //   data.sord = data.sord || 'asc';
-  //   return GetOffsetPageDetailData(data).then(res => {
-  //     const { pageIndex: current, total, pageSize } = res;
-  //     setPagination(pagesetting => {
-  //       return {
-  //         ...pagesetting,
-  //         current,
-  //         total,
-  //         pageSize,
-  //       };
-  //     });
-  //     setNoticeData(res.data);
-  //     return res;
-  //   });
-  // };
-
-  // const onSave = () => {
-  //   form.validateFields((errors, values) => {
-  //     if (!errors) {
-  //       let newData = {
-  //         payBeginDate: values.payBeginDate.format('YYYY-MM-DD HH:mm:ss'),
-  //         payEndDate: values.payEndDate.format('YYYY-MM-DD HH:mm:ss'),
-  //         beginDate: values.beginDate.format('YYYY-MM-DD HH:mm:ss'),
-  //         endDate: values.endDate.format('YYYY-MM-DD HH:mm:ss'),
-  //         //payfeeitemid: infoDetail.billId,
-  //         //feeitemid: infoDetail.feeitemid
-  //       };
-
-  //       SaveForm(newData).then((res) => {
-  //         if (res.data) {
-  //           notification['warning']({
-  //             message: '系统提示',
-  //             description:
-  //               '没有找到要冲抵的费用！'
-  //           });
-  //         } else {
-  //           // close();
-  //           message.success('保存成功');
-  //           reload();
-  //           closeDrawer();
-  //         }
-  //       });
-  //     }
-  //   });
-  // };
-
   const columns = [
-    // {
-    //   title: '单号',
-    //   dataIndex: 'billCode',
-    //   key: 'billCode',
-    //   width: 180,
-    //   sorter: true
-    // },  
     {
-      title: '应付日期',
-      dataIndex: 'period',
-      key: 'period',
-      sorter: true,
-      width: 120,
-      render: val => {
-        if (val == null) {
-          return ''
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
-    },
-    {
-      title: '付款项目',
-      dataIndex: 'payFeeName',
-      key: 'payFeeName',
-      width: 140,
-      sorter: true,
-    },
-    {
-      title: '应付金额',
-      dataIndex: 'payAmount',
-      key: 'payAmount',
+      title: '划账费项',
+      dataIndex: 'feeName',
+      key: 'feeName',
       width: 100,
-      sorter: true,
     },
     {
-      title: '收款项目',
-      dataIndex: 'billFeeName',
-      key: 'billFeeName',
-      width: 140,
-      sorter: true,
+      title: '划账金额',
+      dataIndex: 'amount',
+      key: 'amount',
+      width: 100,
     },
     {
-      title: '冲抵金额',
-      dataIndex: 'offsetAmount',
-      key: 'offsetAmount',
-      sorter: true,
-      width: 100
+      title: '扣款金额',
+      dataIndex: 'deductionAmount',
+      key: 'deductionAmount',
+      width: 100,
     },
-    // {
-    //   title: '应付余额',
-    //   dataIndex: 'lastAmount',
-    //   sorter: true,
-    //   key: 'lastAmount',
-    //   width: 100, 
-    // },
     {
-      title: '计费起始日期',
-      dataIndex: 'billBeginDate',
-      key: 'billBeginDate',
-      sorter: true,
-      width: 120,
-      render: val => {
-        if (val == null) {
-          return ''
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
-    }, {
-      title: '计费截止日期',
-      dataIndex: 'billEndDate',
-      key: 'billEndDate',
-      sorter: true,
-      width: 120,
-      render: val => {
-        if (val == null) {
-          return '';
-        } else {
-          return moment(val).format('YYYY-MM-DD');
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      align: 'left',
+      width: 80,
+      render: (text, record) => {
+        switch (text) {
+          case 0:
+            return <Tag color="#e4aa5b">未扣</Tag>;
+          case 1:
+            return <Tag color="#19d54e">已扣</Tag>;
+          case -1:
+            return <Tag color="#e4aa5b">作废</Tag>;
+          default:
+            return '';
         }
       }
     },
+    {
+      title: '户名',
+      dataIndex: 'name',
+      key: 'name',
+      width: 120,
+    },
+    {
+      title: '房号',
+      dataIndex: 'code',
+      key: 'code',
+      width: 120,
+    },
+    {
+      title: '开户银行',
+      dataIndex: 'accountBank',
+      key: 'accountBank',
+      width: 120,
+    },
+    {
+      title: '账号',
+      dataIndex: 'bankAccount',
+      key: 'bankAccount',
+      width: 120,
+    },
+
     {
       title: '单元全称',
       dataIndex: 'allName',
@@ -353,7 +208,7 @@ const Show = (props: ShowProps) => {
           <Card className={styles.card}>
             <Row gutter={24}>
               <Col lg={8}>
-                <Form.Item label="冲抵单号">
+                <Form.Item label="划账单号">
                   {infoDetail.billCode}
                 </Form.Item>
               </Col>
@@ -363,11 +218,11 @@ const Show = (props: ShowProps) => {
                 </Form.Item>
               </Col>
               <Col lg={8}>
-                <Form.Item label="冲抵人" >
+                <Form.Item label="操作人" >
                   {infoDetail.createUserName}
                 </Form.Item>
               </Col>
-            </Row>
+            </Row> 
             <Row gutter={24}>
               <Col lg={8}>
                 <Form.Item label="是否审核">
@@ -382,6 +237,13 @@ const Show = (props: ShowProps) => {
               <Col lg={8}>
                 <Form.Item label="审核人">
                   {infoDetail.verifyPerson}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={24}>
+              <Col span={24}>
+                <Form.Item label="备注"  >
+                  {infoDetail.memo}
                 </Form.Item>
               </Col>
             </Row>

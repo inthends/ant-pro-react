@@ -78,6 +78,21 @@ export interface TreeEntity {
 */
   attributeC?: string
 
+    /**
+* 扩展
+*/
+code?: string
+
+  /**
+* 扩展
+*/
+allname?: string
+
+  /**
+* 扩展
+*/
+tenantname?: string
+
 
   /**
    * 子节点

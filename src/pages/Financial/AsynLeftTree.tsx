@@ -3,7 +3,7 @@ import Page from '@/components/Common/Page';
 import { Icon, Layout, Tree } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import { SiderContext } from '../SiderContext';
-import { GetOrgTree, GetAsynChildBuildings } from '@/services/commonItem'; 
+import { GetOrgTree, GetAsynChildBuildings } from '@/services/commonItem';
 
 const { TreeNode } = Tree;
 const { Sider } = Layout;
@@ -14,7 +14,7 @@ interface AsynLeftTreeProps {
   parentid: string;
 }
 
-function AsynLeftTree(props: AsynLeftTreeProps) { 
+function AsynLeftTree(props: AsynLeftTreeProps) {
   const { selectTree } = props;
   const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
   // const [autoExpandParent, setAutoExpandParent] = useState<boolean>(false);
@@ -22,11 +22,13 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
   //动态子节点
   const [treeData, setTreeData] = useState<any[]>([]);
 
+  //默认展开的节点
   let keys: any[];
   keys = [];
   const getAllkeys = res =>
     res.forEach(item => {
-      if (item.children && item.type != 'D') {
+      // if (item.children && item.type != 'C') { 
+      if (item.children && 'AB'.indexOf(item.type) != -1) {
         keys.push(getAllkeys(item.children))
       }
       keys.push(item.key);
@@ -39,7 +41,7 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
       setTreeData(res || []);
       getAllkeys(res || []);
       setExpandedKeys(keys);
-    }); 
+    });
     //setExpandedKeys(treeData.map(item => item.id as string)); 
   }, []);
 
@@ -69,7 +71,6 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
     //setAutoExpandParent(false);
   };
 
-
   //异步加载
   const onLoadData = treeNode =>
     new Promise<any>(resolve => {
@@ -84,7 +85,7 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
           setTreeData([...treeData]);
         });
         resolve();
-      }, 50);
+      }, 500);
     });
 
   // const renderTree = (tree: any[], parentId: string) => {
@@ -141,9 +142,9 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
               <Tree
                 loadData={onLoadData}
                 showLine
-                expandedKeys={expandedKeys} 
+                expandedKeys={expandedKeys}
                 onExpand={clickExpend}
-                onSelect={onSelect}> 
+                onSelect={onSelect}>
                 {renderTreeNodes(treeData)}
               </Tree>
             </Page>

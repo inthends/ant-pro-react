@@ -1,13 +1,12 @@
 
-import { Input, message, Table, Button, Card, Col, Drawer, Form, Row } from 'antd';
+import {Tag, Input, message, Table, Button, Card, Col, Drawer, Form, Row } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { Audit, GetFormJson, GetListByID } from './Lastschrift.service';
+import { Audit, GetFormJson, GetListById } from './Lastschrift.service';
 const { TextArea } = Input;
-import styles from './style.less'
-import moment from 'moment';
+import styles from './style.less' 
 
 interface VerifyProps {
   verifyVisible: boolean;
@@ -21,7 +20,7 @@ interface VerifyProps {
 const Verify = (props: VerifyProps) => {
   const { reload, verifyVisible, closeVerify, form, id, ifVerify } = props;
   // const title = id === undefined ? '新增冲抵单' : '修改冲抵单';
-  const title = ifVerify ? '冲抵单审核' : '冲抵单取消审核';
+  const title = ifVerify ? '划账单审核' : '划账单取消审核';
   const [loading, setLoading] = useState<boolean>(false);
   const { getFieldDecorator } = form;
   const [infoDetail, setInfoDetail] = useState<any>({});
@@ -55,19 +54,18 @@ const Verify = (props: VerifyProps) => {
           const { current: pageIndex, pageSize, total } = pagination;
           const searchCondition: any = {
             sord: "asc",
-            sidx: 'billId',
+            sidx: 'id',
             pageIndex,
             pageSize,
             total,
             keyValue: res.billId
           };
           setLoading(true);
-          GetListByID(searchCondition).then(res => {
+          GetListById(searchCondition).then(res => {
             //明细
             setListData(res.data);
             setLoading(false);
-          })
-
+          }) 
         })
       }
     }
@@ -101,10 +99,10 @@ const Verify = (props: VerifyProps) => {
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.sord = order === "descend" ? "desc" : "asc";
-      searchCondition.sidx = field ? field : 'billId';
+      searchCondition.sidx = field ? field : 'id';
     }
     setLoading(true);
-    return GetListByID(searchCondition).then(res => {
+    return GetListById(searchCondition).then(res => {
       //设置查询后的分页
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
@@ -160,80 +158,72 @@ const Verify = (props: VerifyProps) => {
 
   const columns = [
     {
-      title: '冲抵单号',
-      dataIndex: 'billCode',
-      key: 'billCode',
-      width: 180,
-      sorter: true
-    },
-    
-    {
-      title: '付款项目',
-      dataIndex: 'payFeeName',
-      key: 'payFeeName',
-      width: 140,
-      sorter: true,
-    },
-    {
-      title: '应付金额',
-      dataIndex: 'payAmount',
-      key: 'payAmount',
+      title: '划账费项',
+      dataIndex: 'feeName',
+      key: 'feeName',
       width: 100,
-      sorter: true,
     },
     {
-      title: '收款项目',
-      dataIndex: 'billFeeName',
-      key: 'billFeeName',
-      width: 140,
-      sorter: true,
+      title: '划账金额',
+      dataIndex: 'amount',
+      key: 'amount',
+      width: 100,
     },
     {
-      title: '冲抵金额',
-      dataIndex: 'offsetAmount',
-      key: 'offsetAmount',
-      sorter: true,
-      width: 100
+      title: '扣款金额',
+      dataIndex: 'deductionAmount',
+      key: 'deductionAmount',
+      width: 100,
     },
-    // {
-    //   title: '应付余额',
-    //   dataIndex: 'lastAmount',
-    //   sorter: true,
-    //   key: 'lastAmount',
-    //   width: 100, 
-    // },
     {
-      title: '计费起始日期',
-      dataIndex: 'billBeginDate',
-      key: 'billBeginDate',
-      sorter: true,
-      width: 120,
-      render: val => {
-        if (val == null) {
-          return ''
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
-    }, {
-      title: '计费截止日期',
-      dataIndex: 'billEndDate',
-      key: 'billEndDate',
-      sorter: true,
-      width: 120,
-      render: val => {
-        if (val == null) {
-          return '';
-        } else {
-          return moment(val).format('YYYY-MM-DD');
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      align: 'left',
+      width: 80,
+      render: (text, record) => {
+        switch (text) {
+          case 0:
+            return <Tag color="#e4aa5b">未扣</Tag>;
+          case 1:
+            return <Tag color="#19d54e">已扣</Tag>;
+          case -1:
+            return <Tag color="#e4aa5b">作废</Tag>;
+          default:
+            return '';
         }
       }
     },
+    {
+      title: '户名',
+      dataIndex: 'name',
+      key: 'name',
+      width: 120,
+    },
+    {
+      title: '房号',
+      dataIndex: 'code',
+      key: 'code',
+      width: 120,
+    },
+    {
+      title: '开户银行',
+      dataIndex: 'accountBank',
+      key: 'accountBank',
+      width: 120,
+    },
+    {
+      title: '账号',
+      dataIndex: 'bankAccount',
+      key: 'bankAccount',
+      width: 120,
+    },
+
     {
       title: '单元全称',
       dataIndex: 'allName',
-      key: 'allName'
-    },
+      key: 'allName',
+    }
   ] as ColumnProps<any>[];
 
   return (
@@ -249,11 +239,11 @@ const Verify = (props: VerifyProps) => {
       <Form layout="vertical" hideRequiredMark>
         {/* <Spin tip="数据处理中..." spinning={loading}>
        </Spin> */}
- 
+
         <Card className={styles.card}>
           <Row gutter={24}>
             <Col lg={8}>
-              <Form.Item label="冲抵单号">
+              <Form.Item label="划账单号">
                 {infoDetail.billCode}
               </Form.Item>
             </Col>
@@ -263,7 +253,7 @@ const Verify = (props: VerifyProps) => {
               </Form.Item>
             </Col>
             <Col lg={8}>
-              <Form.Item label="冲抵人" >
+              <Form.Item label="操作人" >
                 {infoDetail.createUserName}
               </Form.Item>
             </Col>
@@ -284,7 +274,14 @@ const Verify = (props: VerifyProps) => {
                 {infoDetail.verifyPerson}
               </Form.Item>
             </Col>
-          </Row> 
+          </Row>
+          <Row gutter={24}>
+            <Col span={24}>
+              <Form.Item label="备注"  >
+                {infoDetail.memo}
+              </Form.Item>
+            </Col>
+          </Row>
           <Row>
             <Col>
               <Form.Item label="审核意见" required>
@@ -294,15 +291,14 @@ const Verify = (props: VerifyProps) => {
                 })(<TextArea rows={4} placeholder="请输入审核意见" />)}
               </Form.Item>
             </Col>
-          </Row>
-
+          </Row> 
           <Row style={{ marginTop: '15px' }}>
             <Table
               bordered={false}
               size="middle"
               columns={columns}
               dataSource={listdata}
-              rowKey="billId"
+              rowKey="id"
               pagination={pagination}
               scroll={{ y: 500, x: 1200 }}
               loading={loading}

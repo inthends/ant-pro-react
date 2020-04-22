@@ -213,7 +213,8 @@ const FeeModify = (props: FeeModifyProps) => {
           CycleValue: "" + values.cycleValue,
           CycleType: values.cycleType,
           BillDate: moment(values.billDate).format("YYYY-MM-DD"),
-          Deadline: moment(values.deadline).format("YYYY-MM-DD")
+          Deadline: moment(values.deadline).format("YYYY-MM-DD"),
+          number: values.number
         }
         if (id != null && id != "") {
           unit = Object.assign({}, unit, { Id: id, keyValue: id });

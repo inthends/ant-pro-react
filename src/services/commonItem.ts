@@ -75,7 +75,7 @@ export function GetAsynChildBuildingsForArea(pstructId, type): Promise<any[]> {
 // }
 
 //获取合同管理房产下级，只加载到楼栋
-export function GetAsynChildBuildingsForContract(pstructId,type): Promise<any[]> {
+export function GetAsynChildBuildingsForContract(pstructId, type): Promise<any[]> {
   return request
     .get(process.env.basePath + `/Common/GetAsynChildBuildingsForContract?parentId=${pstructId}&type=${type}`)
     .then(getResult as any);
@@ -167,11 +167,11 @@ export function GetQuickPublicMeterTree(): Promise<any> {
 }
 
 //获取房间住户
-export function GetRoomUsers(data): Promise< any[]> {
+export function GetRoomUsers(data): Promise<any[]> {
   return request.get(process.env.basePath + `/Common/GetRoomUsers?roomId=${data}`, {}).then(getResult as any);;
 }
 //获取关联的房间
-export function GetUserRooms(data): Promise< any[]> {
+export function GetUserRooms(data): Promise<any[]> {
   return request.get(process.env.basePath + `/Common/GetUserRooms?customerId=${data}`, {}).then(getResult as any);;
 }
 
@@ -180,14 +180,14 @@ export function GetUserRoomsByRelationId(data): Promise<any[]> {
 }
 
 //付款费项
-export function GetPayFeeItemDetail(feeitemId,roomId): Promise< any > {
+export function GetPayFeeItemDetail(feeitemId, roomId): Promise<any> {
   return request.get(process.env.basePath + `/Common/GetPayFeeItemDetail?feeitemId=${feeitemId}&roomId=${roomId}`, {}).then(getResult as any);;
 }
 
 //加载全部checkbox巡检点位
 export function GetPointTreeAll(): Promise<ResponseObject<TreeEntity[]>> {
   return request.get(process.env.basePath + `/Common/GetPointTreeAll`, {});
-} 
+}
 
 export function GetFeeItemDetail(feeItemId, roomId): Promise<any> {
   return request.get(process.env.basePath + `/Common/GetFeeItemDetail?feeItemId=${feeItemId}&roomId=${roomId}`, {}).then(getResult as any);;
