@@ -649,10 +649,10 @@ function Main() {
           <TabPane tab="收款单列表" key="2">
             <div style={{ marginBottom: '10px' }}>
 
-            <Search
+              <Search
                 className="search-input"
                 placeholder="搜索收款单号"
-                style={{ width: 180,marginRight: '5px' }}
+                style={{ width: 180, marginRight: '5px' }}
                 onChange={e => {
                   var params = Object.assign({}, chargedSearchParams, { search: e.target.value });
                   setChargedSearchParams(params);
@@ -693,15 +693,15 @@ function Main() {
                 onChange={(date, dateStr) => {
                   var params = Object.assign({}, chargedSearchParams, { startDate: dateStr });
                   setChargedSearchParams(params);
-                }} style={{ marginRight: '5px', width: '120px' }} />
+                }} style={{ marginRight: '5px', width: '130px' }} />
               至
               <DatePicker
                 placeholder='收款日期止'
                 onChange={(date, dateStr) => {
                   var params = Object.assign({}, chargedSearchParams, { endDate: dateStr });
                   setChargedSearchParams(params);
-                }} style={{ marginLeft: '5px', marginRight: '5px', width: '120px' }} />
-            
+                }} style={{ marginLeft: '5px', marginRight: '5px', width: '130px' }} />
+
               <Button type="primary" style={{ marginLeft: '3px' }}
                 onClick={() => {
                   // initChargeLoadData(organizeId, chargedSearchParams.type); 
@@ -741,11 +741,9 @@ function Main() {
                 <Icon type="file" />
                 查看
               </Button> */}
-
               <Button type="primary" style={{ float: 'right', marginLeft: '3px' }}
                 onClick={() => showSubmit('', true)}
-                disabled={chargeSelectedKeys.length == 0 ? true : false}
-              >
+                disabled={chargeSelectedKeys.length == 0 ? true : false}  >
                 <Icon type="plus" />
                 送审
               </Button>

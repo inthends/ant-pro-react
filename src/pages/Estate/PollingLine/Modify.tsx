@@ -3,7 +3,7 @@ import ModifyItem from "@/components/BaseModifyDrawer/ModifyItem";
 import { message, Divider, Icon, Table, Modal, Button, Input, Form, Row, Card } from "antd";
 import { WrappedFormUtils } from "antd/lib/form/Form";
 import React, { useState, useEffect } from 'react';
-import {MovePoint, SaveFormLine, GetLinePonitPageListByID, RemoveLinePoint, RemoveLinePointAll } from "./Main.service";
+import {MovePoint, SaveFormLine, GetLinePonitPageListById, RemoveLinePoint, RemoveLinePointAll } from "./Main.service";
 import { GetOrgEsates } from '@/services/commonItem';
 import { TreeNode } from 'antd/lib/tree-select';
 import { DefaultPagination } from '@/utils/defaultSetting';
@@ -65,13 +65,11 @@ const Modify = (props: ModifyProps) => {
   }, []);
 
   useEffect(() => {
-    if (visible) {
-
+    if (visible) { 
       //巡检角色
       // GetTreeRoleJson().then(res => {
       //   setRoles(res || []);
-      // });
-
+      // }); 
       if (data) {
         setLineId(data.id);
         // setLoading(true);
@@ -92,7 +90,7 @@ const Modify = (props: ModifyProps) => {
       keyword: search,
       LineId: lineId
     }
-    const sidx = 'id';
+    const sidx = 'sort';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
@@ -120,7 +118,7 @@ const Modify = (props: ModifyProps) => {
     if (sorter) {
       const { field, order } = sorter;
       searchCondition.sord = order === "descend" ? "desc" : "asc";
-      searchCondition.sidx = field ? field : 'id';
+      searchCondition.sidx = field ? field : 'sort';
     }
     return load(searchCondition).then(res => {
       return res;
@@ -129,9 +127,9 @@ const Modify = (props: ModifyProps) => {
 
   const load = data => {
     setLoading(true);
-    data.sidx = data.sidx || 'id';
+    data.sidx = data.sidx || 'sort';
     data.sord = data.sord || 'asc';
-    return GetLinePonitPageListByID(data).then(res => {
+    return GetLinePonitPageListById(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
         return {
@@ -180,6 +178,12 @@ const Modify = (props: ModifyProps) => {
 
   const columns = [
     {
+      title: '序号',
+      dataIndex: 'sort',
+      key: 'sort',
+      width: 60,
+    },
+    {
       title: '点位编号',
       dataIndex: 'code',
       key: 'code',
@@ -189,14 +193,9 @@ const Modify = (props: ModifyProps) => {
       title: '点位名称',
       dataIndex: 'name',
       key: 'name',
-      width: 120,
+      width: 200,
     },
-    {
-      title: '序号',
-      dataIndex: 'sort',
-      key: 'sort',
-      width: 60,
-    },
+    
     {
       title: '描述',
       dataIndex: 'allName',
@@ -370,7 +369,7 @@ const Modify = (props: ModifyProps) => {
             dataSource={linepointData}
             rowKey={record => record.id}
             pagination={pagination}
-            scroll={{ y: 500, x: 800 }}
+            scroll={{ y: 500, x: 1000 }}
             loading={loading}
           />
         </Form>

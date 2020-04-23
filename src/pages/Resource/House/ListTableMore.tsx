@@ -13,10 +13,11 @@ interface ListTableMoreProps {
   onchange(page: any, filter: any, sort: any): any;
   reload(id, type): void;
   type: number;
+  showSplit(data: any): void;
 }
 
 function ListTableMore(props: ListTableMoreProps) {
-  const { type, selectId, onchange, loading, pagination, data, modify, reload } = props;
+  const { type, selectId, onchange, loading, pagination, data, modify, reload,showSplit } = props;
   const changePage = (pag: PaginationConfig, filters, sorter) => {
     onchange(pag, filters, sorter);
   };
@@ -125,9 +126,9 @@ function ListTableMore(props: ListTableMoreProps) {
   //更多
   const editAndDelete = (key: string, currentItem: any) => {
     if (key === 'split') {
-
+      showSplit(currentItem);
     } else if (key === 'merge') {
-
+      
     }
   }
 

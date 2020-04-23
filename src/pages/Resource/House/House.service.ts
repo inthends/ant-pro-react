@@ -91,3 +91,8 @@ export function ExistEnCode(keyValue, code): Promise<any> {
     .get(process.env.basePath + `/PStructs/ExistCode?keyValue=${keyValue}&code=${code}`)
     .then(getResult as any);
 }
+
+//拆分房间
+export function SplitUnit(data): Promise<any> {
+  return request.post(process.env.basePath + `/PStructs/SplitUnit`, { data: objToFormdata(data) }).then(getResult as any);
+}

@@ -186,17 +186,18 @@ function ChargeListTable(props: ChargeListTableProps) {
       }
     },
     {
-      title: '审核日期',
-      dataIndex: 'verifyDate',
-      key: 'verifyDate',
-      width: 160,
-      // render: val => val == null || val == "" ? '' : moment(val).format('YYYY-MM-DD')
-    }, {
       title: '审核人',
       dataIndex: 'verifyPerson',
       key: 'verifyPerson',
       width: 80
     },
+    {
+      title: '审核日期',
+      dataIndex: 'verifyDate',
+      key: 'verifyDate',
+      width: 160,
+      // render: val => val == null || val == "" ? '' : moment(val).format('YYYY-MM-DD')
+    }, 
     {
       title: '审核说明',
       dataIndex: 'verifyMemo',

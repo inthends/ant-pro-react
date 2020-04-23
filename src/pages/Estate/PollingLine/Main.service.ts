@@ -45,8 +45,8 @@ export function GetPageLineListJson(data): Promise<any> {
 }
 
 //获取巡检路线点位明细
-export function GetLinePonitPageListByID(data): Promise<any> {
-  return request.post(process.env.basePath + `/Polling/GetLinePonitPageListByID`, { data: objToFormdata(data) }).then(getResult as any);;
+export function GetLinePonitPageListById(data): Promise<any> {
+  return request.post(process.env.basePath + `/Polling/GetLinePonitPageListById`, { data: objToFormdata(data) }).then(getResult as any);;
 }
 
 // 获取巡检内容

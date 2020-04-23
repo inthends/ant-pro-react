@@ -10,6 +10,7 @@ import ListTableMore from './ListTableMore';
 import PstructInfo from './PstructInfo';
 import Room from './Room';
 import Atlas from './Atlas/Atlas';
+import Split from './Split';
 const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
@@ -22,14 +23,12 @@ function HouseMore(props) {
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [data, setData] = useState<any[]>([]);
   const [search, setSearch] = useState<string>('');
-  const [currData, setCurrData] = useState<any>();
-
+  const [currData, setCurrData] = useState<any>(); 
   const [type, setType] = useState<number>(1);
   const [parentId, setParentId] = useState<string>('');//左侧树点击的节点id
   const [selectId, setSelectId] = useState<string>(''); //列表选中的节点id  
   const [organizeId, setOrganizeId] = useState<string>(''); //列表选中的节点组织id  
-  const [roomVisible, setRoomVisible] = useState<boolean>(false);
-
+  const [roomVisible, setRoomVisible] = useState<boolean>(false); 
   const [selectOrganizeId, setSelectOrganizeId] = useState<string>(''); //点击树获取的机构id
 
   const doSelectTree = (parentId, type) => {
@@ -165,6 +164,15 @@ function HouseMore(props) {
   //是否能新增
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
 
+  //拆分房间
+  const [splitVisible, setSplitVisible] = useState<boolean>(false); 
+  const closeSplit = () => { 
+    setSplitVisible(false);
+  } 
+  const showSplit = (item) => {
+    setCurrData(item);
+    setSplitVisible(true);
+  }
   return (
     <Layout style={{ height: '100%' }}>
       <HouseMoreLeftTree
@@ -175,10 +183,10 @@ function HouseMore(props) {
           if ('ABCD'.indexOf(type) != -1) {
             setIsDisabled(true);
             return;
-          } 
+          }
           setSelectOrganizeId(organizeId);
           setIsDisabled(false);
-          doSelectTree(parentId, type); 
+          doSelectTree(parentId, type);
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>
@@ -220,6 +228,7 @@ function HouseMore(props) {
               type={type}
               selectId={selectId}
               modify={showDrawer}
+              showSplit={showSplit}
               reload={(id, selecttype) => {
                 setType(selecttype || type);
                 setSelectId(id);
@@ -260,6 +269,14 @@ function HouseMore(props) {
           //刷新一下左侧树 to do
           initLoadData(parentId, type, search);
         }}
+      />
+
+      <Split
+        splitVisible={splitVisible}
+        closeSplit={closeSplit}
+        data={currData}
+        // id={splitId}
+        reload={() => initLoadData(parentId, type, search)}
       />
 
     </Layout>

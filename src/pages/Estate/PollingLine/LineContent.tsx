@@ -127,11 +127,13 @@ const LineContent = (props: LineContentProps) => {
       width: 100,
       render: (text, record) => {
         if (text == 1) {
-          return '单次执行';
+          return '每天执行';
         } else if (text == 2) {
           return '每1小时执行';
-        } else {
+        } else if (text == 3) {
           return '每2小时执行';
+        } else {
+          return '每月执行';
         }
       }
     },
@@ -261,7 +263,6 @@ const LineContent = (props: LineContentProps) => {
           关闭
         </Button>
       </div>
-
       <PointContentModify
         visible={modifyVisible}
         closeModal={closeModal}

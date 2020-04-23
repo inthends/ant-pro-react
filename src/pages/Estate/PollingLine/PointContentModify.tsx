@@ -167,9 +167,10 @@ const PointContentModify = (props: PointContentModifyProps) => {
                   initialValue: infoDetail.frequency == null ? 1 : infoDetail.frequency
                 })(
                   <Select>
-                    <Option value={1}>单次执行</Option>
+                    <Option value={1}>每天执行</Option>
                     <Option value={2}>每1小时执行</Option>
-                    <Option value={3}>每2小时执行</Option>
+                    <Option value={3}>每2小时执行</Option> 
+                    <Option value={4}>每月执行</Option>
                   </Select>
                 )}
               </Form.Item>
