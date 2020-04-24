@@ -157,7 +157,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
         // setUserSource(res || []); 
         const list = res.map(item =>
           <Option key={item.id}
-          value={item.name.trim()}>{item.name.trim()}
+          value={item.id}>{item.name.trim()}
           <span className={styles.right}>{item.phoneNum}</span>
           <br></br>
           {item.code}
@@ -191,7 +191,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
         // setUserSource(res || []); 
         const list = res.map(item =>
           <Option key={item.id}
-          value={item.name.trim()}>{item.name.trim()}
+          value={item.id}>{item.name.trim()}
           <span className={styles.right}>{item.phoneNum}</span>
           <br></br>
           {item.code}
@@ -221,17 +221,19 @@ const ModifyParking = (props: ModifyParkingProps) => {
   //   </Option>]);
   // //新增
 
-  const onOwnerSelect = (value, option) => {
-    form.setFieldsValue({ ownerId: option.key });
+  const onOwnerSelect = (value, option) => {  
+    form.setFieldsValue({ ownerId: value });
     if (option.props.children.length == 5) {
+      form.setFieldsValue({ ownerName: option.props.children[0] });
       form.setFieldsValue({ ownerPhone: option.props.children[1].props.children });
       form.setFieldsValue({ ownerUnitAllName: option.props.children[4].props.children });
     }
   };
 
-  const onTenantSelect = (value, option) => {
-    form.setFieldsValue({ tenantId: option.key });
+  const onTenantSelect = (value, option) => { 
+    form.setFieldsValue({ tenantId: value });
     if (option.props.children.length == 5) {
+      form.setFieldsValue({ tenantName: option.props.children[0] });
       form.setFieldsValue({ tenantPhone: option.props.children[1].props.children });
       form.setFieldsValue({ tenantUnitAllName: option.props.children[4].props.children });
     }

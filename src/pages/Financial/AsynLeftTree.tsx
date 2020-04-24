@@ -1,10 +1,10 @@
 //异步树
 import Page from '@/components/Common/Page';
-import { Icon, Layout, Tree } from 'antd';
+import { Input, Icon, Layout, Tree } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import { SiderContext } from '../SiderContext';
-import { GetOrgTree, GetAsynChildBuildings } from '@/services/commonItem';
-
+import { GetOrgTree, GetAsynChildBuildings, GetUnitTree } from '@/services/commonItem';
+const { Search } = Input;
 const { TreeNode } = Tree;
 const { Sider } = Layout;
 
@@ -98,6 +98,18 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
   //     });
   // };
 
+  const [treeSearchData, setTreeSearchData] = useState<any[]>([]);
+  const loadUnitData = (search) => {
+    if (search) {
+      GetUnitTree(search).then((res: any[]) => {
+        setTreeSearchData(res || []);
+      });
+    } else {
+      //还原
+      setTreeSearchData([]);
+    }
+  };
+
 
   const renderTreeNodes = data =>
     data.map(item => {
@@ -139,14 +151,29 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
                 overflowY: 'auto',
               }}
             >
-              <Tree
-                loadData={onLoadData}
-                showLine
-                expandedKeys={expandedKeys}
-                onExpand={clickExpend}
-                onSelect={onSelect}>
-                {renderTreeNodes(treeData)}
-              </Tree>
+
+              <Search placeholder="搜索房号或名称"
+                onSearch={value => loadUnitData(value)}
+              />
+
+              {treeSearchData.length > 0 ?
+                <Tree
+                  showLine
+                  // expandedKeys={expandedKeys}
+                  onExpand={clickExpend}
+                  onSelect={onSelect}>
+                  {renderTreeNodes(treeSearchData)}
+                </Tree> :
+                <Tree
+                  loadData={onLoadData}
+                  showLine
+                  expandedKeys={expandedKeys}
+                  onExpand={clickExpend}
+                  onSelect={onSelect}>
+                  {renderTreeNodes(treeData)}
+                </Tree>
+              }
+
             </Page>
             <div
               style={{ position: 'absolute', top: '40%', right: -15 }}

@@ -579,7 +579,7 @@ function Main() {
           <TabPane tab="未收列表" key="1" >
             <div style={{ marginBottom: '10px' }}>
               <Search
-                className="search-input"
+                // className="search-input"
                 placeholder="搜索费项"
                 style={{ width: 180 }}
                 onSearch={value => loadData(value, orgId)} />

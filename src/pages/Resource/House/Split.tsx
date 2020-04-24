@@ -41,7 +41,7 @@ const Split = (props: SplitProps) => {
         setLoading(true);
         var data = {
           FirstName: values.firstName,
-          FirstNo: values.firstBeginNo,
+          FirstNo: values.firstNo,
           FirstArea: values.firstArea,
           SecondName: values.secondName,
           SecondNo: values.secondNo,

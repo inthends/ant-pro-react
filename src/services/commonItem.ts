@@ -91,6 +91,11 @@ export function GetOrgTree(): Promise<any[]> {
   return request.get(process.env.basePath + `/Common/GetOrgTree`).then(getResult as any);
 }
 
+//搜索房间
+export function GetUnitTree(keyValue): Promise<any[]> {
+  return request.get(process.env.basePath + `/Common/GetUnitTree?keyValue=${keyValue}`).then(getResult as any);
+}
+
 export function GetOrgTreeSimple(): Promise<any[]> {
   return request
     .get(process.env.basePath + `/Common/GetOrgTreeSimple`)

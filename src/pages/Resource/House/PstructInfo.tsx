@@ -179,7 +179,7 @@ const PstructInfo = (props: PstructInfoProps) => {
         // setUserSource(res || []); 
         const list = res.map(item =>
           <Option key={item.id}
-            value={item.name.trim()}>{item.name.trim()}
+            value={item.id}>{item.name.trim()}
             <span className={styles.right}>{item.phoneNum}</span>
             <br></br>
             {item.code}
@@ -215,7 +215,7 @@ const PstructInfo = (props: PstructInfoProps) => {
         // setUserSource(res || []); 
         const list = res.map(item =>
           <Option key={item.id}
-            value={item.name.trim()}>{item.name.trim()}
+            value={item.id}>{item.name.trim()}
             <span className={styles.right}>{item.phoneNum}</span>
             <br></br>
             {item.code}
@@ -237,16 +237,18 @@ const PstructInfo = (props: PstructInfoProps) => {
   //   (item => <Option key={item.id} value={item.name}>{item.name}</Option>);
 
   const onOwnerSelect = (value, option) => {
-    form.setFieldsValue({ ownerId: option.key });
+    form.setFieldsValue({ ownerId: value });
     if (option.props.children.length == 5) {
+      form.setFieldsValue({ ownerName: option.props.children[0] });
       form.setFieldsValue({ ownerPhone: option.props.children[1].props.children });
       form.setFieldsValue({ ownerUnitAllName: option.props.children[4].props.children });
     }
   };
 
   const onTenantSelect = (value, option) => {
-    form.setFieldsValue({ tenantId: option.key });
+    form.setFieldsValue({ tenantId: value });
     if (option.props.children.length == 5) {
+      form.setFieldsValue({ tenantName: option.props.children[0] });
       form.setFieldsValue({ tenantPhone: option.props.children[1].props.children });
       form.setFieldsValue({ tenantUnitAllName: option.props.children[4].props.children });
     }
@@ -387,12 +389,12 @@ const PstructInfo = (props: PstructInfoProps) => {
                       <Option value="超高层">超高层</Option>
                       <Option value="联排别墅">联排别墅</Option>
                       <Option value="独栋别墅">独栋别墅</Option>
-                      <Option value="叠加别墅">叠加别墅</Option> */} 
+                      <Option value="叠加别墅">叠加别墅</Option> */}
                       {propertyType.map(item => (
                         <Option key={item.key} value={item.value}>
                           {item.title}
                         </Option>
-                      ))} 
+                      ))}
                     </Select>
                   )}
                 </Form.Item>
