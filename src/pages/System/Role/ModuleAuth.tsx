@@ -2,7 +2,10 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Modal, Tree, message, Spin } from 'antd';
 import styles from './style.less';
-import { GetDataHalfCheckIds, GetDataCheckIds, GetHalfCheckIds, GetCheckIds, GetAuths, GetDataAuths, SaveDataAuthorize, SaveModuleAuthorize } from './Role.service';
+import {
+  // GetDataHalfCheckIds, GetDataCheckIds, GetDataAuths, SaveDataAuthorize, 
+  GetHalfCheckIds, GetCheckIds, GetAuths,SaveModuleAuthorize
+} from './Role.service';
 // const { TabPane } = Tabs;
 interface ModuleAuthProps {
   visible: boolean;
@@ -32,28 +35,29 @@ const ModuleAuth = (props: ModuleAuthProps) => {
     //   return;
     // } 
 
-    if (checkedKeys.length == 0)
-      return;
+    // if (checkedKeys.length == 0)
+    //   return;
 
-    if (tab === ACTIVEKEYS.楼盘权限) {
-      //const halfchecks = halfCheckedKeys.join(',');//半选节点 
-      SaveDataAuthorize({ roleId, halfchecks: halfCheckedKeys.join(','), authorizeDataJson: checkedKeys.join(',') }).then(() => {
-        message.success('保存成功！');
-        close();
-      });
-    } else if (tab === ACTIVEKEYS.功能权限) {
-      const moduleIds = getMenu(checkedKeys, treeData, 'menu').join(',');
-      const moduleButtonIds = getMenu(checkedKeys, treeData, 'button').join(',');
-      const halfchecks = halfCheckedKeys.join(',');//半选节点
-      SaveModuleAuthorize({ roleId, halfchecks, moduleIds, moduleButtonIds }).then(() => {
-        message.success('保存成功');
-        close();
-      });
-    }
+    // if (tab === ACTIVEKEYS.楼盘权限) {
+    //   //const halfchecks = halfCheckedKeys.join(',');//半选节点 
+    //   SaveDataAuthorize({ roleId, halfchecks: halfCheckedKeys.join(','), authorizeDataJson: checkedKeys.join(',') }).then(() => {
+    //     message.success('保存成功！');
+    //     close();
+    //   });
+    // } else if (tab === ACTIVEKEYS.功能权限) {
+
+    const moduleIds = getMenu(checkedKeys, treeData, 'menu').join(',');
+    const moduleButtonIds = getMenu(checkedKeys, treeData, 'button').join(',');
+    const halfchecks = halfCheckedKeys.join(',');//半选节点
+    SaveModuleAuthorize({ roleId, halfchecks, moduleIds, moduleButtonIds }).then(() => {
+      message.success('保存成功');
+      close();
+    });
+    // }
   };
 
   //点击事件
-  const onCheck = (checkedKeys, info) => { 
+  const onCheck = (checkedKeys, info) => {
     //let checkedKeysResult = [...checkedKeys, ...info.halfCheckedKeys];
     setCheckedKeys(checkedKeys);
     setHalfCheckedKeys(info.halfCheckedKeys);//半选中节点
@@ -74,8 +78,7 @@ const ModuleAuth = (props: ModuleAuthProps) => {
         //全选
         GetCheckIds(roleId).then(res => {
           setCheckedKeys(res || []);
-        })
-
+        }) 
         setIsLoaded(true);
       });
       // } else if (e === ACTIVEKEYS.操作权限) {
@@ -84,25 +87,23 @@ const ModuleAuth = (props: ModuleAuthProps) => {
       //     setAuths(res);
       //     setIsLoaded(true);
       //   });
-    } else if (e === ACTIVEKEYS.楼盘权限) {
-      GetDataAuths(roleId).then(res => {
-        //console.log(JSON.parse(res));
-
-        //半选
-        GetDataHalfCheckIds(roleId).then(res => {
-          setHalfCheckedKeys(res || []);
-        })
-
-        //全选
-        GetDataCheckIds(roleId).then(res => {
-          setCheckedKeys(res || []);
-        })
-
-        setAuths(res || []);
-        //setAuths(JSON.parse(res).treeJson || []);
-        setIsLoaded(true);
-      });
-    }
+    } 
+    // else if (e === ACTIVEKEYS.楼盘权限) {
+    //   GetDataAuths(roleId).then(res => {
+    //     //console.log(JSON.parse(res)); 
+    //     //半选
+    //     GetDataHalfCheckIds(roleId).then(res => {
+    //       setHalfCheckedKeys(res || []);
+    //     }) 
+    //     //全选
+    //     GetDataCheckIds(roleId).then(res => {
+    //       setCheckedKeys(res || []);
+    //     }) 
+    //     setAuths(res || []);
+    //     //setAuths(JSON.parse(res).treeJson || []);
+    //     setIsLoaded(true);
+    //   });
+    // }
   };
   return (
     <Modal
@@ -114,12 +115,12 @@ const ModuleAuth = (props: ModuleAuthProps) => {
       //   </Tabs>
       // }
 
-      title='功能权限' 
+      title='功能权限'
       visible={visible}
       okText="保存"
       cancelText="取消"
       onCancel={() => close()}
-      onOk={() => save(activeKey, auths)} 
+      onOk={() => save(activeKey, auths)}
       // bodyStyle={{ background: '#f6f7fb' }}
       width="500px"
     >
@@ -135,9 +136,9 @@ const ModuleAuth = (props: ModuleAuthProps) => {
               treeData={auths}
               key={activeKey}
               defaultExpandAll
-              ref={treeRef} 
+              ref={treeRef}
             ></Tree>
-          ) : <Spin tip="数据处理中..."  className={styles.spin}   />}
+          ) : <Spin tip="数据处理中..." className={styles.spin} />}
         </div>
       ) : null}
     </Modal>

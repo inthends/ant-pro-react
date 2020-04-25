@@ -1,12 +1,12 @@
 //权限设置备份
 import React, { useEffect, useState, useRef } from 'react';
-import { Modal, Tree, Tabs, message, Spin } from 'antd';
+import { Modal, Tree, message, Spin } from 'antd';
 import styles from './style.less';
 import {
-  GetDataHalfCheckIds, GetDataCheckIds, GetHalfCheckIds, GetCheckIds,
-  GetAuths, GetDataAuths, SaveDataAuthorize, SaveModuleAuthorize
+  // GetDataHalfCheckIds, GetDataCheckIds, GetDataAuths,SaveDataAuthorize,
+  GetHalfCheckIds, GetCheckIds, GetAuths, SaveModuleAuthorize
 } from './User.service';
-const { TabPane } = Tabs;
+// const { TabPane } = Tabs;
 interface ModuleAuthProps {
   visible: boolean;
   userId?;
@@ -35,24 +35,26 @@ const ModuleAuth = (props: ModuleAuthProps) => {
     //   return;
     // } 
 
-    if (checkedKeys.length == 0)
-      return;
+    // if (checkedKeys.length == 0)
+    //   return;
 
-    if (tab === ACTIVEKEYS.数据权限) {
-      //const halfchecks = halfCheckedKeys.join(',');//半选节点 
-      SaveDataAuthorize({ userId, halfchecks: halfCheckedKeys.join(','), authorizeDataJson: checkedKeys.join(',') }).then(() => {
-        message.success('保存成功！');
-        close();
-      });
-    } else if (tab === ACTIVEKEYS.功能权限) {
-      const moduleIds = getMenu(checkedKeys, treeData, 'menu').join(',');
-      const moduleButtonIds = getMenu(checkedKeys, treeData, 'button').join(',');
-      const halfchecks = halfCheckedKeys.join(',');//半选节点
-      SaveModuleAuthorize({ userId, halfchecks, moduleIds, moduleButtonIds }).then(() => {
-        message.success('保存成功');
-        close();
-      });
-    }
+    // if (tab === ACTIVEKEYS.数据权限) {
+    //   //const halfchecks = halfCheckedKeys.join(',');//半选节点 
+    //   SaveDataAuthorize({ userId, halfchecks: halfCheckedKeys.join(','), authorizeDataJson: checkedKeys.join(',') }).then(() => {
+    //     message.success('保存成功！');
+    //     close();
+    //   });
+    // } else if (tab === ACTIVEKEYS.功能权限) {
+
+    const moduleIds = getMenu(checkedKeys, treeData, 'menu').join(',');
+    const moduleButtonIds = getMenu(checkedKeys, treeData, 'button').join(',');
+    const halfchecks = halfCheckedKeys.join(',');//半选节点
+    SaveModuleAuthorize({ userId, halfchecks, moduleIds, moduleButtonIds }).then(() => {
+      message.success('保存成功');
+      close();
+    });
+
+    // }
   };
 
   //点击事件
@@ -68,43 +70,40 @@ const ModuleAuth = (props: ModuleAuthProps) => {
     if (e === ACTIVEKEYS.功能权限) {
       GetAuths(userId).then(res => {
         setAuths(res || []);
-
         //半选
         GetHalfCheckIds(userId).then(res => {
           setHalfCheckedKeys(res || []);
         })
-
         //全选
         GetCheckIds(userId).then(res => {
           setCheckedKeys(res || []);
         })
-
         setIsLoaded(true);
       });
+
       // } else if (e === ACTIVEKEYS.操作权限) {
       //   GetButtonAuths(userId).then(res => {
       //     console.log(res);
       //     setAuths(res);
       //     setIsLoaded(true);
       //   });
-    } else if (e === ACTIVEKEYS.数据权限) {
-      GetDataAuths(userId).then(res => {
-        //console.log(JSON.parse(res));
-        //半选
-        GetDataHalfCheckIds(userId).then(res => {
-          setHalfCheckedKeys(res || []);
-        })
-
-        //全选
-        GetDataCheckIds(userId).then(res => {
-          setCheckedKeys(res || []);
-        })
-
-        setAuths(res || []);
-        //setAuths(JSON.parse(res).treeJson || []);
-        setIsLoaded(true);
-      });
     }
+    // else if (e === ACTIVEKEYS.数据权限) {
+    //   GetDataAuths(userId).then(res => {
+    //     //console.log(JSON.parse(res));
+    //     //半选
+    //     GetDataHalfCheckIds(userId).then(res => {
+    //       setHalfCheckedKeys(res || []);
+    //     }) 
+    //     //全选
+    //     GetDataCheckIds(userId).then(res => {
+    //       setCheckedKeys(res || []);
+    //     }) 
+    //     setAuths(res || []);
+    //     //setAuths(JSON.parse(res).treeJson || []);
+    //     setIsLoaded(true);
+    //   });
+    // }
   };
   return (
     <Modal

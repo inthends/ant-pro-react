@@ -37,8 +37,7 @@ function House() {
   //   return true;
   // };
 
-  const setButton = (orgid, orgtype) => {
-
+  const refresh = (orgid, orgtype) => { 
     setOrganizeId(orgid);
     if (orgtype == 'D') {
       setIsDisabled(false);
@@ -50,7 +49,7 @@ function House() {
     //initLoadData(orgid, searchText); 
     //初始化页码，防止页码错乱导致数据查询出错  
     const page = new DefaultPagination();
-    loadData(search, orgid, page); 
+    loadData(search, orgid, page);
   };
 
   useEffect(() => {
@@ -154,7 +153,7 @@ function House() {
       <LeftTree
         treeData={treeData}
         selectTree={(orgid, orgtype) => {
-          setButton(orgid, orgtype);
+          refresh(orgid, orgtype);
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>

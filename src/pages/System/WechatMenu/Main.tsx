@@ -6,7 +6,7 @@ import ListTable from "./ListTable";
 import Add from "./Add";
 import Modify from "./Modify";
 import { CreateMenu, GetPageListJson } from "./WechatMenu.service";
-import create from "antd/lib/icon/IconFont";
+// import create from "antd/lib/icon/IconFont";
 const { Content } = Layout;
 const { Search } = Input;
 interface SearchParam {

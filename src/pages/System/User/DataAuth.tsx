@@ -1,12 +1,12 @@
 
 import React, { useEffect, useState, useRef } from 'react';
-import { Modal, Tree,   message, Spin } from 'antd';
+import { Modal, Tree, message, Spin } from 'antd';
 import styles from './style.less';
 import {
-  GetDataHalfCheckIds, GetDataCheckIds, GetHalfCheckIds, GetCheckIds,
-  GetAuths, GetDataAuths, SaveDataAuthorize, SaveModuleAuthorize
+  // GetHalfCheckIds, GetCheckIds, GetAuths,SaveModuleAuthorize,
+  GetDataHalfCheckIds, GetDataCheckIds, GetDataAuths, SaveDataAuthorize,
 } from './User.service';
- 
+
 interface DataAuthProps {
   visible: boolean;
   userId?;
@@ -35,8 +35,8 @@ const DataAuth = (props: DataAuthProps) => {
     //   return;
     // } 
 
-    if (checkedKeys.length == 0)
-      return;
+    // if (checkedKeys.length == 0)
+    //   return;
 
     if (tab === ACTIVEKEYS.楼盘权限) {
       //const halfchecks = halfCheckedKeys.join(',');//半选节点 
@@ -44,15 +44,16 @@ const DataAuth = (props: DataAuthProps) => {
         message.success('保存成功！');
         close();
       });
-    } else if (tab === ACTIVEKEYS.功能权限) {
-      const moduleIds = getMenu(checkedKeys, treeData, 'menu').join(',');
-      const moduleButtonIds = getMenu(checkedKeys, treeData, 'button').join(',');
-      const halfchecks = halfCheckedKeys.join(',');//半选节点
-      SaveModuleAuthorize({ userId, halfchecks, moduleIds, moduleButtonIds }).then(() => {
-        message.success('保存成功');
-        close();
-      });
     }
+    // else if (tab === ACTIVEKEYS.功能权限) {
+    //   const moduleIds = getMenu(checkedKeys, treeData, 'menu').join(',');
+    //   const moduleButtonIds = getMenu(checkedKeys, treeData, 'button').join(',');
+    //   const halfchecks = halfCheckedKeys.join(',');//半选节点
+    //   SaveModuleAuthorize({ userId, halfchecks, moduleIds, moduleButtonIds }).then(() => {
+    //     message.success('保存成功');
+    //     close();
+    //   });
+    // }
   };
 
   //点击事件
@@ -65,47 +66,51 @@ const DataAuth = (props: DataAuthProps) => {
   const changeTab = (e: string) => {
     setActiveKey(e);
     setIsLoaded(false);
-    if (e === ACTIVEKEYS.功能权限) {
-      GetAuths(userId).then(res => {
-        setAuths(res || []);
 
-        //半选
-        GetHalfCheckIds(userId).then(res => {
-          setHalfCheckedKeys(res || []);
-        })
+    // if (e === ACTIVEKEYS.功能权限) {
+    //   GetAuths(userId).then(res => {
+    //     setAuths(res || []);
 
-        //全选
-        GetCheckIds(userId).then(res => {
-          setCheckedKeys(res || []);
-        })
+    //     //半选
+    //     GetHalfCheckIds(userId).then(res => {
+    //       setHalfCheckedKeys(res || []);
+    //     })
 
-        setIsLoaded(true);
-      });
-      // } else if (e === ACTIVEKEYS.操作权限) {
-      //   GetButtonAuths(userId).then(res => {
-      //     console.log(res);
-      //     setAuths(res);
-      //     setIsLoaded(true);
-      //   });
-    } else if (e === ACTIVEKEYS.楼盘权限) {
-      GetDataAuths(userId).then(res => {
-        //console.log(JSON.parse(res));
-        //半选
-        GetDataHalfCheckIds(userId).then(res => {
-          setHalfCheckedKeys(res || []);
-        })
+    //     //全选
+    //     GetCheckIds(userId).then(res => {
+    //       setCheckedKeys(res || []);
+    //     })
 
-        //全选
-        GetDataCheckIds(userId).then(res => {
-          setCheckedKeys(res || []);
-        })
+    //     setIsLoaded(true);
+    //   });
+    //   // } else if (e === ACTIVEKEYS.操作权限) {
+    //   //   GetButtonAuths(userId).then(res => {
+    //   //     console.log(res);
+    //   //     setAuths(res);
+    //   //     setIsLoaded(true);
+    //   //   });
+    // } else if (e === ACTIVEKEYS.楼盘权限) {
 
-        setAuths(res || []);
-        //setAuths(JSON.parse(res).treeJson || []);
-        setIsLoaded(true);
-      });
-    }
+
+    GetDataAuths(userId).then(res => {
+      //console.log(JSON.parse(res));
+      //半选
+      GetDataHalfCheckIds(userId).then(res => {
+        setHalfCheckedKeys(res || []);
+      })
+
+      //全选
+      GetDataCheckIds(userId).then(res => {
+        setCheckedKeys(res || []);
+      })
+
+      setAuths(res || []);
+      //setAuths(JSON.parse(res).treeJson || []);
+      setIsLoaded(true);
+    });
+    // }
   };
+
   return (
     <Modal
       // title={

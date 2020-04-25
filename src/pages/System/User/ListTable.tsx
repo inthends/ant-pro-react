@@ -73,14 +73,14 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'account',
       key: 'account',
       sorter: true,
-      width: 150,
+      width: 120,
     },
     {
       title: '姓名',
       dataIndex: 'name',
       key: 'name',
       sorter: true,
-      width: 200,
+      width: 120,
     },
     // {
     //   title: '编号',
@@ -92,7 +92,7 @@ function ListTable(props: ListTableProps) {
       title: '状态',
       dataIndex: 'enabledMark',
       key: 'enabledMark',
-      width: 100,
+      width: 80,
       render: (text: any, record, index) => {
         return (
           <Switch
@@ -192,7 +192,7 @@ function ListTable(props: ListTableProps) {
         size="middle"
         dataSource={data}
         columns={columns}
-        rowKey={record => record.id}
+        rowKey={record => record.account}
         scroll={{ y: 500 }}
         loading={loading}
         pagination={pagination}

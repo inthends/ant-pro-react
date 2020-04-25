@@ -2,7 +2,7 @@ import { JcAccount } from '@/model/jcAccount';
 import { getResult, objToFormdata ,objToUrl} from '@/utils/networkUtils';
 import request from '@/utils/request';
 
-export function getDataList(data): Promise<any> {
+export function GetDataList(data): Promise<any> {
   return request
     .post(process.env.basePath + `/Account/GetPageListJson`, { data: objToFormdata(data) })
     .then(getResult as any);

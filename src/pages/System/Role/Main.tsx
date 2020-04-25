@@ -133,7 +133,7 @@ const Main = () => {
           </Select> */}
           <Search
             className="search-input"
-            placeholder="搜索名称和编号"
+            placeholder="搜索名称或编号"
             onSearch={keyword => loadData({ ...search, keyword })}
             style={{ width: 200 }}
           />
