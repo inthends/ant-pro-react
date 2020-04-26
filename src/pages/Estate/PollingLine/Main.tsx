@@ -12,18 +12,16 @@ const { Content } = Layout;
 const { Search } = Input;
 
 interface SearchParam {
-  typeId: string;
-  typeName: string;
-  type: string;
+  orgId: string;
+  orgType: string;
   keyword: string;
 }
 
 const Main = () => {
   const [search, setSearch] = useState<SearchParam>({
-    typeId: '',
-    typeName: '',
-    type: '',
-    keyword: '',
+    orgId: '',
+    orgType: '',
+    keyword: ''
   });
 
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
@@ -40,7 +38,6 @@ const Main = () => {
     // });
     // initLoadData(search);
 
-
     //加载小区
     GetOrgEsates().then(res => {
       setTreeData(res || []);
@@ -52,9 +49,7 @@ const Main = () => {
           setUnitTreeData(res || []);
           return res || [];
         });
-
     });
-
   }, []);
 
   const closeDrawer = () => {
@@ -72,6 +67,7 @@ const Main = () => {
     paginationConfig?: PaginationConfig,
     sorter?
   ) => {
+
     setSearch(searchParam);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
@@ -128,16 +124,22 @@ const Main = () => {
     );
   };
 
-  const selectTreeLoad = (orgid, orgtype, searchText) => {
-    //initLoadData({ ...searchText, orgid, orgtype, '1' });
+  const selectTreeLoad = (value, item) => {
+    const page = new DefaultPagination();
+    var orgId = value;
+    var orgType = '';
+    if (value != '') {
+      orgType = item.node.props.type;
+    }
+    loadData({ ...search, orgId, orgType }, page);
   };
 
   return (
     <Layout style={{ height: "100%" }}>
       <LeftTree
         treeData={treeData}
-        selectTree={(orgid, orgtype) => {
-          selectTreeLoad(orgid, orgtype, search);
+        selectTree={(value, item) => {
+          selectTreeLoad(value, item);
         }}
       />
 
@@ -175,9 +177,9 @@ const Main = () => {
       <Modify
         visible={modifyVisible}
         closeDrawer={closeDrawer}
-        typeId={search.typeId}
+        // typeId={search.typeId}
+        // typeName={search.typeName}
         treeData={unitTreeData}
-        typeName={search.typeName}
         data={currData}
         reload={() => initLoadData(search)}
       />

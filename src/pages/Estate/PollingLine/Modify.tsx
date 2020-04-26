@@ -20,8 +20,8 @@ interface ModifyProps {
   form: WrappedFormUtils<any>;
   closeDrawer(): void;
   reload(): void;
-  typeId: string;
-  typeName: string;
+  // typeId: string;
+  // typeName: string;
   treeData: any[];
 };
 

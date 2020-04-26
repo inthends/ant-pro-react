@@ -13,8 +13,8 @@ const { Search } = Input;
 
 interface SearchParam {
   typeId: string;
-  typeName: string;
-  type: string;
+  // typeName: string;
+  // type: string;
   keyword: string;
 }
 
@@ -22,8 +22,8 @@ const Main = () => {
 
   const [search, setSearch] = useState<SearchParam>({
     typeId: '',
-    typeName: '',
-    type: '',
+    // typeName: '',
+    // type: '',
     keyword: '',
   });
 
@@ -116,23 +116,26 @@ const Main = () => {
     );
   };
 
-  const selectTree = (item) => {
+  const selectTree = (value, item) => {
     var type = item.node.props.type;
-    if (type == '1') {
+    if (type == '1' || value == '') {
       setDisabled(true);
-      type = '';
+      // type = '';
     }
     else {
       setDisabled(false);
     }
-    var typeId = item.node.props.value;
-    var typeName = item.node.props.title;
-    // initLoadData({ ...search, typeId, typeName, type }); 
 
+    if (value == 'PollingType') {
+      value = '';
+    }
+
+    var typeId = value;//item.node.props.value;
+    // var typeName = item.node.props.title;
+    // initLoadData({ ...search, typeId, typeName, type });  
     //初始化页码，防止页码错乱导致数据查询出错  
     const page = new DefaultPagination();
-    loadData({ ...search, typeId, typeName, type }, page);
-
+    loadData({ ...search, typeId }, page);
   };
 
   return (
@@ -140,8 +143,8 @@ const Main = () => {
       <LeftTree
         key='lefttree'
         treeData={treeData}
-        selectTree={(id, item) => {
-          selectTree(item);
+        selectTree={(value, item) => {
+          selectTree(value, item);
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>

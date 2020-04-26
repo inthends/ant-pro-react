@@ -53,7 +53,7 @@ function ListTable(props: ListTableProps) {
       title: "名称",
       dataIndex: "name",
       key: "name",
-      width: 150
+      width: 200
     },
    
 

@@ -4,12 +4,11 @@ import { Icon, Layout, Tree } from 'antd';
 import React, { useEffect, useState, useContext } from 'react';
 import { SiderContext } from '../SiderContext';
 const { Sider } = Layout;
-
 // const { TreeNode } = Tree;
 
 interface LeftTreeProps {
   treeData: any[];
-  selectTree(treeNode, item?: any): void;
+  selectTree(value, item?: any): void;
 }
 function LeftTree(props: LeftTreeProps) {
   const { treeData, selectTree } = props;
@@ -65,6 +64,9 @@ function LeftTree(props: LeftTreeProps) {
     if (selectedKeys.length === 1) {
       //const item = treeData.filter(item => item.key === selectedKeys[0])[0];
       selectTree(selectedKeys[0], info);
+    } else {
+      //恢复查询
+      selectTree('', info);
     }
   };
 
@@ -158,7 +160,6 @@ function LeftTree(props: LeftTreeProps) {
                 onExpand={clickExpend}
                 onSelect={onSelect}
               >
-
               </Tree>
             </Page>
             <div
