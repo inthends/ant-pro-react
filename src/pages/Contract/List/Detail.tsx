@@ -359,8 +359,7 @@ const Detail = (props: DetailProps) => {
                             {infoDetail.legalPerson}
                           </Form.Item>
                         </Col>
-                      </Row>) : null}
-
+                      </Row>) : null} 
                     <Row gutter={24}>
                       <Col lg={12}>
                         <Form.Item label="联系电话">
@@ -424,8 +423,7 @@ const Detail = (props: DetailProps) => {
                       {GetScaleDispose(contractCharge.lastScaleDispose)}
                     </Form.Item>
                   </Col>
-                </Row>
-
+                </Row> 
               </Card>
               {
                 chargeFeeList ? chargeFeeList.map((k, index) => (
