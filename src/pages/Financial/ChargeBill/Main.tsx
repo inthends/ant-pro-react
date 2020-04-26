@@ -558,8 +558,7 @@ function Main() {
           setOrgType(type);
           //点击前重置 
           setAddButtonDisable(true);
-          doSelectTree(id, type);
-
+          doSelectTree(id, type); 
           //type
           // var params = Object.assign({}, chargedSearchParams, { type: type });
           // setChargedSearchParams(params);  

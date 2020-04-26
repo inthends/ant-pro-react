@@ -35,8 +35,12 @@ const PointContentModify = (props: PointContentModifyProps) => {
       });
 
       if (data) {
-
         setInfoDetail(data);
+
+        if (data.unit == 2) {
+          setIsDay(false);
+        }
+
         form.resetFields();
       } else {
         setInfoDetail({});
@@ -64,6 +68,8 @@ const PointContentModify = (props: PointContentModifyProps) => {
       }
     });
   }
+
+  const [isDay, setIsDay] = useState<boolean>(true);
 
   return (
     <Modal
@@ -161,27 +167,64 @@ const PointContentModify = (props: PointContentModifyProps) => {
           </Row> */}
 
           <Row gutter={24}>
-            <Col lg={8}>
-              <Form.Item label="执行频率" required>
-                {getFieldDecorator('frequency', {
-                  initialValue: infoDetail.frequency == null ? 1 : infoDetail.frequency
+            <Col lg={4}>
+              <Form.Item label="每" required>
+                {getFieldDecorator('unitNum', {
+                  initialValue: infoDetail.unitNum == null ? 1 : infoDetail.unitNum,
+                  rules: [{ required: true, message: '请输入频次' }],
+                })(<InputNumber
+                  placeholder="请输入频次"
+                  style={{ width: '100%' }}
+                  precision={0}
+                  min={1}
+                  max={60}
+                />)}
+              </Form.Item>
+            </Col>
+
+            <Col lg={5}>
+              <Form.Item label="单位" required>
+                {getFieldDecorator('unit', {
+                  initialValue: infoDetail.unit == null ? 1 : infoDetail.unit
                 })(
-                  <Select>
-                    <Option value={1}>每天执行</Option>
-                    <Option value={2}>每1小时执行</Option>
-                    <Option value={3}>每2小时执行</Option> 
-                    <Option value={4}>每月执行</Option>
+                  <Select
+                    onChange={(value, option) => {
+                      if (value == '天')
+                        setIsDay(true);
+                      else {
+                        setIsDay(false);
+                        form.setFieldsValue({ frequency: 1 });
+                      }
+                    }}
+                  >
+                    <Option value='天'>天</Option>
+                    <Option value='月'>月</Option>
                   </Select>
                 )}
               </Form.Item>
             </Col>
-
-            <Col lg={8}>
+            <Col lg={4}>
+              <Form.Item label="次" required>
+                {getFieldDecorator('frequency', {
+                  initialValue: infoDetail.frequency == null ? 1 : infoDetail.frequency,
+                  rules: [{ required: true, message: '请输入次数' }],
+                })(<InputNumber
+                  readOnly={!isDay}
+                  placeholder="请输入次数"
+                  style={{ width: '100%' }}
+                  precision={0}
+                  min={1}
+                  max={60}
+                />)}
+              </Form.Item>
+            </Col>
+            <Col lg={6}>
               <Form.Item label="计划时间" required>
                 {getFieldDecorator('planTime', {
                   initialValue: infoDetail.planTime == null ? infoDetail.planTime : moment('9:00', 'HH:mm'),
                   rules: [{ required: true, message: '请输入计划时间' }],
                 })(<TimePicker
+                  disabled={!isDay}
                   placeholder="请输入计划时间"
                   style={{ width: '100%' }}
                   format='HH:mm'
@@ -189,12 +232,13 @@ const PointContentModify = (props: PointContentModifyProps) => {
               </Form.Item>
             </Col>
 
-            <Col lg={8}>
+            <Col lg={5}>
               <Form.Item label="偏差（分）" required>
                 {getFieldDecorator('deviation', {
                   initialValue: infoDetail.deviation == null ? infoDetail.deviation : 10,
                   rules: [{ required: true, message: '请输入偏差' }],
                 })(<InputNumber
+                  disabled={!isDay}
                   placeholder="请输入偏差"
                   style={{ width: '100%' }}
                   precision={0}
@@ -212,6 +256,7 @@ const PointContentModify = (props: PointContentModifyProps) => {
                   initialValue: infoDetail.beginTime == null ? infoDetail.beginTime : moment('8:00', 'HH:mm'),
                   rules: [{ required: true, message: '请输入开始时间' }],
                 })(<TimePicker
+                  disabled={!isDay}
                   placeholder="请输入开始时间"
                   style={{ width: '100%' }}
                   format='HH:mm'
@@ -223,7 +268,9 @@ const PointContentModify = (props: PointContentModifyProps) => {
                 {getFieldDecorator('timeSplit', {
                   initialValue: infoDetail.timeSplit == null ? 1 : infoDetail.timeSplit
                 })(
-                  <Select>
+                  <Select
+                    disabled={!isDay}
+                  >
                     <Option value={1}>当日</Option>
                     <Option value={2}>次日</Option>
                   </Select>
@@ -236,6 +283,7 @@ const PointContentModify = (props: PointContentModifyProps) => {
                   initialValue: infoDetail.endTime == null ? infoDetail.endTime : moment('23:59', 'HH:mm'),
                   rules: [{ required: true, message: '请输入结束时间' }],
                 })(<TimePicker
+                  disabled={!isDay}
                   placeholder="请输入结束时间"
                   style={{ width: '100%' }}
                   format='HH:mm'

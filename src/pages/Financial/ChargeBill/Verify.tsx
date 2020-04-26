@@ -203,7 +203,20 @@ const Verify = (props: VerifyProps) => {
       dataIndex: 'amount',
       key: 'amount',
       width: 100,
-    }, {
+    }, 
+    {
+      title: '减免金额',
+      dataIndex: 'reductionAmount',
+      key: 'reductionAmount',
+      width: 80,
+    },
+    {
+      title: '冲抵金额',
+      dataIndex: 'offsetAmount',
+      key: 'offsetAmount',
+      width: 80,
+    },
+    {
       title: '本次实收金额',
       dataIndex: 'payAmount',
       key: 'payAmount',
@@ -236,7 +249,7 @@ const Verify = (props: VerifyProps) => {
       onClose={closeVerify}
       visible={verifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
-      <Spin tip="数据处理中..." spinning={loading}> 
+      <Spin tip="数据处理中..." spinning={loading}>
         <PageHeader
           title={null}
           subTitle={
@@ -328,7 +341,7 @@ const Verify = (props: VerifyProps) => {
               columns={columns}
               rowKey={record => record.id}
               pagination={pagination}
-              scroll={{ y: 500, x: 1500 }}
+              scroll={{ y: 500, x: 1700 }}
               loading={loading}
               onChange={(pagination: PaginationConfig, filters, sorter) =>
                 changePage(pagination, filters, sorter)
