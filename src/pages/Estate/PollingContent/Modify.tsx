@@ -14,7 +14,7 @@ interface ModifyProps {
   closeDrawer(): void;
   reload(): void;
   // typeId: string;
-  typeName: string;
+  // typeName: string;
 };
 
 const Modify = (props: ModifyProps) => {

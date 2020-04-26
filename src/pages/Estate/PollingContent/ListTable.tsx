@@ -8,7 +8,7 @@ interface ListTableProps {
   loading: boolean;
   pagination: PaginationConfig;
   data: any[];
-  modify(record: any): void; 
+  modify(record: any): void;
   onchange(page: any, filter: any, sort: any): any;
   reload(): void;
 }
@@ -55,8 +55,12 @@ function ListTable(props: ListTableProps) {
       key: "name",
       width: 200
     },
-   
-
+    {
+      title: "所属机构",
+      dataIndex: "orgName",
+      key: "orgName",
+      width: 150
+    },
     {
       title: "标准要求",
       dataIndex: "criterion",
@@ -67,9 +71,8 @@ function ListTable(props: ListTableProps) {
       title: "检查方法",
       dataIndex: "checkWay",
       key: "checkWay",
-      width: 200
+      width: 100
     },
-
     // {
     //   title: "单位",
     //   dataIndex: "unit",
@@ -104,7 +107,6 @@ function ListTable(props: ListTableProps) {
       }
     }
   ] as ColumnProps<any>[];
-
   return (
     <Page>
       <Table
@@ -114,7 +116,7 @@ function ListTable(props: ListTableProps) {
         dataSource={data}
         columns={columns}
         rowKey={record => record.id}
-        scroll={{ y: 500 }}
+        scroll={{ y: 500, x: 1100 }}
         loading={loading}
         pagination={pagination}
         onChange={(pagination: PaginationConfig, filters, sorter) =>

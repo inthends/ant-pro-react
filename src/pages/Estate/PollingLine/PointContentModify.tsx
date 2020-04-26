@@ -57,9 +57,9 @@ const PointContentModify = (props: PointContentModifyProps) => {
       if (!errors) {
         const newData = data ? { ...data, ...values } : values;
         newData.lpId = lpId;
-        newData.planTime = newData.planTime.format('HH:mm');
-        newData.beginTime = newData.beginTime.format('HH:mm');
-        newData.endTime = newData.endTime.format('HH:mm');
+        newData.planTime = newData.planTime ? newData.planTime.format('HH:mm') : null;
+        newData.beginTime = newData.beginTime ? newData.beginTime.format('HH:mm') : null;
+        newData.endTime = newData.endTime ? newData.endTime.format('HH:mm') : null;
         SavePointContentForm({ ...newData, keyValue: newData.id }).then(res => {
           message.success('保存成功');
           closeModal();
@@ -207,7 +207,7 @@ const PointContentModify = (props: PointContentModifyProps) => {
               <Form.Item label="次" required>
                 {getFieldDecorator('frequency', {
                   initialValue: infoDetail.frequency == null ? 1 : infoDetail.frequency,
-                  rules: [{ required: true, message: '请输入次数' }],
+                  rules: [{ required: isDay, message: '请输入次数' }],
                 })(<InputNumber
                   readOnly={!isDay}
                   placeholder="请输入次数"
@@ -222,7 +222,7 @@ const PointContentModify = (props: PointContentModifyProps) => {
               <Form.Item label="计划时间" required>
                 {getFieldDecorator('planTime', {
                   initialValue: infoDetail.planTime == null ? infoDetail.planTime : moment('9:00', 'HH:mm'),
-                  rules: [{ required: true, message: '请输入计划时间' }],
+                  rules: [{ required: isDay, message: '请输入计划时间' }],
                 })(<TimePicker
                   disabled={!isDay}
                   placeholder="请输入计划时间"
@@ -236,7 +236,7 @@ const PointContentModify = (props: PointContentModifyProps) => {
               <Form.Item label="偏差（分）" required>
                 {getFieldDecorator('deviation', {
                   initialValue: infoDetail.deviation == null ? infoDetail.deviation : 10,
-                  rules: [{ required: true, message: '请输入偏差' }],
+                  rules: [{ required: isDay, message: '请输入偏差' }],
                 })(<InputNumber
                   disabled={!isDay}
                   placeholder="请输入偏差"
@@ -254,7 +254,7 @@ const PointContentModify = (props: PointContentModifyProps) => {
               <Form.Item label="开始时间" required>
                 {getFieldDecorator('beginTime', {
                   initialValue: infoDetail.beginTime == null ? infoDetail.beginTime : moment('8:00', 'HH:mm'),
-                  rules: [{ required: true, message: '请输入开始时间' }],
+                  rules: [{ required: isDay, message: '请输入开始时间' }],
                 })(<TimePicker
                   disabled={!isDay}
                   placeholder="请输入开始时间"
@@ -269,8 +269,7 @@ const PointContentModify = (props: PointContentModifyProps) => {
                   initialValue: infoDetail.timeSplit == null ? 1 : infoDetail.timeSplit
                 })(
                   <Select
-                    disabled={!isDay}
-                  >
+                    disabled={!isDay}   >
                     <Option value={1}>当日</Option>
                     <Option value={2}>次日</Option>
                   </Select>
@@ -281,7 +280,7 @@ const PointContentModify = (props: PointContentModifyProps) => {
               <Form.Item label="结束时间" required>
                 {getFieldDecorator('endTime', {
                   initialValue: infoDetail.endTime == null ? infoDetail.endTime : moment('23:59', 'HH:mm'),
-                  rules: [{ required: true, message: '请输入结束时间' }],
+                  rules: [{ required: isDay, message: '请输入结束时间' }],
                 })(<TimePicker
                   disabled={!isDay}
                   placeholder="请输入结束时间"

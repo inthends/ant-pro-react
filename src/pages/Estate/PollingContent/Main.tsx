@@ -181,7 +181,7 @@ const Main = () => {
         visible={modifyVisible}
         closeDrawer={closeDrawer}
         // typeId={search.typeId}
-        typeName={search.typeName}
+        // typeName={search.typeName}
         data={currData}
         reload={() => initLoadData(search)}
       />
