@@ -76,7 +76,7 @@ function ListTable(props: ListTableProps) {
       title: '服务单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 180,
+      width: 250,
       sorter: true,
     },
     {
@@ -125,7 +125,7 @@ function ListTable(props: ListTableProps) {
       title: '关联单号',
       dataIndex: 'businessCode',
       key: 'businessCode',
-      width: 180,
+      width: 250,
     },
     {
       title: '备注',
@@ -188,7 +188,7 @@ function ListTable(props: ListTableProps) {
         columns={columns}
         rowKey={record => record.id}
         pagination={pagination}
-        scroll={{ x: 1500 }}
+        scroll={{ x: 1800 }}
         onChange={(pag: PaginationConfig, filters, sorter) => changePage(pag, filters, sorter)}
         loading={loading}
       />

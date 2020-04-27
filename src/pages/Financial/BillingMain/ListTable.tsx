@@ -65,7 +65,7 @@ function ListTable(props: ListTableProps) {
       title: '计费单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 180,
+      width: 200,
       sorter: true
     },
     {
