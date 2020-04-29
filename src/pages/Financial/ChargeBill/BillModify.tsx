@@ -428,7 +428,7 @@ const BillModify = (props: BillModifyProps) => {
               <Col lg={4}>
                 <Form.Item label="入账银行">
                   {getFieldDecorator('accountBank', {
-                  })(<Select placeholder="请选择入账银行">
+                  })(<Select placeholder="请选择">
                     {banks.map(item => (
                       <Option value={item.value} key={item.key}>
                         {item.title}
