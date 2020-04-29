@@ -48,7 +48,7 @@ const AddHouseFee = (props: AddHouseFeeProps) => {
           message.warning('请选择房屋');
         } else {
           setLoading(true);
-          UnitFeeSaveForm({ FeeItemID: feeId, JsonFeeIdArray: JSON.stringify(unitData) }).then(res => {
+          UnitFeeSaveForm({ FeeItemId: feeId, JsonFeeIdArray: JSON.stringify(unitData) }).then(res => {
             message.success('添加成功');
             setLoading(false);
             closeModal();
