@@ -1,12 +1,13 @@
 import { BaseModifyProvider } from '@/components/BaseModifyDrawer/BaseModifyDrawer';
 import ModifyItem, { SelectItem } from '@/components/BaseModifyDrawer/ModifyItem';
-import { Card, Form, Row } from 'antd';
+import { Tabs, Card, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useState, useEffect } from 'react';
 import { SaveForm, searchUser, ExistEnCode } from './Organize.service';
 import { GetOrgsWithNoGLC } from '@/services/commonItem';
 import { TreeNode } from 'antd/lib/tree-select';
 import styles from './style.less';
+const { TabPane } = Tabs;
 
 interface ModifyProps {
   visible: boolean;
@@ -116,144 +117,185 @@ const Modify = (props: ModifyProps) => {
 
   return (
     <BaseModifyProvider {...props} name="机构" save={doSave} width={700} >
-      <Card className={styles.card}>
-        <Form layout="vertical" hideRequiredMark>
-          <Row gutter={24} hidden={initData.parentId == 0 ? true : false} >
-            <ModifyItem
-              {...baseFormProps}
-              field="parentId"
-              label="隶属上级"
-              type="tree"
-              treeData={orgs}
-              disabled={initData.organizeId != undefined}
-              rules={[{ required: true, message: '请选择隶属上级' }]}
-            ></ModifyItem>
-            <ModifyItem
-              {...baseFormProps}
-              field="category"
-              label="类型"
-              type="select"
-              disabled={initData.parentId === '0'}
-              items={[
-                {
-                  title: '集团',
-                  label: '集团',
-                  value: 'A',
-                },
-                {
-                  title: '区域',
-                  label: '区域',
-                  value: 'B',
-                },
-                {
-                  title: '公司',
-                  label: '公司',
-                  value: 'C',
-                },
-                {
-                  title: '管理处',
-                  label: '管理处',
-                  value: 'D',
-                },
-              ]}
-              rules={[{ required: true, message: '请选择类型' }]}
-            ></ModifyItem>
-          </Row>
+      <Form layout="vertical" hideRequiredMark >
+        <Tabs defaultActiveKey="1" >
+          <TabPane tab="基本信息" key="1">
+            <Card  >
+              <Row gutter={24} hidden={initData.parentId == 0 ? true : false} >
+                <ModifyItem
+                  {...baseFormProps}
+                  field="parentId"
+                  label="隶属上级"
+                  type="tree"
+                  treeData={orgs}
+                  disabled={initData.organizeId != undefined}
+                  rules={[{ required: true, message: '请选择隶属上级' }]}
+                ></ModifyItem>
+                <ModifyItem
+                  {...baseFormProps}
+                  field="category"
+                  label="类型"
+                  type="select"
+                  disabled={initData.parentId === '0'}
+                  items={[
+                    {
+                      title: '集团',
+                      label: '集团',
+                      value: 'A',
+                    },
+                    {
+                      title: '区域',
+                      label: '区域',
+                      value: 'B',
+                    },
+                    {
+                      title: '公司',
+                      label: '公司',
+                      value: 'C',
+                    },
+                    {
+                      title: '管理处',
+                      label: '管理处',
+                      value: 'D',
+                    },
+                  ]}
+                  rules={[{ required: true, message: '请选择类型' }]}
+                ></ModifyItem>
+              </Row>
 
-          <Row gutter={24}>
-            <ModifyItem
-              {...baseFormProps}
-              field="fullName"
-              label="机构名称"
-              rules={[{ required: true, message: '请输入机构名称' }]}
-            ></ModifyItem>
-            <ModifyItem
-              {...baseFormProps}
-              field="enCode"
-              label="机构编号"
-              rules={[{ required: true, message: '请输入机构编号' },
-              {
-                validator: checkExist
-              }
-              ]}
-            ></ModifyItem>
-          </Row>
-
-          <Row gutter={24}>
-            <ModifyItem
-              {...baseFormProps}
-              field="chargeLeader"
-              label="负责人"
-              type="autoComplete"
-              onSearch={searchManager}
-              items={managers}
-              onSelect={onSelect}
-            ></ModifyItem>
-
-            {getFieldDecorator('chargeLeaderId', {
-              initialValue: initData.chargeLeaderId,
-            })(
-              <input type='hidden' />
-            )}
-            <ModifyItem
-              {...baseFormProps}
-              field="foundedTime"
-              label="成立时间"
-              type="date"
-            ></ModifyItem>
-          </Row>
-          <Row gutter={24}>
-            <ModifyItem {...baseFormProps} field="phoneNum" label="联系电话"></ModifyItem>
-            <ModifyItem {...baseFormProps} field="fax" label="传真"></ModifyItem>
-          </Row>
-          <Row gutter={24}>
-            <ModifyItem  {...baseFormProps} field="posType" label="POS机类型"
-              type="select"
-              rules={[{ required: true, message: '请选择POS机类型' }]}
-              items={
-                [
+              <Row gutter={24}>
+                <ModifyItem
+                  {...baseFormProps}
+                  field="fullName"
+                  label="机构名称"
+                  rules={[{ required: true, message: '请输入机构名称' }]}
+                ></ModifyItem>
+                <ModifyItem
+                  {...baseFormProps}
+                  field="enCode"
+                  label="机构编号"
+                  rules={[{ required: true, message: '请输入机构编号' },
                   {
-                    title: '拉卡拉',
-                    label: '拉卡拉',
-                    value: '拉卡拉',
-                  },
-                  {
-                    title: '银盛',
-                    label: '银盛',
-                    value: '银盛',
+                    validator: checkExist
                   }
-                ]}
-            ></ModifyItem>
-            <ModifyItem  {...baseFormProps} field="lklMchId" label="拉卡拉商户号"></ModifyItem>
-          </Row>
+                  ]}
+                ></ModifyItem>
+              </Row>
 
-          <Row gutter={24}>
-            <ModifyItem  {...baseFormProps} field="yseMchId" label="银盛商户号"></ModifyItem>
-            <ModifyItem  {...baseFormProps} field="swiftMchId" label="威富通商户号"></ModifyItem>
-          </Row>
+              <Row gutter={24}>
+                <ModifyItem
+                  {...baseFormProps}
+                  field="chargeLeader"
+                  label="负责人"
+                  type="autoComplete"
+                  onSearch={searchManager}
+                  items={managers}
+                  onSelect={onSelect}
+                ></ModifyItem>
 
-          {/* <Row gutter={24}> 
+                {getFieldDecorator('chargeLeaderId', {
+                  initialValue: initData.chargeLeaderId,
+                })(
+                  <input type='hidden' />
+                )}
+                <ModifyItem
+                  {...baseFormProps}
+                  field="foundedTime"
+                  label="成立时间"
+                  type="date"
+                ></ModifyItem>
+              </Row>
+              <Row gutter={24}>
+                <ModifyItem {...baseFormProps} field="phoneNum" label="联系电话"></ModifyItem>
+                <ModifyItem {...baseFormProps} field="fax" label="传真"></ModifyItem>
+              </Row>
+
+              <Row gutter={24}>
+                <ModifyItem
+                  {...baseFormProps}
+                  // wholeLine={true}
+                  lg={24}
+                  type="textarea"
+                  field="description"
+                  label="备注"
+                ></ModifyItem>
+              </Row> </Card>
+          </TabPane>
+          <TabPane tab="支付设置" key="2">
+            <Card >
+              <Row gutter={24}>
+                <ModifyItem  {...baseFormProps} field="posType" label="POS机类型"
+                  type="select"
+                  rules={[{ required: true, message: '请选择POS机类型' }]}
+                  items={
+                    [
+                      {
+                        title: '拉卡拉',
+                        label: '拉卡拉',
+                        value: '拉卡拉',
+                      },
+                      {
+                        title: '银盛',
+                        label: '银盛',
+                        value: '银盛',
+                      }
+                    ]}
+                ></ModifyItem>
+                <ModifyItem  {...baseFormProps} field="lklMchId" label="拉卡拉商户号"></ModifyItem>
+              </Row>
+              <Row gutter={24}>
+                <ModifyItem  {...baseFormProps} field="yseMchId" label="银盛商户号"></ModifyItem>
+                <ModifyItem  {...baseFormProps} field="swiftMchId" label="威富通商户号"></ModifyItem>
+              </Row>
+              {/* <Row gutter={24}> 
            <ModifyItem {...baseFormProps} field="lklPlatPublicKey" label="拉卡拉公钥"></ModifyItem> 
             <ModifyItem {...baseFormProps} field="lklMchPrivateKey" label="拉卡拉私钥"></ModifyItem>
           </Row>*/}
+              <Row gutter={24}>
+                <ModifyItem {...baseFormProps} field="swiftPlatPublicKey" label="威富通平台公钥"></ModifyItem>
+                <ModifyItem {...baseFormProps} field="swiftMchPrivateKey" label="威富通私钥"></ModifyItem>
+              </Row>
+            </Card>
+          </TabPane>
 
-          <Row gutter={24}>
-            <ModifyItem {...baseFormProps} field="swiftPlatPublicKey" label="威富通平台公钥"></ModifyItem>
-            <ModifyItem {...baseFormProps} field="swiftMchPrivateKey" label="威富通私钥"></ModifyItem>
-          </Row>
+          {/* <TabPane tab="服务单设置" key="2">
+            <Card> 
+              <Row gutter={24}>
+                <ModifyItem
+                  {...baseFormProps}
+                  field="fullName"
+                  label="回复逾期(分)"
+                  type="inputNumber"
+                  rules={[{ required: true, message: '请输入回复逾期' }]}
+                ></ModifyItem>
+                <ModifyItem
+                  {...baseFormProps}
+                  field="enCode"
+                  label="派单逾期(分)"
+                  rules={[{ required: true, message: "请输入派单逾期" }]}
+                ></ModifyItem>
+              </Row>    
+              <Row gutter={24}>
+                <ModifyItem
+                  {...baseFormProps}
+                  field="fullName"
+                  label="接单逾期(分)"
+                  type="inputNumber"
+                  rules={[{ required: true, message: '请输入接单逾期' }]}
+                ></ModifyItem>
+                <ModifyItem
+                  {...baseFormProps}
+                  field="enCode"
+                  label="完成逾期(分)"
+                  rules={[{ required: true, message: "请输入完成逾期" }]}
+                ></ModifyItem>
+              </Row>    
+            </Card>
+          </TabPane> */}
 
-          <Row gutter={24}>
-            <ModifyItem
-              {...baseFormProps}
-              // wholeLine={true}
-              lg={24}
-              type="textarea"
-              field="description"
-              label="备注"
-            ></ModifyItem>
-          </Row>
-        </Form>
-      </Card>
+        </Tabs>
+      </Form>
+
     </BaseModifyProvider >
   );
 };
