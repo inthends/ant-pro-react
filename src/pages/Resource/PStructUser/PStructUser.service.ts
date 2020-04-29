@@ -55,6 +55,13 @@ export function CheckRelation(keyValue): Promise<any> {
     .then(getResult as any);
 }
 
+// 验证code
+export function ExistEnCode(keyValue, code): Promise<any> {
+  return request
+    .get(process.env.basePath + `/PStructUser/ExistCode?keyValue=${keyValue}&code=${code}`)
+    .then(getResult as any);
+}
+
 // 验证
 export function CheckCustomer(organizeId, name): Promise<any> {
   return request

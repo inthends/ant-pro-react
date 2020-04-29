@@ -56,3 +56,10 @@ export function RemoveForm(keyValue): Promise<any> {
     .then(getResult as any);
 }
 
+
+// 验证code
+export function ExistEnCode(keyValue, code): Promise<any> {
+  return request
+    .get(process.env.basePath + `/PStructs/ExistCode?keyValue=${keyValue}&code=${code}`)
+    .then(getResult as any);
+}

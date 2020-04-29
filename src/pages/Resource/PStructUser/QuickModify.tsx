@@ -3,7 +3,7 @@
 import { DatePicker, Button, Card, Col, Drawer, Form, Input, message, Row, Select, TreeSelect } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { SaveForm } from './PStructUser.service';
+import { ExistEnCode, SaveForm } from './PStructUser.service';
 import { GetCommonItems, GetOrgs } from '@/services/commonItem';
 import styles from './style.less';
 const { Option } = Select;
@@ -97,6 +97,23 @@ const QuickModify = (props: QuickModifyProps) => {
     });
   };
 
+  //验证编码是否重复
+  const checkCodeExist = (rule, value, callback) => {
+    if (value == undefined) {
+      callback();
+    }
+    else {
+      const keyValue = infoDetail.id == undefined ? '' : infoDetail.id;
+      ExistEnCode(keyValue, value).then(res => {
+        if (res)
+          callback('编号重复');
+        else
+          callback();
+      })
+    }
+  };
+
+
   return (
     <Drawer
       title={title}
@@ -159,7 +176,10 @@ const QuickModify = (props: QuickModifyProps) => {
                 <Form.Item label="住户编号" required>
                   {getFieldDecorator('code', {
                     initialValue: infoDetail.code,
-                    rules: [{ required: true, message: '请输入住户编号' }],
+                    rules: [{ required: true, message: '请输入住户编号' },
+                    {
+                      validator: checkCodeExist
+                    }],
                   })(<Input placeholder="请输入住户编号" />)}
                 </Form.Item>
               </Col>
@@ -167,11 +187,12 @@ const QuickModify = (props: QuickModifyProps) => {
 
             <Row gutter={24}>
               <Col lg={12}>
-                <Form.Item label="联系电话" required>
+                <Form.Item label="手机号码" required>
                   {getFieldDecorator('phoneNum', {
                     initialValue: infoDetail.phoneNum,
-                    rules: [{ required: true, message: '请输入联系电话' }],
-                  })(<Input placeholder="请输入联系电话" />)}
+                    rules: [{ required: true, message: '请输入手机号码' }],
+
+                  })(<Input placeholder="请输入联系电话" maxLength={11} />)}
                 </Form.Item>
               </Col>
               <Col lg={12}>

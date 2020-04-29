@@ -53,8 +53,7 @@ function Main() {
       const { field, order } = sorter;
       searchCondition.sord = order === "descend" ? "desc" : "asc";
       searchCondition.sidx = field ? field : 'code';
-    }
-
+    } 
     return load(searchCondition).then(res => {
       return res;
     });
@@ -74,8 +73,7 @@ function Main() {
           total,
           pageSize,
         };
-      });
-
+      }); 
       setData(res.data);
       setLoading(false);
       return res;
@@ -126,6 +124,7 @@ function Main() {
           }
         />
       </Content>
+      
       <Modify
         modifyVisible={modifyVisible}
         closeDrawer={closeDrawer}

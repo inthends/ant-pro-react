@@ -558,7 +558,7 @@ function Main() {
           setOrgType(type);
           //点击前重置 
           setAddButtonDisable(true);
-          doSelectTree(id, type); 
+          doSelectTree(id, type);
           //type
           // var params = Object.assign({}, chargedSearchParams, { type: type });
           // setChargedSearchParams(params);  
@@ -567,7 +567,11 @@ function Main() {
             setAddButtonDisable(false);
             var cusname = info.node.props.tenantname;
             setCustomerName(cusname);
-            setShowname(info.node.props.allname + ' 当前租户 ' + cusname);
+            var showTitle = '当前住户';
+            if (type == 9) {
+              showTitle = '当前租户';
+            }
+            setShowname(info.node.props.allname + ' ' + showTitle + ' ' + cusname);
           }
         }}
       />

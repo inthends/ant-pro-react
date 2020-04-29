@@ -1,8 +1,8 @@
 // import { TreeEntity } from '@/model/models';
-import { DatePicker, Button, Card, Col, Drawer, Form, Input, message, Row, Select, TreeSelect, Checkbox} from 'antd';
+import { DatePicker, Button, Card, Col, Drawer, Form, Input, message, Row, Select, TreeSelect, Checkbox } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { SaveForm } from './PStructUser.service';
+import { ExistEnCode, SaveForm } from './PStructUser.service';
 import { GetCommonItems, GetOrgs } from '@/services/commonItem';
 import styles from './style.less';
 import moment from 'moment';
@@ -51,9 +51,9 @@ const Modify = (props: ModifyProps) => {
     // });
   }, []);
 
-   // 打开抽屉时初始化
-   useEffect(() => {
-    if (modifyVisible) { 
+  // 打开抽屉时初始化
+  useEffect(() => {
+    if (modifyVisible) {
       if (data) {
         setInfoDetail(data);
         form.resetFields();
@@ -88,6 +88,22 @@ const Modify = (props: ModifyProps) => {
     });
   };
 
+  //验证编码是否重复
+  const checkCodeExist = (rule, value, callback) => {
+    if (value == undefined) {
+      callback();
+    }
+    else {
+      const keyValue = infoDetail.id == undefined ? '' : infoDetail.id;
+      ExistEnCode(keyValue, value).then(res => {
+        if (res)
+          callback('编号重复');
+        else
+          callback();
+      })
+    }
+  };
+
   return (
     <Drawer
       title={title}
@@ -95,8 +111,7 @@ const Modify = (props: ModifyProps) => {
       width={700}
       onClose={close}
       visible={modifyVisible}
-      bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
-    >
+      bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }} >
       <Card className={styles.card} >
         {modifyVisible ? (
           <Form layout="vertical" hideRequiredMark>
@@ -152,7 +167,10 @@ const Modify = (props: ModifyProps) => {
                 <Form.Item label="住户编号" required>
                   {getFieldDecorator('code', {
                     initialValue: infoDetail.code,
-                    rules: [{ required: true, message: '请输入住户编号' }],
+                    rules: [{ required: true, message: '请输入住户编号' },
+                    {
+                      validator: checkCodeExist
+                    }],
                   })(<Input placeholder="请输入住户编号" />)}
                 </Form.Item>
               </Col>
@@ -166,7 +184,6 @@ const Modify = (props: ModifyProps) => {
                 </Form.Item>
               </Col> */}
             </Row>
-
             <Row gutter={24}>
               <Col lg={12}>
                 <Form.Item label="住户简称">
@@ -180,9 +197,9 @@ const Modify = (props: ModifyProps) => {
                 <Form.Item label="手机号码">
                   {getFieldDecorator('phoneNum', {
                     initialValue: infoDetail.phoneNum,
-                  })(<Input placeholder="请输入手机号码" />)}
+                  })(<Input placeholder="请输入手机号码" maxLength={11} />)}
                 </Form.Item>
-              </Col> 
+              </Col>
             </Row>
 
             {form.getFieldValue('type') === '1' ? (

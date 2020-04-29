@@ -213,9 +213,9 @@ const FeeModify = (props: FeeModifyProps) => {
           CycleValue: "" + values.cycleValue,
           CycleType: values.cycleType,
           BillDate: moment(values.billDate).format("YYYY-MM-DD"),
-          Deadline: moment(values.deadline).format("YYYY-MM-DD"), 
+          Deadline: moment(values.deadline).format("YYYY-MM-DD"),
         }
-  
+
         if (id != null && id != "") {
           unit = Object.assign({}, unit, { Id: id, keyValue: id });
           SaveDetail(unit).then(res => {
@@ -228,7 +228,7 @@ const FeeModify = (props: FeeModifyProps) => {
           let newData = {
             BillId: id != null && id != "" ? infoDetail.billId : guid,
             OrganizeId: adminOrgId,
-            BillSource: "临时加费", 
+            BillSource: "临时加费",
             keyValue: id != null && id != "" ? infoDetail.billId : guid,
             // CreateUserId: localStorage.getItem('userid'),
             // CreateUserName: localStorage.getItem('username'),
@@ -424,26 +424,35 @@ const FeeModify = (props: FeeModifyProps) => {
                   </Form.Item>
                 </Row>
                 <Row>
-                  <Form.Item label="选择房屋" required labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} >
+                  <Form.Item label="选择物业" required labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} >
                     {getFieldDecorator('unitId', {
                       // initialValue: infoDetail.householdId == null ? null : getUnitId(infoDetail.householdId),
                       initialValue: infoDetail.unitId == null ? null : infoDetail.unitId,
-                      rules: [{ required: true, message: '请选择房屋' }]
+                      rules: [{ required: true, message: '请选择物业' }]
                     })(
                       <Select placeholder="=请选择="
                         disabled={id === '' && edit ? false : true}
-                        onSelect={(key) => {
-                          //选择房屋，加载房屋立面的费项单价和起止日期
+                        onSelect={(key) => { 
                           setLoading(true);
-                          GetFeeItemDetail(feeItemId, key).then(res => {
-                            if (res.feeItemId) {
-                              setInfoDetail(res);
-                              setLoading(false);
-                            } else {
-                              message.warning(res);
-                              setLoading(false);
-                            }
+                          //需要刷新费项
+                          GetReceivablesFeeItemTreeJson(roomId).then(res => {
+                            setFeeTreeData(res); 
+                            setInfoDetail({});
+                            //选择房屋，加载房屋立面的费项单价和起止日期 
+                            // GetFeeItemDetail(feeItemId, key).then(res => {
+                            //   if (res.feeItemId) {
+                            //     setInfoDetail(res);
+                            //     setLoading(false);
+                            //   } else {
+                            //     message.warning(res);
+                            //     setLoading(false);
+                            //   }
+                            // });
+
+                            setLoading(false);
+
                           });
+
                         }}>
 
                         {unitIds.map(item => (

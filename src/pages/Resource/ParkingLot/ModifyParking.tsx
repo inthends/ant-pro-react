@@ -1,12 +1,13 @@
 // import { ParkingData } from '@/model/models';
 import { GetCommonItems } from '@/services/commonItem';
-import { AutoComplete, Button, Card, Col, Drawer, Form, Input, message, Row, Select, DatePicker, TreeSelect, InputNumber } from 'antd';
+import { Icon, Button, Card, Col, Drawer, Form, Input, message, Row, Select, DatePicker, TreeSelect, InputNumber } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { SaveParkingForm } from './ParkingLot.service';
-import { GetCustomerInfo, CheckCustomer, GetCustomerList } from '../PStructUser/PStructUser.service';
+import { SaveParkingForm, ExistEnCode } from './ParkingLot.service';
+import { GetCustomerInfo } from '../PStructUser/PStructUser.service';
 import QuickModify from '../PStructUser/QuickModify';
+import CustomerSelect from '../PStructUser/CustomerSelect';
 import styles from './style.less';
 
 const { Option } = Select;
@@ -36,8 +37,8 @@ const ModifyParking = (props: ModifyParkingProps) => {
   // const [color, setColor] = useState<any[]>([]); // 颜色 
   // const [userSource, setUserSource] = useState<any[]>([]);
   const [infoDetail, setInfoDetail] = useState<any>({});
-  const [userList, setUserList] = useState<any[]>([]);
-  const [type, setType] = useState<any>(1);
+  // const [userList, setUserList] = useState<any[]>([]);
+  // const [type, setType] = useState<any>(1);
   const [customerVisible, setCustomerVisible] = useState<boolean>(false);
   const [customer, setCustomer] = useState<any>();
 
@@ -96,7 +97,8 @@ const ModifyParking = (props: ModifyParkingProps) => {
     if (customerId != '') {
       GetCustomerInfo(customerId).then(res => {
         setCustomer(res);
-        setType(type);
+        // setType(type);
+        setCustomerType(type);
         setCustomerVisible(true);
       })
     } else {
@@ -140,73 +142,73 @@ const ModifyParking = (props: ModifyParkingProps) => {
     });
   };
 
-  const ownerChange = value => {
-    form.setFieldsValue({ ownerId: '' });
-    form.setFieldsValue({ ownerPhone: '' });
-    form.setFieldsValue({ ownerUnitAllName: '' });
-  }
+  // const ownerChange = value => {
+  //   form.setFieldsValue({ ownerId: '' });
+  //   form.setFieldsValue({ ownerPhone: '' });
+  //   form.setFieldsValue({ ownerUnitAllName: '' });
+  // }
 
   //业主
-  const ownerSearch = value => {
-    if (value == '') {
-      setUserList([]);
-    }
-    else {
-      setUserList([]);
-      GetCustomerList(value, organizeId).then(res => {
-        // setUserSource(res || []); 
-        const list = res.map(item =>
-          <Option key={item.id}
-          value={item.id}>{item.name.trim()}
-          <span className={styles.right}>{item.phoneNum}</span>
-          <br></br>
-          {item.code}
-          <span className={styles.right}>{item.allName}</span> 
-        </Option>
-        ).concat([
-          <Option disabled key="all" className={styles.addCustomer}>
-            <a onClick={() => showCustomerDrawer('', 1)}>
-              新增业主
-            </a>
-          </Option>]);//新增 
-        setUserList(list);
-      })
-    }
-  };
+  // const ownerSearch = value => {
+  //   if (value == '') {
+  //     setUserList([]);
+  //   }
+  //   else {
+  //     setUserList([]);
+  //     GetCustomerList(value, organizeId).then(res => {
+  //       // setUserSource(res || []); 
+  //       const list = res.map(item =>
+  //         <Option key={item.id}
+  //           value={item.id}>{item.name.trim()}
+  //           <span className={styles.right}>{item.phoneNum}</span>
+  //           <br></br>
+  //           {item.code}
+  //           <span className={styles.right}>{item.allName}</span>
+  //         </Option>
+  //       ).concat([
+  //         <Option disabled key="all" className={styles.addCustomer}>
+  //           <a onClick={() => showCustomerDrawer('', 1)}>
+  //             新增业主
+  //           </a>
+  //         </Option>]);//新增 
+  //       setUserList(list);
+  //     })
+  //   }
+  // };
 
-  const tenantChange = value => {
-    form.setFieldsValue({ tenantId: '' });
-    form.setFieldsValue({ tenantPhone: '' });
-    form.setFieldsValue({ tenantUnitAllName: '' });
-  }
+  // const tenantChange = value => {
+  //   form.setFieldsValue({ tenantId: '' });
+  //   form.setFieldsValue({ tenantPhone: '' });
+  //   form.setFieldsValue({ tenantUnitAllName: '' });
+  // }
 
   //租户
-  const tenantSearch = value => {
-    if (value == '') {
-      setUserList([]);
-    }
-    else {
-      setUserList([]);
-      GetCustomerList(value, organizeId).then(res => {
-        // setUserSource(res || []); 
-        const list = res.map(item =>
-          <Option key={item.id}
-          value={item.id}>{item.name.trim()}
-          <span className={styles.right}>{item.phoneNum}</span>
-          <br></br>
-          {item.code}
-          <span className={styles.right}>{item.allName}</span> 
-        </Option>
-        ).concat([
-          <Option disabled key="all" className={styles.addCustomer}>
-            <a onClick={() => showCustomerDrawer('', 1)}>
-              新增租户
-            </a>
-          </Option>]);//新增 
-        setUserList(list);
-      })
-    }
-  };
+  // const tenantSearch = value => {
+  //   if (value == '') {
+  //     setUserList([]);
+  //   }
+  //   else {
+  //     setUserList([]);
+  //     GetCustomerList(value, organizeId).then(res => {
+  //       // setUserSource(res || []); 
+  //       const list = res.map(item =>
+  //         <Option key={item.id}
+  //           value={item.id}>{item.name.trim()}
+  //           <span className={styles.right}>{item.phoneNum}</span>
+  //           <br></br>
+  //           {item.code}
+  //           <span className={styles.right}>{item.allName}</span>
+  //         </Option>
+  //       ).concat([
+  //         <Option disabled key="all" className={styles.addCustomer}>
+  //           <a onClick={() => showCustomerDrawer('', 1)}>
+  //             新增租户
+  //           </a>
+  //         </Option>]);//新增 
+  //       setUserList(list);
+  //     })
+  //   }
+  // };
 
   // const userList = userSource.map(item =>
   //   <Option key={item.id}
@@ -221,33 +223,57 @@ const ModifyParking = (props: ModifyParkingProps) => {
   //   </Option>]);
   // //新增
 
-  const onOwnerSelect = (value, option) => {  
-    form.setFieldsValue({ ownerId: value });
-    if (option.props.children.length == 5) {
-      form.setFieldsValue({ ownerName: option.props.children[0] });
-      form.setFieldsValue({ ownerPhone: option.props.children[1].props.children });
-      form.setFieldsValue({ ownerUnitAllName: option.props.children[4].props.children });
-    }
-  };
+  // const onOwnerSelect = (value, option) => {
+  //   form.setFieldsValue({ ownerId: value });
+  //   if (option.props.children.length == 5) {
+  //     form.setFieldsValue({ ownerName: option.props.children[0] });
+  //     form.setFieldsValue({ ownerPhone: option.props.children[1].props.children });
+  //     form.setFieldsValue({ ownerUnitAllName: option.props.children[4].props.children });
+  //   }
+  // };
 
-  const onTenantSelect = (value, option) => { 
-    form.setFieldsValue({ tenantId: value });
-    if (option.props.children.length == 5) {
-      form.setFieldsValue({ tenantName: option.props.children[0] });
-      form.setFieldsValue({ tenantPhone: option.props.children[1].props.children });
-      form.setFieldsValue({ tenantUnitAllName: option.props.children[4].props.children });
-    }
-  };
+  // const onTenantSelect = (value, option) => { 
+  //   form.setFieldsValue({ tenantId: value });
+  //   if (option.props.children.length == 5) {
+  //     form.setFieldsValue({ tenantName: option.props.children[0] });
+  //     form.setFieldsValue({ tenantPhone: option.props.children[1].props.children });
+  //     form.setFieldsValue({ tenantUnitAllName: option.props.children[4].props.children });
+  //   }
+  // };
 
   //验证用户
-  const checkExist = (rule, value, callback) => {
-    if (value == undefined || value == '') {
+  // const checkExist = (rule, value, callback) => {
+  //   if (value == undefined || value == '') {
+  //     callback();
+  //   }
+  //   else {
+  //     CheckCustomer(organizeId, value).then(res => {
+  //       if (res)
+  //         callback('人员信息不存在，请先新增');
+  //       else
+  //         callback();
+  //     })
+  //   }
+  // };
+
+  const [customerType, setCustomerType] = useState<any>(1);//1业主，2住户
+  const [customerSelectVisible, setCustomerSelectVisible] = useState<boolean>(false);//用户选择
+
+  const closeCustomerSelect = () => {
+    setCustomerSelectVisible(false);
+  }
+
+
+  //验证编码是否重复
+  const checkCodeExist = (rule, value, callback) => {
+    if (value == undefined) {
       callback();
     }
     else {
-      CheckCustomer(organizeId, value).then(res => {
+      const keyValue = infoDetail.id == undefined ? '' : infoDetail.id;
+      ExistEnCode(keyValue, value).then(res => {
         if (res)
-          callback('人员信息不存在，请先新增');
+          callback('车位编号重复');
         else
           callback();
       })
@@ -296,7 +322,11 @@ const ModifyParking = (props: ModifyParkingProps) => {
                 <Form.Item label="车位编号" required>
                   {getFieldDecorator('code', {
                     initialValue: infoDetail.code,
-                    rules: [{ required: true, message: '请输入车位编号' }],
+                    rules: [{ required: true, message: '请输入车位编号' },
+                    {
+                      validator: checkCodeExist
+                    }
+                    ],
                   })(<Input placeholder="请输入车位编号" />)}
                 </Form.Item>
               </Col>
@@ -389,22 +419,34 @@ const ModifyParking = (props: ModifyParkingProps) => {
                   })(<TextArea rows={4} placeholder="请输入建筑面积" />)} */}
                   {getFieldDecorator('ownerName', {
                     initialValue: infoDetail.ownerName,
-                    rules: [{
-                      required: false, message: '业主不存在，请先新增'
-                    },
-                    { validator: checkExist }]
+                    // rules: [{
+                    //   required: false, message: '业主不存在，请先新增'
+                    // },
+                    // { validator: checkExist }]
                   })(
-                    <AutoComplete
-                      dropdownClassName={styles.searchdropdown}
-                      optionLabelProp="value"
-                      dropdownMatchSelectWidth={false}
-                      style={{ width: '100%' }}
-                      dataSource={userList}
-                      onSearch={ownerSearch}
-                      onChange={ownerChange}
-                      placeholder="请输入业主名称"
-                      onSelect={onOwnerSelect}
-                    />
+                    // <AutoComplete
+                    //   dropdownClassName={styles.searchdropdown}
+                    //   optionLabelProp="value"
+                    //   dropdownMatchSelectWidth={false}
+                    //   style={{ width: '100%' }}
+                    //   dataSource={userList}
+                    //   onSearch={ownerSearch}
+                    //   onChange={ownerChange}
+                    //   placeholder="请输入业主名称"
+                    //   onSelect={onOwnerSelect}
+                    // />
+                    <Input
+                      readOnly
+                      allowClear
+                      onChange={(e) => {
+                        form.setFieldsValue({ ownerId: '' });
+                        form.setFieldsValue({ ownerPhone: '' });
+                        form.setFieldsValue({ ownerUnitAllName: '' });
+                      }}
+                      addonAfter={<Icon type="setting" onClick={() => {
+                        setCustomerType(1);
+                        setCustomerSelectVisible(true);
+                      }} />} />
                   )}
                   {getFieldDecorator('ownerId', {
                     initialValue: infoDetail.ownerId,
@@ -426,25 +468,39 @@ const ModifyParking = (props: ModifyParkingProps) => {
                     initialValue: infoDetail.customerId,
                   })(<TextArea rows={4} placeholder="请输计费面积" />)} */}
                   {getFieldDecorator('tenantName', {
-                    initialValue: infoDetail.tenantName,
-                    rules: [{ required: false, message: '租户不存在，请先新增' }, { validator: checkExist }]
-                  })(<AutoComplete
-                    dropdownClassName={styles.searchdropdown}
-                    optionLabelProp="value"
-                    dropdownMatchSelectWidth={false}
-                    dataSource={userList}
-                    style={{ width: '100%' }}
-                    onSearch={tenantSearch}
-                    onChange={tenantChange}
-                    placeholder="请输入租户名称"
-                    onSelect={onTenantSelect}
-                  />)}
+                    initialValue: infoDetail.tenantName
+                  })(
+                    // <AutoComplete
+                    //   dropdownClassName={styles.searchdropdown}
+                    //   optionLabelProp="value"
+                    //   dropdownMatchSelectWidth={false}
+                    //   dataSource={userList}
+                    //   style={{ width: '100%' }}
+                    //   onSearch={tenantSearch}
+                    //   onChange={tenantChange}
+                    //   placeholder="请输入租户名称"
+                    //   onSelect={onTenantSelect}
+                    // />
+
+                    <Input
+                      readOnly
+                      allowClear
+                      onChange={(e) => {
+                        form.setFieldsValue({ tenantId: '' });
+                        form.setFieldsValue({ tenantPhone: '' });
+                        form.setFieldsValue({ tenantUnitAllName: '' });
+                      }}
+                      addonAfter={<Icon type="setting" onClick={() => {
+                        setCustomerType(2);
+                        setCustomerSelectVisible(true);
+                      }} />} />
+
+                  )}
                   {getFieldDecorator('tenantId', {
                     initialValue: infoDetail.tenantId,
                   })(
                     <input type='hidden' />
                   )}
-
                   {getFieldDecorator('tenantUnitAllName', {
                     initialValue: infoDetail.tenantUnitAllName,
                   })(
@@ -583,10 +639,9 @@ const ModifyParking = (props: ModifyParkingProps) => {
         // type={type}
         reload={(customerId) => {
           GetCustomerInfo(customerId).then(res => {
-            debugger
             //防止旧数据缓存，清空下拉
-            setUserList([]);
-            if (type == 1) {
+            // setUserList([]);
+            if (customerType == 1) {
               //业主
               form.setFieldsValue({ ownerName: res.name });
               form.setFieldsValue({ ownerId: customerId });
@@ -600,6 +655,25 @@ const ModifyParking = (props: ModifyParkingProps) => {
           });
         }
         }
+      />
+
+      <CustomerSelect
+        visible={customerSelectVisible}
+        closeModal={closeCustomerSelect}
+        organizeId={organizeId}
+        Select={(res) => {
+          if (customerType == 1) {
+            //业主
+            form.setFieldsValue({ ownerName: res.name });
+            form.setFieldsValue({ ownerId: res.id });
+            form.setFieldsValue({ ownerPhone: res.phoneNum });
+          } else {
+            //租户
+            form.setFieldsValue({ tenantName: res.name });
+            form.setFieldsValue({ tenantId: res.id });
+            form.setFieldsValue({ tenantPhone: res.phoneNum });
+          }
+        }}
       />
 
     </Drawer >

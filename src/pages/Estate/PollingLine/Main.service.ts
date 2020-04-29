@@ -1,6 +1,6 @@
 import { getResult, objToFormdata } from "@/utils/networkUtils";
 import request from "@/utils/request";
-import { ResponseObject, TreeEntity } from '@/model/models';
+import { TreeEntity } from '@/model/models';
 
 // 新增修改巡检路线
 export function SaveFormLine(data): Promise<any> {
@@ -32,8 +32,6 @@ export function GetPageContentListJson(data): Promise<any> {
 export function SaveLinePointForm(data): Promise<any> {
   return request.post(process.env.basePath + `/Polling/SaveLinePointForm`, { data: objToFormdata(data) }).then(getResult as any);
 }
-
-
 
 //获取巡检路线
 export function GetPageLineListJson(data): Promise<any> {
