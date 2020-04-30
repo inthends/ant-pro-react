@@ -435,7 +435,7 @@ const FeeModify = (props: FeeModifyProps) => {
                         onSelect={(key) => { 
                           setLoading(true);
                           //需要刷新费项
-                          GetReceivablesFeeItemTreeJson(roomId).then(res => {
+                          GetReceivablesFeeItemTreeJson(key).then(res => {
                             setFeeTreeData(res); 
                             setInfoDetail({});
                             //选择房屋，加载房屋立面的费项单价和起止日期 

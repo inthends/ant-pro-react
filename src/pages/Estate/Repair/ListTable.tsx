@@ -38,7 +38,7 @@ function ListTable(props: ListTableProps) {
       title: '报修单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 180,
+      width: 200,
       sorter: true,
     },
     {
@@ -72,13 +72,13 @@ function ListTable(props: ListTableProps) {
             return <Tag color="#e4aa5b">待开工</Tag>
           case 4:
             return <Tag color="#61c33a">待完成</Tag>
-          // case 5:
-          //   return <Tag color="#ff5722">待回访</Tag>
           case 5:
-            return <Tag color="#5fb878">待检验</Tag>
+            return <Tag color="#ff5722">待回访</Tag>
           case 6:
-            return <Tag color="#29cc63">待审核</Tag>
+            return <Tag color="#5fb878">待检验</Tag>
           case 7:
+            return <Tag color="#29cc63">待审核</Tag>
+          case 8:
             return <Tag color="#19d54e">已审核</Tag>
           case -1:
             return <Tag color="#d82d2d">已作废</Tag>

@@ -1677,12 +1677,12 @@ const Modify = (props: ModifyProps) => {
 
             {
               id && infoDetail.feeKind == '收款费项' ?
-                <TabPane tab="设置房屋费项" key="5" style={{ marginBottom: '20px' }}>
+                <TabPane tab="设置房产费项" key="5" style={{ marginBottom: '20px' }}>
                   <div style={{ marginBottom: '5px', padding: '3px 2px' }}>
                     <Input.Search
                       key='search'
                       className="search-input"
-                      placeholder="请输入要查询的房屋编号"
+                      placeholder="请输入要查询的房产编号"
                       style={{ width: 210 }}
                       onSearch={value => houseLoadData(value)}
                     />
