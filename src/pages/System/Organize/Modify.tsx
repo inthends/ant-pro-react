@@ -1,12 +1,11 @@
 import { BaseModifyProvider } from '@/components/BaseModifyDrawer/BaseModifyDrawer';
 import ModifyItem, { SelectItem } from '@/components/BaseModifyDrawer/ModifyItem';
-import { Tabs, Card, Form, Row } from 'antd';
+import { Icon, Upload, Col, Tabs, Card, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useState, useEffect } from 'react';
 import { SaveForm, searchUser, ExistEnCode } from './Organize.service';
 import { GetOrgsWithNoGLC } from '@/services/commonItem';
 import { TreeNode } from 'antd/lib/tree-select';
-import styles from './style.less';
 const { TabPane } = Tabs;
 
 interface ModifyProps {
@@ -17,7 +16,7 @@ interface ModifyProps {
   reload(): void;
 }
 const Modify = (props: ModifyProps) => {
-  const { data, form } = props;
+  const { data, form,visible } = props;
   const { getFieldDecorator } = form;
   const [managers, setManagers] = useState<SelectItem[]>([]);
   // const [types, setTypes] = useState<SelectItem[]>([
@@ -40,6 +39,7 @@ const Modify = (props: ModifyProps) => {
   // ]);
   const [orgs, setOrgs] = useState<TreeNode[]>();
   let initData = data ? data : { enabledMark: 1 };
+  const [fileList, setFileList] = useState<any[]>([]);
 
   // initData.expDate = initData.expDate ? initData.expDate : new Date();
   const baseFormProps = { form, initData };
@@ -50,7 +50,22 @@ const Modify = (props: ModifyProps) => {
     GetOrgsWithNoGLC().then(res => {
       setOrgs(res);
     });
-  }, []);
+ 
+    //加载图片
+    let files: any[]; files = [];
+    if (initData != null && initData.stampUrl != null) {
+      const filedate = {
+        url: data.stampUrl,
+        uid: data.organizeId//必须
+      }
+      files.push(filedate);
+    }
+    setFileList(files);
+
+  }, [visible]);
+
+
+
 
   const doSave = dataDetail => {
     let modifyData = { ...initData, ...dataDetail, keyValue: initData.organizeId };
@@ -114,6 +129,33 @@ const Modify = (props: ModifyProps) => {
   const onSelect = (value, option) => {
     form.setFieldsValue({ chargeLeaderId: option.key });
   };
+
+
+  //图片上传
+  const handleRemove = (file) => {
+    // const fileid = file.fileid || file.response.fileid;
+    // RemoveFile(fileid).then(res => {
+    // }); 
+    //清空
+    form.setFieldsValue({ stampUrl: '' });
+  };
+
+  //重新设置state
+  const handleChange = ({ fileList }) => {
+    setFileList([...fileList]);
+    let url = '';
+    if (fileList.length > 0)
+      url = fileList[0].response;
+    //设置
+    form.setFieldsValue({ stampUrl: url });
+  };
+
+  const uploadButton = (
+    <div>
+      <Icon type="plus" />
+      <div className="ant-upload-text">点击上传印章<br/>小于400像素</div>
+    </div>
+  );
 
   return (
     <BaseModifyProvider {...props} name="机构" save={doSave} width={700} >
@@ -219,7 +261,32 @@ const Modify = (props: ModifyProps) => {
                   field="description"
                   label="备注"
                 ></ModifyItem>
-              </Row> </Card>
+              </Row>
+
+              <Row gutter={24}>
+                <Col lg={24}>
+                  <div className="clearfix">
+                    <Upload
+                      accept='image/*'
+                      action={process.env.basePath + '/Organize/Upload'}
+                      fileList={fileList}
+                      listType="picture-card"
+                      onChange={handleChange}
+                      onRemove={handleRemove}
+                    >
+                      {fileList.length > 0 ? null : uploadButton}
+                    </Upload>
+                  </div>
+                  {getFieldDecorator('stampUrl', {
+                    initialValue: initData.stampUrl,
+                  })(
+                    <input type='hidden' />
+                  )}
+                </Col>
+              </Row>
+
+
+            </Card>
           </TabPane>
           <TabPane tab="支付设置" key="2">
             <Card >

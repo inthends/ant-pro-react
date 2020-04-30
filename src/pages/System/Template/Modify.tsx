@@ -27,13 +27,18 @@ const Modify = (props: ModifyProps) => {
   const baseFormProps = { form, initData };
   const [fileList, setFileList] = useState<any[]>([]);
 
-  useEffect(() => {
-    GetOrgs().then(res => {
-      setOrgs(res);
-    });
-  }, []);
+  // useEffect(() => {
+  //   GetOrgs().then(res => {
+  //     setOrgs(res);
+  //   });
+  // }, []);
 
   useEffect(() => {
+
+   GetOrgs().then(res => {
+      setOrgs(res);
+    });
+
     //加载图片
     let files: any[]; files = [];
     if (data != null && data.fileUrl != null) {
