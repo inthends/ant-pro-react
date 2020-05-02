@@ -202,15 +202,16 @@ const FeeModify = (props: FeeModifyProps) => {
           BillId: id != null && id != "" ? infoDetail.billId : guid,
           UnitId: values.unitId,
           FeeItemId: infoDetail.feeItemId,
-          Quantity: "" + values.quantity,
-          Price: "" + values.price,
-          Amount: "" + values.amount,
+          Quantity: values.quantity,
+          Price: values.price,
+          Amount: values.amount,
+          Number: values.number,
           Period: moment(values.period).format("YYYY-MM-DD"),//"2019-04-08",
           BeginDate: values.beginDate == null ? null : moment(values.beginDate).format("YYYY-MM-DD"),//"2019-04-01",
           EndDate: values.endDate == null ? null : moment(values.endDate).format("YYYY-MM-DD"),//"2019-04-30",
           Memo: values.memo,
           RelationId: values.relationId,//getRelationId(values.relationId),
-          CycleValue: "" + values.cycleValue,
+          CycleValue: values.cycleValue,
           CycleType: values.cycleType,
           BillDate: moment(values.billDate).format("YYYY-MM-DD"),
           Deadline: moment(values.deadline).format("YYYY-MM-DD"),
@@ -241,8 +242,7 @@ const FeeModify = (props: FeeModifyProps) => {
             VerifyPerson: '',
             VerifyDate: '',
             VerifyMemo: '',
-            Status: 0,//0正常 1 删除
-            number: values.number,
+            Status: 0,//0正常 1 删除 
             code: id != null && id != "" ? 1 : 0,
             Units: JSON.stringify(units)
           };
@@ -334,7 +334,7 @@ const FeeModify = (props: FeeModifyProps) => {
   };
 
   //缓存费项id
-  const [feeItemId, setFeeItemId] = useState<any>();
+  // const [feeItemId, setFeeItemId] = useState<any>();
 
   return (
     <Drawer
@@ -357,7 +357,7 @@ const FeeModify = (props: FeeModifyProps) => {
                 <LeftTree
                   treeData={feeTreeData}
                   selectTree={(id, item) => {
-                    setFeeItemId(id);//缓存费项id
+                    // setFeeItemId(id);//缓存费项id
                     if (roomId) {
                       setLoading(true);
                       GetFeeItemDetail(id, roomId).then(res => {
@@ -432,11 +432,11 @@ const FeeModify = (props: FeeModifyProps) => {
                     })(
                       <Select placeholder="=请选择="
                         disabled={id === '' && edit ? false : true}
-                        onSelect={(key) => { 
+                        onSelect={(key) => {
                           setLoading(true);
                           //需要刷新费项
                           GetReceivablesFeeItemTreeJson(key).then(res => {
-                            setFeeTreeData(res); 
+                            setFeeTreeData(res);
                             setInfoDetail({});
                             //选择房屋，加载房屋立面的费项单价和起止日期 
                             // GetFeeItemDetail(feeItemId, key).then(res => {

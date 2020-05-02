@@ -298,8 +298,7 @@ const Modify = (props: ModifyProps) => {
                 <Card className={styles.card2}>
                   <Row gutter={24}>
                     <Col lg={8}>
-                      <Form.Item label="单据来源" required>
-
+                      <Form.Item label="单据来源" required> 
                         {/* {getFieldDecorator('source', {
                           initialValue: infoDetail.source == undefined ? '服务总台' : infoDetail.source
                         })(
@@ -311,7 +310,7 @@ const Modify = (props: ModifyProps) => {
                           </Select>
                         )} */}
 
-                        {getFieldDecorator('billCode', {
+                        {getFieldDecorator('source', {
                           initialValue: '服务总台'
                         })(<Input disabled />)}
 
