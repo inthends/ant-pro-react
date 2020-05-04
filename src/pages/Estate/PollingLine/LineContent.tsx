@@ -154,7 +154,7 @@ const LineContent = (props: LineContentProps) => {
       title: "标准要求",
       dataIndex: "criterion",
       key: "criterion",
-      width: 120
+      width: 180
     },
     {
       title: "检查方法",
