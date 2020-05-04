@@ -8,7 +8,7 @@ import { GetUnitTreeAll } from '@/services/commonItem';//获取全部房间树
 import { getResult } from '@/utils/networkUtils';
 import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
-import UnitTable from './UnitTable';
+import DetailTable from './DetailTable';
 import Modify from './Modify';
 import Verify from './Verify';
 import Divide from './Divide';
@@ -360,7 +360,7 @@ function Main() {
                 onSearch={value => loadUnitMeterData(value, orgId, orgType)}
               />
             </div>
-            <UnitTable
+            <DetailTable
               onchange={(paginationConfig, filters, sorter) =>
                 loadUnitMeterData(detailSearch, orgId, orgType, paginationConfig, sorter)
               }

@@ -7,7 +7,7 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 // import { } from './Main.service';
 import moment from 'moment';
 
-interface UnitTableProps {
+interface DetailTableProps {
   onchange(page: any, filter: any, sort: any): any;
   loading: boolean;
   pagination: PaginationConfig;
@@ -16,14 +16,14 @@ interface UnitTableProps {
   form: WrappedFormUtils;
 }
 
-function UnitTable(props: UnitTableProps) {
+function DetailTable(props: DetailTableProps) {
   const { onchange, loading, pagination, data } = props;
   const columns = [
     {
       title: '计费单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 180,
+      width: 200,
       sorter: true
     },
     {
@@ -130,5 +130,5 @@ function UnitTable(props: UnitTableProps) {
   );
 }
 
-export default Form.create<UnitTableProps>()(UnitTable);
+export default Form.create<DetailTableProps>()(DetailTable);
 

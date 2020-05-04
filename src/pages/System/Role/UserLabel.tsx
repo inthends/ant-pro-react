@@ -14,7 +14,8 @@ const UserLabel = props => {
         </div>
         <div className={styles.userContent}>
           <p key="name">姓名：{name}</p>
-          <p key="account">账户：{account ? account : '未关联'}</p> 
+          {/* <p key="account">账户：{account ? account : '未关联'}</p>  */}
+          <p key="account">账户：{account}</p> 
           <p key="orgName">机构：{orgName}</p>
           <p key="departmentName">部门：{departmentName}</p>
         </div>
