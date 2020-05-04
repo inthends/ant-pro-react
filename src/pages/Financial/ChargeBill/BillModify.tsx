@@ -198,8 +198,8 @@ const BillModify = (props: BillModifyProps) => {
   const columns = [
     {
       title: '单元编号',
-      dataIndex: 'unitId',
-      key: 'unitId',
+      dataIndex: 'unitCode',
+      key: 'unitCode',
       width: 150,
       sorter: true,
     },
@@ -408,7 +408,7 @@ const BillModify = (props: BillModifyProps) => {
               <Col lg={4}>
                 <Form.Item label="收款日期" required>
                   {getFieldDecorator('billDate', {
-                    initialValue: moment(new Date()),
+                    initialValue: moment(infoDetail.billDate),
                     rules: [{ required: true, message: '请选择收款日期' }],
                   })(<DatePicker style={{ width: '100%' }} />)}
                 </Form.Item>

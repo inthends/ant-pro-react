@@ -22,7 +22,7 @@ interface ChargeListTableProps {
 }
 
 function ChargeListTable(props: ChargeListTableProps) {
-  const { onchange, loading, pagination, data, reload, rowSelect,showModify, showDetail, showVerify, showNote } = props;
+  const { onchange, loading, pagination, data, reload, rowSelect, showModify, showDetail, showVerify, showNote } = props;
   // const changePage = (pagination: PaginationConfig, filters, sorter) => {
   //   onchange(pagination, filters, sorter);
   // };
@@ -33,6 +33,7 @@ function ChargeListTable(props: ChargeListTableProps) {
     <Dropdown
       overlay={
         <Menu onClick={({ key }) => editAndDelete(key, item)}>
+          <Menu.Item key="modify">修改</Menu.Item>
           <Menu.Item key="note">票据</Menu.Item>
           <Menu.Item key="redflush">冲红</Menu.Item>
           <Menu.Item key="invalid">作废</Menu.Item>
@@ -45,7 +46,10 @@ function ChargeListTable(props: ChargeListTableProps) {
   );
 
   const editAndDelete = (key: string, currentItem: any) => {
-    if (key === 'note') {
+    if (key === 'modify') {
+      showModify(currentItem.billId);
+    }
+    else if (key === 'note') {
       showNote(currentItem.billId);
     }
     else if (key === 'redflush') {
@@ -197,7 +201,7 @@ function ChargeListTable(props: ChargeListTableProps) {
       key: 'verifyDate',
       width: 160,
       // render: val => val == null || val == "" ? '' : moment(val).format('YYYY-MM-DD')
-    }, 
+    },
     {
       title: '审核说明',
       dataIndex: 'verifyMemo',
@@ -221,10 +225,11 @@ function ChargeListTable(props: ChargeListTableProps) {
           //待审核
           return [
             <span key='span1'>
-              <a onClick={() => showModify(record.billId)} key="modify">修改</a>
+              <a onClick={() => showDetail(record.billId)} key="view">查看</a>
+              {/* <a onClick={() => showModify(record.billId)} key="modify">修改</a> */}
               <Divider type="vertical" />
               <a onClick={() => showVerify(record.billId, false)} key="approve">审核</a>
-              <Divider type="vertical" /> 
+              <Divider type="vertical" />
               <MoreBtn key="more" item={record} />
             </span>
           ];
@@ -232,10 +237,10 @@ function ChargeListTable(props: ChargeListTableProps) {
           //已审核
           return [
             <span key='span1'>
-               <a onClick={() => showDetail(record.billId)} key="view">查看</a>
+              <a onClick={() => showDetail(record.billId)} key="view">查看</a>
               <Divider type="vertical" />
               <a onClick={() => showVerify(record.billId, true)} key="unapprove">反审</a>
-              <Divider type="vertical" /> 
+              <Divider type="vertical" />
               <MoreBtn key="more" item={record} />
             </span>
           ];
