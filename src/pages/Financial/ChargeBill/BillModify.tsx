@@ -27,14 +27,14 @@ const BillModify = (props: BillModifyProps) => {
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   // const [chargeBillData, setChargeBillData] = useState<any[]>([]);
   const [chargeBillData, setChargeBillData] = useState<any>();
-  const [linkno, setLinkno] = useState<any>('');
+  const [linkNo, setLinkNo] = useState<any>('');
   //打印
   // const [modalvisible, setModalVisible] = useState<boolean>(false);
   const [banks, setBanks] = useState<any[]>([]); //入账银行
   const [payTypeA, setPayTypeA] = useState<any[]>([]); //收款方式A
   const [payTypeB, setPayTypeB] = useState<any[]>([]); //收款方式B
   const [payTypeC, setPayTypeC] = useState<any[]>([]); //收款方式C
-
+  const [unitNo, setUnitNo] = useState<any>('');
   // 打开抽屉时初始化
   useEffect(() => {
 
@@ -63,7 +63,8 @@ const BillModify = (props: BillModifyProps) => {
         // setLoading(true);
         GetEntityShow(id).then(res => {
           setInfoDetail(res.entity);
-          setLinkno(res.linkno);
+          setLinkNo(res.linkNo);
+          setUnitNo(res.unitNo);
           initLoadFeeDetail(id);
           // setLoading(false);
         })
@@ -75,8 +76,8 @@ const BillModify = (props: BillModifyProps) => {
     }
   }, [showVisible]);
 
-    //选择模板
-    const [modalvisible, setModalVisible] = useState<boolean>(false);
+  //选择模板
+  const [modalvisible, setModalVisible] = useState<boolean>(false);
 
   const showModal = () => {
     setModalVisible(true);
@@ -197,7 +198,7 @@ const BillModify = (props: BillModifyProps) => {
 
   const columns = [
     {
-      title: '单元编号',
+      title: '房产编号',
       dataIndex: 'unitCode',
       key: 'unitCode',
       width: 150,
@@ -210,14 +211,14 @@ const BillModify = (props: BillModifyProps) => {
       width: 150,
       sorter: true,
     },
-    {
-      title: '应收期间',
-      dataIndex: 'period',
-      key: 'period',
-      width: 120,
-      sorter: true,
-      render: val => val != null ? moment(val).format('YYYY年MM月') : ''
-    },
+    // {
+    //   title: '应收期间',
+    //   dataIndex: 'period',
+    //   key: 'period',
+    //   width: 120,
+    //   sorter: true,
+    //   render: val => val != null ? moment(val).format('YYYY年MM月') : ''
+    // },
     {
       title: '数量',
       dataIndex: 'quantity',
@@ -271,7 +272,7 @@ const BillModify = (props: BillModifyProps) => {
       title: '单元全称',
       dataIndex: 'allName',
       key: 'allName',
-      width: 280
+      width: 350
     },
     {
       title: '备注',
@@ -301,16 +302,17 @@ const BillModify = (props: BillModifyProps) => {
           }}  >
           <Form layout='vertical'>
             <Row gutter={6}>
+              <Col span={3}>
+                <Form.Item label="状态">
+                  {GetStatus(infoDetail.status)}
+                </Form.Item>
+              </Col>
               <Col span={5}>
                 <Form.Item label="收款人">
                   {infoDetail.createUserName}
                 </Form.Item>
               </Col>
-              <Col span={4}>
-                <Form.Item label="状态">
-                  {GetStatus(infoDetail.status)}
-                </Form.Item>
-              </Col>
+
               <Col span={5}>
                 <Form.Item label="业户名称">
                   {infoDetail.customerName}
@@ -318,12 +320,12 @@ const BillModify = (props: BillModifyProps) => {
               </Col>
               <Col span={5}>
                 <Form.Item label="房号">
-                  {infoDetail.unitId}
+                  {unitNo}
                 </Form.Item>
               </Col>
               <Col span={5}>
                 <Form.Item label="冲红单号" >
-                  {linkno}
+                  {linkNo}
                 </Form.Item>
               </Col>
             </Row>

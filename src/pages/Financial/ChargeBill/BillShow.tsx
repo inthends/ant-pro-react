@@ -23,7 +23,8 @@ const BillShow = (props: BillShowProps) => {
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   // const [chargeBillData, setChargeBillData] = useState<any[]>([]);
   const [chargeBillData, setChargeBillData] = useState<any>();
-  const [linkno, setLinkno] = useState<any>('');
+  const [linkNo, setLinkNo] = useState<any>('');
+  const [unitNo, setUnitNo] = useState<any>('');
   //选择模板
   const [modalvisible, setModalVisible] = useState<boolean>(false);
 
@@ -35,7 +36,8 @@ const BillShow = (props: BillShowProps) => {
         // setLoading(true);
         GetEntityShow(id).then(res => {
           setInfoDetail(res.entity);
-          setLinkno(res.linkno);
+          setUnitNo(res.unitNo);
+          setLinkNo(res.linkNo);
           initLoadFeeDetail(id);//res.entity.billId);
           // setLoading(false);
         })
@@ -166,9 +168,9 @@ const BillShow = (props: BillShowProps) => {
 
   const columns = [
     {
-      title: '单元编号',
-      dataIndex: 'unitId',
-      key: 'unitId',
+      title: '房产编号',
+      dataIndex: 'unitCode',
+      key: 'unitCode',
       width: 150,
       sorter: true,
     },
@@ -179,14 +181,14 @@ const BillShow = (props: BillShowProps) => {
       width: 150,
       sorter: true,
     },
-    {
-      title: '应收期间',
-      dataIndex: 'period',
-      key: 'period',
-      width: 120,
-      sorter: true,
-      render: val => val != null ? moment(val).format('YYYY年MM月') : ''
-    },
+    // {
+    //   title: '应收期间',
+    //   dataIndex: 'period',
+    //   key: 'period',
+    //   width: 120,
+    //   sorter: true,
+    //   render: val => val != null ? moment(val).format('YYYY年MM月') : ''
+    // },
     {
       title: '数量',
       dataIndex: 'quantity',
@@ -240,7 +242,7 @@ const BillShow = (props: BillShowProps) => {
       title: '单元全称',
       dataIndex: 'allName',
       key: 'allName',
-      width: 280
+      width: 350
     },
     {
       title: '备注',
@@ -270,7 +272,12 @@ const BillShow = (props: BillShowProps) => {
           }}  >
           <Form layout='vertical'>
             <Row gutter={6}>
-              <Col span={3}>
+              <Col span={2}>
+                <Form.Item label="状态">
+                  {GetStatus(infoDetail.status)}
+                </Form.Item>
+              </Col>
+              <Col span={4}>
                 <Form.Item label="收款日期" >
                   {String(infoDetail.billDate).substr(0, 10)}
                 </Form.Item>
@@ -280,19 +287,15 @@ const BillShow = (props: BillShowProps) => {
                   {infoDetail.createUserName}
                 </Form.Item>
               </Col>
-              <Col span={3}>
-                <Form.Item label="状态">
-                  {GetStatus(infoDetail.status)}
-                </Form.Item>
-              </Col>
+
               <Col span={4}>
                 <Form.Item label="业户名称">
                   {infoDetail.customerName}
                 </Form.Item>
               </Col>
               <Col span={5}>
-                <Form.Item label="房号">
-                  {infoDetail.unitId}
+                <Form.Item label="房产编号">
+                  {unitNo}
                 </Form.Item>
               </Col>
               <Col span={3}>
@@ -316,16 +319,7 @@ const BillShow = (props: BillShowProps) => {
         <Card className={styles.card}>
           <Form layout="vertical" >
             <Row gutter={24}>
-              <Col span={5}>
-                <Form.Item label="入账银行" >
-                  {infoDetail.accountBank}
-                </Form.Item>
-              </Col>
-              <Col span={5}>
-                <Form.Item label="冲红单号" >
-                  {linkno}
-                </Form.Item>
-              </Col>
+
               <Col span={4}>
                 <Form.Item label="审核状态"   >
                   {/* {infoDetail.ifVerify ? '已审核' : '未审核'} */}
@@ -340,6 +334,16 @@ const BillShow = (props: BillShowProps) => {
               <Col span={5}>
                 <Form.Item label="审核时间">
                   {infoDetail.verifyDate}
+                </Form.Item>
+              </Col>
+              <Col span={5}>
+                <Form.Item label="入账银行" >
+                  {infoDetail.accountBank}
+                </Form.Item>
+              </Col>
+              <Col span={5}>
+                <Form.Item label="冲红单号" >
+                  {linkNo}
                 </Form.Item>
               </Col>
             </Row>

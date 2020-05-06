@@ -25,7 +25,8 @@ const Verify = (props: VerifyProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [chargeBillData, setChargeBillData] = useState<any[]>([]);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
-  const [linkno, setLinkno] = useState<any>('');
+  const [linkNo, setLinkNo] = useState<any>('');
+  const [unitNo, setUnitNo] = useState<any>('');
   // 打开抽屉时初始化
   useEffect(() => {
     form.resetFields();
@@ -34,7 +35,8 @@ const Verify = (props: VerifyProps) => {
         //setLoading(true);
         GetEntityShow(id).then(res => {
           setInfoDetail(res.entity);
-          setLinkno(res.linkno);
+          setUnitNo(res.unitNo);
+          setLinkNo(res.linkNo);
           initLoadFeeDetail(id);
           //setLoading(false);
         })
@@ -165,9 +167,9 @@ const Verify = (props: VerifyProps) => {
 
   const columns = [
     {
-      title: '单元编号',
-      dataIndex: 'unitId',
-      key: 'unitId',
+      title: '房产编号',
+      dataIndex: 'unitCode',
+      key: '房产编号',
       width: 150,
       sorter: true,
     },
@@ -178,14 +180,14 @@ const Verify = (props: VerifyProps) => {
       width: 100,
       sorter: true,
     },
-    {
-      title: '应收期间',
-      dataIndex: 'period',
-      key: 'period',
-      width: 120,
-      sorter: true,
-      render: val => val != null ? moment(val).format('YYYY年MM月') : ''
-    },
+    // {
+    //   title: '应收期间',
+    //   dataIndex: 'period',
+    //   key: 'period',
+    //   width: 120,
+    //   sorter: true,
+    //   render: val => val != null ? moment(val).format('YYYY年MM月') : ''
+    // },
     {
       title: '数量',
       dataIndex: 'quantity',
@@ -203,7 +205,7 @@ const Verify = (props: VerifyProps) => {
       dataIndex: 'amount',
       key: 'amount',
       width: 100,
-    }, 
+    },
     {
       title: '减免金额',
       dataIndex: 'reductionAmount',
@@ -235,6 +237,12 @@ const Verify = (props: VerifyProps) => {
       render: val => val != null ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
+      title: '单元全称',
+      dataIndex: 'allName',
+      key: 'allName',
+      width: 350
+    },
+    {
       title: '备注',
       dataIndex: 'memo',
       key: 'memo',
@@ -262,31 +270,43 @@ const Verify = (props: VerifyProps) => {
           }}  >
           <Form layout='vertical'>
             <Row gutter={6}>
-              <Col span={5}>
-                <Form.Item label="收款日期" >
-                  {String(infoDetail.billDate).substr(0, 10)}
-                </Form.Item>
-              </Col>
-              <Col span={5}>
-                <Form.Item label="收款人"  >
-                  {infoDetail.createUserName}
-                </Form.Item>
-              </Col>
-              <Col span={4}>
+              <Col span={2}>
                 <Form.Item label="状态"   >
                   {GetStatus(infoDetail.status)}
                 </Form.Item>
               </Col>
-              <Col span={5}>
-                <Form.Item label="收据编号">
-                  {infoDetail.payCode}
+              <Col span={4}>
+                <Form.Item label="收款日期" >
+                  {String(infoDetail.billDate).substr(0, 10)}
+                </Form.Item>
+              </Col>
+              <Col span={3}>
+                <Form.Item label="收款人"  >
+                  {infoDetail.createUserName}
+                </Form.Item>
+              </Col>
+
+              <Col span={4}>
+                <Form.Item label="业户名称">
+                  {infoDetail.customerName}
                 </Form.Item>
               </Col>
               <Col span={5}>
+                <Form.Item label="房产编号">
+                  {unitNo}
+                </Form.Item>
+              </Col>
+              <Col span={3}>
                 <Form.Item label="发票编号"  >
                   {infoDetail.invoiceCode}
                 </Form.Item>
               </Col>
+              <Col span={3}>
+                <Form.Item label="收据编号">
+                  {infoDetail.payCode}
+                </Form.Item>
+              </Col>
+
             </Row>
           </Form>
           <Divider dashed />
@@ -297,18 +317,7 @@ const Verify = (props: VerifyProps) => {
         <Divider dashed />
         <Card className={styles.card}>
           <Form layout="vertical">
-
             <Row gutter={24}>
-              <Col span={5}>
-                <Form.Item label="入账银行" >
-                  {infoDetail.accountBank}
-                </Form.Item>
-              </Col>
-              <Col span={5}>
-                <Form.Item label="冲红单号" >
-                  {linkno}
-                </Form.Item>
-              </Col>
               <Col span={4}>
                 <Form.Item label="审核状态"   >
                   {/* {infoDetail.ifVerify ? '已审核' : '未审核'} */}
@@ -325,8 +334,17 @@ const Verify = (props: VerifyProps) => {
                   {infoDetail.verifyDate}
                 </Form.Item>
               </Col>
+              <Col span={5}>
+                <Form.Item label="入账银行" >
+                  {infoDetail.accountBank}
+                </Form.Item>
+              </Col>
+              <Col span={5}>
+                <Form.Item label="冲红单号" >
+                  {linkNo}
+                </Form.Item>
+              </Col>
             </Row>
-
             <Row gutter={24}>
               <Col span={24}>
                 <Form.Item label="备注">
