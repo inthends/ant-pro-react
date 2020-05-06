@@ -68,6 +68,8 @@ function Main() {
   const [modifyEdit, setModifyEdit] = useState<boolean>(true);
   // const [organize, SetOrganize] = useState<any>({});
   const [chargedSearchParams, setChargedSearchParams] = useState<any>({});
+  const [chargedCheckSearchParams, setChargedCheckSearchParams] = useState<any>({});
+
   //收款单送审
   const [chargeSelectedKeys, setChargeSelectedKeys] = useState<any[]>([]);
   //点击的tab
@@ -131,7 +133,7 @@ function Main() {
     }
   };
 
-  //刷新
+  //未收款
   const loadData = (search, orgId, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
@@ -197,7 +199,7 @@ function Main() {
     });
   };
 
-  //已收款
+  //收款单
   const loadChargeData = (orgId, type, paginationConfig?: PaginationConfig, sorter?) => {
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
@@ -217,10 +219,8 @@ function Main() {
         StartDate: chargedSearchParams.startDate ? chargedSearchParams.startDate : '',
         EndDate: chargedSearchParams.endDate ? chargedSearchParams.endDate : '',
         receiverId: chargedSearchParams.receiverId ? chargedSearchParams.receiverId : ''
-      },
-
+      }
     };
-
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
@@ -251,7 +251,6 @@ function Main() {
     });
   };
 
-  //收款单
   const initChargeLoadData = (orgId, type) => {
     const queryJson = {
       TreeTypeId: orgId,
@@ -282,20 +281,18 @@ function Main() {
       pageSize,
       total,
       queryJson: {
-        keyword: chargedSearchParams.search ? chargedSearchParams.search : '',
-        // TreeType: "5",
-        TreeTypeId: orgId,//organizeId,
-        TreeType: type,//chargedSearchParams.type ? chargedSearchParams.type : '',
-        Status: chargedSearchParams.status ? chargedSearchParams.status : '',
-        StartDate: chargedSearchParams.startDate ? chargedSearchParams.startDate : '',
-        EndDate: chargedSearchParams.endDate ? chargedSearchParams.endDate : ''
-      },
+        keyword: chargedCheckSearchParams.search ? chargedCheckSearchParams.search : '',
+        TreeTypeId: orgId,
+        TreeType: type,
+        StartDate: chargedCheckSearchParams.startDate ? chargedCheckSearchParams.startDate : '',
+        EndDate: chargedCheckSearchParams.endDate ? chargedCheckSearchParams.endDate : ''
+      }
     };
 
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'billCode';
+      searchCondition.sidx = field ? field : 'billId';
     }
     return loadChargeCheck(searchCondition).then(res => {
       return res;
@@ -304,7 +301,7 @@ function Main() {
 
   const loadChargeCheck = data => {
     setLoadingChargeCheck(true);
-    data.sidx = data.sidx || 'billCode';
+    data.sidx = data.sidx || 'billId';
     data.sord = data.sord || 'desc';
     return ChargeCheckPageData(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -326,14 +323,13 @@ function Main() {
     const queryJson = {
       TreeType: type,
       TreeTypeId: id,
-      keyword: chargedSearchParams.search ? chargedSearchParams.search : '',
-      Status: chargedSearchParams.status ? chargedSearchParams.status : '',
-      StartDate: chargedSearchParams.startDate ? chargedSearchParams.startDate : '',
-      EndDate: chargedSearchParams.endDate ? chargedSearchParams.endDate : ''
+      keyword: chargedCheckSearchParams.search ? chargedCheckSearchParams.search : '',
+      StartDate: chargedCheckSearchParams.startDate ? chargedCheckSearchParams.startDate : '',
+      EndDate: chargedCheckSearchParams.endDate ? chargedCheckSearchParams.endDate : ''
     };
-    const sidx = 'billCode';
+    const sidx = 'billId';
     const sord = 'desc';
-    const { current: pageIndex, pageSize, total } = paginationCharge;
+    const { current: pageIndex, pageSize, total } = paginationChargeCheck;
     return loadChargeCheck({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
       return res;
     });
@@ -736,7 +732,6 @@ function Main() {
                 <Icon type="minus-square" />
                 反审
               </Button>
-            
               <Button type="default" style={{ float: 'right', marginLeft: '3px' }}
                 onClick={() => showDetail()}
                 disabled={chargedRowSelectedKey.status == null || chargedRowSelectedKey.status == 0 ? true : false}
@@ -768,28 +763,29 @@ function Main() {
               rowSelect={GetChargeSelectedKeys}
             />
           </TabPane>
+
           <TabPane tab="对账单" key="3">
             <div style={{ marginBottom: '10px' }}>
               <DatePicker
                 placeholder='收款日期起'
                 onChange={(date, dateStr) => {
-                  var params = Object.assign({}, chargedSearchParams, { startDate: dateStr });
-                  setChargedSearchParams(params);
+                  var params = Object.assign({}, chargedCheckSearchParams, { startDate: dateStr });
+                  setChargedCheckSearchParams(params);
                 }} style={{ marginRight: '5px', width: '140px' }} />
               至
               <DatePicker
                 placeholder='收款日期止'
                 onChange={(date, dateStr) => {
-                  var params = Object.assign({}, chargedSearchParams, { endDate: dateStr });
-                  setChargedSearchParams(params);
+                  var params = Object.assign({}, chargedCheckSearchParams, { endDate: dateStr });
+                  setChargedCheckSearchParams(params);
                 }} style={{ marginLeft: '5px', marginRight: '5px', width: '140px' }} />
               <Search
                 className="search-input"
                 placeholder="搜索收款单号"
-                style={{ width: 180 }}
+                style={{ width: '180px', marginRight: '5px' }}
                 onChange={e => {
-                  var params = Object.assign({}, chargedSearchParams, { search: e.target.value });
-                  setChargedSearchParams(params);
+                  var params = Object.assign({}, chargedCheckSearchParams, { search: e.target.value });
+                  setChargedCheckSearchParams(params);
                 }}
               />
               <Button type="primary" style={{ marginLeft: '3px' }}
@@ -803,7 +799,7 @@ function Main() {
 
             <ChargeCheckTable
               onchange={(paginationConfig, filters, sorter) =>
-                loadChargeCheckData(paginationConfig, sorter)
+                loadChargeCheckData(orgId, orgType,paginationConfig, sorter)
               }
               loading={loadingChargeCheck}
               pagination={paginationChargeCheck}

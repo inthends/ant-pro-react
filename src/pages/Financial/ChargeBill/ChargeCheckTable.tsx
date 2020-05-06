@@ -2,10 +2,10 @@
 import Page from '@/components/Common/Page';
 import { message, Table, Modal } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
-import React, { useState } from 'react';
+import React from 'react';
 import moment from 'moment';
 import { ConfirmForm } from './Main.service';
-import styles from './style.less';
+// import styles from './style.less';
 
 interface ChargeCheckTableProps {
   onchange(page: any, filter: any, sort: any): any;
@@ -41,35 +41,35 @@ function ChargeCheckTable(props: ChargeCheckTableProps) {
       key: 'orgName',
       width: 140,
     },
+    // {
+    //   title: '楼盘',
+    //   dataIndex: 'areaName',
+    //   key: 'areaName',
+    //   width: 120,
+    // },
+    // {
+    //   title: '楼栋',
+    //   dataIndex: 'buildingName',
+    //   key: 'buildingName',
+    //   width: 80,
+    // },
     {
-      title: '楼盘',
-      dataIndex: 'areaName',
-      key: 'areaName',
-      width: 120,
-    },
-    {
-      title: '楼栋',
-      dataIndex: 'buildingName',
-      key: 'buildingName',
-      width: 80,
-    },
-    {
-      title: '房号',
-      dataIndex: 'unitName',
-      key: 'unitName',
-      width: 80,
+      title: '房产全称',
+      dataIndex: 'allName',
+      key: 'allName',
+      width: 280,
     },
 
     {
       title: '商户订单号',
       dataIndex: 'tradeNo',
       key: 'tradeNo',
-      width: 230,
+      width: 200,
       sorter: true,
     },
 
     {
-      title: '平台订单号',
+      title: '交易流水号',
       dataIndex: 'transactionId',
       key: 'transactionId',
       width: 260,
@@ -122,7 +122,7 @@ function ChargeCheckTable(props: ChargeCheckTableProps) {
       title: '收款方式',
       dataIndex: 'payTypeA',
       key: 'payTypeA',
-      width: 130,
+      width: 100,
     },
     {
       title: '收款金额',
@@ -176,34 +176,34 @@ function ChargeCheckTable(props: ChargeCheckTableProps) {
     },
   ] as ColumnProps<any>[];
 
-  const [selectedRowKey, setSelectedRowKey] = useState([]);
-  const onRow = (record) => {
-    return {
-      onClick: event => {
-        setSelectedRowKey(record.billId);
-        // getRowSelect(record);
-      }, // 点击行
-      // onDoubleClick: event => {
-      // },
-      // onContextMenu: event => {
-      // },
-      // onMouseEnter: event => {
-      // }, // 鼠标移入行
-      // onMouseLeave: event => {
-      // },
-    };
-  }
+  // const [selectedRowKey, setSelectedRowKey] = useState([]);
+  // const onRow = (record) => {
+  //   return {
+  //     onClick: event => {
+  //       setSelectedRowKey(record.billId);
+  //       // getRowSelect(record);
+  //     }, // 点击行
+  //     // onDoubleClick: event => {
+  //     // },
+  //     // onContextMenu: event => {
+  //     // },
+  //     // onMouseEnter: event => {
+  //     // }, // 鼠标移入行
+  //     // onMouseLeave: event => {
+  //     // },
+  //   };
+  // }
 
-  const setClassName = (record, index) => {
-    if (record.billId === selectedRowKey) {
-      return styles.rowSelect;
-    }
-  };
+  // const setClassName = (record, index) => {
+  //   if (record.billId === selectedRowKey) {
+  //     return styles.rowSelect;
+  //   }
+  // };
 
   return (
     <Page >
       <Table
-        className={styles.chargeListTable}
+        // className={styles.chargeListTable}
         bordered={false}
         size="middle"
         dataSource={data}
@@ -211,9 +211,9 @@ function ChargeCheckTable(props: ChargeCheckTableProps) {
         rowKey={record => record.billId}
         pagination={pagination}
         scroll={{ y: 500, x: 2300 }}
-        rowClassName={setClassName} //表格行点击高亮
+        // rowClassName={setClassName} //表格行点击高亮
         loading={loading}
-        onRow={onRow}
+        // onRow={onRow}
         onChange={onchange}
       />
     </Page>
