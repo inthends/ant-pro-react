@@ -109,7 +109,7 @@ function ChargeListTable(props: ChargeListTableProps) {
       render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
-      title: '单元编号',
+      title: '房产编号',
       dataIndex: 'unitCode',
       key: 'unitCode',
       width: 150,

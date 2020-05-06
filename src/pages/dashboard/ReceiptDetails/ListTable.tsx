@@ -37,9 +37,9 @@ function ListTable(props: ListTableProps) {
       width: 80,
     },
     {
-      title: '房屋编号',
-      dataIndex: '房屋编号',
-      key: '房屋编号',
+      title: '房产编号',
+      dataIndex: '房产编号',
+      key: '房产编号',
       width: 140,
     },
     {

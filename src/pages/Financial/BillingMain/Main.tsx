@@ -355,7 +355,7 @@ function Main() {
             <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
               <Search
                 className="search-input"
-                placeholder="搜索计费单号和单元编号"
+                placeholder="搜索计费单号和房产编号"
                 style={{ width: 220 }}
                 onSearch={value => loadUnitMeterData(value, orgId, orgType)}
               />

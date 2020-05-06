@@ -20,7 +20,7 @@ function HouseInfoList(props: HouseInfoListProps) {
 
   const columns = [
     {
-      title: '房屋编号',
+      title: '房产编号',
       dataIndex: 'code',
       key: 'code',
       width: 120,

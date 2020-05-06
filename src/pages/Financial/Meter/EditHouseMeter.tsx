@@ -157,7 +157,7 @@ const EditHouseMeter = (props: EditHouseMeterProps) => {
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item label="单元编号"   >
+              <Form.Item label="房产编号"   >
                 {/* {getFieldDecorator('unitId', {
                   initialValue: infoDetail.unitId,
                   rules: [{ required: true, message: '请输入房屋编号' }],

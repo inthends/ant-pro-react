@@ -49,7 +49,7 @@ function ListTable(props: ListTableProps) {
       title: '单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 180,
+      width: 220,
       sorter: true
     },
     {
@@ -63,7 +63,7 @@ function ListTable(props: ListTableProps) {
       }
     },
     {
-      title: '单元编号',
+      title: '房产编号',
       dataIndex: 'unitCode',
       key: 'unitCode',
       width: 140,
@@ -182,7 +182,7 @@ function ListTable(props: ListTableProps) {
         dataSource={data}
         rowKey="billId"
         pagination={pagination}
-        scroll={{ y: 500, x: 1500 }}
+        scroll={{ y: 500, x: 1600 }}
         loading={loading}
         onChange={onchange}
         rowSelection={rowSelection}

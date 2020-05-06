@@ -27,9 +27,9 @@ function DetailTable(props: DetailTableProps) {
       sorter: true
     },
     {
-      title: '单元编号',
-      dataIndex: 'unitId',
-      key: 'UnitId',
+      title: '房产编号',
+      dataIndex: 'code',
+      key: 'code',
       width: 150,
       sorter: true
     },

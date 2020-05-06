@@ -156,7 +156,7 @@ const Verify = (props: VerifyProps) => {
 
   const columns = [
     {
-      title: '单元编号',
+      title: '房产编号',
       dataIndex: 'unitId',
       key: 'unitId',
       width: '180px',

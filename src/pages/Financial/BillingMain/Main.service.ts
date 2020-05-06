@@ -21,7 +21,6 @@ export function GetReceivablesFeeItemTreeJson(): Promise<TreeEntity[]> {
   return request.get(process.env.basePath + `/FeeItems/GetReceivablesFeeItemTreeJson`, {}).then(getResult as any);
 }
 
-//表单明细
 export function GetBilling(data): Promise<any> {
   return request.get(process.env.basePath + `/BillingMain/GetBilling?keyValue=${data}`, {}).then(getResult as any);
 }

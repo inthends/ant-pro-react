@@ -232,8 +232,7 @@ const Modify = (props: ModifyProps) => {
   const checkEntity = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        let guid = getGuid(); 
-
+        let guid = getGuid();
         var feeEntity = {
           keyValue: (id == null || id == '') ? guid : id,
           // BillId: id == null || id == '' ? guid : id,
@@ -257,9 +256,9 @@ const Modify = (props: ModifyProps) => {
   };
   const columns = [
     {
-      title: '单元编号',
-      dataIndex: 'unitId',
-      key: 'unitId',
+      title: '房产编号',
+      dataIndex: 'code',
+      key: 'code',
       width: 140,
     },
     {

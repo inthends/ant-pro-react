@@ -378,7 +378,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                   </Form.Item>
                 </Col>
                 <Col lg={12}>
-                  <Form.Item label="单元编号" >
+                  <Form.Item label="房产编号" >
                     {getFieldDecorator('unitId', {
                       initialValue: infoDetail.unitId,
                     })(

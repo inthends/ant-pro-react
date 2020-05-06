@@ -113,7 +113,7 @@ const Show = (props: ShowProps) => {
 
   const columns = [
     {
-      title: '单元编号',
+      title: '房产编号',
       dataIndex: 'code',
       key: 'code',
       width: 160
