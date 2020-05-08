@@ -11,6 +11,13 @@ export function GetPageListJson(data): Promise<any> {
     .then(getResult as any);
 }
 
+export function GetPageListJsonForParking(data): Promise<any> {
+  return request
+    .post(process.env.basePath + `/PStructUser/GetListJsonForParking`, { data: objToFormdata(data) })
+    .then(getResult as any);
+}
+
+
 export function GetTreeAreaJson(id): Promise<TreeEntity[]> {
   return request
     .get(process.env.basePath + `/PStructs/GetTreeAreaJson?id=${id}`)
@@ -47,6 +54,13 @@ export function GetCustomerInfo(keyValue): Promise<any> {
     .get(process.env.basePath + `/PStructUser/GetCustomerInfo?keyValue=${keyValue}`)
     .then(getResult as any);
 }
+
+export function GetParkingCustomerInfo(keyValue): Promise<any> {
+  return request
+    .get(process.env.basePath + `/PStructUser/GetParkingCustomerInfo?keyValue=${keyValue}`)
+    .then(getResult as any);
+}
+
 
 // 验证是否能删除
 export function CheckRelation(keyValue): Promise<any> {

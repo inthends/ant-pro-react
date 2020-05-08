@@ -5,7 +5,7 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { SaveParkingForm, ExistEnCode } from './ParkingLot.service';
-import { GetCustomerInfo } from '../PStructUser/PStructUser.service';
+import { GetParkingCustomerInfo } from '../PStructUser/PStructUser.service';
 import QuickModify from '../PStructUser/QuickModify';
 import CustomerSelect from '../PStructUser/CustomerSelect';
 import styles from './style.less';
@@ -95,7 +95,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
 
   const showCustomerDrawer = (customerId, type) => {
     if (customerId != '') {
-      GetCustomerInfo(customerId).then(res => {
+      GetParkingCustomerInfo(customerId).then(res => {
         setCustomer(res);
         // setType(type);
         setCustomerType(type);
@@ -638,7 +638,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
         organizeId={organizeId}
         // type={type}
         reload={(customerId) => {
-          GetCustomerInfo(customerId).then(res => {
+          GetParkingCustomerInfo(customerId).then(res => { 
             //防止旧数据缓存，清空下拉
             // setUserList([]);
             if (customerType == 1) {
@@ -646,11 +646,14 @@ const ModifyParking = (props: ModifyParkingProps) => {
               form.setFieldsValue({ ownerName: res.name });
               form.setFieldsValue({ ownerId: customerId });
               form.setFieldsValue({ ownerPhone: res.phoneNum });
+              form.setFieldsValue({ ownerUnitAllName: res.ownerUnitAllName });
+              
             } else {
               //租户
               form.setFieldsValue({ tenantName: res.name });
               form.setFieldsValue({ tenantId: customerId });
               form.setFieldsValue({ tenantPhone: res.phoneNum });
+              form.setFieldsValue({ tenantUnitAllName: res.tenantUnitAllName });
             }
           });
         }
@@ -661,17 +664,19 @@ const ModifyParking = (props: ModifyParkingProps) => {
         visible={customerSelectVisible}
         closeModal={closeCustomerSelect}
         organizeId={organizeId}
-        Select={(res) => {
+        Select={(res) => { 
           if (customerType == 1) {
             //业主
             form.setFieldsValue({ ownerName: res.name });
             form.setFieldsValue({ ownerId: res.id });
             form.setFieldsValue({ ownerPhone: res.phoneNum });
+            form.setFieldsValue({ ownerUnitAllName: res.allName });
           } else {
             //租户
             form.setFieldsValue({ tenantName: res.name });
             form.setFieldsValue({ tenantId: res.id });
             form.setFieldsValue({ tenantPhone: res.phoneNum });
+            form.setFieldsValue({ tenantUnitAllName: res.allName });
           }
         }}
       />

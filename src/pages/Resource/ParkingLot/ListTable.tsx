@@ -156,7 +156,7 @@ function ListTable(props: ListTableProps) {
       title: '业主房屋',
       dataIndex: 'ownerUnitAllName',
       key: 'ownerUnitAllName',
-      width: 250,
+      width: 280,
       sorter: true,
     },
 

@@ -1,5 +1,5 @@
 import Page from '@/components/Common/Page';
-import {Modal, message,Divider, Table } from 'antd';
+import { Modal, message, Divider, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import { CheckRelation, RemoveForm } from './PStructUser.service';
@@ -48,14 +48,14 @@ function ListTableSelect(props: ListTableSelectProps) {
       title: '住户名称',
       dataIndex: 'name',
       key: 'name',
-      width: 200,
+      width: 180,
       sorter: true,
     },
     {
       title: '住户编号',
       dataIndex: 'code',
       key: 'code',
-      width: 160,
+      width: 250,
       sorter: true,
     },
     {
@@ -66,28 +66,40 @@ function ListTableSelect(props: ListTableSelectProps) {
       // sorter: true,
     },
     {
-      title: '证件类别',
-      dataIndex: 'certificateType',
-      key: 'certificateType',
-      width: 120,
-      render: (text, record) => {
-        switch (text) {
-          case '1':
-            return '身份证';
-          case '2':
-            return '护照';
-          default:
-            return '';
-        }
-      },
-    },
-    {
       title: '证件号码',
       dataIndex: 'certificateNO',
       key: 'certificateNO',
       width: 200,
       // sorter: true,
     },
+    {
+      title: '房屋全称',
+      dataIndex: 'allName',
+      key: 'allName',
+    },
+    // {
+    //   title: '证件类别',
+    //   dataIndex: 'certificateType',
+    //   key: 'certificateType',
+    //   width: 120,
+    //   render: (text, record) => {
+    //     switch (text) {
+    //       case '1':
+    //         return '身份证';
+    //       case '2':
+    //         return '护照';
+    //       default:
+    //         return '';
+    //     }
+    //   },
+    // },
+    // {
+    //   title: '证件号码',
+    //   dataIndex: 'certificateNO',
+    //   key: 'certificateNO',
+    //   width: 200,
+    //   // sorter: true,
+    // },
     {
       title: '操作',
       dataIndex: 'operation',
@@ -132,7 +144,7 @@ function ListTableSelect(props: ListTableSelectProps) {
         columns={columns}
         rowKey={record => record.id}
         pagination={pagination}
-        scroll={{ y: 500 }}
+        scroll={{ y: 500, x: 1300 }}
         onChange={(pag: PaginationConfig, filters, sorter) => changePage(pag, filters, sorter)}
         loading={loading}
       />

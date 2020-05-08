@@ -5,7 +5,7 @@ import { DefaultPagination } from '@/utils/defaultSetting';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import ListTableSelect from './ListTableSelect';
-import { GetPageListJson } from './PStructUser.service';
+import { GetPageListJsonForParking } from './PStructUser.service';
 import QuickModify from './QuickModify';
 
 const { Search } = Input;
@@ -47,7 +47,7 @@ const CustomerSelect = (props: CustomerSelectProps) => {
     setLoading(true);
     formData.sidx = formData.sidx || 'code';
     formData.sord = formData.sord || 'asc';
-    return GetPageListJson(formData).then(res => {
+    return GetPageListJsonForParking(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
         return {
