@@ -77,6 +77,12 @@ function ListTable(props: ListTableProps) {
       sorter: true,
     },
     {
+      title: '账单金额',
+      dataIndex: 'allAmount',
+      key: 'allAmount',
+      width: 100
+    },
+    {
       title: '交房日期',
       dataIndex: 'handoverDate',
       key: 'handoverDate',
@@ -90,12 +96,7 @@ function ListTable(props: ListTableProps) {
         }
       }
     },
-    {
-      title: '计费金额',
-      dataIndex: 'allAmount',
-      key: 'allAmount',
-      width: 100
-    },
+
     {
       title: '审核状态',
       dataIndex: 'ifVerify',

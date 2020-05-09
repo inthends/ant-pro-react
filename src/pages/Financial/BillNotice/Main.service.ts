@@ -47,10 +47,14 @@ export function BatchRemoveForm(data): Promise<any> {
   return request.post(process.env.basePath + `/Notice/BatchRemoveForm`, {data:objToFormdata(data)}).then(getResult as any);
 }
 
+//打印
+export function BatchPrint(data): Promise<any> {
+  return request.post(process.env.basePath + `/Notice/BatchPrint`, {data:objToFormdata(data)}).then(getResult as any);
+}
 
 //打印
-export function Print(data): Promise<any> {
-  return request.post(process.env.basePath + `/Notice/Print`, {data:objToFormdata(data)}).then(getResult as any);
+export function DoPrint(keyValue): Promise<any> {
+  return request.post(process.env.basePath + `/Notice/Print?keyValue=${keyValue}`).then(getResult as any);
 }
 
 //表单明细

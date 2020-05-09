@@ -3,7 +3,11 @@ import { DefaultPagination } from '@/utils/defaultSetting';
 import { message, Dropdown, Menu, Tabs, Button, Icon, Input, Layout, Modal, Select } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { GetBillPageData, ChargeFeePageData, BatchRemoveForm, GetNoticeTemplates, BatchAudit } from './Main.service';
+import {
+  GetBillPageData, ChargeFeePageData, BatchRemoveForm,
+  GetNoticeTemplates, BatchAudit, BatchPrint
+} from './Main.service';
+
 import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
 import DetailTable from './DetailTable';
@@ -23,10 +27,7 @@ function Main() {
   const [id, setId] = useState<string>();
   // const [selectRecords, setSelectRecords] = useState<any>();
   const [selectIds, setSelectIds] = useState<any>();
-  const [billCheckLoading, setBillCheckLoading] = useState<boolean>(false);
-  const [billNoticeLoading, setBillNoticeLoading] = useState<boolean>(false);
-  const [billCheckData, setBillCheckData] = useState<any>();
-  const [billNoticeData, setBillNoticeData] = useState<any[]>([]);
+
   // const [billCheckSearch, setBillCheckSearch] = useState<string>('');
   const [billNoticeSearch, setBillNoticeSearch] = useState<string>('');
   const [billCheckPagination, setBillCheckPagination] = useState<DefaultPagination>(new DefaultPagination());
@@ -41,6 +42,12 @@ function Main() {
   const [orgId, setOrgId] = useState<string>('');//左侧树选择的id
   const [orgType, setOrgType] = useState<string>();//类型
 
+  const [noticeData, setNoticeData] = useState<any>();
+  const [detailData, setDetailData] = useState<any[]>([]);
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const [detailLoading, setDetailLoading] = useState<boolean>(false);
+
   const doSelectTree = (id, type, info) => {
     // SetOrganize(info.node.props.dataRef);
     // initBillCheckLoadData(info.node.props.dataRef, billCheckSearch);
@@ -48,8 +55,8 @@ function Main() {
 
     //初始化页码，防止页码错乱导致数据查询出错  
     const page = new DefaultPagination();
-    loadBillCheckData(search, id, type, page);
-    loadBillNoticeData(billNoticeSearch, id, type, page);
+    loadData(search, id, type, page);
+    loadDetailData(billNoticeSearch, id, type, page);
   };
 
   useEffect(() => {
@@ -64,13 +71,12 @@ function Main() {
     GetNoticeTemplates().then(res => {
       setTempListData(res);
     }).then(() => {
-      initBillCheckLoadData('', '', '');
-      initBillNoticeLoadData('', '', '');
+      initLoadData('', '', '');
+      initDetailLoadData('', '', '');
     })
   }, []);
 
-
-  const loadBillCheckData = (search, orgId, type, paginationConfig?: PaginationConfig, sorter?) => {
+  const loadData = (search, orgId, type, paginationConfig?: PaginationConfig, sorter?) => {
     // setBillCheckSearch(search);
     //赋值,必须，否则查询条件会不起作用
     setSearch(search);
@@ -97,10 +103,10 @@ function Main() {
       searchCondition.sord = order === "descend" ? "desc" : "asc";
       searchCondition.sidx = field ? field : 'billId';
     }
-    return billCheckload(searchCondition);
+    return load(searchCondition);
   }
 
-  const loadBillNoticeData = (search, orgId, type, paginationConfig?: PaginationConfig, sorter?) => {
+  const loadDetailData = (search, orgId, type, paginationConfig?: PaginationConfig, sorter?) => {
     setBillNoticeSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
@@ -123,11 +129,11 @@ function Main() {
       searchCondition.sord = order === "descend" ? "desc" : "asc";
       searchCondition.sidx = field ? field : 'billId';
     }
-    return billNoticeload(searchCondition);
+    return detailLoad(searchCondition);
   };
 
-  const billCheckload = data => {
-    setBillCheckLoading(true);
+  const load = data => {
+    setLoading(true);
     data.sidx = data.sidx || 'billId';
     data.sord = data.sord || 'asc';
     return GetBillPageData(data).then(res => {
@@ -140,16 +146,16 @@ function Main() {
           pageSize,
         };
       });
-      setBillCheckData(res.data);
-      setBillCheckLoading(false);
+      setNoticeData(res.data);
+      setLoading(false);
       return res;
     }).catch(err => {
-      setBillCheckLoading(false);
+      setLoading(false);
     });
   };
 
-  const billNoticeload = data => {
-    setBillNoticeLoading(true);
+  const detailLoad = data => {
+    setDetailLoading(true);
     data.sidx = data.sidx || 'billId';
     data.sord = data.sord || 'asc';
     return ChargeFeePageData(data).then(res => {
@@ -162,15 +168,15 @@ function Main() {
           pageSize,
         };
       });
-      setBillNoticeData(res.data);
-      setBillNoticeLoading(false);
+      setDetailData(res.data);
+      setDetailLoading(false);
       return res;
     }).catch(err => {
-      setBillNoticeLoading(false);
+      setDetailLoading(false);
     });
   };
 
-  const initBillCheckLoadData = (orgId, type, searchText) => {
+  const initLoadData = (orgId, type, searchText) => {
     //console.log(org);
     // setBillCheckSearch(searchText);
     setSearch(searchText);
@@ -184,10 +190,10 @@ function Main() {
     const sidx = 'billId';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = billCheckPagination;
-    return billCheckload({ pageIndex, pageSize, sidx, sord, total, queryJson });
+    return load({ pageIndex, pageSize, sidx, sord, total, queryJson });
   };
 
-  const initBillNoticeLoadData = (orgId, type, searchText) => {
+  const initDetailLoadData = (orgId, type, searchText) => {
     setBillNoticeSearch(searchText);
     const queryJson = {
       keyword: searchText,
@@ -197,13 +203,13 @@ function Main() {
     const sidx = 'billId';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = billNoticePagination;
-    return billNoticeload({ pageIndex, pageSize, sidx, sord, total, queryJson });
+    return detailLoad({ pageIndex, pageSize, sidx, sord, total, queryJson });
   };
 
   const closeVerify = (result?) => {
     setVerifyVisible(false);
     if (result) {
-      loadBillCheckData(search, orgId, orgType);
+      loadData(search, orgId, orgType);
     }
     setId('');
   };
@@ -236,7 +242,6 @@ function Main() {
   //       RemoveForm({
   //         keyValue: id
   //       }).then(res => {
-
   //       });
   //     },
   //     onCancel() { },
@@ -254,6 +259,7 @@ function Main() {
     if (e.key == '1') {
       if (selectIds == undefined) {
         message.error('请选择需要审核的账单');
+        return;
       } else {
         //如果选择了多条 在批量审核
         if (selectIds && selectIds.length > 1) {
@@ -261,25 +267,23 @@ function Main() {
             title: '请确认',
             content: `您是否要审核这些账单?`,
             onOk: () => {
+              setLoading(true);
               BatchAudit({
                 keyValues: JSON.stringify(selectIds),
                 IfVerify: true
               })
                 .then(() => {
+                  setLoading(false);
                   message.success('审核成功');
-                  initBillCheckLoadData(orgId, orgType, search);
+                  initLoadData(orgId, orgType, search);
                 })
-                .catch(e => { });
+                .catch(e => { setLoading(false); });
             },
           });
         }
         //如果仅选择一条 则显示账单
         else {
-          /* if (id == null || id == '') {
-             message.warning('请先选择账单');
-           } else {*/
           showVerify(selectIds[0], true);
-          //}
         }
       }
     }
@@ -287,51 +291,77 @@ function Main() {
       // if (selectIds && selectIds.length > 1) {
       if (selectIds == undefined) {
         message.error('请选择需要反审的账单！');
+        return;
       }
-
       else {
-        /* if (id == null || id == '') {
-           message.warning('请先选择账单');
-         } else {*/
-
         if (selectIds && selectIds.length > 1) {
           Modal.confirm({
             title: '请确认',
             content: `您是否要取消审核这些账单?`,
             onOk: () => {
+              setLoading(true);
               BatchAudit({
                 keyValues: JSON.stringify(selectIds),
                 IfVerify: false
               })
                 .then(() => {
+                  setLoading(false);
                   message.success('审核成功');
-                  initBillCheckLoadData(orgId, orgType, search);
-                })
-                .catch(e => { });
+                  initLoadData(orgId, orgType, search);
+                }).catch(e => { setLoading(false); });
             },
           });
         } else {
           showVerify(id, false);
         }
-        // }
       }
     } else if (e.key == '3') {
-      //打印 
+
+      if (billType == '') {
+        message.error('请选择账单类型！');
+        return;
+      }
+
+      if (templateId == '') {
+        message.error('请选择模板类型！');
+        return;
+      }
+
+      //批量打印 
+      if (selectIds == undefined) {
+        message.error('请选择需要打印的账单！');
+        return;
+      } else {
+        setLoading(true);
+        BatchPrint({
+          keyValues: JSON.stringify(selectIds),
+          templateId: templateId
+        }).then(res => {
+          //window.location.href = res;
+          window.open(res);
+          //setLoading(false);
+        }).finally(() => {
+          setLoading(false);
+        });
+      }
     }
     else {
       //删除
       if (selectIds == undefined) {
         message.error('请选择需要删除的账单！');
+        return;
       } else {
         Modal.confirm({
           title: '是否确认删除?',
           onOk() {
+            setLoading(true);
             BatchRemoveForm({
               keyValues: JSON.stringify(selectIds)
             }).then(res => {
+              setLoading(false);
               message.success('删除成功');
-              initBillCheckLoadData(orgId, orgType, search);
-            });
+              initLoadData(orgId, orgType, search);
+            }).catch(e => { setLoading(false); });
           },
           onCancel() { },
         });
@@ -351,9 +381,9 @@ function Main() {
   //tab切换刷新数据
   const changeTab = (e: string) => {
     if (e === '1') {
-      loadBillCheckData(search, orgId, orgType);
+      loadData(search, orgId, orgType);
     } else {
-      loadBillNoticeData(billNoticeSearch, orgId, orgType);
+      loadDetailData(billNoticeSearch, orgId, orgType);
     }
   };
 
@@ -470,7 +500,7 @@ function Main() {
               </Button> */}
 
               <Button type="primary" style={{ marginLeft: '10px' }}
-                onClick={() => { loadBillCheckData(search, orgId, orgType) }}
+                onClick={() => { loadData(search, orgId, orgType) }}
               >
                 <Icon type="search" />
                 查询
@@ -492,19 +522,19 @@ function Main() {
 
             <ListTable
               onchange={(paginationConfig, filters, sorter) => {
-                loadBillCheckData(search, orgId, orgType, paginationConfig, sorter)
+                loadData(search, orgId, orgType, paginationConfig, sorter)
               }
               }
-              loading={billCheckLoading}
+              loading={loading}
               pagination={billCheckPagination}
-              data={billCheckData}
+              data={noticeData}
               showCheckBill={(id) => {
                 if (id != null && id != '') {
                   setId(id);
                 }
                 setShowCheckBillVisible(true);
               }}
-              reload={() => initBillCheckLoadData(orgId, orgType, search)}
+              reload={() => initLoadData(orgId, orgType, search)}
               getRowSelect={(records) => {
                 // setSelectRecords(records);
                 if (records.length == 1) {
@@ -529,7 +559,7 @@ function Main() {
                 className="search-input"
                 placeholder="搜索单号"
                 style={{ width: 200 }}
-                onSearch={value => loadBillNoticeData(value, orgId, orgType)}
+                onSearch={value => loadDetailData(value, orgId, orgType)}
               />
             </div>
             <DetailTable
@@ -537,12 +567,12 @@ function Main() {
                 setId(id);
               }}
               onchange={(paginationConfig, filters, sorter) =>
-                loadBillNoticeData(billNoticeSearch, orgId, orgType, paginationConfig, sorter)
+                loadDetailData(billNoticeSearch, orgId, orgType, paginationConfig, sorter)
               }
-              loading={billNoticeLoading}
+              loading={detailLoading}
               pagination={billNoticePagination}
-              data={billNoticeData}
-              reload={() => initBillNoticeLoadData(orgId, orgType, billNoticeSearch)}
+              data={detailData}
+              reload={() => initDetailLoadData(orgId, orgType, billNoticeSearch)}
               getRowSelect={(record) => {
                 setId(record.billId);
                 if (record.ifVerify == 1) {
@@ -561,7 +591,7 @@ function Main() {
         id={id}
         treeData={unitTreeData}
         isEdit={true}
-        reload={() => initBillCheckLoadData(orgId, orgType, search)}
+        reload={() => initLoadData(orgId, orgType, search)}
       />
       <Show
         visible={showCheckBillVisible}
@@ -575,7 +605,7 @@ function Main() {
         closeVerify={closeVerify}
         ifVerify={ifVerify}
         id={id}
-        reload={() => initBillCheckLoadData(orgId, orgType, search)}
+        reload={() => initLoadData(orgId, orgType, search)}
       />
     </Layout>
   );

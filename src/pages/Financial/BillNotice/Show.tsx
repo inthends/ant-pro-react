@@ -5,7 +5,7 @@ import { DefaultPagination } from '@/utils/defaultSetting';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { GetEntityShow, ChargeFeeDetail } from './Main.service';
+import { GetEntityShow, ChargeFeeDetail, DoPrint } from './Main.service';
 import styles from './style.less';
 import moment from 'moment';
 
@@ -86,6 +86,18 @@ const Show = (props: ShowProps) => {
       return res;
     });
   };
+
+  const print = () => {
+    //打印 
+    setLoading(true);
+    DoPrint(id).then(res => {
+      //window.location.href = res;
+      window.open(res);
+      //setLoading(false);
+    }).finally(() => {
+      setLoading(false);
+    });
+  }
 
   const columns = [
     {
@@ -253,7 +265,7 @@ const Show = (props: ShowProps) => {
             loading={billCheckLoading}
           />
         </Card>
-      </Spin> 
+      </Spin>
       <div
         style={{
           position: 'absolute',
@@ -274,7 +286,7 @@ const Show = (props: ShowProps) => {
         </Button>
         <Button type="primary"
           onClick={() => {
-
+            print();
           }}
         >
           打印
