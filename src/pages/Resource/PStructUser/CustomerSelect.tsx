@@ -142,6 +142,7 @@ const CustomerSelect = (props: CustomerSelectProps) => {
             sorter,
           )
         }
+        type={type}
         Select={(res) => setselectItem(res)}
         loading={loading}
         pagination={pagination}

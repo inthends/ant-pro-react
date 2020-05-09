@@ -12,10 +12,11 @@ interface ListTableSelectProps {
   modify(data: any): void;
   reload(): void;
   Select(object: any): void;
+  type: string;
 }
 
 function ListTableSelect(props: ListTableSelectProps) {
-  const { onchange, loading, pagination, data, modify, reload, Select } = props;
+  const { onchange, loading, pagination, data, modify, reload, Select, type } = props;
   const changePage = (pag: PaginationConfig, filters, sorter) => {
     onchange(pag, filters, sorter);
   };
@@ -44,6 +45,78 @@ function ListTableSelect(props: ListTableSelectProps) {
   };
 
   const columns = [
+    {
+      title: '住户名称',
+      dataIndex: 'name',
+      key: 'name',
+      width: 180,
+      sorter: true,
+    },
+    {
+      title: '住户编号',
+      dataIndex: 'code',
+      key: 'code',
+      width: 250,
+      sorter: true,
+    },
+    {
+      title: '手机号码',
+      dataIndex: 'phoneNum',
+      key: 'phoneNum',
+      width: 200,
+      // sorter: true,
+    },
+    {
+      title: '证件号码',
+      dataIndex: 'certificateNO',
+      key: 'certificateNO',
+      width: 200,
+      // sorter: true,
+    },
+    // {
+    //   title: '证件类别',
+    //   dataIndex: 'certificateType',
+    //   key: 'certificateType',
+    //   width: 120,
+    //   render: (text, record) => {
+    //     switch (text) {
+    //       case '1':
+    //         return '身份证';
+    //       case '2':
+    //         return '护照';
+    //       default:
+    //         return '';
+    //     }
+    //   },
+    // },
+    // {
+    //   title: '证件号码',
+    //   dataIndex: 'certificateNO',
+    //   key: 'certificateNO',
+    //   width: 200,
+    //   // sorter: true,
+    // },
+    {
+      title: '操作',
+      dataIndex: 'operation',
+      key: 'operation',
+      align: 'center',
+      width: 95,
+      fixed: 'right',
+      render: (text, record) => {
+        return [
+          <span key="span">
+            <a onClick={() => modify(record)} key="modify">修改</a>
+            <Divider type="vertical" key="divider" />
+            <a onClick={() => doInvalid(record)} key="delete">作废</a>
+          </span>
+        ];
+      },
+    }
+  ] as ColumnProps<any>[];
+
+  //车位选择人
+  const parkingColumns = [
     {
       title: '住户名称',
       dataIndex: 'name',
@@ -141,7 +214,7 @@ function ListTableSelect(props: ListTableSelectProps) {
         bordered={false}
         size="middle"
         dataSource={data}
-        columns={columns}
+        columns={type == 'room' ? columns : parkingColumns}
         rowKey={record => record.id}
         pagination={pagination}
         scroll={{ y: 500, x: 1300 }}
