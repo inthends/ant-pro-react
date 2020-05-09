@@ -267,19 +267,13 @@ const Modify = (props: ModifyProps) => {
       key: 'feeName',
       width: 150,
     },
-    {
-      title: '应收期间',
-      dataIndex: 'period',
-      key: 'period',
-      width: 100,
-      render: val => {
-        if (val == null) {
-          return ''
-        } else {
-          return moment(val).format('YYYY年MM月');
-        }
-      }
-    },
+    // {
+    //   title: '应收期间',
+    //   dataIndex: 'period',
+    //   key: 'period',
+    //   width: 100,
+    //   render: val => val ? moment(val).format('YYYY年MM月') : '' 
+    // },
     {
       title: '数量',
       dataIndex: 'quantity',
@@ -304,26 +298,14 @@ const Modify = (props: ModifyProps) => {
       key: 'beginDate',
       dataIndex: 'beginDate',
       width: 100,
-      render: val => {
-        if (val == null) {
-          return '';
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '计费截止日期',
       key: 'endDate',
       dataIndex: 'endDate',
       width: 100,
-      render: val => {
-        if (val == null) {
-          return '';
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
 
     {

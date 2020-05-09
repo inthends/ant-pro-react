@@ -58,9 +58,7 @@ function ListTable(props: ListTableProps) {
       key: 'createDate',
       width: 100,
       sorter: true,
-      render: val => {
-        return moment(val).format('YYYY-MM-DD');
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '房产编号',
@@ -116,13 +114,7 @@ function ListTable(props: ListTableProps) {
       key: 'verifyDate',
       width: 100,
       sorter: true,
-      render: val => {
-        if (val == null) {
-          return '';
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '审核情况',

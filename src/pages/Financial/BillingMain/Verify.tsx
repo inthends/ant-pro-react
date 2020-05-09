@@ -158,20 +158,14 @@ const Verify = (props: VerifyProps) => {
       width: 150,
       sorter: true,
     },
-    {
-      title: '应收期间',
-      dataIndex: 'period',
-      key: 'period',
-      width: 100,
-      sorter: true,
-      render: val => {
-        if (val == null) {
-          return ''
-        } else {
-          return moment(val).format('YYYY年MM月');
-        }
-      }
-    },
+    // {
+    //   title: '应收期间',
+    //   dataIndex: 'period',
+    //   key: 'period',
+    //   width: 100,
+    //   sorter: true,
+    //   render: val => val ? moment(val).format('YYYY年MM月') : '' 
+    // },
     {
       title: '数量',
       dataIndex: 'quantity',
@@ -199,13 +193,7 @@ const Verify = (props: VerifyProps) => {
       dataIndex: 'beginDate',
       sorter: true,
       width: 120,
-      render: val => {
-        if (val == null) {
-          return '';
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '计费截止日期',
@@ -213,13 +201,7 @@ const Verify = (props: VerifyProps) => {
       dataIndex: 'endDate',
       sorter: true,
       width: 120,
-      render: val => {
-        if (val == null) {
-          return '';
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '周期',

@@ -110,7 +110,7 @@ const AddRepairFee = (props: AddRepairFeeProps) => {
           Quantity: "" + values.quantity,
           Price: "" + values.price,
           Amount: "" + values.amount,
-          Period: moment(values.period).format("YYYY-MM-DD"),//"2019-04-08",
+          // Period: moment(values.period).format("YYYY-MM-DD"),//"2019-04-08",
           BeginDate: values.beginDate == null ? null : moment(values.beginDate).format("YYYY-MM-DD"),//"2019-04-01",
           EndDate: values.endDate == null ? null : moment(values.endDate).format("YYYY-MM-DD"),//"2019-04-30",
           Memo: values.memo,
@@ -522,8 +522,7 @@ const AddRepairFee = (props: AddRepairFeeProps) => {
                   </Col>
                 </Row>
                 <Row>
-                  <Col span={12}>
-
+                  <Col span={12}> 
                     {/* <Form.Item label="应收期间" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
                     {getFieldDecorator('period', {
                       initialValue: infoDetail.period == null ? moment(new Date()) : moment(infoDetail.period),
@@ -531,13 +530,12 @@ const AddRepairFee = (props: AddRepairFeeProps) => {
                     })(
                       <DatePicker disabled={true} style={{ width: '100%' }} />
                     )}
-                    </Form.Item> */}
-
-                    {getFieldDecorator('period', {
+                    </Form.Item> */} 
+                    {/* {getFieldDecorator('period', {
                       initialValue: infoDetail.period,
                     })(
                       <input type='hidden' />
-                    )}
+                    )} */}
 
                     <Form.Item label="收款截止日" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
                       {getFieldDecorator('deadline', {

@@ -737,7 +737,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
               </Row>
             </Card>
             <Card title="账单日设置" className={styles.card2} hoverable>
-              <Row gutter={8}>
+              {/* <Row gutter={8}>
                 <Col span={6}>
                   <Form.Item label="应收期间距">
                     {getFieldDecorator('accPeriodBase', {
@@ -772,7 +772,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                     )}
                   </Form.Item>
                 </Col>
-              </Row>
+              </Row> */}
               <Row gutter={8}>
                 <Col span={6}>
                   <Form.Item label="账单日距">

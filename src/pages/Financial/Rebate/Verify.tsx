@@ -175,9 +175,7 @@ const Verify = (props: VerifyProps) => {
       key: 'period',
       width: '120px',
       sorter: true,
-      render: val => {
-        return moment(val).format('YYYY年MM月')
-      }
+      render: val => val ? moment(val).format('YYYY年MM月') : ''  
     },
     {
       title: '计费起始日期',

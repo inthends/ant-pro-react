@@ -74,26 +74,14 @@ function ListTable(props: ListTableProps) {
       dataIndex: "beginDate",
       key: "beginDate",
       width: 100,
-      render: val => {
-        if (val == null) {
-          return ''
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: "结束日期",
       dataIndex: "endDate",
       key: "endDate",
       width: 100,
-      render: val => {
-        if (val == null) {
-          return ''
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
 
     {

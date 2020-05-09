@@ -34,9 +34,7 @@ function DetailTable(props: DetailTableProps) {
       key: 'billDate',
       width: 120,
       sorter: true,
-      render: val => {
-       return moment(val).format('YYYY-MM-DD');
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '业户名称',
@@ -86,18 +84,14 @@ function DetailTable(props: DetailTableProps) {
       key: 'beginDate',
       width: 120,
       sorter: true,
-      render: val => {
-        return moment(val).format('YYYY-MM-DD');
-       }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     }, {
       title: '计费结束日期',
       dataIndex: 'enDate',
       key: 'enDate',
       width: 120,
       sorter: true,
-      render: val => {
-        return moment(val).format('YYYY-MM-DD');
-       }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     }
   ] as ColumnProps<any>[];
 
@@ -108,7 +102,7 @@ function DetailTable(props: DetailTableProps) {
         size="middle"
         columns={columns}
         dataSource={data}
-        rowKey="billId"
+        rowKey="id"
         pagination={pagination}
         scroll={{ y: 500, x: 1400 }}
         loading={loading}

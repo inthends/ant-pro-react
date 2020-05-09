@@ -4,6 +4,6 @@ export class DefaultPagination {
   pageSize = 10;
   showSizeChanger = true;
   showQuickJumper = true;
-  pageSizeOptions = ['10', '20', '50', '100'];
+  pageSizeOptions = ['10', '20', '50', '100', '300'];
   showTotal = (total, range) => `当前${range[0]}-${range[1]},共${total}条`;
 }

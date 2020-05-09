@@ -41,13 +41,7 @@ function DetailTable(props: DetailTableProps) {
       dataIndex: 'period',
       key: 'period', 
       width: 120,
-      render: val => {
-        if (val == null) {
-          return ''
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     }, 
     {
       title: '付款项目',
@@ -84,25 +78,13 @@ function DetailTable(props: DetailTableProps) {
       dataIndex: 'billBeginDate',
       key: 'billBeginDate', 
       width: 120,
-      render: val => {
-        if (val == null) {
-          return ''
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     }, {
       title: '计费截止日期',
       dataIndex: 'billEndDate',
       key: 'billEndDate', 
       width: 120,
-      render: val => {
-        if (val == null) {
-          return '';
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '单元全称',

@@ -37,7 +37,7 @@ const Add = (props: AddProps) => {
   // const [checkTreeData, setCheckTreeData] = useState<TreeEntity[]>([]);//付款费项
   const [billTreeData, setBillTreeData] = useState<TreeEntity[]>([]);//收款费项
   const [feeItemIds, setFeeItemIds] = useState<string[]>([]);
-  const [banks, setBanks] = useState<any[]>([]); //入账银行
+  const [banks, setBanks] = useState<any[]>([]); //划扣银行
   // const [payBeginDate, setPayBeginDate] = useState<string>();
   // const [payEndDate, setPayEndDate] = useState<string>();
   // const [beginDate, setBeginDate] = useState<string>();
@@ -55,7 +55,7 @@ const Add = (props: AddProps) => {
       setBillTreeData(res || []);
     });
 
-    //获取开户银行
+    //获取划账银行
     GetCommonItems('AccountBank').then(res => {
       setBanks(res || []);
     });
@@ -95,6 +95,7 @@ const Add = (props: AddProps) => {
         let newData = {
           beginDate: values.beginDate.format('YYYY-MM-DD'),
           endDate: values.endDate.format('YYYY-MM-DD'),
+          bank: values.bank,
           feeItemIds: JSON.stringify(feeItemIds),
           units: JSON.stringify(units),
           memo: values.memo
@@ -154,10 +155,10 @@ const Add = (props: AddProps) => {
             </Form.Item>
           </Col>
           <Col lg={8}>
-            <Form.Item label="入账银行" required >
+            <Form.Item label="划扣银行" required >
               {getFieldDecorator('bank', {
-                rules: [{ required: true, message: '请选择入账银行' }],
-              })(<Select placeholder="请选择入账银行">
+                rules: [{ required: true, message: '请选择划扣银行' }],
+              })(<Select placeholder="请选择划扣银行">
                 {banks.map(item => (
                   <Option value={item.value} key={item.key}>
                     {item.title}

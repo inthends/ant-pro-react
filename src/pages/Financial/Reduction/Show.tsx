@@ -130,16 +130,16 @@ const Show = (props: ShowProps) => {
       width: '160px',
       sorter: true
     },
-    {
-      title: '应收期间',
-      dataIndex: 'period',
-      key: 'period',
-      width: '100px',
-      sorter: true,
-      render: val => {
-        return moment(val).format('YYYY年MM月')
-      }
-    },
+    // {
+    //   title: '应收期间',
+    //   dataIndex: 'period',
+    //   key: 'period',
+    //   width: '100px',
+    //   sorter: true,
+    //   render: val => {
+    //     return moment(val).format('YYYY年MM月')
+    //   }
+    // },
     {
       title: '计费起始日期',
       dataIndex: 'beginDate',

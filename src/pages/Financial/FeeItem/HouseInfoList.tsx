@@ -1,7 +1,7 @@
 import Page from '@/components/Common/Page';
 import { Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
-import React from 'react'; 
+import React from 'react';
 import moment from 'moment';
 
 interface HouseInfoListProps {
@@ -51,44 +51,32 @@ function HouseInfoList(props: HouseInfoListProps) {
       title: '计费周期',
       dataIndex: 'cycleValue',
       key: 'cycleValue',
-      width: 70, 
+      width: 70,
     },
     {
       title: '周期单位',
       dataIndex: 'cycleType',
       key: 'cycleType',
-      width: 70, 
+      width: 70,
     },
     {
       title: '计费起始日期',
       dataIndex: 'beginDate',
       key: 'beginDate',
       width: 90,
-      render: val =>{
-        if(val==null){
-          return ''
-        }else{
-          return  moment(val).format('YYYY-MM-DD');
-        }
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     }, {
       title: '计费截止日期',
       dataIndex: 'endDate',
       key: 'endDate',
       width: 90,
-      render: val =>{
-        if(val==null){
-          return ''
-        }else{
-          return  moment(val).format('YYYY-MM-DD');
-        }
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '单元全称',
       dataIndex: 'allName',
       key: 'allName',
-      width: 220, 
+      width: 220,
     },
   ] as ColumnProps<any>[];
 

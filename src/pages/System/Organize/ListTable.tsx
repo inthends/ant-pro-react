@@ -62,13 +62,7 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'foundedTime',
       key: 'foundedTime',
       width: 100,
-      render: val => {
-        if (val == null) {
-          return '';
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '负责人',

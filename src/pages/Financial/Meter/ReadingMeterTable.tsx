@@ -51,7 +51,7 @@ function ReadingMeterTable(props: ReadingMeterTableProps) {
       key: 'belongDate',
       width: 100,
       sorter: true,
-      render: val =>  moment(val).format('YYYY-MM')
+      render: val => val ? moment(val).format('YYYY-MM') : ''
     },
     {
       title: '抄表人',
@@ -66,7 +66,7 @@ function ReadingMeterTable(props: ReadingMeterTableProps) {
       key: 'billDate',
       width: 100,
       sorter: true,
-      render: val =>  moment(val).format('YYYY-MM-DD')
+      render: val => val ? moment(val).format('YYYY-MM-DD') : '' 
     },
     {
       title: '单元金额合计',
@@ -108,13 +108,7 @@ function ReadingMeterTable(props: ReadingMeterTableProps) {
       dataIndex: 'verifyDate',
       key: 'verifyDate',
       width: 100,
-      render: val => {
-        if (val == null) {
-          return <span></span>
-        } else {
-          return <span> {moment(val).format('YYYY-MM-DD')} </span>
-        }
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '审核情况',

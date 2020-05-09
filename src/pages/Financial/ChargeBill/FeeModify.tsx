@@ -206,7 +206,7 @@ const FeeModify = (props: FeeModifyProps) => {
           Price: values.price,
           Amount: values.amount,
           Number: values.number,
-          Period: moment(values.period).format("YYYY-MM-DD"),//"2019-04-08",
+          // Period: moment(values.period).format("YYYY-MM-DD"),//"2019-04-08",
           BeginDate: values.beginDate == null ? null : moment(values.beginDate).format("YYYY-MM-DD"),//"2019-04-01",
           EndDate: values.endDate == null ? null : moment(values.endDate).format("YYYY-MM-DD"),//"2019-04-30",
           Memo: values.memo,
@@ -645,11 +645,11 @@ const FeeModify = (props: FeeModifyProps) => {
                       <DatePicker disabled={true} style={{ width: '100%' }} />
                     )}
                     </Form.Item> */}
-                    {getFieldDecorator('period', {
+                    {/* {getFieldDecorator('period', {
                       initialValue: infoDetail.period,
                     })(
                       <input type='hidden' />
-                    )}
+                    )} */}
                     <Form.Item label="收款截止日" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
                       {getFieldDecorator('deadline', {
                         initialValue: infoDetail.deadline == null ? moment(new Date()) : moment(infoDetail.deadline),

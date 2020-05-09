@@ -260,13 +260,13 @@ const BillModify = (props: BillModifyProps) => {
       dataIndex: 'beginDate',
       key: 'beginDate',
       width: 120,
-      render: val => val != null ? moment(val).format('YYYY-MM-DD') : ''
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     }, {
       title: '计费截止日期',
       dataIndex: 'endDate',
       key: 'endDate',
       width: 120,
-      render: val => val != null ? moment(val).format('YYYY-MM-DD') : ''
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '单元全称',

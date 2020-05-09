@@ -48,44 +48,32 @@ function DetailList(props: DetailListProps) {
       key: 'feeName',
       width: 150, 
     },
-    {
-      title: '应收期间',
-      dataIndex: 'period',
-      key: 'period',
-      width: 100, 
-      render: val => {
-        if (val == null) {
-          return '';
-        } else {
-          return moment(val).format('YYYY年MM月');
-        }
-      }
-    },
+    // {
+    //   title: '应收期间',
+    //   dataIndex: 'period',
+    //   key: 'period',
+    //   width: 100, 
+    //   render: val => {
+    //     if (val == null) {
+    //       return '';
+    //     } else {
+    //       return moment(val).format('YYYY年MM月');
+    //     }
+    //   }
+    // },
     {
       title: '计费起始日期',
       dataIndex: 'beginDate',
       key: 'beginDate',
       width: 120, 
-      render: val => {
-        if (val == null) {
-          return '';
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '计费截止日期',
       dataIndex: 'endDate',
       key: 'endDate',
       width: 120, 
-      render: val => {
-        if (val == null) {
-          return '';
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '金额',

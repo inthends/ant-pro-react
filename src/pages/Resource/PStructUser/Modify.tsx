@@ -24,6 +24,7 @@ const Modify = (props: ModifyProps) => {
   const [treeData, setTreeData] = useState<any[]>([]); //所属机构
   const [banks, setBanks] = useState<any[]>([]); // 开户银行
   const [industryType, setIndustryType] = useState<any[]>([]); //行业  
+  const [deductionbanks, setDeductionanks] = useState<any[]>([]); //划扣银行
   // const [banks, setBanks] = useState<any[]>([]); // 证件类别
   // const [banks, setBanks] = useState<any[]>([]); // 企业性质
   // 打开抽屉时初始化
@@ -38,6 +39,11 @@ const Modify = (props: ModifyProps) => {
 
     GetCommonItems('IndustryType').then(res => {
       setIndustryType(res || []);
+    });
+
+    // 获取划账银行
+    GetCommonItems('AccountBank').then(res => {
+      setDeductionanks(res || []);
     });
 
     // // 获取证件类别
@@ -362,6 +368,29 @@ const Modify = (props: ModifyProps) => {
             </Row>
             <Row gutter={24}>
               <Col lg={12}>
+                <Form.Item label="划扣银行" required >
+                  {getFieldDecorator('deductionBank', {
+                    rules: [{ required: true, message: '请选择划扣银行' }],
+                  })(<Select placeholder="请选择划扣银行">
+                    {deductionbanks.map(item => (
+                      <Option value={item.value} key={item.key}>
+                        {item.title}
+                      </Option>
+                    ))}
+                  </Select>)}
+                </Form.Item>
+              </Col>
+
+              <Col lg={12}>
+                <Form.Item label="开户名">
+                  {getFieldDecorator('accountName', {
+                    initialValue: infoDetail.accountName,
+                  })(<Input placeholder="请输入开户名" />)}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={24}>
+              <Col lg={12}>
                 <Form.Item label="开户银行">
                   {getFieldDecorator('accountBank', {
                     initialValue: infoDetail.accountBank,
@@ -384,7 +413,6 @@ const Modify = (props: ModifyProps) => {
                 </Form.Item>
               </Col>
             </Row>
-
             <Row gutter={24}>
               <Col lg={12}>
                 <Form.Item label="经营业态">
@@ -417,7 +445,6 @@ const Modify = (props: ModifyProps) => {
                 </Form.Item>
               </Col>
             </Row>
-
             <Row gutter={24}>
               <Col lg={24}>
                 <Form.Item label="联系地址">

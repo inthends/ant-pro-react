@@ -728,6 +728,7 @@ const PstructInfo = (props: PstructInfoProps) => {
         visible={customerSelectVisible}
         closeModal={closeCustomerSelect}
         organizeId={organizeId}
+        type='room'
         Select={(res) => {
           if (customerType == 1) {
             //业主

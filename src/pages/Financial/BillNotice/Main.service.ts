@@ -18,8 +18,8 @@ export function GetBillPageData(data): Promise<any> {
 }
 
 //明细
-export function ChargeFeeDetail(data): Promise<any> {
-  return request.post(process.env.basePath + `/Notice/ChargeFeeDetail`, {data:objToFormdata(data)}).then(getResult as any);
+export function GetBillDetailPageData(data): Promise<any> {
+  return request.post(process.env.basePath + `/Notice/GetBillDetailPageData`, {data:objToFormdata(data)}).then(getResult as any);
 }
 
 //明细

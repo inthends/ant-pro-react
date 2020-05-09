@@ -4,7 +4,7 @@ import { message, Dropdown, Menu, Tabs, Button, Icon, Input, Layout, Modal, Sele
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import {
-  GetBillPageData, ChargeFeePageData, BatchRemoveForm,
+  GetBillPageData, GetBillDetailPageData, BatchRemoveForm,
   GetNoticeTemplates, BatchAudit, BatchPrint
 } from './Main.service';
 
@@ -106,32 +106,6 @@ function Main() {
     return load(searchCondition);
   }
 
-  const loadDetailData = (search, orgId, type, paginationConfig?: PaginationConfig, sorter?) => {
-    setBillNoticeSearch(search);
-    const { current: pageIndex, pageSize, total } = paginationConfig || {
-      current: 1,
-      pageSize: billNoticePagination.pageSize,
-      total: 0,
-    };
-    let searchCondition: any = {
-      pageIndex,
-      pageSize,
-      total,
-      queryJson: {
-        keyword: search,
-        TreeTypeId: orgId,//organize.id,
-        TreeType: type,//organize.type
-      }
-    };
-
-    if (sorter) {
-      let { field, order } = sorter;
-      searchCondition.sord = order === "descend" ? "desc" : "asc";
-      searchCondition.sidx = field ? field : 'billId';
-    }
-    return detailLoad(searchCondition);
-  };
-
   const load = data => {
     setLoading(true);
     data.sidx = data.sidx || 'billId';
@@ -154,28 +128,6 @@ function Main() {
     });
   };
 
-  const detailLoad = data => {
-    setDetailLoading(true);
-    data.sidx = data.sidx || 'billId';
-    data.sord = data.sord || 'asc';
-    return ChargeFeePageData(data).then(res => {
-      const { pageIndex: current, total, pageSize } = res;
-      setBillNoticePagination(pagesetting => {
-        return {
-          ...pagesetting,
-          current,
-          total,
-          pageSize,
-        };
-      });
-      setDetailData(res.data);
-      setDetailLoading(false);
-      return res;
-    }).catch(err => {
-      setDetailLoading(false);
-    });
-  };
-
   const initLoadData = (orgId, type, searchText) => {
     //console.log(org);
     // setBillCheckSearch(searchText);
@@ -193,6 +145,53 @@ function Main() {
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson });
   };
 
+  const loadDetailData = (search, orgId, type, paginationConfig?: PaginationConfig, sorter?) => {
+    setBillNoticeSearch(search);
+    const { current: pageIndex, pageSize, total } = paginationConfig || {
+      current: 1,
+      pageSize: billNoticePagination.pageSize,
+      total: 0,
+    };
+    let searchCondition: any = {
+      pageIndex,
+      pageSize,
+      total,
+      queryJson: {
+        keyword: search,
+        TreeTypeId: orgId,//organize.id,
+        TreeType: type,//organize.type
+      }
+    };
+    if (sorter) {
+      let { field, order } = sorter;
+      searchCondition.sord = order === "descend" ? "desc" : "asc";
+      searchCondition.sidx = field ? field : 'id';
+    }
+    return detailLoad(searchCondition);
+  };
+
+  const detailLoad = data => {
+    setDetailLoading(true);
+    data.sidx = data.sidx || 'id';
+    data.sord = data.sord || 'asc';
+    return GetBillDetailPageData(data).then(res => {
+      const { pageIndex: current, total, pageSize } = res;
+      setBillNoticePagination(pagesetting => {
+        return {
+          ...pagesetting,
+          current,
+          total,
+          pageSize,
+        };
+      });
+      setDetailData(res.data);
+      setDetailLoading(false);
+      return res;
+    }).catch(err => {
+      setDetailLoading(false);
+    });
+  };
+
   const initDetailLoadData = (orgId, type, searchText) => {
     setBillNoticeSearch(searchText);
     const queryJson = {
@@ -200,7 +199,7 @@ function Main() {
       TreeTypeId: orgId,//org.key,
       TreeType: type,// org.type,
     };
-    const sidx = 'billId';
+    const sidx = 'id';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = billNoticePagination;
     return detailLoad({ pageIndex, pageSize, sidx, sord, total, queryJson });
@@ -297,7 +296,7 @@ function Main() {
         if (selectIds && selectIds.length > 1) {
           Modal.confirm({
             title: '请确认',
-            content: `您是否要取消审核这些账单?`,
+            content: `您是否要反审这些账单?`,
             onOk: () => {
               setLoading(true);
               BatchAudit({
@@ -306,7 +305,7 @@ function Main() {
               })
                 .then(() => {
                   setLoading(false);
-                  message.success('审核成功');
+                  message.success('反审成功');
                   initLoadData(orgId, orgType, search);
                 }).catch(e => { setLoading(false); });
             },

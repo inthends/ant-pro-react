@@ -323,26 +323,14 @@ const Modify = (props: ModifyProps) => {
       key: 'beginDate',
       width: 120,
       sorter: true,
-      render: val => {
-        if (val == null) {
-          return '';
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     }, {
       title: '计费截止日期',
       dataIndex: 'endDate',
       key: 'endDate',
       width: 120,
       sorter: true,
-      render: val => {
-        if (val == null) {
-          return '';
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     }, {
       title: '单元全称',
       dataIndex: 'allName',
@@ -1213,7 +1201,7 @@ const Modify = (props: ModifyProps) => {
 
               </Card>
               <Card title="账单日设置" className={styles.card2} hoverable>
-                <Row gutter={8}>
+                {/* <Row gutter={8}>
                   <Col span={6}>
                     <Form.Item label="应收期间 距">
                       {getFieldDecorator('accPeriodBase', {
@@ -1251,7 +1239,7 @@ const Modify = (props: ModifyProps) => {
                       )}
                     </Form.Item>
                   </Col>
-                </Row>
+                </Row> */}
                 <Row gutter={8}>
                   <Col span={6}>
                     <Form.Item label="账单日 距">

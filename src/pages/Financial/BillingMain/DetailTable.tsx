@@ -40,16 +40,14 @@ function DetailTable(props: DetailTableProps) {
       width: 150,
       sorter: true,
     },
-    {
-      title: '应收期间',
-      dataIndex: 'period',
-      key: 'period',
-      width: 100,
-      sorter: true,
-      render: val => {
-        return moment(val).format('YYYY-MM-DD')
-      }
-    },
+    // {
+    //   title: '应收期间',
+    //   dataIndex: 'period',
+    //   key: 'period',
+    //   width: 100,
+    //   sorter: true,
+    //   render: val => val ? moment(val).format('YYYY-MM-DD') : ''
+    // },
     {
       title: '数量',
       dataIndex: 'quantity',
@@ -74,9 +72,7 @@ function DetailTable(props: DetailTableProps) {
       dataIndex: 'beginDate',
       sorter: true,
       width: 120,
-      render: val => {
-        return moment(val).format('YYYY-MM-DD')
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '计费截止日期',
@@ -84,9 +80,7 @@ function DetailTable(props: DetailTableProps) {
       dataIndex: 'endDate',
       sorter: true,
       width: 120,
-      render: val => {
-        return moment(val).format('YYYY-MM-DD')
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '周期',

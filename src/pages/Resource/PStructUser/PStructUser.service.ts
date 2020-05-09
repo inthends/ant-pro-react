@@ -11,9 +11,10 @@ export function GetPageListJson(data): Promise<any> {
     .then(getResult as any);
 }
 
-export function GetPageListJsonForParking(data): Promise<any> {
+//选择人员
+export function GetPageListJsonForSelect(data): Promise<any> {
   return request
-    .post(process.env.basePath + `/PStructUser/GetListJsonForParking`, { data: objToFormdata(data) })
+    .post(process.env.basePath + `/PStructUser/GetPageListJsonForSelect`, { data: objToFormdata(data) })
     .then(getResult as any);
 }
 

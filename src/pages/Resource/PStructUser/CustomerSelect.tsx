@@ -5,7 +5,7 @@ import { DefaultPagination } from '@/utils/defaultSetting';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import ListTableSelect from './ListTableSelect';
-import { GetPageListJsonForParking } from './PStructUser.service';
+import { GetPageListJsonForSelect } from './PStructUser.service';
 import QuickModify from './QuickModify';
 
 const { Search } = Input;
@@ -16,13 +16,14 @@ interface CustomerSelectProps {
   Select(object: any): void;
   form: WrappedFormUtils;
   organizeId: string;
+  type: string;
 }
 
 const CustomerSelect = (props: CustomerSelectProps) => {
-  const { visible, closeModal, Select, organizeId } = props;
+  const { visible, closeModal, Select, organizeId, type } = props;
   const [search, setSearch] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
-  const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination()); 
+  const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
 
   useEffect(() => {
     if (visible) {
@@ -34,7 +35,7 @@ const CustomerSelect = (props: CustomerSelectProps) => {
   const [data, setData] = useState<any[]>([]);
 
   const initLoadData = (searchText) => {
-    const queryJson = { keyword: searchText };
+    const queryJson = { keyword: searchText, type: type };
     const sidx = 'code';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
@@ -47,7 +48,7 @@ const CustomerSelect = (props: CustomerSelectProps) => {
     setLoading(true);
     formData.sidx = formData.sidx || 'code';
     formData.sord = formData.sord || 'asc';
-    return GetPageListJsonForParking(formData).then(res => {
+    return GetPageListJsonForSelect(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
         return {
@@ -79,7 +80,7 @@ const CustomerSelect = (props: CustomerSelectProps) => {
       pageIndex,
       pageSize,
       total,
-      queryJson: { keyword: searchText },
+      queryJson: { keyword: searchText, type: type },
     };
 
     if (sorter) {
@@ -96,7 +97,7 @@ const CustomerSelect = (props: CustomerSelectProps) => {
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   const [currData, setCurrData] = useState<any>();
 
-  const showDrawer = (item?) => { 
+  const showDrawer = (item?) => {
     setCurrData(item);
     setModifyVisible(true);
   };

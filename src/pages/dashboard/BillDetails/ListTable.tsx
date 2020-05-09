@@ -120,9 +120,9 @@ function ListTable(props: ListTableProps) {
       sorter: true
     }, 
     {
-      title: '账单日期',
-      dataIndex: '账单日期',
-      key: '账单日期',
+      title: '账单日',
+      dataIndex: '账单日',
+      key: '账单日',
       width: 100,
       sorter: true,
       render: val => moment(val).format('YYYY-MM-DD') 

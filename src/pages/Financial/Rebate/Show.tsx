@@ -150,33 +150,27 @@ const Show = (props: ShowProps) => {
       width: '120px',
       sorter: true
     },
-    {
-      title: '应收期间',
-      dataIndex: 'period',
-      key: 'period',
-      width: '120px',
-      sorter: true,
-      render: val => {
-        if (val == null) {
-          return '';
-        } else {
-          return moment(val).format('YYYY年MM月');
-        }
-      }
-    },
+    // {
+    //   title: '应收期间',
+    //   dataIndex: 'period',
+    //   key: 'period',
+    //   width: '120px',
+    //   sorter: true,
+    //   render: val => {
+    //     if (val == null) {
+    //       return '';
+    //     } else {
+    //       return moment(val).format('YYYY年MM月');
+    //     }
+    //   }
+    // },
     {
       title: '计费起始日期',
       dataIndex: 'beginDate',
       key: 'beginDate',
       width: '120px',
       sorter: true,
-      render: val => {
-        if (val == null) {
-          return '';
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
+      render: val => val ? moment(val).format('YYYY年MM月') : '' 
     },
     {
       title: '计费截止日期',
@@ -184,13 +178,7 @@ const Show = (props: ShowProps) => {
       key: 'endDate',
       width: '120px',
       sorter: true,
-      render: val => {
-        if (val == null) {
-          return '';
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
+      render: val => val ? moment(val).format('YYYY年MM月') : '' 
     },
     {
       title: '金额',

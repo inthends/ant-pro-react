@@ -145,13 +145,7 @@ const PaymentVerify = (props: PaymentVerifyProps) => {
       dataIndex: 'period',
       key: 'period',
       width: 120,
-      render: val => {
-        if (val == null) {
-          return ''
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '数量',
@@ -182,26 +176,14 @@ const PaymentVerify = (props: PaymentVerifyProps) => {
       dataIndex: 'beginDate',
       key: 'beginDate',
       width: 120,
-      render: val => {
-        if (val == null) {
-          return ''
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '计费截止日期',
       dataIndex: 'endDate',
       key: 'endDate',
       width: 120,
-      render: val => {
-        if (val == null) {
-          return ''
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '备注',

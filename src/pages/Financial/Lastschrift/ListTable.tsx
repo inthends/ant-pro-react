@@ -131,13 +131,7 @@ function ListTable(props: ListTableProps) {
       key: 'billDate',
       width: 100,
       sorter: true,
-      render: val => {
-        if (val == null) {
-          return '';
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '状态',
@@ -176,13 +170,7 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'verifyDate',
       key: 'verifyDate',
       width: 120,
-      render: val => {
-        if (val == null) {
-          return '';
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '审核情况',

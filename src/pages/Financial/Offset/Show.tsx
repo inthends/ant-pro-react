@@ -260,13 +260,7 @@ const Show = (props: ShowProps) => {
       key: 'period',
       sorter: true,
       width: 120,
-      render: val => {
-        if (val == null) {
-          return ''
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '付款项目',
@@ -309,26 +303,14 @@ const Show = (props: ShowProps) => {
       key: 'billBeginDate',
       sorter: true,
       width: 120,
-      render: val => {
-        if (val == null) {
-          return ''
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     }, {
       title: '计费截止日期',
       dataIndex: 'billEndDate',
       key: 'billEndDate',
       sorter: true,
       width: 120,
-      render: val => {
-        if (val == null) {
-          return '';
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '单元全称',

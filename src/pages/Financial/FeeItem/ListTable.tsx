@@ -73,38 +73,26 @@ function ListTable(props: ListTableProps) {
       title: '计费周期',
       dataIndex: 'cycleValue',
       key: 'cycleValue',
-      width: 80, 
+      width: 80,
     },
     {
       title: '周期单位',
       dataIndex: 'cycleType',
       key: 'cycleType',
-      width: 80, 
+      width: 80,
     },
     {
       title: '计费起始日期',
       dataIndex: 'beginDate',
       key: 'beginDate',
       width: 85,
-      render: val => {
-        if (val == null) {
-          return '';
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     }, {
       title: '计费截止日期',
       dataIndex: 'endDate',
       key: 'endDate',
       width: 85,
-      render: val => {
-        if (val == null) {
-          return '';
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '操作',

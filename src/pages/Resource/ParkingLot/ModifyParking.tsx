@@ -664,6 +664,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
         visible={customerSelectVisible}
         closeModal={closeCustomerSelect}
         organizeId={organizeId}
+        type='parking'
         Select={(res) => { 
           if (customerType == 1) {
             //业主
