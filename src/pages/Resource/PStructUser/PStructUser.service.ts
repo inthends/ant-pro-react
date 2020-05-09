@@ -71,9 +71,16 @@ export function CheckRelation(keyValue): Promise<any> {
 }
 
 // 验证code
-export function ExistEnCode(keyValue, code): Promise<any> {
+export function ExistCode(keyValue, code): Promise<any> {
   return request
     .get(process.env.basePath + `/PStructUser/ExistCode?keyValue=${keyValue}&code=${code}`)
+    .then(getResult as any);
+}
+
+// 验证手机号码
+export function ExistCellphone(keyValue, cellphone): Promise<any> {
+  return request
+    .get(process.env.basePath + `/PStructUser/ExistCellphone?keyValue=${keyValue}&cellphone=${cellphone}`)
     .then(getResult as any);
 }
 

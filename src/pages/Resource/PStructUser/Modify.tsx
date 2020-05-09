@@ -2,7 +2,7 @@
 import { DatePicker, Button, Card, Col, Drawer, Form, Input, message, Row, Select, TreeSelect, Checkbox } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { ExistEnCode, SaveForm } from './PStructUser.service';
+import { ExistCellphone,ExistCode, SaveForm } from './PStructUser.service';
 import { GetCommonItems, GetOrgs } from '@/services/commonItem';
 import styles from './style.less';
 import moment from 'moment';
@@ -101,9 +101,25 @@ const Modify = (props: ModifyProps) => {
     }
     else {
       const keyValue = infoDetail.id == undefined ? '' : infoDetail.id;
-      ExistEnCode(keyValue, value).then(res => {
+      ExistCode(keyValue, value).then(res => {
         if (res)
           callback('编号重复');
+        else
+          callback();
+      })
+    }
+  };
+
+  //验证手机号码
+  const checkCellphoneExist = (rule, value, callback) => {
+    if (value == undefined) {
+      callback();
+    }
+    else {
+      const keyValue = infoDetail.id == undefined ? '' : infoDetail.id;
+      ExistCellphone(keyValue, value).then(res => {
+        if (res)
+          callback('手机号码重复');
         else
           callback();
       })
@@ -203,6 +219,10 @@ const Modify = (props: ModifyProps) => {
                 <Form.Item label="手机号码">
                   {getFieldDecorator('phoneNum', {
                     initialValue: infoDetail.phoneNum,
+                    rules: [{ required: true, message: '请输入手机号码' },
+                    {
+                      validator: checkCellphoneExist
+                    }],
                   })(<Input placeholder="请输入手机号码" maxLength={11} />)}
                 </Form.Item>
               </Col>
