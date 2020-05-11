@@ -5,7 +5,7 @@ import React from 'react';
 import moment from 'moment';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 // import VerifyReductionModal from './VerifyReductionModal';
-import { CheckCharge,InvalidForm } from './Main.service';
+import { CheckCharge, InvalidForm } from './Main.service';
 import styles from './style.less';
 
 interface ListTableProps {
@@ -44,21 +44,21 @@ function ListTable(props: ListTableProps) {
     });
   };
 
-  const doVerify = (billId, flag) => { 
+  const doVerify = (billId, flag) => {
 
     //如果关联的计费单收款已经审核，减免单则无法反审
     CheckCharge(billId).then((res) => {
-      if (res) { 
+      if (res) {
         Modal.warning({
           title: '提示信息',
           content: '优惠单关联的收款单已经审核，无法反审！',
           okText: '确定'
         });
-      }else{
+      } else {
         verify(billId, flag);
       }
     });
-     
+
   };
 
   const columns = [
@@ -103,7 +103,7 @@ function ListTable(props: ListTableProps) {
       title: '是否审核',
       dataIndex: 'ifVerify',
       key: 'ifVerify',
-      width: 100, 
+      width: 100,
       render: val => val ? '已审核' : '未审核'
     },
     {
@@ -120,7 +120,13 @@ function ListTable(props: ListTableProps) {
     }, {
       title: '审核意见',
       dataIndex: 'verifyMemo',
-      key: 'verifyMemo'
+      key: 'verifyMemo',
+      width: 100,
+    },
+    {
+      title: '备注',
+      dataIndex: 'memo',
+      key: 'memo'
     },
     {
       title: '操作',

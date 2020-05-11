@@ -1,6 +1,6 @@
 
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { Tabs, Button, Icon, Input, Layout } from 'antd';
+import { Select, Tabs, Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import { GetPageListJson, GetDetailPageListJson } from './Main.service';
@@ -15,6 +15,7 @@ import DetailList from './DetailList';
 const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
+const { Option } = Select;
 
 //查看收款单
 import ChargeShow from '../ChargeBill/BillShow';
@@ -34,6 +35,7 @@ function Main() {
   const [ifVerify, setIfVerify] = useState<boolean>(true);
   // const [addButtonDisabled, setAddButtonDisabled] = useState<boolean>(true);
   const [search, setSearch] = useState<string>('');
+  const [status, setStatus] = useState<string>('');
   const [detailsearch, setDetailSearch] = useState<string>('');
   const [unitTreeData, setUnitTreeData] = useState<any[]>([]);
 
@@ -141,11 +143,12 @@ function Main() {
     setChargeId('');
   };
 
-  const initLoadData = (orgId, type, searchText) => {
+  const initLoadData = (orgId, type, searchText, status) => {
     setSearch(searchText);
     // setAddButtonDisabled(true);
     const queryJson = {
       keyword: searchText,
+      status: status,
       TreeTypeId: orgId,
       TreeType: type,
     };
@@ -158,8 +161,9 @@ function Main() {
     });
   };
 
-  const loadData = (search, orgId, type, paginationConfig?: PaginationConfig, sorter?) => {
+  const loadData = (search, orgId, type, status, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(search);
+    setStatus(status);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: pagination.pageSize,
@@ -171,6 +175,7 @@ function Main() {
       total,
       queryJson: {
         keyword: search,
+        status: status,
         TreeTypeId: orgId,
         TreeType: type
       },
@@ -218,7 +223,12 @@ function Main() {
       pageIndex,
       pageSize,
       total,
-      queryJson: { keyword: search, TreeTypeId: orgId, TreeType: type },
+      queryJson: {
+        keyword: search,
+        status: status,
+        TreeTypeId: orgId,
+        TreeType: type
+      },
     };
 
     if (sorter) {
@@ -269,7 +279,7 @@ function Main() {
   //页签切换刷新
   const changeTab = key => {
     if (key == "1") {
-      initLoadData(orgId, type, search);
+      initLoadData(orgId, type, search, status);
     } else {
       initDetailLoadData(orgId, type, detailsearch);
     }
@@ -298,9 +308,27 @@ function Main() {
               <Search
                 className="search-input"
                 placeholder="搜索优惠单号"
-                style={{ width: 180 }}
-                onSearch={value => loadData(value, orgId, type)}
+                style={{ width: 180, marginRight: '5px' }}
+                onSearch={value => loadData(value, orgId, type, status)}
               />
+
+              <Select placeholder="优惠单状态"
+                allowClear={true}
+                style={{ width: '120px', marginRight: '5px' }}
+                onChange={(value) => {
+                  loadData(search, orgId, type, value);
+                }} >
+                <Option key='0' value='0'>
+                  {'未审核'}
+                </Option>
+                <Option key='1' value='1'>
+                  {'已审核'}
+                </Option> 
+                <Option key='-1' value='-1'>
+                  {'已作废'}
+                </Option>
+              </Select>
+
               <Button type="primary" style={{ float: 'right' }}
                 onClick={() => showDrawer()}
               // disabled={addButtonDisabled}
@@ -319,7 +347,7 @@ function Main() {
               modify={showDrawer}
               show={showViewDrawer}
               verify={(id, ifVerify) => showVerifyDrawer(id, ifVerify)}
-              reload={() => initLoadData(orgId, type, search)}
+              reload={() => initLoadData(orgId, type, search, status)}
             />
           </TabPane>
           <TabPane tab="明细" key="2">
@@ -349,7 +377,7 @@ function Main() {
         modifyVisible={modifyVisible}
         closeDrawer={closeDrawer}
         id={id}
-        reload={() => initLoadData(orgId, type, search)}
+        reload={() => initLoadData(orgId, type, search, status)}
       />
 
       <Show
@@ -364,7 +392,7 @@ function Main() {
         closeModal={closeVerifyDrawer}
         id={id}
         ifVerify={ifVerify}
-        reload={() => initLoadData(orgId, type, search)}
+        reload={() => initLoadData(orgId, type, search, status)}
       />
 
       <ChargeShow
