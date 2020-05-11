@@ -139,7 +139,7 @@ function ListTableMore(props: ListTableMoreProps) {
       overlay={
         <Menu onClick={({ key }) => editAndDelete(key, item)}>
           < Menu.Item key="split">拆分</Menu.Item>
-          < Menu.Item key="merge">合并</Menu.Item>
+          {/* < Menu.Item key="merge">合并</Menu.Item> */}
         </Menu >
       }>
       <a>

@@ -122,9 +122,10 @@ const Split = (props: SplitProps) => {
               <Col span={8}>
                 <Form.Item label="编号" required >
                   {getFieldDecorator('firstNo', {
+                    initialValue: infoDetail.code + '-01',
                     rules: [{ required: true, message: '请输入编号' }],
                   })(
-                    <Input placeholder='请输入编号' />
+                    <Input disabled placeholder='请输入编号' />
                   )}
                 </Form.Item>
               </Col>
@@ -158,15 +159,16 @@ const Split = (props: SplitProps) => {
                   {getFieldDecorator('secondName', {
                     rules: [{ required: true, message: '请输入第二间名称' }],
                   })(
-                    <Input readOnly placeholder='请输入第二间名称' />
+                    <Input placeholder='请输入第二间名称' />
                   )}
                 </Form.Item>
               </Col>
               <Col span={8}>
                 <Form.Item label="编号" required >
                   {getFieldDecorator('secondNo', {
+                    initialValue: infoDetail.code + '-02',
                   })(
-                    <Input placeholder='请输入编号' />
+                    <Input disabled placeholder='请输入编号' />
                   )}
                 </Form.Item>
               </Col>
