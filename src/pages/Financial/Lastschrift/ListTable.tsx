@@ -94,13 +94,29 @@ function ListTable(props: ListTableProps) {
     if (key === "export") {
       doExport(currentItem.billId);
     }
-    // else if (key === "check") {
-    //   showCheck(currentItem.billId);
-    // } 
-    else if (key === "verify") {
-      showVerify(currentItem.billId, true);
-    }
+    else if (key === "check") {
+      showCheck(currentItem.billId);
+    } 
+    // else if (key === "verify") {
+    //   showVerify(currentItem.billId, true);
+    // }
   };
+
+  // const MoreBtn: React.FC<{
+  //   item: any;
+  // }> = ({ item }) => (
+  //   <Dropdown
+  //     overlay={
+  //       <Menu onClick={({ key }) => editAndDelete(key, item)}>
+  //         <Menu.Item key="export">导出</Menu.Item>
+  //         {/* <Menu.Item key="check">对账</Menu.Item> */}
+  //         <Menu.Item key="verify">审核</Menu.Item>
+  //       </Menu>}>
+  //     <a>
+  //       更多 <Icon type="down" />
+  //     </a>
+  //   </Dropdown>
+  // );
 
   const MoreBtn: React.FC<{
     item: any;
@@ -109,8 +125,7 @@ function ListTable(props: ListTableProps) {
       overlay={
         <Menu onClick={({ key }) => editAndDelete(key, item)}>
           <Menu.Item key="export">导出</Menu.Item>
-          {/* <Menu.Item key="check">对账</Menu.Item> */}
-          <Menu.Item key="verify">审核</Menu.Item>
+          <Menu.Item key="check">对账</Menu.Item>
         </Menu>}>
       <a>
         更多 <Icon type="down" />
@@ -193,33 +208,13 @@ function ListTable(props: ListTableProps) {
       render: (text, record) => {
         if (record.ifVerify) {
           return [
-            // <Button
-            //   type="primary"
-            //   key="modify"
-            //   style={{ marginRight: '10px' }}
-            //   onClick={() => showModify(record.billId)}  >
-            //   查看
-            // </Button>,
-            // <Button
-            //   type="primary"
-            //   key="verify"
-            //   style={{ marginRight: '10px' }}
-            //   onClick={() => showVerify(record.billId, false)}
-            // >
-            //   反审
-            // </Button>,
-            // <Button
-            //   type="danger"
-            //   key="delete"
-            //   disabled={true}>
-            //   删除
-            // </Button>
             <span key='span1'>
               <a onClick={() => showModify(record.billId)} key="show">查看</a>
               <Divider type="vertical" />
               <a onClick={() => showVerify(record.billId, false)} key="modify">反审</a>
               <Divider type="vertical" />
-              <a onClick={() => showCheck(record.billId)} key="check">对账</a>
+              <MoreBtn key="more" item={record} />
+              {/* <a onClick={() => showCheck(record.billId)} key="check">对账</a> */}
             </span>
           ];
         }
@@ -253,7 +248,8 @@ function ListTable(props: ListTableProps) {
                 <Divider type="vertical" />
                 <a onClick={() => doInvalid(record)} key="invalid">作废</a>
                 <Divider type="vertical" />
-                <MoreBtn key="more" item={record} />
+                <a onClick={() => showVerify(record.billId, true)} key="modify">审核</a>
+                {/* <MoreBtn key="more" item={record} /> */}
               </span>
             ];
           }

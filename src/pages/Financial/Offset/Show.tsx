@@ -269,13 +269,7 @@ const Show = (props: ShowProps) => {
       width: 140,
       sorter: true,
     },
-    {
-      title: '应付金额',
-      dataIndex: 'payAmount',
-      key: 'payAmount',
-      width: 100,
-      sorter: true,
-    },
+  
     {
       title: '收款项目',
       dataIndex: 'billFeeName',
@@ -284,11 +278,25 @@ const Show = (props: ShowProps) => {
       sorter: true,
     },
     {
+      title: '应付金额',
+      dataIndex: 'amount',
+      key: 'amount',
+      width: 100,
+      sorter: true,
+    },
+    {
       title: '冲抵金额',
       dataIndex: 'offsetAmount',
       key: 'offsetAmount',
       sorter: true,
       width: 100
+    },
+    {
+      title: '实付金额',
+      dataIndex: 'payAmount',
+      key: 'payAmount',
+      width: 100,
+      sorter: true,
     },
     // {
     //   title: '应付余额',
