@@ -83,17 +83,11 @@ function ListTable(props: ListTableProps) {
       title: '单据日期',
       dataIndex: 'billDate',
       key: 'billDate',
-      width: 120,
+      width: 100,
       sorter: true,
       render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
-    {
-      title: '联系地点',
-      dataIndex: 'address',
-      key: 'address',
-      width: 250,
-      sorter: true,
-    },
+
     {
       title: '联系人',
       dataIndex: 'contactName',
@@ -108,6 +102,12 @@ function ListTable(props: ListTableProps) {
       width: 100,
       sorter: true,
     },
+    {
+      title: '内容',
+      dataIndex: 'contents',
+      key: 'contents',
+      width: 150, 
+    }, 
     {
       title: '是否回复',
       dataIndex: 'isApply',
@@ -125,12 +125,18 @@ function ListTable(props: ListTableProps) {
       title: '关联单号',
       dataIndex: 'businessCode',
       key: 'businessCode',
-      width: 250,
+      width: 230,
     },
+    // {
+    //   title: '备注',
+    //   dataIndex: 'memo',
+    //   key: 'memo',
+    //   width: 200,
+    // },
     {
-      title: '备注',
-      dataIndex: 'memo',
-      key: 'memo',
+      title: '联系地点',
+      dataIndex: 'address',
+      key: 'address',
     },
     {
       title: '操作',
@@ -141,7 +147,7 @@ function ListTable(props: ListTableProps) {
       fixed: 'right',
       render: (text, record) => {
         //新增
-        if (record.status == 1 ) {
+        if (record.status == 1) {
           return [
             //   <Button
             //     type="primary"

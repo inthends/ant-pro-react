@@ -80,26 +80,21 @@ function ListTable(props: ListTableProps) {
       key: 'allAmount',
       width: 100
     },
-    {
-      title: '交房日期',
-      dataIndex: 'handoverDate',
-      key: 'handoverDate',
-      width: 120,
-      sorter: true,
-      render: val => {
-        if (val == null) {
-          return '';
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
-    },
 
+    {
+      title: '缴费状态',
+      dataIndex: 'isClear',
+      key: 'isClear',
+      width: 80,
+      align: 'center',
+      render: val => val ? '已缴' : '未缴'
+    },
     {
       title: '审核状态',
       dataIndex: 'ifVerify',
       key: 'ifVerify',
-      width: 100,
+      align: 'center',
+      width: 80,
       render: val => val ? '已审核' : '未审核'
     },
     {
@@ -121,6 +116,13 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'verifyMemo',
       key: 'verifyMemo',
       width: 100,
+    },
+    {
+      title: '交房日期',
+      dataIndex: 'handoverDate',
+      key: 'handoverDate',
+      width: 120, 
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '备注',
@@ -175,7 +177,7 @@ function ListTable(props: ListTableProps) {
         dataSource={data}
         rowKey="billId"
         pagination={pagination}
-        scroll={{ y: 500, x: 1600 }}
+        scroll={{ y: 500, x: 1700 }}
         loading={loading}
         onChange={onchange}
         rowSelection={rowSelection}

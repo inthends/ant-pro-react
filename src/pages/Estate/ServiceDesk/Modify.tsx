@@ -312,7 +312,7 @@ const Modify = (props: ModifyProps) => {
 
                         {getFieldDecorator('source', {
                           initialValue: '服务总台'
-                        })(<Input disabled />)}
+                        })(<Input readOnly />)}
 
                       </Form.Item>
                     </Col>
@@ -444,7 +444,7 @@ const Modify = (props: ModifyProps) => {
                       <Form.Item label="联系人">
                         {getFieldDecorator('contactName', {
                           initialValue: infoDetail.contactName
-                        })(<Input placeholder="自动获取联系人" disabled  />)}
+                        })(<Input placeholder="自动获取联系人" readOnly  />)}
 
                         {getFieldDecorator('contactId', {
                           initialValue: infoDetail.contactId,
@@ -463,7 +463,7 @@ const Modify = (props: ModifyProps) => {
                       <Form.Item label="联系电话">
                         {getFieldDecorator('contactPhone', {
                           initialValue: infoDetail.contactPhone
-                        })(<Input placeholder="自动获取联系电话" disabled />)}
+                        })(<Input placeholder="自动获取联系电话" readOnly />)}
                       </Form.Item>
                     </Col>
                   </Row>
