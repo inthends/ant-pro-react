@@ -388,9 +388,9 @@ const Modify = (props: ModifyProps) => {
             </Row>
             <Row gutter={24}>
               <Col lg={12}>
-                <Form.Item label="划扣银行" required >
+                <Form.Item label="划扣银行">
                   {getFieldDecorator('deductionBank', {
-                    rules: [{ required: true, message: '请选择划扣银行' }],
+                    // rules: [{ required: true, message: '请选择划扣银行' }],
                   })(<Select placeholder="请选择划扣银行">
                     {deductionbanks.map(item => (
                       <Option value={item.value} key={item.key}>

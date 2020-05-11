@@ -1,6 +1,6 @@
 //新增划账单
 import { TreeEntity } from '@/model/models';
-import { Card, Select, Input, message, notification, Button, Col, DatePicker, Drawer, Form, Row, Spin } from 'antd';
+import { Select, Input, message, notification, Button, Col, DatePicker, Drawer, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { GetReceivablesTree, SaveForm } from './Lastschrift.service';

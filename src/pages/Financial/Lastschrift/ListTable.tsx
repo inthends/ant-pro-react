@@ -94,9 +94,10 @@ function ListTable(props: ListTableProps) {
     if (key === "export") {
       doExport(currentItem.billId);
     }
-    else if (key === "check") {
-      showCheck(currentItem.billId);
-    } else if (key === "verify") {
+    // else if (key === "check") {
+    //   showCheck(currentItem.billId);
+    // } 
+    else if (key === "verify") {
       showVerify(currentItem.billId, true);
     }
   };
@@ -108,7 +109,7 @@ function ListTable(props: ListTableProps) {
       overlay={
         <Menu onClick={({ key }) => editAndDelete(key, item)}>
           <Menu.Item key="export">导出</Menu.Item>
-          <Menu.Item key="check">对账</Menu.Item>
+          {/* <Menu.Item key="check">对账</Menu.Item> */}
           <Menu.Item key="verify">审核</Menu.Item>
         </Menu>}>
       <a>
@@ -215,8 +216,10 @@ function ListTable(props: ListTableProps) {
             // </Button>
             <span key='span1'>
               <a onClick={() => showModify(record.billId)} key="show">查看</a>
-              {/* <Divider type="vertical" />
-              <a onClick={() => showVerify(record.billId, false)} key="modify">反审</a> */}
+              <Divider type="vertical" />
+              <a onClick={() => showVerify(record.billId, false)} key="modify">反审</a>
+              <Divider type="vertical" />
+              <a onClick={() => showCheck(record.billId)} key="check">对账</a>
             </span>
           ];
         }

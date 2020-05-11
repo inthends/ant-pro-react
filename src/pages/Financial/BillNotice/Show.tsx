@@ -5,7 +5,7 @@ import { DefaultPagination } from '@/utils/defaultSetting';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { GetEntityShow, ChargeFeeDetail, DoPrint } from './Main.service';
+import { GetEntityShow, GetBillDetailPageData, DoPrint } from './Main.service';
 import styles from './style.less';
 import moment from 'moment';
 
@@ -36,7 +36,7 @@ const Show = (props: ShowProps) => {
           var info = Object.assign({}, res.entity, { customer: res.name, templateName: res.templateName });
           setInfoDetail(info);
           setLoading(false);
-          initBillCheckLoadData();
+          initLoadData();
         }).catch(() => {
           setLoading(false);
         });
@@ -53,7 +53,7 @@ const Show = (props: ShowProps) => {
   //   closeDrawer();
   // };
 
-  const initBillCheckLoadData = (paginationConfig?: PaginationConfig, sorter?) => {
+  const initLoadData = (paginationConfig?: PaginationConfig, sorter?) => {
     const queryJson = {
       billId: id
     };
@@ -64,14 +64,14 @@ const Show = (props: ShowProps) => {
       pageSize: billCheckPagination.pageSize,
       total: 0,
     };
-    return billCheckload({ pageIndex, pageSize, sidx, sord, total, queryJson });
+    return load({ pageIndex, pageSize, sidx, sord, total, queryJson });
   };
 
-  const billCheckload = data => {
+  const load = data => {
     setBillCheckLoading(true);
     data.sidx = data.sidx || 'BillDate';
     data.sord = data.sord || 'asc';
-    return ChargeFeeDetail(data).then(res => {
+    return GetBillDetailPageData(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setBillCheckPagination(pagesetting => {
         return {
@@ -155,13 +155,7 @@ const Show = (props: ShowProps) => {
       dataIndex: 'beginDate',
       sorter: true,
       width: 120,
-      render: val => {
-        if (val == null) {
-          return '';
-        } else {
-          return moment(val).format('YYYY-MM-DD');
-        }
-      }
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '计费截止日期',
@@ -240,7 +234,7 @@ const Show = (props: ShowProps) => {
 
           <Table<any>
             onChange={(paginationConfig, filters, sorter) => {
-              initBillCheckLoadData(paginationConfig, sorter)
+              initLoadData(paginationConfig, sorter)
             }
             }
             bordered={false}

@@ -6,6 +6,7 @@ import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import { GetFormJson, GetListById } from './Lastschrift.service';
 import styles from './style.less';
+import moment from 'moment';
 
 interface ShowProps {
   showVisible: boolean;
@@ -130,6 +131,21 @@ const Show = (props: ShowProps) => {
       width: 100,
     },
     {
+      title: '计费起始日期',
+      dataIndex: 'beginDate',
+      key: 'beginDate',
+      align: 'center',
+      width: 100,
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
+    }, {
+      title: '计费截止日期',
+      dataIndex: 'endDate',
+      key: 'endDate',
+      align: 'center',
+      width: 100,
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
+    },
+    {
       title: '划账金额',
       dataIndex: 'amount',
       key: 'amount',
@@ -167,7 +183,7 @@ const Show = (props: ShowProps) => {
       width: 120,
     },
     {
-      title: '房号',
+      title: '单元编号',
       dataIndex: 'code',
       key: 'code',
       width: 120,
@@ -197,7 +213,7 @@ const Show = (props: ShowProps) => {
       //  className="offsetModify"
       title={title}
       placement="right"
-      width={780}
+      width={850}
       onClose={closeDrawer}
       visible={showVisible}
       // style={{ height: 'calc(100vh-50px)' }}
@@ -222,7 +238,7 @@ const Show = (props: ShowProps) => {
                   {infoDetail.createUserName}
                 </Form.Item>
               </Col>
-            </Row> 
+            </Row>
             <Row gutter={24}>
               <Col lg={8}>
                 <Form.Item label="是否审核">
@@ -263,7 +279,7 @@ const Show = (props: ShowProps) => {
                 // rowKey="billId"
                 rowKey={record => record.id}
                 pagination={pagination}
-                scroll={{ y: 500, x: 1200 }}
+                scroll={{ y: 500, x: 1400 }}
                 loading={loading}
                 onChange={(pagination: PaginationConfig, filters, sorter) =>
                   changePage(pagination, filters, sorter)
