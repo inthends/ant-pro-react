@@ -62,11 +62,11 @@ function ListTable(props: ListTableProps) {
           if (data) {
             let obj = {
               '费项': data[i].feeName,
-              '划账金额': data[i].amount,
-              '扣款金额': data[i].deductionAmount,
-              '物业开户银行': data[i].bank,
-              '户名': data[i].name,
+              '应收金额': data[i].amount,
+              '划扣金额': data[i].deductionAmount,
+              '划扣银行': data[i].bank,
               '房号': data[i].code,
+              '户名': data[i].name,
               '开户行': data[i].accountBank,
               '账号': data[i].bankAccount,
               '单元全称': data[i].allName,
@@ -81,7 +81,7 @@ function ListTable(props: ListTableProps) {
           sheetData: dataTable,
           sheetName: 'sheet',
           // sheetFilter: ['组织ID', '组织代码', '组织名称'],
-          sheetHeader: ['费项', '划账金额', '扣款金额', '物业开户银行', '户名', '房号', '开户行', '账号', '单元全称'],
+          sheetHeader: ['费项', '应收金额', '划扣金额', '划扣银行', '房号', '户名', '开户行', '账号', '单元全称'],
         }
       ];
 
@@ -96,7 +96,7 @@ function ListTable(props: ListTableProps) {
     }
     else if (key === "check") {
       showCheck(currentItem.billId);
-    } 
+    }
     // else if (key === "verify") {
     //   showVerify(currentItem.billId, true);
     // }
@@ -222,7 +222,18 @@ function ListTable(props: ListTableProps) {
           if (record.status == -1) {
             //作废，只能查看
             return [<a onClick={() => showModify(record.billId)} key="show">查看</a>]
-          } else {
+          }
+          else if (record.status == 1) {
+            //已对账
+            return [
+              <span key='span1'>
+                <a onClick={() => showModify(record.billId)} key="show">查看</a>
+                <Divider type="vertical" />
+                <a onClick={() => doExport(record.billId)} key="export">导出</a>
+              </span>
+            ] 
+          } 
+          else {
             return [
               //   <Button
               //     type="primary"
