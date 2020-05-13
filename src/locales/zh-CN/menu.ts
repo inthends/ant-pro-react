@@ -61,6 +61,7 @@ export default {
 
   'menu.admin': '行政管理',
   'menu.admin.news': '信息发布',
+  'menu.admin.member': '会员管理',
   'menu.admin.warehouse': '仓库管理',
 
   'menu.contract': '资产运营',

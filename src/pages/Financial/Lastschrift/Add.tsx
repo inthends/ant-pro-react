@@ -27,7 +27,7 @@ interface AddProps {
 const Add = (props: AddProps) => {
   const { treeData, addDrawerVisible, closeDrawer, form, id, reload } = props;
   const title = id === undefined ? '新增划账单' : '修改划账单';
-  // const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const { getFieldDecorator } = form;
   // const [infoDetail, setInfoDetail] = useState<any>({});
   // const [payfeeitemid, setPayFeeItemId] = useState<string>('');
@@ -42,6 +42,7 @@ const Add = (props: AddProps) => {
   // const [payEndDate, setPayEndDate] = useState<string>();
   // const [beginDate, setBeginDate] = useState<string>();
   // const [endDate, setEndDate] = useState<string>();
+
 
   useEffect(() => {
     // getCheckTreeData().then(res => {
@@ -92,6 +93,7 @@ const Add = (props: AddProps) => {
           return;
         }
 
+        setLoading(true);
         let newData = {
           beginDate: values.beginDate.format('YYYY-MM-DD'),
           endDate: values.endDate.format('YYYY-MM-DD'),
@@ -112,7 +114,9 @@ const Add = (props: AddProps) => {
               description:
                 '没有找到要划账的费用！'
             });
+            setLoading(false);
           } else {
+            setLoading(false);
             message.success('保存成功');
             reload();
             closeDrawer();
@@ -131,80 +135,80 @@ const Add = (props: AddProps) => {
       visible={addDrawerVisible}
       style={{ height: 'calc(100vh-50px)' }}
       bodyStyle={{ background: '#f6f7fb', height: 'calc(100vh -50px)' }} >
-      {/* <Spin tip="数据处理中..." spinning={loading}> */}
-      <Form layout='vertical' hideRequiredMark className={styles.card}>
-        <Row gutter={6}>
-          <Col lg={8}>
-            <Form.Item label="账单日起" required >
-              {getFieldDecorator('beginDate', {
-                initialValue: moment(new Date()),
-                rules: [{ required: true, message: '请选择账单日起' }],
-              })(
-                <DatePicker />
-              )}
-            </Form.Item>
-          </Col>
-          <Col lg={8}>
-            <Form.Item label="账单日止" required >
-              {getFieldDecorator('endDate', {
-                initialValue: moment(new Date()).add(1, 'month').add(-1, 'days'),
-                rules: [{ required: true, message: '请选择账单日止' }],
-              })(
-                <DatePicker />
-              )}
-            </Form.Item>
-          </Col>
-          <Col lg={8}>
-            <Form.Item label="划扣银行" required >
-              {getFieldDecorator('bank', {
-                rules: [{ required: true, message: '请选择划扣银行' }],
-              })(<Select placeholder="请选择划扣银行">
-                {banks.map(item => (
-                  <Option value={item.value} key={item.key}>
-                    {item.title}
-                  </Option>
-                ))}
-              </Select>)}
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={12}  >
-          <Col span={12} style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh - 240px)' }} >
-            <SelectTree
-              checkable={true}
-              treeData={treeData}
-              getCheckedKeys={(keys) => {
-                setUnits(keys);
-              }}
-              selectTree={(id, type, info?) => {
-              }}
-            />
-          </Col>
-          <Col span={12} style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh - 240px)' }}>
-            <SelectFeeItem
-              checkable={true}
-              treeData={billTreeData}
-              getCheckedKeys={(keys) => {
-                setFeeItemIds(keys);
-              }}
-              selectTree={(id) => {
-              }}
-            />
-          </Col>
-        </Row>
-        <Row gutter={6}>
-          <Col lg={24}>
-            <Form.Item label="&nbsp;" required >
-              {getFieldDecorator('memo', {
-              })(
-                <TextArea rows={4} placeholder="请输入备注" />
-              )}
-            </Form.Item>
-          </Col>
-        </Row>
+      <Spin tip="数据处理中..." spinning={loading}>
+        <Form layout='vertical' hideRequiredMark className={styles.card}>
+          <Row gutter={6}>
+            <Col lg={8}>
+              <Form.Item label="账单日起" required >
+                {getFieldDecorator('beginDate', {
+                  initialValue: moment(new Date()),
+                  rules: [{ required: true, message: '请选择账单日起' }],
+                })(
+                  <DatePicker />
+                )}
+              </Form.Item>
+            </Col>
+            <Col lg={8}>
+              <Form.Item label="账单日止" required >
+                {getFieldDecorator('endDate', {
+                  initialValue: moment(new Date()).add(1, 'month').add(-1, 'days'),
+                  rules: [{ required: true, message: '请选择账单日止' }],
+                })(
+                  <DatePicker />
+                )}
+              </Form.Item>
+            </Col>
+            <Col lg={8}>
+              <Form.Item label="划扣银行" required >
+                {getFieldDecorator('bank', {
+                  rules: [{ required: true, message: '请选择划扣银行' }],
+                })(<Select placeholder="请选择划扣银行">
+                  {banks.map(item => (
+                    <Option value={item.value} key={item.key}>
+                      {item.title}
+                    </Option>
+                  ))}
+                </Select>)}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={12}  >
+            <Col span={12} style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh - 240px)' }} >
+              <SelectTree
+                checkable={true}
+                treeData={treeData}
+                getCheckedKeys={(keys) => {
+                  setUnits(keys);
+                }}
+                selectTree={(id, type, info?) => {
+                }}
+              />
+            </Col>
+            <Col span={12} style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh - 240px)' }}>
+              <SelectFeeItem
+                checkable={true}
+                treeData={billTreeData}
+                getCheckedKeys={(keys) => {
+                  setFeeItemIds(keys);
+                }}
+                selectTree={(id) => {
+                }}
+              />
+            </Col>
+          </Row>
+          <Row gutter={6}>
+            <Col lg={24}>
+              <Form.Item label="&nbsp;" required >
+                {getFieldDecorator('memo', {
+                })(
+                  <TextArea rows={4} placeholder="请输入备注" />
+                )}
+              </Form.Item>
+            </Col>
+          </Row>
 
-      </Form>
-      {/* </Spin> */}
+        </Form>
+      </Spin>
       <div
         style={{
           position: 'absolute',

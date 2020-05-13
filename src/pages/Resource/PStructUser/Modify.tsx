@@ -390,6 +390,7 @@ const Modify = (props: ModifyProps) => {
               <Col lg={12}>
                 <Form.Item label="划扣银行">
                   {getFieldDecorator('deductionBank', {
+                       initialValue: infoDetail.deductionBank,
                     // rules: [{ required: true, message: '请选择划扣银行' }],
                   })(<Select placeholder="请选择划扣银行">
                     {deductionbanks.map(item => (

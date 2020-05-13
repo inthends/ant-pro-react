@@ -243,6 +243,12 @@ export default [
             component: './Admin/News/Main',
           },
           {
+            name: 'member',
+            path: '/admin/member',
+            icon: 'layout',
+            component: './Admin/member/Main',
+          },
+          {
             name: 'warehouse',
             path: '/admin/warehouse',
             icon: 'layout',

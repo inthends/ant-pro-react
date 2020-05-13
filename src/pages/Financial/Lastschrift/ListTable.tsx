@@ -63,11 +63,12 @@ function ListTable(props: ListTableProps) {
             let obj = {
               '费项': data[i].feeName,
               '应收金额': data[i].amount,
+              '账单日': data[i].billDate,
               '划扣金额': data[i].deductionAmount,
               '划扣银行': data[i].bank,
               '房号': data[i].code,
               '户名': data[i].name,
-              '开户行': data[i].accountBank,
+              // '开户行': data[i].accountBank,
               '账号': data[i].bankAccount,
               '单元全称': data[i].allName,
             }
@@ -81,7 +82,7 @@ function ListTable(props: ListTableProps) {
           sheetData: dataTable,
           sheetName: 'sheet',
           // sheetFilter: ['组织ID', '组织代码', '组织名称'],
-          sheetHeader: ['费项', '应收金额', '划扣金额', '划扣银行', '房号', '户名', '开户行', '账号', '单元全称'],
+          sheetHeader: ['费项', '应收金额', '账单日', '划扣金额', '划扣银行', '房号', '户名', '账号', '单元全称'],
         }
       ];
 
@@ -138,7 +139,7 @@ function ListTable(props: ListTableProps) {
       title: '划账单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 180,
+      width: 200,
       sorter: true
     },
     {
@@ -231,8 +232,8 @@ function ListTable(props: ListTableProps) {
                 <Divider type="vertical" />
                 <a onClick={() => doExport(record.billId)} key="export">导出</a>
               </span>
-            ] 
-          } 
+            ]
+          }
           else {
             return [
               //   <Button
