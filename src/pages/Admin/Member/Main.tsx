@@ -114,11 +114,11 @@ const Main = () => {
         <div style={{ marginBottom: 20, padding: "3px 0" }}>
           <Search
             className="search-input"
-            placeholder="搜索昵称或姓名"
+            placeholder="搜索关键字"
             onSearch={keyword => loadData({ ...search, keyword })}
             style={{ width: 180 }}
           />
-          <Button
+          {/* <Button
             type="primary"
             style={{ float: "right" }}
             onClick={() => {
@@ -128,7 +128,7 @@ const Main = () => {
           >
             <Icon type="plus" />
             编码
-          </Button>
+          </Button> */}
         </div>
         <ListTable
           onchange={(paginationConfig, filters, sorter) =>

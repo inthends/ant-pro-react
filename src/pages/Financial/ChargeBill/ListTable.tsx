@@ -52,8 +52,11 @@ function ListTable(props: ListTableProps) {
   const [banks, setBanks] = useState<any[]>([]); //入账银行
 
   const [payTypeA, setPayTypeA] = useState<any[]>([]); //收款方式A
+  const [defaultPayTypeA, setDefaultPayTypeA] = useState<any>(''); //默认收款方式A
   const [payTypeB, setPayTypeB] = useState<any[]>([]); //收款方式B
+  const [defaultPayTypeB, setDefaultPayTypeB] = useState<any>(''); //默认收款方式A
   const [payTypeC, setPayTypeC] = useState<any[]>([]); //收款方式C
+  const [defaultPayTypeC, setDefaultPayTypeC] = useState<any>(''); //默认收款方式A
 
   useEffect(() => {
     setSelectedRowKeys([]);
@@ -68,14 +71,20 @@ function ListTable(props: ListTableProps) {
 
     GetCommonItems('PayTypeA').then(res => {
       setPayTypeA(res || []);
+      var val = res.find((item) => item.isDefault);
+      setDefaultPayTypeA(val ? val.value : '转账');
     });
 
     GetCommonItems('PayTypeB').then(res => {
       setPayTypeB(res || []);
+      var val = res.find((item) => item.isDefault);
+      setDefaultPayTypeB(val ? val.value : '现金');
     });
 
     GetCommonItems('PayTypeC').then(res => {
       setPayTypeC(res || []);
+      var val = res.find((item) => item.isDefault);
+      setDefaultPayTypeC(val ? val.value : '刷卡');
     });
 
   }, [data])
@@ -585,7 +594,7 @@ function ListTable(props: ListTableProps) {
             <Col lg={4}>
               <Form.Item >
                 {getFieldDecorator('payTypeA', {
-                  initialValue: '转账'
+                  initialValue: defaultPayTypeA
                 })(
                   <Select >
                     {/* 
@@ -633,7 +642,7 @@ function ListTable(props: ListTableProps) {
             <Col lg={4}>
               <Form.Item >
                 {getFieldDecorator('payTypeB', {
-                  initialValue: '现金'
+                  initialValue: defaultPayTypeB//'现金'
                 })(
                   <Select>
                     {payTypeB.map(item => (
@@ -670,7 +679,7 @@ function ListTable(props: ListTableProps) {
             <Col lg={4}>
               <Form.Item >
                 {getFieldDecorator('payTypeC', {
-                  initialValue: '刷卡'
+                  initialValue: defaultPayTypeC// '刷卡'
                 })(
                   <Select>
                     {payTypeC.map(item => (
@@ -694,8 +703,7 @@ function ListTable(props: ListTableProps) {
                     min={0}
                     max={hasSelected ? lastAmount - Number(form.getFieldValue('payAmountA')) - Number(form.getFieldValue('payAmountB')) : 0}
                   />
-                )}
-
+                )} 
               </Form.Item>
             </Col>
             <Col lg={4}>

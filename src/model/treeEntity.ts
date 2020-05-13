@@ -34,6 +34,11 @@ export interface TreeEntity {
   isLeaf?: boolean;
 
   /**
+   * 是否是默认项
+   */ 
+  isDefault?: boolean;
+
+  /**
        * 禁掉响应
    */
   disabled?: boolean;
@@ -78,20 +83,20 @@ export interface TreeEntity {
 */
   attributeC?: string
 
-    /**
+  /**
 * 扩展
 */
-code?: string
+  code?: string
 
   /**
 * 扩展
 */
-allname?: string
+  allname?: string
 
   /**
 * 扩展
 */
-tenantname?: string
+  tenantname?: string
 
 
   /**

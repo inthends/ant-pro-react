@@ -1,8 +1,8 @@
 
-import { Divider, PageHeader, Drawer, Col, message, Modal, Card, Form, Row, Table } from "antd";
+import { Divider, PageHeader, Drawer, Col, Button, Card, Form, Row, Table } from "antd";
 import { WrappedFormUtils } from "antd/lib/form/Form";
 import React, { useEffect, useState } from "react";
-import { GetUnitPageListJson, RemoveItemForm } from "./Member.service";
+import { GetUnitPageListJson } from "./Member.service";
 import { DefaultPagination } from "@/utils/defaultSetting";
 import { ColumnProps, PaginationConfig } from "antd/lib/table";
 import styles from './style.less';
@@ -37,7 +37,7 @@ const Modify = (props: ModifyProps) => {
 
   const load = formData => {
     setLoading(true);
-    formData.sidx = formData.sidx || "code";
+    formData.sidx = formData.sidx || "state";
     formData.sord = formData.sord || "asc";
     return GetUnitPageListJson(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -57,7 +57,7 @@ const Modify = (props: ModifyProps) => {
 
   const initLoadData = () => {
     const queryJson = { customerId: data.customerId };
-    const sidx = "code";
+    const sidx = "state";
     const sord = "asc";
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(
@@ -84,7 +84,7 @@ const Modify = (props: ModifyProps) => {
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.sord = order === "descend" ? "desc" : "asc";
-      searchCondition.sidx = field ? field : 'code';
+      searchCondition.sidx = field ? field : 'state';
     }
     return load(searchCondition).then(res => {
       return res;
@@ -95,20 +95,21 @@ const Modify = (props: ModifyProps) => {
     loadData(pagination, sorter);
   };
 
-  const doDelete = record => {
-    Modal.confirm({
-      title: "请确认",
-      content: `您确定要删除吗？`,
-      onOk: () => {
-        RemoveItemForm(record.id)
-          .then(() => {
-            message.success("删除成功");
-            initLoadData();
-          })
-          .catch(e => { });
-      }
-    });
-  };
+  // //解绑
+  // const doCancle = record => {
+  //   Modal.confirm({
+  //     title: "请确认",
+  //     content: `您确定要解绑${record.code}？`,
+  //     onOk: () => {
+  //       RemoveItemForm(record.id)
+  //         .then(() => {
+  //           message.success("解绑成功");
+  //           initLoadData();
+  //         })
+  //         .catch(e => { });
+  //     }
+  //   });
+  // };
 
 
   const columns = [
@@ -116,37 +117,41 @@ const Modify = (props: ModifyProps) => {
       title: "房产编号",
       dataIndex: "code",
       key: "code",
-      width: 120,
+      width: 140,
     },
     {
       title: "房产面积",
       dataIndex: "area",
       key: "area",
-      width: 80
-    }, 
+      width: 100
+    },
     {
       title: "状态",
       dataIndex: "state",
       key: "state",
-      width: 60
+      width: 80
     },
     {
       title: "房产全称",
       dataIndex: "allName",
-      key: "allName", 
+      key: "allName",
     },
-    {
-      title: "操作",
-      dataIndex: "operation",
-      key: "operation",
-      align: 'center',
-      width: 85,
-      render: (text, record) => {
-        return [
-          <a onClick={() => doDelete(record)} key="delete">解绑</a>
-        ];
-      }
-    }
+    // {
+    //   title: "操作",
+    //   dataIndex: "operation",
+    //   key: "operation",
+    //   align: 'center',
+    //   width: 85,
+    //   render: (text, record) => {
+    //     if (record.state == '历史') {
+    //       return null;
+    //     } else {
+    //       return [
+    //         <a onClick={() => doCancle(record)} key="cancle">解绑</a>
+    //       ];
+    //     }
+    //   }
+    // }
   ] as ColumnProps<any>[];
 
   return (
@@ -222,6 +227,24 @@ const Modify = (props: ModifyProps) => {
           }
         />
       </Card>
+      <div
+        style={{
+          position: 'absolute',
+          left: 0,
+          bottom: 0,
+          width: '100%',
+          zIndex: 999,
+          borderTop: '1px solid #e9e9e9',
+          padding: '10px 16px',
+          background: '#fff',
+          textAlign: 'right',
+        }}
+      >
+        <Button style={{ marginRight: 8 }}
+          onClick={closeDrawer}  >
+          关闭
+        </Button>
+      </div>
     </Drawer>
 
   );

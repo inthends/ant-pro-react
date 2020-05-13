@@ -116,14 +116,10 @@ function ListTable(props: ListTableProps) {
       dataIndex: "operation",
       key: "operation",
       align: 'center',
-      width: 100,
+      width: 65,
       render: (text, record) => {
-        return [
-          <span>
-            <a onClick={() => doModify(record)} key="modify">编辑</a>
-            <Divider type="vertical" key='divider' />
-            <a onClick={() => doDelete(record)} key="delete">删除</a>
-          </span>
+        return [ 
+            <a onClick={() => doModify(record)} key="modify">查看</a> 
         ];
       }
     }
