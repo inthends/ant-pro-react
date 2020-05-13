@@ -147,11 +147,11 @@ const Modify = (props: ModifyProps) => {
                   <Col span={8}>
                     <Form.Item required label="生成方式">
                       {getFieldDecorator('calType', {
-                        initialValue: infoDetail.calType ? infoDetail.calType : "按户生成",
+                        initialValue: infoDetail.calType ? infoDetail.calType : "按房屋生成",
                         rules: [{ required: true, message: '请选择生成方式' }]
                       })(
                         <Select placeholder="==请选择==" style={{ width: '100%', marginRight: '5px' }}>
-                          <Select.Option value="按户生成">按户生成</Select.Option>
+                          {/* <Select.Option value="按户生成">按户生成</Select.Option> */}
                           <Select.Option value="按房屋生成">按房屋生成</Select.Option>
                         </Select>
                       )}

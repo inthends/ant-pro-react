@@ -441,7 +441,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
                       onChange={(e) => {
                         form.setFieldsValue({ ownerId: '' });
                         form.setFieldsValue({ ownerPhone: '' });
-                        form.setFieldsValue({ ownerUnitAllName: '' });
+                        form.setFieldsValue({ ownerUnitId: '' });
                       }}
                       addonAfter={<Icon type="setting" onClick={() => {
                         setCustomerType(1);
@@ -454,8 +454,8 @@ const ModifyParking = (props: ModifyParkingProps) => {
                     <input type='hidden' />
                   )}
 
-                  {getFieldDecorator('ownerUnitAllName', {
-                    initialValue: infoDetail.ownerUnitAllName,
+                  {getFieldDecorator('ownerUnitId', {
+                    initialValue: infoDetail.ownerUnitId,
                   })(
                     <input type='hidden' />
                   )}
@@ -480,33 +480,30 @@ const ModifyParking = (props: ModifyParkingProps) => {
                     //   onChange={tenantChange}
                     //   placeholder="请输入租户名称"
                     //   onSelect={onTenantSelect}
-                    // />
-
+                    // /> 
                     <Input
                       readOnly
                       allowClear
                       onChange={(e) => {
                         form.setFieldsValue({ tenantId: '' });
                         form.setFieldsValue({ tenantPhone: '' });
-                        form.setFieldsValue({ tenantUnitAllName: '' });
+                        form.setFieldsValue({ tenantUnitId: '' });
                       }}
                       addonAfter={<Icon type="setting" onClick={() => {
                         setCustomerType(2);
                         setCustomerSelectVisible(true);
-                      }} />} />
-
+                      }} />} /> 
                   )}
                   {getFieldDecorator('tenantId', {
                     initialValue: infoDetail.tenantId,
                   })(
                     <input type='hidden' />
                   )}
-                  {getFieldDecorator('tenantUnitAllName', {
-                    initialValue: infoDetail.tenantUnitAllName,
+                  {getFieldDecorator('tenantUnitId', {
+                    initialValue: infoDetail.tenantUnitId,
                   })(
                     <input type='hidden' />
-                  )}
-
+                  )} 
                 </Form.Item>
               </Col>
             </Row>
@@ -671,13 +668,14 @@ const ModifyParking = (props: ModifyParkingProps) => {
             form.setFieldsValue({ ownerName: res.name });
             form.setFieldsValue({ ownerId: res.id });
             form.setFieldsValue({ ownerPhone: res.phoneNum });
-            form.setFieldsValue({ ownerUnitAllName: res.allName });
+            form.setFieldsValue({ ownerUnitId: res.unitId });
+            // form.setFieldsValue({ ownerUnitAllName: res.allName });
           } else {
             //租户
             form.setFieldsValue({ tenantName: res.name });
             form.setFieldsValue({ tenantId: res.id });
             form.setFieldsValue({ tenantPhone: res.phoneNum });
-            form.setFieldsValue({ tenantUnitAllName: res.allName });
+            form.setFieldsValue({ tenantUnitId: res.unitId });
           }
         }}
       />

@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { SaveDetail, GetReceivablesFeeItemTreeJson, SaveTempBill, GetShowDetail, Call } from './Main.service';
 import { GetUserRoomsByRelationId, GetRoomUsers, GetUserRooms, GetFeeItemDetail } from '@/services/commonItem';
 
-import LeftTree from '../LeftTree';
+import FeeItemLeftTree from '../FeeItemLeftTree';
 import moment from 'moment';
 import styles from './style.less';
 const { Option } = Select;
@@ -31,12 +31,16 @@ const FeeModify = (props: FeeModifyProps) => {
   const [relationIds, setRelationIds] = useState<any[]>([]);
   const [unitIds, setUnitIds] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  //房产id
+  const [unitId, setUnitId] = useState<any>('');
 
   // 打开抽屉时初始化
   useEffect(() => {
     // form.resetFields();
     if (modifyVisible) {
       setLoading(true);
+      setSelectedKeys([]);
+      setUnitId(roomId);
       if (id == '') {
         //修改的时候不能修改费项，不加载费项
         GetReceivablesFeeItemTreeJson(roomId).then(res => {
@@ -129,12 +133,10 @@ const FeeModify = (props: FeeModifyProps) => {
         //         setInfoDetail(info);
         //       }
         //     });
-        // });
-
+        // }); 
         // if (relationIds == null) {
         //   setInfoDetail({});
-        // }
-
+        // } 
         // GetReceivablesFeeItemTreeJson().then(res => {
         // const treeList = (res || []).map(item => {
         //   return Object.assign({}, item, {
@@ -333,8 +335,7 @@ const FeeModify = (props: FeeModifyProps) => {
     return current && current.isBefore(moment(form.getFieldValue('beginDate')), 'day');
   };
 
-  //缓存费项id
-  // const [feeItemId, setFeeItemId] = useState<any>();
+  const [selectedKeys, setSelectedKeys] = useState<any[]>([]);
 
   return (
     <Drawer
@@ -354,20 +355,24 @@ const FeeModify = (props: FeeModifyProps) => {
                 overflow: 'visible', position: 'relative',
                 height: 'calc(100vh - 35px)',
               }}>
-                <LeftTree
+                <FeeItemLeftTree
                   treeData={feeTreeData}
+                  selectedKeys={selectedKeys}
                   selectTree={(id, item) => {
+                    setSelectedKeys([id]);
                     // setFeeItemId(id);//缓存费项id
-                    if (roomId) {
+                    if (unitId) {
                       setLoading(true);
-                      GetFeeItemDetail(id, roomId).then(res => {
+                      GetFeeItemDetail(id, unitId).then(res => {
                         if (res.feeItemId) {
                           // if (res.relationId != null) {
                           // var info = Object.assign({}, res, { feeItemId: id });
                           // console.log(info);
-                          //res.feeItemId = id;
+                          //res.feeItemId = id;  
+                          form.resetFields();
                           setInfoDetail(res);
                           setLoading(false);
+
                         } else {
                           message.warning(res);
                           setLoading(false);
@@ -379,7 +384,6 @@ const FeeModify = (props: FeeModifyProps) => {
                         //   return null;
                         // }
                       });
-
                       // .then(info => {
                       //   if (info !== null) {
                       //     GetUserRooms(getRelationId(info.relationId))
@@ -434,11 +438,20 @@ const FeeModify = (props: FeeModifyProps) => {
                         disabled={id === '' && edit ? false : true}
                         onSelect={(key) => {
                           setLoading(true);
+                          setUnitId(key);
                           //需要刷新费项
                           GetReceivablesFeeItemTreeJson(key).then(res => {
                             setFeeTreeData(res);
+ 
+                            //加载加费对象
+                            GetRoomUsers(key).then(res => {
+                              setRelationIds(res); 
+                            });
+ 
+                            //清除费项树选中
+                            setSelectedKeys([]);
                             setInfoDetail({});
-                            //选择房屋，加载房屋立面的费项单价和起止日期 
+                            //选择房屋，加载房屋里面的费项单价和起止日期 
                             // GetFeeItemDetail(feeItemId, key).then(res => {
                             //   if (res.feeItemId) {
                             //     setInfoDetail(res);
@@ -447,10 +460,8 @@ const FeeModify = (props: FeeModifyProps) => {
                             //     message.warning(res);
                             //     setLoading(false);
                             //   }
-                            // });
-
+                            // }); 
                             setLoading(false);
-
                           });
 
                         }}>
