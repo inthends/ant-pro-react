@@ -82,13 +82,14 @@ function Main() {
   const [orgType, setOrgType] = useState<string>();//类型
 
   //点击左侧树，加载数据
-  const doSelectTree = (orgId, type) => {
+  const doSelectTree = (orgId, type) => { 
     //初始化页码，防止页码错乱导致数据查询出错  
     const page = new DefaultPagination();
     if (tabIndex == "1") {
       //未收款
       // initLoadData(search, organizeId, showCustomerFee);
-      loadData(search, orgId, page);
+      if (type == 5 || type == 9)
+        loadData(search, orgId, page);
     }
     else if (tabIndex == "2") {
       //已收款
@@ -292,7 +293,7 @@ function Main() {
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'billId';
+      searchCondition.sidx = field ? field : 'billDate';
     }
     return loadChargeCheck(searchCondition).then(res => {
       return res;
@@ -301,7 +302,7 @@ function Main() {
 
   const loadChargeCheck = data => {
     setLoadingChargeCheck(true);
-    data.sidx = data.sidx || 'billId';
+    data.sidx = data.sidx || 'billDate';
     data.sord = data.sord || 'desc';
     return ChargeCheckPageData(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -327,7 +328,7 @@ function Main() {
       StartDate: chargedCheckSearchParams.startDate ? chargedCheckSearchParams.startDate : '',
       EndDate: chargedCheckSearchParams.endDate ? chargedCheckSearchParams.endDate : ''
     };
-    const sidx = 'billId';
+    const sidx = 'billDate';
     const sord = 'desc';
     const { current: pageIndex, pageSize, total } = paginationChargeCheck;
     return loadChargeCheck({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
@@ -428,8 +429,6 @@ function Main() {
     setBillModifyVisible(false);
   }
 
-
-
   // const onInvalid = () => {
   //   if (chargedRowSelectedKey == null || chargedRowSelectedKey == {}) {
   //     message.warning("请选择要作废的表单");
@@ -498,7 +497,6 @@ function Main() {
   };
 
   const [roomVisible, setRoomVisible] = useState<boolean>(false);
-
   //查看关联单据
   const showRoomDrawer = () => {
     setRoomVisible(true);
@@ -657,7 +655,6 @@ function Main() {
                   setChargedSearchParams(params);
                 }}
               />
-
               <AutoComplete
                 allowClear={true}
                 dataSource={userList}
@@ -667,7 +664,6 @@ function Main() {
                 onChange={onReceiverNameChange}
                 style={{ width: '120px', marginRight: '5px' }}
               />
-
               <Select placeholder="收款单状态"
                 allowClear={true}
                 style={{ width: '120px', marginRight: '5px' }} onChange={(value) => {
@@ -799,7 +795,7 @@ function Main() {
 
             <ChargeCheckTable
               onchange={(paginationConfig, filters, sorter) =>
-                loadChargeCheckData(orgId, orgType,paginationConfig, sorter)
+                loadChargeCheckData(orgId, orgType, paginationConfig, sorter)
               }
               loading={loadingChargeCheck}
               pagination={paginationChargeCheck}

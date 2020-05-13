@@ -78,7 +78,6 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
         resolve();
         return;
       }
-
       setTimeout(() => {
         GetAsynChildBuildings(treeNode.props.eventKey, treeNode.props.type).then((res: any[]) => {
           treeNode.props.dataRef.children = res || [];
@@ -110,7 +109,6 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
     }
   };
 
-
   const renderTreeNodes = data =>
     data.map(item => {
       if (item.children) {
@@ -128,8 +126,8 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
     <Sider
       theme="light"
       style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh + 10px)' }}
-      width={hideSider ? 20 : 245}
-    >
+      width={hideSider ? 20 : 245}>
+
       {hideSider ? (
         <div style={{ position: 'absolute', top: '40%', left: 5 }}>
           <Icon
@@ -149,8 +147,7 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
                 borderBottom: 'none',
                 height: '100%',
                 overflowY: 'auto',
-              }}
-            >
+              }}>
 
               <Search placeholder="搜索房号或名称"
                 onSearch={value => loadUnitData(value)}
