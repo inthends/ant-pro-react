@@ -111,13 +111,12 @@ const Modify = (props: ModifyProps) => {
   //   });
   // };
 
-
   const columns = [
     {
       title: "房产编号",
       dataIndex: "code",
       key: "code",
-      width: 140,
+      width: 160,
     },
     {
       title: "房产面积",
@@ -161,11 +160,8 @@ const Modify = (props: ModifyProps) => {
       width={780}
       onClose={closeDrawer}
       visible={visible}
-      bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
-    >
-
+      bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }} >
       <PageHeader
-
         title={null}
         subTitle={
           <div>
@@ -175,8 +171,7 @@ const Modify = (props: ModifyProps) => {
         style={{
           border: '1px solid rgb(235, 237, 240)'
         }}
-        extra={[<img src={infoDetail.headImgUrl}></img>]}
-      >
+        extra={[<img src={infoDetail.headImgUrl}></img>]} >
         <Form layout='vertical'>
           <Row gutter={6}>
             <Col lg={3}>

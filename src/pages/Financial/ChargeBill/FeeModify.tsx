@@ -441,13 +441,12 @@ const FeeModify = (props: FeeModifyProps) => {
                           setUnitId(key);
                           //需要刷新费项
                           GetReceivablesFeeItemTreeJson(key).then(res => {
-                            setFeeTreeData(res);
- 
+                            setFeeTreeData(res); 
                             //加载加费对象
                             GetRoomUsers(key).then(res => {
-                              setRelationIds(res); 
+                              setRelationIds(res);
                             });
- 
+
                             //清除费项树选中
                             setSelectedKeys([]);
                             setInfoDetail({});
@@ -463,7 +462,6 @@ const FeeModify = (props: FeeModifyProps) => {
                             // }); 
                             setLoading(false);
                           });
-
                         }}>
 
                         {unitIds.map(item => (
@@ -496,7 +494,13 @@ const FeeModify = (props: FeeModifyProps) => {
                                 //form.setFieldsValue({ amount: quantity * number * Number(value) }); 
                                 //调用后台计算并且根据设置保留小数位
                                 const unitId = form.getFieldValue('unitId');
-                                Call({ unitId: unitId, feeItemId: infoDetail.feeItemId, price: value, quantity: quantity, number: number }).then(res => {
+                                Call({
+                                  unitId: unitId,
+                                  feeItemId: infoDetail.feeItemId,
+                                  price: value,
+                                  quantity: quantity,
+                                  number: number
+                                }).then(res => {
                                   form.setFieldsValue({ amount: res });
                                 });
                               }
