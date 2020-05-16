@@ -3,7 +3,7 @@
 import { DatePicker, Button, Card, Col, Drawer, Form, Input, message, Row, Select, TreeSelect } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { ExistEnCode, SaveForm } from './PStructUser.service';
+import { ExistCode, SaveForm } from './PStructUser.service';
 import { GetCommonItems, GetOrgs } from '@/services/commonItem';
 import styles from './style.less';
 const { Option } = Select;
@@ -78,8 +78,10 @@ const QuickModify = (props: QuickModifyProps) => {
   };
 
   const save = () => {
-    form.validateFields((errors, values) => {
+    form.validateFields((errors, values) => { 
+
       if (!errors) {
+
         const newData = data ? { ...data, ...values } : values;
         doSave(newData);
       }
@@ -104,7 +106,7 @@ const QuickModify = (props: QuickModifyProps) => {
     }
     else {
       const keyValue = infoDetail.id == undefined ? '' : infoDetail.id;
-      ExistEnCode(keyValue, value).then(res => {
+      ExistCode(keyValue, value).then(res => {
         if (res)
           callback('编号重复');
         else
@@ -112,7 +114,6 @@ const QuickModify = (props: QuickModifyProps) => {
       })
     }
   };
-
 
   return (
     <Drawer

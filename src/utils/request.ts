@@ -4,6 +4,8 @@
  */
 import { extend } from 'umi-request';
 import { notification } from 'antd';
+import router from 'umi/router';
+// const baseUrl = process.env.baseUrl;
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -29,20 +31,38 @@ const codeMessage = {
 const errorHandler = (error: { response: Response }): Response => {
   const { response } = error;
   if (response && response.status) {
+
     const errorText = codeMessage[response.status] || response.statusText;
-    const { status, url } = response;
-    notification.error({
-      message: `请求错误 ${status}: ${url}`,
-      description: errorText,
-    });
+    const { status } = response;
+    // const { status, url } = response;
+    // notification.error({
+    //   message: `请求错误 ${status}: ${url}`,
+    //   description: errorText,
+    // }); 
+
+    if (status != 502 && status != 503) {
+      //过滤较多的服务器异常提示，避免重复提示
+      notification.warn({
+        message: `请求错误 ${status}`,
+        description: errorText,
+      });
+    }
+
+    if (status >= 500) {
+      //跳转到登录页
+      window.sessionStorage.clear()
+      router.replace({
+        pathname: '/login'
+      });
+    }
   }
+
   else if (!response) {
-    notification.error({
+    notification.warn({
       description: '您的网络发生异常，无法连接服务器',
       message: '网络异常',
     });
   }
-
   return response;
 };
 
@@ -55,22 +75,27 @@ const request = extend({
 });
 
 // @ts-ignore 异常拦截器
-request.interceptors.response.use(async response => { 
-  const { status, headers } = response; 
-  if (status === 403) {
-    const redirect = headers.get('redirect') || '';
-    window.location.href = redirect;
-  }
-  else if (status === 200) { 
-    const { code, msg } = await response.clone().json(); 
-    if (code !== 200) {
-      notification.error({
-        message: `请求错误`,
-        description: msg,
-      });
-    }
-  }
-  return response;
+// request.interceptors.response.use(async response => {
+//   const { status, headers } = response;
+//   if (status === 403) {
+//     const redirect = headers.get('redirect') || '';
+//     window.location.href = redirect;
+//   }
+//   else if (status === 200) {
+//     const { code, msg } = await response.clone().json();
+//     if (code !== 200) {
+//       notification.error({
+//         message: `请求错误`,
+//         description: msg,
+//       });
+//     }
+//   }
+//   return response;
+// });
+
+// response拦截器, 处理response
+request.interceptors.response.use(async (response) => {
+  return response
 });
 
 export default request;
