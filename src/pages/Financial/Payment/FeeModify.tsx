@@ -225,7 +225,8 @@ const FeeModify = (props: FeeModifyProps) => {
                       initialValue: infoDetail.relationId == null ? null : infoDetail.relationId,// getRelationId(infoDetail.relationId),
                       rules: [{ required: true, message: '请选择付款对象' }]
                     })(
-                      <Select placeholder="=请选择=" disabled={isEdit || (id != "") ? false : true}
+                      <Select placeholder="=请选择=" 
+                       disabled={isEdit || (id != "") ? false : true}
                         onSelect={(key) => {
                           GetUserRoomsByRelationId(key).then(res => {
                             //加载房间列表
@@ -247,10 +248,10 @@ const FeeModify = (props: FeeModifyProps) => {
                 </Row>
                 <Row>
                   <Col>
-                    <Form.Item label="选择房屋" required labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} >
+                    <Form.Item label="选择物业" required labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} >
                       {getFieldDecorator('unitId', {
                         initialValue: infoDetail.unitId == null ? null : infoDetail.unitId,/*getUnitId(infoDetail.householdId)*/
-                        rules: [{ required: true, message: '请选择房屋' }]
+                        rules: [{ required: true, message: '请选择物业' }]
                       })(
                         <Select placeholder="=请选择=" disabled={isEdit || (id != "") ? false : true} >
                           {unitIds.map(item => (
@@ -439,7 +440,8 @@ const FeeModify = (props: FeeModifyProps) => {
             form.validateFields((errors, values) => {
               if (!errors) {
                 // var guid = getGuid();
-                let entity = {
+                let newData = {
+                  keyValue: id != null && id != "" ? infoDetail.billId : "",
                   billDate: moment(values.billDate).format('YYYY-MM-DD'),
                   endDate: moment(values.endDate).format('YYYY-MM-DD'),
                   billId: id != null && id != "" ? infoDetail.billId : "",
@@ -459,10 +461,10 @@ const FeeModify = (props: FeeModifyProps) => {
                   organizeId: adminOrgId,// organize.eventKey,
                   period: infoDetail.period
                 }
-                let newData = {
-                  keyValue: id != null && id != "" ? infoDetail.billId : "",
-                  entity: entity
-                }
+                // let newData = {
+                //   keyValue: id != null && id != "" ? infoDetail.billId : "",
+                //   entity: entity
+                // }
                 SaveForm(newData).then((res) => {
                   closeDrawer();
                   reload();

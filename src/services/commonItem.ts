@@ -185,8 +185,8 @@ export function GetUserRoomsByRelationId(data): Promise<any[]> {
 }
 
 //付款费项
-export function GetPayFeeItemDetail(feeitemId, roomId): Promise<any> {
-  return request.get(process.env.basePath + `/Common/GetPayFeeItemDetail?feeitemId=${feeitemId}&roomId=${roomId}`, {}).then(getResult as any);;
+export function GetPayFeeItemDetail(feeItemId, unitId): Promise<any> {
+  return request.get(process.env.basePath + `/Common/GetPayFeeItemDetail?feeItemId=${feeItemId}&unitId=${unitId}`, {}).then(getResult as any);;
 }
 
 //加载全部checkbox巡检点位
@@ -194,8 +194,8 @@ export function GetPointTreeAll(): Promise<ResponseObject<TreeEntity[]>> {
   return request.get(process.env.basePath + `/Common/GetPointTreeAll`, {});
 }
 
-export function GetFeeItemDetail(feeItemId, roomId): Promise<any> {
-  return request.get(process.env.basePath + `/Common/GetFeeItemDetail?feeItemId=${feeItemId}&roomId=${roomId}`, {}).then(getResult as any);;
+export function GetFeeItemDetail(feeItemId, unitId): Promise<any> {
+  return request.get(process.env.basePath + `/Common/GetFeeItemDetail?feeItemId=${feeItemId}&unitId=${unitId}`, {}).then(getResult as any);;
 }
 
 //获取费项类型

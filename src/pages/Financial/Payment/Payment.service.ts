@@ -4,7 +4,8 @@ import request from '@/utils/request';
 
 //保存应付款
 export function SaveForm(data): Promise<any> {
-  return request.post(process.env.basePath + `/Payment/SaveForm?keyValue=${data.keyValue}`, {data:data.entity});
+  // return request.post(process.env.basePath + `/Payment/SaveForm?keyValue=${data.keyValue}`, {data:data.entity});
+  return request.post(process.env.basePath + `/Payment/SaveForm`, { data: objToFormdata(data) }).then(getResult as any);
 }
 
 //审批

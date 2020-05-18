@@ -410,7 +410,8 @@ const FeeModify = (props: FeeModifyProps) => {
                       initialValue: infoDetail.relationId == null ? null : infoDetail.relationId,// getRelationId(infoDetail.relationId),
                       rules: [{ required: true, message: '请选择加费对象' }]
                     })(
-                      <Select placeholder="=请选择=" disabled={id === '' && edit ? false : true}
+                      <Select placeholder="=请选择="
+                        disabled={id === '' && edit ? false : true}
                         onSelect={(key) => {
                           GetUserRoomsByRelationId(key).then(res => {
                             setUnitIds(res);
