@@ -306,19 +306,18 @@ const Modify = (props: ModifyProps) => {
       dataIndex: 'endDate',
       width: 100,
       render: val => val ? moment(val).format('YYYY-MM-DD') : ''
-    },
-
+    }, 
     {
       title: '周期',
       key: 'cycleValue',
       dataIndex: 'cycleValue',
-      width: 80
+      width: 60
     },
     {
       title: '周期单位',
       key: 'cycleType',
       dataIndex: 'cycleType',
-      width: 80
+      width: 70
     },
     {
       title: '备注',
@@ -405,15 +404,14 @@ const Modify = (props: ModifyProps) => {
     >
       <Spin tip="数据处理中..." spinning={loading}>
         <Card className={styles.card} >
-          <Form layout="vertical" hideRequiredMark>
-
+          <Form layout="vertical" hideRequiredMark> 
             <Row gutter={24}>
               <Col span={6}>
                 <Form.Item required label="计费单号">
                   {getFieldDecorator('billCode', {
                     initialValue: infoDetail.billCode,
                   })(
-                    <Input readOnly placeholder="自动获取单号" />
+                    <Input  disabled placeholder="自动获取单号" />
                   )}
                 </Form.Item>
               </Col>
@@ -432,24 +430,21 @@ const Modify = (props: ModifyProps) => {
                   {getFieldDecorator('createUserName', {
                     initialValue: infoDetail.createUserName ? infoDetail.createUserName : localStorage.getItem("name"),
                   })(
-                    <Input readOnly />
+                    <Input disabled />
                   )}
                 </Form.Item>
               </Col>
-
               <Col span={6}>
                 <Form.Item required label="状态"   >
                   {getFieldDecorator('ifVerify', {
                     initialValue: infoDetail.ifVerify == null || !infoDetail.ifVerify ? '未审核' : '已审核',
                   })(
-                    <Input readOnly></Input>
+                    <Input disabled></Input>
                   )}
                 </Form.Item>
-              </Col>
-
+              </Col> 
             </Row>
-            <Row gutter={24}>
-
+            <Row gutter={24}> 
               <Col span={12}>
                 <Form.Item required label="所属机构"  >
                   {getFieldDecorator('organizeId', {

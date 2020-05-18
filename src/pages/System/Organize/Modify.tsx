@@ -16,7 +16,7 @@ interface ModifyProps {
   reload(): void;
 }
 const Modify = (props: ModifyProps) => {
-  const { data, form,visible } = props;
+  const { data, form, visible } = props;
   const { getFieldDecorator } = form;
   const [managers, setManagers] = useState<SelectItem[]>([]);
   // const [types, setTypes] = useState<SelectItem[]>([
@@ -50,7 +50,7 @@ const Modify = (props: ModifyProps) => {
     GetOrgsWithNoGLC().then(res => {
       setOrgs(res);
     });
- 
+
     //加载图片
     let files: any[]; files = [];
     if (initData != null && initData.stampUrl != null) {
@@ -65,7 +65,7 @@ const Modify = (props: ModifyProps) => {
   }, [visible]);
 
 
-
+  const [posType, setPosType] = useState<string>('拉卡拉');
 
   const doSave = dataDetail => {
     let modifyData = { ...initData, ...dataDetail, keyValue: initData.organizeId };
@@ -153,7 +153,7 @@ const Modify = (props: ModifyProps) => {
   const uploadButton = (
     <div>
       <Icon type="plus" />
-      <div className="ant-upload-text">点击上传印章<br/>小于400像素</div>
+      <div className="ant-upload-text">点击上传印章<br />小于400像素</div>
     </div>
   );
 
@@ -307,21 +307,40 @@ const Modify = (props: ModifyProps) => {
                         value: '银盛',
                       }
                     ]}
+                  onChange={(value, option) => {
+                    setPosType(value);
+                  }}
                 ></ModifyItem>
-                <ModifyItem  {...baseFormProps} field="lklMchId" label="拉卡拉商户号"></ModifyItem>
               </Row>
-              <Row gutter={24}>
-                <ModifyItem  {...baseFormProps} field="yseMchId" label="银盛商户号"></ModifyItem>
-                <ModifyItem  {...baseFormProps} field="swiftMchId" label="威富通商户号"></ModifyItem>
-              </Row>
+              {posType == '拉卡拉' ?
+                (<>
+                  <Row gutter={24}>
+                    <ModifyItem  {...baseFormProps} field="lklMchId" label="拉卡拉商户号"></ModifyItem>
+                    <ModifyItem  {...baseFormProps} field="lklMchName" label="拉卡拉商户名称"></ModifyItem>
+                  </Row>
+                  <Row gutter={24}>
+                    <ModifyItem  {...baseFormProps} field="swiftMchId" label="威富通商户号"></ModifyItem>
+                    <ModifyItem  {...baseFormProps} field="swiftMchName" label="威富通商户名称"></ModifyItem>
+                  </Row>
+                  <Row gutter={24}>
+                    <ModifyItem {...baseFormProps} field="swiftPlatPublicKey" label="威富通平台公钥"></ModifyItem>
+                    <ModifyItem {...baseFormProps} field="swiftMchPrivateKey" label="威富通私钥"></ModifyItem>
+                  </Row>
+                </>
+                )
+                : (<><Row gutter={24}>
+                  <ModifyItem  {...baseFormProps} field="yseMchId" label="银盛商户号"></ModifyItem>
+                  <ModifyItem  {...baseFormProps} field="yseMchName" label="银盛商户名称"></ModifyItem>
+                </Row>
+                </>
+                )}
+
               {/* <Row gutter={24}> 
            <ModifyItem {...baseFormProps} field="lklPlatPublicKey" label="拉卡拉公钥"></ModifyItem> 
             <ModifyItem {...baseFormProps} field="lklMchPrivateKey" label="拉卡拉私钥"></ModifyItem>
           </Row>*/}
-              <Row gutter={24}>
-                <ModifyItem {...baseFormProps} field="swiftPlatPublicKey" label="威富通平台公钥"></ModifyItem>
-                <ModifyItem {...baseFormProps} field="swiftMchPrivateKey" label="威富通私钥"></ModifyItem>
-              </Row>
+
+
             </Card>
           </TabPane>
 
