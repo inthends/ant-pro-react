@@ -183,7 +183,7 @@ const PointContentModify = (props: PointContentModifyProps) => {
             <Col lg={5}>
               <Form.Item label="单位" required>
                 {getFieldDecorator('unit', {
-                  initialValue: infoDetail.unit == null ? 1 : infoDetail.unit
+                  initialValue: infoDetail.unit == null ? '天' : infoDetail.unit
                 })(
                   <Select
                     onChange={(value, option) => {
@@ -191,9 +191,10 @@ const PointContentModify = (props: PointContentModifyProps) => {
                         setIsDay(true);
                       else {
                         setIsDay(false);
-                        form.setFieldsValue({ frequency: 1 });
+                        // form.setFieldsValue({ frequency: 1 });
                       }
-                    }} >
+                    }}
+                  >
 
                     <Option value='天'>天</Option>
                     <Option value='月'>月</Option>
@@ -205,9 +206,9 @@ const PointContentModify = (props: PointContentModifyProps) => {
               <Form.Item label="次" required>
                 {getFieldDecorator('frequency', {
                   initialValue: infoDetail.frequency == null ? 1 : infoDetail.frequency,
-                  rules: [{ required: isDay, message: '请输入次数' }],
+                  rules: [{ required: true, message: '请输入次数' }],
                 })(<InputNumber
-                  readOnly={!isDay}
+                  // readOnly={!isDay}
                   placeholder="请输入次数"
                   style={{ width: '100%' }}
                   precision={0}

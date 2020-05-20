@@ -181,21 +181,20 @@ const Modify = (props: ModifyProps) => {
       title: '序号',
       dataIndex: 'sort',
       key: 'sort',
-      width: 60,
+      width: 50,
     },
     {
       title: '点位编号',
       dataIndex: 'code',
       key: 'code',
-      width: 120,
+      width: 160,
     },
     {
       title: '点位名称',
       dataIndex: 'name',
       key: 'name',
       width: 200,
-    },
-    
+    }, 
     {
       title: '描述',
       dataIndex: 'allName',
