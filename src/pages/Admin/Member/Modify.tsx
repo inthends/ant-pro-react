@@ -1,8 +1,8 @@
 
-import { Divider, PageHeader, Drawer, Col, Button, Card, Form, Row, Table } from "antd";
+import { message, Modal, Divider, PageHeader, Drawer, Col, Button, Card, Form, Row, Table } from "antd";
 import { WrappedFormUtils } from "antd/lib/form/Form";
 import React, { useEffect, useState } from "react";
-import { GetUnitPageListJson } from "./Member.service";
+import { RemoveUnitForm, GetUnitPageListJson } from "./Member.service";
 import { DefaultPagination } from "@/utils/defaultSetting";
 import { ColumnProps, PaginationConfig } from "antd/lib/table";
 import styles from './style.less';
@@ -37,7 +37,7 @@ const Modify = (props: ModifyProps) => {
 
   const load = formData => {
     setLoading(true);
-    formData.sidx = formData.sidx || "state";
+    formData.sidx = formData.sidx || "code";
     formData.sord = formData.sord || "asc";
     return GetUnitPageListJson(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -56,8 +56,8 @@ const Modify = (props: ModifyProps) => {
   };
 
   const initLoadData = () => {
-    const queryJson = { customerId: data.customerId };
-    const sidx = "state";
+    const queryJson = { memberId: data.id };
+    const sidx = "code";
     const sord = "asc";
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(
@@ -78,13 +78,13 @@ const Modify = (props: ModifyProps) => {
       pageIndex,
       pageSize,
       total,
-      queryJson: { customerId: data.customerId },
+      queryJson: { memberId: data.id },
     };
 
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.sord = order === "descend" ? "desc" : "asc";
-      searchCondition.sidx = field ? field : 'state';
+      searchCondition.sidx = field ? field : 'code';
     }
     return load(searchCondition).then(res => {
       return res;
@@ -95,21 +95,21 @@ const Modify = (props: ModifyProps) => {
     loadData(pagination, sorter);
   };
 
-  // //解绑
-  // const doCancle = record => {
-  //   Modal.confirm({
-  //     title: "请确认",
-  //     content: `您确定要解绑${record.code}？`,
-  //     onOk: () => {
-  //       RemoveItemForm(record.id)
-  //         .then(() => {
-  //           message.success("解绑成功");
-  //           initLoadData();
-  //         })
-  //         .catch(e => { });
-  //     }
-  //   });
-  // };
+  //解绑
+  const doCancle = record => {
+    Modal.confirm({
+      title: "请确认",
+      content: `您确定要解绑${record.code}？`,
+      onOk: () => {
+        RemoveUnitForm(record.id)
+          .then(() => {
+            message.success("解绑成功");
+            initLoadData();
+          })
+          .catch(e => { });
+      }
+    });
+  };
 
   const columns = [
     {
@@ -125,32 +125,43 @@ const Modify = (props: ModifyProps) => {
       width: 100
     },
     {
-      title: "状态",
-      dataIndex: "state",
-      key: "state",
-      width: 80
+      title: "默认房屋",
+      dataIndex: "isDefault",
+      key: "isDefault",
+      width: 80,
+      align:'center',
+      render: val => val ? '是' : '否'
+    },
+    {
+      title: "类型",
+      dataIndex: "memberType",
+      key: "memberType",
+      width: 60,
+      align:'center',
+      render: val => val == 1 ? '业主' : '住户'
     },
     {
       title: "房产全称",
       dataIndex: "allName",
       key: "allName",
     },
-    // {
-    //   title: "操作",
-    //   dataIndex: "operation",
-    //   key: "operation",
-    //   align: 'center',
-    //   width: 85,
-    //   render: (text, record) => {
-    //     if (record.state == '历史') {
-    //       return null;
-    //     } else {
-    //       return [
-    //         <a onClick={() => doCancle(record)} key="cancle">解绑</a>
-    //       ];
-    //     }
-    //   }
-    // }
+    {
+      title: "操作",
+      dataIndex: "operation",
+      key: "operation",
+      align: 'center',
+      width: 70,
+      render: (text, record) => {
+        // if (record.state == '历史') {
+        //   return null;
+        // } else {
+        //   return [
+        //     <a onClick={() => doCancle(record)} key="cancle">解绑</a>
+        //   ];
+        // }
+        return <a onClick={() => doCancle(record)} key="cancle">解绑</a>;
+      }
+    }
   ] as ColumnProps<any>[];
 
   return (
@@ -201,8 +212,8 @@ const Modify = (props: ModifyProps) => {
             </Col>
           </Row>
         </Form>
-        <Divider dashed />
-        {infoDetail.allName}
+        {/* <Divider dashed />
+        {infoDetail.allName} */}
       </PageHeader>
       <Divider dashed />
 

@@ -119,7 +119,7 @@ function ListTable(props: ListTableProps) {
       width: 65,
       render: (text, record) => {
         return [ 
-            <a onClick={() => doModify(record)} key="modify">查看</a> 
+            <a onClick={() => doModify(record)} key="modify">编辑</a> 
         ];
       }
     }
