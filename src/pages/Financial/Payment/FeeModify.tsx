@@ -30,12 +30,12 @@ const FeeModify = (props: FeeModifyProps) => {
   const [unitIds, setUnitIds] = useState<any[]>([]);
   const title = id ? "修改应付费用" : "新增应付费用";
 
-  useEffect(() => {
-    //付款费项不控制房间
-    GetTempPaymentFeeItemTreeJson().then(res => {
-      setFeeTreeData(res);
-    });
-  }, []);
+  // useEffect(() => {
+  //   //付款费项不控制房间
+  //   GetTempPaymentFeeItemTreeJson().then(res => {
+  //     setFeeTreeData(res);
+  //   });
+  // }, []);
 
   useEffect(() => {
     if (visible) {
@@ -45,6 +45,7 @@ const FeeModify = (props: FeeModifyProps) => {
       // setInfoDetail({});//数据重置
       setLoading(true);
       if (id) {
+
         // GetRoomUsers(organize.code).then(res => {
         //   setRelationID(res);
         //   return res;
@@ -88,6 +89,12 @@ const FeeModify = (props: FeeModifyProps) => {
         });
 
       } else {
+
+         //修改的时候不能修改费项，不加载费项
+        GetTempPaymentFeeItemTreeJson().then(res => {
+          setFeeTreeData(res);
+        });
+
         // setInfoDetail({});
         // if (organize.eventKey) {
         //获取客户
@@ -225,8 +232,8 @@ const FeeModify = (props: FeeModifyProps) => {
                       initialValue: infoDetail.relationId == null ? null : infoDetail.relationId,// getRelationId(infoDetail.relationId),
                       rules: [{ required: true, message: '请选择付款对象' }]
                     })(
-                      <Select placeholder="=请选择=" 
-                       disabled={isEdit || (id != "") ? false : true}
+                      <Select placeholder="=请选择="
+                        disabled={isEdit || (id != "") ? false : true}
                         onSelect={(key) => {
                           GetUserRoomsByRelationId(key).then(res => {
                             //加载房间列表

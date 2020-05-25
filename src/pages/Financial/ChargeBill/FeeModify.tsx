@@ -41,15 +41,9 @@ const FeeModify = (props: FeeModifyProps) => {
       setLoading(true);
       setSelectedKeys([]);
       setUnitId(roomId);
-      if (id == '') {
-        //修改的时候不能修改费项，不加载费项
-        GetReceivablesFeeItemTreeJson(roomId).then(res => {
-          setFeeTreeData(res);
-        });
-      }
-
-      // if (id != null && id != "") {
+ 
       if (id) {
+        
         // var infoTemp = {}; 
         // GetShowDetail(id).then(res => {
         //   infoTemp = Object.assign({}, res.entity, { number: res.number });
@@ -101,6 +95,12 @@ const FeeModify = (props: FeeModifyProps) => {
         });
 
       } else {
+
+        //修改的时候不能修改费项，不加载费项
+        GetReceivablesFeeItemTreeJson(roomId).then(res => {
+          setFeeTreeData(res);
+        });
+
         GetRoomUsers(roomId).then(res => {
           setRelationIds(res);
           if (res.length > 0) {
@@ -442,7 +442,7 @@ const FeeModify = (props: FeeModifyProps) => {
                           setUnitId(key);
                           //需要刷新费项
                           GetReceivablesFeeItemTreeJson(key).then(res => {
-                            setFeeTreeData(res); 
+                            setFeeTreeData(res);
                             //加载加费对象
                             GetRoomUsers(key).then(res => {
                               setRelationIds(res);
