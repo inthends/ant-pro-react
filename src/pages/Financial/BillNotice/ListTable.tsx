@@ -1,6 +1,6 @@
 //通知单
 import Page from '@/components/Common/Page';
-import { Modal, message, Divider, Form, Table } from 'antd';
+import {Tag, Modal, message, Divider, Form, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState } from 'react';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
@@ -60,13 +60,13 @@ function ListTable(props: ListTableProps) {
       sorter: true,
       render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
-    {
-      title: '房产编号',
-      dataIndex: 'unitCode',
-      key: 'unitCode',
-      width: 140,
-      sorter: true,
-    },
+    // {
+    //   title: '房产编号',
+    //   dataIndex: 'unitCode',
+    //   key: 'unitCode',
+    //   width: 140,
+    //   sorter: true,
+    // },
     {
       title: '业户名称',
       dataIndex: 'custName',
@@ -80,14 +80,31 @@ function ListTable(props: ListTableProps) {
       key: 'allAmount',
       width: 100
     },
-
+    {
+      title: '减免金额',
+      dataIndex: 'reductionAmount',
+      key: 'reductionAmount',
+      width: 100
+    },
+    {
+      title: '冲抵金额',
+      dataIndex: 'offsetAmount',
+      key: 'offsetAmount',
+      width: 100
+    },
+    {
+      title: '应收金额',
+      dataIndex: 'lastAmount',
+      key: 'lastAmount',
+      width: 100
+    },
     {
       title: '缴费状态',
       dataIndex: 'isClear',
       key: 'isClear',
       width: 80,
       align: 'center',
-      render: val => val ? '已缴' : '未缴'
+      render: val => val ? <Tag color="#19d54e">已缴</Tag> : <Tag color="#e4aa5b">未缴</Tag>
     },
     {
       title: '审核状态',
@@ -117,13 +134,13 @@ function ListTable(props: ListTableProps) {
       key: 'verifyMemo',
       width: 100,
     },
-    {
-      title: '交房日期',
-      dataIndex: 'handoverDate',
-      key: 'handoverDate',
-      width: 120, 
-      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
-    },
+    // {
+    //   title: '交房日期',
+    //   dataIndex: 'handoverDate',
+    //   key: 'handoverDate',
+    //   width: 120, 
+    //   render: val => val ? moment(val).format('YYYY-MM-DD') : ''
+    // },
     {
       title: '备注',
       dataIndex: 'memo',

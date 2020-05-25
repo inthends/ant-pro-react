@@ -126,7 +126,7 @@ function ListTable(props: ListTableProps) {
       overlay={
         <Menu onClick={({ key }) => editAndDelete(key, item)}>
           <Menu.Item key="export">导出</Menu.Item>
-          <Menu.Item key="check">对账</Menu.Item>
+          {item.status == 0 ? <Menu.Item key="check">对账</Menu.Item> : null}
         </Menu>}>
       <a>
         更多 <Icon type="down" />

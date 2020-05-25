@@ -1,8 +1,8 @@
 //明细
 import Page from '@/components/Common/Page';
-import {  Form, Table } from 'antd';
+import { Form, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
-import React  from 'react';
+import React from 'react';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import moment from 'moment';
 
@@ -25,7 +25,7 @@ function DetailTable(props: DetailTableProps) {
       title: '单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 180,
+      width: 220,
       sorter: true
     },
     {
@@ -43,13 +43,7 @@ function DetailTable(props: DetailTableProps) {
       width: 150,
       sorter: true,
     },
-    {
-      title: '单元全称',
-      dataIndex: 'allName',
-      key: 'allName',
-      width: 220,
-      sorter: true,
-    },
+
     {
       title: '收费项目',
       dataIndex: 'feeName',
@@ -65,18 +59,24 @@ function DetailTable(props: DetailTableProps) {
       width: 100
     },
     {
-      title: '冲抵金额',
-      dataIndex: 'offesetAmount',
-      key: 'offesetAmount',
-      sorter: true,
-      width: 100
-    },
-    {
       title: '减免金额',
       dataIndex: 'reductionAmount',
       key: 'reductionAmount',
       width: 100,
       sorter: true
+    },
+    {
+      title: '冲抵金额',
+      dataIndex: 'offsetAmount',
+      key: 'offsetAmount',
+      sorter: true,
+      width: 100
+    },
+    {
+      title: '应收金额',
+      dataIndex: 'lastAmount',
+      key: 'lastAmount',
+      width: 100
     },
     {
       title: '计费起始日期',
@@ -92,6 +92,11 @@ function DetailTable(props: DetailTableProps) {
       width: 120,
       sorter: true,
       render: val => val ? moment(val).format('YYYY-MM-DD') : ''
+    },
+    {
+      title: '单元全称',
+      dataIndex: 'allName',
+      key: 'allName'
     }
   ] as ColumnProps<any>[];
 
@@ -104,7 +109,7 @@ function DetailTable(props: DetailTableProps) {
         dataSource={data}
         rowKey="id"
         pagination={pagination}
-        scroll={{ y: 500, x: 1400 }}
+        scroll={{ y: 500, x: 1600 }}
         loading={loading}
         onChange={onchange}
       />

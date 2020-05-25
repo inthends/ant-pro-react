@@ -130,13 +130,6 @@ const Show = (props: ShowProps) => {
       width: 100,
       sorter: true,
     },
-    // {
-    //   title: '已收金额',
-    //   dataIndex: 'receivedAmount',
-    //   key: 'receivedAmount',
-    //   sorter: true,
-    //   width: 100
-    // },
     {
       title: '冲抵金额',
       key: 'offsetAmount',
@@ -147,6 +140,12 @@ const Show = (props: ShowProps) => {
       title: '减免金额',
       key: 'reductionAmount',
       dataIndex: 'reductionAmount',
+      width: 100
+    },
+    {
+      title: '应收金额',
+      dataIndex: 'lastAmount',
+      key: 'lastAmount',
       width: 100
     },
     {
