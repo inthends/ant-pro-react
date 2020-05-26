@@ -23,11 +23,18 @@ const Check = (props: CheckProps) => {
       return;
     }
 
-    const newData = { keyValue: id, uploadFile: form.getFieldValue('uploadFile') };
-    CheckBill(newData).then(res => {
-      message.success('对账成功');
-      closeModal();
-      reload();
+    Modal.confirm({
+      title: '请确认',
+      content: '请确认上传数据的准确性，一旦对账无法撤回',
+      onOk: () => {
+
+        const newData = { keyValue: id, uploadFile: form.getFieldValue('uploadFile') };
+        CheckBill(newData).then(res => {
+          message.success('对账完成，请在列表页查看对账详情');
+          closeModal();
+          reload();
+        });
+      }
     });
   }
 
@@ -43,6 +50,8 @@ const Check = (props: CheckProps) => {
     //   authorization: 'authorization-text',
     // },
     onChange(info) {
+
+
       // if (info.fileList.length > 1) {
       //   message.error('只允许上传一个文件，请删除一个'); 
       // } 
@@ -53,10 +62,11 @@ const Check = (props: CheckProps) => {
         message.success(`${info.file.name} 上传成功`);
         //设置项目图片 
         form.setFieldsValue({ uploadFile: info.file.response });
-        setIsUpload(true); 
+        setIsUpload(true);
       } else if (info.file.status === 'error') {
         message.error(`${info.file.name} 上传失败`);
       }
+
     },
     onRemove(info) {
       setIsUpload(false);
