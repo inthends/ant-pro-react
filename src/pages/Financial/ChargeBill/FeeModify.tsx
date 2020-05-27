@@ -41,9 +41,9 @@ const FeeModify = (props: FeeModifyProps) => {
       setLoading(true);
       setSelectedKeys([]);
       setUnitId(roomId);
- 
+
       if (id) {
-        
+
         // var infoTemp = {}; 
         // GetShowDetail(id).then(res => {
         //   infoTemp = Object.assign({}, res.entity, { number: res.number });
@@ -207,7 +207,7 @@ const FeeModify = (props: FeeModifyProps) => {
           Quantity: values.quantity,
           Price: values.price,
           Amount: values.amount,
-          Number: values.number,
+          Number: values.number, 
           // Period: moment(values.period).format("YYYY-MM-DD"),//"2019-04-08",
           BeginDate: values.beginDate == null ? null : moment(values.beginDate).format("YYYY-MM-DD"),//"2019-04-01",
           EndDate: values.endDate == null ? null : moment(values.endDate).format("YYYY-MM-DD"),//"2019-04-30",
@@ -220,11 +220,16 @@ const FeeModify = (props: FeeModifyProps) => {
         }
 
         if (id != null && id != "") {
+          //修改
           unit = Object.assign({}, unit, { Id: id, keyValue: id });
           SaveDetail(unit).then(res => {
             close(true);
           })
-        } else {
+
+        } 
+        else {
+
+          //临时加费
           let units: any[];
           units = [];
           units.push(unit);

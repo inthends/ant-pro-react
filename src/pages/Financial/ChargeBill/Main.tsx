@@ -225,7 +225,7 @@ function Main() {
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'createDate';
+      searchCondition.sidx = field ? field : 'billDate';
     }
     return loadCharge(searchCondition).then(res => {
       return res;
@@ -234,7 +234,7 @@ function Main() {
 
   const loadCharge = data => {
     setLoadingCharge(true);
-    data.sidx = data.sidx || 'createDate';
+    data.sidx = data.sidx || 'billDate';
     data.sord = data.sord || 'desc';
     return ChargeFeePageData(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -262,7 +262,7 @@ function Main() {
       EndDate: chargedSearchParams.endDate ? chargedSearchParams.endDate : '',
       receiverId: chargedSearchParams.receiverId ? chargedSearchParams.receiverId : ''
     };
-    const sidx = 'createDate';
+    const sidx = 'billDate';
     const sord = 'desc';
     const { current: pageIndex, pageSize, total } = paginationCharge;
     return loadCharge({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
