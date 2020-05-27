@@ -171,6 +171,7 @@ const PointContentModify = (props: PointContentModifyProps) => {
                   initialValue: infoDetail.unitNum == null ? 1 : infoDetail.unitNum,
                   rules: [{ required: true, message: '请输入频次' }],
                 })(<InputNumber
+                  readOnly={!isDay}
                   placeholder="请输入频次"
                   style={{ width: '100%' }}
                   precision={0}
@@ -197,6 +198,7 @@ const PointContentModify = (props: PointContentModifyProps) => {
                   >
 
                     <Option value='天'>天</Option>
+                    <Option value='周'>周</Option>
                     <Option value='月'>月</Option>
                   </Select>
                 )}
@@ -268,7 +270,7 @@ const PointContentModify = (props: PointContentModifyProps) => {
                   initialValue: infoDetail.timeSplit == null ? 1 : infoDetail.timeSplit
                 })(
                   <Select
-                    disabled={!isDay}   >
+                    disabled={!isDay}>
                     <Option value={1}>当日</Option>
                     <Option value={2}>次日</Option>
                   </Select>
