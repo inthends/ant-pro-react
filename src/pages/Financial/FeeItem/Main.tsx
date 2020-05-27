@@ -2,7 +2,7 @@
 // import Page from '@/components/Common/Page';
 import { DefaultPagination } from '@/utils/defaultSetting';
 // import { getResult } from '@/utils/networkUtils';
-import { Tabs, Button, Icon, Input, Layout, Select } from 'antd';
+import { Tabs,   Icon, Input, Layout, Select } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useContext, useEffect, useState } from 'react';
 import { GetFeeTreeList, GetPageListJson, GetUnitFeeItemData, GetAllFeeItems } from './Main.service';
@@ -13,6 +13,7 @@ import Modify from './Modify';
 import HouseInfoList from './HouseInfoList';
 import { SiderContext } from '../../SiderContext';
 import { getResult } from '@/utils/networkUtils';
+import AuthButton from '@/components/AuthButton/AuthButton';
 const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
@@ -102,6 +103,7 @@ function Main() {
 
     initLoadData('', '', '');
     initHouseLoadData('', '', '');
+
   }, []);
 
   const closeDrawer = () => {
@@ -300,12 +302,24 @@ function Main() {
                 style={{ width: 200 }}
                 onSearch={value => loadData(value, FeeKind, FeeType)}
               />
-              <Button type="primary" style={{ float: 'right' }} key='add'
+
+              {/* <Button type="primary" style={{ float: 'right' }} key='add'
                 onClick={() => { showDrawer(); }}
               >
                 <Icon type="plus" />
                 费项
-                </Button>
+                </Button> */}
+
+              <AuthButton
+                style={{ float: 'right' }}
+                onClick={() => showDrawer()}
+                module="Feeitem"
+                code="add"
+                btype="primary">
+                <Icon type="plus" />
+                费项
+               </AuthButton>
+
             </div>
 
             <ListTable

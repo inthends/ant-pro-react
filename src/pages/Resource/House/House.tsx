@@ -184,7 +184,8 @@ function House() {
             disabled={isDisabled}
             style={{ float: 'right' }}
             onClick={() => showDrawer()}
-            encode="lr-add"
+            module="PStruct"
+            code="add"
             btype="primary">
             <Icon type="plus" />
             项目

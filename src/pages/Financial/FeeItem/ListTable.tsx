@@ -4,6 +4,7 @@ import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import { RemoveForm } from './Main.service';
 import moment from 'moment';
+import AuthLink from '@/components/AuthLink/AuthLink';
 
 interface ListTableProps {
   onchange(page: any, filter: any, sort: any): any;
@@ -103,9 +104,12 @@ function ListTable(props: ListTableProps) {
       render: (text, record) => {
         return [
           <span key='buttons'>
-            <a onClick={() => modify(record.feeItemId)} key="modify">修改</a>
+            {/* <a onClick={() => modify(record.feeItemId)} key="modify">修改</a>
             <Divider type="vertical" key='divider' />
-            <a onClick={() => doDelete(record)} key="delete">删除</a>
+            <a onClick={() => doDelete(record)} key="delete">删除</a>   */}
+            <AuthLink onClick={() => modify(record.feeItemId)} module="Feeitem" code="modify">修改</AuthLink>
+            <Divider type="vertical" key='divider' />
+            <AuthLink onClick={() => doDelete(record)} module="Feeitem" code="delete">删除</AuthLink>
           </span>
         ];
       },

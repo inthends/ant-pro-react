@@ -3,7 +3,7 @@ import ModifyItem from "@/components/BaseModifyDrawer/ModifyItem";
 import { Form, Row, Card } from "antd";
 import { WrappedFormUtils } from "antd/lib/form/Form";
 import React, { useState, useEffect } from 'react';
-import { SaveContentForm ,GetCommonItemsNew} from "./Main.service";
+import { SaveContentForm, GetCommonItemsNew } from "./Main.service";
 import { GetOrgs } from '@/services/commonItem';
 import { TreeNode } from 'antd/lib/tree-select';
 
@@ -34,7 +34,7 @@ const Modify = (props: ModifyProps) => {
     GetOrgs().then(res => {
       setOrgs(res);
     });
-    
+
     GetCommonItemsNew('PollingType').then(res => {
       setPollingType(res || []);
     });
@@ -63,7 +63,7 @@ const Modify = (props: ModifyProps) => {
             ></ModifyItem>
           </Row>
           <Row gutter={24}>
-            <ModifyItem
+            {/* <ModifyItem
               {...baseFormProps}
               field="organizeId"
               label="所属机构"
@@ -71,7 +71,7 @@ const Modify = (props: ModifyProps) => {
               treeData={orgs}
               disabled={initData.organizeId != undefined}
               rules={[{ required: true, message: '请选择所属机构' }]}
-            ></ModifyItem>
+            ></ModifyItem> */}
             <ModifyItem
               {...baseFormProps}
               field="typeId"
@@ -86,20 +86,22 @@ const Modify = (props: ModifyProps) => {
             })(
               <input type='hidden' />
             )}
+            <ModifyItem
+              {...baseFormProps}
+              field="checkWay"
+              label="检查方法"
+              rules={[{ required: true, message: '请输入检查方法' }]}
+            ></ModifyItem>
           </Row>
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
               field="criterion"
               label="标准要求"
+              lg={24}
               rules={[{ required: true, message: "请输入标准要求" }]}
             ></ModifyItem>
-            <ModifyItem
-              {...baseFormProps}
-              field="checkWay"
-              label="检查方法"
-              rules={[{ required: true, message: '请选择频次单位' }]}
-            ></ModifyItem>
+
           </Row>
           <Row gutter={24}>
             <ModifyItem

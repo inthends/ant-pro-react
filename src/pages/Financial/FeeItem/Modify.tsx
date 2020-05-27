@@ -10,7 +10,7 @@ import {
   GetFormJson, GetAllFeeItems, GetOrganizePageList,
   GetUnitFeeItemData, SaveForm, GetFeeItemNames
 } from './Main.service';
-
+import AuthButton from '@/components/AuthButton/AuthButton';
 import { GetFeeType } from '@/services/commonItem';
 
 import styles from './style.less';
@@ -1145,7 +1145,7 @@ const Modify = (props: ModifyProps) => {
                         </Select>
                       )}
                     </Form.Item>
-                  </Col> 
+                  </Col>
                   <Col lg={7}>
                     <Form.Item label="最终结果保留小数位数">
                       {getFieldDecorator('lastResultScale', {
@@ -1746,9 +1746,19 @@ const Modify = (props: ModifyProps) => {
           <Button onClick={closeDrawer} style={{ marginRight: 8 }}>
             取消
         </Button>
-          <Button onClick={save} type="primary">
+          {/* <Button onClick={save} type="primary">
             提交
-        </Button>
+        </Button> */}
+
+
+          <AuthButton
+            onClick={save}
+            module="Feeitem"
+            code="submit"
+            btype="primary">
+            提交
+               </AuthButton>
+
         </div>
       </Form>
       <AddFormula

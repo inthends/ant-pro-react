@@ -55,12 +55,12 @@ function ListTable(props: ListTableProps) {
       key: "name",
       width: 200
     },
-    {
-      title: "所属机构",
-      dataIndex: "orgName",
-      key: "orgName",
-      width: 150
-    },
+    // {
+    //   title: "所属机构",
+    //   dataIndex: "orgName",
+    //   key: "orgName",
+    //   width: 150
+    // },
     {
       title: "标准要求",
       dataIndex: "criterion",
@@ -71,7 +71,7 @@ function ListTable(props: ListTableProps) {
       title: "检查方法",
       dataIndex: "checkWay",
       key: "checkWay",
-      width: 100
+      width: 200
     },
     // {
     //   title: "单位",
@@ -95,6 +95,7 @@ function ListTable(props: ListTableProps) {
       // dataIndex: "operation",
       key: "operation",
       align: 'center',
+      fixed: 'right',
       width: 95,
       render: (text, record) => {
         return [

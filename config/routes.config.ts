@@ -51,13 +51,13 @@ export default [
       //数据中心
       {
         name: 'dashboard',
-        path: '/dashboard',
+        path: '/dashboard', 
         component: './Dashboard/Dashboard',
         icon: 'bar-chart',
         routes: [
           {
             path: '/dashboard',
-            redirect: '/dashboard/analysis',
+            redirect: '/dashboard/analysis', 
           },
           {
             name: 'analysis',
