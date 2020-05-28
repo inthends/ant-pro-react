@@ -198,6 +198,14 @@ export function CheckRebateFee(data): Promise<any> {
     .then(getResult as any);
 }
 
+
+ //判断之前账单日是否已经勾选，不允许跨账单缴费
+export function CheckFeeBillDate(data): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Receivable/CheckFeeBillDate`, { data: objToFormdata(data) })
+    .then(getResult as any);
+}
+
 //送审的时候获取收款单列表
 export function GetReceiveList(data): Promise<any> {
   return request.post(process.env.basePath + `/Receivable/GetReceiveList`, { data: objToFormdata(data) }).then(getResult as any);

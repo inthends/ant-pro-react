@@ -235,7 +235,7 @@ function Main() {
   const loadCharge = data => {
     setLoadingCharge(true);
     data.sidx = data.sidx || 'billDate';
-    data.sord = data.sord || 'desc';
+    data.sord = data.sord || 'asc';
     return ChargeFeePageData(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPaginationCharge(pagesetting => {
@@ -263,7 +263,7 @@ function Main() {
       receiverId: chargedSearchParams.receiverId ? chargedSearchParams.receiverId : ''
     };
     const sidx = 'billDate';
-    const sord = 'desc';
+    const sord = 'asc';
     const { current: pageIndex, pageSize, total } = paginationCharge;
     return loadCharge({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
       return res;

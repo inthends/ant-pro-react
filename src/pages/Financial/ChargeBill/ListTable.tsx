@@ -5,7 +5,7 @@ import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import { CheckRebateFee, InvalidBillDetailForm, Charge, GetQrCode, GetPayState, CalFee } from './Main.service';
+import { CheckRebateFee, CheckFeeBillDate, InvalidBillDetailForm, Charge, GetQrCode, GetPayState, CalFee } from './Main.service';
 import { GetCommonItems } from '@/services/commonItem';
 // import QRCode from 'qrcode.react';
 // import styles from './style.less';
@@ -137,6 +137,22 @@ function ListTable(props: ListTableProps) {
 
   const onSelectChange = (selectedRowKeys, selectedRows) => {
     if (selectedRowKeys.length > 0) {
+ 
+      const checkdata = {
+        feeId: selectedRowKeys[0],
+        unitId: selectedRows[0].unitId,
+        selectFeeIds: JSON.stringify(selectedRowKeys)
+      };
+
+      //判断之前账单日是否已经勾选，不允许跨账单缴费
+      // CheckFeeBillDate(checkdata).then((res) => {
+      //   if (res) {
+      //     setIsDisabled(true);
+      //   } else {
+      //     setIsDisabled(false);
+      //   }
+      // })
+
       //如果该笔费用存在优惠，则需要选中与此费项有关的全部费用，一起缴款，否则给出提示 
       const data = {
         mainId: selectedRows[0].rmid,
@@ -158,7 +174,6 @@ function ListTable(props: ListTableProps) {
           setIsDisabled(false);
         }
       });
-
 
     } else {
       setIsDisabled(true);
@@ -703,7 +718,7 @@ function ListTable(props: ListTableProps) {
                     min={0}
                     max={hasSelected ? lastAmount - Number(form.getFieldValue('payAmountA')) - Number(form.getFieldValue('payAmountB')) : 0}
                   />
-                )} 
+                )}
               </Form.Item>
             </Col>
             <Col lg={4}>
