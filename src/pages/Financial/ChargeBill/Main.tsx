@@ -14,6 +14,7 @@ import BillModify from './BillModify';
 import Verify from './Verify';
 import Split from './Split';
 import Reduction from './Reduction';
+import Rebate from './Rebate';
 import Transform from './Transform';
 import Submit from './Submit';
 import RoomShow from '../../Resource/House/RoomShow';
@@ -54,6 +55,8 @@ function Main() {
   const [showVisible, setShowVisible] = useState<boolean>(false);
   //减免
   const [reductionVisible, setReductionVisible] = useState<boolean>(false);
+  //优惠
+  const [rebateVisible, setRebateVisible] = useState<boolean>(false);
 
   //对账
   const [verifyVisible, setVerifyVisible] = useState<boolean>(false);
@@ -82,7 +85,7 @@ function Main() {
   const [orgType, setOrgType] = useState<string>();//类型
 
   //点击左侧树，加载数据
-  const doSelectTree = (orgId, type) => { 
+  const doSelectTree = (orgId, type) => {
     //初始化页码，防止页码错乱导致数据查询出错  
     const page = new DefaultPagination();
     if (tabIndex == "1") {
@@ -390,6 +393,17 @@ function Main() {
     setReductionVisible(false);
   }
 
+  const showRebate = (id) => {
+    setId(id);
+    setRebateVisible(true);
+  }
+
+  const closeRebate = () => {
+    setId('');
+    // setSplitId('');
+    setRebateVisible(false);
+  }
+
   //转费
   // const [transId, setTransId] = useState<string>('');
   const showTrans = (id) => {
@@ -640,12 +654,12 @@ function Main() {
               // showDetail={(billId) => { chargedRowSelectedKey.billId = billId; showDetail(); }}
               showDetail={showDetail}
               showReduction={showReduction}
+              showRebate={showRebate}
             />
 
           </TabPane>
           <TabPane tab="收款单列表" key="2">
-            <div style={{ marginBottom: '10px' }}>
-
+            <div style={{ marginBottom: '10px' }}> 
               <Search
                 className="search-input"
                 placeholder="搜索收款单号"
@@ -851,12 +865,18 @@ function Main() {
         reload={() => initChargeLoadData(orgId, orgType)}
       />
 
-
       <Reduction
         reductionVisible={reductionVisible}
         closeReduction={closeReduction}
         id={id}
         // id={splitId}
+        reload={() => initLoadData(search, orgId)}
+      />
+
+      <Rebate
+        visible={rebateVisible}
+        close={closeRebate}
+        id={id}
         reload={() => initLoadData(search, orgId)}
       />
 

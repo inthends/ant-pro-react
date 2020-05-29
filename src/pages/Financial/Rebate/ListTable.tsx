@@ -121,7 +121,7 @@ function ListTable(props: ListTableProps) {
       title: '审核意见',
       dataIndex: 'verifyMemo',
       key: 'verifyMemo',
-      width: 100,
+      width: 150,
     },
     {
       title: '备注',

@@ -253,8 +253,6 @@ const Modify = (props: ModifyProps) => {
   //   }
   // };
 
-
-
   //输入减免条件后，返回匹配的计费
   // const getReducetionItem = (data?) => {
   //   // console.log(data); 
@@ -502,10 +500,10 @@ const Modify = (props: ModifyProps) => {
                   rules: [{ required: true, message: '请选择优惠政策' }]
                 })(
                   <Select placeholder="==请选择优惠政策=="
-                    onChange={change}
-                  >
+                    onChange={change}>
                     <Option value='1'>预缴一年赠送一个月</Option>
                     <Option value='2'>预缴一年减免一个月</Option>
+                    <Option value='3'>全部优惠</Option>
                   </Select>
                 )}
                 {getFieldDecorator('rebateName', {

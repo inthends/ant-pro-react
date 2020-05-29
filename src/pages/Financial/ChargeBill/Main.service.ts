@@ -120,6 +120,11 @@ export function ReductionBilling(data): Promise<any> {
   return request.post(process.env.basePath + `/BillingMain/ReductionBilling`, { data: objToFormdata(data) }).then(getResult as any);
 }
 
+//优惠
+export function RebateBilling(data): Promise<any> {
+  return request.post(process.env.basePath + `/BillingMain/RebateBilling`, { data: objToFormdata(data) }).then(getResult as any);
+}
+
 //拆费
 export function SplitBilling(data): Promise<any> {
   return request.post(process.env.basePath + `/BillingMain/SplitBilling`, { data: objToFormdata(data) }).then(getResult as any);

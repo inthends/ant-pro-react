@@ -138,7 +138,7 @@ const Modify = (props: ModifyProps) => {
       } else {
         form.resetFields();
         //设置checkbox默认值 
-        var info = Object.assign({}, { isEnable: true, isInContract: true, isTax: true });
+        var info = Object.assign({}, { isEnable: true, isInContract: true, isTax: true, isCrossBillDate: true });
         if (isInit && selectTreeItem != null && selectTreeItem.feeKind) {
           info = Object.assign({}, info, { feeKind: selectTreeItem.feeKind });
           form.setFieldsValue({ feeKind: selectTreeItem.feeKind });
@@ -949,16 +949,23 @@ const Modify = (props: ModifyProps) => {
                         允许在合同中添加
                       </Checkbox>
                       )}
+                      {getFieldDecorator('isCrossBillDate', {
+                        initialValue: infoDetail.isCrossBillDate ? true : false,
+                      })(<Checkbox checked={form.getFieldValue('isCrossBillDate')}>
+                        允许跨账单日收费
+                      </Checkbox>
+                      )}
                       {getFieldDecorator('isTemp', {
                         initialValue: infoDetail.isTemp ? true : false,
                       })(<Checkbox checked={form.getFieldValue('isTemp')}>
                         允许临时加费
                       </Checkbox>
                       )}
+
                       {getFieldDecorator('isEditTemp', {
                         initialValue: infoDetail.isEditTemp ? true : false,
                       })(<Checkbox checked={form.getFieldValue('isEditTemp')}>
-                        临时加费允许修改单价
+                        允许修改单价
                       </Checkbox>
                       )}
                       {getFieldDecorator('isEnable', {
@@ -991,7 +998,10 @@ const Modify = (props: ModifyProps) => {
                       {getFieldDecorator('cycleValue', {
                         initialValue: infoDetail.cycleValue ? infoDetail.cycleValue : 1,
                         rules: [{ required: true, message: '请输入计费周期' }],
-                      })(<InputNumber placeholder="请输入计费周期" min={1} style={{ width: '100%' }}
+                      })(<InputNumber placeholder="请输入计费周期"
+                        precision={0}
+                        min={1}
+                        style={{ width: '100%' }}
                         onChange={value => {
                           setEndDate(infoDetail.beginDate, value, infoDetail.cycleType);
                         }} />)}
@@ -1039,7 +1049,7 @@ const Modify = (props: ModifyProps) => {
                   </Col>
                 </Row>
                 <Row gutter={24}>
-                  <Col lg={21}>
+                  <Col lg={9}>
                     <Form.Item label="用量公式">
                       {getFieldDecorator('feeFormulaOne', {
                         initialValue: infoDetail.feeFormulaOne ? infoDetail.feeFormulaOne : '1',
@@ -1055,9 +1065,7 @@ const Modify = (props: ModifyProps) => {
                       }}>设置</Button>
                     </Form.Item>
                   </Col>
-                </Row>
-                <Row gutter={24}>
-                  <Col lg={21}>
+                  <Col lg={9}>
                     <Form.Item label="系数公式">
                       {getFieldDecorator('feeApportion', {
                         initialValue: infoDetail.feeApportion ? infoDetail.feeApportion : '1',

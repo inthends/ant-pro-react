@@ -312,7 +312,7 @@ const BillShow = (props: BillShowProps) => {
           </Form>
           <Divider dashed />
           <span style={{ color: "red" }}>
-            {`${infoDetail.payAmountA + infoDetail.payAmountB + infoDetail.payAmountC}元，其中${infoDetail.payTypeA}${infoDetail.payAmountA}元，${infoDetail.payTypeB}${infoDetail.payAmountB}元，${infoDetail.payTypeC}${infoDetail.payAmountC}元`}
+            {`实收 ${infoDetail.payAmountA + infoDetail.payAmountB + infoDetail.payAmountC} 元，其中 ${infoDetail.payTypeA} ${infoDetail.payAmountA} 元，${infoDetail.payTypeB} ${infoDetail.payAmountB} 元，${infoDetail.payTypeC} ${infoDetail.payAmountC} 元`}
           </span>
         </PageHeader>
         <Divider dashed />
@@ -371,6 +371,30 @@ const BillShow = (props: BillShowProps) => {
               onChange={(pagination: PaginationConfig, filters, sorter) =>
                 changePage(pagination, filters, sorter)
               }
+ 
+              // summary={pageData => {
+              //   let totalAmount = 0;
+              //   let totalPayAmount = 0; 
+              //   pageData.forEach(({ amount, payAmount }) => {
+              //     totalAmount += amount;
+              //     totalPayAmount += payAmount;
+              //   }); 
+              //   return (
+              //     <>
+              //       <Table.Summary.Row>
+              //         <Table.Summary.Cell>合计</Table.Summary.Cell>
+              //         <Table.Summary.Cell>
+              //           <Text type="danger">{totalAmount}</Text>
+              //         </Table.Summary.Cell>
+              //         <Table.Summary.Cell>
+              //           <Text>{totalPayAmount}</Text>
+              //         </Table.Summary.Cell>
+              //       </Table.Summary.Row> 
+              //     </>
+              //   );
+              // }}
+
+
             />
           </Form>
         </Card>

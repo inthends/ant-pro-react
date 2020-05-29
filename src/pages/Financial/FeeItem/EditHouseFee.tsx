@@ -477,6 +477,12 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                       允许在合同中添加
                       </Checkbox>
                     )}
+                      {getFieldDecorator('isCrossBillDate', {
+                        initialValue: infoDetail.isCrossBillDate ? true : false,
+                      })(<Checkbox checked={form.getFieldValue('isCrossBillDate')}>
+                        允许跨账单日收费
+                      </Checkbox>
+                      )}
                     {getFieldDecorator('isTemp', {
                       initialValue: infoDetail.isTemp ? true : false,
                     })(<Checkbox checked={form.getFieldValue('isTemp')}>
@@ -486,7 +492,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                     {getFieldDecorator('isEditTemp', {
                       initialValue: infoDetail.isEditTemp ? true : false,
                     })(<Checkbox checked={form.getFieldValue('isEditTemp')}>
-                      临时加费允许修改单价
+                      允许修改单价
                       </Checkbox>
                     )}
                     {getFieldDecorator('isEnable', {
@@ -514,7 +520,10 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                     {getFieldDecorator('cycleValue', {
                       initialValue: infoDetail.cycleValue,
                       rules: [{ required: true, message: '请输入计费周期' }],
-                    })(<InputNumber style={{ width: '100%' }} placeholder="请输入计费周期"
+                    })(<InputNumber 
+                      precision={0}
+                      min={1} 
+                      style={{ width: '100%' }} placeholder="请输入计费周期"
                       onChange={value => {
                         setEndDate(infoDetail.beginDate, value, infoDetail.cycleType);
                       }} />)}

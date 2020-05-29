@@ -26,12 +26,13 @@ interface ListTableProps {
   showTrans(id: string): void;
   showDetail(billId: string): void;//打开查看页面
   showReduction(id: string): void;
+  showRebate(id: string): void;//优惠
 };
 
 function ListTable(props: ListTableProps) {
   const { form, onchange, loading, pagination, data, modify,
     reload, rowSelect, organizeId, customerName, showSplit,
-    showTrans, showDetail, showReduction
+    showTrans, showDetail, showReduction, showRebate
   } = props;
   const { getFieldDecorator } = form;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
@@ -112,7 +113,12 @@ function ListTable(props: ListTableProps) {
     //}
     //else
     if (key === "reduction") {
+      //减免
       showReduction(currentItem.id);
+    }
+    else if (key === "offset") {
+      //优惠
+      showRebate(currentItem.id);
     }
     else if (key === 'split') {
       //如果设置了优惠政策，则不允许拆费
@@ -137,7 +143,7 @@ function ListTable(props: ListTableProps) {
 
   const onSelectChange = (selectedRowKeys, selectedRows) => {
     if (selectedRowKeys.length > 0) {
- 
+
       const checkdata = {
         feeId: selectedRowKeys[0],
         unitId: selectedRows[0].unitId,
@@ -145,38 +151,52 @@ function ListTable(props: ListTableProps) {
       };
 
       //判断之前账单日是否已经勾选，不允许跨账单缴费
-      // CheckFeeBillDate(checkdata).then((res) => {
-      //   if (res) {
-      //     setIsDisabled(true);
-      //   } else {
-      //     setIsDisabled(false);
-      //   }
-      // })
-
-      //如果该笔费用存在优惠，则需要选中与此费项有关的全部费用，一起缴款，否则给出提示 
-      const data = {
-        mainId: selectedRows[0].rmid,
-        feeId: selectedRowKeys[0],
-        unitId: selectedRows[0].unitId,
-        selectFeeIds: JSON.stringify(selectedRowKeys)
-      };
-      CheckRebateFee(data).then((res) => {
-        if (res.flag) {
-          //message.error('当前选中的费用还有' + res.count + '笔也是属于优惠的，请一起勾选缴费！'); 
-          // Modal.warning({
-          //   title: '提示信息',
-          //   content: '当前选中的费用包含优惠费用，还有' + res.count + '笔优惠，请一起勾选缴费！',
-          //   okText: '确定'
-          // });
+      var flag = true;
+      CheckFeeBillDate(checkdata).then((res) => {
+        if (res) {
+          message.warning('不能跨账单日收费，请勾选之前的费用');
+          flag = false;
           setIsDisabled(true);
-          //收款确认不可用 
+
         } else {
+          flag = true;
           setIsDisabled(false);
         }
-      });
+      })
+
+      if (flag) {
+
+        //如果该笔费用存在优惠，则需要选中与此费项有关的全部费用，一起缴款，否则给出提示 
+        const data = {
+          mainId: selectedRows[0].rmid,
+          feeId: selectedRowKeys[0],
+          unitId: selectedRows[0].unitId,
+          selectFeeIds: JSON.stringify(selectedRowKeys)
+        };
+
+        CheckRebateFee(data).then((res) => {
+          if (res.flag) {
+            //message.error('当前选中的费用还有' + res.count + '笔也是属于优惠的，请一起勾选缴费！'); 
+            // Modal.warning({
+            //   title: '提示信息',
+            //   content: '当前选中的费用包含优惠费用，还有' + res.count + '笔优惠，请一起勾选缴费！',
+            //   okText: '确定'
+            // });
+
+            setIsDisabled(true);
+            return;
+            //收款确认不可用 
+          } else {
+            setIsDisabled(false);
+          }
+        });
+
+      }
 
     } else {
+
       setIsDisabled(true);
+
     }
 
     //勾选
@@ -459,6 +479,7 @@ function ListTable(props: ListTableProps) {
         <Menu onClick={({ key }) => editAndDelete(key, item)}>
           {/* <Menu.Item key="view">查看</Menu.Item> */}
           <Menu.Item key="reduction">减免</Menu.Item>
+          {item.rmid ? null : <Menu.Item key="offset">优惠</Menu.Item>}
           <Menu.Item key="split">拆费</Menu.Item>
           <Menu.Item key="trans">转费</Menu.Item>
         </Menu>}>
@@ -512,6 +533,13 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'lastAmount',
       key: 'lastAmount',
       width: 80,
+    }, {
+      title: '账单日',
+      dataIndex: 'billDate',
+      key: 'billDate',
+      align: 'center',
+      width: 100,
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
       title: '起始日期',
@@ -524,13 +552,6 @@ function ListTable(props: ListTableProps) {
       title: '截止日期',
       dataIndex: 'endDate',
       key: 'endDate',
-      align: 'center',
-      width: 100,
-      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
-    }, {
-      title: '账单日',
-      dataIndex: 'billDate',
-      key: 'billDate',
       align: 'center',
       width: 100,
       render: val => val ? moment(val).format('YYYY-MM-DD') : ''
