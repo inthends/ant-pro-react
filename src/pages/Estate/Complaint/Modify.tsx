@@ -325,6 +325,7 @@ const Modify = (props: ModifyProps) => {
       <PageHeader
         // title={infoDetail.billCode}
         // subTitle={GetStatus(infoDetail)}
+        ghost={false} 
         title={null}
         subTitle={
           <div>

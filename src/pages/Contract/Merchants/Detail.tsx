@@ -89,6 +89,7 @@ const Detail = (props: DetailProps) => {
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
       <Spin tip="数据处理中..." spinning={loading}>
         <PageHeader
+          ghost={false} 
           subTitle={
             <div>
               <label style={{ color: '#4494f0', fontSize: '24px' }}>{infoDetail.customer}</label>

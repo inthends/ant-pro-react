@@ -173,6 +173,7 @@ const Modify = (props: ModifyProps) => {
       visible={visible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }} >
       <PageHeader
+        ghost={false} 
         title={null}
         subTitle={
           <div>

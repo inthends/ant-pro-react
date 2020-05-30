@@ -291,6 +291,7 @@ const BillModify = (props: BillModifyProps) => {
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
       <Spin tip="数据处理中..." spinning={loading}>
         <PageHeader
+          ghost={false} 
           title={null}
           subTitle={
             <div>

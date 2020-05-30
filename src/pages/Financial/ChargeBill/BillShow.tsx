@@ -260,7 +260,8 @@ const BillShow = (props: BillShowProps) => {
       visible={showVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
       <Spin tip="数据处理中..." spinning={loading}>
-        <PageHeader
+        <PageHeader 
+          ghost={false} 
           title={null}
           subTitle={
             <div>
@@ -371,7 +372,7 @@ const BillShow = (props: BillShowProps) => {
               onChange={(pagination: PaginationConfig, filters, sorter) =>
                 changePage(pagination, filters, sorter)
               }
- 
+   
               // summary={pageData => {
               //   let totalAmount = 0;
               //   let totalPayAmount = 0; 

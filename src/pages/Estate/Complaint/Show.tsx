@@ -202,6 +202,7 @@ const Show = (props: ShowProps) => {
       <PageHeader
         // title={infoDetail.billCode}
         // subTitle={GetStatus(infoDetail)}
+        ghost={false} 
         title={null}
         subTitle={
           <div>

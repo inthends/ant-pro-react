@@ -558,6 +558,7 @@ const Renewal = (props: RenewalProps) => {
       /> */}
 
       <PageHeader
+        ghost={false} 
         title={null}
         subTitle={
           <div>

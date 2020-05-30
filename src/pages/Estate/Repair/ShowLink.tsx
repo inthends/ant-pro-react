@@ -127,6 +127,7 @@ const ShowLink = (props: ShowLinkProps) => {
         // extra={[
         //   <Button key="3">附件</Button>,
         // ]} 
+        ghost={false} 
         title={null}
         subTitle={
           <div>

@@ -155,6 +155,7 @@ const ApproveView = (props: ApproveViewProps) => {
 
       <Spin tip="数据处理中..." spinning={loading}>
         <PageHeader
+          ghost={false} 
           title={null}
           subTitle={
             <div>

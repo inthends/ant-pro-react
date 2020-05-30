@@ -339,6 +339,7 @@ const Modify = (props: ModifyProps) => {
         // extra={[
         //   <Button key="3">附件</Button>,
         // ]}
+        ghost={false} 
         title={null}
         subTitle={
           <div>

@@ -132,7 +132,9 @@ const BillCheck = (props: BillCheckProps) => {
       onClose={closeDrawer}
       visible={visible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
-      <PageHeader title={GetStatus(infoDetail.status)}
+      <PageHeader 
+       ghost={false} 
+       title={GetStatus(infoDetail.status)}
       // extra={[
       //   <Button key="1">附件</Button>, 
       //   <Button key="2">打印</Button>,

@@ -100,6 +100,7 @@ const RoomShow = (props: RoomShowProps) => {
       visible={showVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }} >
       <PageHeader
+        ghost={false} 
         title={null}
         subTitle={
           <div>
