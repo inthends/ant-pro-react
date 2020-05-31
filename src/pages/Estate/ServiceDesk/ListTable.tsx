@@ -102,12 +102,7 @@ function ListTable(props: ListTableProps) {
       width: 100,
       sorter: true,
     },
-    {
-      title: '内容',
-      dataIndex: 'contents',
-      key: 'contents',
-      width: 150, 
-    }, 
+   
     {
       title: '是否回复',
       dataIndex: 'isApply',
@@ -137,7 +132,13 @@ function ListTable(props: ListTableProps) {
       title: '联系地点',
       dataIndex: 'address',
       key: 'address',
+      width: 200, 
     },
+    {
+      title: '内容',
+      dataIndex: 'contents',
+      key: 'contents', 
+    }, 
     {
       title: '操作',
       dataIndex: 'operation',
