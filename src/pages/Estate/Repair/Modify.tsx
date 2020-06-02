@@ -339,7 +339,7 @@ const Modify = (props: ModifyProps) => {
         // extra={[
         //   <Button key="3">附件</Button>,
         // ]}
-        ghost={false} 
+        ghost={false}
         title={null}
         subTitle={
           <div>
@@ -357,7 +357,7 @@ const Modify = (props: ModifyProps) => {
 
         <Form layout='vertical'>
           <Row gutter={4}>
-            <Col lg={4}>
+            <Col lg={6}>
               <Form.Item label="单号" >
                 {infoDetail.billCode}
               </Form.Item>
@@ -367,14 +367,48 @@ const Modify = (props: ModifyProps) => {
                 {GetStatus(infoDetail.status)}
               </Form.Item>
             </Col>
+            <Col lg={4}>
+              <Form.Item label="报修时间" >
+                {infoDetail.billDate}
+              </Form.Item>
+            </Col>
+
             <Col lg={3}>
+              <Form.Item label="单据来源"  >
+                {infoDetail.sourceType}
+              </Form.Item>
+            </Col>
+            <Col lg={4}>
               <Form.Item label="联系人" >
                 {infoDetail.contactName}
               </Form.Item>
             </Col>
-            <Col lg={3}>
-              <Form.Item label="电话" >
+            <Col lg={4}>
+              <Form.Item label="联系电话" >
                 {infoDetail.contactLink}
+              </Form.Item>
+            </Col> 
+          </Row>
+
+          <Row gutter={4}>
+            <Col lg={6}>
+              <Form.Item label="关联单号" >
+                <a onClick={() => showLink(serverId)}>{serverCode}</a>
+              </Form.Item>
+            </Col> 
+            <Col lg={3}>
+              <Form.Item label="转单人" >
+                {infoDetail.createUserName}
+              </Form.Item>
+            </Col> 
+            <Col lg={4}>
+              <Form.Item label="转单时间" >
+                {infoDetail.createDate}
+              </Form.Item>
+            </Col>
+            <Col lg={3}>
+              <Form.Item label="维修区域" >
+                {infoDetail.repairArea}
               </Form.Item>
             </Col>
             <Col lg={3}>
@@ -382,17 +416,8 @@ const Modify = (props: ModifyProps) => {
                 {infoDetail.isPaid}
               </Form.Item>
             </Col>
-            <Col lg={4}>
-              <Form.Item label="报修时间" >
-                {infoDetail.billDate}
-              </Form.Item>
-            </Col>
-            <Col lg={4}>
-              <Form.Item label="关联单号" >
-                <a onClick={() => showLink(serverId)}>{serverCode}</a>
-              </Form.Item>
-            </Col>
           </Row>
+
         </Form>
         <Divider dashed />
         {infoDetail.repairContent}
@@ -402,7 +427,7 @@ const Modify = (props: ModifyProps) => {
         modifyVisible ? (
           <Form layout="vertical" hideRequiredMark>
             {infoDetail.status == 1 ? (
-              <Card title="派单" className={styles.card} hoverable>
+              <Card title="派单" className={styles.card2} hoverable>
                 <Row gutter={24}>
                   <Col lg={5}>
                     <Form.Item label="维修专业" required>

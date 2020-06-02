@@ -92,7 +92,7 @@ function ListTable(props: ListTableProps) {
       title: '联系人',
       dataIndex: 'contactName',
       key: 'contactName',
-      width: 100,
+      width: 120,
       sorter: true,
     },
     {
@@ -102,7 +102,7 @@ function ListTable(props: ListTableProps) {
       width: 100,
       sorter: true,
     },
-   
+
     {
       title: '是否回复',
       dataIndex: 'isApply',
@@ -129,16 +129,17 @@ function ListTable(props: ListTableProps) {
     //   width: 200,
     // },
     {
-      title: '联系地点',
-      dataIndex: 'address',
-      key: 'address',
-      width: 200, 
-    },
-    {
       title: '内容',
       dataIndex: 'contents',
-      key: 'contents', 
-    }, 
+      key: 'contents',
+      width: 200,
+    },
+    {
+      title: '联系地点',
+      dataIndex: 'address',
+      key: 'address' 
+    },
+
     {
       title: '操作',
       dataIndex: 'operation',

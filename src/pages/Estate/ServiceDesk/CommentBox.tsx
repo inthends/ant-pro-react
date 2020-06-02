@@ -60,8 +60,7 @@ function CommentBox(props: CommentBoxProps) {
 
   return (
     <div>
-      {/* {comments.length > 0 && <CommentList comments={comments} />} */}
-
+      {/* {comments.length > 0 && <CommentList comments={comments} />} */} 
       {comments.length > 0 ?
         <List
           dataSource={comments}

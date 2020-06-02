@@ -157,7 +157,7 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
                 setHideSider(true);
               }}
             >
-              <Icon type="double-left" style={{ color: '#1890ff' }} />
+              <Icon type="double-left" style={{ color: '#1890ff' , cursor: 'pointer'}} />
             </div>
           </>
         )}

@@ -215,7 +215,7 @@ const Modify = (props: ModifyProps) => {
           form.setFieldsValue({ byComplaintUserId: res.custId });
           form.setFieldsValue({ byComplaintRoomAllName: res.contactAddress });
         }
-      }); 
+      });
     } else {
       form.setFieldsValue({ byComplaintUserName: '' });
       form.setFieldsValue({ byComplaintUerTel: '' });
@@ -325,7 +325,7 @@ const Modify = (props: ModifyProps) => {
       <PageHeader
         // title={infoDetail.billCode}
         // subTitle={GetStatus(infoDetail)}
-        ghost={false} 
+        ghost={false}
         title={null}
         subTitle={
           <div>
@@ -342,8 +342,8 @@ const Modify = (props: ModifyProps) => {
         </Paragraph>
         {infoDetail.contents} */}
         <Form layout='vertical'>
-          <Row gutter={6}>
-            <Col lg={5}>
+          <Row gutter={4}>
+            <Col lg={6}>
               <Form.Item label="单号" >
                 {infoDetail.billCode}
               </Form.Item>
@@ -353,24 +353,42 @@ const Modify = (props: ModifyProps) => {
                 {GetStatus(infoDetail.status, infoDetail.isEnable)}
               </Form.Item>
             </Col>
-            <Col lg={3}>
-              <Form.Item label="联系人" >
-                {infoDetail.complaintUser ? infoDetail.complaintUser : '匿名'}
-              </Form.Item>
-            </Col>
-            <Col lg={3}>
-              <Form.Item label="电话" >
-                {infoDetail.complaintLink ? infoDetail.complaintLink : '无'}
-              </Form.Item>
-            </Col>
             <Col lg={5}>
               <Form.Item label="投诉时间" >
                 {infoDetail.billDate}
               </Form.Item>
             </Col>
-            <Col lg={5}>
+           
+            <Col lg={4}>
+              <Form.Item label="联系人" >
+                {infoDetail.complaintUser ? infoDetail.complaintUser : '匿名'}
+              </Form.Item>
+            </Col>
+            <Col lg={3}>
+              <Form.Item label="联系电话" >
+                {infoDetail.complaintLink ? infoDetail.complaintLink : '无'}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={4}>
+            <Col lg={6}>
               <Form.Item label="关联单号" >
                 <a onClick={() => showLink(serverId)}>{serverCode}</a>
+              </Form.Item>
+            </Col>
+            <Col lg={3}>
+              <Form.Item label="转单人" >
+                {infoDetail.createUserName}
+              </Form.Item>
+            </Col>
+            <Col lg={5}>
+              <Form.Item label="转单时间" >
+                {infoDetail.createDate}
+              </Form.Item>
+            </Col>
+            <Col lg={3}>
+              <Form.Item label="单据来源"  >
+                {infoDetail.sourceType}
               </Form.Item>
             </Col>
           </Row>

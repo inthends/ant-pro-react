@@ -39,7 +39,7 @@ function ListTable(props: ListTableProps) {
       title: '投诉单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 180,
+      width: 220,
       sorter: true,
     },
     {
@@ -97,6 +97,7 @@ function ListTable(props: ListTableProps) {
       title: '联系方式',
       dataIndex: 'complaintLink',
       key: 'complaintLink',
+      width: 100,
     },
     {
       title: '关联地址',

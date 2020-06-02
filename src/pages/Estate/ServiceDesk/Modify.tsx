@@ -298,7 +298,7 @@ const Modify = (props: ModifyProps) => {
                 <Card className={styles.card2}>
                   <Row gutter={24}>
                     <Col lg={8}>
-                      <Form.Item label="单据来源" required> 
+                      <Form.Item label="单据来源" required>
                         {/* {getFieldDecorator('source', {
                           initialValue: infoDetail.source == undefined ? '服务总台' : infoDetail.source
                         })(
@@ -444,7 +444,7 @@ const Modify = (props: ModifyProps) => {
                       <Form.Item label="联系人">
                         {getFieldDecorator('contactName', {
                           initialValue: infoDetail.contactName
-                        })(<Input placeholder="自动获取联系人" readOnly  />)}
+                        })(<Input placeholder="自动获取联系人" readOnly />)}
 
                         {getFieldDecorator('contactId', {
                           initialValue: infoDetail.contactId,
@@ -507,20 +507,23 @@ const Modify = (props: ModifyProps) => {
                       </div>
                     </Col>
                   </Row>
-
-
                 </Card>
               ) :
-                (<Card className={infoDetail.status > 1 ? styles.card2 : styles.card} title="基础信息" >
+                (<Card className={infoDetail.status == 1 ? styles.card : styles.card2} title="基础信息" >
                   <Row gutter={24}>
-                    <Col lg={6}>
+                    <Col lg={7}>
                       <Form.Item label="服务单号">
                         {infoDetail.billCode}
                       </Form.Item>
                     </Col>
-                    <Col lg={4}>
+                    <Col lg={3}>
                       <Form.Item label="单据来源"  >
                         {infoDetail.source}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={3}>
+                      <Form.Item label="创建人">
+                        {infoDetail.createUserName}
                       </Form.Item>
                     </Col>
                     <Col lg={5}>
@@ -528,63 +531,59 @@ const Modify = (props: ModifyProps) => {
                         {infoDetail.billDate}
                       </Form.Item>
                     </Col>
-                    <Col lg={4}>
+                    <Col lg={3}>
                       <Form.Item label="联系人">
                         {infoDetail.contactName}
                       </Form.Item>
                     </Col>
-                    <Col lg={5}>
+                    <Col lg={3}>
                       <Form.Item label="联系电话">
                         {infoDetail.contactPhone}
                       </Form.Item>
                     </Col>
                   </Row>
                   <Row gutter={24}>
-                    <Col lg={6}>
+                    <Col lg={7}>
                       <Form.Item label="关联单号">
                         <a onClick={() => showLink(infoDetail.businessType, infoDetail.businessCode)}>{infoDetail.businessCode}</a>
                       </Form.Item>
                     </Col>
-                    <Col lg={4}>
+                    <Col lg={3}>
                       <Form.Item label="业务类型">
                         {infoDetail.billType}
                       </Form.Item>
                     </Col>
-                    <Col lg={5}>
-                      <Form.Item label="位置编号">
-                        {infoDetail.roomId}
-                      </Form.Item>
-                    </Col>
-
-                    <Col lg={4}>
+                    <Col lg={3}>
                       <Form.Item label="紧急程度">
                         {infoDetail.emergencyLevel}
                       </Form.Item>
                     </Col>
-                    <Col lg={5}>
+                    {/* <Col lg={5}>
+                      <Form.Item label="位置编号">
+                        {infoDetail.roomId}
+                      </Form.Item>
+                    </Col>   */}
+                    <Col lg={3}>
                       <Form.Item label="重要程度">
                         {infoDetail.importance}
                       </Form.Item>
-                    </Col>
-                  </Row>
-
-                  {infoDetail.billType == '报修' ?
-                    <Row gutter={24}>
-                      <Col lg={6}>
+                    </Col> 
+                    {infoDetail.billType == '报修' ?
+                      (<><Col lg={4}>
                         <Form.Item label="维修区域">
                           {infoDetail.repairArea}
                         </Form.Item>
                       </Col>
-                      <Col lg={4}>
-                        <Form.Item label="是否有偿">
-                          {infoDetail.isPaid}
-                        </Form.Item>
-                      </Col>
-                    </Row> : null}
+                        <Col lg={4}>
+                          <Form.Item label="是否有偿">
+                            {infoDetail.isPaid}
+                          </Form.Item>
+                        </Col> </>) : null}
+                  </Row>
 
                   <Row gutter={24}>
                     <Col lg={24}>
-                      <Form.Item label="详细地址">
+                      <Form.Item label="联系地点">
                         {infoDetail.address}
                       </Form.Item>
                     </Col>
