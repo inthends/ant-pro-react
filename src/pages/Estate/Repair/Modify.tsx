@@ -24,7 +24,7 @@ const Modify = (props: ModifyProps) => {
   const { modifyVisible, id, closeDrawer, form, reload, showLink } = props;
   const { getFieldDecorator } = form;
   // const title = data === undefined ? '添加维修单' : data.status == 8 ? '查看维修单' : '修改维修单'; 
-  const title = id == "" ? '添加维修单' : "修改维修单";
+  const title = id == "" ? '添加维修单' : "处理维修单";
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [repairMajors, setRepairMajors] = useState<any[]>([]); // 维修专业
   const [userSource, setUserSource] = useState<any[]>([]);
@@ -102,7 +102,7 @@ const Modify = (props: ModifyProps) => {
     form.validateFields((errors, values) => {
       if (!errors) {
         Receive(infoDetail.id).then(res => {
-          message.success('接单成功！');
+          message.success('接单成功');
           closeDrawer();
           reload();
         });
@@ -115,7 +115,7 @@ const Modify = (props: ModifyProps) => {
     form.validateFields((errors, values) => {
       if (!errors) {
         Change(infoDetail.id).then(res => {
-          message.success('转单成功！');
+          message.success('转单成功');
           closeDrawer();
           reload();
         });
@@ -130,7 +130,7 @@ const Modify = (props: ModifyProps) => {
         const newData = infoDetail ? { ...infoDetail, ...values } : values;
         newData.beginDate = values.beginDate.format('YYYY-MM-DD HH:mm');
         Start({ ...newData, keyValue: newData.id }).then(res => {
-          message.success('已开工！');
+          message.success('已开工');
           closeDrawer();
           reload();
         });
@@ -145,7 +145,7 @@ const Modify = (props: ModifyProps) => {
         const newData = infoDetail ? { ...infoDetail, ...values } : values;
         newData.endDate = values.endDate.format('YYYY-MM-DD HH:mm');
         Handle({ ...newData, keyValue: newData.id }).then(res => {
-          message.success('处理完成！');
+          message.success('处理完成');
           closeDrawer();
           reload();
         });
@@ -160,7 +160,7 @@ const Modify = (props: ModifyProps) => {
         const newData = infoDetail ? { ...infoDetail, ...values } : values;
         newData.testDate = values.testDate.format('YYYY-MM-DD HH:mm');
         Check({ ...newData, keyValue: newData.id }).then(res => {
-          message.success('检验完成！');
+          message.success('检验完成');
           closeDrawer();
           reload();
         });
@@ -174,7 +174,7 @@ const Modify = (props: ModifyProps) => {
       if (!errors) {
         const newData = infoDetail ? { ...infoDetail, ...values } : values;
         Approve({ ...newData, keyValue: newData.id }).then(res => {
-          message.success('审核完成！');
+          message.success('审核完成');
           closeDrawer();
           reload();
         });
@@ -201,7 +201,7 @@ const Modify = (props: ModifyProps) => {
 
   const disabledTestDate = (current) => {
     // Can not select days before today and today
-    return current && current.isAfter(moment(infoDetail.endDate), 'day');
+    return current && current.isBefore(moment(infoDetail.endDate), 'day');
   };
 
   // const range = (start, end) => {
@@ -244,7 +244,7 @@ const Modify = (props: ModifyProps) => {
       if (id) {
         GetEntity(id).then(info => {
           //赋值
-          setInfoDetail(info.entity);
+          setInfoDetail(info.entity); 
           setAdminOrgId(info.entity.organizeId);//管理处Id
           setOrganizeId(info.entity.roomId);
           setFeeId(info.feeId);
@@ -387,7 +387,7 @@ const Modify = (props: ModifyProps) => {
               <Form.Item label="联系电话" >
                 {infoDetail.contactLink}
               </Form.Item>
-            </Col> 
+            </Col>
           </Row>
 
           <Row gutter={4}>
@@ -395,12 +395,12 @@ const Modify = (props: ModifyProps) => {
               <Form.Item label="关联单号" >
                 <a onClick={() => showLink(serverId)}>{serverCode}</a>
               </Form.Item>
-            </Col> 
+            </Col>
             <Col lg={3}>
               <Form.Item label="转单人" >
                 {infoDetail.createUserName}
               </Form.Item>
-            </Col> 
+            </Col>
             <Col lg={4}>
               <Form.Item label="转单时间" >
                 {infoDetail.createDate}
@@ -484,7 +484,7 @@ const Modify = (props: ModifyProps) => {
                   </Col>
                 </Row>
               </Card>) : (
-                <Card title="派单" className={styles.card} hoverable>
+                <Card title="派单" className={styles.card2} hoverable>
                   <Row gutter={24}>
                     <Col lg={4}>
                       <Form.Item label="维修专业">
@@ -821,7 +821,7 @@ const Modify = (props: ModifyProps) => {
               </Row>
             </Card>) : null} */}
 
-            {infoDetail.status == 5 ? (
+            {infoDetail.status == 6 ? (
               <Card title="检验情况" className={styles.card2} hoverable>
                 <Row gutter={24}>
                   <Col lg={7}>
@@ -869,7 +869,7 @@ const Modify = (props: ModifyProps) => {
                   </Col>
                 </Row>
               </Card>
-            ) : (infoDetail.status > 5 && infoDetail.repairArea == '公共区域') ? (
+            ) : (infoDetail.status > 6 && infoDetail.repairArea == '公共区域') ? (
               <Card title="检验情况" className={styles.card2} hoverable >
                 <Row gutter={24}>
                   <Col lg={5}>
@@ -919,30 +919,25 @@ const Modify = (props: ModifyProps) => {
           background: '#fff',
           textAlign: 'right',
         }}>
+
+        <Button onClick={close} style={{ marginRight: 8 }}>
+          取消
+          </Button> 
         {infoDetail.status == 1 ? (
-          <div>
-            <Button onClick={close} style={{ marginRight: 8 }}>
-              取消
-            </Button>
-            <Button onClick={dispatch} type="primary">
-              派单
-         </Button></div>
+
+          <Button onClick={dispatch} type="primary">
+            派单
+          </Button>
         ) : null}
-        {infoDetail.status == 2 ? (
-          <div>
-            <Button onClick={close} style={{ marginRight: 8 }}>
-              取消
-            </Button>
-            <Button onClick={receive} type="primary">
-              接单
-            </Button>
-          </div>
+        {infoDetail.status == 2 && infoDetail.receiverId == localStorage.getItem('userid') ? (
+          <Button onClick={receive} type="primary">
+            接单
+          </Button> 
         ) : null}
+
         {infoDetail.status == 3 ? (
           <div>
-            <Button onClick={close} style={{ marginRight: 8 }}>
-              取消
-         </Button>
+
             <Button onClick={start} type="primary" style={{ marginRight: 8 }}>
               开工
          </Button>
@@ -954,9 +949,7 @@ const Modify = (props: ModifyProps) => {
 
         {infoDetail.status == 4 ? (
           <div>
-            <Button onClick={close} style={{ marginRight: 8 }}>
-              取消
-        </Button>
+
             {/* <Button onClick={start} type="primary" style={{ marginRight: 8 }}>
               呼叫增援
          </Button>
@@ -982,33 +975,26 @@ const Modify = (props: ModifyProps) => {
           </div>
         ) : null} */}
 
-        {infoDetail.status == 5 ? (
-          <div>
-            <Button onClick={close} style={{ marginRight: 8 }}>
-              取消
-        </Button>
-            <Button onClick={check} type="primary">
-              检验
-        </Button></div>
-        ) : null}
-
-        {infoDetail.status == 6 ? (
-          <div>
-            <Button onClick={close} style={{ marginRight: 8 }}>
-              取消
+        {infoDetail.status == 6 ? ( 
+          <Button onClick={check} type="primary">
+            检验
           </Button>
-            <Button onClick={approve} type="primary">
-              审核
-        </Button></div>
         ) : null}
 
+        {infoDetail.status == 7 ? (
+
+          <Button onClick={approve} type="primary">
+            审核
+          </Button>
+        ) : null}
+        {/* 
         {infoDetail.status == 7 ? (
           <div>
             <Button onClick={close} style={{ marginRight: 8 }}>
               关闭
           </Button>
           </div>
-        ) : null}
+        ) : null} */}
 
       </div>
     </Drawer >

@@ -25,13 +25,11 @@ export function RemoveForm(keyValue): Promise<any> {
     .post(process.env.basePath + `/Device/RemoveForm?keyValue=${keyValue}`, {})
     .then(getResult as any);
 }
- 
 
 //获取分类
 export function GetTypes(): Promise<TreeEntity[]> {
   return request.get(process.env.basePath + `/Device/GetTypes`, {}).then(getResult as any);
 }
-
 
 // 删除明细
 export function RemoveDetailForm(keyValue): Promise<any> {
@@ -39,3 +37,21 @@ export function RemoveDetailForm(keyValue): Promise<any> {
     .post(process.env.basePath + `/Device/RemoveDetailForm?keyValue=${keyValue}`, {})
     .then(getResult as any);
 }
+
+export function GetMaintenanceListJson(data): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Device/GetMaintenanceListJson`, {
+      data: objToFormdata(data)
+    })
+    .then(getResult as any);
+}
+
+export function GetRepairListJson(data): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Device/GetRepairListJson`, {
+      data: objToFormdata(data)
+    })
+    .then(getResult as any);
+}
+
+
