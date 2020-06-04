@@ -35,7 +35,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
   const [accFixedDisabled, setAccFixedDisabled] = useState<boolean>(true);
   const [payFixedDisabled, setPayFixedDisabled] = useState<boolean>(true);
   const [lateFixedDisabled, setLateFixedDisabled] = useState<boolean>(true);
-
+  const [formulaOne, setFeeFormulaOne] = useState<any>('');
   // const dateItems = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'];
   //打开抽屉时初始化
   useEffect(() => {
@@ -606,6 +606,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                 <Col lg={3}>
                   <Form.Item label="&nbsp;">
                     <Button type="primary" onClick={() => {
+                      setFeeFormulaOne(infoDetail.feeFormulaOne);
                       setAddFormulaVisible(true);
                       setIsFormula(true);
                     }}>设置</Button>
@@ -1142,6 +1143,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
       <AddFormula
         visible={addFormulaVisible}
         closeModal={closeAddFormula}
+        formulaOne={formulaOne}
         getFormulaStr={(str, isFormula) => {
           if (isFormula) {
             var info = Object.assign({}, infoDetail, { feeFormulaOne: str });

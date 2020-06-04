@@ -10,6 +10,7 @@ import {
   GetFormJson, GetAllFeeItems, GetOrganizePageList,
   GetUnitFeeItemData, SaveForm, GetFeeItemNames
 } from './Main.service';
+
 import AuthButton from '@/components/AuthButton/AuthButton';
 import { GetFeeType } from '@/services/commonItem';
 
@@ -49,6 +50,8 @@ const Modify = (props: ModifyProps) => {
   const [feeItemNames, setFeeItemNames] = useState<TreeEntity[]>([]);
   const [isFormula, setIsFormula] = useState<boolean>(false);
   const [addFormulaVisible, setAddFormulaVisible] = useState<boolean>(false);
+  const [formulaOne, setFeeFormulaOne] = useState<any>('');
+
   const [selectOrgVisible, setSelectOrgVisible] = useState<boolean>(false);
   const [selectHouseVisible, setSelectHouseVisible] = useState<boolean>(false);
   const [editOrgVisible, setEditOrgVisible] = useState<boolean>(false);
@@ -1060,6 +1063,7 @@ const Modify = (props: ModifyProps) => {
                   <Col lg={3}>
                     <Form.Item label="&nbsp;">
                       <Button type="primary" onClick={() => {
+                        setFeeFormulaOne(infoDetail.feeFormulaOne);
                         setAddFormulaVisible(true);
                         setIsFormula(true);
                       }}>设置</Button>
@@ -1772,6 +1776,7 @@ const Modify = (props: ModifyProps) => {
       <AddFormula
         visible={addFormulaVisible}
         closeModal={closeAddFormula}
+        formulaOne={formulaOne}
         getFormulaStr={(str, isFormula) => {
           if (isFormula) {
             var info = Object.assign({}, infoDetail, { feeFormulaOne: str });

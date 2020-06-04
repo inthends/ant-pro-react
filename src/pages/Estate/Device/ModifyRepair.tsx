@@ -59,8 +59,7 @@ const ModifyRepair = (props: ModifyRepairProps) => {
             ></ModifyItem>
           </Row>
 
-          <Row gutter={24}>
-
+          <Row gutter={24}> 
             <ModifyItem
               {...baseFormProps}
               field="fee"

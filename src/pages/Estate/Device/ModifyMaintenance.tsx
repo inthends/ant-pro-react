@@ -14,7 +14,7 @@ interface ModifyMaintenanceProps {
   reload(): void;
 }
 
-const ModifyMaintenance  = (props: ModifyMaintenanceProps) => {
+const ModifyMaintenance = (props: ModifyMaintenanceProps) => {
   const { data, form, deviceId } = props;
   let initData = data ? data : { deviceId: deviceId };
   const baseFormProps = { form, initData };
