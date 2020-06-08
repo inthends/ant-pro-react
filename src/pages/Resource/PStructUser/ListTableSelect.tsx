@@ -2,7 +2,7 @@ import Page from '@/components/Common/Page';
 import { Modal, message, Divider, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
-import { CheckRelation, RemoveForm } from './PStructUser.service';
+import { CheckRelation, InvalidForm } from './PStructUser.service';
 
 interface ListTableSelectProps {
   loading: boolean;
@@ -27,12 +27,12 @@ function ListTableSelect(props: ListTableSelectProps) {
       content: `您确认要作废${record.name}吗？`,
       onOk: () => {
         //判断是否关联房间
-        CheckRelation(record.key).then((res) => {
+        CheckRelation(record.id).then((res) => {
           if (res) {
             message.error('已经关联房间，不允许作废');
             return;
           }
-          RemoveForm(record.id)
+          InvalidForm(record.id)
             .then(() => {
               message.success('作废成功');
               reload();

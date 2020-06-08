@@ -42,10 +42,10 @@ export function SaveForm(data): Promise<any> {
     .post(process.env.basePath + `/PStructUser/SaveForm`, { data: objToFormdata(data) })
     .then(getResult as any);
 }
-// 删除
-export function RemoveForm(keyValue): Promise<any> {
+// 作废
+export function InvalidForm(keyValue): Promise<any> {
   return request
-    .post(process.env.basePath + `/PStructUser/RemoveForm?keyValue=${keyValue}`, {})
+    .post(process.env.basePath + `/PStructUser/InvalidForm?keyValue=${keyValue}`, {})
     .then(getResult as any);
 }
 
