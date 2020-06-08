@@ -14,29 +14,36 @@ export function GetReceivablesTree(): Promise<TreeEntity[]> {
   return request.get(process.env.basePath + `/FeeItems/GetReceivablesFeeItemTreeJson`, {}).then(getResult as any);
 }
 
-//查询冲抵列表
+//查询列表
 export function GetPageData(data): Promise<any> {
   return request.post(process.env.basePath + `/Lastschrift/GetPageData`, { data: objToFormdata(data) }).then(getResult as any);
 }
 
-//查询冲抵明细列表
+//查询明细列表
 export function GetPageDetailData(data): Promise<any> {
   return request.post(process.env.basePath + `/Lastschrift/GetPageDetailData`, { data: objToFormdata(data) }).then(getResult as any);
 }
 
-//根据主单id查询冲抵明细列表
+//根据主单id查询明细列表
 export function GetListById(data): Promise<any> {
   return request.post(process.env.basePath + `/Lastschrift/GetListById`, { data: objToFormdata(data) }).then(getResult as any);
 }
 
-//作废冲抵单
+//作废
 export function InvalidForm(keyValue): Promise<any> {
   return request
     .post(process.env.basePath + `/Lastschrift/InvalidForm?keyValue=${keyValue}`)
     .then(getResult as any);
 }
 
-//保存冲抵单
+//作废明细
+export function InvalidItemForm(keyValue): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Lastschrift/InvalidItemForm?keyValue=${keyValue}`)
+    .then(getResult as any);
+}
+
+//保存
 export function SaveForm(data): Promise<any> {
   return request.post(process.env.basePath + `/Lastschrift/SaveForm`, { data: objToFormdata(data) }).then(getResult as any);
 }
@@ -75,5 +82,3 @@ export function Export(keyValue): Promise<any> {
     )
     .then(getResult as any);
 }
-
-

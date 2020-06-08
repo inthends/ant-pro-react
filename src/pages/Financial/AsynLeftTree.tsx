@@ -3,7 +3,7 @@ import Page from '@/components/Common/Page';
 import { Input, Icon, Layout, Tree } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import { SiderContext } from '../SiderContext';
-import { GetOrgTree, GetAsynChildBuildings, GetUnitTree } from '@/services/commonItem';
+import { GetFeeOrgTree, GetAsynChilds, GetUnitTree } from '@/services/commonItem';
 const { Search } = Input;
 const { TreeNode } = Tree;
 const { Sider } = Layout;
@@ -37,7 +37,7 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
   //展开到管理处
   useEffect(() => {
     //根据父节点获取房产树
-    GetOrgTree().then((res: any[]) => {
+    GetFeeOrgTree().then((res: any[]) => {
       setTreeData(res || []);
       getAllkeys(res || []);
       setExpandedKeys(keys);
@@ -78,9 +78,9 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
       if (treeNode.props.children && treeNode.props.children.length > 0 && treeNode.props.type != 'D') {
         resolve();
         return;
-      }
+      } 
       setTimeout(() => {
-        GetAsynChildBuildings(treeNode.props.eventKey, treeNode.props.type).then((res: any[]) => {
+        GetAsynChilds(treeNode.props.ptype, treeNode.props.eventKey, treeNode.props.type).then((res: any[]) => {
           treeNode.props.dataRef.children = res || [];
           setTreeData([...treeData]);
         });

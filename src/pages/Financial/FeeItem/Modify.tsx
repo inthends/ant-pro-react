@@ -1,7 +1,8 @@
 // 费项编辑页面
 import { CwFeeitem, TreeEntity } from '@/model/models';
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { Spin, message, Modal, Checkbox, Tabs, Select, Table, Button, Card, Icon, Divider, Col, DatePicker, Drawer, Form, Input, Row, InputNumber } from 'antd';
+import { Spin, message, Modal, Checkbox, Tabs, Select, Table, Button, Card,
+   Icon, Divider, Col, DatePicker, Drawer, Form, Input, Row, InputNumber } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
@@ -50,8 +51,7 @@ const Modify = (props: ModifyProps) => {
   const [feeItemNames, setFeeItemNames] = useState<TreeEntity[]>([]);
   const [isFormula, setIsFormula] = useState<boolean>(false);
   const [addFormulaVisible, setAddFormulaVisible] = useState<boolean>(false);
-  const [formulaOne, setFeeFormulaOne] = useState<any>('');
-
+  const [formulaOne, setFeeFormulaOne] = useState<any>(''); 
   const [selectOrgVisible, setSelectOrgVisible] = useState<boolean>(false);
   const [selectHouseVisible, setSelectHouseVisible] = useState<boolean>(false);
   const [editOrgVisible, setEditOrgVisible] = useState<boolean>(false);

@@ -370,7 +370,6 @@ function ListTable(props: ListTableProps) {
     //   alert('ok');
     //   temp.destroy();
     // });
-
     start();
   };
 
@@ -380,7 +379,7 @@ function ListTable(props: ListTableProps) {
       clearInterval(interval);
       interval = null;
     }
-    interval = setInterval(retry, 3000);//启动计时器，调用函数，
+    interval = setInterval(retry, 3000);//启动计时器，调用函数
   }
 
   const retry = () => {
@@ -533,14 +532,7 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'lastAmount',
       key: 'lastAmount',
       width: 80,
-    }, {
-      title: '账单日',
-      dataIndex: 'billDate',
-      key: 'billDate',
-      align: 'center',
-      width: 100,
-      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
-    },
+    }, 
     {
       title: '起始日期',
       dataIndex: 'beginDate',
@@ -555,7 +547,16 @@ function ListTable(props: ListTableProps) {
       align: 'center',
       width: 100,
       render: val => val ? moment(val).format('YYYY-MM-DD') : ''
-    }, {
+    }, 
+    {
+      title: '账单日',
+      dataIndex: 'billDate',
+      key: 'billDate',
+      align: 'center',
+      width: 100,
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
+    },
+    {
       title: '单元全称',
       dataIndex: 'allname',
       key: 'allname',

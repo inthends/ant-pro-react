@@ -9,6 +9,12 @@ export function GetCommonItems(code: string): Promise<Array<TreeEntity>> {
     .then(getResult as any);
 }
 
+export function GetCommonItemsOther(code: string): Promise<Array<TreeEntity>> {
+  return request
+    .get(process.env.basePath + `/Common/GetCommonItemsOther?code=${code}`)
+    .then(getResult as any);
+}
+
 //查询客户数据
 export function GetUserList(keyword, type): Promise<any> {
   return request
@@ -54,6 +60,13 @@ export function GetAsynChildBuildings(pstructId, type): Promise<any[]> {
     .then(getResult as any);
 }
 
+//获取下级包括往来单位
+export function GetAsynChilds(ptype,pstructId, type): Promise<any[]> {
+  return request
+    .get(process.env.basePath + `/Common/GetAsynChilds?ptype=${ptype}&parentId=${pstructId}&type=${type}`)
+    .then(getResult as any);
+}
+
 //获取下级
 export function GetAsynChildBuildingsForHouse(pstructId, type): Promise<any[]> {
   return request
@@ -89,6 +102,11 @@ export function GetOrgs(): Promise<any[]> {
 //加载管理处，子级可展开加载楼盘
 export function GetOrgTree(): Promise<any[]> {
   return request.get(process.env.basePath + `/Common/GetOrgTree`).then(getResult as any);
+}
+
+//收费页面树，包含房产和往来单位
+export function GetFeeOrgTree(): Promise<any[]> {
+  return request.get(process.env.basePath + `/Common/GetFeeOrgTree`).then(getResult as any);
 }
 
 //搜索房间

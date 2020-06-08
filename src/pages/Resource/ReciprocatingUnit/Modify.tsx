@@ -14,7 +14,7 @@ import {
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { SaveForm } from './ReciprocatingUnit.service';
-import { GetCommonItems } from '@/services/commonItem';
+import { GetCommonItemsOther,GetCommonItems } from '@/services/commonItem';
 import styles from './style.less';
 
 const { Option } = Select;
@@ -56,7 +56,7 @@ const Modify = (props: ModifyProps) => {
       setVenderTypes(res || []);
     });
     // 获取状态
-    GetCommonItems('TypeState').then(res => {
+    GetCommonItemsOther('TypeState').then(res => {  
       setStates(res || []);
     });
     // 单位性质
@@ -139,7 +139,7 @@ const Modify = (props: ModifyProps) => {
                   })(
                     <Select placeholder="请选择所属类别">
                       {venderTypes.map(item => (
-                        <Option value={item.value} key={item.key}>
+                        <Option value={item.key} key={item.key}>
                           {item.title}
                         </Option>
                       ))}

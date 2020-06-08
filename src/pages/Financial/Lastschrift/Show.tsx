@@ -1,10 +1,10 @@
 //查看
-import { Tag, Spin, Card, Button, Col, Drawer, Form, Row, Table } from 'antd';
+import { Modal, Input, message, Tag, Spin, Card, Button, Col, Drawer, Form, Row, Table } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { GetFormJson, GetListById } from './Lastschrift.service';
+import { GetFormJson, GetListById, InvalidItemForm } from './Lastschrift.service';
 import styles from './style.less';
 import moment from 'moment';
 
@@ -51,7 +51,7 @@ const Show = (props: ShowProps) => {
           //   setListData(res.data);
           //   setLoading(false);
           // }) 
-          initLoad(res.billId);
+          initLoad(res.billId, '');
         });
       } else {
         setInfoDetail({});
@@ -64,12 +64,13 @@ const Show = (props: ShowProps) => {
   }, [showVisible]);
 
 
-  const initLoad = (keyValue) => {
-    // const queryJson = { keyValue: billId };
+  const initLoad = (keyvalue, search) => {
+    setSearch(search);
+    const queryJson = { keyvalue: keyvalue };
     const sidx = 'id';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
-    return load({ pageIndex, pageSize, sidx, sord, total, keyValue }).then(res => {
+    return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
       return res;
     });
   }
@@ -94,8 +95,10 @@ const Show = (props: ShowProps) => {
     });
   };
 
+  const [search, setSearch] = useState<string>();
   //刷新
-  const loadData = (paginationConfig?: PaginationConfig, sorter?) => {
+  const loadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
+    setSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: pagination.pageSize,
@@ -105,8 +108,7 @@ const Show = (props: ShowProps) => {
       pageIndex,
       pageSize,
       total,
-      keyValue: id,
-      //queryJson: { ruleId: ruleId },
+      queryJson: { keyword: search, keyvalue: id, },
     };
 
     if (sorter) {
@@ -119,9 +121,9 @@ const Show = (props: ShowProps) => {
     });
   };
 
-  const changePage = (pagination: PaginationConfig, filters, sorter) => {
-    loadData(pagination, sorter);
-  };
+  // const changePage = (pagination: PaginationConfig, filters, sorter) => {
+  //   loadData(pagination, sorter);
+  // };
 
   const columns = [
     {
@@ -198,13 +200,44 @@ const Show = (props: ShowProps) => {
       title: '账号',
       dataIndex: 'bankAccount',
       key: 'bankAccount',
-      width: 120,
+      width: 180,
     },
 
     {
       title: '单元全称',
       dataIndex: 'allName',
       key: 'allName',
+    },
+    {
+      title: '操作',
+      dataIndex: 'operation',
+      align: 'center',
+      key: 'operation',
+      fixed: 'right',
+      width: 60,
+      render: (text, record) => {
+        return [ 
+          record.status == 1 ? null : 
+            <a onClick={() => {
+              Modal.confirm({
+                title: '请确认',
+                content: `您是否要作废吗？`,
+                cancelText: '取消',
+                okText: '确认',
+                onOk: () => {
+                  InvalidItemForm(record.id)
+                    .then(() => {
+                      message.success('作废成功');
+                      initLoad(id, search);
+                    })
+                    .catch(e => {
+                      message.error('作废失败');
+                    });
+                },
+              });
+            }} key="delete">作废</a>
+        ];
+      },
     }
   ] as ColumnProps<any>[];
 
@@ -217,8 +250,7 @@ const Show = (props: ShowProps) => {
       onClose={closeDrawer}
       visible={showVisible}
       // style={{ height: 'calc(100vh-50px)' }}
-      bodyStyle={{ background: '#f6f7fb', height: 'calc(100vh -55px)' }}
-    >
+      bodyStyle={{ background: '#f6f7fb', height: 'calc(100vh -55px)' }}  >
       <Spin tip="数据处理中..." spinning={loading}>
         <Form layout="vertical" hideRequiredMark>
           <Card className={styles.card}>
@@ -271,6 +303,15 @@ const Show = (props: ShowProps) => {
               </Col>
             </Row>
             <Row style={{ marginTop: '15px' }}>
+              <div style={{ marginBottom: '5px', padding: '3px 2px' }}>
+                <Input.Search
+                  key='search'
+                  className="search-input"
+                  placeholder="搜索房屋编号"
+                  style={{ width: 180 }}
+                  onSearch={value => loadData(value)}
+                />
+              </div>
               <Table
                 // bordered={false}
                 size="middle"
@@ -279,10 +320,11 @@ const Show = (props: ShowProps) => {
                 // rowKey="billId"
                 rowKey={record => record.id}
                 pagination={pagination}
-                scroll={{ y: 500, x: 1400 }}
+                scroll={{ y: 500, x: 1500 }}
                 loading={loading}
                 onChange={(pagination: PaginationConfig, filters, sorter) =>
-                  changePage(pagination, filters, sorter)
+                  // changePage(pagination, filters, sorter)
+                  loadData(search, pagination, sorter)
                 }
               />
             </Row>

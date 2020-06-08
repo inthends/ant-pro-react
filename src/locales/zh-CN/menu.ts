@@ -60,6 +60,7 @@ export default {
   'menu.estate.pollingline': '巡检路线',
 
   'menu.admin': '行政管理',
+  'menu.admin.admincontract': '行政合同',
   'menu.admin.news': '信息发布',
   'menu.admin.member': '会员管理',
   'menu.admin.warehouse': '仓库管理',

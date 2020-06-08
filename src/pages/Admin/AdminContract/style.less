@@ -1,0 +1,109 @@
+@import '~antd/lib/style/themes/default.less';
+
+
+.card {
+  margin-bottom: 10px;
+}
+
+.addcard {
+  margin-bottom: 50px;
+}
+
+
+.userLabel {
+  height: 60px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  margin-bottom: 10px;
+  user-select: none;
+  display: flex;
+  overflow: hidden;
+  cursor: pointer;
+
+  &.checked {
+    border: 2px solid #ff5d5b;
+    padding: 0 0px;
+  }
+
+  .userImg {
+    width: 60px;
+    line-height: 58px;
+    background-color: #ebebeb;
+    border-right: 1px solid #ccc;
+    text-align: center;
+
+    img {
+      justify-content: center;
+      border-radius: 45px;
+    }
+  }
+
+  .userContent {
+    flex: 1;
+    padding-left: 6px;
+    padding-top: 2px;
+
+    p {
+      margin: 0;
+      font-size: 9pt;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      word-break: break-all;
+      white-space: nowrap;
+    }
+  }
+}
+
+.spin {
+  display: inline-block;
+  opacity: 1;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  margin-top: 50px;
+}
+
+.searchdropdown {
+  color: #666;
+  font-weight: bold;
+}
+ 
+
+.addCustomer {
+  text-align: center;
+  cursor: default;
+}
+
+.phoneNum {
+  position: absolute;
+  color: #999;
+  right: 16px;
+}
+
+
+.headerInfo {
+  position: relative;
+  text-align: center;
+  & > span {
+    display: inline-block;
+    margin-bottom: 4px;
+    color: @text-color-secondary;
+    font-size: @font-size-base;
+    line-height: 22px;
+  }
+  & > p {
+    margin: 0;
+    color: @heading-color;
+    font-size: 24px;
+    line-height: 32px;
+  }
+  & > em {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 1px;
+    height: 56px;
+    background-color: @border-color-split;
+  }
+}

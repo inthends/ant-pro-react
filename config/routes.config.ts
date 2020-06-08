@@ -237,6 +237,12 @@ export default [
             redirect: '/admin/news',
           },
           {
+            name: 'admincontract',
+            path: '/admin/admincontract',
+            icon: 'layout',
+            component: './Admin/AdminContract/Main',
+          },
+          {
             name: 'news',
             path: '/admin/news',
             icon: 'edit',
@@ -246,7 +252,7 @@ export default [
             name: 'member',
             path: '/admin/member',
             icon: 'layout',
-            component: './Admin/member/Main',
+            component: './Admin/Member/Main',
           },
           {
             name: 'warehouse',
