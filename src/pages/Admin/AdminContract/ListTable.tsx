@@ -65,23 +65,7 @@ function ListTable(props: ListTableProps) {
 
 
   const columns = [
-    {
-      title: '默认计费单元',
-      dataIndex: 'billUnitId',
-      key: 'billUnitId',
-      width: 200,
-      // render: (text, row, index) => {
-      //   var house = "";
-      //   if (row.houseList) {
-      //     for (var i = 0; i < row.houseList.length; i++) {
-      //       house = house + row.houseList[i].allName + "，";
-      //     }
-      //     return house.slice(0, house.length - 1);
-      //   }
-      //   return "";
-      // }
-    },
-
+     
     {
       title: '合同编号',
       dataIndex: 'no',
@@ -124,7 +108,7 @@ function ListTable(props: ListTableProps) {
     },
 
     {
-      title: '租客',
+      title: '甲方',
       dataIndex: 'customer',
       key: 'customer',
       width: 120,
@@ -153,32 +137,9 @@ function ListTable(props: ListTableProps) {
       width: 100,
       render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
+    
     {
-      title: '合同面积(㎡)',
-      dataIndex: 'leaseSize',
-      key: 'leaseSize',
-      width: 100,
-    },
-    // {
-    //   title: '总租金',
-    //   dataIndex: 'leaseAmount',
-    //   key: 'leaseAmount',
-    //   width: 100,
-    // },
-    // {
-    //   title: '保证金',
-    //   dataIndex: 'leaseDeposit',
-    //   key: 'leaseDeposit',
-    //   width: 100,
-    // },
-    // {
-    //   title: '物业费',
-    //   dataIndex: 'propertyAmount',
-    //   key: 'propertyAmount',
-    //   width: 100,
-    // },
-    {
-      title: '合同单价',
+      title: '合同金额',
       dataIndex: 'leasePrice',
       key: 'leasePrice',
       width: 100,

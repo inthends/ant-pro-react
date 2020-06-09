@@ -96,3 +96,10 @@ export function ExistEnCode(keyValue, code): Promise<any> {
 export function SplitUnit(data): Promise<any> {
   return request.post(process.env.basePath + `/PStructs/SplitUnit`, { data: objToFormdata(data) }).then(getResult as any);
 }
+
+//获取全称
+export function GetNewAllName(parentId, name): Promise<any> {
+  return request
+    .get(process.env.basePath + `/PStructs/GetNewAllName?parentId=${parentId}&name=${name}`)
+    .then(getResult as any);
+}

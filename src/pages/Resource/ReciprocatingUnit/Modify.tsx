@@ -190,10 +190,8 @@ const Modify = (props: ModifyProps) => {
                           {item.title}
                         </Option>
                       ))}
-                    </Select>,
-                  )}
-
-
+                    </Select>
+                  )} 
                 </Form.Item>
               </Col>
 

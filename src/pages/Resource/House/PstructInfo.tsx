@@ -3,7 +3,7 @@ import { Icon, Upload, Modal, Select, AutoComplete, Button, Card, Col, Drawer, F
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { TreeEntity } from '@/model/models';
-import { ExistEnCode, SaveForm } from './House.service';
+import { ExistEnCode, SaveForm, GetNewAllName } from './House.service';
 import {
   GetCustomerInfo
   // , CheckCustomer, GetCustomerList 
@@ -358,7 +358,18 @@ const PstructInfo = (props: PstructInfoProps) => {
                   {getFieldDecorator('name', {
                     initialValue: infoDetail.name,
                     rules: [{ required: true, message: '请输入名称' }],
-                  })(<Input placeholder="请输入名称" />)}
+                  })(<Input placeholder="请输入名称"
+                    onChange={(e) => {
+                      const { value } = e.target;
+                      //设置全称  
+                      GetNewAllName(infoDetail.parentId, value).then(res => {
+                        // infoDetail.allName = res;
+                        form.setFieldsValue({ allName: res });
+                      })
+
+                    }}
+
+                  />)}
                 </Form.Item>
               </Col>
               <Col lg={12}>
@@ -535,7 +546,7 @@ const PstructInfo = (props: PstructInfoProps) => {
                     )}
                   </Form.Item> */}
 
-                  <Form.Item label={infoDetail.ownerName ? <div>业主名称<a onClick={() => { showCustomerDrawer(infoDetail.ownerId, 1) }}>编辑</a></div> : '业主名称'}>
+                  <Form.Item label={infoDetail.ownerName ? <div>业主名称 <a onClick={() => { showCustomerDrawer(infoDetail.ownerId, 1) }}>编辑</a></div> : '业主名称'}>
                     {getFieldDecorator('ownerName', {
                       initialValue: infoDetail.ownerName
                     })(
@@ -556,7 +567,7 @@ const PstructInfo = (props: PstructInfoProps) => {
                       initialValue: infoDetail.ownerId,
                     })(
                       <input type='hidden' />
-                    )} 
+                    )}
                     {getFieldDecorator('ownerUnitAllName', {
                       initialValue: infoDetail.ownerUnitAllName,
                     })(
@@ -565,7 +576,7 @@ const PstructInfo = (props: PstructInfoProps) => {
                   </Form.Item>
                 </Col>
                 <Col lg={12}>
-                  <Form.Item label={infoDetail.tenantName ? <div>住户名称<a onClick={() => { showCustomerDrawer(infoDetail.tenantId, 2) }}>编辑</a></div> : '住户名称'}>
+                  <Form.Item label={infoDetail.tenantName ? <div>住户名称 <a onClick={() => { showCustomerDrawer(infoDetail.tenantId, 2) }}>编辑</a></div> : '住户名称'}>
                     {/* {getFieldDecorator('tenantName', {
                       initialValue: infoDetail.tenantName,
                       rules: [{ required: false, message: '住户不存在，请先新增' }, { validator: checkExist }]
@@ -584,7 +595,7 @@ const PstructInfo = (props: PstructInfoProps) => {
                     )} */}
 
                     {getFieldDecorator('tenantName', {
-                      initialValue: infoDetail.tenantName 
+                      initialValue: infoDetail.tenantName
                     })(
 
                       <Input

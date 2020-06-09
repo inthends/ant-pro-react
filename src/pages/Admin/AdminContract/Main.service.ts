@@ -12,11 +12,11 @@ export function GetTotalJson(data): Promise<any> {
 }
 
 //获取所有费项
-// export function GetAllFeeItems(): Promise<TreeEntity[]> {
-//   return request
-//     .get(process.env.basePath + `/FeeItems/GetAllFeeItems`)
-//     .then(getResult as any);
-// }
+export function GetAllFeeItems(): Promise<TreeEntity[]> {
+  return request
+    .get(process.env.basePath + `/FeeItems/GetAllFeeItems`)
+    .then(getResult as any);
+}
 
 //获取当前选中房屋的收款费项
 export function GetFeeItemsByUnitId(unitId): Promise<TreeEntity[]> {
