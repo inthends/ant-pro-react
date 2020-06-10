@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import LeftTree from '../LeftTree';
 import ListTable from './ListTable';
 import Modify from './Modify';
-import { GetPageListJson } from './ReciprocatingUnit.service';
+import { GetPageListJson } from './Vendor.service';
 import { GetOrgs } from '@/services/commonItem';
 
 const { Content } = Layout;

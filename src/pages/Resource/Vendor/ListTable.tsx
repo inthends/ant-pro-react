@@ -2,7 +2,7 @@ import Page from '@/components/Common/Page';
 import { Divider, message, Modal, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
-import { RemoveForm, GetDetailJson } from './ReciprocatingUnit.service';
+import { RemoveForm, GetDetailJson } from './Vendor.service';
 
 interface ListTableProps {
   loading: boolean;
@@ -76,24 +76,25 @@ function ListTable(props: ListTableProps) {
       width: 80,
       // sorter: true,
     },
+    
+    {
+      title: '联系人',
+      dataIndex: 'linkMan',
+      key: 'linkMan',
+      width: 80,
+      // sorter: true,
+    },
+    {
+      title: '联系电话',
+      dataIndex: 'linkPhone',
+      key: 'linkPhone',
+    },
     {
       title: '经营范围',
       dataIndex: 'businessScope',
       key: 'businessScope',
       width: 150,
       // sorter: true,
-    },
-    {
-      title: '负责人',
-      dataIndex: 'manager',
-      key: 'manager',
-      width: 80,
-      // sorter: true,
-    },
-    {
-      title: '联系电话',
-      dataIndex: 'innerPhone',
-      key: 'innerPhone',
     },
     {
       title: '联系地址',

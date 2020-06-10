@@ -146,10 +146,10 @@ export default [
             component: './Resource/PStructUser/Main',
           },
           {
-            name: 'reciprocatingunit',
-            path: '/resource/reciprocatingunit',
+            name: 'vendor',
+            path: '/resource/vendor',
             icon: 'contacts',
-            component: './Resource/ReciprocatingUnit/Main',
+            component: './Resource/Vendor/Main',
           },
         ],
       },

@@ -198,12 +198,11 @@ function Main() {
     <Layout style={{ height: '100%' }}>
       <AsynLeftTree
         parentid={'0'}
-        selectTree={(pid, type, info) => {
+        selectTree={(pid, type) => {
           selectTree(pid, type, search);
         }}
       />
-      <Content style={{ paddingLeft: '18px' }}>
-     
+      <Content style={{ paddingLeft: '18px' }}> 
             <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
               <Search
                 className="search-input"

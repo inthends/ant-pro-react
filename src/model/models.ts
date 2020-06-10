@@ -31,9 +31,13 @@ export * from './jcOrganize';
 export * from './jcRole';
 export * from './kfPollingarea';
 export * from './htLeasecontract';
-export * from './leaseContractHouseDTO';
+// export * from './leaseContractHouseDTO';
 export * from './pageData';
 // export * from './parkingData'; 
 export * from './responseObject'; 
 export * from './treeEntity';
 export * from './unitReductionDetail';
+
+export * from './htAdmincontractfee';
+export * from './htAdminfeeresult';
+export * from './htAdmincontract';

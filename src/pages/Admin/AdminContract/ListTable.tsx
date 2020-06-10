@@ -72,7 +72,12 @@ function ListTable(props: ListTableProps) {
       key: 'no',
       width: 100,
     },
-
+    {
+      title: '合同金额',
+      dataIndex: 'amount',
+      key: 'amount',
+      width: 100
+    },
     {
       title: '合同状态',
       dataIndex: 'status',
@@ -108,9 +113,23 @@ function ListTable(props: ListTableProps) {
     },
 
     {
-      title: '甲方',
-      dataIndex: 'customer',
-      key: 'customer',
+      title: '签约对象',
+      dataIndex: 'vendorName',
+      key: 'vendorName',
+      width: 120,
+    },
+
+    {
+      title: '联系人',
+      dataIndex: 'linkMan',
+      key: 'linkMan',
+      width: 120,
+    },
+
+    {
+      title: '联系电话',
+      dataIndex: 'linkPhone',
+      key: 'linkPhone',
       width: 120,
     },
 
@@ -138,15 +157,7 @@ function ListTable(props: ListTableProps) {
       render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     
-    {
-      title: '合同金额',
-      dataIndex: 'leasePrice',
-      key: 'leasePrice',
-      width: 100,
-      render: (text, record) => {
-        return text + record.leasePriceUnit;
-      }
-    },
+   
     {
       title: '是否续租',
       width: 100,
@@ -172,12 +183,7 @@ function ListTable(props: ListTableProps) {
     //   dataIndex: 'legalPerson',
     //   key: 'legalPerson',
     //   width: 100,
-    // },
-    {
-      title: '行业',
-      dataIndex: 'industry',
-      key: 'industry',
-    },
+    // }, 
     {
       title: '操作',
       align: 'center',
@@ -241,7 +247,7 @@ function ListTable(props: ListTableProps) {
         columns={columns}
         rowKey={record => record.id}
         pagination={pagination}
-        scroll={{ y: 500, x: 2000 }}
+        scroll={{ y: 500, x: 1500 }}
         onChange={(pagination: PaginationConfig, filters, sorter) =>
           changePage(pagination, filters, sorter)
         }

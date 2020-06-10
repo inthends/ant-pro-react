@@ -49,3 +49,17 @@ export function GetDetailJson(keyValue): Promise<any> {
 }
 
 
+//查询往来单位数据
+export function GetVendorList(keyword): Promise<any> {
+  return request
+    .get(process.env.basePath + `/Vendor/GetVendorList?keyword=${keyword}`)
+    .then(getResult as any);
+}
+
+//验证
+export function CheckVendor(name): Promise<any> {
+  return request
+    .get(process.env.basePath + `/Vendor/CheckVendor?name=${name}`)
+    .then(getResult as any);
+}
+

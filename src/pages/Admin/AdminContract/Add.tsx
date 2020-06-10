@@ -4,20 +4,15 @@ import {
   Card, Col, DatePicker, Drawer, Form, Input, Row
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import {
-  TreeEntity, HtLeasecontractcharge,
-  htLeasecontract
-} from '@/model/models';
+import { TreeEntity, HtAdmincontractfee, HtAdminfeeresult, htAdmincontract } from '@/model/models';
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { GetCommonItems, GetUserList } from '@/services/commonItem';
-import { RemoveFile, SaveForm, GetAllFeeItems,GetChargeDetail } from './Main.service';
-import styles from './style.less';
-import {
-  GetCustomerInfo, CheckContractCustomer,
-  GetContractCustomerList
-} from '../../Resource/PStructUser/PStructUser.service';
+import { RemoveFile, SaveForm, GetAllFeeItems, GetChargeDetail } from './Main.service';
+import { GetDetailJson, CheckVendor, GetVendorList } from '../../Resource/Vendor/Vendor.service';
 import QuickModify from '../../Resource/PStructUser/QuickModify';
+import styles from './style.less';
+
 const { Option } = Select;
 const { TabPane } = Tabs;
 const { TextArea } = Input;
@@ -46,7 +41,6 @@ const Add = (props: AddProps) => {
 
   //打开抽屉时初始化
   useEffect(() => {
-
     //加载关联收费项目
     GetAllFeeItems().then(res => {
       setFeeItems(res || []);
@@ -63,7 +57,7 @@ const Add = (props: AddProps) => {
 
   }, [visible]);
 
-
+  const [isCal, setIsCal] = useState<boolean>(false);
   //是否启用验证
   const [isValidate, setIsValidate] = useState<boolean>(false);
 
@@ -71,60 +65,48 @@ const Add = (props: AddProps) => {
     setIsValidate(submit);
     form.validateFields((errors, values) => {
       if (!errors) {
+        //是否生成租金明细
+        if (!isCal && submit) {
+          // Modal.warning({
+          //   title: '提示',
+          //   content: '请生成租金明细！',
+          //   okText: '确认'
+          // }); 
+          message.warning('请生成费用明细！');
+          return;
+        }
         setLoading(true);
-        //保存合同数据
-        let ContractCharge: HtLeasecontractcharge = {};
-        //费用条款-基本条款 
-        // ContractCharge.depositFeeItemId = values.depositFeeItemId;
-        // ContractCharge.depositFeeItemName = values.depositFeeItemName;
-        ContractCharge.leaseArea = values.leaseArea;
-        // ContractCharge.deposit = values.deposit;
-        // ContractCharge.depositUnit = values.depositUnit;
-        // ContractCharge.startDate = values.billingDate.format('YYYY-MM-DD');
-        // ContractCharge.endDate = values.contractEndDate.format('YYYY-MM-DD');
-        // ContractCharge.payDate = values.contractStartDate.format('YYYY-MM-DD'); 
-        // ContractCharge.calcPrecision = values.calcPrecision;
-        ContractCharge.lateFee = values.lateFee;
-        ContractCharge.lateMethod = values.lateMethod;
-        if (values.lateDate != null)
-          ContractCharge.lateDate = values.lateDate.format('YYYY-MM-DD');
-        // ContractCharge.propertyFeeId = values.propertyFeeId;
-        // ContractCharge.propertyFeeName = values.propertyFeeName;
-        let Contract: htLeasecontract = {};
+        //保存合同数据 
+        let Contract: htAdmincontract = {};
         Contract.no = values.no;
         Contract.follower = values.follower;
         Contract.followerId = values.followerId;
-        Contract.leaseSize = values.leaseSize;
+        Contract.amount = values.amount;
         Contract.signingDate = values.signingDate.format('YYYY-MM-DD');
         Contract.startDate = values.startDate.format('YYYY-MM-DD');
         Contract.endDate = values.endDate.format('YYYY-MM-DD');
-        // Contract.calcPrecision = values.calcPrecision;
-        // Contract.calcPrecisionMode = values.calcPrecisionMode;
-        Contract.customer = values.customer;
-        Contract.customerId = values.customerId;
-        Contract.customerType = values.customerType;
-        Contract.industry = values.industry;
-        //Contract.industryId = values.industryId;
-        Contract.legalPerson = values.legalPerson;
+        Contract.vendorName = values.vendorName;
+        Contract.vendorId = values.vendorId;
         Contract.linkMan = values.linkMan;
         Contract.linkPhone = values.linkPhone;
         Contract.address = values.address;
         Contract.signer = values.signer;
         Contract.signerId = values.signerId;
-        // Contract.lateFee = values.lateFee;
-        // Contract.lateFeeUnit = values.lateFeeUnit;
-        // Contract.maxLateFee = values.maxLateFee;
-        // Contract.maxLateFeeUnit = values.maxLateFeeUnit;
-        Contract.billUnitId = values.billUnitId;
         Contract.organizeId = organizeId;
+
+        Contract.penaltyRatio = values.penaltyRatio;
+        Contract.penaltyDate = values.penaltyDate ? values.penaltyDate.format('YYYY-MM-DD') : null;
+        Contract.lastResultScale = values.lastResultScale;
+        Contract.lastScaleDispose = values.lastScaleDispose;
+
         Contract.memo = values.memo;
 
         SaveForm({
           ...Contract,
-          ...ContractCharge,
           keyValue: '',
-          chargeId: '',
           room: values.room,
+          termJson: TermJson,
+          chargeFeeResult: JSON.stringify(chargeData)
         }).then(res => {
           message.success('保存成功');
           closeDrawer();
@@ -189,9 +171,9 @@ const Add = (props: AddProps) => {
       callback();//'承租方不能为空');
     }
     else {
-      CheckContractCustomer(value).then(res => {
+      CheckVendor(value).then(res => {
         if (res)
-          callback('承租方不存在，请先新增');
+          callback('签约对象不存在，请先新增');
         else
           callback();
       })
@@ -203,19 +185,19 @@ const Add = (props: AddProps) => {
   const [customerVisible, setCustomerVisible] = useState<boolean>(false);
   const [customer, setCustomer] = useState<any>();
 
-  //甲方
-  const customerSearch = value => {
+  //签约对象
+  const vendorSearch = value => {
     if (value == '') {
       setUserList([]);
     }
     else {
       setUserList([]);
-      GetContractCustomerList(value).then(res => {
+      GetVendorList(value).then(res => {
         // setUserSource(res || []); 
         const list = res.map(item =>
           <Option key={item.id}
-            value={item.name.trim()}>{item.name.trim()}
-            <span className={styles.phoneNum}>{item.phoneNum}</span>
+            value={item.fullName.trim()}>{item.fullName.trim()}
+            <span className={styles.linkPhone}>{item.linkPhone}</span>
           </Option>
         ).concat([
           <Option disabled key="all" className={styles.addCustomer}>
@@ -228,16 +210,14 @@ const Add = (props: AddProps) => {
     }
   };
 
-  const onCustomerSelect = (value, option) => {
+  const onVendorSelect = (value, option) => {
     //props.children[1].props.children
-    form.setFieldsValue({ customerId: option.key });
-    GetCustomerInfo(option.key).then(res => {
-      form.setFieldsValue({ customerType: res.type });
+    form.setFieldsValue({ vendorId: option.key });
+    GetDetailJson(option.key).then(res => {
       form.setFieldsValue({ linkMan: res.linkMan });
-      form.setFieldsValue({ linkPhone: res.phoneNum });
-      form.setFieldsValue({ industry: res.industry });
-      form.setFieldsValue({ legalPerson: res.legal });
+      form.setFieldsValue({ linkPhone: res.linkPhone });
       form.setFieldsValue({ address: res.address });
+      setOrganizeId(res.organizeId);
     })
   };
 
@@ -245,9 +225,9 @@ const Add = (props: AddProps) => {
     setCustomerVisible(false);
   };
 
-  const showCustomerDrawer = (customerId) => {
-    if (customerId != '') {
-      GetCustomerInfo(customerId).then(res => {
+  const showCustomerDrawer = (vendorId) => {
+    if (vendorId != '') {
+      GetDetailJson(vendorId).then(res => {
         setCustomer(res);
         setCustomerVisible(true);
       })
@@ -256,17 +236,10 @@ const Add = (props: AddProps) => {
     }
   };
 
-  // const [priceUnit, setPriceUnit] = useState<string>("元/m²·天");//单价单位
-  // //单位切换
-  // const changeUnit = value => {
-  //   setPriceUnit(value);
-  // };
-
   //动态条款里面选择费项
   // const changeFee = (value, option) => {
   //   form.setFieldsValue({ feeItemName: option.props.children });
   // };
-
 
   //附件上传
   const [fileList, setFileList] = useState<any[]>([]);
@@ -285,114 +258,40 @@ const Add = (props: AddProps) => {
     });
   };
 
-  const [chargeData, setChargeData] = useState<HtChargefeeresult[]>([]);//费用
+  const [chargeData, setChargeData] = useState<HtAdminfeeresult[]>([]);//费用
   const [TermJson, setTermJson] = useState<string>();
+
   //计算租金明细
   const calculation = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        debugger
         //租赁条款     
         // setLoading(true);
-        let TermJson: HtLeasecontractchargefee[] = [];
-        let data: HtLeasecontractchargefee = {}; 
+        let TermJson: HtAdmincontractfee[] = [];
+        let data: HtAdmincontractfee = {};
         data.feeItemId = values.feeItemId[0];
         data.feeItemName = values.feeItemName[0];
-        data.chargeStartDate = values.chargeStartDate[0].format('YYYY-MM-DD');
-        data.chargeEndDate = values.chargeEndDate[0].format('YYYY-MM-DD');
-        data.price = values.price[0];
-        data.priceUnit = values.priceUnit[0];
-        data.advancePayTime = values.advancePayTime[0];
-        data.advancePayTimeUnit = values.advancePayTimeUnit[0];
-        data.billType = values.billType[0];
-        if (data.priceUnit != "元/m²·天" && data.priceUnit != "元/天") {
-          //天单价转换规则
-          data.dayPriceConvertRule = values.dayPriceConvertRule[0];
-        }
-        data.yearDays = values.yearDays[0];
-        data.payCycle = values.payCycle[0];
-        //租期划分方式
-        data.rentalPeriodDivided = values.rentalPeriodDivided[0];
-        //递增率
-        // data.increType = values.increType;
-        data.increStartDate = values.increStartDate[0] ? values.increStartDate[0].format('YYYY-MM-DD') : null;
-        //data.increEndDate = values.increEndDate[0] ? values.increEndDate[0].format('YYYY-MM-DD') : null;
-        data.increGap = values.increGap[0];
-        data.increPrice = values.increPrice[0];
-        data.increPriceUnit = values.increPriceUnit[0];
-        //优惠
-        // data.rebateType = values.rebateType[0];
-        data.rebateStartDate = values.rebateStartDate[0] ? values.rebateStartDate[0].format('YYYY-MM-DD') : null;
-        data.rebateEndDate = values.rebateEndDate[0] ? values.rebateEndDate[0].format('YYYY-MM-DD') : null;
-        // data.startPeriod = values.startPeriod[0];
-        // data.periodLength = values.periodLength[0];
-        // data.discount = values.discount[0];
-        data.rebateRemark = values.rebateRemark[0];
+        data.beginDate = values.beginDate[0].format('YYYY-MM-DD');
+        data.endDate = values.endDate[0].format('YYYY-MM-DD');
+        data.amount = values.amount[0];
         TermJson.push(data);
 
         //动态添加的租期
         values.LeaseTerms.map(function (k, index, arr) {
-          let data: HtLeasecontractchargefee = {};
+          let data: HtAdmincontractfee = {};
           data.feeItemId = values.feeItemId[k];
           data.feeItemName = values.feeItemName[k];
-          data.chargeStartDate = values.chargeStartDate[k];
-          data.chargeEndDate = values.chargeEndDate[k];
-          data.price = values.price[k];
-          data.priceUnit = values.priceUnit[k];
-          data.advancePayTime = values.advancePayTime[k];
-          data.advancePayTimeUnit = values.advancePayTimeUnit[k];
-          data.billType = values.billType[k];
-          if (data.priceUnit != "元/m²·天" && data.priceUnit != "元/天") {
-            data.dayPriceConvertRule = values.dayPriceConvertRule[k];
-          }
-          data.yearDays = values.yearDays[k];
-          data.payCycle = values.payCycle[k];
-          data.rentalPeriodDivided = values.rentalPeriodDivided[k];
-          //递增率 
-          data.increStartDate = values.increStartDate[k] ? values.increStartDate[k].format('YYYY-MM-DD') : null;
-          //data.increEndDate = values.increEndDate[k] ? values.increEndDate[k].format('YYYY-MM-DD') : null;
-          data.increGap = values.increGap[k];
-          data.increPrice = values.increPrice[k];
-          data.increPriceUnit = values.increPriceUnit[k];
-          //优惠
-          // data.rebateType = values.rebateType[k];
-          data.rebateStartDate = values.rebateStartDate[k] ? values.rebateStartDate[k].format('YYYY-MM-DD') : null;
-          data.rebateEndDate = values.rebateEndDate[k] ? values.rebateEndDate[k].format('YYYY-MM-DD') : null;
-          // data.startPeriod = values.startPeriod[k];
-          // data.periodLength = values.periodLength[k];
-          // data.discount = values.discount[k];
-          data.rebateRemark = values.rebateRemark[k];
+          data.beginDate = values.beginDate[k];
+          data.endDate = values.endDate[k];
+          data.amount = values.amount[k];
           TermJson.push(data);
-        }); 
-        
-        let entity: HtLeasecontractcharge = {};
-        //费用条款-基本条款 
-        // entity.depositFeeItemId = values.depositFeeItemId;
-        // entity.depositFeeItemName = values.depositFeeItemName;
-        entity.leaseArea = values.leaseArea;
-        // entity.deposit = values.deposit;
-        // entity.depositUnit = values.depositUnit;
-        // entity.startDate = values.billingDate.format('YYYY-MM-DD');
-        // entity.endDate = values.contractEndDate.format('YYYY-MM-DD');
-        // entity.calcPrecision = values.calcPrecision;
-        entity.lateFee = values.lateFee;
-        entity.lateMethod = values.lateMethod;
-        if (values.lateDate != null)
-          entity.lateDate = values.lateDate.format('YYYY-MM-DD');
-        // entity.propertyFeeId = values.propertyFeeId;
-        // entity.propertyFeeName = values.propertyFeeName;
+        });
 
         let strTermJson = JSON.stringify(TermJson);
         setTermJson(strTermJson);
-        // setChargefee(mychargefee);
-        // let strRateJson = JSON.stringify(RateJson);
-        // setChargeincre(mychargeincre);
-        // let strRebateJson = JSON.stringify(RebateJson);
-        // setChargefeeoffer(mychargefeeoffer);
 
         GetChargeDetail({
-          ...entity, 
-          TermJson: strTermJson, 
+          TermJson: strTermJson,
         }).then(res => {
           setIsCal(true);//计算租金 
           setChargeData(res.chargeFeeResultList);//租金明细   
@@ -407,7 +306,7 @@ const Add = (props: AddProps) => {
     <Drawer
       title={title}
       placement="right"
-      width={1050}
+      width={850}
       onClose={closeDrawer}
       visible={visible}
       destroyOnClose={true}
@@ -427,7 +326,6 @@ const Add = (props: AddProps) => {
                         </Form.Item>
                       </Col>
                     </Row> */}
-
                     <Row gutter={24}>
                       <Col lg={12}>
                         <Form.Item label="合同编号" required>
@@ -438,9 +336,9 @@ const Add = (props: AddProps) => {
                       </Col>
                       <Col lg={12}>
                         <Form.Item label="合同金额">
-                          {getFieldDecorator('leaseSize', {
+                          {getFieldDecorator('amount', {
                             rules: [{ required: true, message: '请输入合同金额' }],
-                          })(<InputNumber placeholder="请输入合同金额" />)}
+                          })(<Input placeholder="自动获取合同金额" readOnly />)}
                         </Form.Item>
                       </Col>
                     </Row>
@@ -511,9 +409,7 @@ const Add = (props: AddProps) => {
                           )}
                         </Form.Item>
                       </Col>
-
                     </Row>
-
                     <Row gutter={24}>
                       <Col lg={12}>
                         <Form.Item label="经营主体" >
@@ -590,9 +486,9 @@ const Add = (props: AddProps) => {
                               optionLabelProp="value"
                               dropdownMatchSelectWidth={false}
                               dataSource={userList}
-                              onSearch={customerSearch}
+                              onSearch={vendorSearch}
                               placeholder="请输入签约对象"
-                              onSelect={onCustomerSelect}
+                              onSelect={onVendorSelect}
                             />
                           )}
                           {getFieldDecorator('vendorId', {
@@ -623,7 +519,7 @@ const Add = (props: AddProps) => {
                       </Col>
                     </Row>
                     <Row gutter={24}>
-                      <Col lg={12}>
+                      <Col lg={24}>
                         <Form.Item label="联系地址" required>
                           {getFieldDecorator('address', {
                             rules: [{ required: true, message: '请输入联系地址' }],
@@ -637,9 +533,57 @@ const Add = (props: AddProps) => {
 
             </TabPane>
             <TabPane tab="费用条款" key="2">
+
+              <Card title="基本条款" className={styles.card} hoverable >
+                <Row gutter={24}>
+                  <Col lg={5}>
+                    <Form.Item label="违约金比例(‰)" >
+                      {getFieldDecorator('penaltyRatio', {
+                        initialValue: 3,
+                      })(<InputNumber placeholder="请输入违约金比例" style={{ width: '100%' }} />)}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={7}>
+                    <Form.Item label="违约金起算日期" >
+                      {getFieldDecorator('penaltyDate', {
+                      })(<DatePicker placeholder="请选择违约金起算日期" style={{ width: '100%' }} />)}
+                    </Form.Item>
+                  </Col>
+
+                  <Col lg={6}>
+                    <Form.Item label="保留小数位数">
+                      {getFieldDecorator('lastResultScale', {
+                        initialValue: 2,
+                        rules: [{ required: true, message: '请选择小数位数' }],
+                      })(
+                        <Select placeholder="请选择小数位数">
+                          <Option value={0}>0</Option>
+                          <Option value={1}>1</Option>
+                          <Option value={2}>2</Option>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={6}>
+                    <Form.Item label="对最后一位">
+                      {getFieldDecorator('lastScaleDispose', {
+                        initialValue: 1,
+                        rules: [{ required: true, message: '请选择小数处理方法' }],
+                      })(
+                        <Select placeholder="请选择小数处理方法">
+                          <Option value={1}>四舍五入</Option>
+                          <Option value={2}>直接舍去</Option>
+                          <Option value={3}>有数进一</Option>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </Card>
+
               <LeaseTerm form={form} feeItems={feeItems} isValidate={isValidate} ></LeaseTerm>
-              <Button style={{ width: '100%', marginBottom: '10px' }} 
-              onClick={calculation}>点击生成费用明细</Button>
+              <Button style={{ width: '100%', marginBottom: '10px' }}
+                onClick={calculation}>点击生成费用明细</Button>
               <ResultList
                 chargeData={chargeData}
                 className={styles.addcard}
@@ -652,7 +596,7 @@ const Add = (props: AddProps) => {
                   <Form.Item label="&nbsp;">
                     {getFieldDecorator('memo', {
                     })(
-                      <TextArea rows={10} placeholder="请输入" />
+                      <TextArea rows={15} placeholder="请输入条款" />
                     )}
                   </Form.Item>
                 </Col>
@@ -710,13 +654,13 @@ const Add = (props: AddProps) => {
         data={customer}
         organizeId={organizeId}
         // type={type}
-        reload={(customerId) => {
-          GetCustomerInfo(customerId).then(res => {
+        reload={(vendorId) => {
+          GetDetailJson(vendorId).then(res => {
             //防止旧数据缓存，清空下拉
             setUserList([]);
-            form.setFieldsValue({ ownerName: res.name });
-            form.setFieldsValue({ ownerId: customerId });
-            form.setFieldsValue({ ownerPhone: res.phoneNum });
+            form.setFieldsValue({ ownerName: res.fullName });
+            form.setFieldsValue({ ownerId: vendorId });
+            form.setFieldsValue({ ownerPhone: res.linkPhone });
           });
         }
         }

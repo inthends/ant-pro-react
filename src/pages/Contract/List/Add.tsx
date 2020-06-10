@@ -85,8 +85,7 @@ const Add = (props: AddProps) => {
   //计算租金明细
   const calculation = () => {
     form.validateFields((errors, values) => {
-      if (!errors) {
-        debugger
+      if (!errors) { 
         //租赁条款     
         // setLoading(true);
         let TermJson: HtLeasecontractchargefee[] = [];
@@ -916,6 +915,70 @@ const Add = (props: AddProps) => {
                       })(<Select>
                         <Option value="固定滞纳金率按天计算" >固定滞纳金率按天计算</Option>
                       </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={24}>
+                  <Col lg={6}>
+                    <Form.Item label="中间每一步计算结果保留">
+                      {getFieldDecorator('midResultScale', {
+                        initialValue:  2,
+                        rules: [{ required: true, message: '请选择小数位数' }],
+                      })(
+                        <Select placeholder="请选择小数位数">
+                          <Option value={0}>0</Option>
+                          <Option value={1}>1</Option>
+                          <Option value={2}>2</Option>
+                          <Option value={3}>3</Option>
+                          <Option value={4}>4</Option>
+                          <Option value={5}>5</Option>
+                          <Option value={6}>6</Option>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={6}>
+                    <Form.Item label="对最后一位">
+                      {getFieldDecorator('midScaleDispose', {
+                        initialValue:   1,
+                        rules: [{ required: true, message: '请选择小数处理方法' }],
+                      })(
+                        <Select placeholder="请选择小数处理方法">
+                          <Option value={1}>四舍五入</Option>
+                          <Option value={2}>直接舍去</Option>
+                          <Option value={3}>有数进一</Option>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={6}>
+                    <Form.Item label="最终结果保留小数位数">
+                      {getFieldDecorator('lastResultScale', {
+                        initialValue:   2,
+                        rules: [{ required: true, message: '请选择小数位数' }],
+                      })(
+                        <Select placeholder="请选择小数位数">
+                          <Option value={0}>0</Option>
+                          <Option value={1}>1</Option>
+                          <Option value={2}>2</Option>
+                          {/* <Option value={3}>3</Option>
+                        <Option value={4}>4</Option> */}
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={6}>
+                    <Form.Item label="对最后一位">
+                      {getFieldDecorator('lastScaleDispose', {
+                        initialValue: 1,
+                        rules: [{ required: true, message: '请选择小数处理方法' }],
+                      })(
+                        <Select placeholder="请选择小数处理方法">
+                          <Option value={1}>四舍五入</Option>
+                          <Option value={2}>直接舍去</Option>
+                          <Option value={3}>有数进一</Option>
+                        </Select>
                       )}
                     </Form.Item>
                   </Col>

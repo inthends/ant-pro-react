@@ -12,9 +12,9 @@
 
 
 /**
- * 合同信息
+ * 行政合同信息
  */
-export interface htLeasecontract {
+export interface htAdmincontract {
   /**
    * 唯一键
    */
@@ -26,7 +26,13 @@ export interface htLeasecontract {
   /**
    * 租赁数量
    */
-  leaseSize?: number;
+  amount?: number;
+
+  /**
+   * 违约金
+   */
+  penaltyAmount?: number;
+
   /**
   * 签订人代码
   */
@@ -71,6 +77,26 @@ export interface htLeasecontract {
  */
   channelType?: string;
 
+    /**
+     * Desc:  违约金起算日期
+     */
+    penaltyDate?: Date;
+
+    /**
+    * 违约金比例
+    */
+   penaltyRatio?: number;
+
+       /**
+     * Desc:  Default:0  Nullable:True
+     */
+    lastResultScale?: number;
+
+        /**
+     * Desc:  Default:0  Nullable:True
+     */
+    lastScaleDispose?: number;
+
   // /**
   //  * 单价保留小数点位数
   //  */
@@ -82,30 +108,11 @@ export interface htLeasecontract {
   /**
    * 租客id
    */
-  customerId?: string;
+  vendorId?: string;
   /**
    * 租客名称
    */
-  customer?: string;
-
-  /**
-  * 行业
-  */
-  industry?: string;
-
-  /**
-   * 承租方类别
-   */
-  customerType?: string;
-  //   /**
-  //  * 行业
-  //  */
-  //   industryId?: string;
-  /**
-   * 法人
-   */
-  legalPerson?: string;
-
+  vendorName?: string;
   /**
    * 租客联系人
    */
@@ -139,31 +146,14 @@ export interface htLeasecontract {
    * 合同状态
    */
   status?: string;
-  // /**
-  //  * 条款单价
-  //  */
-  // leasePrice?: number;
-  /**
-   * 租出合同房源
-   */
-  // houseList?: Array<LeaseContractHouseDTO>;
-  /**
-   * 合同条款Id
-   */
-  chargeId?: string;
-
-  /**
-    * 计费单元Id
-    */
-  billUnitId?: string;
   /**
   * 机构Id
   */
   organizeId?: string;
 
   /**
-   * Desc:  Default:b'0'  Nullable:True
-   */
+  * Desc:  Default:b'0'  Nullable:True
+  */
   isRenewal?: boolean;
 
   /**
@@ -177,8 +167,8 @@ export interface htLeasecontract {
   memo?: string;
 
   /**
- * Desc:  Default:  Nullable:True
- */
+   * Desc:  Default:  Nullable:True
+   */
   createDate?: Date;
   /**
    * Desc:  Default:  Nullable:True

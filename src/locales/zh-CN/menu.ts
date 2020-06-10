@@ -36,7 +36,7 @@ export default {
   'menu.resource.publicarea': '公共区域',
   'menu.resource.parkinglot': '车位资料',
   'menu.resource.pstructuser': '住户资料',
-  'menu.resource.reciprocatingunit': '往来单位',
+  'menu.resource.vendor': '往来单位',
 
   'menu.financial': '财务管理',
   'menu.financial.feeitem': '费项设置',
