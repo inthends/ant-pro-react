@@ -1,4 +1,4 @@
-
+//查看维修单
 import {   Tag, Divider, PageHeader, Button, Card, Col, Drawer, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
@@ -179,31 +179,30 @@ const ShowLink = (props: ShowLinkProps) => {
       {
         showVisible ? (
           <Form layout="vertical" hideRequiredMark>
-            {infoDetail.status == 1 ? (
+            {infoDetail.status != 1 ? (
               <Card title="派单" className={styles.card} hoverable>
                 <Row gutter={24}>
-                  <Col lg={5}>
+                  <Col lg={4}>
                     <Form.Item label="维修专业">
                       {infoDetail.repairMajor}
                     </Form.Item>
                   </Col>
-                  <Col lg={5}>
+                  <Col lg={4}>
                     <Form.Item label="指派给" >
                       {infoDetail.receiverName}
                     </Form.Item>
                   </Col>
-                  <Col lg={5}>
+                  <Col lg={4}>
                     <Form.Item label="派单人" >
                       {infoDetail.senderName}
                     </Form.Item>
                   </Col>
-                  <Col lg={4}>
+                  <Col lg={6}>
                     <Form.Item label="派单时间"  >
                       {infoDetail.sendDate}
                     </Form.Item>
-                  </Col>
-
-                  <Col lg={5}>
+                  </Col> 
+                  <Col lg={6}>
                     <Form.Item label="接单时间">
                       {infoDetail.receiverDate}
                     </Form.Item>

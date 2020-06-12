@@ -243,7 +243,7 @@ const PointContentModify = (props: PointContentModifyProps) => {
                   placeholder="请输入"
                   style={{ width: '100%' }}
                   precision={0}
-                  min={1}
+                  // min={1}
                   max={60}
                 />)}
               </Form.Item>

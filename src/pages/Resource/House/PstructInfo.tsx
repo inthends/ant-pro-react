@@ -362,7 +362,7 @@ const PstructInfo = (props: PstructInfoProps) => {
                     onChange={(e) => {
                       const { value } = e.target;
                       //设置全称  
-                      GetNewAllName(infoDetail.parentId, value).then(res => {
+                      GetNewAllName(parentId, value).then(res => {
                         // infoDetail.allName = res;
                         form.setFieldsValue({ allName: res });
                       })
