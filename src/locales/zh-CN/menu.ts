@@ -53,11 +53,14 @@ export default {
   'menu.estate': '物业管理',
   'menu.estate.servicedesk': '服务总台',
   'menu.estate.repair': '报修管理',
-  'menu.estate.complaint': '投诉管理',
-  'menu.estate.devicetype': '设备种类',
-  'menu.estate.device': '设备资料',
+  'menu.estate.complaint': '投诉管理', 
   'menu.estate.pollingcontent': '巡检内容',
   'menu.estate.pollingline': '巡检路线',
+
+  'menu.estate.devicetype': '设备种类',
+  'menu.estate.device': '设备资料',
+  'menu.estate.maintenancecontent': '维保内容',
+  'menu.estate.maintenanceplan': '维保计划',
 
   'menu.admin': '行政管理',
   'menu.admin.admincontract': '行政合同',

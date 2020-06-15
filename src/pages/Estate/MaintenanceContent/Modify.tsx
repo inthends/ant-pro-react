@@ -22,7 +22,7 @@ const Modify = (props: ModifyProps) => {
   const { getFieldDecorator } = form;
   let initData = data ? data : {};
   const baseFormProps = { form, initData };
-  const [pollingType, setPollingType] = useState<any[]>([]);
+  const [maintenanceType, setMaintenanceType] = useState<any[]>([]);
   // const [orgs, setOrgs] = useState<TreeNode[]>();
 
   const doSave = dataDetail => {
@@ -35,8 +35,8 @@ const Modify = (props: ModifyProps) => {
     //   setOrgs(res);
     // });
 
-    GetCommonItemsNew('PollingType').then(res => {
-      setPollingType(res || []);
+    GetCommonItemsNew('MaintenanceType').then(res => {
+      setMaintenanceType(res || []);
     });
   }, []);
 
@@ -45,7 +45,7 @@ const Modify = (props: ModifyProps) => {
   };
 
   return (
-    <BaseModifyProvider {...props} name="巡检内容" save={doSave}>
+    <BaseModifyProvider {...props} name="维保内容" save={doSave}>
       <Card >
         <Form layout="vertical" hideRequiredMark>
           <Row gutter={24}>
@@ -75,11 +75,11 @@ const Modify = (props: ModifyProps) => {
             <ModifyItem
               {...baseFormProps}
               field="typeId"
-              label="巡检类型"
+              label="维保类型"
               type='select'
-              items={pollingType}
+              items={maintenanceType}
               onChange={onTypeSelect}
-              rules={[{ required: true, message: '请选择巡检类型' }]}
+              rules={[{ required: true, message: '请选择维保类型' }]}
             ></ModifyItem>
             {getFieldDecorator('typeName', {
               initialValue: initData.typeName,

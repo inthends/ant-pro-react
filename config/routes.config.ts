@@ -291,6 +291,20 @@ export default [
             icon: 'phone',
             component: './Estate/Complaint/Main',
           },
+ 
+          {
+            name: 'pollingcontent',
+            path: '/estate/pollingcontent',
+            icon: 'menu',
+            component: './Estate/PollingContent/Main',
+          },
+          {
+            name: 'pollingline',
+            path: '/estate/pollingline',
+            icon: 'gateway',
+            component: './Estate/PollingLine/Main',
+          },
+
 
           {
             name: 'devicetype',
@@ -304,18 +318,21 @@ export default [
             icon: 'laptop',
             component: './Estate/Device/Main',
           },
+
+
           {
-            name: 'pollingcontent',
-            path: '/estate/pollingcontent',
+            name: 'maintenancecontent',
+            path: '/estate/maintenancecontent',
             icon: 'menu',
-            component: './Estate/PollingContent/Main',
+            component: './Estate/MaintenanceContent/Main',
           },
           {
-            name: 'pollingline',
-            path: '/estate/pollingline',
+            name: 'maintenanceplan',
+            path: '/estate/maintenanceplan',
             icon: 'gateway',
-            component: './Estate/PollingLine/Main',
+            component: './Estate/MaintenancePlan/Main',
           },
+
         ],
       },
       {

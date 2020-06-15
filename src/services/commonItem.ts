@@ -224,3 +224,9 @@ export function GetFeeType(code): Promise<TreeEntity[]> {
 // export function GetTreeJsonById(): Promise<TreeEntity[]> {
 //   return request.get(process.env.basePath + `/Common/GetTreeJsonById`, {}).then(getResult);
 // }
+
+
+//加载全部checkbox维保设备
+export function GetDeviceTreeAll(): Promise<ResponseObject<TreeEntity[]>> {
+  return request.get(process.env.basePath + `/Common/GetDeviceTreeAll`, {});
+}

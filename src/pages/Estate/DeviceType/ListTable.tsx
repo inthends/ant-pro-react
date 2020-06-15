@@ -66,7 +66,7 @@ function ListTable(props: ListTableProps) {
       title: '类别编号',
       dataIndex: 'enCode',
       key: 'enCode',
-      width: 200,
+      width: 300,
     },
     {
       title: '类别名称',
@@ -74,6 +74,7 @@ function ListTable(props: ListTableProps) {
       key: 'fullName',
       width: 300,
     },
+
     {
       title: '描述',
       dataIndex: 'description',

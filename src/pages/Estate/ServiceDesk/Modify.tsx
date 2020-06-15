@@ -219,7 +219,7 @@ const Modify = (props: ModifyProps) => {
 
   const menu = (
     <Menu onClick={handleMenuClick}>
-      <Menu.Item key="1">转报修</Menu.Item>
+      <Menu.Item key="1">转维修</Menu.Item>
       <Menu.Item key="2">转投诉</Menu.Item>
       <Menu.Item key="3">闭单</Menu.Item>
       {/* <Menu.Item key="4">归档</Menu.Item> */}
