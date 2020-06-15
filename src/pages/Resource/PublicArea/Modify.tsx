@@ -103,7 +103,10 @@ const Modify = (props: ModifyProps) => {
       reload();
     });
   };
+
+
   const selectOrg = orgId => {
+    
     //const type = treeData.filter(item => item.id === orgId)[0].type;
     // if (type !== '4') {
     //   Modal.warn({
@@ -111,7 +114,8 @@ const Modify = (props: ModifyProps) => {
     //     content: '只能选到楼层不可以选择其他层次！',
     //   });
     // }
-    form.setFieldsValue({ parentId: undefined });
+ 
+    form.setFieldsValue({ parentId: orgId });
   };
 
   return (
@@ -193,7 +197,7 @@ const Modify = (props: ModifyProps) => {
                       checked={form.getFieldValue('auditMark')}
                     >
                       是否审核
-                    </Checkbox>,
+                    </Checkbox>
                   )}
                 </Col>
               </Row>

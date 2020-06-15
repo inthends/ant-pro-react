@@ -20,6 +20,7 @@ const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
 // const { Option } = Select;
+import AuthButton from '@/components/AuthButton/AuthButton';
 
 function Main() {
   // const [organize, SetOrganize] = useState<any>({});
@@ -511,12 +512,24 @@ function Main() {
                 </Button>
               </Dropdown>
 
-              <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
+              {/* <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
                 onClick={() => { showModify(null, true) }}
               >
                 <Icon type="plus" />
                 新增
-              </Button>
+              </Button> */}
+
+
+              <AuthButton
+                style={{ float: 'right', marginLeft: '10px' }}
+                onClick={() => showModify(null, true)}
+                module="Billnotice"
+                code="add"
+                btype="primary">
+                <Icon type="plus" />
+                新增
+               </AuthButton>
+
             </div>
 
             <ListTable

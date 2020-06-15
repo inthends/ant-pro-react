@@ -27,7 +27,7 @@ function Main() {
     SetOrganize(info.node.props.dataRef);
     //初始化页码，防止页码错乱导致数据查询出错  
     const page = new DefaultPagination();
-    loadData(search,info.node.props.dataRef, page);
+    loadData(search, info.node.props.dataRef, page);
   };
 
   useEffect(() => {
@@ -186,17 +186,19 @@ function Main() {
             style={{ width: 200 }}
           />
           <Button type="primary"
-            disabled={isDisabled}
-            style={{ float: 'right', marginLeft: '10px' }} onClick={() => showDrawer()}>
-            <Icon type="plus" />
-            区域
-          </Button>
-
-          <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
+            style={{ float: 'right', marginLeft: '10px' }}
             onClick={() => { CreateQrCode() }} >
             <Icon type="qrcode" />
             生成二维码
            </Button>
+
+          <Button type="primary"
+            disabled={isDisabled}
+            style={{ float: 'right', marginLeft: '10px' }}
+            onClick={() => showDrawer()}>
+            <Icon type="plus" />
+            区域
+          </Button>
 
         </div>
         <ListTable

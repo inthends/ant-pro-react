@@ -1,6 +1,6 @@
 //划账管理
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { Tabs, Button, Icon, Input, Layout } from 'antd';
+import { Tabs,   Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import { GetPageDetailData, GetPageData } from './Lastschrift.service';
@@ -15,6 +15,7 @@ import Show from './Show';
 import ListTable from './ListTable';
 import DetailTable from './DetailTable';
 import Check from './Check';
+import AuthButton from '@/components/AuthButton/AuthButton';
 
 const { Content } = Layout;
 const { Search } = Input;
@@ -318,12 +319,25 @@ function Main() {
                 <Icon type="reload" />
                 刷新
               </Button> */}
-              <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
+
+              {/* <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
                 onClick={() => showDrawer()} disabled={addButtonDisable}
               >
                 <Icon type="plus" />
                 添加
-              </Button>
+              </Button> */}
+
+              <AuthButton
+              style={{ float: 'right', marginLeft: '10px' }}
+                onClick={() => showDrawer()}
+                disabled={addButtonDisable}
+                module="Lastschrift"
+                code="add"
+                btype="primary">
+                <Icon type="plus" />
+                添加
+               </AuthButton>
+
             </div>
             <ListTable
               onchange={(paginationConfig, filters, sorter) =>

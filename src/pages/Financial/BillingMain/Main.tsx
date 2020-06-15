@@ -1,6 +1,6 @@
 //周期费计算
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { Tabs, Button, Icon, Input, Layout } from 'antd';
+import { Tabs,  Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import { GetPageListJson, GetPageDetailListJson } from './Main.service';
@@ -16,6 +16,9 @@ import Show from './Show';
 const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
+
+import AuthButton from '@/components/AuthButton/AuthButton';
+
 function Main() {
   // const [organize, SetOrganize] = useState<any>({});
   // const [treeSearch, SetTreeSearch] = useState<any>({});
@@ -44,7 +47,7 @@ function Main() {
     // initLoadData(info.node.props.dataRef, search);
     // initLoadDetailData(info.node.props.dataRef, detailSearch); 
     //初始化页码，防止页码错乱导致数据查询出错  
-    const page = new DefaultPagination(); 
+    const page = new DefaultPagination();
     loadData(search, orgId, type, page);
     loadUnitMeterData(detailSearch, orgId, type, page);
   };
@@ -316,12 +319,25 @@ function Main() {
                 <Icon type="search" />
                 查询
               </Button> */}
-              <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
+
+
+              {/* <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
                 onClick={() => { showModify(null, true) }}
               >
                 <Icon type="plus" />
                 新增
-              </Button>
+              </Button> */}
+
+              <AuthButton
+                style={{ float: 'right', marginLeft: '10px' }}
+                onClick={() => showModify(null, true)}
+                module="Billingmain"
+                code="add"
+                btype="primary">
+                <Icon type="plus" />
+                新增
+               </AuthButton>
+ 
             </div>
             <ListTable
               onchange={(paginationConfig, filters, sorter) =>

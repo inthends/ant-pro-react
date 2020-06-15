@@ -118,8 +118,8 @@ const PointContentModify = (props: PointContentModifyProps) => {
                 )}
               </Form.Item>
             </Col>
-
           </Row>
+
           {/* <Row gutter={24}>
             <Col lg={8}>
               <Form.Item label="频次" required>

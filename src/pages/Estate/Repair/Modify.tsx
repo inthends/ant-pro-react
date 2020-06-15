@@ -88,10 +88,22 @@ const Modify = (props: ModifyProps) => {
     form.validateFields((errors, values) => {
       if (!errors) {
         const newData = infoDetail ? { ...infoDetail, ...values } : values;
+
         Dispatch({ ...newData, keyValue: newData.id }).then(res => {
+          message.destroy();//防止重复弹出提示
           message.success('派单成功');
           closeDrawer();
           reload();
+        }).catch(err => { 
+          //数据在APP端已经处理，弹出刷新确认
+          Modal.confirm({
+            title: '请确认',
+            content: err,
+            onOk: () => { 
+              closeDrawer();
+              reload(); 
+            }
+          }); 
         });
       }
     });
@@ -105,6 +117,16 @@ const Modify = (props: ModifyProps) => {
           message.success('接单成功');
           closeDrawer();
           reload();
+        }).catch(err => { 
+          //数据在APP端已经处理，弹出刷新确认
+          Modal.confirm({
+            title: '请确认',
+            content: err,
+            onOk: () => { 
+              closeDrawer();
+              reload(); 
+            }
+          }); 
         });
       }
     });
@@ -133,6 +155,16 @@ const Modify = (props: ModifyProps) => {
           message.success('已开工');
           closeDrawer();
           reload();
+        }).catch(err => { 
+          //数据在APP端已经处理，弹出刷新确认
+          Modal.confirm({
+            title: '请确认',
+            content: err,
+            onOk: () => { 
+              closeDrawer();
+              reload(); 
+            }
+          }); 
         });
       }
     });
@@ -148,6 +180,16 @@ const Modify = (props: ModifyProps) => {
           message.success('处理完成');
           closeDrawer();
           reload();
+        }).catch(err => { 
+          //数据在APP端已经处理，弹出刷新确认
+          Modal.confirm({
+            title: '请确认',
+            content: err,
+            onOk: () => { 
+              closeDrawer();
+              reload(); 
+            }
+          }); 
         });
       }
     });
@@ -163,6 +205,16 @@ const Modify = (props: ModifyProps) => {
           message.success('检验完成');
           closeDrawer();
           reload();
+        }).catch(err => { 
+          //数据在APP端已经处理，弹出刷新确认
+          Modal.confirm({
+            title: '请确认',
+            content: err,
+            onOk: () => { 
+              closeDrawer();
+              reload(); 
+            }
+          }); 
         });
       }
     });
@@ -244,7 +296,7 @@ const Modify = (props: ModifyProps) => {
       if (id) {
         GetEntity(id).then(info => {
           //赋值
-          setInfoDetail(info.entity); 
+          setInfoDetail(info.entity);
           setAdminOrgId(info.entity.organizeId);//管理处Id
           setOrganizeId(info.entity.roomId);
           setFeeId(info.feeId);
@@ -322,7 +374,6 @@ const Modify = (props: ModifyProps) => {
     });
   };
   //图片上传结束
-
 
   return (
     <Drawer
@@ -922,7 +973,7 @@ const Modify = (props: ModifyProps) => {
 
         <Button onClick={close} style={{ marginRight: 8 }}>
           取消
-          </Button> 
+          </Button>
         {infoDetail.status == 1 ? (
 
           <Button onClick={dispatch} type="primary">
@@ -932,7 +983,7 @@ const Modify = (props: ModifyProps) => {
         {infoDetail.status == 2 && infoDetail.receiverId == localStorage.getItem('userid') ? (
           <Button onClick={receive} type="primary">
             接单
-          </Button> 
+          </Button>
         ) : null}
 
         {infoDetail.status == 3 ? (
@@ -975,7 +1026,7 @@ const Modify = (props: ModifyProps) => {
           </div>
         ) : null} */}
 
-        {infoDetail.status == 6 ? ( 
+        {infoDetail.status == 6 ? (
           <Button onClick={check} type="primary">
             检验
           </Button>

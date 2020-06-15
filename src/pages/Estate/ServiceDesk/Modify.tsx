@@ -97,10 +97,22 @@ const Modify = (props: ModifyProps) => {
     dataDetail.isAdd = dataDetail.billCode == undefined ? true : false;
     dataDetail.custEvaluate = 0;
     SaveForm({ ...dataDetail }).then(res => {
+      message.destroy();//防止重复弹出提示
       message.success('保存成功');
       closeDrawer();
       reload();
-    });
+    }) 
+      .catch(err => {
+        //数据在APP端已经处理，弹出刷新确认
+        Modal.confirm({
+          title: '请确认',
+          content: err,
+          onOk: () => {
+            closeDrawer();
+            reload();
+          }
+        });
+      });
   };
 
   const onChange = (value, label, extr) => {
@@ -139,17 +151,41 @@ const Modify = (props: ModifyProps) => {
               const newData = data ? { ...data, ...values } : values;
               newData.keyValue = newData.id;
               if (e.key == '1') {
+
                 ChangeToRepair({ ...newData }).then(res => {
+                  message.destroy();//防止重复弹出提示
                   message.success('操作成功！');
                   closeDrawer();
                   reload();
+
+                }).catch(err => {
+                  //数据在APP端已经处理，弹出刷新确认
+                  Modal.confirm({
+                    title: '请确认',
+                    content: err,
+                    onOk: () => {
+                      closeDrawer();
+                      reload();
+                    }
+                  });
                 });
               }
               else if (e.key == '2') {
                 ChangeToComplaint({ ...newData }).then(res => {
+                  message.destroy();//防止重复弹出提示
                   message.success('操作成功！');
                   closeDrawer();
                   reload();
+                }).catch(err => {
+                  //数据在APP端已经处理，弹出刷新确认
+                  Modal.confirm({
+                    title: '请确认',
+                    content: err,
+                    onOk: () => {
+                      closeDrawer();
+                      reload();
+                    }
+                  });
                 });
               }
             }
@@ -567,7 +603,7 @@ const Modify = (props: ModifyProps) => {
                       <Form.Item label="重要程度">
                         {infoDetail.importance}
                       </Form.Item>
-                    </Col> 
+                    </Col>
                     {infoDetail.billType == '报修' ?
                       (<><Col lg={4}>
                         <Form.Item label="维修区域">

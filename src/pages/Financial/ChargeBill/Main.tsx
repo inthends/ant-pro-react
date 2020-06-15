@@ -19,7 +19,7 @@ import Transform from './Transform';
 import Submit from './Submit';
 import RoomShow from '../../Resource/House/RoomShow';
 import AddNote from './AddNote';
-
+import AuthButton from '@/components/AuthButton/AuthButton';
 const { Content } = Layout;
 const { Search } = Input;
 const { TabPane } = Tabs;
@@ -622,12 +622,22 @@ function Main() {
                 {showname}
               </a>
 
-              <Button type="primary" style={{ float: 'right' }}
+              {/* <Button type="primary" style={{ float: 'right' }}
                 onClick={() => showDrawer()}
                 disabled={addButtonDisable}>
                 <Icon type="plus" />
                 加费
-              </Button>
+              </Button> */}
+
+              <AuthButton
+               type="primary" style={{ float: 'right' }}
+                onClick={() => showDrawer()}
+                module="ChargeBill"
+                code="add"
+                btype="primary">
+                <Icon type="plus" />
+                加费
+               </AuthButton>
 
               {/* <Button type="primary" style={{ float: 'right',marginLeft:'3px' }}
                 onClick={() => showVerify('',false)}
@@ -659,7 +669,7 @@ function Main() {
 
           </TabPane>
           <TabPane tab="收款单列表" key="2">
-            <div style={{ marginBottom: '10px' }}> 
+            <div style={{ marginBottom: '10px' }}>
               <Search
                 className="search-input"
                 placeholder="搜索收款单号"
