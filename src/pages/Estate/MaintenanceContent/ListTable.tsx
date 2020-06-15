@@ -62,15 +62,15 @@ function ListTable(props: ListTableProps) {
     //   width: 150
     // },
     {
-      title: "标准要求",
-      dataIndex: "criterion",
-      key: "criterion",
-      width: 200
+      title: "作业标准",
+      dataIndex: "standard",
+      key: "standard",
+      width: 150
     },
     {
-      title: "检查方法",
-      dataIndex: "checkWay",
-      key: "checkWay",
+      title: "作业要点",
+      dataIndex: "essentials",
+      key: "essentials",
       width: 200
     },
     // {

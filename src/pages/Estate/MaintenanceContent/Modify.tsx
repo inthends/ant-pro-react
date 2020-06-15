@@ -53,12 +53,14 @@ const Modify = (props: ModifyProps) => {
               {...baseFormProps}
               field="name"
               label="名称"
+              maxLength={50}
               rules={[{ required: true, message: "请输入名称" }]}
             ></ModifyItem>
             <ModifyItem
               {...baseFormProps}
               field="code"
               label="编号"
+              maxLength={50}
               rules={[{ required: true, message: "请输入编号" }]}
             ></ModifyItem>
           </Row>
@@ -88,27 +90,32 @@ const Modify = (props: ModifyProps) => {
             )}
             <ModifyItem
               {...baseFormProps}
-              field="checkWay"
-              label="检查方法"
-              rules={[{ required: true, message: '请输入检查方法' }]}
+              field="standard"
+              label="作业标准"
+              maxLength={50}
+              rules={[{ required: true, message: '请输入作业标准' }]}
             ></ModifyItem>
           </Row>
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
-              field="criterion"
-              label="标准要求"
+              field="essentials"
+              label="作业要点"
+              maxLength={200}
+              type="textarea"
               lg={24}
-              rules={[{ required: true, message: "请输入标准要求" }]}
+              rows={3}
+              rules={[{ required: true, message: "请输入作业要点" }]}
             ></ModifyItem>
 
           </Row>
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
-              lg={24}
+              lg={24} 
               type="textarea"
               field="memo"
+              maxLength={500}
               label="备注"
             ></ModifyItem>
           </Row>

@@ -26,6 +26,7 @@ interface ModifyItemProps {
   onSelect?(value, option): void; //autoComplete
   lg?: any;
   maxLength?: any;
+  rows?: any;
 }
 const ModifyItem = (props: ModifyItemProps) => {
   const {
@@ -48,7 +49,8 @@ const ModifyItem = (props: ModifyItemProps) => {
     onChange,
     onSelect,
     checked,
-    dropdownStyle
+    dropdownStyle,
+    rows 
   } = props;
   const { getFieldDecorator } = form;
   const inner = { disabled };
@@ -92,7 +94,7 @@ const ModifyItem = (props: ModifyItemProps) => {
         return (
           <TextArea
             {...inner}
-            rows={4}
+            rows={rows ? rows : 4}
             placeholder={`请输入${label as string}`}
             onChange={onChange}
             maxLength={maxLength}
@@ -166,7 +168,7 @@ const ModifyItem = (props: ModifyItemProps) => {
     }
   };
 
-  const getInitValue = () => { 
+  const getInitValue = () => {
     if (initData) {
       if (type === 'date') {
         if (initData[field]) {
