@@ -1,15 +1,19 @@
 
-import { Spin, Upload, Modal, Menu, Dropdown, Icon, Tabs, Select, Button, Card, Col, Drawer, Form, Input, message, Row, TreeSelect } from 'antd';
+import {
+  Spin, Upload, Modal, Menu, Dropdown, Icon, Tabs, Select, Button, Card, Col,
+  Drawer, Form, Input, message, Row
+} from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { GetFilesData, RemoveFile, SaveForm, ChangeToRepair, ChangeToComplaint } from './Main.service';
-import { GetRoomUser, GetOrgTreeSimple, GetAsynChildBuildingsForServerDesk } from '@/services/commonItem';
+import { GetRoomUser } from '@/services/commonItem';
 import styles from './style.less';
 import CommentBox from './CommentBox';
 import AddMemo from './AddMemo';
 const { Option } = Select;
 const { TextArea } = Input;
 const { TabPane } = Tabs;
+import SelectHouse from './SelectHouse';
 
 interface ModifyProps {
   modifyVisible: boolean;
@@ -37,15 +41,15 @@ const Modify = (props: ModifyProps) => {
   const [previewImage, setPreviewImage] = useState<string>('');
   const [addMemoVisible, setAddMemoVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [treeData, setTreeData] = useState<any[]>([]);
+  // const [treeData, setTreeData] = useState<any[]>([]);
 
   // 打开抽屉时初始化
-  useEffect(() => {
-    //获取房产树 
-    GetOrgTreeSimple().then((res: any[]) => {
-      setTreeData(res || []);
-    });
-  }, []);
+  // useEffect(() => {
+  //   //获取房产树 
+  //   GetOrgTreeSimple().then((res: any[]) => {
+  //     setTreeData(res || []);
+  //   });
+  // }, []);
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -101,7 +105,7 @@ const Modify = (props: ModifyProps) => {
       message.success('保存成功');
       closeDrawer();
       reload();
-    }) 
+    })
       .catch(err => {
         //数据在APP端已经处理，弹出刷新确认
         Modal.confirm({
@@ -115,29 +119,29 @@ const Modify = (props: ModifyProps) => {
       });
   };
 
-  const onChange = (value, label, extr) => {
-    //加载房间联系人以及联系电话 
-    if (value) {
-      GetRoomUser(value).then((res: any) => {
-        //setRoomUser(res || null); 
-        form.setFieldsValue({ address: extr.triggerNode.props.allname });
-        if (res != null) {
-          form.setFieldsValue({ contactName: res.contactName });
-          form.setFieldsValue({ contactPhone: res.contactPhone });
-          form.setFieldsValue({ contactId: res.custId });
-        } else {
-          form.setFieldsValue({ contactName: '' });
-          form.setFieldsValue({ contactPhone: '' });
-          form.setFieldsValue({ contactId: '' });
-        }
-      });
-    } else {
-      form.setFieldsValue({ address: '' });
-      form.setFieldsValue({ contactName: '' });
-      form.setFieldsValue({ contactPhone: '' });
-      form.setFieldsValue({ contactId: '' });
-    }
-  };
+  // const onChange = (value, label, extr) => {
+  //   //加载房间联系人以及联系电话 
+  //   if (value) {
+  //     GetRoomUser(value).then((res: any) => {
+  //       //setRoomUser(res || null); 
+  //       form.setFieldsValue({ address: extr.triggerNode.props.allname });
+  //       if (res != null) {
+  //         form.setFieldsValue({ contactName: res.contactName });
+  //         form.setFieldsValue({ contactPhone: res.contactPhone });
+  //         form.setFieldsValue({ contactId: res.custId });
+  //       } else {
+  //         form.setFieldsValue({ contactName: '' });
+  //         form.setFieldsValue({ contactPhone: '' });
+  //         form.setFieldsValue({ contactId: '' });
+  //       }
+  //     });
+  //   } else {
+  //     form.setFieldsValue({ address: '' });
+  //     form.setFieldsValue({ contactName: '' });
+  //     form.setFieldsValue({ contactPhone: '' });
+  //     form.setFieldsValue({ contactId: '' });
+  //   }
+  // };
 
   const handleMenuClick = (e) => {
     form.validateFields((errors, values) => {
@@ -200,22 +204,22 @@ const Modify = (props: ModifyProps) => {
   };
 
   //异步加载房产
-  const onLoadData = treeNode =>
-    new Promise<any>(resolve => {
-      if (treeNode.props.children && treeNode.props.children.length > 0 && treeNode.props.type != 'D') {
-        resolve();
-        return;
-      }
-      setTimeout(() => {
-        GetAsynChildBuildingsForServerDesk(treeNode.props.eventKey, treeNode.props.type).then((res: any[]) => {
-          // treeNode.props.children = res || [];
-          let newtree = treeData.concat(res);
-          // setTreeData([...treeData]);
-          setTreeData(newtree);
-        });
-        resolve();
-      }, 50);
-    });
+  // const onLoadData = treeNode =>
+  //   new Promise<any>(resolve => {
+  //     if (treeNode.props.children && treeNode.props.children.length > 0 && treeNode.props.type != 'D') {
+  //       resolve();
+  //       return;
+  //     }
+  //     setTimeout(() => {
+  //       GetAsynChildBuildingsForServerDesk(treeNode.props.eventKey, treeNode.props.type).then((res: any[]) => {
+  //         // treeNode.props.children = res || [];
+  //         let newtree = treeData.concat(res);
+  //         // setTreeData([...treeData]);
+  //         setTreeData(newtree);
+  //       });
+  //       resolve();
+  //     }, 50);
+  //   });
 
   const menu = (
     <Menu onClick={handleMenuClick}>
@@ -315,6 +319,12 @@ const Modify = (props: ModifyProps) => {
   //   });
   // };
 
+  const [selectHouseVisible, setSelectHouseVisible] = useState<boolean>(false);
+
+  const closeSelectHouse = () => {
+    setSelectHouseVisible(false);
+  }
+
   return (
     <Drawer
       title={title}
@@ -333,7 +343,16 @@ const Modify = (props: ModifyProps) => {
               {!infoDetail.status || infoDetail.status == 1 ? (
                 <Card className={styles.card2}>
                   <Row gutter={24}>
-                    <Col lg={8}>
+
+                    <Col lg={10}>
+                      <Form.Item label="服务单号">
+                        {getFieldDecorator('billCode', {
+                          initialValue: infoDetail.billCode
+                        })(<Input placeholder="自动获取单号" disabled />)}
+                      </Form.Item>
+                    </Col>
+
+                    <Col lg={7}>
                       <Form.Item label="单据来源" required>
                         {/* {getFieldDecorator('source', {
                           initialValue: infoDetail.source == undefined ? '服务总台' : infoDetail.source
@@ -345,28 +364,21 @@ const Modify = (props: ModifyProps) => {
                             <Option value="员工APP">员工APP</Option>
                           </Select>
                         )} */}
-
                         {getFieldDecorator('source', {
                           initialValue: '服务总台'
-                        })(<Input readOnly />)}
+                        })(<Input disabled />)}
 
                       </Form.Item>
                     </Col>
-                    <Col lg={8}>
-                      <Form.Item label="服务单号">
-                        {getFieldDecorator('billCode', {
-                          initialValue: infoDetail.billCode
-                        })(<Input placeholder="自动获取单号" readOnly />)}
-                      </Form.Item>
-                    </Col>
-                    <Col lg={8}>
+
+                    <Col lg={7}>
                       <Form.Item label="单据时间">
-                        <Input placeholder="自动获取时间" readOnly value={infoDetail.billDate} />
+                        <Input placeholder="自动获取时间" disabled value={infoDetail.billDate} />
                       </Form.Item>
                     </Col>
                   </Row>
                   <Row gutter={24}>
-                    <Col lg={8}>
+                    <Col lg={5}>
                       <Form.Item label="业务类型">
                         {getFieldDecorator('billType', {
                           initialValue: infoDetail.billType === undefined ? '咨询' : infoDetail.billType
@@ -381,7 +393,7 @@ const Modify = (props: ModifyProps) => {
                         )}
                       </Form.Item>
                     </Col>
-                    <Col lg={8}>
+                    <Col lg={5}>
                       <Form.Item label="紧急程度">
                         {getFieldDecorator('emergencyLevel', {
                           initialValue: infoDetail.emergencyLevel == undefined ? '一般' : infoDetail.emergencyLevel
@@ -394,7 +406,7 @@ const Modify = (props: ModifyProps) => {
                         )}
                       </Form.Item>
                     </Col>
-                    <Col lg={8}>
+                    <Col lg={5}>
                       <Form.Item label="重要程度">
                         {getFieldDecorator('importance', {
                           initialValue: infoDetail.importance == undefined ? '一般' : infoDetail.importance
@@ -407,8 +419,35 @@ const Modify = (props: ModifyProps) => {
                         )}
                       </Form.Item>
                     </Col>
+
+
+                    <Col lg={5}>
+                      <Form.Item label="维修区域">
+                        {getFieldDecorator('repairArea', {
+                          initialValue: infoDetail.repairArea == undefined ? '客户区域' : infoDetail.repairArea
+                        })(
+                          <Select disabled={form.getFieldValue('billType') == '报修' ? false : true} >
+                            <Option value="客户区域">客户区域</Option>
+                            <Option value="公共区域">公共区域</Option>
+                          </Select>
+                        )}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={4}>
+                      <Form.Item label="是否有偿">
+                        {getFieldDecorator('isPaid', {
+                          initialValue: infoDetail.isPaid == undefined ? '否' : infoDetail.isPaid
+                        })(
+                          <Select disabled={form.getFieldValue('billType') == '报修' ? false : true} >
+                            <Option value="否">否</Option>
+                            <Option value="是">是</Option>
+                          </Select>
+                        )}
+                      </Form.Item>
+                    </Col>
                   </Row>
-                  {form.getFieldValue('billType') == '报修' ?
+
+                  {/* {form.getFieldValue('billType') == '报修' ?
                     <Row gutter={24}>
                       <Col lg={8}>
                         <Form.Item label="维修区域">
@@ -434,26 +473,11 @@ const Modify = (props: ModifyProps) => {
                           )}
                         </Form.Item>
                       </Col>
-                    </Row> : null}
-                  <Row gutter={24}>
-                    <Col lg={8}>
-                      {/* <Form.Item label="联系位置" required>
-                        {getFieldDecorator('roomId', {
-                          initialValue: infoDetail.roomId,
-                          rules: [{ required: true, message: '请选择联系位置' }],
-                        })(
-                          <TreeSelect
-                            placeholder="请选择联系位置"
-                            allowClear
-                            onChange={onChange}
-                            dropdownStyle={{ maxHeight: 300 }}
-                            treeData={treeData}
-                            treeDataSimpleMode={true} >
-                          </TreeSelect>
-                        )}
-                      </Form.Item> */}
+                    </Row> : null} */}
 
-                      <Form.Item label="所属位置" required>
+                  <Row gutter={24}>
+                    <Col lg={12}>
+                      {/* <Form.Item label="所属位置" required>
                         {getFieldDecorator('roomId', {
                           initialValue: infoDetail.roomId,
                           rules: [{ required: true, message: '请选择所属位置' }],
@@ -466,21 +490,51 @@ const Modify = (props: ModifyProps) => {
                             treeData={treeData}
                             loadData={onLoadData}
                             onChange={onChange}
-                            treeDataSimpleMode={true} >
+                            treeDataSimpleMode={true}
+                          >
                           </TreeSelect>
+                        )} 
+                      </Form.Item> */}
+
+
+                      <Form.Item label="所在位置" required>
+                        {getFieldDecorator('address', {
+                          initialValue: infoDetail.address,
+                          rules: [{ required: true, message: '请选择所在位置' }],
+                        })(
+                          <Input
+                            onChange={e => {
+                              var newInfo = Object.assign({}, infoDetail,
+                                {
+                                  roomId: '',
+                                  address: '',
+                                  contactName: '',
+                                  contactPhone: '',
+                                  contactId: ''
+                                });
+                              setInfoDetail(newInfo);
+                            }}
+                            allowClear={true}
+
+                            addonAfter={<Icon type="setting" onClick={() => {
+                              setSelectHouseVisible(true);
+                            }} />} />
                         )}
-                        {/* <span style={{ marginLeft: 8, color: "blue" }}>多个房屋的时候，默认获取第一个房屋作为计费单元</span> */}
-                        {getFieldDecorator('billUnitId', {
+
+                        {getFieldDecorator('roomId', {
+                          initialValue: infoDetail.roomId,
                         })(
                           <input type='hidden' />
                         )}
+
                       </Form.Item>
+
                     </Col>
-                    <Col lg={8}>
+                    <Col lg={6}>
                       <Form.Item label="联系人">
                         {getFieldDecorator('contactName', {
                           initialValue: infoDetail.contactName
-                        })(<Input placeholder="自动获取联系人" readOnly />)}
+                        })(<Input placeholder="自动获取联系人" disabled />)}
 
                         {getFieldDecorator('contactId', {
                           initialValue: infoDetail.contactId,
@@ -495,23 +549,25 @@ const Modify = (props: ModifyProps) => {
                       </Form.Item>
                     </Col>
 
-                    <Col lg={8}>
+                    <Col lg={6}>
                       <Form.Item label="联系电话">
                         {getFieldDecorator('contactPhone', {
                           initialValue: infoDetail.contactPhone
-                        })(<Input placeholder="自动获取联系电话" readOnly />)}
+                        })(<Input placeholder="自动获取联系电话" disabled />)}
                       </Form.Item>
                     </Col>
                   </Row>
-                  <Row gutter={24}>
+
+                  {/* <Row gutter={24}>
                     <Col lg={24}>
                       <Form.Item label="详细地址">
                         {getFieldDecorator('address', {
                           initialValue: infoDetail.address
-                        })(<Input placeholder="请输入详细地址" />)}
+                        })(<Input placeholder="自动获取详细地址" disabled />)}
                       </Form.Item>
                     </Col>
-                  </Row>
+                  </Row> */}
+
                   <Row gutter={24}>
                     <Col lg={24}>
                       <Form.Item label="内容" required>
@@ -807,6 +863,52 @@ const Modify = (props: ModifyProps) => {
            </Button>) : null} */}
 
       </div>
+
+      <SelectHouse
+        visible={selectHouseVisible}
+        closeModal={closeSelectHouse}
+        getSelectTree={(info) => {
+          if (info.value) {
+            GetRoomUser(info.value).then((res: any) => {
+              if (res != null) {
+                var newInfo = Object.assign({}, infoDetail,
+                  {
+                    roomId: info.value,
+                    address: info.allname,
+                    contactName: res.contactName,
+                    contactPhone: res.contactPhone,
+                    contactId: res.custId
+                  });
+
+                setInfoDetail(newInfo);
+
+              } else {
+                var newInfo = Object.assign({}, infoDetail,
+                  {
+                    roomId: info.value,
+                    address: info.allname,
+                    contactName: '',
+                    contactPhone: '',
+                    contactId: ''
+                  });
+                setInfoDetail(newInfo);
+
+              }
+            });
+          } else {
+            var newInfo = Object.assign({}, infoDetail,
+              {
+                roomId: '',
+                address: '',
+                contactName: '',
+                contactPhone: '',
+                contactId: ''
+              });
+            setInfoDetail(newInfo);
+          }
+        }}
+      />
+
     </Drawer>
   );
 };

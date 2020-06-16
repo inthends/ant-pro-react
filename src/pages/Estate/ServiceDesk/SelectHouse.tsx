@@ -46,8 +46,8 @@ function SelectHouse(props: SelectHouseProps) {
       //根据父节点获取房产树
       setLoading(true);
        //还原
-      setTreeSearchData([]);
-      GetOrgTree().then((res: any[]) => {
+       setTreeSearchData([]);
+       GetOrgTree().then((res: any[]) => {
         setTreeData(res || []);
         setLoading(false);
         // getAllkeys(res || []);
@@ -59,7 +59,7 @@ function SelectHouse(props: SelectHouseProps) {
 
   const [unitData, setUnitData] = useState<any[]>([]);
 
-  const onSelect = (selectedKeys, info) => {
+  const onSelect = (selectedKeys, info) => { 
     if (selectedKeys.length === 1) {
       //const item = treeData.filter(treeItem => treeItem.key === selectedKeys[0])[0];
       const type = info.node.props.type;
@@ -208,7 +208,6 @@ function SelectHouse(props: SelectHouseProps) {
       </Row>
       </Spin>
     </Modal>
-
   )
 };
 

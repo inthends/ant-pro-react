@@ -1,4 +1,4 @@
-//checkbox异步树
+//多选checkbox异步树
 import Page from '@/components/Common/Page';
 import { Tree } from 'antd';
 import React, { useEffect, useState } from 'react';

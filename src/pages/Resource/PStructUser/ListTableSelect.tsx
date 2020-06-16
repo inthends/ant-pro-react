@@ -197,10 +197,10 @@ function ListTableSelect(props: ListTableSelectProps) {
       // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
       Select(selectedRows[0]);
     },
-    getCheckboxProps: record => ({
-      disabled: record.name === 'Disabled User', // Column configuration not to be checked
-      name: record.name,
-    }),
+    // getCheckboxProps: record => ({
+    //   disabled: record.name === 'Disabled User', // Column configuration not to be checked
+    //   name: record.name,
+    // }),
   };
 
   return (

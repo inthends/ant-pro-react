@@ -52,7 +52,7 @@ const MeterModify = (props: MeterModifyProps) => {
   // }, []);
 
   useEffect(() => {
- 
+
     if (modifyVisible) {
 
       //获取费表种类
@@ -413,9 +413,19 @@ const MeterModify = (props: MeterModifyProps) => {
                       initialValue: infoDetail.feeItemName,
                       rules: [{ required: true, message: '请选择关联收费项目' }],
                     })(
-                      <Input addonAfter={<Icon type="setting" onClick={() => {
-                        setChargeFeeItemVisible(true);
-                      }} />} />
+                      <Input 
+                        allowClear
+                        onChange={e => {
+                          var info = Object.assign({}, infoDetail,
+                            {
+                              feeItemName: '',
+                              feeItemId: ''
+                            });
+                          setInfoDetail(info);
+                        }}
+                        addonAfter={<Icon type="setting" onClick={() => {
+                          setChargeFeeItemVisible(true);
+                        }} />} />
                     )}
                   </Form.Item>
                 </Col>
@@ -638,6 +648,7 @@ const MeterModify = (props: MeterModifyProps) => {
         visible={chargeFeeItemVisible}
         closeModal={closeChargeFeeItem}
         getSelectTree={(item) => {
+
           var info = Object.assign({}, infoDetail, { feeItemName: item.name, feeItemId: item.id });
           setInfoDetail(info);
         }}

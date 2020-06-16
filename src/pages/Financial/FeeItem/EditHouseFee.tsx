@@ -371,9 +371,18 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                       initialValue: infoDetail.allName,
                       rules: [{ required: true, message: '请选择单元' }],
                     })(
-                      <Input addonAfter={<Icon type="setting" onClick={() => {
-                        setSelectHouseVisible(true);
-                      }} />} />
+                      <Input
+                        onChange={e => {
+                          var newInfo = Object.assign({}, infoDetail, {
+                            allName: '',
+                            unitId: ''
+                          })
+                          setInfoDetail(newInfo);
+                        }}
+                        allowClear={true} 
+                        addonAfter={<Icon type="setting" onClick={() => {
+                          setSelectHouseVisible(true);
+                        }} />} />
                     )}
                   </Form.Item>
                 </Col>
@@ -390,7 +399,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
 
               <Row gutter={24}>
                 <Col lg={24}>
-                  <Form.Item  >
+                  <Form.Item>
                     {/* <Checkbox checked={infoDetail.isNullDate ? true : false} onChange={(e) => {
                       var info = Object.assign({}, infoDetail, { isNullDate: e.target.checked });
                       setInfoDetail(info);
@@ -477,12 +486,12 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                       允许在合同中添加
                       </Checkbox>
                     )}
-                      {getFieldDecorator('isCrossBillDate', {
-                        initialValue: infoDetail.isCrossBillDate ? true : false,
-                      })(<Checkbox checked={form.getFieldValue('isCrossBillDate')}>
-                        允许跨账单日收费
+                    {getFieldDecorator('isCrossBillDate', {
+                      initialValue: infoDetail.isCrossBillDate ? true : false,
+                    })(<Checkbox checked={form.getFieldValue('isCrossBillDate')}>
+                      允许跨账单日收费
                       </Checkbox>
-                      )}
+                    )}
                     {getFieldDecorator('isTemp', {
                       initialValue: infoDetail.isTemp ? true : false,
                     })(<Checkbox checked={form.getFieldValue('isTemp')}>
@@ -520,9 +529,9 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
                     {getFieldDecorator('cycleValue', {
                       initialValue: infoDetail.cycleValue,
                       rules: [{ required: true, message: '请输入计费周期' }],
-                    })(<InputNumber 
+                    })(<InputNumber
                       precision={0}
-                      min={1} 
+                      min={1}
                       style={{ width: '100%' }} placeholder="请输入计费周期"
                       onChange={value => {
                         setEndDate(infoDetail.beginDate, value, infoDetail.cycleType);
@@ -1160,7 +1169,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
         closeModal={closeSelectHouse}
         getSelectTree={(info) => {
           // console.log(info);
-          var newInfo = Object.assign({}, infoDetail, { allName: info.allname, unitId: info.key })
+          var newInfo = Object.assign({}, infoDetail, { allName: info.allname, unitId: info.value })
           setInfoDetail(newInfo);
         }}
       />

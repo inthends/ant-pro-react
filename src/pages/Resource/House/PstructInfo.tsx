@@ -744,12 +744,12 @@ const PstructInfo = (props: PstructInfoProps) => {
           if (customerType == 1) {
             //业主
             form.setFieldsValue({ ownerName: res.name });
-            form.setFieldsValue({ ownerId: res.id });
+            form.setFieldsValue({ ownerId: res.cusId });
             form.setFieldsValue({ ownerPhone: res.phoneNum });
           } else {
             //租户
             form.setFieldsValue({ tenantName: res.name });
-            form.setFieldsValue({ tenantId: res.id });
+            form.setFieldsValue({ tenantId: res.cusId });
             form.setFieldsValue({ tenantPhone: res.phoneNum });
           }
         }}

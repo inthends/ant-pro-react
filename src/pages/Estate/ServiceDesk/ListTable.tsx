@@ -76,7 +76,7 @@ function ListTable(props: ListTableProps) {
       title: '服务单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 250,
+      width: 260,
       sorter: true,
     },
     {
@@ -120,7 +120,7 @@ function ListTable(props: ListTableProps) {
       title: '关联单号',
       dataIndex: 'businessCode',
       key: 'businessCode',
-      width: 230,
+      width: 260,
     },
     // {
     //   title: '备注',

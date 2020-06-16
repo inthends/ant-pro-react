@@ -94,8 +94,7 @@ const Modify = (props: ModifyProps) => {
 
   // 打开抽屉时初始化
   useEffect(() => {
-    if (modifyVisible) {
-
+    if (modifyVisible) { 
       if (id) {
         setLoading(true);
         GetFormJson(id).then((tempInfo: CwFeeitem) => {
