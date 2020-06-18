@@ -633,7 +633,8 @@ function Main() {
                type="primary" style={{ float: 'right' }}
                 onClick={() => showDrawer()}
                 module="ChargeBill"
-                code="add"
+                code="add"  
+                disabled={addButtonDisable} 
                 btype="primary">
                 <Icon type="plus" />
                 加费

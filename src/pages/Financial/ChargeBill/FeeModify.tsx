@@ -32,7 +32,7 @@ const FeeModify = (props: FeeModifyProps) => {
   const [unitIds, setUnitIds] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   //房产id
-  const [unitId, setUnitId] = useState<any>('');
+  const [unitId, setUnitId] = useState<any>(''); 
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -198,7 +198,8 @@ const FeeModify = (props: FeeModifyProps) => {
     form.validateFields((errors, values) => {
       // if (infoDetail.feeItemId == null || infoDetail.feeItemId == '') {
       // }
-      if (!errors) {
+      if (!errors) { 
+        setLoading(true);  
         var guid = getGuid();
         var unit = {
           BillId: id != null && id != "" ? infoDetail.billId : guid,
@@ -224,8 +225,7 @@ const FeeModify = (props: FeeModifyProps) => {
           unit = Object.assign({}, unit, { Id: id, keyValue: id });
           SaveDetail(unit).then(res => {
             close(true);
-          })
-
+          }) 
         } 
         else {
 
@@ -255,6 +255,7 @@ const FeeModify = (props: FeeModifyProps) => {
           };
           SaveTempBill(newData).then((res) => {
             message.success('提交成功');
+            setLoading(false);
             close(true);
           });
         }
@@ -724,8 +725,10 @@ const FeeModify = (props: FeeModifyProps) => {
         >
           <Button onClick={() => close(false)} style={{ marginRight: 8 }}>
             取消
-        </Button>
-          <Button onClick={onSave} type="primary">
+        </Button> 
+          <Button onClick={onSave} 
+          disabled={loading} 
+          type="primary">
             提交
         </Button>
         </div> : null

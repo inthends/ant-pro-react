@@ -333,7 +333,9 @@ const Split = (props: SplitProps) => {
         <Button onClick={close} style={{ marginRight: 8 }} disabled={loading}>
           取消
         </Button>
-        <Button onClick={save} type="primary" disabled={loading}  >
+        <Button onClick={save}
+         type="primary"
+         disabled={loading} >
           提交
         </Button>
       </div>

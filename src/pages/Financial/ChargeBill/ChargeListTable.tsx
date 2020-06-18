@@ -97,7 +97,7 @@ function ChargeListTable(props: ChargeListTableProps) {
       title: '收款单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 200,
+      width: 220,
       sorter: true,
     },
     {

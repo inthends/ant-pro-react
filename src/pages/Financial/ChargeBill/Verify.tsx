@@ -398,7 +398,9 @@ const Verify = (props: VerifyProps) => {
         <Button onClick={closeVerify} style={{ marginRight: 8 }}>
           取消
         </Button>
-        <Button onClick={audit} type="primary">
+        <Button onClick={audit}
+         disabled={loading} 
+        type="primary">
           提交
         </Button>
       </div>

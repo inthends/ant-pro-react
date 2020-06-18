@@ -35,6 +35,7 @@ const PointContentModify = (props: PointContentModifyProps) => {
       });
 
       if (data) {
+ 
         setInfoDetail(data);
         if (data.unit == '月') {
           setIsDay(false);

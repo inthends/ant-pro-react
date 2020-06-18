@@ -1,6 +1,9 @@
 //未收列表
 import Page from '@/components/Common/Page';
-import { Checkbox, Menu, Dropdown, Icon, Divider, InputNumber, Input, Select, Col, Row, Form, DatePicker, Card, Button, message, Table, Modal } from 'antd';
+import {
+  Spin, Checkbox, Menu, Dropdown, Icon, Divider, InputNumber, Input, Select,
+  Col, Row, Form, DatePicker, Card, Button, message, Table, Modal
+} from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
@@ -252,10 +255,13 @@ function ListTable(props: ListTableProps) {
     selectedRowKeys,
     onChange: onSelectChange,
   };
+ 
+  const [myLoading, setMyLoading] = useState<boolean>(false);
 
   //收款
   const charge = () => {
     if (selectedRowKeys.length == 0) {
+      message.destroy();//防止重复出现提示
       message.warning('请选择收款项目！');
       return;
     }
@@ -267,6 +273,7 @@ function ListTable(props: ListTableProps) {
           cancelText: '取消',
           okText: '确定',
           onOk: () => {
+            setMyLoading(true);
             let info = Object.assign({}, values, {
               // roomId: organizeId,
               ids: JSON.stringify(selectedRowKeys),
@@ -282,6 +289,7 @@ function ListTable(props: ListTableProps) {
 
             if (lastAmount != Number(info.payAmountA) + Number(info.payAmountB) + Number(info.payAmountC)) {
               message.warning('本次收款金额小于本次选中未收金额合计，不允许收款，请拆费或者重新选择收款项');
+              setMyLoading(false);
               return;
             }
 
@@ -319,10 +327,11 @@ function ListTable(props: ListTableProps) {
               })
 
             } else {
-              //直接收款
-              Charge(info).then(billId => {
+              //直接收款 
+              Charge(info).then(billId => { 
                 message.success('收款成功');
                 //重置收款页面信息
+                setSelectedRowKeys([]);//重置之前选择的数据
                 form.setFieldsValue({ payAmountA: 0 });
                 form.setFieldsValue({ payAmountB: 0 });
                 form.setFieldsValue({ payAmountC: 0 });
@@ -333,6 +342,7 @@ function ListTable(props: ListTableProps) {
                 form.setFieldsValue({ invoiceCode: '' });
                 form.setFieldsValue({ accountBank: null });
                 form.setFieldsValue({ memo: '' });
+                setMyLoading(false);
                 reload();
                 //弹出查看页面
                 showDetail(billId);
@@ -532,7 +542,7 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'lastAmount',
       key: 'lastAmount',
       width: 80,
-    }, 
+    },
     {
       title: '起始日期',
       dataIndex: 'beginDate',
@@ -547,7 +557,7 @@ function ListTable(props: ListTableProps) {
       align: 'center',
       width: 100,
       render: val => val ? moment(val).format('YYYY-MM-DD') : ''
-    }, 
+    },
     {
       title: '账单日',
       dataIndex: 'billDate',
@@ -625,234 +635,235 @@ function ListTable(props: ListTableProps) {
 
   return (
     <Page>
-      <Form layout="vertical" hideRequiredMark>
-        <Card bordered={false}  >
-          <Row gutter={12}>
-            <Col lg={4}>
-              <Form.Item >
-                {getFieldDecorator('payTypeA', {
-                  initialValue: defaultPayTypeA
-                })(
-                  <Select >
-                    {/* 
+      <Spin tip="数据处理中..." spinning={myLoading}>
+        <Form layout="vertical" hideRequiredMark> 
+          <Card bordered={false}>
+            <Row gutter={12}>
+              <Col lg={4}>
+                <Form.Item >
+                  {getFieldDecorator('payTypeA', {
+                    initialValue: defaultPayTypeA
+                  })(
+                    <Select >
+                      {/* 
                        <Option value="转账">转账</Option>
                     <Option value="现金">现金</Option> 
                     <Option value="刷卡">刷卡</Option>  
                     <Option value="抵扣券">抵扣券</Option>
                     <Option value="其它">其它</Option> */}
-                    {payTypeA.map(item => (
+                      {payTypeA.map(item => (
+                        <Option value={item.value} key={item.key}>
+                          {item.title}
+                        </Option>
+                      ))}
+                    </Select>
+                  )}
+                </Form.Item>
+              </Col>
+              <Col lg={4}>
+                <Form.Item required>
+                  {getFieldDecorator('payAmountA', {
+                    //initialValue: hasSelected ? lastAmount : 0,
+                    rules: [{ required: true, message: '请输入金额' }],
+                  })(<InputNumber onChange={(value) => {
+                    if (sumEntity != undefined && Number(value) < lastAmount) {
+                      var amountB = lastAmount - Number(value);
+                      form.setFieldsValue({ payAmountB: amountB.toFixed(2) });
+                      form.setFieldsValue({ payAmountC: 0 });
+                    }
+                  }}
+                    precision={2}
+                    min={0}
+                    max={hasSelected ? lastAmount : 0}
+                    style={{ width: '100%' }}
+                  />)}
+                  {getFieldDecorator('tradenoId', {
+                  })(
+                    <input type='hidden' />
+                  )}
+                  {getFieldDecorator('rebateAmount', {
+                  })(
+                    <input type='hidden' />
+                  )}
+                </Form.Item>
+              </Col>
+              <Col lg={4}>
+                <Form.Item >
+                  {getFieldDecorator('payTypeB', {
+                    initialValue: defaultPayTypeB//'现金'
+                  })(
+                    <Select>
+                      {payTypeB.map(item => (
+                        <Option value={item.value} key={item.key}>
+                          {item.title}
+                        </Option>
+                      ))}
+                    </Select>
+                  )}
+                </Form.Item>
+              </Col>
+              <Col lg={4}>
+                <Form.Item required>
+                  {getFieldDecorator('payAmountB', {
+                    initialValue: 0,
+                    rules: [{ required: true, message: '请输入金额' }],
+                  })(
+                    <InputNumber
+                      precision={2}
+                      min={0}
+                      max={hasSelected ? lastAmount - Number(form.getFieldValue('payAmountA')) : 0}
+                      style={{ width: '100%' }}
+                      onChange={(value) => {
+                        var sumAmountA = form.getFieldValue('payAmountA');
+                        if (sumEntity != undefined && sumAmountA + Number(value) < lastAmount) {
+                          var amountC = lastAmount - Number(value) - sumAmountA;
+                          form.setFieldsValue({ payAmountC: amountC.toFixed(2) });
+                        }
+                      }}
+                    />
+                  )}
+                </Form.Item>
+              </Col>
+              <Col lg={4}>
+                <Form.Item >
+                  {getFieldDecorator('payTypeC', {
+                    initialValue: defaultPayTypeC// '刷卡'
+                  })(
+                    <Select>
+                      {payTypeC.map(item => (
+                        <Option value={item.value} key={item.key}>
+                          {item.title}
+                        </Option>
+                      ))}
+                    </Select>
+                  )}
+                </Form.Item>
+              </Col>
+              <Col lg={4}>
+                <Form.Item required>
+                  {getFieldDecorator('payAmountC', {
+                    initialValue: 0,
+                    rules: [{ required: true, message: '请输入金额' }],
+                  })(
+                    <InputNumber
+                      style={{ width: '100%' }}
+                      precision={2}
+                      min={0}
+                      max={hasSelected ? lastAmount - Number(form.getFieldValue('payAmountA')) - Number(form.getFieldValue('payAmountB')) : 0}
+                    />
+                  )}
+                </Form.Item>
+              </Col>
+              <Col lg={4}>
+                <Form.Item required>
+                  {getFieldDecorator('billDate', {
+                    initialValue: moment(new Date()),
+                    rules: [{ required: true, message: '请选择收款日期' }],
+                  })(<DatePicker style={{ width: '100%' }} />)}
+                </Form.Item>
+              </Col>
+              <Col lg={4}>
+                <Form.Item >
+                  {getFieldDecorator('payCode', {
+                  })(<Input placeholder="请输入收据编号" />)}
+                </Form.Item>
+
+              </Col>
+              <Col lg={4}>
+                <Form.Item >
+                  {getFieldDecorator('invoiceCode', {
+                  })(<Input placeholder="请输入发票编号" />)}
+                </Form.Item>
+              </Col>
+
+              <Col lg={4}>
+                <Form.Item >
+                  {getFieldDecorator('accountBank', {
+                  })(<Select placeholder="请选择入账银行">
+                    {banks.map(item => (
                       <Option value={item.value} key={item.key}>
                         {item.title}
                       </Option>
                     ))}
-                  </Select>
-                )}
-              </Form.Item>
-            </Col>
-            <Col lg={4}>
-              <Form.Item required>
-                {getFieldDecorator('payAmountA', {
-                  //initialValue: hasSelected ? lastAmount : 0,
-                  rules: [{ required: true, message: '请输入金额' }],
-                })(<InputNumber onChange={(value) => {
-                  if (sumEntity != undefined && Number(value) < lastAmount) {
-                    var amountB = lastAmount - Number(value);
-                    form.setFieldsValue({ payAmountB: amountB.toFixed(2) });
-                    form.setFieldsValue({ payAmountC: 0 });
-                  }
+                  </Select>)}
+                </Form.Item>
+              </Col>
+
+              <Col lg={8}>
+                <Form.Item >
+                  {getFieldDecorator('memo', {
+                  })(<Input placeholder="请输入备注" />)}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Button type="primary" disabled={isDisabled} onClick={charge}>收款确认</Button>
+              <Checkbox
+                style={{ marginLeft: '10px' }}
+                onChange={(e) => { setIsQrcode(e.target.checked); }}
+              >生成收款码</Checkbox>
+              <Checkbox
+                style={{ marginLeft: '10px' }}
+                disabled={isQrcode}
+                onChange={(e) => {
+                  setIsML(e.target.checked);
+                  //算抹零金额
+                  mlCal(e.target.checked, mlType, mlScale);
                 }}
-                  precision={2}
-                  min={0}
-                  max={hasSelected ? lastAmount : 0}
-                  style={{ width: '100%' }}
-                />)}
-                {getFieldDecorator('tradenoId', {
-                })(
-                  <input type='hidden' />
-                )}
-                {getFieldDecorator('rebateAmount', {
-                })(
-                  <input type='hidden' />
-                )}
-              </Form.Item>
-            </Col>
-            <Col lg={4}>
-              <Form.Item >
-                {getFieldDecorator('payTypeB', {
-                  initialValue: defaultPayTypeB//'现金'
-                })(
-                  <Select>
-                    {payTypeB.map(item => (
-                      <Option value={item.value} key={item.key}>
-                        {item.title}
-                      </Option>
-                    ))}
-                  </Select>
-                )}
-              </Form.Item>
-            </Col>
-            <Col lg={4}>
-              <Form.Item required>
-                {getFieldDecorator('payAmountB', {
-                  initialValue: 0,
-                  rules: [{ required: true, message: '请输入金额' }],
-                })(
-                  <InputNumber
-                    precision={2}
-                    min={0}
-                    max={hasSelected ? lastAmount - Number(form.getFieldValue('payAmountA')) : 0}
-                    style={{ width: '100%' }}
-                    onChange={(value) => {
-                      var sumAmountA = form.getFieldValue('payAmountA');
-                      if (sumEntity != undefined && sumAmountA + Number(value) < lastAmount) {
-                        var amountC = lastAmount - Number(value) - sumAmountA;
-                        form.setFieldsValue({ payAmountC: amountC.toFixed(2) });
-                      }
-                    }}
-                  />
-                )}
-              </Form.Item>
-            </Col>
-            <Col lg={4}>
-              <Form.Item >
-                {getFieldDecorator('payTypeC', {
-                  initialValue: defaultPayTypeC// '刷卡'
-                })(
-                  <Select>
-                    {payTypeC.map(item => (
-                      <Option value={item.value} key={item.key}>
-                        {item.title}
-                      </Option>
-                    ))}
-                  </Select>
-                )}
-              </Form.Item>
-            </Col>
-            <Col lg={4}>
-              <Form.Item required>
-                {getFieldDecorator('payAmountC', {
-                  initialValue: 0,
-                  rules: [{ required: true, message: '请输入金额' }],
-                })(
-                  <InputNumber
-                    style={{ width: '100%' }}
-                    precision={2}
-                    min={0}
-                    max={hasSelected ? lastAmount - Number(form.getFieldValue('payAmountA')) - Number(form.getFieldValue('payAmountB')) : 0}
-                  />
-                )}
-              </Form.Item>
-            </Col>
-            <Col lg={4}>
-              <Form.Item required>
-                {getFieldDecorator('billDate', {
-                  initialValue: moment(new Date()),
-                  rules: [{ required: true, message: '请选择收款日期' }],
-                })(<DatePicker style={{ width: '100%' }} />)}
-              </Form.Item>
-            </Col>
-            <Col lg={4}>
-              <Form.Item >
-                {getFieldDecorator('payCode', {
-                })(<Input placeholder="请输入收据编号" />)}
-              </Form.Item>
-
-            </Col>
-            <Col lg={4}>
-              <Form.Item >
-                {getFieldDecorator('invoiceCode', {
-                })(<Input placeholder="请输入发票编号" />)}
-              </Form.Item>
-            </Col>
-
-            <Col lg={4}>
-              <Form.Item >
-                {getFieldDecorator('accountBank', {
-                })(<Select placeholder="请选择入账银行">
-                  {banks.map(item => (
-                    <Option value={item.value} key={item.key}>
-                      {item.title}
-                    </Option>
-                  ))}
-                </Select>)}
-              </Form.Item>
-            </Col>
-
-            <Col lg={8}>
-              <Form.Item >
-                {getFieldDecorator('memo', {
-                })(<Input placeholder="请输入备注" />)}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row>
-            <Button type="primary" disabled={isDisabled} onClick={charge}>收款确认</Button>
-            <Checkbox
-              style={{ marginLeft: '10px' }}
-              onChange={(e) => { setIsQrcode(e.target.checked); }}
-            >生成收款码</Checkbox>
-            <Checkbox
-              style={{ marginLeft: '10px' }}
-              disabled={isQrcode}
-              onChange={(e) => {
-                setIsML(e.target.checked);
-                //算抹零金额
-                mlCal(e.target.checked, mlType, mlScale);
-              }}
-            >自动抹零</Checkbox>
-            <Select
-              style={{
-                marginLeft: '10px',
-                width: '110px',
+              >自动抹零</Checkbox>
+              <Select
+                style={{
+                  marginLeft: '10px',
+                  width: '110px',
+                  display: isML ? 'inline-block' : 'none'
+                }}
+                defaultValue='1'
+                disabled={isQrcode}
+                onChange={(value) => { setMlType(value); mlCal(isML, value, mlScale); }} >
+                {/* <Option value='1'>抹去角和分</Option> */}
+                <Option value='1'>抹去角</Option>
+                <Option value='2'>抹去分</Option>
+              </Select>
+              <Select style={{
+                marginLeft: '10px', width: '96px',
                 display: isML ? 'inline-block' : 'none'
               }}
-              defaultValue='1'
-              disabled={isQrcode}
-              onChange={(value) => { setMlType(value); mlCal(isML, value, mlScale); }} >
-              {/* <Option value='1'>抹去角和分</Option> */}
-              <Option value='1'>抹去角</Option>
-              <Option value='2'>抹去分</Option>
-            </Select>
-            <Select style={{
-              marginLeft: '10px', width: '96px',
-              display: isML ? 'inline-block' : 'none'
-            }}
-              defaultValue='1'
-              disabled={isQrcode}
-              onChange={(value) => { setMlScale(value); mlCal(isML, mlType, value); }} >
-              <Option value='1'>四舍五入</Option>
-              <Option value='2'>直接舍去</Option>
-              <Option value='3'>有数进一</Option>
-            </Select>
-          </Row>
+                defaultValue='1'
+                disabled={isQrcode}
+                onChange={(value) => { setMlScale(value); mlCal(isML, mlType, value); }} >
+                <Option value='1'>四舍五入</Option>
+                <Option value='2'>直接舍去</Option>
+                <Option value='3'>有数进一</Option>
+              </Select>
+            </Row>
 
-          <Row style={{ marginTop: '15px' }}>
-            <span style={{ marginLeft: 8, color: "red" }}>
-              {hasSelected ? `应收金额：${sumEntity.sumAmount} ，
+            <Row style={{ marginTop: '15px' }}>
+              <span style={{ marginLeft: 8, color: "red" }}>
+                {hasSelected ? `应收金额：${sumEntity.sumAmount} ，
             减免金额：${sumEntity.sumreductionAmount}，
             冲抵金额：${sumEntity.sumoffsetAmount}，
             优惠金额：${rebateAmount}， 
             抹零金额：${mlAmount.toFixed(2)}，
             未收金额：${lastAmount.toFixed(2)}` : ''}
-            </span>
-          </Row>
-          <Table
-            bordered={false}
-            size="middle"
-            dataSource={data}
-            columns={columns}
-            rowKey={record => record.id}
-            pagination={pagination}
-            scroll={{ y: 500, x: 1850 }}
-            onChange={(pagination: PaginationConfig, filters, sorter) =>
-              changePage(pagination, filters, sorter)
-            }
-            loading={loading}
-            rowSelection={rowSelection}
-          />
-        </Card>
-      </Form>
-
+              </span>
+            </Row>
+            <Table
+              bordered={false}
+              size="middle"
+              dataSource={data}
+              columns={columns}
+              rowKey={record => record.id}
+              pagination={pagination}
+              scroll={{ y: 500, x: 1850 }}
+              onChange={(pagination: PaginationConfig, filters, sorter) =>
+                changePage(pagination, filters, sorter)
+              }
+              loading={loading}
+              rowSelection={rowSelection}
+            />
+          </Card>
+        </Form>
+      </Spin>
     </Page >
   );
 };

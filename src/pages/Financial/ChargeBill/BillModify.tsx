@@ -291,7 +291,7 @@ const BillModify = (props: BillModifyProps) => {
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
       <Spin tip="数据处理中..." spinning={loading}>
         <PageHeader
-          ghost={false} 
+          ghost={false}
           title={null}
           subTitle={
             <div>
@@ -487,11 +487,15 @@ const BillModify = (props: BillModifyProps) => {
           取消
         </Button>
 
-        <Button onClick={showModal} type="primary" style={{ marginRight: 8 }}>
+        <Button onClick={showModal} 
+          disabled={loading}
+          type="primary" style={{ marginRight: 8 }}>
           打印
         </Button>
 
-        <Button onClick={onSave} type="primary">
+        <Button onClick={onSave}
+          disabled={loading}
+          type="primary">
           提交
         </Button>
 
