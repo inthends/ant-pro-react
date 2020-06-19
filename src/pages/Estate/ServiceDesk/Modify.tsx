@@ -97,12 +97,14 @@ const Modify = (props: ModifyProps) => {
   };
 
   const doSave = dataDetail => {
+    setLoading(true);
     dataDetail.keyValue = keyValue;//dataDetail.id ? dataDetail.id : guid(); 
     dataDetail.isAdd = dataDetail.billCode == undefined ? true : false;
     dataDetail.custEvaluate = 0;
     SaveForm({ ...dataDetail }).then(res => {
       message.destroy();//防止重复弹出提示
       message.success('保存成功');
+      setLoading(false);
       closeDrawer();
       reload();
     })
@@ -112,6 +114,7 @@ const Modify = (props: ModifyProps) => {
           title: '请确认',
           content: err,
           onOk: () => {
+            setLoading(false);
             closeDrawer();
             reload();
           }
@@ -152,11 +155,13 @@ const Modify = (props: ModifyProps) => {
             title: '请确认',
             content: `确定要` + title + `吗？`,
             onOk: () => {
+              setLoading(true);
               const newData = data ? { ...data, ...values } : values;
               newData.keyValue = newData.id;
               if (e.key == '1') {
 
                 ChangeToRepair({ ...newData }).then(res => {
+                  setLoading(false);
                   message.destroy();//防止重复弹出提示
                   message.success('操作成功！');
                   closeDrawer();
@@ -168,6 +173,7 @@ const Modify = (props: ModifyProps) => {
                     title: '请确认',
                     content: err,
                     onOk: () => {
+                      setLoading(false);
                       closeDrawer();
                       reload();
                     }
@@ -175,7 +181,9 @@ const Modify = (props: ModifyProps) => {
                 });
               }
               else if (e.key == '2') {
+                setLoading(true);
                 ChangeToComplaint({ ...newData }).then(res => {
+                  setLoading(false);
                   message.destroy();//防止重复弹出提示
                   message.success('操作成功！');
                   closeDrawer();
@@ -186,6 +194,7 @@ const Modify = (props: ModifyProps) => {
                     title: '请确认',
                     content: err,
                     onOk: () => {
+                      setLoading(false);
                       closeDrawer();
                       reload();
                     }
@@ -838,17 +847,17 @@ const Modify = (props: ModifyProps) => {
           取消
         </Button>
         {data === undefined ? (
-          <Button onClick={save} type="primary">
+          <Button onClick={save} type="primary" disabled={loading} >
             保存
           </Button>) : null}
         {(infoDetail.status && infoDetail.status == 1) ? (
           <span>
             <Dropdown overlay={menu} >
-              <Button style={{ marginRight: 8 }}>
+              <Button style={{ marginRight: 8 }} disabled={loading}>
                 操作<Icon type="down" />
               </Button>
             </Dropdown>
-            <Button onClick={save} type="primary">
+            <Button onClick={save} type="primary" disabled={loading}>
               保存
            </Button></span>) : null}
 
