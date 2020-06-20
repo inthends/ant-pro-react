@@ -1,6 +1,6 @@
 
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { Button, Icon, Input, Layout } from 'antd';
+import { Select, Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import AsynLeftTree from '../AsynLeftTree';
@@ -11,6 +11,7 @@ import { GetPageListJson } from './Main.service';
 // import { getResult } from '@/utils/networkUtils';
 const { Content } = Layout;
 const { Search } = Input;
+const { Option } = Select;
 //查看
 import RShowLink from '../Repair/ShowLink';
 import CShowLink from '../Complaint/ShowLink';
@@ -24,7 +25,7 @@ function Main() {
   const [currData, setCurrData] = useState<any>();
   const [search, setSearch] = useState<string>('');
   // const [treeData, setTreeData] = useState<any[]>([]);
-
+  const [status, setStatus] = useState<string>('');
   const selectTree = (id, type, info) => {
     // initLoadData(info.node.props.dataRef, search);
     SetOrganize(info.node.props.dataRef);
@@ -39,8 +40,7 @@ function Main() {
     //   const rootOrg = root.length === 1 ? root[0] : undefined;
     //   SetOrganize(rootOrg);
     //   initLoadData('', '');
-    // });
-
+    // }); 
     //获取房产树
     // GetQuickSimpleTreeAllForDeskService()
     //   .then(getResult)
@@ -48,7 +48,7 @@ function Main() {
     //     setTreeData(res || []);
     //     // return res || [];
     //   }); 
-    initLoadData('', '');
+    initLoadData('', '','');
 
   }, []);
 
@@ -77,8 +77,9 @@ function Main() {
     setModifyVisible(true);
   };
 
-  const loadData = (searchText, org, paginationConfig?: PaginationConfig, sorter?) => {
+  const loadData = (searchText, org, status, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(searchText);
+    setStatus(status);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: pagination.pageSize,
@@ -93,6 +94,7 @@ function Main() {
         // OrganizeId: org.organizeId,
         TreeTypeId: org.key,
         TreeType: org.type,
+        status: status
       },
     };
 
@@ -127,13 +129,14 @@ function Main() {
     });
   };
 
-  const initLoadData = (org, searchText) => {
+  const initLoadData = (org, searchText,status) => {
     setSearch(searchText);
     const queryJson = {
       // OrganizeId: org.organizeId,
       keyword: searchText,
       TreeTypeId: org.key,
       TreeType: org.type,
+      status: status
     };
     const sidx = 'createDate';
     const sord = 'desc';
@@ -176,10 +179,22 @@ function Main() {
       />
       <Content style={{ paddingLeft: '18px' }}>
         <div style={{ marginBottom: '10px' }}>
+          <Select placeholder="=请选择状态="
+            allowClear={true}
+            style={{ width: '140px', marginRight: '5px' }}
+            onChange={value => {
+              loadData(search, organize, value);
+            }}>
+            <Option value="1">待处理</Option>
+            <Option value="2" >待完成</Option>
+            <Option value="3">待评价</Option>
+            <Option value="4">已评价</Option>
+            <Option value="-1">已作废</Option>
+          </Select>
           <Search
             className="search-input"
             placeholder="搜索服务单号"
-            onSearch={value => loadData(value, organize)}
+            onSearch={value => loadData(value, organize,status)}
             style={{ width: 200 }}
           />
           <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer()}>
@@ -195,7 +210,7 @@ function Main() {
           pagination={pagination}
           data={data}
           modify={showDrawer}
-          reload={() => initLoadData(organize, search)}
+          reload={() => initLoadData(organize, search,status)}
         />
       </Content>
 
@@ -204,7 +219,7 @@ function Main() {
         closeDrawer={closeDrawer}
         // treeData={treeData}
         data={currData}
-        reload={() => initLoadData(organize, search)}
+        reload={() => initLoadData(organize, search,status)}
         showLink={showLinkDrawer}
       />
 
