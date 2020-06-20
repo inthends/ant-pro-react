@@ -206,7 +206,7 @@ function ListTable(props: ListTableProps) {
       key: 'operation',
       fixed: 'right',
       align: 'center',
-      width: 150,
+      width: 155,
       render: (text, record) => {
         if (record.ifVerify) {
           return [

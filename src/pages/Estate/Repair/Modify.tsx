@@ -30,11 +30,13 @@ const Modify = (props: ModifyProps) => {
   const [userSource, setUserSource] = useState<any[]>([]);
   // 打开抽屉时初始化
   useEffect(() => {
-    // 获取维修专业
-    GetCommonItems('RepairMajor').then(res => {
-      setRepairMajors(res || []);
-    });
-  }, []);
+    if (modifyVisible) {
+      //获取维修专业
+      GetCommonItems('RepairMajor').then(res => {
+        setRepairMajors(res || []);
+      });
+    }
+  }, [modifyVisible]);
 
   const close = () => {
     closeDrawer();
@@ -94,16 +96,16 @@ const Modify = (props: ModifyProps) => {
           message.success('派单成功');
           closeDrawer();
           reload();
-        }).catch(err => { 
+        }).catch(err => {
           //数据在APP端已经处理，弹出刷新确认
           Modal.confirm({
             title: '请确认',
             content: err,
-            onOk: () => { 
+            onOk: () => {
               closeDrawer();
-              reload(); 
+              reload();
             }
-          }); 
+          });
         });
       }
     });
@@ -117,16 +119,16 @@ const Modify = (props: ModifyProps) => {
           message.success('接单成功');
           closeDrawer();
           reload();
-        }).catch(err => { 
+        }).catch(err => {
           //数据在APP端已经处理，弹出刷新确认
           Modal.confirm({
             title: '请确认',
             content: err,
-            onOk: () => { 
+            onOk: () => {
               closeDrawer();
-              reload(); 
+              reload();
             }
-          }); 
+          });
         });
       }
     });
@@ -155,16 +157,16 @@ const Modify = (props: ModifyProps) => {
           message.success('已开工');
           closeDrawer();
           reload();
-        }).catch(err => { 
+        }).catch(err => {
           //数据在APP端已经处理，弹出刷新确认
           Modal.confirm({
             title: '请确认',
             content: err,
-            onOk: () => { 
+            onOk: () => {
               closeDrawer();
-              reload(); 
+              reload();
             }
-          }); 
+          });
         });
       }
     });
@@ -180,16 +182,16 @@ const Modify = (props: ModifyProps) => {
           message.success('处理完成');
           closeDrawer();
           reload();
-        }).catch(err => { 
+        }).catch(err => {
           //数据在APP端已经处理，弹出刷新确认
           Modal.confirm({
             title: '请确认',
             content: err,
-            onOk: () => { 
+            onOk: () => {
               closeDrawer();
-              reload(); 
+              reload();
             }
-          }); 
+          });
         });
       }
     });
@@ -205,16 +207,16 @@ const Modify = (props: ModifyProps) => {
           message.success('检验完成');
           closeDrawer();
           reload();
-        }).catch(err => { 
+        }).catch(err => {
           //数据在APP端已经处理，弹出刷新确认
           Modal.confirm({
             title: '请确认',
             content: err,
-            onOk: () => { 
+            onOk: () => {
               closeDrawer();
-              reload(); 
+              reload();
             }
-          }); 
+          });
         });
       }
     });
@@ -234,7 +236,7 @@ const Modify = (props: ModifyProps) => {
     });
   };
 
-  //计算用时
+  //计算用时，单位分钟
   const onEndDateChange = (date) => {
     //var sbegin = new Date(data.beginDate).getTime(), send = new Date(date).getTime();
     //var total = (send - sbegin) / 1000 / 60; 

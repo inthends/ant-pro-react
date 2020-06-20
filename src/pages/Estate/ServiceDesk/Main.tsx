@@ -40,6 +40,7 @@ function Main() {
     const page = new DefaultPagination();
     loadData(search,
       info.node.props.dataRef,
+      status,
       source,
       billType,
       billDateBegin,
@@ -283,9 +284,8 @@ function Main() {
             <Option value="建议">建议</Option>
             <Option value="报修">报修</Option>
             <Option value="投诉">投诉</Option>
-          </Select>
-
-
+          </Select> 
+          
           <DatePicker
             placeholder='单据日期起'
             onChange={(date, dateStr) => {
