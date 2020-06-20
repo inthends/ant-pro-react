@@ -92,15 +92,13 @@ function ListTable(props: ListTableProps) {
       title: '联系人',
       dataIndex: 'contactName',
       key: 'contactName',
-      width: 120,
-      sorter: true,
+      width: 120
     },
     {
-      title: '联系方式',
+      title: '联系电话',
       dataIndex: 'contactPhone',
       key: 'contactPhone',
-      width: 100,
-      sorter: true,
+      width: 100, 
     },
 
     {

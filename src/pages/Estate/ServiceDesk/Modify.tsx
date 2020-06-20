@@ -396,8 +396,7 @@ const Modify = (props: ModifyProps) => {
                             <Option value="咨询">咨询</Option>
                             <Option value="建议">建议</Option>
                             <Option value="报修">报修</Option>
-                            <Option value="投诉">投诉</Option>
-
+                            <Option value="投诉">投诉</Option> 
                           </Select>
                         )}
                       </Form.Item>
