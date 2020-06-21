@@ -15,12 +15,13 @@ const { TextArea } = Input;
 const { TabPane } = Tabs;
 import SelectHouse from './SelectHouse';
 
+
 interface ModifyProps {
   modifyVisible: boolean;
   data?: any;
   form: WrappedFormUtils;
   closeDrawer(): void;
-  reload(): void;
+  reload(): void; 
   // treeData: any[];
   showLink(type, code): void;
 }
@@ -29,7 +30,8 @@ const Modify = (props: ModifyProps) => {
   const { modifyVisible, data, closeDrawer, form, reload, showLink } = props;
   const { getFieldDecorator } = form;
   var title = data === undefined ? '添加服务单' : '修改服务单';
-  if (data && data.status != 1 && data.status != 3) {
+  debugger
+  if (data && data.status != 1) {
     title = '查看服务单';
   }
   const [infoDetail, setInfoDetail] = useState<any>({});
@@ -334,6 +336,17 @@ const Modify = (props: ModifyProps) => {
     setSelectHouseVisible(false);
   }
 
+  //选择模板
+  const [modalvisible, setModalVisible] = useState<boolean>(false);
+
+  //选择打印模板
+  const showModal = () => {
+    setModalVisible(true);
+  };
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
   return (
     <Drawer
       title={title}
@@ -396,7 +409,7 @@ const Modify = (props: ModifyProps) => {
                             <Option value="咨询">咨询</Option>
                             <Option value="建议">建议</Option>
                             <Option value="报修">报修</Option>
-                            <Option value="投诉">投诉</Option> 
+                            <Option value="投诉">投诉</Option>
                           </Select>
                         )}
                       </Form.Item>

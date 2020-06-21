@@ -35,7 +35,7 @@ const PointContentModify = (props: PointContentModifyProps) => {
       });
 
       if (data) {
- 
+
         setInfoDetail(data);
         if (data.unit == '月') {
           setIsDay(false);
@@ -216,7 +216,7 @@ const PointContentModify = (props: PointContentModifyProps) => {
                   style={{ width: '100%' }}
                   precision={0}
                   min={1}
-                  max={60}
+                  max={isDay ? 12 : 7}
                 />)}
               </Form.Item>
             </Col>

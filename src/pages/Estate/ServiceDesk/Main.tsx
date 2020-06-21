@@ -17,7 +17,7 @@ import RShowLink from '../Repair/ShowLink';
 import CShowLink from '../Complaint/ShowLink';
 
 function Main() {
-  const [modifyVisible, setModifyVisible] = useState<boolean>(false);
+  const [modifyVisible, setModifyVisible] = useState<boolean>(false);  
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [organize, SetOrganize] = useState<any>({});
@@ -87,7 +87,7 @@ function Main() {
   };
 
   const showDrawer = (item?) => {
-    setCurrData(item);
+    setCurrData(item); 
     setModifyVisible(true);
   };
 
@@ -337,7 +337,7 @@ function Main() {
 
       <Modify
         modifyVisible={modifyVisible}
-        closeDrawer={closeDrawer}
+        closeDrawer={closeDrawer} 
         // treeData={treeData}
         data={currData}
         reload={() => initLoadData(organize, search, status,source,billType,billDateBegin,billDateEnd)}

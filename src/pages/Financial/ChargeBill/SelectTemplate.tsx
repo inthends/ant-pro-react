@@ -1,4 +1,4 @@
-//添加收款单
+//打印收款单
 import { Select, Spin, Form, Row, Col, Modal } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { WrappedFormUtils } from 'antd/lib/form/Form';

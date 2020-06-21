@@ -35,6 +35,14 @@ function ListTable(props: ListTableProps) {
   };
   const columns = [
     {
+      title: '服务单号',
+      dataIndex: 'billCode',
+      key: 'billCode',
+      width: 260,
+      sorter: true,
+      fixed: 'left'
+    },
+    {
       title: '业务类型',
       dataIndex: 'billType',
       key: 'billType',
@@ -45,6 +53,7 @@ function ListTable(props: ListTableProps) {
       title: '来源',
       dataIndex: 'source',
       key: 'source',
+      align: 'center',
       width: 100,
       sorter: true,
     },
@@ -72,13 +81,7 @@ function ListTable(props: ListTableProps) {
         }
       }
     },
-    {
-      title: '服务单号',
-      dataIndex: 'billCode',
-      key: 'billCode',
-      width: 260,
-      sorter: true,
-    },
+
     {
       title: '单据日期',
       dataIndex: 'billDate',
@@ -98,7 +101,7 @@ function ListTable(props: ListTableProps) {
       title: '联系电话',
       dataIndex: 'contactPhone',
       key: 'contactPhone',
-      width: 100, 
+      width: 100,
     },
 
     {
@@ -108,7 +111,7 @@ function ListTable(props: ListTableProps) {
       align: 'center',
       width: 100,
       render: (text, record) => {
-        if (text == 0)
+        if (text == 0 && record.status == 1)
           return <Tag color="#e4aa5b">未回复</Tag>;
         else
           return <Tag color="#009688">已回复</Tag>;
@@ -130,12 +133,12 @@ function ListTable(props: ListTableProps) {
       title: '内容',
       dataIndex: 'contents',
       key: 'contents',
-      width: 200,
+      width: 220,
     },
     {
       title: '联系地点',
       dataIndex: 'address',
-      key: 'address' 
+      key: 'address'
     },
 
     {

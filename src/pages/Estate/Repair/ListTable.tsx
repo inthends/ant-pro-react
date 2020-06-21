@@ -40,6 +40,7 @@ function ListTable(props: ListTableProps) {
       key: 'billCode',
       width: 220,
       sorter: true,
+      fixed:'left'
     },
     {
       title: '来源',
@@ -91,7 +92,7 @@ function ListTable(props: ListTableProps) {
       title: '单据日期',
       dataIndex: 'billDate',
       key: 'billDate',
-      width: 120,
+      width: 100,
       sorter: true,
       render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
@@ -103,12 +104,13 @@ function ListTable(props: ListTableProps) {
       sorter: true,
     },
     {
-      title: '联系方式',
+      title: '联系电话',
       dataIndex: 'contactLink',
       key: 'contactLink',
+      width: 110,
     },
     {
-      title: '关联地址',
+      title: '保修地址',
       dataIndex: 'address',
       key: 'address',
     },
@@ -154,7 +156,7 @@ function ListTable(props: ListTableProps) {
         columns={columns}
         rowKey={record => record.id}
         pagination={pagination}
-        scroll={{ x: 1500 }}
+        scroll={{ x: 1300 }}
         onChange={(pag: PaginationConfig, filters, sorter) => changePage(pag, filters, sorter)}
         loading={loading}
       />

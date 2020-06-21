@@ -143,12 +143,11 @@ function SelectHouse(props: SelectHouseProps) {
   return (
 
     <Modal
-      title="选择房屋"
+      title="选择位置"
       visible={visible}
       okText="确认"
       cancelText="取消"
-      onCancel={() => closeModal()}
-      
+      onCancel={() => closeModal()} 
       onOk={() => {
         if (unitData.length == 0)//||unitData.isLeaf!=1){
         {
