@@ -9,18 +9,18 @@ interface AddMemoProps {
   visible: boolean;
   closeModal(): void;
   form: WrappedFormUtils;
-  keyValue: string;
+  keyvalue: string;
   closeDrawer(): void;
   reload(): void;
 }
 
 const AddMemo = (props: AddMemoProps) => {
-  const { visible, closeModal, form, keyValue, reload, closeDrawer } = props;
+  const { visible, closeModal, form, keyvalue, reload, closeDrawer } = props;
   const { getFieldDecorator } = form;
   const save = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        const newData = { keyValue: keyValue, memo: values.memo };
+        const newData = { keyvalue: keyvalue, memo: values.memo };
         Finish({ ...newData }).then(res => {
           message.success('闭单成功');
           closeModal();

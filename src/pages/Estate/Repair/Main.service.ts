@@ -10,9 +10,9 @@ export function GetPageListJson(data): Promise<any> {
 }
 
 //作废
-export function InvalidForm(keyValue): Promise<any> {
+export function InvalidForm(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Repair/InvalidForm?keyValue=${keyValue}`, {})
+    .post(process.env.basePath + `/Repair/InvalidForm?keyvalue=${keyvalue}`, {})
     .then(getResult as any);
 }
  
@@ -24,9 +24,9 @@ export function Dispatch(data): Promise<any> {
 }
 
 //接单
-export function Receive(keyValue): Promise<any> {
+export function Receive(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Repair/Receive?keyValue=${keyValue}`, {})
+    .post(process.env.basePath + `/Repair/Receive?keyvalue=${keyvalue}`, {})
     .then(getResult as any);
 }
 
@@ -80,20 +80,20 @@ export function GetEntityByCode(code): Promise<any> {
 
 
 //获取实体
-export function GetEntity(keyValue): Promise<any> {
-  return request.get(process.env.basePath + `/Repair/GetEntity?keyValue=${keyValue}`).then(getResult as any);
+export function GetEntity(keyvalue): Promise<any> {
+  return request.get(process.env.basePath + `/Repair/GetEntity?keyvalue=${keyvalue}`).then(getResult as any);
 }
 
 //获取图片
-export function GetFilesData(keyValue): Promise<any> {
+export function GetFilesData(keyvalue): Promise<any> {
   return request
-    .get(process.env.basePath + `/Repair/GetFilesData?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/Repair/GetFilesData?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
 //删除附件
-export function RemoveFile(keyValue): Promise<any> {
+export function RemoveFile(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Repair/RemoveFile?keyValue=${keyValue}`, {})
+    .post(process.env.basePath + `/Repair/RemoveFile?keyvalue=${keyvalue}`, {})
     .then(getResult as any);
 }

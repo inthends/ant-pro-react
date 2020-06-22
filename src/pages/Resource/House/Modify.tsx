@@ -180,7 +180,7 @@ const Modify = (props: ModifyProps) => {
           const newvalue = { ...values, handoverDate: values.handoverDate.format('YYYY-MM-DD') };
           newvalue.description = values.description.toHTML();//toRAW(); 
           //newvalue.isPublish = newvalue.isPublish ? newvalue.isPublish : false;
-          SaveForm({ ...tempInfo, ...newvalue, keyValue: tempInfo.id }).then(res => {
+          SaveForm({ ...tempInfo, ...newvalue, keyvalue: tempInfo.id }).then(res => {
             message.success('提交成功');
             closeDrawer();
             reload();
@@ -241,8 +241,8 @@ const Modify = (props: ModifyProps) => {
       callback();
     }
     else {
-      const keyValue = infoDetail.id == undefined ? '' : infoDetail.id;
-      ExistEnCode(keyValue, value).then(res => {
+      const keyvalue = infoDetail.id == undefined ? '' : infoDetail.id;
+      ExistEnCode(keyvalue, value).then(res => {
         if (res)
           callback('项目编号重复');
         else

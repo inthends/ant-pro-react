@@ -59,7 +59,7 @@ const Split = (props: SplitProps) => {
         }
         var splitData = {
           Data: JSON.stringify(data),
-          keyValue: id
+          keyvalue: id
         };
         SplitBilling(splitData).then(res => {
           message.success('提交成功');

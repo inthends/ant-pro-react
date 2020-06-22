@@ -20,9 +20,9 @@ export function GetDataList(data): Promise<any> {
 // }
  
 // 删除分类
-export function RemoveForm(keyValue): Promise<any> {
+export function RemoveForm(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Dictionary/RemoveForm?keyValue=${keyValue}`, {})
+    .post(process.env.basePath + `/Dictionary/RemoveForm?keyvalue=${keyvalue}`, {})
     .then(getResult as any);
 }
  
@@ -34,9 +34,9 @@ export function GetDataItemTreeList(): Promise<TreeEntity[]> {
 
 
 // 删除明细
-export function RemoveDetailForm(keyValue): Promise<any> {
+export function RemoveDetailForm(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Dictionary/RemoveDetailForm?keyValue=${keyValue}`, {})
+    .post(process.env.basePath + `/Dictionary/RemoveDetailForm?keyvalue=${keyvalue}`, {})
     .then(getResult as any);
 }
 

@@ -7,7 +7,8 @@ import React, { useEffect, useState } from 'react';
 import { GetEntityShow, ChargeFeeDetail } from './Main.service';
 import moment from 'moment';
 import styles from './style.less';
-import SelectTemplate from './SelectTemplate';
+import SelectTemplate from '../../System/Template/SelectTemplate' 
+
 
 interface BillShowProps {
   showVisible: boolean;
@@ -393,9 +394,7 @@ const BillShow = (props: BillShowProps) => {
               //       </Table.Summary.Row> 
               //     </>
               //   );
-              // }}
-
-
+              // }}  
             />
           </Form>
         </Card>

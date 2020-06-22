@@ -65,7 +65,7 @@ const Modify = (props: ModifyProps) => {
 
   //数据保存
   const doSave = dataDetail => {
-    let modifyData = { ...initData, ...dataDetail, keyValue: initData.departmentId };
+    let modifyData = { ...initData, ...dataDetail, keyvalue: initData.departmentId };
     if (modifyData.foundedTime != null)
       modifyData.foundedTime = modifyData.foundedTime.format('YYYY-MM-DD');
     if (modifyData.parentId === undefined)
@@ -78,8 +78,8 @@ const Modify = (props: ModifyProps) => {
       callback();
     }
     else {
-      const keyValue = initData.departmentId == undefined ? '' : initData.departmentId;
-      ExistEnCode(keyValue, value).then(res => {
+      const keyvalue = initData.departmentId == undefined ? '' : initData.departmentId;
+      ExistEnCode(keyvalue, value).then(res => {
         if (res)
           callback('部门编号重复');
         else
@@ -93,8 +93,8 @@ const Modify = (props: ModifyProps) => {
   //     callback();
   //   }
   //   else {
-  //     const keyValue = initData.departmentId == undefined ? '' : initData.departmentId;
-  //     ExistName(keyValue, value).then(res => {
+  //     const keyvalue = initData.departmentId == undefined ? '' : initData.departmentId;
+  //     ExistName(keyvalue, value).then(res => {
   //       if (res)
   //         callback('部门名称重复');
   //       else

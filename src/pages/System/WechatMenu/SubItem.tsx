@@ -30,7 +30,7 @@ const SubItem = (props: SubItemProps) => {
   }, [visible]);
 
   const doSave = dataDetail => {
-    let modifyData = { ...initData, ...dataDetail, keyValue: initData.id };
+    let modifyData = { ...initData, ...dataDetail, keyvalue: initData.id };
     return SaveItemForm(modifyData);
   };
 

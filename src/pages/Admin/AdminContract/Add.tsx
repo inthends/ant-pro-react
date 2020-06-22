@@ -103,7 +103,7 @@ const Add = (props: AddProps) => {
 
         SaveForm({
           ...Contract,
-          keyValue: '',
+          keyvalue: '',
           room: values.room,
           termJson: TermJson,
           chargeFeeResult: JSON.stringify(chargeData)

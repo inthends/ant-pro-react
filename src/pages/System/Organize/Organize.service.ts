@@ -17,22 +17,22 @@ export function SaveForm(data): Promise<any> {
     .then(getResult as any);
 }
 // 删除
-// export function RemoveForm(keyValue): Promise<any> {
+// export function RemoveForm(keyvalue): Promise<any> {
 //   return request
-//     .post(process.env.basePath + `/Organize/RemoveForm`, { data: objToFormdata({ keyValue }) })
+//     .post(process.env.basePath + `/Organize/RemoveForm`, { data: objToFormdata({ keyvalue }) })
 //     .then(getResult as any);
 // }
 
-export function RemoveForm(keyValue): Promise<any> {
+export function RemoveForm(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Organize/RemoveForm?keyValue=${keyValue}`, {})
+    .post(process.env.basePath + `/Organize/RemoveForm?keyvalue=${keyvalue}`, {})
     .then(getResult as any);
 }
 
 // 查询详情
-export function GetDetailJson(keyValue): Promise<any> {
+export function GetDetailJson(keyvalue): Promise<any> {
   return request
-    .get(process.env.basePath + `/Organize/GetFormJson?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/Organize/GetFormJson?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
@@ -53,15 +53,15 @@ export function searchUser(keyword): Promise<any[]> {
 // }
 
 // 验证code
-export function ExistEnCode(keyValue, code): Promise<any> {
+export function ExistEnCode(keyvalue, code): Promise<any> {
   return request
-    .get(process.env.basePath + `/Organize/ExistEnCode?keyValue=${keyValue}&code=${code}`)
+    .get(process.env.basePath + `/Organize/ExistEnCode?keyvalue=${keyvalue}&code=${code}`)
     .then(getResult as any);
 }
 
 // 验证机构是否能删除
-export function CheckOrg(keyValue): Promise<any> {
+export function CheckOrg(keyvalue): Promise<any> {
   return request
-    .get(process.env.basePath + `/Organize/CheckOrg?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/Organize/CheckOrg?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }

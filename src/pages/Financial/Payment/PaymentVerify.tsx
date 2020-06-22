@@ -99,7 +99,7 @@ const PaymentVerify = (props: PaymentVerifyProps) => {
     form.validateFields((errors, values) => {
       if (!errors) {
         // let newData = {
-        //   keyValue: id,
+        //   keyvalue: id,
         //   entity: {
         //     billId: id,
         //     // verifyDate: ifVerify ? moment(new Date()).format('YYYY-MM-DD HH:mm:ss') : moment(values.verifyDate).format('YYYY-MM-DD HH:mm:ss'),
@@ -117,7 +117,7 @@ const PaymentVerify = (props: PaymentVerifyProps) => {
         // };
 
         const newData = infoDetail ? { ...infoDetail, ...values } : values;
-        newData.keyValue = infoDetail.billId;
+        newData.keyvalue = infoDetail.billId;
         newData.ifVerify = ifVerify; 
         Audit(newData).then(() => {
           closeVerify(true);

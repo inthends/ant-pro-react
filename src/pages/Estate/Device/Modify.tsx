@@ -33,7 +33,7 @@ const Modify = (props: ModifyProps) => {
   const baseFormProps = { form, initData };
   const { getFieldDecorator } = form;
   const doSave = dataDetail => {
-    let modifyData = { ...initData, ...dataDetail, keyValue: initData.id };
+    let modifyData = { ...initData, ...dataDetail, keyvalue: initData.id };
     return SaveDeviceForm(modifyData);
   };
 

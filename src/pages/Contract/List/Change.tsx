@@ -358,7 +358,7 @@ const Change = (props: ChangeProps) => {
         SubmitForm({
           ...Contract,
           ...ContractCharge,
-          keyValue: id,
+          keyvalue: id,
           ChargeId: chargeId,
           room: values.room,
           TermJson: TermJson,
@@ -430,7 +430,7 @@ const Change = (props: ChangeProps) => {
         SaveForm({
           ...Contract,
           ...ContractCharge,
-          keyValue: id,
+          keyvalue: id,
           ChargeId: chargeId,
           room: values.room,
           TermJson: TermJson,

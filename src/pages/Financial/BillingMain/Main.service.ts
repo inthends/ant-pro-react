@@ -22,15 +22,15 @@ export function GetReceivablesFeeItemTreeJson(): Promise<TreeEntity[]> {
 }
 
 export function GetBilling(data): Promise<any> {
-  return request.get(process.env.basePath + `/BillingMain/GetBilling?keyValue=${data}`, {}).then(getResult as any);
+  return request.get(process.env.basePath + `/BillingMain/GetBilling?keyvalue=${data}`, {}).then(getResult as any);
 }
 //删除费项明细
-export function RemoveUnitForm(keyValue): Promise<any> {
-  return request.post(process.env.basePath + `/BillingMain/RemoveUnitForm?keyValue=${keyValue}`, {}).then(getResult as any);
+export function RemoveUnitForm(keyvalue): Promise<any> {
+  return request.post(process.env.basePath + `/BillingMain/RemoveUnitForm?keyvalue=${keyvalue}`, {}).then(getResult as any);
 }
 //删除全部计费明细
-export function RemoveUnitFormAll(keyValue): Promise<any> {
-  return request.post(process.env.basePath + `/BillingMain/RemoveUnitFormAll?keyValue=${keyValue}`, {}).then(getResult as any);
+export function RemoveUnitFormAll(keyvalue): Promise<any> {
+  return request.post(process.env.basePath + `/BillingMain/RemoveUnitFormAll?keyvalue=${keyvalue}`, {}).then(getResult as any);
 }
 
 //计算周期费数据
@@ -54,12 +54,12 @@ export function SaveForm(data): Promise<any> {
 
 //删除计费单
 // export function RemoveForm(data): Promise<any> {
-//   return request.post(process.env.basePath + `/BillingMain/RemoveForm?keyValue=${data}`, {});
+//   return request.post(process.env.basePath + `/BillingMain/RemoveForm?keyvalue=${data}`, {});
 // }
 
 //作废计费单
 export function InvalidForm(data): Promise<any> {
-  return request.post(process.env.basePath + `/BillingMain/InvalidForm?keyValue=${data}`, {});
+  return request.post(process.env.basePath + `/BillingMain/InvalidForm?keyvalue=${data}`, {});
 }
 
 //审核

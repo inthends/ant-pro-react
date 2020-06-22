@@ -30,9 +30,9 @@ export function GetListByID(data): Promise<any> {
 }
 
 //作废冲抵单
-export function InvalidForm(keyValue): Promise<any> {
+export function InvalidForm(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Offset/InvalidForm?keyValue=${keyValue}`)
+    .post(process.env.basePath + `/Offset/InvalidForm?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
@@ -42,7 +42,7 @@ export function SaveForm(data): Promise<any> {
 }
 // 获取实体
 export function GetFormJson(data): Promise<CwOffsetmain> {
-  return request.get(process.env.basePath + `/Offset/GetFormJson?keyValue=${data}`).then(getResult as any);
+  return request.get(process.env.basePath + `/Offset/GetFormJson?keyvalue=${data}`).then(getResult as any);
 }
 //审核
 export function Audit(data): Promise<any> {
@@ -50,7 +50,7 @@ export function Audit(data): Promise<any> {
 }
 //获取客户详情
 export function GetCustomInfo(data): Promise<GmCustomerinfo>  {
-  return request.get(process.env.basePath + `/PStructUser/GetFormJson?keyValue=${data}`, {data:objToFormdata(data)}).then(getResult as any);
+  return request.get(process.env.basePath + `/PStructUser/GetFormJson?keyvalue=${data}`, {data:objToFormdata(data)}).then(getResult as any);
 }
 
 //获取当前用户信息

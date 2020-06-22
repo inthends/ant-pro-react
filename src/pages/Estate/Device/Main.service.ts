@@ -20,9 +20,9 @@ export function SaveDeviceForm(data): Promise<any> {
 }
  
 // 删除分类
-export function RemoveForm(keyValue): Promise<any> {
+export function RemoveForm(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Device/RemoveForm?keyValue=${keyValue}`, {})
+    .post(process.env.basePath + `/Device/RemoveForm?keyvalue=${keyvalue}`, {})
     .then(getResult as any);
 }
 
@@ -32,9 +32,9 @@ export function GetTypes(): Promise<TreeEntity[]> {
 }
 
 // 删除明细
-export function RemoveDetailForm(keyValue): Promise<any> {
+export function RemoveDetailForm(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Device/RemoveDetailForm?keyValue=${keyValue}`, {})
+    .post(process.env.basePath + `/Device/RemoveDetailForm?keyvalue=${keyvalue}`, {})
     .then(getResult as any);
 }
 

@@ -44,7 +44,7 @@ const Show = (props: ShowProps) => {
           //   pageIndex,
           //   pageSize,
           //   total,
-          //   keyValue: res.billId
+          //   keyvalue: res.billId
           // };  
           // setLoading(true);
           // GetListByID(searchCondition).then(res => {
@@ -67,12 +67,12 @@ const Show = (props: ShowProps) => {
   }, [showVisible]);
 
 
-  const initLoad = (keyValue) => {
-    // const queryJson = { keyValue: billId };
+  const initLoad = (keyvalue) => {
+    // const queryJson = { keyvalue: billId };
     const sidx = 'id';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
-    return load({ pageIndex, pageSize, sidx, sord, total, keyValue }).then(res => {
+    return load({ pageIndex, pageSize, sidx, sord, total, keyvalue }).then(res => {
       return res;
     });
   }
@@ -108,7 +108,7 @@ const Show = (props: ShowProps) => {
       pageIndex,
       pageSize,
       total,
-      keyValue: id,
+      keyvalue: id,
       //queryJson: { ruleId: ruleId },
     };
 
@@ -136,7 +136,7 @@ const Show = (props: ShowProps) => {
   //     pageIndex,
   //     pageSize,
   //     total,
-  //     keyValue: infoDetail.billId
+  //     keyvalue: infoDetail.billId
   //   };
 
   //   if (sorter) {

@@ -46,7 +46,7 @@ const MeterModify = (props: MeterModifyProps) => {
   const [meterPagination, setMeterPagination] = useState<DefaultPagination>(new DefaultPagination());
   const [addFormulaVisible, setAddFormulaVisible] = useState<boolean>(false);
   const [isAdd, setIsAdd] = useState<boolean>(true);
-  const [keyValue, setKeyValue] = useState<string>('');
+  const [keyvalue, setKeyValue] = useState<string>('');
 
   // useEffect(() => { 
   // }, []);
@@ -104,7 +104,7 @@ const MeterModify = (props: MeterModifyProps) => {
   const initMeterLoadData = (search) => {
     const queryJson = {
       keyword: search,
-      MeterId: keyValue
+      MeterId: keyvalue
     }
     const sidx = 'meterCode';
     const sord = 'asc';
@@ -128,7 +128,7 @@ const MeterModify = (props: MeterModifyProps) => {
       total,
       queryJson: {
         keyword: searchText,
-        MeterId: keyValue
+        MeterId: keyvalue
       },
     };
     if (sorter) {
@@ -168,8 +168,8 @@ const MeterModify = (props: MeterModifyProps) => {
       if (!errors) {
         // let guid = getGuid();
         var meterEntity = {
-          keyValue: keyValue,//id == null || id == '' ? guid : id,
-          MeterId: keyValue,//id == null || id == '' ? guid : id,
+          keyvalue: keyvalue,//id == null || id == '' ? guid : id,
+          MeterId: keyvalue,//id == null || id == '' ? guid : id,
           OrganizeId: infoDetail.organizeId,
           MeterType: values.meterType,
           MeterKind: values.meterKind,
@@ -613,7 +613,7 @@ const MeterModify = (props: MeterModifyProps) => {
               if (!errors) {
                 let guid = getGuid();
                 var meterEntity = {
-                  keyValue: id == null || id == '' ? guid : id,
+                  keyvalue: id == null || id == '' ? guid : id,
                   MeterId: id == null || id == '' ? guid : id,
                   OrganizeId: infoDetail.organizeId,
                   MeterType: values.meterType,

@@ -68,7 +68,7 @@ const Modify = (props: ModifyProps) => {
   const [posType, setPosType] = useState<string>('拉卡拉');
 
   const doSave = dataDetail => {
-    let modifyData = { ...initData, ...dataDetail, keyValue: initData.organizeId };
+    let modifyData = { ...initData, ...dataDetail, keyvalue: initData.organizeId };
     if (modifyData.foundedTime != null)
       modifyData.foundedTime = modifyData.foundedTime.format('YYYY-MM-DD');
     //return SaveForm(modifyData);
@@ -115,8 +115,8 @@ const Modify = (props: ModifyProps) => {
       callback();
     }
     else {
-      const keyValue = initData.organizeId == undefined ? '' : initData.organizeId;
-      ExistEnCode(keyValue, value).then(res => {
+      const keyvalue = initData.organizeId == undefined ? '' : initData.organizeId;
+      ExistEnCode(keyvalue, value).then(res => {
         if (res)
           callback('机构编号重复');
         else

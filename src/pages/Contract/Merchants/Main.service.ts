@@ -16,9 +16,9 @@ export function SaveForm(data): Promise<any> {
  
 
 // 获取信息
-export function GetFormJson(keyValue): Promise<any> {
+export function GetFormJson(keyvalue): Promise<any> {
   return request
-    .get(process.env.basePath + `/Merchants/GetFormJson?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/Merchants/GetFormJson?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
@@ -29,15 +29,15 @@ export function SaveFollow(data): Promise<any> {
     .then(getResult as any);
 }
 
-export function GetFollow(keyValue): Promise<any> {
+export function GetFollow(keyvalue): Promise<any> {
   return request
-    .get(process.env.basePath + `/Merchants/GetFollow?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/Merchants/GetFollow?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
 //刷新跟进
-export function RefreshFollow(keyValue): Promise<any> {
+export function RefreshFollow(keyvalue): Promise<any> {
   return request
-    .get(process.env.basePath + `/Merchants/RefreshFollow?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/Merchants/RefreshFollow?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }

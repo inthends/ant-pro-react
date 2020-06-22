@@ -77,7 +77,7 @@ const EditHouseMeter = (props: EditHouseMeterProps) => {
         //   FeeItemName: meterinfo.feeItemName,
         //   IsStop: meterinfo.isStop == null ? false : true,
         // }, {
-        //   keyValue: id,
+        //   keyvalue: id,
         //   UnitMeterId: id,
         //   MeterName: values.meterName,
         //   MeterCode: values.meterCode,
@@ -95,7 +95,7 @@ const EditHouseMeter = (props: EditHouseMeterProps) => {
 
 
         const newData = infoDetail ? { ...infoDetail, ...values } : values;
-        newData.keyValue = id;
+        newData.keyvalue = id;
         SaveUnitMeterForm(newData).then(res => {
           closeModal();
           message.success('保存成功');

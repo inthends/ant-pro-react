@@ -111,7 +111,7 @@ const Verify = (props: VerifyProps) => {
       if (!errors) {
         //console.log(infoDetail);
         // let newData = {
-        //   keyValue: infoDetail.billId,
+        //   keyvalue: infoDetail.billId,
         //   billCode: values.billCode,
         //   billDate: moment(values.billDate).format('YYYY-MM-DD'),
         //   createUserName: values.createUserName,
@@ -120,10 +120,10 @@ const Verify = (props: VerifyProps) => {
         //   VerifyDate: ifVerify ? moment(new Date()).format('YYYY-MM-DD HH:mm:ss') : moment(values.verifyDate).format('YYYY-MM-DD HH:mm:ss'),
         //   VerifyMemo: values.verifyMemo
         // };
-        //let modifyData = { ...infoDetail, ...values, keyValue: infoDetail.billId };
+        //let modifyData = { ...infoDetail, ...values, keyvalue: infoDetail.billId };
 
         let newData = {
-          keyValue: infoDetail.billId,
+          keyvalue: infoDetail.billId,
           IfVerify: ifVerify,
           VerifyMemo: values.verifyMemo
         };

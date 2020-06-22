@@ -61,7 +61,7 @@ const Verify = (props: VerifyProps) => {
           // verifyPerson: localStorage.getItem('userid'),
           // verifyDate: moment(new Date).format('YYYY-MM-DD'),
           verifyMemo: values.verifyMemo,
-          keyValue: infoDetail.billId,
+          keyvalue: infoDetail.billId,
           //billDate: moment(values.billDate).format('YYYY-MM-DD'),
           //status: ifVerify ? 1 : 2//，已收未审核1，已审核2，已冲红3
           check: !ifVerify

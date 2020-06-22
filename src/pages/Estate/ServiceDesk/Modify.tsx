@@ -14,14 +14,14 @@ const { Option } = Select;
 const { TextArea } = Input;
 const { TabPane } = Tabs;
 import SelectHouse from './SelectHouse';
-
+import SelectTemplate from '../../System/Template/SelectTemplate'
 
 interface ModifyProps {
   modifyVisible: boolean;
   data?: any;
   form: WrappedFormUtils;
   closeDrawer(): void;
-  reload(): void; 
+  reload(): void;
   // treeData: any[];
   showLink(type, code): void;
 }
@@ -29,15 +29,14 @@ interface ModifyProps {
 const Modify = (props: ModifyProps) => {
   const { modifyVisible, data, closeDrawer, form, reload, showLink } = props;
   const { getFieldDecorator } = form;
-  var title = data === undefined ? '添加服务单' : '修改服务单';
-  debugger
+  var title = data === undefined ? '添加服务单' : '修改服务单'; 
   if (data && data.status != 1) {
     title = '查看服务单';
   }
   const [infoDetail, setInfoDetail] = useState<any>({});
   // const [treeData, setTreeData] = useState<any[]>([]);
   //const [roomUser, setRoomUser] = useState<any>(); 
-  const [keyValue, setkeyValue] = useState<any>();
+  const [keyvalue, setKeyvalue] = useState<any>();
   const [previewVisible, setPreviewVisible] = useState<boolean>(false);
   const [fileList, setFileList] = useState<any[]>([]);
   const [previewImage, setPreviewImage] = useState<string>('');
@@ -58,7 +57,7 @@ const Modify = (props: ModifyProps) => {
     if (modifyVisible) {
       setLoading(true);
       if (data) {
-        setkeyValue(data.id);
+        setKeyvalue(data.id);
         setInfoDetail(data);
         form.resetFields();
         //图片
@@ -67,7 +66,7 @@ const Modify = (props: ModifyProps) => {
         });
         setLoading(false);
       } else {
-        setkeyValue(guid());
+        setKeyvalue(guid());
         setInfoDetail({});
         form.resetFields();
         setFileList([]);
@@ -100,7 +99,7 @@ const Modify = (props: ModifyProps) => {
 
   const doSave = dataDetail => {
     setLoading(true);
-    dataDetail.keyValue = keyValue;//dataDetail.id ? dataDetail.id : guid(); 
+    dataDetail.keyvalue = keyvalue;//dataDetail.id ? dataDetail.id : guid(); 
     dataDetail.isAdd = dataDetail.billCode == undefined ? true : false;
     dataDetail.custEvaluate = 0;
     SaveForm({ ...dataDetail }).then(res => {
@@ -159,7 +158,7 @@ const Modify = (props: ModifyProps) => {
             onOk: () => {
               setLoading(true);
               const newData = data ? { ...data, ...values } : values;
-              newData.keyValue = newData.id;
+              newData.keyvalue = newData.id;
               if (e.key == '1') {
 
                 ChangeToRepair({ ...newData }).then(res => {
@@ -321,7 +320,7 @@ const Modify = (props: ModifyProps) => {
   //   form.validateFields((errors, values) => {
   //     if (!errors) {
   //       const newData = data ? { ...data, ...values } : values;
-  //       Visit({ ...newData, keyValue: newData.id }).then(res => {
+  //       Visit({ ...newData, keyvalue: newData.id }).then(res => {
   //         message.success('回访完成！');
   //         closeDrawer();
   //         reload();
@@ -365,7 +364,6 @@ const Modify = (props: ModifyProps) => {
               {!infoDetail.status || infoDetail.status == 1 ? (
                 <Card className={styles.card2}>
                   <Row gutter={24}>
-
                     <Col lg={10}>
                       <Form.Item label="服务单号">
                         {getFieldDecorator('billCode', {
@@ -605,7 +603,7 @@ const Modify = (props: ModifyProps) => {
                       <div className="clearfix">
                         <Upload
                           accept='image/*'
-                          action={process.env.basePath + '/ServiceDesk/Upload?keyValue=' + keyValue}
+                          action={process.env.basePath + '/ServiceDesk/Upload?keyvalue=' + keyvalue}
                           listType="picture-card"
                           fileList={fileList}
                           onPreview={handlePreview}
@@ -835,14 +833,6 @@ const Modify = (props: ModifyProps) => {
 
       </Spin>
 
-      <AddMemo
-        visible={addMemoVisible}
-        closeModal={closeAddMemo}
-        reload={reload}
-        closeDrawer={closeDrawer}
-        keyValue={keyValue}
-      />
-
       <div
         style={{
           position: 'absolute',
@@ -858,20 +848,28 @@ const Modify = (props: ModifyProps) => {
         <Button onClick={close} style={{ marginRight: 8 }}>
           取消
         </Button>
+
+        <Button onClick={showModal}
+          disabled={loading}
+          type="primary" style={{ marginRight: 8 }}>
+          打印
+        </Button>
+
         {data === undefined ? (
           <Button onClick={save} type="primary" disabled={loading} >
             保存
           </Button>) : null}
         {(infoDetail.status && infoDetail.status == 1) ? (
           <span>
+            <Button style={{ marginRight: 8 }} onClick={save} type="primary" disabled={loading}>
+              保存
+           </Button>
             <Dropdown overlay={menu} >
-              <Button style={{ marginRight: 8 }} disabled={loading}>
-                操作<Icon type="down" />
+              <Button  disabled={loading}>
+                更多<Icon type="down" />
               </Button>
             </Dropdown>
-            <Button onClick={save} type="primary" disabled={loading}>
-              保存
-           </Button></span>) : null}
+          </span>) : null}
 
         {/* {(infoDetail.status && infoDetail.status == 3) ? (
           <Button onClick={visit} type="primary">
@@ -884,6 +882,14 @@ const Modify = (props: ModifyProps) => {
            </Button>) : null} */}
 
       </div>
+
+      <AddMemo
+        visible={addMemoVisible}
+        closeModal={closeAddMemo}
+        reload={reload}
+        closeDrawer={closeDrawer}
+        keyvalue={keyvalue}
+      />
 
       <SelectHouse
         visible={selectHouseVisible}
@@ -930,6 +936,12 @@ const Modify = (props: ModifyProps) => {
         }}
       />
 
+      <SelectTemplate
+        id={keyvalue}
+        visible={modalvisible}
+        closeModal={closeModal}
+        unitId={infoDetail.roomId}
+      />
     </Drawer>
   );
 };

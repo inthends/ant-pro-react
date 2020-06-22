@@ -121,7 +121,7 @@ const AddRepairFee = (props: AddRepairFeeProps) => {
           Deadline: moment(values.deadline).format("YYYY-MM-DD")
         }
         if (infoDetail.id != null && infoDetail.id != "") {
-          unit = Object.assign({}, unit, { Id: infoDetail.id, keyValue: infoDetail.id });
+          unit = Object.assign({}, unit, { Id: infoDetail.id, keyvalue: infoDetail.id });
           SaveDetail(unit).then(res => {
             closeDrawer(mainId, values.amount);
           })
@@ -134,7 +134,7 @@ const AddRepairFee = (props: AddRepairFeeProps) => {
             OrganizeId: adminOrgId,
             BillSource: "维修单",
             Units: JSON.stringify(units),
-            keyValue: mainId != null && mainId != "" ? infoDetail.billId : guid,
+            keyvalue: mainId != null && mainId != "" ? infoDetail.billId : guid,
             LinkId: linkId,
             IfVerify: false,
             // VerifyPerson: '',

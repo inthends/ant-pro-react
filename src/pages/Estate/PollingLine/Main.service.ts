@@ -8,9 +8,9 @@ export function SaveFormLine(data): Promise<any> {
 }
 
 //删除
-export function RemoveForm(keyValue): Promise<any> {
+export function RemoveForm(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Polling/RemoveForm?keyValue=${keyValue}`, {})
+    .post(process.env.basePath + `/Polling/RemoveForm?keyvalue=${keyvalue}`, {})
     .then(getResult as any);
 }
 
@@ -63,38 +63,38 @@ export function GetPointcontentPageListByID(data): Promise<any> {
 }
 
 //删除巡检点位内容
-export function RemoveLineContentPoint(keyValue): Promise<any> {
+export function RemoveLineContentPoint(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Polling/RemoveLineContentPoint?keyValue=${keyValue}`, {})
+    .post(process.env.basePath + `/Polling/RemoveLineContentPoint?keyvalue=${keyvalue}`, {})
     .then(getResult as any);
 }
 
 //删除巡检点位全部内容
-export function RemoveLineContentPointAll(keyValue): Promise<any> {
+export function RemoveLineContentPointAll(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Polling/RemoveLineContentPointAll?keyValue=${keyValue}`)
+    .post(process.env.basePath + `/Polling/RemoveLineContentPointAll?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
 //删除巡检路线下的点位
-export function RemoveLinePoint(keyValue): Promise<any> {
+export function RemoveLinePoint(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Polling/RemoveLinePoint?keyValue=${keyValue}`, {})
+    .post(process.env.basePath + `/Polling/RemoveLinePoint?keyvalue=${keyvalue}`, {})
     .then(getResult as any);
 }
 
 
 //移动路线下的点位排序
-export function MovePoint(keyValue,sort): Promise<any> {
+export function MovePoint(keyvalue,sort): Promise<any> {
   return request
-    .post(process.env.basePath + `/Polling/MovePoint?keyValue=${keyValue}&sort=${sort}`, {})
+    .post(process.env.basePath + `/Polling/MovePoint?keyvalue=${keyvalue}&sort=${sort}`, {})
     .then(getResult as any);
 }
 
 //删除巡检路线下的全部点位
-export function RemoveLinePointAll(keyValue): Promise<any> {
+export function RemoveLinePointAll(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Polling/RemoveLinePointAll?keyValue=${keyValue}`)
+    .post(process.env.basePath + `/Polling/RemoveLinePointAll?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 

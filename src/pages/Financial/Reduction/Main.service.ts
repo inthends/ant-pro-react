@@ -30,15 +30,15 @@ export function GetPageListJson(data): Promise<any> {
 }
 
 //获取实体
-// export function GetFormJson(keyValue): Promise<CwReductionmain> {
+// export function GetFormJson(keyvalue): Promise<CwReductionmain> {
 //   return request
-//     .get(process.env.basePath + `/Reduction/GetFormJson?keyValue=${keyValue}`)
+//     .get(process.env.basePath + `/Reduction/GetFormJson?keyvalue=${keyvalue}`)
 //     .then(getResult as any);
 // }
 
-export function GetFormJson(keyValue): Promise<any> {
+export function GetFormJson(keyvalue): Promise<any> {
   return request
-    .get(process.env.basePath + `/Reduction/GetFormJson?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/Reduction/GetFormJson?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
@@ -78,9 +78,9 @@ export function Audit(data): Promise<any> {
 }
 
 //作废减免单
-export function InvalidForm(keyValue): Promise<any> {
+export function InvalidForm(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Reduction/InvalidForm?keyValue=${keyValue}`)
+    .post(process.env.basePath + `/Reduction/InvalidForm?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 //保存减免单
@@ -91,22 +91,22 @@ export function SaveForm(data): Promise<any> {
 }
 
 //验证是否可以取消审核
-export function CheckBill(keyValue): Promise<any[]> {
+export function CheckBill(keyvalue): Promise<any[]> {
   return request
-    .get(process.env.basePath + `/Reduction/CheckBill?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/Reduction/CheckBill?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
 //删除减免单里面的全部房屋
-export function RemoveFormAll(keyValue): Promise<any> {
+export function RemoveFormAll(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Reduction/RemoveFormAll?keyValue=${keyValue}`)
+    .post(process.env.basePath + `/Reduction/RemoveFormAll?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
 //判断收款单是否已经审核
-export function CheckCharge(keyValue): Promise<any> {
+export function CheckCharge(keyvalue): Promise<any> {
   return request
-    .get(process.env.basePath + `/Reduction/CheckCharge?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/Reduction/CheckCharge?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }

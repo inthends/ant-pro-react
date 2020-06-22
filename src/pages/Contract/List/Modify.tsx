@@ -450,7 +450,7 @@ const Modify = (props: ModifyProps) => {
           // ...chargefee,
           // ...chargeincre,
           // ...chargefeeoffer,
-          keyValue: id,
+          keyvalue: id,
           chargeId: chargeId,
           room: values.room,
           termJson: TermJson,
@@ -542,7 +542,7 @@ const Modify = (props: ModifyProps) => {
           // ...chargefee,
           // ...chargeincre,
           // ...chargefeeoffer,
-          keyValue: id,
+          keyvalue: id,
           chargeId: chargeId,
           room: values.room,
           termJson: TermJson,
@@ -1341,7 +1341,7 @@ const Modify = (props: ModifyProps) => {
                     <div className="clearfix">
                       <Upload
                         //accept='.doc,.docx,.pdf,image/*'
-                        action={process.env.basePath + '/Contract/Upload?keyValue=' + id}
+                        action={process.env.basePath + '/Contract/Upload?keyvalue=' + id}
                         fileList={fileList}
                         //listType="picture-card"
                         listType='picture'

@@ -46,7 +46,7 @@ const EditRebateOrganize = (props: EditRebateOrganizeProps) => {
         form.validateFields((errors, values) => {
           if (!errors) {
             let newData = {
-              keyValue: infoDetail.id,
+              keyvalue: infoDetail.id,
               Id: infoDetail.id,
               PStructId: infoDetail.pStructId,
               FeeItemId: infoDetail.feeItemId,

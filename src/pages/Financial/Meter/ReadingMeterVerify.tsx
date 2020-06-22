@@ -72,7 +72,7 @@ const ReadingMeterVerify = (props: ReadingMeterVerifyProps) => {
       if (!errors) {
         setLoading(true);
         let newData = {
-          keyValue: infoDetail.billId,
+          keyvalue: infoDetail.billId,
           // BillId: infoDetail.billId,
           // OrganizeId: infoDetail.organizeId,
           // BillCode: infoDetail.billCode,
@@ -320,7 +320,7 @@ const ReadingMeterVerify = (props: ReadingMeterVerifyProps) => {
   const initHouseLoadData = (search) => {
     const queryJson = {
       keyword: search,
-      keyValue: id
+      keyvalue: id
     }
     const sidx = 'id';
     const sord = 'asc';
@@ -344,7 +344,7 @@ const ReadingMeterVerify = (props: ReadingMeterVerifyProps) => {
       total,
       queryJson: {
         keyword: searchText,
-        keyValue: id
+        keyvalue: id
       },
     };
     if (sorter) {
@@ -383,7 +383,7 @@ const ReadingMeterVerify = (props: ReadingMeterVerifyProps) => {
   const initPublicLoadData = (search) => {
     const queryJson = {
       keyword: search,
-      keyValue: id
+      keyvalue: id
     }
     const sidx = 'id';
     const sord = 'asc';
@@ -407,7 +407,7 @@ const ReadingMeterVerify = (props: ReadingMeterVerifyProps) => {
       total,
       queryJson: {
         keyword: searchText,
-        keyValue: id
+        keyvalue: id
       },
     };
     if (sorter) {
@@ -444,7 +444,7 @@ const ReadingMeterVerify = (props: ReadingMeterVerifyProps) => {
   const initVirtualLoadData = (search) => {
     const queryJson = {
       keyword: search,
-      keyValue: id
+      keyvalue: id
     }
     const sidx = 'id';
     const sord = 'asc';
@@ -468,7 +468,7 @@ const ReadingMeterVerify = (props: ReadingMeterVerifyProps) => {
       total,
       queryJson: {
         keyword: searchText,
-        keyValue: id
+        keyvalue: id
       },
     };
     if (sorter) {

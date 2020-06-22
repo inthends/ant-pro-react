@@ -15,37 +15,37 @@ export function SaveForm(data): Promise<JcAccount> {
 }
  
 // 删除
-export function RemoveForm(keyValue): Promise<any> {
+export function RemoveForm(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Account/RemoveForm?keyValue=${keyValue}`, {})
+    .post(process.env.basePath + `/Account/RemoveForm?keyvalue=${keyvalue}`, {})
     .then(getResult as any);
 }
 
 
 //重置密码
-export function ResetPwd(keyValue): Promise<any> {
+export function ResetPwd(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Account/ResetPwd?keyValue=${keyValue}`, {})
+    .post(process.env.basePath + `/Account/ResetPwd?keyvalue=${keyvalue}`, {})
     .then(getResult as any);
 }
 
 // 禁用切换
-export function DisabledToggle(keyValue, disabled: boolean): Promise<any> {
+export function DisabledToggle(keyvalue, disabled: boolean): Promise<any> {
   if (disabled) {
     return request
-      .post(process.env.basePath + `/Account/DisabledAccount?keyValue=${keyValue}`, {})
+      .post(process.env.basePath + `/Account/DisabledAccount?keyvalue=${keyvalue}`, {})
       .then(getResult as any);
   } else {
     return request
-      .post(process.env.basePath + `/Account/EnabledAccount?keyValue=${keyValue}`, {})
+      .post(process.env.basePath + `/Account/EnabledAccount?keyvalue=${keyvalue}`, {})
       .then(getResult as any);
   }
 }
 
 // 验证用户名
-export function ExistAccount(keyValue, account): Promise<any> {
+export function ExistAccount(keyvalue, account): Promise<any> {
   return request
-    .get(process.env.basePath + `/Account/ExistAccount?keyValue=${keyValue}&account=${account}`)
+    .get(process.env.basePath + `/Account/ExistAccount?keyvalue=${keyvalue}&account=${account}`)
     .then(getResult as any);
 }
 

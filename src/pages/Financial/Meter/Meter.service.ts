@@ -62,32 +62,32 @@ export function GetPageListWithMeterID(data): Promise<any> {
 
 //获取费表信息
 export function GetInfoFormJson(data): Promise<ResponseObject<TreeEntity[]>> {
-  return request.get(process.env.basePath + `/Meter/GetInfoFormJson?keyValue=${data}`, {}).then(getResult as any);;
+  return request.get(process.env.basePath + `/Meter/GetInfoFormJson?keyvalue=${data}`, {}).then(getResult as any);;
 }
 
 //获取房间费表信息
 export function GetUnitMeterInfoFormJson(data): Promise<any> {
-  return request.get(process.env.basePath + `/Meter/GetUnitMeterInfoFormJson?keyValue=${data}`, {}).then(getResult as any);;
+  return request.get(process.env.basePath + `/Meter/GetUnitMeterInfoFormJson?keyvalue=${data}`, {}).then(getResult as any);;
 }
 
 //删除房屋表
 export function RemoveUnitForm(data): Promise<any> {
-  return request.post(process.env.basePath + `/Meter/RemoveUnitForm?keyValue=${data}`, {}).then(getResult as any);;
+  return request.post(process.env.basePath + `/Meter/RemoveUnitForm?keyvalue=${data}`, {}).then(getResult as any);;
 }
 
 //删除房屋抄表明细
 export function RemoveReadingUnitForm(data): Promise<any> {
-  return request.post(process.env.basePath + `/Meter/RemoveReadingUnitForm?keyValue=${data}`, {}).then(getResult as any);;
+  return request.post(process.env.basePath + `/Meter/RemoveReadingUnitForm?keyvalue=${data}`, {}).then(getResult as any);;
 }
 
 //获取费项实体
 export function GetFeeDetailJson(data): Promise<ResponseObject<TreeEntity[]>> {
-  return request.get(process.env.basePath + `/FeeItems/GetFormJson?keyValue=${data}`, {}).then(getResult as any);;
+  return request.get(process.env.basePath + `/FeeItems/GetFormJson?keyvalue=${data}`, {}).then(getResult as any);;
 }
 
 //批量删除房屋表
 export function RemoveFormAll(data): Promise<any> {
-  return request.post(process.env.basePath + `/Meter/RemoveFormAll?keyValue=${data}`, {}).then(getResult as any);;
+  return request.post(process.env.basePath + `/Meter/RemoveFormAll?keyvalue=${data}`, {}).then(getResult as any);;
 }
 
 //保存房屋费表信息
@@ -134,35 +134,35 @@ export function GetUnitReadPageList(data): Promise<any> {
 
 //抄表单详细
 export function GetMeterRead(data): Promise<any> {
-  return request.get(process.env.basePath + `/Meter/GetMeterRead?keyValue=${data}`, {}).then(getResult as any);;
+  return request.get(process.env.basePath + `/Meter/GetMeterRead?keyvalue=${data}`, {}).then(getResult as any);;
 }
 
 //全部删除单元抄表 
 export function RemoveReadUnitFormAll(data): Promise<any> {
-  return request.post(process.env.basePath + `/Meter/RemoveReadUnitFormAll?keyValue=${data}`, {}).then(getResult as any);;
+  return request.post(process.env.basePath + `/Meter/RemoveReadUnitFormAll?keyvalue=${data}`, {}).then(getResult as any);;
 }
 
 //全部删除公用抄表
 export function RemoveReadPublicFormAll(data): Promise<any> {
-  return request.post(process.env.basePath + `/Meter/RemoveReadPublicFormAll?keyValue=${data}`, {}).then(getResult as any);;
+  return request.post(process.env.basePath + `/Meter/RemoveReadPublicFormAll?keyvalue=${data}`, {}).then(getResult as any);;
 }
 
 //删除公用抄表
 export function RemoveReadPublicForm(data): Promise<any> {
-  return request.post(process.env.basePath + `/Meter/RemoveReadPublicForm?keyValue=${data}`, {}).then(getResult as any);;
+  return request.post(process.env.basePath + `/Meter/RemoveReadPublicForm?keyvalue=${data}`, {}).then(getResult as any);;
 }
 
 //全部删除虚拟抄表
 export function RemoveReadVirtualFormAll(data): Promise<any> {
-  return request.post(process.env.basePath + `/Meter/RemoveReadVirtualFormAll?keyValue=${data}`, {}).then(getResult as any);;
+  return request.post(process.env.basePath + `/Meter/RemoveReadVirtualFormAll?keyvalue=${data}`, {}).then(getResult as any);;
 }
 //删除虚拟抄表
 export function RemoveReadVirtualForm(data): Promise<any> {
-  return request.post(process.env.basePath + `/Meter/RemoveReadVirtualForm?keyValue=${data}`, {}).then(getResult as any);;
+  return request.post(process.env.basePath + `/Meter/RemoveReadVirtualForm?keyvalue=${data}`, {}).then(getResult as any);;
 }
 //删除抄表单
 export function RemoveReadForm(data): Promise<any> {
-  return request.post(process.env.basePath + `/Meter/RemoveReadForm?keyValue=${data}`, {}).then(getResult as any);;
+  return request.post(process.env.basePath + `/Meter/RemoveReadForm?keyvalue=${data}`, {}).then(getResult as any);;
 }
 
 //审核抄表单

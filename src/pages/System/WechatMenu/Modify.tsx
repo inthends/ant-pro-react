@@ -28,7 +28,7 @@ const Modify = (props: ModifyProps) => {
   const [ruleItem, setRuleItem] = useState<any>();
   let menuId = data ? data.id : '';
   const doSave = dataDetail => {
-    let modifyData = { ...initData, ...dataDetail, keyValue: initData.id };
+    let modifyData = { ...initData, ...dataDetail, keyvalue: initData.id };
     return SaveForm(modifyData);
   };
 

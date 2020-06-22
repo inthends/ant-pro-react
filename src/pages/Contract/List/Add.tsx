@@ -329,7 +329,7 @@ const Add = (props: AddProps) => {
         SaveForm({
           ...Contract,
           ...ContractCharge,
-          keyValue: '',
+          keyvalue: '',
           chargeId: '',
           room: values.room,
           termJson: TermJson,

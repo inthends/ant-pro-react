@@ -4,7 +4,7 @@ import { PaginationConfig } from "antd/lib/table";
 import React, { useContext, useEffect, useState } from "react";
 import ListTable from "./ListTable";
 import Modify from "./Modify";
-import { GetDataItemTreeList, GetDataList } from "./Template.service";
+import { GetDataItemTreeList, GetDataList } from "./Main.service";
 import { SiderContext } from '../../SiderContext';
 import LeftTree from '../LeftTree';
 const { Sider } = Layout;

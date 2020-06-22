@@ -112,7 +112,7 @@ const PstructInfo = (props: PstructInfoProps) => {
   };
 
   const doSave = dataDetail => {
-    dataDetail.keyValue = dataDetail.id;
+    dataDetail.keyvalue = dataDetail.id;
     dataDetail.organizeId = organizeId;
     dataDetail.parentId = dataDetail.parentId ? dataDetail.parentId : parentId;
     //设置房产类型
@@ -285,8 +285,8 @@ const PstructInfo = (props: PstructInfoProps) => {
       callback();
     }
     else {
-      const keyValue = infoDetail.id == undefined ? '' : infoDetail.id;
-      ExistEnCode(keyValue, value).then(res => {
+      const keyvalue = infoDetail.id == undefined ? '' : infoDetail.id;
+      ExistEnCode(keyvalue, value).then(res => {
         if (res)
           callback('编号重复');
         else

@@ -54,7 +54,7 @@ const Reduction = (props: ReductionProps) => {
         }
         var jsonData = {
           Data: JSON.stringify(data),
-          keyValue: id
+          keyvalue: id
         };
         ReductionBilling(jsonData).then(res => {
           message.success('提交成功');

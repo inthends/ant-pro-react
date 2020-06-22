@@ -20,7 +20,7 @@ const Modify = (props: ModifyProps) => {
   initData.expDate = initData.expDate ? initData.expDate : new Date(); 
   const baseFormProps = { form, initData }; 
   const doSave = dataDetail => {
-    let modifyData = { ...initData, ...dataDetail, keyValue: initData.roleId };
+    let modifyData = { ...initData, ...dataDetail, keyvalue: initData.roleId };
     return SaveForm(modifyData);
   };
 

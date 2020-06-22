@@ -70,7 +70,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
 
   const [orgTreeData, setOrgTreeData] = useState<any>({});
 
-  const [keyValue, setKeyValue] = useState<string>('');
+  const [keyvalue, setKeyValue] = useState<string>('');
 
   useEffect(() => {
     if (modifyVisible) {
@@ -122,7 +122,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
   const initHouseLoadData = (search) => {
     const queryJson = {
       keyword: search,
-      keyValue: keyValue
+      keyvalue: keyvalue
     }
     const sidx = 'id';
     const sord = 'asc';
@@ -146,7 +146,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
       total,
       queryJson: {
         keyword: searchText,
-        keyValue: keyValue
+        keyvalue: keyvalue
       },
     };
     if (sorter) {
@@ -184,7 +184,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
   const initPublicLoadData = (search) => {
     const queryJson = {
       keyword: search,
-      keyValue: keyValue
+      keyvalue: keyvalue
     }
     const sidx = 'id';
     const sord = 'asc';
@@ -208,7 +208,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
       total,
       queryJson: {
         keyword: searchText,
-        keyValue: keyValue
+        keyvalue: keyvalue
       },
     };
     if (sorter) {
@@ -245,7 +245,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
   const initVirtualLoadData = (search) => {
     const queryJson = {
       keyword: search,
-      keyValue: keyValue
+      keyvalue: keyvalue
     }
     const sidx = 'id';
     const sord = 'asc';
@@ -269,7 +269,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
       total,
       queryJson: {
         keyword: searchText,
-        keyValue: keyValue
+        keyvalue: keyvalue
       },
     };
     if (sorter) {
@@ -330,7 +330,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
         //   endDate: values.endDate.format('YYYY-MM-DD HH:mm:ss')
         // }; 
         const newData = infoDetail ? { ...infoDetail, ...values } : values;
-        newData.keyValue = keyValue;
+        newData.keyvalue = keyvalue;
         newData.isAdd = false;//houseData.length == 0 ? true: false; 
         newData.billDate = newData.billDate.format('YYYY-MM-DD');
         newData.belongDate = newData.belongDate.format('YYYY-MM-DD');
@@ -982,8 +982,8 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                           if (!errors) {
                             // let guid = getGuid();
                             var meterEntity = {
-                              keyValue: keyValue,//== null || id == '' ? guid : id,
-                              BillId: keyValue,//== null || id == '' ? guid : id,
+                              keyvalue: keyvalue,//== null || id == '' ? guid : id,
+                              BillId: keyvalue,//== null || id == '' ? guid : id,
                               BatchCode: values.batchCode,
                               //MeterCode: moment(values.meterCode).format('YYYYMM'),
                               ReadDate: moment(values.readDate).format('YYYY-MM-DD'),
@@ -1049,8 +1049,8 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                           if (!errors) {
                             // let guid = getGuid();
                             var meterEntity = {
-                              keyValue: keyValue,//== null || id == '' ? guid : id,
-                              BillId: keyValue,//== null || id == '' ? guid : id,
+                              keyvalue: keyvalue,//== null || id == '' ? guid : id,
+                              BillId: keyvalue,//== null || id == '' ? guid : id,
                               BatchCode: values.batchCode,
                               //MeterCode: moment(values.meterCode).format('YYYYMM'),
                               ReadDate: moment(values.readDate).format('YYYY-MM-DD'),
@@ -1115,8 +1115,8 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                           if (!errors) {
                             // let guid = getGuid();
                             var meterEntity = {
-                              keyValue: keyValue,//== null || id == '' ? guid : id,
-                              BillId: keyValue,//== null || id == '' ? guid : id,
+                              keyvalue: keyvalue,//== null || id == '' ? guid : id,
+                              BillId: keyvalue,//== null || id == '' ? guid : id,
                               BatchCode: values.batchCode,
                               //MeterCode: moment(values.meterCode).format('YYYYMM'),
                               ReadDate: moment(values.readDate).format('YYYY-MM-DD'),

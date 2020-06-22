@@ -68,7 +68,7 @@ const Transfrom = (props: TransfromProps) => {
 
         var splitData = {
           Data: JSON.stringify(data),
-          keyValue: id
+          keyvalue: id
         };
 
         TransferBilling(splitData).then(res => {

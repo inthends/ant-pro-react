@@ -234,7 +234,7 @@ const Modify = (props: ModifyProps) => {
       if (!errors) {
         let guid = getGuid();
         var feeEntity = {
-          keyValue: (id == null || id == '') ? guid : id,
+          keyvalue: (id == null || id == '') ? guid : id,
           // BillId: id == null || id == '' ? guid : id,
           OrganizeId: values.organizeId,
           BillSource: '计算周期费',
@@ -245,7 +245,7 @@ const Modify = (props: ModifyProps) => {
           Memo: values.memo
         };
         //设置新id
-        setNewId(feeEntity.keyValue);
+        setNewId(feeEntity.keyvalue);
         setFeeDetail(
           feeEntity
         );
@@ -588,26 +588,26 @@ const Modify = (props: ModifyProps) => {
             form.validateFields((errors, values) => {
               if (!errors) {
                 let guid = getGuid();
-                var keyValue = "";
+                var keyvalue = "";
                 var type = 1;
                 if (id == null || id == '') {
                   if (newId == null && newId == '') {
-                    keyValue = guid;
+                    keyvalue = guid;
                   } else {
-                    keyValue = newId;
+                    keyvalue = newId;
                     type = 0;
                   }
                 } else {
                   if (newId == null && newId == '') {
-                    keyValue = guid;
+                    keyvalue = guid;
                   } else {
-                    keyValue = id;
+                    keyvalue = id;
                     type = 0;
                   }
                 }
 
                 // var feeEntity = {
-                //   keyValue: keyValue,//id == null || id == '' ? guid : id,
+                //   keyvalue: keyvalue,//id == null || id == '' ? guid : id,
                 //   //BillId:'',// id == null || id == '' ? guid : id,
                 //   BillSource: '计算周期费',
                 //   BillDate: moment(values.billDate).format('YYYY-MM-DD'),
@@ -621,7 +621,7 @@ const Modify = (props: ModifyProps) => {
 
                 //赋值
                 const newData = infoDetail ? { ...infoDetail, ...values } : values;
-                newData.keyValue = keyValue;
+                newData.keyvalue = keyvalue;
                 newData.billDate = moment(newData.billDate).format('YYYY-MM-DD');
                 newData.ifVerify = newData.ifVerify == "未审核" ? false : true;
                 newData.type = type;

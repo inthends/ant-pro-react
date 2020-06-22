@@ -49,7 +49,7 @@ const Verify = (props: VerifyProps) => {
           //   pageIndex,
           //   pageSize,
           //   total,
-          //   keyValue: entity.billId
+          //   keyvalue: entity.billId
           // };
           // setLoading(true);
           // GetListById(searchCondition).then(res => {
@@ -68,7 +68,7 @@ const Verify = (props: VerifyProps) => {
     const sidx = 'billId';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
-    return load({ pageIndex, pageSize, sidx, sord, total, keyValue: id }).then(res => {
+    return load({ pageIndex, pageSize, sidx, sord, total, keyvalue: id }).then(res => {
       return res;
     });
   };
@@ -107,7 +107,7 @@ const Verify = (props: VerifyProps) => {
       pageIndex,
       pageSize,
       total,
-      keyValue: infoDetail.billId
+      keyvalue: infoDetail.billId
     };
 
     if (sorter) {
@@ -140,7 +140,7 @@ const Verify = (props: VerifyProps) => {
       if (!errors) {
         // const newvalue = { ...values, ifVerify: ifVerify };
         const newData = infoDetail ? { ...infoDetail, ...values } : values;
-        newData.keyValue = infoDetail.billId;
+        newData.keyvalue = infoDetail.billId;
         newData.ifVerify = ifVerify;
         Audit(newData).then(res => {
           message.success('提交成功');

@@ -31,9 +31,9 @@ export function GetProjectType(): Promise<TreeEntity[]> {
 }
 
 // 获取房产信息
-export function GetFormInfoJson(keyValue): Promise<GmPstructure> {
+export function GetFormInfoJson(keyvalue): Promise<GmPstructure> {
   return request
-    .get(process.env.basePath + `/PStructs/GetFormInfoJson?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/PStructs/GetFormInfoJson?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 // 新增修改
@@ -43,44 +43,44 @@ export function SaveForm(data): Promise<any> {
     .then(getResult as any);
 }
 // 作废
-export function InvalidForm(keyValue): Promise<any> {
+export function InvalidForm(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/PStructUser/InvalidForm?keyValue=${keyValue}`, {})
+    .post(process.env.basePath + `/PStructUser/InvalidForm?keyvalue=${keyvalue}`, {})
     .then(getResult as any);
 }
 
 // 查询详情
-export function GetCustomerInfo(keyValue): Promise<any> {
+export function GetCustomerInfo(keyvalue): Promise<any> {
   return request
-    .get(process.env.basePath + `/PStructUser/GetCustomerInfo?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/PStructUser/GetCustomerInfo?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
-export function GetParkingCustomerInfo(keyValue): Promise<any> {
+export function GetParkingCustomerInfo(keyvalue): Promise<any> {
   return request
-    .get(process.env.basePath + `/PStructUser/GetParkingCustomerInfo?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/PStructUser/GetParkingCustomerInfo?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
 
 // 验证是否能删除
-export function CheckRelation(keyValue): Promise<any> {
+export function CheckRelation(keyvalue): Promise<any> {
   return request
-    .get(process.env.basePath + `/PStructUser/CheckRelation?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/PStructUser/CheckRelation?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
 // 验证code
-export function ExistCode(keyValue, code): Promise<any> {
+export function ExistCode(keyvalue, code): Promise<any> {
   return request
-    .get(process.env.basePath + `/PStructUser/ExistCode?keyValue=${keyValue}&code=${code}`)
+    .get(process.env.basePath + `/PStructUser/ExistCode?keyvalue=${keyvalue}&code=${code}`)
     .then(getResult as any);
 }
 
 // 验证手机号码
-export function ExistCellphone(keyValue, cellphone): Promise<any> {
+export function ExistCellphone(keyvalue, cellphone): Promise<any> {
   return request
-    .get(process.env.basePath + `/PStructUser/ExistCellphone?keyValue=${keyValue}&cellphone=${cellphone}`)
+    .get(process.env.basePath + `/PStructUser/ExistCellphone?keyvalue=${keyvalue}&cellphone=${cellphone}`)
     .then(getResult as any);
 }
 

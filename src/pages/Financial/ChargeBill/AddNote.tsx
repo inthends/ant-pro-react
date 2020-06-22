@@ -8,17 +8,17 @@ interface AddNoteProps {
   visible: boolean;
   closeModal(): void;
   form: WrappedFormUtils;
-  keyValue: string;
+  keyvalue: string;
   reload(): void;
 }
 
 const AddNote = (props: AddNoteProps) => {
-  const { visible, closeModal, form, keyValue, reload } = props;
+  const { visible, closeModal, form, keyvalue, reload } = props;
   const { getFieldDecorator } = form;
   const save = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        const newData = { keyValue: keyValue, ...values};
+        const newData = { keyvalue: keyvalue, ...values};
         SaveNote(newData).then(res => {
           message.success('保存成功');
           closeModal();

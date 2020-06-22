@@ -39,7 +39,7 @@ const Verify = (props: VerifyProps) => {
           //   GetCustomInfo(res.customerId).then(customInfo => {
           //     setInfoDetail({
           //       ...res,
-          //       keyValue: res.billId,
+          //       keyvalue: res.billId,
           //       customerName: customInfo.name
           //     });
           //     setLoading(false);
@@ -59,7 +59,7 @@ const Verify = (props: VerifyProps) => {
             pageIndex,
             pageSize,
             total,
-            keyValue: res.billId
+            keyvalue: res.billId
           };
           setLoading(true);
           GetListByID(searchCondition).then(res => {
@@ -95,7 +95,7 @@ const Verify = (props: VerifyProps) => {
       pageIndex,
       pageSize,
       total,
-      keyValue: infoDetail.billId
+      keyvalue: infoDetail.billId
     };
 
     if (sorter) {
@@ -144,7 +144,7 @@ const Verify = (props: VerifyProps) => {
       if (!errors) {
         // const newvalue = { ...values, ifVerify: ifVerify };
         const newData = infoDetail ? { ...infoDetail, ...values } : values;
-        newData.keyValue = infoDetail.billId;
+        newData.keyvalue = infoDetail.billId;
         newData.ifVerify = ifVerify;
         Audit(newData).then(res => {
           message.success('提交成功');

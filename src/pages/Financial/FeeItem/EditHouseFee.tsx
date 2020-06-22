@@ -92,7 +92,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
     form.validateFields((errors, values) => {
       if (!errors) {
         // let newvalue = {
-        //   keyValue: houseItemId,
+        //   keyvalue: houseItemId,
         //   AccBillDateNum: values.accBillDateNum,
         //   //BankTransfer:tempInfo.bankTransfer,
         //   //CreateDate:tempInfo.createDate, 
@@ -180,7 +180,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
         // };
 
         const newData = infoDetail ? { ...infoDetail, ...values } : values;
-        newData.keyValue = houseItemId;
+        newData.keyvalue = houseItemId;
         if (!newData.isNullDate) {
           newData.beginDate = newData.beginDate.format('YYYY-MM-DD');
           newData.endDate = newData.endDate.format('YYYY-MM-DD');

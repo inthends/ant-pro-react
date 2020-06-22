@@ -41,6 +41,7 @@ function ListTable(props: ListTableProps) {
       key: 'billCode',
       width: 220,
       sorter: true,
+      fixed:'left'
     },
     {
       title: '来源',
@@ -82,7 +83,7 @@ function ListTable(props: ListTableProps) {
       title: '单据日期',
       dataIndex: 'billDate',
       key: 'billDate',
-      width: 120,
+      width: 110,
       sorter: true,
       render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },

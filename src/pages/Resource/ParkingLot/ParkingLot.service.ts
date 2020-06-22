@@ -22,9 +22,9 @@ export function GetProjectType(): Promise<TreeEntity[]> {
 }
 
 // 获取车位车库信息
-export function GetDetailJson(keyValue): Promise<any> {
+export function GetDetailJson(keyvalue): Promise<any> {
   return request
-    .get(process.env.basePath + `/ParkingLot/GetFormInfoJson?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/ParkingLot/GetFormInfoJson?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
@@ -37,29 +37,29 @@ export function GetAreasByOrganizeId(organizeId): Promise<any> {
 
 // 新增修改
 export function SaveGarageForm(data): Promise<any> {
-  data.keyValue = data.id;
+  data.keyvalue = data.id;
   return request
     .post(process.env.basePath + `/ParkingLot/SaveGarageForm`, { data: objToFormdata(data) })
     .then(getResult as any);
 }
 // 新增修改
 export function SaveParkingForm(data): Promise<any> {
-  data.keyValue = data.id;
+  data.keyvalue = data.id;
   return request
     .post(process.env.basePath + `/ParkingLot/SaveParkingForm`, { data: objToFormdata(data) })
     .then(getResult as any);
 }
 // 删除
-export function RemoveForm(keyValue): Promise<any> {
+export function RemoveForm(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/ParkingLot/RemoveForm?keyValue=${keyValue}`, {})
+    .post(process.env.basePath + `/ParkingLot/RemoveForm?keyvalue=${keyvalue}`, {})
     .then(getResult as any);
 }
 
 
 // 验证code
-export function ExistEnCode(keyValue, code): Promise<any> {
+export function ExistEnCode(keyvalue, code): Promise<any> {
   return request
-    .get(process.env.basePath + `/PStructs/ExistCode?keyValue=${keyValue}&code=${code}`)
+    .get(process.env.basePath + `/PStructs/ExistCode?keyvalue=${keyvalue}&code=${code}`)
     .then(getResult as any);
 }

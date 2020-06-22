@@ -84,7 +84,7 @@ const Modify = (props: ModifyProps) => {
     });
   };
   const doSave = dataDetail => {
-    dataDetail.keyValue = dataDetail.id;
+    dataDetail.keyvalue = dataDetail.id;
     if (dataDetail.birthdate != null)
       dataDetail.birthdate = dataDetail.birthdate.format('YYYY-MM-DD');
     SaveForm({ ...dataDetail }).then(res => {
@@ -100,8 +100,8 @@ const Modify = (props: ModifyProps) => {
       callback();
     }
     else {
-      const keyValue = infoDetail.id == undefined ? '' : infoDetail.id;
-      ExistCode(keyValue, value).then(res => {
+      const keyvalue = infoDetail.id == undefined ? '' : infoDetail.id;
+      ExistCode(keyvalue, value).then(res => {
         if (res)
           callback('编号重复');
         else
@@ -116,8 +116,8 @@ const Modify = (props: ModifyProps) => {
       callback();
     }
     else {
-      const keyValue = infoDetail.id == undefined ? '' : infoDetail.id;
-      ExistCellphone(keyValue, value).then(res => {
+      const keyvalue = infoDetail.id == undefined ? '' : infoDetail.id;
+      ExistCellphone(keyvalue, value).then(res => {
         if (res)
           callback('手机号码重复');
         else

@@ -9,7 +9,7 @@ export function Audit(data): Promise<any> {
 
 //获取通知单
 export function GetEntityShow(data): Promise<any> {
-  return request.get(process.env.basePath + `/Notice/GetEntityShow?keyValue=${data}`, {}).then(getResult as any);
+  return request.get(process.env.basePath + `/Notice/GetEntityShow?keyvalue=${data}`, {}).then(getResult as any);
 }
 
 //获取账单
@@ -53,26 +53,26 @@ export function BatchPrint(data): Promise<any> {
 }
 
 //打印
-export function DoPrint(keyValue): Promise<any> {
-  return request.post(process.env.basePath + `/Notice/Print?keyValue=${keyValue}`).then(getResult as any);
+export function DoPrint(keyvalue): Promise<any> {
+  return request.post(process.env.basePath + `/Notice/Print?keyvalue=${keyvalue}`).then(getResult as any);
 }
 
 //表单明细
 export function GetBillCheck(data): Promise<any> {
-  return request.get(process.env.basePath + `/Notice/GetBillCheck?keyValue=${data}`, {}).then(getResult as any);
+  return request.get(process.env.basePath + `/Notice/GetBillCheck?keyvalue=${data}`, {}).then(getResult as any);
 }
 
 //删除通知单
 export function RemoveForm(data): Promise<any> {
-  return request.post(process.env.basePath + `/Notice/RemoveForm?keyValue=${data}`, {}).then(getResult as any);
+  return request.post(process.env.basePath + `/Notice/RemoveForm?keyvalue=${data}`, {}).then(getResult as any);
 }
 //
 export function GetInfoFormJson(data): Promise<any> {
-  return request.get(process.env.basePath + `/Notice/GetInfoFormJson?keyValue=${data}`, {}).then(getResult as any);
+  return request.get(process.env.basePath + `/Notice/GetInfoFormJson?keyvalue=${data}`, {}).then(getResult as any);
 }
 //验证是否生成通知单
 export function CheckNoticeBill(data): Promise<any> {
-  return request.get(process.env.basePath + `/Notice/CheckNoticeBill?keyValue=${data}`, {}).then(getResult as any);
+  return request.get(process.env.basePath + `/Notice/CheckNoticeBill?keyvalue=${data}`, {}).then(getResult as any);
 }
  
 

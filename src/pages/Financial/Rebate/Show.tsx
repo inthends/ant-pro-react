@@ -50,7 +50,7 @@ const Show = (props: ShowProps) => {
           //   pageIndex,
           //   pageSize,
           //   total,
-          //   keyValue: entity.billId
+          //   keyvalue: entity.billId
           // };
           // setLoading(true);
           // GetListById(searchCondition).then(res => {
@@ -69,7 +69,7 @@ const Show = (props: ShowProps) => {
     const sidx = 'billId';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
-    return load({ pageIndex, pageSize, sidx, sord, total, keyValue: id }).then(res => {
+    return load({ pageIndex, pageSize, sidx, sord, total, keyvalue: id }).then(res => {
       return res;
     });
   };
@@ -108,7 +108,7 @@ const Show = (props: ShowProps) => {
       pageIndex,
       pageSize,
       total,
-      keyValue: infoDetail.billId
+      keyvalue: infoDetail.billId
     };
 
     if (sorter) {

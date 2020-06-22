@@ -39,7 +39,7 @@ const Modify = (props: ModifyProps) => {
     //   return;
     // }
 
-    let modifyData = { ...initData, ...dataDetail, keyValue: initData.id };
+    let modifyData = { ...initData, ...dataDetail, keyvalue: initData.id };
     // modifyData.flowType = typeId;
     // modifyData.flowTypeName = typeName;
     //保存流程图 

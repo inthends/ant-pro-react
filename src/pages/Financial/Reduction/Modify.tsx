@@ -178,7 +178,7 @@ const Modify = (props: ModifyProps) => {
             pageIndex,
             pageSize,
             total,
-            keyValue: entity.billId
+            keyvalue: entity.billId
           };
           GetListById(searchCondition).then(res => {
             //设置查询后的分页
@@ -205,7 +205,7 @@ const Modify = (props: ModifyProps) => {
         //重置之前选择加载的费项类别
         // GetUseInfo(localStorage.getItem('userid')).then(res => {
         setInfoDetail({
-          keyValue: '',
+          keyvalue: '',
           //code: 0,
           billId: guid(),
           // billCode: '',
@@ -265,7 +265,7 @@ const Modify = (props: ModifyProps) => {
         // });
 
         // let newData = {
-        //   keyValue: infoDetail.billId,
+        //   keyvalue: infoDetail.billId,
         //   code: code,//infoDetail.code,
         //   // code: infoDetail.billId == "" ? 0 : 1,
         //   billId: infoDetail.billId,
@@ -293,7 +293,7 @@ const Modify = (props: ModifyProps) => {
         /*  let newData = infoDetail ? {
             ...infoDetail,
             ...values ,
-            keyValue:infoDetail.billId,
+            keyvalue:infoDetail.billId,
             billDate:moment(infoDetail.billDate).format('YYYY-MM-DD HH:mm:ss'),
             code:infoDetail.billId==""?0:1,
             details: JSON.stringify(newListData)} : values;*/
@@ -302,7 +302,7 @@ const Modify = (props: ModifyProps) => {
         newData.details = JSON.stringify(listdata);
         newData.code = code;
         newData.billDate = moment(newData.billDate).format('YYYY-MM-DD HH:mm:ss');
-        newData.keyValue = newData.billId;
+        newData.keyvalue = newData.billId;
         SaveForm(newData).then(res => {
           message.success('保存成功');
           closeDrawer();
@@ -329,7 +329,7 @@ const Modify = (props: ModifyProps) => {
   //         reductionAmount
   //       } = res || ({} as any);
   //       let info = {
-  //         keyValue: billId,
+  //         keyvalue: billId,
   //         code: 1,
   //         billId,
   //         billCode,
@@ -541,7 +541,7 @@ const Modify = (props: ModifyProps) => {
       pageIndex,
       pageSize,
       total,
-      keyValue: infoDetail.billId
+      keyvalue: infoDetail.billId
     };
 
     if (sorter) {

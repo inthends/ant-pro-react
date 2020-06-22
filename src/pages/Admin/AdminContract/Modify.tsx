@@ -212,7 +212,7 @@ const Modify = (props: ModifyProps) => {
         Contract.memo = values.memo;
         SubmitForm({
           ...Contract,
-          keyValue: id, 
+          keyvalue: id, 
           termJson: TermJson,
           ChargeFeeResult: JSON.stringify(chargeData),
         }).then(res => {
@@ -257,7 +257,7 @@ const Modify = (props: ModifyProps) => {
         Contract.memo = values.memo;
         SaveForm({
           ...Contract,
-          keyValue: id, 
+          keyvalue: id, 
           termJson: TermJson,
           ChargeFeeResult: JSON.stringify(chargeData)
         }).then(res => {
@@ -782,7 +782,7 @@ const Modify = (props: ModifyProps) => {
                     <div className="clearfix">
                       <Upload
                         //accept='.doc,.docx,.pdf,image/*'
-                        action={process.env.basePath + '/Contract/Upload?keyValue=' + id}
+                        action={process.env.basePath + '/Contract/Upload?keyvalue=' + id}
                         fileList={fileList}
                         //listType="picture-card"
                         listType='picture'

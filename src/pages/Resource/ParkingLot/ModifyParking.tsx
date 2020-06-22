@@ -132,7 +132,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
   };
 
   const doSave = dataDetail => {
-    dataDetail.keyValue = dataDetail.id;
+    dataDetail.keyvalue = dataDetail.id;
     dataDetail.type = 9;
     dataDetail.organizeId = organizeId;
     SaveParkingForm(dataDetail).then(res => {
@@ -270,8 +270,8 @@ const ModifyParking = (props: ModifyParkingProps) => {
       callback();
     }
     else {
-      const keyValue = infoDetail.id == undefined ? '' : infoDetail.id;
-      ExistEnCode(keyValue, value).then(res => {
+      const keyvalue = infoDetail.id == undefined ? '' : infoDetail.id;
+      ExistEnCode(keyvalue, value).then(res => {
         if (res)
           callback('车位编号重复');
         else

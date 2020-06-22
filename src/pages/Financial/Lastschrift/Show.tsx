@@ -43,7 +43,7 @@ const Show = (props: ShowProps) => {
           //   pageIndex,
           //   pageSize,
           //   total,
-          //   keyValue: res.billId
+          //   keyvalue: res.billId
           // };  
           // setLoading(true);
           // GetListByID(searchCondition).then(res => {

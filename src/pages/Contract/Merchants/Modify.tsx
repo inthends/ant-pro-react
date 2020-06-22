@@ -40,7 +40,7 @@ const Modify = (props: ModifyProps) => {
         newData.oldContractDueDate = newData.oldContractDueDate == '' ? '' : newData.oldContractDueDate.format('YYYY-MM-DD');
         SaveForm({
           ...newData,
-          keyValue: id == null || id == '' ? '' : id,
+          keyvalue: id == null || id == '' ? '' : id,
           rooms: newData.room
         }).then(res => {
           setLoading(false);

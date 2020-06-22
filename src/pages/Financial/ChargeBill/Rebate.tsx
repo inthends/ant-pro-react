@@ -57,7 +57,7 @@ const Rebate = (props: RebateProps) => {
         }
         var jsonData = {
           Data: JSON.stringify(data),
-          keyValue: id
+          keyvalue: id
         };
         RebateBilling(jsonData).then(res => {
           setLoading(false);

@@ -45,7 +45,7 @@ const Verify = (props: VerifyProps) => {
     form.validateFields((errors, values) => {
       if (!errors) {
         // let newData={
-        //   keyValue:infoDetail.billId,
+        //   keyvalue:infoDetail.billId,
         //   billCode:values.billCode,
         //   billDate:moment(values.billDate).format('YYYY-MM-DD'),
         //   billType:values.billType,
@@ -58,7 +58,7 @@ const Verify = (props: VerifyProps) => {
         const newData = {
           ...values,
           ...infoDetail,
-          keyValue: infoDetail.billId,
+          keyvalue: infoDetail.billId,
           ifVerify: !infoDetail.ifVerify,
           verifyDate: values.verifyDate.format('YYYY-MM-DD HH:mm:ss')
         };

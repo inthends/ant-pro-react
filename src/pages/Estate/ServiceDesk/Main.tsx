@@ -133,7 +133,7 @@ function Main() {
     if (sorter) {
       const { field, order } = sorter;
       searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
-      searchCondition.sidx = field ? field : 'createDate';
+      searchCondition.sidx = field ? field : 'billDate';
     }
     return load(searchCondition).then(res => {
       return res;
@@ -142,7 +142,7 @@ function Main() {
 
   const load = formData => {
     setLoading(true);
-    formData.sidx = formData.sidx || 'createDate';
+    formData.sidx = formData.sidx || 'billDate';
     formData.sord = formData.sord || 'desc';
     return GetPageListJson(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -173,7 +173,7 @@ function Main() {
       billDateBegin: billDateBegin,
       billDateEnd: billDateEnd
     };
-    const sidx = 'createDate';
+    const sidx = 'billDate';
     const sord = 'desc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {

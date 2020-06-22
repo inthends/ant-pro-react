@@ -54,40 +54,40 @@ export function SubmitForm(data): Promise<any> {
 }
 
 // 获取合同信息
-// export function GetContractInfo(keyValue): Promise<LeaseContractDTO> {
+// export function GetContractInfo(keyvalue): Promise<LeaseContractDTO> {
 //   return request
-//     .get(process.env.basePath + `/AdminContract/GetContractInfo?keyValue=${keyValue}`)
+//     .get(process.env.basePath + `/AdminContract/GetContractInfo?keyvalue=${keyvalue}`)
 //     .then(getResult as any);
 // }
 
 //获取租赁房态图楼层和房间数据
-export function GetContranctFloorData(keyValue): Promise<any> {
+export function GetContranctFloorData(keyvalue): Promise<any> {
   // const data = {
-  //   keyValue
+  //   keyvalue
   // };
   return request
-    .get(process.env.basePath + `/PStructs/GetContranctFloorData?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/PStructs/GetContranctFloorData?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
 //获取合同信息
-export function GetContractInfo(keyValue): Promise<any> {
+export function GetContractInfo(keyvalue): Promise<any> {
   return request
-    .get(process.env.basePath + `/AdminContract/GetContractInfo?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/AdminContract/GetContractInfo?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
 // 获取条款
-export function GetCharge(keyValue): Promise<ChargeDetailDTO> {
+export function GetCharge(keyvalue): Promise<ChargeDetailDTO> {
   return request
-    .get(process.env.basePath + `/AdminContract/GetCharge?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/AdminContract/GetCharge?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
 // 获取条款
-export function GetChargeByContractId(keyValue): Promise<ChargeDetailDTO> {
+export function GetChargeByContractId(keyvalue): Promise<ChargeDetailDTO> {
   return request
-    .get(process.env.basePath + `/AdminContract/GetChargeByContractId?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/AdminContract/GetChargeByContractId?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
@@ -119,23 +119,23 @@ export function WithdrawalForm(data): Promise<any> {
 }
 
 //删除附件
-export function RemoveFile(keyValue): Promise<any> {
+export function RemoveFile(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/AdminContract/RemoveFile?keyValue=${keyValue}`, {})
+    .post(process.env.basePath + `/AdminContract/RemoveFile?keyvalue=${keyvalue}`, {})
     .then(getResult as any);
 }
 
 //获取附件
-export function GetFilesData(keyValue): Promise<any> {
+export function GetFilesData(keyvalue): Promise<any> {
   return request
-    .get(process.env.basePath + `/AdminContract/GetFilesData?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/AdminContract/GetFilesData?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
 //刷新跟进
-export function GetFollowCount(keyValue): Promise<any> {
+export function GetFollowCount(keyvalue): Promise<any> {
   return request
-    .get(process.env.basePath + `/AdminContract/GetFollowCount?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/AdminContract/GetFollowCount?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
@@ -146,13 +146,13 @@ export function SaveFollow(data): Promise<any> {
     .then(getResult as any);
 }
 
-export function GetFollow(keyValue): Promise<any> {
+export function GetFollow(keyvalue): Promise<any> {
   return request
-    .get(process.env.basePath + `/AdminContract/GetFollow?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/AdminContract/GetFollow?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
 //删除合同
-export function RemoveForm(keyValue): Promise<any> {
-  return request.post(process.env.basePath + `/Receivable/RemoveForm?keyValue=${keyValue}`).then(getResult as any);
+export function RemoveForm(keyvalue): Promise<any> {
+  return request.post(process.env.basePath + `/Receivable/RemoveForm?keyvalue=${keyvalue}`).then(getResult as any);
 }

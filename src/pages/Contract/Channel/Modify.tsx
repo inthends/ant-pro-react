@@ -21,7 +21,7 @@ const Modify = (props: ModifyProps) => {
   const [area, setArea] = useState<any[]>([]);//商圈
   const [channel, setChannel] = useState<any[]>([]);//渠道
   const doSave = dataDetail => {
-    let modifyData = { ...initData, ...dataDetail, keyValue: initData.id };
+    let modifyData = { ...initData, ...dataDetail, keyvalue: initData.id };
     return SaveForm(modifyData);
   };
 

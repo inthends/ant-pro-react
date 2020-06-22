@@ -222,7 +222,7 @@ const FeeModify = (props: FeeModifyProps) => {
 
         if (id != null && id != "") {
           //修改
-          unit = Object.assign({}, unit, { Id: id, keyValue: id });
+          unit = Object.assign({}, unit, { Id: id, keyvalue: id });
           SaveDetail(unit).then(res => {
             close(true);
           }) 
@@ -237,7 +237,7 @@ const FeeModify = (props: FeeModifyProps) => {
             BillId: id != null && id != "" ? infoDetail.billId : guid,
             OrganizeId: adminOrgId,
             BillSource: "临时加费",
-            keyValue: id != null && id != "" ? infoDetail.billId : guid,
+            keyvalue: id != null && id != "" ? infoDetail.billId : guid,
             // CreateUserId: localStorage.getItem('userid'),
             // CreateUserName: localStorage.getItem('username'),
             // CreateDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),

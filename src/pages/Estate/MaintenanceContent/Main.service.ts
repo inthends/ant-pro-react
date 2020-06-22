@@ -12,9 +12,9 @@ export function SaveContentForm(data): Promise<any> {
 }
  
 // 逻辑删除
-export function RemoveForm(keyValue): Promise<any> {
+export function RemoveForm(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Maintenance/RemoveForm?keyValue=${keyValue}`, {})
+    .post(process.env.basePath + `/Maintenance/RemoveForm?keyvalue=${keyvalue}`, {})
     .then(getResult as any);
 }
 

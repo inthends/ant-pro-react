@@ -30,16 +30,16 @@ export function GetListById(data): Promise<any> {
 }
 
 //作废
-export function InvalidForm(keyValue): Promise<any> {
+export function InvalidForm(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Lastschrift/InvalidForm?keyValue=${keyValue}`)
+    .post(process.env.basePath + `/Lastschrift/InvalidForm?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
 //作废明细
-export function InvalidItemForm(keyValue): Promise<any> {
+export function InvalidItemForm(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Lastschrift/InvalidItemForm?keyValue=${keyValue}`)
+    .post(process.env.basePath + `/Lastschrift/InvalidItemForm?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
@@ -55,7 +55,7 @@ export function CheckBill(data): Promise<any> {
 
 // 获取实体
 export function GetFormJson(data): Promise<CwOffsetmain> {
-  return request.get(process.env.basePath + `/Lastschrift/GetFormJson?keyValue=${data}`).then(getResult as any);
+  return request.get(process.env.basePath + `/Lastschrift/GetFormJson?keyvalue=${data}`).then(getResult as any);
 }
 //审核
 export function Audit(data): Promise<any> {
@@ -63,7 +63,7 @@ export function Audit(data): Promise<any> {
 }
 //获取客户详情
 export function GetCustomInfo(data): Promise<GmCustomerinfo> {
-  return request.get(process.env.basePath + `/PStructUser/GetFormJson?keyValue=${data}`, { data: objToFormdata(data) }).then(getResult as any);
+  return request.get(process.env.basePath + `/PStructUser/GetFormJson?keyvalue=${data}`, { data: objToFormdata(data) }).then(getResult as any);
 }
 
 //获取当前用户信息
@@ -73,9 +73,9 @@ export function GetUserInfo(userid): Promise<any[]> {
     .then(getResult as any);
 }
 
-export function Export(keyValue): Promise<any> {
+export function Export(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Lastschrift/Export?billId=${keyValue}`, 
+    .post(process.env.basePath + `/Lastschrift/Export?billId=${keyvalue}`, 
       // {
       //   responseType: "blob"
       // } 

@@ -12,9 +12,9 @@ export function SaveForm(data): Promise<any> {
 }
  
 // 删除
-export function RemoveForm(keyValue): Promise<any> {
+export function RemoveForm(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Worker/RemoveForm?keyValue=${keyValue}`, {})
+    .post(process.env.basePath + `/Worker/RemoveForm?keyvalue=${keyvalue}`, {})
     .then(getResult as any);
 }
 
@@ -38,8 +38,8 @@ export function GetDepartmentTreeByOrgId(OrganizeId): Promise<any[]> {
 }
 
 // 验证code
-export function ExistCode(keyValue, code): Promise<any> {
+export function ExistCode(keyvalue, code): Promise<any> {
   return request
-    .get(process.env.basePath + `/Worker/ExistCode?keyValue=${keyValue}&code=${code}`)
+    .get(process.env.basePath + `/Worker/ExistCode?keyvalue=${keyvalue}&code=${code}`)
     .then(getResult as any);
 }

@@ -167,7 +167,7 @@ const Modify = (props: ModifyProps) => {
       if (!errors) {
         setLoading(true);
         const newData = infoDetail ? { ...infoDetail, ...values } : values;
-        newData.keyValue = id == null || id == "" ? "" : id;
+        newData.keyvalue = id == null || id == "" ? "" : id;
         if (!newData.isNullDate) {
           newData.beginDate = newData.beginDate.format('YYYY-MM-DD');
           newData.endDate = newData.endDate.format('YYYY-MM-DD');

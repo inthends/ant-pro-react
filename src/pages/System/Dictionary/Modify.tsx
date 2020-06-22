@@ -21,7 +21,7 @@ const Modify = (props: ModifyProps) => {
   let initData = data ? data : { enabledMark: 1, isDefault: false, itemId: itemId };
   const baseFormProps = { form, initData };
   const doSave = dataDetail => {
-    let modifyData = { ...initData, ...dataDetail, keyValue: initData.itemDetailId };
+    let modifyData = { ...initData, ...dataDetail, keyvalue: initData.itemDetailId };
     return SaveDetailForm(modifyData);
   };
 

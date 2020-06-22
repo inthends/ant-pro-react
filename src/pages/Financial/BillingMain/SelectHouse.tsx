@@ -76,7 +76,7 @@ const SelectHouse = (props: SelectHouseProps) => {
                   } else {
                     message.success('数据保存成功');
                     closeModal();
-                    getBillID(feeDetail.keyValue);
+                    getBillID(feeDetail.keyvalue);
                     setLoading(false);
                   }
                 }).finally(() => {

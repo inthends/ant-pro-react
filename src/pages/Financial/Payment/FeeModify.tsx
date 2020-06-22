@@ -448,7 +448,7 @@ const FeeModify = (props: FeeModifyProps) => {
               if (!errors) {
                 // var guid = getGuid();
                 let newData = {
-                  keyValue: id != null && id != "" ? infoDetail.billId : "",
+                  keyvalue: id != null && id != "" ? infoDetail.billId : "",
                   billDate: moment(values.billDate).format('YYYY-MM-DD'),
                   endDate: moment(values.endDate).format('YYYY-MM-DD'),
                   billId: id != null && id != "" ? infoDetail.billId : "",
@@ -469,7 +469,7 @@ const FeeModify = (props: FeeModifyProps) => {
                   period: infoDetail.period
                 }
                 // let newData = {
-                //   keyValue: id != null && id != "" ? infoDetail.billId : "",
+                //   keyvalue: id != null && id != "" ? infoDetail.billId : "",
                 //   entity: entity
                 // }
                 SaveForm(newData).then((res) => {

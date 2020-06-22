@@ -26,9 +26,9 @@ export function searchUser(keyword): Promise<any[]> {
     .then(getResult as any);
 }
 // 删除
-export function RemoveForm(keyValue): Promise<any> {
+export function RemoveForm(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Role/RemoveForm?keyValue=${keyValue}`, {})
+    .post(process.env.basePath + `/Role/RemoveForm?keyvalue=${keyvalue}`, {})
     .then(getResult as any);
 }
 
@@ -127,8 +127,8 @@ export function GetDataHalfCheckIds(roleId): Promise<any> {
 }
 
 // 验证机构是否能删除
-export function CheckRole(keyValue): Promise<any> {
+export function CheckRole(keyvalue): Promise<any> {
   return request
-    .get(process.env.basePath + `/PermissionRole/CheckRole?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/PermissionRole/CheckRole?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }

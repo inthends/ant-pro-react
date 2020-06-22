@@ -67,7 +67,7 @@ const SelectReadingMeterHouse = (props: SelectReadingMeterHouseProps) => {
         // }
         // const newData = readingDetail ? { ...readingDetail, ...values } : values;  
         setLoading(true);
-        // readingDetail.keyValue = id;
+        // readingDetail.keyvalue = id;
         readingDetail.units = JSON.stringify(unitData);
         readingDetail.meterId = meterId;
         SaveUnitForm(readingDetail).then(res => {

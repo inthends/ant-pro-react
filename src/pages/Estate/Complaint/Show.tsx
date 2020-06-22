@@ -71,8 +71,8 @@ const Show = (props: ShowProps) => {
   //     if (!errors) {
   //       const newData = data ? { ...data, ...values } : values;
   //       //doSave(newData);
-  //       //newData.keyValue = newData.id;
-  //       Project({ ...newData, keyValue: newData.id }).then(res => {
+  //       //newData.keyvalue = newData.id;
+  //       Project({ ...newData, keyvalue: newData.id }).then(res => {
   //         message.success('立项成功');
   //         closeDrawer();
   //         reload();
@@ -86,8 +86,8 @@ const Show = (props: ShowProps) => {
   //     if (!errors) {
   //       const newData = data ? { ...data, ...values } : values;
   //       //doSave(newData);
-  //       //newData.keyValue = newData.id;
-  //       Handle({ ...newData, keyValue: newData.id }).then(res => {
+  //       //newData.keyvalue = newData.id;
+  //       Handle({ ...newData, keyvalue: newData.id }).then(res => {
   //         message.success('处理成功！');
   //         closeDrawer();
   //         reload();
@@ -101,8 +101,8 @@ const Show = (props: ShowProps) => {
   //     if (!errors) {
   //       const newData = data ? { ...data, ...values } : values;
   //       //doSave(newData);
-  //       //newData.keyValue = newData.id;
-  //       Visit({ ...newData, keyValue: newData.id }).then(res => {
+  //       //newData.keyvalue = newData.id;
+  //       Visit({ ...newData, keyvalue: newData.id }).then(res => {
   //         message.success('回访成功！');
   //         closeDrawer();
   //         reload();
@@ -116,8 +116,8 @@ const Show = (props: ShowProps) => {
   //     if (!errors) {
   //       const newData = data ? { ...data, ...values } : values;
   //       //doSave(newData);
-  //       //newData.keyValue = newData.id;
-  //       Approve({ ...newData, keyValue: newData.id }).then(res => {
+  //       //newData.keyvalue = newData.id;
+  //       Approve({ ...newData, keyvalue: newData.id }).then(res => {
   //         message.success('审核成功！');
   //         closeDrawer();
   //         reload();
@@ -127,7 +127,7 @@ const Show = (props: ShowProps) => {
   // };
 
   // const doSave = dataDetail => {
-  //   dataDetail.keyValue = dataDetail.id;
+  //   dataDetail.keyvalue = dataDetail.id;
   //   SaveForm({ ...dataDetail, type: 5 }).then(res => {
   //     message.success('保存成功');
   //     closeDrawer();

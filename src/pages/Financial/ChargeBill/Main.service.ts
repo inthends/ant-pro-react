@@ -14,9 +14,9 @@ export function NotChargeFeeData(data): Promise<any> {
 }
 
 // 获取费项信息
-export function GetFormJson(keyValue): Promise<CwFeeitem> {
+export function GetFormJson(keyvalue): Promise<CwFeeitem> {
   return request
-    .get(process.env.basePath + `/FeeItems/GetFormJson?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/FeeItems/GetFormJson?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
@@ -28,15 +28,15 @@ export function GetAllFeeItems(): Promise<TreeEntity[]> {
 }
 
 //编辑和查看调用
-export function GetShowDetail(keyValue): Promise<any> {
+export function GetShowDetail(keyvalue): Promise<any> {
   return request
-    .get(process.env.basePath + `/BillingMain/GetShowDetail?keyvalue=${keyValue}`)
+    .get(process.env.basePath + `/BillingMain/GetShowDetail?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
-export function GetShowDetailByMainId(keyValue): Promise<any> {
+export function GetShowDetailByMainId(keyvalue): Promise<any> {
   return request
-    .get(process.env.basePath + `/BillingMain/GetShowDetailByMainId?keyvalue=${keyValue}`)
+    .get(process.env.basePath + `/BillingMain/GetShowDetailByMainId?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
@@ -48,9 +48,9 @@ export function GetTransferRoomUsers(roomid, relationid): Promise<any[]> {
 }
 
 //表单明细
-export function GetEntity(keyValue): Promise<any[]> {
+export function GetEntity(keyvalue): Promise<any[]> {
   return request
-    .get(process.env.basePath + `/Receivable/GetEntity?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/Receivable/GetEntity?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
@@ -136,23 +136,23 @@ export function TransferBilling(data): Promise<any> {
 }
 
 //作废计费单
-export function InvalidBillForm(keyValue): Promise<any> {
-  return request.post(process.env.basePath + `/BillingMain/InvalidForm?keyValue=${keyValue}`).then(getResult as any);
+export function InvalidBillForm(keyvalue): Promise<any> {
+  return request.post(process.env.basePath + `/BillingMain/InvalidForm?keyvalue=${keyvalue}`).then(getResult as any);
 }
 
 //作废计费明细
-export function InvalidBillDetailForm(keyValue): Promise<any> {
-  return request.post(process.env.basePath + `/BillingMain/InvalidBillDetailForm?keyValue=${keyValue}`).then(getResult as any);
+export function InvalidBillDetailForm(keyvalue): Promise<any> {
+  return request.post(process.env.basePath + `/BillingMain/InvalidBillDetailForm?keyvalue=${keyvalue}`).then(getResult as any);
 }
 
 //作废收款单
-export function InvalidForm(keyValue): Promise<any> {
-  return request.post(process.env.basePath + `/Receivable/InvalidForm?keyValue=${keyValue}`).then(getResult as any);
+export function InvalidForm(keyvalue): Promise<any> {
+  return request.post(process.env.basePath + `/Receivable/InvalidForm?keyvalue=${keyvalue}`).then(getResult as any);
 }
 
 //冲红收款单/
-export function RedFlush(keyValue): Promise<any> {
-  return request.post(process.env.basePath + `/Receivable/RedFlush?keyValue=${keyValue}`).then(getResult as any);
+export function RedFlush(keyvalue): Promise<any> {
+  return request.post(process.env.basePath + `/Receivable/RedFlush?keyvalue=${keyvalue}`).then(getResult as any);
 }
 
 //退款，参数收款单主id，支付记录主id
@@ -167,8 +167,8 @@ export function ConfirmForm(rid, billId): Promise<any> {
 
 
 //验证收款单是否可以冲红
-export function CheckRedFlush(keyValue): Promise<any> {
-  return request.get(process.env.basePath + `/Receivable/CheckRedFlush?keyValue=${keyValue}`).then(getResult as any);
+export function CheckRedFlush(keyvalue): Promise<any> {
+  return request.get(process.env.basePath + `/Receivable/CheckRedFlush?keyvalue=${keyvalue}`).then(getResult as any);
 }
 
 //收款单对账
@@ -182,8 +182,8 @@ export function SubmitForm(data): Promise<any> {
 }
 
 //获取收款单实体
-export function GetEntityShow(keyValue): Promise<any> {
-  return request.get(process.env.basePath + `/Receivable/GetEntityShow?keyValue=${keyValue}`).then(getResult as any);
+export function GetEntityShow(keyvalue): Promise<any> {
+  return request.get(process.env.basePath + `/Receivable/GetEntityShow?keyvalue=${keyvalue}`).then(getResult as any);
 }
 
 //获取费用详情列表
@@ -191,10 +191,10 @@ export function ChargeFeeDetail(data): Promise<any> {
   return request.post(process.env.basePath + `/Receivable/ChargeFeeDetail`, { data: objToFormdata(data) }).then(getResult as any);
 }
 
-//打印
-export function Print(keyValue, templateId): Promise<any> {
-  return request.post(process.env.basePath + `/Receivable/Print?keyValue=${keyValue}&templateId=${templateId}`).then(getResult as any);
-}
+// //打印
+// export function Print(keyvalue, templateId): Promise<any> {
+//   return request.post(process.env.basePath + `/Receivable/Print?keyvalue=${keyvalue}&templateId=${templateId}`).then(getResult as any);
+// }
 
 // 如果改笔费用存在优惠，则需要选中与此费项有关的全部费用，一起缴款，否则给出提示 
 export function CheckRebateFee(data): Promise<any> {
@@ -217,8 +217,8 @@ export function GetReceiveList(data): Promise<any> {
 }
 
 //删除送审单明细
-export function RemoveSubmitDetail(keyValue): Promise<any> {
-  return request.post(process.env.basePath + `/Receivable/RemoveSubmitDetail?keyValue=${keyValue}`).then(getResult as any);
+export function RemoveSubmitDetail(keyvalue): Promise<any> {
+  return request.post(process.env.basePath + `/Receivable/RemoveSubmitDetail?keyvalue=${keyvalue}`).then(getResult as any);
 }
 
 
@@ -229,8 +229,8 @@ export function GetTotalAmount(data): Promise<any> {
 
 
 //获取送审单实体
-export function GetSubmitEntity(keyValue): Promise<any> {
-  return request.get(process.env.basePath + `/Receivable/GetSubmitEntity?keyValue=${keyValue}`).then(getResult as any);
+export function GetSubmitEntity(keyvalue): Promise<any> {
+  return request.get(process.env.basePath + `/Receivable/GetSubmitEntity?keyvalue=${keyvalue}`).then(getResult as any);
 }
 
 //查看的时候获取送审单明细
@@ -253,10 +253,10 @@ export function ReSubmitForm(data): Promise<any> {
   return request.post(process.env.basePath + `/Receivable/ReSubmitForm`, { data: objToFormdata(data) }).then(getResult as any);
 }
 
-//获取打印模板
-export function GetTemplates(unitId): Promise<any> {
-  return request.get(process.env.basePath + `/Template/GetTemplates?unitId=${unitId}`).then(getResult as any);
-}
+// //获取打印模板
+// export function GetTemplates(unitId): Promise<any> {
+//   return request.get(process.env.basePath + `/Template/GetTemplates?unitId=${unitId}`).then(getResult as any);
+// }
 
 // 收款抹零
 export function Call(data): Promise<any> {

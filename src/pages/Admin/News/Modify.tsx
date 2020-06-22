@@ -161,7 +161,7 @@ const Modify = (props: ModifyProps) => {
   //文本编辑器结束
 
   const doSave = dataDetail => {
-    let modifyData = { ...initData, ...dataDetail, keyValue: initData.id };
+    let modifyData = { ...initData, ...dataDetail, keyvalue: initData.id };
     modifyData.description = dataDetail.description.toHTML();//toRAW();  
     modifyData.isDistinguish = modifyData.isDistinguish == 0 ? false : true;
     modifyData.isPublish = modifyData.isPublish == 0 ? false : true;

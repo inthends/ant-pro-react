@@ -8,7 +8,7 @@ import { GetEntityShow, ChargeFeeDetail, SavaReceiveForm } from './Main.service'
 import { GetCommonItems } from '@/services/commonItem';
 import moment from 'moment';
 import styles from './style.less';
-import SelectTemplate from './SelectTemplate';
+import SelectTemplate from '../../System/Template/SelectTemplate' 
 const { Option } = Select;
 
 interface BillModifyProps {

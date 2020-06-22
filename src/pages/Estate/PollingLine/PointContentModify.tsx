@@ -60,7 +60,7 @@ const PointContentModify = (props: PointContentModifyProps) => {
         newData.planTime = newData.planTime ? newData.planTime.format('HH:mm') : null;
         newData.beginTime = newData.beginTime ? newData.beginTime.format('HH:mm') : null;
         newData.endTime = newData.endTime ? newData.endTime.format('HH:mm') : null;
-        SavePointContentForm({ ...newData, keyValue: newData.id }).then(res => {
+        SavePointContentForm({ ...newData, keyvalue: newData.id }).then(res => {
           message.success('保存成功');
           closeModal();
           reload();

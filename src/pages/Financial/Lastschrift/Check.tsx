@@ -28,7 +28,7 @@ const Check = (props: CheckProps) => {
       content: '请确认上传数据的准确性，一旦对账无法撤回',
       onOk: () => {
 
-        const newData = { keyValue: id, uploadFile: form.getFieldValue('uploadFile') };
+        const newData = { keyvalue: id, uploadFile: form.getFieldValue('uploadFile') };
         CheckBill(newData).then(res => {
           message.success('对账完成，请在列表页查看对账详情');
           closeModal();

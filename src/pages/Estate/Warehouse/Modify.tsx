@@ -30,7 +30,7 @@ const Modify = (props: ModifyProps) => {
   const [infoDetail, setInfoDetail] = useState<any>({});
   // const [treeData, setTreeData] = useState<any[]>([]);
   //const [roomUser, setRoomUser] = useState<any>(); 
-  const [keyValue, setkeyValue] = useState<any>();
+  const [keyvalue, setkeyValue] = useState<any>();
 
   const [previewVisible, setPreviewVisible] = useState<boolean>(false);
   const [fileList, setFileList] = useState<any[]>([]);
@@ -91,7 +91,7 @@ const Modify = (props: ModifyProps) => {
   };
 
   const doSave = dataDetail => {
-    dataDetail.keyValue = keyValue;//dataDetail.id ? dataDetail.id : guid(); 
+    dataDetail.keyvalue = keyvalue;//dataDetail.id ? dataDetail.id : guid(); 
     dataDetail.isAdd = dataDetail.billCode == undefined ? true : false;
     SaveForm({ ...dataDetail }).then(res => {
       message.success('保存成功');
@@ -127,7 +127,7 @@ const Modify = (props: ModifyProps) => {
           content: `确定要` + title + `吗？`,
           onOk: () => {
             const newData = data ? { ...data, ...values } : values;
-            newData.keyValue = newData.id;
+            newData.keyvalue = newData.id;
             if (e.key == '1') {
               ChangeToRepair({ ...newData }).then(res => {
                 message.success('操作成功');
@@ -366,7 +366,7 @@ const Modify = (props: ModifyProps) => {
                       <div className="clearfix">
                         <Upload
                           accept='image/*'
-                          action={process.env.basePath + '/ServiceDesk/Upload?keyValue=' + keyValue}
+                          action={process.env.basePath + '/ServiceDesk/Upload?keyvalue=' + keyvalue}
                           listType="picture-card"
                           fileList={fileList}
                           onPreview={handlePreview}

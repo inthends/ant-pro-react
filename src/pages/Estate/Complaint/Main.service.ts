@@ -11,9 +11,9 @@ export function GetPageListJson(data): Promise<any> {
 }
 
 // 获取投诉对象详细信息
-export function GetUserByCustomerId(keyValue, type): Promise<any> {
+export function GetUserByCustomerId(keyvalue, type): Promise<any> {
   return request
-    .get(process.env.basePath + `/ServiceDesk/GetUserByCustomerId?keyValue=${keyValue}&type=${type}`)
+    .get(process.env.basePath + `/ServiceDesk/GetUserByCustomerId?keyvalue=${keyvalue}&type=${type}`)
     .then(getResult as any);
 }
 
@@ -25,9 +25,9 @@ export function GetUserByCustomerId(keyValue, type): Promise<any> {
 // }
 
 // 作废
-export function InvalidForm(keyValue): Promise<any> {
+export function InvalidForm(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Complaint/InvalidForm?keyValue=${keyValue}`, {})
+    .post(process.env.basePath + `/Complaint/InvalidForm?keyvalue=${keyvalue}`, {})
     .then(getResult as any);
 }
 
@@ -60,6 +60,6 @@ export function Project(data): Promise<any> {
 }
 
 //获取实体
-export function GetEntity(keyValue): Promise<any> {
-  return request.get(process.env.basePath + `/Complaint/GetEntity?keyValue=${keyValue}`).then(getResult as any);
+export function GetEntity(keyvalue): Promise<any> {
+  return request.get(process.env.basePath + `/Complaint/GetEntity?keyvalue=${keyvalue}`).then(getResult as any);
 }

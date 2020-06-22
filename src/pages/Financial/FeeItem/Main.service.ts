@@ -12,16 +12,16 @@ export function GetPageListJson(data): Promise<any> {
 }
 
 // 获取费项信息
-export function GetFormJson(keyValue): Promise<CwFeeitem> {
+export function GetFormJson(keyvalue): Promise<CwFeeitem> {
   return request
-    .get(process.env.basePath + `/FeeItems/GetFormJson?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/FeeItems/GetFormJson?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
 // 获取房屋费项信息
-export function GetHouseFormJson(keyValue): Promise<any> {
+export function GetHouseFormJson(keyvalue): Promise<any> {
   return request
-    .get(process.env.basePath + `/FeeItems/GetHouseFormJson?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/FeeItems/GetHouseFormJson?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
@@ -54,12 +54,12 @@ export function OrganizeEditForm(data): Promise<any> {
 
 //删除费项组织机构
 export function OrganizeRemoveForm(data): Promise<any> {
-  return request.post(process.env.basePath + `/FeeItems/OrganizeRemoveForm?keyValue=${data}`, {}).then(getResult as any);
+  return request.post(process.env.basePath + `/FeeItems/OrganizeRemoveForm?keyvalue=${data}`, {}).then(getResult as any);
 }
 
 //删除优惠政策
 export function RebateRemoveForm(data): Promise<any> {
-  return request.post(process.env.basePath + `/FeeItems/RebateRemoveForm?keyValue=${data}`, {}).then(getResult as any);
+  return request.post(process.env.basePath + `/FeeItems/RebateRemoveForm?keyvalue=${data}`, {}).then(getResult as any);
 }
 
 //删除已设费房屋/FeeItems/
@@ -69,7 +69,7 @@ export function HouseRemoveForm(data: any): Promise<any> {
 //删除费项/FeeItems/
 
 export function RemoveForm(data: any): Promise<any> {
-  return request.post(process.env.basePath + `/FeeItems/RemoveForm?keyValue=${data}`, {}).then(getResult as any);
+  return request.post(process.env.basePath + `/FeeItems/RemoveForm?keyvalue=${data}`, {}).then(getResult as any);
 }
 //房屋费项保存
 export function UnitFeeSaveForm(data): Promise<any> {
@@ -83,7 +83,7 @@ export function HouseSaveForm(data): Promise<any> {
 //加载税项
 export function GetOrgTaxTateFormJson(data): Promise<TreeEntity[]> {
   return request
-    .get(process.env.basePath + `/FeeItems/GetOrgTaxTateFormJson?keyValue=${data}`)
+    .get(process.env.basePath + `/FeeItems/GetOrgTaxTateFormJson?keyvalue=${data}`)
     .then(getResult as any);
 }
 
@@ -139,7 +139,7 @@ export function RebateSaveForm(data): Promise<any> {
 //加载优惠政策
 export function GetRebateFormJson(data): Promise<TreeEntity[]> {
   return request
-    .get(process.env.basePath + `/FeeItems/GetRebateFormJson?keyValue=${data}`)
+    .get(process.env.basePath + `/FeeItems/GetRebateFormJson?keyvalue=${data}`)
     .then(getResult as any);
 }
 

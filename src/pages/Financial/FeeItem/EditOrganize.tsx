@@ -42,7 +42,7 @@ const EditOrganize = (props: EditOrganizeProps) => {
         form.validateFields((errors, values) => {
           if (!errors) {
             let newData = {
-              keyValue: infoDetail.id,
+              keyvalue: infoDetail.id,
               Id: infoDetail.id,
               InvoiceName: values.invoiceName,
               InvoiceCode: values.invoiceCode,

@@ -81,7 +81,7 @@ const Modify = (props: ModifyProps) => {
     });
   };
   const doSave = dataDetail => {
-    dataDetail.keyValue = dataDetail.id;
+    dataDetail.keyvalue = dataDetail.id;
     SaveForm({ ...dataDetail }).then(res => {
       message.success('保存成功');
       closeDrawer();

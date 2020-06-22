@@ -35,17 +35,17 @@ export function GetUnitPageListJson(data): Promise<any> {
 // }
 
 //解绑
-export function RemoveUnitForm(keyValue): Promise<any> {
+export function RemoveUnitForm(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Member/RemoveUnitForm?keyValue=${keyValue}`, {})
+    .post(process.env.basePath + `/Member/RemoveUnitForm?keyvalue=${keyvalue}`, {})
     .then(getResult as any);
 }
 
 
 // 删除
-// export function RemoveForm(keyValue): Promise<any> {
+// export function RemoveForm(keyvalue): Promise<any> {
 //   return request
-//     .post(process.env.basePath + `/Member/RemoveForm?keyValue=${keyValue}`, {})
+//     .post(process.env.basePath + `/Member/RemoveForm?keyvalue=${keyvalue}`, {})
 //     .then(getResult as any);
 // }
 

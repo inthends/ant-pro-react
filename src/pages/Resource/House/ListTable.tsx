@@ -37,7 +37,7 @@ function ListTable(props: ListTableProps) {
       title: '项目名称',
       dataIndex: 'name',
       key: 'name',
-      width: 200,
+      width: 250,
       fixed: 'left',
       sorter: true,
       render: (text, record) => {
@@ -50,7 +50,7 @@ function ListTable(props: ListTableProps) {
       title: '总建筑面积',
       dataIndex: 'area',
       key: 'area',
-      width: 120,
+      width: 130,
       // sorter: (a, b) => a.area - b.area
       sorter: true,
     },
@@ -65,14 +65,14 @@ function ListTable(props: ListTableProps) {
       title: '入住面积',
       dataIndex: 'checkarea',
       key: 'checkarea',
-      width: 100,
+      width: 110,
       sorter: true,
     },
     {
       title: '空置面积',
       dataIndex: 'emptyarea',
       key: 'emptyarea',
-      width: 100,
+      width: 110,
       // render: (text, record) => {
       //   return record.area - record.checkarea;
       // },
@@ -94,20 +94,20 @@ function ListTable(props: ListTableProps) {
     },
     {
       title: '入驻率',
-      dataIndex: 'checkrate',
+      //dataIndex: 'checkrate',
       sorter: true,
       key: 'checkrate',
-      // render: (text, record) => {
-      //   return (
-      //     (record.roomcount ? (record.checkroom / record.roomcount) * 100 : 0).toFixed(2) + '%'
-      //   );
-      // },
       render: (text, record) => {
-        if (text != null)
-          return text + '%';
-        else
-          return '';
-      }
+        return (
+          (record.roomcount ? (record.checkroom / record.roomcount) * 100 : 0).toFixed(2) + '%'
+        );
+      },
+      // render: (text, record) => {
+      //   if (text != null)
+      //     return text + '%';
+      //   else
+      //     return '';
+      // }
     },
     {
       title: '操作',

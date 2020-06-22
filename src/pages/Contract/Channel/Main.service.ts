@@ -15,8 +15,8 @@ export function SaveForm(data): Promise<any> {
 }
 
 // 获取信息
-export function GetFormJson(keyValue): Promise<any> {
+export function GetFormJson(keyvalue): Promise<any> {
   return request
-    .get(process.env.basePath + `/Channel/GetFormJson?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/Channel/GetFormJson?keyvalue=${keyvalue}`)
     .then(getResult as any);
 } 

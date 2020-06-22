@@ -1,5 +1,8 @@
 
-import { Modal, Upload, Icon, DatePicker, AutoComplete, Select, Tag, Divider, PageHeader, Button, Card, Col, Drawer, Form, Input, message, Row } from 'antd';
+import {
+  Spin, Modal, Upload, Icon, DatePicker, AutoComplete, Select, Tag, Divider,
+  PageHeader, Button, Card, Col, Drawer, Form, Input, message, Row
+} from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { GetFilesData, RemoveFile, Dispatch, Change, Receive, Start, Handle, Check, Approve, GetEntity } from './Main.service';
@@ -9,7 +12,7 @@ import styles from './style.less';
 // const { Paragraph } = Typography;
 const { Option } = Select;
 import AddRepairFee from '../../Financial/ChargeBill/AddRepairFee';
-
+import SelectTemplate from '../../System/Template/SelectTemplate'
 interface ModifyProps {
   modifyVisible: boolean;
   // data?: any;
@@ -28,12 +31,15 @@ const Modify = (props: ModifyProps) => {
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [repairMajors, setRepairMajors] = useState<any[]>([]); // 维修专业
   const [userSource, setUserSource] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   // 打开抽屉时初始化
   useEffect(() => {
     if (modifyVisible) {
+      setLoading(true);
       //获取维修专业
       GetCommonItems('RepairMajor').then(res => {
         setRepairMajors(res || []);
+        setLoading(false);
       });
     }
   }, [modifyVisible]);
@@ -89,9 +95,8 @@ const Modify = (props: ModifyProps) => {
   const dispatch = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        const newData = infoDetail ? { ...infoDetail, ...values } : values;
-
-        Dispatch({ ...newData, keyValue: newData.id }).then(res => {
+        const newData = infoDetail ? { ...infoDetail, ...values } : values; 
+        Dispatch({ ...newData, keyvalue: newData.id }).then(res => {
           message.destroy();//防止重复弹出提示
           message.success('派单成功');
           closeDrawer();
@@ -153,7 +158,7 @@ const Modify = (props: ModifyProps) => {
       if (!errors) {
         const newData = infoDetail ? { ...infoDetail, ...values } : values;
         newData.beginDate = values.beginDate.format('YYYY-MM-DD HH:mm');
-        Start({ ...newData, keyValue: newData.id }).then(res => {
+        Start({ ...newData, keyvalue: newData.id }).then(res => {
           message.success('已开工');
           closeDrawer();
           reload();
@@ -178,7 +183,7 @@ const Modify = (props: ModifyProps) => {
       if (!errors) {
         const newData = infoDetail ? { ...infoDetail, ...values } : values;
         newData.endDate = values.endDate.format('YYYY-MM-DD HH:mm');
-        Handle({ ...newData, keyValue: newData.id }).then(res => {
+        Handle({ ...newData, keyvalue: newData.id }).then(res => {
           message.success('处理完成');
           closeDrawer();
           reload();
@@ -203,7 +208,7 @@ const Modify = (props: ModifyProps) => {
       if (!errors) {
         const newData = infoDetail ? { ...infoDetail, ...values } : values;
         newData.testDate = values.testDate.format('YYYY-MM-DD HH:mm');
-        Check({ ...newData, keyValue: newData.id }).then(res => {
+        Check({ ...newData, keyvalue: newData.id }).then(res => {
           message.success('检验完成');
           closeDrawer();
           reload();
@@ -227,7 +232,7 @@ const Modify = (props: ModifyProps) => {
     form.validateFields((errors, values) => {
       if (!errors) {
         const newData = infoDetail ? { ...infoDetail, ...values } : values;
-        Approve({ ...newData, keyValue: newData.id }).then(res => {
+        Approve({ ...newData, keyvalue: newData.id }).then(res => {
           message.success('审核完成');
           closeDrawer();
           reload();
@@ -377,6 +382,16 @@ const Modify = (props: ModifyProps) => {
   };
   //图片上传结束
 
+  //选择模板
+  const [modalvisible, setModalVisible] = useState<boolean>(false);
+  //选择打印模板
+  const showModal = () => {
+    setModalVisible(true);
+  };
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
   return (
     <Drawer
       title={title}
@@ -386,273 +401,274 @@ const Modify = (props: ModifyProps) => {
       visible={modifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
-      <PageHeader
-        // title={infoDetail.billCode}
-        // subTitle={GetStatus(infoDetail.status)}
-        // extra={[
-        //   <Button key="3">附件</Button>,
-        // ]}
-        ghost={false}
-        title={null}
-        subTitle={
-          <div>
-            <label style={{ color: '#4494f0', fontSize: '24px' }}>{infoDetail.address}</label>
-          </div>
-        }
-        style={{
-          border: '1px solid rgb(235, 237, 240)'
-        }}>
+      <Spin tip="数据处理中..." spinning={loading}>
+        <PageHeader
+          // title={infoDetail.billCode}
+          // subTitle={GetStatus(infoDetail.status)}
+          // extra={[
+          //   <Button key="3">附件</Button>,
+          // ]}
+          ghost={false}
+          title={null}
+          subTitle={
+            <div>
+              <label style={{ color: '#4494f0', fontSize: '24px' }}>{infoDetail.address}</label>
+            </div>
+          }
+          style={{
+            border: '1px solid rgb(235, 237, 240)'
+          }}>
 
-        {/* <Paragraph>
+          {/* <Paragraph>
           来自{infoDetail.repairArea}，联系人：{infoDetail.contactName}，地址：{infoDetail.address}，电话：<a>{infoDetail.contactLink}</a>，属于{infoDetail.isPaid == '是' ? '有偿服务' : '无偿服务'}，报修时间：{infoDetail.billDate}，内容如下
         </Paragraph>
         {infoDetail.repairContent} */}
 
-        <Form layout='vertical'>
-          <Row gutter={4}>
-            <Col lg={6}>
-              <Form.Item label="单号" >
-                {infoDetail.billCode}
-              </Form.Item>
-            </Col>
-            <Col lg={3}>
-              <Form.Item label="状态" >
-                {GetStatus(infoDetail.status)}
-              </Form.Item>
-            </Col>
-            <Col lg={4}>
-              <Form.Item label="报修时间" >
-                {infoDetail.billDate}
-              </Form.Item>
-            </Col>
+          <Form layout='vertical'>
+            <Row gutter={4}>
+              <Col lg={6}>
+                <Form.Item label="单号" >
+                  {infoDetail.billCode}
+                </Form.Item>
+              </Col>
+              <Col lg={3}>
+                <Form.Item label="状态" >
+                  {GetStatus(infoDetail.status)}
+                </Form.Item>
+              </Col>
+              <Col lg={4}>
+                <Form.Item label="报修时间" >
+                  {infoDetail.billDate}
+                </Form.Item>
+              </Col>
 
-            <Col lg={3}>
-              <Form.Item label="单据来源"  >
-                {infoDetail.sourceType}
-              </Form.Item>
-            </Col>
-            <Col lg={4}>
-              <Form.Item label="联系人" >
-                {infoDetail.contactName}
-              </Form.Item>
-            </Col>
-            <Col lg={4}>
-              <Form.Item label="联系电话" >
-                {infoDetail.contactLink}
-              </Form.Item>
-            </Col>
-          </Row>
+              <Col lg={3}>
+                <Form.Item label="单据来源"  >
+                  {infoDetail.sourceType}
+                </Form.Item>
+              </Col>
+              <Col lg={4}>
+                <Form.Item label="联系人" >
+                  {infoDetail.contactName}
+                </Form.Item>
+              </Col>
+              <Col lg={4}>
+                <Form.Item label="联系电话" >
+                  {infoDetail.contactLink}
+                </Form.Item>
+              </Col>
+            </Row>
 
-          <Row gutter={4}>
-            <Col lg={6}>
-              <Form.Item label="关联单号" >
-                <a onClick={() => showLink(serverId)}>{serverCode}</a>
-              </Form.Item>
-            </Col>
-            <Col lg={3}>
-              <Form.Item label="转单人" >
-                {infoDetail.createUserName}
-              </Form.Item>
-            </Col>
-            <Col lg={4}>
-              <Form.Item label="转单时间" >
-                {infoDetail.createDate}
-              </Form.Item>
-            </Col>
-            <Col lg={3}>
-              <Form.Item label="维修区域" >
-                {infoDetail.repairArea}
-              </Form.Item>
-            </Col>
-            <Col lg={3}>
-              <Form.Item label="是否有偿" >
-                {infoDetail.isPaid}
-              </Form.Item>
-            </Col>
-          </Row>
+            <Row gutter={4}>
+              <Col lg={6}>
+                <Form.Item label="关联单号" >
+                  <a onClick={() => showLink(serverId)}>{serverCode}</a>
+                </Form.Item>
+              </Col>
+              <Col lg={3}>
+                <Form.Item label="转单人" >
+                  {infoDetail.createUserName}
+                </Form.Item>
+              </Col>
+              <Col lg={4}>
+                <Form.Item label="转单时间" >
+                  {infoDetail.createDate}
+                </Form.Item>
+              </Col>
+              <Col lg={3}>
+                <Form.Item label="维修区域" >
+                  {infoDetail.repairArea}
+                </Form.Item>
+              </Col>
+              <Col lg={3}>
+                <Form.Item label="是否有偿" >
+                  {infoDetail.isPaid}
+                </Form.Item>
+              </Col>
+            </Row>
 
-        </Form>
+          </Form>
+          <Divider dashed />
+          {infoDetail.repairContent}
+        </PageHeader>
         <Divider dashed />
-        {infoDetail.repairContent}
-      </PageHeader>
-      <Divider dashed />
-      {
-        modifyVisible ? (
-          <Form layout="vertical" hideRequiredMark>
-            {infoDetail.status == 1 ? (
-              <Card title="派单" className={styles.card2} hoverable>
-                <Row gutter={24}>
-                  <Col lg={5}>
-                    <Form.Item label="维修专业" required>
-                      {getFieldDecorator('repairMajor', {
-                        rules: [{ required: true, message: '请选择维修专业' }],
-                      })(
-                        <Select placeholder="请选择">
-                          {repairMajors.map(item => (
-                            <Option value={item.title} key={item.key}>
-                              {item.title}
-                            </Option>
-                          ))}
-                        </Select>)
-                      }
-                    </Form.Item>
-                  </Col>
-                  <Col lg={5}>
-                    <Form.Item label="指派给" required>
-                      {getFieldDecorator('receiverName', {
-                        rules: [{ required: true, message: '请选择接单人' }],
-                      })(
-                        <AutoComplete
-                          dataSource={userList}
-                          onSearch={handleSearch}
-                          placeholder="请选择接单人"
-                          onSelect={onReceiverNameSelect}
-                        />
-                      )}
-                      {getFieldDecorator('receiverId', {
-                      })(<Input type='hidden' />)}
-                    </Form.Item>
-                  </Col>
-
-                  <Col lg={5}>
-                    <Form.Item label="派单人" >
-                      {getFieldDecorator('senderName', {
-                      })(<Input placeholder="自动获取派单人" readOnly />)}
-                      {getFieldDecorator('senderId', {
-                      })(<Input type='hidden' />)}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={4}>
-                    <Form.Item label="派单时间"  >
-                      {getFieldDecorator('sendDate', {
-                      })(<Input placeholder="自动获取" readOnly />)}
-                    </Form.Item>
-                  </Col>
-
-                  <Col lg={5}>
-                    <Form.Item label="接单时间">
-                      {getFieldDecorator('receiverDate', {
-                      })(<Input placeholder="自动获取时间" readOnly />)}
-                    </Form.Item>
-                  </Col>
-                </Row>
-              </Card>) : (
+        {
+          modifyVisible ? (
+            <Form layout="vertical" hideRequiredMark>
+              {infoDetail.status == 1 ? (
                 <Card title="派单" className={styles.card2} hoverable>
                   <Row gutter={24}>
-                    <Col lg={4}>
-                      <Form.Item label="维修专业">
-                        {infoDetail.repairMajor}
+                    <Col lg={5}>
+                      <Form.Item label="维修专业" required>
+                        {getFieldDecorator('repairMajor', {
+                          rules: [{ required: true, message: '请选择维修专业' }],
+                        })(
+                          <Select placeholder="请选择">
+                            {repairMajors.map(item => (
+                              <Option value={item.title} key={item.key}>
+                                {item.title}
+                              </Option>
+                            ))}
+                          </Select>)
+                        }
                       </Form.Item>
                     </Col>
                     <Col lg={5}>
-                      <Form.Item label="指派给">
-                        {infoDetail.receiverName}
+                      <Form.Item label="指派给" required>
+                        {getFieldDecorator('receiverName', {
+                          rules: [{ required: true, message: '请选择接单人' }],
+                        })(
+                          <AutoComplete
+                            dataSource={userList}
+                            onSearch={handleSearch}
+                            placeholder="请选择接单人"
+                            onSelect={onReceiverNameSelect}
+                          />
+                        )}
+                        {getFieldDecorator('receiverId', {
+                        })(<Input type='hidden' />)}
                       </Form.Item>
                     </Col>
+
                     <Col lg={5}>
                       <Form.Item label="派单人" >
-                        {infoDetail.senderName}
+                        {getFieldDecorator('senderName', {
+                        })(<Input placeholder="自动获取派单人" readOnly />)}
+                        {getFieldDecorator('senderId', {
+                        })(<Input type='hidden' />)}
                       </Form.Item>
                     </Col>
-                    <Col lg={5}>
+                    <Col lg={4}>
                       <Form.Item label="派单时间"  >
-                        {infoDetail.sendDate}
+                        {getFieldDecorator('sendDate', {
+                        })(<Input placeholder="自动获取" readOnly />)}
                       </Form.Item>
                     </Col>
 
                     <Col lg={5}>
                       <Form.Item label="接单时间">
-                        {infoDetail.receiverDate}
+                        {getFieldDecorator('receiverDate', {
+                        })(<Input placeholder="自动获取时间" readOnly />)}
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Card>) : (
+                  <Card title="派单" className={styles.card2} hoverable>
+                    <Row gutter={24}>
+                      <Col lg={4}>
+                        <Form.Item label="维修专业">
+                          {infoDetail.repairMajor}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={5}>
+                        <Form.Item label="指派给">
+                          {infoDetail.receiverName}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={5}>
+                        <Form.Item label="派单人" >
+                          {infoDetail.senderName}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={5}>
+                        <Form.Item label="派单时间"  >
+                          {infoDetail.sendDate}
+                        </Form.Item>
+                      </Col>
+
+                      <Col lg={5}>
+                        <Form.Item label="接单时间">
+                          {infoDetail.receiverDate}
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                  </Card>
+                )}
+              {infoDetail.status == 3 ? (
+                <Card title="开工" className={styles.card2} hoverable>
+                  <Row gutter={24}>
+                    <Col lg={7}>
+                      <Form.Item label="开工时间" required>
+                        {getFieldDecorator('beginDate', {
+                          initialValue: moment(new Date()),
+                          rules: [{ required: true, message: '请选择开工时间' }],
+                        })(<DatePicker placeholder="请选择开工时间" showTime={true} />)}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={17}>
+                      <Form.Item label="故障判断" required>
+                        {getFieldDecorator('faultJudgement', {
+                          initialValue: infoDetail.faultJudgement,
+                          rules: [{ required: true, message: '请输入故障判断' }],
+                        })(<Input placeholder="请输入故障判断" />)}
+                      </Form.Item>
+                    </Col>
+                  </Row>
+
+                  <Row gutter={24}>
+                    <Col lg={24}>
+                      <div className="clearfix">
+                        <Upload
+                          accept='image/*'
+                          action={process.env.basePath + '/Repair/Upload?keyvalue=' + id}
+                          listType="picture-card"
+                          fileList={fileList}
+                          onPreview={handlePreview}
+                          onChange={handleChange}
+                          onRemove={handleRemove} >
+                          {fileList.length >= 5 ? null : uploadButton}
+                        </Upload>
+                        <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
+                          <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                        </Modal>
+                      </div>
+                    </Col>
+                  </Row>
+
+                </Card>
+              ) : infoDetail.status > 3 ? (
+                <Card title="开工" className={styles.card} hoverable>
+                  <Row gutter={24}>
+                    <Col lg={5}>
+                      <Form.Item label="开工时间"  >
+                        {infoDetail.beginDate}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={19}>
+                      <Form.Item label="故障判断">
+                        {infoDetail.faultJudgement}
                       </Form.Item>
                     </Col>
                   </Row>
                 </Card>
-              )}
-            {infoDetail.status == 3 ? (
-              <Card title="开工" className={styles.card2} hoverable>
-                <Row gutter={24}>
-                  <Col lg={7}>
-                    <Form.Item label="开工时间" required>
-                      {getFieldDecorator('beginDate', {
-                        initialValue: moment(new Date()),
-                        rules: [{ required: true, message: '请选择开工时间' }],
-                      })(<DatePicker placeholder="请选择开工时间" showTime={true} />)}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={17}>
-                    <Form.Item label="故障判断" required>
-                      {getFieldDecorator('faultJudgement', {
-                        initialValue: infoDetail.faultJudgement,
-                        rules: [{ required: true, message: '请输入故障判断' }],
-                      })(<Input placeholder="请输入故障判断" />)}
-                    </Form.Item>
-                  </Col>
-                </Row>
+              ) : null}
 
-                <Row gutter={24}>
-                  <Col lg={24}>
-                    <div className="clearfix">
-                      <Upload
-                        accept='image/*'
-                        action={process.env.basePath + '/Repair/Upload?keyValue=' + id}
-                        listType="picture-card"
-                        fileList={fileList}
-                        onPreview={handlePreview}
-                        onChange={handleChange}
-                        onRemove={handleRemove} >
-                        {fileList.length >= 5 ? null : uploadButton}
-                      </Upload>
-                      <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
-                        <img alt="example" style={{ width: '100%' }} src={previewImage} />
-                      </Modal>
-                    </div>
-                  </Col>
-                </Row>
+              {infoDetail.status == 4 ? (
+                <Card title="完成情况" className={styles.card2} hoverable>
+                  <Row gutter={24}>
+                    <Col lg={7}>
+                      <Form.Item label="完成时间" required>
+                        {getFieldDecorator('endDate', {
+                          //initialValue: moment(new Date()),
+                          rules: [{ required: true, message: '请选择完成时间' }],
+                        })(<DatePicker
+                          format="YYYY-MM-DD HH:mm"
+                          placeholder="请选择完成时间" showTime={true}
+                          onChange={onEndDateChange}
+                          disabledDate={disabledDate}
+                        // disabledTime={disabledDateTime}
+                        />)}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={5}>
+                      <Form.Item label="用时(分钟)">
+                        {getFieldDecorator('useTime', {
+                          initialValue: infoDetail.useTime
+                        })(<Input placeholder="自动获取" readOnly />)}
+                      </Form.Item>
+                    </Col>
 
-              </Card>
-            ) : infoDetail.status > 3 ? (
-              <Card title="开工" className={styles.card} hoverable>
-                <Row gutter={24}>
-                  <Col lg={5}>
-                    <Form.Item label="开工时间"  >
-                      {infoDetail.beginDate}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={19}>
-                    <Form.Item label="故障判断">
-                      {infoDetail.faultJudgement}
-                    </Form.Item>
-                  </Col>
-                </Row>
-              </Card>
-            ) : null}
-
-            {infoDetail.status == 4 ? (
-              <Card title="完成情况" className={styles.card2} hoverable>
-                <Row gutter={24}>
-                  <Col lg={7}>
-                    <Form.Item label="完成时间" required>
-                      {getFieldDecorator('endDate', {
-                        //initialValue: moment(new Date()),
-                        rules: [{ required: true, message: '请选择完成时间' }],
-                      })(<DatePicker
-                        format="YYYY-MM-DD HH:mm"
-                        placeholder="请选择完成时间" showTime={true}
-                        onChange={onEndDateChange}
-                        disabledDate={disabledDate}
-                      // disabledTime={disabledDateTime}
-                      />)}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={5}>
-                    <Form.Item label="用时(分钟)">
-                      {getFieldDecorator('useTime', {
-                        initialValue: infoDetail.useTime
-                      })(<Input placeholder="自动获取" readOnly />)}
-                    </Form.Item>
-                  </Col>
-
-                  {/* <Col lg={4}>
+                    {/* <Col lg={4}>
                     <Form.Item label="人工费"  >
                       {getFieldDecorator('laborFee', {
                         initialValue: infoDetail.laborFee
@@ -666,77 +682,77 @@ const Modify = (props: ModifyProps) => {
                       })(<Input placeholder="请输入" />)}
                     </Form.Item>
                   </Col> */}
-                  <Col lg={6}>
-                    <Form.Item label="费用合计">
-                      {getFieldDecorator('totalFee', {
-                        initialValue: infoDetail.totalFee
-                      })(<Input placeholder="请添加费用"
-                        readOnly
-                        addonAfter={<Icon type="setting" onClick={() => {
-                          setAddFeeVisible(true);
-                        }} />} />)}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={6}>
-                    <Form.Item label="完成情况" required>
-                      {getFieldDecorator('achieved', {
-                        rules: [{ required: true, message: '请输入完成情况' }],
-                      })(<Input placeholder="请输入完成情况" />)}
-                    </Form.Item>
-                  </Col>
-                </Row>
-                <Row gutter={24}>
-                  <Col lg={12}>
-                    <Form.Item label="现场评价"  >
-                      {getFieldDecorator('fieldEvaluation', {
-                        initialValue: infoDetail.fieldEvaluation
-                      })(<Input placeholder="请输入现场评价" />)}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={12}>
-                    <Form.Item label="业主意见"  >
-                      {getFieldDecorator('ownerOpinion', {
-                        initialValue: infoDetail.ownerOpinion
-                      })(<Input placeholder="请输入业主意见" />)}
-                    </Form.Item>
-                  </Col>
-                </Row>
-
-                <Row gutter={24}>
-                  <Col lg={24}>
-                    <div className="clearfix">
-                      <Upload
-                        accept='image/*'
-                        action={process.env.basePath + '/Repair/Upload?keyValue=' + id}
-                        listType="picture-card"
-                        fileList={fileList}
-                        onPreview={handlePreview}
-                        onChange={handleChange}
-                        onRemove={handleRemove} >
-                        {fileList.length >= 5 ? null : uploadButton}
-                      </Upload>
-                      <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
-                        <img alt="example" style={{ width: '100%' }} src={previewImage} />
-                      </Modal>
-                    </div>
-                  </Col>
-                </Row>
-
-              </Card>
-            ) : infoDetail.status > 4 ?
-                (<Card title="完成情况" className={infoDetail.status > 5 && infoDetail.repairArea == '客户区域' ? styles.card2 : styles.card} >
+                    <Col lg={6}>
+                      <Form.Item label="费用合计">
+                        {getFieldDecorator('totalFee', {
+                          initialValue: infoDetail.totalFee
+                        })(<Input placeholder="请添加费用"
+                          readOnly
+                          addonAfter={<Icon type="setting" onClick={() => {
+                            setAddFeeVisible(true);
+                          }} />} />)}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={6}>
+                      <Form.Item label="完成情况" required>
+                        {getFieldDecorator('achieved', {
+                          rules: [{ required: true, message: '请输入完成情况' }],
+                        })(<Input placeholder="请输入完成情况" />)}
+                      </Form.Item>
+                    </Col>
+                  </Row>
                   <Row gutter={24}>
-                    <Col lg={5}>
-                      <Form.Item label="完成时间">
-                        {infoDetail.endDate}
+                    <Col lg={12}>
+                      <Form.Item label="现场评价"  >
+                        {getFieldDecorator('fieldEvaluation', {
+                          initialValue: infoDetail.fieldEvaluation
+                        })(<Input placeholder="请输入现场评价" />)}
                       </Form.Item>
                     </Col>
-                    <Col lg={4}>
-                      <Form.Item label="用时(分钟)">
-                        {infoDetail.useTime}
+                    <Col lg={12}>
+                      <Form.Item label="业主意见"  >
+                        {getFieldDecorator('ownerOpinion', {
+                          initialValue: infoDetail.ownerOpinion
+                        })(<Input placeholder="请输入业主意见" />)}
                       </Form.Item>
                     </Col>
-                    {/* <Col lg={6}>
+                  </Row>
+
+                  <Row gutter={24}>
+                    <Col lg={24}>
+                      <div className="clearfix">
+                        <Upload
+                          accept='image/*'
+                          action={process.env.basePath + '/Repair/Upload?keyvalue=' + id}
+                          listType="picture-card"
+                          fileList={fileList}
+                          onPreview={handlePreview}
+                          onChange={handleChange}
+                          onRemove={handleRemove} >
+                          {fileList.length >= 5 ? null : uploadButton}
+                        </Upload>
+                        <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
+                          <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                        </Modal>
+                      </div>
+                    </Col>
+                  </Row>
+
+                </Card>
+              ) : infoDetail.status > 4 ?
+                  (<Card title="完成情况" className={infoDetail.status > 5 && infoDetail.repairArea == '客户区域' ? styles.card2 : styles.card} >
+                    <Row gutter={24}>
+                      <Col lg={5}>
+                        <Form.Item label="完成时间">
+                          {infoDetail.endDate}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={4}>
+                        <Form.Item label="用时(分钟)">
+                          {infoDetail.useTime}
+                        </Form.Item>
+                      </Col>
+                      {/* <Col lg={6}>
                   <Form.Item label="人工费"  >
                     {infoDetail.laborFee}
                   </Form.Item>
@@ -746,49 +762,49 @@ const Modify = (props: ModifyProps) => {
                     {infoDetail.stuffFee}
                   </Form.Item>
                 </Col> */}
-                    <Col lg={4}>
-                      <Form.Item label="费用合计">
-                        {infoDetail.totalFee}
-                      </Form.Item>
-                    </Col>
-                    <Col lg={7}>
-                      <Form.Item label="完成情况" >
-                        {infoDetail.achieved}
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                  <Row gutter={24}>
-                    <Col lg={5}>
-                      <Form.Item label="现场评价"  >
-                        {infoDetail.fieldEvaluation}
-                      </Form.Item>
-                    </Col>
-                    <Col lg={19}>
-                      <Form.Item label="业主意见"  >
-                        {infoDetail.ownerOpinion}
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                  <Row gutter={24}>
-                    <Col lg={24}>
-                      <div className="clearfix">
-                        <Upload
-                          accept='image/*'
-                          action={process.env.basePath + '/Repair/Upload?keyValue=' + id}
-                          listType="picture-card"
-                          fileList={fileList}
-                          onPreview={handlePreview}
-                          disabled={true}>
-                        </Upload>
-                        <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
-                          <img alt="example" style={{ width: '100%' }} src={previewImage} />
-                        </Modal>
-                      </div>
-                    </Col>
-                  </Row>
-                </Card>) : null}
+                      <Col lg={4}>
+                        <Form.Item label="费用合计">
+                          {infoDetail.totalFee}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={7}>
+                        <Form.Item label="完成情况" >
+                          {infoDetail.achieved}
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row gutter={24}>
+                      <Col lg={5}>
+                        <Form.Item label="现场评价"  >
+                          {infoDetail.fieldEvaluation}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={19}>
+                        <Form.Item label="业主意见"  >
+                          {infoDetail.ownerOpinion}
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row gutter={24}>
+                      <Col lg={24}>
+                        <div className="clearfix">
+                          <Upload
+                            accept='image/*'
+                            action={process.env.basePath + '/Repair/Upload?keyvalue=' + id}
+                            listType="picture-card"
+                            fileList={fileList}
+                            onPreview={handlePreview}
+                            disabled={true}>
+                          </Upload>
+                          <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
+                            <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                          </Modal>
+                        </div>
+                      </Col>
+                    </Row>
+                  </Card>) : null}
 
-            {/* {infoDetail.status == 5 ? (
+              {/* {infoDetail.status == 5 ? (
               <Card title="回访情况" className={styles.card}  >
                 <Row gutter={24}>
                   <Col lg={6}>
@@ -874,150 +890,149 @@ const Modify = (props: ModifyProps) => {
               </Row>
             </Card>) : null} */}
 
-            {infoDetail.status == 6 ? (
-              <Card title="检验情况" className={styles.card2} hoverable>
-                <Row gutter={24}>
-                  <Col lg={7}>
-                    <Form.Item label="检验时间" required>
-                      {getFieldDecorator('testDate', {
-                        initialValue: infoDetail.testDate,
-                        rules: [{ required: true, message: '请选择检验时间' }],
-                      })(
-                        <DatePicker
-                          format="YYYY-MM-DD HH:mm"
-                          placeholder="请选择完成时间"
-                          showTime={true}
-                          disabledDate={disabledTestDate}
-                        // disabledTime={disabledDateTime}
-                        />
-                      )}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={5}>
-                    <Form.Item label="检验人"  >
-                      {getFieldDecorator('testerName', {
-                        initialValue: infoDetail.testerName,
-                      })(<Input placeholder="自动获取" readOnly />)}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={5}>
-                    <Form.Item label="检验结果" required>
-                      {getFieldDecorator('testResult', {
-                        initialValue: '1',
-                        rules: [{ required: true, message: '请选择检验结果' }],
-                      })(
-                        <Select >
-                          <Option value="1">合格</Option>
-                          <Option value="0">不合格</Option>
-                        </Select>
-                      )}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={7}>
-                    <Form.Item label="检验说明"  >
-                      {getFieldDecorator('testRemark', {
-                        initialValue: infoDetail.testRemark
-                      })(<Input placeholder="请输入检验说明" />)}
-                    </Form.Item>
-                  </Col>
-                </Row>
-              </Card>
-            ) : (infoDetail.status > 6 && infoDetail.repairArea == '公共区域') ? (
-              <Card title="检验情况" className={styles.card2} hoverable >
-                <Row gutter={24}>
-                  <Col lg={5}>
-                    <Form.Item label="检验时间" >
-                      {infoDetail.testDate}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={3}>
-                    <Form.Item label="检验人"  >
-                      {infoDetail.testerName}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={3}>
-                    <Form.Item label="检验结果" >
-                      {infoDetail.testResult}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={13}>
-                    <Form.Item label="检验说明"  >
-                      {infoDetail.testRemark}
-                    </Form.Item>
-                  </Col>
-                </Row>
-              </Card>
-            ) : null}
-          </Form>
-        ) : null
-      }
+              {infoDetail.status == 6 ? (
+                <Card title="检验情况" className={styles.card2} hoverable>
+                  <Row gutter={24}>
+                    <Col lg={7}>
+                      <Form.Item label="检验时间" required>
+                        {getFieldDecorator('testDate', {
+                          initialValue: infoDetail.testDate,
+                          rules: [{ required: true, message: '请选择检验时间' }],
+                        })(
+                          <DatePicker
+                            format="YYYY-MM-DD HH:mm"
+                            placeholder="请选择完成时间"
+                            showTime={true}
+                            disabledDate={disabledTestDate}
+                          // disabledTime={disabledDateTime}
+                          />
+                        )}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={5}>
+                      <Form.Item label="检验人"  >
+                        {getFieldDecorator('testerName', {
+                          initialValue: infoDetail.testerName,
+                        })(<Input placeholder="自动获取" readOnly />)}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={5}>
+                      <Form.Item label="检验结果" required>
+                        {getFieldDecorator('testResult', {
+                          initialValue: '1',
+                          rules: [{ required: true, message: '请选择检验结果' }],
+                        })(
+                          <Select >
+                            <Option value="1">合格</Option>
+                            <Option value="0">不合格</Option>
+                          </Select>
+                        )}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={7}>
+                      <Form.Item label="检验说明"  >
+                        {getFieldDecorator('testRemark', {
+                          initialValue: infoDetail.testRemark
+                        })(<Input placeholder="请输入检验说明" />)}
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Card>
+              ) : (infoDetail.status > 6 && infoDetail.repairArea == '公共区域') ? (
+                <Card title="检验情况" className={styles.card2} hoverable >
+                  <Row gutter={24}>
+                    <Col lg={5}>
+                      <Form.Item label="检验时间" >
+                        {infoDetail.testDate}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={3}>
+                      <Form.Item label="检验人"  >
+                        {infoDetail.testerName}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={3}>
+                      <Form.Item label="检验结果" >
+                        {infoDetail.testResult}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={13}>
+                      <Form.Item label="检验说明"  >
+                        {infoDetail.testRemark}
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Card>
+              ) : null}
+            </Form>
+          ) : null
+        }
+         </Spin>
 
-      <AddRepairFee
-        modifyVisible={addFeelaVisible}
-        closeDrawer={closeAddFee}
-        mainId={feeId}
-        roomId={organizeId}
-        adminOrgId={adminOrgId}
-        linkId={id}
-        edit={true}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          left: 0,
-          bottom: 0,
-          width: '100%',
-          borderTop: '1px solid #e9e9e9',
-          padding: '10px 16px',
-          background: '#fff',
-          textAlign: 'right',
-        }}>
+        <div
+          style={{
+            position: 'absolute',
+            left: 0,
+            bottom: 0,
+            width: '100%',
+            borderTop: '1px solid #e9e9e9',
+            padding: '10px 16px',
+            background: '#fff',
+            textAlign: 'right',
+          }}>
 
-        <Button onClick={close} style={{ marginRight: 8 }}>
-          取消
+          <Button onClick={close} style={{ marginRight: 8 }}>
+            取消
           </Button>
-        {infoDetail.status == 1 ? (
 
-          <Button onClick={dispatch} type="primary">
-            派单
-          </Button>
-        ) : null}
-        {infoDetail.status == 2 && infoDetail.receiverId == localStorage.getItem('userid') ? (
-          <Button onClick={receive} type="primary">
-            接单
-          </Button>
-        ) : null}
-
-        {infoDetail.status == 3 ? (
-          <div>
-
-            <Button onClick={start} type="primary" style={{ marginRight: 8 }}>
-              开工
+          <Button onClick={showModal}
+            disabled={loading}
+            type="primary" style={{ marginRight: 8 }}>
+            打印
          </Button>
-            <Button onClick={change} type="primary">
-              转单
+
+          {infoDetail.status == 1 ? (
+
+            <Button onClick={dispatch} type="primary">
+              派单
             </Button>
-          </div>
-        ) : null}
+          ) : null}
+          {infoDetail.status == 2 && infoDetail.receiverId == localStorage.getItem('userid') ? (
+            <Button onClick={receive} type="primary">
+              接单
+            </Button>
+          ) : null}
 
-        {infoDetail.status == 4 ? (
-          <div>
+          {infoDetail.status == 3 ? (
+            <div>
 
-            {/* <Button onClick={start} type="primary" style={{ marginRight: 8 }}>
+              <Button onClick={start} type="primary" style={{ marginRight: 8 }}>
+                开工
+         </Button>
+              <Button onClick={change} type="primary">
+                转单
+            </Button>
+            </div>
+          ) : null}
+
+          {infoDetail.status == 4 ? (
+            <div>
+
+              {/* <Button onClick={start} type="primary" style={{ marginRight: 8 }}>
               呼叫增援
          </Button>
             <Button onClick={start} type="primary" style={{ marginRight: 8 }}>
               暂停
         </Button> */}
-            <Button onClick={start} type="danger" style={{ marginRight: 8 }}>
-              退单
+              <Button onClick={start} type="danger" style={{ marginRight: 8 }}>
+                退单
         </Button>
-            <Button onClick={handle} type="primary">
-              完成
+              <Button onClick={handle} type="primary">
+                完成
         </Button></div>
-        ) : null}
+          ) : null}
 
-        {/* {infoDetail.status == 5 ? (
+          {/* {infoDetail.status == 5 ? (
           <div>
             <Button onClick={close} style={{ marginRight: 8 }}>
               关闭
@@ -1028,19 +1043,19 @@ const Modify = (props: ModifyProps) => {
           </div>
         ) : null} */}
 
-        {infoDetail.status == 6 ? (
-          <Button onClick={check} type="primary">
-            检验
-          </Button>
-        ) : null}
+          {infoDetail.status == 6 ? (
+            <Button onClick={check} type="primary">
+              检验
+            </Button>
+          ) : null}
 
-        {infoDetail.status == 7 ? (
+          {infoDetail.status == 7 ? (
 
-          <Button onClick={approve} type="primary">
-            审核
-          </Button>
-        ) : null}
-        {/* 
+            <Button onClick={approve} type="primary">
+              审核
+            </Button>
+          ) : null}
+          {/* 
         {infoDetail.status == 7 ? (
           <div>
             <Button onClick={close} style={{ marginRight: 8 }}>
@@ -1049,7 +1064,27 @@ const Modify = (props: ModifyProps) => {
           </div>
         ) : null} */}
 
-      </div>
+        </div>
+
+
+        <AddRepairFee
+          modifyVisible={addFeelaVisible}
+          closeDrawer={closeAddFee}
+          mainId={feeId}
+          roomId={organizeId}
+          adminOrgId={adminOrgId}
+          linkId={id}
+          edit={true}
+        />
+
+        <SelectTemplate
+          id={id}
+          visible={modalvisible}
+          closeModal={closeModal}
+          unitId={infoDetail.roomId}
+        />
+     
+
     </Drawer >
   );
 };

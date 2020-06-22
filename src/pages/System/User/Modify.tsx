@@ -37,7 +37,7 @@ const Modify = (props: ModifyProps) => {
   //   { label: '其他', value: 5 },
   // ];
   const doSave = dataDetail => {
-    let modifyData = { ...initData, ...dataDetail, keyValue: initData.id };
+    let modifyData = { ...initData, ...dataDetail, keyvalue: initData.id };
     //modifyData.expDate = modifyData.expDate ? modifyData.expDate.format('YYYY-MM-DD') : undefined;
     //密码前端加密
     modifyData.password = md5(modifyData.password);
@@ -67,8 +67,8 @@ const Modify = (props: ModifyProps) => {
       callback();
     }
     else {
-      const keyValue = initData.id == undefined ? '' : initData.id;
-      ExistAccount(keyValue, value).then(res => {
+      const keyvalue = initData.id == undefined ? '' : initData.id;
+      ExistAccount(keyvalue, value).then(res => {
         if (res)
           callback('请输入用户名重复');
         else

@@ -18,9 +18,9 @@ export function GetTreeAreaJson(id): Promise<TreeEntity[]> {
 }
 
 // 获取房产信息
-export function GetFormInfoJson(keyValue): Promise<GmPstructure> {
+export function GetFormInfoJson(keyvalue): Promise<GmPstructure> {
   return request
-    .get(process.env.basePath + `/PStructs/GetFormInfoJson?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/PStructs/GetFormInfoJson?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
@@ -32,9 +32,9 @@ export function SaveForm(data): Promise<any> {
 }
 
 // 删除
-export function RemoveForm(keyValue): Promise<any> {
+export function RemoveForm(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/PStructs/RemoveForm`, { data: objToFormdata({ keyValue }) })
+    .post(process.env.basePath + `/PStructs/RemoveForm`, { data: objToFormdata({ keyvalue }) })
     .then(getResult as any);
 }
 
@@ -45,9 +45,9 @@ export function GetPageListJson(data): Promise<any> {
     .then(getResult as any);
 }
 
-// export function GetFloorData(keyValue): Promise<any> {
+// export function GetFloorData(keyvalue): Promise<any> {
 //   const data = {
-//     keyValue
+//     keyvalue
 //   };
 //   return request
 //     .get(process.env.basePath + `/PStructs/GetFloorData?${objToUrl(data)}`)
@@ -55,20 +55,20 @@ export function GetPageListJson(data): Promise<any> {
 // }
 
 //获取房态图楼层和房间数据
-export function GetFloorData(keyValue): Promise<any> {
+export function GetFloorData(keyvalue): Promise<any> {
   // const data = {
-  //   keyValue
+  //   keyvalue
   // };
   return request
-    .get(process.env.basePath + `/PStructs/GetFloorData?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/PStructs/GetFloorData?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
 
 //获取房态图房间数据
-// export function GetRoomData(keyValue): Promise<any> {
+// export function GetRoomData(keyvalue): Promise<any> {
 //   const data = {
-//     keyValue,
+//     keyvalue,
 //     type: 5,
 //   };
 //   return request
@@ -86,9 +86,9 @@ export function GetCustomerList(keyword,organizeId): Promise<any> {
 }
 
 // 验证code
-export function ExistEnCode(keyValue, code): Promise<any> {
+export function ExistEnCode(keyvalue, code): Promise<any> {
   return request
-    .get(process.env.basePath + `/PStructs/ExistCode?keyValue=${keyValue}&code=${code}`)
+    .get(process.env.basePath + `/PStructs/ExistCode?keyvalue=${keyvalue}&code=${code}`)
     .then(getResult as any);
 }
 

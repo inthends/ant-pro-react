@@ -23,7 +23,7 @@ const Add = (props: AddProps) => {
   // const [orgs, setOrgs] = useState<TreeNode[]>();
 
   const doSave = dataDetail => {
-    let modifyData = { ...initData, ...dataDetail, keyValue: initData.ruleId };
+    let modifyData = { ...initData, ...dataDetail, keyvalue: initData.ruleId };
     return SaveForm(modifyData);
   };
 

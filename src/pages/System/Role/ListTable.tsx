@@ -48,8 +48,8 @@ function ListTable(props: ListTableProps) {
   };
   const toggleDisabled = record => {
     record.enabledMark = record.enabledMark === 0 ? 1 : 0;
-    let keyValue = record.roleId;
-    SaveForm({ ...record, keyValue }).then(() => {
+    let keyvalue = record.roleId;
+    SaveForm({ ...record, keyvalue }).then(() => {
       setData([...data]);
     });
   };

@@ -21,7 +21,7 @@ const Modify = (props: ModifyProps) => {
   let initData = data ? data : { enabledMark: 1 };
   const baseFormProps = { form, initData };
   const doSave = dataDetail => {
-    let modifyData = { ...initData, ...dataDetail, keyValue: initData.id };
+    let modifyData = { ...initData, ...dataDetail, keyvalue: initData.id };
     return SaveForm(modifyData);
   };
 
@@ -30,8 +30,8 @@ const Modify = (props: ModifyProps) => {
       callback();
     }
     else {
-      const keyValue = initData.id == undefined ? '' : initData.id;
-      ExistEnCode(keyValue, value).then(res => {
+      const keyvalue = initData.id == undefined ? '' : initData.id;
+      ExistEnCode(keyvalue, value).then(res => {
         if (res)
           callback('机构编号重复');
         else

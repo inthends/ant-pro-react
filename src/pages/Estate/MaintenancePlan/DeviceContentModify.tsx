@@ -56,7 +56,7 @@ const DeviceContentModify = (props: DeviceContentModifyProps) => {
       if (!errors) {
         const newData = data ? { ...data, ...values } : values;
         newData.planDeviceId = planDeviceId; 
-        SaveDeviceContentForm({ ...newData, keyValue: newData.id }).then(res => {
+        SaveDeviceContentForm({ ...newData, keyvalue: newData.id }).then(res => {
           message.success('保存成功');
           closeModal();
           reload();

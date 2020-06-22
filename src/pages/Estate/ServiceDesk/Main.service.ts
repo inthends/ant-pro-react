@@ -19,16 +19,16 @@ export function SendCommunicate(data): Promise<any> {
 }
 
 //获取评论
-export function GetCommunicates(keyValue): Promise<any> {
+export function GetCommunicates(keyvalue): Promise<any> {
   return request
-    .get(process.env.basePath + `/ServiceDesk/GetCommunicates?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/ServiceDesk/GetCommunicates?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
 //获取图片
-export function GetFilesData(keyValue): Promise<any> {
+export function GetFilesData(keyvalue): Promise<any> {
   return request
-    .get(process.env.basePath + `/ServiceDesk/GetFilesData?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/ServiceDesk/GetFilesData?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
@@ -40,16 +40,16 @@ export function SaveForm(data): Promise<any> {
 }
 
 // 作废
-export function InvalidForm(keyValue): Promise<any> {
+export function InvalidForm(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/ServiceDesk/InvalidForm?keyValue=${keyValue}`, {})
+    .post(process.env.basePath + `/ServiceDesk/InvalidForm?keyvalue=${keyvalue}`, {})
     .then(getResult as any);
 }
 
 //删除附件
-export function RemoveFile(keyValue): Promise<any> {
+export function RemoveFile(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/ServiceDesk/RemoveFile?keyValue=${keyValue}`, {})
+    .post(process.env.basePath + `/ServiceDesk/RemoveFile?keyvalue=${keyvalue}`, {})
     .then(getResult as any);
 }
 
@@ -83,8 +83,8 @@ export function Visit(data): Promise<any> {
 }
 
 //获取实体
-export function GetEntity(keyValue): Promise<any> {
-  return request.get(process.env.basePath + `/ServiceDesk/GetEntity?keyValue=${keyValue}`).then(getResult as any);
+export function GetEntity(keyvalue): Promise<any> {
+  return request.get(process.env.basePath + `/ServiceDesk/GetEntity?keyvalue=${keyvalue}`).then(getResult as any);
 }
 
 

@@ -43,7 +43,7 @@ const Modify = (props: ModifyProps) => {
 
   //数据保存
   const doSave = dataDetail => {
-    let modifyData = { ...initData, ...dataDetail, keyValue: initData.id };
+    let modifyData = { ...initData, ...dataDetail, keyvalue: initData.id };
     return SaveForm(modifyData);
   };
 
@@ -60,8 +60,8 @@ const Modify = (props: ModifyProps) => {
       callback();
     }
     else {
-      const keyValue = initData.id == undefined ? '' : initData.id;
-      ExistCode(keyValue, value).then(res => {
+      const keyvalue = initData.id == undefined ? '' : initData.id;
+      ExistCode(keyvalue, value).then(res => {
         if (res)
           callback('工号重复');
         else

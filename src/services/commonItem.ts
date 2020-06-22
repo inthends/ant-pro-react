@@ -110,8 +110,8 @@ export function GetFeeOrgTree(): Promise<any[]> {
 }
 
 //搜索房间
-export function GetUnitTree(keyValue): Promise<any[]> {
-  return request.get(process.env.basePath + `/Common/GetUnitTree?keyValue=${keyValue}`).then(getResult as any);
+export function GetUnitTree(keyvalue): Promise<any[]> {
+  return request.get(process.env.basePath + `/Common/GetUnitTree?keyvalue=${keyvalue}`).then(getResult as any);
 }
 
 export function GetOrgTreeSimple(): Promise<any[]> {
@@ -121,9 +121,9 @@ export function GetOrgTreeSimple(): Promise<any[]> {
 }
 
 // 获取房间住户信息
-export function GetRoomUser(keyValue): Promise<any> {
+export function GetRoomUser(keyvalue): Promise<any> {
   return request
-    .get(process.env.basePath + `/Common/GetRoomUser?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/Common/GetRoomUser?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
@@ -175,9 +175,9 @@ export function GetOrgEsates(): Promise<any[]> {
 
 
 //获取审批记录
-export function GetApproveLog(keyValue): Promise<any> {
+export function GetApproveLog(keyvalue): Promise<any> {
   return request
-    .get(process.env.basePath + `/FlowTask/GetApproveLog?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/FlowTask/GetApproveLog?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 

@@ -917,7 +917,7 @@ function Main() {
         visible={addNoteVisible}
         closeModal={closeAddNote}
         reload={() => initChargeLoadData(orgId, orgType)}
-        keyValue={billId}
+        keyvalue={billId}
       />
 
     </Layout>

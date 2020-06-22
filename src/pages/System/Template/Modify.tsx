@@ -3,7 +3,7 @@ import ModifyItem from '@/components/BaseModifyDrawer/ModifyItem';
 import {Checkbox, message, Tooltip, Button, Icon, Col, Upload, Card, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useState, useEffect } from 'react';
-import { SaveForm } from './Template.service';
+import { SaveForm } from './Main.service';
 import { TreeNode } from 'antd/lib/tree-select';
 import styles from './style.less';
 import copy from 'copy-to-clipboard';
@@ -53,7 +53,7 @@ const Modify = (props: ModifyProps) => {
 
   //数据保存
   const doSave = dataDetail => {
-    let modifyData = { ...initData, ...dataDetail, keyValue: initData.id };
+    let modifyData = { ...initData, ...dataDetail, keyvalue: initData.id };
     modifyData.categoryId = modifyData.categoryId ? modifyData.categoryId : typeId;
     return SaveForm(modifyData);
   };

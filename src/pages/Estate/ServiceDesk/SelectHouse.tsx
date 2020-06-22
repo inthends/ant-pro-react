@@ -180,8 +180,7 @@ function SelectHouse(props: SelectHouseProps) {
               borderBottom: 'none',
               height: '400px',
               overflowY: 'auto',
-            }}>
-
+            }}> 
             {treeSearchData.length > 0 ?
               <Tree
                 showLine

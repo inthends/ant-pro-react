@@ -32,7 +32,7 @@ const RuleItem = (props: RuleItemProps) => {
 
   const [itemTypeName, setItemTypeName] = useState<string>('自定义');
   const doSave = dataDetail => {
-    let modifyData = { ...initData, ...dataDetail, keyValue: initData.id };
+    let modifyData = { ...initData, ...dataDetail, keyvalue: initData.id };
     modifyData.itemTypeName = itemTypeName;
     return SaveItemForm(modifyData);
   };

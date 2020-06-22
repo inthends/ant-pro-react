@@ -42,7 +42,7 @@ const Modify = (props: ModifyProps) => {
   const doSave = dataDetail => {
     let modifyData = {
       ...initData, ...dataDetail,
-      keyValue: planId,
+      keyvalue: planId,
       type: isAdd
     };
     modifyData.beginDate = modifyData.beginDate.format('YYYY-MM-DD');
@@ -151,7 +151,7 @@ const Modify = (props: ModifyProps) => {
       if (!errors) {
         //获取值
         var obj = {
-          keyValue: planId,
+          keyvalue: planId,
           id: planId,
           organizeId: values.organizeId,
           pStructId: values.pStructId,

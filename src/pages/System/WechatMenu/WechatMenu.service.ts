@@ -35,9 +35,9 @@ export function SaveItemForm(data): Promise<any> {
 }
 
 // 删除
-export function RemoveItemForm(keyValue): Promise<any> {
+export function RemoveItemForm(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/WechatMenu/RemoveItemForm?keyValue=${keyValue}`, {})
+    .post(process.env.basePath + `/WechatMenu/RemoveItemForm?keyvalue=${keyvalue}`, {})
     .then(getResult as any);
 }
 
@@ -51,9 +51,9 @@ export function CreateMenu(): Promise<any> {
  
 
 // 删除
-export function RemoveForm(keyValue): Promise<any> {
+export function RemoveForm(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/WechatMenu/RemoveForm?keyValue=${keyValue}`, {})
+    .post(process.env.basePath + `/WechatMenu/RemoveForm?keyvalue=${keyvalue}`, {})
     .then(getResult as any);
 }
 

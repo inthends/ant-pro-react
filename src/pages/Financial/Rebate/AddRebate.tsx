@@ -84,7 +84,7 @@ const AddRebate = (props: AddRebateProps) => {
         newdata.beginDate = newdata.beginDate.format('YYYY-MM-DD');
         newdata.endDate = newdata.endDate.format('YYYY-MM-DD');
         newdata.billDate = moment(newdata.billDate).format('YYYY-MM-DD HH:mm:ss');
-        newdata.keyValue = id;
+        newdata.keyvalue = id;
         SaveUnitForm(newdata).then(res => {
           setLoading(false);
           if (res != null) {

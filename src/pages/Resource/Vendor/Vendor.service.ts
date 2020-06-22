@@ -23,9 +23,9 @@ export function GetProjectType(): Promise<TreeEntity[]> {
 }
 
 // 获取房产信息
-export function GetFormInfoJson(keyValue): Promise<GmPstructure> {
+export function GetFormInfoJson(keyvalue): Promise<GmPstructure> {
   return request
-    .get(process.env.basePath + `/PStructs/GetFormInfoJson?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/PStructs/GetFormInfoJson?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 // 新增修改
@@ -35,16 +35,16 @@ export function SaveForm(data): Promise<any> {
     .then(getResult as any);
 }
 // 新增修改
-export function RemoveForm(keyValue): Promise<any> {
+export function RemoveForm(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Vendor/RemoveForm?keyValue=${keyValue}`, {})
+    .post(process.env.basePath + `/Vendor/RemoveForm?keyvalue=${keyvalue}`, {})
     .then(getResult as any);
 }
 
 // 查询详情
-export function GetDetailJson(keyValue): Promise<any> {
+export function GetDetailJson(keyvalue): Promise<any> {
   return request
-    .get(process.env.basePath + `/Vendor/GetFormJson?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/Vendor/GetFormJson?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 

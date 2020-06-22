@@ -32,7 +32,7 @@ const Modify = (props: ModifyProps) => {
   // const [reductionItem, setReductionItem] = useState<any[]>([]);
   // const [editItemColumn, setEditItemColumn] = useState<boolean>(false);
   const [listdata, setListData] = useState<any[]>([]);
-  const [keyValue, setKeyValue] = useState<any>();//主键
+  const [keyvalue, setKeyValue] = useState<any>();//主键
 
   // const [code, setCode] = useState<number>(0);//新增还是修改
   // const getSelectReduction = () => {
@@ -77,7 +77,7 @@ const Modify = (props: ModifyProps) => {
         //重置之前选择加载的费项类别
         // GetUseInfo(localStorage.getItem('userid')).then(res => {
         // setInfoDetail({
-        //   keyValue: '',
+        //   keyvalue: '',
         //code: 0,
         // billId: guid(),
         // billCode: '',
@@ -104,7 +104,7 @@ const Modify = (props: ModifyProps) => {
     const sidx = 'billId';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
-    return load({ pageIndex, pageSize, sidx, sord, total, keyValue: id }).then(res => {
+    return load({ pageIndex, pageSize, sidx, sord, total, keyvalue: id }).then(res => {
       return res;
     });
   };
@@ -167,7 +167,7 @@ const Modify = (props: ModifyProps) => {
         //   newListData.push(element);
         // });
         // let newData = {
-        //   keyValue: infoDetail.billId,
+        //   keyvalue: infoDetail.billId,
         //   code: code,//infoDetail.code,
         //   // code: infoDetail.billId == "" ? 0 : 1,
         //   billId: infoDetail.billId,
@@ -195,7 +195,7 @@ const Modify = (props: ModifyProps) => {
         /*  let newData = infoDetail ? {
             ...infoDetail,
             ...values ,
-            keyValue:infoDetail.billId,
+            keyvalue:infoDetail.billId,
             billDate:moment(infoDetail.billDate).format('YYYY-MM-DD HH:mm:ss'),
             code:infoDetail.billId==""?0:1,
             details: JSON.stringify(newListData)} : values;*/
@@ -206,7 +206,7 @@ const Modify = (props: ModifyProps) => {
         newData.billDate = moment(newData.billDate).format('YYYY-MM-DD HH:mm:ss');
         newData.beginDate = newData.beginDate.format('YYYY-MM-DD');
         newData.endDate = newData.endDate.format('YYYY-MM-DD');
-        newData.keyValue = keyValue;
+        newData.keyvalue = keyvalue;
         SaveForm(newData).then(res => {
           message.success('保存成功');
           closeDrawer();
@@ -232,7 +232,7 @@ const Modify = (props: ModifyProps) => {
   //         reductionAmount
   //       } = res || ({} as any);
   //       let info = {
-  //         keyValue: billId,
+  //         keyvalue: billId,
   //         code: 1,
   //         billId,
   //         billCode,
@@ -325,7 +325,7 @@ const Modify = (props: ModifyProps) => {
       pageIndex,
       pageSize,
       total,
-      keyValue: infoDetail.billId
+      keyvalue: infoDetail.billId
     };
 
     if (sorter) {
@@ -372,7 +372,7 @@ const Modify = (props: ModifyProps) => {
     form.validateFields((errors, values) => {
       if (!errors) {
         // var feeEntity = {
-        //   keyValue: id,
+        //   keyvalue: id,
         //   newData.beginDate = newData.beginDate.format('YYYY-MM-DD');
         //   newData.endDate = newData.endDate.format('YYYY-MM-DD');
         //   Memo: values.memo
@@ -617,7 +617,7 @@ const Modify = (props: ModifyProps) => {
         </div>
       </Form>
       <AddRebate
-        id={keyValue}
+        id={keyvalue}
         visible={modalvisible}
         treeData={treeData}
         entity={infoDetail}

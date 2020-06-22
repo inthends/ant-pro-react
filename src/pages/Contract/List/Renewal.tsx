@@ -386,7 +386,7 @@ const Renewal = (props: RenewalProps) => {
           ...chargefee,
           ...chargeincre,
           ...chargefeeoffer,
-          keyValue: id,
+          keyvalue: id,
           ChargeId: chargeId,
           room: values.room,
           // TermJson: TermJson,
@@ -468,7 +468,7 @@ const Renewal = (props: RenewalProps) => {
           ...chargefee,
           ...chargeincre,
           ...chargefeeoffer,
-          keyValue: '',
+          keyvalue: '',
           ChargeId: '',
           room: values.room,
           // TermJson: TermJson,
@@ -1064,7 +1064,7 @@ const Renewal = (props: RenewalProps) => {
                     <div className="clearfix">
                       <Upload
                         //accept='.doc,.docx,.pdf,image/*'
-                        action={process.env.basePath + '/Contract/Upload?keyValue=' + id}
+                        action={process.env.basePath + '/Contract/Upload?keyvalue=' + id}
                         fileList={fileList}
                         //listType="picture-card"
                         listType='picture'

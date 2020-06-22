@@ -17,16 +17,16 @@ export function SaveForm(data): Promise<any> {
     .then(getResult as any);
 }
 // 删除
-export function RemoveForm(keyValue): Promise<any> {
+export function RemoveForm(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Department/RemoveForm?keyValue=${keyValue}`, {})
+    .post(process.env.basePath + `/Department/RemoveForm?keyvalue=${keyvalue}`, {})
     .then(getResult as any);
 }
 
 // 查询详情
-export function GetDetailJson(keyValue): Promise<any> {
+export function GetDetailJson(keyvalue): Promise<any> {
   return request
-    .get(process.env.basePath + `/Department/GetFormJson?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/Department/GetFormJson?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
@@ -39,16 +39,16 @@ export function searchUser(keyword): Promise<any[]> {
 }
 
 // 验证code
-export function ExistEnCode(keyValue, code): Promise<any> {
+export function ExistEnCode(keyvalue, code): Promise<any> {
   return request
-    .get(process.env.basePath + `/Department/ExistEnCode?keyValue=${keyValue}&code=${code}`)
+    .get(process.env.basePath + `/Department/ExistEnCode?keyvalue=${keyvalue}&code=${code}`)
     .then(getResult as any);
 }
 
 // 验证name
-export function ExistName(keyValue, name): Promise<any> {
+export function ExistName(keyvalue, name): Promise<any> {
   return request
-    .get(process.env.basePath + `/Department/ExistFullName?keyValue=${keyValue}&name=${name}`)
+    .get(process.env.basePath + `/Department/ExistFullName?keyvalue=${keyvalue}&name=${name}`)
     .then(getResult as any);
 }
 
@@ -59,8 +59,8 @@ export function GetDepartmentTree(OrganizeId): Promise<any[]> {
 }
 
 // 验证是否能删除
-export function CheckDepartment(keyValue): Promise<any> {
+export function CheckDepartment(keyvalue): Promise<any> {
   return request
-    .get(process.env.basePath + `/Department/CheckDepartment?keyValue=${keyValue}`)
+    .get(process.env.basePath + `/Department/CheckDepartment?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
