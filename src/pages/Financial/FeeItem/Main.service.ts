@@ -112,12 +112,12 @@ export function HouseAllRemoveForm(data: any): Promise<any> {
   return request.post(process.env.basePath + `/FeeItems/HouseAllRemoveForm`, { data: objToFormdata(data) }).then(getResult as any);
 }
 
-//优惠政策选择到楼栋
-export function GetRebateOrgTree(): Promise<TreeEntity[]> {
-  return request
-    .get(process.env.basePath + `/FeeItems/GetRebateOrgTree`)
-    .then(getResult as any);
-}
+// //优惠政策选择到楼栋
+// export function GetRebateOrgTree(): Promise<TreeEntity[]> {
+//   return request
+//     .get(process.env.basePath + `/FeeItems/GetRebateOrgTree`)
+//     .then(getResult as any);
+// }
 
 //获取优惠政策
 export function GetRebatePageList(data): Promise<any> {

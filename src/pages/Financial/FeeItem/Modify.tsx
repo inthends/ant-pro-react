@@ -1718,9 +1718,9 @@ const Modify = (props: ModifyProps) => {
                     >
                       <Icon type="plus" />
                       新增
-                </Button>
-
+                </Button> 
                   </div>
+                  
                   <Table
                     key='list'
                     style={{ border: 'none' }}

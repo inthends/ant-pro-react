@@ -4,7 +4,9 @@ import Page from '@/components/Common/Page';
 // import { TreeEntity } from '@/model/models';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { RebateSaveForm, GetRebateOrgTree, GetRebateOrgId } from './Main.service';
+import { RebateSaveForm, GetRebateOrgId } from './Main.service';
+import { GetOrgBuildingTree } from '../../Resource/House/House.service';
+
 const Option = Select.Option;
 const { TextArea } = Input;
 // import './style.less';
@@ -26,7 +28,7 @@ const AddRebateOrganize = (props: AddRebateOrganizeProps) => {
   useEffect(() => {
     if (visible) {
       setLoading(true);
-      GetRebateOrgTree().then(res => {
+      GetOrgBuildingTree().then(res => {
         //var newTreeNode = resetTreeNode(res[0]);
         setOrgTreeData(res);
       });

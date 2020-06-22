@@ -17,6 +17,11 @@ export function GetTreeAreaJson(id): Promise<TreeEntity[]> {
     .then(getResult as any);
 }
 
+//获取房产数据到楼栋，因为系统权限控制到楼栋
+export function GetOrgBuildingTree(): Promise<any[]> {
+  return request.get(process.env.basePath + `/PStructs/GetOrgBuildingTree`, {}).then(getResult);
+}
+
 // 获取房产信息
 export function GetFormInfoJson(keyvalue): Promise<GmPstructure> {
   return request

@@ -56,6 +56,14 @@ export function GetCustomerInfo(keyvalue): Promise<any> {
     .then(getResult as any);
 }
 
+export function GetUnitPageListJson(data): Promise<any> {
+  return request
+    .post(process.env.basePath + `/PStructUser/GetUnitPageListJson`, {
+      data: objToFormdata(data)
+    })
+    .then(getResult as any);
+}
+
 export function GetParkingCustomerInfo(keyvalue): Promise<any> {
   return request
     .get(process.env.basePath + `/PStructUser/GetParkingCustomerInfo?keyvalue=${keyvalue}`)

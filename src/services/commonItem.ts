@@ -74,10 +74,18 @@ export function GetAsynChildBuildingsForHouse(pstructId, type): Promise<any[]> {
     .then(getResult as any);
 }
 
-//获取公共区域下级
+//获取公共区域树
 export function GetAsynChildBuildingsForArea(pstructId, type): Promise<any[]> {
   return request
     .get(process.env.basePath + `/Common/GetAsynChildBuildingsForArea?parentId=${pstructId}&type=${type}`)
+    .then(getResult as any);
+}
+
+
+//获取住户左侧树
+export function GetAsynChildBuildingsForCustomer(pstructId, type): Promise<any[]> {
+  return request
+    .get(process.env.basePath + `/Common/GetAsynChildBuildingsForCustomer?parentId=${pstructId}&type=${type}`)
     .then(getResult as any);
 }
 

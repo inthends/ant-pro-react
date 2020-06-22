@@ -2,7 +2,7 @@ import { DefaultPagination } from '@/utils/defaultSetting';
 import { Modal, message, Button, Icon, Input, Layout } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import AsynLeftTree from '../AsynLeftTree';
+import AsynLeftTreeForArea from '../AsynLeftTreeForArea';
 import ListTable from './ListTable';
 import Modify from './Modify';
 import { CreateQrCodeFrom, GetPublicAreas } from './Main.service';
@@ -22,7 +22,7 @@ function Main() {
   const [currData, setCurrData] = useState<any>();
   const [search, setSearch] = useState<string>('');
 
-  const selectTree = (id, type, info) => {
+  const select = (id, type, info) => {
     // initLoadData(info.node.props.dataRef, search);
     SetOrganize(info.node.props.dataRef);
     //初始化页码，防止页码错乱导致数据查询出错  
@@ -91,7 +91,7 @@ function Main() {
       total,
       queryJson: {
         keyword: searchText,
-        // OrganizeId: org.organizeId,
+        //OrganizeId: org.organizeId,
         TreeTypeId: org.key,
         TreeType: org.type,
       },
@@ -128,7 +128,7 @@ function Main() {
     });
   };
 
-  const initLoadData = (org, searchText) => {
+  const initLoadData = (searchText,org) => {
     setSearch(searchText);
     const queryJson = {
       // OrganizeId: org.organizeId,
@@ -165,7 +165,7 @@ function Main() {
 
   return (
     <Layout style={{ height: '100%' }}>
-      <AsynLeftTree
+      <AsynLeftTreeForArea
         parentid={'0'}
         //treeData={treeData}
         selectTree={(parentId, type, info) => {
@@ -174,7 +174,7 @@ function Main() {
           } else {
             setIsDisabled(false);
           }
-          selectTree(parentId, type, info);
+          select(parentId, type, info);
         }}
       />
       <Content style={{ paddingLeft: '18px' }} >
@@ -209,7 +209,7 @@ function Main() {
           pagination={pagination}
           data={data}
           modify={showDrawer}
-          reload={() => initLoadData(organize, search)}
+          reload={() => initLoadData(search,organize)}
         />
       </Content>
 
@@ -219,7 +219,7 @@ function Main() {
         organizeId={organize.id}
         data={currData}
         treeData={treeData}
-        reload={() => initLoadData(organize, search)}
+        reload={() => initLoadData(search,organize)}
       />
     </Layout>
   );

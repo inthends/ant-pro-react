@@ -1,4 +1,4 @@
-//异步树
+//公共区域异步树
 import Page from '@/components/Common/Page';
 import { Icon, Layout, Tree } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
@@ -8,13 +8,13 @@ import { GetOrgTree, GetAsynChildBuildingsForArea } from '@/services/commonItem'
 const { TreeNode } = Tree;
 const { Sider } = Layout;
 
-interface AsynLeftTreeProps {
+interface AsynLeftTreeForAreaProps {
   //treeData: any[];
   selectTree(parentId, type, info): void;
   parentid: string;
 }
 
-function AsynLeftTree(props: AsynLeftTreeProps) {
+function AsynLeftTreeForArea(props: AsynLeftTreeForAreaProps) {
 
   const { selectTree } = props;
   const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
@@ -172,5 +172,4 @@ function AsynLeftTree(props: AsynLeftTreeProps) {
     </Sider>
   );
 }
-
-export default AsynLeftTree;
+export default AsynLeftTreeForArea;

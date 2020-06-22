@@ -19,9 +19,7 @@ const Modify = (props: ModifyProps) => {
   const { data, closeDrawer, visible } = props;
   const [loading, setLoading] = useState<boolean>(false);
   const [itemData, setItemData] = useState<any[]>([]);
-  const [pagination, setPagination] = useState<PaginationConfig>(
-    new DefaultPagination()
-  );
+  const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [infoDetail, setInfoDetail] = useState<any>({});
 
   //打开抽屉时初始化
@@ -119,7 +117,7 @@ const Modify = (props: ModifyProps) => {
       width: 160,
     },
     {
-      title: "房产面积",
+      title: "房产面积(㎡)",
       dataIndex: "area",
       key: "area",
       width: 100
