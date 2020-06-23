@@ -5,7 +5,7 @@ import {
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetFilesData, RemoveFile, SaveForm, ChangeToRepair, ChangeToComplaint } from './Main.service';
+import { GetFilesData, RemoveFile, SaveForm, ChangeToRepair, ChangeToComplaint,Visit } from './Main.service';
 import { GetRoomUser } from '@/services/commonItem';
 import styles from './style.less';
 import CommentBox from './CommentBox';
@@ -29,8 +29,8 @@ interface ModifyProps {
 const Modify = (props: ModifyProps) => {
   const { modifyVisible, data, closeDrawer, form, reload, showLink } = props;
   const { getFieldDecorator } = form;
-  var title = data === undefined ? '添加服务单' : '修改服务单'; 
-  if (data && data.status != 1) {
+  var title = data === undefined ? '添加服务单' : '修改服务单';
+  if (data && data.status != 1 && data.status != '3') {
     title = '查看服务单';
   }
   const [infoDetail, setInfoDetail] = useState<any>({});
@@ -316,18 +316,18 @@ const Modify = (props: ModifyProps) => {
   };
 
   //回访
-  // const visit = () => {
-  //   form.validateFields((errors, values) => {
-  //     if (!errors) {
-  //       const newData = data ? { ...data, ...values } : values;
-  //       Visit({ ...newData, keyvalue: newData.id }).then(res => {
-  //         message.success('回访完成！');
-  //         closeDrawer();
-  //         reload();
-  //       });
-  //     }
-  //   });
-  // };
+  const visit = () => {
+    form.validateFields((errors, values) => {
+      if (!errors) {
+        const newData = data ? { ...data, ...values } : values;
+        Visit({ ...newData, keyvalue: newData.id }).then(res => {
+          message.success('回访完成');
+          closeDrawer();
+          reload();
+        });
+      }
+    });
+  };
 
   const [selectHouseVisible, setSelectHouseVisible] = useState<boolean>(false);
 
@@ -620,7 +620,7 @@ const Modify = (props: ModifyProps) => {
                   </Row>
                 </Card>
               ) :
-                (<Card className={infoDetail.status == 1 ? styles.card : styles.card2} title="基础信息" >
+                (<Card className={infoDetail.status == 1 ? styles.card2 : styles.card} title="基础信息" >
                   <Row gutter={24}>
                     <Col lg={7}>
                       <Form.Item label="服务单号">
@@ -731,94 +731,94 @@ const Modify = (props: ModifyProps) => {
                 </Card>)}
 
               {
-                // infoDetail.status == 3 ? (
-                //   <Card title="回访情况" className={styles.card2} hoverable>
-                //     <Row gutter={24}>
-                //       <Col lg={6}>
-                //         <Form.Item label="回访方式" required>
-                //           {getFieldDecorator('returnVisitMode', {
-                //             initialValue: '在线'
-                //           })(
-                //             <Select >
-                //               <Option value="在线">在线</Option>
-                //               <Option value="电话">电话</Option>
-                //               <Option value="上门">上门</Option>
-                //               <Option value="其他">其他</Option>
-                //             </Select>
-                //           )}
-                //         </Form.Item>
-                //       </Col>
-                //       <Col lg={6}>
-                //         <Form.Item label="客户评价" required>
-                //           {getFieldDecorator('custEvaluate', {
-                //             initialValue: '4'
-                //           })(
-                //             <Select >
-                //               <Option value="5">非常满意</Option>
-                //               <Option value="4">满意</Option>
-                //               <Option value="3">一般</Option>
-                //               <Option value="2">不满意</Option>
-                //               <Option value="1">非常不满意</Option>
-                //             </Select>
-                //           )}
-                //         </Form.Item>
-                //       </Col>
-                //       <Col lg={6}>
-                //         <Form.Item label="回访时间" >
-                //           {getFieldDecorator('returnVisitDate', {
-                //           })(<Input placeholder="自动获取时间" readOnly />)}
-                //         </Form.Item>
-                //       </Col>
-                //       <Col lg={6}>
-                //         <Form.Item label="回访人">
-                //           {getFieldDecorator('returnVisiterName', {
-                //           })(<Input placeholder="自动获取回访人" readOnly />)}
-                //         </Form.Item>
-                //       </Col>
-                //     </Row>
-                //     <Row gutter={24}>
-                //       <Col lg={24}>
-                //         <Form.Item label="回访结果" required>
-                //           {getFieldDecorator('returnVisitResult', {
-                //             rules: [{ required: true, message: '请输入回访结果' }],
-                //           })(<Input placeholder="请输入回访结果" />)}
-                //         </Form.Item>
-                //       </Col>
-                //     </Row>
-                //   </Card>
-                // ) : 
+                infoDetail.status == 3 ? (
+                  <Card title="回访情况" className={styles.card2} hoverable>
+                    <Row gutter={24}>
+                      <Col lg={6}>
+                        <Form.Item label="回访方式" required>
+                          {getFieldDecorator('returnVisitMode', {
+                            initialValue: '在线'
+                          })(
+                            <Select >
+                              <Option value="在线">在线</Option>
+                              <Option value="电话">电话</Option>
+                              <Option value="上门">上门</Option>
+                              <Option value="其他">其他</Option>
+                            </Select>
+                          )}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={6}>
+                        <Form.Item label="客户评价" required>
+                          {getFieldDecorator('custEvaluate', {
+                            initialValue: '4'
+                          })(
+                            <Select >
+                              <Option value="5">非常满意</Option>
+                              <Option value="4">满意</Option>
+                              <Option value="3">一般</Option>
+                              <Option value="2">不满意</Option>
+                              <Option value="1">非常不满意</Option>
+                            </Select>
+                          )}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={6}>
+                        <Form.Item label="回访时间" >
+                          {getFieldDecorator('returnVisitDate', {
+                          })(<Input placeholder="自动获取时间" readOnly />)}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={6}>
+                        <Form.Item label="回访人">
+                          {getFieldDecorator('returnVisiterName', {
+                          })(<Input placeholder="自动获取回访人" readOnly />)}
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row gutter={24}>
+                      <Col lg={24}>
+                        <Form.Item label="回访结果" required>
+                          {getFieldDecorator('returnVisitResult', {
+                            rules: [{ required: true, message: '请输入回访结果' }],
+                          })(<Input placeholder="请输入回访结果" />)}
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                  </Card>
+                ) :
 
-                infoDetail.status > 3 ? (<Card title="回访情况" className={styles.card2}  >
-                  <Row gutter={24}>
-                    <Col lg={6}>
-                      <Form.Item label="回访方式"  >
-                        {infoDetail.returnVisitMode}
-                      </Form.Item>
-                    </Col>
-                    <Col lg={6}>
-                      <Form.Item label="客户评价"  >
-                        {GetCustEvaluate(infoDetail.custEvaluate)}
-                      </Form.Item>
-                    </Col>
-                    <Col lg={6}>
-                      <Form.Item label="回访时间" >
-                        {infoDetail.returnVisitDate}
-                      </Form.Item>
-                    </Col>
-                    <Col lg={6}>
-                      <Form.Item label="回访人">
-                        {infoDetail.returnVisiterName}
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                  <Row gutter={24}>
-                    <Col lg={24}>
-                      <Form.Item label="回访结果" >
-                        {infoDetail.returnVisitResult}
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                </Card>) : null}
+                  infoDetail.status > 3 ? (<Card title="回访情况" className={styles.card2}  >
+                    <Row gutter={24}>
+                      <Col lg={6}>
+                        <Form.Item label="回访方式"  >
+                          {infoDetail.returnVisitMode}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={6}>
+                        <Form.Item label="客户评价"  >
+                          {GetCustEvaluate(infoDetail.custEvaluate)}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={6}>
+                        <Form.Item label="回访时间" >
+                          {infoDetail.returnVisitDate}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={6}>
+                        <Form.Item label="回访人">
+                          {infoDetail.returnVisiterName}
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row gutter={24}>
+                      <Col lg={24}>
+                        <Form.Item label="回访结果" >
+                          {infoDetail.returnVisitResult}
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                  </Card>) : null}
             </Form>
           </TabPane>
           {data ? (
@@ -865,16 +865,16 @@ const Modify = (props: ModifyProps) => {
               保存
            </Button>
             <Dropdown overlay={menu} >
-              <Button  disabled={loading}>
+              <Button disabled={loading}>
                 更多<Icon type="down" />
               </Button>
             </Dropdown>
           </span>) : null}
 
-        {/* {(infoDetail.status && infoDetail.status == 3) ? (
+        {(infoDetail.status && infoDetail.status == 3) ? (
           <Button onClick={visit} type="primary">
             回访
-           </Button>) : null} */}
+          </Button>) : null}
 
         {/* {(infoDetail.status && infoDetail.status == 4) ? (
           <Button onClick={close} type="primary">

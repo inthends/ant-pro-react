@@ -150,7 +150,7 @@ function ListTable(props: ListTableProps) {
       fixed: 'right',
       render: (text, record) => {
         //新增
-        if (record.status == 1) {
+        if (record.status == 1||record.status == 3) {
           return [
             //   <Button
             //     type="primary"
@@ -174,8 +174,7 @@ function ListTable(props: ListTableProps) {
             //     type="primary"
             //     key="modify"
             //     style={{ marginRight: '10px' }}
-            //     onClick={() => modify(record)}
-            //   >
+            //     onClick={() => modify(record)} >
             //     查看
             // </Button>,
             //   <Button type="danger" key="delete" disabled={true} >
@@ -197,7 +196,7 @@ function ListTable(props: ListTableProps) {
         columns={columns}
         rowKey={record => record.id}
         pagination={pagination}
-        scroll={{ x: 1800 }}
+        scroll={{ x: 1850 }}
         onChange={(pag: PaginationConfig, filters, sorter) => changePage(pag, filters, sorter)}
         loading={loading}
       />
