@@ -1,6 +1,6 @@
 //费表列表
 import Page from '@/components/Common/Page';
-import {Modal, Divider, Form, Table } from 'antd';
+import { Modal, Divider, Form, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
@@ -25,7 +25,7 @@ function MeterTable(props: MeterTableProps) {
       content: `您是否要删除${record.meterName}吗？`,
       onOk: () => {
         RemoveForm(record.meterId)
-          .then(() => { 
+          .then(() => {
             // message.success('删除成功');
             reload();
           })
@@ -35,6 +35,13 @@ function MeterTable(props: MeterTableProps) {
   };
 
   const columns = [
+    {
+      title: '费表名称',
+      dataIndex: 'meterName',
+      key: 'meterName',
+      width: 250,
+      sorter: true, 
+    },
     {
       title: '费表类型',
       dataIndex: 'meterKind',
@@ -49,13 +56,7 @@ function MeterTable(props: MeterTableProps) {
       width: 100,
       sorter: true
     },
-    {
-      title: '费表名称',
-      dataIndex: 'meterName',
-      key: 'meterName',
-      width: 200,
-      sorter: true,
-    },
+
     {
       title: '倍率',
       dataIndex: 'meterZoom',
@@ -73,13 +74,13 @@ function MeterTable(props: MeterTableProps) {
     {
       title: '关联收费项目',
       dataIndex: 'feeItemName',
-      key: 'feeItemName', 
+      key: 'feeItemName',
       width: 150
     },
     {
       title: '所属机构',
       dataIndex: 'fullName',
-      key: 'fullName', 
+      key: 'fullName',
     },
     {
       title: '操作',
@@ -122,7 +123,7 @@ function MeterTable(props: MeterTableProps) {
           <span>
             <a onClick={() => showModify(record.meterId)} key="modify">修改</a>
             <Divider type="vertical" />
-            <a  onClick={() => doDelete(record)} key="delete">删除</a>
+            <a onClick={() => doDelete(record)} key="delete">删除</a>
           </span>
 
         ];

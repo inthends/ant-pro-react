@@ -61,7 +61,7 @@ function UnitMeterTable(props: UnitMeterTableProps) {
       width: 60
     },
     {
-      title: '所属机构',
+      title: '所在位置',
       key: 'allName',
       dataIndex: 'allName', 
       width: 200

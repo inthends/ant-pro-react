@@ -130,11 +130,9 @@ function Main() {
     });
   };
 
-  const loadData = (search, feeKind, feeType, paginationConfig?: PaginationConfig, sorter?) => {
-
+  const loadData = (search, feeKind, feeType, paginationConfig?: PaginationConfig, sorter?) => { 
     //赋值,必须，否则查询条件会不起作用
     setSearch(search);
-
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: pagination.pageSize,
@@ -145,10 +143,11 @@ function Main() {
       pageSize,
       total,
       queryJson: { FeeKind: feeKind, FeeType: feeType, keyword: search },
-    };
+    }; 
+
     if (sorter) {
       let { field, order } = sorter;
-      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sord = order === 'descend' ? 'desc' : 'asc';
       searchCondition.sidx = field ? field : 'feeName';
     }
     return load(searchCondition).then(res => {

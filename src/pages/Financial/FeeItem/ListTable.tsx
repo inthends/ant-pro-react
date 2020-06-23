@@ -17,7 +17,7 @@ interface ListTableProps {
 
 function ListTable(props: ListTableProps) {
   const { onchange, loading, pagination, data, modify, reload } = props;
-  const changePage = (pagination: PaginationConfig, filters, sorter) => {
+  const changePage = (pagination: PaginationConfig, filters, sorter) => { 
     onchange(pagination, filters, sorter);
   };
   const doDelete = record => {
@@ -128,7 +128,7 @@ function ListTable(props: ListTableProps) {
         rowKey={record => record.feeItemId}
         pagination={pagination}
         scroll={{ y: 420 }}
-        onChange={(pagination: PaginationConfig, filters, sorter) =>
+        onChange={(pagination: PaginationConfig, filters, sorter) => 
           changePage(pagination, filters, sorter)
         }
         loading={loading}

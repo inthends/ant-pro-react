@@ -106,9 +106,9 @@ const Change = (props: ChangeProps) => {
           GetCharge(chargeId).then((charge: ChargeDetailDTO) => {
             setContractCharge(charge.contractCharge || {});
             setChargeFeeList(charge.chargeFeeList || []);
-            setChargeIncreList(charge.chargeIncreList || []);
-            setChargeOfferList(charge.chargeFeeOfferList || []);
-            setDepositData(charge.depositFeeResultList || []);//保证金明细
+            // setChargeIncreList(charge.chargeIncreList || []);
+            // setChargeOfferList(charge.chargeFeeOfferList || []);
+            // setDepositData(charge.depositFeeResultList || []);//保证金明细
             setChargeData(charge.chargeFeeResultList || []);//租金明细    
           })
           form.resetFields();
@@ -216,8 +216,8 @@ const Change = (props: ChangeProps) => {
 
           data.feeItemId = values.feeItemId[index];
           data.feeItemName = values.feeItemName[index];
-          data.startDate = values.startDate[index];
-          data.endDate = values.endDate[index];
+          // data.startDate = values.startDate[index];
+          // data.endDate = values.endDate[index];
           data.price = values.price[index];
           data.priceUnit = values.priceUnit[index];
           data.advancePayTime = values.advancePayTime[index];
@@ -248,9 +248,9 @@ const Change = (props: ChangeProps) => {
         let RebateJson: HtLeasecontractchargefeeoffer[] = [];
         values.Rebates.map(function (k, index, arr) {
           let rebate: HtLeasecontractchargefeeoffer = {};
-          rebate.type = values.rebateType[index];
-          rebate.startDate = values.rebateStartDate[index];
-          rebate.endDate = values.rebateEndDate[index];
+          // rebate.type = values.rebateType[index];
+          // rebate.startDate = values.rebateStartDate[index];
+          // rebate.endDate = values.rebateEndDate[index];
           rebate.startPeriod = values.startPeriod[index];
           rebate.periodLength = values.periodLength[index];
           rebate.discount = values.discount[index];
@@ -261,14 +261,14 @@ const Change = (props: ChangeProps) => {
         //let entity = values; 
         let entity: HtLeasecontractcharge = {};
         //费用条款-基本条款 
-        entity.depositFeeItemId = values.depositFeeItemId;
-        entity.depositFeeItemName = values.depositFeeItemName;
+        // entity.depositFeeItemId = values.depositFeeItemId;
+        // entity.depositFeeItemName = values.depositFeeItemName;
         entity.leaseArea = values.leaseArea;
-        entity.deposit = values.deposit;
-        entity.depositUnit = values.depositUnit;
-        entity.startDate = values.billingDate.format('YYYY-MM-DD');
-        entity.endDate = values.contractEndDate.format('YYYY-MM-DD');
-        entity.payDate = values.contractStartDate.format('YYYY-MM-DD');
+        // entity.deposit = values.deposit;
+        // entity.depositUnit = values.depositUnit;
+        // entity.startDate = values.billingDate.format('YYYY-MM-DD');
+        // entity.endDate = values.contractEndDate.format('YYYY-MM-DD');
+        // entity.payDate = values.contractStartDate.format('YYYY-MM-DD');
 
         let strTermJson = JSON.stringify(TermJson);
         setTermJson(strTermJson);
@@ -319,14 +319,14 @@ const Change = (props: ChangeProps) => {
         //保存合同数据
         let ContractCharge: HtLeasecontractcharge = {};
         //费用条款-基本条款 
-        ContractCharge.depositFeeItemId = values.depositFeeItemId;
-        ContractCharge.depositFeeItemName = values.depositFeeItemName;
+        // ContractCharge.depositFeeItemId = values.depositFeeItemId;
+        // ContractCharge.depositFeeItemName = values.depositFeeItemName;
         ContractCharge.leaseArea = values.leaseArea;
-        ContractCharge.deposit = values.deposit;
-        ContractCharge.depositUnit = values.depositUnit;
-        ContractCharge.startDate = values.billingDate.format('YYYY-MM-DD');
-        ContractCharge.endDate = values.contractEndDate.format('YYYY-MM-DD');
-        ContractCharge.payDate = values.contractStartDate.format('YYYY-MM-DD');
+        // ContractCharge.deposit = values.deposit;
+        // ContractCharge.depositUnit = values.depositUnit;
+        // ContractCharge.startDate = values.billingDate.format('YYYY-MM-DD');
+        // ContractCharge.endDate = values.contractEndDate.format('YYYY-MM-DD');
+        // ContractCharge.payDate = values.contractStartDate.format('YYYY-MM-DD');
 
         //合同信息
         let Contract: LeaseContractDTO = {};
@@ -392,14 +392,14 @@ const Change = (props: ChangeProps) => {
         //保存合同数据
         let ContractCharge: HtLeasecontractcharge = {};
         //费用条款-基本条款 
-        ContractCharge.depositFeeItemId = values.depositFeeItemId;
-        ContractCharge.depositFeeItemName = values.depositFeeItemName;
+        // ContractCharge.depositFeeItemId = values.depositFeeItemId;
+        // ContractCharge.depositFeeItemName = values.depositFeeItemName;
         ContractCharge.leaseArea = values.leaseArea;
-        ContractCharge.deposit = values.deposit;
-        ContractCharge.depositUnit = values.depositUnit;
-        ContractCharge.startDate = values.billingDate.format('YYYY-MM-DD');
-        ContractCharge.endDate = values.contractEndDate.format('YYYY-MM-DD');
-        ContractCharge.payDate = values.contractStartDate.format('YYYY-MM-DD');
+        // ContractCharge.deposit = values.deposit;
+        // ContractCharge.depositUnit = values.depositUnit;
+        // ContractCharge.startDate = values.billingDate.format('YYYY-MM-DD');
+        // ContractCharge.endDate = values.contractEndDate.format('YYYY-MM-DD');
+        // ContractCharge.payDate = values.contractStartDate.format('YYYY-MM-DD');
 
         //合同信息
         let Contract: LeaseContractDTO = {};
