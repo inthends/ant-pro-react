@@ -26,7 +26,7 @@ function General(props: GeneralProps) {
             <Col xxl={4} xl={4} md={6} sm={12} xs={24}>
               <NumberInfo
                 subTitle="入住面积"
-                total={((generalData.checkroom || 0) / 10000).toFixed(4)}
+                total={((generalData.checkarea || 0) / 10000).toFixed(4)}
                 suffix="万m²"
               />
             </Col>
@@ -34,7 +34,7 @@ function General(props: GeneralProps) {
             <Col xxl={4} xl={4} md={6} sm={12} xs={24}>
               <NumberInfo
                 subTitle="空置面积"
-                total={(((generalData.areasum || 0) - (generalData.checkroom || 0)) / 10000).toFixed(
+                total={(((generalData.areasum || 0) - (generalData.checkarea || 0)) / 10000).toFixed(
                   4,
                 )}
                 suffix="万m²"
