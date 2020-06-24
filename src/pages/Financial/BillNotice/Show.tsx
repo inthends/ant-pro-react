@@ -175,7 +175,7 @@ const Show = (props: ShowProps) => {
     <Drawer
       title={title}
       placement="right"
-      width={780}
+      width={800}
       onClose={closeDrawer}
       visible={visible}
       style={{ height: 'calc(100vh-50px)' }}
@@ -188,24 +188,26 @@ const Show = (props: ShowProps) => {
             <Row gutter={24}>
               <Col span={8}>
                 <Form.Item required label="通知单号">
-                  <a>{infoDetail.billCode}</a>
+                  {infoDetail.billCode}
+                  {/* <a>{infoDetail.billCode}</a> */}
                 </Form.Item>
               </Col>
-              <Col span={8}>
+              <Col span={6}>
+                <Form.Item required label="类型">
+                  {infoDetail.billType}
+                </Form.Item>
+              </Col>
+              <Col span={5}>
                 <Form.Item required label="通知单日期"  >
                   {String(infoDetail.createDate).substr(0, 10)}
                 </Form.Item>
               </Col>
-              {/* <Col span={6}>
-              <Form.Item required label="缴费日期"  >
-                {String(infoDetail.mustDate).substr(0, 10)}
-              </Form.Item>
-            </Col> */}
-              <Col span={8}>
-                <Form.Item required label="类型"   >
-                  {infoDetail.billType}
+              <Col span={5}>
+                <Form.Item required label="账单归属年月">
+                  {String(infoDetail.belongDate).substr(0, 7)}
                 </Form.Item>
               </Col>
+
             </Row>
             <Row gutter={24}>
               <Col span={8}>
@@ -213,17 +215,24 @@ const Show = (props: ShowProps) => {
                   {infoDetail.customer}
                 </Form.Item>
               </Col>
-              {/* <Col span={6}>
-              <Form.Item required label="打印模板" >
-                {infoDetail.templateName}
-              </Form.Item>
-            </Col> */}
-              <Col span={8}>
+              <Col span={6}>
+                <Form.Item required label="总金额" >
+                  {infoDetail.allAmount}
+                </Form.Item>
+              </Col>
+              <Col span={5}>
+                <Form.Item required label="是否缴清" >
+                  {infoDetail.isClear?'是':'否'}
+                </Form.Item>
+              </Col>
+              <Col span={5}>
                 <Form.Item label="审核人"  >
                   {infoDetail.verifyPerson}
                 </Form.Item>
               </Col>
-              <Col span={8}>
+            </Row> 
+            <Row gutter={24}>
+              <Col span={24}>
                 <Form.Item label="审核情况"  >
                   {infoDetail.verifyMemo}
                 </Form.Item>

@@ -1,26 +1,23 @@
 //通知单
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { message, Dropdown, Menu, Tabs, Button, Icon, Input, Layout, Modal, Select } from 'antd';
+import { DatePicker, message, Dropdown, Menu, Button, Icon, Input, Layout, Modal, Select } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import {
-  GetBillPageData, GetBillDetailPageData, BatchRemoveForm,
-  GetNoticeTemplates, BatchAudit, BatchPrint
-} from './Main.service';
-
+import { GetBillPageData, BatchRemoveForm, GetNoticeTemplates, BatchAudit, BatchPrint } from './Main.service';
 import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
-import DetailTable from './DetailTable';
+// import DetailTable from './DetailTable';
 import Modify from './Modify';
 import Verify from './Verify';
 import Show from './Show';
 import { getResult } from '@/utils/networkUtils';
 import { GetUnitTreeAll } from '@/services/commonItem';//获取全部房间树
+const { MonthPicker } = DatePicker;
 const { Content } = Layout;
 const { Search } = Input;
-const { TabPane } = Tabs;
+// const { TabPane } = Tabs;
 // const { Option } = Select;
-import AuthButton from '@/components/AuthButton/AuthButton';
+import AuthButton from '@/components/AuthButton/AuthButton'; 
 
 function Main() {
   // const [organize, SetOrganize] = useState<any>({});
@@ -28,11 +25,10 @@ function Main() {
   const [id, setId] = useState<string>();
   // const [selectRecords, setSelectRecords] = useState<any>();
   const [selectIds, setSelectIds] = useState<any>();
-
-  // const [billCheckSearch, setBillCheckSearch] = useState<string>('');
-  const [billNoticeSearch, setBillNoticeSearch] = useState<string>('');
+  // const [billCheckSearch, setBillCheckSearch] = useState<string>(''); 
   const [billCheckPagination, setBillCheckPagination] = useState<DefaultPagination>(new DefaultPagination());
-  const [billNoticePagination, setBillNoticePagination] = useState<DefaultPagination>(new DefaultPagination());
+  // const [billNoticeSearch, setBillNoticeSearch] = useState<string>('');
+  // const [billNoticePagination, setBillNoticePagination] = useState<DefaultPagination>(new DefaultPagination());
   const [ifVerify, setIfVerify] = useState<boolean>(false);
   const [verifyVisible, setVerifyVisible] = useState<boolean>(false);
   const [showCheckBillVisible, setShowCheckBillVisible] = useState<boolean>(false);
@@ -41,23 +37,20 @@ function Main() {
   const [search, setSearch] = useState<string>('');
   //树查询
   const [orgId, setOrgId] = useState<string>('');//左侧树选择的id
-  const [orgType, setOrgType] = useState<string>();//类型
-
+  const [orgType, setOrgType] = useState<string>();//类型 
   const [noticeData, setNoticeData] = useState<any>();
-  const [detailData, setDetailData] = useState<any[]>([]);
-
   const [loading, setLoading] = useState<boolean>(false);
-  const [detailLoading, setDetailLoading] = useState<boolean>(false);
+  // const [detailData, setDetailData] = useState<any[]>([]);
+  // const [detailLoading, setDetailLoading] = useState<boolean>(false);
 
   const doSelectTree = (id, type, info) => {
     // SetOrganize(info.node.props.dataRef);
     // initBillCheckLoadData(info.node.props.dataRef, billCheckSearch);
-    // initBillNoticeLoadData(info.node.props.dataRef, billNoticeSearch);
-
+    // initBillNoticeLoadData(info.node.props.dataRef, billNoticeSearch); 
     //初始化页码，防止页码错乱导致数据查询出错  
     const page = new DefaultPagination();
     loadData(search, id, type, page);
-    loadDetailData(billNoticeSearch, id, type, page);
+    //loadDetailData(billNoticeSearch, id, type, page);
   };
 
   useEffect(() => {
@@ -73,7 +66,7 @@ function Main() {
       setTempListData(res);
     }).then(() => {
       initLoadData('', '', '');
-      initDetailLoadData('', '', '');
+      //initDetailLoadData('', '', '');
     })
   }, []);
 
@@ -96,21 +89,22 @@ function Main() {
         BillType: billType,
         TreeTypeId: orgId,//organize.id,
         TreeType: type,//organize.type,
+        BelongDate: belongDate
       }
     };
 
     if (sorter) {
       let { field, order } = sorter;
       searchCondition.sord = order === "descend" ? "desc" : "asc";
-      searchCondition.sidx = field ? field : 'billId';
+      searchCondition.sidx = field ? field : 'createDate';
     }
     return load(searchCondition);
   }
 
   const load = data => {
     setLoading(true);
-    data.sidx = data.sidx || 'billId';
-    data.sord = data.sord || 'asc';
+    data.sidx = data.sidx || 'createDate';
+    data.sord = data.sord || 'desc';
     return GetBillPageData(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setBillCheckPagination(pagesetting => {
@@ -139,72 +133,73 @@ function Main() {
       keyword: searchText,
       TreeTypeId: orgId,//org.key,
       TreeType: type,//org.type,
+      BelongDate: belongDate
     };
-    const sidx = 'billId';
-    const sord = 'asc';
+    const sidx = 'createDate';
+    const sord = 'desc';
     const { current: pageIndex, pageSize, total } = billCheckPagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson });
   };
 
-  const loadDetailData = (search, orgId, type, paginationConfig?: PaginationConfig, sorter?) => {
-    setBillNoticeSearch(search);
-    const { current: pageIndex, pageSize, total } = paginationConfig || {
-      current: 1,
-      pageSize: billNoticePagination.pageSize,
-      total: 0,
-    };
-    let searchCondition: any = {
-      pageIndex,
-      pageSize,
-      total,
-      queryJson: {
-        keyword: search,
-        TreeTypeId: orgId,//organize.id,
-        TreeType: type,//organize.type
-      }
-    };
-    if (sorter) {
-      let { field, order } = sorter;
-      searchCondition.sord = order === "descend" ? "desc" : "asc";
-      searchCondition.sidx = field ? field : 'id';
-    }
-    return detailLoad(searchCondition);
-  };
+  // const loadDetailData = (search, orgId, type, paginationConfig?: PaginationConfig, sorter?) => {
+  //   setBillNoticeSearch(search);
+  //   const { current: pageIndex, pageSize, total } = paginationConfig || {
+  //     current: 1,
+  //     pageSize: billNoticePagination.pageSize,
+  //     total: 0,
+  //   };
+  //   let searchCondition: any = {
+  //     pageIndex,
+  //     pageSize,
+  //     total,
+  //     queryJson: {
+  //       keyword: search,
+  //       TreeTypeId: orgId,//organize.id,
+  //       TreeType: type,//organize.type
+  //     }
+  //   };
+  //   if (sorter) {
+  //     let { field, order } = sorter;
+  //     searchCondition.sord = order === "descend" ? "desc" : "asc";
+  //     searchCondition.sidx = field ? field : 'id';
+  //   }
+  //   return detailLoad(searchCondition);
+  // };
 
-  const detailLoad = data => {
-    setDetailLoading(true);
-    data.sidx = data.sidx || 'id';
-    data.sord = data.sord || 'asc';
-    return GetBillDetailPageData(data).then(res => {
-      const { pageIndex: current, total, pageSize } = res;
-      setBillNoticePagination(pagesetting => {
-        return {
-          ...pagesetting,
-          current,
-          total,
-          pageSize,
-        };
-      });
-      setDetailData(res.data);
-      setDetailLoading(false);
-      return res;
-    }).catch(err => {
-      setDetailLoading(false);
-    });
-  };
+  // const detailLoad = data => {
+  //   setDetailLoading(true);
+  //   data.sidx = data.sidx || 'id';
+  //   data.sord = data.sord || 'asc';
+  //   return GetBillDetailPageData(data).then(res => {
+  //     const { pageIndex: current, total, pageSize } = res;
+  //     setBillNoticePagination(pagesetting => {
+  //       return {
+  //         ...pagesetting,
+  //         current,
+  //         total,
+  //         pageSize,
+  //       };
+  //     });
+  //     setDetailData(res.data);
+  //     setDetailLoading(false);
+  //     return res;
+  //   }).catch(err => {
+  //     setDetailLoading(false);
+  //   });
+  // };
 
-  const initDetailLoadData = (orgId, type, searchText) => {
-    setBillNoticeSearch(searchText);
-    const queryJson = {
-      keyword: searchText,
-      TreeTypeId: orgId,//org.key,
-      TreeType: type,// org.type,
-    };
-    const sidx = 'id';
-    const sord = 'asc';
-    const { current: pageIndex, pageSize, total } = billNoticePagination;
-    return detailLoad({ pageIndex, pageSize, sidx, sord, total, queryJson });
-  };
+  // const initDetailLoadData = (orgId, type, searchText) => {
+  //   setBillNoticeSearch(searchText);
+  //   const queryJson = {
+  //     keyword: searchText,
+  //     TreeTypeId: orgId,//org.key,
+  //     TreeType: type,// org.type,
+  //   };
+  //   const sidx = 'id';
+  //   const sord = 'asc';
+  //   const { current: pageIndex, pageSize, total } = billNoticePagination;
+  //   return detailLoad({ pageIndex, pageSize, sidx, sord, total, queryJson });
+  // };
 
   const closeVerify = (result?) => {
     setVerifyVisible(false);
@@ -254,6 +249,7 @@ function Main() {
 
   const [templateId, setTemplateId] = useState<string>('');
   const [billType, setBillType] = useState<string>('');
+  const [belongDate, setBelongDate] = useState<any>('');
 
   const handleMenuClick = (e) => {
     if (e.key == '1') {
@@ -379,13 +375,13 @@ function Main() {
   );
 
   //tab切换刷新数据
-  const changeTab = (e: string) => {
-    if (e === '1') {
-      loadData(search, orgId, orgType);
-    } else {
-      loadDetailData(billNoticeSearch, orgId, orgType);
-    }
-  };
+  // const changeTab = (e: string) => {
+  //   if (e === '1') {
+  //     loadData(search, orgId, orgType);
+  //   } else {
+  //     loadDetailData(billNoticeSearch, orgId, orgType);
+  //   }
+  // };
 
   return (
     <Layout>
@@ -398,46 +394,55 @@ function Main() {
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>
-        <Tabs defaultActiveKey="1" onChange={changeTab}>
-          <TabPane tab="账单列表" key="1">
-            {/* <div style={{ marginBottom: '20px', padding: '3px 2px' }}
+        {/* <Tabs defaultActiveKey="1" onChange={changeTab}>
+          <TabPane tab="账单列表" key="1"> */}
+        {/* <div style={{ marginBottom: '20px', padding: '3px 2px' }}
               onChange={(value) => {
                 var params = Object.assign({}, billCheckSearchParams, { billChecktype: value });
                 setBillCheckSearchParams(params);
               }}> */}
-            <div style={{ marginBottom: '10px' }}>
-              <Select placeholder="账单类型" style={{ width: '150px', marginRight: '5px' }}
-                onChange={(value: string) => {
-                  setBillType(value);
-                }}>
-                <Select.Option value="通知单">通知单</Select.Option>
-                <Select.Option value="催款单">催款单</Select.Option>
-                <Select.Option value="催缴函">催缴函</Select.Option>
-                <Select.Option value="律师函">律师函</Select.Option>
-              </Select>
-              <Select placeholder="模版类型" style={{ width: '150px', marginRight: '5px' }}
-                onChange={(value: string) => {
-                  setTemplateId(value);
-                }}
-              >
-                {
-                  (tempListData || []).map(item => {
-                    return <Select.Option value={item.value}>{item.title}</Select.Option>
-                  })
-                }
-              </Select>
-              <Search
-                className="search-input"
-                placeholder="搜索单号"
-                style={{ width: 200 }}
-                onChange={e => {
-                  // var params = Object.assign({}, billCheckSearchParams, { search: e.target.value });
-                  // setBillCheckSearchParams(params);
-                  setSearch(e.target.value);
-                }}
-              />
+        <div style={{ marginBottom: '10px' }}>
+          <Select placeholder="账单类型" style={{ width: '120px', marginRight: '5px' }}
+            onChange={(value: string) => {
+              setBillType(value);
+            }}>
+            <Select.Option value="通知单">通知单</Select.Option>
+            <Select.Option value="催款单">催款单</Select.Option>
+            <Select.Option value="催缴函">催缴函</Select.Option>
+            <Select.Option value="律师函">律师函</Select.Option>
+          </Select>
+          <Select placeholder="模版类型" style={{ width: '150px', marginRight: '5px' }}
+            onChange={(value: string) => {
+              setTemplateId(value);
+            }}
+          >
+            {
+              (tempListData || []).map(item => {
+                return <Select.Option value={item.value}>{item.title}</Select.Option>
+              })
+            }
+          </Select>
 
-              {/* <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
+          <MonthPicker placeholder="账单归属年月"
+            style={{ width: '140px', marginRight: '5px' }}
+            onChange={(date,dateString) => { 
+              debugger
+              setBelongDate(dateString);
+            }}
+          />
+
+          <Search
+            className="search-input"
+            placeholder="搜索单号"
+            style={{ width: 200 }}
+            onChange={e => {
+              // var params = Object.assign({}, billCheckSearchParams, { search: e.target.value });
+              // setBillCheckSearchParams(params);
+              setSearch(e.target.value);
+            }}
+          />
+
+          {/* <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
                 onClick={() => {
                   if (selectIds.length > 1) {
                     Modal.confirm({
@@ -493,26 +498,25 @@ function Main() {
                     }
                   }
                 }}
-                disabled={ifVerify ? true : false}
-              >
+                disabled={ifVerify ? true : false}>
                 <Icon type="check-square" />
                 审核
               </Button> */}
 
-              <Button type="primary" style={{ marginLeft: '10px' }}
-                onClick={() => { loadData(search, orgId, orgType) }}
-              >
-                <Icon type="search" />
+          <Button type="primary" style={{ marginLeft: '10px' }}
+            onClick={() => { loadData(search, orgId, orgType) }}
+          >
+            <Icon type="search" />
                 查询
               </Button>
 
-              <Dropdown overlay={menu}  >
-                <Button style={{ float: 'right', marginLeft: '10px' }}>
-                  更多<Icon type="down" />
-                </Button>
-              </Dropdown>
+          <Dropdown overlay={menu}  >
+            <Button style={{ float: 'right', marginLeft: '10px' }}>
+              更多<Icon type="down" />
+            </Button>
+          </Dropdown>
 
-              {/* <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
+          {/* <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
                 onClick={() => { showModify(null, true) }}
               >
                 <Icon type="plus" />
@@ -520,51 +524,52 @@ function Main() {
               </Button> */}
 
 
-              <AuthButton
-                style={{ float: 'right', marginLeft: '10px' }}
-                onClick={() => showModify(null, true)}
-                module="Billnotice"
-                code="add"
-                btype="primary">
-                <Icon type="plus" />
+          <AuthButton
+            style={{ float: 'right', marginLeft: '10px' }}
+            onClick={() => showModify(null, true)}
+            module="Billnotice"
+            code="add"
+            btype="primary">
+            <Icon type="plus" />
                 新增
                </AuthButton>
 
-            </div>
+        </div>
 
-            <ListTable
-              onchange={(paginationConfig, filters, sorter) => {
-                loadData(search, orgId, orgType, paginationConfig, sorter)
+        <ListTable
+          onchange={(paginationConfig, filters, sorter) => {
+            loadData(search, orgId, orgType, paginationConfig, sorter)
+          }
+          }
+          loading={loading}
+          pagination={billCheckPagination}
+          data={noticeData}
+          showCheckBill={(id) => {
+            if (id != null && id != '') {
+              setId(id);
+            }
+            setShowCheckBillVisible(true);
+          }}
+          reload={() => initLoadData(orgId, orgType, search)}
+          getRowSelect={(records) => {
+            // setSelectRecords(records);
+            if (records.length == 1) {
+              setId(records[0].billId);
+              if (records[0].ifVerify == 1) {
+                setIfVerify(true);
+              } else {
+                setIfVerify(false);
               }
-              }
-              loading={loading}
-              pagination={billCheckPagination}
-              data={noticeData}
-              showCheckBill={(id) => {
-                if (id != null && id != '') {
-                  setId(id);
-                }
-                setShowCheckBillVisible(true);
-              }}
-              reload={() => initLoadData(orgId, orgType, search)}
-              getRowSelect={(records) => {
-                // setSelectRecords(records);
-                if (records.length == 1) {
-                  setId(records[0].billId);
-                  if (records[0].ifVerify == 1) {
-                    setIfVerify(true);
-                  } else {
-                    setIfVerify(false);
-                  }
-                }
-                var recordList: Array<string> = [];
-                records.forEach(record => {
-                  recordList.push(record.billId)
-                })
-                setSelectIds(recordList);
-              }}
-            />
-          </TabPane>
+            }
+            var recordList: Array<string> = [];
+            records.forEach(record => {
+              recordList.push(record.billId)
+            })
+            setSelectIds(recordList);
+          }}
+        />
+
+        {/* </TabPane>
           <TabPane tab="账单明细" key="2">
             <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
               <Search
@@ -595,7 +600,7 @@ function Main() {
               }}
             />
           </TabPane>
-        </Tabs>
+        </Tabs> */}
       </Content>
       <Modify
         visible={modifyVisible}

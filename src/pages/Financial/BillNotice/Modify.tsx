@@ -31,10 +31,10 @@ const Modify = (props: ModifyProps) => {
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [loading, setLoading] = useState<boolean>(false);
   const { getFieldDecorator } = form;
-  const title = id ? "修改通知单" : "新增通知单"; 
-  const [orgTreeData, setOrgTreeData] = useState<any>({}); 
+  const title = id ? "修改通知单" : "新增通知单";
+  const [orgTreeData, setOrgTreeData] = useState<any>({});
   useEffect(() => {
-    if (visible) { 
+    if (visible) {
       GetOrgs().then(res => {
         setOrgTreeData(res);
       });
@@ -124,6 +124,19 @@ const Modify = (props: ModifyProps) => {
               <Form layout="vertical" hideRequiredMark>
                 <Row gutter={24}>
                   <Col span={8}>
+                    <Form.Item required label="生成方式">
+                      {getFieldDecorator('calType', {
+                        initialValue: infoDetail.calType ? infoDetail.calType : "按房屋生成",
+                        rules: [{ required: true, message: '请选择生成方式' }]
+                      })(
+                        <Select placeholder="==请选择==" style={{ width: '100%', marginRight: '5px' }}>
+                          {/* <Select.Option value="按户生成">按户生成</Select.Option> */}
+                          <Select.Option value="按房屋生成">按房屋生成</Select.Option>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col span={8}>
                     <Form.Item required label="账单起始日">
                       {getFieldDecorator('beginDate', {
                         initialValue: infoDetail.beginDate == null ? moment(new Date()).startOf('month') : moment(infoDetail.beginDate),
@@ -143,20 +156,6 @@ const Modify = (props: ModifyProps) => {
                       )}
                     </Form.Item>
                   </Col>
-
-                  <Col span={8}>
-                    <Form.Item required label="生成方式">
-                      {getFieldDecorator('calType', {
-                        initialValue: infoDetail.calType ? infoDetail.calType : "按房屋生成",
-                        rules: [{ required: true, message: '请选择生成方式' }]
-                      })(
-                        <Select placeholder="==请选择==" style={{ width: '100%', marginRight: '5px' }}>
-                          {/* <Select.Option value="按户生成">按户生成</Select.Option> */}
-                          <Select.Option value="按房屋生成">按房屋生成</Select.Option>
-                        </Select>
-                      )}
-                    </Form.Item>
-                  </Col>
                 </Row>
                 <Row gutter={24}>
 
@@ -170,6 +169,20 @@ const Modify = (props: ModifyProps) => {
                       )}
                     </Form.Item>
                   </Col> */}
+
+                  <Col span={8}>
+                    <Form.Item required label="账单归属年月">
+                      {getFieldDecorator('belongDate', {
+                        initialValue: infoDetail.belongDate == null ?
+                          moment(new Date()) :
+                          moment(infoDetail.belongDate),
+                        rules: [{ required: true, message: '请选择账单归属年月' }],
+                      })(
+                        <MonthPicker style={{ width: '100%' }} />
+                      )}
+                    </Form.Item>
+                  </Col>
+
                   <Col span={16}>
                     <Form.Item required label="账单模板"  >
                       {getFieldDecorator('templateId', {
@@ -186,15 +199,31 @@ const Modify = (props: ModifyProps) => {
                       )}
                     </Form.Item>
                   </Col>
+                </Row>
+                <Row gutter={24}>
                   <Col span={8}>
-                    <Form.Item required label="账单归属年月"  >
-                      {getFieldDecorator('belongDate', {
-                        initialValue: infoDetail.belongDate == null ?
-                          moment(new Date()) :
-                          moment(infoDetail.belongDate),
-                        rules: [{ required: true, message: '请选择账单归属年月' }],
+                    <Form.Item required label="包含前期欠费">
+                      {getFieldDecorator('includeBefore', {
+                        initialValue: infoDetail.includeBefore == null ? false : true,
                       })(
-                        <MonthPicker style={{ width: '100%' }} />
+                        <Checkbox disabled={!isEdit} ></Checkbox>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col span={16}>
+                    <Form.Item required label="所属机构"  >
+                      {getFieldDecorator('organizeId', {
+                        initialValue: infoDetail.organizeId,
+                        rules: [{ required: true, message: '请选择所属机构' }],
+                      })(
+                        <TreeSelect
+                          style={{ width: '100%' }}
+                          dropdownStyle={{ maxHeight: 310, overflow: 'auto' }}
+                          treeData={orgTreeData}
+                          placeholder="=请选择="
+                          treeDefaultExpandAll
+                          disabled={id ? true : false}
+                        />
                       )}
                     </Form.Item>
                   </Col>
@@ -223,36 +252,6 @@ const Modify = (props: ModifyProps) => {
                             }}
                           />
                         </div>
-                      )}
-                    </Form.Item>
-                  </Col>
-                </Row>
-                <Row gutter={24}>
-
-                  <Col span={16}>
-                    <Form.Item required label="所属机构"  >
-                      {getFieldDecorator('organizeId', {
-                        initialValue: infoDetail.organizeId,
-                        rules: [{ required: true, message: '请选择所属机构' }],
-                      })(
-                        <TreeSelect
-                          style={{ width: '100%' }}
-                          dropdownStyle={{ maxHeight: 310, overflow: 'auto' }}
-                          treeData={orgTreeData}
-                          placeholder="=请选择="
-                          treeDefaultExpandAll
-                          disabled={id ? true : false}
-                        />
-                      )}
-                    </Form.Item>
-                  </Col>
-
-                  <Col span={8}>
-                    <Form.Item required label="包含前期欠费">
-                      {getFieldDecorator('includeBefore', {
-                        initialValue: infoDetail.includeBefore == null ? false : true,
-                      })(
-                        <Checkbox disabled={!isEdit} ></Checkbox>
                       )}
                     </Form.Item>
                   </Col>
@@ -293,7 +292,7 @@ const Modify = (props: ModifyProps) => {
                         return;
                       }
 
-                      form.validateFields((errors, values) => { 
+                      form.validateFields((errors, values) => {
 
                         if (!errors) {
                           setLoading(true);
@@ -379,7 +378,7 @@ const Modify = (props: ModifyProps) => {
                     units: JSON.stringify(unitData),
                     items: JSON.stringify(selectedFeeId)
                   }
-                  SaveBill(newData).then((res) => { 
+                  SaveBill(newData).then((res) => {
                     closeDrawer();
                     reload();
                     setLoading(false);

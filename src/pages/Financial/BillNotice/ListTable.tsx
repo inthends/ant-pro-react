@@ -40,18 +40,20 @@ function ListTable(props: ListTableProps) {
 
   const columns = [
     {
+      title: '单号',
+      dataIndex: 'billCode',
+      key: 'billCode',
+      width: 220,
+      sorter: true,
+      fixed:'left'
+    },
+    {
       title: '单据类型',
       dataIndex: 'billType',
       key: 'billType',
       width: 100,
       sorter: true
-    }, {
-      title: '单号',
-      dataIndex: 'billCode',
-      key: 'billCode',
-      width: 220,
-      sorter: true
-    },
+    }, 
     {
       title: '单据日期',
       dataIndex: 'createDate',
@@ -59,6 +61,15 @@ function ListTable(props: ListTableProps) {
       width: 100,
       sorter: true,
       render: val => val ? moment(val).format('YYYY-MM-DD') : ''
+    },
+    {
+      title: '缴费状态',
+      dataIndex: 'isClear',
+      key: 'isClear',
+      width: 100,
+      align: 'center',
+      sorter: true,
+      render: val => val ? <Tag color="#19d54e">已缴</Tag> : <Tag color="#e4aa5b">未缴</Tag>
     },
     // {
     //   title: '房产编号',
@@ -78,33 +89,29 @@ function ListTable(props: ListTableProps) {
       title: '账单金额',
       dataIndex: 'allAmount',
       key: 'allAmount',
+      align: 'center',
       width: 100
     },
     {
       title: '减免金额',
       dataIndex: 'reductionAmount',
       key: 'reductionAmount',
+      align: 'center',
       width: 100
     },
     {
       title: '冲抵金额',
       dataIndex: 'offsetAmount',
       key: 'offsetAmount',
+      align: 'center',
       width: 100
     },
     {
       title: '应收金额',
       dataIndex: 'lastAmount',
       key: 'lastAmount',
-      width: 100
-    },
-    {
-      title: '缴费状态',
-      dataIndex: 'isClear',
-      key: 'isClear',
-      width: 80,
       align: 'center',
-      render: val => val ? <Tag color="#19d54e">已缴</Tag> : <Tag color="#e4aa5b">未缴</Tag>
+      width: 100
     },
     {
       title: '审核状态',
@@ -128,12 +135,12 @@ function ListTable(props: ListTableProps) {
       sorter: true,
       render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
-    {
-      title: '审核情况',
-      dataIndex: 'verifyMemo',
-      key: 'verifyMemo',
-      width: 100,
-    },
+    // {
+    //   title: '审核情况',
+    //   dataIndex: 'verifyMemo',
+    //   key: 'verifyMemo',
+    //   width: 100,
+    // },
     // {
     //   title: '交房日期',
     //   dataIndex: 'handoverDate',

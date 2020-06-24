@@ -1,4 +1,4 @@
-//明细
+//明细，去掉，明细查询不实用
 import Page from '@/components/Common/Page';
 import { Form, Table } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
