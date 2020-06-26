@@ -304,7 +304,12 @@ export default [
             icon: 'gateway',
             component: './Estate/PollingLine/Main',
           },
-
+          {
+            name: 'pollingtask',
+            path: '/estate/pollingtask',
+            icon: 'gateway',
+            component: './Estate/PollingTask/Main',
+          }, 
 
           {
             name: 'devicetype',

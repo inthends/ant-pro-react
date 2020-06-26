@@ -75,7 +75,7 @@ function ListTable(props: ListTableProps) {
           case 4:
             return <Tag color="#36d54e">待检验</Tag>;
           case 5:
-            return <Tag color="#009688">已完成</Tag>;
+            return <Tag color="#009688">已归档</Tag>;
           case -1:
             return <Tag color="#d82d2d">已作废</Tag>
           default:

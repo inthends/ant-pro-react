@@ -245,7 +245,7 @@ function Main() {
             <Option value="2" >待完成</Option>
             <Option value="3">待回访</Option>
             <Option value="4">待检验</Option>
-            <Option value="5">已完成</Option>
+            <Option value="5">已归档</Option>
             <Option value="-1">已作废</Option>
           </Select>
 

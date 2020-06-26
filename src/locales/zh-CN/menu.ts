@@ -56,6 +56,7 @@ export default {
   'menu.estate.complaint': '投诉管理', 
   'menu.estate.pollingcontent': '巡检内容',
   'menu.estate.pollingline': '巡检路线',
+  'menu.estate.pollingtask': '巡检任务',
 
   'menu.estate.devicetype': '设备种类',
   'menu.estate.device': '设备资料',
