@@ -116,7 +116,7 @@ const ShowLink = (props: ShowLinkProps) => {
     <Drawer
       title={title}
       placement="right"
-      width={850}
+      width={800}
       onClose={close}
       visible={showVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
@@ -140,7 +140,7 @@ const ShowLink = (props: ShowLinkProps) => {
 
         <Form layout='vertical'>
           <Row gutter={6}>
-            <Col lg={5}>
+            <Col lg={6}>
               <Form.Item label="单号" >
                 {infoDetail.billCode}
               </Form.Item>
@@ -150,7 +150,7 @@ const ShowLink = (props: ShowLinkProps) => {
                 {GetStatus(infoDetail.status)}
               </Form.Item>
             </Col>
-            <Col lg={4}>
+            <Col lg={3}>
               <Form.Item label="联系人" >
                 {infoDetail.contactName}
               </Form.Item>
@@ -227,7 +227,7 @@ const ShowLink = (props: ShowLinkProps) => {
             ) : null}
 
             {infoDetail.status > 4 ?
-              (<Card title="完成情况" className={infoDetail.status == 5 ? styles.card2 : styles.card} >
+              (<Card title="完成情况" className={infoDetail.status > 5 ? styles.card2 : styles.card} >
                 <Row gutter={24}>
                   <Col lg={6}>
                     <Form.Item label="用时(分钟)">

@@ -95,7 +95,7 @@ const Modify = (props: ModifyProps) => {
   const dispatch = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        const newData = infoDetail ? { ...infoDetail, ...values } : values; 
+        const newData = infoDetail ? { ...infoDetail, ...values } : values;
         Dispatch({ ...newData, keyvalue: newData.id }).then(res => {
           message.destroy();//防止重复弹出提示
           message.success('派单成功');
@@ -384,10 +384,12 @@ const Modify = (props: ModifyProps) => {
 
   //选择模板
   const [modalvisible, setModalVisible] = useState<boolean>(false);
+
   //选择打印模板
   const showModal = () => {
     setModalVisible(true);
   };
+
   const closeModal = () => {
     setModalVisible(false);
   };
@@ -421,39 +423,40 @@ const Modify = (props: ModifyProps) => {
 
           {/* <Paragraph>
           来自{infoDetail.repairArea}，联系人：{infoDetail.contactName}，地址：{infoDetail.address}，电话：<a>{infoDetail.contactLink}</a>，属于{infoDetail.isPaid == '是' ? '有偿服务' : '无偿服务'}，报修时间：{infoDetail.billDate}，内容如下
-        </Paragraph>
-        {infoDetail.repairContent} */}
+             </Paragraph>
+           {infoDetail.repairContent}
+         */}
 
           <Form layout='vertical'>
             <Row gutter={4}>
               <Col lg={6}>
-                <Form.Item label="单号" >
+                <Form.Item label="单号">
                   {infoDetail.billCode}
                 </Form.Item>
               </Col>
               <Col lg={3}>
-                <Form.Item label="状态" >
+                <Form.Item label="状态">
                   {GetStatus(infoDetail.status)}
                 </Form.Item>
               </Col>
               <Col lg={4}>
-                <Form.Item label="报修时间" >
+                <Form.Item label="报修时间">
                   {infoDetail.billDate}
                 </Form.Item>
               </Col>
 
               <Col lg={3}>
-                <Form.Item label="单据来源"  >
+                <Form.Item label="单据来源">
                   {infoDetail.sourceType}
                 </Form.Item>
               </Col>
               <Col lg={4}>
-                <Form.Item label="联系人" >
+                <Form.Item label="联系人">
                   {infoDetail.contactName}
                 </Form.Item>
               </Col>
               <Col lg={4}>
-                <Form.Item label="联系电话" >
+                <Form.Item label="联系电话">
                   {infoDetail.contactLink}
                 </Form.Item>
               </Col>
@@ -967,72 +970,83 @@ const Modify = (props: ModifyProps) => {
             </Form>
           ) : null
         }
-         </Spin>
+      </Spin>
 
-        <div
-          style={{
-            position: 'absolute',
-            left: 0,
-            bottom: 0,
-            width: '100%',
-            borderTop: '1px solid #e9e9e9',
-            padding: '10px 16px',
-            background: '#fff',
-            textAlign: 'right',
-          }}>
+      <div
+        style={{
+          position: 'absolute',
+          left: 0,
+          bottom: 0,
+          width: '100%',
+          borderTop: '1px solid #e9e9e9',
+          padding: '10px 16px',
+          background: '#fff',
+          textAlign: 'right',
+        }}>
 
-          <Button onClick={close} style={{ marginRight: 8 }}>
-            取消
+         <Button onClick={close} style={{ marginRight: 8 }}>
+          取消
+         </Button>
+
+         <Button onClick={showModal}
+          disabled={loading}
+          type="primary" style={{ marginRight: 8 }} >
+          打印
+         </Button>
+
+        {infoDetail.status == 1 ? (
+
+          <Button onClick={dispatch} type="primary">
+            派单
           </Button>
 
-          <Button onClick={showModal}
-            disabled={loading}
-            type="primary" style={{ marginRight: 8 }}>
-            打印
-         </Button>
+        ) : null}
 
-          {infoDetail.status == 1 ? (
+        {infoDetail.status == 2 && infoDetail.receiverId == localStorage.getItem('userid') ? (
+          <Button onClick={receive} type="primary">
+            接单
+          </Button>
 
-            <Button onClick={dispatch} type="primary">
-              派单
+        ) : null}
+
+        {infoDetail.status == 3 ? (
+
+          <span>
+            <Button onClick={start} type="primary" style={{ marginRight: 8 }}>
+              开工
             </Button>
-          ) : null}
-          {infoDetail.status == 2 && infoDetail.receiverId == localStorage.getItem('userid') ? (
-            <Button onClick={receive} type="primary">
-              接单
+
+            <Button onClick={change} type="primary">
+              转单
             </Button>
-          ) : null}
 
-          {infoDetail.status == 3 ? (
-            <div>
+          </span>
 
-              <Button onClick={start} type="primary" style={{ marginRight: 8 }}>
-                开工
-         </Button>
-              <Button onClick={change} type="primary">
-                转单
-            </Button>
-            </div>
-          ) : null}
+        ) : null}
 
-          {infoDetail.status == 4 ? (
-            <div>
+        {infoDetail.status == 4 ? (
+          <div>
 
-              {/* <Button onClick={start} type="primary" style={{ marginRight: 8 }}>
+            {/* <Button onClick={start} type="primary" style={{ marginRight: 8 }}>
               呼叫增援
-         </Button>
+            </Button>
             <Button onClick={start} type="primary" style={{ marginRight: 8 }}>
               暂停
-        </Button> */}
-              <Button onClick={start} type="danger" style={{ marginRight: 8 }}>
-                退单
-        </Button>
-              <Button onClick={handle} type="primary">
-                完成
-        </Button></div>
-          ) : null}
+            </Button> */}
 
-          {/* {infoDetail.status == 5 ? (
+            <Button onClick={start} type="danger" style={{ marginRight: 8 }}>
+              退单
+            </Button>
+
+            <Button onClick={handle} type="primary">
+              完成
+            </Button>
+
+          </div>
+
+        ) : null}
+
+        {/* {infoDetail.status == 5 ? (
           <div>
             <Button onClick={close} style={{ marginRight: 8 }}>
               关闭
@@ -1043,19 +1057,19 @@ const Modify = (props: ModifyProps) => {
           </div>
         ) : null} */}
 
-          {infoDetail.status == 6 ? (
-            <Button onClick={check} type="primary">
-              检验
-            </Button>
-          ) : null}
+        {infoDetail.status == 6 ? (
+          <Button onClick={check} type="primary">
+            检验
+          </Button>
+        ) : null}
 
-          {infoDetail.status == 7 ? (
+        {infoDetail.status == 7 ? ( 
+          <Button onClick={approve} type="primary">
+            审核
+          </Button>
+        ) : null}
 
-            <Button onClick={approve} type="primary">
-              审核
-            </Button>
-          ) : null}
-          {/* 
+        {/* 
         {infoDetail.status == 7 ? (
           <div>
             <Button onClick={close} style={{ marginRight: 8 }}>
@@ -1063,27 +1077,23 @@ const Modify = (props: ModifyProps) => {
           </Button>
           </div>
         ) : null} */}
+      </div>
 
-        </div>
+      <AddRepairFee
+        modifyVisible={addFeelaVisible}
+        closeDrawer={closeAddFee}
+        mainId={feeId}
+        roomId={organizeId}
+        adminOrgId={adminOrgId}
+        linkId={id}
+        edit={true} />
 
-
-        <AddRepairFee
-          modifyVisible={addFeelaVisible}
-          closeDrawer={closeAddFee}
-          mainId={feeId}
-          roomId={organizeId}
-          adminOrgId={adminOrgId}
-          linkId={id}
-          edit={true}
-        />
-
-        <SelectTemplate
-          id={id}
-          visible={modalvisible}
-          closeModal={closeModal}
-          unitId={infoDetail.roomId}
-        />
-     
+      <SelectTemplate
+        id={id}
+        visible={modalvisible}
+        closeModal={closeModal}
+        unitId={infoDetail.roomId}
+      />
 
     </Drawer >
   );

@@ -1,11 +1,11 @@
 
 import {
   Spin, Upload, Modal, Menu, Dropdown, Icon, Tabs, Select, Button, Card, Col,
-  Drawer, Form, Input, message, Row
+  Drawer, Form, Input, message, Row, DatePicker
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetFilesData, RemoveFile, SaveForm, ChangeToRepair, ChangeToComplaint,Visit } from './Main.service';
+import { GetFilesData, RemoveFile, SaveForm, ChangeToRepair, ChangeToComplaint, Visit, Check } from './Main.service';
 import { GetRoomUser } from '@/services/commonItem';
 import styles from './style.less';
 import CommentBox from './CommentBox';
@@ -13,6 +13,7 @@ import AddMemo from './AddMemo';
 const { Option } = Select;
 const { TextArea } = Input;
 const { TabPane } = Tabs;
+import moment from 'moment';
 import SelectHouse from './SelectHouse';
 import SelectTemplate from '../../System/Template/SelectTemplate'
 
@@ -329,6 +330,22 @@ const Modify = (props: ModifyProps) => {
     });
   };
 
+
+  //检验
+  const check = () => {
+    form.validateFields((errors, values) => {
+      if (!errors) {
+        const newData = data ? { ...data, ...values } : values;
+        newData.testDate = values.testDate.format('YYYY-MM-DD HH:mm');
+        Check({ ...newData, keyvalue: newData.id }).then(res => {
+          message.success('检验完成');
+          closeDrawer();
+          reload();
+        });
+      }
+    });
+  };
+
   const [selectHouseVisible, setSelectHouseVisible] = useState<boolean>(false);
 
   const closeSelectHouse = () => {
@@ -344,6 +361,11 @@ const Modify = (props: ModifyProps) => {
   };
   const closeModal = () => {
     setModalVisible(false);
+  };
+
+  const disabledTestDate = (current) => {
+    // Can not select days before today and today
+    return current && current.isBefore(moment(infoDetail.endDate), 'day');
   };
 
   return (
@@ -730,95 +752,169 @@ const Modify = (props: ModifyProps) => {
                   </Row>
                 </Card>)}
 
-              {
-                infoDetail.status == 3 ? (
-                  <Card title="回访情况" className={styles.card2} hoverable>
+              {infoDetail.status == 3 ? (
+                <Card title="回访情况" className={styles.card2} hoverable>
+                  <Row gutter={24}>
+                    <Col lg={6}>
+                      <Form.Item label="回访方式" required>
+                        {getFieldDecorator('returnVisitMode', {
+                          initialValue: '在线'
+                        })(
+                          <Select >
+                            <Option value="在线">在线</Option>
+                            <Option value="电话">电话</Option>
+                            <Option value="上门">上门</Option>
+                            <Option value="其他">其他</Option>
+                          </Select>
+                        )}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={6}>
+                      <Form.Item label="客户评价" required>
+                        {getFieldDecorator('custEvaluate', {
+                          initialValue: '4'
+                        })(
+                          <Select >
+                            <Option value="5">非常满意</Option>
+                            <Option value="4">满意</Option>
+                            <Option value="3">一般</Option>
+                            <Option value="2">不满意</Option>
+                            <Option value="1">非常不满意</Option>
+                          </Select>
+                        )}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={6}>
+                      <Form.Item label="回访时间" >
+                        {getFieldDecorator('returnVisitDate', {
+                        })(<Input placeholder="自动获取时间" readOnly />)}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={6}>
+                      <Form.Item label="回访人">
+                        {getFieldDecorator('returnVisiterName', {
+                        })(<Input placeholder="自动获取回访人" readOnly />)}
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Row gutter={24}>
+                    <Col lg={24}>
+                      <Form.Item label="回访结果" required>
+                        {getFieldDecorator('returnVisitResult', {
+                          rules: [{ required: true, message: '请输入回访结果' }],
+                        })(<Input placeholder="请输入回访结果" />)}
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Card>
+              ) :
+
+                infoDetail.status > 3 && infoDetail.repairArea == '客户区域' ? (<Card title="回访情况" className={styles.card2}  >
+                  <Row gutter={24}>
+                    <Col lg={6}>
+                      <Form.Item label="回访方式"  >
+                        {infoDetail.returnVisitMode}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={6}>
+                      <Form.Item label="客户评价"  >
+                        {GetCustEvaluate(infoDetail.custEvaluate)}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={6}>
+                      <Form.Item label="回访时间" >
+                        {infoDetail.returnVisitDate}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={6}>
+                      <Form.Item label="回访人">
+                        {infoDetail.returnVisiterName}
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Row gutter={24}>
+                    <Col lg={24}>
+                      <Form.Item label="回访结果" >
+                        {infoDetail.returnVisitResult}
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Card>) : null}
+
+              {infoDetail.status == 4 ?
+                (<Card title="检验情况" className={styles.card2} hoverable>
+                  <Row gutter={24}>
+                    <Col lg={7}>
+                      <Form.Item label="检验时间" required>
+                        {getFieldDecorator('testDate', {
+                          initialValue: infoDetail.testDate,
+                          rules: [{ required: true, message: '请选择检验时间' }],
+                        })(
+                          <DatePicker
+                            format="YYYY-MM-DD HH:mm"
+                            placeholder="请选择完成时间"
+                            showTime={true}
+                            disabledDate={disabledTestDate}
+                          // disabledTime={disabledDateTime}
+                          />
+                        )}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={5}>
+                      <Form.Item label="检验人"  >
+                        {getFieldDecorator('testerName', {
+                          initialValue: infoDetail.testerName,
+                        })(<Input placeholder="自动获取" readOnly />)}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={5}>
+                      <Form.Item label="检验结果" required>
+                        {getFieldDecorator('testResult', {
+                          initialValue: '1',
+                          rules: [{ required: true, message: '请选择检验结果' }],
+                        })(
+                          <Select >
+                            <Option value="1">合格</Option>
+                            <Option value="0">不合格</Option>
+                          </Select>
+                        )}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={7}>
+                      <Form.Item label="检验说明"  >
+                        {getFieldDecorator('testRemark', {
+                          initialValue: infoDetail.testRemark
+                        })(<Input placeholder="请输入检验说明" />)}
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Card>) :
+                 infoDetail.status > 4 && infoDetail.repairArea == '公共区域' ?
+                  (<Card title="检验情况" className={styles.card2} hoverable>
                     <Row gutter={24}>
-                      <Col lg={6}>
-                        <Form.Item label="回访方式" required>
-                          {getFieldDecorator('returnVisitMode', {
-                            initialValue: '在线'
-                          })(
-                            <Select >
-                              <Option value="在线">在线</Option>
-                              <Option value="电话">电话</Option>
-                              <Option value="上门">上门</Option>
-                              <Option value="其他">其他</Option>
-                            </Select>
-                          )}
+                      <Col lg={7}>
+                        <Form.Item label="检验时间" >
+                          {infoDetail.testDate}
                         </Form.Item>
                       </Col>
-                      <Col lg={6}>
-                        <Form.Item label="客户评价" required>
-                          {getFieldDecorator('custEvaluate', {
-                            initialValue: '4'
-                          })(
-                            <Select >
-                              <Option value="5">非常满意</Option>
-                              <Option value="4">满意</Option>
-                              <Option value="3">一般</Option>
-                              <Option value="2">不满意</Option>
-                              <Option value="1">非常不满意</Option>
-                            </Select>
-                          )}
+                      <Col lg={5}>
+                        <Form.Item label="检验人"  >
+                          {infoDetail.testerName}
                         </Form.Item>
                       </Col>
-                      <Col lg={6}>
-                        <Form.Item label="回访时间" >
-                          {getFieldDecorator('returnVisitDate', {
-                          })(<Input placeholder="自动获取时间" readOnly />)}
+                      <Col lg={5}>
+                        <Form.Item label="检验结果" required>
+                          {infoDetail.testResult == 1 ? '合格' : '不合格'}
                         </Form.Item>
                       </Col>
-                      <Col lg={6}>
-                        <Form.Item label="回访人">
-                          {getFieldDecorator('returnVisiterName', {
-                          })(<Input placeholder="自动获取回访人" readOnly />)}
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row gutter={24}>
-                      <Col lg={24}>
-                        <Form.Item label="回访结果" required>
-                          {getFieldDecorator('returnVisitResult', {
-                            rules: [{ required: true, message: '请输入回访结果' }],
-                          })(<Input placeholder="请输入回访结果" />)}
+                      <Col lg={7}>
+                        <Form.Item label="检验说明"  >
+                          {infoDetail.testRemark}
                         </Form.Item>
                       </Col>
                     </Row>
                   </Card>
-                ) :
-
-                  infoDetail.status > 3 ? (<Card title="回访情况" className={styles.card2}  >
-                    <Row gutter={24}>
-                      <Col lg={6}>
-                        <Form.Item label="回访方式"  >
-                          {infoDetail.returnVisitMode}
-                        </Form.Item>
-                      </Col>
-                      <Col lg={6}>
-                        <Form.Item label="客户评价"  >
-                          {GetCustEvaluate(infoDetail.custEvaluate)}
-                        </Form.Item>
-                      </Col>
-                      <Col lg={6}>
-                        <Form.Item label="回访时间" >
-                          {infoDetail.returnVisitDate}
-                        </Form.Item>
-                      </Col>
-                      <Col lg={6}>
-                        <Form.Item label="回访人">
-                          {infoDetail.returnVisiterName}
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row gutter={24}>
-                      <Col lg={24}>
-                        <Form.Item label="回访结果" >
-                          {infoDetail.returnVisitResult}
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                  </Card>) : null}
+                  ) : null}
             </Form>
           </TabPane>
           {data ? (
@@ -871,9 +967,14 @@ const Modify = (props: ModifyProps) => {
             </Dropdown>
           </span>) : null}
 
-        {(infoDetail.status && infoDetail.status == 3) ? (
+        {infoDetail.status == 3 ? (
           <Button onClick={visit} type="primary">
             回访
+          </Button>) : null}
+
+        {infoDetail.status == 4 ? (
+          <Button onClick={check} type="primary">
+            检验
           </Button>) : null}
 
         {/* {(infoDetail.status && infoDetail.status == 4) ? (

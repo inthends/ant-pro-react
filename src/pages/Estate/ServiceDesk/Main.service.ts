@@ -82,6 +82,15 @@ export function Visit(data): Promise<any> {
     .then(getResult as any);
 }
 
+
+//检验
+export function Check(data): Promise<any> {
+  return request
+    .post(process.env.basePath + `/ServiceDesk/Check`, { data: objToFormdata(data) })
+    .then(getResult as any);
+}
+
+
 //获取实体
 export function GetEntity(keyvalue): Promise<any> {
   return request.get(process.env.basePath + `/ServiceDesk/GetEntity?keyvalue=${keyvalue}`).then(getResult as any);
