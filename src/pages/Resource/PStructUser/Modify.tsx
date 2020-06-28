@@ -1,8 +1,8 @@
 // import { TreeEntity } from '@/model/models';
-import { Tabs, Table , DatePicker, Button, Card, Col, Drawer, Form, Input, message, Row, Select, TreeSelect, Checkbox } from 'antd';
+import { Tabs, Table, DatePicker, Button, Card, Col, Drawer, Form, Input, message, Row, Select, TreeSelect, Checkbox } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import {GetUnitPageListJson, ExistCellphone, ExistCode, SaveForm } from './PStructUser.service';
+import { GetUnitPageListJson, ExistCellphone, ExistCode, SaveForm } from './PStructUser.service';
 import { GetCommonItems, GetOrgs } from '@/services/commonItem';
 import { DefaultPagination } from "@/utils/defaultSetting";
 import { ColumnProps, PaginationConfig } from "antd/lib/table";
@@ -213,13 +213,13 @@ const Modify = (props: ModifyProps) => {
       dataIndex: "state",
       key: "state",
       width: 80,
-      align:'center', 
-    }, 
+      align: 'center',
+    },
     {
       title: "房产全称",
       dataIndex: "allName",
       key: "allName",
-    } 
+    }
   ] as ColumnProps<any>[];
 
   return (
@@ -450,6 +450,39 @@ const Modify = (props: ModifyProps) => {
                           </Form.Item>
                         </Col>
                       </Row>
+
+                      <Row gutter={24}>
+                        <Col lg={12}>
+                          <Form.Item label="经营业态">
+                            {getFieldDecorator('businessFormat', {
+                              initialValue: infoDetail.businessFormat,
+                            })(<Input placeholder="请输入经营业态" />)}
+                          </Form.Item>
+                        </Col>
+                        <Col lg={12}>
+                          <Form.Item label="招牌名称">
+                            {getFieldDecorator('signboardName', {
+                              initialValue: infoDetail.signboardName,
+                            })(<Input placeholder="请输入招牌名称" />)}
+                          </Form.Item>
+                        </Col>
+                      </Row>
+                      <Row gutter={24}>
+                        <Col lg={12}>
+                          <Form.Item label="品牌名称">
+                            {getFieldDecorator('brandName', {
+                              initialValue: infoDetail.brandName,
+                            })(<Input placeholder="请输入传真号码" />)}
+                          </Form.Item>
+                        </Col>
+                        <Col lg={12}>
+                          <Form.Item label="品牌级别">
+                            {getFieldDecorator('brandLevel', {
+                              initialValue: infoDetail.brandLevel,
+                            })(<Input placeholder="请输入品牌级别" />)}
+                          </Form.Item>
+                        </Col>
+                      </Row>
                     </>
                   )}
 
@@ -533,38 +566,27 @@ const Modify = (props: ModifyProps) => {
                     </Form.Item>
                   </Col>
                 </Row>
+
+
                 <Row gutter={24}>
                   <Col lg={12}>
-                    <Form.Item label="经营业态">
-                      {getFieldDecorator('businessFormat', {
-                        initialValue: infoDetail.businessFormat,
-                      })(<Input placeholder="请输入经营业态" />)}
+                    <Form.Item label="协议编号">
+                      {getFieldDecorator('agreementNo', {
+                        initialValue: infoDetail.agreementNo,
+                      })(<Input placeholder="请输入协议编号" />)}
                     </Form.Item>
                   </Col>
                   <Col lg={12}>
-                    <Form.Item label="招牌名称">
-                      {getFieldDecorator('signboardName', {
-                        initialValue: infoDetail.signboardName,
-                      })(<Input placeholder="请输入招牌名称" />)}
+                    <Form.Item label="签约日期">
+                      {getFieldDecorator('signingDate', {
+                        initialValue: infoDetail.signingDate
+                          ? moment(new Date(infoDetail.birthdate))
+                          : null,
+                      })(<DatePicker style={{ width: '100%' }} />)}
                     </Form.Item>
                   </Col>
                 </Row>
-                <Row gutter={24}>
-                  <Col lg={12}>
-                    <Form.Item label="品牌名称">
-                      {getFieldDecorator('brandName', {
-                        initialValue: infoDetail.brandName,
-                      })(<Input placeholder="请输入传真号码" />)}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={12}>
-                    <Form.Item label="品牌级别">
-                      {getFieldDecorator('brandLevel', {
-                        initialValue: infoDetail.brandLevel,
-                      })(<Input placeholder="请输入品牌级别" />)}
-                    </Form.Item>
-                  </Col>
-                </Row>
+
                 <Row gutter={24}>
                   <Col lg={24}>
                     <Form.Item label="联系地址">
@@ -605,7 +627,7 @@ const Modify = (props: ModifyProps) => {
             columns={columns}
             rowKey={record => record.id}
             pagination={pagination}
-            scroll={{ y: 420  }}
+            scroll={{ y: 420 }}
             loading={loading}
             onChange={(pagination: PaginationConfig, filters, sorter) =>
               changePage(pagination, filters, sorter)
