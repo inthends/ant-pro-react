@@ -43,14 +43,14 @@ function ListTable(props: ListTableProps) {
       dataIndex: "code",
       key: "code",
       sorter: true,
-      width: 100,
+      width: 150,
     },
     {
       title: "名称",
       dataIndex: "name",
       sorter: true,
       key: "name",
-      width: 100
+      width: 150
     },
     {
       title: "性别",
@@ -76,30 +76,29 @@ function ListTable(props: ListTableProps) {
     //   key: "telPhoneNum",
     //   width: 100
     // },  
-    {
-      title: "所属机构",
-      dataIndex: "orgName",
-      key: "orgName",
-      width: 120
-    },
+   
     {
       title: "办公室",
       dataIndex: "deptName",
       key: "deptName",
-      width: 100
+      width: 150
     },
-
     {
-      title: "备注",
-      dataIndex: "description",
-      key: "description",
-      width: 100
+      title: "所属机构",
+      dataIndex: "orgName",
+      key: "orgName", 
     },
+    // {
+    //   title: "备注",
+    //   dataIndex: "description",
+    //   key: "description",
+    //   width: 100
+    // },
     {
       title: "操作",
       dataIndex: "operation",
       key: "operation",
-      width: 80,
+      width: 95,
       render: (text, record) => {
         return [
           <span>
@@ -119,8 +118,7 @@ function ListTable(props: ListTableProps) {
         size="middle"
         dataSource={data}
         columns={columns}
-        rowKey={record => record.id}
-        scroll={{ y: 500 }}
+        rowKey={record => record.id} 
         loading={loading}
         pagination={pagination}
         onChange={(pagination: PaginationConfig, filters, sorter) =>

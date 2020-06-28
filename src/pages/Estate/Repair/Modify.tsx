@@ -13,6 +13,7 @@ import styles from './style.less';
 const { Option } = Select;
 import AddRepairFee from '../../Financial/ChargeBill/AddRepairFee';
 import SelectTemplate from '../../System/Template/SelectTemplate'
+import AuthButton from '@/components/AuthButton/AuthButton';
 interface ModifyProps {
   modifyVisible: boolean;
   // data?: any;
@@ -984,22 +985,28 @@ const Modify = (props: ModifyProps) => {
           textAlign: 'right',
         }}>
 
-         <Button onClick={close} style={{ marginRight: 8 }}>
+        <Button onClick={close} style={{ marginRight: 8 }}>
           取消
          </Button>
 
-         <Button onClick={showModal}
+        <Button onClick={showModal}
           disabled={loading}
           type="primary" style={{ marginRight: 8 }} >
           打印
          </Button>
 
         {infoDetail.status == 1 ? (
+          // <Button onClick={dispatch} type="primary">
+          //   派单
+          // </Button>
 
-          <Button onClick={dispatch} type="primary">
+          <AuthButton
+            onClick={dispatch}
+            module="Repair"
+            code="dispatch"
+            btype="primary">
             派单
-          </Button>
-
+          </AuthButton>
         ) : null}
 
         {infoDetail.status == 2 && infoDetail.receiverId == localStorage.getItem('userid') ? (
@@ -1058,15 +1065,32 @@ const Modify = (props: ModifyProps) => {
         ) : null} */}
 
         {infoDetail.status == 6 ? (
-          <Button onClick={check} type="primary">
+          // <Button onClick={check} type="primary">
+          //   检验
+          // </Button>
+
+          <AuthButton
+            onClick={check}
+            module="Repair"
+            code="check"
+            btype="primary">
             检验
-          </Button>
+          </AuthButton>
+
         ) : null}
 
-        {infoDetail.status == 7 ? ( 
-          <Button onClick={approve} type="primary">
+        {infoDetail.status == 7 ? (
+          // <Button onClick={approve} type="primary">
+          //   审核
+          // </Button>
+
+          <AuthButton
+            onClick={approve}
+            module="Repair"
+            code="approve"
+            btype="primary">
             审核
-          </Button>
+          </AuthButton>
         ) : null}
 
         {/* 

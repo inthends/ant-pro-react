@@ -86,7 +86,7 @@ const Modify = (props: ModifyProps) => {
               field="code"
               label="工号"
               // rules={[{ required: true, message: '请输入工号' }]} 
-              rules={[{ required: true, message: '请输入工号' }, { validator: checkCodeExist }]} 
+              rules={[{ required: true, message: '请输入工号' }, { validator: checkCodeExist }]}
             ></ModifyItem>
           </Row>
 
@@ -108,11 +108,18 @@ const Modify = (props: ModifyProps) => {
               type="tree"
               // disabled={initData.parentId === '0'}
               treeData={depts}
-            //  rules={[{ required: true, message: '请选择上级部门' }]}
+              // rules={[{ required: true, message: '请选择上级部门' }]}
             ></ModifyItem>
           </Row>
 
           <Row gutter={24}>
+            <ModifyItem
+              {...baseFormProps}
+              field="phoneNum"
+              label="联系电话"
+              maxLength={20}
+              rules={[{ required: true, message: '请输入联系电话' }]}
+            ></ModifyItem>
             <ModifyItem
               {...baseFormProps}
               field="gender"
@@ -120,12 +127,6 @@ const Modify = (props: ModifyProps) => {
               type='radio'
               items={genderItems}
               rules={[{ required: true, message: '请选择性别' }]}
-            ></ModifyItem>
-            <ModifyItem
-              {...baseFormProps}
-              field="phoneNum"
-              label="联系电话"
-              rules={[{ required: true, message: '请输入联系电话' }]}
             ></ModifyItem>
           </Row>
 

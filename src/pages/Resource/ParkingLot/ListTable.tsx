@@ -115,6 +115,28 @@ function ListTable(props: ListTableProps) {
       sorter: true,
     },
     {
+      title: '车位状态',
+      dataIndex: 'state',
+      key: 'state',
+      width: 100,
+      align: 'center',
+      sorter: true,
+      render: (text, record) => {
+        switch (text) {
+          case 0:
+            return <Tag color="#c32c2b">未售</Tag>
+          case 3:
+            return <Tag color="#e4aa5b">空置</Tag>
+          case 4:
+            return <Tag color="#61c33a">出租</Tag>
+          case 5:
+            return <Tag color="#566485">自用</Tag>
+          default:
+            return '';
+        }
+      }
+    },
+    {
       title: '车库编号',
       dataIndex: 'code',
       key: 'code',
@@ -140,7 +162,7 @@ function ListTable(props: ListTableProps) {
       title: '业主姓名',
       dataIndex: 'ownerName',
       key: 'ownerName',
-      width: 100,
+      width: 200,
       sorter: true,
     },
 
@@ -148,16 +170,14 @@ function ListTable(props: ListTableProps) {
       title: '电话',
       dataIndex: 'ownerPhone',
       key: 'ownerPhone',
-      width: 100,
-      sorter: true,
+      width: 100, 
     },
 
     {
       title: '业主房屋',
       dataIndex: 'ownerUnitAllName',
       key: 'ownerUnitAllName',
-      width: 280,
-      sorter: true,
+      width: 220, 
     },
 
     {
@@ -167,28 +187,7 @@ function ListTable(props: ListTableProps) {
       width: 100,
       sorter: true,
     },
-    {
-      title: '车位状态',
-      dataIndex: 'state',
-      key: 'state',
-      width: 100,
-      align: 'center',
-      sorter: true,
-      render: (text, record) => {
-        switch (text) {
-          case 0:
-            return <Tag color="#c32c2b">未售</Tag>
-          case 3:
-            return <Tag color="#e4aa5b">空置</Tag>
-          case 4:
-            return <Tag color="#61c33a">出租</Tag>
-          case 5:
-            return <Tag color="#566485">自用</Tag>
-          default:
-            return '';
-        }
-      }
-    },
+  
     {
       title: '车库全称',
       dataIndex: 'allname',

@@ -14,38 +14,61 @@ const { Content } = Layout;
 const { Search } = Input;
 const { Option } = Select;
 
+//搜索条件
+interface SearchParam {
+  orgId: string;
+  orgType: string;
+  keyword: string;
+  status: string;
+  repairMajor: string;
+  repairArea: string;
+  isPaid: string;
+  billDateBegin: string;
+  billDateEnd: string;
+}
+
 function Main() {
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
-  const [organize, SetOrganize] = useState<any>({});
+  // const [organize, SetOrganize] = useState<any>({});
   const [data, setData] = useState<any[]>([]);
   // const [currData, setCurrData] = useState<any>(); 
   const [id, setId] = useState<any>();
 
-  const [search, setSearch] = useState<string>('');
-  const [status, setStatus] = useState<string>('');//状态
-  const [repairMajor, setRepairMajor] = useState<string>('');//维修专业
-  const [repairArea, setRepairArea] = useState<string>('');//维修区域
-  const [isPaid, setIsPaid] = useState<string>('');//是否有偿
-  const [billDateBegin, setBillDateBegin] = useState<string>('');//单据时间
-  const [billDateEnd, setBillDateEnd] = useState<string>('');//单据时间
+  // const [search, setSearch] = useState<string>('');
+  // const [status, setStatus] = useState<string>('');//状态
+  // const [repairMajor, setRepairMajor] = useState<string>('');//维修专业
+  // const [repairArea, setRepairArea] = useState<string>('');//维修区域
+  // const [isPaid, setIsPaid] = useState<string>('');//是否有偿
+  // const [billDateBegin, setBillDateBegin] = useState<string>('');//单据时间
+  // const [billDateEnd, setBillDateEnd] = useState<string>('');//单据时间
+
+  const [search, setSearch] = useState<SearchParam>({
+    orgId: '',
+    orgType: '',
+    keyword: '',
+    status: '',
+    repairMajor: '',
+    repairArea: '',
+    isPaid: '',
+    billDateBegin: '',
+    billDateEnd: '',
+  });
+
   const [repairMajors, setRepairMajors] = useState<any[]>([]); // 维修专业
 
   const selectTree = (id, type, info) => {
     // initLoadData(info.node.props.dataRef, search);
-    SetOrganize(info.node.props.dataRef);
+    //SetOrganize(info.node.props.dataRef);
     //初始化页码，防止页码错乱导致数据查询出错  
     const page = new DefaultPagination();
-    loadData(search, info.node.props.dataRef,
-      status,
-      repairMajor,
-      repairArea,
-      isPaid,
-      billDateBegin,
-      billDateEnd,
-      page);
-
+    var orgId = id;
+    var orgType = '';
+    if (id != '') {
+      orgType = info.node.props.type;
+    }
+    loadData({ ...search, orgId, orgType }, page);
   };
 
   useEffect(() => {
@@ -58,7 +81,7 @@ function Main() {
     GetCommonItems('RepairMajor').then(res => {
       setRepairMajors(res || []);
     });
-    initLoadData('', '');
+    initLoadData(search);
   }, []);
 
   // 获取属性数据
@@ -86,23 +109,17 @@ function Main() {
     setModifyVisible(true);
   };
   const loadData = (
-    searchText,
-    org,
-    status,
-    repairMajor,
-    repairArea,
-    isPaid,
-    billDateBegin,
-    billDateEnd,
-    paginationConfig?: PaginationConfig, sorter?) => {
+    searchParam: any,
+    paginationConfig?: PaginationConfig,
+    sorter?) => {
 
-    setSearch(searchText);
-    setStatus(status);
-    setRepairMajor(repairMajor);
-    setRepairArea(repairArea);
-    setIsPaid(isPaid);
-    setBillDateBegin(billDateBegin);
-    setBillDateEnd(billDateEnd);
+    // setSearch(searchText);
+    // setStatus(status);
+    // setRepairMajor(repairMajor);
+    // setRepairArea(repairArea);
+    // setIsPaid(isPaid);
+    // setBillDateBegin(billDateBegin);
+    // setBillDateEnd(billDateEnd);
 
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
@@ -113,18 +130,19 @@ function Main() {
       pageIndex,
       pageSize,
       total,
-      queryJson: {
-        keyword: searchText,
-        // OrganizeId: org.organizeId,
-        TreeTypeId: org.key,
-        TreeType: org.type,
-        status: status,
-        repairMajor: repairMajor,
-        repairArea: repairArea,
-        isPaid: isPaid,
-        billDateBegin: billDateBegin,
-        billDateEnd: billDateEnd
-      },
+      queryJson: searchParam
+      // queryJson: {
+      //   keyword: searchText,
+      //   // OrganizeId: org.organizeId,
+      //   TreeTypeId: org.key,
+      //   TreeType: org.type,
+      //   status: status,
+      //   repairMajor: repairMajor,
+      //   repairArea: repairArea,
+      //   isPaid: isPaid,
+      //   billDateBegin: billDateBegin,
+      //   billDateEnd: billDateEnd
+      // },
     };
 
     if (sorter) {
@@ -158,20 +176,21 @@ function Main() {
     });
   };
 
-  const initLoadData = (org, searchText) => {
-    setSearch(searchText);
-    const queryJson = {
-      //OrganizeId: org.organizeId,
-      keyword: searchText,
-      TreeTypeId: org.key,
-      TreeType: org.type,
-      status: status,
-      repairMajor: repairMajor,
-      repairArea: repairArea,
-      isPaid: isPaid,
-      billDateBegin: billDateBegin,
-      billDateEnd: billDateEnd
-    };
+  const initLoadData = (searchParam: SearchParam) => {
+    setSearch(searchParam);
+    const queryJson = searchParam;
+    // const queryJson = {
+    //   //OrganizeId: org.organizeId,
+    //   keyword: searchText,
+    //   TreeTypeId: org.key,
+    //   TreeType: org.type,
+    //   status: status,
+    //   repairMajor: repairMajor,
+    //   repairArea: repairArea,
+    //   isPaid: isPaid,
+    //   billDateBegin: billDateBegin,
+    //   billDateEnd: billDateEnd
+    // };
     const sidx = 'billDate';
     const sord = 'desc';
     const { current: pageIndex, pageSize, total } = pagination;
@@ -206,34 +225,14 @@ function Main() {
           <Search
             className="search-input"
             placeholder="搜索报修单号"
-            onSearch={value =>
-              loadData(value,
-                organize,
-                status,
-                repairMajor,
-                repairArea,
-                isPaid,
-                billDateBegin,
-                billDateEnd
-              )}
+            onSearch={keyword => loadData({ ...search, keyword })}
             style={{ width: 180, marginRight: '5px' }}
           />
-
 
           <Select placeholder="=单据状态="
             allowClear={true}
             style={{ width: '125px', marginRight: '5px' }}
-            onChange={value => {
-              loadData(search,
-                organize,
-                value,
-                repairMajor,
-                repairArea,
-                isPaid,
-                billDateBegin,
-                billDateEnd
-              );
-            }}>
+            onChange={status => loadData({ ...search, status })}>
             <Option value="1">待派单</Option>
             <Option value="2">待接单</Option>
             <Option value="3">待开工</Option>
@@ -248,17 +247,7 @@ function Main() {
           <Select placeholder="=维修专业="
             allowClear={true}
             style={{ width: '125px', marginRight: '5px' }}
-            onChange={value => {
-              loadData(search,
-                organize,
-                status,
-                value,
-                repairArea,
-                isPaid,
-                billDateBegin,
-                billDateEnd
-              );
-            }}  >
+            onChange={repairMajor => loadData({ ...search, repairMajor })} >
 
             {repairMajors.map(item => (
               <Option value={item.title} key={item.key}>
@@ -270,17 +259,7 @@ function Main() {
           <Select placeholder="=维修区域="
             allowClear={true}
             style={{ width: '125px', marginRight: '5px' }}
-            onChange={value => {
-              loadData(search,
-                organize,
-                status,
-                repairMajor,
-                value,
-                isPaid,
-                billDateBegin,
-                billDateEnd
-              );
-            }} >
+            onChange={repairArea => loadData({ ...search, repairArea })} >
             <Option value="客户区域">客户区域</Option>
             <Option value="公共区域">公共区域</Option>
           </Select>
@@ -289,17 +268,7 @@ function Main() {
             placeholder="=是否有偿="
             allowClear={true}
             style={{ width: '125px', marginRight: '5px' }}
-            onChange={value => {
-              loadData(search,
-                organize,
-                status,
-                repairMajor,
-                repairArea,
-                value,
-                billDateBegin,
-                billDateEnd
-              );
-            }}
+            onChange={isPaid => loadData({ ...search, isPaid })}
           >
             <Option value="否">否</Option>
             <Option value="是">是</Option>
@@ -307,50 +276,24 @@ function Main() {
 
           <DatePicker
             placeholder='单据日期起'
-            onChange={(date, dateStr) => {
-              loadData(search,
-                organize,
-                status,
-                repairMajor,
-                repairArea,
-                isPaid,
-                dateStr,
-                billDateEnd);
-            }} style={{ marginRight: '5px', width: '130px' }} />
+            onChange={(date, billDateBegin) => loadData({ ...search, billDateBegin })}
+            style={{ marginRight: '5px', width: '130px' }} />
               至
               <DatePicker
             placeholder='单据日期止'
-            onChange={(date, dateStr) => {
-              loadData(search,
-                organize,
-                status,
-                repairMajor,
-                repairArea,
-                isPaid,
-                billDateBegin,
-                dateStr);
-            }} style={{ marginLeft: '5px', marginRight: '5px', width: '130px' }} />
-
+            onChange={(date, billDateEnd) => loadData({ ...search, billDateEnd })}
+            style={{ marginLeft: '5px', marginRight: '5px', width: '130px' }} />
 
         </div>
         <ListTable
           onchange={(paginationConfig, filters, sorter) =>
-            loadData(
-              search,
-              organize,
-              status,
-              repairMajor,
-              repairArea,
-              isPaid,
-              billDateBegin,
-              billDateEnd,
-              paginationConfig, sorter)
+            loadData(search, paginationConfig, sorter)
           }
           loading={loading}
           pagination={pagination}
           data={data}
           modify={showDrawer}
-          reload={() => initLoadData(organize, search)}
+          reload={() => initLoadData(search)}
         />
       </Content>
 
@@ -358,7 +301,7 @@ function Main() {
         modifyVisible={modifyVisible}
         closeDrawer={closeDrawer}
         id={id}
-        reload={() => initLoadData(organize, search)}
+        reload={() => initLoadData(search)}
         showLink={showLinkDrawer}
       />
 

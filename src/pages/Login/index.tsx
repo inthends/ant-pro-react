@@ -27,12 +27,13 @@ function Login(props: ConnectFormProps) {
               //const { token, id } = data;
               message.success('登录成功');
               //localStorage.setItem('token', token);
-              const { userid, name, avatar, report } = data;
+              const { userid, name, avatar, report,organizeId } = data;
               //全局记录用户id,name,src头像
               localStorage.setItem('userid', userid);
               localStorage.setItem('name', name);
               // localStorage.setItem('usercode', usercode);
               localStorage.setItem('avatar', avatar);
+              localStorage.setItem('organizeId', organizeId);//机构id
               localStorage.setItem('report', report);//服务端地址
               dispatch!({ type: 'user/setCurrent', payload: data });
               await dispatch!({ type: 'auth/fetch' });

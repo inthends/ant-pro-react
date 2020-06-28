@@ -19,7 +19,7 @@ function Reports() {
         scrolling="no"
         frameBorder='0'
         width='100%'
-        src={localStorage.getItem('report') + "/index.html"} >
+        src={localStorage.getItem('report') + "/index.html?organizeId=" + localStorage.getItem('organizeId')} >
       </iframe>
 
     </Layout >

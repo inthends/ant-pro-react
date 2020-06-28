@@ -16,36 +16,55 @@ const { Option } = Select;
 import RShowLink from '../Repair/ShowLink';
 import CShowLink from '../Complaint/ShowLink';
 
+//搜索条件
+interface SearchParam {
+  orgId: string;
+  orgType: string;
+  keyword: string;
+  status: string;
+  source: string;
+  billType: string;
+  billDateBegin: string;
+  billDateEnd: string;
+}
+
 function Main() {
-  const [modifyVisible, setModifyVisible] = useState<boolean>(false);  
+  const [modifyVisible, setModifyVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
-  const [organize, SetOrganize] = useState<any>({});
+  // const [organize, SetOrganize] = useState<any>({});
   const [data, setData] = useState<any[]>([]);
   const [currData, setCurrData] = useState<any>();
-  // const [treeData, setTreeData] = useState<any[]>([]);
+  // const [treeData, setTreeData] = useState<any[]>([]); 
+  // const [search, setSearch] = useState<string>('');//单号
+  // const [status, setStatus] = useState<string>('');//状态
+  // const [source, setSource] = useState<string>('');//单据来源
+  // const [billType, setBillType] = useState<string>('');//业务类型
+  // const [billDateBegin, setBillDateBegin] = useState<string>('');//单据时间
+  // const [billDateEnd, setBillDateEnd] = useState<string>('');//单据时间
 
-  const [search, setSearch] = useState<string>('');//单号
-  const [status, setStatus] = useState<string>('');//状态
-  const [source, setSource] = useState<string>('');//单据来源
-  const [billType, setBillType] = useState<string>('');//业务类型
-  const [billDateBegin, setBillDateBegin] = useState<string>('');//单据时间
-  const [billDateEnd, setBillDateEnd] = useState<string>('');//单据时间
-
+  const [search, setSearch] = useState<SearchParam>({
+    orgId: '',
+    orgType: '',
+    keyword: '',
+    status: '',
+    source: '',
+    billType: '',
+    billDateBegin: '',
+    billDateEnd: '',
+  });
 
   const selectTree = (id, type, info) => {
     // initLoadData(info.node.props.dataRef, search);
-    SetOrganize(info.node.props.dataRef);
+    // SetOrganize(info.node.props.dataRef);
     //初始化页码，防止页码错乱导致数据查询出错  
     const page = new DefaultPagination();
-    loadData(search,
-      info.node.props.dataRef,
-      status,
-      source,
-      billType,
-      billDateBegin,
-      billDateEnd,
-      page);
+    var orgId = id;
+    var orgType = '';
+    if (id != '') {
+      orgType = info.node.props.type;
+    }
+    loadData({ ...search, orgId, orgType }, page);
   };
 
   useEffect(() => {
@@ -62,7 +81,7 @@ function Main() {
     //     setTreeData(res || []);
     //     // return res || [];
     //   }); 
-    initLoadData('', '', '', '', '', '', '');
+    initLoadData(search);
 
   }, []);
 
@@ -87,26 +106,21 @@ function Main() {
   };
 
   const showDrawer = (item?) => {
-    setCurrData(item); 
+    setCurrData(item);
     setModifyVisible(true);
   };
 
   const loadData = (
-    searchText,
-    org,
-    status,
-    source,
-    billType,
-    billDateBegin,
-    billDateEnd,
-    paginationConfig?: PaginationConfig, sorter?) => {
+    searchParam: any,
+    paginationConfig?: PaginationConfig,
+    sorter?) => {
 
-    setSearch(searchText);
-    setStatus(status);
-    setSource(source);
-    setBillType(billType);
-    setBillDateBegin(billDateBegin);
-    setBillDateEnd(billDateEnd);
+    // setSearch(searchText);
+    // setStatus(status);
+    // setSource(source);
+    // setBillType(billType);
+    // setBillDateBegin(billDateBegin);
+    // setBillDateEnd(billDateEnd);
 
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
@@ -118,17 +132,18 @@ function Main() {
       pageIndex,
       pageSize,
       total,
-      queryJson: {
-        keyword: searchText,
-        // OrganizeId: org.organizeId,
-        TreeTypeId: org.key,
-        TreeType: org.type,
-        status: status,
-        source: source,
-        billType: billType,
-        billDateBegin: billDateBegin,
-        billDateEnd: billDateEnd
-      },
+      queryJson: searchParam
+      // queryJson: {
+      //   keyword: searchText,
+      //   // OrganizeId: org.organizeId,
+      //   TreeTypeId: org.key,
+      //   TreeType: org.type,
+      //   status: status,
+      //   source: source,
+      //   billType: billType,
+      //   billDateBegin: billDateBegin,
+      //   billDateEnd: billDateEnd
+      // },
     };
     if (sorter) {
       const { field, order } = sorter;
@@ -160,19 +175,20 @@ function Main() {
     });
   };
 
-  const initLoadData = (org, searchText, status,source,billType,billDateBegin,billDateEnd) => {
-    setSearch(searchText);
-    const queryJson = {
-      // OrganizeId: org.organizeId,
-      keyword: searchText,
-      TreeTypeId: org.key,
-      TreeType: org.type,
-      status: status,
-      source: source,
-      billType: billType,
-      billDateBegin: billDateBegin,
-      billDateEnd: billDateEnd
-    };
+  const initLoadData = (searchParam: SearchParam) => {
+    setSearch(searchParam);
+    const queryJson = searchParam;
+    // const queryJson = {
+    //   // OrganizeId: org.organizeId,
+    //   keyword: searchText,
+    //   TreeTypeId: org.key,
+    //   TreeType: org.type,
+    //   status: status,
+    //   source: source,
+    //   billType: billType,
+    //   billDateBegin: billDateBegin,
+    //   billDateEnd: billDateEnd
+    // };
     const sidx = 'billDate';
     const sord = 'desc';
     const { current: pageIndex, pageSize, total } = pagination;
@@ -217,30 +233,14 @@ function Main() {
           <Search
             className="search-input"
             placeholder="搜索服务单号"
-            onSearch={value => loadData(value,
-              organize,
-              status,
-              source,
-              billType,
-              billDateBegin,
-              billDateEnd
-            )}
+            onSearch={keyword => loadData({ ...search, keyword })}
             style={{ width: 180, marginRight: '5px' }}
           />
 
           <Select placeholder="=单据状态="
             allowClear={true}
             style={{ width: '125px', marginRight: '5px' }}
-            onChange={value => {
-              loadData(search,
-                organize,
-                value,
-                source,
-                billType,
-                billDateBegin,
-                billDateEnd
-              );
-            }}>
+            onChange={status => loadData({ ...search, status })}>
             <Option value="1">待处理</Option>
             <Option value="2" >待完成</Option>
             <Option value="3">待回访</Option>
@@ -252,16 +252,7 @@ function Main() {
           <Select placeholder="=单据来源="
             allowClear={true}
             style={{ width: '125px', marginRight: '5px' }}
-            onChange={value => {
-              loadData(search,
-                organize,
-                status,
-                value,
-                billType,
-                billDateBegin,
-                billDateEnd
-              );
-            }}>
+            onChange={source => loadData({ ...search, source })}>
             <Option value="服务总台">服务总台</Option>
             <Option value="社区APP">社区APP</Option>
             <Option value="微信公众号">微信公众号</Option>
@@ -271,46 +262,22 @@ function Main() {
           <Select placeholder="=服务类型="
             allowClear={true}
             style={{ width: '125px', marginRight: '5px' }}
-            onChange={value => {
-              loadData(search,
-                organize,
-                status,
-                source,
-                value,
-                billDateBegin,
-                billDateEnd
-              );
-            }}>
+            onChange={billType => loadData({ ...search, billType })}>
             <Option value="咨询">咨询</Option>
             <Option value="建议">建议</Option>
             <Option value="报修">报修</Option>
             <Option value="投诉">投诉</Option>
-          </Select> 
-          
+          </Select>
+
           <DatePicker
             placeholder='单据日期起'
-            onChange={(date, dateStr) => {
-              loadData(search,
-                organize,
-                status,
-                source,
-                billType,
-                dateStr,
-                billDateEnd);
-            }} style={{ marginRight: '5px', width: '130px' }} />
+            onChange={billDateBegin => loadData({ ...search, billDateBegin })}
+            style={{ marginRight: '5px', width: '130px' }} />
               至
               <DatePicker
             placeholder='单据日期止'
-            onChange={(date, dateStr) => {
-              loadData(search,
-                organize,
-                status,
-                source,
-                billType,
-                billDateBegin,
-                dateStr);
-            }} style={{ marginLeft: '5px', marginRight: '5px', width: '130px' }} />
-
+            onChange={billDateEnd => loadData({ ...search, billDateEnd })}
+            style={{ marginLeft: '5px', marginRight: '5px', width: '130px' }} />
 
           <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer()}>
             <Icon type="plus" />
@@ -319,29 +286,22 @@ function Main() {
         </div>
         <ListTable
           onchange={(paginationConfig, filters, sorter) =>
-            loadData(search,
-              organize,
-              status,
-              source,
-              billType,
-              billDateBegin,
-              billDateEnd,
-              paginationConfig, sorter)
+            loadData(search, paginationConfig, sorter)
           }
           loading={loading}
           pagination={pagination}
           data={data}
           modify={showDrawer}
-          reload={() => initLoadData(organize, search, status,source,billType,billDateBegin,billDateEnd)}
+          reload={() => initLoadData(search)}
         />
       </Content>
 
       <Modify
         modifyVisible={modifyVisible}
-        closeDrawer={closeDrawer} 
+        closeDrawer={closeDrawer}
         // treeData={treeData}
         data={currData}
-        reload={() => initLoadData(organize, search, status,source,billType,billDateBegin,billDateEnd)}
+        reload={() => initLoadData(search)}
         showLink={showLinkDrawer}
       />
 
@@ -356,7 +316,6 @@ function Main() {
         closeDrawer={closeLinkDrawer}
         billCode={billCode}
       />
-
     </Layout>
   );
 }

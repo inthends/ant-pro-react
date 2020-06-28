@@ -1,27 +1,32 @@
 import { DefaultPagination } from "@/utils/defaultSetting";
-import { Button, Icon, Input, Layout } from "antd";
+import { DatePicker, Select, Input, Layout } from "antd";
 import { PaginationConfig } from "antd/lib/table";
 import React, { useEffect, useState } from "react";
 import ListTable from "./ListTable";
-import Modify from "./Modify";
-import { GetPageLineListJson } from "./Main.service";
-import { getResult } from '@/utils/networkUtils';
-import { GetPointTreeAll, GetOrgEsates } from '@/services/commonItem';
+import Show from "./Show";
+import { GetPageTaskListJson } from "./Main.service";
+import { GetOrgEsates } from '@/services/commonItem';
 import LeftTree from '../LeftTree';
 const { Content } = Layout;
 const { Search } = Input;
-
+const { Option } = Select;
 interface SearchParam {
   orgId: string;
   orgType: string;
   keyword: string;
+  status: string;
+  planDateBegin: string;
+  planDateEnd: string;
 }
 
 const Main = () => {
   const [search, setSearch] = useState<SearchParam>({
     orgId: '',
     orgType: '',
-    keyword: ''
+    keyword: '',
+    status: '',
+    planDateBegin: '',
+    planDateEnd: '',
   });
 
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);
@@ -30,25 +35,12 @@ const Main = () => {
   const [currData, setCurrData] = useState<any>();
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   const [treeData, setTreeData] = useState<any[]>([]);
-  const [unitTreeData, setUnitTreeData] = useState<any[]>([]);
 
-  useEffect(() => {
-    // GetDataItemTreeList().then((res) => {
-    //   setTreeData(res || []);
-    // });
-    // initLoadData(search);
-
+  useEffect(() => { 
     //加载小区
     GetOrgEsates().then(res => {
       setTreeData(res || []);
       initLoadData(search);
-      //加载点位
-      GetPointTreeAll()
-        .then(getResult)
-        .then((res: any[]) => {
-          setUnitTreeData(res || []);
-          return res || [];
-        });
     });
   }, []);
 
@@ -62,6 +54,7 @@ const Main = () => {
   const showChoose = (item?) => {
     setCurrData(item);
   };
+  
   const loadData = (
     searchParam: any,
     paginationConfig?: PaginationConfig,
@@ -84,7 +77,7 @@ const Main = () => {
     if (sorter) {
       const { field, order } = sorter;
       searchCondition.sord = order === "ascend" ? "asc" : "desc";
-      searchCondition.sidx = field ? field : "code";
+      searchCondition.sidx = field ? field : "planTime";
     }
     return load(searchCondition).then(res => {
       return res;
@@ -93,9 +86,9 @@ const Main = () => {
 
   const load = formData => {
     setLoading(true);
-    formData.sidx = formData.sidx || "code";
+    formData.sidx = formData.sidx || "planTime";
     formData.sord = formData.sord || "asc";
-    return GetPageLineListJson(formData).then(res => {
+    return GetPageTaskListJson(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
         return {
@@ -114,7 +107,7 @@ const Main = () => {
   const initLoadData = (searchParam: SearchParam) => {
     setSearch(searchParam);
     const queryJson = searchParam;
-    const sidx = "code";
+    const sidx = "planTime";
     const sord = "asc";
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(
@@ -148,19 +141,41 @@ const Main = () => {
           <Search
             key='search'
             className="search-input"
-            placeholder="搜索名称和编号"
-            style={{ width: 200 }}
+            placeholder="搜索点位名称"
+            style={{ width: 150, marginRight: '5px' }}
             onSearch={keyword => loadData({ ...search, keyword })}
           />
 
-          <Button
+          <Select placeholder="=单据状态="
+            allowClear={true}
+            style={{ width: '130px', marginRight: '5px' }}
+            onChange={status => {
+              loadData({ ...search, status })
+            }}>
+            <Option value="0">未巡检</Option>
+            <Option value="1">已巡检</Option>
+          </Select>
+
+          <DatePicker
+            placeholder='计划时间起'
+            onChange={(date, planDateBegin) => {
+              loadData({ ...search, planDateBegin })
+            }} style={{ marginRight: '5px', width: '130px' }} />
+              至
+              <DatePicker
+            placeholder='计划时间止'
+            onChange={(date, planDateEnd) => {
+              loadData({ ...search, planDateEnd })
+            }} style={{ marginLeft: '5px', marginRight: '5px', width: '130px' }} />
+
+          {/* <Button
             type="primary"
             style={{ float: "right" }}
             onClick={() => showDrawer()}
           >
             <Icon type="plus" />
             路线
-          </Button>
+          </Button> */}
         </div>
         <ListTable
           onchange={(paginationConfig, filters, sorter) =>
@@ -169,17 +184,14 @@ const Main = () => {
           loading={loading}
           pagination={pagination}
           data={data}
-          modify={showDrawer}
+          show={showDrawer}
           choose={showChoose}
           reload={() => initLoadData(search)}
         />
       </Content>
-      <Modify
+      <Show
         visible={modifyVisible}
         closeDrawer={closeDrawer}
-        // typeId={search.typeId}
-        // typeName={search.typeName}
-        treeData={unitTreeData}
         data={currData}
         reload={() => initLoadData(search)}
       />
