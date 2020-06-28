@@ -75,6 +75,10 @@ function ListTable(props: ListTableProps) {
           case 4:
             return <Tag color="#36d54e">待检验</Tag>;
           case 5:
+            return <Tag color="#119688">已回访</Tag>;
+          case 6:
+            return <Tag color="#229688">已检验</Tag>;
+          case 7:
             return <Tag color="#009688">已归档</Tag>;
           case -1:
             return <Tag color="#d82d2d">已作废</Tag>
@@ -152,7 +156,7 @@ function ListTable(props: ListTableProps) {
       fixed: 'right',
       render: (text, record) => {
         //新增
-        if (record.status != 5 && record.status != -1) {
+        if (record.status < 5 && record.status != -1) {
           return [
             //   <Button
             //     type="primary"

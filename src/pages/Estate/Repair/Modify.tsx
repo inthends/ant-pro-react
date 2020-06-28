@@ -744,7 +744,7 @@ const Modify = (props: ModifyProps) => {
 
                 </Card>
               ) : infoDetail.status > 4 ?
-                  (<Card title="完成情况" className={infoDetail.status > 5 && infoDetail.repairArea == '客户区域' ? styles.card2 : styles.card} >
+                  (<Card title="完成情况" className={infoDetail.repairArea == '客户区域' ? styles.card2 : styles.card} >
                     <Row gutter={24}>
                       <Col lg={5}>
                         <Form.Item label="完成时间">
@@ -1016,8 +1016,7 @@ const Modify = (props: ModifyProps) => {
 
         ) : null}
 
-        {infoDetail.status == 3 ? (
-
+        {infoDetail.status == 3 ? ( 
           <span>
             <Button onClick={start} type="primary" style={{ marginRight: 8 }}>
               开工
@@ -1032,8 +1031,7 @@ const Modify = (props: ModifyProps) => {
         ) : null}
 
         {infoDetail.status == 4 ? (
-          <div>
-
+          <span> 
             {/* <Button onClick={start} type="primary" style={{ marginRight: 8 }}>
               呼叫增援
             </Button>
@@ -1049,7 +1047,7 @@ const Modify = (props: ModifyProps) => {
               完成
             </Button>
 
-          </div>
+          </span>
 
         ) : null}
 

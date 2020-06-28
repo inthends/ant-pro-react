@@ -1,11 +1,8 @@
 
-import {
-  Spin, Upload, Modal, Menu, Dropdown, Icon, Tabs, Select, Button, Card, Col,
-  Drawer, Form, Input, message, Row, DatePicker
-} from 'antd';
+import { Spin, Upload, Modal, Menu, Dropdown, Icon, Tabs, Select, Button, Card, Col, Drawer, Form, Input, message, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetFilesData, RemoveFile, SaveForm, ChangeToRepair, ChangeToComplaint, Visit, Check } from './Main.service';
+import { GetFilesData, RemoveFile, SaveForm, ChangeToRepair, ChangeToComplaint, Visit } from './Main.service';
 import { GetRoomUser } from '@/services/commonItem';
 import styles from './style.less';
 import CommentBox from './CommentBox';
@@ -13,7 +10,6 @@ import AddMemo from './AddMemo';
 const { Option } = Select;
 const { TextArea } = Input;
 const { TabPane } = Tabs;
-import moment from 'moment';
 import SelectHouse from './SelectHouse';
 import SelectTemplate from '../../System/Template/SelectTemplate'
 
@@ -168,7 +164,6 @@ const Modify = (props: ModifyProps) => {
                   message.success('操作成功！');
                   closeDrawer();
                   reload();
-
                 }).catch(err => {
                   //数据在APP端已经处理，弹出刷新确认
                   Modal.confirm({
@@ -332,19 +327,19 @@ const Modify = (props: ModifyProps) => {
 
 
   //检验
-  const check = () => {
-    form.validateFields((errors, values) => {
-      if (!errors) {
-        const newData = data ? { ...data, ...values } : values;
-        newData.testDate = values.testDate.format('YYYY-MM-DD HH:mm');
-        Check({ ...newData, keyvalue: newData.id }).then(res => {
-          message.success('检验完成');
-          closeDrawer();
-          reload();
-        });
-      }
-    });
-  };
+  // const check = () => {
+  //   form.validateFields((errors, values) => {
+  //     if (!errors) {
+  //       const newData = data ? { ...data, ...values } : values;
+  //       newData.testDate = values.testDate.format('YYYY-MM-DD HH:mm');
+  //       Check({ ...newData, keyvalue: newData.id }).then(res => {
+  //         message.success('检验完成');
+  //         closeDrawer();
+  //         reload();
+  //       });
+  //     }
+  //   });
+  // };
 
   const [selectHouseVisible, setSelectHouseVisible] = useState<boolean>(false);
 
@@ -363,10 +358,10 @@ const Modify = (props: ModifyProps) => {
     setModalVisible(false);
   };
 
-  const disabledTestDate = (current) => {
-    // Can not select days before today and today
-    return current && current.isBefore(moment(infoDetail.endDate), 'day');
-  };
+  // const disabledTestDate = (current) => {
+  //   // Can not select days before today and today
+  //   return current && current.isBefore(moment(infoDetail.endDate), 'day');
+  // };
 
   return (
     <Drawer
@@ -807,9 +802,12 @@ const Modify = (props: ModifyProps) => {
                     </Col>
                   </Row>
                 </Card>
-              ) :
+              ) : null}
 
-                infoDetail.status > 3 && infoDetail.repairArea == '客户区域' ? (<Card title="回访情况" className={styles.card2}  >
+              {infoDetail.status > 4 ?
+                (<Card title="回访情况"
+                  hoverable
+                  className={infoDetail.status == 5 ? styles.card2 : styles.card}>
                   <Row gutter={24}>
                     <Col lg={6}>
                       <Form.Item label="回访方式"  >
@@ -841,7 +839,7 @@ const Modify = (props: ModifyProps) => {
                   </Row>
                 </Card>) : null}
 
-              {infoDetail.status == 4 ?
+              {/* {infoDetail.status == 4 ?
                 (<Card title="检验情况" className={styles.card2} hoverable>
                   <Row gutter={24}>
                     <Col lg={7}>
@@ -888,33 +886,35 @@ const Modify = (props: ModifyProps) => {
                       </Form.Item>
                     </Col>
                   </Row>
-                </Card>) :
-                 infoDetail.status > 4 && infoDetail.repairArea == '公共区域' ?
-                  (<Card title="检验情况" className={styles.card2} hoverable>
-                    <Row gutter={24}>
-                      <Col lg={7}>
-                        <Form.Item label="检验时间" >
-                          {infoDetail.testDate}
-                        </Form.Item>
-                      </Col>
-                      <Col lg={5}>
-                        <Form.Item label="检验人"  >
-                          {infoDetail.testerName}
-                        </Form.Item>
-                      </Col>
-                      <Col lg={5}>
-                        <Form.Item label="检验结果" required>
-                          {infoDetail.testResult == 1 ? '合格' : '不合格'}
-                        </Form.Item>
-                      </Col>
-                      <Col lg={7}>
-                        <Form.Item label="检验说明"  >
-                          {infoDetail.testRemark}
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                  </Card>
-                  ) : null}
+                </Card>) : */}
+
+              {infoDetail.status == 6 ?
+                (<Card title="检验情况" className={styles.card2} hoverable>
+                  <Row gutter={24}>
+                    <Col lg={7}>
+                      <Form.Item label="检验时间" >
+                        {infoDetail.testDate}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={5}>
+                      <Form.Item label="检验人"  >
+                        {infoDetail.testerName}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={5}>
+                      <Form.Item label="检验结果" required>
+                        {infoDetail.testResult == 1 ? '合格' : '不合格'}
+                      </Form.Item>
+                    </Col>
+                    <Col lg={7}>
+                      <Form.Item label="检验说明"  >
+                        {infoDetail.testRemark}
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Card>
+                ) : null}
+
             </Form>
           </TabPane>
           {data ? (
@@ -926,7 +926,6 @@ const Modify = (props: ModifyProps) => {
           ) : null}
         </Tabs>
         {/* ) : null} */}
-
       </Spin>
 
       <div
@@ -972,10 +971,10 @@ const Modify = (props: ModifyProps) => {
             回访
           </Button>) : null}
 
-        {infoDetail.status == 4 ? (
+        {/* {infoDetail.status == 4 ? (
           <Button onClick={check} type="primary">
             检验
-          </Button>) : null}
+          </Button>) : null} */}
 
         {/* {(infoDetail.status && infoDetail.status == 4) ? (
           <Button onClick={close} type="primary">
