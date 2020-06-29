@@ -64,7 +64,7 @@ function SelectHouse(props: SelectHouseProps) {
       //const item = treeData.filter(treeItem => treeItem.key === selectedKeys[0])[0];
       const type = info.node.props.type;
       // if ('ABCD'.indexOf(type) != -1)
-      if ('ABC'.indexOf(type) != -1)
+      if ('59'.indexOf(type) == -1)
         return;
       // selectTree(selectedKeys[0], type, info);
       setUnitData(info.node.props);
@@ -147,13 +147,14 @@ function SelectHouse(props: SelectHouseProps) {
       visible={visible}
       okText="确认"
       cancelText="取消"
-      onCancel={() => closeModal()}
-      
+      onCancel={() => closeModal()} 
       onOk={() => {
         if (unitData.length == 0)//||unitData.isLeaf!=1){
         {
-          message.warning('请选择房间');
-        } else {
+          message.destroy();
+          message.warning('请选择房间或车位');
+        } 
+        else {
           getSelectTree(unitData);
           closeModal();
         }

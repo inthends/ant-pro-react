@@ -40,6 +40,8 @@ function SelectHouse(props: SelectHouseProps) {
   //     keys.push(item.key);
   //   });
 
+  const [unitData, setUnitData] = useState<any[]>([]);
+
   //展开到管理处
   useEffect(() => {
     if (visible) {
@@ -47,6 +49,7 @@ function SelectHouse(props: SelectHouseProps) {
       setLoading(true);
        //还原
        setTreeSearchData([]);
+       setUnitData([]);
        GetOrgTree().then((res: any[]) => {
         setTreeData(res || []);
         setLoading(false);
@@ -55,16 +58,13 @@ function SelectHouse(props: SelectHouseProps) {
       });
       //setExpandedKeys(treeData.map(item => item.id as string)); 
     }
-  }, [visible]);
-
-  const [unitData, setUnitData] = useState<any[]>([]);
-
+  }, [visible]); 
   const onSelect = (selectedKeys, info) => { 
     if (selectedKeys.length === 1) {
       //const item = treeData.filter(treeItem => treeItem.key === selectedKeys[0])[0];
       const type = info.node.props.type;
       // if ('ABCD'.indexOf(type) != -1)
-      if ('ABC'.indexOf(type) != -1)
+      if ('ABCD'.indexOf(type) != -1)
         return;
       // selectTree(selectedKeys[0], type, info);
       setUnitData(info.node.props);
@@ -151,8 +151,10 @@ function SelectHouse(props: SelectHouseProps) {
       onOk={() => {
         if (unitData.length == 0)//||unitData.isLeaf!=1){
         {
-          message.warning('请选择房间');
-        } else {
+          message.destroy();//销毁之前的提示，防止提示叠加
+          message.warning('请选择楼盘或房间');
+        } 
+        else {
           getSelectTree(unitData);
           closeModal();
         }
