@@ -165,7 +165,9 @@ const Modify = (props: ModifyProps) => {
   );
 
   return (
-    <BaseModifyProvider {...props} name="机构" save={doSave} width={800} >
+    <BaseModifyProvider {...props} name="机构"
+      save={doSave}
+      width={700} >
       <Form layout="vertical" hideRequiredMark >
         <Tabs defaultActiveKey="1" >
           <TabPane tab="基本信息" key="1">
@@ -295,7 +297,8 @@ const Modify = (props: ModifyProps) => {
           </TabPane>
 
           <TabPane tab="支付设置" key="2">
-            <Card hoverable>
+            <Card hoverable
+              className={styles.cardsmall}>
               <Row gutter={24}>
                 <ModifyItem  {...baseFormProps}
                   field="posType"
@@ -351,149 +354,184 @@ const Modify = (props: ModifyProps) => {
 
           <TabPane tab="服务单设置" key="3">
             <Card
-
               title='派单逾期设置'
-              hoverable className={styles.cardsmall}>
-
-
+              hoverable
+              className={styles.cardsmall}>
               <Row gutter={24}>
                 <ModifyItem
                   {...baseFormProps}
-                  field="dispatchTime"
+                  field="dispatchTimeA"
                   label="派单逾期(分)"
                   type='inputNumber'
-                  lg={6}
                 ></ModifyItem>
                 <ModifyItem
                   {...baseFormProps}
                   field="dispatchRoleA"
-                  label="派单逾期一级上报"
+                  label="一级上报"
                   type="select"
-                  lg={6}
                   items={roles}
+                ></ModifyItem>
+              </Row>
+              <Row gutter={24}>
+                <ModifyItem
+                  {...baseFormProps}
+                  field="dispatchTimeB"
+                  label="派单逾期(分)"
+                  type='inputNumber'
                 ></ModifyItem>
                 <ModifyItem
                   {...baseFormProps}
                   field="dispatchRoleB"
-                  label="派单逾期二级上报"
+                  label="二级上报"
                   type="select"
-                  lg={6}
                   items={roles}
                 ></ModifyItem>
-
+              </Row>
+              <Row gutter={24}>
+                <ModifyItem
+                  {...baseFormProps}
+                  field="dispatchTimeC"
+                  label="派单逾期(分)"
+                  type='inputNumber'
+                ></ModifyItem>
                 <ModifyItem
                   {...baseFormProps}
                   field="dispatchRoleC"
-                  label="派单逾期三级上报"
+                  label="三级上报"
                   type="select"
-                  lg={6}
                   items={roles}
                 ></ModifyItem>
               </Row>
             </Card>
             <Card
-
               title='接单逾期设置'
-              hoverable className={styles.cardsmall}>
-
+              hoverable
+              className={styles.cardsmall}>
               <Row gutter={24}>
                 <ModifyItem
                   {...baseFormProps}
-                  field="receiveTime"
+                  field="receiveTimeA"
                   label="接单逾期(分)"
                   type="inputNumber"
-                  lg={6}
                 ></ModifyItem>
                 <ModifyItem
                   {...baseFormProps}
                   field="receiveRoleA"
-                  label="接单逾期一级上报"
+                  label="一级上报"
                   type="select"
-                  lg={6}
                   items={roles}
+                ></ModifyItem></Row>
+              <Row gutter={24}>
+                <ModifyItem
+                  {...baseFormProps}
+                  field="receiveTimeB"
+                  label="接单逾期(分)"
+                  type="inputNumber"
                 ></ModifyItem>
                 <ModifyItem
                   {...baseFormProps}
                   field="receiveRoleB"
-                  label="接单逾期二级上报"
+                  label="二级上报"
                   type="select"
-                  lg={6}
                   items={roles}
+                ></ModifyItem></Row>
+              <Row gutter={24}>
+                <ModifyItem
+                  {...baseFormProps}
+                  field="receiveTimeC"
+                  label="接单逾期(分)"
+                  type="inputNumber"
                 ></ModifyItem>
-
                 <ModifyItem
                   {...baseFormProps}
                   field="receiveRoleC"
-                  label="接单逾期三级上报"
+                  label="三级上报"
                   type="select"
-                  lg={6}
                   items={roles}
                 ></ModifyItem>
               </Row>
             </Card>
             <Card
               title='完成逾期设置'
-              hoverable className={styles.card}>
-
+              hoverable
+              className={styles.card}>
               <Row gutter={24}>
                 <ModifyItem
                   {...baseFormProps}
-                  field="handleTime"
+                  field="handleTimeA"
                   label="完成逾期(分)"
                   type="inputNumber"
-                  lg={8}
                 ></ModifyItem>
                 <ModifyItem
                   {...baseFormProps}
                   field="handleRoleA"
-                  label="完成逾期一级上报"
+                  label="一级上报"
                   type="select"
-                  lg={8}
                   items={roles}
+                ></ModifyItem>
+              </Row>
+              <Row gutter={24}>
+                <ModifyItem
+                  {...baseFormProps}
+                  field="handleTimeB"
+                  label="完成逾期(分)"
+                  type="inputNumber"
                 ></ModifyItem>
                 <ModifyItem
                   {...baseFormProps}
                   field="handleRoleB"
-                  label="完成逾期二级上报"
-                  type="select"
-                  lg={8}
+                  label="二级上报"
+                  type="select" 
                   items={roles}
                 ></ModifyItem>
               </Row>
-
               <Row gutter={24}>
+                <ModifyItem
+                  {...baseFormProps}
+                  field="handleTimeC"
+                  label="完成逾期(分)"
+                  type="inputNumber"
+                ></ModifyItem>
                 <ModifyItem
                   {...baseFormProps}
                   field="handleRoleC"
                   label="完成逾期三级上报"
-                  type="select"
-                  lg={8}
+                  type="select" 
                   items={roles}
+                ></ModifyItem></Row>
+              <Row gutter={24}>
+                <ModifyItem
+                  {...baseFormProps}
+                  field="handleTimeD"
+                  label="完成逾期(分)"
+                  type="inputNumber"
                 ></ModifyItem>
                 <ModifyItem
                   {...baseFormProps}
                   field="handleRoleD"
-                  label="完成逾期四级上报"
-                  type="select"
-                  lg={8}
+                  label="四级上报"
+                  type="select" 
                   items={roles}
+                ></ModifyItem></Row>
+              <Row gutter={24}>
+                <ModifyItem
+                  {...baseFormProps}
+                  field="handleTimeE"
+                  label="完成逾期(分)"
+                  type="inputNumber"
                 ></ModifyItem>
                 <ModifyItem
                   {...baseFormProps}
                   field="handleRoleE"
-                  label="完成逾期五级上报"
-                  type="select"
-                  lg={8}
+                  label="五级上报"
+                  type="select" 
                   items={roles}
                 ></ModifyItem>
-
               </Row>
             </Card>
           </TabPane>
-
         </Tabs>
       </Form>
-
     </BaseModifyProvider >
   );
 };
