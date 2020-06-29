@@ -3,7 +3,7 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { GetPageDetailListJson, Audit, GetBilling } from './Main.service';
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { ColumnProps,PaginationConfig } from 'antd/lib/table';
+import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import styles from './style.less';
 import moment from 'moment';
 const { TextArea } = Input;
@@ -77,8 +77,8 @@ const Verify = (props: VerifyProps) => {
     });
   };
 
-   //刷新
-   const loadData = (paginationConfig?: PaginationConfig, sorter?) => {
+  //刷新
+  const loadData = (paginationConfig?: PaginationConfig, sorter?) => {
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: pagination.pageSize,
@@ -121,7 +121,7 @@ const Verify = (props: VerifyProps) => {
         //   VerifyMemo: values.verifyMemo
         // };
         //let modifyData = { ...infoDetail, ...values, keyvalue: infoDetail.billId };
-
+        setLoading(true);
         let newData = {
           keyvalue: infoDetail.billId,
           IfVerify: ifVerify,
@@ -129,6 +129,7 @@ const Verify = (props: VerifyProps) => {
         };
         //modifyData.ifVerify = ifVerify;
         Audit(newData).then(() => {
+          setLoading(false);
           closeVerify(true);
           reload();
         });
@@ -235,7 +236,7 @@ const Verify = (props: VerifyProps) => {
       visible={verifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
-      <Card className={styles.card}  hoverable>
+      <Card className={styles.card} hoverable>
         <Form layout="vertical" hideRequiredMark>
           <Spin tip="数据处理中..." spinning={loading}>
             <Row gutter={24}>
@@ -254,7 +255,7 @@ const Verify = (props: VerifyProps) => {
                   {infoDetail.createUserName}
                 </Form.Item>
               </Col>
-            </Row> 
+            </Row>
 
             <Row gutter={24}>
               <Col span={8}>
@@ -345,6 +346,7 @@ const Verify = (props: VerifyProps) => {
         </Button>
         <Button type="primary"
           onClick={onSave}
+          disabled={loading}
         >
           提交
         </Button>

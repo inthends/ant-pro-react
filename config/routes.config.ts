@@ -14,18 +14,21 @@ export default [
     path: '/exception/403',
     component: './403',
   },
-  // {
-  //   path: '/register',
-  //   component: '../layouts/UserLayout',
-  //   routes: [
-  //     {
-  //       path: '/register',
-  //       name: 'register',
-  //       component: './Register/Register',
-  //
-  //     },
-  //   ],
-  // },
+  
+  //提供给阳山公租房申请
+  {
+    path: '/register',
+    component: '../layouts/UserLayout',
+    routes: [
+      {
+        path: '/register',
+        name: 'register',
+        component: './Register/Register',
+  
+      },
+    ],
+  },
+
   {
     path: '/',
     component: '../layouts/BasicLayout',
@@ -64,6 +67,7 @@ export default [
             path: '/dashboard/analysis',
             component: './Dashboard/Analysis',
           },
+
           // {
           //   name: 'workplace',
           //   path: '/dashboard/workplace',
@@ -100,9 +104,8 @@ export default [
             name: 'reports',
             path: '/dashboard/reports',
             component: './Dashboard/Reports/Reports',
-          },
-
-        ],
+          }
+        ]
       },
       //资源管理
       {
