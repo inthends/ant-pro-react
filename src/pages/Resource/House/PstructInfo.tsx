@@ -349,7 +349,7 @@ const PstructInfo = (props: PstructInfoProps) => {
       visible={modifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
-      <Card className={styles.card} >
+      <Card className={styles.card}  hoverable>
         {modifyVisible ? (
           <Form layout="vertical" hideRequiredMark>
             <Row gutter={24}>

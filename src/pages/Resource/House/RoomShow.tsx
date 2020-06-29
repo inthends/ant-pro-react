@@ -148,7 +148,7 @@ const RoomShow = (props: RoomShowProps) => {
         {infoDetail.allName}
       </PageHeader>
       <Divider dashed />
-      <Card className={styles.card} >
+      <Card className={styles.card}  hoverable>
         {showVisible ? (
           <Form layout="vertical" hideRequiredMark>
             <Row gutter={24}>

@@ -417,7 +417,7 @@ const Modify = (props: ModifyProps) => {
     <BaseModifyProvider {...props} name="设备" save={doSave} width={780} >
       <Tabs defaultActiveKey="1" >
         <TabPane tab="基本信息" key="1">
-          <Card className={styles.card}>
+          <Card className={styles.card} hoverable>
             <Form layout="vertical" hideRequiredMark>
               <Row gutter={24}>
                 <ModifyItem
@@ -670,7 +670,7 @@ const Modify = (props: ModifyProps) => {
 
         </TabPane>
         <TabPane tab="维保记录" key="2">
-          <Card>
+          <Card  hoverable>
             <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
               <Button type="link" style={{ float: 'right', marginLeft: '10px' }}
                 onClick={() => doAddMaintenance()}  >
@@ -693,7 +693,7 @@ const Modify = (props: ModifyProps) => {
           </Card>
         </TabPane>
         <TabPane tab="维修记录" key="3">
-          <Card>
+          <Card  hoverable>
             <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
               <Button type="link" style={{ float: 'right', marginLeft: '10px' }}
                 onClick={() => doAddRepair()}  >

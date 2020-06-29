@@ -134,7 +134,7 @@ const AddRebateOrganize = (props: AddRebateOrganizeProps) => {
             </Page>
           </Col>
           <Col span={14}>
-            <Card >
+            <Card  hoverable>
               <Form layout="vertical" hideRequiredMark>
                 <Form.Item label="优惠政策" required>
                   {getFieldDecorator('rebateCode', {

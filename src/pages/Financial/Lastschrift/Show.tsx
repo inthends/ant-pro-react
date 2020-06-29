@@ -253,7 +253,7 @@ const Show = (props: ShowProps) => {
       bodyStyle={{ background: '#f6f7fb', height: 'calc(100vh -55px)' }}  >
       <Spin tip="数据处理中..." spinning={loading}>
         <Form layout="vertical" hideRequiredMark>
-          <Card className={styles.card}>
+          <Card className={styles.card}  hoverable>
             <Row gutter={24}>
               <Col lg={8}>
                 <Form.Item label="划账单号">

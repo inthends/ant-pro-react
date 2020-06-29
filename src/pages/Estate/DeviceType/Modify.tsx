@@ -42,7 +42,7 @@ const Modify = (props: ModifyProps) => {
 
   return (
     <BaseModifyProvider {...props} name="分类" save={doSave}>
-      <Card className={styles.card}>
+      <Card className={styles.card} hoverable>
         <Form layout="vertical" hideRequiredMark>
           <Row gutter={24} hidden={initData.parentId == 0 ? true : false} >
             <ModifyItem

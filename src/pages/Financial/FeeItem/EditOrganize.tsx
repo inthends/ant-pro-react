@@ -63,7 +63,7 @@ const EditOrganize = (props: EditOrganizeProps) => {
       bodyStyle={{ background: '#f6f7fb' }}
       width='400px'
     >
-      <Card>
+      <Card  hoverable>
         <Form layout="vertical" hideRequiredMark> 
           {/* <Form.Item label="税控项目" required>
                 {getFieldDecorator('invoiceId', {

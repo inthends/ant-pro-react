@@ -227,7 +227,9 @@ const ShowLink = (props: ShowLinkProps) => {
             ) : null}
 
             {infoDetail.status > 4 ?
-              (<Card title="完成情况" className={infoDetail.status > 5 ? styles.card2 : styles.card} >
+              (<Card title="完成情况" 
+              hoverable
+              className={infoDetail.status > 5 ? styles.card2 : styles.card} >
                 <Row gutter={24}>
                   <Col lg={6}>
                     <Form.Item label="用时(分钟)">

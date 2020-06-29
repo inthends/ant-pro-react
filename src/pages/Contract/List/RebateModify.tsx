@@ -1,13 +1,11 @@
 
 //优惠条款动态组件,编辑
-import { InputNumber, Input, Select, DatePicker, Card, Col, Row, Form } from 'antd';
+import {  Input, DatePicker, Card, Col, Row, Form } from 'antd';
 import React from 'react';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import styles from './style.less';
 import { HtLeasecontractchargefeeoffer } from '@/model/models';
-import moment from 'moment';
-const { TextArea } = Input;
-const { Option } = Select;
+import moment from 'moment'; 
 
 interface RebateModifyProps {
   form: WrappedFormUtils;
@@ -47,7 +45,7 @@ function RebateModify(props: RebateModifyProps) {
     // getFieldDecorator('Rebates', { initialValue: chargeOfferList });
     // const keys = getFieldValue('Rebates');
     // const formItems = keys.map((k, index) => (
-    <Card className={styles.card} title="免租期"  >
+    <Card className={styles.card} title="免租期"  hoverable >
       <Row gutter={24}>
         {/* <Col lg={5}>
            <Form.Item label="优惠类型" required>

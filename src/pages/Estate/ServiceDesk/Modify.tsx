@@ -1,5 +1,5 @@
 
-import { Spin, Upload, Modal, Menu, Dropdown, Icon, Tabs, Select, Button, Card, Col, Drawer, Form, Input, message, Row } from 'antd';
+import { Spin, Upload, Modal, Icon, Tabs, Select, Button, Card, Col, Drawer, Form, Input, message, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { GetFilesData, RemoveFile, SaveForm, ChangeToRepair, ChangeToComplaint, Visit } from './Main.service';
@@ -12,6 +12,7 @@ const { TextArea } = Input;
 const { TabPane } = Tabs;
 import SelectHouse from './SelectHouse';
 import SelectTemplate from '../../System/Template/SelectTemplate'
+import AuthButton from '@/components/AuthButton/AuthButton';
 
 interface ModifyProps {
   modifyVisible: boolean;
@@ -144,70 +145,147 @@ const Modify = (props: ModifyProps) => {
   //   }
   // };
 
-  const handleMenuClick = (e) => {
+  const torepair = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        if (e.key != '3') {
-          const title = e.item.props.children;
-          Modal.confirm({
-            title: '请确认',
-            content: `确定要` + title + `吗？`,
-            onOk: () => {
-              setLoading(true);
-              const newData = data ? { ...data, ...values } : values;
-              newData.keyvalue = newData.id;
-              if (e.key == '1') {
-
-                ChangeToRepair({ ...newData }).then(res => {
+        Modal.confirm({
+          title: '请确认',
+          content: '确定要转维修吗？',
+          onOk: () => {
+            setLoading(true);
+            const newData = data ? { ...data, ...values } : values;
+            newData.keyvalue = newData.id;
+            ChangeToRepair({ ...newData }).then(res => {
+              setLoading(false);
+              message.destroy();//防止重复弹出提示
+              message.success('操作成功');
+              closeDrawer();
+              reload();
+            }).catch(err => {
+              //数据在APP端已经处理，弹出刷新确认
+              Modal.confirm({
+                title: '请确认',
+                content: err,
+                onOk: () => {
                   setLoading(false);
-                  message.destroy();//防止重复弹出提示
-                  message.success('操作成功！');
                   closeDrawer();
                   reload();
-                }).catch(err => {
-                  //数据在APP端已经处理，弹出刷新确认
-                  Modal.confirm({
-                    title: '请确认',
-                    content: err,
-                    onOk: () => {
-                      setLoading(false);
-                      closeDrawer();
-                      reload();
-                    }
-                  });
-                });
-              }
-              else if (e.key == '2') {
-                setLoading(true);
-                ChangeToComplaint({ ...newData }).then(res => {
-                  setLoading(false);
-                  message.destroy();//防止重复弹出提示
-                  message.success('操作成功！');
-                  closeDrawer();
-                  reload();
-                }).catch(err => {
-                  //数据在APP端已经处理，弹出刷新确认
-                  Modal.confirm({
-                    title: '请确认',
-                    content: err,
-                    onOk: () => {
-                      setLoading(false);
-                      closeDrawer();
-                      reload();
-                    }
-                  });
-                });
-              }
-            }
-          });
-        }
-        else {
-          //闭单，弹出备注页面
-          setAddMemoVisible(true);
-        }
+                }
+              });
+            });
+          }
+        })
       }
     });
   };
+
+
+
+
+  const tocomplaint = () => {
+    form.validateFields((errors, values) => {
+      if (!errors) {
+        Modal.confirm({
+          title: '请确认',
+          content: '确定要转投诉吗？',
+          onOk: () => {
+            setLoading(true);
+            const newData = data ? { ...data, ...values } : values;
+            newData.keyvalue = newData.id;
+            ChangeToComplaint({ ...newData }).then(res => {
+              setLoading(false);
+              message.destroy();//防止重复弹出提示
+              message.success('操作成功');
+              closeDrawer();
+              reload();
+            }).catch(err => {
+              //数据在APP端已经处理，弹出刷新确认
+              Modal.confirm({
+                title: '请确认',
+                content: err,
+                onOk: () => {
+                  setLoading(false);
+                  closeDrawer();
+                  reload();
+                }
+              });
+            });
+          }
+        })
+      }
+    });
+  };
+
+  const doClose = () => {
+    //闭单，弹出备注页面
+    setAddMemoVisible(true);
+  }
+
+
+
+  // const handleMenuClick = (e) => {
+  //   form.validateFields((errors, values) => {
+  //     if (!errors) {
+  //       if (e.key != '3') {
+  //         const title = e.item.props.children;
+  //         Modal.confirm({
+  //           title: '请确认',
+  //           content: `确定要` + title + `吗？`,
+  //           onOk: () => {
+  //             setLoading(true);
+  //             const newData = data ? { ...data, ...values } : values;
+  //             newData.keyvalue = newData.id;
+  //             if (e.key == '1') { 
+  //               ChangeToRepair({ ...newData }).then(res => {
+  //                 setLoading(false);
+  //                 message.destroy();//防止重复弹出提示
+  //                 message.success('操作成功！');
+  //                 closeDrawer();
+  //                 reload();
+  //               }).catch(err => {
+  //                 //数据在APP端已经处理，弹出刷新确认
+  //                 Modal.confirm({
+  //                   title: '请确认',
+  //                   content: err,
+  //                   onOk: () => {
+  //                     setLoading(false);
+  //                     closeDrawer();
+  //                     reload();
+  //                   }
+  //                 });
+  //               });
+  //             }
+  //             else if (e.key == '2') {
+  //               setLoading(true);
+  //               ChangeToComplaint({ ...newData }).then(res => {
+  //                 setLoading(false);
+  //                 message.destroy();//防止重复弹出提示
+  //                 message.success('操作成功！');
+  //                 closeDrawer();
+  //                 reload();
+  //               }).catch(err => {
+  //                 //数据在APP端已经处理，弹出刷新确认
+  //                 Modal.confirm({
+  //                   title: '请确认',
+  //                   content: err,
+  //                   onOk: () => {
+  //                     setLoading(false);
+  //                     closeDrawer();
+  //                     reload();
+  //                   }
+  //                 });
+  //               });
+  //             }
+  //           }
+  //         });
+  //       }
+  //       else {
+  //         //闭单，弹出备注页面
+  //         setAddMemoVisible(true);
+  //       }
+  //     }
+  //   });
+  // };
 
   //异步加载房产
   // const onLoadData = treeNode =>
@@ -227,14 +305,15 @@ const Modify = (props: ModifyProps) => {
   //     }, 50);
   //   });
 
-  const menu = (
-    <Menu onClick={handleMenuClick}>
-      <Menu.Item key="1">转维修</Menu.Item>
-      <Menu.Item key="2">转投诉</Menu.Item>
-      <Menu.Item key="3">闭单</Menu.Item>
-      {/* <Menu.Item key="4">归档</Menu.Item> */}
-    </Menu>
-  );
+  //不好权限控制，取消
+  // const menu = (
+  //   <Menu onClick={handleMenuClick}>
+  //     <Menu.Item key="1">转维修</Menu.Item>
+  //     <Menu.Item key="2">转投诉</Menu.Item>
+  //     <Menu.Item key="3">闭单</Menu.Item>
+  //     {/* <Menu.Item key="4">归档</Menu.Item> */}
+  //   </Menu>
+  // );
 
   //图片上传
   const getBase64 = (file) => {
@@ -379,7 +458,7 @@ const Modify = (props: ModifyProps) => {
           <TabPane tab="基础信息" key="1">
             <Form layout="vertical" hideRequiredMark>
               {!infoDetail.status || infoDetail.status == 1 ? (
-                <Card className={styles.card2}>
+                <Card className={styles.card2} hoverable>
                   <Row gutter={24}>
                     <Col lg={10}>
                       <Form.Item label="服务单号">
@@ -637,7 +716,7 @@ const Modify = (props: ModifyProps) => {
                   </Row>
                 </Card>
               ) :
-                (<Card className={infoDetail.status == 1 ? styles.card2 : styles.card} title="基础信息" >
+                (<Card  hoverable className={infoDetail.status == 1 ? styles.card2 : styles.card} title="基础信息" >
                   <Row gutter={24}>
                     <Col lg={7}>
                       <Form.Item label="服务单号">
@@ -959,11 +1038,42 @@ const Modify = (props: ModifyProps) => {
             <Button style={{ marginRight: 8 }} onClick={save} type="primary" disabled={loading}>
               保存
            </Button>
-            <Dropdown overlay={menu} >
+            {/* <Dropdown overlay={menu} >
               <Button disabled={loading}>
                 更多<Icon type="down" />
               </Button>
-            </Dropdown>
+            </Dropdown> */}
+
+            <AuthButton
+              style={{ marginRight: 8 }}
+              onClick={torepair}
+              disabled={loading}
+              btype="primary"
+              module="Servicedesk"
+              code="torepair"
+            >
+              转维修
+           </AuthButton>
+
+            <AuthButton
+              style={{ marginRight: 8 }}
+              onClick={tocomplaint}
+              btype="primary"
+              module="Servicedesk"
+              code="tocomplaint"
+              disabled={loading}>
+              转投诉
+           </AuthButton>
+
+            <AuthButton
+              onClick={doClose}
+              btype="primary"
+              module="Servicedesk"
+              code="close"
+              disabled={loading}>
+              闭单
+           </AuthButton>
+
           </span>) : null}
 
         {infoDetail.status == 3 ? (

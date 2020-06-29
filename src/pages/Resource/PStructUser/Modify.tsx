@@ -233,7 +233,7 @@ const Modify = (props: ModifyProps) => {
 
       <Tabs defaultActiveKey="1" >
         <TabPane tab="基本信息" key="1">
-          <Card className={styles.card} >
+          <Card className={styles.card}  hoverable>
             {modifyVisible ? (
               <Form layout="vertical" hideRequiredMark>
                 <Row gutter={24}>

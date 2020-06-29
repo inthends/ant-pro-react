@@ -95,7 +95,7 @@ const Modify = (props: ModifyProps) => {
     <BaseModifyProvider {...props} name="模板" save={doSave}
       width={750} >
       <Form layout="vertical" hideRequiredMark>
-        <Card className={styles.card}>
+        <Card className={styles.card} hoverable>
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
@@ -143,7 +143,7 @@ const Modify = (props: ModifyProps) => {
             ></ModifyItem>
           </Row>
         </Card>
-        <Card className={styles.card} title='关键词复制'>
+        <Card className={styles.card} title='关键词复制' hoverable>
           <Row gutter={24}>
             <Tooltip title="当前系统登录用户名">
               <Button className={styles.button}
@@ -210,7 +210,7 @@ const Modify = (props: ModifyProps) => {
             >收款明细</Button></Tooltip>
           </Row>
         </Card>
-        <Card className={styles.card2}>
+        <Card className={styles.card2} hoverable>
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}

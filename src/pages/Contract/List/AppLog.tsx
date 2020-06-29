@@ -45,7 +45,7 @@ function AppLog(props: AppLogProps) {
 
   return (
     <div>
-      <Card  >
+      <Card   hoverable>
         <Table
           style={{ border: 'none' }}
           bordered={false}

@@ -102,7 +102,7 @@ const Modify = (props: ModifyProps) => {
       name="流程"
       save={doSave}
       width={1000}>
-      <Card className={styles.card}>
+      <Card hoverable className={styles.card}>
         <Form layout="vertical" hideRequiredMark>
           <Row gutter={24}>
             <ModifyItem

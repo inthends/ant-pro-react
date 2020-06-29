@@ -79,7 +79,7 @@ const Modify = (props: ModifyProps) => {
 
   return (
     <BaseModifyProvider {...props} name="用户" save={doSave}>
-      <Card>
+      <Card hoverable>
         <Form layout="vertical" hideRequiredMark>
 
           {initData.id == undefined ? <div>

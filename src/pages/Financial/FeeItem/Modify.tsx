@@ -797,7 +797,7 @@ const Modify = (props: ModifyProps) => {
         <Spin tip="数据处理中..." spinning={loading}>
           <Tabs defaultActiveKey="1" >
             <TabPane tab="基本信息" key="1">
-              <Card className={styles.card} >
+              <Card className={styles.card}  hoverable>
                 <Row gutter={24}>
                   <Col lg={12}>
                     <Form.Item label="费项种类" required>

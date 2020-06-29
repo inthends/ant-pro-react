@@ -83,7 +83,6 @@ export function RemoveLinePoint(keyvalue): Promise<any> {
     .then(getResult as any);
 }
 
-
 //移动路线下的点位排序
 export function MovePoint(keyvalue,sort): Promise<any> {
   return request
@@ -101,6 +100,6 @@ export function RemoveLinePointAll(keyvalue): Promise<any> {
 //获取角色
 export function GetTreeRoleJson(): Promise<any[]> { 
   return request
-    .get(process.env.basePath + `/Polling/GetTreeRoleJson`)
+    .get(process.env.basePath + `/Role/GetRoleListJson`)
     .then(getResult as any);
 }

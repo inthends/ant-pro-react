@@ -202,7 +202,7 @@ const ApproveView = (props: ApproveViewProps) => {
       <Tabs defaultActiveKey="1" >
         <TabPane tab="基础信息" key="1">
           <Form layout="vertical" hideRequiredMark>
-            <Card className={styles.card}>
+            <Card className={styles.card} hoverable>
               <Row gutter={24}>
                 <Col span={8}>
                   <Form.Item label="总金额">

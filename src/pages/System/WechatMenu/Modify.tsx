@@ -229,7 +229,7 @@ const Modify = (props: ModifyProps) => {
       name="菜单"
       width={700}
       save={doSave}>
-      <Card className={styles.card}>
+      <Card className={styles.card} hoverable>
         <Form layout="vertical" hideRequiredMark>
         
           <Row gutter={24}>

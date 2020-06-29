@@ -65,3 +65,10 @@ export function CheckOrg(keyvalue): Promise<any> {
     .get(process.env.basePath + `/Organize/CheckOrg?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
+
+//获取角色
+export function GetRoleListJson(): Promise<any[]> { 
+  return request
+    .get(process.env.basePath + `/Role/GetRoleListJson`)
+    .then(getResult as any);
+}

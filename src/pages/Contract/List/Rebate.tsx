@@ -36,7 +36,7 @@ function Rebate(props: RebateProps) {
   const keys = getFieldValue('Rebates');
   const formItems = keys.map((k, index) => (
 
-    <Card key={k} className={styles.card} title="优惠" extra={<Icon type="minus-circle-o" onClick={() => remove(k)} />}>
+    <Card  hoverable key={k} className={styles.card} title="优惠" extra={<Icon type="minus-circle-o" onClick={() => remove(k)} />}>
       <Row gutter={24}>
         <Col lg={4}>
           <Form.Item label="优惠类型" >

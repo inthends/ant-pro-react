@@ -76,7 +76,7 @@ const AddFee = (props: AddFeeProps) => {
           />
         </Col>
         <Col span={16}>
-          <Card>
+          <Card  hoverable>
             <Form hideRequiredMark>
               <Row>
                 {/* <Form.Item label="加费对象" required labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} >

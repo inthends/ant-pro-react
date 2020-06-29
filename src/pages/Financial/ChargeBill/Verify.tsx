@@ -316,7 +316,7 @@ const Verify = (props: VerifyProps) => {
           </span>
         </PageHeader>
         <Divider dashed />
-        <Card className={styles.card}>
+        <Card className={styles.card}  hoverable>
           <Form layout="vertical">
             <Row gutter={24}>
               <Col span={4}>

@@ -637,7 +637,7 @@ function ListTable(props: ListTableProps) {
     <Page>
       <Spin tip="数据处理中..." spinning={myLoading}>
         <Form layout="vertical" hideRequiredMark> 
-          <Card bordered={false}>
+          <Card bordered={false}  hoverable>
             <Row gutter={12}>
               <Col lg={4}>
                 <Form.Item >

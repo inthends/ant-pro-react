@@ -812,7 +812,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
       style={{ height: 'calc(100vh-50px)' }}
       bodyStyle={{ background: '#f6f7fb', height: 'calc(100vh -50px)' }}
     >
-      <Card className={styles.card}>
+      <Card className={styles.card}  hoverable>
         <Form layout="vertical" hideRequiredMark>
           <Spin tip="数据处理中..." spinning={loading}>
             <Row gutter={12}>

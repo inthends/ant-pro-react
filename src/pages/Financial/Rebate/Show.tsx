@@ -212,7 +212,7 @@ const Show = (props: ShowProps) => {
     >
 
       <Form layout="vertical" hideRequiredMark>
-        <Card className={styles.card}>
+        <Card className={styles.card} hoverable>
           <Row gutter={24}>
             <Col lg={6}>
               <Form.Item label="优惠单号">

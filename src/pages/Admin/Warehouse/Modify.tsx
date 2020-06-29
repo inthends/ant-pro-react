@@ -38,7 +38,7 @@ const Modify = (props: ModifyProps) => {
 
   return (
     <BaseModifyProvider {...props} name="仓库" save={doSave}>
-      <Card>
+      <Card  hoverable>
         <Form layout="vertical" hideRequiredMark>
           <Row gutter={24}> 
             <ModifyItem

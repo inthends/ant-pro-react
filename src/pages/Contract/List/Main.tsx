@@ -276,7 +276,7 @@ function Main() {
                 合同
               </Button>
             </div>
-            <Card className={styles.card}>
+            <Card className={styles.card}  hoverable>
               <Row>
                 <Col sm={4} xs={24}>
                   <Info title="新建待修改" value={totalInfo ? totalInfo.newModify : 0} bordered />

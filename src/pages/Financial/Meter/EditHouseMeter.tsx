@@ -128,7 +128,7 @@ const EditHouseMeter = (props: EditHouseMeterProps) => {
       bodyStyle={{ background: '#f6f7fb' }}
       width='600px'
     >
-      <Card>
+      <Card  hoverable>
         <Form layout="vertical" hideRequiredMark>
           {/* <Spin tip="数据处理中..." spinning={loading}> */}
           <Row gutter={24}>

@@ -120,7 +120,7 @@ const Modify = (props: ModifyProps) => {
             />
           </Col>
           <Col span={12} style={{ height: 'calc(100vh - 100px)', overflow: 'auto' }}>
-            <Card>
+            <Card  hoverable>
               <Form layout="vertical" hideRequiredMark>
                 <Row gutter={24}>
                   <Col span={8}>

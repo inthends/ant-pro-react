@@ -320,7 +320,7 @@ const Show = (props: ShowProps) => {
         {infoDetail.verifyMemo}
       </PageHeader>
       <Divider dashed />
-      <Card className={styles.card} >
+      <Card className={styles.card}  hoverable>
         <Spin tip="数据处理中..." spinning={loading}>
           <Row>
             <div style={{ marginBottom: '20px', padding: '3px 2px' }}>

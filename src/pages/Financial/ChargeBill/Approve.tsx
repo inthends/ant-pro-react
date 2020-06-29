@@ -236,7 +236,7 @@ const Approve = (props: ApproveProps) => {
       visible={visible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
       <Form layout="vertical" hideRequiredMark>
-        <Card className={styles.cardnarrow}>
+        <Card className={styles.cardnarrow} hoverable>
           <Row gutter={24}>
             <Col span={8}>
               <Form.Item label="总金额">
@@ -282,7 +282,7 @@ const Approve = (props: ApproveProps) => {
           />
         </Card>
 
-        <Card className={styles.card}>
+        <Card className={styles.card} hoverable>
           <CommentBox instanceId={instanceId} />
           <Form.Item label="">
             {getFieldDecorator('verifyMemo', {

@@ -403,7 +403,7 @@ const Modify = (props: ModifyProps) => {
       bodyStyle={{ background: '#f6f7fb', height: 'calc(100vh -50px)' }}
     >
       <Spin tip="数据处理中..." spinning={loading}>
-        <Card className={styles.card} >
+        <Card className={styles.card}  hoverable>
           <Form layout="vertical" hideRequiredMark> 
             <Row gutter={24}>
               <Col span={6}>

@@ -81,7 +81,7 @@ const Verify = (props: VerifyProps) => {
       visible={verifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
-      <Card>
+      <Card  hoverable>
         <Form layout="vertical" hideRequiredMark> 
           <Row gutter={24}>
             <Col span={8}>

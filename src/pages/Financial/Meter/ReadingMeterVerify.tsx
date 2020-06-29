@@ -515,7 +515,7 @@ const ReadingMeterVerify = (props: ReadingMeterVerifyProps) => {
         <Spin tip="数据处理中..." spinning={loading}>
           <Tabs >
             <TabPane tab="基础信息" key="1">
-              <Card className={styles.Card} >
+              <Card className={styles.Card}  hoverable>
                 <Row gutter={12}>
                   <Col span={8}>
                     <Form.Item required={true} label="抄表单号"  >

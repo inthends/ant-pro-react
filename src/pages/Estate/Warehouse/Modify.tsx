@@ -223,7 +223,7 @@ const Modify = (props: ModifyProps) => {
           <TabPane tab="基础信息" key="1">
             <Form layout="vertical" hideRequiredMark>
               {infoDetail.status != 2 ? (
-                <Card className={styles.card}  >
+                <Card className={styles.card}   hoverable>
                   <Row gutter={24}>
                     <Col lg={8}>
                       <Form.Item label="单据来源" required>
@@ -383,7 +383,7 @@ const Modify = (props: ModifyProps) => {
                   </Row>
                 </Card>
               ) :
-                <Card className={styles.card}  >
+                <Card className={styles.card}  hoverable >
                   <Row gutter={24}>
                     <Col lg={4}>
                       <Form.Item label="单据来源"  >

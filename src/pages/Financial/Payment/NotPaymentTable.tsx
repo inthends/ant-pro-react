@@ -227,7 +227,7 @@ function NotPaymentTable(props: NotPaymentTableProps) {
   return (
     <Page>
       <Form layout="vertical" hideRequiredMark>
-        <Card bordered={false}  >
+        <Card bordered={false}   hoverable>
           <Row gutter={24} style={{ marginBottom: '8px' }}>
             <Col lg={24}>
               <span style={{ color: "red" }}>

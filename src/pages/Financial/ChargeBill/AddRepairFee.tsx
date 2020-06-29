@@ -311,7 +311,7 @@ const AddRepairFee = (props: AddRepairFeeProps) => {
           }
 
           <Col span={mainId != '' ? 24 : 17}>
-            <Card className={styles.card}>
+            <Card className={styles.card} hoverable>
               <Form hideRequiredMark>
                 <Row>
                   <Form.Item label="加费对象" required labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} >

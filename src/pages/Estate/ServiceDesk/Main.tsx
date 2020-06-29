@@ -271,12 +271,12 @@ function Main() {
 
           <DatePicker
             placeholder='单据日期起'
-            onChange={billDateBegin => loadData({ ...search, billDateBegin })}
+            onChange={(data,billDateBegin) => loadData({ ...search, billDateBegin })}
             style={{ marginRight: '5px', width: '130px' }} />
               至
               <DatePicker
             placeholder='单据日期止'
-            onChange={billDateEnd => loadData({ ...search, billDateEnd })}
+            onChange={(date,billDateEnd) => loadData({ ...search, billDateEnd })}
             style={{ marginLeft: '5px', marginRight: '5px', width: '130px' }} />
 
           <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer()}>

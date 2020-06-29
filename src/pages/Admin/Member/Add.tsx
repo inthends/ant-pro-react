@@ -139,7 +139,7 @@ const Add = (props: AddProps) => {
       name="编码"
       width={700}
       save={doSave}>
-      <Card>
+      >
         <Form layout="vertical" hideRequiredMark>
           {/* <Row gutter={24}> 
             <ModifyItem

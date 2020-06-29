@@ -317,7 +317,9 @@ const Add = (props: AddProps) => {
             <TabPane tab="基本信息" key="1">
               <Row gutter={24}>
                 <Col span={12}>
-                  <Card title="基本信息" className={styles.addcard} hoverable>
+                  <Card title="基本信息"
+                   className={styles.addcard} 
+                   hoverable>
                     {/* <Row gutter={24}>
                       <Col lg={24}>
                         <Form.Item label="模板选择">

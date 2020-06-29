@@ -28,7 +28,7 @@ const ModifyRepair = (props: ModifyRepairProps) => {
 
   return (
     <BaseModifyProvider {...props} name="维修记录" save={doSave}>
-      <Card>
+      <Card  hoverable>
         <Form layout="vertical" hideRequiredMark>
           <Row gutter={24}>
             <ModifyItem

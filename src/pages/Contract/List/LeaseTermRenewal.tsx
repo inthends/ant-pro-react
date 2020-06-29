@@ -60,6 +60,7 @@ function LeaseTermRenewal(props: LeaseTermRenewalProps) {
   const keys = getFieldValue('LeaseTerms');
   const formItems = keys.map((k, index) => (
     <Card key={k} className={styles.card}
+    hoverable
       extra={<Icon type="minus-circle-o" onClick={() => remove(k)} />}>
       <Row gutter={24}>
         <Col lg={4}>
@@ -216,7 +217,7 @@ function LeaseTermRenewal(props: LeaseTermRenewalProps) {
 
   return (
     <div style={{ marginBottom: '10px' }}  >
-      <Card key='0' title="租期条款" className={styles.card}  >
+      <Card  hoverable key='0' title="租期条款" className={styles.card}  >
         <Row gutter={24}>
           <Col lg={4}>
             <Form.Item label="开始时间" required >

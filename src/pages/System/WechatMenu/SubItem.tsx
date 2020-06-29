@@ -36,7 +36,7 @@ const SubItem = (props: SubItemProps) => {
 
   return (
     <BaseModifyProvider {...props} name="二级菜单" save={doSave}>
-      <Card>
+      <Card hoverable>
         <Form layout="vertical" hideRequiredMark>
           <Row gutter={24}>
             <ModifyItem

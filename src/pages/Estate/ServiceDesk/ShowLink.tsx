@@ -113,7 +113,9 @@ const ShowLink = (props: ShowLinkProps) => {
         <Tabs defaultActiveKey="1" >
           <TabPane tab="基础信息" key="1">
             <Form layout="vertical" hideRequiredMark>
-              <Card className={infoDetail.status == 2 ? styles.card2 : styles.card} title="基础信息" >
+              <Card  hoverable className={infoDetail.status == 2 ? styles.card2 : styles.card} 
+              title="基础信息"
+              hoverable >
                 <Row gutter={24}>
                   <Col lg={6}>
                     <Form.Item label="服务单号">
@@ -216,7 +218,7 @@ const ShowLink = (props: ShowLinkProps) => {
                   </Col>
                 </Row>
               </Card>
-              <Card title="回访情况" className={styles.card2}  >
+              <Card title="回访情况" className={styles.card2}  hoverable >
                 <Row gutter={24}>
                   <Col lg={6}>
                     <Form.Item label="回访方式"  >

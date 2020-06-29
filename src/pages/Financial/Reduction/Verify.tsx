@@ -215,7 +215,7 @@ const Verify= (props: VerifyProps) => {
     >
 
       <Form layout="vertical" hideRequiredMark>
-        <Card  className={styles.card}>
+        <Card  className={styles.card} hoverable>
           <Row gutter={24}>
             <Col lg={8}>
               <Form.Item label="减免单号">

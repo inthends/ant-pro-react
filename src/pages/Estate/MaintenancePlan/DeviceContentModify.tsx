@@ -79,7 +79,7 @@ const DeviceContentModify = (props: DeviceContentModifyProps) => {
       bodyStyle={{ background: '#f6f7fb' }}
       width='580px'
     >
-      <Card>
+      <Card  hoverable>
         <Form layout="vertical" hideRequiredMark>
           <Row gutter={24}>
             <Col lg={12}>

@@ -744,7 +744,9 @@ const Modify = (props: ModifyProps) => {
 
                 </Card>
               ) : infoDetail.status > 4 ?
-                  (<Card title="完成情况" className={infoDetail.repairArea == '客户区域' ? styles.card2 : styles.card} >
+                  (<Card title="完成情况" 
+                  hoverable
+                  className={infoDetail.repairArea == '客户区域' ? styles.card2 : styles.card} >
                     <Row gutter={24}>
                       <Col lg={5}>
                         <Form.Item label="完成时间">
@@ -1020,8 +1022,7 @@ const Modify = (props: ModifyProps) => {
           <span>
             <Button onClick={start} type="primary" style={{ marginRight: 8 }}>
               开工
-            </Button>
-
+            </Button> 
             <Button onClick={change} type="primary">
               转单
             </Button>
@@ -1042,7 +1043,6 @@ const Modify = (props: ModifyProps) => {
             <Button onClick={start} type="danger" style={{ marginRight: 8 }}>
               退单
             </Button>
-
             <Button onClick={handle} type="primary">
               完成
             </Button>

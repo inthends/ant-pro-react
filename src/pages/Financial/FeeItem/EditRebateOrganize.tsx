@@ -67,7 +67,7 @@ const EditRebateOrganize = (props: EditRebateOrganizeProps) => {
       bodyStyle={{ background: '#f6f7fb' }}
       width='450px'
     >
-      <Card>
+      <Card  hoverable>
         <Form layout="vertical" hideRequiredMark>
           <Form.Item label="优惠政策" required>
             {getFieldDecorator('rebateCode', {

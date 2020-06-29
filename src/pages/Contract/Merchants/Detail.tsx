@@ -139,7 +139,7 @@ const Detail = (props: DetailProps) => {
         <Form layout="vertical">
           <Row gutter={24}>
             <Col span={12}>
-              <Card title="基本信息" className={styles.card}>
+              <Card title="基本信息" className={styles.card} hoverable>
                 <Row gutter={24}>
                   <Col lg={12}>
                     <Form.Item label="客户联系人" >
@@ -186,7 +186,7 @@ const Detail = (props: DetailProps) => {
                 </Row>
               </Card>
 
-              <Card title="需求信息" className={styles.addcard}>
+              <Card title="需求信息" className={styles.addcard} hoverable>
                 <Row gutter={24}>
                   <Col lg={12}>
                     <Form.Item label="城市/区域/商圈"  >
@@ -204,7 +204,7 @@ const Detail = (props: DetailProps) => {
             </Col>
 
             <Col span={12}>
-              <Card title="意向房源" className={styles.card}>
+              <Card title="意向房源" className={styles.card} hoverable>
                 <Row gutter={24}>
                   <Col lg={24}>
                     <List

@@ -43,12 +43,12 @@ const AddMemo = (props: AddMemoProps) => {
       bodyStyle={{ background: '#f6f7fb', height: '250px' }}
       width='400px' > 
       <Form layout="vertical" hideRequiredMark>
-        <Row gutter={24}>
+        <Row gutter={6}>
           <Col lg={24}>
-            <Form.Item label="&nbsp;">
+            <Form.Item >
               {getFieldDecorator('memo', {
                 rules: [{ required: true, message: '请输入说明' }]
-              })(<TextArea rows={7} placeholder="请输入说明" />)}
+              })(<TextArea rows={9} placeholder="请输入说明" />)}
             </Form.Item>
           </Col>
         </Row>

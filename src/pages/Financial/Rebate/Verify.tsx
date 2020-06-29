@@ -222,7 +222,7 @@ const Verify = (props: VerifyProps) => {
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
 
       <Form layout="vertical" hideRequiredMark>
-        <Card className={styles.card}>
+        <Card className={styles.card} hoverable>
           <Row gutter={24}>
             <Col lg={8}>
               <Form.Item label="优惠单号">

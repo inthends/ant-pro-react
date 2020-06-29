@@ -3,9 +3,10 @@ import ModifyItem, { SelectItem } from '@/components/BaseModifyDrawer/ModifyItem
 import { Icon, Upload, Col, Tabs, Card, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useState, useEffect } from 'react';
-import { SaveForm, searchUser, ExistEnCode } from './Organize.service';
+import { GetRoleListJson, SaveForm, searchUser, ExistEnCode } from './Organize.service';
 import { GetOrgsWithNoGLC } from '@/services/commonItem';
 import { TreeNode } from 'antd/lib/tree-select';
+import styles from './style.less';
 const { TabPane } = Tabs;
 
 interface ModifyProps {
@@ -19,6 +20,7 @@ const Modify = (props: ModifyProps) => {
   const { data, form, visible } = props;
   const { getFieldDecorator } = form;
   const [managers, setManagers] = useState<SelectItem[]>([]);
+  const [roles, setRoles] = useState<any[]>([]);
   // const [types, setTypes] = useState<SelectItem[]>([
   //   {
   //     label: '集团',
@@ -49,6 +51,11 @@ const Modify = (props: ModifyProps) => {
     // getOrgs(); 
     GetOrgsWithNoGLC().then(res => {
       setOrgs(res);
+    });
+
+    //角色
+    GetRoleListJson().then(res => {
+      setRoles(res || []);
     });
 
     //加载图片
@@ -158,11 +165,11 @@ const Modify = (props: ModifyProps) => {
   );
 
   return (
-    <BaseModifyProvider {...props} name="机构" save={doSave} width={700} >
+    <BaseModifyProvider {...props} name="机构" save={doSave} width={800} >
       <Form layout="vertical" hideRequiredMark >
         <Tabs defaultActiveKey="1" >
           <TabPane tab="基本信息" key="1">
-            <Card  >
+            <Card hoverable className={styles.card}  >
               <Row gutter={24} hidden={initData.parentId == 0 ? true : false} >
                 <ModifyItem
                   {...baseFormProps}
@@ -284,14 +291,15 @@ const Modify = (props: ModifyProps) => {
                   )}
                 </Col>
               </Row>
-
-
             </Card>
           </TabPane>
+
           <TabPane tab="支付设置" key="2">
-            <Card >
+            <Card hoverable>
               <Row gutter={24}>
-                <ModifyItem  {...baseFormProps} field="posType" label="POS机类型"
+                <ModifyItem  {...baseFormProps}
+                  field="posType"
+                  label="POS机类型"
                   type="select"
                   rules={[{ required: true, message: '请选择POS机类型' }]}
                   items={
@@ -334,50 +342,154 @@ const Modify = (props: ModifyProps) => {
                 </Row>
                 </>
                 )}
-
               {/* <Row gutter={24}> 
            <ModifyItem {...baseFormProps} field="lklPlatPublicKey" label="拉卡拉公钥"></ModifyItem> 
             <ModifyItem {...baseFormProps} field="lklMchPrivateKey" label="拉卡拉私钥"></ModifyItem>
           </Row>*/}
-
-
             </Card>
           </TabPane>
 
-          {/* <TabPane tab="服务单设置" key="2">
-            <Card> 
+          <TabPane tab="服务单设置" key="3">
+            <Card
+
+              title='派单逾期设置'
+              hoverable className={styles.cardsmall}>
+
+
               <Row gutter={24}>
                 <ModifyItem
                   {...baseFormProps}
-                  field="fullName"
-                  label="回复逾期(分)"
-                  type="inputNumber"
-                  rules={[{ required: true, message: '请输入回复逾期' }]}
-                ></ModifyItem>
-                <ModifyItem
-                  {...baseFormProps}
-                  field="enCode"
+                  field="dispatchTime"
                   label="派单逾期(分)"
-                  rules={[{ required: true, message: "请输入派单逾期" }]}
+                  type='inputNumber'
+                  lg={6}
                 ></ModifyItem>
-              </Row>    
+                <ModifyItem
+                  {...baseFormProps}
+                  field="dispatchRoleA"
+                  label="派单逾期一级上报"
+                  type="select"
+                  lg={6}
+                  items={roles}
+                ></ModifyItem>
+                <ModifyItem
+                  {...baseFormProps}
+                  field="dispatchRoleB"
+                  label="派单逾期二级上报"
+                  type="select"
+                  lg={6}
+                  items={roles}
+                ></ModifyItem>
+
+                <ModifyItem
+                  {...baseFormProps}
+                  field="dispatchRoleC"
+                  label="派单逾期三级上报"
+                  type="select"
+                  lg={6}
+                  items={roles}
+                ></ModifyItem>
+              </Row>
+            </Card>
+            <Card
+
+              title='接单逾期设置'
+              hoverable className={styles.cardsmall}>
+
               <Row gutter={24}>
                 <ModifyItem
                   {...baseFormProps}
-                  field="fullName"
+                  field="receiveTime"
                   label="接单逾期(分)"
                   type="inputNumber"
-                  rules={[{ required: true, message: '请输入接单逾期' }]}
+                  lg={6}
                 ></ModifyItem>
                 <ModifyItem
                   {...baseFormProps}
-                  field="enCode"
-                  label="完成逾期(分)"
-                  rules={[{ required: true, message: "请输入完成逾期" }]}
+                  field="receiveRoleA"
+                  label="接单逾期一级上报"
+                  type="select"
+                  lg={6}
+                  items={roles}
                 ></ModifyItem>
-              </Row>    
+                <ModifyItem
+                  {...baseFormProps}
+                  field="receiveRoleB"
+                  label="接单逾期二级上报"
+                  type="select"
+                  lg={6}
+                  items={roles}
+                ></ModifyItem>
+
+                <ModifyItem
+                  {...baseFormProps}
+                  field="receiveRoleC"
+                  label="接单逾期三级上报"
+                  type="select"
+                  lg={6}
+                  items={roles}
+                ></ModifyItem>
+              </Row>
             </Card>
-          </TabPane> */}
+            <Card
+              title='完成逾期设置'
+              hoverable className={styles.card}>
+
+              <Row gutter={24}>
+                <ModifyItem
+                  {...baseFormProps}
+                  field="handleTime"
+                  label="完成逾期(分)"
+                  type="inputNumber"
+                  lg={8}
+                ></ModifyItem>
+                <ModifyItem
+                  {...baseFormProps}
+                  field="handleRoleA"
+                  label="完成逾期一级上报"
+                  type="select"
+                  lg={8}
+                  items={roles}
+                ></ModifyItem>
+                <ModifyItem
+                  {...baseFormProps}
+                  field="handleRoleB"
+                  label="完成逾期二级上报"
+                  type="select"
+                  lg={8}
+                  items={roles}
+                ></ModifyItem>
+              </Row>
+
+              <Row gutter={24}>
+                <ModifyItem
+                  {...baseFormProps}
+                  field="handleRoleC"
+                  label="完成逾期三级上报"
+                  type="select"
+                  lg={8}
+                  items={roles}
+                ></ModifyItem>
+                <ModifyItem
+                  {...baseFormProps}
+                  field="handleRoleD"
+                  label="完成逾期四级上报"
+                  type="select"
+                  lg={8}
+                  items={roles}
+                ></ModifyItem>
+                <ModifyItem
+                  {...baseFormProps}
+                  field="handleRoleE"
+                  label="完成逾期五级上报"
+                  type="select"
+                  lg={8}
+                  items={roles}
+                ></ModifyItem>
+
+              </Row>
+            </Card>
+          </TabPane>
 
         </Tabs>
       </Form>

@@ -77,7 +77,7 @@ const AddHouseFee = (props: AddHouseFeeProps) => {
             />
           </Col>
           <Col span={8}>
-            <Card >
+            <Card   hoverable>
               <Checkbox.Group
                 options={["入住", "空置"]}
                 value={checkedList}

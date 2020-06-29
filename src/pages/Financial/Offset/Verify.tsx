@@ -238,7 +238,7 @@ const Verify = (props: VerifyProps) => {
         {/* <Spin tip="数据处理中..." spinning={loading}>
        </Spin> */}
  
-        <Card className={styles.card}>
+        <Card className={styles.card} hoverable>
           <Row gutter={24}>
             <Col lg={8}>
               <Form.Item label="冲抵单号">

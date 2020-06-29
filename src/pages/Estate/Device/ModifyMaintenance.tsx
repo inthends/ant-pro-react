@@ -26,7 +26,7 @@ const ModifyMaintenance = (props: ModifyMaintenanceProps) => {
 
   return (
     <BaseModifyProvider {...props} name="维保记录" save={doSave}>
-      <Card>
+      <Card  hoverable>
         <Form layout="vertical" hideRequiredMark>
           <Row gutter={24}> 
 

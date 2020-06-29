@@ -231,7 +231,7 @@ const Modify = (props: ModifyProps) => {
       name="编码"
       width={700}
       save={doSave}>
-      <Card className={styles.card}>
+      <Card className={styles.card} hoverable>
         <Form layout="vertical" hideRequiredMark>
           {/* <Row gutter={24}> 
             <ModifyItem

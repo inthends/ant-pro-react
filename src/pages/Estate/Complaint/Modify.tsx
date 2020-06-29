@@ -416,7 +416,9 @@ const Modify = (props: ModifyProps) => {
         {modifyVisible ? (
           <Form layout="vertical" hideRequiredMark>
             {infoDetail.status == 1 ? (
-              <Card title="立项信息" className={infoDetail.status == 1 ? styles.card2 : styles.card} hoverable >
+              <Card title="立项信息"  
+              className={infoDetail.status == 1 ? styles.card2 : styles.card}
+               hoverable >
                 <Row gutter={24}>
                   <Col lg={6}>
                     <Form.Item label="对象类别" required>

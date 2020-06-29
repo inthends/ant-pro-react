@@ -201,7 +201,7 @@ const PaymentVerify = (props: PaymentVerifyProps) => {
       visible={verifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
-      <Card className={styles.card}>
+      <Card className={styles.card} hoverable>
         <Form layout="vertical" hideRequiredMark>
           {/* <Row gutter={24}>
             <Col span={8}>

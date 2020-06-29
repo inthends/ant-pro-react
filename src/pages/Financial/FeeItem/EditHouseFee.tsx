@@ -325,7 +325,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
       <Form layout="vertical" hideRequiredMark>
         <Tabs defaultActiveKey="1" >
           <TabPane tab="基本信息" key="1">
-            <Card className={styles.card}  >
+            <Card className={styles.card}  hoverable >
               <Row gutter={24}>
                 <Col lg={12}>
                   <Form.Item label="费项名称" required>

@@ -540,7 +540,7 @@ const Withdrawal = (props: WithdrawalProps) => {
                 className={styles.card}></ResultList>
             </TabPane>
             <TabPane tab="其他条款" key="4">
-              <Card className={styles.addcard}   >
+              <Card className={styles.addcard}   hoverable >
                 <Row gutter={24}>
                   <Col lg={24}>
                     <Form.Item label="&nbsp;">

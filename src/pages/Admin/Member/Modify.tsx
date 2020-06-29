@@ -216,7 +216,7 @@ const Modify = (props: ModifyProps) => {
       </PageHeader>
       <Divider dashed />
 
-      <Card className={styles.card}>
+      <Card className={styles.card}  hoverable>
         <Table
           style={{ border: 'none' }}
           bordered={false}

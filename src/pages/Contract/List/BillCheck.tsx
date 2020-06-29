@@ -386,7 +386,7 @@ const BillCheck = (props: BillCheckProps) => {
             }
 
             {chargeOfferList ? chargeOfferList.map((k, index) => (
-              <Card title={'优惠' + (index + 1)} className={styles.card}>
+              <Card title={'优惠' + (index + 1)} className={styles.card}  hoverable>
                 <Row gutter={24}>
                   <Col lg={4}>
                     <Form.Item label="优惠类型"  >

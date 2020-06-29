@@ -36,7 +36,7 @@ function IncreasingRate(props: IncreasingRateProps) {
   const keys = getFieldValue('IncreasingRates');
   const formItems = keys.map((k, index) => (
 
-    <Card key={k} className={styles.card} title="递增率" extra={<Icon type="minus-circle-o" onClick={() => remove(k)} />}>
+    <Card  hoverable key={k} className={styles.card} title="递增率" extra={<Icon type="minus-circle-o" onClick={() => remove(k)} />}>
       <Row gutter={24}>
         <Col lg={4}>
           <Form.Item label="递增时间点" required >

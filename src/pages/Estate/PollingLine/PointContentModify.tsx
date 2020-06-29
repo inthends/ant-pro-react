@@ -83,7 +83,7 @@ const PointContentModify = (props: PointContentModifyProps) => {
       bodyStyle={{ background: '#f6f7fb' }}
       width='580px'
     >
-      <Card>
+      <Card hoverable>
         <Form layout="vertical" hideRequiredMark>
           <Row gutter={24}>
             <Col lg={12}>
@@ -109,7 +109,9 @@ const PointContentModify = (props: PointContentModifyProps) => {
                   initialValue: infoDetail.roleId,
                   rules: [{ required: true, message: "请选择巡检角色" }]
                 })(
-                  <Select>
+                  <Select
+                    allowClear
+                  >
                     {roles.map(item => (
                       <Option key={item.value} value={item.value}>
                         {item.title}

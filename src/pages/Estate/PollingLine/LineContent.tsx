@@ -207,7 +207,7 @@ const LineContent = (props: LineContentProps) => {
       onClose={closeDrawer}
       visible={visible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
-      <Card>
+      <Card  hoverable>
         <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
           <Search className="search-input"
             placeholder="请输入要查询的关键词"

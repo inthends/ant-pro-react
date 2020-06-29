@@ -325,7 +325,7 @@ const MeterModify = (props: MeterModifyProps) => {
       <Form layout="vertical" hideRequiredMark>
         <Tabs defaultActiveKey="1" >
           <TabPane tab="基本信息" key="1">
-            <Card className={styles.card} >
+            <Card className={styles.card}  hoverable>
               <Row gutter={24}>
                 <Col span={8}>
                   <Form.Item required label="费表名称">
@@ -526,7 +526,7 @@ const MeterModify = (props: MeterModifyProps) => {
             </Card>
           </TabPane>
           <TabPane tab="装表房屋" key="2">
-            <Card className={styles.card}>
+            <Card className={styles.card}  hoverable>
               <Row>
                 <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
                   <Search

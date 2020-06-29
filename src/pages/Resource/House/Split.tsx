@@ -71,7 +71,7 @@ const Split = (props: SplitProps) => {
       visible={splitVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }} >
       <Spin tip="数据处理中..." spinning={loading}>
-        <Card className={styles.card} >
+        <Card className={styles.card}  hoverable>
           <Form layout="vertical" hideRequiredMark>
             <Row>
               <p style={{ fontSize: '18px', fontWeight: 'bold' }}>拆分前</p>

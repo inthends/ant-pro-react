@@ -99,7 +99,7 @@ function HouseMore(props) {
     if (sorter) {
       const { field, order } = sorter;
       searchCondition.sord = order === "descend" ? "desc" : "asc";
-      searchCondition.sidx = field ? field : 'name';
+      searchCondition.sidx = field ? field : 'code';
     }
 
     return load(searchCondition).then(res => {
@@ -109,7 +109,7 @@ function HouseMore(props) {
 
   const load = formData => {
     setLoading(true);
-    formData.sidx = formData.sidx || 'name';
+    formData.sidx = formData.sidx || 'code';
     formData.sord = formData.sord || 'asc';
     return GetPageListJson(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -136,7 +136,7 @@ function HouseMore(props) {
       ParentId: parentId,//== null ? psid : parentId,
       Type: type == null ? 1 : type,
     };
-    const sidx = 'name';
+    const sidx = 'code';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
@@ -153,7 +153,7 @@ function HouseMore(props) {
       ParentId: parentId,//== null ? psid : parentId,
       Type: type == null ? 1 : type,
     };
-    const sidx = 'name';
+    const sidx = 'code';
     const sord = 'asc';
     const { current: pageIndex, pageSize, total } = page;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
