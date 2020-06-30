@@ -76,7 +76,7 @@ const Main = () => {
 
     if (sorter) {
       const { field, order } = sorter;
-      searchCondition.sord = order === "ascend" ? "asc" : "desc";
+      searchCondition.sord = order === "descend" ? "desc" : "asc";
       searchCondition.sidx = field ? field : "planTime";
     }
     return load(searchCondition).then(res => {
@@ -141,8 +141,8 @@ const Main = () => {
           <Search
             key='search'
             className="search-input"
-            placeholder="搜索点位名称"
-            style={{ width: 150, marginRight: '5px' }}
+            placeholder="搜索路线或点位"
+            style={{ width: 180, marginRight: '5px' }}
             onSearch={keyword => loadData({ ...search, keyword })}
           />
 

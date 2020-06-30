@@ -74,7 +74,8 @@ const Show = (props: ShowProps) => {
         }
         style={{
           border: '1px solid rgb(235, 237, 240)'
-        }}>
+        }} 
+        >
 
         <Form layout='vertical'>
           <Row gutter={6}>
