@@ -19,7 +19,7 @@ interface ShowProps {
   showLink(billId): void;
 }
 const Show = (props: ShowProps) => {
-  const {showLink, modifyVisible, id, closeDrawer, form } = props;
+  const { showLink, modifyVisible, id, closeDrawer, form } = props;
   // const { getFieldDecorator } = form;
   const title = id === undefined ? '添加投诉单' : '查看投诉单';
   const [infoDetail, setInfoDetail] = useState<any>({});
@@ -44,7 +44,7 @@ const Show = (props: ShowProps) => {
   // 打开抽屉时初始化 
   useEffect(() => {
     if (modifyVisible) {
-      if (id) { 
+      if (id) {
         GetEntity(id).then(info => {
           //赋值
           setInfoDetail(info.entity);
@@ -145,13 +145,15 @@ const Show = (props: ShowProps) => {
         case 1:
           return <Tag color="#e4aa5b">待处理</Tag>
         case 2:
-          return <Tag color="#19d54e">处理中</Tag>
-        // case 3:
-        //   return <Tag color="#e4aa5b">待回访</Tag>
+          return <Tag color="#19d54e">待完成</Tag>
         case 3:
-          return <Tag color="#61c33a">待审核</Tag>
+          return <Tag color="#e4aa5b">待回访</Tag>
         case 4:
-          return <Tag color="#40A9FF">已归档</Tag>
+          return <Tag color="#61c33a">待审核</Tag>
+        case 5:
+          return <Tag color="#40A9FF">已审核</Tag>
+        case -1:
+          return <Tag color="#40A9FF">已作废</Tag>
         default:
           return '';
       }
@@ -202,7 +204,7 @@ const Show = (props: ShowProps) => {
       <PageHeader
         // title={infoDetail.billCode}
         // subTitle={GetStatus(infoDetail)}
-        ghost={false} 
+        ghost={false}
         title={null}
         subTitle={
           <div>
@@ -242,7 +244,7 @@ const Show = (props: ShowProps) => {
               <Form.Item label="投诉时间" >
                 {infoDetail.billDate}
               </Form.Item>
-            </Col> 
+            </Col>
             <Col lg={5}>
               <Form.Item label="关联单号" >
                 <a onClick={() => showLink(serverId)}>{serverCode}</a>
@@ -276,7 +278,7 @@ const Show = (props: ShowProps) => {
               </Col>
               <Col lg={6}>
                 <Form.Item label="地址"  >
-                  {infoDetail.byComplaintRoomAllName} 
+                  {infoDetail.byComplaintRoomAllName}
                 </Form.Item>
               </Col>
             </Row>
@@ -293,7 +295,7 @@ const Show = (props: ShowProps) => {
               </Col>
               <Col lg={6}>
                 <Form.Item label="联系电话"  >
-                  {infoDetail.handleChargeTel} 
+                  {infoDetail.handleChargeTel}
                 </Form.Item>
               </Col>
               <Col lg={6}>
@@ -391,7 +393,7 @@ const Show = (props: ShowProps) => {
       >
         <Button onClick={close} style={{ marginRight: 8 }}>
           取消
-        </Button> 
+        </Button>
       </div>
     </Drawer>
   );

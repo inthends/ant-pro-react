@@ -1,9 +1,9 @@
 
-import { Tag,  Row, Divider, PageHeader, Button, Card, Col, Drawer, Form } from 'antd';
+import { Tag, Row, Divider, PageHeader, Button, Card, Col, Drawer, Form } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { GetEntityShow } from './Main.service';
-import styles from './style.less'; 
+import styles from './style.less';
 // const { Option } = Select;
 
 interface ShowLinkProps {
@@ -42,21 +42,23 @@ const ShowLink = (props: ShowLinkProps) => {
 
 
   //转换状态
-  const GetStatus = (status,isEnable) => {
-    if ( isEnable == 0) {
+  const GetStatus = (status, isEnable) => {
+    if (isEnable == 0) {
       return <Tag color="#d82d2d">无效投诉</Tag>
     } else {
-      switch ( status) {
+      switch (status) {
         case 1:
           return <Tag color="#e4aa5b">待处理</Tag>
         case 2:
-          return <Tag color="#19d54e">处理中</Tag>
-        // case 3:
-        //   return <Tag color="#e4aa5b">待回访</Tag>
+          return <Tag color="#19d54e">待完成</Tag>
         case 3:
-          return <Tag color="#61c33a">待审核</Tag>
+          return <Tag color="#e4aa5b">待回访</Tag>
         case 4:
-          return <Tag color="#40A9FF">已归档</Tag>
+          return <Tag color="#61c33a">待审核</Tag>
+        case 5:
+          return <Tag color="#40A9FF">已审核</Tag>
+        case -1:
+          return <Tag color="#40A9FF">已作废</Tag>
         default:
           return '';
       }
@@ -73,7 +75,7 @@ const ShowLink = (props: ShowLinkProps) => {
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
       <PageHeader
-        ghost={false} 
+        ghost={false}
         title={null}
         subTitle={
           <div>
@@ -93,7 +95,7 @@ const ShowLink = (props: ShowLinkProps) => {
             </Col>
             <Col lg={3}>
               <Form.Item label="状态" >
-                {GetStatus(infoDetail.status,infoDetail.isEnable)}
+                {GetStatus(infoDetail.status, infoDetail.isEnable)}
               </Form.Item>
             </Col>
             <Col lg={4}>
