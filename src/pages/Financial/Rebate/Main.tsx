@@ -54,7 +54,7 @@ function Main() {
     setType(type);
     //初始化页码，防止页码错乱导致数据查询出错  
     const page = new DefaultPagination();
-    loadData(search, orgId, type, page);
+    loadData(search, orgId, type, status, page);
     loadDetailData(detailsearch, orgId, type, page);
   };
 
@@ -75,7 +75,7 @@ function Main() {
         return res || [];
       });
 
-    initLoadData('', '', '');
+    initLoadData('', '', '', '');
     initDetailLoadData('', '', '');
   }, []);
 
@@ -323,7 +323,7 @@ function Main() {
                 </Option>
                 <Option key='1' value='1'>
                   {'已审核'}
-                </Option> 
+                </Option>
                 <Option key='-1' value='-1'>
                   {'已作废'}
                 </Option>

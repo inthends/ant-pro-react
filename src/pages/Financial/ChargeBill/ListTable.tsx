@@ -168,7 +168,6 @@ function ListTable(props: ListTableProps) {
       })
 
       if (flag) {
-
         //如果该笔费用存在优惠，则需要选中与此费项有关的全部费用，一起缴款，否则给出提示 
         const data = {
           mainId: selectedRows[0].rmid,
@@ -193,13 +192,10 @@ function ListTable(props: ListTableProps) {
             setIsDisabled(false);
           }
         });
-
       }
 
     } else {
-
       setIsDisabled(true);
-
     }
 
     //勾选
@@ -606,7 +602,7 @@ function ListTable(props: ListTableProps) {
       key: 'operation',
       fixed: 'right',
       align: 'center',
-      width: 150,
+      width: 155,
       render: (text, record) => {
         return [
           // <Button
@@ -637,7 +633,7 @@ function ListTable(props: ListTableProps) {
     <Page>
       <Spin tip="数据处理中..." spinning={myLoading}>
         <Form layout="vertical" hideRequiredMark> 
-          <Card bordered={false}  hoverable>
+          <Card bordered={false}  hoverable >
             <Row gutter={12}>
               <Col lg={4}>
                 <Form.Item >

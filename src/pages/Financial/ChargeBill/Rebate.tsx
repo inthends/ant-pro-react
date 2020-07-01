@@ -2,7 +2,7 @@
 import { Select, Spin, message, Button, Col, Drawer, Form, Input, DatePicker, Row, Card } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetShowDetail, RebateBilling } from './Main.service';
+import { GetShowDetail, CheckRebate, RebateBilling } from './Main.service';
 import styles from './style.less';
 import moment from 'moment';
 const { Option } = Select;
@@ -47,7 +47,17 @@ const Rebate = (props: RebateProps) => {
   const save = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        setLoading(true);
+        setLoading(true); 
+        //判断之前是否已经做过全部优惠
+        // var flag = false;
+        // CheckRebate(id).then((res) => {
+        //   flag = res;
+        // }); 
+        // if (flag) {
+        //   message.warning('已经做过全部优惠，不能重复优惠');
+        //   return;
+        // }
+
         var data = {
           RebateName: values.rebateName,
           RebateCode: values.rebateCode,
@@ -59,6 +69,7 @@ const Rebate = (props: RebateProps) => {
           Data: JSON.stringify(data),
           keyvalue: id
         };
+
         RebateBilling(jsonData).then(res => {
           setLoading(false);
           message.success('提交成功');
@@ -117,7 +128,7 @@ const Rebate = (props: RebateProps) => {
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
       <Spin tip="数据处理中..." spinning={loading}>
-        <Card className={styles.card}  hoverable>
+        <Card className={styles.card} hoverable>
           <Form layout="vertical" hideRequiredMark>
             {/* <Row gutter={4}>
             <Col span={24}>
@@ -175,7 +186,7 @@ const Rebate = (props: RebateProps) => {
                     initialValue: infoDetail.rebateCode,
                     rules: [{ required: true, message: '请选择优惠政策' }]
                   })(
-                    <Select placeholder="==请选择优惠政策=="
+                    <Select placeholder="==请选择=="
                       onChange={change}>
                       <Option value='3'>全部优惠</Option>
                     </Select>
@@ -190,7 +201,7 @@ const Rebate = (props: RebateProps) => {
               <Col lg={8}>
                 <Form.Item label="优惠开始日期" required>
                   {getFieldDecorator('beginDate', {
-                    initialValue:   moment(new Date())  ,
+                    initialValue: moment(new Date()),
                     rules: [{ required: true, message: '请选择优惠开始日期' }]
                   })(
                     <DatePicker placeholder="请选择优惠开始日期" style={{ width: '100%' }}
@@ -201,7 +212,7 @@ const Rebate = (props: RebateProps) => {
               <Col lg={8}>
                 <Form.Item label="优惠结束日期" required >
                   {getFieldDecorator('endDate', {
-                    initialValue:   moment(new Date()) ,
+                    initialValue: moment(new Date()),
                     rules: [{ required: true, message: '请选择优惠结束日期' }]
                   })(
                     <DatePicker placeholder="请选择优惠结束日期" style={{ width: '100%' }}

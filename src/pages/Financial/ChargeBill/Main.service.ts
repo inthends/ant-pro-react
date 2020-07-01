@@ -120,6 +120,11 @@ export function ReductionBilling(data): Promise<any> {
   return request.post(process.env.basePath + `/BillingMain/ReductionBilling`, { data: objToFormdata(data) }).then(getResult as any);
 }
 
+ //判断之前是否已经做过全部优惠
+ export function CheckRebate(keyvalue): Promise<any> {
+  return request.get(process.env.basePath + `/BillingMain/CheckRebate?keyvalue=${keyvalue}`).then(getResult as any);
+}
+
 //优惠
 export function RebateBilling(data): Promise<any> {
   return request.post(process.env.basePath + `/BillingMain/RebateBilling`, { data: objToFormdata(data) }).then(getResult as any);
@@ -150,6 +155,12 @@ export function InvalidForm(keyvalue): Promise<any> {
   return request.post(process.env.basePath + `/Receivable/InvalidForm?keyvalue=${keyvalue}`).then(getResult as any);
 }
 
+
+//验证收款单是否可以冲红
+export function CheckRedFlush(keyvalue): Promise<any> {
+  return request.get(process.env.basePath + `/Receivable/CheckRedFlush?keyvalue=${keyvalue}`).then(getResult as any);
+}
+
 //冲红收款单/
 export function RedFlush(keyvalue): Promise<any> {
   return request.post(process.env.basePath + `/Receivable/RedFlush?keyvalue=${keyvalue}`).then(getResult as any);
@@ -164,12 +175,7 @@ export function RedFlush(keyvalue): Promise<any> {
 export function ConfirmForm(rid, billId): Promise<any> {
   return request.post(process.env.basePath + `/Receivable/ConfirmForm?rid=${rid}&billId=${billId}`).then(getResult as any);
 }
-
-
-//验证收款单是否可以冲红
-export function CheckRedFlush(keyvalue): Promise<any> {
-  return request.get(process.env.basePath + `/Receivable/CheckRedFlush?keyvalue=${keyvalue}`).then(getResult as any);
-}
+ 
 
 //收款单对账
 export function CheckBill(data): Promise<any> {
