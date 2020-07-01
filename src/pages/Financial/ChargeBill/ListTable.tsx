@@ -810,7 +810,7 @@ function ListTable(props: ListTableProps) {
               <Select
                 style={{
                   marginLeft: '10px',
-                  width: '110px',
+                  width: '85px',
                   display: isML ? 'inline-block' : 'none'
                 }}
                 defaultValue='1'
