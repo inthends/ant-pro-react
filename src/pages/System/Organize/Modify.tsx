@@ -1,13 +1,13 @@
 import { BaseModifyProvider } from '@/components/BaseModifyDrawer/BaseModifyDrawer';
 import ModifyItem, { SelectItem } from '@/components/BaseModifyDrawer/ModifyItem';
-import { Icon, Upload, Col, Tabs, Card, Form, Row } from 'antd';
+import {  Icon, Upload, Col, Tabs, Card, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useState, useEffect } from 'react';
 import { GetRoleListJson, SaveForm, searchUser, ExistEnCode } from './Organize.service';
 import { GetOrgsWithNoGLC } from '@/services/commonItem';
 import { TreeNode } from 'antd/lib/tree-select';
 import styles from './style.less';
-const { TabPane } = Tabs;
+const { TabPane } = Tabs; 
 
 interface ModifyProps {
   visible: boolean;
@@ -361,23 +361,29 @@ const Modify = (props: ModifyProps) => {
                 <ModifyItem
                   {...baseFormProps}
                   field="dispatchTimeA"
-                  label="派单逾期(分)"
+                  label="派单逾期(小时)"
                   type='inputNumber'
+                  lg={6}
                 ></ModifyItem>
-                <ModifyItem
+               <ModifyItem
                   {...baseFormProps}
                   field="dispatchRoleA"
                   label="一级上报"
-                  type="select"
+                  type="select"  
                   items={roles}
+                  //['15446e6e-5f8b-45db-886d-161c900276e8','170bd26c-52aa-458c-aeb5-6d413ad480b9'];
+                  mode="multiple"
+                  lg={18}  
                 ></ModifyItem>
+
               </Row>
               <Row gutter={24}>
                 <ModifyItem
                   {...baseFormProps}
                   field="dispatchTimeB"
-                  label="派单逾期(分)"
+                  label="派单逾期(小时)"
                   type='inputNumber'
+                  lg={6}
                 ></ModifyItem>
                 <ModifyItem
                   {...baseFormProps}
@@ -385,14 +391,17 @@ const Modify = (props: ModifyProps) => {
                   label="二级上报"
                   type="select"
                   items={roles}
+                  mode="multiple"
+                  lg={18}
                 ></ModifyItem>
               </Row>
               <Row gutter={24}>
                 <ModifyItem
                   {...baseFormProps}
                   field="dispatchTimeC"
-                  label="派单逾期(分)"
+                  label="派单逾期(小时)"
                   type='inputNumber'
+                  lg={6}
                 ></ModifyItem>
                 <ModifyItem
                   {...baseFormProps}
@@ -400,6 +409,8 @@ const Modify = (props: ModifyProps) => {
                   label="三级上报"
                   type="select"
                   items={roles}
+                  mode="multiple"
+                  lg={18}
                 ></ModifyItem>
               </Row>
             </Card>
@@ -411,27 +422,33 @@ const Modify = (props: ModifyProps) => {
                 <ModifyItem
                   {...baseFormProps}
                   field="receiveTimeA"
-                  label="接单逾期(分)"
+                  label="接单逾期(小时)"
                   type="inputNumber"
+                  lg={6}
                 ></ModifyItem>
                 <ModifyItem
                   {...baseFormProps}
                   field="receiveRoleA"
                   label="一级上报"
                   type="select"
+                  mode="multiple"
+                  lg={18}
                   items={roles}
                 ></ModifyItem></Row>
               <Row gutter={24}>
                 <ModifyItem
                   {...baseFormProps}
                   field="receiveTimeB"
-                  label="接单逾期(分)"
+                  label="接单逾期(小时)"
+                  lg={6}
                   type="inputNumber"
                 ></ModifyItem>
                 <ModifyItem
                   {...baseFormProps}
                   field="receiveRoleB"
                   label="二级上报"
+                  mode="multiple"
+                  lg={18}
                   type="select"
                   items={roles}
                 ></ModifyItem></Row>
@@ -439,13 +456,16 @@ const Modify = (props: ModifyProps) => {
                 <ModifyItem
                   {...baseFormProps}
                   field="receiveTimeC"
-                  label="接单逾期(分)"
+                  label="接单逾期(小时)"
+                  lg={6}
                   type="inputNumber"
                 ></ModifyItem>
                 <ModifyItem
                   {...baseFormProps}
                   field="receiveRoleC"
                   label="三级上报"
+                  mode="multiple"
+                  lg={18}
                   type="select"
                   items={roles}
                 ></ModifyItem>
@@ -459,13 +479,16 @@ const Modify = (props: ModifyProps) => {
                 <ModifyItem
                   {...baseFormProps}
                   field="handleTimeA"
-                  label="完成逾期(分)"
+                  label="完成逾期(小时)"
+                  lg={6}
                   type="inputNumber"
                 ></ModifyItem>
                 <ModifyItem
                   {...baseFormProps}
                   field="handleRoleA"
                   label="一级上报"
+                  mode="multiple"
+                  lg={18}
                   type="select"
                   items={roles}
                 ></ModifyItem>
@@ -474,14 +497,17 @@ const Modify = (props: ModifyProps) => {
                 <ModifyItem
                   {...baseFormProps}
                   field="handleTimeB"
-                  label="完成逾期(分)"
+                  label="完成逾期(小时)"
+                  lg={6}
                   type="inputNumber"
                 ></ModifyItem>
                 <ModifyItem
                   {...baseFormProps}
                   field="handleRoleB"
                   label="二级上报"
-                  type="select" 
+                  mode="multiple"
+                  lg={18}
+                  type="select"
                   items={roles}
                 ></ModifyItem>
               </Row>
@@ -489,42 +515,51 @@ const Modify = (props: ModifyProps) => {
                 <ModifyItem
                   {...baseFormProps}
                   field="handleTimeC"
-                  label="完成逾期(分)"
+                  label="完成逾期(小时)"
+                  lg={6}
                   type="inputNumber"
                 ></ModifyItem>
                 <ModifyItem
                   {...baseFormProps}
                   field="handleRoleC"
-                  label="完成逾期三级上报"
-                  type="select" 
+                  label="三级上报"
+                  mode="multiple"
+                  lg={18}
+                  type="select"
                   items={roles}
                 ></ModifyItem></Row>
               <Row gutter={24}>
                 <ModifyItem
                   {...baseFormProps}
                   field="handleTimeD"
-                  label="完成逾期(分)"
+                  label="完成逾期(小时)"
+                  lg={6}
                   type="inputNumber"
                 ></ModifyItem>
                 <ModifyItem
                   {...baseFormProps}
                   field="handleRoleD"
                   label="四级上报"
-                  type="select" 
+                  mode="multiple"
+                  lg={18}
+                  type="select"
                   items={roles}
                 ></ModifyItem></Row>
               <Row gutter={24}>
                 <ModifyItem
                   {...baseFormProps}
                   field="handleTimeE"
-                  label="完成逾期(分)"
+                  label="完成逾期(小时)"
+                  lg={6}
                   type="inputNumber"
                 ></ModifyItem>
                 <ModifyItem
                   {...baseFormProps}
                   field="handleRoleE"
                   label="五级上报"
-                  type="select" 
+                  mode="multiple"
+                  lg={18}
+                  type="select"
                   items={roles}
                 ></ModifyItem>
               </Row>

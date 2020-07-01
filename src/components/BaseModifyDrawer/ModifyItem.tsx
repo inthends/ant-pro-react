@@ -27,6 +27,7 @@ interface ModifyItemProps {
   lg?: any;
   maxLength?: any;
   rows?: any;
+  mode?: any;
 }
 const ModifyItem = (props: ModifyItemProps) => {
   const {
@@ -36,6 +37,7 @@ const ModifyItem = (props: ModifyItemProps) => {
     initData,
     // wholeLine,
     lg,
+    mode,
     maxLength,
     multiple,
     form,
@@ -50,7 +52,7 @@ const ModifyItem = (props: ModifyItemProps) => {
     onSelect,
     checked,
     dropdownStyle,
-    rows 
+    rows
   } = props;
   const { getFieldDecorator } = form;
   const inner = { disabled };
@@ -110,7 +112,10 @@ const ModifyItem = (props: ModifyItemProps) => {
           //   ))}
           // </Select>
 
-          <Select {...inner} placeholder={`请选择${label as string}`} onChange={onChange}>
+          <Select {...inner}
+            mode={mode}
+            placeholder={`请选择${label as string}`}
+            onChange={onChange}>
             {(items || []).map((item: SelectItem) => (
               <Option key={item.key} value={item.value} >
                 {item.title}
@@ -176,7 +181,15 @@ const ModifyItem = (props: ModifyItemProps) => {
         } else {
           return undefined;
         }
-      } else {
+      } else if (type === 'select') {
+        if (mode == "multiple") {
+          //多选值处理
+          return initData[field] == null ? [] : initData[field].split(',');
+        } else {
+          return initData[field];
+        }
+      }
+      else {
         return initData[field];
       }
     } else {

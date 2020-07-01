@@ -98,7 +98,14 @@ function ListTable(props: ListTableProps) {
       key: 'pointStatus',
       align: 'center',
       width: 100,
-      render: val => val == 1 ? <Tag color="#009688">正常</Tag> : <Tag color="#e4aa5b">异常</Tag>
+      //render: val => val == 1 ? <Tag color="#009688">正常</Tag> : <Tag color="#e4aa5b">异常</Tag>
+      render: (text, record) => {
+        if (text == 1) {
+          return <Tag color="#009688">正常</Tag>;
+        } else {
+          return record.status == 1 ? <Tag color="#e4aa5b">异常</Tag> : '';
+        }
+      } 
     },
     {
       title: "计划时间",

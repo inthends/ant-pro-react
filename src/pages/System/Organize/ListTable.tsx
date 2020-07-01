@@ -21,7 +21,7 @@ function ListTable(props: ListTableProps) {
       content: `您确认要删除${record.fullName}吗？`,
       onOk: () => {
         //check 
-        CheckOrg(record.key).then((res) => { 
+        CheckOrg(record.key).then((res) => {
           if (res) {
             message.error('存在下级，不允许删除！');
             return;
@@ -38,8 +38,20 @@ function ListTable(props: ListTableProps) {
   };
 
   const doModify = id => {
+    //获取机构详情
     GetDetailJson(id).then(res => {
       //console.log(res)
+      //多选值处理
+      // if (res.dispatchRoleA) {
+      //   res.dispatchRoleA = res.dispatchRoleA.split(',');
+      // }
+      // if (res.dispatchRoleB) {
+      //   res.dispatchRoleB = res.dispatchRoleB.split(',');
+      // }
+      // if (res.dispatchRoleC) {
+      //   res.dispatchRoleC = res.dispatchRoleC.split(',');
+      // }
+      
       modify(res);
     });
   };
