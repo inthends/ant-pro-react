@@ -46,7 +46,7 @@ function ListTable(props: ListTableProps) {
   //是否抹零
   const [isML, setIsML] = useState<boolean>(false);
   //抹零类型
-  const [mlType, setMlType] = useState<any>('1');
+  const [mlType, setMlType] = useState<any>('抹去角');
   //小数位处理
   const [mlScale, setMlScale] = useState<any>('1');
   //二维码地址
@@ -799,7 +799,7 @@ function ListTable(props: ListTableProps) {
               >生成收款码</Checkbox>
               <Checkbox
                 style={{ marginLeft: '10px' }}
-                disabled={isQrcode}
+                // disabled={isQrcode}
                 onChange={(e) => {
                   setIsML(e.target.checked);
                   //算抹零金额
@@ -812,23 +812,23 @@ function ListTable(props: ListTableProps) {
                   width: '85px',
                   display: isML ? 'inline-block' : 'none'
                 }}
-                defaultValue='1'
-                disabled={isQrcode}
+                defaultValue='抹去角'
+                // disabled={isQrcode}
                 onChange={(value) => { setMlType(value); mlCal(isML, value, mlScale); }} >
                 {/* <Option value='1'>抹去角和分</Option> */}
-                <Option value='1'>抹去角</Option>
-                <Option value='2'>抹去分</Option>
+                <Option value='抹去角'>抹去角</Option>
+                <Option value='抹去分'>抹去分</Option>
               </Select>
               <Select style={{
                 marginLeft: '10px', width: '96px',
                 display: isML ? 'inline-block' : 'none'
               }}
-                defaultValue='1'
-                disabled={isQrcode}
+                defaultValue='四舍五入'
+                // disabled={isQrcode}
                 onChange={(value) => { setMlScale(value); mlCal(isML, mlType, value); }} >
-                <Option value='1'>四舍五入</Option>
-                <Option value='2'>直接舍去</Option>
-                <Option value='3'>有数进一</Option>
+                <Option value='四舍五入'>四舍五入</Option>
+                <Option value='直接舍去'>直接舍去</Option>
+                <Option value='有数进一'>有数进一</Option>
               </Select>
             </Row>
 

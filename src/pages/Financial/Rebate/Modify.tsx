@@ -503,7 +503,7 @@ const Modify = (props: ModifyProps) => {
                     onChange={change}>
                     <Option value='1'>预缴一年赠送一个月</Option>
                     <Option value='2'>预缴一年减免一个月</Option>
-                    <Option value='3'>全部优惠</Option>
+                    {/* <Option value='3'>全部优惠</Option> */}
                   </Select>
                 )}
                 {getFieldDecorator('rebateName', {
