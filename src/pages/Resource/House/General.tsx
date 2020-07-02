@@ -41,13 +41,13 @@ function General(props: GeneralProps) {
               />
             </Col>
             <Col xxl={3} xl={3} md={6} sm={12} xs={24}>
-              <NumberInfo subTitle="总房屋数" total={generalData.roomcount || 0} />
+              <NumberInfo subTitle="房产总数" total={generalData.roomcount || 0} />
             </Col>
             <Col xxl={3} xl={3} md={6} sm={12} xs={24}>
-              <NumberInfo subTitle="入住房屋数" total={generalData.checkroom || 0} />
+              <NumberInfo subTitle="入住房产数" total={generalData.checkroom || 0} />
             </Col>
             <Col xxl={3} xl={3} md={6} sm={12} xs={24}>
-              <NumberInfo subTitle="空置房屋数" total={(generalData.vacancyroom || 0)} />
+              <NumberInfo subTitle="空置房产数" total={(generalData.vacancyroom || 0)} />
             </Col>
           </Row>
         </Col>

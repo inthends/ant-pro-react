@@ -109,8 +109,10 @@ function Main() {
       queryJson: {
         keyword: searchText,
         // OrganizeId: org.organizeId,
-        OrganizeId: orgid,
-        Type: orgtype,
+        // OrganizeId: orgid,
+        // Type: orgtype,
+        TreeTypeId: orgid,
+        TreeType: orgtype,
       },
     };
 
@@ -150,8 +152,8 @@ function Main() {
     const queryJson = {
       //OrganizeId: org.organizeId,
       keyword: searchText,
-      OrganizeId: id,
-      Type: type,
+      TreeTypeId: id,
+      TreeType: type,
     };
     const sidx = 'code';
     const sord = 'asc';

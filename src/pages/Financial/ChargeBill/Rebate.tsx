@@ -2,7 +2,7 @@
 import { Select, Spin, message, Button, Col, Drawer, Form, Input, DatePicker, Row, Card } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetShowDetail, CheckRebate, RebateBilling } from './Main.service';
+import { GetShowDetail, RebateBilling } from './Main.service';
 import styles from './style.less';
 import moment from 'moment';
 const { Option } = Select;

@@ -55,7 +55,7 @@ function ListTable(props: ListTableProps) {
       sorter: true,
     },
     {
-      title: '总房屋数',
+      title: '房产总数',
       dataIndex: 'roomcount',
       key: 'roomcount',
       width: 100,
@@ -79,14 +79,14 @@ function ListTable(props: ListTableProps) {
       sorter: true,
     },
     {
-      title: '入住房屋数',
+      title: '入住房产数',
       dataIndex: 'checkroom',
       key: 'checkroom',
       width: 120,
       sorter: true,
     },
     {
-      title: '空置房屋数',
+      title: '空置房产数',
       dataIndex: 'vacancyroom',
       key: 'vacancyroom',
       width: 120,

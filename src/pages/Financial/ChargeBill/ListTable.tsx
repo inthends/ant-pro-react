@@ -565,8 +565,7 @@ function ListTable(props: ListTableProps) {
     {
       title: '单元全称',
       dataIndex: 'allname',
-      key: 'allname',
-      align: 'center',
+      key: 'allname', 
       width: 280
     },
     {

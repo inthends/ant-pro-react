@@ -178,7 +178,7 @@ const Modify = (props: ModifyProps) => {
       if (!errors) {
         getInfo(id).then(tempInfo => {
           const newvalue = { ...values, handoverDate: values.handoverDate.format('YYYY-MM-DD') };
-          newvalue.description = values.description.toHTML();//toRAW(); 
+          newvalue.description = values.description ? values.description.toHTML() : '';//toRAW(); 
           //newvalue.isPublish = newvalue.isPublish ? newvalue.isPublish : false;
           SaveForm({ ...tempInfo, ...newvalue, keyvalue: tempInfo.id }).then(res => {
             message.success('提交成功');
@@ -312,7 +312,7 @@ const Modify = (props: ModifyProps) => {
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
       <Spin tip="数据处理中..." spinning={loading}>
-        <Card className={styles.card}  hoverable>
+        <Card className={styles.card} hoverable>
           {modifyVisible ? (
             <Form layout="vertical" hideRequiredMark>
               <Row gutter={24}>
@@ -588,12 +588,12 @@ const Modify = (props: ModifyProps) => {
                       initialValue: infoDetail.invoiceTitle,
                     })(<Input placeholder="请输入电子发票" />)}
                   </Form.Item>
-                </Col> 
+                </Col>
 
                 <Col lg={6}>
                   <Form.Item label="微信端项目风采">
                     {getFieldDecorator('isPublish', {
-                      initialValue: infoDetail.isPublish? true : false,
+                      initialValue: infoDetail.isPublish ? true : false,
                     })(
                       <Switch
                         onChange={value => form.setFieldsValue({ isPublish: value })}
@@ -616,9 +616,9 @@ const Modify = (props: ModifyProps) => {
               </Row>
               <Row gutter={24}>
                 <Col lg={24}>
-                  <Form.Item required label="">
+                  <Form.Item  >
                     {getFieldDecorator('description', {
-                      rules: [{ required: true, message: '请输入详细介绍' }]
+                      // rules: [{ required: true, message: '请输入详细介绍' }]
                     })(
                       <BraftEditor
                         // value={state.editorState}
