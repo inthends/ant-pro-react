@@ -58,8 +58,7 @@ function ListTable(props: ListTableProps) {
       title: '建筑面积(㎡)',
       dataIndex: 'area',
       key: 'area',
-      width: 120,
-      sorter: true,
+      width: 120, 
     },
     {
       title: '占地面积(㎡)',
@@ -72,8 +71,7 @@ function ListTable(props: ListTableProps) {
     {
       title: '车库全称',
       dataIndex: 'allname',
-      key: 'allname',
-      sorter: true,
+      key: 'allname', 
     },
     {
       title: '操作',
@@ -147,8 +145,7 @@ function ListTable(props: ListTableProps) {
       title: '建筑面积(㎡)',
       dataIndex: 'area',
       key: 'area',
-      width: 120,
-      sorter: true,
+      width: 120, 
     },
     // {
     //   title: '计费面积(㎡)',
@@ -184,15 +181,13 @@ function ListTable(props: ListTableProps) {
       title: '车牌号',
       dataIndex: 'carno',
       key: 'carno',
-      width: 100,
-      sorter: true,
+      width: 100, 
     },
   
     {
       title: '车库全称',
       dataIndex: 'allname',
-      key: 'allname',
-      sorter: true,
+      key: 'allname', 
     },
     {
       title: '操作',
@@ -234,7 +229,7 @@ function ListTable(props: ListTableProps) {
         columns={type == '8' ? columns : columnsGarage}
         rowKey={record => record.id}
         pagination={pagination}
-        scroll={{ x: 1500 }}
+        scroll={{ x: 1550 }}
         onChange={(pag: PaginationConfig, filters, sorter) => changePage(pag, filters, sorter)}
         loading={loading}
       />

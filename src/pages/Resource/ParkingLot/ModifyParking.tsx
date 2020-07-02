@@ -635,7 +635,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
         organizeId={organizeId}
         // type={type}
         reload={(customerId) => {
-          GetParkingCustomerInfo(customerId).then(res => { 
+          GetParkingCustomerInfo(customerId).then(res => {  
             //防止旧数据缓存，清空下拉
             // setUserList([]);
             if (customerType == 1) {
@@ -662,18 +662,18 @@ const ModifyParking = (props: ModifyParkingProps) => {
         closeModal={closeCustomerSelect}
         organizeId={organizeId}
         type='parking'
-        Select={(res) => { 
+        Select={(res) => {  
           if (customerType == 1) {
             //业主
             form.setFieldsValue({ ownerName: res.name });
-            form.setFieldsValue({ ownerId: res.id });
+            form.setFieldsValue({ ownerId: res.cusId });
             form.setFieldsValue({ ownerPhone: res.phoneNum });
             form.setFieldsValue({ ownerUnitId: res.unitId });
             // form.setFieldsValue({ ownerUnitAllName: res.allName });
           } else {
             //租户
             form.setFieldsValue({ tenantName: res.name });
-            form.setFieldsValue({ tenantId: res.id });
+            form.setFieldsValue({ tenantId: res.cusId });
             form.setFieldsValue({ tenantPhone: res.phoneNum });
             form.setFieldsValue({ tenantUnitId: res.unitId });
           }

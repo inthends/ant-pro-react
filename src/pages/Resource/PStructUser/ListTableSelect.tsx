@@ -49,14 +49,14 @@ function ListTableSelect(props: ListTableSelectProps) {
       title: '住户名称',
       dataIndex: 'name',
       key: 'name',
-      width: 180,
+      width: 200,
       sorter: true,
     },
     {
       title: '住户编号',
       dataIndex: 'code',
       key: 'code',
-      width: 250,
+      width: 150,
       sorter: true,
     },
     {
@@ -121,14 +121,14 @@ function ListTableSelect(props: ListTableSelectProps) {
       title: '住户名称',
       dataIndex: 'name',
       key: 'name',
-      width: 180,
+      width: 200,
       sorter: true,
     },
     {
       title: '住户编号',
       dataIndex: 'code',
       key: 'code',
-      width: 250,
+      width: 150,
       sorter: true,
     },
     {
