@@ -450,8 +450,7 @@ const Modify = (props: ModifyProps) => {
       onClose={close}
       visible={modifyVisible}
       destroyOnClose={true}
-      bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
-    >
+      bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
       <Spin tip="数据处理中..." spinning={loading}>
         {/* {modifyVisible ? ( */}
         <Tabs defaultActiveKey="1" >
@@ -610,7 +609,6 @@ const Modify = (props: ModifyProps) => {
                           </TreeSelect>
                         )} 
                       </Form.Item> */}
-
 
                       <Form.Item label="所在位置" required>
                         {getFieldDecorator('address', {
@@ -807,7 +805,7 @@ const Modify = (props: ModifyProps) => {
                       <div className="clearfix">
                         <Upload
                           accept='image/*'
-                          action={process.env.basePath + '/News/Upload'}
+                          // action={process.env.basePath + '/News/Upload'}
                           listType="picture-card"
                           fileList={fileList}
                           onPreview={handlePreview}
@@ -1090,7 +1088,6 @@ const Modify = (props: ModifyProps) => {
           <Button onClick={close} type="primary">
             毕单
            </Button>) : null} */}
-
       </div>
 
       <AddMemo
