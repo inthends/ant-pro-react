@@ -251,7 +251,7 @@ function ListTable(props: ListTableProps) {
     selectedRowKeys,
     onChange: onSelectChange,
   };
- 
+
   const [myLoading, setMyLoading] = useState<boolean>(false);
 
   //收款
@@ -289,7 +289,7 @@ function ListTable(props: ListTableProps) {
               return;
             }
 
-            //弹出支付宝扫码
+            //弹出收款码
             if (isQrcode) {
               // GetQrCode(info).then(res => {
               //   // setQrUrl(res);  
@@ -316,6 +316,14 @@ function ListTable(props: ListTableProps) {
               //     } 
               //   }); 
               // });
+
+              //金额为0，不能走移动支付
+              if (lastAmount == 0) {
+                message.warning('本次收款金额为0，不能使用收款码支付');
+                setMyLoading(false);
+                return;
+              }
+
               GetQrCode(info).then(res => {
                 pay(res.code_img_url);
                 //预订单id
@@ -324,7 +332,7 @@ function ListTable(props: ListTableProps) {
 
             } else {
               //直接收款 
-              Charge(info).then(billId => { 
+              Charge(info).then(billId => {
                 message.success('收款成功');
                 //重置收款页面信息
                 setSelectedRowKeys([]);//重置之前选择的数据
@@ -565,7 +573,7 @@ function ListTable(props: ListTableProps) {
     {
       title: '单元全称',
       dataIndex: 'allname',
-      key: 'allname', 
+      key: 'allname',
       width: 280
     },
     {
@@ -631,8 +639,8 @@ function ListTable(props: ListTableProps) {
   return (
     <Page>
       <Spin tip="数据处理中..." spinning={myLoading}>
-        <Form layout="vertical" hideRequiredMark> 
-          <Card bordered={false}  hoverable >
+        <Form layout="vertical" hideRequiredMark>
+          <Card bordered={false} hoverable >
             <Row gutter={12}>
               <Col lg={4}>
                 <Form.Item >

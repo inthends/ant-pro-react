@@ -361,7 +361,7 @@ const Modify = (props: ModifyProps) => {
                 <ModifyItem
                   {...baseFormProps}
                   field="dispatchTimeA"
-                  label="派单逾期(小时)"
+                  label="派单逾期(分钟)"
                   type='inputNumber'
                   lg={6}
                 ></ModifyItem>
@@ -381,7 +381,7 @@ const Modify = (props: ModifyProps) => {
                 <ModifyItem
                   {...baseFormProps}
                   field="dispatchTimeB"
-                  label="派单逾期(小时)"
+                  label="派单逾期(分钟)"
                   type='inputNumber'
                   lg={6}
                 ></ModifyItem>
@@ -399,7 +399,7 @@ const Modify = (props: ModifyProps) => {
                 <ModifyItem
                   {...baseFormProps}
                   field="dispatchTimeC"
-                  label="派单逾期(小时)"
+                  label="派单逾期(分钟)"
                   type='inputNumber'
                   lg={6}
                 ></ModifyItem>
@@ -422,7 +422,7 @@ const Modify = (props: ModifyProps) => {
                 <ModifyItem
                   {...baseFormProps}
                   field="receiveTimeA"
-                  label="接单逾期(小时)"
+                  label="接单逾期(分钟)"
                   type="inputNumber"
                   lg={6}
                 ></ModifyItem>
@@ -439,7 +439,7 @@ const Modify = (props: ModifyProps) => {
                 <ModifyItem
                   {...baseFormProps}
                   field="receiveTimeB"
-                  label="接单逾期(小时)"
+                  label="接单逾期(分钟)"
                   lg={6}
                   type="inputNumber"
                 ></ModifyItem>
@@ -456,7 +456,7 @@ const Modify = (props: ModifyProps) => {
                 <ModifyItem
                   {...baseFormProps}
                   field="receiveTimeC"
-                  label="接单逾期(小时)"
+                  label="接单逾期(分钟)"
                   lg={6}
                   type="inputNumber"
                 ></ModifyItem>
