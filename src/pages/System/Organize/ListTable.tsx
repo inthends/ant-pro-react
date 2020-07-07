@@ -18,17 +18,17 @@ function ListTable(props: ListTableProps) {
   const doDelete = record => {
     Modal.confirm({
       title: '请确认',
-      content: `您确认要删除${record.fullName}吗？`,
+      content: `您确认要作废${record.fullName}吗？`,
       onOk: () => {
         //check 
         CheckOrg(record.key).then((res) => {
           if (res) {
-            message.error('存在下级，不允许删除！');
+            message.error('存在下级，不允许作废');
             return;
           }
           RemoveForm(record.key)
             .then(() => {
-              message.success('删除成功');
+              message.success('作废成功');
               reload();
             })
             .catch(e => { });
@@ -115,7 +115,7 @@ function ListTable(props: ListTableProps) {
           <span>
             <a onClick={() => doModify(record.key)} key="modify">编辑</a>
             <Divider type="vertical" key='divider' />
-            <a onClick={() => doDelete(record)} key="delete">删除</a>
+            <a onClick={() => doDelete(record)} key="delete">作废</a>
           </span>
         ];
       },

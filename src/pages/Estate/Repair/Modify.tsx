@@ -5,7 +5,10 @@ import {
 } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetFilesData, RemoveFile, Dispatch, Change, Receive, Start, Handle, Check, Approve, GetEntity } from './Main.service';
+import {
+  GetFilesData, RemoveFile, Dispatch, Change, Receive,
+  Back, Start, Handle, Check, Approve, GetEntity
+} from './Main.service';
 import { GetUserList, GetCommonItems } from '@/services/commonItem';
 import moment from 'moment';
 import styles from './style.less';
@@ -174,6 +177,20 @@ const Modify = (props: ModifyProps) => {
             }
           });
         });
+      }
+    });
+  };
+
+  //退单
+  const back = () => {
+    form.validateFields((errors, values) => {
+      if (!errors) {
+        const newData = infoDetail ? { ...infoDetail, ...values } : values;
+        Back({ ...newData, keyvalue: newData.id }).then(res => {
+          message.success('已退单');
+          closeDrawer();
+          reload();
+        })
       }
     });
   };
@@ -744,9 +761,9 @@ const Modify = (props: ModifyProps) => {
 
                 </Card>
               ) : infoDetail.status > 4 ?
-                  (<Card title="完成情况" 
-                  hoverable
-                  className={infoDetail.repairArea == '客户区域' ? styles.card2 : styles.card} >
+                  (<Card title="完成情况"
+                    hoverable
+                    className={infoDetail.repairArea == '客户区域' ? styles.card2 : styles.card} >
                     <Row gutter={24}>
                       <Col lg={5}>
                         <Form.Item label="完成时间">
@@ -1018,11 +1035,11 @@ const Modify = (props: ModifyProps) => {
 
         ) : null}
 
-        {infoDetail.status == 3 ? ( 
+        {infoDetail.status == 3 ? (
           <span>
             <Button onClick={start} type="primary" style={{ marginRight: 8 }}>
               开工
-            </Button> 
+            </Button>
             <Button onClick={change} type="primary">
               转单
             </Button>
@@ -1032,7 +1049,7 @@ const Modify = (props: ModifyProps) => {
         ) : null}
 
         {infoDetail.status == 4 ? (
-          <span> 
+          <span>
             {/* <Button onClick={start} type="primary" style={{ marginRight: 8 }}>
               呼叫增援
             </Button>
@@ -1040,7 +1057,7 @@ const Modify = (props: ModifyProps) => {
               暂停
             </Button> */}
 
-            <Button onClick={start} type="danger" style={{ marginRight: 8 }}>
+            <Button onClick={back} type="danger" style={{ marginRight: 8 }}>
               退单
             </Button>
             <Button onClick={handle} type="primary">

@@ -48,7 +48,7 @@ function ListTable(props: ListTableProps) {
   //抹零类型
   const [mlType, setMlType] = useState<any>('抹去角');
   //小数位处理
-  const [mlScale, setMlScale] = useState<any>('1');
+  const [mlScale, setMlScale] = useState<any>('四舍五入');
   //二维码地址
   // const [qrUrl, setQrUrl] = useState<any>('1');
   //是否生成收款码
@@ -140,8 +140,9 @@ function ListTable(props: ListTableProps) {
   // const [unitId, setUnitId] = useState();
   // const [customerName, setCustomerName] = useState();
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
+
   const [rebateAmount, setRebateAmount] = useState<number>(0);//优惠金额
-  const [mlAmount, setMlAmount] = useState<number>(0);//抹零金额
+  const [mlAmount, setMlAmount] = useState<any>(0);//抹零金额
   const [lastAmount, setLastAmount] = useState<number>(0);//剩余金额
 
   const onSelectChange = (selectedRowKeys, selectedRows) => {
@@ -223,15 +224,15 @@ function ListTable(props: ListTableProps) {
       isML: isML,
       mlType: mlType,
       mlScale: mlScale,
-      sumAmount: sumlastAmount,
+      sumAmount: sumlastAmount.toFixed(2),
       ids: JSON.stringify(selectedRowKeys)
     };
 
-    CalFee(data).then((res) => {
+    CalFee(data).then((res) => { 
       //CalML(sumlastAmount, mlType, mlScale).then((res) => {
       setMlAmount(res.mlAmount);
       setRebateAmount(res.rebateAmount);
-      setLastAmount(Number(res.lastAmount));
+      setLastAmount(res.lastAmount);
       form.setFieldsValue({ payAmountA: res.lastAmount });
       form.setFieldsValue({ payAmountB: 0 });
       form.setFieldsValue({ payAmountC: 0 });
@@ -454,14 +455,14 @@ function ListTable(props: ListTableProps) {
       isML: isml,
       mlType: type,
       mlScale: scale,
-      sumAmount: sumEntity.sumlastAmount, //lastAmount,
+      sumAmount: sumEntity.sumlastAmount.toFixed(2), //lastAmount,
       ids: JSON.stringify(selectedRowKeys)
     };
     CalFee(data).then((res) => {
       //CalFee(sumEntity.sumlastAmount, type, scale).then((res) => {
       setMlAmount(res.mlAmount);
       setRebateAmount(res.rebateAmount);
-      setLastAmount(Number(res.lastAmount));
+      setLastAmount(res.lastAmount);
       form.setFieldsValue({ payAmountA: res.lastAmount });
       form.setFieldsValue({ payAmountB: 0 });
       form.setFieldsValue({ payAmountC: 0 });
