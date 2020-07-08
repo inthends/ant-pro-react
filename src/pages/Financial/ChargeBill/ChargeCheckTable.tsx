@@ -132,7 +132,7 @@ function ChargeCheckTable(props: ChargeCheckTableProps) {
     },
 
     {
-      title: '收续费',
+      title: '手续费',
       dataIndex: 'serviceFee',
       key: 'serviceFee',
       width: 100,
