@@ -445,7 +445,7 @@ class Register extends Component<RegisterProps, RegisterStates> {
                   <div className="clearfix">
                     <Upload
                       accept='image/*'
-                      action={process.env.basePath + '/UserApp/Upload?keyvalue=' + keyvalue}
+                      action={process.env.basePath + '/Apartment/Upload?keyvalue=' + keyvalue}
                       listType="picture-card"
                       fileList={fileList}
                       // onPreview={handlePreview}

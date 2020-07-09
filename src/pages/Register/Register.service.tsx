@@ -5,7 +5,7 @@ import { getResult, objToFormdata } from '@/utils/networkUtils';
 //前端人才公寓申请资料填报
 export function SaveForm(data): Promise<any> { 
   return request
-    .post(process.env.basePath + `/UserApp/SaveForm`, { data:objToFormdata(data) })
+    .post(process.env.basePath + `/Apartment/SaveForm`, { data:objToFormdata(data) })
     .then(getResult as any);
 }
 

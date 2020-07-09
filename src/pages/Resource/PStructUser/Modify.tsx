@@ -2,7 +2,11 @@
 import { Tabs, Table, DatePicker, Button, Card, Col, Drawer, Form, Input, message, Row, Select, TreeSelect, Checkbox } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetUnitPageListJson, ExistCellphone, ExistCode, SaveForm } from './PStructUser.service';
+import {
+  GetUnitPageListJson,
+  //ExistCellphone, 
+  ExistCode, SaveForm
+} from './PStructUser.service';
 import { GetCommonItems, GetOrgs } from '@/services/commonItem';
 import { DefaultPagination } from "@/utils/defaultSetting";
 import { ColumnProps, PaginationConfig } from "antd/lib/table";
@@ -118,21 +122,20 @@ const Modify = (props: ModifyProps) => {
   };
 
   //验证手机号码
-  const checkCellphoneExist = (rule, value, callback) => {
-    if (value == undefined) {
-      callback();
-    }
-    else {
-      const keyvalue = infoDetail.id == undefined ? '' : infoDetail.id;
-      ExistCellphone(keyvalue, value).then(res => {
-        if (res)
-          callback('手机号码重复');
-        else
-          callback();
-      })
-    }
-  };
-
+  // const checkCellphoneExist = (rule, value, callback) => {
+  //   if (value == undefined) {
+  //     callback();
+  //   }
+  //   else {
+  //     const keyvalue = infoDetail.id == undefined ? '' : infoDetail.id;
+  //     ExistCellphone(keyvalue, value).then(res => {
+  //       if (res)
+  //         callback('手机号码重复');
+  //       else
+  //         callback();
+  //     })
+  //   }
+  // };
 
   const load = formData => {
     setLoading(true);
@@ -233,7 +236,7 @@ const Modify = (props: ModifyProps) => {
 
       <Tabs defaultActiveKey="1" >
         <TabPane tab="基本信息" key="1">
-          <Card className={styles.card}  hoverable>
+          <Card className={styles.card} hoverable>
             {modifyVisible ? (
               <Form layout="vertical" hideRequiredMark>
                 <Row gutter={24}>
@@ -318,10 +321,9 @@ const Modify = (props: ModifyProps) => {
                     <Form.Item label="手机号码">
                       {getFieldDecorator('phoneNum', {
                         initialValue: infoDetail.phoneNum,
-                        rules: [{ required: true, message: '请输入手机号码' },
-                        {
-                          validator: checkCellphoneExist
-                        }],
+                        rules: [{ required: true, message: '请输入手机号码' }
+                          //{ validator: checkCellphoneExist}
+                        ],
                       })(<Input placeholder="请输入手机号码" maxLength={11} />)}
                     </Form.Item>
                   </Col>

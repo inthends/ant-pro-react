@@ -191,8 +191,7 @@ const QuickModify = (props: QuickModifyProps) => {
                 <Form.Item label="手机号码" required>
                   {getFieldDecorator('phoneNum', {
                     initialValue: infoDetail.phoneNum,
-                    rules: [{ required: true, message: '请输入手机号码' }],
-
+                    rules: [{ required: true, message: '请输入手机号码' }]
                   })(<Input placeholder="请输入联系电话" maxLength={11} />)}
                 </Form.Item>
               </Col>

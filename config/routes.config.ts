@@ -246,6 +246,12 @@ export default [
             component: './Admin/AdminContract/Main',
           },
           {
+            name: 'apartment',
+            path: '/admin/apartment',
+            icon: 'layout',
+            component: './Admin/Apartment/Main',
+          },
+          {
             name: 'news',
             path: '/admin/news',
             icon: 'edit',
