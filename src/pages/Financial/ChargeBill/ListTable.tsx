@@ -142,12 +142,13 @@ function ListTable(props: ListTableProps) {
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
 
   const [rebateAmount, setRebateAmount] = useState<number>(0);//优惠金额
-  const [mlAmount, setMlAmount] = useState<any>(0);//抹零金额
+  const [mlAmount, setMlAmount] = useState<number>(0);//抹零金额
   const [lastAmount, setLastAmount] = useState<number>(0);//剩余金额
+
+  const [groupTotal, setGroupTotal] = useState<any>('');//按照费项统计金额
 
   const onSelectChange = (selectedRowKeys, selectedRows) => {
     if (selectedRowKeys.length > 0) {
-
       const checkdata = {
         feeId: selectedRowKeys[0],
         unitId: selectedRows[0].unitId,
@@ -161,7 +162,6 @@ function ListTable(props: ListTableProps) {
           message.warning('不能跨账单日收费，请勾选之前的费用');
           flag = false;
           setIsDisabled(true);
-
         } else {
           flag = true;
           setIsDisabled(false);
@@ -216,7 +216,7 @@ function ListTable(props: ListTableProps) {
     _sumEntity['sumAmount'] = sumAmount.toFixed(2);//应收金额
     _sumEntity['sumreductionAmount'] = sumreductionAmount.toFixed(2);//减免金额
     _sumEntity['sumoffsetAmount'] = sumoffsetAmount.toFixed(2);//冲抵金额
-    _sumEntity['sumlastAmount'] = sumlastAmount;//).toFixed(2);//原始剩余应收金额
+    _sumEntity['sumlastAmount'] = sumlastAmount.toFixed(2);//原始剩余应收金额
     setSumEntity(_sumEntity);
     //抹零 
     // if (isML) {
@@ -224,12 +224,14 @@ function ListTable(props: ListTableProps) {
       isML: isML,
       mlType: mlType,
       mlScale: mlScale,
-      sumAmount: sumlastAmount.toFixed(2),
+      sumAmount: sumlastAmount,
       ids: JSON.stringify(selectedRowKeys)
     };
 
-    CalFee(data).then((res) => { 
+    CalFee(data).then((res) => {
       //CalML(sumlastAmount, mlType, mlScale).then((res) => {
+      //按照费项统计金额
+      setGroupTotal(res.groupTotal);
       setMlAmount(res.mlAmount);
       setRebateAmount(res.rebateAmount);
       setLastAmount(res.lastAmount);
@@ -455,7 +457,7 @@ function ListTable(props: ListTableProps) {
       isML: isml,
       mlType: type,
       mlScale: scale,
-      sumAmount: sumEntity.sumlastAmount.toFixed(2), //lastAmount,
+      sumAmount: sumEntity.sumlastAmount, //lastAmount,
       ids: JSON.stringify(selectedRowKeys)
     };
     CalFee(data).then((res) => {
@@ -841,16 +843,26 @@ function ListTable(props: ListTableProps) {
               </Select>
             </Row>
 
-            <Row style={{ marginTop: '15px' }}>
+
+
+
+            <Row style={{ marginTop: '5px' }}>
               <span style={{ marginLeft: 8, color: "red" }}>
                 {hasSelected ? `应收金额：${sumEntity.sumAmount} ，
             减免金额：${sumEntity.sumreductionAmount}，
             冲抵金额：${sumEntity.sumoffsetAmount}，
-            优惠金额：${rebateAmount}， 
+            优惠金额：${rebateAmount.toFixed(2)}， 
             抹零金额：${mlAmount.toFixed(2)}，
             未收金额：${lastAmount.toFixed(2)}` : ''}
               </span>
             </Row>
+
+            <Row style={{ marginTop: '5px' }}>
+              <span style={{ marginLeft: 8, color: "red" }}>
+                {groupTotal}
+              </span>
+            </Row>
+
             <Table
               bordered={false}
               size="middle"

@@ -1,13 +1,14 @@
 //查看收款单
-import { Divider, PageHeader, Tag, Spin, Button, Card, Table, Col, Drawer, Form, Row } from 'antd';
+import { notification, Divider, PageHeader, Tag, Spin, Button, Card, Table, Col, Drawer, Form, Row } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { GetEntityShow, ChargeFeeDetail } from './Main.service';
+import { Print2 } from '../../System/Template/Main.service';
 import moment from 'moment';
 import styles from './style.less';
-import SelectTemplate from '../../System/Template/SelectTemplate' 
+// import SelectTemplate from '../../System/Template/SelectTemplate'
 
 
 interface BillShowProps {
@@ -16,6 +17,7 @@ interface BillShowProps {
   form: WrappedFormUtils;
   id?: string;
 }
+
 const BillShow = (props: BillShowProps) => {
   const { showVisible, closeShow, id, form } = props;
   const title = "查看收款单";
@@ -27,7 +29,7 @@ const BillShow = (props: BillShowProps) => {
   const [linkNo, setLinkNo] = useState<any>('');
   const [unitNo, setUnitNo] = useState<any>('');
   //选择模板
-  const [modalvisible, setModalVisible] = useState<boolean>(false);
+  // const [modalvisible, setModalVisible] = useState<boolean>(false);
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -50,12 +52,12 @@ const BillShow = (props: BillShowProps) => {
     }
   }, [showVisible]);
 
-  const showModal = () => {
-    setModalVisible(true);
-  };
-  const closeModal = () => {
-    setModalVisible(false);
-  };
+  // const showModal = () => {
+  //   setModalVisible(true);
+  // };
+  // const closeModal = () => {
+  //   setModalVisible(false);
+  // };
 
   const initLoadFeeDetail = (billId) => {
     const queryJson = { billId: billId };
@@ -166,6 +168,24 @@ const BillShow = (props: BillShowProps) => {
     }
   };
 
+  //打印
+  const print = () => {
+    setLoading(true);
+    Print2(id, '收款单', infoDetail.organizeId).then(res => {
+      //window.location.href = res;
+      window.open(res);
+      //setLoading(false);
+    }).catch(e => {
+      //message.warn(e);
+      notification.warning({
+        message: '系统提示',
+        description: e
+      });
+
+    }).finally(() => {
+      setLoading(false);
+    });
+  }
 
   const columns = [
     {
@@ -261,8 +281,8 @@ const BillShow = (props: BillShowProps) => {
       visible={showVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
       <Spin tip="数据处理中..." spinning={loading}>
-        <PageHeader 
-          ghost={false} 
+        <PageHeader
+          ghost={false}
           title={null}
           subTitle={
             <div>
@@ -318,7 +338,7 @@ const BillShow = (props: BillShowProps) => {
           </span>
         </PageHeader>
         <Divider dashed />
-        <Card className={styles.card}  hoverable>
+        <Card className={styles.card} hoverable>
           <Form layout="vertical" >
             <Row gutter={24}>
 
@@ -373,28 +393,28 @@ const BillShow = (props: BillShowProps) => {
               onChange={(pagination: PaginationConfig, filters, sorter) =>
                 changePage(pagination, filters, sorter)
               }
-   
-              // summary={pageData => {
-              //   let totalAmount = 0;
-              //   let totalPayAmount = 0; 
-              //   pageData.forEach(({ amount, payAmount }) => {
-              //     totalAmount += amount;
-              //     totalPayAmount += payAmount;
-              //   }); 
-              //   return (
-              //     <>
-              //       <Table.Summary.Row>
-              //         <Table.Summary.Cell>合计</Table.Summary.Cell>
-              //         <Table.Summary.Cell>
-              //           <Text type="danger">{totalAmount}</Text>
-              //         </Table.Summary.Cell>
-              //         <Table.Summary.Cell>
-              //           <Text>{totalPayAmount}</Text>
-              //         </Table.Summary.Cell>
-              //       </Table.Summary.Row> 
-              //     </>
-              //   );
-              // }}  
+
+            // summary={pageData => {
+            //   let totalAmount = 0;
+            //   let totalPayAmount = 0; 
+            //   pageData.forEach(({ amount, payAmount }) => {
+            //     totalAmount += amount;
+            //     totalPayAmount += payAmount;
+            //   }); 
+            //   return (
+            //     <>
+            //       <Table.Summary.Row>
+            //         <Table.Summary.Cell>合计</Table.Summary.Cell>
+            //         <Table.Summary.Cell>
+            //           <Text type="danger">{totalAmount}</Text>
+            //         </Table.Summary.Cell>
+            //         <Table.Summary.Cell>
+            //           <Text>{totalPayAmount}</Text>
+            //         </Table.Summary.Cell>
+            //       </Table.Summary.Row> 
+            //     </>
+            //   );
+            // }}  
             />
           </Form>
         </Card>
@@ -415,17 +435,23 @@ const BillShow = (props: BillShowProps) => {
         <Button onClick={closeShow} style={{ marginRight: 8 }}>
           关闭
         </Button>
-        <Button onClick={showModal} type="primary">
+        {/* <Button onClick={showModal} type="primary">
+          打印
+        </Button> */}
+
+        {/* 直接获取模板，不弹出选择，减少操作 */}
+        <Button onClick={print} type="primary">
           打印
         </Button>
+
       </div>
 
-      <SelectTemplate
+      {/* <SelectTemplate
         id={id}
         visible={modalvisible}
         closeModal={closeModal}
         unitId={infoDetail.unitId}
-      />
+      /> */}
 
     </Drawer>
   );

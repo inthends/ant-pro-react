@@ -10,7 +10,7 @@ export function SaveForm(data): Promise<any> {
     })
     .then(getResult as any);
 }
- 
+
 // 删除
 export function RemoveForm(keyvalue): Promise<any> {
   return request
@@ -42,3 +42,7 @@ export function Print(keyvalue, templateId): Promise<any> {
   return request.post(process.env.basePath + `/Template/Print?keyvalue=${keyvalue}&templateId=${templateId}`).then(getResult as any);
 }
 
+//自动获取模板打印
+export function Print2(keyvalue, templateType, organizeId): Promise<any> {
+  return request.post(process.env.basePath + `/Template/Print2?keyvalue=${keyvalue}&templateType=${templateType}&organizeId=${organizeId}`).then(getResult as any);
+}
