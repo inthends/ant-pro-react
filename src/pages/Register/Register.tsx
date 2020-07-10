@@ -83,21 +83,26 @@ class Register extends Component<RegisterProps, RegisterStates> {
   };
 
 
-  handleSubmit = e => {
-    e.preventDefault();
-    const { form } = this.props;
-    form.validateFields({ force: true }, (err, values) => {
-      if (!err) {
-        values.keyvalue = this.state.keyvalue;
-        values.appDate = values.appDate.format('YYYY-MM-DD'); 
-        SaveForm(values).then(res => {
-          // if (res.code === '0') {
-          message.success('注册成功');
-          router.push('/login');
-          // }
-        });
-      }
-    });
+  handleSubmit = e => { 
+
+
+    router.push({ pathname: '/View', query: { keyvalue: this.state.keyvalue } });
+
+    // e.preventDefault();
+    // const { form } = this.props;
+    // form.validateFields({ force: true }, (err, values) => {
+    //   if (!err) {
+    //     values.keyvalue = this.state.keyvalue;
+    //     values.appDate = values.appDate.format('YYYY-MM-DD');
+    //     SaveForm(values).then(res => {
+    //       // if (res.code === '0') {
+    //       message.success('注册成功');
+    //       //查看结果
+    //       router.push({ pathname: '/View', query: { keyvalue: this.state.keyvalue } });
+    //       // }
+    //     });
+    //   }
+    // });
   };
 
   // handleConfirmBlur = e => {

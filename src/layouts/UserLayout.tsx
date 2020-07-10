@@ -20,13 +20,15 @@ export interface UserLayoutProps extends ConnectProps {
 }
 
 const UserLayout: React.SFC<UserLayoutProps> = props => {
-  const {
+  //const {
     // route = {
     //   routes: [],
     // },
-  } = props;
+  //} = props;
+
   // const { routes = [] } = route;
   const {
+    title,
     children,
     location = {
       pathname: '',
@@ -51,8 +53,8 @@ const UserLayout: React.SFC<UserLayoutProps> = props => {
           <div className={styles.top}>
             <div className={styles.header}>
               <Link to="/">
-                <img alt="logo" className={styles.logo} src={logo} /> 
-                <span className={styles.title}>A6资产管理系统</span>
+                <img alt="logo" className={styles.logo} src={logo} />
+                <span className={styles.title}>{title}</span>
               </Link>
             </div>
             <div className={styles.desc}>专注物业资产管理</div>

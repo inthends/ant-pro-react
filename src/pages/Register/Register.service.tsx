@@ -14,3 +14,10 @@ export function SaveForm(data): Promise<any> {
 //     data,
 //   });
 // };
+
+// 获取信息
+export function GetFormInfoJson(keyvalue): Promise<any> {
+  return request
+    .get(process.env.basePath + `/Apartment/GetFormInfoJson?keyvalue=${keyvalue}`)
+    .then(getResult as any);
+}

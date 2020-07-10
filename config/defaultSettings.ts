@@ -58,7 +58,7 @@ export default {
   menu: {
     locale: true,
   },
-  title: 'A6资产管理系统',
+  title: 'A6资产管理系统',//阳山物业
   pwa: false,
   iconfontUrl: '',
 } as DefaultSettings;
