@@ -4,8 +4,8 @@ import { WrappedFormUtils } from 'antd/es/form/Form';
 import React, { Component } from 'react';
 // import Link from 'umi/link';
 // import router from 'umi/router';
-import styles from './Register.less';
-import { GetFormInfoJson } from './Register.service';
+// import styles from './Register.less';
+import { GetFormInfoJson, GetFilesData } from './Register.service';
 // import moment from 'moment';
 // const FormItem = Form.Item;
 // const { Option } = Select;
@@ -63,8 +63,11 @@ class View extends Component<RegisterProps, ViewStates> {
     if (id) {
       GetFormInfoJson(id).then((res) => {
         //加载图片 
-        if (res.info) {
-          this.setState({ infoDetail: res.info, fileList: res.files });
+        if (res) {
+          this.setState({ infoDetail: res });
+          GetFilesData(id).then(res => {
+            this.setState({ fileList: res || [] });
+          });
         }
       });
     }
@@ -197,7 +200,7 @@ class View extends Component<RegisterProps, ViewStates> {
             <h3 style={{ color: 'green' }} >注册成功，下面是您的申请信息</h3>
             <Form layout='inline' hideRequiredMark>
               <Row gutter={4}>
-              <Col lg={12}>
+                <Col lg={12}>
                   <Form.Item label='名称' >
                     {infoDetail.name}
                   </Form.Item>
@@ -206,7 +209,7 @@ class View extends Component<RegisterProps, ViewStates> {
                   <Form.Item label='类别' >
                     {infoDetail.userType}
                   </Form.Item>
-                </Col> 
+                </Col>
               </Row>
 
               {infoDetail.userType === '个人' ?
@@ -220,9 +223,8 @@ class View extends Component<RegisterProps, ViewStates> {
                   </Row>
                   <Row gutter={8}>
                     <Col lg={12}>
-                      <Form.Item label='证件类别'  >
+                      <Form.Item label='证件类别'>
                         {infoDetail.certificateType}
-
                       </Form.Item>
                     </Col>
                     <Col lg={12}>
@@ -239,9 +241,8 @@ class View extends Component<RegisterProps, ViewStates> {
                     </Form.Item>
                   </Col>
                   <Col lg={12}>
-                    <Form.Item label='法人代表'   >
+                    <Form.Item label='法人代表'>
                       {infoDetail.legal}
-
                     </Form.Item>
                   </Col>
                 </Row>}
@@ -250,25 +251,24 @@ class View extends Component<RegisterProps, ViewStates> {
                 <Col lg={12}>
                   <Form.Item label='手机号码'  >
                     {infoDetail.phoneNum}
-
                   </Form.Item>
                 </Col>
                 <Col lg={12}>
                   <Form.Item label='电子邮箱'  >
                     {infoDetail.email}
-
                   </Form.Item >
                 </Col>
               </Row>
 
               <Row gutter={4}>
                 <Col lg={12}>
-                  <Form.Item label='申请日期'   >
-                    {infoDetail.appDate}
+                  <Form.Item label='申请日期'>
+                    {/* {infoDetail.appDate} */}
+                    {String(infoDetail.appDate).substr(0, 10)}
                   </Form.Item>
                 </Col>
                 <Col lg={12}>
-                  <Form.Item label='传真号码'  >
+                  <Form.Item label='传真号码'>
                     {infoDetail.fax}
                   </Form.Item>
                 </Col>
@@ -277,7 +277,6 @@ class View extends Component<RegisterProps, ViewStates> {
                 <Col lg={24}>
                   <Form.Item label='联系地址'  >
                     {infoDetail.address}
-
                   </Form.Item >
                 </Col>
               </Row>
@@ -367,7 +366,7 @@ class View extends Component<RegisterProps, ViewStates> {
               <div className="clearfix">
                 <Upload
                   accept='image/*'
-                  action={process.env.basePath + '/Apartment/Upload?keyvalue='}
+                  //action={process.env.basePath + '/Apartment/Upload?keyvalue='}
                   listType="picture-card"
                   fileList={fileList}
                   disabled={true}

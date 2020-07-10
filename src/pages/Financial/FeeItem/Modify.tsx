@@ -446,7 +446,7 @@ const Modify = (props: ModifyProps) => {
       title: '管理处',
       dataIndex: 'orgName',
       key: 'orgName',
-      width: 100,
+      width: 120,
       sorter: true,
     },
     {
@@ -474,7 +474,7 @@ const Modify = (props: ModifyProps) => {
       title: '开票项目编号',
       dataIndex: 'invoiceCode',
       key: 'invoiceCode',
-      width: 100,
+      width: 120,
       sorter: true,
     },
 

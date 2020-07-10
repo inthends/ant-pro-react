@@ -90,7 +90,7 @@ const FeeModify = (props: FeeModifyProps) => {
 
       } else {
 
-         //修改的时候不能修改费项，不加载费项
+         //新增加载费项
         GetTempPaymentFeeItemTreeJson().then(res => {
           setFeeTreeData(res);
         });

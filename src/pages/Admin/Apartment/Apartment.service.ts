@@ -3,11 +3,17 @@ import request from "@/utils/request";
 
 export function GetPageListJson(data): Promise<any> {
   return request
-    .post(process.env.basePath + `/Member/GetPageListJson`, {
+    .post(process.env.basePath + `/Apartment/GetPageListJson`, {
       data: objToFormdata(data)
     })
     .then(getResult as any);
 }
+
+//审核
+export function Audit(data): Promise<any> {
+  return request.post(process.env.basePath + `/Apartment/Audit`, {data:objToFormdata(data)});
+}
+
 // 新增修改
 // export function SaveForm(data): Promise<any> {
 //   return request
@@ -17,13 +23,13 @@ export function GetPageListJson(data): Promise<any> {
 //     .then(getResult as any);
 // }
 
-export function GetUnitPageListJson(data): Promise<any> {
-  return request
-    .post(process.env.basePath + `/Member/GetUnitPageListJson`, {
-      data: objToFormdata(data)
-    })
-    .then(getResult as any);
-}
+// export function GetUnitPageListJson(data): Promise<any> {
+//   return request
+//     .post(process.env.basePath + `/Member/GetUnitPageListJson`, {
+//       data: objToFormdata(data)
+//     })
+//     .then(getResult as any);
+// }
 
 //保存规则
 // export function SaveItemForm(data): Promise<any> {
@@ -35,9 +41,15 @@ export function GetUnitPageListJson(data): Promise<any> {
 // }
 
 //解绑
-export function RemoveUnitForm(keyvalue): Promise<any> {
+// export function RemoveUnitForm(keyvalue): Promise<any> {
+//   return request
+//     .post(process.env.basePath + `/Member/RemoveUnitForm?keyvalue=${keyvalue}`, {})
+//     .then(getResult as any);
+// }
+
+export function GetFilesData(keyvalue): Promise<any> {
   return request
-    .post(process.env.basePath + `/Member/RemoveUnitForm?keyvalue=${keyvalue}`, {})
+    .get(process.env.basePath + `/Apartment/GetFilesData?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
