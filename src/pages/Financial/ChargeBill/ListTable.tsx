@@ -37,6 +37,7 @@ function ListTable(props: ListTableProps) {
     reload, rowSelect, organizeId, customerName, showSplit,
     showTrans, showDetail, showReduction, showRebate
   } = props;
+
   const { getFieldDecorator } = form;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
@@ -842,10 +843,7 @@ function ListTable(props: ListTableProps) {
                 <Option value='有数进一'>有数进一</Option>
               </Select>
             </Row>
-
-
-
-
+ 
             <Row style={{ marginTop: '5px' }}>
               <span style={{ marginLeft: 8, color: "red" }}>
                 {hasSelected ? `应收金额：${sumEntity.sumAmount} ，
@@ -859,7 +857,7 @@ function ListTable(props: ListTableProps) {
 
             <Row style={{ marginTop: '5px' }}>
               <span style={{ marginLeft: 8, color: "red" }}>
-                {groupTotal}
+                {hasSelected ? groupTotal : ''}
               </span>
             </Row>
 

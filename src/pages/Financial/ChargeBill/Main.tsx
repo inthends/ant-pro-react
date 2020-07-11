@@ -560,7 +560,7 @@ function Main() {
         parentid={'0'}
         selectTree={(id, type, info?) => {
           setCustomerName('');
-          setShowname('');
+          setShowname(''); 
           setAdminOrgId(info.node.props.organizeId);//管理处Id
           setOrgId(id);
           setOrgType(type);
@@ -596,7 +596,6 @@ function Main() {
                 onSearch={value => loadData(value, orgId)} />
               <Checkbox style={{ marginLeft: '10px' }} onChange={onShowCustomerChange}
                 defaultChecked={true}>显示该户其他费用</Checkbox>
-
               {/* <Button type="primary" style={{ float: 'right', marginLeft: '3px' }}
                 onClick={() => showTrans()}
                 disabled={billRowKey == -1 ? true : false}  >
