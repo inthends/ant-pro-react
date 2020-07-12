@@ -171,7 +171,7 @@ const BillShow = (props: BillShowProps) => {
   //打印
   const print = () => {
     setLoading(true);
-    Print2(id, '收款单', infoDetail.organizeId).then(res => {
+    Print2(id, '收款单', infoDetail.unitId).then(res => {
       //window.location.href = res;
       window.open(res);
       //setLoading(false);
