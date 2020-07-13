@@ -4,9 +4,11 @@ import { connect } from 'dva';
 import React, { FormEvent, useState } from 'react';
 import styles from './index.less';
 import router from 'umi/router';
+import { Link } from 'umi';
 // import { delay } from 'lodash';
 import { loginService } from '@/services/login';
 const { Item: FormItem } = Form;
+import md5 from 'blueimp-md5';
 
 function Login(props: ConnectFormProps) {
   const { form, dispatch } = props;
@@ -17,7 +19,10 @@ function Login(props: ConnectFormProps) {
     form.validateFields((errors, values) => {
       if (!errors) {
         setLoading(true);
+        values.password = md5(values.password);
+        
         loginService(values).then(async ({ code, msg, data }) => {
+
           if (code === 200) {
 
             if (data == null) {
@@ -27,7 +32,7 @@ function Login(props: ConnectFormProps) {
               //const { token, id } = data;
               message.success('登录成功');
               //localStorage.setItem('token', token);
-              const { userid, name, avatar, report,organizeId } = data;
+              const { userid, name, avatar, report, organizeId,defaulturl } = data;
               //全局记录用户id,name,src头像
               localStorage.setItem('userid', userid);
               localStorage.setItem('name', name);
@@ -37,9 +42,9 @@ function Login(props: ConnectFormProps) {
               localStorage.setItem('report', report);//服务端地址
               dispatch!({ type: 'user/setCurrent', payload: data });
               await dispatch!({ type: 'auth/fetch' });
-              router.push('/dashboard');
-            }
-
+              // router.push('/dashboard'); 
+              router.push(defaulturl); 
+            } 
           }
 
         })
@@ -80,6 +85,12 @@ function Login(props: ConnectFormProps) {
             登录
           </Button>
         </FormItem>
+        
+        <Link className={styles.register} to="/register">
+          注册账户
+          </Link>
+
+
       </Form>
     </div>
   );

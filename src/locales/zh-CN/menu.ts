@@ -64,10 +64,11 @@ export default {
   'menu.estate.maintenanceplan': '维保计划',
 
   'menu.admin': '行政管理',
+  'menu.admin.apartmentapp': '公寓申请',
   'menu.admin.apartment': '人才管理',
   'menu.admin.admincontract': '行政合同',
   'menu.admin.news': '信息发布',
-  'menu.admin.member': '会员管理',  
+  'menu.admin.member': '微信会员',  
   'menu.admin.warehouse': '仓库管理',
 
   'menu.contract': '资产运营',

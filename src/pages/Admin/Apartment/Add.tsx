@@ -136,22 +136,12 @@ const Add = (props: AddProps) => {
 
   return (
     <BaseModifyProvider {...props}
-      name="编码"
+      name="申请资料"
       width={700}
       save={doSave}>
       <Card  hoverable>
         <Form layout="vertical" hideRequiredMark>
-          {/* <Row gutter={24}> 
-            <ModifyItem
-              {...baseFormProps}
-              field="organizeId"
-              label="所属机构"
-              type="tree"
-              treeData={orgs}
-              disabled={initData.organizeId != undefined}
-              rules={[{ required: true, message: '请选择所属机构' }]}
-            ></ModifyItem> 
-          </Row> */}
+    
           <Row gutter={24}>
             <ModifyItem
               {...baseFormProps}
@@ -176,37 +166,8 @@ const Add = (props: AddProps) => {
               label="备注"
             ></ModifyItem>
           </Row>
-        </Form>
-
-        {/* <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
-          <Button type="link" style={{ float: 'right', marginLeft: '10px' }}
-            onClick={() => doAdd()}  >
-            <Icon type="plus" />新增</Button>
-        </div>
-        <Table
-          key='list'
-          style={{ border: 'none' }}
-          bordered={false}
-          size="middle"
-          dataSource={ruleList}
-          columns={columns}
-        // rowKey={record => record.allName}
-        // pagination={orgPagination}
-        // scroll={{ y: 420 }}
-        // onChange={(pagination: PaginationConfig, filters, sorter) =>
-        //   orgLoadData(pagination, sorter)
-        // }
-        // loading={orgLoading}
-        /> */}
-      </Card>
-
-      {/* <RuleItem
-        visible={ruleItemVisible}
-        closeDrawer={closeRuleItem}
-        data={ruleItem}
-        reload={reload}
-      /> */}
-
+        </Form> 
+      </Card> 
     </BaseModifyProvider >
 
   );

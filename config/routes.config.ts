@@ -10,12 +10,13 @@ export default [
       },
     ],
   },
+  
   {
     path: '/exception/403',
     component: './403',
   },
 
-  //提供给阳山公租房申请
+  //提供给阳山公租房登录账户申请
   {
     path: '/register',
     component: '../layouts/UserLayout',
@@ -27,17 +28,18 @@ export default [
       },
     ],
   },
-  {
-    path: '/view',
-    component: '../layouts/UserLayout',
-    routes: [
-      {
-        path: '/view',
-        name: 'view',
-        component: './Register/View'
-      },
-    ],
-  },
+
+  // {
+  //   path: '/view',
+  //   component: '../layouts/UserLayout',
+  //   routes: [
+  //     {
+  //       path: '/view',
+  //       name: 'view',
+  //       component: './Register/View'
+  //     },
+  //   ],
+  // },
 
   {
     path: '/',
@@ -61,6 +63,7 @@ export default [
           },
         ],
       },
+
       //数据中心
       {
         name: 'dashboard',
@@ -239,6 +242,7 @@ export default [
           },
         ],
       },
+      //行政管理
       {
         name: 'admin',
         path: '/admin',
@@ -247,13 +251,15 @@ export default [
         routes: [
           {
             path: '/admin',
-            redirect: '/admin/news',
+            // redirect: '/admin/news',
+            redirect: '/admin/apartmentapp',
           },
+
           {
-            name: 'admincontract',
-            path: '/admin/admincontract',
+            name: 'apartmentapp',
+            path: '/admin/apartmentapp',
             icon: 'layout',
-            component: './Admin/AdminContract/Main',
+            component: './Admin/ApartmentApp/Main',
           },
           {
             name: 'apartment',
@@ -266,6 +272,12 @@ export default [
             path: '/admin/news',
             icon: 'edit',
             component: './Admin/News/Main',
+          },
+          {
+            name: 'admincontract',
+            path: '/admin/admincontract',
+            icon: 'layout',
+            component: './Admin/AdminContract/Main',
           },
           {
             name: 'member',
