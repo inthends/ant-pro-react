@@ -252,7 +252,14 @@ export default [
           {
             path: '/admin',
             // redirect: '/admin/news',
-            redirect: '/admin/apartmentapp',
+            redirect: '/admin/apartmentuser',
+          },
+
+          {
+            name: 'apartmentuser',
+            path: '/admin/apartmentuser',
+            icon: 'layout',
+            component: './Admin/ApartmentUser/Main',
           },
 
           {
@@ -261,12 +268,13 @@ export default [
             icon: 'layout',
             component: './Admin/ApartmentApp/Main',
           },
-          {
-            name: 'apartment',
-            path: '/admin/apartment',
-            icon: 'layout',
-            component: './Admin/Apartment/Main',
-          },
+ 
+          // {
+          //   name: 'apartment',
+          //   path: '/admin/apartment',
+          //   icon: 'layout',
+          //   component: './Admin/Apartment/Main',
+          // },
           {
             name: 'news',
             path: '/admin/news',
@@ -407,6 +415,10 @@ export default [
         // component: './workflow/editormain',
         icon: 'cluster',
         routes: [
+          {
+            path: '/workflow',
+            redirect: '/workflow/flowtask',
+          },
           {
             name: 'flowedit',//name关联多语言
             path: '/workflow/flowedit',

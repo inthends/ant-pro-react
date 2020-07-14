@@ -5,8 +5,8 @@ import { queryCity, queryCurrent, queryProvince, query as queryUsers } from './s
 
 export interface ModalState {
   currentUser?: Partial<CurrentUser>;
-  province?: GeographicItemType[];
-  city?: GeographicItemType[];
+  // province?: GeographicItemType[];
+  // city?: GeographicItemType[];
   isLoading?: boolean;
 }
 
@@ -21,8 +21,8 @@ export interface ModelType {
   effects: {
     fetchCurrent: Effect;
     fetch: Effect;
-    fetchProvince: Effect;
-    fetchCity: Effect;
+    // fetchProvince: Effect;
+    // fetchCity: Effect;
   };
   reducers: {
     saveCurrentUser: Reducer<ModalState>;
@@ -37,8 +37,8 @@ const Model: ModelType = {
   namespace: 'accountSettings', 
   state: {
     currentUser: {},
-    province: [],
-    city: [],
+    // province: [],
+    // city: [],
     isLoading: false,
   },
 
@@ -58,24 +58,24 @@ const Model: ModelType = {
         payload: response,
       });
     },
-    *fetchProvince(_, { call, put }) {
-      yield put({
-        type: 'changeLoading',
-        payload: true,
-      });
-      const response = yield call(queryProvince);
-      yield put({
-        type: 'setProvince',
-        payload: response,
-      });
-    },
-    *fetchCity({ payload }, { call, put }) {
-      const response = yield call(queryCity, payload);
-      yield put({
-        type: 'setCity',
-        payload: response,
-      });
-    },
+    // *fetchProvince(_, { call, put }) {
+    //   yield put({
+    //     type: 'changeLoading',
+    //     payload: true,
+    //   });
+    //   const response = yield call(queryProvince);
+    //   yield put({
+    //     type: 'setProvince',
+    //     payload: response,
+    //   });
+    // },
+    // *fetchCity({ payload }, { call, put }) {
+    //   const response = yield call(queryCity, payload);
+    //   yield put({
+    //     type: 'setCity',
+    //     payload: response,
+    //   });
+    // },
   },
 
   reducers: {
@@ -85,28 +85,28 @@ const Model: ModelType = {
         currentUser: action.payload || {},
       };
     },
-    changeNotifyCount(state = {}, action) {
-      return {
-        ...state,
-        currentUser: {
-          ...state.currentUser,
-          notifyCount: action.payload.totalCount,
-          unreadCount: action.payload.unreadCount,
-        },
-      };
-    },
-    setProvince(state, action) {
-      return {
-        ...state,
-        province: action.payload,
-      };
-    },
-    setCity(state, action) {
-      return {
-        ...state,
-        city: action.payload,
-      };
-    },
+    // changeNotifyCount(state = {}, action) {
+    //   return {
+    //     ...state,
+    //     currentUser: {
+    //       ...state.currentUser,
+    //       notifyCount: action.payload.totalCount,
+    //       unreadCount: action.payload.unreadCount,
+    //     },
+    //   };
+    // },
+    // setProvince(state, action) {
+    //   return {
+    //     ...state,
+    //     province: action.payload,
+    //   };
+    // },
+    // setCity(state, action) {
+    //   return {
+    //     ...state,
+    //     city: action.payload,
+    //   };
+    // },
     changeLoading(state, action) {
       return {
         ...state,

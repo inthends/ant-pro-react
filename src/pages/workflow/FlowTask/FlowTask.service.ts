@@ -23,3 +23,8 @@ export function RejectForm(data): Promise<any> {
     .post(process.env.basePath + `/FlowTask/RejectForm`, { data: objToFormdata(data) })
     .then(getResult as any);
 }
+
+//获取任务数量
+export function GetTaskCounts(): Promise<any> {
+  return request.get(process.env.basePath + `/FlowTask/GetTaskCounts`, {}).then(getResult as any);
+}

@@ -24,10 +24,8 @@ function Login(props: ConnectFormProps) {
         loginService(values).then(async ({ code, msg, data }) => {
 
           if (code === 200) {
-
             if (data == null) {
               message.error(msg);
-
             } else {
               //const { token, id } = data;
               message.success('登录成功');
@@ -39,7 +37,9 @@ function Login(props: ConnectFormProps) {
               // localStorage.setItem('usercode', usercode);
               localStorage.setItem('avatar', avatar);
               localStorage.setItem('organizeId', organizeId);//机构id
-              localStorage.setItem('report', report);//服务端地址
+              localStorage.setItem('report', report);//服务端地址  
+              // localStorage.setItem('unreadCount', unreadCount);//待办数量  
+
               dispatch!({ type: 'user/setCurrent', payload: data });
               await dispatch!({ type: 'auth/fetch' });
               // router.push('/dashboard'); 
@@ -88,8 +88,7 @@ function Login(props: ConnectFormProps) {
         
         <Link className={styles.register} to="/register">
           注册账户
-          </Link>
-
+        </Link>
 
       </Form>
     </div>

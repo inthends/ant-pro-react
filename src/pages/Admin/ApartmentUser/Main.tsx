@@ -2,8 +2,7 @@ import { DefaultPagination } from "@/utils/defaultSetting";
 import { Input, Layout } from "antd";
 import { PaginationConfig } from "antd/lib/table";
 import React, { useEffect, useState } from "react";
-import ListTable from "./ListTable";
-import Add from "./Add";
+import ListTable from "./ListTable"; 
 import Modify from "./Modify";
 import { GetPageListJson } from "./Apartment.service";
 const { Content } = Layout;
@@ -19,8 +18,7 @@ const Main = () => {
     keyword: ""
   });
 
-  const [modifyVisible, setModifyVisible] = useState<boolean>(false); 
-  const [addVisible, setAddVisible] = useState<boolean>(false); 
+  const [modifyVisible, setModifyVisible] = useState<boolean>(false);  
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<any[]>([]);
   const [currData, setCurrData] = useState<any>();
@@ -144,12 +142,7 @@ const Main = () => {
         />
       </Content>
 
-      <Add
-        visible={addVisible}
-        closeDrawer={() => setAddVisible(false)}
-        data={currData}
-        reload={() => initLoadData({ ...search })}
-      />
+   
 
       <Modify
         visible={modifyVisible}

@@ -1127,7 +1127,7 @@ const Modify = (props: ModifyProps) => {
                   });
                 setInfoDetail(newInfo);
 
-              }
+                }
             });
           } else {
             var newInfo = Object.assign({}, infoDetail,

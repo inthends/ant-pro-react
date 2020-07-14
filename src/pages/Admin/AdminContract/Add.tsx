@@ -640,14 +640,14 @@ const Add = (props: AddProps) => {
         }}
       >
         <Button onClick={closeDrawer} style={{ marginRight: 8 }}>
-          取消
-          </Button>
+        关闭
+        </Button>
         <Button onClick={() => save(false)} style={{ marginRight: 8 }}>
-          暂存
-          </Button>
+          保存
+        </Button>
         <Button onClick={() => save(true)} type="primary">
           提交
-          </Button>
+        </Button>
       </div>
 
       <QuickModify

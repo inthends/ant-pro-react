@@ -45,10 +45,16 @@ function ListTable(props: ListTableProps) {
       width: 250,
     },
     {
+      title: "流程编码",
+      dataIndex: "code",
+      key: "code",
+      width: 150,
+    },
+    {
       title: "流程分类",
       dataIndex: "flowTypeName",
       key: "flowTypeName",
-      width: 250
+      width: 200
     },
     {
       title: "创建人",

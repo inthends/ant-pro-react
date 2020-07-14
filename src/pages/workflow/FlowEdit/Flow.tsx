@@ -32,7 +32,7 @@ const Flow = () => {
   const [data, setData] = useState<any[]>([]);
   const [currData, setCurrData] = useState<any>();
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
-  const { hideSider, setHideSider } = useContext(SiderContext);
+  const { hideSider, setHideSider } = useContext(SiderContext); 
   const [treeData, setTreeData] = useState<any[]>([]);
   //是否能新增
   const [isDisabled, setDisabled] = useState<boolean>(true);

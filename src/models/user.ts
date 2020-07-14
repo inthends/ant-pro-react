@@ -5,11 +5,11 @@ import { Reducer } from 'redux';
 export interface CurrentUser {
   avatar?: string;
   name?: string;
-  title?: string;
-  group?: string;
-  signature?: string;
-  geographic?: any;
-  tags?: any[];
+  // title?: string;
+  // group?: string;
+  // signature?: string;
+  // geographic?: any;
+  // tags?: any[];
   unreadCount?: number;
 }
 
@@ -31,8 +31,8 @@ export interface UserModelType {
   reducers: {
     save: Reducer<any>;
     saveCurrentUser: Reducer<any>;
-    saveDingdingInfo: Reducer<any>;
-    changeNotifyCount: Reducer<any>;
+    // saveDingdingInfo: Reducer<any>;
+    // changeNotifyCount: Reducer<any>;
   };
 }
 
@@ -52,10 +52,13 @@ const UserModel: UserModelType = {
         payload: response,
       });
     },
+
     *fetchCurrent(_, { call, put }) {
         const userid = localStorage.getItem('userid'); 
         const { code, data } = yield call(queryCurrent, userid);
-        if (code === 200) {
+
+        if (code === 200) { 
+
           if (data) {
             yield put({
               type: 'saveCurrentUser',
@@ -71,6 +74,7 @@ const UserModel: UserModelType = {
         payload: payload,
       });
     },
+    
     *bindUser({ payload }, { call }) {
       const { user } = payload;
       const { code } = yield call(bindUserService, user);
@@ -91,22 +95,22 @@ const UserModel: UserModelType = {
         currentUser: action.payload || {},
       };
     },
-    saveDingdingInfo(state, action) {
-      return {
-        ...state,
-        dingdingInfo: action.payload || {},
-      };
-    },
-    changeNotifyCount(state, action) {
-      return {
-        ...state,
-        currentUser: {
-          ...state.currentUser,
-          notifyCount: action.payload.totalCount,
-          unreadCount: action.payload.unreadCount,
-        },
-      };
-    },
+    // saveDingdingInfo(state, action) {
+    //   return {
+    //     ...state,
+    //     dingdingInfo: action.payload || {},
+    //   };
+    // },
+    // changeNotifyCount(state, action) {
+    //   return {
+    //     ...state,
+    //     currentUser: {
+    //       ...state.currentUser,
+    //       notifyCount: action.payload.totalCount,
+    //       unreadCount: action.payload.unreadCount,
+    //     },
+    //   };
+    // },
   },
 };
 export default UserModel;

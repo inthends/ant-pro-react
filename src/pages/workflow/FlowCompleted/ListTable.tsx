@@ -60,7 +60,7 @@ function ListTable(props: ListTableProps) {
       title: '发送人',
       dataIndex: 'senderName',
       key: 'senderName',
-      width: 100,
+      width: 200,
     },
     {
       title: '接收时间',
@@ -84,7 +84,7 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'operation',
       key: 'operation',
       align: 'center',
-      width: 75,
+      width: 65,
       render: (text, record) => {
         return [
           <span key='span'>

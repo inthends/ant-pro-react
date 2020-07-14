@@ -4,14 +4,14 @@ import { connect } from 'dva';
 // import { formatMessage } from 'umi-plugin-react/locale';
 // import groupBy from 'lodash/groupBy';
 // import moment from 'moment';
-import { NoticeItem } from '@/models/global';
+// import { NoticeItem } from '@/models/global';
 import NoticeIcon from '../NoticeIcon';
 import { CurrentUser } from '@/models/user';
 import { ConnectProps, ConnectState } from '@/models/connect';
 import styles from './index.less';
 
 export interface GlobalHeaderRightProps extends ConnectProps {
-  notices?: NoticeItem[];
+  // notices?: NoticeItem[];
   currentUser?: CurrentUser;
   // fetchingNotices?: boolean;
   // onNoticeVisibleChange?: (visible: boolean) => void;
@@ -96,14 +96,15 @@ class GlobalHeaderRight extends Component<GlobalHeaderRightProps> {
   // };
 
   render() {
-    const { currentUser } = this.props;
+     const { currentUser } = this.props;
     //  const noticeData = this.getNoticeData();
-    //  const unreadMsg = this.getUnreadData(noticeData);
+    //  const unreadMsg = this.getUnreadData(noticeData); 
+    // const count = localStorage.getItem('unreadCount');
 
     return (
       <NoticeIcon
         className={styles.action}
-        count={currentUser && currentUser.unreadCount}
+        count={currentUser && currentUser.unreadCount}  
 
       // onItemClick={item => {
       //   this.changeReadState(item as NoticeItem);
@@ -153,5 +154,5 @@ export default connect(({ user, global, loading }: ConnectState) => ({
   // collapsed: global.collapsed,
   // fetchingMoreNotices: loading.effects['global/fetchMoreNotices'],
   // fetchingNotices: loading.effects['global/fetchNotices'],
-   notices: global.notices,
+  // notices: global.notices,
 }))(GlobalHeaderRight);

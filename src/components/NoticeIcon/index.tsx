@@ -2,10 +2,8 @@ import { Badge, Icon, Spin, Tabs } from 'antd';
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import NoticeList, { NoticeIconTabProps } from './NoticeList';
-
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
-
 import router from 'umi/router';
 
 const { TabPane } = Tabs;
@@ -22,7 +20,7 @@ export interface NoticeIconData {
 }
 
 export interface NoticeIconProps {
-  count?: number;
+  count?: any; //number;
   bell?: React.ReactNode;
   className?: string;
   loading?: boolean;
@@ -101,8 +99,7 @@ export default class NoticeIcon extends Component<NoticeIconProps> {
         const msgCount = count || count === 0 ? count : len;
         const tabTitle: string = msgCount > 0 ? `${title} (${msgCount})` : title;
         return (
-          <TabPane tab={tabTitle} key={title}
-          >
+          <TabPane tab={tabTitle} key={title}  >
             <NoticeList
               clearText={clearText}
               viewMoreText={viewMoreText}
@@ -112,7 +109,7 @@ export default class NoticeIcon extends Component<NoticeIconProps> {
               onViewMore={(event): void => this.onViewMore(child.props, event)}
               showClear={showClear}
               showViewMore={showViewMore}
-              title={title}
+              // title={title}
               {...child.props}
             />
           </TabPane>

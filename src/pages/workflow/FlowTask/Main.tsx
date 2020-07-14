@@ -5,17 +5,22 @@ import React, { useEffect, useState } from 'react';
 import ListTable from './ListTable';
 import { GetDataList } from './FlowTask.service';
 //合同审批
-import ContractApprove from '../../Contract/List/Approve';
-//合同退租验房
-import RoomCheck from '../../Contract/List/RoomCheck';
-//合同退租结算
-import BillCheck from '../../Contract/List/BillCheck';
+// import ContractApprove from '../../Contract/List/Approve';
+// //合同退租验房
+// import RoomCheck from '../../Contract/List/RoomCheck';
+// //合同退租结算
+// import BillCheck from '../../Contract/List/BillCheck';
 
-//收款单送审
-import ReceiveReSubmit from '../../Financial/ChargeBill/ReSubmit';
-//收款单审批
-import ReceiveApprove from '../../Financial/ChargeBill/Approve';
+// //收款单送审
+// import ReceiveReSubmit from '../../Financial/ChargeBill/ReSubmit';
+// //收款单审批
+// import ReceiveApprove from '../../Financial/ChargeBill/Approve';
 
+//公寓入住审批
+//重新发起
+import ApartmentSubmit from '../../Admin/ApartmentApp/Modify';
+//审批
+import ApartmentApprove from '../../Admin/ApartmentApp/Approve';
 
 const { Content } = Layout;
 const { Search } = Input;
@@ -31,16 +36,21 @@ const Main = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<any[]>([]);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
-  const [roomcheckVisible, setRoomCheckVisible] = useState<boolean>(false);
-  const [billcheckVisible, setBillCheckVisible] = useState<boolean>(false);
-
-  const [flowId, setFlowId] = useState<string>();
+  // const [flowId, setFlowId] = useState<string>();
+  const [code, setCode] = useState<string>();
   const [id, setId] = useState<string>();
   const [instanceId, setInstanceId] = useState<string>();
 
-  const [contractVisible, setContractVisible] = useState<boolean>(false);
-  const [receiveVisible, setReceiveVisible] = useState<boolean>(false);
-  const [receiveSubmitVisible, setReceiveSubmitVisible] = useState<boolean>(false);
+  // const [roomcheckVisible, setRoomCheckVisible] = useState<boolean>(false);
+  // const [billcheckVisible, setBillCheckVisible] = useState<boolean>(false);
+
+  // const [contractVisible, setContractVisible] = useState<boolean>(false);
+  // const [receiveVisible, setReceiveVisible] = useState<boolean>(false);
+  // const [receiveSubmitVisible, setReceiveSubmitVisible] = useState<boolean>(false);
+
+  //入住申请
+  const [apartmentVisible, setApartmentVisible] = useState<boolean>(false);
+  const [apartmentSubmitVisible, setApartmentSubmitVisible] = useState<boolean>(false);
 
   useEffect(() => {
     initLoadData(search);
@@ -104,80 +114,102 @@ const Main = () => {
     });
   };
 
-  //approve
-  const closeApproveDrawer = () => {
-    if (flowId == 'b5011d6f-d386-4ed3-a2ab-2f2eb5597b7f'
-      || flowId == 'b6011d6f-d386-4ed3-a2ab-2f2eb5597b7f'
-      || flowId == 'b7011d6f-d386-4ed3-a2ab-2f2eb5597b7f'
-    ) {
-      setContractVisible(false);
-    }
-    else {
-      //收款
-      setReceiveVisible(false);
-    }
-  };
-  const showApproveDrawer = (flowId, id, instanceId) => {
-    if (flowId == 'b5011d6f-d386-4ed3-a2ab-2f2eb5597b7f'
-      || flowId == 'b6011d6f-d386-4ed3-a2ab-2f2eb5597b7f'
-      || flowId == 'b7011d6f-d386-4ed3-a2ab-2f2eb5597b7f'
-    ) {
-      //合同
-      setContractVisible(true);
-    } else {
-      //收款
-      setReceiveVisible(true);
-    }
-    setFlowId(flowId);
+  //审批
+  const showApartmentApproveDrawer = (code, id, instanceId) => {
+    setCode(code);
     setId(id);
     setInstanceId(instanceId);
-  };
+    setApartmentVisible(true);
+  }
+
+
+  //重新发起
+  const showApartmentSubmitDrawer = (id,instanceId) => {
+    setId(id);
+    setInstanceId(instanceId);
+    setApartmentSubmitVisible(true);
+  }
+
+  // const closeApartmentApproveDrawer = () => {
+  //   setApartmentVisible(false);
+  // }
+
+
+  //approve
+  // const closeApproveDrawer = () => {
+  //   if (flowId == 'b5011d6f-d386-4ed3-a2ab-2f2eb5597b7f'
+  //     || flowId == 'b6011d6f-d386-4ed3-a2ab-2f2eb5597b7f'
+  //     || flowId == 'b7011d6f-d386-4ed3-a2ab-2f2eb5597b7f'
+  //   ) {
+  //     setContractVisible(false);
+  //   }
+  //   else {
+  //     //收款
+  //     // setReceiveVisible(false);
+  //   }
+  // };
+
+  // const showApproveDrawer = (flowId, id, instanceId) => {
+  //   if (flowId == 'b5011d6f-d386-4ed3-a2ab-2f2eb5597b7f'
+  //     || flowId == 'b6011d6f-d386-4ed3-a2ab-2f2eb5597b7f'
+  //     || flowId == 'b7011d6f-d386-4ed3-a2ab-2f2eb5597b7f'
+  //   ) {
+  //     //合同
+  //     setContractVisible(true);
+  //   } else {
+  //     //收款
+  //     // setReceiveVisible(true);
+  //   }
+  //   setFlowId(flowId);
+  //   setId(id);
+  //   setInstanceId(instanceId);
+  // };
 
   //验房
-  const closeRoomCheckDrawer = () => {
-    setRoomCheckVisible(false);
-  };
-  const showRoomCheckDrawer = (flowId, id, instanceId) => {
-    setRoomCheckVisible(true);
-    setFlowId(flowId);
-    setId(id);
-    setInstanceId(instanceId);
-  };
+  // const closeRoomCheckDrawer = () => {
+  //   setRoomCheckVisible(false);
+  // };
+  // const showRoomCheckDrawer = (flowId, id, instanceId) => {
+  //   setRoomCheckVisible(true);
+  //   setFlowId(flowId);
+  //   setId(id);
+  //   setInstanceId(instanceId);
+  // };
 
   //结算
-  const closeBillCheckDrawer = () => {
-    setBillCheckVisible(false);
-  };
-  const showBillCheckDrawer = (flowId, id, instanceId) => {
-    setBillCheckVisible(true);
-    setFlowId(flowId);
-    setId(id);
-    setInstanceId(instanceId);
-  };
+  // const closeBillCheckDrawer = () => {
+  //   setBillCheckVisible(false);
+  // };
+  // const showBillCheckDrawer = (flowId, id, instanceId) => {
+  //   setBillCheckVisible(true);
+  //   setFlowId(flowId);
+  //   setId(id);
+  //   setInstanceId(instanceId);
+  // };
 
 
   //resubmit
-  const closeSubmitDrawer = () => {
-    if (flowId == 'b5011d6f-d386-4ed3-a2ab-2f2eb5597b7f') {
-      // setContractSubmitVisible(false);
-    }
-    else {
-      //收款
-      setReceiveSubmitVisible(false);
-    }
-  };
-  const showSubmitDrawer = (flowId, id, instanceId) => {
-    if (flowId == 'b5011d6f-d386-4ed3-a2ab-2f2eb5597b7f') {
-      //合同
-      // setContractSubmitVisible(true);
-    } else {
-      //收款
-      setReceiveSubmitVisible(true);
-    }
-    setFlowId(flowId);
-    setId(id);
-    setInstanceId(instanceId);
-  };
+  // const closeSubmitDrawer = () => {
+  //   if (flowId == 'b5011d6f-d386-4ed3-a2ab-2f2eb5597b7f') {
+  //     // setContractSubmitVisible(false);
+  //   }
+  //   else {
+  //     //收款
+  //     setReceiveSubmitVisible(false);
+  //   }
+  // };
+  // const showSubmitDrawer = (flowId, id, instanceId) => {
+  //   if (flowId == 'b5011d6f-d386-4ed3-a2ab-2f2eb5597b7f') {
+  //     //合同
+  //     // setContractSubmitVisible(true);
+  //   } else {
+  //     //收款
+  //     setReceiveSubmitVisible(true);
+  //   }
+  //   setFlowId(flowId);
+  //   setId(id);
+  //   setInstanceId(instanceId);
+  // };
 
   return (
     <Layout style={{ height: '100%' }}>
@@ -211,13 +243,35 @@ const Main = () => {
           pagination={pagination}
           data={data}
           reload={() => initLoadData(search)}
-          roomcheck={showRoomCheckDrawer}
-          billcheck={showBillCheckDrawer}
-          approve={showApproveDrawer}
-          submit={showSubmitDrawer}
+          // roomcheck={showRoomCheckDrawer}
+          // billcheck={showBillCheckDrawer}
+          // approve={showApproveDrawer}
+          // submit={showSubmitDrawer}
+          apartmentApprove={showApartmentApproveDrawer}
+          apartmentSubmit={showApartmentSubmitDrawer}
         />
 
-        <RoomCheck
+        <ApartmentApprove
+          visible={apartmentVisible}
+          closeDrawer={() => setApartmentVisible(false)}
+          isView={false}
+          // flowId={flowId}
+          code={code}
+          id={id}
+          instanceId={instanceId}
+          reload={() => initLoadData(search)}
+        />
+
+        <ApartmentSubmit
+          visible={apartmentSubmitVisible}
+          closeDrawer={() => setApartmentSubmitVisible(false)}
+          instanceId={instanceId}
+          taskId={id}
+          reload={() => initLoadData(search)}
+          isReSubmit={true}
+        />
+
+        {/*  <RoomCheck
           visible={roomcheckVisible}
           closeDrawer={closeRoomCheckDrawer}
           flowId={flowId}
@@ -260,7 +314,9 @@ const Main = () => {
           id={id}
           instanceId={instanceId}
           reload={() => initLoadData(search)}
-        />
+        /> */}
+
+
       </Content>
     </Layout>
   );

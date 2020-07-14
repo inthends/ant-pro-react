@@ -53,7 +53,7 @@ export default {
   'menu.estate': '物业管理',
   'menu.estate.servicedesk': '服务总台',
   'menu.estate.repair': '报修管理',
-  'menu.estate.complaint': '投诉管理', 
+  'menu.estate.complaint': '投诉管理',
   'menu.estate.pollingcontent': '巡检内容',
   'menu.estate.pollingline': '巡检路线',
   'menu.estate.pollingtask': '巡检任务',
@@ -64,11 +64,12 @@ export default {
   'menu.estate.maintenanceplan': '维保计划',
 
   'menu.admin': '行政管理',
-  'menu.admin.apartmentapp': '公寓申请',
+  'menu.admin.apartmentuser': '我的资料',
+  'menu.admin.apartmentapp': '入住申请',
   'menu.admin.apartment': '人才管理',
   'menu.admin.admincontract': '行政合同',
   'menu.admin.news': '信息发布',
-  'menu.admin.member': '微信会员',  
+  'menu.admin.member': '微信会员',
   'menu.admin.warehouse': '仓库管理',
 
   'menu.contract': '资产运营',

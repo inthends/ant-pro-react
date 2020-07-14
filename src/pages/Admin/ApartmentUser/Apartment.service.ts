@@ -9,19 +9,21 @@ export function GetPageListJson(data): Promise<any> {
     .then(getResult as any);
 }
 
-//审核
-export function Audit(data): Promise<any> {
-  return request.post(process.env.basePath + `/Apartment/Audit`, {data:objToFormdata(data)});
+//删除附件
+export function RemoveFile(keyvalue): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Apartment/RemoveFile?keyvalue=${keyvalue}`, {})
+    .then(getResult as any);
 }
 
 // 新增修改
-// export function SaveForm(data): Promise<any> {
-//   return request
-//     .post(process.env.basePath + `/Member/SaveForm`, {
-//       data: objToFormdata(data)
-//     })
-//     .then(getResult as any);
-// }
+export function SaveForm(data): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Apartment/SaveForm`, {
+      data: objToFormdata(data)
+    })
+    .then(getResult as any);
+}
 
 // export function GetUnitPageListJson(data): Promise<any> {
 //   return request

@@ -1,11 +1,11 @@
 import { DefaultPagination } from "@/utils/defaultSetting";
-import {Icon, Button,Input, Layout } from "antd";
+import { Icon, Button, Input, Layout } from "antd";
 import { PaginationConfig } from "antd/lib/table";
 import React, { useEffect, useState } from "react";
 import ListTable from "./ListTable";
-import Add from "./Add";
+import Approve from "./Approve";
 import Modify from "./Modify";
-import { GetPageListJson } from "./ApartmentApp.service";
+import { GetAppPageListJson } from "./ApartmentApp.service";
 const { Content } = Layout;
 const { Search } = Input;
 interface SearchParam {
@@ -19,27 +19,36 @@ const Main = () => {
     keyword: ""
   });
 
-  const [modifyVisible, setModifyVisible] = useState<boolean>(false); 
-  const [addVisible, setAddVisible] = useState<boolean>(false); 
+  // const [modifyVisible, setModifyVisible] = useState<boolean>(false);
+  const [addVisible, setAddVisible] = useState<boolean>(false);
+  const [viewVisible, setViewVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<any[]>([]);
-  const [currData, setCurrData] = useState<any>();
-  const [pagination, setPagination] = useState<PaginationConfig>(
-    new DefaultPagination()
-  );
+  // const [currData, setCurrData] = useState<any>();
+  const [pagination, setPagination] = useState<PaginationConfig>( new DefaultPagination());  
 
   useEffect(() => {
     initLoadData(search);
   }, []);
 
-  const closeDrawer = () => {
-    setModifyVisible(false);
+  // const closeDrawer = () => {
+  //   setModifyVisible(false);
+  // };
+
+  const showDrawer = (id?) => {
+    // setCurrData(item);
+    setInstanceId(id);
+    setAddVisible(true);
   };
 
-  const showDrawer = (item?) => {
-    setCurrData(item);
-    setModifyVisible(true);
+
+  //查看
+  const [instanceId, setInstanceId] = useState<string>();
+  const showViewDrawer = (id?) => {
+    setInstanceId(id);
+    setViewVisible(true);
   };
+
 
   // const showChoose = (item?) => {
   //   // setUserVisible(true);
@@ -67,18 +76,20 @@ const Main = () => {
     if (sorter) {
       const { field, order } = sorter;
       searchCondition.sord = order === "descend" ? "desc" : "asc";
-      searchCondition.sidx = field ? field : "name";
+      searchCondition.sidx = field ? field : "createDate";
     }
 
     return load(searchCondition).then(res => {
       return res;
     });
   };
+
+
   const load = formData => {
     setLoading(true);
-    formData.sidx = formData.sidx || "name";
+    formData.sidx = formData.sidx || "createDate";
     formData.sord = formData.sord || "asc";
-    return GetPageListJson(formData).then(res => {
+    return GetAppPageListJson(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setPagination(pagesetting => {
         return {
@@ -98,7 +109,7 @@ const Main = () => {
   const initLoadData = (searchParam: SearchParam) => {
     setSearch(searchParam);
     const queryJson = searchParam;
-    const sidx = "name";
+    const sidx = "createDate";
     const sord = "asc";
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(
@@ -114,7 +125,7 @@ const Main = () => {
         <div style={{ marginBottom: 20, padding: "3px 0" }}>
           <Search
             className="search-input"
-            placeholder="搜索关键字"
+            placeholder="搜索标题"
             onSearch={keyword => loadData({ ...search, keyword })}
             style={{ width: 180 }}
           />
@@ -122,10 +133,10 @@ const Main = () => {
             type="primary"
             style={{ float: "right" }}
             onClick={() => {
-              setCurrData(undefined);
+              // setCurrData(undefined);
+              setInstanceId(undefined);
               setAddVisible(true);
-            }}
-          >
+            }}>
             <Icon type="plus" />
             申请
           </Button>
@@ -138,25 +149,30 @@ const Main = () => {
           pagination={pagination}
           data={data}
           modify={showDrawer}
+          view={showViewDrawer}
           // choose={showChoose}
           reload={() => initLoadData(search)}
           setData={setData}
         />
       </Content>
 
-      <Add
+      <Modify
         visible={addVisible}
         closeDrawer={() => setAddVisible(false)}
-        data={currData}
+        // data={currData}
+        instanceId={instanceId}
+        isReSubmit={false}
         reload={() => initLoadData({ ...search })}
       />
 
-      <Modify
-        visible={modifyVisible}
-        closeDrawer={closeDrawer}
-        data={currData}
-        reload={() => initLoadData({ ...search })}
+      <Approve
+        visible={viewVisible}
+        closeDrawer={() => setViewVisible(false)}
+        isView={true}
+        instanceId={instanceId}
+        reload={() => initLoadData(search)}
       />
+
     </Layout>
   );
 };

@@ -1,6 +1,6 @@
 import { BaseModifyProvider } from '@/components/BaseModifyDrawer/BaseModifyDrawer';
 import ModifyItem from '@/components/BaseModifyDrawer/ModifyItem';
-import {message, Col, Card, Form, Row } from 'antd';
+import { message, Col, Card, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React from 'react';
 import { SaveForm } from './Flow.service';
@@ -114,18 +114,17 @@ const Modify = (props: ModifyProps) => {
             ></ModifyItem>
             <ModifyItem
               {...baseFormProps}
-              field="flowTypeName"
-              label="流程分类"
-              readOnly={true}
+              field="code"
+              label="流程编码" 
               lg={8}
             ></ModifyItem>
             <ModifyItem
               {...baseFormProps}
-              field="createUserName"
-              label="创建人"
+              field="flowTypeName"
+              label="流程分类"
               readOnly={true}
               lg={8}
-            ></ModifyItem>
+            ></ModifyItem> 
           </Row>
         </Form>
       </Card>
@@ -156,7 +155,7 @@ const Modify = (props: ModifyProps) => {
               // }
               data={GetData()}
               //修改流程图
-              onAfterChange={(e) => { 
+              onAfterChange={(e) => {
                 if (e.action != "changeData") {
                   // setIsSave(false); 
                   initData.designerJSON = JSON.stringify(e.item.graph._cfg._data);

@@ -7,10 +7,10 @@ import { CurrentUser } from './data.d';
 //   return request('/api/currentUser');
 // }
 
+//个人设置页面加载用户数据
 export async function queryCurrent(userid): Promise<CurrentUser> {
   //return request.get(process.env.basePath + `/Setting/GetUserInfo?userid=${userid}`, {});  
   //return request(process.env.basePath + `/Setting/GetUserInfo?userid=${userid}`); 
-  
   return request.get(process.env.basePath + `/Setting/GetUserInfo?userid=${userid}`, {}).then(getResult as any);
 }
 

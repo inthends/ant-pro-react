@@ -44,9 +44,9 @@ class Register extends Component<RegisterProps, RegisterStates> {
     help: '',
   };
 
-  componentDidUpdate() {}
+  componentDidUpdate() { }
 
-  componentWillUnmount() {}
+  componentWillUnmount() { }
 
   getPasswordStatus = () => {
     const { form } = this.props;
@@ -69,8 +69,8 @@ class Register extends Component<RegisterProps, RegisterStates> {
         values.password = md5(values.password);
         register(values).then(res => {
           // if (res.code === '0') {
-            message.success('注册成功');
-            router.push('/login');
+          message.success('注册成功');
+          router.push('/login');
           // }
         });
       }
@@ -147,16 +147,6 @@ class Register extends Component<RegisterProps, RegisterStates> {
         <h3>注册</h3>
         <Form onSubmit={this.handleSubmit}>
           <FormItem>
-            {getFieldDecorator('account', {
-              rules: [
-                {
-                  required: true,
-                  message: '请输入登录账号',
-                },
-              ],
-            })(<Input size="large" placeholder="登录账号" />)}
-          </FormItem>
-          <FormItem>
             {getFieldDecorator('name', {
               rules: [
                 {
@@ -166,6 +156,16 @@ class Register extends Component<RegisterProps, RegisterStates> {
               ],
             })(<Input size="large" placeholder="姓名" />)}
           </FormItem>
+          <FormItem>
+            {getFieldDecorator('account', {
+              rules: [
+                {
+                  required: true,
+                  message: '请输入登录账号',
+                },
+              ],
+            })(<Input size="large" placeholder="登录账号" />)}
+          </FormItem> 
           {/* <FormItem>
             {getFieldDecorator('email', {
               rules: [

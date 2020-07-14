@@ -10,14 +10,16 @@ interface ListTableProps {
   data: any[];
   onchange(page: any, filter: any, sort: any): any;
   reload(): void;
-  roomcheck(flowId: string, id: string, instanceId: string): void;//验房
-  billcheck(flowId: string, id: string, instanceId: string): void;//结算
-  approve(flowId: string, id: string, instanceId: string): void;//审核退租
-  submit(flowId: string, id: string, instanceId: string): void;//重新发起
+  // roomcheck(code: string, id: string, instanceId: string): void;//验房
+  // billcheck(code: string, id: string, instanceId: string): void;//结算
+  // approve(code: string, id: string, instanceId: string): void;//审核退租
+  // submit(code: string, id: string, instanceId: string): void;//重新发起 
+  apartmentApprove(code: string, id: string, instanceId: string): void;//入住申请
+  apartmentSubmit(id: string, instanceId: string): void;//重新发起
 }
 
 function ListTable(props: ListTableProps) {
-  const { onchange, loading, data,pagination, roomcheck, billcheck, approve, submit } = props;
+  const { onchange, loading, data, pagination, apartmentApprove, apartmentSubmit } = props;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
   };
@@ -39,18 +41,50 @@ function ListTable(props: ListTableProps) {
 
   const doHandle = record => {
     //判断步骤
-    if (record.stepName == '验房') {
-      roomcheck(record.flowId, record.id, record.instanceId);
-    } else if (record.stepName == '财务结算') {
-      billcheck(record.flowId, record.id, record.instanceId);
+    // if (record.stepName == '验房') {
+    //   roomcheck(record.flowId, record.id, record.instanceId);
+
+    // } else if (record.stepName == '财务结算') {
+
+    //   billcheck(record.flowId, record.id, record.instanceId);
+    // }
+    // else if (record.stepName == '开始') {
+    //   //resubmit
+    //   submit(record.flowId, record.id, record.instanceId);
+    // }
+    // else {
+    //   approve(record.flowId, record.id, record.instanceId);
+    // }
+
+    switch (record.code) {
+
+      // case '验房':
+      //   roomcheck(record.flowId, record.id, record.instanceId);
+      //   break;
+      // case '财务结算':
+      //   billcheck(record.flowId, record.id, record.instanceId);
+      //   break;
+      // case '开始':
+      //   submit(record.flowId, record.id, record.instanceId);
+      //   break;
+
+      case '1001':
+        switch (record.stepName) {
+          case '技术部审批':
+          case '领导审批':
+            apartmentApprove(record.code, record.id, record.instanceId);
+            break;
+          case '开始':
+            apartmentSubmit(record.id,record.instanceId);
+            break;
+          default:
+            break;
+        }
+        break;
+      default:
+        break;
     }
-    else if (record.stepName == '开始') {
-      //resubmit
-      submit(record.flowId, record.id, record.instanceId);
-    }
-    else {
-      approve(record.flowId, record.id, record.instanceId);
-    }
+
   };
 
   const columns = [
@@ -76,7 +110,7 @@ function ListTable(props: ListTableProps) {
       title: '发送人',
       dataIndex: 'senderName',
       key: 'senderName',
-      width: 100,
+      width: 200,
     },
     {
       title: '接收时间',
@@ -102,7 +136,7 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'operation',
       key: 'operation',
       align: 'center',
-      width: 70,
+      width: 60,
       render: (text, record) => {
         return [
           <span key='span'>
