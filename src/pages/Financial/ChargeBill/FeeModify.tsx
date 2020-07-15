@@ -32,7 +32,7 @@ const FeeModify = (props: FeeModifyProps) => {
   const [unitIds, setUnitIds] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   //房产id
-  const [unitId, setUnitId] = useState<any>(''); 
+  const [unitId, setUnitId] = useState<any>('');
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -198,8 +198,8 @@ const FeeModify = (props: FeeModifyProps) => {
     form.validateFields((errors, values) => {
       // if (infoDetail.feeItemId == null || infoDetail.feeItemId == '') {
       // }
-      if (!errors) { 
-        setLoading(true);  
+      if (!errors) {
+        setLoading(true);
         var guid = getGuid();
         var unit = {
           BillId: id != null && id != "" ? infoDetail.billId : guid,
@@ -208,7 +208,7 @@ const FeeModify = (props: FeeModifyProps) => {
           Quantity: values.quantity,
           Price: values.price,
           Amount: values.amount,
-          Number: values.number, 
+          Number: values.number,
           // Period: moment(values.period).format("YYYY-MM-DD"),//"2019-04-08",
           BeginDate: values.beginDate == null ? null : moment(values.beginDate).format("YYYY-MM-DD"),//"2019-04-01",
           EndDate: values.endDate == null ? null : moment(values.endDate).format("YYYY-MM-DD"),//"2019-04-30",
@@ -225,8 +225,8 @@ const FeeModify = (props: FeeModifyProps) => {
           unit = Object.assign({}, unit, { Id: id, keyvalue: id });
           SaveDetail(unit).then(res => {
             close(true);
-          }) 
-        } 
+          })
+        }
         else {
 
           //临时加费
@@ -340,14 +340,13 @@ const FeeModify = (props: FeeModifyProps) => {
   const disabledDate = (current) => {
     return current && current.isBefore(moment(form.getFieldValue('beginDate')), 'day');
   };
-
   const [selectedKeys, setSelectedKeys] = useState<any[]>([]);
 
   return (
     <Drawer
       title={title}
       placement="right"
-      width={id != '' ? 600 : 840}
+      width={id != '' ? 600 : 880}
       onClose={() => close(false)}
       visible={modifyVisible}
       destroyOnClose={true}
@@ -357,10 +356,9 @@ const FeeModify = (props: FeeModifyProps) => {
           {
             id != '' ?
               null :
-              <Col span={7} style={{
-                overflow: 'visible', position: 'relative',
-                height: 'calc(100vh - 35px)',
-              }}>
+              <Col span={8}
+                style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh - 40px)' }}
+              >
                 <FeeItemLeftTree
                   treeData={feeTreeData}
                   selectedKeys={selectedKeys}
@@ -404,11 +402,10 @@ const FeeModify = (props: FeeModifyProps) => {
                     }
                   }}
                 />
-              </Col>
-          }
+              </Col>}
 
-          <Col span={id != '' ? 24 : 17}>
-            <Card className={styles.card}  hoverable>
+          <Col span={id != '' ? 24 : 16}>
+            <Card className={styles.card} hoverable>
               <Form hideRequiredMark>
                 <Row>
                   <Form.Item label="加费对象" required labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} >
@@ -426,7 +423,7 @@ const FeeModify = (props: FeeModifyProps) => {
                           });
                         }}>
                         {relationIds.map(item => (
-                          <Option value={item.key}>
+                          <Option value={item.key} key={item.key}>
                             {item.title}
                           </Option>
                         ))}
@@ -453,7 +450,6 @@ const FeeModify = (props: FeeModifyProps) => {
                             GetRoomUsers(key).then(res => {
                               setRelationIds(res);
                             });
-
                             //清除费项树选中
                             setSelectedKeys([]);
                             setInfoDetail({});
@@ -472,7 +468,7 @@ const FeeModify = (props: FeeModifyProps) => {
                         }}>
 
                         {unitIds.map(item => (
-                          <Option value={item.key}>
+                          <Option value={item.key} key={item.key} >
                             {item.title}
                           </Option>
                         ))}
@@ -521,7 +517,7 @@ const FeeModify = (props: FeeModifyProps) => {
                     X
               </Col>
                   <Col span={5}>
-                    <Form.Item label="" required wrapperCol={{ span: 24 }}>
+                    <Form.Item required wrapperCol={{ span: 24 }}>
                       {getFieldDecorator('quantity', {
                         initialValue: infoDetail.quantity,
                         rules: [{ required: true, message: '请输入数量' }]
@@ -536,7 +532,7 @@ const FeeModify = (props: FeeModifyProps) => {
                     X
               </Col>
                   <Col span={5}>
-                    <Form.Item label="" required wrapperCol={{ span: 24 }}>
+                    <Form.Item required wrapperCol={{ span: 24 }}>
                       {getFieldDecorator('number', {
                         initialValue: infoDetail.number,
                         rules: [{ required: true, message: '请输入系数' }]
@@ -725,10 +721,10 @@ const FeeModify = (props: FeeModifyProps) => {
         >
           <Button onClick={() => close(false)} style={{ marginRight: 8 }}>
             取消
-        </Button> 
-          <Button onClick={onSave} 
-          disabled={loading} 
-          type="primary">
+        </Button>
+          <Button onClick={onSave}
+            disabled={loading}
+            type="primary">
             提交
         </Button>
         </div> : null

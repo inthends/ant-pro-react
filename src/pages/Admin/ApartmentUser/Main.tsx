@@ -1,22 +1,22 @@
 import { DefaultPagination } from "@/utils/defaultSetting";
-import { Input, Layout } from "antd";
+import {   Layout } from "antd";
 import { PaginationConfig } from "antd/lib/table";
 import React, { useEffect, useState } from "react";
 import ListTable from "./ListTable"; 
 import Modify from "./Modify";
 import { GetPageListJson } from "./Apartment.service";
 const { Content } = Layout;
-const { Search } = Input;
-interface SearchParam {
-  // condition: "EnCode" | "FullName";
-  keyword: string;
-};
+// const { Search } = Input;
+// interface SearchParam {
+//   // condition: "EnCode" | "FullName";
+//   keyword: string;
+// };
 
 const Main = () => {
-  const [search, setSearch] = useState<SearchParam>({
-    // condition: "EnCode",
-    keyword: ""
-  });
+  // const [search, setSearch] = useState<SearchParam>({
+  //   // condition: "EnCode",
+  //   keyword: ""
+  // });
 
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);  
   const [loading, setLoading] = useState<boolean>(false);
@@ -27,7 +27,7 @@ const Main = () => {
   );
 
   useEffect(() => {
-    initLoadData(search);
+    initLoadData();
   }, []);
 
   const closeDrawer = () => {
@@ -49,7 +49,7 @@ const Main = () => {
     paginationConfig?: PaginationConfig,
     sorter?
   ) => {
-    setSearch(searchParam);
+    // setSearch(searchParam);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: pagination.pageSize,
@@ -93,13 +93,14 @@ const Main = () => {
     });
   };
 
-  const initLoadData = (searchParam: SearchParam) => {
-    setSearch(searchParam);
-    const queryJson = searchParam;
+//const initLoadData = (searchParam: SearchParam) => {
+    const initLoadData =()=>{
+    // setSearch(searchParam);
+    // const queryJson = searchParam;
     const sidx = "name";
     const sord = "asc";
     const { current: pageIndex, pageSize, total } = pagination;
-    return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(
+    return load({ pageIndex, pageSize, sidx, sord, total }).then(
       res => {
         return res;
       }
@@ -109,14 +110,14 @@ const Main = () => {
   return (
     <Layout style={{ height: "100%" }}>
       <Content  >
-        <div style={{ marginBottom: 20, padding: "3px 0" }}>
+        {/* <div style={{ marginBottom: 20, padding: "3px 0" }}>
           <Search
             className="search-input"
             placeholder="搜索关键字"
             onSearch={keyword => loadData({ ...search, keyword })}
             style={{ width: 180 }}
           />
-          {/* <Button
+          <Button
             type="primary"
             style={{ float: "right" }}
             onClick={() => {
@@ -126,8 +127,8 @@ const Main = () => {
           >
             <Icon type="plus" />
             编码
-          </Button> */}
-        </div>
+          </Button>
+        </div> */}
         <ListTable
           onchange={(paginationConfig, filters, sorter) =>
             loadData(search, paginationConfig, sorter)

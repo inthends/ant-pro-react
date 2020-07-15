@@ -70,8 +70,8 @@ function ListTable(props: ListTableProps) {
 
       case '1001':
         switch (record.stepName) {
-          case '技术部审批':
-          case '领导审批':
+          case '招商部工作人员':
+          case '招商部领导':
             apartmentApprove(record.code, record.id, record.instanceId);
             break;
           case '开始':

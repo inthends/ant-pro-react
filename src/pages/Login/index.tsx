@@ -86,9 +86,9 @@ function Login(props: ConnectFormProps) {
           </Button>
         </FormItem>
         
-        <Link className={styles.register} to="/register">
+        {/* <Link className={styles.register} to="/register">
           注册账户
-        </Link>
+        </Link> */}
 
       </Form>
     </div>

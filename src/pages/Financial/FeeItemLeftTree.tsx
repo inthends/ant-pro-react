@@ -90,7 +90,7 @@ function FeeItemLeftTree(props: FeeItemLeftTreeProps) {
       padding: '6px',
       borderLeft: 'none',
       borderBottom: 'none',
-      height: '100%',
+      height: '100%', 
       overflowY: 'auto'
     }}>
 
@@ -100,7 +100,7 @@ function FeeItemLeftTree(props: FeeItemLeftTreeProps) {
           showLine
           onSelect={onSelect}
           treeData={treeData}
-          autoExpandParent
+          // autoExpandParent
           // defaultExpandAll={true}
           onExpand={clickExpend}
           selectedKeys={selectedKeys}

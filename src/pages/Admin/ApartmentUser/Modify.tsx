@@ -89,7 +89,7 @@ const Modify = (props: ModifyProps) => {
 
   return (
     <Drawer
-      title='我的资料'
+      title='企业资料'
       placement="right"
       width={780}
       onClose={closeDrawer}

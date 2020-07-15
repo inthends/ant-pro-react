@@ -64,7 +64,7 @@ export default {
   'menu.estate.maintenanceplan': '维保计划',
 
   'menu.admin': '行政管理',
-  'menu.admin.apartmentuser': '我的资料',
+  'menu.admin.apartmentuser': '企业资料',
   'menu.admin.apartmentapp': '入住申请',
   'menu.admin.apartment': '人才管理',
   'menu.admin.admincontract': '行政合同',

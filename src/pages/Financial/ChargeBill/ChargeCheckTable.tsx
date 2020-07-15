@@ -36,10 +36,17 @@ function ChargeCheckTable(props: ChargeCheckTableProps) {
 
   const columns = [
     {
+      title: '房产全称',
+      dataIndex: 'allName',
+      key: 'allName',
+      width: 280,
+      fixed: 'left'
+    }, 
+    {
       title: '管理处',
       dataIndex: 'orgName',
       key: 'orgName',
-      width: 140,
+      width: 180,
     },
     // {
     //   title: '楼盘',
@@ -53,28 +60,6 @@ function ChargeCheckTable(props: ChargeCheckTableProps) {
     //   key: 'buildingName',
     //   width: 80,
     // },
-    {
-      title: '房产全称',
-      dataIndex: 'allName',
-      key: 'allName',
-      width: 280,
-    },
-
-    {
-      title: '商户订单号',
-      dataIndex: 'tradeNo',
-      key: 'tradeNo',
-      width: 200,
-      sorter: true,
-    },
-
-    {
-      title: '交易流水号',
-      dataIndex: 'transactionId',
-      key: 'transactionId',
-      width: 260,
-      sorter: true,
-    },
 
     {
       title: '订单日期',
@@ -84,12 +69,27 @@ function ChargeCheckTable(props: ChargeCheckTableProps) {
       sorter: true,
       render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
+
+    {
+      title: '商户订单号',
+      dataIndex: 'tradeNo',
+      key: 'tradeNo',
+      width: 200, 
+    },
+
+    {
+      title: '交易流水号',
+      dataIndex: 'transactionId',
+      key: 'transactionId',
+      width: 260, 
+    },
+
+  
     {
       title: '订单来源',
       dataIndex: 'sourceType',
       key: 'sourceType',
-      width: 100,
-      sorter: true,
+      width: 100, 
     },
     {
       title: '订单状态',
@@ -143,7 +143,7 @@ function ChargeCheckTable(props: ChargeCheckTableProps) {
       dataIndex: 'actualAmount',
       key: 'actualAmount',
       width: 100,
-    }, 
+    },
 
     {
       title: '发票编号',
@@ -161,9 +161,8 @@ function ChargeCheckTable(props: ChargeCheckTableProps) {
       key: 'operation',
       fixed: 'right',
       align: 'center',
-      width: 75,
-      render: (text, record) => {
-
+      width: 65,
+      render: (text, record) => { 
         return [
           <span>
             {record.status == 0 ? <a onClick={() => confirm(record)} key="exit">确认</a> : null}
