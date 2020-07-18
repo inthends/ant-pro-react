@@ -63,8 +63,9 @@ function ListTable(props: ListTableProps) {
       title: '减免单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 180,
+      width: 220,
       sorter: true,
+      fixed:'left'
     },
     {
       title: '单据日期',
@@ -75,19 +76,19 @@ function ListTable(props: ListTableProps) {
       render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
-      title: '折扣',
-      dataIndex: 'rebate',
-      key: 'rebate',
-      sorter: true,
-      width: 100, 
-    },
-    {
       title: '减免金额',
       dataIndex: 'reductionAmount',
       key: 'reductionAmount',
       sorter: true,
       width: 100, 
     },
+    {
+      title: '折扣',
+      dataIndex: 'rebate',
+      key: 'rebate', 
+      width: 100, 
+    },
+  
     {
       title: '经办人',
       dataIndex: 'createUserName',
@@ -177,7 +178,6 @@ function ListTable(props: ListTableProps) {
             //作废，只能查看
             return [<a onClick={() => show(record.billId)} key="modify">查看</a>]
           } else {
-
             return [
               //   <Button
               //     type="primary"

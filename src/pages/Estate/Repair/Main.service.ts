@@ -37,6 +37,14 @@ export function Start(data): Promise<any> {
     .then(getResult as any);
 }
 
+//退单
+export function Back(data): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Repair/Back`, { data: objToFormdata(data) })
+    .then(getResult as any);
+}
+
+
 //暂停
 export function Pause(data): Promise<any> {
   return request

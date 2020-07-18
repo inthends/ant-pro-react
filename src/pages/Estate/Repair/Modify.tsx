@@ -186,6 +186,7 @@ const Modify = (props: ModifyProps) => {
     form.validateFields((errors, values) => {
       if (!errors) {
         const newData = infoDetail ? { ...infoDetail, ...values } : values;
+        newData.beginDate = values.beginDate.format('YYYY-MM-DD HH:mm');
         Back({ ...newData, keyvalue: newData.id }).then(res => {
           message.success('已退单');
           closeDrawer();
@@ -1040,10 +1041,12 @@ const Modify = (props: ModifyProps) => {
             <Button onClick={start} type="primary" style={{ marginRight: 8 }}>
               开工
             </Button>
+            <Button onClick={back} type="danger" style={{ marginRight: 8 }}>
+              退单
+            </Button>
             <Button onClick={change} type="primary">
               转单
-            </Button>
-
+            </Button> 
           </span>
 
         ) : null}
@@ -1055,15 +1058,10 @@ const Modify = (props: ModifyProps) => {
             </Button>
             <Button onClick={start} type="primary" style={{ marginRight: 8 }}>
               暂停
-            </Button> */}
-
-            <Button onClick={back} type="danger" style={{ marginRight: 8 }}>
-              退单
-            </Button>
+            </Button> */} 
             <Button onClick={handle} type="primary">
               完成
-            </Button>
-
+            </Button> 
           </span>
 
         ) : null}

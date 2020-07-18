@@ -99,6 +99,7 @@ function ChargeListTable(props: ChargeListTableProps) {
       key: 'billCode',
       width: 220,
       sorter: true,
+      fixed:'left'
     },
     {
       title: '收款日期',

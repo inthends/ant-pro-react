@@ -118,8 +118,8 @@ function Main() {
   };
 
   //冲抵单数据
-  const loadData = (search, orgId, orgType, paginationConfig?: PaginationConfig, sorter?) => {
-    setSearch(search);
+  const loadData = (searchText, orgId, orgType, paginationConfig?: PaginationConfig, sorter?) => {
+    setSearch(searchText);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: pagination.pageSize,
@@ -130,7 +130,7 @@ function Main() {
       pageSize,
       total,
       queryJson: {
-        keyword: search,
+        keyword: searchText,
         TreeTypeId: orgId,
         TreeType: orgType,
       }
@@ -350,6 +350,7 @@ function Main() {
           </TabPane>
         </Tabs>
       </Content>
+
       <AddOffset
         treeData={unitTreeData}
         addDrawerVisible={addDrawerVisible}

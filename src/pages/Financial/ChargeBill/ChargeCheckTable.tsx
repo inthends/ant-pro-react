@@ -110,7 +110,7 @@ function ChargeCheckTable(props: ChargeCheckTableProps) {
       title: '收款单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 180,
+      width: 220,
     }, {
       title: '收款单日期',
       dataIndex: 'rBillDate',

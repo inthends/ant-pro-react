@@ -391,7 +391,7 @@ const Show = (props: ShowProps) => {
                 // rowKey="billId"
                 rowKey={record => record.id}
                 pagination={pagination}
-                scroll={{ y: 500, x: 1200 }}
+                scroll={{ y: 500, x: 1250 }}
                 loading={loading}
                 onChange={(pagination: PaginationConfig, filters, sorter) =>
                   changePage(pagination, filters, sorter)

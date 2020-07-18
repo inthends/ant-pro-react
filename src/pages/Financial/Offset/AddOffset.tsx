@@ -55,6 +55,7 @@ const AddOffset = (props: AddOffsetProps) => {
   useEffect(() => {
     if (addDrawerVisible) {
       if (id) {
+        setLoading(true);
         GetFormJson(id).then(res => {
           setInfoDetail(res);
           setLoading(false);
@@ -159,14 +160,18 @@ const AddOffset = (props: AddOffsetProps) => {
         //   unitsStr += '"' + item + '"%2C';
         // });
         // unitsStr = unitsStr.substring(0, unitsStr.length - 3) + "%5D"; 
+        setLoading(true);
         SaveForm(newData).then((res) => {
           if (!res) {
+            setLoading(false);
             notification['warning']({
               message: '系统提示',
               description:
                 '没有找到要冲抵的费用！'
-            });
+            }); 
+
           } else {
+            setLoading(false);
             message.success('保存成功');
             reload();
             closeDrawer();
@@ -341,6 +346,7 @@ const AddOffset = (props: AddOffsetProps) => {
             取消
         </Button>
           <Button type="primary"
+            disabled={loading}
             onClick={onSave}>
             提交
         </Button>
