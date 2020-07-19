@@ -2,11 +2,12 @@
 import { Spin, Upload, Modal, Icon, Tabs, Select, Button, Card, Col, Drawer, Form, Input, message, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
-import { GetFilesData, RemoveFile, SaveForm, ChangeToRepair, ChangeToComplaint, Visit } from './Main.service';
+import { GetOperationRecords, GetFilesData, RemoveFile, SaveForm, ChangeToRepair, ChangeToComplaint, Visit } from './Main.service';
 import { GetRoomUser } from '@/services/commonItem';
 import styles from './style.less';
 import CommentBox from './CommentBox';
-import AddMemo from './AddMemo';
+import OperationRecord from './OperationRecord';
+import AddCloseMemo from './AddCloseMemo';
 const { Option } = Select;
 const { TextArea } = Input;
 const { TabPane } = Tabs;
@@ -50,11 +51,15 @@ const Modify = (props: ModifyProps) => {
   //   });
   // }, []);
 
+  const [comments, setComments] = useState<any[]>([]);
+
+
   // 打开抽屉时初始化
   useEffect(() => {
     if (modifyVisible) {
-      setLoading(true);
+
       if (data) {
+        setLoading(true);
         setKeyvalue(data.id);
         setInfoDetail(data);
         form.resetFields();
@@ -62,13 +67,18 @@ const Modify = (props: ModifyProps) => {
         GetFilesData(data.id).then(res => {
           setFileList(res || []);
         });
+
+        //获取操作记录
+        GetOperationRecords(data.id).then(info => {
+          setComments(info || []);
+        })
+
         setLoading(false);
       } else {
         setKeyvalue(guid());
         setInfoDetail({});
         form.resetFields();
         setFileList([]);
-        setLoading(false);
       }
     } else {
       form.resetFields();
@@ -216,10 +226,10 @@ const Modify = (props: ModifyProps) => {
     });
   };
 
-  const doClose = () => {
-    //闭单，弹出备注页面
-    setAddMemoVisible(true);
-  }
+  // const doClose = () => {
+  //   //闭单，弹出备注页面
+  //   setAddMemoVisible(true);
+  // }
 
 
 
@@ -368,9 +378,9 @@ const Modify = (props: ModifyProps) => {
   //图片上传结束
 
 
-  const closeAddMemo = () => {
-    setAddMemoVisible(false);
-  };
+  // const closeAddMemo = () => {
+  //   setAddMemoVisible(false);
+  // };
 
   //获取客户回访结果
   const GetCustEvaluate = (status) => {
@@ -714,7 +724,7 @@ const Modify = (props: ModifyProps) => {
                   </Row>
                 </Card>
               ) :
-                (<Card  hoverable className={infoDetail.status == 1 ? styles.card2 : styles.card} title="基础信息" >
+                (<Card hoverable className={infoDetail.status == 1 ? styles.card2 : styles.card} title="基础信息" >
                   <Row gutter={24}>
                     <Col lg={7}>
                       <Form.Item label="服务单号">
@@ -995,11 +1005,20 @@ const Modify = (props: ModifyProps) => {
             </Form>
           </TabPane>
           {data ? (
+
             <TabPane tab="留言动态" key="2">
               <CommentBox
                 data={data}
               />
             </TabPane>
+
+          ) : null}
+
+          {data ? (<TabPane tab="操作记录" key="3">
+            <OperationRecord
+              data={comments}
+            />
+          </TabPane>
           ) : null}
         </Tabs>
         {/* ) : null} */}
@@ -1064,7 +1083,7 @@ const Modify = (props: ModifyProps) => {
            </AuthButton>
 
             <AuthButton
-              onClick={doClose}
+              onClick={() => setAddMemoVisible(true)}
               btype="primary"
               module="Servicedesk"
               code="close"
@@ -1090,9 +1109,9 @@ const Modify = (props: ModifyProps) => {
            </Button>) : null} */}
       </div>
 
-      <AddMemo
+      <AddCloseMemo
         visible={addMemoVisible}
-        closeModal={closeAddMemo}
+        closeModal={() => setAddMemoVisible(false)}
         reload={reload}
         closeDrawer={closeDrawer}
         keyvalue={keyvalue}
@@ -1127,7 +1146,7 @@ const Modify = (props: ModifyProps) => {
                   });
                 setInfoDetail(newInfo);
 
-                }
+              }
             });
           } else {
             var newInfo = Object.assign({}, infoDetail,

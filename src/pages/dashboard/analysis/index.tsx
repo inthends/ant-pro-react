@@ -11,11 +11,13 @@ import { getTimeDistance } from './utils/utils';
 import { AnalysisData } from './data.d';
 import styles from './style.less';
 
-const IntroduceRow = React.lazy(() => import('./components/IntroduceRow'));
+// const IntroduceRow = React.lazy(() => import('./components/IntroduceRow'));
 const SalesCard = React.lazy(() => import('./components/SalesCard'));
 const TopSearch = React.lazy(() => import('./components/TopSearch'));
-const ProportionSales = React.lazy(() => import('./components/ProportionSales'));
-const OfflineData = React.lazy(() => import('./components/OfflineData'));
+const ProportionSalesLeft = React.lazy(() => import('./components/ProportionSalesLeft'));
+const ProportionSales = React.lazy(() => import('./components/ProportionSales')); 
+
+// const OfflineData = React.lazy(() => import('./components/OfflineData'));
 
 interface AnalysisProps {
   dashboardAnalysis: AnalysisData;
@@ -125,16 +127,17 @@ AnalysisState
   };
 
   render() {
-    const { rangePickerValue, salesType, currentTabKey } = this.state;
+    const { rangePickerValue, salesType//, currentTabKey
+    } = this.state;
     const { dashboardAnalysis, loading } = this.props;
     const {
-      monthReceivables,
-      visitData,
+      // monthReceivables,
+      // visitData,
       visitData2,
       salesData,
       searchData,
-      offlineData,
-      offlineChartData,
+      // offlineData,
+      // offlineChartData,
       salesTypeData,
       salesTypeDataOnline,
       salesTypeDataOffline,
@@ -160,14 +163,14 @@ AnalysisState
       </span>
     );
 
-    const activeKey = currentTabKey || (offlineData[0] && offlineData[0].name);
+    // const activeKey = currentTabKey || (offlineData[0] && offlineData[0].name);
 
     return (
       <GridContent>
         <React.Fragment>
-          <Suspense fallback={<PageLoading />}>
+          {/* <Suspense fallback={<PageLoading />}>
             <IntroduceRow loading={loading} visitData={visitData} monthReceivables={monthReceivables} />
-          </Suspense>
+          </Suspense> */}
           <Suspense fallback={null}>
             <SalesCard
               rangePickerValue={rangePickerValue}
@@ -183,9 +186,22 @@ AnalysisState
             type="flex"
             style={{
               marginTop: 24,
+              marginBottom: 24
             }}
           >
             <Col xl={12} lg={24} md={24} sm={24} xs={24}>
+              <Suspense fallback={null}>
+                <ProportionSalesLeft
+                  dropdownGroup={dropdownGroup}
+                  salesType={salesType}
+                  loading={loading}
+                  salesPieData={salesPieData}
+                  handleChangeSalesType={this.handleChangeSalesType}
+                />
+              </Suspense>
+            </Col>
+
+            {/* <Col xl={12} lg={24} md={24} sm={24} xs={24}>
               <Suspense fallback={null}>
                 <TopSearch
                   loading={loading}
@@ -194,7 +210,8 @@ AnalysisState
                   dropdownGroup={dropdownGroup}
                 />
               </Suspense>
-            </Col>
+            </Col> */}
+
             <Col xl={12} lg={24} md={24} sm={24} xs={24}>
               <Suspense fallback={null}>
                 <ProportionSales
@@ -206,8 +223,10 @@ AnalysisState
                 />
               </Suspense>
             </Col>
+
           </Row>
-          <Suspense fallback={null}>
+
+          {/* <Suspense fallback={null}>
             <OfflineData
               activeKey={activeKey}
               loading={loading}
@@ -215,7 +234,8 @@ AnalysisState
               offlineChartData={offlineChartData}
               handleTabChange={this.handleTabChange}
             />
-          </Suspense>
+          </Suspense> */}
+
         </React.Fragment>
       </GridContent>
     );

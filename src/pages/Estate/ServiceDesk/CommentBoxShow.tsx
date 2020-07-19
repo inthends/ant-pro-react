@@ -1,5 +1,6 @@
 
-import { Comment, Avatar, List } from 'antd';
+import { Comment, //Avatar,
+   List } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { GetCommunicates } from './Main.service';
 

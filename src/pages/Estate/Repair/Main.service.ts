@@ -105,3 +105,10 @@ export function RemoveFile(keyvalue): Promise<any> {
     .post(process.env.basePath + `/Repair/RemoveFile?keyvalue=${keyvalue}`, {})
     .then(getResult as any);
 }
+
+//获取操作记录
+export function GetOperationRecords(keyvalue): Promise<any> {
+  return request
+    .get(process.env.basePath + `/Repair/GetOperationRecords?keyvalue=${keyvalue}`)
+    .then(getResult as any);
+}

@@ -5,7 +5,7 @@ import React from 'react';
 const { TextArea } = Input;
 import { Finish } from './Main.service';
 
-interface AddMemoProps {
+interface AddCloseMemoProps {
   visible: boolean;
   closeModal(): void;
   form: WrappedFormUtils;
@@ -14,7 +14,7 @@ interface AddMemoProps {
   reload(): void;
 }
 
-const AddMemo = (props: AddMemoProps) => {
+const AddCloseMemo = (props: AddCloseMemoProps) => {
   const { visible, closeModal, form, keyvalue, reload, closeDrawer } = props;
   const { getFieldDecorator } = form;
   const save = () => {
@@ -57,5 +57,5 @@ const AddMemo = (props: AddMemoProps) => {
   );
 };
 
-export default Form.create<AddMemoProps>()(AddMemo);
+export default Form.create<AddCloseMemoProps>()(AddCloseMemo);
 

@@ -2,7 +2,6 @@
 import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
  
- 
 
 //获取服务单
 export function GetPageListJson(data): Promise<any> {
@@ -22,6 +21,13 @@ export function SendCommunicate(data): Promise<any> {
 export function GetCommunicates(keyvalue): Promise<any> {
   return request
     .get(process.env.basePath + `/ServiceDesk/GetCommunicates?keyvalue=${keyvalue}`)
+    .then(getResult as any);
+}
+
+//获取操作记录
+export function GetOperationRecords(keyvalue): Promise<any> {
+  return request
+    .get(process.env.basePath + `/ServiceDesk/GetOperationRecords?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 
@@ -68,7 +74,7 @@ export function ChangeToComplaint(data): Promise<any> {
 }
 
 
-// 毕单
+// 闭单
 export function Finish(data): Promise<any> { 
   return request
     .post(process.env.basePath + `/ServiceDesk/Finish`, { data:objToFormdata(data) })
