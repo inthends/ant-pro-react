@@ -2,7 +2,7 @@ export interface TagType {
   key: string;
   label: string;
 }
-export interface VisitDataType {
+export interface CommonDataType {
   x: string;
   y: number;
 }
@@ -33,15 +33,15 @@ export interface RadarData {
 }
 
 export interface AnalysisData {
-  visitData: VisitDataType[];
-  visitData2: VisitDataType[];
-  salesData: VisitDataType[];
+  // visitData: VisitDataType[];
+  // visitData2: VisitDataType[];
+  monthReceiveData: CommonDataType[];
   searchData: SearchDataType[];
   offlineData: OfflineDataType[];
   offlineChartData: OfflineChartData[];
-  salesTypeData: VisitDataType[];
-  salesTypeDataOnline: VisitDataType[];
-  salesTypeDataOffline: VisitDataType[];
+  salesTypeData: CommonDataType[];
+  salesTypeDataOnline: CommonDataType[];
+  salesTypeDataOffline: CommonDataType[];
   radarData: RadarData[];
 }
 

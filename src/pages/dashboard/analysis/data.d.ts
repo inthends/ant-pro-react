@@ -1,4 +1,5 @@
-export interface VisitDataType {
+export interface CommonDataType {
+  //通用数据类型
   x: string;
   y: number;
 }
@@ -29,15 +30,16 @@ export interface RadarData {
 }
 
 export interface AnalysisData {
-  monthReceivables: any;//本月收款,add new
-  visitData: VisitDataType[];
-  visitData2: VisitDataType[];
-  salesData: VisitDataType[];
+  // monthReceivables: any;//本月收款,add new
+  // visitData: CommonDataType[];
+  // visitData2: CommonDataType[];
+  monthReceiveData: CommonDataType[];
+  receiveData: CommonDataType[];
   searchData: SearchDataType[];
   offlineData: OfflineDataType[];
   offlineChartData: OfflineChartData[];
-  salesTypeData: VisitDataType[];
-  salesTypeDataOnline: VisitDataType[];
-  salesTypeDataOffline: VisitDataType[];
+  salesTypeData: CommonDataType[];
+  salesTypeDataOnline: CommonDataType[];
+  salesTypeDataOffline: CommonDataType[];
   radarData: RadarData[];
 }

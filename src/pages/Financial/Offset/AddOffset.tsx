@@ -168,7 +168,7 @@ const AddOffset = (props: AddOffsetProps) => {
               message: '系统提示',
               description:
                 '没有找到要冲抵的费用！'
-            }); 
+            });
 
           } else {
             setLoading(false);
@@ -233,6 +233,7 @@ const AddOffset = (props: AddOffsetProps) => {
       width={900}
       onClose={closeDrawer}
       visible={addDrawerVisible}
+      destroyOnClose={true}
       style={{ height: 'calc(100vh-50px)' }}
       bodyStyle={{ background: '#f6f7fb', height: 'calc(100vh -50px)' }}
     >

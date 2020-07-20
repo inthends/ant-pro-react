@@ -23,9 +23,10 @@ export interface ModelType {
 }
 
 const initState = {
-  visitData: [],
-  visitData2: [],
-  salesData: [],
+  // visitData: [],
+  // visitData2: [],
+  monthReceiveData: [],
+  receiveData:[],
   searchData: [],
   offlineData: [],
   offlineChartData: [],
@@ -51,7 +52,7 @@ const Model: ModelType = {
       yield put({
         type: 'save',
         payload: {
-          salesData: response.salesData,
+          monthReceiveData: response.monthReceiveData,
         },
       });
     },

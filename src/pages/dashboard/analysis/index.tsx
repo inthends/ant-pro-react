@@ -13,9 +13,9 @@ import styles from './style.less';
 
 // const IntroduceRow = React.lazy(() => import('./components/IntroduceRow'));
 const SalesCard = React.lazy(() => import('./components/SalesCard'));
-const TopSearch = React.lazy(() => import('./components/TopSearch'));
+// const TopSearch = React.lazy(() => import('./components/TopSearch'));
 const ProportionSalesLeft = React.lazy(() => import('./components/ProportionSalesLeft'));
-const ProportionSales = React.lazy(() => import('./components/ProportionSales')); 
+const ProportionSales = React.lazy(() => import('./components/ProportionSales'));
 
 // const OfflineData = React.lazy(() => import('./components/OfflineData'));
 
@@ -133,9 +133,10 @@ AnalysisState
     const {
       // monthReceivables,
       // visitData,
-      visitData2,
-      salesData,
-      searchData,
+      // visitData2,
+      monthReceiveData,
+      receiveData,
+      // searchData,
       // offlineData,
       // offlineChartData,
       salesTypeData,
@@ -174,11 +175,12 @@ AnalysisState
           <Suspense fallback={null}>
             <SalesCard
               rangePickerValue={rangePickerValue}
-              salesData={salesData}
-              isActive={this.isActive}
+              monthReceiveData={monthReceiveData}
+              receiveData={receiveData}
+              // isActive={this.isActive}
               handleRangePickerChange={this.handleRangePickerChange}
               loading={loading}
-              selectDate={this.selectDate}
+              // selectDate={this.selectDate}
             />
           </Suspense>
           <Row

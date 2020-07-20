@@ -1,40 +1,44 @@
 import { Select, Card, Col, DatePicker, Row, Tabs } from 'antd';
-import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
+import { FormattedMessage } from 'umi-plugin-react/locale';
 
 import { RangePickerValue } from 'antd/es/date-picker/interface';
 import React from 'react';
 import numeral from 'numeral';
-import { VisitDataType } from '../data.d';
+import { CommonDataType } from '../data.d';
 import { Bar } from './Charts';
 import styles from '../style.less';
 
 const { RangePicker } = DatePicker;
 const { TabPane } = Tabs;
 
-const rankingListData: { title: string; total: number }[] = [];
-for (let i = 0; i < 7; i += 1) {
-  rankingListData.push({
-    title: formatMessage({ id: 'dashboard-analysis.analysis.test' }, { no: i }),
-    total: 323234,
-  });
-}
+// const rankingListData: { title: string; total: number }[] = [];
+// for (let i = 0; i < 7; i += 1) {
+//   rankingListData.push({
+//     title: formatMessage({ id: 'dashboard-analysis.analysis.test' }, { no: i }),
+//     total: 323234,
+//   });
+// }
 
 const SalesCard = ({
   rangePickerValue,
-  salesData,
-  isActive,
+  monthReceiveData,//月收款
+  receiveData,//总收款
+  // isActive,
   handleRangePickerChange,
   loading,
-  selectDate,
+  // selectDate,
 }: {
   rangePickerValue: RangePickerValue;
-  isActive: (key: 'today' | 'week' | 'month' | 'year') => string;
-  salesData: VisitDataType[];
+  // isActive: (key: 'today' | 'week' | 'month' | 'year') => string;
+  monthReceiveData: CommonDataType[];
+  receiveData: CommonDataType[];
   loading: boolean;
   handleRangePickerChange: (dates: RangePickerValue, dateStrings: [string, string]) => void;
-  selectDate: (key: 'today' | 'week' | 'month' | 'year') => void;
+  // selectDate: (key: 'today' | 'week' | 'month' | 'year') => void; 
 }) => (
-    <Card loading={loading} bordered={false} bodyStyle={{ padding: 0 }}>
+    <Card loading={loading} bordered={false} bodyStyle={{ padding: 0 }}
+    hoverable
+    >
       <div className={styles.salesCard}>
         <Tabs
           tabBarExtraContent={
@@ -53,13 +57,14 @@ const SalesCard = ({
                   <FormattedMessage id="dashboard-analysis.analysis.all-year" defaultMessage="All Year" />
                 </a>
               </div> */}
+
               <RangePicker
-                value={rangePickerValue}  
-                picker="month" 
+                value={rangePickerValue}
+                format="YYYY-MM"
+                mode={['month', 'month']}
                 onChange={handleRangePickerChange}
                 style={{ width: 256 }}
               />
-
 
               <Select
                 allowClear={true}
@@ -94,7 +99,7 @@ const SalesCard = ({
                         defaultMessage="Sales Trend"
                       />
                     }
-                    data={salesData}
+                    data={monthReceiveData}
                   />
                 </div>
               </Col>
@@ -107,16 +112,16 @@ const SalesCard = ({
                     />
                   </h4>
                   <ul className={styles.rankingList}>
-                    {rankingListData.map((item, i) => (
-                      <li key={item.title}>
+                    {receiveData.map((item, i) => (
+                      <li key={item.x}>
                         <span className={`${styles.rankingItemNumber} ${i < 3 ? styles.active : ''}`}>
                           {i + 1}
                         </span>
-                        <span className={styles.rankingItemTitle} title={item.title}>
-                          {item.title}
+                        <span className={styles.rankingItemTitle} title={item.x}>
+                          {item.x}
                         </span>
                         <span className={styles.rankingItemValue}>
-                          {numeral(item.total).format('0,0')}
+                          ¥ {numeral(item.y).format('0,0.00')}
                         </span>
                       </li>
                     ))}

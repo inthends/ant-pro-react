@@ -766,7 +766,7 @@ function ListTable(props: ListTableProps) {
                   {getFieldDecorator('billDate', {
                     initialValue: moment(new Date()),
                     rules: [{ required: true, message: '请选择收款日期' }],
-                  })(<DatePicker style={{ width: '100%' }} />)}
+                  })(<DatePicker style={{ width: '100%' }} placeholder="请选择收款日期" />)}
                 </Form.Item>
               </Col>
               <Col lg={4}>

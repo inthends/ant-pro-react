@@ -3,7 +3,10 @@ import React, { Component } from 'react';
 
 import Debounce from 'lodash.debounce';
 import autoHeight from '../autoHeight';
+import numeral from 'numeral';
+
 import styles from '../index.less';
+
 
 export interface BarProps {
   title: React.ReactNode;
@@ -24,7 +27,7 @@ class Bar extends Component<
   {
     autoHideXLabels: boolean;
   }
-> {
+  > {
   state = {
     autoHideXLabels: false,
   };
@@ -99,7 +102,7 @@ class Bar extends Component<
       'x*y',
       (x: string, y: string) => ({
         name: x,
-        value: y,
+        value: `¥ ${numeral(y).format('0,0.00')}`//金额显示的方式
       }),
     ];
 
@@ -119,10 +122,16 @@ class Bar extends Component<
               title={false}
               label={autoHideXLabels ? undefined : {}}
               tickLine={autoHideXLabels ? undefined : {}}
+
             />
             <Axis name="y" min={0} />
-            <Tooltip showTitle={false} crosshairs={false} />
-            <Geom type="interval" position="x*y" color={color} tooltip={tooltip} />
+
+            <Tooltip
+              showTitle={false}
+            // crosshairs={false}   
+            /> 
+            <Geom type="interval" position="x*y" color={color} tooltip={tooltip}  /> 
+
           </Chart>
         </div>
       </div>

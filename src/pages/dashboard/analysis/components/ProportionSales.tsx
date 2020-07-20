@@ -34,24 +34,25 @@ const ProportionSales = ({
     style={{
       height: '100%',
     }}
-    extra={
-      <div className={styles.salesCardExtra}>
-        {dropdownGroup}
-        <div className={styles.salesTypeRadio}>
-          <Radio.Group value={salesType} onChange={handleChangeSalesType}>
-            <Radio.Button value="all">
-              <FormattedMessage id="dashboard-analysis.channel.all" defaultMessage="ALL" />
-            </Radio.Button>
-            <Radio.Button value="online">
-              <FormattedMessage id="dashboard-analysis.channel.online" defaultMessage="Online" />
-            </Radio.Button>
-            <Radio.Button value="stores">
-              <FormattedMessage id="dashboard-analysis.channel.stores" defaultMessage="Stores" />
-            </Radio.Button>
-          </Radio.Group>
-        </div>
-      </div>
-    }
+    // extra={
+    //   <div className={styles.salesCardExtra}>
+    //     {dropdownGroup}
+    //     <div className={styles.salesTypeRadio}>
+    //       <Radio.Group value={salesType} onChange={handleChangeSalesType}>
+    //         <Radio.Button value="all">
+    //           <FormattedMessage id="dashboard-analysis.channel.all" defaultMessage="ALL" />
+    //         </Radio.Button>
+    //         <Radio.Button value="online">
+    //           <FormattedMessage id="dashboard-analysis.channel.online" defaultMessage="Online" />
+    //         </Radio.Button>
+    //         <Radio.Button value="stores">
+    //           <FormattedMessage id="dashboard-analysis.channel.stores" defaultMessage="Stores" />
+    //         </Radio.Button>
+    //       </Radio.Group>
+    //     </div>
+    //   </div>
+    // }
+    hoverable
   >
     <div>
       <h4 style={{ marginTop: 8, marginBottom: 32 }}>

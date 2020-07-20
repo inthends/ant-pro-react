@@ -29,6 +29,7 @@ const ProportionSalesLeft = ({
       style={{
         height: '100%',
       }}
+      hoverable
     // extra={
     //   <div className={styles.salesCardExtra}>
     //     {dropdownGroup}
