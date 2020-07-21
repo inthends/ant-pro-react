@@ -46,4 +46,5 @@ export interface AnalysisData {
 
   feeTypeData: CommonDataType[];
   // radarData: RadarData[];
+  treeData:any[];
 }

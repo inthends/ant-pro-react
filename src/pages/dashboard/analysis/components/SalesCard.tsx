@@ -1,14 +1,13 @@
-import { Select, Card, Col, DatePicker, Row, Tabs } from 'antd';
+import { TreeSelect, Card, Col, Row, Tabs } from 'antd';
 import { FormattedMessage } from 'umi-plugin-react/locale';
-
-import { RangePickerValue } from 'antd/es/date-picker/interface';
+// import { RangePickerValue } from 'antd/es/date-picker/interface';
 import React from 'react';
 import numeral from 'numeral';
 import { CommonDataType } from '../data.d';
 import { Bar } from './Charts';
 import styles from '../style.less';
 
-const { RangePicker } = DatePicker;
+// const { RangePicker } = DatePicker;
 const { TabPane } = Tabs;
 
 // const rankingListData: { title: string; total: number }[] = [];
@@ -20,25 +19,31 @@ const { TabPane } = Tabs;
 // }
 
 const SalesCard = ({
-  rangePickerValue,
+  // rangePickerValue,
   monthReceiveData,//月收款
   receiveData,//总收款
   // isActive,
-  handleRangePickerChange,
+  // handleRangePickerChange,
   loading,
+  treeData,
+  orgId,
+  onOrgChange
   // selectDate,
 }: {
-  rangePickerValue: RangePickerValue;
+  orgId: string;
+  // rangePickerValue: RangePickerValue;
   // isActive: (key: 'today' | 'week' | 'month' | 'year') => string;
   monthReceiveData: CommonDataType[];
   receiveData: CommonDataType[];
   loading: boolean;
-  handleRangePickerChange: (dates: RangePickerValue, dateStrings: [string, string]) => void;
-  // selectDate: (key: 'today' | 'week' | 'month' | 'year') => void; 
+  treeData: any[];
+  // handleRangePickerChange: (dates: RangePickerValue, dateStrings: [string, string]) => void;
+  // selectDate: (key: 'today' | 'week' | 'month' | 'year') => void;
+  onOrgChange: (value, label, extra) => void;
+
 }) => (
     <Card loading={loading} bordered={false} bodyStyle={{ padding: 0 }}
-      hoverable
-    >
+      hoverable >
       <div className={styles.salesCard}>
         <Tabs
           tabBarExtraContent={
@@ -58,20 +63,29 @@ const SalesCard = ({
                 </a>
               </div> */}
 
-              <RangePicker
+              {/* <RangePicker
                 value={rangePickerValue}
                 format="YYYY-MM"
                 mode={['month', 'month']}
                 onChange={handleRangePickerChange}
                 style={{ width: 256 }}
-              />
+              /> */}
 
-              <Select
+              {/* <Select
                 allowClear={true}
                 style={{ width: '160px', marginLeft: '5px' }}
-                placeholder="请选择机构"
-              > 
-              </Select>
+                placeholder="请选择机构"  > 
+              </Select> */}
+
+              <TreeSelect placeholder="请选择机构"
+                value={orgId ? orgId : undefined}
+                treeData={treeData}
+                style={{ width: '260px' }}
+                dropdownStyle={{ maxHeight: 400 }}
+                onChange={onOrgChange}
+                allowClear >
+                {/* {renderTree(treeData, '0')} */}
+              </TreeSelect>
 
             </div>
           }

@@ -3,10 +3,20 @@
 import request from '@/utils/request';
 import { getResult } from '@/utils/networkUtils';
 
-export async function fakeChartData() {
+//获取机构
+
+//只加载管理处,子级不可展开
+export async function GetOrgs(): Promise<any[]> {
+  return request.get(process.env.basePath + `/Common/GetBIOrgs`).then(getResult as any);
+}
+
+
+export async function fakeChartData(orgId: any, orgType: any) { 
+  
   //return request('/api/fake_chart_data'); 
   //获取后台分析数据
-  return request.get(process.env.basePath + `/Dashboard/GetDashboardAnalysis`).then(getResult as any);
+  return request.get(process.env.basePath
+    + `/Dashboard/GetDashboardAnalysis?orgId=${orgId}&orgType=${orgType}`).then(getResult as any);
 
   // return {
   //   "visitData":

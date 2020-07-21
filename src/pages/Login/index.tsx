@@ -4,7 +4,7 @@ import { connect } from 'dva';
 import React, { FormEvent, useState } from 'react';
 import styles from './index.less';
 import router from 'umi/router';
-import { Link } from 'umi';
+// import { Link } from 'umi';
 // import { delay } from 'lodash';
 import { loginService } from '@/services/login';
 const { Item: FormItem } = Form;

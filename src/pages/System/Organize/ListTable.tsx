@@ -61,7 +61,7 @@ function ListTable(props: ListTableProps) {
       title: '机构名称',
       dataIndex: 'fullName',
       key: 'fullName',
-      width: 250,
+      width: 280,
     },
     {
       title: '机构编号',

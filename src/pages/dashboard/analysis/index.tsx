@@ -1,15 +1,14 @@
 import { Col, Row } from 'antd';
 import React, { Component, Suspense } from 'react';
-
 import { Dispatch } from 'redux';
 import { GridContent } from '@ant-design/pro-layout';
 import { RadioChangeEvent } from 'antd/es/radio';
-import { RangePickerValue } from 'antd/es/date-picker/interface';
+// import { RangePickerValue } from 'antd/es/date-picker/interface';
 import { connect } from 'dva';
 // import PageLoading from './components/PageLoading';
-import { getTimeDistance } from './utils/utils';
+// import { getTimeDistance } from './utils/utils';
 import { AnalysisData } from './data.d';
-import styles from './style.less';
+// import styles from './style.less';
 
 // const IntroduceRow = React.lazy(() => import('./components/IntroduceRow'));
 const SalesCard = React.lazy(() => import('./components/SalesCard'));
@@ -28,7 +27,9 @@ interface AnalysisProps {
 interface AnalysisState {
   salesType: 'all' | 'online' | 'stores';
   currentTabKey: string;
-  rangePickerValue: RangePickerValue;
+  // rangePickerValue: RangePickerValue;
+  orgId: any;//机构id
+  orgType: any;//机构类型
 }
 
 @connect(
@@ -49,21 +50,32 @@ class Analysis extends Component<
 AnalysisProps,
 AnalysisState
 > {
+
   state: AnalysisState = {
     salesType: 'all',
     currentTabKey: '',
-    rangePickerValue: getTimeDistance('year'),
+    // rangePickerValue: getTimeDistance('year'),
+    orgId: '',
+    orgType: ''
   };
 
   reqRef: number = 0;
-
   timeoutId: number = 0;
 
   componentDidMount() {
     const { dispatch } = this.props;
+
     this.reqRef = requestAnimationFrame(() => {
+
+      //加载机构
+      dispatch({
+        type: 'dashboardAnalysis/fetchOrgs',
+      });
+
       dispatch({
         type: 'dashboardAnalysis/fetch',
+        orgId: '',
+        orgType: ''
       });
     });
   }
@@ -89,45 +101,63 @@ AnalysisState
     });
   };
 
-  handleRangePickerChange = (rangePickerValue: RangePickerValue) => {
-    const { dispatch } = this.props;
-    this.setState({
-      rangePickerValue,
-    });
+  // handleRangePickerChange = (rangePickerValue: RangePickerValue) => {
+  //   const { dispatch } = this.props;
+  //   this.setState({
+  //     rangePickerValue,
+  //   });
+  //   dispatch({
+  //     type: 'dashboardAnalysis/fetchSalesData',
+  //   });
+  // };
 
-    dispatch({
-      type: 'dashboardAnalysis/fetchSalesData',
-    });
-  };
-
-  selectDate = (type: 'today' | 'week' | 'month' | 'year') => {
-    const { dispatch } = this.props;
-    this.setState({
-      rangePickerValue: getTimeDistance(type),
-    });
-
-    dispatch({
-      type: 'dashboardAnalysis/fetchSalesData',
-    });
-  };
-
-  isActive = (type: 'today' | 'week' | 'month' | 'year') => {
-    const { rangePickerValue } = this.state;
-    const value = getTimeDistance(type);
-    if (!rangePickerValue[0] || !rangePickerValue[1]) {
-      return '';
+  onOrgChange = (orgId, label, extra) => {
+    var orgType = '';
+    if (!orgId) {
+      orgId = '';
+    } else {
+      orgType = extra.triggerNode.props.type;
     }
-    if (
-      rangePickerValue[0].isSame(value[0], 'day') &&
-      rangePickerValue[1].isSame(value[1], 'day')
-    ) {
-      return styles.currentDate;
-    }
-    return '';
+    this.setState({
+      orgId, orgType
+    });
+    debugger
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'dashboardAnalysis/fetch',
+      orgId: orgId,
+      orgType: orgType
+    });
   };
+
+
+  // selectDate = (type: 'today' | 'week' | 'month' | 'year') => {
+  //   const { dispatch } = this.props;
+  //   this.setState({
+  //     rangePickerValue: getTimeDistance(type),
+  //   });
+  //   dispatch({
+  //     type: 'dashboardAnalysis/fetchSalesData',
+  //   });
+  // };
+
+  // isActive = (type: 'today' | 'week' | 'month' | 'year') => {
+  //   const { rangePickerValue } = this.state;
+  //   const value = getTimeDistance(type);
+  //   if (!rangePickerValue[0] || !rangePickerValue[1]) {
+  //     return '';
+  //   }
+  //   if (
+  //     rangePickerValue[0].isSame(value[0], 'day') &&
+  //     rangePickerValue[1].isSame(value[1], 'day')
+  //   ) {
+  //     return styles.currentDate;
+  //   }
+  //   return '';
+  // };
 
   render() {
-    const { rangePickerValue, salesType//, currentTabKey
+    const { orgId, salesType//rangePickerValue, //, currentTabKey
     } = this.state;
     const { dashboardAnalysis, loading } = this.props;
     const {
@@ -142,8 +172,9 @@ AnalysisState
       // searchData,
       // offlineData,
       // offlineChartData,
-      feeTypeData
-    
+      feeTypeData,
+      treeData
+
     } = dashboardAnalysis;
 
     let payPieData;
@@ -177,13 +208,16 @@ AnalysisState
           </Suspense> */}
           <Suspense fallback={null}>
             <SalesCard
-              rangePickerValue={rangePickerValue}
+              // rangePickerValue={rangePickerValue}
+              orgId={orgId}
               monthReceiveData={monthReceiveData}
               receiveData={receiveData}
               // isActive={this.isActive}
-              handleRangePickerChange={this.handleRangePickerChange}
+              // handleRangePickerChange={this.handleRangePickerChange}
+              onOrgChange={this.onOrgChange}
               loading={loading}
-              // selectDate={this.selectDate}
+              treeData={treeData}
+            // selectDate={this.selectDate}
             />
           </Suspense>
           <Row
@@ -224,7 +258,7 @@ AnalysisState
                   salesType={salesType}
                   loading={loading}
                   salesPieData={feeTypeData}
-                  // handleChangeSalesType={this.handleChangeSalesType}
+                // handleChangeSalesType={this.handleChangeSalesType}
                 />
               </Suspense>
             </Col>
