@@ -38,7 +38,7 @@
 //     status: Math.floor((Math.random() * 10) % 2),
 //   });
 // }
-// const salesTypeData = [
+// const feeTypeData = [
 //   {
 //     x: '家用电器',
 //     y: 4544,
@@ -386,7 +386,7 @@
 //     searchData,
 //     offlineData,
 //     offlineChartData,
-//     salesTypeData,
+//     feeTypeData,
 //     salesTypeDataOnline,
 //     salesTypeDataOffline,
 //     radarData,

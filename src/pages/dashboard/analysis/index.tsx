@@ -6,7 +6,7 @@ import { GridContent } from '@ant-design/pro-layout';
 import { RadioChangeEvent } from 'antd/es/radio';
 import { RangePickerValue } from 'antd/es/date-picker/interface';
 import { connect } from 'dva';
-import PageLoading from './components/PageLoading';
+// import PageLoading from './components/PageLoading';
 import { getTimeDistance } from './utils/utils';
 import { AnalysisData } from './data.d';
 import styles from './style.less';
@@ -136,18 +136,21 @@ AnalysisState
       // visitData2,
       monthReceiveData,
       receiveData,
+      payTypeData,
+      payTypeDataOnline,
+      payTypeDataOffline,
       // searchData,
       // offlineData,
       // offlineChartData,
-      salesTypeData,
-      salesTypeDataOnline,
-      salesTypeDataOffline,
+      feeTypeData
+    
     } = dashboardAnalysis;
-    let salesPieData;
+
+    let payPieData;
     if (salesType === 'all') {
-      salesPieData = salesTypeData;
+      payPieData = payTypeData;
     } else {
-      salesPieData = salesType === 'online' ? salesTypeDataOnline : salesTypeDataOffline;
+      payPieData = salesType === 'online' ? payTypeDataOnline : payTypeDataOffline;
     }
     // const menu = (
     //   <Menu>
@@ -156,13 +159,13 @@ AnalysisState
     //   </Menu>
     // );
 
-    const dropdownGroup = (
-      <span className={styles.iconGroup}>
-        {/* <Dropdown overlay={menu} placement="bottomRight">
-          <Icon type="ellipsis" />
-        </Dropdown> */}
-      </span>
-    );
+    // const dropdownGroup = (
+    //   <span className={styles.iconGroup}>
+    //     <Dropdown overlay={menu} placement="bottomRight">
+    //       <Icon type="ellipsis" />
+    //     </Dropdown>
+    //   </span>
+    // );
 
     // const activeKey = currentTabKey || (offlineData[0] && offlineData[0].name);
 
@@ -194,10 +197,10 @@ AnalysisState
             <Col xl={12} lg={24} md={24} sm={24} xs={24}>
               <Suspense fallback={null}>
                 <ProportionSalesLeft
-                  dropdownGroup={dropdownGroup}
+                  // dropdownGroup={dropdownGroup}
                   salesType={salesType}
                   loading={loading}
-                  salesPieData={salesPieData}
+                  salesPieData={payPieData}
                   handleChangeSalesType={this.handleChangeSalesType}
                 />
               </Suspense>
@@ -217,11 +220,11 @@ AnalysisState
             <Col xl={12} lg={24} md={24} sm={24} xs={24}>
               <Suspense fallback={null}>
                 <ProportionSales
-                  dropdownGroup={dropdownGroup}
+                  // dropdownGroup={dropdownGroup}
                   salesType={salesType}
                   loading={loading}
-                  salesPieData={salesPieData}
-                  handleChangeSalesType={this.handleChangeSalesType}
+                  salesPieData={feeTypeData}
+                  // handleChangeSalesType={this.handleChangeSalesType}
                 />
               </Suspense>
             </Col>

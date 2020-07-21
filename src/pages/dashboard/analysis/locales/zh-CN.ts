@@ -23,9 +23,11 @@ export default {
   // 'dashboard-analysis.analysis.per-capita-search': '人均搜索次数',
   // 'dashboard-analysis.analysis.online-top-search': '线上热门搜索',
   'dashboard-analysis.analysis.the-proportion-of-sales': '收款项目占比',
-  // 'dashboard-analysis.channel.all': '全部',
-  // 'dashboard-analysis.channel.online': '线上',
-  // 'dashboard-analysis.channel.stores': '线下',
+
+  'dashboard-analysis.channel.all': '全部',
+  'dashboard-analysis.channel.online': '线上',
+  'dashboard-analysis.channel.stores': '线下', 
+  
   'dashboard-analysis.analysis.sales': '收款额',
 
   // 'dashboard-analysis.table.rank': '排名',

@@ -37,7 +37,7 @@ const SalesCard = ({
   // selectDate: (key: 'today' | 'week' | 'month' | 'year') => void; 
 }) => (
     <Card loading={loading} bordered={false} bodyStyle={{ padding: 0 }}
-    hoverable
+      hoverable
     >
       <div className={styles.salesCard}>
         <Tabs
@@ -70,14 +70,7 @@ const SalesCard = ({
                 allowClear={true}
                 style={{ width: '160px', marginLeft: '5px' }}
                 placeholder="请选择机构"
-              >
-
-                <Select.Option key='通知' value='通知'>通知</Select.Option>
-                <Select.Option key='公告' value='公告'>公告</Select.Option>
-                <Select.Option key='资讯' value='资讯'>资讯</Select.Option>
-                <Select.Option key='广告' value='广告'>广告</Select.Option>
-                <Select.Option key='活动' value='活动'>活动</Select.Option>
-
+              > 
               </Select>
 
             </div>
@@ -111,21 +104,23 @@ const SalesCard = ({
                       defaultMessage="Sales Ranking"
                     />
                   </h4>
-                  <ul className={styles.rankingList}>
-                    {receiveData.map((item, i) => (
-                      <li key={item.x}>
-                        <span className={`${styles.rankingItemNumber} ${i < 3 ? styles.active : ''}`}>
-                          {i + 1}
-                        </span>
-                        <span className={styles.rankingItemTitle} title={item.x}>
-                          {item.x}
-                        </span>
-                        <span className={styles.rankingItemValue}>
-                          ¥ {numeral(item.y).format('0,0.00')}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
+                  <div style={{ overflowY: 'scroll', height: 260, paddingRight: 8 }}>
+                    <ul className={styles.rankingList}>
+                      {receiveData.map((item, i) => (
+                        <li key={item.x}>
+                          <span className={`${styles.rankingItemNumber} ${i < 3 ? styles.active : ''}`}>
+                            {i + 1}
+                          </span>
+                          <span className={styles.rankingItemTitle} title={item.x}>
+                            {item.x}
+                          </span>
+                          <span className={styles.rankingItemValue}>
+                            ¥ {numeral(item.y).format('0,0.00')}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               </Col>
             </Row>

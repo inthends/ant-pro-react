@@ -27,13 +27,16 @@ const initState = {
   // visitData2: [],
   monthReceiveData: [],
   receiveData:[],
-  searchData: [],
-  offlineData: [],
-  offlineChartData: [],
-  salesTypeData: [],
-  salesTypeDataOnline: [],
-  salesTypeDataOffline: [],
-  radarData: [],
+
+  payTypeData:[],
+  payTypeDataOnline: [],
+  payTypeDataOffline: [],
+  // searchData: [],
+  // offlineData: [],
+  // offlineChartData: [],
+  feeTypeData: [],
+
+  // radarData: [],
 };
 
 const Model: ModelType = {

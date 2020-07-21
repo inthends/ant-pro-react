@@ -6,7 +6,7 @@ import {
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import {
-  GetFilesData, RemoveFile, Dispatch, Change, Receive,
+  GetFilesData, RemoveFile, Dispatch, Receive,
   Start, Handle, Check, Approve, GetEntity, GetOperationRecords
 } from './Main.service';
 import { GetUserList, GetCommonItems } from '@/services/commonItem';
@@ -203,18 +203,20 @@ const Modify = (props: ModifyProps) => {
     });
   };
 
+
   //转单
-  const change = () => {
-    form.validateFields((errors, values) => {
-      if (!errors) {
-        Change(infoDetail.id).then(res => {
-          message.success('转单成功');
-          closeDrawer();
-          reload();
-        });
-      }
-    });
-  };
+  // const change = () => {
+  //   form.validateFields((errors, values) => {
+  //     if (!errors) {
+  //       Change(infoDetail.id).then(res => {
+  //         message.success('转单成功');
+  //         closeDrawer();
+  //         reload();
+  //       });
+  //     }
+  //   });
+  // };
+
 
   //开工
   const start = () => {
@@ -1074,9 +1076,9 @@ const Modify = (props: ModifyProps) => {
               开工
             </Button>
 
-            <Button onClick={change} type="primary" style={{ marginRight: 8 }}>
+            {/* <Button onClick={change} type="primary" style={{ marginRight: 8 }}>
               转单
-            </Button>
+            </Button> */}
 
             <Button
               onClick={() => setAddMemoVisible(true)}

@@ -58,7 +58,7 @@ export default {
   menu: {
     locale: true,
   },
-  title: 'A6资产管理系统',//阳山物业 ， A6资产管理系统
+  title: '兴业银行BI',//阳山物业 ， A6资产管理系统 ， 兴业银行BI
   pwa: false,
   iconfontUrl: '',
 } as DefaultSettings;

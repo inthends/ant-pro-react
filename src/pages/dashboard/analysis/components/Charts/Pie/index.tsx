@@ -245,7 +245,9 @@ class Pie extends Component<PieProps, PieState> {
     });
 
     return (
-      <div ref={this.handleRoot} className={pieClassName} style={style}>
+      <div ref={this.handleRoot} className={pieClassName}
+        style={style}
+      >
         <ReactFitText maxFontSize={25}>
           <div className={styles.chart}>
             <Chart
@@ -281,8 +283,10 @@ class Pie extends Component<PieProps, PieState> {
           </div>
         </ReactFitText>
 
+
         {hasLegend && (
-          <ul className={styles.legend}>
+
+          <ul style={{ overflowY: 'scroll', height: 260 }} className={styles.legend}>
             {legendData.map((item, i) => (
               <li key={item.x} onClick={() => this.handleLegendClick(item, i)}>
                 <span
@@ -296,11 +300,16 @@ class Pie extends Component<PieProps, PieState> {
                 <span className={styles.percent}>
                   {`${(Number.isNaN(item.percent) ? 0 : item.percent * 100).toFixed(2)}%`}
                 </span>
-                <span className={styles.value}>{valueFormat ? valueFormat(item.y) : item.y}</span>
+                <span className={styles.value}
+                  style={{ paddingRight: 8 }}
+                >{valueFormat ? valueFormat(item.y) : item.y}</span>
+
               </li>
             ))}
           </ul>
+
         )}
+
       </div>
     );
   }

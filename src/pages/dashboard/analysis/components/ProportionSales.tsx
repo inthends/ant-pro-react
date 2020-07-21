@@ -1,4 +1,4 @@
-import { Card, Radio } from 'antd';
+import { Card , Radio } from 'antd';
 
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import { RadioChangeEvent } from 'antd/es/radio';

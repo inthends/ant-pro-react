@@ -35,14 +35,18 @@ export interface RadarData {
 export interface AnalysisData {
   // visitData: VisitDataType[];
   // visitData2: VisitDataType[];
-  monthReceiveData: CommonDataType[];
-  searchData: SearchDataType[];
-  offlineData: OfflineDataType[];
-  offlineChartData: OfflineChartData[];
-  salesTypeData: CommonDataType[];
+  monthReceiveData: CommonDataType[]; 
+  receiveData:CommonDataType[],
+
+  payTypeData:CommonDataType[],
+  
+  // searchData: SearchDataType[];
+  // offlineData: OfflineDataType[];
+  // offlineChartData: OfflineChartData[];
+  feeTypeData: CommonDataType[];
   salesTypeDataOnline: CommonDataType[];
   salesTypeDataOffline: CommonDataType[];
-  radarData: RadarData[];
+  // radarData: RadarData[];
 }
 
 export interface GeographicType {

@@ -35,11 +35,15 @@ export interface AnalysisData {
   // visitData2: CommonDataType[];
   monthReceiveData: CommonDataType[];
   receiveData: CommonDataType[];
-  searchData: SearchDataType[];
-  offlineData: OfflineDataType[];
-  offlineChartData: OfflineChartData[];
-  salesTypeData: CommonDataType[];
-  salesTypeDataOnline: CommonDataType[];
-  salesTypeDataOffline: CommonDataType[];
-  radarData: RadarData[];
+  
+  payTypeData: CommonDataType[];
+  payTypeDataOnline: CommonDataType[];
+  payTypeDataOffline: CommonDataType[];
+
+  // searchData: SearchDataType[];
+  // offlineData: OfflineDataType[];
+  // offlineChartData: OfflineChartData[];
+
+  feeTypeData: CommonDataType[];
+  // radarData: RadarData[];
 }
