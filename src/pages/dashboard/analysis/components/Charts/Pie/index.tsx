@@ -248,7 +248,7 @@ class Pie extends Component<PieProps, PieState> {
       <div ref={this.handleRoot} className={pieClassName}
         style={style}
       >
-        <ReactFitText maxFontSize={23}>
+        <ReactFitText maxFontSize={20}>
           <div className={styles.chart}>
             <Chart
               scale={scale}
@@ -286,7 +286,7 @@ class Pie extends Component<PieProps, PieState> {
 
         {hasLegend && (
 
-          <ul style={{ overflowY: 'scroll', height: 260 }} className={styles.legend}>
+          <ul style={{ overflowY: 'auto', height: 260 }} className={styles.legend}>
             {legendData.map((item, i) => (
               <li key={item.x} onClick={() => this.handleLegendClick(item, i)}>
                 <span

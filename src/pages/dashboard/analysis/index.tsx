@@ -120,8 +120,7 @@ AnalysisState
     }
     this.setState({
       orgId, orgType
-    });
-    debugger
+    }); 
     const { dispatch } = this.props;
     dispatch({
       type: 'dashboardAnalysis/fetch',

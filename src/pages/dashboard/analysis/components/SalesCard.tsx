@@ -118,7 +118,7 @@ const SalesCard = ({
                       defaultMessage="Sales Ranking"
                     />
                   </h4>
-                  <div style={{ overflowY: 'scroll', height: 260, paddingRight: 8 }}>
+                  <div style={{ overflowY: 'auto', height: 260, paddingRight: 8 }}>
                     <ul className={styles.rankingList}>
                       {receiveData.map((item, i) => (
                         <li key={item.x}>
