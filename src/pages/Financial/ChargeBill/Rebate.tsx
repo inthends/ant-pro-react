@@ -104,9 +104,9 @@ const Rebate = (props: RebateProps) => {
   // }
 
   //选择优惠政策
-  const change = (value, option) => {
-    form.setFieldsValue({ rebateName: option.props.children });
-  };
+  // const change = (value, option) => {
+  //   form.setFieldsValue({ rebateName: option.props.children });
+  // };
 
   //起始日期控制
   const disabledStartDate = (current) => {
@@ -187,12 +187,13 @@ const Rebate = (props: RebateProps) => {
                     rules: [{ required: true, message: '请选择优惠政策' }]
                   })(
                     <Select placeholder="==请选择=="
-                      onChange={change}>
+                      // onChange={change}
+                      >
                       <Option value='3'>全部优惠</Option>
                     </Select>
                   )}
                   {getFieldDecorator('rebateName', {
-                    initialValue: infoDetail.rebateName,
+                    initialValue: "全部优惠"//infoDetail.rebateName,
                   })(
                     <input type='hidden' />
                   )}
