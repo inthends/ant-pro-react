@@ -1,4 +1,4 @@
-//快速优惠
+//快速优惠，只能做全部优惠
 import { Select, Spin, message, Button, Col, Drawer, Form, Input, DatePicker, Row, Card } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
@@ -183,7 +183,7 @@ const Rebate = (props: RebateProps) => {
               <Col lg={8}>
                 <Form.Item label="优惠政策" required>
                   {getFieldDecorator('rebateCode', {
-                    initialValue: infoDetail.rebateCode,
+                    initialValue: '3',//infoDetail.rebateCode,
                     rules: [{ required: true, message: '请选择优惠政策' }]
                   })(
                     <Select placeholder="==请选择=="

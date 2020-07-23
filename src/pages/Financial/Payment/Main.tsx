@@ -48,7 +48,8 @@ function Main() {
 
   const doSelectTree = (id, type, info) => {
     setOrganize(info.node.props.dataRef);
-    if (type == 5) {
+    if (type == 5 || type == 9) {
+      //房间和车位
       // initNotPaymentLoadData({ id: id, type: type }, '');
       // initPaymentLoadData({ id: id, type: type }, '');
       setAddBtnDisable(false);

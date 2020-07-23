@@ -1,14 +1,17 @@
 //未收列表
 import Page from '@/components/Common/Page';
 import {
-  Spin, Checkbox, Menu, Dropdown, Icon, Divider, InputNumber, Input, Select,
+  Tooltip, Spin, Checkbox, Menu, Dropdown, Icon, Divider, InputNumber, Input, Select,
   Col, Row, Form, DatePicker, Card, Button, message, Table, Modal
 } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import { CheckRebateFee, CheckFeeBillDate, InvalidBillDetailForm, Charge, GetQrCode, GetPayState, CalFee } from './Main.service';
+import {
+  CheckRebateFee, CheckFeeBillDate, InvalidBillDetailForm,
+  Charge, GetQrCode, GetPayState, CalFee
+} from './Main.service';
 import { GetCommonItems } from '@/services/commonItem';
 // import QRCode from 'qrcode.react';
 // import styles from './style.less';
@@ -30,12 +33,14 @@ interface ListTableProps {
   showDetail(billId: string): void;//打开查看页面
   showReduction(id: string): void;
   showRebate(id: string): void;//优惠
+  showOffset(): void;
+  payAmount: any;//应付金额
 };
 
 function ListTable(props: ListTableProps) {
   const { form, onchange, loading, pagination, data, modify,
     reload, rowSelect, organizeId, customerName, showSplit,
-    showTrans, showDetail, showReduction, showRebate
+    showTrans, showDetail, showReduction, showRebate, showOffset, payAmount
   } = props;
 
   const { getFieldDecorator } = form;
@@ -843,20 +848,28 @@ function ListTable(props: ListTableProps) {
                 <Option value='有数进一'>有数进一</Option>
               </Select>
             </Row>
- 
-            <Row style={{ marginTop: '5px' }}>
-              <span style={{ marginLeft: 8, color: "red" }}>
-                {hasSelected ? `应收金额：${sumEntity.sumAmount} ，
-            减免金额：${sumEntity.sumreductionAmount}，
-            冲抵金额：${sumEntity.sumoffsetAmount}，
-            优惠金额：${rebateAmount.toFixed(2)}， 
-            抹零金额：${mlAmount.toFixed(2)}，
-            未收金额：${lastAmount.toFixed(2)}` : ''}
-              </span>
+
+            <Row style={{ marginTop: '8px' }}>
+
+              {hasSelected ? <span style={{ color: "red" }}>
+                应收金额：{sumEntity.sumAmount} ，
+            减免金额：{sumEntity.sumreductionAmount}，
+            冲抵金额：{sumEntity.sumoffsetAmount}，
+            优惠金额：{rebateAmount.toFixed(2)}，
+            抹零金额：{mlAmount.toFixed(2)}，
+            未收金额：{lastAmount.toFixed(2)}  </span> : null}
+
+              {payAmount > 0 ?
+                <Tooltip title="点击冲抵">
+                  <a style={{ marginLeft: 5 }} 
+                  onClick={showOffset}>
+                  应付金额：{payAmount}
+                </a> </Tooltip> : null}
+
             </Row>
 
             <Row style={{ marginTop: '5px' }}>
-              <span style={{ marginLeft: 8, color: "red" }}>
+              <span style={{ color: "red" }}>
                 {hasSelected ? groupTotal : ''}
               </span>
             </Row>

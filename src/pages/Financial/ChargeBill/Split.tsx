@@ -7,14 +7,14 @@ import styles from './style.less';
 import moment from 'moment';
 
 interface SplitProps {
-  splitVisible: boolean;
-  closeSplit(): void;
+  visible: boolean;
+  close(): void;
   form: WrappedFormUtils;
   id?: string;
   reload(): void;
 }
 const Split = (props: SplitProps) => {
-  const { splitVisible, closeSplit, id, form, reload } = props;
+  const { visible, close, id, form, reload } = props;
   const { getFieldDecorator } = form;
   const title = "拆分费用";
   const [infoDetail, setInfoDetail] = useState<any>({});
@@ -22,7 +22,7 @@ const Split = (props: SplitProps) => {
 
   // 打开抽屉时初始化
   useEffect(() => {
-    if (splitVisible) {
+    if (visible) {
       form.resetFields();
       if (id != null && id != "") {
         GetShowDetail(id).then(res => {
@@ -36,11 +36,11 @@ const Split = (props: SplitProps) => {
       }
     } else {
     }
-  }, [splitVisible]);
+  }, [visible]);
 
-  const close = () => {
-    closeSplit();
-  };
+  // const close = () => {
+  //   closeSplit();
+  // };
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -101,7 +101,7 @@ const Split = (props: SplitProps) => {
       placement="right"
       width={700}
       onClose={close}
-      visible={splitVisible}
+      visible={visible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
       <Spin tip="数据处理中..." spinning={loading}>

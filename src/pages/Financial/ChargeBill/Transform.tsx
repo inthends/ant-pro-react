@@ -18,15 +18,15 @@ import styles from './style.less';
 const { Option } = Select;
 
 interface TransfromProps {
-  transVisible: boolean;
-  closeTrans(): void;
+  visible: boolean;
+  close (): void;
   form: WrappedFormUtils;
   id?: string;
   reload(): void;
 
 }
 const Transfrom = (props: TransfromProps) => {
-  const { transVisible, closeTrans, id, form, reload } = props;
+  const { visible, close, id, form, reload } = props;
   const { getFieldDecorator } = form;
   const title = "转费";
   const [infoDetail, setInfoDetail] = useState<any>({});
@@ -34,7 +34,7 @@ const Transfrom = (props: TransfromProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   // 打开抽屉时初始化
   useEffect(() => {
-    if (transVisible) {
+    if (visible) {
       if (id) {
         setLoading(true);
         GetShowDetail(id).then(res => {
@@ -51,11 +51,11 @@ const Transfrom = (props: TransfromProps) => {
     } else {
 
     }
-  }, [transVisible]);
+  }, [visible]);
 
-  const close = () => {
-    closeTrans();
-  };
+  // const close = () => {
+  //   closeTrans();
+  // };
 
   const save = () => {
     form.validateFields((errors, values) => {
@@ -87,7 +87,7 @@ const Transfrom = (props: TransfromProps) => {
       placement="right"
       width={700}
       onClose={close}
-      visible={transVisible}
+      visible={visible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
       <Spin tip="数据处理中..." spinning={loading}>

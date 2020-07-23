@@ -1,8 +1,8 @@
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { AutoComplete, Checkbox, Tabs, Button, Icon, Input, Layout, Select, DatePicker, message } from 'antd';
+import { Tooltip,AutoComplete, Checkbox, Tabs, Button, Icon, Input, Layout, Select, DatePicker, message } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useState } from 'react';
-import { NotChargeFeeData, ChargeFeePageData, ChargeCheckPageData } from './Main.service';
+import { NotChargeFeeData, ChargeFeePageData, ChargeCheckPageData, GetPayAmount } from './Main.service';
 import { GetUserList } from '@/services/commonItem';
 import AsynLeftTree from '../AsynLeftTree';
 import ListTable from './ListTable';
@@ -14,6 +14,7 @@ import BillModify from './BillModify';
 import Verify from './Verify';
 import Split from './Split';
 import Reduction from './Reduction';
+import Offset from './Offset';
 import Rebate from './Rebate';
 import Transform from './Transform';
 import Submit from './Submit';
@@ -46,6 +47,8 @@ function Main() {
   const [customerName, setCustomerName] = useState<string>('');
   const [showname, setShowname] = useState<string>('');
   const [addButtonDisable, setAddButtonDisable] = useState<boolean>(true);
+  //应付金额
+  const [payAmount, setPayAmount] = useState<any>(0);
 
   //显示该户其他费用
   const [showCustomerFee, setShowCustomerFee] = useState<boolean>(true);
@@ -57,6 +60,8 @@ function Main() {
   const [reductionVisible, setReductionVisible] = useState<boolean>(false);
   //优惠
   const [rebateVisible, setRebateVisible] = useState<boolean>(false);
+  //冲抵
+  const [offsetVisible, setOffsetVisible] = useState<boolean>(false);
 
   //对账
   const [verifyVisible, setVerifyVisible] = useState<boolean>(false);
@@ -91,8 +96,14 @@ function Main() {
     if (tabIndex == "1") {
       //未收款
       // initLoadData(search, organizeId, showCustomerFee);
-      if (type == 5 || type == 9)
+      if (type == 5 || type == 9) {
         loadData(search, orgId, page);
+
+        //统计应付金额
+        GetPayAmount(orgId).then(res => {
+          setPayAmount(res);
+        });
+      }
     }
     else if (tabIndex == "2") {
       //已收款
@@ -393,6 +404,15 @@ function Main() {
     setReductionVisible(false);
   }
 
+  //冲抵
+  const showOffset = () => {
+    setOffsetVisible(true);
+  }
+
+  const closeOffset = () => {
+    setOffsetVisible(false);
+  }
+
   const showRebate = (id) => {
     setId(id);
     setRebateVisible(true);
@@ -560,7 +580,7 @@ function Main() {
         parentid={'0'}
         selectTree={(id, type, info?) => {
           setCustomerName('');
-          setShowname(''); 
+          setShowname('');
           setAdminOrgId(info.node.props.organizeId);//管理处Id
           setOrgId(id);
           setOrgType(type);
@@ -616,10 +636,11 @@ function Main() {
                 <Icon type="minus-square" />
                 查看
               </Button> */}
-
-              <a style={{ marginLeft: 8 }} onClick={showRoomDrawer}>
-                {showname}
-              </a>
+              <Tooltip title="点击查看详情">
+                <a style={{ marginLeft: 8 }}
+                  onClick={showRoomDrawer}>
+                  {showname}
+                </a></Tooltip>
 
               {/* <Button type="primary" style={{ float: 'right' }}
                 onClick={() => showDrawer()}
@@ -629,11 +650,11 @@ function Main() {
               </Button> */}
 
               <AuthButton
-               type="primary" style={{ float: 'right' }}
+                type="primary" style={{ float: 'right' }}
                 onClick={() => showDrawer()}
                 module="ChargeBill"
-                code="add"  
-                disabled={addButtonDisable} 
+                code="add"
+                disabled={addButtonDisable}
                 btype="primary">
                 <Icon type="plus" />
                 加费
@@ -665,6 +686,8 @@ function Main() {
               showDetail={showDetail}
               showReduction={showReduction}
               showRebate={showRebate}
+              payAmount={payAmount}
+              showOffset={showOffset}
             />
 
           </TabPane>
@@ -838,7 +861,13 @@ function Main() {
         id={id}
         roomId={orgId}
         adminOrgId={adminOrgId}
-        reload={() => initLoadData(search, orgId)}
+        reload={() => {
+          initLoadData(search, orgId);
+          //统计应付金额
+          GetPayAmount(orgId).then(res => {
+            setPayAmount(res);
+          });
+        }}
         edit={modifyEdit}
       />
 
@@ -876,39 +905,76 @@ function Main() {
       />
 
       <Reduction
-        reductionVisible={reductionVisible}
-        closeReduction={closeReduction}
+        visible={reductionVisible}
+        close={closeReduction}
         id={id}
         // id={splitId}
-        reload={() => initLoadData(search, orgId)}
+        reload={() => {
+          initLoadData(search, orgId);
+          //统计应付金额
+          GetPayAmount(orgId).then(res => {
+            setPayAmount(res);
+          });
+        }}
+      />
+
+      <Offset
+        visible={offsetVisible}
+        close={closeOffset}
+        unitId={orgId}
+        showname={showname}
+        reload={() => {
+          initLoadData(search, orgId);
+          //统计应付金额
+          GetPayAmount(orgId).then(res => {
+            setPayAmount(res);
+          });
+        }}
       />
 
       <Rebate
         visible={rebateVisible}
         close={closeRebate}
         id={id}
-        reload={() => initLoadData(search, orgId)}
+        reload={() => {
+          initLoadData(search, orgId);
+          //统计应付金额
+          GetPayAmount(orgId).then(res => {
+            setPayAmount(res);
+          });
+        }}
       />
 
       <Split
-        splitVisible={splitVisible}
-        closeSplit={closeSplit}
+        visible={splitVisible}
+        close={closeSplit}
         id={id}
         // id={splitId}
-        reload={() => initLoadData(search, orgId)}
+        reload={() => {
+          initLoadData(search, orgId);
+          //统计应付金额
+          GetPayAmount(orgId).then(res => {
+            setPayAmount(res);
+          });
+        }}
       />
 
       <Transform
-        transVisible={transVisible}
-        closeTrans={closeTrans}
+        visible={transVisible}
+        close={closeTrans}
         id={id}
         // id={transId}
-        reload={() => initLoadData(search, orgId)}
-      />
+        reload={() => {
+          initLoadData(search, orgId);
+          //统计应付金额
+          GetPayAmount(orgId).then(res => {
+            setPayAmount(res);
+          });
+        }} />
 
       <RoomShow
-        showVisible={roomVisible}
-        closeDrawer={closeRoomDrawer}
+        visible={roomVisible}
+        close={closeRoomDrawer}
         unitId={orgId}
       />
 

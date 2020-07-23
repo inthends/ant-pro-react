@@ -391,7 +391,7 @@ const FeeModify = (props: FeeModifyProps) => {
                         initialValue: infoDetail.beginDate ? moment(infoDetail.beginDate) : moment(new Date()),
                         rules: [{ required: true, message: '请选择起始日期' }]
                       })(
-                        <DatePicker disabled={true} style={{ width: '100%' }} onChange={(date, dateString) => {
+                        <DatePicker   style={{ width: '100%' }} onChange={(date, dateString) => {
                           setEndDate(dateString, infoDetail.cycleValue, infoDetail.cycleType);
                         }} />
                       )}
@@ -403,7 +403,7 @@ const FeeModify = (props: FeeModifyProps) => {
                         initialValue: infoDetail.endDate ? moment(infoDetail.endDate) : moment(new Date()),
                         rules: [{ required: true, message: '请选择结束日期' }]
                       })(
-                        <DatePicker disabled={true} style={{ width: '100%' }} />
+                        <DatePicker   style={{ width: '100%' }} />
                       )}
                     </Form.Item>
                   </Col>

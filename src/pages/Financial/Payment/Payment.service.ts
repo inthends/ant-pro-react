@@ -23,6 +23,7 @@ export function Audit(data): Promise<any> {
 export function NotPaymentFeeData(data): Promise<any> {
   return request.post(process.env.basePath + `/Payment/NotPaymentFeeData`, {data:objToFormdata(data)}).then(getResult as any);
 }
+
 ///付款明细
 export function ChargeFeeDetail(data): Promise<any> {
   return request.post(process.env.basePath + `/Payment/PaymentFeeDetail`, {data:objToFormdata(data)}).then(getResult as any);

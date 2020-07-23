@@ -6,14 +6,14 @@ import { GetShowDetail, ReductionBilling } from './Main.service';
 import styles from './style.less';
 
 interface ReductionProps {
-  reductionVisible: boolean;
-  closeReduction(): void;
+  visible: boolean;
+  close(): void;
   form: WrappedFormUtils;
   id?: string;
   reload(): void;
 }
 const Reduction = (props: ReductionProps) => {
-  const { reductionVisible, closeReduction, id, form, reload } = props;
+  const { visible, close, id, form, reload } = props;
   const { getFieldDecorator } = form;
   const title = "减免费用";
   const [infoDetail, setInfoDetail] = useState<any>({});
@@ -21,7 +21,7 @@ const Reduction = (props: ReductionProps) => {
 
   // 打开抽屉时初始化
   useEffect(() => {
-    if (reductionVisible) {
+    if (visible) {
       form.resetFields();
       if (id != null && id != "") {
         GetShowDetail(id).then(res => {
@@ -35,11 +35,11 @@ const Reduction = (props: ReductionProps) => {
       }
     } else {
     }
-  }, [reductionVisible]);
+  }, [visible]);
 
-  const close = () => {
-    closeReduction();
-  };
+  // const close = () => {
+  //   closeReduction();
+  // };
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -96,7 +96,7 @@ const Reduction = (props: ReductionProps) => {
       placement="right"
       width={700}
       onClose={close}
-      visible={reductionVisible}
+      visible={visible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
       <Spin tip="数据处理中..." spinning={loading}>

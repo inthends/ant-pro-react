@@ -67,6 +67,13 @@ export function CalFee(data): Promise<any> {
     .post(process.env.basePath + `/Receivable/CalFee`, { data: objToFormdata(data) })
     .then(getResult as any);
 }
+ 
+//获取当前房屋应付金额
+export function GetPayAmount(unitId): Promise<any> {
+  return request
+    .get(process.env.basePath + `/Receivable/GetPayAmount?unitId=${unitId}`)
+    .then(getResult as any);
+}
 
 // export function CalFee(sumAmount,mlType, mlScale): Promise<any> {
 //   return request
@@ -279,4 +286,15 @@ export function SaveNote(data): Promise<any> {
 //修改收款单
 export function SavaReceiveForm(data): Promise<any> {
   return request.post(process.env.basePath + `/Receivable/SavaReceiveForm`, { data: objToFormdata(data) }).then(getResult as any);
+}
+
+
+//应付列表
+export function NotPaymentFeeData(data): Promise<any> {
+  return request.post(process.env.basePath + `/Payment/NotPaymentFeeData`, {data:objToFormdata(data)}).then(getResult as any);
+}
+
+ //冲抵
+export function OffsetBilling(data): Promise<any> {
+  return request.post(process.env.basePath + `/BillingMain/OffsetBilling`, { data: objToFormdata(data) }).then(getResult as any);
 }

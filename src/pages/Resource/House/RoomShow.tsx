@@ -6,14 +6,14 @@ import styles from './style.less';
 import { GetFormInfoJson } from './House.service';
 
 interface RoomShowProps {
-  showVisible: boolean;
+  visible: boolean;
   form: WrappedFormUtils;
-  closeDrawer(): void;
+  close(): void;
   unitId?: any;
 };
 
 const RoomShow = (props: RoomShowProps) => {
-  const { showVisible, closeDrawer, form, unitId } = props;
+  const { visible, close, form, unitId } = props;
   const [infoDetail, setInfoDetail] = useState<any>({});
   const [previewVisible, setPreviewVisible] = useState<boolean>(false);
   const [fileList, setFileList] = useState<any[]>([]);
@@ -21,7 +21,7 @@ const RoomShow = (props: RoomShowProps) => {
 
   // 打开抽屉时初始化
   useEffect(() => {
-    if (showVisible) {
+    if (visible) {
       if (unitId) {
         GetFormInfoJson(unitId).then(res => {
           setInfoDetail(res);
@@ -44,11 +44,11 @@ const RoomShow = (props: RoomShowProps) => {
     } else {
       form.resetFields();
     }
-  }, [showVisible]);
+  }, [visible]);
 
-  const close = () => {
-    closeDrawer();
-  };
+  // const close = () => {
+  //   closeDrawer();
+  // };
 
   const getBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -97,7 +97,7 @@ const RoomShow = (props: RoomShowProps) => {
       placement="right"
       width={650}
       onClose={close}
-      visible={showVisible}
+      visible={visible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }} >
       <PageHeader
         ghost={false} 
@@ -149,7 +149,7 @@ const RoomShow = (props: RoomShowProps) => {
       </PageHeader>
       <Divider dashed />
       <Card className={styles.card}  hoverable>
-        {showVisible ? (
+        {visible ? (
           <Form layout="vertical" hideRequiredMark>
             <Row gutter={24}>
               <Col lg={6}>
