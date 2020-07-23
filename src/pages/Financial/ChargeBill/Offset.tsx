@@ -303,7 +303,7 @@ const Offset = (props: OffsetProps) => {
                 columns={columns}
                 rowKey={record => record.billId}
                 pagination={notPaymentPagination}
-                // scroll={{ y: 500, x: 1200 }}
+                scroll={{ y: 800  }}
                 onChange={(pagination: PaginationConfig, filters, sorter) =>
                   loadNotPaymentData(pagination, sorter)
                 }
@@ -325,6 +325,7 @@ const Offset = (props: OffsetProps) => {
                 columns={columnsreceive}
                 rowKey={record => record.id}
                 pagination={pagination}
+                scroll={{ y: 800  }}
                 onChange={(pagination: PaginationConfig, filters, sorter) =>
                   loadData(pagination, sorter)
                 }

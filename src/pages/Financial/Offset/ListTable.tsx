@@ -112,7 +112,7 @@ function ListTable(props: ListTableProps) {
       title: '审核情况',
       dataIndex: 'verifyMemo',
       key: 'verifyMemo',
-      width: 100
+      width: 150
     }, {
       title: '备注',
       dataIndex: 'memo',
@@ -206,7 +206,7 @@ function ListTable(props: ListTableProps) {
         dataSource={data}
         rowKey="billId"
         pagination={pagination}
-        scroll={{ x: 1100, y: 500 }}
+        scroll={{ x: 1200, y: 500 }}
         rowClassName={getClassName} //样式
         loading={loading}
         onChange={(pagination: PaginationConfig, filters, sorter) =>

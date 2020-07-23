@@ -863,7 +863,7 @@ function ListTable(props: ListTableProps) {
                 <Tooltip title="点击冲抵">
                   <a style={{ marginLeft: 5 }} 
                   onClick={showOffset}>
-                  应付金额：{payAmount}
+                  未付金额：{payAmount}
                 </a> </Tooltip> : null}
 
             </Row>
