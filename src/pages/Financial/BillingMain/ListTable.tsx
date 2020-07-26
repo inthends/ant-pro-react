@@ -163,7 +163,7 @@ function ListTable(props: ListTableProps) {
 
             <Divider type="vertical" />
             {!record.ifVerify ? <a onClick={() => showVerify(record.billId)} key="app">审核</a> :
-              <a onClick={() => showVerify(record.billId)} key="unapp"   >反审</a>
+              <a onClick={() => showVerify(record.billId)} key="unapp">反审</a>
             }
             <Divider type="vertical" />
             <MoreBtn key="more" item={record} />

@@ -45,7 +45,7 @@ const Main = () => {
   // };
 
   const loadData = (
-    searchParam: any,
+    //searchParam: any,
     paginationConfig?: PaginationConfig,
     sorter?
   ) => {
@@ -59,7 +59,7 @@ const Main = () => {
       pageIndex,
       pageSize,
       total,
-      queryJson: searchParam
+      //queryJson: searchParam
     };
 
     if (sorter) {
@@ -131,25 +131,23 @@ const Main = () => {
         </div> */}
         <ListTable
           onchange={(paginationConfig, filters, sorter) =>
-            loadData(search, paginationConfig, sorter)
+            loadData(paginationConfig, sorter)
           }
           loading={loading}
           pagination={pagination}
           data={data}
           modify={showDrawer}
           // choose={showChoose}
-          reload={() => initLoadData(search)}
+          reload={() => initLoadData()}
           setData={setData}
         />
-      </Content>
-
-   
+      </Content> 
 
       <Modify
         visible={modifyVisible}
         closeDrawer={closeDrawer}
         data={currData}
-        reload={() => initLoadData({ ...search })}
+        reload={() => initLoadData()}
       />
     </Layout>
   );

@@ -1,4 +1,4 @@
-//合同审批查看
+//合同审批查看，废弃，跟审批共用一个
 import {Icon, Spin, Upload, Tooltip, Tag, Divider, PageHeader, List, Tabs, Button, Card, Col, Drawer, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import {

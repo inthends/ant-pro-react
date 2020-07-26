@@ -463,6 +463,19 @@ const ModifyParking = (props: ModifyParkingProps) => {
               </Col>
 
               <Col lg={12}>
+                <Form.Item label="业主电话">
+                  {getFieldDecorator('ownerPhone', {
+                    initialValue: infoDetail.ownerPhone,
+                  })(
+                    <Input placeholder="自动带出业主电话" readOnly />
+                  )}
+                </Form.Item>
+              </Col>
+
+           
+            </Row>
+            <Row gutter={24}>
+            <Col lg={12}>
                 <Form.Item label={infoDetail.tenantName ? <div>租户名称 <a onClick={() => { showCustomerDrawer(infoDetail.tenantId, 2) }}>编辑</a></div> : '租户名称'}>
                   {/* {getFieldDecorator('customerId', {
                     initialValue: infoDetail.customerId,
@@ -506,17 +519,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
                   )} 
                 </Form.Item>
               </Col>
-            </Row>
-            <Row gutter={24}>
-              <Col lg={12}>
-                <Form.Item label="业主电话">
-                  {getFieldDecorator('ownerPhone', {
-                    initialValue: infoDetail.ownerPhone,
-                  })(
-                    <Input placeholder="自动带出业主电话" readOnly />
-                  )}
-                </Form.Item>
-              </Col>
+           
               <Col lg={12}>
                 <Form.Item label="租户电话">
                   {getFieldDecorator('tenantPhone', {

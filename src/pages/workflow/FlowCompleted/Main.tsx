@@ -5,11 +5,11 @@ import { PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import ListTable from './ListTable';
 import { GetDataList } from './FlowCompleted.service';
-// //合同审批查看
+//合同审批查看
 // import ContractView from '../../Contract/List/ApproveView';
+import ContractApprove from '../../Contract/List/Approve';
 // //收款单审批查看
 // import ReceiveView from '../../Financial/ChargeBill/ApproveView';
-
 //入住审批查看
 import ApartmentApprove from '../../Admin/ApartmentApp/Approve';
 
@@ -27,11 +27,8 @@ const Main = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<any[]>([]);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
-
-  // const [flowId, setFlowId] = useState<string>();
-  // const [id, setId] = useState<string>();
+  const [code, setCode] = useState<string>();
   const [instanceId, setInstanceId] = useState<string>();
-
   // const [contractVisible, setContractVisible] = useState<boolean>(false);
   // const [receiveVisible, setReceiveVisible] = useState<boolean>(false);
 
@@ -99,6 +96,8 @@ const Main = () => {
 
   //入住申请
   const [apartmentVisible, setApartmentVisible] = useState<boolean>(false);
+  //合同审批
+  const [contractVisible, setContractVisible] = useState<boolean>(false);
 
   const closeDrawer = () => {
     // if (flowId == 'b5011d6f-d386-4ed3-a2ab-2f2eb5597b7f'
@@ -112,28 +111,35 @@ const Main = () => {
     //   //收款送审
     //   setReceiveVisible(false);
     // } 
-    setApartmentVisible(false);
+
+    switch (code) {
+      case '1001':
+        setApartmentVisible(false);
+        break;
+      case '1003':
+        setContractVisible(false);
+        break;
+    }
 
   };
 
-  const showDrawer = (flowId, id, instanceId) => {
-    // if (flowId == 'b5011d6f-d386-4ed3-a2ab-2f2eb5597b7f'
-    //   || flowId == 'b6011d6f-d386-4ed3-a2ab-2f2eb5597b7f'
-    //   || flowId == 'b7011d6f-d386-4ed3-a2ab-2f2eb5597b7f'
-    // ) {
-    //   //合同
-    //   setContractVisible(true);
-    // }
-    // else if (flowId == 'f3f367c8-1806-4ac2-b6ca-a6e537dd1925') {
-    //   //收款送审
-    //   setReceiveVisible(true);
-    // }
 
-    setApartmentVisible(true);
-    // setFlowId(flowId);
-    // setId(id);
+  //弹出查看
+  const showDrawer = (code, id, instanceId) => { 
+
+    switch (code) {
+      case '1001':
+        setApartmentVisible(true);
+        break;
+      case '1003':
+        setContractVisible(true);
+        break;
+    }
+    setCode(code);
     setInstanceId(instanceId);
   };
+
+
 
   return (
     <Layout style={{ height: '100%' }}>
@@ -158,6 +164,7 @@ const Main = () => {
             style={{ width: 200 }}
           />
         </div>
+
         <ListTable
           key='ListTable'
           onchange={(paginationConfig, filters, sorter) =>
@@ -170,7 +177,8 @@ const Main = () => {
           view={showDrawer}
         />
 
-        {/* <ContractView
+
+        {/*<ContractView
           visible={contractVisible}
           closeDrawer={closeDrawer}
           instanceId={instanceId}
@@ -184,10 +192,17 @@ const Main = () => {
           reload={() => initLoadData(search)}
         /> */}
 
+        <ContractApprove
+          visible={contractVisible}
+          closeDrawer={closeDrawer}
+          isView={true}
+          instanceId={instanceId}
+          reload={() => initLoadData(search)}
+        />
 
         <ApartmentApprove
           visible={apartmentVisible}
-          closeDrawer={closeDrawer} 
+          closeDrawer={closeDrawer}
           isView={true}
           instanceId={instanceId}
           reload={() => initLoadData(search)}

@@ -24,7 +24,7 @@ interface ModifyProps {
 };
 
 const Modify = (props: ModifyProps) => {
-  const { reload, taskId, instanceId, form, visible, isReSubmit, closeDrawer } = props;
+  const { taskId, instanceId, isReSubmit, form, visible, closeDrawer, reload } = props;
   // let initData = data ? data : {};
   // const baseFormProps = { form, initData };
   const [infoDetail, setInfoDetail] = useState<any>({});
@@ -192,7 +192,7 @@ const Modify = (props: ModifyProps) => {
         const newData = infoDetail ? { ...infoDetail, ...values } : values;
         //doSave(newData);
         //newData.keyvalue = newData.id;
-        SaveAppForm({ ...newData, keyvalue: keyvalue}).then(res => {
+        SaveAppForm({ ...newData, keyvalue: keyvalue }).then(res => {
           message.success('保存成功');
           closeDrawer();
           reload();
@@ -210,7 +210,9 @@ const Modify = (props: ModifyProps) => {
         SubmitAppForm({ ...newData, keyvalue: keyvalue }).then(res => {
           message.success('提交成功');
           closeDrawer();
-          reload();
+          // reload();
+          //刷新页面
+          location.reload();
         }).catch(res => {
           message.warn(res);
         });;
@@ -229,10 +231,12 @@ const Modify = (props: ModifyProps) => {
           message.success('提交成功');
           closeDrawer();
           //刷新待办数量
-          GetTaskCounts().then(count => {
-            localStorage.setItem('unreadCount', count);//待办数量  
-          })
-          reload();
+          // GetTaskCounts().then(count => {
+          //   localStorage.setItem('unreadCount', count);//待办数量  
+          // })
+          // reload();
+          //刷新页面
+          location.reload();
         }).catch(res => {
           message.warn(res);
         });;

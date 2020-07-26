@@ -53,6 +53,13 @@ export function SubmitForm(data): Promise<any> {
     .then(getResult as any);
 }
 
+//重新提交
+export function ReSubmitForm(data): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Contract/ReSubmitForm`, { data: objToFormdata(data) })
+    .then(getResult as any);
+}
+
 // 获取合同信息
 // export function GetContractInfo(keyvalue): Promise<LeaseContractDTO> {
 //   return request

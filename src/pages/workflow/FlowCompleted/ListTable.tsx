@@ -9,7 +9,7 @@ interface ListTableProps {
   onchange(page: any, filter: any, sort: any): any;
   reload(): void;
   data: any[];
-  view(flowId: string, id: string, instanceId: string): void;//审核退租 
+  view(code: string, id: string, instanceId: string): void;//查看 
 }
 
 function ListTable(props: ListTableProps) {
@@ -34,7 +34,7 @@ function ListTable(props: ListTableProps) {
   // };
 
   const doHandle = record => {
-    view(record.flowId, record.id, record.instanceId);
+    view(record.code, record.id, record.instanceId);
   };
 
   const columns = [
@@ -91,8 +91,7 @@ function ListTable(props: ListTableProps) {
             <a
               type="link"
               key="modify"
-              onClick={() => doHandle(record)}
-            >
+              onClick={() => doHandle(record)}>
               查看
           </a>
           </span>

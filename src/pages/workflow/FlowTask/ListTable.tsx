@@ -12,14 +12,18 @@ interface ListTableProps {
   reload(): void;
   // roomcheck(code: string, id: string, instanceId: string): void;//验房
   // billcheck(code: string, id: string, instanceId: string): void;//结算
-  // approve(code: string, id: string, instanceId: string): void;//审核退租
-  // submit(code: string, id: string, instanceId: string): void;//重新发起 
-  apartmentApprove(code: string, id: string, instanceId: string): void;//入住申请
-  apartmentSubmit(id: string, instanceId: string): void;//重新发起
+  // contractApprove(code: string, id: string, instanceId: string): void;//审核退租
+  // // submit(code: string, id: string, instanceId: string): void;//重新发起 
+  // apartmentApprove(code: string, id: string, instanceId: string): void;//入住申请
+  // apartmentSubmit(id: string, instanceId: string): void;//重新发起
+
+  handle(code: string, id: string, instanceId: string, stepName: string): void;//流程处理 
+
 }
 
+
 function ListTable(props: ListTableProps) {
-  const { onchange, loading, data, pagination, apartmentApprove, apartmentSubmit } = props;
+  const { onchange, loading, data, pagination, handle } = props;
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     onchange(pagination, filters, sorter);
   };
@@ -40,6 +44,9 @@ function ListTable(props: ListTableProps) {
   // };
 
   const doHandle = record => {
+
+    handle(record.code, record.id, record.instanceId, record.stepName);
+
     //判断步骤
     // if (record.stepName == '验房') {
     //   roomcheck(record.flowId, record.id, record.instanceId);
@@ -56,34 +63,52 @@ function ListTable(props: ListTableProps) {
     //   approve(record.flowId, record.id, record.instanceId);
     // }
 
-    switch (record.code) {
+    // switch (record.code) {
 
-      // case '验房':
-      //   roomcheck(record.flowId, record.id, record.instanceId);
-      //   break;
-      // case '财务结算':
-      //   billcheck(record.flowId, record.id, record.instanceId);
-      //   break;
-      // case '开始':
-      //   submit(record.flowId, record.id, record.instanceId);
-      //   break;
+    //   // case '验房':
+    //   //   roomcheck(record.flowId, record.id, record.instanceId);
+    //   //   break;
+    //   // case '财务结算':
+    //   //   billcheck(record.flowId, record.id, record.instanceId);
+    //   //   break;
+    //   // case '开始':
+    //   //   submit(record.flowId, record.id, record.instanceId);
+    //   //   break;
 
-      case '1001':
-        switch (record.stepName) {
-          case '招商部工作人员':
-          case '招商部领导':
-            apartmentApprove(record.code, record.id, record.instanceId);
-            break;
-          case '开始':
-            apartmentSubmit(record.id,record.instanceId);
-            break;
-          default:
-            break;
-        }
-        break;
-      default:
-        break;
-    }
+    //   case '1001':
+
+    //     switch (record.stepName) {
+    //       case '招商部工作人员':
+    //       case '招商部领导':
+    //         apartmentApprove(record.code, record.id, record.instanceId);
+    //         break;
+    //       case '开始':
+    //         apartmentSubmit(record.id, record.instanceId);
+    //         break;
+    //       default:
+    //         break;
+    //     }
+    //     break;
+
+    //   //新建合同审批
+    //   case '1003':
+    //     switch (record.stepName) {
+    //       case '招商部经理审批':
+    //       case '财务审批':
+    //         contractApprove(record.code, record.id, record.instanceId);
+    //         break;
+    //       case '开始':
+    //         //重新发起
+    //         apartmentSubmit(record.id, record.instanceId);
+    //         break;
+    //       default:
+    //         break;
+    //     }
+    //     break;
+
+    //   default:
+    //     break;
+    // }
 
   };
 

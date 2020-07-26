@@ -17,20 +17,23 @@ import { ApproveForm, RejectForm } from '../../Workflow/FlowTask/FlowTask.servic
 import styles from './style.less';
 const { TabPane } = Tabs;
 import Follow from './Follow';
+import CommentBox from '../../Workflow/CommentBox';
 
 interface ApproveProps {
   visible: boolean;
-  flowId?: string;//流程id
+  // flowId?: string;//流程id
+  code?: string;//流程类别编号
   id?: string;//任务id
   instanceId?: string;//合同id
   closeDrawer(): void;
   form: WrappedFormUtils;
   reload(): void;
+  isView: boolean;//是否是查看
 }
 
 const Approve = (props: ApproveProps) => {
-  const { reload, visible, closeDrawer, flowId, id, instanceId, form } = props;
-  const title = '合同审批';
+  const { isView, visible, closeDrawer, code, id, instanceId, form } = props;
+  const title = isView ? '单据详情' : '合同审批';
   const { getFieldDecorator } = form;
   //const [industryType, setIndustryType] = useState<any[]>([]); //行业  
   //const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
@@ -136,15 +139,20 @@ const Approve = (props: ApproveProps) => {
   const approve = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
+        setLoading(true);
         ApproveForm({
-          flowId: flowId,
+          // flowId: flowId,
+          code: code,
           id: id,
           instanceId: instanceId,
           verifyMemo: values.verifyMemo
         }).then(res => {
+          setLoading(false);
           message.success('审批成功');
           closeDrawer();
-          reload();
+          // reload();
+          //刷新页面
+          location.reload();
         });
       }
     });
@@ -153,15 +161,20 @@ const Approve = (props: ApproveProps) => {
   const reject = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
+        setLoading(true);
         RejectForm({
-          flowId: flowId,
+          // flowId: flowId,
+          code: code,
           id: id,
           instanceId: instanceId,
           verifyMemo: values.verifyMemo
         }).then(res => {
-          message.success('退回成功！');
+          setLoading(false);
+          message.success('退回成功');
           closeDrawer();
-          reload();
+          // reload();
+          //刷新页面
+          location.reload();
         });
       }
     });
@@ -196,7 +209,7 @@ const Approve = (props: ApproveProps) => {
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
       <Spin tip="数据处理中..." spinning={loading}>
         <PageHeader
-          ghost={false} 
+          ghost={false}
           title={null}
           subTitle={
             <div>
@@ -272,7 +285,7 @@ const Approve = (props: ApproveProps) => {
             <TabPane tab="基本信息" key="1">
               <Row gutter={24}>
                 <Col span={12}>
-                  <Card title="基本信息" className={styles.addcard} hoverable>
+                  <Card title="基本信息" className={styles.card} hoverable>
                     <Row gutter={24}>
                       <Col lg={12}>
                         <Form.Item label="合同编号">
@@ -358,7 +371,7 @@ const Approve = (props: ApproveProps) => {
                       </Col>
                     </Row>
                   </Card>
-                  <Card title="租客信息" className={styles.addcard} hoverable>
+                  <Card title="租客信息" className={styles.card} hoverable>
                     <Row gutter={24}>
                       <Col lg={24}>
                         <Form.Item label="承租方"  >
@@ -392,7 +405,7 @@ const Approve = (props: ApproveProps) => {
                             {infoDetail.legalPerson}
                           </Form.Item>
                         </Col>
-                      </Row>) : null} 
+                      </Row>) : null}
                     <Row gutter={24}>
                       <Col lg={12}>
                         <Form.Item label="联系电话">
@@ -459,7 +472,7 @@ const Approve = (props: ApproveProps) => {
 
               {
                 chargeFeeList ? chargeFeeList.map((k, index) => (
-                  <Card title={'费用条款' + (index + 1)} className={styles.addcard} hoverable>
+                  <Card title={'费用条款' + (index + 1)} className={styles.card} hoverable>
                     <Row gutter={24}>
                       <Col lg={4}>
                         <Form.Item label="开始时间"  >
@@ -586,11 +599,11 @@ const Approve = (props: ApproveProps) => {
             <TabPane tab="租金明细" key="3">
               <ResultList
                 chargeData={chargeData}
-                className={styles.addcard}
+                className={styles.card}
               ></ResultList>
             </TabPane>
             <TabPane tab="其他条款" key="4">
-              <Card className={styles.addcard}    hoverable>
+              <Card className={styles.card} hoverable>
                 <Row gutter={24}>
                   <Col lg={24}>
                     <Form.Item label="&nbsp;">
@@ -615,13 +628,24 @@ const Approve = (props: ApproveProps) => {
             </TabPane>
           </Tabs>
           <Card title="审核意见" className={styles.addcard} hoverable>
-            <Form.Item label="">
+            <CommentBox instanceId={instanceId} />
+            {/* <Form.Item label="">
               {getFieldDecorator('verifyMemo', {
                 rules: [{ required: true, message: '请输入审核意见' }]
               })(
                 <Input.TextArea rows={4} />
               )}
-            </Form.Item>
+            </Form.Item> */}
+
+            {!isView ?
+              < Form.Item label="">
+                {getFieldDecorator('verifyMemo', {
+                  rules: [{ required: true, message: '请输入审核意见' }]
+                })(
+                  <Input.TextArea rows={4} />
+                )}
+              </Form.Item>
+              : null}
           </Card>
         </Form>
       </Spin>
@@ -655,12 +679,17 @@ const Approve = (props: ApproveProps) => {
         <Button onClick={closeDrawer} style={{ marginRight: 8 }}>
           关闭
           </Button>
-        <Button onClick={reject} type='danger' style={{ marginRight: 8 }}>
-          退回
+
+        {!isView ?
+          <>
+            <Button onClick={reject} type='danger' style={{ marginRight: 8 }}>
+              退回
         </Button>
-        <Button type="primary" onClick={approve}>
-          通过
+            <Button type="primary" onClick={approve}>
+              通过
         </Button>
+          </>
+          : null}
       </div>
     </Drawer>
   );

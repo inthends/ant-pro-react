@@ -8,8 +8,8 @@ import ListTable from './ListTable';
 // import { getResult } from '@/utils/networkUtils';
 import Add from './Add';
 import Modify from './Modify';
-import Detail from './Detail';
-// import Approve from './Approve';
+// import Detail from './Detail';
+import Approve from './Approve';
 import Change from './Change';
 import Renewal from './Renewal';
 import Withdrawal from './Withdrawal';
@@ -25,7 +25,7 @@ import Atlas from './Atlas/Atlas';
 function Main() {
   const [addVisible, setAddVisible] = useState<boolean>(false);//新建
   const [modifyVisible, setModifyVisible] = useState<boolean>(false);//修改
-  const [detailVisible, setDetailVisible] = useState<boolean>(false);//查看
+  const [viewVisible, setViewVisible] = useState<boolean>(false);//查看
   const [changeVisible, setChangeVisible] = useState<boolean>(false);//变更
   const [renewalVisible, setRenewalVisible] = useState<boolean>(false);//续租 
   const [withdrawalVisible, setWithdrawalVisible] = useState<boolean>(false);//退租  
@@ -59,12 +59,12 @@ function Main() {
     setChargeId(chargeId);
   };
 
-  const closeDetailDrawer = () => {
-    setDetailVisible(false);
-  };
+  // const closeDetailDrawer = () => {
+  //   setDetailVisible(false);
+  // };
 
   const showDetailDrawer = (id?, chargeId?) => {
-    setDetailVisible(true);
+    setViewVisible(true);
     setId(id);
     setChargeId(chargeId);
   };
@@ -276,7 +276,7 @@ function Main() {
                 合同
               </Button>
             </div>
-            <Card className={styles.card}  hoverable>
+            <Card className={styles.card} hoverable>
               <Row>
                 <Col sm={4} xs={24}>
                   <Info title="新建待修改" value={totalInfo ? totalInfo.newModify : 0} bordered />
@@ -325,23 +325,33 @@ function Main() {
         id={id}
         reload={() => initLoadData(search)}
       />
+
       <Modify
         visible={modifyVisible}
         closeDrawer={closeModifyDrawer}
         // treeData={treeData}
-        id={id}
-        chargeId={chargeId}
+        instanceId={id}
+        isReSubmit={false}
+        // chargeId={chargeId}
         reload={() => initLoadData(search)}
       // choose={showChoose}
       />
 
-      <Detail
+      <Approve
+        visible={viewVisible}
+        closeDrawer={() => setViewVisible(false)}
+        isView={true}
+        instanceId={id}
+        reload={() => initLoadData(search)}
+      />
+
+      {/* <Detail
         visible={detailVisible}
         closeDrawer={closeDetailDrawer}
         id={id}
         chargeId={chargeId}
         reload={() => initLoadData(search)}
-      />
+      /> */}
 
       {/* <ChooseUser
         visible={userVisible}

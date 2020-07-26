@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import ResultList from './ResultList';
 import {
   RemoveFile, GetFilesData, SubmitForm, SaveForm, GetFeeItemsByUnitId,
-  GetCharge, GetContractInfo, GetModifyChargeDetail, GetFollowCount
+  GetCharge, GetContractInfo, GetModifyChargeDetail, GetFollowCount, ReSubmitForm
 } from './Main.service';
 import { GetOrgTreeSimple, GetAsynChildBuildingsSimple, GetCommonItems, GetUserList } from '@/services/commonItem';
 import { GetCustomerInfo, CheckContractCustomer, GetContractCustomerList } from '../../Resource/PStructUser/PStructUser.service';
@@ -22,9 +22,15 @@ const { TabPane } = Tabs;
 const { TextArea } = Input;
 
 interface ModifyProps {
+
+  isReSubmit: boolean;
+  instanceId?: string;//实例id
+  taskId?: string;//任务id
+
   visible: boolean;
-  id?: string;//合同id
-  chargeId?: string;//合同条款id
+  // id?: string;//合同id
+  // chargeId?: string;//合同条款id
+
   closeDrawer(): void;
   form: WrappedFormUtils;
   reload(): void;
@@ -33,8 +39,8 @@ interface ModifyProps {
 };
 
 const Modify = (props: ModifyProps) => {
-  const title = '修改合同';
-  const { visible, closeDrawer, id, form, chargeId, reload } = props;
+  const title = '合同详情';
+  const { taskId, instanceId, isReSubmit, visible, form, closeDrawer, reload } = props;
   const { getFieldDecorator } = form;
   //const [industryType, setIndustryType] = useState<any[]>([]); //行业  
   //const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
@@ -95,9 +101,9 @@ const Modify = (props: ModifyProps) => {
   // 打开抽屉时初始化
   useEffect(() => {
     if (visible) {
-      if (id) {
+      if (instanceId) {
         setLoading(true);
-        GetContractInfo(id).then((tempInfo) => {
+        GetContractInfo(instanceId).then((tempInfo) => {
           //处理一下房间
           let rooms: any[] = [];
           if (tempInfo != null && tempInfo.houseList != null) {
@@ -117,7 +123,7 @@ const Modify = (props: ModifyProps) => {
           setCount(tempInfo.followCount);
 
           //获取条款
-          GetCharge(chargeId).then((charge: ChargeDetailDTO) => {
+          GetCharge(tempInfo.chargeId).then((charge: ChargeDetailDTO) => {
             setContractCharge(charge.contractCharge || {});
             setChargeFeeList(charge.chargeFeeList || []);
             // setChargefee(charge.chargeFee || {});
@@ -129,7 +135,7 @@ const Modify = (props: ModifyProps) => {
           });
 
           //附件
-          GetFilesData(id).then(res => {
+          GetFilesData(instanceId).then(res => {
             setFileList(res || []);
           });
 
@@ -374,6 +380,7 @@ const Modify = (props: ModifyProps) => {
     });
   };
 
+
   //提交审核
   const submit = () => {
     //弹出选人
@@ -416,7 +423,7 @@ const Modify = (props: ModifyProps) => {
 
         //合同信息
         let Contract: htLeasecontract = {};
-        Contract.id = id;
+        Contract.id = instanceId;
         Contract.no = values.no;
         Contract.follower = values.follower;
         Contract.followerId = values.followerId;
@@ -450,8 +457,8 @@ const Modify = (props: ModifyProps) => {
           // ...chargefee,
           // ...chargeincre,
           // ...chargefeeoffer,
-          keyvalue: id,
-          chargeId: chargeId,
+          keyvalue: instanceId,
+          chargeId: infoDetail.chargeId,
           room: values.room,
           termJson: TermJson,
           // RateJson: RateJson,
@@ -461,10 +468,114 @@ const Modify = (props: ModifyProps) => {
           // PropertyFeeResult: JSON.stringify(propertyData)
         }).then(res => {
           if (res.flag) {
+            setLoading(false);
             message.success('提交成功');
             closeDrawer();
-            reload();
+            // reload(); 
+            //刷新页面
+            location.reload();
+          } else {
+            message.warning(res.message);
             setLoading(false);
+          }
+        });
+      }
+    });
+  };
+
+  //重新提交
+  const resubmit = () => {
+    //弹出选人
+    //choose();
+    //save(); 
+    //发起审批
+    form.validateFields((errors, values) => {
+      if (!errors) {
+        //是否生成租金明细
+        if (!isCal) {
+          // Modal.warning({
+          //   title: '提示',
+          //   content: '请生成租金明细！',
+          // });
+          message.warning('请生成租金明细！');
+          return;
+        }
+
+        setLoading(true);
+
+        //保存合同数据
+        let ContractCharge: HtLeasecontractcharge = {};
+        //费用条款-基本条款 
+        // ContractCharge.depositFeeItemId = values.depositFeeItemId;
+        // ContractCharge.depositFeeItemName = values.depositFeeItemName;
+        ContractCharge.leaseArea = values.leaseArea;
+        // ContractCharge.deposit = values.deposit;
+        // ContractCharge.depositUnit = values.depositUnit;
+        // ContractCharge.startDate = values.billingDate.format('YYYY-MM-DD');
+        // ContractCharge.endDate = values.contractEndDate.format('YYYY-MM-DD');
+        // ContractCharge.payDate = values.contractStartDate.format('YYYY-MM-DD'); 
+        // ContractCharge.calcPrecision = values.calcPrecision;
+        ContractCharge.lateFee = values.lateFee;
+        ContractCharge.lateMethod = values.lateMethod;
+        if (values.lateDate != null)
+          ContractCharge.lateDate = values.lateDate.format('YYYY-MM-DD');
+        // ContractCharge.propertyFeeId = values.propertyFeeId;
+        // ContractCharge.propertyFeeName = values.propertyFeeName;
+
+        //合同信息
+        let Contract: htLeasecontract = {};
+        Contract.id = instanceId;
+        Contract.no = values.no;
+        Contract.follower = values.follower;
+        Contract.followerId = values.followerId;
+        Contract.leaseSize = values.leaseSize;
+        Contract.signingDate = values.signingDate.format('YYYY-MM-DD');
+        Contract.startDate = values.startDate.format('YYYY-MM-DD');
+        Contract.endDate = values.endDate.format('YYYY-MM-DD');
+        // Contract.calcPrecision = values.calcPrecision;
+        // Contract.calcPrecisionMode = values.calcPrecisionMode;
+        Contract.customer = values.customer;
+        Contract.customerId = values.customerId;
+        Contract.customerType = values.customerType;
+        Contract.industry = values.industry;
+        //Contract.industryId = values.industryId; 
+        Contract.legalPerson = values.legalPerson;
+        Contract.linkMan = values.linkMan;
+        Contract.linkPhone = values.linkPhone;
+        Contract.address = values.address;
+        Contract.signer = values.signer;
+        Contract.signerId = values.signerId;
+        // Contract.lateFee = values.lateFee;
+        // Contract.lateFeeUnit = values.lateFeeUnit;
+        // Contract.maxLateFee = values.maxLateFee;
+        // Contract.maxLateFeeUnit = values.maxLateFeeUnit;
+        Contract.billUnitId = values.billUnitId;
+        Contract.organizeId = values.organizeId;
+        Contract.memo = values.memo;
+        ReSubmitForm({
+          ...Contract,
+          ...ContractCharge,
+          // ...chargefee,
+          // ...chargeincre,
+          // ...chargefeeoffer,
+          keyvalue: instanceId,
+          chargeId: infoDetail.chargeId,
+          room: values.room,
+          termJson: TermJson,
+          // RateJson: RateJson,
+          // RebateJson: RebateJson,
+          // DepositResult: JSON.stringify(depositData),
+          ChargeFeeResult: JSON.stringify(chargeData),
+          taskId: taskId
+          // PropertyFeeResult: JSON.stringify(propertyData)
+        }).then(res => {
+          if (res.flag) {
+            setLoading(false);
+            message.success('提交成功');
+            closeDrawer();
+            // reload();
+            //刷新页面
+            location.reload();
           } else {
             message.warning(res.message);
             setLoading(false);
@@ -491,7 +602,7 @@ const Modify = (props: ModifyProps) => {
         //保存合同数据 
         //合同信息
         let Contract: htLeasecontract = {};
-        Contract.id = id;
+        Contract.id = instanceId;
         Contract.no = values.no;
         Contract.follower = values.follower;
         Contract.followerId = values.followerId;
@@ -542,8 +653,8 @@ const Modify = (props: ModifyProps) => {
           // ...chargefee,
           // ...chargeincre,
           // ...chargefeeoffer,
-          keyvalue: id,
-          chargeId: chargeId,
+          keyvalue: instanceId,
+          chargeId: infoDetail.chargeId,
           room: values.room,
           termJson: TermJson,
           // RateJson: RateJson,
@@ -736,7 +847,7 @@ const Modify = (props: ModifyProps) => {
       visible={visible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
       <PageHeader
-        ghost={false} 
+        ghost={false}
         title={null}
         subTitle={
           <div>
@@ -1341,7 +1452,7 @@ const Modify = (props: ModifyProps) => {
                     <div className="clearfix">
                       <Upload
                         //accept='.doc,.docx,.pdf,image/*'
-                        action={process.env.basePath + '/Contract/Upload?keyvalue=' + id}
+                        action={process.env.basePath + '/Contract/Upload?keyvalue=' + instanceId}
                         fileList={fileList}
                         //listType="picture-card"
                         listType='picture'
@@ -1379,7 +1490,9 @@ const Modify = (props: ModifyProps) => {
         <Button onClick={save} style={{ marginRight: 8 }}>
           暂存
           </Button>
-        <Button onClick={submit} type="primary">
+        <Button
+          onClick={isReSubmit ? resubmit : submit}
+          type="primary">
           提交
           </Button>
       </div>
@@ -1405,9 +1518,9 @@ const Modify = (props: ModifyProps) => {
       <Follow
         visible={followVisible}
         closeDrawer={closeFollowDrawer}
-        id={id}
+        id={instanceId}
         reload={() => {
-          GetFollowCount(id).then(res => {
+          GetFollowCount(instanceId).then(res => {
             setCount(res);
             // setNewFlow(res.newFollow);
             setLoading(false);

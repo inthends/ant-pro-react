@@ -25,7 +25,7 @@ interface ApproveProps {
 }
 
 const Approve = (props: ApproveProps) => {
-  const { isView, reload, visible, closeDrawer, code, id, instanceId, form } = props;
+  const { isView, visible, closeDrawer, code, id, instanceId, form } = props;
   const title = isView ? '单据详情' : '入住审批';
   const { getFieldDecorator } = form;
   const [infoDetail, setInfoDetail] = useState<any>({});
@@ -178,16 +178,17 @@ const Approve = (props: ApproveProps) => {
   const reject = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
+        setLoading(true);
         RejectForm({
           code: code,
           id: id,
           instanceId: instanceId,
           verifyMemo: values.verifyMemo
         }).then(res => {
+          setLoading(false);
           message.success('退回成功');
           closeDrawer();
-          // reload();
-
+          // reload(); 
           //刷新页面
           location.reload();
 
@@ -201,20 +202,21 @@ const Approve = (props: ApproveProps) => {
   const approve = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
+        setLoading(true);
         ApproveForm({
           code: code,
           id: id,
           instanceId: instanceId,
           verifyMemo: values.verifyMemo
         }).then(res => {
+          setLoading(false);
           message.success('审批成功');
           closeDrawer();
           //刷新待办数量
           // GetTaskCounts().then(count => {
           //   localStorage.setItem('unreadCount', count);//待办数量  
           // })
-          //reload();
-
+          //reload(); 
           //刷新页面
           location.reload();
 

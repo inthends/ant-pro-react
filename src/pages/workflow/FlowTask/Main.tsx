@@ -5,7 +5,9 @@ import React, { useEffect, useState } from 'react';
 import ListTable from './ListTable';
 import { GetDataList } from './FlowTask.service';
 //合同审批
-// import ContractApprove from '../../Contract/List/Approve';
+import ContractApprove from '../../Contract/List/Approve';
+import ContractSubmit from '../../Contract/List/Modify';
+
 // //合同退租验房
 // import RoomCheck from '../../Contract/List/RoomCheck';
 // //合同退租结算
@@ -37,14 +39,15 @@ const Main = () => {
   const [data, setData] = useState<any[]>([]);
   const [pagination, setPagination] = useState<PaginationConfig>(new DefaultPagination());
   // const [flowId, setFlowId] = useState<string>();
-  const [code, setCode] = useState<string>();
+  const [code, setCode] = useState<string>('');
   const [id, setId] = useState<string>();
   const [instanceId, setInstanceId] = useState<string>();
 
   // const [roomcheckVisible, setRoomCheckVisible] = useState<boolean>(false);
   // const [billcheckVisible, setBillCheckVisible] = useState<boolean>(false);
 
-  // const [contractVisible, setContractVisible] = useState<boolean>(false);
+  const [contractVisible, setContractVisible] = useState<boolean>(false);
+  const [contractSubmitVisible, setContractSubmitVisible] = useState<boolean>(false);
   // const [receiveVisible, setReceiveVisible] = useState<boolean>(false);
   // const [receiveSubmitVisible, setReceiveSubmitVisible] = useState<boolean>(false);
 
@@ -124,7 +127,7 @@ const Main = () => {
 
 
   //重新发起
-  const showApartmentSubmitDrawer = (id,instanceId) => {
+  const showApartmentSubmitDrawer = (id, instanceId) => {
     setId(id);
     setInstanceId(instanceId);
     setApartmentSubmitVisible(true);
@@ -135,7 +138,21 @@ const Main = () => {
   // }
 
 
-  //approve
+  //合同审批
+  const showContractApproveDrawer = (code, id, instanceId) => {
+    setCode(code);
+    setId(id);
+    setInstanceId(instanceId);
+    setContractVisible(true);
+  }
+
+  //重新发起
+  const showContractSubmitDrawer = (id, instanceId) => {
+    setId(id);
+    setInstanceId(instanceId);
+    setContractSubmitVisible(true);
+  }
+
   // const closeApproveDrawer = () => {
   //   if (flowId == 'b5011d6f-d386-4ed3-a2ab-2f2eb5597b7f'
   //     || flowId == 'b6011d6f-d386-4ed3-a2ab-2f2eb5597b7f'
@@ -211,6 +228,59 @@ const Main = () => {
   //   setInstanceId(instanceId);
   // };
 
+
+
+  const showDrawer = (code, id, instanceId, stepName) => {
+    switch (code) {
+      // case '验房':
+      //   roomcheck(record.flowId, record.id, record.instanceId);
+      //   break;
+      // case '财务结算':
+      //   billcheck(record.flowId, record.id, record.instanceId);
+      //   break;
+      // case '开始':
+      //   submit(record.flowId, record.id, record.instanceId);
+      //   break;
+
+      case '1001':
+
+        switch (stepName) {
+          case '招商部工作人员':
+          case '招商部领导':
+            showApartmentApproveDrawer(code, id, instanceId);
+            break;
+          case '开始':
+            showApartmentSubmitDrawer(id, instanceId);
+            break;
+          default:
+            break;
+        }
+        break;
+
+      //新建合同审批
+      case '1003':
+        switch (stepName) {
+          case '招商部经理审批':
+          case '财务审批':
+            showContractApproveDrawer(code, id, instanceId);
+            break;
+          case '开始':
+            //重新发起 
+            showContractSubmitDrawer(id, instanceId);
+            break;
+          default:
+            break;
+        }
+        break;
+
+      default:
+        break;
+    }
+
+  }
+
+
+
   return (
     <Layout style={{ height: '100%' }}>
       <Content style={{ padding: '0 20px', overflow: 'auto' }}>
@@ -245,10 +315,21 @@ const Main = () => {
           reload={() => initLoadData(search)}
           // roomcheck={showRoomCheckDrawer}
           // billcheck={showBillCheckDrawer}
-          // approve={showApproveDrawer}
+          //contractApprove={showContractApproveDrawer}
           // submit={showSubmitDrawer}
-          apartmentApprove={showApartmentApproveDrawer}
-          apartmentSubmit={showApartmentSubmitDrawer}
+          //apartmentApprove={showApartmentApproveDrawer}
+          //apartmentSubmit={showApartmentSubmitDrawer} 
+          handle={showDrawer}
+
+        />
+
+        <ApartmentSubmit
+          visible={apartmentSubmitVisible}
+          closeDrawer={() => setApartmentSubmitVisible(false)}
+          instanceId={instanceId}
+          taskId={id}
+          reload={() => initLoadData(search)}
+          isReSubmit={true}
         />
 
         <ApartmentApprove
@@ -262,13 +343,24 @@ const Main = () => {
           reload={() => initLoadData(search)}
         />
 
-        <ApartmentSubmit
-          visible={apartmentSubmitVisible}
-          closeDrawer={() => setApartmentSubmitVisible(false)}
+
+        <ContractSubmit
+          visible={contractSubmitVisible}
+          closeDrawer={() => setContractSubmitVisible(false)}
           instanceId={instanceId}
           taskId={id}
           reload={() => initLoadData(search)}
           isReSubmit={true}
+        />
+
+        <ContractApprove
+          visible={contractVisible}
+          closeDrawer={() => setContractVisible(false)}
+          isView={false}
+          code={code}
+          id={id}
+          instanceId={instanceId}
+          reload={() => initLoadData(search)}
         />
 
         {/*  <RoomCheck
@@ -288,15 +380,7 @@ const Main = () => {
           instanceId={instanceId}
           reload={() => initLoadData(search)}
         />
-
-        <ContractApprove
-          visible={contractVisible}
-          closeDrawer={closeApproveDrawer}
-          flowId={flowId}
-          id={id}
-          instanceId={instanceId}
-          reload={() => initLoadData(search)}
-        />
+ 
 
         <ReceiveReSubmit
           visible={receiveSubmitVisible}

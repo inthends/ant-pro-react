@@ -1,4 +1,4 @@
-
+//废弃，跟审批查看共用一个
 import { Icon, Tooltip, Spin, Upload, Tag, Divider, PageHeader, List, Tabs, Button, Card, Col, Drawer, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import {

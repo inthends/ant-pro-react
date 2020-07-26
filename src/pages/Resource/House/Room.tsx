@@ -325,7 +325,7 @@ const Room = (props: RoomProps) => {
       visible={modifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
-      <Card className={styles.card}  hoverable>
+      <Card className={styles.card} hoverable>
         {modifyVisible ? (
           <Form layout="vertical" hideRequiredMark>
             <Row gutter={24}>
@@ -500,6 +500,20 @@ const Room = (props: RoomProps) => {
                   </Form.Item>
                 </Col>
                 <Col lg={12}>
+                  <Form.Item label="业主电话">
+                    {getFieldDecorator('ownerPhone', {
+                      initialValue: infoDetail.ownerPhone,
+                    })(
+                      <Input placeholder="自动带出业主电话" readOnly />
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row>
+            ) : null}
+
+            {type == 4 || type == 5 ? (
+              <Row gutter={24}> 
+                <Col lg={12}>
                   <Form.Item label={infoDetail.tenantName ? <div>住户名称 <a onClick={() => { showCustomerDrawer(infoDetail.tenantId, 2) }}>编辑</a></div> : '住户名称'}>
                     {getFieldDecorator('tenantName', {
                       initialValue: infoDetail.tenantName,
@@ -521,20 +535,7 @@ const Room = (props: RoomProps) => {
                     )}
                   </Form.Item>
                 </Col>
-              </Row>
-            ) : null}
 
-            {type == 4 || type == 5 ? (
-              <Row gutter={24}>
-                <Col lg={12}>
-                  <Form.Item label="业主电话">
-                    {getFieldDecorator('ownerPhone', {
-                      initialValue: infoDetail.ownerPhone,
-                    })(
-                      <Input placeholder="自动带出业主电话" readOnly />
-                    )}
-                  </Form.Item>
-                </Col>
                 <Col lg={12}>
                   <Form.Item label="住户电话">
                     {getFieldDecorator('tenantPhone', {
