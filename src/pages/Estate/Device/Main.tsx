@@ -1,11 +1,11 @@
 import { DefaultPagination } from "@/utils/defaultSetting";
-import { Button, Icon, Input, Layout } from "antd";
+import { message, Modal, Button, Icon, Input, Layout } from "antd";
 import { PaginationConfig } from "antd/lib/table";
 import React, { useEffect, useState } from "react";
 import ListTable from "./ListTable";
 import Modify from "./Modify";
 import { getResult } from '@/utils/networkUtils';
-import { GetTypes, GetDataList } from "./Main.service";
+import { CreateQrCodeFrom, GetTypes, GetDataList } from "./Main.service";
 import { GetQuickSimpleTreeAllForDeskService } from '@/services/commonItem';
 // import { SiderContext } from '../../SiderContext';
 // import LeftTree from '../LeftTree';
@@ -117,6 +117,27 @@ const Device = () => {
   //   setItemId(itemId);
   // };
 
+  //生成二维码
+  const CreateQrCode = () => {
+    setLoading(true);
+    Modal.confirm({
+      title: '请确认',
+      content: `您是否要生成二维码？`,
+      okText: '确认',
+      cancelText: '取消',
+      onOk: () => {
+        CreateQrCodeFrom().then(() => {
+          setLoading(false);
+          message.success('生成成功，请到服务器wwwroot/upload/Device目录下查看');
+        }).catch(() => {
+        });;
+      },
+      onCancel: () => {
+        setLoading(false);
+      }
+    });
+  }
+
   return (
     <Layout style={{ height: "100%" }}>
 
@@ -165,10 +186,16 @@ const Device = () => {
             placeholder="请输入要查询的关键词"
             style={{ width: 200 }}
           />
+          <Button type="primary"
+            style={{ float: 'right', marginLeft: '10px' }}
+            onClick={() => { CreateQrCode() }} >
+            <Icon type="qrcode" />
+            二维码
+           </Button>
 
           <Button
             type="primary"
-            style={{ float: "right" }}
+            style={{ float: 'right', marginLeft: '10px' }}
             onClick={() => showDrawer()}
           >
             <Icon type="plus" />

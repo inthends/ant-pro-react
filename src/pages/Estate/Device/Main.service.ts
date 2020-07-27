@@ -55,3 +55,8 @@ export function GetRepairListJson(data): Promise<any> {
 }
 
 
+//生成二维码
+export function CreateQrCodeFrom(): Promise<any> {
+  return request.post(process.env.basePath + `/Device/CreateQrCodeFrom`).then(getResult as any);
+}
+

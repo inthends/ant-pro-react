@@ -42,6 +42,19 @@ function ListTable(props: ListTableProps) {
 
   const columns = [
     {
+      title: "设备名称",
+      dataIndex: "name",
+      key: "name",
+      width: 250,
+      fixed: 'left'
+    },
+    {
+      title: "设备编号",
+      dataIndex: "code",
+      key: "code",
+      width: 200
+    },
+    {
       title: "所属机构",
       dataIndex: "organizeName",
       key: "organizeName",
@@ -53,18 +66,8 @@ function ListTable(props: ListTableProps) {
       key: "typeName",
       width: 150
     },
-    {
-      title: "设备名称",
-      dataIndex: "name",
-      key: "name",
-      width: 150
-    },
-    {
-      title: "设备编号",
-      dataIndex: "code",
-      key: "code",
-      width: 100
-    },
+
+   
     {
       title: "规格型号",
       dataIndex: "modelNo",
@@ -100,6 +103,7 @@ function ListTable(props: ListTableProps) {
       title: "状态",
       dataIndex: "status",
       key: "status",
+      align:'center',
       width: 80,
       render: (text, record) => {
         switch (text) {

@@ -128,7 +128,7 @@ function Main() {
     });
   };
 
-  const initLoadData = (searchText,org) => {
+  const initLoadData = (searchText, org) => {
     setSearch(searchText);
     const queryJson = {
       // OrganizeId: org.organizeId,
@@ -146,6 +146,7 @@ function Main() {
 
   //生成二维码
   const CreateQrCode = () => {
+    setLoading(true);
     Modal.confirm({
       title: '请确认',
       content: `您是否要生成二维码？`,
@@ -153,10 +154,15 @@ function Main() {
       cancelText: '取消',
       onOk: () => {
         CreateQrCodeFrom().then(() => {
+          setLoading(false);
           message.success('生成成功，请到服务器wwwroot/upload/Area目录下查看');
         }).catch(() => {
         });;
-      },
+      }, 
+      onCancel: () => {
+        setLoading(false);
+      }
+
     });
   }
 
@@ -189,7 +195,7 @@ function Main() {
             style={{ float: 'right', marginLeft: '10px' }}
             onClick={() => { CreateQrCode() }} >
             <Icon type="qrcode" />
-            生成二维码
+            二维码
            </Button>
 
           <Button type="primary"
@@ -209,7 +215,7 @@ function Main() {
           pagination={pagination}
           data={data}
           modify={showDrawer}
-          reload={() => initLoadData(search,organize)}
+          reload={() => initLoadData(search, organize)}
         />
       </Content>
 
@@ -219,7 +225,7 @@ function Main() {
         organizeId={organize.id}
         data={currData}
         treeData={treeData}
-        reload={() => initLoadData(search,organize)}
+        reload={() => initLoadData(search, organize)}
       />
     </Layout>
   );

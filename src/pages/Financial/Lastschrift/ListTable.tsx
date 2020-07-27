@@ -126,8 +126,8 @@ function ListTable(props: ListTableProps) {
       overlay={
         <Menu onClick={({ key }) => editAndDelete(key, item)}>
           <Menu.Item key="export">导出</Menu.Item>
-          <Menu.Item key="check">对账</Menu.Item>
-          {/* {item.status == 0 ? <Menu.Item key="check">对账</Menu.Item> : null} */}
+          {/* <Menu.Item key="check">对账</Menu.Item> */}
+          {item.status == 0 ? <Menu.Item key="check">对账</Menu.Item> : null}
         </Menu>}>
       <a>
         更多 <Icon type="down" />
@@ -156,7 +156,7 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'status',
       key: 'status',
       align: 'center',
-      width: 70,
+      width: 90,
       render: (text, record) => {
         switch (text) {
           case 0:
@@ -174,14 +174,14 @@ function ListTable(props: ListTableProps) {
       title: '是否审核',
       dataIndex: 'ifVerify',
       key: 'ifVerify',
-      width: 75,
+      width: 90,
       render: val => val ? '已审核' : '未审核'
     },
     {
       title: '审核人',
       dataIndex: 'verifyPerson',
       key: 'verifyPerson',
-      width: 80,
+      width: 90,
     },
     {
       title: '审核日期',
