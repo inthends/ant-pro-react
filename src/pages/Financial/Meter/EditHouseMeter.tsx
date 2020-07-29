@@ -116,7 +116,7 @@ const EditHouseMeter = (props: EditHouseMeterProps) => {
   const [isFormula, setIsFormula] = useState<boolean>(false);
   return (
     <Modal
-      title="编辑房屋费项"
+      title="编辑房屋费表"
       visible={modifyVisible}
       okText="确认"
       cancelText="取消"
@@ -126,13 +126,13 @@ const EditHouseMeter = (props: EditHouseMeterProps) => {
       }}
       destroyOnClose={true}
       bodyStyle={{ background: '#f6f7fb' }}
-      width='600px'
+      width='700px'
     >
       <Card  hoverable>
         <Form layout="vertical" hideRequiredMark>
           {/* <Spin tip="数据处理中..." spinning={loading}> */}
           <Row gutter={24}>
-            <Col span={8}>
+            <Col span={12}>
               <Form.Item label="费表名称">
                 {/* {getFieldDecorator('meterName', {
                   initialValue: infoDetail.metername,
@@ -145,7 +145,7 @@ const EditHouseMeter = (props: EditHouseMeterProps) => {
 
               </Form.Item>
             </Col>
-            <Col span={8}>
+            <Col span={12}>
               <Form.Item label="费表编号"   >
                 {/* {getFieldDecorator('meterCode', {
                   initialValue: infoDetail.meterCode,
@@ -156,17 +156,11 @@ const EditHouseMeter = (props: EditHouseMeterProps) => {
                 {infoDetail.meterCode}
               </Form.Item>
             </Col>
-            <Col span={8}>
-              <Form.Item label="房产编号"   >
-                {/* {getFieldDecorator('unitId', {
-                  initialValue: infoDetail.unitId,
-                  rules: [{ required: true, message: '请输入房屋编号' }],
-                })(
-                  <Input style={{ width: '100%' }} readOnly />
-                )} */}
+            {/* <Col span={8}>
+              <Form.Item label="房产编号"   > 
                 {infoDetail.unitId}
               </Form.Item>
-            </Col>
+            </Col> */}
           </Row>
           <Row gutter={24}>
             <Col  >
@@ -183,9 +177,8 @@ const EditHouseMeter = (props: EditHouseMeterProps) => {
             </Col>
 
           </Row>
-          <Row gutter={24}>
-
-            <Col span={8}>
+          <Row gutter={12}> 
+            <Col span={4}>
               <Form.Item required label="单价"  >
                 {getFieldDecorator('meterPrice', {
                   initialValue: infoDetail.meterPrice == null ? 1 : infoDetail.meterPrice,
@@ -196,7 +189,7 @@ const EditHouseMeter = (props: EditHouseMeterProps) => {
               </Form.Item>
             </Col>
 
-            <Col span={8}>
+            <Col span={4}>
               <Form.Item required label="倍率"  >
                 {getFieldDecorator('meterZoom', {
                   initialValue: infoDetail.meterZoom == null ? 1 : infoDetail.meterZoom,
@@ -206,7 +199,7 @@ const EditHouseMeter = (props: EditHouseMeterProps) => {
                 )}
               </Form.Item>
             </Col>
-            <Col span={8}>
+            <Col span={4}>
               <Form.Item required label="量程"   >
                 {getFieldDecorator('meterRange', {
                   initialValue: infoDetail.meterRange == null ? 9999 : infoDetail.meterRange,
@@ -216,10 +209,9 @@ const EditHouseMeter = (props: EditHouseMeterProps) => {
                 )}
               </Form.Item>
             </Col>
-          </Row>
-          <Row gutter={24}>
+          
 
-            <Col span={8}>
+            <Col span={4}>
               <Form.Item required label="容量"  >
                 {getFieldDecorator('meterCapacity', {
                   initialValue: infoDetail.meterCapacity == null ? 0 : infoDetail.meterCapacity,
@@ -229,7 +221,7 @@ const EditHouseMeter = (props: EditHouseMeterProps) => {
               </Form.Item>
             </Col>
 
-            <Col span={8}>
+            <Col span={4}>
               <Form.Item required label="最小用量"  >
                 {getFieldDecorator('minUsage', {
                   initialValue: infoDetail.minUsage == null ? 0 : infoDetail.minUsage,
@@ -238,7 +230,7 @@ const EditHouseMeter = (props: EditHouseMeterProps) => {
                 )}
               </Form.Item>
             </Col>
-            <Col span={8}>
+            <Col span={4}>
               <Form.Item required label="最大用量"   >
                 {getFieldDecorator('maxUsage', {
                   initialValue: infoDetail.maxUsage == null ? 0 : infoDetail.maxUsage,

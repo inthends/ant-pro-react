@@ -503,9 +503,9 @@ function Main() {
             //   setMeterSearchParams(params);
             // }}
             >
-              <Select placeholder="=请选择="
+              <Select placeholder="=请选择费表类型="
                 allowClear={true}
-                style={{ width: '120px', marginRight: '5px' }}
+                style={{ width: '164px', marginRight: '5px' }}
                 onChange={value => {
                   // var params = Object.assign({}, meterSearchParams, { meterkind: value });
                   // setMeterSearchParams(params); 

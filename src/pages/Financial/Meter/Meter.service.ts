@@ -56,8 +56,8 @@ export function GetReceivablesFeeItemTreeJson(): Promise<any[]> {
 }
 
 //获取费表装表明细
-export function GetPageListWithMeterID(data): Promise<any> {
-  return request.post(process.env.basePath + `/Meter/GetPageListWithMeterID`, { data: objToFormdata(data) }).then(getResult as any);;
+export function GetPageListWithMeterId(data): Promise<any> {
+  return request.post(process.env.basePath + `/Meter/GetPageListWithMeterId`, { data: objToFormdata(data) }).then(getResult as any);;
 }
 
 //获取费表信息

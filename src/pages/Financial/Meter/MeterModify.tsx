@@ -4,7 +4,7 @@ import { DefaultPagination } from '@/utils/defaultSetting';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { GetInfoFormJson, GetPageListWithMeterID, RemoveUnitForm, RemoveFormAll, SaveForm } from './Meter.service';
+import { GetInfoFormJson, GetPageListWithMeterId, RemoveUnitForm, RemoveFormAll, SaveForm } from './Meter.service';
 import { GetOrgs, GetCommonItems } from '@/services/commonItem';
 import styles from './style.less';
 import ChargeFeeItem from './ChargeFeeItem';
@@ -74,9 +74,9 @@ const MeterModify = (props: MeterModifyProps) => {
         setIsAdd(false);
         setLoading(true);
         GetInfoFormJson(id).then(res => {
-          setInfoDetail(res);
+          setInfoDetail(res); 
+          initMeterLoadData(meterSearch,id);
           setLoading(false);
-          initMeterLoadData(meterSearch);
 
         });
       } else {
@@ -101,10 +101,10 @@ const MeterModify = (props: MeterModifyProps) => {
   }
 
   //房屋费表初始化
-  const initMeterLoadData = (search) => {
+  const initMeterLoadData = (search,meterId) => {
     const queryJson = {
       keyword: search,
-      MeterId: keyvalue
+      MeterId: meterId
     }
     const sidx = 'meterCode';
     const sord = 'asc';
@@ -146,7 +146,7 @@ const MeterModify = (props: MeterModifyProps) => {
     // setMeterLoading(true);
     data.sidx = data.sidx || 'meterCode';
     data.sord = data.sord || 'asc';
-    return GetPageListWithMeterID(data).then(res => {
+    return GetPageListWithMeterId(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setMeterPagination(pagesetting => {
         return {
@@ -200,7 +200,7 @@ const MeterModify = (props: MeterModifyProps) => {
       title: '表编号',
       dataIndex: 'meterCode',
       key: 'meterCode',
-      width: 180,
+      width: 280,
       sorter: true
     },
     {
@@ -280,7 +280,7 @@ const MeterModify = (props: MeterModifyProps) => {
                 okText: '确定',
                 onOk: () => {
                   RemoveUnitForm(record.unitMeterId).then(res => {
-                    initMeterLoadData(meterSearch);
+                    initMeterLoadData(meterSearch,keyvalue);
                   })
                 }
               })
@@ -317,7 +317,7 @@ const MeterModify = (props: MeterModifyProps) => {
     <Drawer
       title={title}
       placement="right"
-      width={700}
+      width={800}
       onClose={close}
       visible={modifyVisible}
       style={{ height: 'calc(100vh-50px)' }}
@@ -549,7 +549,7 @@ const MeterModify = (props: MeterModifyProps) => {
                           if (id != null || id != '') {
                             RemoveFormAll(id).then(res => {
                               message.success('删除成功');
-                              initMeterLoadData(meterSearch);
+                              initMeterLoadData(meterSearch,keyvalue);
                             });
                           }
                         },
@@ -576,7 +576,7 @@ const MeterModify = (props: MeterModifyProps) => {
                   dataSource={meterData}
                   rowKey="unitmeterid"
                   pagination={meterPagination}
-                  scroll={{ y: 500, x: 800 }}
+                  scroll={{ y: 800, x: 900 }}
                   loading={loading}
                 //rowSelection={rowSelection}
                 />
@@ -674,7 +674,7 @@ const MeterModify = (props: MeterModifyProps) => {
         treeData={treeData}
         reload={() => {
           //刷新数据 
-          initMeterLoadData(meterSearch);
+          initMeterLoadData(meterSearch,keyvalue);
           setIsAdd(false);
         }}
       />
@@ -688,7 +688,7 @@ const MeterModify = (props: MeterModifyProps) => {
         // meterinfo={infoDetail}
         reload={() => {
           //刷新数据
-          initMeterLoadData(meterSearch);
+          initMeterLoadData(meterSearch,keyvalue);
           setIsAdd(false);
         }}
       />

@@ -39,8 +39,8 @@ function MeterTable(props: MeterTableProps) {
       title: '费表名称',
       dataIndex: 'meterName',
       key: 'meterName',
-      width: 250,
-      sorter: true, 
+      width: 280,
+      sorter: true,  
     },
     {
       title: '费表类型',
@@ -61,15 +61,13 @@ function MeterTable(props: MeterTableProps) {
       title: '倍率',
       dataIndex: 'meterZoom',
       key: 'meterZoom',
-      width: 80,
-      sorter: true,
+      width: 90, 
     },
     {
       title: '量程',
       dataIndex: 'meterRange',
       key: 'meterRange',
-      width: 80,
-      sorter: true,
+      width: 90, 
     },
     {
       title: '关联收费项目',
