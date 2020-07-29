@@ -3,7 +3,7 @@ import ModifyItem , { SelectItem }from "@/components/BaseModifyDrawer/ModifyItem
 import { Card, Form, Row } from "antd";
 import { WrappedFormUtils } from "antd/lib/form/Form";
 import React from "react";
-import { SaveItemForm } from "./Main.service";
+import { SaveRepairForm } from "./Main.service";
 
 interface ModifyRepairProps {
   visible: boolean;
@@ -21,7 +21,10 @@ const ModifyRepair = (props: ModifyRepairProps) => {
 
   const doSave = dataDetail => {
     let modifyData = { ...initData, ...dataDetail, keyvalue: initData.id };
-    return SaveItemForm(modifyData);
+    modifyData.billDate = modifyData.billDate.format('YYYY-MM-DD');
+    modifyData.finishDate = modifyData.finishDate.format('YYYY-MM-DD'); 
+    modifyData.checkDate = modifyData.checkDate.format('YYYY-MM-DD'); 
+    return SaveRepairForm(modifyData);
   };
 
   const checkItems: SelectItem[] = [{ label: '不合格', value: 0 }, { label: '合格', value: 1 }];

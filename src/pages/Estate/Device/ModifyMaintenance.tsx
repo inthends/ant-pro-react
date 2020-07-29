@@ -3,7 +3,7 @@ import ModifyItem from "@/components/BaseModifyDrawer/ModifyItem";
 import { Card, Form, Row } from "antd";
 import { WrappedFormUtils } from "antd/lib/form/Form";
 import React  from "react";
-import { SaveItemForm } from "./Main.service";
+import { SaveMaintenanceForm } from "./Main.service";
 
 interface ModifyMaintenanceProps {
   visible: boolean;
@@ -21,7 +21,9 @@ const ModifyMaintenance = (props: ModifyMaintenanceProps) => {
 
   const doSave = dataDetail => {
     let modifyData = { ...initData, ...dataDetail, keyvalue: initData.id };
-    return SaveItemForm(modifyData);
+    modifyData.planDate = modifyData.planDate.format('YYYY-MM-DD');
+    modifyData.finishDate = modifyData.finishDate.format('YYYY-MM-DD'); 
+    return SaveMaintenanceForm(modifyData);
   };
 
   return (

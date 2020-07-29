@@ -55,8 +55,63 @@ export function GetRepairListJson(data): Promise<any> {
 }
 
 
+export function GetDefectListJson(data): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Device/GetDefectListJson`, {
+      data: objToFormdata(data)
+    })
+    .then(getResult as any);
+}
+
 //生成二维码
 export function CreateQrCodeFrom(): Promise<any> {
   return request.post(process.env.basePath + `/Device/CreateQrCodeFrom`).then(getResult as any);
 }
 
+ 
+//保存维保记录
+export function SaveMaintenanceForm(data): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Device/SaveMaintenanceForm`, {
+      data: objToFormdata(data)
+    })
+    .then(getResult as any);
+}
+
+//保存维修记录
+export function SaveRepairForm(data): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Device/SaveRepairForm`, {
+      data: objToFormdata(data)
+    })
+    .then(getResult as any);
+}
+
+//保存设备缺陷
+export function SaveDefectForm(data): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Device/SaveDefectForm`, {
+      data: objToFormdata(data)
+    })
+    .then(getResult as any);
+}
+
+//删除
+export function RemoveMaintenanceForm(keyvalue): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Device/RemoveMaintenanceForm?keyvalue=${keyvalue}`, {})
+    .then(getResult as any);
+}
+
+//删除
+export function RemoveRepairForm(keyvalue): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Device/RemoveRepairForm?keyvalue=${keyvalue}`, {})
+    .then(getResult as any);
+}
+//删除
+export function RemoveDefectForm(keyvalue): Promise<any> {
+  return request
+    .post(process.env.basePath + `/Device/RemoveDefectForm?keyvalue=${keyvalue}`, {})
+    .then(getResult as any);
+}

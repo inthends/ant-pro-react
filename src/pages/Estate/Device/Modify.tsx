@@ -6,7 +6,11 @@ import { ColumnProps, PaginationConfig } from "antd/lib/table";
 import { DefaultPagination } from "@/utils/defaultSetting";
 import { WrappedFormUtils } from "antd/lib/form/Form";
 import React, { useState, useEffect } from 'react';
-import { RemoveRepair, RemoveMaintenance, SaveDeviceForm, GetMaintenanceListJson, GetRepairListJson } from "./Main.service";
+import {
+  RemoveRepairForm, RemoveDefectForm, RemoveMaintenanceForm,
+  SaveDeviceForm, GetMaintenanceListJson,
+  GetRepairListJson, GetDefectListJson
+} from "./Main.service";
 import styles from './style.less';
 import { GetOrgs, GetCommonItems } from '@/services/commonItem';
 import { TreeNode } from 'antd/lib/tree-select';
@@ -14,6 +18,7 @@ import moment from 'moment';
 
 import ModifyMaintenance from './ModifyMaintenance';
 import ModifyRepair from './ModifyRepair';
+import ModifyDefect from './ModifyDefect';
 
 const { TabPane } = Tabs;
 interface ModifyProps {
@@ -52,6 +57,7 @@ const Modify = (props: ModifyProps) => {
       if (data) {
         initMaintenanceLoadData();
         initRepairLoadData();
+        initDefectLoadData();
       }
     }
   }, [visible]);
@@ -141,7 +147,7 @@ const Modify = (props: ModifyProps) => {
       title: "请确认",
       content: `您确定要删除吗？`,
       onOk: () => {
-        RemoveMaintenance(record.id)
+        RemoveMaintenanceForm(record.id)
           .then(() => {
             message.success("删除成功");
             initMaintenanceLoadData();
@@ -221,6 +227,8 @@ const Modify = (props: ModifyProps) => {
       }
     }
   ] as ColumnProps<any>[];
+  const [maintenanceVisible, setMaintenanceVisible] = useState<boolean>(false);
+  const [maintenanceItem, setMaintenanceItem] = useState<any>();
   //维保记录-end
 
 
@@ -308,7 +316,7 @@ const Modify = (props: ModifyProps) => {
       title: "请确认",
       content: `您确定要删除吗？`,
       onOk: () => {
-        RemoveRepair(record.id)
+        RemoveRepairForm(record.id)
           .then(() => {
             message.success("删除成功");
             initRepairLoadData();
@@ -405,13 +413,150 @@ const Modify = (props: ModifyProps) => {
       }
     }
   ] as ColumnProps<any>[];
-  //维修记录-end
 
-  const [maintenanceVisible, setMaintenanceVisible] = useState<boolean>(false);
-  const [maintenanceItem, setMaintenanceItem] = useState<any>();
 
   const [repairVisible, setRepairVisible] = useState<boolean>(false);
   const [repairItem, setRepairItem] = useState<any>();
+  //维修记录-end
+
+
+  //设备缺陷-begin
+  const [loadingDefect, setLoadingDefect] = useState<boolean>(false);
+  const [dataDefect, setDataDefect] = useState<any[]>([]);
+  const [paginationDefect, setPaginationDefect] = useState<PaginationConfig>(new DefaultPagination());
+  const loadDefect = formData => {
+    setLoadingDefect(true);
+    formData.sidx = formData.sidx || "id";
+    formData.sord = formData.sord || "asc";
+    return GetDefectListJson(formData).then(res => {
+      const { pageIndex: current, total, pageSize } = res;
+      setPaginationDefect(pagesetting => {
+        return {
+          ...pagesetting,
+          current,
+          total,
+          pageSize
+        };
+      });
+      setDataDefect(res.data);
+      setLoadingDefect(false);
+      return res;
+    });
+  };
+
+  const initDefectLoadData = () => {
+    const queryJson = { deviceId: deviceId };
+    const sidx = "id";
+    const sord = "asc";
+    const { current: pageIndex, pageSize, total } = paginationRepair;
+    return loadDefect({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(
+      res => {
+        return res;
+      }
+    );
+  };
+
+  //刷新
+  const loadDataDefect = (paginationConfig?: PaginationConfig, sorter?) => {
+    const { current: pageIndex, pageSize, total } = paginationConfig || {
+      current: 1,
+      pageSize: paginationRepair.pageSize,
+      total: 0,
+    };
+    let searchCondition: any = {
+      pageIndex,
+      pageSize,
+      total,
+      queryJson: { deviceId: deviceId },
+    };
+
+    if (sorter) {
+      let { field, order } = sorter;
+      searchCondition.sord = order === "descend" ? "desc" : "asc";
+      searchCondition.sidx = field ? field : 'id';
+    }
+    return loadDefect(searchCondition).then(res => {
+      return res;
+    });
+  };
+
+  const changePageDefect = (pagination: PaginationConfig, filters, sorter) => {
+    loadDataDefect(pagination, sorter);
+  };
+
+  // //关闭弹出的规则页面
+  // const closeRuleItem = () => {
+  //   setRuleItemVisible(false);
+  // };
+
+  const doModifyDefect = record => {
+    setDefectItem(record);
+    setDefectVisible(true);
+  };
+
+  const doAddDefect = (record?) => {
+    setDefectItem(record);
+    setDefectVisible(true);
+  };
+
+  const doDeleteDefect = record => {
+    Modal.confirm({
+      title: "请确认",
+      content: `您确定要删除吗？`,
+      onOk: () => {
+        RemoveDefectForm(record.id)
+          .then(() => {
+            message.success("删除成功");
+            initRepairLoadData();
+          })
+          .catch(e => { });
+      }
+    });
+  };
+
+  const columnsDefect = [
+    {
+      title: "缺陷内容",
+      dataIndex: "memo",
+      key: "memo",
+      width: 300,
+    },
+    {
+      title: "登记人",
+      dataIndex: "createUserName",
+      key: "createUserName",
+      width: 120,
+    },
+    {
+      title: "登记时间",
+      dataIndex: "createDate",
+      key: "createDate",
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
+    },
+
+    {
+      title: "操作",
+      dataIndex: "operation",
+      key: "operation",
+      align: 'center',
+      fixed: 'right',
+      width: 105,
+      render: (text, record) => {
+        return [
+          <span>
+            <a onClick={() => doModifyDefect(record)} key="modify">编辑</a>
+            <Divider type="vertical" key='divider' />
+            <a onClick={() => doDeleteDefect(record)} key="delete">删除</a>
+          </span>
+        ];
+      }
+    }
+  ] as ColumnProps<any>[];
+
+  const [defectVisible, setDefectVisible] = useState<boolean>(false);
+  const [defectItem, setDefectItem] = useState<any>();
+  //设备缺陷-end 
+
 
   return (
     <BaseModifyProvider {...props} name="设备" save={doSave} width={780} >
@@ -670,7 +815,7 @@ const Modify = (props: ModifyProps) => {
 
         </TabPane>
         <TabPane tab="维保记录" key="2">
-          <Card  hoverable>
+          <Card hoverable>
             <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
               <Button type="link" style={{ float: 'right', marginLeft: '10px' }}
                 onClick={() => doAddMaintenance()}  >
@@ -693,7 +838,7 @@ const Modify = (props: ModifyProps) => {
           </Card>
         </TabPane>
         <TabPane tab="维修记录" key="3">
-          <Card  hoverable>
+          <Card hoverable>
             <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
               <Button type="link" style={{ float: 'right', marginLeft: '10px' }}
                 onClick={() => doAddRepair()}  >
@@ -715,8 +860,28 @@ const Modify = (props: ModifyProps) => {
             />
           </Card>
         </TabPane>
-        {/* <TabPane tab="巡检记录" key="4"> 
-        </TabPane> */}
+        <TabPane tab="设备缺陷" key="4">
+          <Card hoverable>
+            <div style={{ marginBottom: '20px', padding: '3px 2px' }}>
+              <Button type="link" style={{ float: 'right', marginLeft: '10px' }}
+                onClick={() => doAddDefect()}  >
+                <Icon type="plus" />新增</Button>
+            </div>
+            <Table
+              style={{ border: 'none' }}
+              bordered={false}
+              size="middle"
+              dataSource={dataDefect}
+              columns={columnsDefect}
+              rowKey={record => record.id}
+              pagination={paginationDefect}
+              loading={loadingDefect}
+              onChange={(pagination: PaginationConfig, filters, sorter) =>
+                changePageDefect(pagination, filters, sorter)
+              }
+            />
+          </Card>
+        </TabPane>
       </Tabs>
 
 
@@ -734,6 +899,14 @@ const Modify = (props: ModifyProps) => {
         closeDrawer={() => setRepairVisible(false)}
         data={repairItem}
         reload={initRepairLoadData}
+        deviceId={deviceId}
+      />
+
+      <ModifyDefect
+        visible={defectVisible}
+        closeDrawer={() => setDefectVisible(false)}
+        data={defectItem}
+        reload={initDefectLoadData}
         deviceId={deviceId}
       />
 

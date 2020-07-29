@@ -34,7 +34,7 @@ export function SaveItemForm(data): Promise<any> {
     .then(getResult as any);
 }
 
-// 删除
+//删除
 export function RemoveItemForm(keyvalue): Promise<any> {
   return request
     .post(process.env.basePath + `/Code/RemoveItemForm?keyvalue=${keyvalue}`, {})
@@ -42,7 +42,7 @@ export function RemoveItemForm(keyvalue): Promise<any> {
 }
 
 
-// 删除
+//删除
 export function RemoveForm(keyvalue): Promise<any> {
   return request
     .post(process.env.basePath + `/Code/RemoveForm?keyvalue=${keyvalue}`, {})
