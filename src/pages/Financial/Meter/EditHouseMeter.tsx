@@ -147,13 +147,12 @@ const EditHouseMeter = (props: EditHouseMeterProps) => {
             </Col>
             <Col span={12}>
               <Form.Item label="费表编号"   >
-                {/* {getFieldDecorator('meterCode', {
+                {getFieldDecorator('meterCode', {
                   initialValue: infoDetail.meterCode,
                   rules: [{ required: true, message: '请输入费表编号' }],
                 })(
-                  <Input style={{ width: '100%' }} disabled={true}></Input>
-                )} */}
-                {infoDetail.meterCode}
+                  <Input style={{ width: '100%' }}  placeholder='请输入费表编号' ></Input>
+                )} 
               </Form.Item>
             </Col>
             {/* <Col span={8}>
