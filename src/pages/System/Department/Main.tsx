@@ -27,10 +27,8 @@ function Main() {
     setCurrData(item);
     setModifyVisible(true);
   };
-  const loadData = (
-    { searchText }, sorter?) => {
+  const loadData = ({ searchText }, sorter?) => {
     setSearch(searchText);
-
     let queryJson: any = { keyword: searchText };
     const searchCondition: any = {
       queryJson

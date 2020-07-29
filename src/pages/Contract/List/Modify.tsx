@@ -1,7 +1,7 @@
 //修改合同
 import { Tooltip, Upload, Icon, Tag, Spin, Divider, PageHeader, AutoComplete, InputNumber, message, Tabs, Select, Button, Card, Col, DatePicker, Drawer, Form, Input, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import { ChargeFeeDetailDTO, HtLeasecontractcharge, htLeasecontract, ChargeDetailDTO } from '@/model/models';
+import { HtLeasecontractchargefee, ChargeFeeDetailDTO, HtLeasecontractcharge, htLeasecontract, ChargeDetailDTO } from '@/model/models';
 import React, { useEffect, useState } from 'react';
 import ResultList from './ResultList';
 import {
@@ -45,7 +45,7 @@ const Modify = (props: ModifyProps) => {
   //const [industryType, setIndustryType] = useState<any[]>([]); //行业  
   //const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
   const [infoDetail, setInfoDetail] = useState<htLeasecontract>({});
-  const [contractCharge, setContractCharge] = useState<HtLeasecontractcharge>({}); 
+  const [contractCharge, setContractCharge] = useState<HtLeasecontractcharge>({});
   const [chargeFeeList, setChargeFeeList] = useState<ChargeFeeDetailDTO[]>([]);
 
 
@@ -129,8 +129,8 @@ const Modify = (props: ModifyProps) => {
 
           //获取条款
           GetCharge(tempInfo.chargeId).then((charge: ChargeDetailDTO) => {
-            setContractCharge(charge.contractCharge || {}); 
-            setChargeFeeList(charge.chargeFeeList || []); 
+            setContractCharge(charge.contractCharge || {});
+            setChargeFeeList(charge.chargeFeeList || []);
             // setChargeFeeList(charge.chargeFeeList || []);
             // setChargefee(charge.chargeFee || {});
             // setChargeincre(charge.chargeIncre || {});
@@ -182,6 +182,8 @@ const Modify = (props: ModifyProps) => {
 
   const onSignerSelect = (value, option) => {
     form.setFieldsValue({ signerId: option.key });
+    //设置管理机构 
+    form.setFieldsValue({ organizeId: option.pros.organizeId });
   };
 
   // const onRoomChange = (value, label, extra) => {
@@ -223,28 +225,18 @@ const Modify = (props: ModifyProps) => {
   const calculation = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        // setLoading(true);
+        setLoading(true);
         //租赁条款     
-        let TermJson: HtLeasecontractchargefee[] = [];
-        // let data: HtLeasecontractchargefee = {}; 
-        // data.feeItemId = values.feeItemId[0];
-        // data.startDate = values.startDate[0];
-        // data.endDate = values.endDate[0];
-        // data.price = values.price[0];
-        // data.priceUnit = values.priceUnit[0];
-        // data.advancePayTime = values.advancePayTime[0];
-        // data.advancePayTimeUnit = values.advancePayTimeUnit[0];
-        // data.billType = values.billType[0];
-        // if (data.priceUnit == "1" || data.priceUnit == "3") {
-        //   data.dayPriceConvertRule = values.dayPriceConvertRule[0];
-        // }
-        // data.yearDays = values.yearDays[0];
-        // data.payCycle = values.payCycle[0];
-        // data.rentalPeriodDivided = values.rentalPeriodDivided[0];
-        // TermJson.push(data); 
-
+        // let TermJson: HtLeasecontractchargefee[] = [];
+        let TermJson: ChargeFeeDetailDTO[] = []; 
         //动态添加的租期
-        values.LeaseTerms.map(function (k, index, arr) {
+        values.LeaseTerms.map(function (k, index, arr) { 
+          let charge: ChargeFeeDetailDTO = {
+            rooms: [],
+            feeItems: [],
+            chargeFee: {}
+          };
+
           let mychargefee: HtLeasecontractchargefee = {};
 
           // data.feeItemId = k.feeItemId;
@@ -290,7 +282,10 @@ const Modify = (props: ModifyProps) => {
           // mychargefee.periodLength = values.periodLength[index];
           // mychargefee.discount = values.discount[index];
           mychargefee.rebateRemark = values.rebateRemark[index];
-          TermJson.push(mychargefee);
+          charge.chargeFee = mychargefee;
+          //添加房屋  
+          charge.rooms = values.rooms[index];
+          TermJson.push(charge);
         });
 
         //递增率
@@ -326,7 +321,7 @@ const Modify = (props: ModifyProps) => {
         //费用条款-基本条款 
         // entity.depositFeeItemId = values.depositFeeItemId;
         // entity.depositFeeItemName = values.depositFeeItemName;
-        entity.leaseArea = values.leaseArea;
+        // entity.leaseArea = values.leaseArea;
         // entity.deposit = values.deposit;
         // entity.depositUnit = values.depositUnit;
         // entity.startDate = values.billingDate.format('YYYY-MM-DD');
@@ -360,7 +355,7 @@ const Modify = (props: ModifyProps) => {
           //...mychargeincre,
           // ...mychargefeeoffer,
           // leaseContractId: '',
-          billUnitId: values.billUnitId,//计费单元id
+          // billUnitId: values.billUnitId,//计费单元id
           termJson: strTermJson
           // LeaseContractId: '',
           // CalcPrecision: values.calcPrecision,
@@ -414,7 +409,7 @@ const Modify = (props: ModifyProps) => {
         //费用条款-基本条款 
         // ContractCharge.depositFeeItemId = values.depositFeeItemId;
         // ContractCharge.depositFeeItemName = values.depositFeeItemName;
-        ContractCharge.leaseArea = values.leaseArea;
+        // ContractCharge.leaseArea = values.leaseArea;
         // ContractCharge.deposit = values.deposit;
         // ContractCharge.depositUnit = values.depositUnit;
         // ContractCharge.startDate = values.billingDate.format('YYYY-MM-DD');
@@ -456,7 +451,7 @@ const Modify = (props: ModifyProps) => {
         // Contract.lateFeeUnit = values.lateFeeUnit;
         // Contract.maxLateFee = values.maxLateFee;
         // Contract.maxLateFeeUnit = values.maxLateFeeUnit;
-        Contract.billUnitId = values.billUnitId;
+        // Contract.billUnitId = values.billUnitId;
         Contract.organizeId = values.organizeId;
         Contract.memo = values.memo;
         SubmitForm({
@@ -467,7 +462,7 @@ const Modify = (props: ModifyProps) => {
           // ...chargefeeoffer,
           keyvalue: instanceId,
           chargeId: chargeId,
-          room: values.room,
+          // room: values.room,
           termJson: TermJson,
           // RateJson: RateJson,
           // RebateJson: RebateJson,
@@ -516,7 +511,7 @@ const Modify = (props: ModifyProps) => {
         //费用条款-基本条款 
         // ContractCharge.depositFeeItemId = values.depositFeeItemId;
         // ContractCharge.depositFeeItemName = values.depositFeeItemName;
-        ContractCharge.leaseArea = values.leaseArea;
+        // ContractCharge.leaseArea = values.leaseArea;
         // ContractCharge.deposit = values.deposit;
         // ContractCharge.depositUnit = values.depositUnit;
         // ContractCharge.startDate = values.billingDate.format('YYYY-MM-DD');
@@ -557,7 +552,7 @@ const Modify = (props: ModifyProps) => {
         // Contract.lateFeeUnit = values.lateFeeUnit;
         // Contract.maxLateFee = values.maxLateFee;
         // Contract.maxLateFeeUnit = values.maxLateFeeUnit;
-        Contract.billUnitId = values.billUnitId;
+        // Contract.billUnitId = values.billUnitId;
         Contract.organizeId = values.organizeId;
         Contract.memo = values.memo;
         ReSubmitForm({
@@ -568,7 +563,7 @@ const Modify = (props: ModifyProps) => {
           // ...chargefeeoffer,
           keyvalue: instanceId,
           chargeId: chargeId,
-          room: values.room,
+          // room: values.room,
           termJson: TermJson,
           // RateJson: RateJson,
           // RebateJson: RebateJson,
@@ -635,7 +630,7 @@ const Modify = (props: ModifyProps) => {
         // Contract.lateFeeUnit = values.lateFeeUnit;
         // Contract.maxLateFee = values.maxLateFee;
         // Contract.maxLateFeeUnit = values.maxLateFeeUnit;
-        Contract.billUnitId = values.billUnitId;
+        // Contract.billUnitId = values.billUnitId;
         Contract.organizeId = values.organizeId;
         Contract.memo = values.memo;
         let ContractCharge: HtLeasecontractcharge = {};
@@ -1019,7 +1014,9 @@ const Modify = (props: ModifyProps) => {
                               placeholder="请选择签约人"
                               onSelect={onSignerSelect}>
                               {userSource.map(item => (
-                                <Option key={item.id} value={item.name}>
+                                <Option key={item.id} value={item.name}
+                                {...item} 
+                                >
                                   {item.name}
                                 </Option>
                               ))}

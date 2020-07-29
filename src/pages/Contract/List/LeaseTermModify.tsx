@@ -147,7 +147,7 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
 
                       >移除</a>]}  >
                       <List.Item.Meta title={item.allName} />
-                      <div>{item.area}㎡</div>
+                      <div>{item.area}㎡，{item.rentPrice}元/㎡.天</div>
                     </List.Item>
                   }
                 />

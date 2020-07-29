@@ -47,13 +47,13 @@ function ListTable(props: ListTableProps) {
       sorter: true,
       fixed:'left'
     },
-    {
-      title: '单据类型',
-      dataIndex: 'billType',
-      key: 'billType',
-      width: 100,
-      sorter: true
-    }, 
+    // {
+    //   title: '单据类型',
+    //   dataIndex: 'billType',
+    //   key: 'billType',
+    //   width: 100,
+    //   sorter: true
+    // }, 
     {
       title: '单据日期',
       dataIndex: 'createDate',
@@ -82,35 +82,31 @@ function ListTable(props: ListTableProps) {
       title: '业户名称',
       dataIndex: 'custName',
       key: 'custName',
-      width: 160,
+      width: 200,
       sorter: true,
     },
     {
       title: '账单金额',
       dataIndex: 'allAmount',
-      key: 'allAmount',
-      align: 'center',
+      key: 'allAmount', 
       width: 100
     },
     {
       title: '减免金额',
       dataIndex: 'reductionAmount',
-      key: 'reductionAmount',
-      align: 'center',
+      key: 'reductionAmount', 
       width: 100
     },
     {
       title: '冲抵金额',
       dataIndex: 'offsetAmount',
-      key: 'offsetAmount',
-      align: 'center',
+      key: 'offsetAmount', 
       width: 100
     },
     {
       title: '应收金额',
       dataIndex: 'lastAmount',
-      key: 'lastAmount',
-      align: 'center',
+      key: 'lastAmount', 
       width: 100
     },
     {
@@ -118,21 +114,20 @@ function ListTable(props: ListTableProps) {
       dataIndex: 'ifVerify',
       key: 'ifVerify',
       align: 'center',
-      width: 80,
+      width: 100,
       render: val => val ? '已审核' : '未审核'
     },
     {
       title: '审核人',
       dataIndex: 'verifyPerson',
       key: 'verifyPerson',
-      width: 80
+      width: 100
     },
     {
       title: '审核时间',
       dataIndex: 'verifyDate',
       key: 'verifyDate',
-      width: 100,
-      sorter: true,
+      width: 100, 
       render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     // {

@@ -17,7 +17,7 @@ const { Content } = Layout;
 const { Search } = Input;
 // const { TabPane } = Tabs;
 // const { Option } = Select;
-import AuthButton from '@/components/AuthButton/AuthButton'; 
+import AuthButton from '@/components/AuthButton/AuthButton';
 
 function Main() {
   // const [organize, SetOrganize] = useState<any>({});
@@ -86,16 +86,18 @@ function Main() {
       queryJson: {
         keyword: search,//billCheckSearchParams.search,
         TemplateId: templateId,
-        BillType: billType,
+        // BillType: billType,
         TreeTypeId: orgId,//organize.id,
         TreeType: type,//organize.type,
         BelongDate: belongDate
       }
     };
 
+    debugger
+
     if (sorter) {
       let { field, order } = sorter;
-      searchCondition.sord = order === "descend" ? "desc" : "asc";
+      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
       searchCondition.sidx = field ? field : 'createDate';
     }
     return load(searchCondition);
@@ -129,7 +131,7 @@ function Main() {
     setSearch(searchText);
     const queryJson = {
       TemplateId: templateId,
-      BillType: billType,
+      // BillType: billType,
       keyword: searchText,
       TreeTypeId: orgId,//org.key,
       TreeType: type,//org.type,
@@ -248,7 +250,7 @@ function Main() {
   // const [divideVisible,setDivideVisible]=useState<boolean>(false);
 
   const [templateId, setTemplateId] = useState<string>('');
-  const [billType, setBillType] = useState<string>('');
+  // const [billType, setBillType] = useState<string>('');
   const [belongDate, setBelongDate] = useState<any>('');
 
   const handleMenuClick = (e) => {
@@ -313,10 +315,10 @@ function Main() {
       }
     } else if (e.key == '3') {
 
-      if (billType == '') {
-        message.error('请选择账单类型！');
-        return;
-      }
+      // if (billType == '') {
+      //   message.error('请选择账单类型！');
+      //   return;
+      // }
 
       if (templateId == '') {
         message.error('请选择模板类型！');
@@ -402,7 +404,7 @@ function Main() {
                 setBillCheckSearchParams(params);
               }}> */}
         <div style={{ marginBottom: '10px' }}>
-          <Select placeholder="账单类型" style={{ width: '120px', marginRight: '5px' }}
+          {/* <Select placeholder="账单类型" style={{ width: '120px', marginRight: '5px' }}
             onChange={(value: string) => {
               setBillType(value);
             }}>
@@ -410,7 +412,7 @@ function Main() {
             <Select.Option value="催款单">催款单</Select.Option>
             <Select.Option value="催缴函">催缴函</Select.Option>
             <Select.Option value="律师函">律师函</Select.Option>
-          </Select>
+          </Select> */}
           <Select placeholder="模版类型" style={{ width: '150px', marginRight: '5px' }}
             onChange={(value: string) => {
               setTemplateId(value);
@@ -425,7 +427,7 @@ function Main() {
 
           <MonthPicker placeholder="账单归属年月"
             style={{ width: '140px', marginRight: '5px' }}
-            onChange={(date,dateString) => { 
+            onChange={(date, dateString) => {
               debugger
               setBelongDate(dateString);
             }}
@@ -539,8 +541,7 @@ function Main() {
         <ListTable
           onchange={(paginationConfig, filters, sorter) => {
             loadData(search, orgId, orgType, paginationConfig, sorter)
-          }
-          }
+          }}
           loading={loading}
           pagination={billCheckPagination}
           data={noticeData}

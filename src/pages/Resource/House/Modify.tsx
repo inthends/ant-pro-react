@@ -1,7 +1,9 @@
 //项目修改
 import { TreeEntity } from '@/model/models';
-import { Spin, Switch, Upload, Modal, Icon, Button, Card, Col, DatePicker, 
-  Drawer, Form, Input, Row, Select, TreeSelect, message } from 'antd';
+import {
+  Spin, Switch, Upload, Modal, Icon, Button, Card, Col, DatePicker,
+  Drawer, Form, Input, Row, Select, TreeSelect, message
+} from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { ExistEnCode, GetFormInfoJson, GetTreeAreaJson, SaveForm } from './House.service';
@@ -61,7 +63,7 @@ const Modify = (props: ModifyProps) => {
     })
   }, []);
 
-  const getCity = (areaId: string, init = false) => {
+  const getCity = (areaId, init = false) => {
     GetTreeAreaJson(areaId).then(res => {
       setCity(res || []);
       if (!init) {
@@ -70,7 +72,7 @@ const Modify = (props: ModifyProps) => {
     });
   };
 
-  const getArea = (areaId: string, init = false) => {
+  const getArea = (areaId, init = false) => {
     GetTreeAreaJson(areaId).then(res => {
       setArea(res || []);
       if (!init) {
@@ -367,10 +369,12 @@ const Modify = (props: ModifyProps) => {
                         })(
                           <Select
                             showSearch
-                            onChange={getCity}
-                            filterOption={(input, option) =>
-                              option.props.children.indexOf(input) >= 0
-                            }
+                            allowClear
+                            optionFilterProp='children'
+                            onChange={(value) => getCity(value)}
+                          // filterOption={(input, option) =>
+                          //   option.props.children.indexOf(input) >= 0
+                          // }
                           >
                             {pro.map(item => (
                               <Option key={item.key} value={item.value}>
@@ -388,10 +392,12 @@ const Modify = (props: ModifyProps) => {
                         })(
                           <Select
                             showSearch
-                            onChange={getArea}
-                            filterOption={(input, option) =>
-                              option.props.children.indexOf(input) >= 0
-                            }
+                            allowClear
+                            optionFilterProp='children'
+                            onChange={(value) => getArea(value)}
+                          // filterOption={(input, option) =>
+                          //   option.props.children.indexOf(input) >= 0
+                          // }
                           >
                             {city.map(item => (
                               <Option key={item.key} value={item.value}>
@@ -409,9 +415,11 @@ const Modify = (props: ModifyProps) => {
                         })(
                           <Select
                             showSearch
-                            filterOption={(input, option) =>
-                              option.props.children.indexOf(input) >= 0
-                            }
+                            allowClear
+                            optionFilterProp='children'
+                          // filterOption={(input, option) =>
+                          //   option.props.children.indexOf(input) >= 0 
+                          // }
                           >
                             {area.map(item => (
                               <Option key={item.key} value={item.value}>

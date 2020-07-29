@@ -349,7 +349,7 @@ const PstructInfo = (props: PstructInfoProps) => {
       visible={modifyVisible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
-      <Card className={styles.card}  hoverable>
+      <Card className={styles.card} hoverable>
         {modifyVisible ? (
           <Form layout="vertical" hideRequiredMark>
             <Row gutter={24}>
@@ -421,97 +421,114 @@ const PstructInfo = (props: PstructInfoProps) => {
                 </Form.Item>
               </Col>
 
-              <Col lg={8}>
+              {/* <Col lg={8}>
                 <Form.Item label="联系电话">
                   {getFieldDecorator('phoneNum', {
                     initialValue: infoDetail.phoneNum,
                   })(<Input placeholder="请输入联系电话" />)}
                 </Form.Item>
+              </Col> */}
+
+
+              <Col lg={8}>
+                <Form.Item label="状态">
+                  {getFieldDecorator('state', {
+                    initialValue: infoDetail.state
+                  })(
+                    <Select>
+                      <Option value={0}>未售</Option>
+                      <Option value={1}>待交房</Option>
+                      <Option value={2}>装修</Option>
+                      <Option value={3}>空置</Option>
+                      <Option value={4}>出租</Option>
+                      <Option value={5}>自用</Option>
+                      <Option value={-1}>作废</Option>
+                    </Select>
+                  )}
+                </Form.Item>
               </Col>
+
             </Row>
 
-            {type == 1 ? (
-              <Row gutter={24}>
-                <Col lg={8}>
-                  <Form.Item label="占地面积(㎡)">
-                    {getFieldDecorator('coverArea', {
-                      initialValue: infoDetail.coverArea || 0,
-                    })(<InputNumber placeholder="请输入占地面积" style={{ width: '100%' }} />)}
-                  </Form.Item>
-                </Col>
-                <Col lg={8}>
-                  <Form.Item label="建筑面积(㎡)">
-                    {getFieldDecorator('area', {
-                      initialValue: infoDetail.area || 0,
-                    })(<InputNumber placeholder="请输入建筑面积" style={{ width: '100%' }} />)}
-                  </Form.Item>
-                </Col>
-                <Col lg={8}>
-                  <Form.Item label="产权面积(㎡)">
-                    {getFieldDecorator('propertyArea', {
-                      initialValue: infoDetail.propertyArea || 0,
-                    })(<InputNumber placeholder="请输入产权面积" style={{ width: '100%' }} />)}
-                  </Form.Item>
-                </Col>
-              </Row>) : type == 2 ?
-                (<Row gutter={24}>
-                  <Col lg={12}>
+            {type == 1 ?
+              <>
+                <Row gutter={24}>
+                  <Col lg={8}>
+                    <Form.Item label="占地面积(㎡)">
+                      {getFieldDecorator('coverArea', {
+                        initialValue: infoDetail.coverArea || 0,
+                      })(<InputNumber placeholder="请输入占地面积" style={{ width: '100%' }} />)}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={8}>
                     <Form.Item label="建筑面积(㎡)">
                       {getFieldDecorator('area', {
                         initialValue: infoDetail.area || 0,
                       })(<InputNumber placeholder="请输入建筑面积" style={{ width: '100%' }} />)}
                     </Form.Item>
                   </Col>
-                  <Col lg={12}>
+                  <Col lg={8}>
                     <Form.Item label="产权面积(㎡)">
                       {getFieldDecorator('propertyArea', {
                         initialValue: infoDetail.propertyArea || 0,
                       })(<InputNumber placeholder="请输入产权面积" style={{ width: '100%' }} />)}
                     </Form.Item>
                   </Col>
-                </Row>) :
-                (
-                  <Row gutter={24}>
-                    <Col lg={8}>
-                      <Form.Item label="建筑面积(㎡)">
-                        {getFieldDecorator('area', {
-                          initialValue: infoDetail.area || 0,
-                        })(<InputNumber placeholder="请输入建筑面积" style={{ width: '100%' }} />)}
-                      </Form.Item>
-                    </Col>
-                    <Col lg={8}>
-                      <Form.Item label="产权面积(㎡)">
-                        {getFieldDecorator('propertyArea', {
-                          initialValue: infoDetail.propertyArea || 0,
-                        })(<InputNumber placeholder="请输入产权面积" style={{ width: '100%' }} />)}
-                      </Form.Item>
-                    </Col>
-                    <Col lg={8}>
-                      <Form.Item label="计费面积(㎡)">
-                        {getFieldDecorator('billArea', {
-                          initialValue: infoDetail.billArea || 0,
-                        })(<InputNumber placeholder="请输入计费面积" style={{ width: '100%' }} />)}
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                )
+                </Row>
+        
+                <Row gutter={24}>
+                  <Col lg={12}>
+                    <Form.Item label="经度">
+                      {getFieldDecorator('lat', {
+                        initialValue: infoDetail.lat,
+                      })(<Input placeholder="请输入经度" />)}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={12}>
+                    <Form.Item label="纬度">
+                      {getFieldDecorator('lng', {
+                        initialValue: infoDetail.lng,
+                      })(<Input placeholder="请输入纬度" />)}
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </>
+
+              :
+
+              <Row gutter={12}>
+                <Col lg={6}>
+                  <Form.Item label="建筑面积(㎡)">
+                    {getFieldDecorator('area', {
+                      initialValue: infoDetail.area || 0,
+                    })(<InputNumber placeholder="请输入建筑面积" style={{ width: '100%' }} />)}
+                  </Form.Item>
+                </Col>
+                <Col lg={6}>
+                  <Form.Item label="产权面积(㎡)">
+                    {getFieldDecorator('propertyArea', {
+                      initialValue: infoDetail.propertyArea || 0,
+                    })(<InputNumber placeholder="请输入产权面积" style={{ width: '100%' }} />)}
+                  </Form.Item>
+                </Col>
+                <Col lg={6}>
+                  <Form.Item label="计费面积(㎡)">
+                    {getFieldDecorator('billArea', {
+                      initialValue: infoDetail.billArea || 0,
+                    })(<InputNumber placeholder="请输入计费面积" style={{ width: '100%' }} />)}
+                  </Form.Item>
+                </Col>
+
+                <Col lg={6}>
+                  <Form.Item label="标准单价(元/㎡.天)">
+                    {getFieldDecorator('rentPrice', {
+                      initialValue: infoDetail.rentPrice || 0,
+                    })(<InputNumber placeholder="请输入标准单价" style={{ width: '100%' }} />)}
+                  </Form.Item>
+                </Col>
+              </Row>
             }
-            {type == 1 ? (<Row gutter={24}>
-              <Col lg={12}>
-                <Form.Item label="经度">
-                  {getFieldDecorator('lat', {
-                    initialValue: infoDetail.lat,
-                  })(<Input placeholder="请输入经度" />)}
-                </Form.Item>
-              </Col>
-              <Col lg={12}>
-                <Form.Item label="纬度">
-                  {getFieldDecorator('lng', {
-                    initialValue: infoDetail.lng,
-                  })(<Input placeholder="请输入纬度" />)}
-                </Form.Item>
-              </Col>
-            </Row>) : null}
+
 
             {type == 4 || type == 5 || type == 8 || type == 9 ? (
               <Row gutter={24}>
@@ -576,6 +593,19 @@ const PstructInfo = (props: PstructInfoProps) => {
                   </Form.Item>
                 </Col>
                 <Col lg={12}>
+                  <Form.Item label="业主电话">
+                    {getFieldDecorator('ownerPhone', {
+                      initialValue: infoDetail.ownerPhone,
+                    })(
+                      <Input placeholder="自动带出业主电话" readOnly />
+                    )}
+                  </Form.Item>
+                </Col> 
+              </Row>) : null}
+
+            {type == 4 || type == 5 ? (
+              <Row gutter={24}>
+                <Col lg={12}>
                   <Form.Item label={infoDetail.tenantName ? <div>住户名称 <a onClick={() => { showCustomerDrawer(infoDetail.tenantId, 2) }}>编辑</a></div> : '住户名称'}>
                     {/* {getFieldDecorator('tenantName', {
                       initialValue: infoDetail.tenantName,
@@ -623,21 +653,7 @@ const PstructInfo = (props: PstructInfoProps) => {
                       initialValue: infoDetail.tenantUnitAllName,
                     })(
                       <input type='hidden' />
-                    )}
-
-                  </Form.Item>
-                </Col>
-              </Row>) : null}
-
-            {type == 4 || type == 5 ? (
-              <Row gutter={24}>
-                <Col lg={12}>
-                  <Form.Item label="业主电话">
-                    {getFieldDecorator('ownerPhone', {
-                      initialValue: infoDetail.ownerPhone,
-                    })(
-                      <Input placeholder="自动带出业主电话" readOnly />
-                    )}
+                    )} 
                   </Form.Item>
                 </Col>
                 <Col lg={12}>

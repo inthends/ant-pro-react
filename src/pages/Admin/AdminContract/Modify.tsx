@@ -141,7 +141,7 @@ const Modify = (props: ModifyProps) => {
   const calculation = () => {
     form.validateFields((errors, values) => {
       if (!errors) {
-        // setLoading(true);
+        setLoading(true);
         //租赁条款     
         let TermJson: htAdmincontractfee[] = [];
         //动态添加的租期

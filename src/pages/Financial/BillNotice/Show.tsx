@@ -53,24 +53,47 @@ const Show = (props: ShowProps) => {
   //   closeDrawer();
   // };
 
-  const initLoadData = (paginationConfig?: PaginationConfig, sorter?) => {
+  const initLoadData = () => {
     const queryJson = {
       billId: id
     };
-    const sidx = sorter == null ? 'BillDate' : sorter.field;
-    const sord = sorter == null || sorter.order === 'ascend' ? 'asc' : 'desc';
+    const sidx = 'billDate';
+    const sord = 'desc';
+    const { current: pageIndex, pageSize, total } = billCheckPagination;
+    return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
+      return res;
+    });
+  };
+
+  //刷新
+  const loadData = (paginationConfig?: PaginationConfig, sorter?) => {
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: billCheckPagination.pageSize,
       total: 0,
     };
-    return load({ pageIndex, pageSize, sidx, sord, total, queryJson });
+    const searchCondition: any = {
+      pageIndex,
+      pageSize,
+      total,
+      queryJson: { billId: id }
+    };
+
+    if (sorter) {
+      const { field, order } = sorter;
+      searchCondition.sord = order === 'ascend' ? 'asc' : 'desc';
+      searchCondition.sidx = field ? field : 'billDate';
+    }
+
+    return load(searchCondition).then(res => {
+      return res;
+    });
   };
 
   const load = data => {
     setBillCheckLoading(true);
-    data.sidx = data.sidx || 'BillDate';
-    data.sord = data.sord || 'asc';
+    data.sidx = data.sidx || 'billDate';
+    data.sord = data.sord || 'desc';
     return GetBillDetailPageData(data).then(res => {
       const { pageIndex: current, total, pageSize } = res;
       setBillCheckPagination(pagesetting => {
@@ -222,7 +245,7 @@ const Show = (props: ShowProps) => {
               </Col>
               <Col span={5}>
                 <Form.Item required label="是否缴清" >
-                  {infoDetail.isClear?'是':'否'}
+                  {infoDetail.isClear ? '是' : '否'}
                 </Form.Item>
               </Col>
               <Col span={5}>
@@ -230,7 +253,7 @@ const Show = (props: ShowProps) => {
                   {infoDetail.verifyPerson}
                 </Form.Item>
               </Col>
-            </Row> 
+            </Row>
             <Row gutter={24}>
               <Col span={24}>
                 <Form.Item label="审核情况"  >
@@ -242,9 +265,8 @@ const Show = (props: ShowProps) => {
 
           <Table<any>
             onChange={(paginationConfig, filters, sorter) => {
-              initLoadData(paginationConfig, sorter)
-            }
-            }
+              loadData(paginationConfig, sorter)
+            }}
             bordered={false}
             size="middle"
             columns={columns}

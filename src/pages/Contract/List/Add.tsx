@@ -4,7 +4,7 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import {
   HtLeasecontractcharge,
   HtLeasecontractchargefee,
-  HtChargefeeresult, 
+  HtChargefeeresult,
   htLeasecontract,
   ChargeFeeDetailDTO
 } from '@/model/models';
@@ -92,15 +92,15 @@ const Add = (props: AddProps) => {
   const calculation = () => {
     setIsValidate(true);
     form.validateFields((errors, values) => {
-      if (!errors) { 
+      if (!errors) {
         //租赁条款     
-        setLoading(true);  
+        setLoading(true);
         let TermJson: ChargeFeeDetailDTO[] = [];
         let charge: ChargeFeeDetailDTO = {
           rooms: [],
           feeItems: [],
           chargeFee: {}
-        };  
+        };
         let data: HtLeasecontractchargefee = {};
         //const TermJson=[];
         //const data = {}; 
@@ -137,19 +137,19 @@ const Add = (props: AddProps) => {
         // data.startPeriod = values.startPeriod[0];
         // data.periodLength = values.periodLength[0];
         // data.discount = values.discount[0];
-        data.rebateRemark = values.rebateRemark[0]; 
+        data.rebateRemark = values.rebateRemark[0];
         charge.chargeFee = data;
-         //添加房屋   
-        charge.rooms = values.rooms[0];  
+        //添加房屋   
+        charge.rooms = values.rooms[0];
         TermJson.push(charge);
 
         //动态添加的租期
         values.LeaseTerms.map(function (k, index, arr) {
-          let charge: ChargeFeeDetailDTO ={
+          let charge: ChargeFeeDetailDTO = {
             rooms: [],
             feeItems: [],
             chargeFee: {}
-          };  
+          };
           let data: HtLeasecontractchargefee = {};
           data.feeItemId = values.feeItemId[k];
           data.feeItemName = values.feeItemName[k];
@@ -394,8 +394,10 @@ const Add = (props: AddProps) => {
   //   } 
   // };
 
-  const onSignerSelect = (value, option) => {
+  const onSignerSelect = (value, option) => { 
     form.setFieldsValue({ signerId: option.key });
+    //设置管理机构
+    setOrganizeId(option.pros.organizeId);
   };
 
   //选择房屋
@@ -660,7 +662,8 @@ const Add = (props: AddProps) => {
                               placeholder="请选择签约人"
                               onSelect={onSignerSelect}>
                               {userSource.map(item => (
-                                <Option key={item.id} value={item.name}>
+                                <Option key={item.id} value={item.name}
+                                  {...item}  >
                                   {item.name}
                                 </Option>
                               ))}

@@ -69,4 +69,6 @@ export interface HtLeasecontracthouse {
      * Desc:  Default:  Nullable:True
      */
     area?: number;
+
+    rentPrice?: number;
 }

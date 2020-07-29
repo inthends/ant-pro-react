@@ -486,11 +486,10 @@ const Approve = (props: ApproveProps) => {
                               renderItem={item =>
                                 <List.Item   >
                                   <List.Item.Meta title={item.allName} />
-                                  <div>{item.area}㎡</div>
+                                  <div>{item.area}㎡，{item.rentPrice}元/㎡.天</div>
                                 </List.Item>
                               }
-                            />
-
+                            /> 
                           )}
                         </Form.Item>
                       </Col>

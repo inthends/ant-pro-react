@@ -311,7 +311,7 @@ const Detail = (props: DetailProps) => {
                   </Card> */}
                 </Col>
                 <Col span={12}>
-                  <Card title="房源信息" className={styles.card} hoverable>
+                  {/* <Card title="房源信息" className={styles.card} hoverable>
                     <Row gutter={24}>
                       <Col lg={24}>
                         <List
@@ -319,13 +319,13 @@ const Detail = (props: DetailProps) => {
                           renderItem={item =>
                             <List.Item  >
                               <List.Item.Meta title={item.allName} />
-                              <div>{item.area}㎡</div>
+                              <div>{item.area}㎡，{item.rentPrice}元/㎡.天</div>
                             </List.Item>
                           }
                         />
                       </Col>
                     </Row>
-                  </Card>
+                  </Card> */}
                   <Card title="租客信息" className={styles.addcard} hoverable>
                     <Row gutter={24}>
                       <Col lg={24}>

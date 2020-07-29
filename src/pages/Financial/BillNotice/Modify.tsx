@@ -80,7 +80,7 @@ const Modify = (props: ModifyProps) => {
       className="offsetVerify"
       title={title}
       placement="right"
-      width={1100}
+      width={1200}
       onClose={closeDrawer}
       visible={visible}
       destroyOnClose={true}

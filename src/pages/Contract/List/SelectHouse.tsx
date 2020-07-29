@@ -78,7 +78,7 @@ function SelectHouse(props: SelectHouseProps) {
       // }); 
       var rooms: any[] = [];
       info.selectedNodes.forEach((val, idx, arr) => {
-        rooms.push({ id: val.key, roomId: val.key, area: val.props.attributeA, allName: val.props.allname });
+        rooms.push({ id: val.key, roomId: val.key, area: val.props.attributeA, rentPrice: val.props.attributeB, allName: val.props.allname });
       });
       setRooms(rooms);
     }
@@ -174,8 +174,8 @@ function SelectHouse(props: SelectHouseProps) {
           //加载费项
           GetFeeItemsByUnitId(rooms[0].roomId).then(feeItems => {
             getSelectTree(rooms, feeItems || []);
-            setLoading(false);
             closeModal();
+            setLoading(false);
           });
         }
       }}
