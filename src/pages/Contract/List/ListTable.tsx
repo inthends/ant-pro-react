@@ -70,29 +70,92 @@ function ListTable(props: ListTableProps) {
 
   const columns = [
     {
-      title: '默认计费单元',
-      dataIndex: 'billUnitId',
-      key: 'billUnitId',
-      width: 200,
-      // render: (text, row, index) => {
-      //   var house = "";
-      //   if (row.houseList) {
-      //     for (var i = 0; i < row.houseList.length; i++) {
-      //       house = house + row.houseList[i].allName + "，";
-      //     }
-      //     return house.slice(0, house.length - 1);
-      //   }
-      //   return "";
-      // }
-    },
-
-    {
       title: '合同编号',
       dataIndex: 'no',
       key: 'no',
-      width: 100,
+      width: 150,
+      fixed: 'left'
+    },
+    // {
+    //   title: '默认计费单元',
+    //   dataIndex: 'billUnitId',
+    //   key: 'billUnitId',
+    //   width: 200,
+    // render: (text, row, index) => {
+    //   var house = "";
+    //   if (row.houseList) {
+    //     for (var i = 0; i < row.houseList.length; i++) {
+    //       house = house + row.houseList[i].allName + "，";
+    //     }
+    //     return house.slice(0, house.length - 1);
+    //   }
+    //   return "";
+    // }
+    // },  
+     
+    {
+      title: '租客',
+      dataIndex: 'customer',
+      key: 'customer',
+      width: 180,
     },
 
+    {
+      title: '签约日期',
+      dataIndex: 'signingDate',
+      key: 'signingDate',
+      width: 100,
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
+    },
+
+    {
+      title: '起始日期',
+      dataIndex: 'startDate',
+      key: 'startDate',
+      width: 100,
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
+    },
+
+    {
+      title: '终止日期',
+      dataIndex: 'endDate',
+      key: 'endDate',
+      width: 100,
+      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
+    },
+    // {
+    //   title: '合同面积(㎡)',
+    //   dataIndex: 'leaseSize',
+    //   key: 'leaseSize',
+    //   width: 100,
+    // },
+    // {
+    //   title: '总租金',
+    //   dataIndex: 'leaseAmount',
+    //   key: 'leaseAmount',
+    //   width: 100,
+    // },
+    // {
+    //   title: '保证金',
+    //   dataIndex: 'leaseDeposit',
+    //   key: 'leaseDeposit',
+    //   width: 100,
+    // },
+    // {
+    //   title: '物业费',
+    //   dataIndex: 'propertyAmount',
+    //   key: 'propertyAmount',
+    //   width: 100,
+    // },
+    // {
+    //   title: '合同单价',
+    //   dataIndex: 'leasePrice',
+    //   key: 'leasePrice',
+    //   width: 100,
+    //   render: (text, record) => {
+    //     return text + record.leasePriceUnit;
+    //   }
+    // },
     {
       title: '合同状态',
       dataIndex: 'status',
@@ -119,75 +182,11 @@ function ListTable(props: ListTableProps) {
             return <Tag color="#19d54e">到期未处理</Tag>;
           case 8:
             return <Tag color="#19d54e">待执行</Tag>;
-          case -1:
-            return <Tag color="#d82d2d">已作废</Tag>
+          // case -1:
+          //   return <Tag color="#d82d2d">已作废</Tag>
           default:
             return '';
         }
-      }
-    },
-
-    {
-      title: '租客',
-      dataIndex: 'customer',
-      key: 'customer',
-      width: 120,
-    },
-
-    {
-      title: '签约日期',
-      dataIndex: 'signingDate',
-      key: 'signingDate',
-      width: 100,
-      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
-    },
-
-    {
-      title: '起始日期',
-      dataIndex: 'startDate',
-      key: 'startDate',
-      width: 100,
-      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
-    },
-
-    {
-      title: '终止日期',
-      dataIndex: 'endDate',
-      key: 'endDate',
-      width: 100,
-      render: val => val ? moment(val).format('YYYY-MM-DD') : ''
-    },
-    {
-      title: '合同面积(㎡)',
-      dataIndex: 'leaseSize',
-      key: 'leaseSize',
-      width: 100,
-    },
-    // {
-    //   title: '总租金',
-    //   dataIndex: 'leaseAmount',
-    //   key: 'leaseAmount',
-    //   width: 100,
-    // },
-    // {
-    //   title: '保证金',
-    //   dataIndex: 'leaseDeposit',
-    //   key: 'leaseDeposit',
-    //   width: 100,
-    // },
-    // {
-    //   title: '物业费',
-    //   dataIndex: 'propertyAmount',
-    //   key: 'propertyAmount',
-    //   width: 100,
-    // },
-    {
-      title: '合同单价',
-      dataIndex: 'leasePrice',
-      key: 'leasePrice',
-      width: 100,
-      render: (text, record) => {
-        return text + record.leasePriceUnit;
       }
     },
     {
@@ -284,7 +283,7 @@ function ListTable(props: ListTableProps) {
         columns={columns}
         rowKey={record => record.id}
         pagination={pagination}
-        scroll={{ y: 500, x: 2000 }}
+        scroll={{ y: 500, x: 1500 }}
         onChange={(pagination: PaginationConfig, filters, sorter) =>
           changePage(pagination, filters, sorter)
         }

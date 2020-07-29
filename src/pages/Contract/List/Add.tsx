@@ -1,7 +1,13 @@
 //添加合同
-import { Upload, Icon, AutoComplete, Spin, message, InputNumber, TreeSelect, Tabs, Select, Button, Card, Col, DatePicker, Drawer, Form, Input, Row } from 'antd';
+import { Upload, Icon, AutoComplete, Spin, message, InputNumber, Tabs, Select, Button, Card, Col, DatePicker, Drawer, Form, Input, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import { TreeEntity, HtLeasecontractcharge, HtLeasecontractchargefee, HtChargefeeresult, htLeasecontract } from '@/model/models';
+import {
+  HtLeasecontractcharge,
+  HtLeasecontractchargefee,
+  HtChargefeeresult, 
+  htLeasecontract,
+  ChargeFeeDetailDTO
+} from '@/model/models';
 import React, { useEffect, useState } from 'react';
 import LeaseTerm from './LeaseTerm';
 // import IncreasingRate from './IncreasingRate';
@@ -9,8 +15,8 @@ import LeaseTerm from './LeaseTerm';
 import ResultList from './ResultList';
 import moment from 'moment';
 import { GetCommonItems, GetUserList } from '@/services/commonItem';
-import { RemoveFile, SaveForm, GetFeeItemsByUnitId, GetChargeDetail } from './Main.service';
-import { GetOrgTreeSimple, GetAsynChildBuildingsSimple } from '@/services/commonItem';
+import { RemoveFile, SaveForm, GetChargeDetail } from './Main.service';
+// import { GetOrgTreeSimple, GetAsynChildBuildingsSimple } from '@/services/commonItem';
 import styles from './style.less';
 import { GetCustomerInfo, CheckContractCustomer, GetContractCustomerList } from '../../Resource/PStructUser/PStructUser.service';
 import QuickModify from '../../Resource/PStructUser/QuickModify';
@@ -33,12 +39,12 @@ const Add = (props: AddProps) => {
   const { visible, closeDrawer, form, reload } = props;
   const { getFieldDecorator } = form;
   const [industryType, setIndustryType] = useState<any[]>([]); //行业  
-  const [feeItems, setFeeItems] = useState<TreeEntity[]>([]);
+  // const [feeItems, setFeeItems] = useState<TreeEntity[]>([]);
   //租金计算结果
   // const [depositData, setDepositData] = useState<HtChargefeeresult[]>([]);//保证金
   const [chargeData, setChargeData] = useState<HtChargefeeresult[]>([]);//租金  
   // const [propertyData, setPropertyData] = useState<HtChargefeeresult[]>([]);//物业费 
-  const [treeData, setTreeData] = useState<any[]>([]);
+  // const [treeData, setTreeData] = useState<any[]>([]);
   const [isCal, setIsCal] = useState<boolean>(false);
   // const [chargefee, setChargefee] = useState<HtLeasecontractchargefee>({});
   // const [chargeincre, setChargeincre] = useState<HtLeasecontractchargeincre>();
@@ -66,9 +72,9 @@ const Add = (props: AddProps) => {
     // });
 
     //获取房产树
-    GetOrgTreeSimple().then((res: any[]) => {
-      setTreeData(res || []);
-    });
+    // GetOrgTreeSimple().then((res: any[]) => {
+    //   setTreeData(res || []);
+    // });
 
     GetUserList('', '员工').then(res => {
       setUserSource(res || []);
@@ -84,11 +90,17 @@ const Add = (props: AddProps) => {
   const [TermJson, setTermJson] = useState<string>();
   //计算租金明细
   const calculation = () => {
+    setIsValidate(true);
     form.validateFields((errors, values) => {
       if (!errors) { 
         //租赁条款     
-        // setLoading(true);
-        let TermJson: HtLeasecontractchargefee[] = [];
+        setLoading(true);  
+        let TermJson: ChargeFeeDetailDTO[] = [];
+        let charge: ChargeFeeDetailDTO = {
+          rooms: [],
+          feeItems: [],
+          chargeFee: {}
+        };  
         let data: HtLeasecontractchargefee = {};
         //const TermJson=[];
         //const data = {}; 
@@ -125,11 +137,19 @@ const Add = (props: AddProps) => {
         // data.startPeriod = values.startPeriod[0];
         // data.periodLength = values.periodLength[0];
         // data.discount = values.discount[0];
-        data.rebateRemark = values.rebateRemark[0];
-        TermJson.push(data);
+        data.rebateRemark = values.rebateRemark[0]; 
+        charge.chargeFee = data;
+         //添加房屋   
+        charge.rooms = values.rooms[0];  
+        TermJson.push(charge);
 
         //动态添加的租期
         values.LeaseTerms.map(function (k, index, arr) {
+          let charge: ChargeFeeDetailDTO ={
+            rooms: [],
+            feeItems: [],
+            chargeFee: {}
+          };  
           let data: HtLeasecontractchargefee = {};
           data.feeItemId = values.feeItemId[k];
           data.feeItemName = values.feeItemName[k];
@@ -160,7 +180,10 @@ const Add = (props: AddProps) => {
           // data.periodLength = values.periodLength[k];
           // data.discount = values.discount[k];
           data.rebateRemark = values.rebateRemark[k];
-          TermJson.push(data);
+          charge.chargeFee = data;
+          //添加房屋  
+          charge.rooms = values.rooms[k];
+          TermJson.push(charge);
         });
 
         //递增率
@@ -215,7 +238,7 @@ const Add = (props: AddProps) => {
         //费用条款-基本条款 
         // entity.depositFeeItemId = values.depositFeeItemId;
         // entity.depositFeeItemName = values.depositFeeItemName;
-        entity.leaseArea = values.leaseArea;
+        //entity.leaseArea = values.leaseArea;
         // entity.deposit = values.deposit;
         // entity.depositUnit = values.depositUnit;
         // entity.startDate = values.billingDate.format('YYYY-MM-DD');
@@ -241,7 +264,7 @@ const Add = (props: AddProps) => {
           // ...mychargefee,
           // ...mychargeincre,
           // ...mychargefeeoffer,
-          billUnitId: values.billUnitId,//计费单元id
+          // billUnitId: values.billUnitId,//计费单元id
           // leaseContractId: '',
           // startDate: values.startDate.format('YYYY-MM-DD'),
           // endDate: values.endDate.format('YYYY-MM-DD'),
@@ -284,7 +307,7 @@ const Add = (props: AddProps) => {
         //费用条款-基本条款 
         // ContractCharge.depositFeeItemId = values.depositFeeItemId;
         // ContractCharge.depositFeeItemName = values.depositFeeItemName;
-        ContractCharge.leaseArea = values.leaseArea;
+        // ContractCharge.leaseArea = values.leaseArea;
         // ContractCharge.deposit = values.deposit;
         // ContractCharge.depositUnit = values.depositUnit;
         // ContractCharge.startDate = values.billingDate.format('YYYY-MM-DD');
@@ -301,7 +324,7 @@ const Add = (props: AddProps) => {
         Contract.no = values.no;
         Contract.follower = values.follower;
         Contract.followerId = values.followerId;
-        Contract.leaseSize = values.leaseSize;
+        // Contract.leaseSize = values.leaseSize;
         Contract.signingDate = values.signingDate.format('YYYY-MM-DD');
         Contract.startDate = values.startDate.format('YYYY-MM-DD');
         Contract.endDate = values.endDate.format('YYYY-MM-DD');
@@ -322,7 +345,7 @@ const Add = (props: AddProps) => {
         // Contract.lateFeeUnit = values.lateFeeUnit;
         // Contract.maxLateFee = values.maxLateFee;
         // Contract.maxLateFeeUnit = values.maxLateFeeUnit;
-        Contract.billUnitId = values.billUnitId;
+        // Contract.billUnitId = values.billUnitId;
         Contract.organizeId = organizeId;
         Contract.memo = values.memo;
 
@@ -331,7 +354,7 @@ const Add = (props: AddProps) => {
           ...ContractCharge,
           keyvalue: '',
           chargeId: '',
-          room: values.room,
+          // room: values.room,
           termJson: TermJson,
           chargeFeeResult: JSON.stringify(chargeData),
         }).then(res => {
@@ -376,35 +399,35 @@ const Add = (props: AddProps) => {
   };
 
   //选择房屋
-  const onRoomChange = (value, label, extra) => {
-    //多个房屋的时候，默认获取第一个房屋作为计费单元
-    if (value.length == 0) {
-      // setBillUnitId('');
-      form.setFieldsValue({ billUnitId: '' });
-      setOrganizeId('');
-      setFeeItems([]);
-    } else {
-      form.setFieldsValue({ billUnitId: value[0] });
-      //机构Id
-      setOrganizeId(extra.triggerNode.props.organizeId);
-      // setBillUnitId(value[0]);
-      //加载房屋费项
-      //加载关联收费项目
-      GetFeeItemsByUnitId(value[0]).then(res => {
-        setFeeItems(res || []);
-      });
-    }
+  // const onRoomChange = (value, label, extra) => {
+  //   //多个房屋的时候，默认获取第一个房屋作为计费单元
+  //   if (value.length == 0) {
+  //     // setBillUnitId('');
+  //     form.setFieldsValue({ billUnitId: '' });
+  //     setOrganizeId('');
+  //     setFeeItems([]);
+  //   } else {
+  //     form.setFieldsValue({ billUnitId: value[0] });
+  //     //机构Id
+  //     setOrganizeId(extra.triggerNode.props.organizeId);
+  //     // setBillUnitId(value[0]);
+  //     //加载房屋费项
+  //     //加载关联收费项目
+  //     GetFeeItemsByUnitId(value[0]).then(res => {
+  //       setFeeItems(res || []);
+  //     });
+  //   }
 
-    //选择房源,计算面积
-    //["101 158.67㎡", "102 156.21㎡"] 
-    let area = 0;
+  //   //选择房源,计算面积
+  //   //["101 158.67㎡", "102 156.21㎡"] 
+  //   let area = 0;
 
-    label.forEach((val, idx, arr) => {
-      area += parseFloat(val.split(' ')[1].replace('㎡', ''));
-    });
-    form.setFieldsValue({ leaseSize: area.toFixed(2) });
-    form.setFieldsValue({ leaseArea: area.toFixed(2) });
-  };
+  //   label.forEach((val, idx, arr) => {
+  //     area += parseFloat(val.split(' ')[1].replace('㎡', ''));
+  //   });
+  //   form.setFieldsValue({ leaseSize: area.toFixed(2) });
+  //   form.setFieldsValue({ leaseArea: area.toFixed(2) });
+  // };
 
   // const onIndustrySelect = (value, option) => { 
   //   //设置行业名称
@@ -413,22 +436,22 @@ const Add = (props: AddProps) => {
 
 
   //异步加载
-  const onLoadData = treeNode =>
-    new Promise<any>(resolve => {
-      if (treeNode.props.children && treeNode.props.children.length > 0 && treeNode.props.type != 'D') {
-        resolve();
-        return;
-      }
-      setTimeout(() => {
-        GetAsynChildBuildingsSimple(treeNode.props.eventKey, treeNode.props.type).then((res: any[]) => {
-          // treeNode.props.children = res || [];
-          let newtree = treeData.concat(res);
-          // setTreeData([...treeData]);
-          setTreeData(newtree);
-        });
-        resolve();
-      }, 50);
-    });
+  // const onLoadData = treeNode =>
+  //   new Promise<any>(resolve => {
+  //     if (treeNode.props.children && treeNode.props.children.length > 0 && treeNode.props.type != 'D') {
+  //       resolve();
+  //       return;
+  //     }
+  //     setTimeout(() => {
+  //       GetAsynChildBuildingsSimple(treeNode.props.eventKey, treeNode.props.type).then((res: any[]) => {
+  //         // treeNode.props.children = res || [];
+  //         let newtree = treeData.concat(res);
+  //         // setTreeData([...treeData]);
+  //         setTreeData(newtree);
+  //       });
+  //       resolve();
+  //     }, 50);
+  //   });
 
 
   //保证金单位切换
@@ -439,13 +462,13 @@ const Add = (props: AddProps) => {
 
   //结束日期控制
   const disabledEndDate = (current) => {
-    return current&&current.isBefore(moment(form.getFieldValue('startDate')), 'day');
+    return current && current.isBefore(moment(form.getFieldValue('startDate')), 'day');
   };
 
   //起始日期控制
-  const disabledStartDate = (current) => {
-    return current&&current.isAfter(moment(form.getFieldValue('endDate')), 'day'); 
-  };
+  // const disabledStartDate = (current) => {
+  //   return current&&current.isAfter(moment(form.getFieldValue('endDate')), 'day'); 
+  // };
 
   //验证用户
   const checkExist = (rule, value, callback) => {
@@ -575,20 +598,20 @@ const Add = (props: AddProps) => {
                     </Row> */}
 
                     <Row gutter={24}>
-                      <Col lg={12}>
+                      <Col lg={24}>
                         <Form.Item label="合同编号" required>
                           {getFieldDecorator('no', {
                             rules: [{ required: true, message: '请输入合同编号' }],
                           })(<Input placeholder="请输入合同编号" />)}
                         </Form.Item>
                       </Col>
-                      <Col lg={12}>
+                      {/* <Col lg={12}>
                         <Form.Item label="合同面积(㎡)">
                           {getFieldDecorator('leaseSize', {
                             // rules: [{ required: true, message: '请输入合同面积' }],
                           })(<Input placeholder="自动获取房屋的计费面积" readOnly />)}
                         </Form.Item>
-                      </Col>
+                      </Col> */}
                     </Row>
 
                     <Row gutter={24}>
@@ -598,7 +621,7 @@ const Add = (props: AddProps) => {
                             initialValue: moment(new Date()),
                             rules: [{ required: true, message: '请选择起始日期' }],
                           })(<DatePicker placeholder="请选择起始日期"
-                            disabledDate={disabledStartDate}
+                            // disabledDate={disabledStartDate}
                             style={{ width: '100%' }}
                           />)}
                         </Form.Item>
@@ -730,7 +753,7 @@ const Add = (props: AddProps) => {
                 </Col>
                 <Col span={12}>
                   <Card title="租赁信息" className={styles.addcard} hoverable>
-                    <Row gutter={24}>
+                    {/* <Row gutter={24}>
                       <Col lg={24}>
                         <Form.Item label={<div>房源选择(<a>多个房屋的时候，默认获取第一个房屋作为计费单元</a>)</div>} required>
                           {getFieldDecorator('room', {
@@ -747,14 +770,14 @@ const Add = (props: AddProps) => {
                               multiple={true}>
                             </TreeSelect>
                           )}
-                          {/* <span style={{ marginLeft: 8, color: "blue" }}>多个房屋的时候，默认获取第一个房屋作为计费单元</span> */}
+                          <span style={{ marginLeft: 8, color: "blue" }}>多个房屋的时候，默认获取第一个房屋作为计费单元</span>
                           {getFieldDecorator('billUnitId', {
                           })(
                             <input type='hidden' />
                           )}
                         </Form.Item>
                       </Col>
-                    </Row>
+                    </Row> */}
                     <Row gutter={24}>
                       <Col lg={24}>
                         {/* <Form.Item label="承租方" required>
@@ -778,7 +801,7 @@ const Add = (props: AddProps) => {
                               onSearch={customerSearch}
                               placeholder="请输入承租方"
                               onSelect={onCustomerSelect}
-                              disabled={organizeId == '' ? true : false}
+                            // disabled={organizeId == '' ? true : false}
                             />
                           )}
                           {getFieldDecorator('customerId', {
@@ -875,14 +898,14 @@ const Add = (props: AddProps) => {
             <TabPane tab="费用条款" key="2">
               <Card title="基本条款" className={styles.card} hoverable>
                 <Row gutter={24}>
-                  <Col lg={6}>
+                  {/*  <Col lg={6}>
                     <Form.Item label="合同面积(㎡)" >
                       {getFieldDecorator('leaseArea', {
                         // rules: [{ required: true, message: '请输入合同面积' }]
                       })(<Input readOnly placeholder='自动获取' />)}
                     </Form.Item>
                   </Col>
-                  {/* <Col lg={4}>
+                 <Col lg={4}>
                     <Form.Item label="小数位数">
                       {getFieldDecorator('calcPrecision', {
                         initialValue: 2,
@@ -923,7 +946,7 @@ const Add = (props: AddProps) => {
                   <Col lg={6}>
                     <Form.Item label="中间每一步计算结果保留">
                       {getFieldDecorator('midResultScale', {
-                        initialValue:  2,
+                        initialValue: 2,
                         rules: [{ required: true, message: '请选择小数位数' }],
                       })(
                         <Select placeholder="请选择小数位数">
@@ -941,7 +964,7 @@ const Add = (props: AddProps) => {
                   <Col lg={6}>
                     <Form.Item label="对最后一位">
                       {getFieldDecorator('midScaleDispose', {
-                        initialValue:   1,
+                        initialValue: 1,
                         rules: [{ required: true, message: '请选择小数处理方法' }],
                       })(
                         <Select placeholder="请选择小数处理方法">
@@ -955,7 +978,7 @@ const Add = (props: AddProps) => {
                   <Col lg={6}>
                     <Form.Item label="最终结果保留小数位数">
                       {getFieldDecorator('lastResultScale', {
-                        initialValue:   2,
+                        initialValue: 2,
                         rules: [{ required: true, message: '请选择小数位数' }],
                       })(
                         <Select placeholder="请选择小数位数">
@@ -984,7 +1007,10 @@ const Add = (props: AddProps) => {
                   </Col>
                 </Row>
               </Card>
-              <LeaseTerm form={form} feeItems={feeItems} isValidate={isValidate} ></LeaseTerm>
+              <LeaseTerm form={form}
+                // feeItems={feeItems} 
+                isValidate={isValidate}
+              ></LeaseTerm>
               <Button style={{ width: '100%', marginBottom: '10px' }} onClick={calculation}>点击生成费用明细</Button>
               <ResultList
                 chargeData={chargeData}

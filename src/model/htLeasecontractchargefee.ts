@@ -48,7 +48,7 @@ export interface HtLeasecontractchargefee {
   /**
   * Desc:  Default:  Nullable:True
   */
- chargeEndDate?: Date;
+  chargeEndDate?: Date;
   /**
    * Desc:  Default:  Nullable:True
    */
@@ -161,4 +161,8 @@ export interface HtLeasecontractchargefee {
    * Desc:  Default:  Nullable:True
    */
   rebateRemark?: string;
+
+  //租赁条款里的房屋
+  rooms?: [];
+
 }

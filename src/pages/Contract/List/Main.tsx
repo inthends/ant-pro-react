@@ -281,21 +281,21 @@ function Main() {
                 <Col sm={4} xs={24}>
                   <Info title="新建待修改" value={totalInfo ? totalInfo.newModify : 0} bordered />
                 </Col>
-                <Col sm={4} xs={24}>
+                <Col sm={5} xs={24}>
                   <Info title="新建待审核" value={totalInfo ? totalInfo.newAudit : 0} bordered />
                 </Col>
-                <Col sm={4} xs={24}>
+                <Col sm={5} xs={24}>
                   <Info title="变更待审核" value={totalInfo ? totalInfo.changeAudit : 0} bordered />
                 </Col>
-                <Col sm={4} xs={24}>
+                <Col sm={5} xs={24}>
                   <Info title="退租待审核" value={totalInfo ? totalInfo.exitAudit : 0} bordered />
                 </Col>
                 <Col sm={4} xs={24}>
-                  <Info title="正常执行" value={totalInfo ? totalInfo.normal : 0} bordered />
+                  <Info title="正常执行" value={totalInfo ? totalInfo.normal : 0}   />
                 </Col>
-                <Col sm={4} xs={24}>
+                {/* <Col sm={4} xs={24}>
                   <Info title="已作废" value={totalInfo ? totalInfo.invalid : 0} />
-                </Col>
+                </Col> */}
               </Row>
             </Card>
             <ListTable

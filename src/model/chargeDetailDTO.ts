@@ -11,7 +11,7 @@
  */
 import { HtChargefeeresult } from './htChargefeeresult';
 import { HtLeasecontractcharge } from './htLeasecontractcharge';
-import { HtLeasecontractchargefee } from './htLeasecontractchargefee';
+import { ChargeFeeDetailDTO } from './chargeDetailDTO';
 // import { HtLeasecontractchargefeeoffer } from './htLeasecontractchargefeeoffer';
 // import { HtLeasecontractchargeincre } from './htLeasecontractchargeincre';
 // import { htContractapprovelog } from './htContractapprovelog';
@@ -27,9 +27,9 @@ export interface ChargeDetailDTO {
     /**
      * 条款
      */
-    chargeFeeList?: Array<HtLeasecontractchargefee>;
-
-
+    // chargeFeeList?: Array<HtLeasecontractchargefee>; 
+    chargeFeeList?: Array<ChargeFeeDetailDTO>;
+ 
     /**
         * 条款
         */

@@ -12,21 +12,46 @@
 
 
 /**
- * 递增率
+ * 条款房屋
  */
-export interface HtLeasecontractchargeincre {
+export interface HtLeasecontracthouse {
+
+    /**
+  * Desc:  Default:  Nullable:True
+  */
+    createDate?: Date;
+ 
+
+    /**
+ * Desc:  Default:  Nullable:True
+ */
+    createUserId?: string;
+
+    /**
+ * Desc:  Default:  Nullable:True
+ */
+    roomId?: string;
+
     /**
      * Desc:  Default:  Nullable:True
      */
     createUserName?: string;
+
+    /**
+   * Desc:  Default:  Nullable:False
+   */
+    id?: string;
+
+    /**
+ * Desc:  Default:  Nullable:True
+ */
+    chargeFeeId?: string;
+
     /**
      * Desc:  Default:  Nullable:True
      */
     modifyDate?: Date;
-    /**
-     * Desc:  Default:  Nullable:False
-     */
-    id?: string;
+
     /**
      * Desc:  Default:  Nullable:True
      */
@@ -34,37 +59,14 @@ export interface HtLeasecontractchargeincre {
     /**
      * Desc:递增类型  Default:  Nullable:True
      */
-    increType?: string;
+    allName?: string;
     /**
      * Desc:  Default:  Nullable:True
      */
     modifyUserName?: string;
+
     /**
      * Desc:  Default:  Nullable:True
      */
-    increDeposit?: number;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    increDepositUnit?: string;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    increPrice?: number;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    createDate?: Date;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    increPriceUnit?: string;
-    /**
-     * Desc:  Default:  Nullable:True
-     */
-    createUserId?: string;
-    /**
-     * Desc:  Default:  Nullable:False
-     */
-    leaseContractChargeId?: string;
+    area?: number;
 }

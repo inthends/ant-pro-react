@@ -230,6 +230,7 @@ const EditHouseFee = (props: EditHouseFeeProps) => {
   const closeAddFormula = () => {
     setAddFormulaVisible(false);
   }
+  
   const closeSelectHouse = () => {
     setSelectHouseVisible(false);
   }

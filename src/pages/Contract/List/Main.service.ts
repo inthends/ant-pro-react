@@ -161,5 +161,5 @@ export function GetFollow(keyvalue): Promise<any> {
 
 //删除合同
 export function RemoveForm(keyvalue): Promise<any> {
-  return request.post(process.env.basePath + `/Receivable/RemoveForm?keyvalue=${keyvalue}`).then(getResult as any);
+  return request.post(process.env.basePath + `/Contract/RemoveForm?keyvalue=${keyvalue}`).then(getResult as any);
 }

@@ -1,5 +1,5 @@
 //费表装表选择房间，修改为同步树
-import { Spin, Col, Form, Row, Modal, message } from 'antd';
+import { Spin, Col, Form, Row, Modal, message, notification } from 'antd';
 // import { TreeEntity } from '@/model/models';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
@@ -31,6 +31,7 @@ const SelectHouse = (props: SelectHouseProps) => {
       title="选择房屋"
       visible={visible}
       okText="确认"
+      confirmLoading={loading}
       cancelText="取消"
       onCancel={() => closeModal()}
       onOk={() => {
@@ -45,8 +46,12 @@ const SelectHouse = (props: SelectHouseProps) => {
           closeModal();
           message.success('添加成功');
           reload();
-        }).catch(() => {
-          //message.warning('数据保存错误');
+        }).catch((err) => {
+          // message.warning(err);
+          notification['warning']({
+            message: '系统提示',
+            description: err
+          });
           setLoading(false);
         });
       }}
