@@ -50,12 +50,12 @@ function LeaseTerm(props: LeaseTermProps) {
   };
 
   const remove = k => {
- 
+
 
     Modal.confirm({
       title: '请确认',
       content: `您是否要删除条款${k + 1}？`,
-      onOk: () => {  
+      onOk: () => {
 
         const keys = getFieldValue('LeaseTerms');
         setFieldsValue({
@@ -73,7 +73,7 @@ function LeaseTerm(props: LeaseTermProps) {
 
   const add = () => {
 
-    const keys = getFieldValue('LeaseTerms');  
+    const keys = getFieldValue('LeaseTerms');
     const nextKeys = keys.concat(index++);
     setFieldsValue({
       LeaseTerms: nextKeys,
@@ -110,7 +110,7 @@ function LeaseTerm(props: LeaseTermProps) {
   const formItems = keys.map((k, index) => (
 
 
-    <Card hoverable key={k} className={styles.card} title={'费用条款' + (index + 2)}
+    <Card hoverable key={k} className={styles.card} title={'租期条款' + (index + 2)}
       extra={<Icon type="minus-circle-o" onClick={() => remove(k)} />}>
       <Row gutter={24}>
         <Col lg={24}>
@@ -137,8 +137,12 @@ function LeaseTerm(props: LeaseTermProps) {
                 dataSource={chargeFeeList[k] ? chargeFeeList[k].rooms : []}
                 renderItem={item =>
                   <List.Item
-                    actions={[<a key="list-loadmore-remove"
-                      onClick={(e) => {
+                    actions={[<a
+                      //key="list-loadmore-remove"
+                      key={`list-room-remove-${k}`}
+                      onClick={(e: any) => {
+                        //条款序号  
+                        var index = e._targetInst.key.replace('list-room-remove-', '');
                         Modal.confirm({
                           title: '删除房源',
                           content: '确定删除该房源吗？',
@@ -149,18 +153,23 @@ function LeaseTerm(props: LeaseTermProps) {
                             // houseList.splice(index, 1);
                             // setHouseList([...houseList]);//必须展开
 
-                            var index = chargeFeeList[roomIndex].rooms.indexOf(item);
-                            chargeFeeList[roomIndex].rooms.splice(index, 1);
-                            if (chargeFeeList[roomIndex].rooms.length == 0) {
-                              chargeFeeList[roomIndex].feeItems = [];//清空费项
-
+                            //要删除的房间序号
+                            var roomindex = chargeFeeList[index].rooms.indexOf(item);
+                            chargeFeeList[index].rooms.splice(roomindex, 1);
+                            if (chargeFeeList[index].rooms.length == 0) {
+                              chargeFeeList[index].feeItems = [];//清空费项 
                               form.setFieldsValue({
-                                ['rooms[' + roomIndex + ']']
+                                ['rooms[' + index + ']']
                                   : []
                               });
 
                               form.setFieldsValue({
-                                ['feeItemId[' + roomIndex + ']']
+                                ['feeItemId[' + index + ']']
+                                  : null
+                              });
+
+                              form.setFieldsValue({
+                                ['price[' + index + ']']
                                   : null
                               });
                             }
@@ -169,8 +178,8 @@ function LeaseTerm(props: LeaseTermProps) {
                           }
                         });
                       }}
-                    >移除</a>]}
-                  >
+                    >移除</a>]}>
+
                     <List.Item.Meta title={item.allName} />
                     <div>{item.area}㎡</div>
                   </List.Item>
@@ -847,7 +856,7 @@ function LeaseTerm(props: LeaseTermProps) {
         closeModal={closeSelectHouse}
         getSelectTree={(res, feeItems) => {
           //临时值
-            let items = chargeFeeList.length > 0 ? chargeFeeList :
+          let items = chargeFeeList.length > 0 ? chargeFeeList :
             [{
               rooms: [],
               feeItems: [],

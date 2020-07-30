@@ -475,7 +475,7 @@ const PstructInfo = (props: PstructInfoProps) => {
                     </Form.Item>
                   </Col>
                 </Row>
-        
+
                 <Row gutter={24}>
                   <Col lg={12}>
                     <Form.Item label="经度">
@@ -568,7 +568,7 @@ const PstructInfo = (props: PstructInfoProps) => {
                       initialValue: infoDetail.ownerName
                     })(
                       <Input
-                        readOnly
+                        placeholder='请选择业主'
                         allowClear
                         onChange={(e) => {
                           form.setFieldsValue({ ownerName: '' });
@@ -600,7 +600,7 @@ const PstructInfo = (props: PstructInfoProps) => {
                       <Input placeholder="自动带出业主电话" readOnly />
                     )}
                   </Form.Item>
-                </Col> 
+                </Col>
               </Row>) : null}
 
             {type == 4 || type == 5 ? (
@@ -629,7 +629,7 @@ const PstructInfo = (props: PstructInfoProps) => {
                     })(
 
                       <Input
-                        readOnly
+                        placeholder='请选择租户'
                         allowClear
                         onChange={(e) => {
                           form.setFieldsValue({ tenantName: '' });
@@ -653,7 +653,7 @@ const PstructInfo = (props: PstructInfoProps) => {
                       initialValue: infoDetail.tenantUnitAllName,
                     })(
                       <input type='hidden' />
-                    )} 
+                    )}
                   </Form.Item>
                 </Col>
                 <Col lg={12}>

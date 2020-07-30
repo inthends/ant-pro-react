@@ -284,16 +284,15 @@ const ModifyParking = (props: ModifyParkingProps) => {
     <Drawer
       title={title}
       placement="right"
-      width={700}
+      width={800}
       onClose={close}
       visible={modifyVisible}
-      bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
-    >
-      <Card className={styles.card}  hoverable >
+      bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
+      <Card className={styles.card} hoverable >
         {modifyVisible ? (
           <Form layout="vertical" hideRequiredMark>
-            <Row gutter={24}>
-              <Col lg={24}>
+            <Row gutter={12}>
+              <Col lg={8}>
                 <Form.Item label="所属车库" required>
                   {getFieldDecorator('parentId', {
                     rules: [{ required: true, message: '请选择所属车库' }],
@@ -308,9 +307,8 @@ const ModifyParking = (props: ModifyParkingProps) => {
                   )}
                 </Form.Item>
               </Col>
-            </Row>
-            <Row gutter={24}>
-              <Col lg={12}>
+
+              <Col lg={8}>
                 <Form.Item label="车位名称" required>
                   {getFieldDecorator('name', {
                     initialValue: infoDetail.name,
@@ -318,7 +316,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
                   })(<Input placeholder="请输入车位名称" />)}
                 </Form.Item>
               </Col>
-              <Col lg={12}>
+              <Col lg={8}>
                 <Form.Item label="车位编号" required>
                   {getFieldDecorator('code', {
                     initialValue: infoDetail.code,
@@ -331,8 +329,8 @@ const ModifyParking = (props: ModifyParkingProps) => {
                 </Form.Item>
               </Col>
             </Row>
-            <Row gutter={24}>
-              <Col lg={12}>
+            <Row gutter={12}>
+              <Col lg={8}>
                 <Form.Item label="车位状态">
                   {getFieldDecorator('state', {
                     initialValue: infoDetail.state ? infoDetail.state : 0,
@@ -352,7 +350,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
                 </Form.Item>
               </Col>
 
-              <Col lg={12}>
+              <Col lg={8}>
                 <Form.Item label="车位类型">
                   {getFieldDecorator('propertyType', {
                     initialValue: infoDetail.propertyType,
@@ -367,9 +365,8 @@ const ModifyParking = (props: ModifyParkingProps) => {
                   )}
                 </Form.Item>
               </Col>
-            </Row>
-            <Row gutter={24}>
-              <Col lg={12}>
+
+              <Col lg={8}>
                 <Form.Item label="车位性质">
                   {getFieldDecorator('parkingNature', {
                     initialValue: infoDetail.parkingNature,
@@ -383,8 +380,11 @@ const ModifyParking = (props: ModifyParkingProps) => {
                     </Select>,
                   )}
                 </Form.Item>
-              </Col>
-              <Col lg={12}>
+              </Col> 
+            </Row>
+
+            <Row gutter={12}>
+              <Col lg={8}>
                 <Form.Item label="交付日期">
                   {getFieldDecorator('date', {
                     initialValue: infoDetail.handoverDate
@@ -393,16 +393,14 @@ const ModifyParking = (props: ModifyParkingProps) => {
                   })(<DatePicker style={{ width: '100%' }} />)}
                 </Form.Item>
               </Col>
-            </Row>
-            <Row gutter={24}>
-              <Col lg={12}>
+              <Col lg={8}>
                 <Form.Item label="建筑面积(㎡)">
                   {getFieldDecorator('area', {
                     initialValue: infoDetail.area,
                   })(<InputNumber placeholder="请输入建筑面积" style={{ width: '100%' }} />)}
                 </Form.Item>
               </Col>
-              <Col lg={12}>
+              <Col lg={8}>
                 <Form.Item label="计费面积(㎡)">
                   {getFieldDecorator('billArea', {
                     initialValue: infoDetail.billArea,
@@ -411,7 +409,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
               </Col>
             </Row>
 
-            <Row gutter={12}>
+            <Row gutter={24}>
               <Col lg={12}>
                 <Form.Item label={infoDetail.ownerName ? <div>业主名称 <a onClick={() => { showCustomerDrawer(infoDetail.ownerId, 1) }}>编辑</a></div> : '业主名称'}>
                   {/* {getFieldDecorator('ownerId', {
@@ -435,9 +433,9 @@ const ModifyParking = (props: ModifyParkingProps) => {
                     //   placeholder="请输入业主名称"
                     //   onSelect={onOwnerSelect}
                     // />
-                    <Input
-                      readOnly
+                    <Input 
                       allowClear
+                      placeholder='请选择业主'
                       onChange={(e) => {
                         form.setFieldsValue({ ownerId: '' });
                         form.setFieldsValue({ ownerPhone: '' });
@@ -472,10 +470,10 @@ const ModifyParking = (props: ModifyParkingProps) => {
                 </Form.Item>
               </Col>
 
-           
+
             </Row>
             <Row gutter={24}>
-            <Col lg={12}>
+              <Col lg={12}>
                 <Form.Item label={infoDetail.tenantName ? <div>租户名称 <a onClick={() => { showCustomerDrawer(infoDetail.tenantId, 2) }}>编辑</a></div> : '租户名称'}>
                   {/* {getFieldDecorator('customerId', {
                     initialValue: infoDetail.customerId,
@@ -494,9 +492,9 @@ const ModifyParking = (props: ModifyParkingProps) => {
                     //   placeholder="请输入租户名称"
                     //   onSelect={onTenantSelect}
                     // /> 
-                    <Input
-                      readOnly
+                    <Input 
                       allowClear
+                      placeholder='请选择租户'
                       onChange={(e) => {
                         form.setFieldsValue({ tenantId: '' });
                         form.setFieldsValue({ tenantPhone: '' });
@@ -505,7 +503,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
                       addonAfter={<Icon type="setting" onClick={() => {
                         setCustomerType(2);
                         setCustomerSelectVisible(true);
-                      }} />} /> 
+                      }} />} />
                   )}
                   {getFieldDecorator('tenantId', {
                     initialValue: infoDetail.tenantId,
@@ -516,10 +514,10 @@ const ModifyParking = (props: ModifyParkingProps) => {
                     initialValue: infoDetail.tenantUnitId,
                   })(
                     <input type='hidden' />
-                  )} 
+                  )}
                 </Form.Item>
               </Col>
-           
+
               <Col lg={12}>
                 <Form.Item label="租户电话">
                   {getFieldDecorator('tenantPhone', {
@@ -638,7 +636,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
         organizeId={organizeId}
         // type={type}
         reload={(customerId) => {
-          GetParkingCustomerInfo(customerId).then(res => {  
+          GetParkingCustomerInfo(customerId).then(res => {
             //防止旧数据缓存，清空下拉
             // setUserList([]);
             if (customerType == 1) {
@@ -647,7 +645,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
               form.setFieldsValue({ ownerId: customerId });
               form.setFieldsValue({ ownerPhone: res.phoneNum });
               form.setFieldsValue({ ownerUnitAllName: res.ownerUnitAllName });
-              
+
             } else {
               //租户
               form.setFieldsValue({ tenantName: res.name });
@@ -665,7 +663,7 @@ const ModifyParking = (props: ModifyParkingProps) => {
         closeModal={closeCustomerSelect}
         organizeId={organizeId}
         type='parking'
-        Select={(res) => {  
+        Select={(res) => {
           if (customerType == 1) {
             //业主
             form.setFieldsValue({ ownerName: res.name });

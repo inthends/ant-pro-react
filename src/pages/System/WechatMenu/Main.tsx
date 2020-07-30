@@ -1,5 +1,5 @@
 import { DefaultPagination } from "@/utils/defaultSetting";
-import { message, Modal, Button, Icon, Input, Layout } from "antd";
+import { message, Modal, Button, Icon, Input, Layout, notification } from "antd";
 import { PaginationConfig } from "antd/lib/table";
 import React, { useEffect, useState } from "react";
 import ListTable from "./ListTable";
@@ -115,7 +115,13 @@ const Main = () => {
       onOk: () => {
         CreateMenu().then(() => {
           message.success('创建成功');
-        }).catch(() => {
+        }).catch((err) => {
+           message.warn(err); 
+          // notification['warning']({
+          //   message: '系统提示',
+          //   description: err
+          // });
+
         });
       },
     });
@@ -151,7 +157,7 @@ const Main = () => {
             <Icon type="plus" />
             菜单
           </Button>
- 
+
         </div>
         <ListTable
           onchange={(paginationConfig, filters, sorter) =>

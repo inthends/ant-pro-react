@@ -2,7 +2,7 @@
 //租期条款动态组件，编辑
 import { ChargeFeeDetailDTO } from '@/model/models';
 import { Modal, List, Tooltip, Input, Icon, DatePicker, Button, InputNumber, Select, Card, Col, Row, Form } from 'antd';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import SelectHouse from './SelectHouse';
 import styles from './style.less';
@@ -14,16 +14,23 @@ interface LeaseTermModifyProps {
   // feeItems: TreeEntity[];
   // chargeFeeList: HtLeasecontractchargefee[]; 
   chargeFeeList: ChargeFeeDetailDTO[];
+  visible: boolean;
 }
 
 //动态数量
-let index = 1;
+//let index = 1;
 function LeaseTermModify(props: LeaseTermModifyProps) {
-  const { form, chargeFeeList } = props;
+  const { visible, form, chargeFeeList } = props;
   const { getFieldDecorator, getFieldValue, setFieldsValue } = form;
-  const [priceUnit, setPriceUnit] = useState<string>("元/m²·天");//单价单位
+  const [priceUnit, setPriceUnit] = useState<string>("元/m²·天");//单价单位 
+  const [mychargeFeeList, setMyChargeFeeList] = useState<ChargeFeeDetailDTO[]>([]);
 
-  const [mychargeFeeList, setMyChargeFeeList] = useState<ChargeFeeDetailDTO[]>(chargeFeeList);
+  //初始化
+  useEffect(() => {
+    if (visible) {
+      setMyChargeFeeList(chargeFeeList);
+    }
+  }, [visible]);
 
   //单位切换
   const changeUnit = value => {
@@ -39,21 +46,36 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
       title: '请确认',
       content: `您是否要删除条款${k + 1}？`,
       onOk: () => {
-        const keys = getFieldValue('LeaseTerms');
-        setFieldsValue({
-          LeaseTerms: keys.filter(key => key !== k),
-        });
-        index--;
+        // const keys = getFieldValue('LeaseTerms');
+        // setFieldsValue({
+        //   LeaseTerms: keys.filter(key => key !== k),
+        // }); 
+        //index--;
+        //删除
+        mychargeFeeList.splice(k, 1);
+        setMyChargeFeeList([...mychargeFeeList]);//必须展开
+        setFieldsValue({ LeaseTerms: mychargeFeeList });
       },
     });
   };
 
   const add = () => {
-    const keys = getFieldValue('LeaseTerms');
-    const nextKeys = keys.concat(index++);
-    setFieldsValue({
-      LeaseTerms: nextKeys,
+
+    //const keys = getFieldValue('LeaseTerms');
+    // const nextKeys = keys.concat(index++);
+    // setFieldsValue({
+    //   LeaseTerms: nextKeys,
+    // });
+
+    mychargeFeeList.push({
+      rooms: [],
+      feeItems: [],
+      chargeFee: {}
     });
+
+    setMyChargeFeeList(mychargeFeeList);
+    setFieldsValue({ LeaseTerms: mychargeFeeList });
+
   };
 
   //费项选择
@@ -71,14 +93,16 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
   // const [feeItems, setFeeItems] = useState<TreeEntity[]>([]);
   const [selectHouseVisible, setSelectHouseVisible] = useState<boolean>(false);
   const [roomIndex, setRoomIndex] = useState<number>(0);
-  const [houseList, setHouseList] = useState<any[]>([]);//房屋列表
+  // const [houseList, setHouseList] = useState<any[]>([]);//房屋列表
 
   //初始化 租赁条款 
-  getFieldDecorator('LeaseTerms', { initialValue: mychargeFeeList });
+  getFieldDecorator('LeaseTerms', { initialValue: chargeFeeList });
   const keys = getFieldValue('LeaseTerms');
   const formItems = keys.map((k: ChargeFeeDetailDTO, index) =>
     (
-      <Card hoverable key={index} className={styles.card} title={index == 0 ? '租期条款' : ''}
+      <Card hoverable key={index} className={styles.card}
+        title={'租期条款' + (index + 1)}
+        //title={index == 0 ? '租期条款' : ''}
         extra={index > 0 ? <Icon type="minus-circle-o" onClick={() => remove(index)} /> : null}>
         <Row gutter={24}>
           <Col lg={24}>
@@ -87,14 +111,6 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
                 initialValue: k.rooms,
                 rules: [{ required: true, message: '请选择房源' }],
               })(
-                // <Input
-                //   onChange={e => { 
-                //   }}
-                //   allowClear={true}
-                //   addonAfter={<Icon type="setting" onClick={() => {
-                //     setSelectHouseVisible(true);
-                //     // setRoomIndex(0);
-                //   }} />} />
 
                 <List
                   header={<a
@@ -108,39 +124,41 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
                   dataSource={k.rooms}
                   renderItem={item =>
                     <List.Item
-                      actions={[<a key="list-loadmore-remove"
-                        onClick={(e) => {
+ 
+                      actions={[<a 
+                        key={`list-room-remove-${index}`} 
+                        onClick={(e:any) => { 
+                          //条款序号  
+                          var index = e._targetInst.key.replace('list-room-remove-',''); 
                           Modal.confirm({
                             title: '删除房源',
                             content: '确定删除该房源吗？',
                             okText: '确认',
                             cancelText: '取消',
-                            onOk: () => {
-                              // var index = houseList.indexOf(item);
-                              // houseList.splice(index, 1);
-                              // setHouseList([...houseList]);//必须展开
+                            onOk: () => { 
 
-                              var index = chargeFeeList[0].rooms.indexOf(item);
-                              chargeFeeList[0].rooms.splice(index, 1);
-                              if (chargeFeeList[0].rooms.length == 0) {
-                                chargeFeeList[0].feeItems = [];//清空费项
+                              //要删除的房间序号
+                              var roomindex = mychargeFeeList[index].rooms.indexOf(item);
+                              mychargeFeeList[index].rooms.splice(roomindex, 1);
+                              if (mychargeFeeList[index].rooms.length == 0) {
+                                mychargeFeeList[index].feeItems = [];//清空费项
 
                                 form.setFieldsValue({
-                                  ['rooms[0]']
+                                  ['rooms[' + index + ']']
                                     : []
                                 });
 
                                 form.setFieldsValue({
-                                  ['feeItemId[0]']
+                                  ['feeItemId[' + index + ']']
                                     : null
                                 });
 
                                 form.setFieldsValue({
-                                  ['price[0]']
+                                  ['price[' + index + ']']
                                     : null
                                 });
                               }
-                              setMyChargeFeeList([...chargeFeeList]);//必须展开   
+                              setMyChargeFeeList([...mychargeFeeList]);//必须展开   
                             }
                           });
                         }}
@@ -161,7 +179,7 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
           <Col lg={4}>
             <Form.Item label="开始时间" required >
               {getFieldDecorator(`chargeStartDate[${index}]`, {
-                initialValue: k.chargeFee.chargeStartDate
+                initialValue: k.chargeFee && k.chargeFee.chargeStartDate
                   ? moment(new Date(k.chargeFee.chargeStartDate))
                   : moment(new Date()),
                 rules: [{ required: true, message: '请选择' }],
@@ -178,7 +196,7 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
           <Col lg={4}>
             <Form.Item label="结束时间" required>
               {getFieldDecorator(`chargeEndDate[${index}]`, {
-                initialValue: k.chargeFee.chargeEndDate
+                initialValue: k.chargeFee && k.chargeFee.chargeEndDate
                   ? moment(new Date(k.chargeFee.chargeEndDate))
                   : moment(new Date()),
                 rules: [{ required: true, message: '请选择' }],
@@ -194,21 +212,21 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
           <Col lg={8}>
             <Form.Item label="关联费项" required>
               {getFieldDecorator(`feeItemId[${index}]`, {
-                initialValue: k.chargeFee.feeItemId,
+                initialValue: k.chargeFee ? k.chargeFee.feeItemId : null,
                 rules: [{ required: true, message: '请选择费项' }]
               })(
                 <Select placeholder="请选择费项"
                   onChange={(value, option) => changeFee(value, option, index)}
                 >
-                  {k.feeItems.map(item => (
+                  {k.feeItems ? k.feeItems.map(item => (
                     <Option value={item.value} >
                       {item.title}
                     </Option>
-                  ))}
+                  )) : null}
                 </Select>
               )}
               {getFieldDecorator(`feeItemName[${index}]`, {
-                initialValue: k.chargeFee.feeItemName,
+                initialValue: k.chargeFee ? k.chargeFee.feeItemName : null,
               })(
                 <input type='hidden' />
               )}
@@ -217,7 +235,7 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
           <Col lg={4}>
             <Form.Item label="单价" required>
               {getFieldDecorator(`price[${index}]`, {
-                initialValue: k.chargeFee.price,
+                initialValue: k.chargeFee ? k.chargeFee.price : null,
                 rules: [{ required: true, message: '请输入单价' }],
               })(<InputNumber placeholder="请输入单价" style={{ width: '100%' }} />)}
             </Form.Item>
@@ -225,7 +243,7 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
           <Col lg={4}>
             <Form.Item label="&nbsp;">
               {getFieldDecorator(`priceUnit[${index}]`, {
-                initialValue: k.chargeFee.priceUnit ? k.chargeFee.priceUnit : '元/m²·天'
+                initialValue: k.chargeFee ? k.chargeFee.priceUnit : '元/m²·天'
               })(
                 <Select onChange={changeUnit}>
                   <Option value="元/m²·月">元/m²·月</Option>
@@ -248,7 +266,7 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
             5、以月记租时，整月按公式3第一项计算，余下的天数按照公式3的第二项计算</span>}>
               <Icon type="question-circle" /></Tooltip></div>}>
               {getFieldDecorator(`billType[${index}]`, {
-                initialValue: k.chargeFee.billType ? k.chargeFee.billType : '按月计费'
+                initialValue: k.chargeFee ? k.chargeFee.billType : '按月计费'
               })(
                 <Select>
                   <Option value="按实际天数计费">按实际天数计费</Option>
@@ -267,7 +285,7 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
               <Icon type="question-circle" />
             </Tooltip></div>}>
               {getFieldDecorator(`dayPriceConvertRule[${index}]`, {
-                initialValue: k.chargeFee.dayPriceConvertRule ? k.chargeFee.dayPriceConvertRule : '按年换算',
+                initialValue: k.chargeFee ? k.chargeFee.dayPriceConvertRule : '按年换算',
               })(
                 <Select
                   disabled={!(priceUnit != "元/m²·天" && priceUnit != "元/天")}>
@@ -297,7 +315,7 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
             <Form.Item label={<div>年天数 <Tooltip title="指一年按多少天来计算">
               <Icon type="question-circle" /></Tooltip></div>}>
               {getFieldDecorator(`yearDays[${index}]`, {
-                initialValue: k.chargeFee.yearDays ? k.chargeFee.yearDays : 365,
+                initialValue: k.chargeFee ? k.chargeFee.yearDays : 365,
                 rules: [{ required: true, message: '请输入年天数' }],
               })(<InputNumber placeholder="请输入年天数" style={{ width: '100%' }} />)}
             </Form.Item>
@@ -305,7 +323,7 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
           <Col lg={4}>
             <Form.Item label="付款周期（月）" required>
               {getFieldDecorator(`payCycle[${index}]`, {
-                initialValue: k.chargeFee.payCycle,
+                initialValue: k.chargeFee ? k.chargeFee.payCycle : 1,
                 rules: [{ required: true, message: '请填写付款周期' }]
               })(
                 <InputNumber placeholder="请填写付款周期" style={{ width: '100%' }} />
@@ -316,7 +334,7 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
           <Col lg={4}>
             <Form.Item label="提前付款时间">
               {getFieldDecorator(`advancePayTime[${index}]`, {
-                initialValue: k.chargeFee.advancePayTime ? k.chargeFee.advancePayTime : 1,
+                initialValue: k.chargeFee ? k.chargeFee.advancePayTime : 1,
                 rules: [{ required: true, message: '请输入提前付款时间' }],
               })(<InputNumber placeholder="请输入" style={{ width: '100%' }} />)}
             </Form.Item>
@@ -324,7 +342,7 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
           <Col lg={4}>
             <Form.Item label="&nbsp;">
               {getFieldDecorator(`advancePayTimeUnit[${index}]`, {
-                initialValue: k.chargeFee.advancePayTimeUnit ? k.chargeFee.advancePayTimeUnit : '工作日'
+                initialValue: k.chargeFee ? k.chargeFee.advancePayTimeUnit : '工作日'
               })(
                 <Select>
                   <Option value="工作日">工作日</Option>
@@ -344,7 +362,7 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
               <Icon type="question-circle" />
             </Tooltip></div>}>
               {getFieldDecorator(`rentalPeriodDivided[${index}]`, {
-                initialValue: k.chargeFee.rentalPeriodDivided ? k.chargeFee.rentalPeriodDivided : '按起始日划分'
+                initialValue: k.chargeFee ? k.chargeFee.rentalPeriodDivided : '按起始日划分'
               })(
                 <Select>
                   <Option value="按起始日划分">按起始日划分</Option>
@@ -357,7 +375,7 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
           <Col lg={4}>
             <Form.Item label="递增时间点"  >
               {getFieldDecorator(`increStartDate[${index}]`, {
-                initialValue: k.chargeFee.increStartDate
+                initialValue: k.chargeFee && k.chargeFee.increStartDate
                   ? moment(new Date(k.chargeFee.increStartDate))
                   : null,
                 // rules: [{ required: true, message: '请选择' }],
@@ -378,7 +396,7 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
           <Col lg={4}>
             <Form.Item label="递增间隔（月）">
               {getFieldDecorator(`increGap[${index}]`, {
-                initialValue: k.chargeFee.increGap,
+                initialValue: k.chargeFee ? k.chargeFee.increGap : null,
                 rules: [{ required: form.getFieldValue(`increStartDate[${index}]`), message: '请输入' }],
               })(<InputNumber placeholder='请输入' style={{ width: '100%' }} />)}
             </Form.Item>
@@ -387,7 +405,7 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
           <Col lg={4}>
             <Form.Item label="单价递增" >
               {getFieldDecorator(`increPrice[${index}]`, {
-                initialValue: k.chargeFee.increPrice,
+                initialValue: k.chargeFee ? k.chargeFee.increPrice : null,
                 rules: [{ required: form.getFieldValue(`increStartDate[${index}]`), message: '请输入' }],
               })(
                 <InputNumber placeholder="请输入" style={{ width: '100%' }} />
@@ -422,7 +440,7 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
           <Col lg={4}>
             <Form.Item label="免租期开始" >
               {getFieldDecorator(`rebateStartDate[${index}]`, {
-                initialValue: k.chargeFee.rebateStartDate
+                initialValue: k.chargeFee && k.chargeFee.rebateStartDate
                   ? moment(new Date(k.chargeFee.rebateStartDate))
                   : null,
               })(<DatePicker placeholder="请选择"
@@ -438,7 +456,7 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
           <Col lg={4}>
             <Form.Item label="免租期结束" >
               {getFieldDecorator(`rebateEndDate[${index}]`, {
-                initialValue: k.chargeFee.rebateEndDate
+                initialValue: k.chargeFee && k.chargeFee.rebateEndDate
                   ? moment(new Date(k.chargeFee.rebateEndDate))
                   : null,
               })(<DatePicker placeholder="请选择"
@@ -478,7 +496,7 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
           <Col lg={16}>
             <Form.Item label="优惠备注" >
               {getFieldDecorator(`rebateRemark[${index}]`, {
-                initialValue: k.chargeFee.rebateRemark,
+                initialValue: k.chargeFee ? k.chargeFee.rebateRemark : null,
                 //rules: [{ required: true, message: '请输入备注' }],
               })(<Input placeholder="请输入优惠备注" />)}
             </Form.Item>
@@ -488,55 +506,26 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
     ));
 
   return (
-    <div style={{ marginBottom: '10px' }}  >
+    <div style={{ marginBottom: '10px' }}>
       {formItems}
+
       <Button type="dashed" onClick={add}>
         <Icon type="plus" />添加租期条款
-          </Button>
+      </Button>
 
 
       <SelectHouse
         visible={selectHouseVisible}
         closeModal={closeSelectHouse}
         getSelectTree={(res, feeItems) => {
-
-          //临时值
-          let items = chargeFeeList.length > 0 ? chargeFeeList :
-            [{
-              rooms: [],
-              feeItems: [],
-              chargeFee: {}
-            }];
-
-          //追加赋值 
-          //去除原队列已存在数据 
-          for (var i = 0; i < houseList.length; i++) {
-            for (var j = 0; j < res.length; j++) {
-              if (res[j].roomId == houseList[i].roomId) {
-                res.splice(j, 1);
-                j = j - 1;
-              }
-            }
-          }
-
-          // var list = [...houseList, ...res];
-          // setHouseList(list);
-
-          var list = [...items[roomIndex].rooms, ...res];
-
+          var list = [...mychargeFeeList[roomIndex].rooms, ...res];
           form.setFieldsValue({
             ['rooms[' + roomIndex + ']']
               : list
           });
-
-          items[roomIndex].rooms = list;
-          items[roomIndex].feeItems = feeItems; //[ { key: 'test', value: 'test', title: 'test' }]; 
-          setMyChargeFeeList(items);
-
-          //加载费项
-          // GetFeeItemsByUnitId(res[0].id).then(res => {
-          //   setFeeItems(res || []);
-          // });
+          mychargeFeeList[roomIndex].rooms = list;
+          mychargeFeeList[roomIndex].feeItems = feeItems;
+          setMyChargeFeeList(mychargeFeeList);
         }}
       />
 

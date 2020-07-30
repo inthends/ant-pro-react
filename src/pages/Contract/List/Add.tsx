@@ -88,6 +88,108 @@ const Add = (props: AddProps) => {
   }, [visible]);
 
   const [TermJson, setTermJson] = useState<string>();
+
+
+  //获取条款
+  const getTerms = (values) => {
+
+    //获取条款-begin
+    let TermJson: ChargeFeeDetailDTO[] = [];
+    let charge: ChargeFeeDetailDTO = {
+      rooms: [],
+      feeItems: [],
+      chargeFee: {}
+    };
+    let data: HtLeasecontractchargefee = {};
+    //const TermJson=[];
+    //const data = {}; 
+    //data["FeeItemId"] = values.feeItemId[0]; 
+    // let mychargefee: HtLeasecontractchargefee = {}; 
+    data.feeItemId = values.feeItemId[0];
+    data.feeItemName = values.feeItemName[0];
+    data.chargeStartDate = values.chargeStartDate[0].format('YYYY-MM-DD');
+    data.chargeEndDate = values.chargeEndDate[0].format('YYYY-MM-DD');
+    data.price = values.price[0];
+    data.priceUnit = values.priceUnit[0];
+    data.advancePayTime = values.advancePayTime[0];
+    data.advancePayTimeUnit = values.advancePayTimeUnit[0];
+    data.billType = values.billType[0];
+    if (data.priceUnit != "元/m²·天" && data.priceUnit != "元/天") {
+      //天单价转换规则
+      data.dayPriceConvertRule = values.dayPriceConvertRule[0];
+    }
+    data.yearDays = values.yearDays[0];
+    data.payCycle = values.payCycle[0];
+    //租期划分方式
+    data.rentalPeriodDivided = values.rentalPeriodDivided[0];
+    //递增率
+    // data.increType = values.increType;
+    data.increStartDate = values.increStartDate[0] ? values.increStartDate[0].format('YYYY-MM-DD') : null;
+    //data.increEndDate = values.increEndDate[0] ? values.increEndDate[0].format('YYYY-MM-DD') : null;
+    data.increGap = values.increGap[0];
+    data.increPrice = values.increPrice[0];
+    data.increPriceUnit = values.increPriceUnit[0];
+    //优惠
+    // data.rebateType = values.rebateType[0];
+    data.rebateStartDate = values.rebateStartDate[0] ? values.rebateStartDate[0].format('YYYY-MM-DD') : null;
+    data.rebateEndDate = values.rebateEndDate[0] ? values.rebateEndDate[0].format('YYYY-MM-DD') : null;
+    // data.startPeriod = values.startPeriod[0];
+    // data.periodLength = values.periodLength[0];
+    // data.discount = values.discount[0];
+    data.rebateRemark = values.rebateRemark[0];
+    charge.chargeFee = data;
+    //添加房屋   
+    charge.rooms = values.rooms[0];
+    TermJson.push(charge);
+    //动态添加的租期
+    values.LeaseTerms.map(function (k, index, arr) {
+      let charge: ChargeFeeDetailDTO = {
+        rooms: [],
+        feeItems: [],
+        chargeFee: {}
+      };
+      let data: HtLeasecontractchargefee = {};
+      data.feeItemId = values.feeItemId[k];
+      data.feeItemName = values.feeItemName[k];
+      data.chargeStartDate = values.chargeStartDate[k];
+      data.chargeEndDate = values.chargeEndDate[k];
+      data.price = values.price[k];
+      data.priceUnit = values.priceUnit[k];
+      data.advancePayTime = values.advancePayTime[k];
+      data.advancePayTimeUnit = values.advancePayTimeUnit[k];
+      data.billType = values.billType[k];
+      if (data.priceUnit != "元/m²·天" && data.priceUnit != "元/天") {
+        data.dayPriceConvertRule = values.dayPriceConvertRule[k];
+      }
+      data.yearDays = values.yearDays[k];
+      data.payCycle = values.payCycle[k];
+      data.rentalPeriodDivided = values.rentalPeriodDivided[k];
+      //递增率 
+      data.increStartDate = values.increStartDate[k] ? values.increStartDate[k].format('YYYY-MM-DD') : null;
+      //data.increEndDate = values.increEndDate[k] ? values.increEndDate[k].format('YYYY-MM-DD') : null;
+      data.increGap = values.increGap[k];
+      data.increPrice = values.increPrice[k];
+      data.increPriceUnit = values.increPriceUnit[k];
+      //优惠
+      // data.rebateType = values.rebateType[k];
+      data.rebateStartDate = values.rebateStartDate[k] ? values.rebateStartDate[k].format('YYYY-MM-DD') : null;
+      data.rebateEndDate = values.rebateEndDate[k] ? values.rebateEndDate[k].format('YYYY-MM-DD') : null;
+      // data.startPeriod = values.startPeriod[k];
+      // data.periodLength = values.periodLength[k];
+      // data.discount = values.discount[k];
+      data.rebateRemark = values.rebateRemark[k];
+      charge.chargeFee = data;
+      //添加房屋  
+      charge.rooms = values.rooms[k];
+      TermJson.push(charge);
+    });
+    let strTermJson = JSON.stringify(TermJson);
+    setTermJson(strTermJson);
+    //获取条款-end 
+    return strTermJson;
+  }
+
+
   //计算租金明细
   const calculation = () => {
     setIsValidate(true);
@@ -95,144 +197,9 @@ const Add = (props: AddProps) => {
       if (!errors) {
         //租赁条款     
         setLoading(true);
-        let TermJson: ChargeFeeDetailDTO[] = [];
-        let charge: ChargeFeeDetailDTO = {
-          rooms: [],
-          feeItems: [],
-          chargeFee: {}
-        };
-        let data: HtLeasecontractchargefee = {};
-        //const TermJson=[];
-        //const data = {}; 
-        //data["FeeItemId"] = values.feeItemId[0]; 
-        // let mychargefee: HtLeasecontractchargefee = {}; 
-        data.feeItemId = values.feeItemId[0];
-        data.feeItemName = values.feeItemName[0];
-        data.chargeStartDate = values.chargeStartDate[0].format('YYYY-MM-DD');
-        data.chargeEndDate = values.chargeEndDate[0].format('YYYY-MM-DD');
-        data.price = values.price[0];
-        data.priceUnit = values.priceUnit[0];
-        data.advancePayTime = values.advancePayTime[0];
-        data.advancePayTimeUnit = values.advancePayTimeUnit[0];
-        data.billType = values.billType[0];
-        if (data.priceUnit != "元/m²·天" && data.priceUnit != "元/天") {
-          //天单价转换规则
-          data.dayPriceConvertRule = values.dayPriceConvertRule[0];
-        }
-        data.yearDays = values.yearDays[0];
-        data.payCycle = values.payCycle[0];
-        //租期划分方式
-        data.rentalPeriodDivided = values.rentalPeriodDivided[0];
-        //递增率
-        // data.increType = values.increType;
-        data.increStartDate = values.increStartDate[0] ? values.increStartDate[0].format('YYYY-MM-DD') : null;
-        //data.increEndDate = values.increEndDate[0] ? values.increEndDate[0].format('YYYY-MM-DD') : null;
-        data.increGap = values.increGap[0];
-        data.increPrice = values.increPrice[0];
-        data.increPriceUnit = values.increPriceUnit[0];
-        //优惠
-        // data.rebateType = values.rebateType[0];
-        data.rebateStartDate = values.rebateStartDate[0] ? values.rebateStartDate[0].format('YYYY-MM-DD') : null;
-        data.rebateEndDate = values.rebateEndDate[0] ? values.rebateEndDate[0].format('YYYY-MM-DD') : null;
-        // data.startPeriod = values.startPeriod[0];
-        // data.periodLength = values.periodLength[0];
-        // data.discount = values.discount[0];
-        data.rebateRemark = values.rebateRemark[0];
-        charge.chargeFee = data;
-        //添加房屋   
-        charge.rooms = values.rooms[0];
-        TermJson.push(charge);
 
-        //动态添加的租期
-        values.LeaseTerms.map(function (k, index, arr) {
-          let charge: ChargeFeeDetailDTO = {
-            rooms: [],
-            feeItems: [],
-            chargeFee: {}
-          };
-          let data: HtLeasecontractchargefee = {};
-          data.feeItemId = values.feeItemId[k];
-          data.feeItemName = values.feeItemName[k];
-          data.chargeStartDate = values.chargeStartDate[k];
-          data.chargeEndDate = values.chargeEndDate[k];
-          data.price = values.price[k];
-          data.priceUnit = values.priceUnit[k];
-          data.advancePayTime = values.advancePayTime[k];
-          data.advancePayTimeUnit = values.advancePayTimeUnit[k];
-          data.billType = values.billType[k];
-          if (data.priceUnit != "元/m²·天" && data.priceUnit != "元/天") {
-            data.dayPriceConvertRule = values.dayPriceConvertRule[k];
-          }
-          data.yearDays = values.yearDays[k];
-          data.payCycle = values.payCycle[k];
-          data.rentalPeriodDivided = values.rentalPeriodDivided[k];
-          //递增率 
-          data.increStartDate = values.increStartDate[k] ? values.increStartDate[k].format('YYYY-MM-DD') : null;
-          //data.increEndDate = values.increEndDate[k] ? values.increEndDate[k].format('YYYY-MM-DD') : null;
-          data.increGap = values.increGap[k];
-          data.increPrice = values.increPrice[k];
-          data.increPriceUnit = values.increPriceUnit[k];
-          //优惠
-          // data.rebateType = values.rebateType[k];
-          data.rebateStartDate = values.rebateStartDate[k] ? values.rebateStartDate[k].format('YYYY-MM-DD') : null;
-          data.rebateEndDate = values.rebateEndDate[k] ? values.rebateEndDate[k].format('YYYY-MM-DD') : null;
-          // data.startPeriod = values.startPeriod[k];
-          // data.periodLength = values.periodLength[k];
-          // data.discount = values.discount[k];
-          data.rebateRemark = values.rebateRemark[k];
-          charge.chargeFee = data;
-          //添加房屋  
-          charge.rooms = values.rooms[k];
-          TermJson.push(charge);
-        });
-
-        //递增率
-        // let RateJson: HtLeasecontractchargeincre[] = [];
-        // values.IncreasingRates.map(function (k, index, arr) {
-        //   let rate: HtLeasecontractchargeincre = {};
-        //   rate.increDate = values.increDate[k];
-        //   rate.increPrice = values.increPrice[k];
-        //   rate.increPriceUnit = values.increPriceUnit[k];
-        //   rate.increDeposit = values.increDeposit[k];
-        //   rate.increDepositUnit = values.increDepositUnit[k];
-        //   RateJson.push(rate);
-        // });
-
-        // let RateJson: HtLeasecontractchargeincre[] = [];
-        // let mychargeincre: HtLeasecontractchargeincre = {};
-        // mychargeincre.increType = values.increType;
-        // mychargeincre.increPrice = values.increPrice;
-        // mychargeincre.increPriceUnit = values.increPriceUnit;
-        // mychargeincre.increDeposit = values.increDeposit;
-        // mychargeincre.increDepositUnit = values.increDepositUnit;
-        // RateJson.push(rate);
-
-        //优惠
-        // values.Rebates.map(function (k, index, arr) {
-        //   let rebate: HtLeasecontractchargefeeoffer = {};
-        //   rebate.type = values.rebateType[k];
-        //   rebate.startDate = values.rebateStartDate[k];
-        //   rebate.endDate = values.rebateEndDate[k];
-        //   rebate.startPeriod = values.startPeriod[k];
-        //   rebate.periodLength = values.periodLength[k];
-        //   rebate.discount = values.discount[k];
-        //   rebate.remark = values.remark[k];
-        //   RebateJson.push(rebate);
-        // });
-
-        // let RebateJson: HtLeasecontractchargefeeoffer[] = [];
-        // let mychargefeeoffer: HtLeasecontractchargefeeoffer = {};
-        // mychargefeeoffer.rebateType = values.rebateType;
-        // if (values.rebateStartDate != undefined)
-        //   mychargefeeoffer.rebateStartDate = values.rebateStartDate.format('YYYY-MM-DD');
-        // if (values.rebateEndDate != undefined)
-        //   mychargefeeoffer.rebateEndDate = values.rebateEndDate.format('YYYY-MM-DD');
-        // mychargefeeoffer.startPeriod = values.startPeriod;
-        // mychargefeeoffer.periodLength = values.periodLength;
-        // mychargefeeoffer.discount = values.discount;
-        // mychargefeeoffer.remark = values.remark;
-        // RebateJson.push(rebate);
-        //let entity = values; 
+        //获取条款
+        var strTermJson = getTerms(values);
 
         let entity: HtLeasecontractcharge = {};
         //费用条款-基本条款 
@@ -249,10 +216,7 @@ const Add = (props: AddProps) => {
         if (values.lateDate != null)
           entity.lateDate = values.lateDate.format('YYYY-MM-DD');
         // entity.propertyFeeId = values.propertyFeeId;
-        // entity.propertyFeeName = values.propertyFeeName;
-
-        let strTermJson = JSON.stringify(TermJson);
-        setTermJson(strTermJson);
+        // entity.propertyFeeName = values.propertyFeeName; 
         // setChargefee(mychargefee);
         // let strRateJson = JSON.stringify(RateJson);
         // setChargeincre(mychargeincre);
@@ -287,6 +251,7 @@ const Add = (props: AddProps) => {
   //是否启用验证
   const [isValidate, setIsValidate] = useState<boolean>(false);
 
+  //暂存或提交
   const save = (submit) => {
     setIsValidate(submit);
     form.validateFields((errors, values) => {
@@ -302,6 +267,16 @@ const Add = (props: AddProps) => {
           return;
         }
         setLoading(true);
+
+        var strTermJson;
+        if (!submit) {
+          //获取条款
+          strTermJson = getTerms(values);
+        } else {
+          //获取计算之后的租期
+          strTermJson = TermJson;
+        }
+
         //保存合同数据
         let ContractCharge: HtLeasecontractcharge = {};
         //费用条款-基本条款 
@@ -355,7 +330,7 @@ const Add = (props: AddProps) => {
           keyvalue: '',
           chargeId: '',
           // room: values.room,
-          termJson: TermJson,
+          termJson: strTermJson,
           chargeFeeResult: JSON.stringify(chargeData),
         }).then(res => {
           message.success('保存成功');
@@ -394,7 +369,7 @@ const Add = (props: AddProps) => {
   //   } 
   // };
 
-  const onSignerSelect = (value, option) => { 
+  const onSignerSelect = (value, option) => {
     form.setFieldsValue({ signerId: option.key });
     //设置管理机构
     setOrganizeId(option.pros.organizeId);

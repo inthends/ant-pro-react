@@ -266,7 +266,7 @@ function Main() {
               <Search
                 className="search-input"
                 placeholder="搜索合同编号"
-                style={{ width: 160 }}
+                style={{ width: 200 }}
                 onSearch={value => { loadData(value); loadTotalData(value); }}
               />
               <Button type="primary" style={{ float: 'right' }}

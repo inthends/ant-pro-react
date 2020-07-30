@@ -228,9 +228,9 @@ const Modify = (props: ModifyProps) => {
         setLoading(true);
         //租赁条款     
         // let TermJson: HtLeasecontractchargefee[] = [];
-        let TermJson: ChargeFeeDetailDTO[] = []; 
+        let TermJson: ChargeFeeDetailDTO[] = [];
         //动态添加的租期
-        values.LeaseTerms.map(function (k, index, arr) { 
+        values.LeaseTerms.map(function (k, index, arr) {
           let charge: ChargeFeeDetailDTO = {
             rooms: [],
             feeItems: [],
@@ -398,7 +398,7 @@ const Modify = (props: ModifyProps) => {
           //   title: '提示',
           //   content: '请生成租金明细！',
           // });
-          message.warning('请生成租金明细！');
+          message.warning('请生成租金明细');
           return;
         }
 
@@ -598,7 +598,7 @@ const Modify = (props: ModifyProps) => {
           //   title: '提示',
           //   content: '请生成租金明细！',
           // });
-          message.warning('请生成租金明细！');
+          message.warning('请生成租金明细');
           return;
         }
         setLoading(true);
@@ -1015,7 +1015,7 @@ const Modify = (props: ModifyProps) => {
                               onSelect={onSignerSelect}>
                               {userSource.map(item => (
                                 <Option key={item.id} value={item.name}
-                                {...item} 
+                                  {...item}
                                 >
                                   {item.name}
                                 </Option>
@@ -1417,6 +1417,7 @@ const Modify = (props: ModifyProps) => {
                 form={form}
                 // feeItems={feeItems}
                 chargeFeeList={chargeFeeList}
+                visible={visible}
               ></LeaseTermModify>
               {/* <IncreasingRateModify
                 form={form}
@@ -1493,7 +1494,8 @@ const Modify = (props: ModifyProps) => {
           </Button>
         <Button
           onClick={isReSubmit ? resubmit : submit}
-          type="primary">
+          type="primary"
+          disabled={!isCal}>
           提交
           </Button>
       </div>
