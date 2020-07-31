@@ -1,10 +1,10 @@
 //对账单
 import Page from '@/components/Common/Page';
-import { message, Table, Modal } from 'antd';
+import { Tag, Divider, message, Table, Modal } from 'antd';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React from 'react';
 import moment from 'moment';
-import { ConfirmForm } from './Main.service';
+import { InvalidPaylog, ConfirmForm } from './Main.service';
 // import styles from './style.less';
 
 interface ChargeCheckTableProps {
@@ -24,10 +24,24 @@ function ChargeCheckTable(props: ChargeCheckTableProps) {
   const confirm = (record) => {
     Modal.confirm({
       title: '请确认',
-      content: `您确定要对${record.billCode}确认收款么`,
+      content: `对${record.tradeNo}确认收款么？`,
       onOk: () => {
-        ConfirmForm(record.rId, record.billId).then(() => {
+        ConfirmForm(record.billId).then(() => {
           message.success('确认成功');
+          reload();
+        });
+      },
+    });
+  }
+
+  //作废paylog
+  const invalid = (record) => {
+    Modal.confirm({
+      title: '请确认',
+      content: `您确定要作废${record.tradeNo}么？`,
+      onOk: () => {
+        InvalidPaylog(record.billId).then(() => {
+          message.success('作废成功');
           reload();
         });
       },
@@ -41,7 +55,7 @@ function ChargeCheckTable(props: ChargeCheckTableProps) {
       key: 'allName',
       width: 280,
       fixed: 'left'
-    }, 
+    },
     {
       title: '管理处',
       dataIndex: 'orgName',
@@ -74,22 +88,22 @@ function ChargeCheckTable(props: ChargeCheckTableProps) {
       title: '商户订单号',
       dataIndex: 'tradeNo',
       key: 'tradeNo',
-      width: 200, 
+      width: 200,
     },
 
     {
       title: '交易流水号',
       dataIndex: 'transactionId',
       key: 'transactionId',
-      width: 260, 
+      width: 260,
     },
 
-  
+
     {
       title: '订单来源',
       dataIndex: 'sourceType',
       key: 'sourceType',
-      width: 100, 
+      width: 100,
     },
     {
       title: '订单状态',
@@ -97,7 +111,19 @@ function ChargeCheckTable(props: ChargeCheckTableProps) {
       key: 'status',
       width: 100,
       sorter: true,
-      render: val => val == 0 ? '未确认' : '已确认'
+      // render: val => val == 0 ? '未确认' : '已确认'
+      render: (text, record) => {
+        switch (text) {
+          case 0:
+            return <Tag color="#e4aa5b">待确认</Tag>;
+          case 1:
+            return <Tag color="#119688">已确认</Tag>;
+          case -1:
+            return <Tag color="#d82d2d">已作废</Tag>
+          default:
+            return '';
+        }
+      }
     },
     {
       title: '订单金额',
@@ -161,16 +187,19 @@ function ChargeCheckTable(props: ChargeCheckTableProps) {
       key: 'operation',
       fixed: 'right',
       align: 'center',
-      width: 65,
-      render: (text, record) => { 
-        return [
-          <span>
-            {record.status == 0 ? <a onClick={() => confirm(record)} key="exit">确认</a> : null}
-            {/* <Divider type="vertical" />
-            {!record.ifVerify ? <a onClick={() => showVerify(record.billId, false)} key="approve">审核</a>
-              : <a onClick={() => showVerify(record.id, true)} key="unapprove">反审</a>} */}
-          </span>
-        ];
+      width: 100,
+      render: (text, record) => {
+        if (record.status == 0) {
+          return [
+            <span>
+              {record.status == 0 ? <a onClick={() => confirm(record)} key="exit">确认</a> : null}
+              <Divider type="vertical" />
+              <a onClick={() => invalid(record)} key="invalid">作废</a>
+            </span>
+          ];
+        }else{
+          return null;
+        }
       },
     },
   ] as ColumnProps<any>[];
@@ -209,7 +238,7 @@ function ChargeCheckTable(props: ChargeCheckTableProps) {
         columns={columns}
         rowKey={record => record.billId}
         pagination={pagination}
-        scroll={{ y: 500, x: 2300 }}
+        scroll={{ y: 500, x: 2400 }}
         // rowClassName={setClassName} //表格行点击高亮
         loading={loading}
         // onRow={onRow}

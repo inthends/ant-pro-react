@@ -179,8 +179,13 @@ export function RedFlush(keyvalue): Promise<any> {
 // }
 
 //确认收款
-export function ConfirmForm(rid, billId): Promise<any> {
-  return request.post(process.env.basePath + `/Receivable/ConfirmForm?rid=${rid}&billId=${billId}`).then(getResult as any);
+export function ConfirmForm(billId): Promise<any> {
+  return request.post(process.env.basePath + `/Receivable/ConfirmForm?billId=${billId}`).then(getResult as any);
+}
+
+//作废
+export function InvalidPaylog(billId): Promise<any> {
+  return request.post(process.env.basePath + `/Receivable/InvalidPaylog?billId=${billId}`).then(getResult as any);
 }
  
 
