@@ -152,10 +152,11 @@ export interface htLeasecontract {
    */
   chargeId?: string;
 
-  /**
-    * 计费单元Id
-    */
-  billUnitId?: string;
+  // /**
+  //   * 计费单元Id
+  //   */
+  // billUnitId?: string;
+  
   /**
   * 机构Id
   */

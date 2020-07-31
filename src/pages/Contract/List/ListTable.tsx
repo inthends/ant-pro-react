@@ -62,7 +62,7 @@ function ListTable(props: ListTableProps) {
           <Menu.Item key="invalid">作废</Menu.Item>
         </Menu>}>
       <a>
-        操作<Icon type="down" key='down' />
+        更多 <Icon type="down" key='down' />
       </a>
     </Dropdown>
   );
@@ -283,7 +283,7 @@ function ListTable(props: ListTableProps) {
         columns={columns}
         rowKey={record => record.id}
         pagination={pagination}
-        scroll={{ y: 500, x: 1500 }}
+        scroll={{ y: 500, x: 1300 }}
         onChange={(pagination: PaginationConfig, filters, sorter) =>
           changePage(pagination, filters, sorter)
         }

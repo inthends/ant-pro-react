@@ -180,10 +180,10 @@ const Modify = (props: ModifyProps) => {
     form.setFieldsValue({ followerId: option.key });
   };
 
-  const onSignerSelect = (value, option) => {
+  const onSignerSelect = (value, option) => { 
     form.setFieldsValue({ signerId: option.key });
-    //设置管理机构 
-    form.setFieldsValue({ organizeId: option.pros.organizeId });
+    //设置管理机构
+    form.setFieldsValue({ organizeId: option.props.organizeId });
   };
 
   // const onRoomChange = (value, label, extra) => {
@@ -1027,6 +1027,11 @@ const Modify = (props: ModifyProps) => {
                           })(
                             <input type='hidden' />
                           )}
+                          {getFieldDecorator('organizeId', {
+                            initialValue: infoDetail.organizeId
+                          })(
+                            <input type='hidden' />
+                          )}
                         </Form.Item>
                       </Col>
                       <Col lg={12}>
@@ -1163,12 +1168,7 @@ const Modify = (props: ModifyProps) => {
                             initialValue: infoDetail.billUnitId
                           })(
                             <input type='hidden' />
-                          )} 
-                          {getFieldDecorator('organizeId', {
-                            initialValue: infoDetail.organizeId
-                          })(
-                            <input type='hidden' />
-                          )}
+                          )}  
                         </Form.Item>
                       </Col>
                     </Row>  */}

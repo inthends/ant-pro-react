@@ -372,7 +372,7 @@ const Add = (props: AddProps) => {
   const onSignerSelect = (value, option) => {
     form.setFieldsValue({ signerId: option.key });
     //设置管理机构
-    setOrganizeId(option.pros.organizeId);
+    setOrganizeId(option.props.organizeId);
   };
 
   //选择房屋
