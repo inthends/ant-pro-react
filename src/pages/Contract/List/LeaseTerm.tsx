@@ -108,11 +108,10 @@ function LeaseTerm(props: LeaseTermProps) {
   getFieldDecorator('LeaseTerms', { initialValue: [] });
   const keys = getFieldValue('LeaseTerms');
   const formItems = keys.map((k, index) => (
-
-
+ 
     <Card hoverable key={k} className={styles.card} title={'租期条款' + (index + 2)}
       extra={<Icon type="minus-circle-o" onClick={() => remove(k)} />}>
-      <Row gutter={24}>
+      <Row >
         <Col lg={24}>
           <Form.Item required>
             {getFieldDecorator(`rooms[${k}]`, {
@@ -190,7 +189,7 @@ function LeaseTerm(props: LeaseTermProps) {
         </Col>
       </Row>
 
-      <Row gutter={24}>
+      <Row gutter={16}>
         <Col lg={4}>
           <Form.Item label="开始时间" required >
             {getFieldDecorator(`chargeStartDate[${k}]`, {
@@ -266,7 +265,7 @@ function LeaseTerm(props: LeaseTermProps) {
           </Form.Item>
         </Col>
       </Row>
-      <Row gutter={24}>
+      <Row gutter={16}>
         <Col lg={4}>
           <Form.Item label={<div>计费类型 <Tooltip
             overlayStyle={{ maxWidth: 'none' }}
@@ -480,7 +479,7 @@ function LeaseTerm(props: LeaseTermProps) {
   return (
     <div style={{ marginBottom: '10px' }}  >
       <Card key='0' title="费用条款1" className={styles.card} hoverable>
-        <Row gutter={24}>
+        <Row >
           <Col lg={24}>
             <Form.Item required>
               {getFieldDecorator(`rooms[0]`, {
@@ -558,7 +557,7 @@ function LeaseTerm(props: LeaseTermProps) {
           </Col>
         </Row>
 
-        <Row gutter={24}>
+        <Row gutter={16}>
           <Col lg={4}>
             <Form.Item label="开始时间" required >
               {getFieldDecorator(`chargeStartDate[0]`, {
@@ -637,8 +636,7 @@ function LeaseTerm(props: LeaseTermProps) {
             </Form.Item>
           </Col>
         </Row>
-        <Row gutter={24}>
-
+        <Row gutter={16}> 
           <Col lg={4}>
             <Form.Item label="计费类型">
               {getFieldDecorator(`billType[0]`, {

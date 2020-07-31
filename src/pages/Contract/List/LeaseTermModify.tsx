@@ -104,7 +104,7 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
         title={'租期条款' + (index + 1)}
         //title={index == 0 ? '租期条款' : ''}
         extra={index > 0 ? <Icon type="minus-circle-o" onClick={() => remove(index)} /> : null}>
-        <Row gutter={24}>
+        <Row >
           <Col lg={24}>
             <Form.Item required>
               {getFieldDecorator(`rooms[${index}]`, {
@@ -175,7 +175,7 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
           </Col>
         </Row>
 
-        <Row gutter={24}>
+        <Row gutter={16}>
           <Col lg={4}>
             <Form.Item label="开始时间" required >
               {getFieldDecorator(`chargeStartDate[${index}]`, {
@@ -254,7 +254,7 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
             </Form.Item>
           </Col>
         </Row>
-        <Row gutter={24}>
+        <Row gutter={16}>
           <Col lg={4}>
             <Form.Item label={<div>计费类型 <Tooltip
               overlayStyle={{ maxWidth: 'none' }}
@@ -511,9 +511,7 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
 
       <Button type="dashed" onClick={add}>
         <Icon type="plus" />添加租期条款
-      </Button>
-
-
+      </Button> 
       <SelectHouse
         visible={selectHouseVisible}
         closeModal={closeSelectHouse}

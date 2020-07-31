@@ -98,6 +98,8 @@ const Modify = (props: ModifyProps) => {
     dataDetail.keyvalue = dataDetail.id;
     if (dataDetail.birthdate != null)
       dataDetail.birthdate = dataDetail.birthdate.format('YYYY-MM-DD');
+    if (dataDetail.signingDate != null)
+      dataDetail.signingDate = dataDetail.signingDate.format('YYYY-MM-DD');
     SaveForm({ ...dataDetail }).then(res => {
       message.success('保存成功');
       closeDrawer();
@@ -572,13 +574,6 @@ const Modify = (props: ModifyProps) => {
 
                 <Row gutter={24}>
                   <Col lg={12}>
-                    <Form.Item label="协议编号">
-                      {getFieldDecorator('agreementNo', {
-                        initialValue: infoDetail.agreementNo,
-                      })(<Input placeholder="请输入协议编号" />)}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={12}>
                     <Form.Item label="签约日期">
                       {getFieldDecorator('signingDate', {
                         initialValue: infoDetail.signingDate
@@ -587,6 +582,14 @@ const Modify = (props: ModifyProps) => {
                       })(<DatePicker style={{ width: '100%' }} />)}
                     </Form.Item>
                   </Col>
+                  <Col lg={12}>
+                    <Form.Item label="协议编号">
+                      {getFieldDecorator('agreementNo', {
+                        initialValue: infoDetail.agreementNo,
+                      })(<Input placeholder="请输入协议编号" />)}
+                    </Form.Item>
+                  </Col>
+
                 </Row>
 
                 <Row gutter={24}>

@@ -1088,7 +1088,7 @@ const Modify = (props: ModifyProps) => {
 
                 <Row gutter={24}>
                   <Col lg={12}>
-                    <Form.Item label="滞纳金比例(%)">
+                    <Form.Item label="滞纳金比例(‰)">
                       {getFieldDecorator('delayRate', {
                         initialValue: infoDetail.delayRate ? infoDetail.delayRate : 0,
                         // rules: [{ required: true, message: '请输入滞纳金比例' }],
@@ -1251,23 +1251,23 @@ const Modify = (props: ModifyProps) => {
                     </Form.Item>
                   </Col>
                 </Row> */}
-                <Row gutter={8}>
-                  <Col span={6}>
+                <Row gutter={24}>
+                  <Col lg={6}>
                     <Form.Item label="账单日 距">
                       {getFieldDecorator('accBillDateBase', {
                         initialValue: infoDetail.accBillDateBase ? infoDetail.accBillDateBase : 2,
                         rules: [{ required: true, message: '请选择账单日' }],
                       })(
                         <Select placeholder="==选择账单日==">
-                          <Option value={1}>同一季度费用,每季度首月为账单期间</Option>
+                          {/* <Option value={1}>同一季度费用,每季度首月为账单期间</Option> */}
                           <Option value={2} >计费起始日期</Option>
                           <Option value={3}>计费截止日期</Option>
                         </Select>
                       )}
                     </Form.Item>
                   </Col>
-                  <Col span={6} style={{ marginTop: '29px' }}>
-                    <Form.Item>
+                  <Col lg={6} >
+                    <Form.Item label="&nbsp;">
                       {getFieldDecorator('accBillDateNum', {
                         initialValue: infoDetail.accBillDateNum ? infoDetail.accBillDateNum : 0,
                         rules: [{ required: true, message: '请输入数量' }],
@@ -1276,8 +1276,8 @@ const Modify = (props: ModifyProps) => {
                       )}
                     </Form.Item>
                   </Col>
-                  <Col span={6} style={{ marginTop: '29px' }}>
-                    <Form.Item>
+                  <Col lg={6}  >
+                    <Form.Item label="&nbsp;">
                       {getFieldDecorator('accBillDateUnit', {
                         initialValue: infoDetail.accBillDateUnit ? infoDetail.accBillDateUnit : 1,
                         rules: [{ required: true, message: '请选择单位' }],
@@ -1295,8 +1295,8 @@ const Modify = (props: ModifyProps) => {
                       )}
                     </Form.Item>
                   </Col>
-                  <Col span={6} style={{ marginTop: '29px' }}>
-                    <Form.Item>
+                  <Col lg={6} >
+                    <Form.Item label="&nbsp;">
                       {getFieldDecorator('accBillDateFixed', {
                         initialValue: infoDetail.accBillDateFixed,
                       })(
@@ -1337,23 +1337,23 @@ const Modify = (props: ModifyProps) => {
                     </Form.Item>
                   </Col>
                 </Row>
-                <Row gutter={8}>
-                  <Col span={6}>
+                <Row gutter={24}>
+                  <Col lg={6}>
                     <Form.Item label="收款截止日 距">
                       {getFieldDecorator('payDeadlineBase', {
                         initialValue: infoDetail.payDeadlineBase ? infoDetail.payDeadlineBase : 3,
                         rules: [{ required: true, message: '请选择收款截止日' }],
                       })(
                         <Select placeholder="==选择收款截止日==">
-                          <Option value={1}>同一季度费用,每季度首月</Option>
+                          {/* <Option value={1}>同一季度费用,每季度首月</Option> */}
                           <Option value={2}>计费起始日期</Option>
                           <Option value={3}>计费截止日期</Option>
                         </Select>
                       )}
                     </Form.Item>
                   </Col>
-                  <Col span={6} style={{ marginTop: '29px' }}>
-                    <Form.Item>
+                  <Col lg={6} >
+                    <Form.Item label="&nbsp;">
                       {getFieldDecorator('payDeadlineNum', {
                         initialValue: infoDetail.payDeadlineNum ? infoDetail.payDeadlineNum : 0,
                         rules: [{ required: true, message: '请输入数量' }],
@@ -1362,7 +1362,7 @@ const Modify = (props: ModifyProps) => {
                       )}
                     </Form.Item>
                   </Col>
-                  <Col span={6} style={{ marginTop: '29px' }}>
+                  <Col lg={6}  >
                     <Form.Item>
                       {getFieldDecorator('payDeadlineUnit', {
                         initialValue: infoDetail.payDeadlineUnit ? infoDetail.payDeadlineUnit : 1,
@@ -1381,7 +1381,7 @@ const Modify = (props: ModifyProps) => {
                       )}
                     </Form.Item>
                   </Col>
-                  <Col span={6} style={{ marginTop: '29px' }}>
+                  <Col lg={6}  >
                     <Form.Item>
                       {getFieldDecorator('payDeadlineFixed', {
                         initialValue: infoDetail.payDeadlineFixed,
@@ -1423,23 +1423,23 @@ const Modify = (props: ModifyProps) => {
                     </Form.Item>
                   </Col>
                 </Row>
-                <Row gutter={8}>
-                  <Col span={6}>
+                <Row gutter={24}>
+                  <Col lg={6}>
                     <Form.Item label="滞纳金起算日 距">
                       {getFieldDecorator('lateStartDateBase', {
                         initialValue: infoDetail.lateStartDateBase ? infoDetail.lateStartDateBase : 3,
                         rules: [{ required: true, message: '请选择滞纳金起算日' }],
                       })(
                         <Select placeholder="==选择滞纳金起算日==">
-                          <Option value={1}>同一季度费用,每季度首月</Option>
+                          {/* <Option value={1}>同一季度费用,每季度首月</Option> */}
                           <Option value={2}>计费起始日期</Option>
                           <Option value={3}>计费截止日期</Option>
                         </Select>
                       )}
                     </Form.Item>
                   </Col>
-                  <Col span={6} style={{ marginTop: '29px' }}>
-                    <Form.Item>
+                  <Col lg={6} >
+                    <Form.Item label="&nbsp;">
                       {getFieldDecorator('lateStartDateNum', {
                         initialValue: infoDetail.lateStartDateNum ? infoDetail.lateStartDateNum : 1,
                         rules: [{ required: true, message: '请输入数量' }],
@@ -1448,8 +1448,8 @@ const Modify = (props: ModifyProps) => {
                       )}
                     </Form.Item>
                   </Col>
-                  <Col span={6} style={{ marginTop: '29px' }}>
-                    <Form.Item>
+                  <Col lg={6}  >
+                    <Form.Item label="&nbsp;">
                       {getFieldDecorator('lateStartDateUnit', {
                         initialValue: infoDetail.lateStartDateUnit ? infoDetail.lateStartDateUnit : 1,
                         rules: [{ required: true, message: '请选择单位' }],
@@ -1467,8 +1467,8 @@ const Modify = (props: ModifyProps) => {
                       )}
                     </Form.Item>
                   </Col>
-                  <Col span={6} style={{ marginTop: '29px' }}>
-                    <Form.Item>
+                  <Col lg={6} >
+                    <Form.Item label="&nbsp;">
                       {getFieldDecorator('lateStartDateFixed', {
                         initialValue: infoDetail.lateStartDateFixed,
                       })(
@@ -1512,7 +1512,7 @@ const Modify = (props: ModifyProps) => {
               </Card>
               <Card title="其他" className={styles.card} hoverable>
                 <Row gutter={24}>
-                  <Col span={6}  >
+                  <Col lg={6}  >
                     <Form.Item label='&nbsp;'>
                       {getFieldDecorator('payedCreateCope', {
                         initialValue: infoDetail.payedCreateCope ? infoDetail.payedCreateCope : false,
@@ -1531,7 +1531,7 @@ const Modify = (props: ModifyProps) => {
                       )}
                     </Form.Item>
                   </Col>
-                  <Col span={6}  >
+                  <Col lg={6}  >
                     <Form.Item label='应付款项'>
                       {getFieldDecorator('payFeeItemId', {
                         initialValue: infoDetail.payFeeItemId,
@@ -1546,8 +1546,8 @@ const Modify = (props: ModifyProps) => {
                       )}
                     </Form.Item>
                   </Col>
-                  <Col span={6} >
-                    <Form.Item label="应付比例（100%）">
+                  <Col lg={6} >
+                    <Form.Item label="应付比例(%)">
                       {getFieldDecorator('copeRate', {
                         initialValue: infoDetail.copeRate ? infoDetail.copeRate : 100,
                       })(
@@ -1555,7 +1555,7 @@ const Modify = (props: ModifyProps) => {
                       )}
                     </Form.Item>
                   </Col>
-                  <Col span={6}  >
+                  <Col lg={6}  >
                     <Form.Item label='付款对象'>
                       {getFieldDecorator('copePersonType', {
                         initialValue: infoDetail.copePersonType ? infoDetail.copePersonType : 2,
@@ -1570,7 +1570,7 @@ const Modify = (props: ModifyProps) => {
                   </Col>
                 </Row>
                 <Row gutter={24} style={{ display: showFeeField ? "" : "none" }}>
-                  <Col span={6}>
+                  <Col lg={6}>
                     <Form.Item label="应付期间距收款日">
                       {getFieldDecorator('payDateNum', {
                         initialValue: infoDetail.payDateNum ? infoDetail.payDateNum : 0,
@@ -1579,8 +1579,8 @@ const Modify = (props: ModifyProps) => {
                       )}
                     </Form.Item>
                   </Col>
-                  <Col span={6} style={{ marginTop: '29px' }}>
-                    <Form.Item>
+                  <Col lg={6} >
+                    <Form.Item label="&nbsp;">
                       {getFieldDecorator('payDateUnit', {
                         initialValue: infoDetail.payDateUnit ? infoDetail.payDateUnit : 1,
                       })(

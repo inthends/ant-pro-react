@@ -211,10 +211,14 @@ const Add = (props: AddProps) => {
         // entity.startDate = values.billingDate.format('YYYY-MM-DD');
         // entity.endDate = values.contractEndDate.format('YYYY-MM-DD');
         // entity.calcPrecision = values.calcPrecision;
+        entity.lateStartDateNum = values.lateStartDateNum;
+        entity.lateStartDateBase = values.lateStartDateBase;
+        entity.lateStartDateFixed = values.lateStartDateFixed;
+        entity.lateStartDateUnit = values.lateStartDateUnit;
         entity.lateFee = values.lateFee;
         entity.lateMethod = values.lateMethod;
-        if (values.lateDate != null)
-          entity.lateDate = values.lateDate.format('YYYY-MM-DD');
+        // if (values.lateDate != null)
+        //   entity.lateDate = values.lateDate.format('YYYY-MM-DD');
         // entity.propertyFeeId = values.propertyFeeId;
         // entity.propertyFeeName = values.propertyFeeName; 
         // setChargefee(mychargefee);
@@ -289,10 +293,15 @@ const Add = (props: AddProps) => {
         // ContractCharge.endDate = values.contractEndDate.format('YYYY-MM-DD');
         // ContractCharge.payDate = values.contractStartDate.format('YYYY-MM-DD'); 
         // ContractCharge.calcPrecision = values.calcPrecision;
+
+        ContractCharge.lateStartDateNum = values.lateStartDateNum;
+        ContractCharge.lateStartDateBase = values.lateStartDateBase;
+        ContractCharge.lateStartDateFixed = values.lateStartDateFixed;
+        ContractCharge.lateStartDateUnit = values.lateStartDateUnit;
         ContractCharge.lateFee = values.lateFee;
         ContractCharge.lateMethod = values.lateMethod;
-        if (values.lateDate != null)
-          ContractCharge.lateDate = values.lateDate.format('YYYY-MM-DD');
+        // if (values.lateDate != null)
+        //   ContractCharge.lateDate = values.lateDate.format('YYYY-MM-DD');
         // ContractCharge.propertyFeeId = values.propertyFeeId;
         // ContractCharge.propertyFeeName = values.propertyFeeName;
         let Contract: htLeasecontract = {};
@@ -467,6 +476,8 @@ const Add = (props: AddProps) => {
   const [customerVisible, setCustomerVisible] = useState<boolean>(false);
   const [customer, setCustomer] = useState<any>();
 
+  const [lateFixedDisabled, setLateFixedDisabled] = useState<boolean>(true);
+
   //承租方
   const customerSearch = value => {
     if (value == '') {
@@ -617,6 +628,14 @@ const Add = (props: AddProps) => {
 
                     <Row gutter={24}>
                       <Col lg={12}>
+                        <Form.Item label="签约日期" required>
+                          {getFieldDecorator('signingDate', {
+                            initialValue: moment(new Date()),
+                            rules: [{ required: true, message: '请选择签约日期' }],
+                          })(<DatePicker placeholder="请选择签约日期" style={{ width: '100%' }} />)}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={12}>
                         <Form.Item label="签约人">
                           {/* {getFieldDecorator('follower', {
                           })(
@@ -650,31 +669,7 @@ const Add = (props: AddProps) => {
                           )}
                         </Form.Item>
                       </Col>
-                      <Col lg={12}>
-                        <Form.Item label="签约日期" required>
-                          {getFieldDecorator('signingDate', {
-                            initialValue: moment(new Date()),
-                            rules: [{ required: true, message: '请选择签约日期' }],
-                          })(<DatePicker placeholder="请选择签约日期" style={{ width: '100%' }} />)}
-                        </Form.Item>
-                      </Col>
-                    </Row>
 
-                    <Row gutter={24}>
-                      <Col lg={12}>
-                        <Form.Item label="经营主体" >
-                          {getFieldDecorator('businessEntity', {
-                            // rules: [{ required: true, message: '请输入经营主体' }],
-                          })(<Input placeholder="请输入经营主体" />)}
-                        </Form.Item>
-                      </Col>
-                      <Col lg={12}>
-                        <Form.Item label="付款方式">
-                          {getFieldDecorator('payType', {
-                            // rules: [{ required: true, message: '请输入付款方式' }],
-                          })(<Input placeholder="请输入付款方式" />)}
-                        </Form.Item>
-                      </Col>
                     </Row>
 
                     <Row gutter={24}>
@@ -869,13 +864,31 @@ const Add = (props: AddProps) => {
                         </Form.Item>
                       </Col>
                     </Row>
+
+                    <Row gutter={24}>
+                      <Col lg={12}>
+                        <Form.Item label="付款方式">
+                          {getFieldDecorator('payType', {
+                            // rules: [{ required: true, message: '请输入付款方式' }],
+                          })(<Input placeholder="请输入付款方式" />)}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={12}>
+                        <Form.Item label="经营主体" >
+                          {getFieldDecorator('businessEntity', {
+                            // rules: [{ required: true, message: '请输入经营主体' }],
+                          })(<Input placeholder="请输入经营主体" />)}
+                        </Form.Item>
+                      </Col>
+                    </Row>
+
                   </Card>
                 </Col>
               </Row>
             </TabPane>
             <TabPane tab="费用条款" key="2">
               <Card title="基本条款" className={styles.card} hoverable>
-                <Row gutter={24}>
+                <Row gutter={12}>
                   {/*  <Col lg={6}>
                     <Form.Item label="合同面积(㎡)" >
                       {getFieldDecorator('leaseArea', {
@@ -895,32 +908,119 @@ const Add = (props: AddProps) => {
                       </Select>)}
                     </Form.Item>
                   </Col> */}
+
                   <Col lg={6}>
-                    <Form.Item label="滞纳金比例(‰)" >
-                      {getFieldDecorator('lateFee', {
-                        initialValue: 3
-                      })(<InputNumber placeholder="请输入滞纳金比例" style={{ width: '100%' }} />)}
+                    <Form.Item label="滞纳金起算日 距">
+                      {getFieldDecorator('lateStartDateBase', {
+                        // rules: [{ required: true, message: '请选择滞纳金起算日' }],
+                      })(
+                        <Select
+                          allowClear
+                          placeholder="==选择滞纳金起算日==">
+                          {/* <Option value={1}>同一季度费用,每季度首月</Option> */}
+                          <Option value={2}>计费起始日期</Option>
+                          <Option value={3}>计费截止日期</Option>
+                        </Select>
+                      )}
                     </Form.Item>
                   </Col>
-                  <Col lg={6}>
+                  <Col lg={3}>
+                    <Form.Item label="&nbsp;">
+                      {getFieldDecorator('lateStartDateNum', {
+                        rules: [{ required: form.getFieldValue('lateStartDateBase'), message: '请输入数字' }],
+                      })(
+                        <InputNumber style={{ width: '100%' }} precision={0} min={0} />
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={3} >
+                    <Form.Item label="&nbsp;">
+                      {getFieldDecorator('lateStartDateUnit', {
+                        rules: [{ required: form.getFieldValue('lateStartDateBase'), message: '请选择' }],
+                      })(
+                        <Select
+                          allowClear
+                          placeholder="==选择==" onChange={value => {
+                            if (value == 1) {
+                              setLateFixedDisabled(true);
+                            } else {
+                              setLateFixedDisabled(false);
+                            }
+                          }}>
+                          <Option value={1}>天</Option>
+                          <Option value={2}>月</Option>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={3}>
+                    <Form.Item label="&nbsp;">
+                      {getFieldDecorator('lateStartDateFixed', {
+                      })(
+                        <Select
+                          allowClear
+                          disabled={lateFixedDisabled}>
+                          <Option key="1">1日</Option>
+                          <Option key="2">2日</Option>
+                          <Option key="3">3日</Option>
+                          <Option key="4">4日</Option>
+                          <Option key="5">5日</Option>
+                          <Option key="6">6日</Option>
+                          <Option key="7">7日</Option>
+                          <Option key="8">8日</Option>
+                          <Option key="9">9日</Option>
+                          <Option key="10">10日</Option>
+                          <Option key="11">11日</Option>
+                          <Option key="12">12日</Option>
+                          <Option key="13">13日</Option>
+                          <Option key="14">14日</Option>
+                          <Option key="15">15日</Option>
+                          <Option key="16">16日</Option>
+                          <Option key="17">17日</Option>
+                          <Option key="18">18日</Option>
+                          <Option key="19">19日</Option>
+                          <Option key="20">20日</Option>
+                          <Option key="21">21日</Option>
+                          <Option key="22">22日</Option>
+                          <Option key="23">23日</Option>
+                          <Option key="24">24日</Option>
+                          <Option key="25">25日</Option>
+                          <Option key="26">26日</Option>
+                          <Option key="27">27日</Option>
+                          <Option key="28">28日</Option>
+                          <Option key="29">29日</Option>
+                          <Option key="30">30日</Option>
+                          <Option key="31">31日</Option>
+                        </Select>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col lg={3}>
+                    <Form.Item label="滞纳金比例(‰)" >
+                      {getFieldDecorator('lateFee', {
+                        rules: [{ required: form.getFieldValue('lateStartDateBase'), message: '请输入' }],
+                      })(<InputNumber placeholder="请输入" style={{ width: '100%' }} />)}
+                    </Form.Item>
+                  </Col>
+                  {/* <Col lg={6}>
                     <Form.Item label="滞纳金起算日期" >
                       {getFieldDecorator('lateDate', {
                         // rules: [{ required: true, message: '请选择滞纳金起算日期' }],
                       })(<DatePicker placeholder="请选择滞纳金起算日期" style={{ width: '100%' }} />)}
                     </Form.Item>
-                  </Col>
+                  </Col> */}
                   <Col lg={6}>
                     <Form.Item label="滞纳金算法" >
                       {getFieldDecorator('lateMethod', {
-                        initialValue: "固定滞纳金率按天计算"
-                      })(<Select>
+                        rules: [{ required: form.getFieldValue('lateStartDateBase'), message: '请选择滞纳金算法' }],
+                      })(<Select allowClear>
                         <Option value="固定滞纳金率按天计算" >固定滞纳金率按天计算</Option>
                       </Select>
                       )}
                     </Form.Item>
                   </Col>
                 </Row>
-                <Row gutter={24}>
+                <Row gutter={12}>
                   <Col lg={6}>
                     <Form.Item label="中间每一步计算结果保留">
                       {getFieldDecorator('midResultScale', {

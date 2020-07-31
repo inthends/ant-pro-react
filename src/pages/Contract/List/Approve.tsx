@@ -310,27 +310,16 @@ const Approve = (props: ApproveProps) => {
                         </Form.Item>
                       </Col>
                     </Row>
-                    <Row gutter={24}>
-                      <Col lg={12}>
-                        <Form.Item label="经营主体">
-                          {infoDetail.businessEntity}
-                        </Form.Item>
-                      </Col>
-                      <Col lg={12}>
-                        <Form.Item label="付款方式">
-                          {infoDetail.payType}
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row gutter={24}>
-                      <Col lg={12}>
-                        <Form.Item label="签约人">
-                          {infoDetail.signer}
-                        </Form.Item>
-                      </Col>
+
+                    <Row gutter={24}> 
                       <Col lg={12}>
                         <Form.Item label="签约日期">
                           {String(infoDetail.signingDate).substr(0, 10)}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={12}>
+                        <Form.Item label="签约人">
+                          {infoDetail.signer}
                         </Form.Item>
                       </Col>
                     </Row>
@@ -418,6 +407,20 @@ const Approve = (props: ApproveProps) => {
                         </Form.Item>
                       </Col>
                     </Row>
+
+                    <Row gutter={24}>
+                      <Col lg={12}>
+                        <Form.Item label="付款方式">
+                          {infoDetail.payType}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={12}>
+                        <Form.Item label="经营主体">
+                          {infoDetail.businessEntity}
+                        </Form.Item>
+                      </Col>
+
+                    </Row>
                   </Card>
                 </Col>
               </Row>
@@ -430,16 +433,27 @@ const Approve = (props: ApproveProps) => {
                       {contractCharge.leaseArea}
                     </Form.Item>
                   </Col> */}
+
+                  <Col lg={12}>
+                    <Form.Item label="滞纳金起算日 距">
+                      {contractCharge.lateStartDateBase == 2 ? '计费起始日期' : '计费截止日期'}
+                      {contractCharge.lateStartDateNum}
+                      {contractCharge.lateStartDateUnit == 1 ? '天' : '月'}
+                      {contractCharge.lateStartDateUnit == 2 ? contractCharge.lateStartDateFixed + '天' : ''}
+                    </Form.Item>
+                  </Col>
+
+
                   <Col lg={6}>
                     <Form.Item label="滞纳金比例(‰)" >
                       {contractCharge.lateFee}
                     </Form.Item>
                   </Col>
-                  <Col lg={6}>
+                  {/* <Col lg={6}>
                     <Form.Item label="滞纳金起算日期" >
                       {contractCharge.lateDate == null ? '' : String(contractCharge.lateDate).substr(0, 10)}
                     </Form.Item>
-                  </Col>
+                  </Col> */}
                   <Col lg={6}>
                     <Form.Item label="滞纳金算法" >
                       {contractCharge.lateMethod}
@@ -489,7 +503,7 @@ const Approve = (props: ApproveProps) => {
                                   <div>{item.area}㎡，{item.rentPrice}元/㎡.天</div>
                                 </List.Item>
                               }
-                            /> 
+                            />
                           )}
                         </Form.Item>
                       </Col>

@@ -47,10 +47,30 @@ export interface HtLeasecontractcharge {
     //  */
     // depositUnit?: string;
 
-    /**
-     * Desc:  滞纳金起算日期
+   //  /**
+   //   * Desc:  滞纳金起算日期
+   //   */
+   //  lateDate?: Date;
+
+     /**
+     * Desc:  Default:1  Nullable:False
      */
-    lateDate?: Date;
+    lateStartDateBase?: number;
+
+      /**
+     * Desc:  Default:0  Nullable:False
+     */
+    lateStartDateUnit?: number;
+
+        /**
+     * Desc:  Default:0  Nullable:True
+     */
+    lateStartDateFixed?: number;
+ 
+    /**
+     * Desc:  Default:0  Nullable:False
+     */
+    lateStartDateNum?: number;
 
     /**
     * 滞纳金比例
