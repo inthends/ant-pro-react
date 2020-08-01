@@ -8,18 +8,22 @@ import {
 } from '../Main.service';
 
 interface AtlasProps {
-  parentId?: string;
-  showDrawer(item): void;
+  orgType?: string;
+  orgId?: string;
+  showDrawer(id, chargeId): void;
 }
 const Atlas = (props: AtlasProps) => {
   const [inline, setInline] = useState(false);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<any[]>([]);
-  const { parentId, showDrawer } = props;
+  const { orgId, orgType, showDrawer } = props;
+
   useEffect(() => {
+    if (orgType != '2')
+      return;
     setLoading(true);
     // 获取楼层信息
-    GetContranctFloorData(parentId).then(res => {
+    GetContranctFloorData(orgId).then(res => {
       const floors = res || [];
       // const promises = floors.map(item => {
       //   // 获取房间信息
@@ -40,7 +44,7 @@ const Atlas = (props: AtlasProps) => {
       setLoading(false);
 
     });
-  }, [parentId]);
+  }, [orgId]);
   return (
     <>
       <div className={styles.buildingInfo}>
@@ -79,12 +83,18 @@ const Atlas = (props: AtlasProps) => {
                 <div style={{ flexGrow: 1 }}>
                   <div className={styles.buildingRooms} style={inline ? undefined : { flexFlow: 'row wrap' }}>
                     {floor.rooms.map(room => (
-                      <Room inline={inline} state={room.state} onClick={() => showDrawer(room)}>
-                        <div>{room.name}</div>
-                        <div>{room.area}㎡</div>
-                        <div>{room.endDate != null ? '至' + room.endDate : ''}</div>
-                        <div>{room.tenantName}</div>
-                      </Room>
+                      room.id ?
+                        <Room inline={inline} state={room.state} onClick={() => showDrawer(room.id, room.chargeId)}>
+                          <div>{room.name}</div>
+                          <div>{room.area}㎡</div>
+                          <div>合同号：{room.no}</div>
+                          <div>{room.startDate != null ? room.startDate + '至' + room.endDate : ''}</div>
+                          <div>{room.tenantName}</div>
+                        </Room> :
+                        <Room inline={inline} state={room.state} onClick={() => {} }>
+                          <div>{room.name}</div>
+                          <div>{room.area}㎡</div>
+                        </Room>
                     ))}
                   </div>
                 </div>

@@ -215,7 +215,7 @@ const Approve = (props: ApproveProps) => {
           title={null}
           subTitle={
             <div>
-              <label style={{ color: '#4494f0', fontSize: '24px' }}>{infoDetail.customer}</label>
+              <label style={{ color: '#4494f0', fontSize: '24px' }}>{infoDetail.no}</label>
             </div>
           }
           //title={GetStatus(infoDetail.status)}
@@ -286,18 +286,18 @@ const Approve = (props: ApproveProps) => {
               <Row gutter={24}>
                 <Col span={12}>
                   <Card title="基本信息" className={styles.card} hoverable>
-                    <Row gutter={24}>
+                    {/* <Row gutter={24}>
                       <Col lg={24}>
                         <Form.Item label="合同编号">
                           {infoDetail.no}
                         </Form.Item>
                       </Col>
-                      {/* <Col lg={12}>
+                      <Col lg={12}>
                         <Form.Item label="合同面积(㎡)">
                           {infoDetail.leaseSize}
                         </Form.Item>
-                      </Col> */}
-                    </Row>
+                      </Col>
+                    </Row> */}
                     <Row gutter={24}>
                       <Col lg={12}>
                         <Form.Item label="起始日期">

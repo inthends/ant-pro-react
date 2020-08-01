@@ -63,10 +63,11 @@ function Main() {
   //   setDetailVisible(false);
   // };
 
+  //查看
   const showDetailDrawer = (id?, chargeId?) => {
-    setViewVisible(true);
     setId(id);
     setChargeId(chargeId);
+    setViewVisible(true);
   };
 
   const closeChangeDrawer = () => {
@@ -102,7 +103,7 @@ function Main() {
     setWithdrawalVisible(false);
   };
 
-  const loadData = (search, paginationConfig?: PaginationConfig, sorter?) => {
+  const loadData = (search, orgId, orgType, paginationConfig?: PaginationConfig, sorter?) => {
     setSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
@@ -113,7 +114,11 @@ function Main() {
       pageIndex,
       pageSize,
       total,
-      queryJson: { keyword: search },
+      queryJson: {
+        keyword: search,
+        TreeTypeId: orgId,
+        TreeType: orgType
+      }
     };
 
     if (sorter) {
@@ -158,10 +163,14 @@ function Main() {
   };
 
 
-  const loadTotalData = (search) => {
+  const loadTotalData = (search, orgId, orgType) => {
     setSearch(search);
     let searchCondition: any = {
-      queryJson: { keyword: search },
+      queryJson: {
+        keyword: search,
+        TreeTypeId: orgId,
+        TreeType: orgType
+      }
     };
     loadTotal(searchCondition);
   };
@@ -209,47 +218,48 @@ function Main() {
     </div>
   );
 
-  const [type, setType] = useState<number>(1);
-  const [parentId, setParentId] = useState<string>('');//左侧树点击的节点id
-  const [currData, setCurrData] = useState<any>();
-  const [roomVisible, setRoomVisible] = useState<boolean>(false);
-  const [organizeId, setOrganizeId] = useState<string>(''); //列表选中的节点组织id
+  const [orgId, setOrgId] = useState<string>('');//左侧树点击的节点id
+  const [orgType, setOrgType] = useState<string>();
 
-  //租控图弹出合同
-  const showAtlasDrawer = (item?) => {
-    setCurrData(item);
-    setRoomVisible(true);
-  };
+  // const [currData, setCurrData] = useState<any>();
+  // const [roomVisible, setRoomVisible] = useState<boolean>(false);
+  // const [organizeId, setOrganizeId] = useState<string>(''); //列表选中的节点组织id
 
   // const closeAtlasDrawer = () => {
   //   setRoomVisible(false);
   // };
 
-  const selectTree = (parentId, type, searchText) => {
+  const selectTree = (orgId, orgType, searchText) => {
     //初始化页码
+    // const page = new DefaultPagination();
+    // refresh(parentId, type, searchText, page);//, pstructId); 
+    // setParentId(parentId);
+    // setPagination(page);
+    // setType(type);
+
+    setOrgId(orgId);
+    setOrgType(orgType);
     const page = new DefaultPagination();
-    refresh(parentId, type, searchText, page);//, pstructId); 
-    setParentId(parentId);
-    setPagination(page);
-    setType(type);
+    loadData(search, orgId, orgType, page);
+
   };
 
   //点击树刷新列表
-  const refresh = (parentId, type, searchText, page) => {
-    setSearch(searchText);
-    const queryJson = {
-      keyword: search,
-      //PStructId: psid,
-      ParentId: parentId,//== null ? psid : parentId,
-      Type: type == null ? 1 : type,
-    };
-    const sidx = 'id';
-    const sord = 'asc';
-    const { current: pageIndex, pageSize, total } = page;
-    return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
-      return res;
-    });
-  };
+  // const refresh = (parentId, type, searchText, page) => {
+  //   setSearch(searchText);
+  //   const queryJson = {
+  //     keyword: search,
+  //     //PStructId: psid,
+  //     ParentId: parentId,//== null ? psid : parentId,
+  //     Type: type == null ? 1 : type,
+  //   };
+  //   const sidx = 'id';
+  //   const sord = 'asc';
+  //   const { current: pageIndex, pageSize, total } = page;
+  //   return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(res => {
+  //     return res;
+  //   });
+  // };
 
   return (
     <Layout style={{ height: '100%' }}>
@@ -267,7 +277,7 @@ function Main() {
                 className="search-input"
                 placeholder="搜索合同编号"
                 style={{ width: 200 }}
-                onSearch={value => { loadData(value); loadTotalData(value); }}
+                onSearch={value => { loadData(value, orgId, orgType); loadTotalData(value, orgId, orgType); }}
               />
               <Button type="primary" style={{ float: 'right' }}
                 onClick={() => showAddDrawer()}
@@ -291,7 +301,7 @@ function Main() {
                   <Info title="退租待审核" value={totalInfo ? totalInfo.exitAudit : 0} bordered />
                 </Col>
                 <Col sm={4} xs={24}>
-                  <Info title="正常执行" value={totalInfo ? totalInfo.normal : 0}   />
+                  <Info title="正常执行" value={totalInfo ? totalInfo.normal : 0} />
                 </Col>
                 {/* <Col sm={4} xs={24}>
                   <Info title="已作废" value={totalInfo ? totalInfo.invalid : 0} />
@@ -300,7 +310,7 @@ function Main() {
             </Card>
             <ListTable
               onchange={(paginationConfig, filters, sorter) =>
-                loadData(search, paginationConfig, sorter)
+                loadData(search, orgId, orgType, paginationConfig, sorter)
               }
               loading={loading}
               pagination={pagination}
@@ -314,7 +324,10 @@ function Main() {
               reload={() => initLoadData(search)} />
           </TabPane>
           <TabPane tab="租控图" key="2">
-            <Atlas parentId={parentId} showDrawer={showAtlasDrawer}></Atlas>
+            <Atlas
+              orgId={orgId}
+              orgType={orgType}
+              showDrawer={showDetailDrawer}></Atlas>
           </TabPane>
         </Tabs>
       </Content>

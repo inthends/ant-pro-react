@@ -871,7 +871,7 @@ const Modify = (props: ModifyProps) => {
         title={null}
         subTitle={
           <div>
-            <label style={{ color: '#4494f0', fontSize: '24px' }}>{infoDetail.customer}</label>
+            <label style={{ color: '#4494f0', fontSize: '24px' }}>{infoDetail.no}</label>
           </div>
         }
         //title={GetStatus(infoDetail.status)}
