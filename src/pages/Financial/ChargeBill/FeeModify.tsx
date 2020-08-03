@@ -5,7 +5,6 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { SaveDetail, GetReceivablesFeeItemTreeJson, SaveTempBill, GetShowDetail, Call } from './Main.service';
 import { GetUserRoomsByRelationId, GetRoomUsers, GetUserRooms, GetFeeItemDetail } from '@/services/commonItem';
-
 import FeeItemLeftTree from '../FeeItemLeftTree';
 import moment from 'moment';
 import styles from './style.less';
@@ -31,8 +30,11 @@ const FeeModify = (props: FeeModifyProps) => {
   const [relationIds, setRelationIds] = useState<any[]>([]);
   const [unitIds, setUnitIds] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  //房产id
-  const [unitId, setUnitId] = useState<any>('');
+
+  //relationId
+  const [relationId, setRelationId] = useState<any>();
+  //房产id 
+  const [unitId, setUnitId] = useState<any>();
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -102,6 +104,7 @@ const FeeModify = (props: FeeModifyProps) => {
         });
 
         GetRoomUsers(roomId).then(res => {
+
           setRelationIds(res);
           if (res.length > 0) {
             //var info = Object.assign({}, infoDetail, { relationId: res[0].key });
@@ -149,7 +152,8 @@ const FeeModify = (props: FeeModifyProps) => {
         // });
         //重置之前选择加载的费项类别
         // setInfoDetail({});
-        // form.resetFields();
+        // form.resetFields(); 
+
       }
 
     }
@@ -357,8 +361,7 @@ const FeeModify = (props: FeeModifyProps) => {
             id != '' ?
               null :
               <Col span={8}
-                style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh - 40px)' }}
-              >
+                style={{ overflow: 'visible', position: 'relative', height: 'calc(100vh - 40px)' }}>
                 <FeeItemLeftTree
                   treeData={feeTreeData}
                   selectedKeys={selectedKeys}
@@ -367,8 +370,8 @@ const FeeModify = (props: FeeModifyProps) => {
                     // setFeeItemId(id);//缓存费项id
                     if (unitId) {
                       setLoading(true);
-                      GetFeeItemDetail(id, unitId).then(res => {
-                        if (res.feeItemId) {
+                      GetFeeItemDetail(id, unitId, relationId).then(res => {
+                        if (res) {
                           // if (res.relationId != null) {
                           // var info = Object.assign({}, res, { feeItemId: id });
                           // console.log(info);
@@ -376,11 +379,12 @@ const FeeModify = (props: FeeModifyProps) => {
                           form.resetFields();
                           setInfoDetail(res);
                           setLoading(false);
-
-                        } else {
-                          message.warning(res);
+                        }
+                        else {
+                          // message.warning(res);
                           setLoading(false);
                         }
+
                         // return info;
                         // }
                         // else {
@@ -416,6 +420,7 @@ const FeeModify = (props: FeeModifyProps) => {
                       <Select placeholder="=请选择="
                         disabled={id === '' && edit ? false : true}
                         onSelect={(key) => {
+                          setRelationId(key);
                           GetUserRoomsByRelationId(key).then(res => {
                             setUnitIds(res);
                             // var info = Object.assign({}, infoDetail, { householdId: res[0].value });
@@ -446,10 +451,10 @@ const FeeModify = (props: FeeModifyProps) => {
                           //需要刷新费项
                           GetReceivablesFeeItemTreeJson(key).then(res => {
                             setFeeTreeData(res);
-                            //加载加费对象
-                            GetRoomUsers(key).then(res => {
-                              setRelationIds(res);
-                            });
+                            //加载加费对象，不能更改加费对象
+                            // GetRoomUsers(key).then(res => {
+                            //   setRelationIds(res);
+                            // });
                             //清除费项树选中
                             setSelectedKeys([]);
                             setInfoDetail({});
@@ -627,7 +632,7 @@ const FeeModify = (props: FeeModifyProps) => {
                   <Col span={12}>
                     <Form.Item label="起始日期" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}  >
                       {getFieldDecorator('beginDate', {
-                        initialValue: !infoDetail.isNullDate ? moment(infoDetail.beginDate) : null,
+                        initialValue: !infoDetail.isNullDate && infoDetail.beginDate ? moment(infoDetail.beginDate) : null,
                         rules: [{ required: !infoDetail.isNullDate, message: '请选择起始日期' }]
                       })(
                         <DatePicker
@@ -641,7 +646,7 @@ const FeeModify = (props: FeeModifyProps) => {
                   <Col span={12}>
                     <Form.Item label="截止日期" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
                       {getFieldDecorator('endDate', {
-                        initialValue: !infoDetail.isNullDate ? moment(infoDetail.endDate) : null,
+                        initialValue: !infoDetail.isNullDate && infoDetail.endDate ? moment(infoDetail.endDate) : null,
                         // initialValue: infoDetail.endDate == null ? moment(getEndDate()) : moment(infoDetail.endDate),
                         rules: [{ required: !infoDetail.isNullDate, message: '请选择截止日期' }]
                       })(
@@ -670,7 +675,7 @@ const FeeModify = (props: FeeModifyProps) => {
                     )} */}
                     <Form.Item label="收款截止日" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
                       {getFieldDecorator('deadline', {
-                        initialValue: infoDetail.deadline == null ? moment(new Date()) : moment(infoDetail.deadline),
+                        initialValue: infoDetail.deadline == null ? null : moment(infoDetail.deadline),
                         rules: [{ required: true, message: '请选择收款截止日期' }]
                       })(
                         <DatePicker disabled={!infoDetail.isModifyDate} style={{ width: '100%' }} />
@@ -681,7 +686,7 @@ const FeeModify = (props: FeeModifyProps) => {
                   <Col span={12}>
                     <Form.Item label="账单日" required labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} >
                       {getFieldDecorator('billDate', {
-                        initialValue: infoDetail.billDate == null ? moment(new Date()) : moment(infoDetail.billDate),
+                        initialValue: infoDetail.billDate == null ? null : moment(infoDetail.billDate),
                         rules: [{ required: true, message: '请选择账单日' }]
                       })(
                         <DatePicker disabled={!infoDetail.isModifyDate} style={{ width: '100%' }} />

@@ -220,8 +220,8 @@ export function GetPointTreeAll(): Promise<ResponseObject<TreeEntity[]>> {
   return request.get(process.env.basePath + `/Common/GetPointTreeAll`, {});
 }
 
-export function GetFeeItemDetail(feeItemId, unitId): Promise<any> {
-  return request.get(process.env.basePath + `/Common/GetFeeItemDetail?feeItemId=${feeItemId}&unitId=${unitId}`, {}).then(getResult as any);;
+export function GetFeeItemDetail(feeItemId, unitId,relationId): Promise<any> {
+  return request.get(process.env.basePath + `/Common/GetFeeItemDetail?feeItemId=${feeItemId}&unitId=${unitId}&relationId=${relationId}`, {}).then(getResult as any);;
 }
 
 //获取费项类型
