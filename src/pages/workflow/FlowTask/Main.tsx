@@ -243,7 +243,7 @@ const Main = () => {
       //   break;
 
       case '1001':
-
+        //公寓入住流程
         switch (stepName) {
           case '招商部工作人员':
           case '招商部领导':
@@ -257,11 +257,26 @@ const Main = () => {
         }
         break;
 
-      //新建合同审批
       case '1003':
+        //新建合同审批流程
         switch (stepName) {
           case '招商部经理审批':
           case '财务审批':
+            showContractApproveDrawer(code, id, instanceId);
+            break;
+          case '开始':
+            //重新发起 
+            showContractSubmitDrawer(id, instanceId);
+            break;
+          default:
+            break;
+        }
+        break;
+
+      case '1002':
+        //合同退租流程
+        switch (stepName) {
+          case '验房':
             showContractApproveDrawer(code, id, instanceId);
             break;
           case '开始':

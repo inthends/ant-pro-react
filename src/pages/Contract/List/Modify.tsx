@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import ResultList from './ResultList';
 import {
   RemoveFile, GetFilesData, SubmitForm, SaveForm,
-  GetCharge, GetContractInfo, GetModifyChargeDetail, GetFollowCount, ReSubmitForm
+  GetChargeByChargeId, GetContractInfo, GetModifyChargeDetail, GetFollowCount, ReSubmitForm
 } from './Main.service';
 import { GetCommonItems, GetUserList } from '@/services/commonItem';
 import { GetCustomerInfo, CheckContractCustomer, GetContractCustomerList } from '../../Resource/PStructUser/PStructUser.service';
@@ -128,16 +128,10 @@ const Modify = (props: ModifyProps) => {
           setChargeId(tempInfo.chargeId);//条款Id
 
           //获取条款
-          GetCharge(tempInfo.chargeId).then((charge: ChargeDetailDTO) => {
+          GetChargeByChargeId(tempInfo.chargeId).then((charge: ChargeDetailDTO) => {
             setContractCharge(charge.contractCharge || {});
-            setChargeFeeList(charge.chargeFeeList || []);
-            // setChargeFeeList(charge.chargeFeeList || []);
-            // setChargefee(charge.chargeFee || {});
-            // setChargeincre(charge.chargeIncre || {});
-            // setChargefeeoffer(charge.chargeFeeOffer || {});
-            // setDepositData(charge.depositFeeResultList || []);//保证金明细
-            setChargeData(charge.chargeFeeResultList || []);//租金明细 
-            // setPropertyData(charge.propertyFeeResultList || []);//物业费明细 
+            setChargeFeeList(charge.chargeFeeList || []); 
+            setChargeData(charge.chargeFeeResultList || []);//租金明细  
           });
 
           //附件
@@ -1061,26 +1055,7 @@ const Modify = (props: ModifyProps) => {
                           })(<DatePicker placeholder="请选择签约日期" style={{ width: '100%' }} />)}
                         </Form.Item>
                       </Col>
-                    </Row>
-
-                    <Row gutter={24}>
-                      <Col lg={12}>
-                        <Form.Item label="经营主体" >
-                          {getFieldDecorator('businessEntity', {
-                            initialValue: infoDetail.businessEntity
-                            // rules: [{ required: true, message: '请输入经营主体' }],
-                          })(<Input placeholder="请输入经营主体" />)}
-                        </Form.Item>
-                      </Col>
-                      <Col lg={12}>
-                        <Form.Item label="付款方式">
-                          {getFieldDecorator('payType', {
-                            initialValue: infoDetail.payType
-                            // rules: [{ required: true, message: '请输入付款方式' }],
-                          })(<Input placeholder="请输入付款方式" />)}
-                        </Form.Item>
-                      </Col>
-                    </Row>
+                    </Row> 
                     <Row gutter={24}>
                       <Col lg={12}>
                         <Form.Item label="跟进人" >
@@ -1298,6 +1273,24 @@ const Modify = (props: ModifyProps) => {
                             initialValue: infoDetail.address,
                             rules: [{ required: true, message: '请输入联系地址' }],
                           })(<Input placeholder="请输入联系地址" disabled={form.getFieldValue('customerId') == '' ? true : false} />)}
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row gutter={24}>
+                      <Col lg={12}>
+                        <Form.Item label="经营主体" >
+                          {getFieldDecorator('businessEntity', {
+                            initialValue: infoDetail.businessEntity
+                            // rules: [{ required: true, message: '请输入经营主体' }],
+                          })(<Input placeholder="请输入经营主体" />)}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={12}>
+                        <Form.Item label="付款方式">
+                          {getFieldDecorator('payType', {
+                            initialValue: infoDetail.payType
+                            // rules: [{ required: true, message: '请输入付款方式' }],
+                          })(<Input placeholder="请输入付款方式" />)}
                         </Form.Item>
                       </Col>
                     </Row>

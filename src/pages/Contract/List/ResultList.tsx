@@ -21,7 +21,7 @@ function ResultList(props: ResultListProps) {
         if (row.isReduction)
           return <span>{moment(row.beginDate).format('YYYY-MM-DD') + " - " + moment(row.endDate).format('YYYY-MM-DD') + ' '}<span style={{ color: 'red', fontSize: '4px', verticalAlign: 'super' }}>免</span></span>;
         else
-          return moment(row.beginDate).format('YYYY-MM-DD') + " - " + moment(row.endDate).format('YYYY-MM-DD'); 
+          return moment(row.beginDate).format('YYYY-MM-DD') + " - " + moment(row.endDate).format('YYYY-MM-DD');
       }
     },
     {
@@ -65,7 +65,13 @@ function ResultList(props: ResultListProps) {
       dataIndex: 'totalPrice',
       key: 'totalPrice',
       width: 60,
-    }
+    },
+    {
+      title: '未收金额',
+      dataIndex: 'lastAmount',
+      key: 'lastAmount',
+      width: 60,
+    },
   ] as ColumnProps<any>[];
 
   return (

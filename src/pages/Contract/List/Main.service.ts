@@ -85,9 +85,9 @@ export function GetContractInfo(keyvalue): Promise<any> {
 }
 
 // 获取条款
-export function GetCharge(keyvalue): Promise<ChargeDetailDTO> {
+export function GetChargeByChargeId(keyvalue): Promise<ChargeDetailDTO> {
   return request
-    .get(process.env.basePath + `/Contract/GetCharge?keyvalue=${keyvalue}`)
+    .get(process.env.basePath + `/Contract/GetChargeByChargeId?keyvalue=${keyvalue}`)
     .then(getResult as any);
 }
 

@@ -1,3 +1,4 @@
+//合同变更
 import {
   Tag, Spin, Divider, PageHeader, AutoComplete, InputNumber, TreeSelect, message,
   Tabs, Select, Button, Card, Col, DatePicker, Drawer, Form, Input, Row
@@ -14,7 +15,7 @@ import {
 } from '@/model/models';
 import React, { useEffect, useState } from 'react';
 import ResultList from './ResultList';
-import { SubmitForm, SaveForm, GetFeeItemsByUnitId, GetCharge, GetFormJson, GetChargeDetail } from './Main.service';
+import { SubmitForm, SaveForm, GetFeeItemsByUnitId, GetChargeByChargeId, GetFormJson, GetChargeDetail } from './Main.service';
 import { GetOrgTreeSimple, GetAsynChildBuildingsSimple, GetCommonItems, GetUserList } from '@/services/commonItem';
 import moment from 'moment';
 import styles from './style.less';
@@ -103,12 +104,9 @@ const Change = (props: ChangeProps) => {
           setInfoDetail(tempInfo);
 
           //获取条款
-          GetCharge(chargeId).then((charge: ChargeDetailDTO) => {
+          GetChargeByChargeId(chargeId).then((charge: ChargeDetailDTO) => {
             setContractCharge(charge.contractCharge || {});
-            setChargeFeeList(charge.chargeFeeList || []);
-            // setChargeIncreList(charge.chargeIncreList || []);
-            // setChargeOfferList(charge.chargeFeeOfferList || []);
-            // setDepositData(charge.depositFeeResultList || []);//保证金明细
+            setChargeFeeList(charge.chargeFeeList || []); 
             setChargeData(charge.chargeFeeResultList || []);//租金明细    
           })
           form.resetFields();

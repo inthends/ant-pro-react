@@ -90,7 +90,7 @@ const Modify = (props: ModifyProps) => {
           setCount(tempInfo.followCount);
 
           //获取条款
-          GetCharge(chargeId).then((charge: ChargeDetailDTO) => {
+          GetyChargeByChadrgeId(chargeId).then((charge: ChargeDetailDTO) => {
             setChargeFeeList(charge.chargeFeeList || []);//费用条款
             setChargeData(charge.chargeFeeResultList || []);//明细  
           });

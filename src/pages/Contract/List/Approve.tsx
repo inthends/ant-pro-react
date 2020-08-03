@@ -67,6 +67,7 @@ const Approve = (props: ApproveProps) => {
   // }, []);
 
   const [loading, setLoading] = useState<boolean>(false);
+
   // 打开抽屉时初始化
   useEffect(() => {
     if (visible) {
@@ -82,15 +83,12 @@ const Approve = (props: ApproveProps) => {
             totalAmount: tempInfo.totalAmount,
             // totalPropertyAmount: tempInfo.totalPropertyAmount
           });
+
           //获取条款
           GetChargeByContractId(instanceId).then((charge: ChargeDetailDTO) => {
             setContractCharge(charge.contractCharge || {});
             setChargeFeeList(charge.chargeFeeList || []);
-            // setChargeIncre(charge.chargeIncre || {});
-            // setChargeOffer(charge.chargeFeeOffer || {});
-            // setDepositData(charge.depositFeeResultList || []);//保证金明细
-            setChargeData(charge.chargeFeeResultList || []);//租金明细    
-            // setPropertyData(charge.propertyFeeResultList || []);//物业费明细  
+            setChargeData(charge.chargeFeeResultList || []);//租金明细     
           });
 
           //附件
@@ -236,7 +234,7 @@ const Approve = (props: ApproveProps) => {
           <Divider dashed />
           {GetStatus(infoDetail.status)}
       合同摘要【合同期间{String(infoDetail.startDate).substr(0, 10)}到{String(infoDetail.endDate).substr(0, 10)}，
-      租赁数为<a>{totalInfo.totalArea}㎡</a>，
+      租赁面积<a>{totalInfo.totalArea}㎡</a>，
       {/* 付款周期{chargeFeeList.length > 0 ? chargeFeeList[0].payCycle : ''}月一付， */}
       总金额<a>{totalInfo.totalAmount}</a>】
           {/* <Form layout='vertical'>
@@ -286,18 +284,18 @@ const Approve = (props: ApproveProps) => {
               <Row gutter={24}>
                 <Col span={12}>
                   <Card title="基本信息" className={styles.card} hoverable>
-                    {/* <Row gutter={24}>
+                    <Row gutter={24}>
                       <Col lg={24}>
                         <Form.Item label="合同编号">
                           {infoDetail.no}
                         </Form.Item>
                       </Col>
-                      <Col lg={12}>
+                      {/* <Col lg={12}>
                         <Form.Item label="合同面积(㎡)">
                           {infoDetail.leaseSize}
                         </Form.Item>
-                      </Col>
-                    </Row> */}
+                      </Col> */}
+                    </Row>
                     <Row gutter={24}>
                       <Col lg={12}>
                         <Form.Item label="起始日期">
@@ -311,7 +309,7 @@ const Approve = (props: ApproveProps) => {
                       </Col>
                     </Row>
 
-                    <Row gutter={24}> 
+                    <Row gutter={24}>
                       <Col lg={12}>
                         <Form.Item label="签约日期">
                           {String(infoDetail.signingDate).substr(0, 10)}
@@ -369,39 +367,39 @@ const Approve = (props: ApproveProps) => {
                       </Col>
                     </Row>
                     <Row gutter={24}>
-                      <Col lg={12}>
-                        <Form.Item label="联系人">
-                          {infoDetail.linkMan}
-                        </Form.Item>
-                      </Col>
-                      <Col lg={12}>
+                      <Col lg={10}>
                         <Form.Item label="类别">
                           {infoDetail.customerType == '2' ? '单位' : '个人'}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={14}>
+                        <Form.Item label="联系人">
+                          {infoDetail.linkMan}
                         </Form.Item>
                       </Col>
                     </Row>
                     {infoDetail.customerType == '2' ? (
                       <Row gutter={24}>
-                        <Col lg={12}>
+                        <Col lg={10}>
+                          <Form.Item label="法人">
+                            {infoDetail.legalPerson}
+                          </Form.Item>
+                        </Col>
+                        <Col lg={14}>
                           <Form.Item label="行业">
                             {
                               infoDetail.industry
                             }
                           </Form.Item>
                         </Col>
-                        <Col lg={12}>
-                          <Form.Item label="法人">
-                            {infoDetail.legalPerson}
-                          </Form.Item>
-                        </Col>
                       </Row>) : null}
                     <Row gutter={24}>
-                      <Col lg={12}>
+                      <Col lg={10}>
                         <Form.Item label="联系电话">
                           {infoDetail.linkPhone}
                         </Form.Item>
                       </Col>
-                      <Col lg={12}>
+                      <Col lg={14}>
                         <Form.Item label="联系地址">
                           {infoDetail.address}
                         </Form.Item>
@@ -409,12 +407,12 @@ const Approve = (props: ApproveProps) => {
                     </Row>
 
                     <Row gutter={24}>
-                      <Col lg={12}>
+                      <Col lg={10}>
                         <Form.Item label="付款方式">
                           {infoDetail.payType}
                         </Form.Item>
                       </Col>
-                      <Col lg={12}>
+                      <Col lg={14}>
                         <Form.Item label="经营主体">
                           {infoDetail.businessEntity}
                         </Form.Item>
@@ -664,6 +662,26 @@ const Approve = (props: ApproveProps) => {
               </Card>
             </TabPane>
           </Tabs>
+
+          {infoDetail.withdrawalDate ?
+            <Card title="退租" className={styles.card} hoverable>
+              <Row gutter={24}>
+                <Col lg={3}>
+                  <Form.Item label="退租日期" >
+                    {String(infoDetail.withdrawalDate).substr(0, 10)}
+                  </Form.Item>
+                </Col>
+                <Col lg={21}>
+                  <Form.Item label="退租原因" >
+                    {infoDetail.withdrawal}
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Form.Item label="">
+                {infoDetail.withdrawalMemo}
+              </Form.Item>
+            </Card> : null}
+
           <Card title="审核意见" className={styles.addcard} hoverable>
             <CommentBox instanceId={instanceId} />
             {/* <Form.Item label="">

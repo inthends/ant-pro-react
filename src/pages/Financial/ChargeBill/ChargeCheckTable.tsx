@@ -157,19 +157,19 @@ function ChargeCheckTable(props: ChargeCheckTableProps) {
       width: 100,
     },
 
-    {
-      title: '手续费',
-      dataIndex: 'serviceFee',
-      key: 'serviceFee',
-      width: 100,
-    },
+    // {
+    //   title: '手续费',
+    //   dataIndex: 'serviceFee',
+    //   key: 'serviceFee',
+    //   width: 100,
+    // },
 
-    {
-      title: '提现金额',
-      dataIndex: 'actualAmount',
-      key: 'actualAmount',
-      width: 100,
-    },
+    // {
+    //   title: '提现金额',
+    //   dataIndex: 'actualAmount',
+    //   key: 'actualAmount',
+    //   width: 100,
+    // },
 
     {
       title: '发票编号',
@@ -238,7 +238,7 @@ function ChargeCheckTable(props: ChargeCheckTableProps) {
         columns={columns}
         rowKey={record => record.billId}
         pagination={pagination}
-        scroll={{ y: 500, x: 2400 }}
+        scroll={{ y: 500, x: 2200 }}
         // rowClassName={setClassName} //表格行点击高亮
         loading={loading}
         // onRow={onRow}

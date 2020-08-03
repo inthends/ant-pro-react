@@ -1,17 +1,18 @@
 //退租
-import {Icon, Spin, Tooltip, Upload, DatePicker, message, Checkbox, Input, Tag, Divider, PageHeader, List, Tabs, Button, Card, Col, Drawer, Form, Row } from 'antd';
+import {
+  Icon, Spin, Tooltip, Upload, DatePicker, message, Checkbox, Input, List,
+  PageHeader, Tabs, Button, Card, Col, Drawer, Form, Row, Tag, Divider
+} from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import {
+  ChargeFeeDetailDTO,
   HtLeasecontractcharge,
-  HtLeasecontractchargefee,
-  // HtLeasecontractchargeincre,
-  // HtLeasecontractchargefeeoffer,
-  LeaseContractDTO,
+  htLeasecontract,
   ChargeDetailDTO
 } from '@/model/models';
 import React, { useEffect, useState } from 'react';
 import ResultList from './ResultList';
-import { GetFilesData, GetCharge, GetContractInfo, WithdrawalForm } from './Main.service';
+import { GetFilesData, GetChargeByContractId, GetContractInfo, WithdrawalForm } from './Main.service';
 import styles from './style.less';
 import moment from 'moment';
 const { TabPane } = Tabs;
@@ -19,7 +20,7 @@ const { TabPane } = Tabs;
 interface WithdrawalProps {
   visible: boolean;
   id?: string;//合同id
-  chargeId?: string;//合同条款id
+  // chargeId?: string;//合同条款id
   closeDrawer(): void;
   form: WrappedFormUtils;
   reload(): void;
@@ -27,13 +28,13 @@ interface WithdrawalProps {
 
 const Withdrawal = (props: WithdrawalProps) => {
   const title = '合同退租';
-  const { visible, closeDrawer, id, form, chargeId, reload } = props;
+  const { visible, closeDrawer, id, form, reload } = props;
   const { getFieldDecorator } = form;
   //const [industryType, setIndustryType] = useState<any[]>([]); //行业  
   //const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
-  const [infoDetail, setInfoDetail] = useState<LeaseContractDTO>({});
+  const [infoDetail, setInfoDetail] = useState<htLeasecontract>({});
   const [contractCharge, setContractCharge] = useState<HtLeasecontractcharge>({});
-  const [chargeFeeList, setChargeFeeList] = useState<HtLeasecontractchargefee[]>([]);
+  const [chargeFeeList, setChargeFeeList] = useState<ChargeFeeDetailDTO[]>([]);
   // const [chargeFee, setChargeFee] = useState<HtLeasecontractchargefee>({});
   // const [chargeIncre, setChargeIncre] = useState<HtLeasecontractchargeincre>({});
   // const [chargeOffer, setChargeOffer] = useState<HtLeasecontractchargefeeoffer>({});
@@ -57,7 +58,7 @@ const Withdrawal = (props: WithdrawalProps) => {
   // }, []);
   const [loading, setLoading] = useState<boolean>(false);
   const [totalInfo, setTotalInfo] = useState<any>({});//合计信息
-  const [houseList, setHouseList] = useState<any[]>([]);
+  // const [houseList, setHouseList] = useState<any[]>([]);
 
   // 打开抽屉时初始化
   useEffect(() => {
@@ -66,20 +67,15 @@ const Withdrawal = (props: WithdrawalProps) => {
         setLoading(true);
         GetContractInfo(id).then((tempInfo) => {
           setInfoDetail(tempInfo.contract);
-          setHouseList(tempInfo.houseList);
+          // setHouseList(tempInfo.houseList);
           setTotalInfo({
-            leasePrice: tempInfo.leasePrice,
-            totalDeposit: tempInfo.totalDeposit,
+            totalArea: tempInfo.totalArea,
             totalAmount: tempInfo.totalAmount
           });
           //获取条款
-          GetCharge(chargeId).then((charge: ChargeDetailDTO) => {
+          GetChargeByContractId(id).then((charge: ChargeDetailDTO) => {
             setContractCharge(charge.contractCharge || {});
             setChargeFeeList(charge.chargeFeeList || []);
-            // setChargeFee(charge.chargeFee || {});
-            // setChargeIncre(charge.chargeIncre || {});
-            // setChargeOffer(charge.chargeFeeOffer || {});
-            // setDepositData(charge.depositFeeResultList || []);//保证金明细
             setChargeData(charge.chargeFeeResultList || []);//租金明细    
           });
           //附件
@@ -119,8 +115,8 @@ const Withdrawal = (props: WithdrawalProps) => {
         return <Tag color="#19d54e">到期未处理</Tag>;
       case 8:
         return <Tag color="#19d54e">待执行</Tag>;
-      case -1:
-        return <Tag color="#d82d2d">已作废</Tag>
+      // case -1:
+      //   return <Tag color="#d82d2d">已作废</Tag>
       default:
         return '';
     }
@@ -140,7 +136,7 @@ const Withdrawal = (props: WithdrawalProps) => {
       if (!errors) {
         WithdrawalForm({
           contractId: id,
-          chargeId: chargeId,
+          // chargeId: chargeId,
           withdrawalDate: values.withdrawalDate.format('YYYY-MM-DD'),
           withdrawal: values.withdrawal,
           withdrawalMemo: values.withdrawalMemo
@@ -159,7 +155,7 @@ const Withdrawal = (props: WithdrawalProps) => {
 
   //退租日期不能小于合同计租日期
   const disabledDate = (current) => {
-    return current && current.isBefore(moment(infoDetail.billingDate), 'day');
+    return current && current.isBefore(moment(infoDetail.startDate), 'day');
   };
 
   return (
@@ -172,10 +168,11 @@ const Withdrawal = (props: WithdrawalProps) => {
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
       <Spin tip="数据处理中..." spinning={loading}>
         <PageHeader
+          ghost={false}
           title={null}
           subTitle={
             <div>
-              <label style={{ color: '#4494f0', fontSize: '24px' }}>{infoDetail.customer}</label>
+              <label style={{ color: '#4494f0', fontSize: '24px' }}>{infoDetail.no}</label>
             </div>
           }
           //title={GetStatus(infoDetail.status)}
@@ -197,9 +194,9 @@ const Withdrawal = (props: WithdrawalProps) => {
       合同摘要 【合同期间
       {String(infoDetail.startDate).substr(0, 10)}
       到{String(infoDetail.endDate).substr(0, 10)}，
-      租赁数为{infoDetail.leaseSize}㎡。
-      付款周期{chargeFeeList.length > 0 ? chargeFeeList[0].payCycle : ''}月一付，
-      总金额{totalInfo.totalAmount}】
+      租赁面积<a>{totalInfo.totalArea}㎡</a>，
+      {/* 付款周期{chargeFeeList.length > 0 ? chargeFeeList[0].payCycle : ''}月一付， */}
+      总金额<a>{totalInfo.totalAmount}</a>】
         </PageHeader>
         <Divider dashed />
         <Form layout="vertical" hideRequiredMark>
@@ -207,18 +204,18 @@ const Withdrawal = (props: WithdrawalProps) => {
             <TabPane tab="基本信息" key="1">
               <Row gutter={24}>
                 <Col span={12}>
-                <Card title="基本信息" className={styles.addcard} hoverable>
+                  <Card title="基本信息" className={styles.card} hoverable>
                     <Row gutter={24}>
-                      <Col lg={12}>
+                      <Col lg={24}>
                         <Form.Item label="合同编号">
                           {infoDetail.no}
                         </Form.Item>
                       </Col>
-                      <Col lg={12}>
+                      {/* <Col lg={12}>
                         <Form.Item label="合同面积(㎡)">
                           {infoDetail.leaseSize}
                         </Form.Item>
-                      </Col>
+                      </Col> */}
                     </Row>
                     <Row gutter={24}>
                       <Col lg={12}>
@@ -232,27 +229,16 @@ const Withdrawal = (props: WithdrawalProps) => {
                         </Form.Item>
                       </Col>
                     </Row>
+
                     <Row gutter={24}>
-                      <Col lg={12}>
-                        <Form.Item label="经营主体">
-                          {infoDetail.businessEntity}
-                        </Form.Item>
-                      </Col>
-                      <Col lg={12}>
-                        <Form.Item label="付款方式">
-                          {infoDetail.payType}
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row gutter={24}>
-                      <Col lg={12}>
-                        <Form.Item label="签约人">
-                          {infoDetail.signer}
-                        </Form.Item>
-                      </Col>
                       <Col lg={12}>
                         <Form.Item label="签约日期">
                           {String(infoDetail.signingDate).substr(0, 10)}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={12}>
+                        <Form.Item label="签约人">
+                          {infoDetail.signer}
                         </Form.Item>
                       </Col>
                     </Row>
@@ -292,7 +278,7 @@ const Withdrawal = (props: WithdrawalProps) => {
                   </Card> */}
                 </Col>
                 <Col span={12}>
-                  <Card title="房源信息" className={styles.card} hoverable>
+                  {/* <Card title="房源信息" className={styles.card} hoverable>
                     <Row gutter={24}>
                       <Col lg={24}>
                         <List
@@ -306,9 +292,9 @@ const Withdrawal = (props: WithdrawalProps) => {
                         />
                       </Col>
                     </Row>
-                  </Card>
+                  </Card> */}
 
-                  <Card title="租客信息" className={styles.addcard} hoverable>
+                  <Card title="租客信息" className={styles.card} hoverable>
                     <Row gutter={24}>
                       <Col lg={24}>
                         <Form.Item label="承租方"  >
@@ -317,41 +303,54 @@ const Withdrawal = (props: WithdrawalProps) => {
                       </Col>
                     </Row>
                     <Row gutter={24}>
-                      <Col lg={12}>
-                        <Form.Item label="联系人">
-                          {infoDetail.linkMan}
-                        </Form.Item>
-                      </Col>
-                      <Col lg={12}>
+                      <Col lg={10}>
                         <Form.Item label="类别">
                           {infoDetail.customerType == '2' ? '单位' : '个人'}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={14}>
+                        <Form.Item label="联系人">
+                          {infoDetail.linkMan}
                         </Form.Item>
                       </Col>
                     </Row>
                     {infoDetail.customerType == '2' ? (
                       <Row gutter={24}>
-                        <Col lg={12}>
+                        <Col lg={10}>
+                          <Form.Item label="法人"  >
+                            {infoDetail.legalPerson}
+                          </Form.Item>
+                        </Col>
+                        <Col lg={14}>
                           <Form.Item label="行业"  >
                             {
                               infoDetail.industry
                             }
                           </Form.Item>
                         </Col>
-                        <Col lg={12}>
-                          <Form.Item label="法人"  >
-                            {infoDetail.legalPerson}
-                          </Form.Item>
-                        </Col>
-                      </Row>) : null} 
+
+                      </Row>) : null}
                     <Row gutter={24}>
-                      <Col lg={12}>
+                      <Col lg={10}>
                         <Form.Item label="联系电话">
                           {infoDetail.linkPhone}
                         </Form.Item>
                       </Col>
-                      <Col lg={12}>
+                      <Col lg={14}>
                         <Form.Item label="联系地址"  >
                           {infoDetail.address}
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row gutter={24}>
+                      <Col lg={10}>
+                        <Form.Item label="付款方式">
+                          {infoDetail.payType}
+                        </Form.Item>
+                      </Col>
+                      <Col lg={14}>
+                        <Form.Item label="经营主体">
+                          {infoDetail.businessEntity}
                         </Form.Item>
                       </Col>
                     </Row>
@@ -360,21 +359,19 @@ const Withdrawal = (props: WithdrawalProps) => {
               </Row>
             </TabPane>
             <TabPane tab="租赁条款" key="2">
-            <Card title="基本条款" className={styles.card} hoverable>
+              <Card title="基本条款" className={styles.card} hoverable>
                 <Row gutter={24}>
-                  <Col lg={6}>
-                    <Form.Item label="合同面积(㎡)">
-                      {contractCharge.leaseArea}
+                  <Col lg={12}>
+                    <Form.Item label="滞纳金起算日 距">
+                      {contractCharge.lateStartDateBase == 2 ? '计费起始日期' : '计费截止日期'}
+                      {contractCharge.lateStartDateNum}
+                      {contractCharge.lateStartDateUnit == 1 ? '天' : '月'}
+                      {contractCharge.lateStartDateUnit == 2 ? contractCharge.lateStartDateFixed + '天' : ''}
                     </Form.Item>
                   </Col>
                   <Col lg={6}>
                     <Form.Item label="滞纳金比例(‰)" >
                       {contractCharge.lateFee}
-                    </Form.Item>
-                  </Col>
-                  <Col lg={6}>
-                    <Form.Item label="滞纳金起算日期" >
-                      {contractCharge.lateDate == null ? '' : String(contractCharge.lateDate).substr(0, 10)}
                     </Form.Item>
                   </Col>
                   <Col lg={6}>
@@ -408,29 +405,51 @@ const Withdrawal = (props: WithdrawalProps) => {
               </Card>
 
               {
-                chargeFeeList ? chargeFeeList.map((k, index) => (
+                chargeFeeList ? chargeFeeList.map((k: ChargeFeeDetailDTO, index) => (
                   <Card title={'费用条款' + (index + 1)} className={styles.addcard} hoverable>
+                    <Row gutter={24}>
+                      <Col lg={24}>
+                        <Form.Item required>
+                          {getFieldDecorator(`rooms[${index}]`, {
+                            initialValue: k.rooms,
+                            rules: [{ required: true, message: '请选择房源' }],
+                          })(
+                            <List
+                              bordered
+                              dataSource={k.rooms}
+                              renderItem={item =>
+                                <List.Item   >
+                                  <List.Item.Meta title={item.allName} />
+                                  <div>{item.area}㎡，{item.rentPrice}元/㎡.天</div>
+                                </List.Item>
+                              }
+                            />
+                          )}
+                        </Form.Item>
+                      </Col>
+                    </Row>
+
                     <Row gutter={24}>
                       <Col lg={4}>
                         <Form.Item label="开始时间"  >
-                          {String(k.chargeStartDate).substr(0, 10)}
+                          {String(k.chargeFee.chargeStartDate).substr(0, 10)}
                         </Form.Item>
                       </Col>
                       <Col lg={4}>
                         <Form.Item label="结束时间" >
-                          {String(k.chargeEndDate).substr(0, 10)}
+                          {String(k.chargeFee.chargeEndDate).substr(0, 10)}
                         </Form.Item>
                       </Col>
                       <Col lg={4}>
                         <Form.Item label="关联费项" >
-                          {k.feeItemName}
+                          {k.chargeFee.feeItemName}
                         </Form.Item>
                       </Col>
 
                       <Col lg={4}>
                         <Form.Item label="单价" >
-                          {k.price}
-                          {k.priceUnit}
+                          {k.chargeFee.price}
+                          {k.chargeFee.priceUnit}
                         </Form.Item>
                       </Col>
                       <Col lg={4}>
@@ -443,7 +462,7 @@ const Withdrawal = (props: WithdrawalProps) => {
             4、以天记租时没有月数，即套用公式3计算，其中月数为0计算<br />
             5、以月记租时，整月按公式3第一项计算，余下的天数按照公式3的第二项计算</span>}>
                           <Icon type="question-circle" /></Tooltip></div>}>
-                          {k.billType}
+                          {k.chargeFee.billType}
                         </Form.Item>
                       </Col>
 
@@ -457,90 +476,92 @@ const Withdrawal = (props: WithdrawalProps) => {
             </span>}>
                           <Icon type="question-circle" />
                         </Tooltip></div>}>
-                          {k.dayPriceConvertRule}
-                        </Form.Item>
-                      </Col>
-
-                      <Col lg={4}>
-                        <Form.Item label={<div>年天数 <Tooltip title="指一年按多少天来计算">
-                          <Icon type="question-circle" /></Tooltip></div>}>
-                          {k.yearDays}
-                        </Form.Item>
-                      </Col>
-
-                      <Col lg={4}>
-                        <Form.Item label="付款周期（月）" >
-                          {k.payCycle}月一付
-                      </Form.Item>
-                      </Col>
-
-                      <Col lg={4}>
-                        <Form.Item label="提前付款时间">
-                          ({k.advancePayTimeUnit})
-                        {k.advancePayTime}天
-                      </Form.Item>
-                      </Col>
-                      <Col lg={6}>
-                        <Form.Item label={<div>租期划分方式 <Tooltip
-                          overlayStyle={{ maxWidth: 'none' }}
-                          title={<span>
-                            按起始日划分<br />
-              按自然月划分(首月非整自然月划入第一期)<br />
-              按自然月划分(首月非整自然月算一个月)
-            </span>}>
-                          <Icon type="question-circle" />
-                        </Tooltip></div>}>
-                          {k.rentalPeriodDivided}
-                        </Form.Item>
-                      </Col>
-
-                      <Col lg={4}>
-                        <Form.Item label="递增时间点">
-                          {k.increStartDate ? String(k.increStartDate).substr(0, 10) : ''}
+                          {k.chargeFee.dayPriceConvertRule}
                         </Form.Item>
                       </Col>
                     </Row>
                     <Row gutter={24}>
                       <Col lg={4}>
-                        <Form.Item label="递增间隔（月）">
-                          {k.increGap}
+                        <Form.Item label={<div>年天数 <Tooltip title="指一年按多少天来计算">
+                          <Icon type="question-circle" /></Tooltip></div>}>
+                          {k.chargeFee.yearDays}
                         </Form.Item>
                       </Col>
 
                       <Col lg={4}>
+                        <Form.Item label="付款周期（月）" >
+                          {k.chargeFee.payCycle}月一付
+                      </Form.Item>
+                      </Col>
+
+                      <Col lg={4}>
+                        <Form.Item label="提前付款时间">
+                          ({k.chargeFee.advancePayTimeUnit})
+                        {k.chargeFee.advancePayTime}天
+                      </Form.Item>
+                      </Col>
+                      <Col lg={4}>
+                        <Form.Item label={<div>租期划分方式 <Tooltip
+                          overlayStyle={{ maxWidth: 'none' }}
+                          title={<span>
+                            按起始日划分<br />
+                            按自然月划分(首月非整自然月划入第一期)<br />
+                            按自然月划分(首月非整自然月算一个月)
+                          </span>}>
+                          <Icon type="question-circle" />
+                        </Tooltip></div>}>
+                          {k.chargeFee.rentalPeriodDivided}
+                        </Form.Item>
+                      </Col>
+
+                      <Col lg={4}>
+                        <Form.Item label="递增时间点">
+                          {k.chargeFee.increStartDate ? String(k.chargeFee.increStartDate).substr(0, 10) : ''}
+                        </Form.Item>
+                      </Col>
+
+                      <Col lg={4}>
+                        <Form.Item label="递增间隔（月）">
+                          {k.chargeFee.increGap}
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Row gutter={24}>
+                      <Col lg={4}>
                         <Form.Item label="单价递增" >
-                          {k.increPrice}
-                          {k.increPriceUnit}
+                          {k.chargeFee.increPrice}
+                          {k.chargeFee.increPriceUnit}
                         </Form.Item>
                       </Col>
                       <Col lg={4}>
                         <Form.Item label="免租期开始" >
-                          {k.rebateStartDate ? String(k.rebateStartDate).substr(0, 10) : ''}
+                          {k.chargeFee.rebateStartDate ? String(k.chargeFee.rebateStartDate).substr(0, 10) : ''}
                         </Form.Item>
                       </Col>
                       <Col lg={4}>
                         <Form.Item label="免租期结束" >
-                          {k.rebateEndDate ? String(k.rebateEndDate).substr(0, 10) : ''}
+                          {k.chargeFee.rebateEndDate ? String(k.chargeFee.rebateEndDate).substr(0, 10) : ''}
                         </Form.Item>
                       </Col>
-                      <Col lg={6}>
+                      <Col lg={12}>
                         <Form.Item label="优惠备注" >
-                          {k.rebateRemark}
+                          {k.chargeFee.rebateRemark}
                         </Form.Item>
                       </Col>
                     </Row>
+
                   </Card>
                 )) : null
               }
-            
+
             </TabPane>
             <TabPane tab="租金明细" key="3">
-              <ResultList 
+              <ResultList
                 chargeData={chargeData}
                 className={styles.card}></ResultList>
             </TabPane>
             <TabPane tab="其他条款" key="4">
-              <Card className={styles.addcard}   hoverable >
+              <Card className={styles.addcard} hoverable >
                 <Row gutter={24}>
                   <Col lg={24}>
                     <Form.Item label="&nbsp;">
@@ -563,8 +584,8 @@ const Withdrawal = (props: WithdrawalProps) => {
                 </Row>
               </Card>
             </TabPane>
-          </Tabs>
-          <Card title="退租" className={styles.addcard} hoverable>
+          </Tabs> 
+          <Card title="退租" className={styles.card} hoverable>
             <Form.Item label="退租日期" required>
               {getFieldDecorator('withdrawalDate', {
                 initialValue: moment(new Date()),
@@ -573,8 +594,9 @@ const Withdrawal = (props: WithdrawalProps) => {
                 disabledDate={disabledDate}
               />)}
             </Form.Item>
-            <Form.Item label="">
+            <Form.Item label="" required>
               {getFieldDecorator('withdrawal', {
+                 rules: [{ required: true, message: '请选择退租原因' }],
               })(<Checkbox.Group options={['正常到期', '价格因素', '物业服务', '交通不便', '卫生环境', '楼宇质量', '公司扩张', '经营不善', '其他原因']} />
               )}
             </Form.Item>
@@ -606,7 +628,7 @@ const Withdrawal = (props: WithdrawalProps) => {
           关闭
           </Button>
         <Button onClick={doWwithdrawal} type="primary" >
-          确定
+          提交
         </Button>
       </div>
     </Drawer>

@@ -56,10 +56,10 @@ function ListTable(props: ListTableProps) {
     <Dropdown
       overlay={
         <Menu onClick={({ key }) => editAndDelete(key, item)}>
-          <Menu.Item key="change">变更</Menu.Item>
-          <Menu.Item key="renewal">续租</Menu.Item>
           <Menu.Item key="withdrawal">退租</Menu.Item>
-          <Menu.Item key="invalid">作废</Menu.Item>
+          {/* <Menu.Item key="change">变更</Menu.Item>
+              <Menu.Item key="renewal">续租</Menu.Item> 
+              <Menu.Item key="invalid">作废</Menu.Item>*/}  
         </Menu>}>
       <a>
         更多 <Icon type="down" key='down' />
@@ -92,7 +92,7 @@ function ListTable(props: ListTableProps) {
     //   return "";
     // }
     // },  
-     
+
     {
       title: '租客',
       dataIndex: 'customer',

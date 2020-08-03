@@ -80,6 +80,11 @@ export interface HtChargefeeresult {
   totalPrice?: number;
 
   /**
+* Desc:未收金额  Default:  Nullable:True
+*/
+  lastAmount?: number;
+
+  /**
 * Desc:费用类型，1保证金2租金  Default:  Nullable:True
 */
   // feeType?: number;

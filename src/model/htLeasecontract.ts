@@ -67,6 +67,21 @@ export interface htLeasecontract {
   payType?: string;
 
   /**
+ * 退租日期
+ */
+  withdrawalDate?: Date;
+
+  /**
+* 退租原因
+*/
+  withdrawal?: string;
+
+  /**
+ * 退租备注
+ */
+  withdrawalMemo?: string;
+
+  /**
  * 渠道类型
  */
   channelType?: string;
@@ -156,7 +171,7 @@ export interface htLeasecontract {
   //   * 计费单元Id
   //   */
   // billUnitId?: string;
-  
+
   /**
   * 机构Id
   */
