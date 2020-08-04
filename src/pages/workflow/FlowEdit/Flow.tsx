@@ -81,7 +81,7 @@ const Flow = () => {
     if (sorter) {
       const { field, order } = sorter;
       searchCondition.sord = order === "ascend" ? "asc" : "desc";
-      searchCondition.sidx = field ? field : "CreateDate";
+      searchCondition.sidx = field ? field : "code";
     }
     return load(searchCondition).then(res => {
       return res;
@@ -90,7 +90,7 @@ const Flow = () => {
 
   const load = formData => {
     setLoading(true);
-    formData.sidx = formData.sidx || "CreateDate";
+    formData.sidx = formData.sidx || "code";
     formData.sord = formData.sord || "desc";
     return GetDataList(formData).then(res => {
       const { pageIndex: current, total, pageSize } = res;
@@ -111,8 +111,8 @@ const Flow = () => {
   const initLoadData = (searchParam: SearchParam) => {
     setSearch(searchParam);
     const queryJson = searchParam;
-    const sidx = "CreateDate";
-    const sord = "desc";
+    const sidx = "code";
+    const sord = "asc";
     const { current: pageIndex, pageSize, total } = pagination;
     return load({ pageIndex, pageSize, sidx, sord, total, queryJson }).then(
       res => {

@@ -179,9 +179,9 @@ function ListTable(props: ListTableProps) {
           case 6:
             return <Tag color="#19d54e">正常执行</Tag>;
           case 7:
-            return <Tag color="#19d54e">到期未处理</Tag>;
-          case 8:
-            return <Tag color="#19d54e">待执行</Tag>;
+            return <Tag color="#19d54e">已退租</Tag>;
+          // case 8:
+          //   return <Tag color="#19d54e">待执行</Tag>;
           // case -1:
           //   return <Tag color="#d82d2d">已作废</Tag>
           default:

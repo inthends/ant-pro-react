@@ -19,9 +19,7 @@ import { SubmitForm, SaveForm, GetFeeItemsByUnitId, GetChargeByChargeId, GetForm
 import { GetOrgTreeSimple, GetAsynChildBuildingsSimple, GetCommonItems, GetUserList } from '@/services/commonItem';
 import moment from 'moment';
 import styles from './style.less';
-import LeaseTermModify from './LeaseTermModify';
-import IncreasingRateModify from './IncreasingRateModify';
-import RebateModify from './RebateModify';
+import LeaseTermModify from './LeaseTermModify'; 
 
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -813,14 +811,7 @@ const Change = (props: ChangeProps) => {
                 feeItems={feeItems}
                 chargeFeeList={chargeFeeList}
               ></LeaseTermModify>
-              <IncreasingRateModify
-                form={form}
-                chargeIncreList={chargeIncreList}
-              ></IncreasingRateModify>
-              <RebateModify
-                form={form}
-                chargeOfferList={chargeOfferList}
-              ></RebateModify>
+ 
               <Button style={{ width: '100%', marginBottom: '10px' }}
                 onClick={calculation}>点击生成租金明细</Button>
               <ResultList

@@ -24,8 +24,7 @@ import styles from './style.less';
 // import Rebate from './Rebate';
 
 import LeaseTermModify from './LeaseTermModify';
-import IncreasingRateModify from './IncreasingRateModify';
-import RebateModify from './RebateModify';
+ 
 
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -1028,14 +1027,7 @@ const Renewal = (props: RenewalProps) => {
                 feeItems={feeItems}
                 chargeFee={chargefee}
               ></LeaseTermModify>
-              <IncreasingRateModify
-                form={form}
-                chargeIncre={chargeincre}
-              ></IncreasingRateModify>
-              <RebateModify
-                form={form}
-                chargeOffer={chargefeeoffer}
-              ></RebateModify>
+              
 
               <Button style={{ width: '100%', marginBottom: '10px' }}
                 onClick={calculation}>点击生成租金明细</Button>
