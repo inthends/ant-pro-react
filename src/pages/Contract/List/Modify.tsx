@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import ResultList from './ResultList';
 import {
   RemoveFile, GetFilesData, SubmitForm, SaveForm,
-  GetChargeByChargeId, GetContractInfo, GetModifyChargeDetail, GetFollowCount, ReSubmitForm
+  GetChargeByChargeId, GetContractInfo, GetModifyChargeDetail, GetFollowCount
 } from './Main.service';
 import { GetCommonItems, GetUserList } from '@/services/commonItem';
 import { GetCustomerInfo, CheckContractCustomer, GetContractCustomerList } from '../../Resource/PStructUser/PStructUser.service';
@@ -22,10 +22,10 @@ const { TabPane } = Tabs;
 const { TextArea } = Input;
 
 interface ModifyProps {
-
-  isReSubmit: boolean;
   instanceId?: string;//实例id
-  taskId?: string;//任务id
+
+  // isReSubmit: boolean;//是否是重新提交
+  // taskId?: string;//任务id
 
   visible: boolean;
   // id?: string;//合同id
@@ -40,7 +40,7 @@ interface ModifyProps {
 
 const Modify = (props: ModifyProps) => {
   const title = '合同详情';
-  const { taskId, instanceId, isReSubmit, visible, form, closeDrawer, reload } = props;
+  const { instanceId,   visible, form, closeDrawer, reload } = props;
   const { getFieldDecorator } = form;
   //const [industryType, setIndustryType] = useState<any[]>([]); //行业  
   //const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
@@ -487,113 +487,6 @@ const Modify = (props: ModifyProps) => {
       }
     });
   };
-
-  //重新提交
-  const resubmit = () => {
-    //弹出选人
-    //choose();
-    //save(); 
-    //发起审批
-    form.validateFields((errors, values) => {
-      if (!errors) {
-        //是否生成租金明细
-        if (!isCal) {
-          // Modal.warning({
-          //   title: '提示',
-          //   content: '请生成租金明细！',
-          // });
-          message.warning('请生成租金明细');
-          return;
-        }
-
-        setLoading(true);
-
-        //保存合同数据
-        let ContractCharge: HtLeasecontractcharge = {};
-        //费用条款-基本条款 
-        // ContractCharge.depositFeeItemId = values.depositFeeItemId;
-        // ContractCharge.depositFeeItemName = values.depositFeeItemName;
-        // ContractCharge.leaseArea = values.leaseArea;
-        // ContractCharge.deposit = values.deposit;
-        // ContractCharge.depositUnit = values.depositUnit;
-        // ContractCharge.startDate = values.billingDate.format('YYYY-MM-DD');
-        // ContractCharge.endDate = values.contractEndDate.format('YYYY-MM-DD');
-        // ContractCharge.payDate = values.contractStartDate.format('YYYY-MM-DD'); 
-        // ContractCharge.calcPrecision = values.calcPrecision;
-        ContractCharge.lateStartDateNum = values.lateStartDateNum;
-        ContractCharge.lateStartDateBase = values.lateStartDateBase;
-        ContractCharge.lateStartDateFixed = values.lateStartDateFixed;
-        ContractCharge.lateStartDateUnit = values.lateStartDateUnit;
-        ContractCharge.lateFee = values.lateFee;
-        ContractCharge.lateMethod = values.lateMethod;
-        // if (values.lateDate != null)
-        //   ContractCharge.lateDate = values.lateDate.format('YYYY-MM-DD');
-        // ContractCharge.propertyFeeId = values.propertyFeeId;
-        // ContractCharge.propertyFeeName = values.propertyFeeName;
-
-        //合同信息
-        let Contract: htLeasecontract = {};
-        Contract.id = instanceId;
-        Contract.no = values.no;
-        Contract.follower = values.follower;
-        Contract.followerId = values.followerId;
-        Contract.leaseSize = values.leaseSize;
-        Contract.signingDate = values.signingDate.format('YYYY-MM-DD');
-        Contract.startDate = values.startDate.format('YYYY-MM-DD');
-        Contract.endDate = values.endDate.format('YYYY-MM-DD');
-        // Contract.calcPrecision = values.calcPrecision;
-        // Contract.calcPrecisionMode = values.calcPrecisionMode;
-        Contract.customer = values.customer;
-        Contract.customerId = values.customerId;
-        Contract.customerType = values.customerType;
-        Contract.industry = values.industry;
-        //Contract.industryId = values.industryId; 
-        Contract.legalPerson = values.legalPerson;
-        Contract.linkMan = values.linkMan;
-        Contract.linkPhone = values.linkPhone;
-        Contract.address = values.address;
-        Contract.signer = values.signer;
-        Contract.signerId = values.signerId;
-        // Contract.lateFee = values.lateFee;
-        // Contract.lateFeeUnit = values.lateFeeUnit;
-        // Contract.maxLateFee = values.maxLateFee;
-        // Contract.maxLateFeeUnit = values.maxLateFeeUnit;
-        // Contract.billUnitId = values.billUnitId;
-        Contract.organizeId = values.organizeId;
-        Contract.memo = values.memo;
-        ReSubmitForm({
-          ...Contract,
-          ...ContractCharge,
-          // ...chargefee,
-          // ...chargeincre,
-          // ...chargefeeoffer,
-          keyvalue: instanceId,
-          chargeId: chargeId,
-          // room: values.room,
-          termJson: TermJson,
-          // RateJson: RateJson,
-          // RebateJson: RebateJson,
-          // DepositResult: JSON.stringify(depositData),
-          ChargeFeeResult: JSON.stringify(chargeData),
-          taskId: taskId
-          // PropertyFeeResult: JSON.stringify(propertyData)
-        }).then(res => {
-          if (res.flag) {
-            setLoading(false);
-            message.success('提交成功');
-            closeDrawer();
-            // reload();
-            //刷新页面
-            location.reload();
-          } else {
-            message.warning(res.message);
-            setLoading(false);
-          }
-        });
-      }
-    });
-  };
-
 
   const save = () => {
     form.validateFields((errors, values) => {
@@ -1419,7 +1312,7 @@ const Modify = (props: ModifyProps) => {
                         initialValue: contractCharge.lateMethod ? contractCharge.lateMethod : null,
                         rules: [{ required: form.getFieldValue('lateStartDateBase'), message: '请选择滞纳金算法' }],
                       })(<Select allowClear>
-                        <Option value="固定滞纳金率按天计算" >固定滞纳金率按天计算</Option>
+                        <Option value="按天计算" >按天计算</Option>
                       </Select>
                       )}
                     </Form.Item>
@@ -1592,7 +1485,7 @@ const Modify = (props: ModifyProps) => {
           暂存
           </Button>
         <Button
-          onClick={isReSubmit ? resubmit : submit}
+          onClick={submit}
           type="primary"
           disabled={!isCal}>
           提交

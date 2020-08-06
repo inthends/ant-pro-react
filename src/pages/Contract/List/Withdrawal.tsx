@@ -18,8 +18,14 @@ import moment from 'moment';
 const { TabPane } = Tabs;
 
 interface WithdrawalProps {
+
+  isReSubmit: boolean;//是否是重新提交
+  taskId?: string;//任务id
+  instanceId?: string;//合同id
+
+
   visible: boolean;
-  id?: string;//合同id
+  // id?: string;//合同id
   // chargeId?: string;//合同条款id
   closeDrawer(): void;
   form: WrappedFormUtils;
@@ -28,7 +34,7 @@ interface WithdrawalProps {
 
 const Withdrawal = (props: WithdrawalProps) => {
   const title = '合同退租';
-  const { visible, closeDrawer, id, form, reload } = props;
+  const { visible, closeDrawer, instanceId, form, reload } = props;
   const { getFieldDecorator } = form;
   //const [industryType, setIndustryType] = useState<any[]>([]); //行业  
   //const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
@@ -63,9 +69,9 @@ const Withdrawal = (props: WithdrawalProps) => {
   // 打开抽屉时初始化
   useEffect(() => {
     if (visible) {
-      if (id) {
+      if (instanceId) {
         setLoading(true);
-        GetContractInfo(id).then((tempInfo) => {
+        GetContractInfo(instanceId).then((tempInfo) => {
           setInfoDetail(tempInfo.contract);
           // setHouseList(tempInfo.houseList);
           setTotalInfo({
@@ -73,13 +79,13 @@ const Withdrawal = (props: WithdrawalProps) => {
             totalAmount: tempInfo.totalAmount
           });
           //获取条款
-          GetChargeByContractId(id).then((charge: ChargeDetailDTO) => {
+          GetChargeByContractId(instanceId).then((charge: ChargeDetailDTO) => {
             setContractCharge(charge.contractCharge || {});
             setChargeFeeList(charge.chargeFeeList || []);
             setChargeData(charge.chargeFeeResultList || []);//租金明细    
           });
           //附件
-          GetFilesData(id).then(res => {
+          GetFilesData(instanceId).then(res => {
             setFileList(res || []);
           });
           form.resetFields();
@@ -135,7 +141,7 @@ const Withdrawal = (props: WithdrawalProps) => {
     form.validateFields((errors, values) => {
       if (!errors) {
         WithdrawalForm({
-          contractId: id,
+          contractId: instanceId,
           // chargeId: chargeId,
           withdrawalDate: values.withdrawalDate.format('YYYY-MM-DD'),
           withdrawal: values.withdrawal,
@@ -584,11 +590,13 @@ const Withdrawal = (props: WithdrawalProps) => {
                 </Row>
               </Card>
             </TabPane>
-          </Tabs> 
-          <Card title="退租" className={styles.card} hoverable>
+          </Tabs>
+          <Card title="退租" className={styles.addcard} hoverable>
             <Form.Item label="退租日期" required>
               {getFieldDecorator('withdrawalDate', {
-                initialValue: moment(new Date()),
+                initialValue: infoDetail.withdrawalDate
+                  ? moment(new Date(infoDetail.withdrawalDate))
+                  : moment(new Date()),
                 rules: [{ required: true, message: '请选择退租日期' }],
               })(<DatePicker placeholder="请选择退租日期"
                 disabledDate={disabledDate}
@@ -596,13 +604,15 @@ const Withdrawal = (props: WithdrawalProps) => {
             </Form.Item>
             <Form.Item label="" required>
               {getFieldDecorator('withdrawal', {
-                 rules: [{ required: true, message: '请选择退租原因' }],
+                initialValue: infoDetail.withdrawal,
+                rules: [{ required: true, message: '请选择退租原因' }],
               })(<Checkbox.Group options={['正常到期', '价格因素', '物业服务', '交通不便', '卫生环境', '楼宇质量', '公司扩张', '经营不善', '其他原因']} />
               )}
             </Form.Item>
 
             <Form.Item label="">
               {getFieldDecorator('withdrawalMemo', {
+                initialValue: infoDetail.withdrawalMemo,
                 rules: [{ required: false }]
               })(
                 <Input.TextArea rows={4} />

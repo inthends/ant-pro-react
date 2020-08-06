@@ -120,17 +120,21 @@ const Approve = (props: ApproveProps) => {
       case 3:
         return <Tag color="#19d54e">变更待审核</Tag>;
       case 4:
-        return <Tag color="#19d54e">退租待审核</Tag>;
+        return <Tag color="#19d54e">退租待修改</Tag>;
       case 5:
-        return <Tag color="#19d54e">作废待审核</Tag>;
+        return <Tag color="#19d54e">退租待审核</Tag>;
       case 6:
-        return <Tag color="#19d54e">正常执行</Tag>;
+        return <Tag color="#19d54e">作废待修改</Tag>;
       case 7:
+        return <Tag color="#19d54e">作废待审核</Tag>;
+      case 8:
+        return <Tag color="#19d54e">正常执行</Tag>;
+      case 9:
         return <Tag color="#19d54e">已退租</Tag>;
       // case 8:
       //   return <Tag color="#19d54e">待执行</Tag>;
-      // case -1:
-      //   return <Tag color="#d82d2d">已作废</Tag>
+      case -1:
+        return <Tag color="#d82d2d">已作废</Tag>
       default:
         return '';
     }
@@ -430,19 +434,16 @@ const Approve = (props: ApproveProps) => {
                     <Form.Item label="合同面积(㎡)">
                       {contractCharge.leaseArea}
                     </Form.Item>
-                  </Col> */}
-
-                  <Col lg={12}>
+                  </Col> */} 
+                  <Col lg={4}>
                     <Form.Item label="滞纳金起算日 距">
                       {contractCharge.lateStartDateBase == 2 ? '计费起始日期' : '计费截止日期'}
                       {contractCharge.lateStartDateNum}
                       {contractCharge.lateStartDateUnit == 1 ? '天' : '月'}
                       {contractCharge.lateStartDateUnit == 2 ? contractCharge.lateStartDateFixed + '天' : ''}
                     </Form.Item>
-                  </Col>
-
-
-                  <Col lg={6}>
+                  </Col>  
+                  <Col lg={4}>
                     <Form.Item label="滞纳金比例(‰)" >
                       {contractCharge.lateFee}
                     </Form.Item>
@@ -452,29 +453,27 @@ const Approve = (props: ApproveProps) => {
                       {contractCharge.lateDate == null ? '' : String(contractCharge.lateDate).substr(0, 10)}
                     </Form.Item>
                   </Col> */}
-                  <Col lg={6}>
+                  <Col lg={3}>
                     <Form.Item label="滞纳金算法" >
                       {contractCharge.lateMethod}
                     </Form.Item>
-                  </Col>
-                </Row>
-                <Row gutter={24}>
-                  <Col lg={6}>
-                    <Form.Item label="中间每一步计算结果保留">
-                      {contractCharge.midResultScale}
+                  </Col> 
+                  <Col lg={4}>
+                    <Form.Item label="中间每一步保留">
+                      {contractCharge.midResultScale}位小数
                     </Form.Item>
                   </Col>
-                  <Col lg={6}>
+                  <Col lg={3}>
                     <Form.Item label="对最后一位">
                       {GetScaleDispose(contractCharge.midScaleDispose)}
                     </Form.Item>
                   </Col>
-                  <Col lg={6}>
-                    <Form.Item label="最终结果保留小数位数">
-                      {contractCharge.lastResultScale}
+                  <Col lg={3}>
+                    <Form.Item label="最终结果保留">
+                      {contractCharge.lastResultScale}位小数
                     </Form.Item>
                   </Col>
-                  <Col lg={6}>
+                  <Col lg={3}>
                     <Form.Item label="对最后一位">
                       {GetScaleDispose(contractCharge.lastScaleDispose)}
                     </Form.Item>

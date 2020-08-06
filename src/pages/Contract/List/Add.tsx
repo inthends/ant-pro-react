@@ -1014,7 +1014,7 @@ const Add = (props: AddProps) => {
                       {getFieldDecorator('lateMethod', {
                         rules: [{ required: form.getFieldValue('lateStartDateBase'), message: '请选择滞纳金算法' }],
                       })(<Select allowClear>
-                        <Option value="固定滞纳金率按天计算" >固定滞纳金率按天计算</Option>
+                        <Option value="按天计算" >按天计算</Option>
                       </Select>
                       )}
                     </Form.Item>

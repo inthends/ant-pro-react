@@ -116,6 +116,7 @@ const Main = () => {
       case '1001':
         setApartmentVisible(false);
         break;
+      case '1002':
       case '1003':
         setContractVisible(false);
         break;
@@ -125,12 +126,13 @@ const Main = () => {
 
 
   //弹出查看
-  const showDrawer = (code, id, instanceId) => { 
+  const showDrawer = (code, id, instanceId) => {
 
     switch (code) {
       case '1001':
         setApartmentVisible(true);
         break;
+      case '1002':
       case '1003':
         setContractVisible(true);
         break;

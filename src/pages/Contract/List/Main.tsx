@@ -34,7 +34,7 @@ function Main() {
   const [data, setData] = useState<any[]>([]);
   const [totalInfo, setTotalInfo] = useState<any>({});//合计信息
   const [id, setId] = useState<string>();
-  const [chargeId, setChargeId] = useState<string>();
+  //const [chargeId, setChargeId] = useState<string>();
   const [search, setSearch] = useState<string>('');
   // const [treeData, setTreeData] = useState<any[]>([]); 
   // const [userVisible, setUserVisible] = useState<boolean>(false); 
@@ -46,17 +46,17 @@ function Main() {
   const showAddDrawer = (id?, chargeId?) => {
     setAddVisible(true);
     setId(id);
-    setChargeId(chargeId);
+    //setChargeId(chargeId);
   };
 
   const closeModifyDrawer = () => {
     setModifyVisible(false);
   };
 
-  const showModifyDrawer = (id?, chargeId?) => {
+  const showModifyDrawer = (id?) => {
     setModifyVisible(true);
     setId(id);
-    setChargeId(chargeId);
+    //setChargeId(chargeId);
   };
 
   // const closeDetailDrawer = () => {
@@ -64,9 +64,9 @@ function Main() {
   // };
 
   //查看
-  const showDetailDrawer = (id?, chargeId?) => {
+  const showDetailDrawer = (id?) => {
     setId(id);
-    setChargeId(chargeId);
+    //setChargeId(chargeId);
     setViewVisible(true);
   };
 
@@ -78,14 +78,14 @@ function Main() {
   const showChangeDrawer = (id?, chargeId?) => {
     setChangeVisible(true);
     setId(id);
-    setChargeId(chargeId);
+    //setChargeId(chargeId);
   };
 
   //续租
-  const showRenewalDrawer = (id?, chargeId?) => {
+  const showRenewalDrawer = (id?) => {
     setRenewalVisible(true);
     setId(id);
-    setChargeId(chargeId);
+    //setChargeId(chargeId);
   };
 
   const closeRenewalDrawer = () => {
@@ -93,10 +93,10 @@ function Main() {
   };
 
   //退租
-  const showWithdrawalDrawer = (id?, chargeId?) => {
+  const showWithdrawalDrawer = (id?) => {
     setWithdrawalVisible(true);
     setId(id);
-    setChargeId(chargeId);
+    //setChargeId(chargeId);
   };
 
   const closeWithdrawalDrawer = () => {
@@ -331,6 +331,7 @@ function Main() {
           </TabPane>
         </Tabs>
       </Content>
+
       <Add
         visible={addVisible}
         closeDrawer={closeAddDrawer}
@@ -344,7 +345,7 @@ function Main() {
         closeDrawer={closeModifyDrawer}
         // treeData={treeData}
         instanceId={id}
-        isReSubmit={false}
+        // isReSubmit={false}
         // chargeId={chargeId}
         reload={() => initLoadData(search)}
       // choose={showChoose}
@@ -376,7 +377,7 @@ function Main() {
         closeDrawer={closeChangeDrawer}
         // treeData={treeData}
         id={id}
-        chargeId={chargeId}
+        // chargeId={chargeId}
         reload={() => initLoadData(search)}
       // choose={showChoose}
       />
@@ -386,7 +387,7 @@ function Main() {
         closeDrawer={closeRenewalDrawer}
         // treeData={treeData}
         id={id}
-        chargeId={chargeId}
+        // chargeId={chargeId}
         reload={() => initLoadData(search)}
       // choose={showChoose}
       />
@@ -394,7 +395,8 @@ function Main() {
       <Withdrawal
         visible={withdrawalVisible}
         closeDrawer={closeWithdrawalDrawer}
-        id={id}
+        isReSubmit={false}
+        instanceId={id}
         // chargeId={chargeId}
         reload={() => initLoadData(search)}
       />

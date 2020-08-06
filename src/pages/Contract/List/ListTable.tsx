@@ -10,12 +10,12 @@ interface ListTableProps {
   loading: boolean;
   pagination: PaginationConfig;
   data: any[];
-  detail(id: string, chargeId: string): void;//查看
-  modify(id: string, chargeId: string): void;//修改
+  detail(id: string): void;//查看
+  modify(id: string): void;//修改
   // approve(id: string, chargeId: string): void;//审核
-  change(id: string, chargeId: string): void;//变更
-  renewal(id: string, chargeId: string): void;//续租
-  withdrawal(id: string, chargeId: string): void;//退租 
+  change(id: string): void;//变更
+  renewal(id: string): void;//续租
+  withdrawal(id: string): void;//退租 
   reload(): void;
 };
 
@@ -41,10 +41,10 @@ function ListTable(props: ListTableProps) {
   const editAndDelete = (key: string, currentItem: any) => {
     if (key === 'renewal') {
       //续租
-      renewal(currentItem.id, currentItem.chargeId);
+      renewal(currentItem.id);
     } else if (key === 'withdrawal') {
       //退租
-      withdrawal(currentItem.id, currentItem.chargeId);
+      withdrawal(currentItem.id);
     } else if (key === 'invalid') {
 
     }
@@ -59,7 +59,7 @@ function ListTable(props: ListTableProps) {
           <Menu.Item key="withdrawal">退租</Menu.Item>
           {/* <Menu.Item key="change">变更</Menu.Item>
               <Menu.Item key="renewal">续租</Menu.Item> 
-              <Menu.Item key="invalid">作废</Menu.Item>*/}  
+              <Menu.Item key="invalid">作废</Menu.Item>*/}
         </Menu>}>
       <a>
         更多 <Icon type="down" key='down' />
@@ -169,21 +169,25 @@ function ListTable(props: ListTableProps) {
           case 1:
             return <Tag color="#e4aa4b">新建待审核</Tag>;
           case 2:
-            return <Tag color="#19d54e">变更待修改</Tag>;
+            return <Tag color="#e6aa9b">变更待修改</Tag>;
           case 3:
             return <Tag color="#19d54e">变更待审核</Tag>;
           case 4:
-            return <Tag color="#19d54e">退租待审核</Tag>;
+            return <Tag color="#b7aa5b">退租待修改</Tag>;
           case 5:
-            return <Tag color="#19d54e">作废待审核</Tag>;
+            return <Tag color="#f4aa5b">退租待审核</Tag>;
           case 6:
-            return <Tag color="#19d54e">正常执行</Tag>;
+            return <Tag color="#a8aa5b">作废待修改</Tag>;
           case 7:
+            return <Tag color="#19d54e">作废待审核</Tag>;
+          case 8:
+            return <Tag color="#19d54e">正常执行</Tag>;
+          case 9:
             return <Tag color="#19d54e">已退租</Tag>;
           // case 8:
           //   return <Tag color="#19d54e">待执行</Tag>;
-          // case -1:
-          //   return <Tag color="#d82d2d">已作废</Tag>
+          case -1:
+            return <Tag color="#d82d2d">已作废</Tag>
           default:
             return '';
         }
@@ -228,45 +232,52 @@ function ListTable(props: ListTableProps) {
       width: 140,
       fixed: 'right',
       render: (text, record) => {
-        //新建
+        //新建待修改
         if (record.status == 0) {
           return [
-            // <Button
-            //   type="primary"
-            //   key="detail"
-            //   style={{ marginRight: '10px' }}
-            //   onClick={() => detail(record.id,record.chargeId)}
-            // >
-            // 查看
-            // </Button>,
-            // <Button type="danger" key="delete" onClick={() => doDelete(record)}>
-            //   删除
-            // </Button>, 
             <span key='span'>
-              <a onClick={() => modify(record.id, record.chargeId)} key="modify">修改</a>
+              <a onClick={() => modify(record.id)} key="modify">修改</a>
               <Divider type="vertical" key='spilt1' />
-              <a onClick={() => detail(record.id, record.chargeId)} key="detail">查看</a>
+              <a onClick={() => detail(record.id)} key="detail">查看</a>
               <Divider type="vertical" key='spilt2' />
               <a onClick={() => doDelete(record)} key="delete">删除</a>
             </span>
           ];
-        } else if (record.status == 1 || record.status == 4) {
-          //新建提交和退租待审核
+        }
+        else if (record.status == 1) {
+          //新建待审核
           return [
             <span key='span'>
               {/* <a onClick={() => approve(record.id, record.chargeId)} key="modify">审核</a>
               <Divider type="vertical" key='spilt1' /> */}
-              <a onClick={() => detail(record.id, record.chargeId)} key="detail">查看</a>
+              <a onClick={() => detail(record.id)} key="detail">查看</a>
             </span>
           ];
-        } else {
+        }
+        else if (record.status == 4) {
+          //退租待修改
+          return [
+            <span key='span'>
+              <a onClick={() => withdrawal(record.id)} key="modify">修改</a>
+              <Divider type="vertical" key='spilt1' />
+              <a onClick={() => detail(record.id)} key="detail">查看</a>
+              <Divider type="vertical" key='spilt2' />
+              <a onClick={() => doDelete(record)} key="delete">删除</a>
+            </span>
+          ];
+        }
+        else if (record.status == 8) {
           return [
             <span key='span'>
               {/* <a onClick={() => change(record.id, record.chargeId)} key="change">变更</a> */}
-              <a onClick={() => detail(record.id, record.chargeId)} key="detail">查看</a>
+              <a onClick={() => detail(record.id)} key="detail">查看</a>
               <Divider type="vertical" key='spilt1' />
               <MoreBtn key="more" item={record} />
             </span>
+          ];
+        } else {
+          return [ 
+              <a onClick={() => detail(record.id)} key="detail">查看</a> 
           ];
         }
       },

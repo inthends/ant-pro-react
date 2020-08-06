@@ -50,8 +50,7 @@ class EditableCell extends React.Component {
     const { editing } = this.state;
     return editing ?
       (
-
-
+ 
         <Form.Item style={{ margin: 0 }}>
           {form.getFieldDecorator(dataIndex, {
             rules: [
@@ -64,6 +63,7 @@ class EditableCell extends React.Component {
           })(
             dataIndex == 'reductionAmount' ?
               <InputNumber
+                min={0}
                 precision={2}
                 ref={node => (this.input = node)}
                 // onPressEnter={this.save} 
@@ -72,8 +72,7 @@ class EditableCell extends React.Component {
               <Input
                 ref={node => (this.input = node)}
                 // onPressEnter={this.save} 
-                onBlur={this.save} />
-
+                onBlur={this.save} /> 
           )}
         </Form.Item>
 
@@ -81,8 +80,7 @@ class EditableCell extends React.Component {
         <div
           className="editable-cell-value-wrap"
           style={{ paddingRight: 24 }}
-          onClick={_this.toggleEdit}
-        >
+          onClick={_this.toggleEdit} >
           {children}
         </div>
       );
@@ -578,7 +576,7 @@ const Modify = (props: ModifyProps) => {
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}
     >
       <Form layout="vertical" hideRequiredMark>
-        <Card className={styles.card}  hoverable>
+        <Card className={styles.card} hoverable>
           <Row gutter={24}>
             <Col lg={8}>
               <Form.Item label="减免单号">
@@ -637,7 +635,7 @@ const Modify = (props: ModifyProps) => {
               </Form.Item>
             </Col> */}
 
- 
+
             <Col lg={12}>
               <Form.Item label="批量折扣(默认10不打折)">
                 {getFieldDecorator('rebate', {
