@@ -385,7 +385,8 @@ function ListTable(props: ListTableProps) {
           clearInterval(interval);
           interval = null;
         }
-      }
+        setMyLoading(false);
+      } 
     })
 
     // retry().then(() => {
@@ -579,18 +580,7 @@ function ListTable(props: ListTableProps) {
       width: 100,
       render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
-    {
-      title: '单元全称',
-      dataIndex: 'allname',
-      key: 'allname',
-      width: 280
-    },
-    {
-      title: '备注',
-      dataIndex: 'memo',
-      key: 'memo',
-      width: 200
-    },
+
     {
       title: '优惠政策',
       dataIndex: 'rebateName',
@@ -611,6 +601,17 @@ function ListTable(props: ListTableProps) {
           return '';
         }
       }
+    },
+    {
+      title: '单元全称',
+      dataIndex: 'allname',
+      key: 'allname',
+      width: 350
+    },
+    {
+      title: '备注',
+      dataIndex: 'memo',
+      key: 'memo',
     },
     {
       title: '操作',
@@ -861,10 +862,10 @@ function ListTable(props: ListTableProps) {
 
               {payAmount > 0 ?
                 <Tooltip title="点击冲抵">
-                  <a style={{ marginLeft: 5 }} 
-                  onClick={showOffset}>
-                  未付金额：{payAmount}
-                </a> </Tooltip> : null}
+                  <a style={{ marginLeft: 5 }}
+                    onClick={showOffset}>
+                    未付金额：{payAmount}
+                  </a> </Tooltip> : null}
 
             </Row>
 
