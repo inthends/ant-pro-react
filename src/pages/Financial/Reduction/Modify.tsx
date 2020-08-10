@@ -50,7 +50,7 @@ class EditableCell extends React.Component {
     const { editing } = this.state;
     return editing ?
       (
- 
+
         <Form.Item style={{ margin: 0 }}>
           {form.getFieldDecorator(dataIndex, {
             rules: [
@@ -72,13 +72,13 @@ class EditableCell extends React.Component {
               <Input
                 ref={node => (this.input = node)}
                 // onPressEnter={this.save} 
-                onBlur={this.save} /> 
+                onBlur={this.save} />
           )}
         </Form.Item>
 
       ) : (
         <div
-          className="editable-cell-value-wrap"
+          className={styles.editablecellvaluewrap}
           style={{ paddingRight: 24 }}
           onClick={_this.toggleEdit} >
           {children}
@@ -703,6 +703,7 @@ const Modify = (props: ModifyProps) => {
           <Row style={{ marginTop: '15px' }}>
             <Table
               components={components}
+              rowClassName={styles.editablerow}
               bordered={false}
               size="middle"
               dataSource={listdata}

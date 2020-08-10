@@ -68,7 +68,7 @@ class EditableCell extends React.Component {
       </Form.Item>
     ) : (
         <div
-          className="editable-cell-value-wrap"
+        className={styles.editablecellvaluewrap}
           style={{ paddingRight: 24 }}
           onClick={_this.toggleEdit}
         >
@@ -549,6 +549,7 @@ const Modify = (props: ModifyProps) => {
               <div style={{ color: 'rgb(255,0,0)' }}>点击金额列和备注列可以编辑，编辑完按回车保存。</div>
               <Table<any>
                 components={components}
+                rowClassName={styles.editablerow}
                 onChange={(paginationConfig, filters, sorter) => {
                   initUnitFeeLoadData('', paginationConfig, sorter)
                 }}

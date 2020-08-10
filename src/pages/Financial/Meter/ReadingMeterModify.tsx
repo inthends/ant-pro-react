@@ -398,7 +398,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
         </Form.Item>
       ) : (
           <div
-            className="editable-cell-value-wrap"
+          className={styles.editablecellvaluewrap}
             style={{ paddingRight: 24 }}
             onClick={_this.toggleEdit}
           >
@@ -1072,6 +1072,7 @@ const ReadingMeterModify = (props: ReadingMeterModifyProps) => {
                   <div style={{ color: 'rgb(255,0,0)' }}>点击本次读数列和备注列可以编辑，按回车保存。</div>
                   <Table
                     components={components}
+                    rowClassName={styles.editablerow}
                     onChange={(paginationConfig, filters, sorter) => {
                       loadPublicData(publicSearch, paginationConfig, sorter)
                     }}

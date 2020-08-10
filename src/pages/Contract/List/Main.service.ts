@@ -18,6 +18,13 @@ export function GetTotalJson(data): Promise<any> {
 //     .then(getResult as any);
 // }
 
+//获取当前选中多个房屋的收款费项
+export function GetFeeItemsByUnitIds(unitIds): Promise<TreeEntity[]> {
+  return request
+    .get(process.env.basePath + `/FeeItems/GetFeeItemsByUnitIds?unitIds=${unitIds}`)
+    .then(getResult as any);
+}
+
 //获取当前选中房屋的收款费项
 export function GetFeeItemsByUnitId(unitId): Promise<TreeEntity[]> {
   return request

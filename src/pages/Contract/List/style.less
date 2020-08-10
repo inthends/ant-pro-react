@@ -1,5 +1,6 @@
 @import '~antd/lib/style/themes/default.less';
 
+ 
 
 .card {
   margin-bottom: 10px;
@@ -106,4 +107,21 @@
     height: 56px;
     background-color: @border-color-split;
   }
+}
+
+
+//编辑表格边框样式
+.editable-cell {
+  position: relative;
+}
+
+.editablecellvaluewrap {
+  padding: 5px 12px;
+  cursor: pointer;
+} 
+
+.editablerow:hover .editablecellvaluewrap {
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  padding: 4px 11px;
 }

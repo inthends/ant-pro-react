@@ -67,7 +67,7 @@ function ListTable(props: ListTableProps) {
               '划扣金额': data[i].deductionAmount,
               '划扣银行': data[i].bank,
               '房号': data[i].code,
-              '户名': data[i].name,
+              '户名': data[i].accountName,
               // '开户行': data[i].accountBank,
               '账号': data[i].bankAccount,
               '单元全称': data[i].allName,

@@ -107,9 +107,9 @@ export function GetCustomerList(keyword,organizeId): Promise<any> {
 }
 
 //合同承租方验证
-export function CheckContractCustomer(name): Promise<any> {
+export function CheckContractCustomer(cusId): Promise<any> {
   return request
-    .get(process.env.basePath + `/PStructUser/CheckContractCustomer?name=${name}`)
+    .get(process.env.basePath + `/PStructUser/CheckContractCustomer?cusId=${cusId}`)
     .then(getResult as any);
 }
 

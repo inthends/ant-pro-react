@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 // import { WrappedFormUtils } from 'antd/lib/form/Form';
 // import { SiderContext } from '../SiderContext';
 import { GetOrgTree, GetAsynChilds, GetUnitTree } from '@/services/commonItem';
-import { GetFeeItemsByUnitId } from './Main.service';
+import { GetFeeItemsByUnitIds } from './Main.service';
 const { Search } = Input;
 const { TreeNode } = Tree;
 // const { Sider } = Layout;
@@ -62,6 +62,7 @@ function SelectHouse(props: SelectHouseProps) {
   // const [roomNames, setRoomNames] = useState<any>();
 
   const [rooms, setRooms] = useState<any[]>([]);
+  const [roomIds, setRoomIds] = useState<any[]>([]);
 
   const onSelect = (selectedKeys, info) => {
     if (selectedKeys.length > 0) {
@@ -77,10 +78,13 @@ function SelectHouse(props: SelectHouseProps) {
       //   roomName += " " + val.props.allname;
       // }); 
       var rooms: any[] = [];
+      var roomIds: any[] = [];
       info.selectedNodes.forEach((val, idx, arr) => {
         rooms.push({ id: val.key, roomId: val.key, area: val.props.attributeA, rentPrice: val.props.attributeB, allName: val.props.allname });
+        roomIds.push(val.key);
       });
       setRooms(rooms);
+      setRoomIds(roomIds);
     }
   };
 
@@ -171,8 +175,8 @@ function SelectHouse(props: SelectHouseProps) {
           setLoading(false);
         }
         else {
-          //加载费项
-          GetFeeItemsByUnitId(rooms[0].roomId).then(feeItems => {
+          //加载费项 
+          GetFeeItemsByUnitIds(JSON.stringify(roomIds)).then(feeItems => {
             getSelectTree(rooms, feeItems || []);
             closeModal();
             setLoading(false);

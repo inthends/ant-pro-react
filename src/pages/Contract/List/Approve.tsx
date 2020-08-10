@@ -11,7 +11,7 @@ import {
   ChargeDetailDTO
 } from '@/model/models';
 import React, { useEffect, useState } from 'react';
-import ResultList from './ResultList';
+import ResultListView from './ResultListView';
 import { GetFilesData, GetChargeByContractId, GetContractInfo, GetFollowCount } from './Main.service';
 import { ApproveForm, RejectForm } from '../../Workflow/FlowTask/FlowTask.service'
 import styles from './style.less';
@@ -434,7 +434,7 @@ const Approve = (props: ApproveProps) => {
                     <Form.Item label="合同面积(㎡)">
                       {contractCharge.leaseArea}
                     </Form.Item>
-                  </Col> */} 
+                  </Col> */}
                   <Col lg={4}>
                     <Form.Item label="滞纳金起算日 距">
                       {contractCharge.lateStartDateBase == 2 ? '计费起始日期' : '计费截止日期'}
@@ -442,7 +442,7 @@ const Approve = (props: ApproveProps) => {
                       {contractCharge.lateStartDateUnit == 1 ? '天' : '月'}
                       {contractCharge.lateStartDateUnit == 2 ? contractCharge.lateStartDateFixed + '天' : ''}
                     </Form.Item>
-                  </Col>  
+                  </Col>
                   <Col lg={4}>
                     <Form.Item label="滞纳金比例(‰)" >
                       {contractCharge.lateFee}
@@ -457,7 +457,7 @@ const Approve = (props: ApproveProps) => {
                     <Form.Item label="滞纳金算法" >
                       {contractCharge.lateMethod}
                     </Form.Item>
-                  </Col> 
+                  </Col>
                   <Col lg={4}>
                     <Form.Item label="中间每一步保留">
                       {contractCharge.midResultScale}位小数
@@ -631,10 +631,10 @@ const Approve = (props: ApproveProps) => {
               }
             </TabPane>
             <TabPane tab="租金明细" key="3">
-              <ResultList
+              <ResultListView 
                 chargeData={chargeData}
                 className={styles.card}
-              ></ResultList>
+              ></ResultListView>
             </TabPane>
             <TabPane tab="其他条款" key="4">
               <Card className={styles.card} hoverable>
