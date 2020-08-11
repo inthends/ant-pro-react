@@ -139,7 +139,7 @@ function ChargeListTable(props: ChargeListTableProps) {
       title: '收据编号',
       dataIndex: 'payCode',
       key: 'payCode',
-      width: 120,
+      width: 140,
     },
     {
       title: '发票编号',

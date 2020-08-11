@@ -337,7 +337,7 @@ function Main() {
         closeDrawer={closeAddDrawer}
         // treeData={treeData}
         id={id}
-        reload={() => initLoadData(search)}
+        reload={() => { initLoadData(search); initLoadTotal(search); }}
       />
 
       <Modify
@@ -347,7 +347,7 @@ function Main() {
         instanceId={id}
         // isReSubmit={false}
         // chargeId={chargeId}
-        reload={() => initLoadData(search)}
+        reload={() => { initLoadData(search); initLoadTotal(search); }}
       // choose={showChoose}
       />
 
@@ -356,7 +356,7 @@ function Main() {
         closeDrawer={() => setViewVisible(false)}
         isView={true}
         instanceId={id}
-        reload={() => initLoadData(search)}
+        reload={() => { initLoadData(search); initLoadTotal(search); }}
       />
 
       {/* <Detail
@@ -378,7 +378,7 @@ function Main() {
         // treeData={treeData}
         id={id}
         // chargeId={chargeId}
-        reload={() => initLoadData(search)}
+        reload={() => { initLoadData(search); initLoadTotal(search); }}
       // choose={showChoose}
       />
 
@@ -388,7 +388,7 @@ function Main() {
         // treeData={treeData}
         id={id}
         // chargeId={chargeId}
-        reload={() => initLoadData(search)}
+        reload={() => { initLoadData(search); initLoadTotal(search); }}
       // choose={showChoose}
       />
 
@@ -398,7 +398,7 @@ function Main() {
         isReSubmit={false}
         instanceId={id}
         // chargeId={chargeId}
-        reload={() => initLoadData(search)}
+        reload={() => { initLoadData(search); initLoadTotal(search); }}
       />
 
     </Layout>

@@ -1,15 +1,15 @@
 //计费明细表 
-import { Form, Card, Table, InputNumber } from 'antd';
+import { DatePicker, Form, Card, Table, InputNumber } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import React, { useEffect,useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import styles from './style.less';
 
 interface ResultListProps {
   chargeData: any[];//费用明细
   className: any;
-  form: WrappedFormUtils; 
+  form: WrappedFormUtils;
 }
 
 /*详情可编辑单元格*/
@@ -50,27 +50,63 @@ class EditableCell extends React.Component {
     });
   };
 
+  //保存日期
+  saveDate = (dateString, dataIndex) => {
+
+    const { record, handleSave } = this.props;
+    this.form.validateFields((error, values) => {
+      if (error && error[dataIndex]) {
+        return;
+      }
+      this.toggleEdit();
+      record[dataIndex] = dateString;
+      handleSave({ ...record }, record.totalPrice);
+    });
+  };
+
   renderCell = form => {
     var _this = this;
     this.form = form;
     const { children, dataIndex, record, title } = this.props;
     const { editing } = this.state;
     return editing ? (
-      <Form.Item style={{ margin: 0 }}>
-        {form.getFieldDecorator(dataIndex, {
-          rules: [
-            {
-              required: true,
-              message: `${title}不能为空.`,
-            },
-          ],
-          initialValue: record[dataIndex],
-        })(
-          <InputNumber min={0}
-            style={{ width: '100%' }}
-            ref={node => (this.input = node)} onPressEnter={this.save} onBlur={this.save} />
-        )}
-      </Form.Item>
+
+      title == '金额' ?
+        <Form.Item style={{ margin: 0 }}>
+          {form.getFieldDecorator(dataIndex, {
+            rules: [
+              {
+                required: true,
+                message: `${title}不能为空.`,
+              },
+            ],
+            initialValue: record[dataIndex],
+          })(
+            <InputNumber min={0}
+              style={{ width: '100%' }}
+              ref={node => (this.input = node)} onPressEnter={this.save} onBlur={this.save} />
+          )}
+        </Form.Item> :
+
+        <Form.Item style={{ margin: 0 }}>
+          {form.getFieldDecorator(dataIndex, {
+            rules: [
+              {
+                required: true,
+                message: `${title}不能为空`,
+              },
+            ],
+            initialValue: moment(record[dataIndex]),
+          })(
+            <DatePicker
+              ref={node => (this.input = node)}
+              style={{ width: '100%' }}
+              onChange={(date, datestring) => this.saveDate(datestring, dataIndex)}
+            />
+          )}
+        </Form.Item>
+
+
     ) : (
         <div
           className={styles.editablecellvaluewrap}
@@ -107,7 +143,7 @@ class EditableCell extends React.Component {
 
 function ResultList(props: ResultListProps) {
 
-  const {  form, chargeData, className } = props;
+  const { form, chargeData, className } = props;
 
   //初始化
   useEffect(() => {
@@ -117,21 +153,44 @@ function ResultList(props: ResultListProps) {
     }
   }, [chargeData]);
 
-  const { getFieldDecorator  } = form; 
+  const { getFieldDecorator } = form;
   const [mychargeData, setMyChargeData] = useState<any[]>([]);//租金 
 
   const columns = [
+    // {
+    //   title: '区间',
+    //   width: 100,
+    //   render: (text, row, index) => {
+    //     // return moment(row.beginDate).format('YYYY-MM-DD') + " - " + moment(row.endDate).format('YYYY-MM-DD'); 
+    //     if (row.isReduction)
+    //       return <span>{moment(row.beginDate).format('YYYY-MM-DD') + "~" + moment(row.endDate).format('YYYY-MM-DD') + ' '}<span style={{ color: 'red', fontSize: '4px', verticalAlign: 'super' }}>免</span></span>;
+    //     else
+    //       return moment(row.beginDate).format('YYYY-MM-DD') + "~" + moment(row.endDate).format('YYYY-MM-DD');
+    //   },
+    // }, 
+
     {
-      title: '区间',
-      width: 100,
+      title: '起始日期',
+      width: 105,
+      dataIndex: 'beginDate',
+      align: 'center',
       render: (text, row, index) => {
-        // return moment(row.beginDate).format('YYYY-MM-DD') + " - " + moment(row.endDate).format('YYYY-MM-DD'); 
-        if (row.isReduction)
-          return <span>{moment(row.beginDate).format('YYYY-MM-DD') + "~" + moment(row.endDate).format('YYYY-MM-DD') + ' '}<span style={{ color: 'red', fontSize: '4px', verticalAlign: 'super' }}>免</span></span>;
-        else
-          return moment(row.beginDate).format('YYYY-MM-DD') + "~" + moment(row.endDate).format('YYYY-MM-DD');
-      }
+        return moment(row.beginDate).format('YYYY-MM-DD')
+      },
+      editable: true,
     },
+
+    {
+      title: '截至日期',
+      width: 105,
+      dataIndex: 'endDate',
+      align: 'center',
+      render: (text, row, index) => {
+        return moment(row.endDate).format('YYYY-MM-DD')
+      },
+      editable: true,
+    },
+
     {
       title: '费用类型',
       dataIndex: 'feeItemName',
@@ -141,8 +200,10 @@ function ResultList(props: ResultListProps) {
     {
       title: '付款日',
       dataIndex: 'deadline',
+      align: 'center',
       key: 'deadline',
-      width: 60,
+      width: 105,
+      editable: true,
       render: val => val ? moment(val).format('YYYY-MM-DD') : ''
     },
     {
@@ -170,7 +231,8 @@ function ResultList(props: ResultListProps) {
       title: '金额',
       dataIndex: 'totalPrice',
       key: 'totalPrice',
-      width: 60,
+      align: 'center',
+      width: 80,
       editable: true,
     },
     {
