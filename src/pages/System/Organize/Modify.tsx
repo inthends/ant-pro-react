@@ -1,13 +1,13 @@
 import { BaseModifyProvider } from '@/components/BaseModifyDrawer/BaseModifyDrawer';
 import ModifyItem, { SelectItem } from '@/components/BaseModifyDrawer/ModifyItem';
-import {  Icon, Upload, Col, Tabs, Card, Form, Row } from 'antd';
+import { Icon, Upload, Col, Tabs, Card, Form, Row } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useState, useEffect } from 'react';
 import { GetRoleListJson, SaveForm, searchUser, ExistEnCode } from './Organize.service';
 import { GetOrgsWithNoGLC } from '@/services/commonItem';
 import { TreeNode } from 'antd/lib/tree-select';
 import styles from './style.less';
-const { TabPane } = Tabs; 
+const { TabPane } = Tabs;
 
 interface ModifyProps {
   visible: boolean;
@@ -226,9 +226,7 @@ const Modify = (props: ModifyProps) => {
                   field="enCode"
                   label="机构编号"
                   rules={[{ required: true, message: '请输入机构编号' },
-                  {
-                    validator: checkExist
-                  }
+                          { validator: checkExist }
                   ]}
                 ></ModifyItem>
               </Row>
@@ -365,15 +363,15 @@ const Modify = (props: ModifyProps) => {
                   type='inputNumber'
                   lg={6}
                 ></ModifyItem>
-               <ModifyItem
+                <ModifyItem
                   {...baseFormProps}
                   field="dispatchRoleA"
                   label="一级上报"
-                  type="select"  
+                  type="select"
                   items={roles}
                   //['15446e6e-5f8b-45db-886d-161c900276e8','170bd26c-52aa-458c-aeb5-6d413ad480b9'];
                   mode="multiple"
-                  lg={18}  
+                  lg={18}
                 ></ModifyItem>
 
               </Row>

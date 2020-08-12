@@ -1,5 +1,5 @@
 //计费明细表 
-import { DatePicker, Form, Card, Table, InputNumber } from 'antd';
+import { Popconfirm, DatePicker, Form, Card, Table, InputNumber } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
@@ -195,7 +195,7 @@ function ResultList(props: ResultListProps) {
       title: '费用类型',
       dataIndex: 'feeItemName',
       key: 'feeItemName',
-      width: 120,
+      width: 90,
     },
     {
       title: '付款日',
@@ -240,7 +240,21 @@ function ResultList(props: ResultListProps) {
       dataIndex: 'lastAmount',
       key: 'lastAmount',
       width: 60,
-    }
+    },
+    {
+      title: '操作',
+      dataIndex: '操作',
+      width: 40,
+      render: (text, record) =>
+        mychargeData.length >= 1 ? (
+          <Popconfirm title="确定删除?"
+            onConfirm={() => handleDelete(record.id)}>
+            <a>删除</a>
+          </Popconfirm>
+        ) : null,
+    },
+
+
   ] as ColumnProps<any>[];
 
 
@@ -267,6 +281,11 @@ function ResultList(props: ResultListProps) {
       }),
     };
   });
+
+  const handleDelete = id => {
+    const newData = [...mychargeData];
+    setMyChargeData(newData.filter(item => item.id !== id));
+  };
 
   //金额编辑
   const handleSave = (row, oldvalue) => {

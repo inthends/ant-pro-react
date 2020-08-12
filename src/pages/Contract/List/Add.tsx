@@ -15,7 +15,7 @@ import LeaseTerm from './LeaseTerm';
 import ResultList from './ResultList';
 import moment from 'moment';
 import { GetCommonItems, GetUserList } from '@/services/commonItem';
-import { RemoveFile, SaveForm, GetChargeDetail } from './Main.service';
+import {CheckNo, RemoveFile, SaveForm, GetChargeDetail } from './Main.service';
 // import { GetOrgTreeSimple, GetAsynChildBuildingsSimple } from '@/services/commonItem';
 import styles from './style.less';
 // import { GetCustomerInfo, CheckContractCustomer, GetContractCustomerList } from '../../Resource/PStructUser/PStructUser.service';
@@ -63,6 +63,9 @@ const Add = (props: AddProps) => {
 
   //打开抽屉时初始化
   useEffect(() => {
+
+    setIsCal(false);//重置值
+
     GetCommonItems('IndustryType').then(res => {
       setIndustryType(res || []);
     });
@@ -149,7 +152,6 @@ const Add = (props: AddProps) => {
 
     //动态添加的租期
     values.LeaseTerms.map(function (k, index, arr) {
-
       if (values.rooms[k] != null) {
         let charge: ChargeFeeDetailDTO = {
           rooms: [],
@@ -201,8 +203,9 @@ const Add = (props: AddProps) => {
 
   //计算租金明细
   const calculation = () => {
-    // setIsValidate(true);
+
     form.validateFields((errors, values) => {
+
       if (!errors) {
         //租赁条款     
         setLoading(true);
@@ -262,38 +265,36 @@ const Add = (props: AddProps) => {
   };
 
   //是否启用验证
-  // const [isValidate, setIsValidate] = useState<boolean>(true);
+  const [isValidate, setIsValidate] = useState<boolean>(false);
+  //const [isValidate, setIsValidate] = useState(() => { return false });
+
+
+  // useEffect(() => {
+  //   if (isValidate) {
+  //     form.validateFields({ force: true });
+  //   }
+  // }, [isValidate]);
+
+
 
   //保存
   const save = () => {
-    //只验证合同编号
+
+    //如果计算验证了必填项，需要清除   
     form.validateFields((errors, values) => {
+
       if (!errors) {
         setLoading(true);
+        // var values = form.getFieldsValue(); 
 
         //保存合同数据
         let ContractCharge: HtLeasecontractcharge = {};
-        //费用条款-基本条款 
-        // ContractCharge.depositFeeItemId = values.depositFeeItemId;
-        // ContractCharge.depositFeeItemName = values.depositFeeItemName;
-        // ContractCharge.leaseArea = values.leaseArea;
-        // ContractCharge.deposit = values.deposit;
-        // ContractCharge.depositUnit = values.depositUnit;
-        // ContractCharge.startDate = values.billingDate.format('YYYY-MM-DD');
-        // ContractCharge.endDate = values.contractEndDate.format('YYYY-MM-DD');
-        // ContractCharge.payDate = values.contractStartDate.format('YYYY-MM-DD'); 
-        // ContractCharge.calcPrecision = values.calcPrecision;
-
         ContractCharge.lateStartDateNum = values.lateStartDateNum;
         ContractCharge.lateStartDateBase = values.lateStartDateBase;
         ContractCharge.lateStartDateFixed = values.lateStartDateFixed;
         ContractCharge.lateStartDateUnit = values.lateStartDateUnit;
         ContractCharge.lateFee = values.lateFee;
         ContractCharge.lateMethod = values.lateMethod;
-        // if (values.lateDate != null)
-        //   ContractCharge.lateDate = values.lateDate.format('YYYY-MM-DD');
-        // ContractCharge.propertyFeeId = values.propertyFeeId;
-        // ContractCharge.propertyFeeName = values.propertyFeeName;
         let Contract: htLeasecontract = {};
 
         Contract.no = values.no;
@@ -316,11 +317,6 @@ const Add = (props: AddProps) => {
         Contract.address = values.address;
         Contract.signer = values.signer;
         Contract.signerId = values.signerId;
-        // Contract.lateFee = values.lateFee;
-        // Contract.lateFeeUnit = values.lateFeeUnit;
-        // Contract.maxLateFee = values.maxLateFee;
-        // Contract.maxLateFeeUnit = values.maxLateFeeUnit;
-        // Contract.billUnitId = values.billUnitId;
         Contract.organizeId = organizeId;
         Contract.memo = values.memo;
 
@@ -335,10 +331,10 @@ const Add = (props: AddProps) => {
           termJson: strTermJson,
           chargeFeeResult: JSON.stringify(chargeData),
         }).then(res => {
+          setLoading(false);
           message.success('保存成功');
           closeDrawer();
           reload();
-          setLoading(false);
         });
       }
     });
@@ -646,6 +642,32 @@ const Add = (props: AddProps) => {
   }
   const [customerSelectVisible, setCustomerSelectVisible] = useState<boolean>(false);//用户选择
 
+
+  //tab切换
+  const changeTab = (e: string) => {
+    if (e === '1') {
+      setIsValidate(false);
+
+    } else {
+      setIsValidate(true);
+    }
+  };
+
+  //验证合同编号是否重复
+  const checkNoExist = (rule, value, callback) => {
+    if (value == undefined) {
+      callback();
+    }
+    else {
+      CheckNo('', value).then(res => {
+        if (res)
+          callback('合同编号重复');
+        else
+          callback();
+      })
+    }
+  };
+
   return (
     <Drawer
       title={title}
@@ -654,10 +676,11 @@ const Add = (props: AddProps) => {
       onClose={closeDrawer}
       visible={visible}
       destroyOnClose={true}
+
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
       <Form layout="vertical" hideRequiredMark>
         <Spin tip="数据处理中..." spinning={loading}>
-          <Tabs defaultActiveKey="1" >
+          <Tabs defaultActiveKey="1" onChange={changeTab}>
             <TabPane tab="基本信息" key="1">
               <Row gutter={24}>
                 <Col span={12}>
@@ -675,7 +698,9 @@ const Add = (props: AddProps) => {
                       <Col lg={24}>
                         <Form.Item label="合同编号" required>
                           {getFieldDecorator('no', {
-                            rules: [{ required: true, message: '请输入合同编号' }],
+                            rules: [{ required: true, message: '请输入合同编号' },
+                            { validator: checkNoExist }
+                            ],
                           })(<Input placeholder="请输入合同编号" />)}
                         </Form.Item>
                       </Col>
@@ -714,15 +739,15 @@ const Add = (props: AddProps) => {
 
                     <Row gutter={24}>
                       <Col lg={12}>
-                        <Form.Item label="签约日期" required>
+                        <Form.Item label="签订日期" required>
                           {getFieldDecorator('signingDate', {
                             initialValue: moment(new Date()),
-                            rules: [{ required: true, message: '请选择签约日期' }],
-                          })(<DatePicker placeholder="请选择签约日期" style={{ width: '100%' }} />)}
+                            rules: [{ required: true, message: '请选择签订日期' }],
+                          })(<DatePicker placeholder="请选择签订日期" style={{ width: '100%' }} />)}
                         </Form.Item>
                       </Col>
                       <Col lg={12}>
-                        <Form.Item label="签约人">
+                        <Form.Item label="签订人">
                           {/* {getFieldDecorator('follower', {
                           })(
                             <AutoComplete
@@ -1037,7 +1062,9 @@ const Add = (props: AddProps) => {
                       })(
                         <InputNumber
                           placeholder="请输入"
-                          style={{ width: '100%' }} precision={0} min={0} />
+                          style={{ width: '100%' }}
+                          precision={0}
+                        />
                       )}
                     </Form.Item>
                   </Col>
@@ -1195,10 +1222,12 @@ const Add = (props: AddProps) => {
                 </Row>
               </Card>
               <LeaseTerm form={form}
-              // feeItems={feeItems} 
-              // isValidate={isValidate}
+                // feeItems={feeItems} 
+                isValidate={isValidate}
+                visible={visible}
               ></LeaseTerm>
-              <Button style={{ width: '100%', marginBottom: '10px' }} onClick={calculation}>点击生成费用明细</Button>
+              <Button style={{ width: '100%', marginBottom: '10px' }}
+                onClick={() => { setIsValidate(true); calculation(); }}>点击生成费用明细</Button>
               <ResultList
                 form={form}
                 chargeData={chargeData}

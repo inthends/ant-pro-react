@@ -5,7 +5,7 @@ import { HtLeasecontractchargefee, ChargeFeeDetailDTO, HtLeasecontractcharge, ht
 import React, { useEffect, useState } from 'react';
 import ResultList from './ResultList';
 import {
-  RemoveFile, GetFilesData, SubmitForm, SaveForm,
+  RemoveFile, GetFilesData, SubmitForm, SaveForm, CheckNo,
   GetChargeByChargeId, GetContractInfo, GetModifyChargeDetail, GetFollowCount
 } from './Main.service';
 import { GetCommonItems, GetUserList } from '@/services/commonItem';
@@ -269,6 +269,16 @@ const Modify = (props: ModifyProps) => {
     form.validateFields((errors, values) => {
       if (!errors) {
         setLoading(true);
+
+        //获取条款
+        var strTermJson = getTerms(values);
+
+        if (strTermJson == '[]') {
+          message.warn('请添加租期条款');
+          setLoading(false);
+          return;
+        }
+
         let entity: HtLeasecontractcharge = {};
         //精度处理
         entity.midResultScale = values.midResultScale;
@@ -281,8 +291,7 @@ const Modify = (props: ModifyProps) => {
         entity.lateStartDateUnit = values.lateStartDateUnit;
         entity.lateFee = values.lateFee;
         entity.lateMethod = values.lateMethod;
-        //获取条款
-        var strTermJson = getTerms(values);
+
         GetModifyChargeDetail({
           ...entity,
           termJson: strTermJson
@@ -431,18 +440,18 @@ const Modify = (props: ModifyProps) => {
         Contract.linkPhone = values.linkPhone;
         Contract.address = values.address;
         Contract.signer = values.signer;
-        Contract.signerId = values.signerId; 
+        Contract.signerId = values.signerId;
         Contract.organizeId = values.organizeId;
         Contract.memo = values.memo;
         let ContractCharge: HtLeasecontractcharge = {};
         //费用条款-基本条款  
-        ContractCharge.leaseArea = values.leaseArea; 
+        ContractCharge.leaseArea = values.leaseArea;
         ContractCharge.lateStartDateNum = values.lateStartDateNum;
         ContractCharge.lateStartDateBase = values.lateStartDateBase;
         ContractCharge.lateStartDateFixed = values.lateStartDateFixed;
         ContractCharge.lateStartDateUnit = values.lateStartDateUnit;
         ContractCharge.lateFee = values.lateFee;
-        ContractCharge.lateMethod = values.lateMethod; 
+        ContractCharge.lateMethod = values.lateMethod;
 
         var strTermJson = getTerms(values);
 
@@ -633,6 +642,21 @@ const Modify = (props: ModifyProps) => {
 
   const [lateFixedDisabled, setLateFixedDisabled] = useState<boolean>(true);
 
+  //验证合同编号是否重复
+  const checkNoExist = (rule, value, callback) => {
+    if (value == undefined) {
+      callback();
+    }
+    else {
+      CheckNo(instanceId, value).then(res => {
+        if (res)
+          callback('合同编号重复');
+        else
+          callback();
+      })
+    }
+  };
+
   return (
     <Drawer
       title={title}
@@ -686,7 +710,9 @@ const Modify = (props: ModifyProps) => {
                         <Form.Item label="合同编号" required>
                           {getFieldDecorator('no', {
                             initialValue: infoDetail.no,
-                            rules: [{ required: true, message: '请输入合同编号' }],
+                            rules: [{ required: true, message: '请输入合同编号' },
+                            { validator: checkNoExist }
+                            ],
                           })(<Input placeholder="请输入合同编号" />)}
                         </Form.Item>
                       </Col>

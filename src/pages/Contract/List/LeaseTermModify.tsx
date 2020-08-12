@@ -130,6 +130,7 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
                         onClick={(e:any) => { 
                           //条款序号  
                           var index = e._targetInst.key.replace('list-room-remove-',''); 
+                          
                           Modal.confirm({
                             title: '删除房源',
                             content: '确定删除该房源吗？',
@@ -163,7 +164,7 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
                           });
                         }}
 
-                      >移除</a>]}  >
+                      >删除</a>]}  >
                       <List.Item.Meta title={item.allName} />
                       <div>{item.area}㎡，{item.rentPrice}元/㎡.天</div>
                     </List.Item>

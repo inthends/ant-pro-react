@@ -13,16 +13,40 @@ const { Option } = Select;
 interface LeaseTermProps {
   form: WrappedFormUtils;
   // feeItems: any[];//TreeEntity[];
-  // true: boolean;//是否进行必填项验证  
+  isValidate: boolean;//是否进行必填项验证  
+  visible: boolean;
 }
 
 //动态数量
 let index = 1;
 function LeaseTerm(props: LeaseTermProps) {
-  const { form } = props;
+  const { isValidate, form } = props;
   const { getFieldDecorator, getFieldValue, setFieldsValue } = form;
   const [priceUnit, setPriceUnit] = useState<string>("元/m²·天");//单价单位
   // const [feeItems, setFeeItems] = useState<TreeEntity[]>([]);
+  //是否启用验证
+  //const [isMyValidate, setIsMyValidate] = useState<boolean>(false); 
+
+
+  // const formHasErrors = (fieldsError) => {
+  //   // return Object.keys(fieldsError).some(field => fieldsError[field]);
+  //   return Object.keys(fieldsError).filter(field => fieldsError[field]);
+  // }
+
+  //初始化 
+
+  // useEffect(() => { 
+  //   // var names = formHasErrors(form.getFieldsError());
+  //   // form.resetFields(names);
+
+  //   if (isValidate)
+  //     form.validateFields({ force: true });
+  //   else {
+
+  //     form.validateFields({ force: false });
+  //   }
+  // }, [isValidate]);
+
 
   //单位切换
   const changeUnit = value => {
@@ -36,7 +60,6 @@ function LeaseTerm(props: LeaseTermProps) {
 
   //动态条款里面选择费项
   const changeFee = (value, option, index) => {
-
     // const keys = getFieldValue('feeItemName'); 
     form.setFieldsValue({
       ['feeItemName[' + index + ']']
@@ -50,19 +73,15 @@ function LeaseTerm(props: LeaseTermProps) {
   };
 
   const remove = k => {
-
-
     Modal.confirm({
       title: '请确认',
       content: `您是否要删除条款${k + 1}？`,
       onOk: () => {
-
         const keys = getFieldValue('LeaseTerms');
         setFieldsValue({
           LeaseTerms: keys.filter(key => key !== k),
         });
         index--;
-
         //删除
         chargeFeeList.splice(k, 1);
         setChargeFeeList([...chargeFeeList]);//必须展开
@@ -142,6 +161,7 @@ function LeaseTerm(props: LeaseTermProps) {
                       onClick={(e: any) => {
                         //条款序号  
                         var index = e._targetInst.key.replace('list-room-remove-', '');
+
                         Modal.confirm({
                           title: '删除房源',
                           content: '确定删除该房源吗？',
@@ -176,8 +196,11 @@ function LeaseTerm(props: LeaseTermProps) {
 
                           }
                         });
+
+
+                        
                       }}
-                    >移除</a>]}>
+                    >删除</a>]}>
 
                     <List.Item.Meta title={item.allName} />
                     <div>{item.area}㎡</div>
@@ -485,7 +508,11 @@ function LeaseTerm(props: LeaseTermProps) {
           <Col lg={24}>
             <Form.Item required>
               {getFieldDecorator(`rooms[0]`, {
-                rules: [{ required: true, message: '请选择房源' }],
+                rules: [{
+                  required: isValidate,
+                  message: '请选择房源'
+                }],
+
               })(
                 // <Input
                 //   onChange={e => { 
@@ -561,10 +588,10 @@ function LeaseTerm(props: LeaseTermProps) {
 
         <Row gutter={16}>
           <Col lg={4}>
-            <Form.Item label="开始时间" required >
+            <Form.Item label="开始时间" required  >
               {getFieldDecorator(`chargeStartDate[0]`, {
                 initialValue: moment(new Date()),
-                rules: [{ required: true, message: '请选择开始时间' }],
+                rules: [{ required: form.getFieldValue('rooms[0]'), message: '请选择开始时间' }],
               })(<DatePicker placeholder='请选择开始时间'
                 disabledDate={(currentDate) => {
                   return currentDate && (
@@ -576,10 +603,10 @@ function LeaseTerm(props: LeaseTermProps) {
             </Form.Item>
           </Col>
           <Col lg={4}>
-            <Form.Item label="结束时间" required>
+            <Form.Item label="结束时间" required >
               {getFieldDecorator(`chargeEndDate[0]`, {
                 initialValue: moment(new Date()).add(1, 'years').add(-1, 'days'),
-                rules: [{ required: true, message: '请选择结束时间' }],
+                rules: [{ required: form.getFieldValue('rooms[0]'), message: '请选择结束时间' }],
               })(<DatePicker placeholder='请选择结束时间'
                 disabledDate={(currentDate) => {
                   return currentDate && (
@@ -591,9 +618,9 @@ function LeaseTerm(props: LeaseTermProps) {
             </Form.Item>
           </Col>
           <Col lg={8}>
-            <Form.Item label="费项" required>
+            <Form.Item label="费项" required >
               {getFieldDecorator(`feeItemId[0]`, {
-                rules: [{ required: true, message: '请选择费项' }]
+                rules: [{ required: form.getFieldValue('rooms[0]'), message: '请选择费项' }]
               })(
                 <Select placeholder="请选择费项"
                   onChange={(value, option) => changeFee(value, option, 0)}>
@@ -617,10 +644,9 @@ function LeaseTerm(props: LeaseTermProps) {
           </Col>
 
           <Col lg={4}>
-            <Form.Item label='单价' required>
+            <Form.Item label='单价' required >
               {getFieldDecorator(`price[0]`, {
-
-                rules: [{ required: true, message: '请输入单价' }],
+                rules: [{ required: form.getFieldValue('rooms[0]'), message: '请输入单价' }],
               })(<InputNumber placeholder="请输入单价" style={{ width: '100%' }} />)}
             </Form.Item>
           </Col>

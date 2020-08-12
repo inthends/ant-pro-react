@@ -3,6 +3,13 @@ import { getResult, objToFormdata } from '@/utils/networkUtils';
 import request from '@/utils/request';
 
 
+// 验证合同编号
+export function CheckNo(keyvalue, no): Promise<any> {
+  return request
+    .get(process.env.basePath + `/Contract/CheckNo?keyvalue=${keyvalue}&no=${no}`)
+    .then(getResult as any);
+}
+
 export function GetPageListJson(data): Promise<any> {
   return request.post(process.env.basePath + `/Contract/GetPageListJson`, { data: objToFormdata(data) }).then(getResult as any);
 }

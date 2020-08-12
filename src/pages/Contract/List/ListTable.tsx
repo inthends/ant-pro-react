@@ -101,7 +101,7 @@ function ListTable(props: ListTableProps) {
     },
 
     {
-      title: '签约日期',
+      title: '签订日期',
       dataIndex: 'signingDate',
       key: 'signingDate',
       width: 100,
