@@ -36,15 +36,15 @@ function LeaseTerm(props: LeaseTermProps) {
 
   //初始化 
 
-  useEffect(() => {   
+  useEffect(() => {
 
     if (isValidate) {
       setRoomIndex(0);//是否验证
-      
-    } else { 
+
+    } else {
       setRoomIndex(-1);
-     
-    } 
+
+    }
   }, [isValidate]);
 
   //单位切换
@@ -401,10 +401,29 @@ function LeaseTerm(props: LeaseTermProps) {
         <Col lg={4}>
           <Form.Item label="天单价换算规则">
             {getFieldDecorator(`dayPriceConvertRule[${k}]`, {
-              initialValue: '按年换算',
+              // initialValue: '按年换算',
+              rules: [{
+                required:
+                  form.getFieldValue(`billType[${k}]`) == '按实际天数计费'
+                  && (
+                    form.getFieldValue(`priceUnit[${k}]`) == '元/m²·月'
+                    ||
+                    form.getFieldValue(`priceUnit[${k}]`) == '元/月'
+                  )
+                , message: '请选择'
+              }],
             })(
               <Select
-                disabled={!(priceUnit != "元/m²·天" && priceUnit != "元/天")}>
+                placeholder='请选择' 
+                disabled={
+                  !(form.getFieldValue(`billType[${k}]`) == '按实际天数计费'
+                    && (
+                      form.getFieldValue(`priceUnit[${k}]`) == '元/m²·月'
+                      ||
+                      form.getFieldValue(`priceUnit[${k}]`) == '元/月'
+                    ))
+                } 
+                >
                 <Option value="按自然月换算">按自然月换算</Option>
                 <Option value="按年换算" >按年换算</Option>
               </Select>
@@ -603,7 +622,7 @@ function LeaseTerm(props: LeaseTermProps) {
       {getFieldDecorator(`chargeData[${k}]`, {
       })(
         <input type='hidden' />
-      )} 
+      )}
     </Card>
   ));
 
@@ -613,11 +632,11 @@ function LeaseTerm(props: LeaseTermProps) {
         className={styles.card}
         hoverable
 
-        // onMouseOver={() => {
-        //   //当前激活的条款序号，用于条款验证控制 
-        //   setRoomIndex(0);
-        // }} 
-         >
+      // onMouseOver={() => {
+      //   //当前激活的条款序号，用于条款验证控制 
+      //   setRoomIndex(0);
+      // }} 
+      >
         <Row >
           <Col lg={24}>
             <Form.Item required>
@@ -810,10 +829,30 @@ function LeaseTerm(props: LeaseTermProps) {
           <Col lg={4}>
             <Form.Item label="天单价换算规则">
               {getFieldDecorator(`dayPriceConvertRule[0]`, {
-                initialValue: !(priceUnit != "元/m²·天" && priceUnit != "元/天") ? '' : '按年换算',
+                //initialValue: !(priceUnit != "元/m²·天" && priceUnit != "元/天") ? '' : '按年换算',
+                rules: [{
+                  required:
+                    form.getFieldValue(`billType[0]`) == '按实际天数计费'
+                    && (
+                      form.getFieldValue(`priceUnit[0]`) == '元/m²·月'
+                      ||
+                      form.getFieldValue(`priceUnit[0]`) == '元/月'
+                    )
+                  , message: '请选择'
+                }],
               })(
                 <Select
-                  disabled={!(priceUnit != "元/m²·天" && priceUnit != "元/天")}>
+                  placeholder='请选择'
+                  disabled={
+                    !(form.getFieldValue(`billType[0]`) == '按实际天数计费'
+                      && (
+                        form.getFieldValue(`priceUnit[0]`) == '元/m²·月'
+                        ||
+                        form.getFieldValue(`priceUnit[0]`) == '元/月'
+                      ))
+                  }
+                // disabled={!(priceUnit != "元/m²·天" && priceUnit != "元/天")}
+                >
                   <Option value="按自然月换算">按自然月换算</Option>
                   <Option value="按年换算" >按年换算</Option>
                 </Select>

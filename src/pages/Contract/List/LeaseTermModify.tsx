@@ -23,16 +23,17 @@ interface LeaseTermModifyProps {
 //动态数量
 //let index = 1;
 function LeaseTermModify(props: LeaseTermModifyProps) {
-  const { isValidate, visible, form, chargeFeeList } = props;
+  const { isValidate,  form, chargeFeeList } = props;
+  
   const { getFieldDecorator, getFieldValue, setFieldsValue } = form;
-  const [priceUnit, setPriceUnit] = useState<string>("元/m²·天");//单价单位 
+  // const [priceUnit, setPriceUnit] = useState<string>("元/m²·天");//单价单位 
   const [mychargeFeeList, setMyChargeFeeList] = useState<ChargeFeeDetailDTO[]>([]);
 
   //初始化
   useEffect(() => {
-    if (visible)
+    if (chargeFeeList)
       setMyChargeFeeList(chargeFeeList);
-  }, [visible]);
+  }, [chargeFeeList]);
 
   useEffect(() => {
     if (isValidate) {
@@ -44,9 +45,9 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
 
 
   //单位切换
-  const changeUnit = value => {
-    setPriceUnit(value);
-  };
+  // const changeUnit = value => {
+  //   setPriceUnit(value);
+  // };
 
   const closeSelectHouse = () => {
     setSelectHouseVisible(false);
@@ -250,7 +251,7 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
                               content: '确定删除该房源吗？',
                               okText: '确认',
                               cancelText: '取消',
-                              onOk: () => { 
+                              onOk: () => {
                                 //要删除的房间序号
                                 var roomindex = mychargeFeeList[index].rooms.indexOf(item);
                                 mychargeFeeList[index].rooms.splice(roomindex, 1);
@@ -356,7 +357,9 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
                 {getFieldDecorator(`priceUnit[${index}]`, {
                   initialValue: k.chargeFee ? k.chargeFee.priceUnit : '元/m²·天'
                 })(
-                  <Select onChange={changeUnit}>
+                  <Select
+                  // onChange={changeUnit}
+                  >
                     <Option value="元/m²·月">元/m²·月</Option>
                     <Option value="元/m²·天">元/m²·天</Option>
                     <Option value="元/月">元/月</Option>
@@ -380,8 +383,8 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
                   initialValue: k.chargeFee ? k.chargeFee.billType : '按月计费'
                 })(
                   <Select>
-                    <Option value="按实际天数计费">按实际天数计费</Option>
                     <Option value="按月计费" >按月计费</Option>
+                    <Option value="按实际天数计费">按实际天数计费</Option>
                   </Select>)}
               </Form.Item>
             </Col>
@@ -397,11 +400,31 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
               </Tooltip></div>}>
                 {getFieldDecorator(`dayPriceConvertRule[${index}]`, {
                   initialValue: k.chargeFee ? k.chargeFee.dayPriceConvertRule : '按年换算',
+                  rules: [{
+                    required:
+                      form.getFieldValue(`billType[${index}]`) == '按实际天数计费'
+                      && (
+                        form.getFieldValue(`priceUnit[${index}]`) == '元/m²·月'
+                        ||
+                        form.getFieldValue(`priceUnit[${index}]`) == '元/月'
+                      )
+                    , message: '请选择'
+                  }],
                 })(
                   <Select
-                    disabled={!(priceUnit != "元/m²·天" && priceUnit != "元/天")}>
-                    <Option value="按自然月换算">按自然月换算</Option>
+                    placeholder='请选择'
+                    // disabled={!(priceUnit != "元/m²·天" && priceUnit != "元/天")} 
+                    disabled={
+                      !(form.getFieldValue(`billType[${index}]`) == '按实际天数计费'
+                        && (
+                          form.getFieldValue(`priceUnit[${index}]`) == '元/m²·月'
+                          ||
+                          form.getFieldValue(`priceUnit[${index}]`) == '元/月'
+                        ))
+                    }
+                    >
                     <Option value="按年换算" >按年换算</Option>
+                    <Option value="按自然月换算">按自然月换算</Option>
                   </Select>
                 )}
               </Form.Item>
@@ -426,7 +449,7 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
               <Form.Item label={<div>年天数 <Tooltip title="指一年按多少天来计算">
                 <Icon type="question-circle" /></Tooltip></div>}>
                 {getFieldDecorator(`yearDays[${index}]`, {
-                  initialValue: k && k.chargeFee ? k.chargeFee.yearDays : 365,
+                  initialValue: k.chargeFee ? k.chargeFee.yearDays : 365,
                   rules: [{ required: roomIndex == index ? true : false, message: '请输入年天数' }],
                 })(<InputNumber placeholder="请输入年天数" style={{ width: '100%' }} />)}
               </Form.Item>

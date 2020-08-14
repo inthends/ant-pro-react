@@ -216,11 +216,12 @@ const Modify = (props: ModifyProps) => {
 
   //获取条款
   const getTerms = (values) => {
+
     //租赁条款     
     // let TermJson: HtLeasecontractchargefee[] = [];
     let TermJson: ChargeFeeDetailDTO[] = [];
     //动态添加的租期
-    values.LeaseTerms.map(function (k, index, arr) {
+    values.LeaseTerms && values.LeaseTerms.map(function (k, index, arr) {
       let charge: ChargeFeeDetailDTO = {
         rooms: [],
         feeItems: [],
@@ -238,7 +239,13 @@ const Modify = (props: ModifyProps) => {
       mychargefee.advancePayTime = values.advancePayTime[index];
       mychargefee.advancePayTimeUnit = values.advancePayTimeUnit[index];
       mychargefee.billType = values.billType[index];
-      if (mychargefee.priceUnit == "元/m²·天" || mychargefee.priceUnit == "元/天") {
+
+
+      if (
+        (mychargefee.priceUnit == "元/m²·月"
+          || mychargefee.priceUnit == "元/月") &&
+        mychargefee.billType == "按实际天数计费"
+      ) {
         mychargefee.dayPriceConvertRule = values.dayPriceConvertRule[index];
       }
       mychargefee.yearDays = values.yearDays[index];
@@ -443,14 +450,19 @@ const Modify = (props: ModifyProps) => {
         Contract.organizeId = values.organizeId;
         Contract.memo = values.memo;
         let ContractCharge: HtLeasecontractcharge = {};
-        //费用条款-基本条款  
-        ContractCharge.leaseArea = values.leaseArea;
+        //费用条款-基本条款    
+
         ContractCharge.lateStartDateNum = values.lateStartDateNum;
         ContractCharge.lateStartDateBase = values.lateStartDateBase;
         ContractCharge.lateStartDateFixed = values.lateStartDateFixed;
         ContractCharge.lateStartDateUnit = values.lateStartDateUnit;
         ContractCharge.lateFee = values.lateFee;
         ContractCharge.lateMethod = values.lateMethod;
+
+        ContractCharge.midResultScale = values.midResultScale;
+        ContractCharge.midScaleDispose = values.midScaleDispose; 
+        ContractCharge.lastResultScale = values.lastResultScale;
+        ContractCharge.lastScaleDispose = values.lastScaleDispose;
 
         var strTermJson = getTerms(values);
 
@@ -822,7 +834,8 @@ const Modify = (props: ModifyProps) => {
                             />
                           )} */}
                           {getFieldDecorator('signer', {
-                            initialValue: infoDetail.signer
+                            initialValue: infoDetail.signer ? infoDetail.signer : undefined,
+                            rules: [{ required: true, message: '请选择签约人' }]
                           })(
                             <Select
                               showSearch
@@ -876,7 +889,7 @@ const Modify = (props: ModifyProps) => {
                             />
                           )} */}
                           {getFieldDecorator('follower', {
-                            initialValue: infoDetail.follower
+                            initialValue: infoDetail.follower ? infoDetail.follower : undefined
                           })(
                             <Select
                               showSearch
@@ -902,7 +915,7 @@ const Modify = (props: ModifyProps) => {
                       <Col lg={12}>
                         <Form.Item label="渠道"  >
                           {getFieldDecorator('channelType', {
-                            initialValue: infoDetail.channelType
+                            initialValue: infoDetail.channelType ? infoDetail.channelType : undefined
                             // rules: [{ required: true, message: '请选择渠道' }],
                           })(
                             <Select placeholder="请选择渠道"  >
@@ -1411,7 +1424,7 @@ const Modify = (props: ModifyProps) => {
           </Button>
         <Button
           onClick={submit}
-          type="primary" 
+          type="primary"
           onMouseOver={() => {
             //用于条款验证控制 
             setIsValidate(true)

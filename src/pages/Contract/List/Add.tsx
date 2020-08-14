@@ -115,10 +115,14 @@ const Add = (props: AddProps) => {
       data.advancePayTime = values.advancePayTime[0];
       data.advancePayTimeUnit = values.advancePayTimeUnit[0];
       data.billType = values.billType[0];
-      if (data.priceUnit != "元/m²·天" && data.priceUnit != "元/天") {
+
+      if ((data.priceUnit == "元/m²·月" || data.priceUnit == "元/月")
+        &&
+        data.billType == "按实际天数计费") {
         //天单价转换规则
         data.dayPriceConvertRule = values.dayPriceConvertRule[0];
       }
+
       data.yearDays = values.yearDays[0];
       data.payCycle = values.payCycle[0];
       //租期划分方式
@@ -166,9 +170,14 @@ const Add = (props: AddProps) => {
           data.advancePayTime = values.advancePayTime[k];
           data.advancePayTimeUnit = values.advancePayTimeUnit[k];
           data.billType = values.billType[k];
-          if (data.priceUnit != "元/m²·天" && data.priceUnit != "元/天") {
-            data.dayPriceConvertRule = values.dayPriceConvertRule[k];
-          }
+ 
+          if ((data.priceUnit == "元/m²·月" || data.priceUnit == "元/月")
+          &&
+          data.billType == "按实际天数计费") {
+          //天单价转换规则
+          data.dayPriceConvertRule = values.dayPriceConvertRule[k];
+        }
+
           data.yearDays = values.yearDays[k];
           data.payCycle = values.payCycle[k];
           data.rentalPeriodDivided = values.rentalPeriodDivided[k];
@@ -348,27 +357,17 @@ const Add = (props: AddProps) => {
         setLoading(true);
         //保存合同数据
         let ContractCharge: HtLeasecontractcharge = {};
-        //费用条款-基本条款 
-        // ContractCharge.depositFeeItemId = values.depositFeeItemId;
-        // ContractCharge.depositFeeItemName = values.depositFeeItemName;
-        // ContractCharge.leaseArea = values.leaseArea;
-        // ContractCharge.deposit = values.deposit;
-        // ContractCharge.depositUnit = values.depositUnit;
-        // ContractCharge.startDate = values.billingDate.format('YYYY-MM-DD');
-        // ContractCharge.endDate = values.contractEndDate.format('YYYY-MM-DD');
-        // ContractCharge.payDate = values.contractStartDate.format('YYYY-MM-DD'); 
-        // ContractCharge.calcPrecision = values.calcPrecision;
-
+        //费用条款-基本条款
         ContractCharge.lateStartDateNum = values.lateStartDateNum;
         ContractCharge.lateStartDateBase = values.lateStartDateBase;
         ContractCharge.lateStartDateFixed = values.lateStartDateFixed;
         ContractCharge.lateStartDateUnit = values.lateStartDateUnit;
         ContractCharge.lateFee = values.lateFee;
-        ContractCharge.lateMethod = values.lateMethod;
-        // if (values.lateDate != null)
-        //   ContractCharge.lateDate = values.lateDate.format('YYYY-MM-DD');
-        // ContractCharge.propertyFeeId = values.propertyFeeId;
-        // ContractCharge.propertyFeeName = values.propertyFeeName;
+        ContractCharge.lateMethod = values.lateMethod; 
+        ContractCharge.midResultScale = values.midResultScale;
+        ContractCharge.midScaleDispose = values.midScaleDispose; 
+        ContractCharge.lastResultScale = values.lastResultScale;
+        ContractCharge.lastScaleDispose = values.lastScaleDispose; 
         let Contract: htLeasecontract = {};
         Contract.no = values.no;
         Contract.follower = values.follower;
@@ -389,14 +388,9 @@ const Add = (props: AddProps) => {
         Contract.linkPhone = values.linkPhone;
         Contract.address = values.address;
         Contract.signer = values.signer;
-        Contract.signerId = values.signerId;
-        // Contract.lateFee = values.lateFee;
-        // Contract.lateFeeUnit = values.lateFeeUnit;
-        // Contract.maxLateFee = values.maxLateFee;
-        // Contract.maxLateFeeUnit = values.maxLateFeeUnit;
-        // Contract.billUnitId = values.billUnitId;
+        Contract.signerId = values.signerId; 
         Contract.organizeId = organizeId;
-        Contract.memo = values.memo; 
+        Contract.memo = values.memo;
         SaveForm({
           ...Contract,
           ...ContractCharge,
@@ -728,14 +722,7 @@ const Add = (props: AddProps) => {
                     </Row>
 
                     <Row gutter={24}>
-                      <Col lg={12}>
-                        <Form.Item label="签订日期" required>
-                          {getFieldDecorator('signingDate', {
-                            initialValue: moment(new Date()),
-                            rules: [{ required: true, message: '请选择签订日期' }],
-                          })(<DatePicker placeholder="请选择签订日期" style={{ width: '100%' }} />)}
-                        </Form.Item>
-                      </Col>
+                    
                       <Col lg={12}>
                         <Form.Item label="签订人">
                           {/* {getFieldDecorator('follower', {
@@ -749,6 +736,7 @@ const Add = (props: AddProps) => {
                             />
                           )} */}
                           {getFieldDecorator('signer', {
+                             rules: [{ required: true, message: '请选择签约人' }]
                           })(
                             <Select
                               showSearch
@@ -770,7 +758,14 @@ const Add = (props: AddProps) => {
                           )}
                         </Form.Item>
                       </Col>
-
+                      <Col lg={12}>
+                        <Form.Item label="签订日期" required>
+                          {getFieldDecorator('signingDate', {
+                            initialValue: moment(new Date()),
+                            rules: [{ required: true, message: '请选择签订日期' }],
+                          })(<DatePicker placeholder="请选择签订日期" style={{ width: '100%' }} />)}
+                        </Form.Item>
+                      </Col>
                     </Row>
 
                     <Row gutter={24}>
