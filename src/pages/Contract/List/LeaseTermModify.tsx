@@ -646,6 +646,7 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
             form={form}
             chargeData={chargeFeeList[index] ? chargeFeeList[index].chargeData : []}
             className={styles.addcard}
+            index={index}
           ></ResultList>
           {/* 存放费用明细 */}
           {getFieldDecorator(`chargeData[${index}]`, {

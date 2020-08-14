@@ -10,6 +10,7 @@ interface ResultListProps {
   chargeData: any[];//费用明细
   className: any;
   form: WrappedFormUtils;
+  index: any;
 }
 
 /*详情可编辑单元格*/
@@ -143,7 +144,7 @@ class EditableCell extends React.Component {
 
 function ResultList(props: ResultListProps) {
 
-  const { form, chargeData } = props;
+  const { index, form, chargeData } = props;
 
   //初始化
   useEffect(() => {
@@ -283,7 +284,10 @@ function ResultList(props: ResultListProps) {
 
   const handleDelete = id => {
     const newData = [...mychargeData];
-    setMyChargeData(newData.filter(item => item.id !== id));
+    var data = newData.filter(item => item.id !== id);
+    setMyChargeData(data);
+    //更新费用
+    form.setFieldsValue({ ['chargeData[' + index + ']']: data });
   };
 
   //金额编辑
@@ -299,6 +303,8 @@ function ResultList(props: ResultListProps) {
           ...row,
         });
         setMyChargeData(newData);
+        //更新费用
+        form.setFieldsValue({ ['chargeData[' + index + ']']: newData });
       }
     });
   };
