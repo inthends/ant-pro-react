@@ -626,16 +626,24 @@ const Approve = (props: ApproveProps) => {
                         </Form.Item>
                       </Col>
                     </Row>
+
+
+                    <ResultListView
+                      chargeData={k.chargeData}
+                      className={styles.card}
+                    ></ResultListView>
+
+
                   </Card>
                 )) : null
               }
             </TabPane>
-            <TabPane tab="租金明细" key="3">
+            {/* <TabPane tab="租金明细" key="3">
               <ResultListView 
                 chargeData={chargeData}
                 className={styles.card}
               ></ResultListView>
-            </TabPane>
+            </TabPane> */}
             <TabPane tab="其他条款" key="4">
               <Card className={styles.card} hoverable>
                 <Row gutter={24}>

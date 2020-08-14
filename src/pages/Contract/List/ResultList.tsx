@@ -1,5 +1,5 @@
 //计费明细表 
-import { Popconfirm, DatePicker, Form, Card, Table, InputNumber } from 'antd';
+import { Popconfirm, DatePicker, Form, Table, InputNumber } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
@@ -143,14 +143,13 @@ class EditableCell extends React.Component {
 
 function ResultList(props: ResultListProps) {
 
-  const { form, chargeData, className } = props;
+  const { form, chargeData } = props;
 
   //初始化
   useEffect(() => {
-    if (chargeData) {
+    if (chargeData)
       //数据刷新
       setMyChargeData(chargeData);
-    }
   }, [chargeData]);
 
   const { getFieldDecorator } = form;
@@ -208,7 +207,7 @@ function ResultList(props: ResultListProps) {
     },
     {
       title: '最终单价',
-      width: 60,
+      width: 65,
       render: (text, row, index) => {
         return row.price + row.priceUnit;
         // let unit = '';
@@ -307,23 +306,22 @@ function ResultList(props: ResultListProps) {
   getFieldDecorator('ChargeData', { initialValue: mychargeData });
 
   return (
-    <div>
-
-      <Card title="费用" className={className} hoverable>
-        <Table
-          components={components}
-          rowClassName={styles.editablerow}
-          // rowClassName={() => 'editable-row'}
-          style={{ border: 'none' }}
-          bordered={false}
-          size="middle"
-          rowKey="id"
-          // columns={columns}
-          columns={eidtColumns}
-          dataSource={mychargeData}
-        />
-      </Card>
-    </div >
+    // <div> 
+    //   <Card title="费用" className={className} hoverable>
+    <Table
+      components={components}
+      rowClassName={styles.editablerow}
+      // rowClassName={() => 'editable-row'}
+      style={{ border: 'none' }}
+      bordered={false}
+      size="middle"
+      rowKey="id"
+      // columns={columns}
+      columns={eidtColumns}
+      dataSource={mychargeData}
+    />
+    //   </Card>
+    // </div >
   );
 }
 

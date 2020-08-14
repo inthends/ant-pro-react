@@ -9,9 +9,9 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { HtLeasecontracthouse } from './htLeasecontracthouse';
-import { HtLeasecontractchargefee } from './htLeasecontractchargefee';
-import { TreeEntity } from '@/model/models';
+// import { HtLeasecontracthouse } from './htLeasecontracthouse';
+// import { HtLeasecontractchargefee } from './htLeasecontractchargefee';
+import { TreeEntity, HtLeasecontracthouse, HtLeasecontractchargefee, HtChargefeeresult } from '@/model/models';
 /**
  * 费用明细
  */
@@ -24,7 +24,10 @@ export interface ChargeFeeDetailDTO {
      * 房屋
      */
     rooms: Array<HtLeasecontracthouse>;
-    
+
     //费项
-    feeItems: Array<TreeEntity>; 
+    feeItems: Array<TreeEntity>;
+
+    //费用明细
+    chargeData: Array<HtChargefeeresult>;
 }

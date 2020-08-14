@@ -290,6 +290,7 @@ const Add = (props: AddProps) => {
         let strTermJson = JSON.stringify(TermJson);
         setTermJson(strTermJson);
 
+      
         GetChargeDetail({
           TermJson: strTermJson,
         }).then(res => {

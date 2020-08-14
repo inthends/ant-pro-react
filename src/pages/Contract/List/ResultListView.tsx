@@ -9,8 +9,8 @@ interface ResultListViewProps {
   className: any;
 }
 
-function ResultListView(props: ResultListViewProps) { 
-  const {  chargeData, className } = props; 
+function ResultListView(props: ResultListViewProps) {
+  const { chargeData } = props;
   const columns = [
     {
       title: '区间',
@@ -73,19 +73,18 @@ function ResultListView(props: ResultListViewProps) {
 
 
   return (
-    <div>
-
-      <Card title="费用" className={className} hoverable>
-        <Table
-          style={{ border: 'none' }}
-          bordered={false}
-          size="middle"
-          rowKey="id"
-          columns={columns}
-          dataSource={chargeData}
-        />
-      </Card>
-    </div >
+    // <div> 
+    //   <Card title="费用" className={className} hoverable>
+    <Table
+      style={{ border: 'none' }}
+      bordered={false}
+      size="middle"
+      rowKey="id"
+      columns={columns}
+      dataSource={chargeData}
+    />
+    //   </Card>
+    // </div >
   );
 }
 
