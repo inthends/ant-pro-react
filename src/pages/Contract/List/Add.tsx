@@ -142,6 +142,7 @@ const Add = (props: AddProps) => {
       // data.periodLength = values.periodLength[0];
       // data.discount = values.discount[0];
       data.rebateRemark = values.rebateRemark[0];
+      data.indexs = 0;
       charge.chargeFee = data;
 
       //添加房屋   
@@ -161,6 +162,8 @@ const Add = (props: AddProps) => {
             chargeData: []
           };
           let data: HtLeasecontractchargefee = {};
+          //条款序号
+          data.indexs = values.indexs[k];
           data.feeItemId = values.feeItemId[k];
           data.feeItemName = values.feeItemName[k];
           data.chargeStartDate = values.chargeStartDate[k];
@@ -170,13 +173,13 @@ const Add = (props: AddProps) => {
           data.advancePayTime = values.advancePayTime[k];
           data.advancePayTimeUnit = values.advancePayTimeUnit[k];
           data.billType = values.billType[k];
- 
+
           if ((data.priceUnit == "元/m²·月" || data.priceUnit == "元/月")
-          &&
-          data.billType == "按实际天数计费") {
-          //天单价转换规则
-          data.dayPriceConvertRule = values.dayPriceConvertRule[k];
-        }
+            &&
+            data.billType == "按实际天数计费") {
+            //天单价转换规则
+            data.dayPriceConvertRule = values.dayPriceConvertRule[k];
+          }
 
           data.yearDays = values.yearDays[k];
           data.payCycle = values.payCycle[k];
@@ -363,11 +366,11 @@ const Add = (props: AddProps) => {
         ContractCharge.lateStartDateFixed = values.lateStartDateFixed;
         ContractCharge.lateStartDateUnit = values.lateStartDateUnit;
         ContractCharge.lateFee = values.lateFee;
-        ContractCharge.lateMethod = values.lateMethod; 
+        ContractCharge.lateMethod = values.lateMethod;
         ContractCharge.midResultScale = values.midResultScale;
-        ContractCharge.midScaleDispose = values.midScaleDispose; 
+        ContractCharge.midScaleDispose = values.midScaleDispose;
         ContractCharge.lastResultScale = values.lastResultScale;
-        ContractCharge.lastScaleDispose = values.lastScaleDispose; 
+        ContractCharge.lastScaleDispose = values.lastScaleDispose;
         let Contract: htLeasecontract = {};
         Contract.no = values.no;
         Contract.follower = values.follower;
@@ -388,7 +391,7 @@ const Add = (props: AddProps) => {
         Contract.linkPhone = values.linkPhone;
         Contract.address = values.address;
         Contract.signer = values.signer;
-        Contract.signerId = values.signerId; 
+        Contract.signerId = values.signerId;
         Contract.organizeId = organizeId;
         Contract.memo = values.memo;
         SaveForm({
@@ -722,7 +725,7 @@ const Add = (props: AddProps) => {
                     </Row>
 
                     <Row gutter={24}>
-                    
+
                       <Col lg={12}>
                         <Form.Item label="签订人">
                           {/* {getFieldDecorator('follower', {
@@ -736,7 +739,7 @@ const Add = (props: AddProps) => {
                             />
                           )} */}
                           {getFieldDecorator('signer', {
-                             rules: [{ required: true, message: '请选择签约人' }]
+                            rules: [{ required: true, message: '请选择签约人' }]
                           })(
                             <Select
                               showSearch

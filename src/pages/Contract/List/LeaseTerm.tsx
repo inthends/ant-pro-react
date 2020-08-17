@@ -24,7 +24,7 @@ let index = 1;
 function LeaseTerm(props: LeaseTermProps) {
   const { isValidate, form } = props;
   const { getFieldDecorator, getFieldValue, setFieldsValue } = form;
-  const [priceUnit, setPriceUnit] = useState<string>("元/m²·天");//单价单位
+  // const [priceUnit, setPriceUnit] = useState<string>("元/m²·天");//单价单位
   // const [feeItems, setFeeItems] = useState<TreeEntity[]>([]);
   //是否启用验证
   //const [isMyValidate, setIsMyValidate] = useState<boolean>(false); 
@@ -48,9 +48,9 @@ function LeaseTerm(props: LeaseTermProps) {
   }, [isValidate]);
 
   //单位切换
-  const changeUnit = value => {
-    setPriceUnit(value);
-  };
+  // const changeUnit = value => {
+  //   setPriceUnit(value);
+  // };
 
   //模板中费项选择  
   // const changeFee0 = (value, option, index) => {
@@ -145,7 +145,12 @@ function LeaseTerm(props: LeaseTermProps) {
       data.rebateStartDate = values.rebateStartDate[index] ? values.rebateStartDate[index].format('YYYY-MM-DD') : null;
       data.rebateEndDate = values.rebateEndDate[index] ? values.rebateEndDate[index].format('YYYY-MM-DD') : null;
       data.rebateRemark = values.rebateRemark[index];
-      charge.chargeFee = data;
+
+      //条款序号
+      data.indexs = values.indexs[index];
+
+      charge.chargeFee = data; 
+
       TermJson.push(charge);
     }
 
@@ -226,6 +231,13 @@ function LeaseTerm(props: LeaseTermProps) {
       <Row >
         <Col lg={24}>
           <Form.Item required>
+
+            {getFieldDecorator(`indexs[${k}]`, {
+              initialValue: k
+            })(
+              <input type='hidden' />
+            )}
+
             {getFieldDecorator(`rooms[${k}]`, {
               rules: [{ required: isValidate, message: '请选择房源' }],
             })(
@@ -369,11 +381,12 @@ function LeaseTerm(props: LeaseTermProps) {
             {getFieldDecorator(`priceUnit[${k}]`, {
               initialValue: '元/m²·天'
             })(
-              <Select onChange={changeUnit}>
+              <Select >
                 <Option value="元/m²·月">元/m²·月</Option>
                 <Option value="元/m²·天">元/m²·天</Option>
                 <Option value="元/月">元/月</Option>
                 <Option value="元/天">元/天</Option>
+                <Option value="元">元</Option>
               </Select>)}
           </Form.Item>
         </Col>
@@ -414,7 +427,7 @@ function LeaseTerm(props: LeaseTermProps) {
               }],
             })(
               <Select
-                placeholder='请选择' 
+                placeholder='请选择'
                 disabled={
                   !(form.getFieldValue(`billType[${k}]`) == '按实际天数计费'
                     && (
@@ -422,8 +435,8 @@ function LeaseTerm(props: LeaseTermProps) {
                       ||
                       form.getFieldValue(`priceUnit[${k}]`) == '元/月'
                     ))
-                } 
-                >
+                }
+              >
                 <Option value="按自然月换算">按自然月换算</Option>
                 <Option value="按年换算" >按年换算</Option>
               </Select>
@@ -616,6 +629,7 @@ function LeaseTerm(props: LeaseTermProps) {
         form={form}
         chargeData={chargeFeeList[k].chargeData}
         className={styles.addcard}
+        index={k}
       ></ResultList>
 
       {/* 存放费用明细 */}
@@ -640,6 +654,13 @@ function LeaseTerm(props: LeaseTermProps) {
         <Row >
           <Col lg={24}>
             <Form.Item required>
+              {/* 条款序号 */}
+              {getFieldDecorator(`indexs[0]`, {
+                initialValue: 0
+              })(
+                <input type='hidden' />
+              )}
+
               {getFieldDecorator(`rooms[0]`, {
                 rules: [{
                   required: roomIndex == 0 ? true : false,
@@ -684,8 +705,7 @@ function LeaseTerm(props: LeaseTermProps) {
                               //var list = [...items[0].rooms, ...res];
                               chargeFeeList[0].rooms.splice(index, 1);
                               if (chargeFeeList[0].rooms.length == 0) {
-                                chargeFeeList[0].feeItems = [];//清空费项
-
+                                chargeFeeList[0].feeItems = [];//清空费项 
                                 form.setFieldsValue({
                                   ['rooms[0]']
                                     : []
@@ -788,11 +808,13 @@ function LeaseTerm(props: LeaseTermProps) {
               {getFieldDecorator(`priceUnit[0]`, {
                 initialValue: '元/m²·天'
               })(
-                <Select onChange={changeUnit}>
+                // <Select onChange={changeUnit}>
+                <Select  >
                   <Option value="元/m²·月">元/m²·月</Option>
                   <Option value="元/m²·天">元/m²·天</Option>
                   <Option value="元/月">元/月</Option>
                   <Option value="元/天">元/天</Option>
+                  <Option value="元">元</Option>
                 </Select>)}
             </Form.Item>
           </Col>
@@ -1033,6 +1055,7 @@ function LeaseTerm(props: LeaseTermProps) {
           form={form}
           chargeData={chargeFeeList[0].chargeData}
           className={styles.addcard}
+          index={0}
         ></ResultList>
         {/* 存放费用明细 */}
         {getFieldDecorator(`chargeData[0]`, {

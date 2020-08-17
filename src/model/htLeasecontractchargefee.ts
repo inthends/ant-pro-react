@@ -57,6 +57,10 @@ export interface HtLeasecontractchargefee {
    * Desc:  Default:  Nullable:True
    */
   modifyDate?: Date;
+
+  
+  indexs?: number;
+
   /**
    * Desc:  Default:0  Nullable:True
    */

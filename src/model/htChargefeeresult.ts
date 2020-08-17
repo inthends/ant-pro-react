@@ -22,7 +22,7 @@ export interface HtChargefeeresult {
   /**
   * Desc:  Default:  Nullable:False
   */
-  leaseContractChargeId?: string;
+ chargeFeeId?: string;
   /**
  * Desc:  Default:  Nullable:True
  */

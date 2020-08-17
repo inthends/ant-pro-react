@@ -230,6 +230,7 @@ const Modify = (props: ModifyProps) => {
       };
 
       let mychargefee: HtLeasecontractchargefee = {};
+      mychargefee.indexs = values.indexs[index];
       mychargefee.feeItemId = values.feeItemId[index];
       mychargefee.feeItemName = values.feeItemName[index];
       mychargefee.chargeStartDate = values.chargeStartDate[index].format('YYYY-MM-DD');

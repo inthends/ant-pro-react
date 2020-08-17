@@ -23,8 +23,8 @@ interface LeaseTermModifyProps {
 //动态数量
 //let index = 1;
 function LeaseTermModify(props: LeaseTermModifyProps) {
-  const { isValidate,  form, chargeFeeList } = props;
-  
+  const { isValidate, form, chargeFeeList } = props;
+
   const { getFieldDecorator, getFieldValue, setFieldsValue } = form;
   // const [priceUnit, setPriceUnit] = useState<string>("元/m²·天");//单价单位 
   const [mychargeFeeList, setMyChargeFeeList] = useState<ChargeFeeDetailDTO[]>([]);
@@ -189,6 +189,7 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
       data.rebateStartDate = values.rebateStartDate[index] ? values.rebateStartDate[index].format('YYYY-MM-DD') : null;
       data.rebateEndDate = values.rebateEndDate[index] ? values.rebateEndDate[index].format('YYYY-MM-DD') : null;
       data.rebateRemark = values.rebateRemark[index];
+      data.indexs = values.indexs[index];
       charge.chargeFee = data;
       TermJson.push(charge);
     }
@@ -224,6 +225,11 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
           extra={index > 0 ? <Icon type="minus-circle-o" onClick={() => remove(index)} /> : null}>
           <Row >
             <Col lg={24}>
+              {getFieldDecorator(`indexs[${index}]`, {
+                initialValue: index
+              })(
+                <input type='hidden' />
+              )}
               <Form.Item required>
                 {getFieldDecorator(`rooms[${index}]`, {
                   initialValue: k.rooms,
@@ -364,6 +370,7 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
                     <Option value="元/m²·天">元/m²·天</Option>
                     <Option value="元/月">元/月</Option>
                     <Option value="元/天">元/天</Option>
+                    <Option value="元">元</Option>
                   </Select>)}
               </Form.Item>
             </Col>
@@ -422,7 +429,7 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
                           form.getFieldValue(`priceUnit[${index}]`) == '元/月'
                         ))
                     }
-                    >
+                  >
                     <Option value="按年换算" >按年换算</Option>
                     <Option value="按自然月换算">按自然月换算</Option>
                   </Select>

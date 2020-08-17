@@ -147,10 +147,14 @@ function ResultList(props: ResultListProps) {
   const { index, form, chargeData } = props;
 
   //初始化
+  // useEffect(() => { 
+  //   if (chargeData)
+  //     //数据刷新
+  //     setMyChargeData(chargeData);
+  // }, [chargeData]);
+
   useEffect(() => {
-    if (chargeData)
-      //数据刷新
-      setMyChargeData(chargeData);
+    setMyChargeData(chargeData);
   }, [chargeData]);
 
   const { getFieldDecorator } = form;
@@ -311,10 +315,28 @@ function ResultList(props: ResultListProps) {
 
   getFieldDecorator('ChargeData', { initialValue: mychargeData });
 
+
+  //获取金额合计 
+  const getTotal = () => {
+    if (mychargeData) {
+
+      var lastAmount = 0;
+      mychargeData.map(item => {
+        lastAmount = mychargeData.reduce((sum, row) => { return sum + row.lastAmount; }, 0);
+      });  
+      return <a>{'未收金额合计：' + lastAmount}</a>;
+    }
+    else {
+      return '';
+    }
+  }
+
   return (
     // <div> 
     //   <Card title="费用" className={className} hoverable>
     <Table
+
+      title={getTotal}
       components={components}
       rowClassName={styles.editablerow}
       // rowClassName={() => 'editable-row'}
@@ -326,14 +348,14 @@ function ResultList(props: ResultListProps) {
       columns={eidtColumns}
       dataSource={mychargeData}
 
-      // summary={() => (
-      //   <Table.Summary.Row>
-      //     <Table.Summary.Cell index={0}>Summary</Table.Summary.Cell>
-      //     <Table.Summary.Cell index={1}>This is a summary content</Table.Summary.Cell>
-      //   </Table.Summary.Row>
-      // )}
+    // summary={() => (
+    //   <Table.Summary.Row>
+    //     <Table.Summary.Cell index={0}>Summary</Table.Summary.Cell>
+    //     <Table.Summary.Cell index={1}>This is a summary content</Table.Summary.Cell>
+    //   </Table.Summary.Row>
+    // )}
 
-      
+
     />
     //   </Card>
     // </div >
