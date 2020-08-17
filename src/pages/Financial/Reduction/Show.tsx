@@ -1,10 +1,11 @@
 
-import { Table, Button, Card, Col, Drawer, Form, Row } from 'antd';
+import {notification, Table, Button, Card, Col, Drawer, Form, Row } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { GetFormJson, GetListById } from './Main.service';
+import { PrintByType } from '../../System/Template/Main.service';
 import moment from 'moment';
 // const { TextArea } = Input;
 import styles from './style.less';
@@ -65,6 +66,26 @@ const Show = (props: ShowProps) => {
       form.setFieldsValue({});
     }
   }, [modalVisible]);
+
+
+     //打印
+     const print = () => {
+      setLoading(true);
+      PrintByType(id, '减免单', infoDetail.organizeId).then(res => {
+        //window.location.href = res;
+        window.open(res);
+        //setLoading(false);
+      }).catch(e => {
+        //message.warn(e);
+        notification.warning({
+          message: '系统提示',
+          description: e
+        });
+  
+      }).finally(() => {
+        setLoading(false);
+      });
+    }
 
   const changePage = (pagination: PaginationConfig, filters, sorter) => {
     loadData(pagination, sorter);
@@ -280,6 +301,10 @@ const Show = (props: ShowProps) => {
         <Button style={{ marginRight: 8 }} onClick={() => closeModal()}
         >
           关闭
+        </Button>
+         {/* 直接获取模板，不弹出选择，减少操作 */}
+         <Button onClick={print} type="primary">
+          打印
         </Button>
       </div>
     </Drawer>

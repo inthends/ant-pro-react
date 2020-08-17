@@ -5,7 +5,7 @@ import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { GetEntityShow, ChargeFeeDetail } from './Main.service';
-import { Print2 } from '../../System/Template/Main.service';
+import { PrintReceive } from '../../System/Template/Main.service';
 import moment from 'moment';
 import styles from './style.less';
 // import SelectTemplate from '../../System/Template/SelectTemplate'
@@ -171,7 +171,7 @@ const BillShow = (props: BillShowProps) => {
   //打印
   const print = () => {
     setLoading(true);
-    Print2(id, '收款单', infoDetail.unitId).then(res => {
+    PrintReceive(id, '收款单', infoDetail.unitId).then(res => {
       //window.location.href = res;
       window.open(res);
       //setLoading(false);

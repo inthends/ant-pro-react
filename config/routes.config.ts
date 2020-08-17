@@ -239,8 +239,8 @@ export default [
             path: '/financial/lastschrift',
             icon: 'export',
             component: './Financial/Lastschrift/Main',
-          },
-        ],
+          }
+        ]
       },
       //行政管理
       {

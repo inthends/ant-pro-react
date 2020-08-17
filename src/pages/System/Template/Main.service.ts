@@ -42,7 +42,13 @@ export function Print(keyvalue, templateId): Promise<any> {
   return request.post(process.env.basePath + `/Template/Print?keyvalue=${keyvalue}&templateId=${templateId}`).then(getResult as any);
 }
 
-//自动获取模板打印
-export function Print2(keyvalue, templateType, unitId): Promise<any> {
-  return request.post(process.env.basePath + `/Template/Print2?keyvalue=${keyvalue}&templateType=${templateType}&unitId=${unitId}`).then(getResult as any);
+ 
+//打印收款单
+export function PrintReceive(keyvalue, templateType, unitId): Promise<any> {
+  return request.post(process.env.basePath + `/Template/PrintReceive?keyvalue=${keyvalue}&templateType=${templateType}&unitId=${unitId}`).then(getResult as any);
+}
+
+//根据机构来获取打印模板
+export function PrintByType(keyvalue, templateType, organizeId): Promise<any> {
+  return request.post(process.env.basePath + `/Template/PrintByType?keyvalue=${keyvalue}&templateType=${templateType}&organizeId=${organizeId}`).then(getResult as any);
 }

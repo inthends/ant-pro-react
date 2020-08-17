@@ -1,10 +1,11 @@
 //查看冲抵单
-import { Spin, Card, Button, Col, Drawer, Form, Row, Table } from 'antd';
+import {notification, Spin, Card, Button, Col, Drawer, Form, Row, Table } from 'antd';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import { GetFormJson, GetListByID } from './Offset.service';
+import { PrintByType } from '../../System/Template/Main.service';
 import styles from './style.less';
 import moment from 'moment';
 
@@ -65,6 +66,25 @@ const Show = (props: ShowProps) => {
     // }
 
   }, [showVisible]);
+
+     //打印
+     const print = () => {
+      setLoading(true);
+      PrintByType(id, '冲抵单', infoDetail.organizeId).then(res => {
+        //window.location.href = res;
+        window.open(res);
+        //setLoading(false);
+      }).catch(e => {
+        //message.warn(e);
+        notification.warning({
+          message: '系统提示',
+          description: e
+        });
+  
+      }).finally(() => {
+        setLoading(false);
+      });
+    }
 
 
   const initLoad = (keyvalue) => {
@@ -282,7 +302,7 @@ const Show = (props: ShowProps) => {
       key: 'billFeeName',
       width: 140,
       sorter: true,
-    }, 
+    },
     {
       title: '冲抵金额',
       dataIndex: 'offsetAmount',
@@ -324,7 +344,7 @@ const Show = (props: ShowProps) => {
       dataIndex: 'allName',
       key: 'allName',
     }
-  ] as ColumnProps<any>[];
+  ] as ColumnProps<any>[]; 
 
   return (
     <Drawer
@@ -418,6 +438,12 @@ const Show = (props: ShowProps) => {
         >
           关闭
         </Button>
+
+        {/* 直接获取模板，不弹出选择，减少操作 */}
+        <Button onClick={print} type="primary">
+          打印
+        </Button>
+
         {/* <Button type="primary"
           onClick={() => onSave()}
         >
