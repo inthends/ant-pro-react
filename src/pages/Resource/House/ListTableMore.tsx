@@ -269,7 +269,7 @@ function ListTableMore(props: ListTableMoreProps) {
         columns={type >= 4 ? roomcolumns : columns}
         rowKey={record => record.id}
         pagination={pagination}
-        scroll={{ x: 1300 }}
+        scroll={{ x: 1400 }}
         onChange={(pag: PaginationConfig, filters, sorter) => changePage(pag, filters, sorter)}
         loading={loading}
       />
