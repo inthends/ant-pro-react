@@ -1,10 +1,11 @@
 //快速冲抵
-import { Table, Spin, message, Card, Button, Drawer, Form, Row, Col } from 'antd';
+import { notification, Table, Spin, message, Card, Button, Drawer, Form, Row, Col } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { DefaultPagination } from '@/utils/defaultSetting';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import { NotPaymentFeeData, NotChargeFeeData, OffsetBilling } from './Main.service';
+import { PrintByUnitId } from '../../System/Template/Main.service';
 import moment from 'moment';
 import styles from './style.less';
 
@@ -269,12 +270,33 @@ const Offset = (props: OffsetProps) => {
     };
 
     OffsetBilling(data).then(res => {
-      setLoading(false);
+      //setLoading(false);
       message.success('提交成功');
+
+      if (res.id != '') {
+        //弹出打印
+        PrintByUnitId(res.id, '冲抵单', unitId).then(res => {
+          //window.location.href = res;
+          window.open(res);
+          //setLoading(false);
+        }).catch(e => {
+          //message.warn(e);
+          notification.warning({
+            message: '系统提示',
+            description: e
+          });
+
+        }).finally(() => {
+          setLoading(false);
+        });
+      }
+
       reload();
       close();
     });
   }
+
+
 
   const [isSubmitDisabled, setSubmitDisabled] = useState<boolean>(true);
 
@@ -303,7 +325,7 @@ const Offset = (props: OffsetProps) => {
                 columns={columns}
                 rowKey={record => record.billId}
                 pagination={notPaymentPagination}
-                scroll={{ y: 800  }}
+                scroll={{ y: 800 }}
                 onChange={(pagination: PaginationConfig, filters, sorter) =>
                   loadNotPaymentData(pagination, sorter)
                 }
@@ -325,7 +347,7 @@ const Offset = (props: OffsetProps) => {
                 columns={columnsreceive}
                 rowKey={record => record.id}
                 pagination={pagination}
-                scroll={{ y: 800  }}
+                scroll={{ y: 800 }}
                 onChange={(pagination: PaginationConfig, filters, sorter) =>
                   loadData(pagination, sorter)
                 }

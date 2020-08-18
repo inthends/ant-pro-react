@@ -43,12 +43,12 @@ export function Print(keyvalue, templateId): Promise<any> {
 }
 
  
-//打印收款单
-export function PrintReceive(keyvalue, templateType, unitId): Promise<any> {
-  return request.post(process.env.basePath + `/Template/PrintReceive?keyvalue=${keyvalue}&templateType=${templateType}&unitId=${unitId}`).then(getResult as any);
+//根据房屋Id获取打印模板
+export function PrintByUnitId(keyvalue, templateType, unitId): Promise<any> {
+  return request.post(process.env.basePath + `/Template/PrintByUnitId?keyvalue=${keyvalue}&templateType=${templateType}&unitId=${unitId}`).then(getResult as any);
 }
 
 //根据机构来获取打印模板
-export function PrintByType(keyvalue, templateType, organizeId): Promise<any> {
-  return request.post(process.env.basePath + `/Template/PrintByType?keyvalue=${keyvalue}&templateType=${templateType}&organizeId=${organizeId}`).then(getResult as any);
+export function PrintByOrganizeId(keyvalue, templateType, organizeId): Promise<any> {
+  return request.post(process.env.basePath + `/Template/PrintByOrganizeId?keyvalue=${keyvalue}&templateType=${templateType}&organizeId=${organizeId}`).then(getResult as any);
 }

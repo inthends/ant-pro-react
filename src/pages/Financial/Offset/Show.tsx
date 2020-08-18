@@ -5,7 +5,7 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import { GetFormJson, GetListByID } from './Offset.service';
-import { PrintByType } from '../../System/Template/Main.service';
+import { PrintByOrganizeId } from '../../System/Template/Main.service';
 import styles from './style.less';
 import moment from 'moment';
 
@@ -70,7 +70,7 @@ const Show = (props: ShowProps) => {
      //打印
      const print = () => {
       setLoading(true);
-      PrintByType(id, '冲抵单', infoDetail.organizeId).then(res => {
+      PrintByOrganizeId(id, '冲抵单', infoDetail.organizeId).then(res => {
         //window.location.href = res;
         window.open(res);
         //setLoading(false);

@@ -5,7 +5,7 @@ import { ColumnProps, PaginationConfig } from 'antd/lib/table';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import React, { useEffect, useState } from 'react';
 import { GetFormJson, GetListById } from './Main.service';
-import { PrintByType } from '../../System/Template/Main.service';
+import { PrintByOrganizeId } from '../../System/Template/Main.service';
 import moment from 'moment';
 // const { TextArea } = Input;
 import styles from './style.less';
@@ -71,7 +71,7 @@ const Show = (props: ShowProps) => {
      //打印
      const print = () => {
       setLoading(true);
-      PrintByType(id, '减免单', infoDetail.organizeId).then(res => {
+      PrintByOrganizeId(id, '减免单', infoDetail.organizeId).then(res => {
         //window.location.href = res;
         window.open(res);
         //setLoading(false);
