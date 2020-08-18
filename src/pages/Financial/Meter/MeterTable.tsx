@@ -40,6 +40,7 @@ function MeterTable(props: MeterTableProps) {
       dataIndex: 'meterName',
       key: 'meterName',
       width: 280,
+      fixed:'left',
       sorter: true,  
     },
     {
@@ -138,7 +139,7 @@ function MeterTable(props: MeterTableProps) {
         dataSource={data}
         rowKey="meterid"
         pagination={pagination}
-        scroll={{ y: 500 }}
+        scroll={{ y: 500,x:1200 }}
         loading={loading}
         onChange={onchange}
       />
