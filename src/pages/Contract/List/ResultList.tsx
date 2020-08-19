@@ -330,7 +330,7 @@ function ResultList(props: ResultListProps) {
       mychargeData.map(item => {
         lastAmount = mychargeData.reduce((sum, row) => { return sum + row.lastAmount; }, 0);
       });  
-      return <a>{'未收金额合计：' + lastAmount}</a>;
+      return <a>{'未收金额合计：' + lastAmount.toFixed(2)}</a>;
     }
     else {
       return '';

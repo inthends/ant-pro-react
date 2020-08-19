@@ -99,7 +99,10 @@ function LeaseTerm(props: LeaseTermProps) {
               : res.chargeData
           });
           // chargeFeeList[index].chargeData = res.chargeData;
-          chargeFeeList[index] = res;
+          chargeFeeList[index].chargeFee = res.chargeFee;
+          chargeFeeList[index].rooms = res.rooms;
+          chargeFeeList[index].feeItems = res.feeItems;
+          chargeFeeList[index].chargeData = res.chargeData;
           setChargeFeeList([...chargeFeeList]);//必须展开，否则值不更新
         });
       }
@@ -188,8 +191,7 @@ function LeaseTerm(props: LeaseTermProps) {
     setFieldsValue({
       LeaseTerms: nextKeys,
     });
-
-
+ 
     // chargeFeeList.push({
     //   rooms: [],
     //   feeItems: [],
@@ -197,9 +199,15 @@ function LeaseTerm(props: LeaseTermProps) {
     //   chargeData: []
     // });
 
-    //复制第一个条款的内容，减少输入
-    var newItem = chargeFeeList[0];
-    chargeFeeList.push(newItem);
+    //复制第一个条款的内容，减少输入 
+    chargeFeeList.push(
+      {
+        chargeFee: chargeFeeList[0].chargeFee,
+        rooms: chargeFeeList[0].rooms,
+        feeItems: chargeFeeList[0].feeItems,
+        chargeData: []//清除计费，以便计算
+      }
+    );
 
     // setChargeFeeList([...chargeFeeList]);
     setChargeFeeList(chargeFeeList);
@@ -374,7 +382,7 @@ function LeaseTerm(props: LeaseTermProps) {
             {getFieldDecorator(`feeItemName[${k}]`, {
             })(
               <input type='hidden' />
-            )} 
+            )}
             {getFieldDecorator(`feeItems[${k}]`, {
             })(
               <input type='hidden' />

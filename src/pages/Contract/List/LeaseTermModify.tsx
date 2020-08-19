@@ -80,16 +80,20 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
     // }); 
 
     if (mychargeFeeList.length > 0) {
-      //复制第一个条款的内容，减少输入
-      var newItem = mychargeFeeList[0];
-      mychargeFeeList.push(newItem);
+      //复制第一个条款的内容，减少输入 
+      mychargeFeeList.push({
+        chargeFee: mychargeFeeList[0].chargeFee,
+        rooms: mychargeFeeList[0].rooms,
+        feeItems: mychargeFeeList[0].feeItems, 
+        chargeData: []//清除计费，以便计算
+      });
 
     }
     else {
       mychargeFeeList.push({
-        rooms: [],
-        feeItems: [],
         chargeFee: {},
+        rooms: [],
+        feeItems: [], 
         chargeData: []
       });
     }
@@ -145,9 +149,13 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
               : res.dataInfo.chargeData
           });
 
-          //mychargeFeeList[index].chargeData = res.dataInfo.chargeData;
+
+          //mychargeFeeList[index].chargeFee = res.dataInfo.chargeFee;
+          // mychargeFeeList[index].rooms = res.dataInfo.rooms;
+          // mychargeFeeList[index].feeItems = res.dataInfo.feeItems;
+          //mychargeFeeList[index].chargeData = res.dataInfo.chargeData;  
           mychargeFeeList[index] = res.dataInfo;
-          setMyChargeFeeList([...mychargeFeeList]);//必须展开，否则值不更新
+          setMyChargeFeeList([...mychargeFeeList]);//必须展开，否则值不更新  
 
           setLoading(false);
         });
@@ -669,13 +677,13 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
           >点击生成费用明细</Button>
           <ResultList
             form={form}
-            chargeData={chargeFeeList[index] ? chargeFeeList[index].chargeData : []}
+            chargeData={mychargeFeeList[index] ? mychargeFeeList[index].chargeData : []}
             className={styles.addcard}
             index={index}
           ></ResultList>
           {/* 存放费用明细 */}
           {getFieldDecorator(`chargeData[${index}]`, {
-            initialValue: chargeFeeList[index] ? chargeFeeList[index].chargeData : []
+            initialValue: mychargeFeeList[index] ? mychargeFeeList[index].chargeData : []
           })(
             <input type='hidden' />
           )}
