@@ -149,7 +149,7 @@ function LeaseTerm(props: LeaseTermProps) {
       //条款序号
       data.indexs = values.indexs[index];
 
-      charge.chargeFee = data; 
+      charge.chargeFee = data;
 
       TermJson.push(charge);
     }
@@ -186,12 +186,18 @@ function LeaseTerm(props: LeaseTermProps) {
       LeaseTerms: nextKeys,
     });
 
-    chargeFeeList.push({
-      rooms: [],
-      feeItems: [],
-      chargeFee: {},
-      chargeData: []
-    });
+
+    // chargeFeeList.push({
+    //   rooms: [],
+    //   feeItems: [],
+    //   chargeFee: {},
+    //   chargeData: []
+    // });
+
+    //复制第一个条款的内容，减少输入
+    var newItem = chargeFeeList[0]; 
+    chargeFeeList.push(newItem);
+
     // setChargeFeeList([...chargeFeeList]);
     setChargeFeeList(chargeFeeList);
     //当前激活的条款序号

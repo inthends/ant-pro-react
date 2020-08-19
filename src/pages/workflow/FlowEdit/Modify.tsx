@@ -147,7 +147,7 @@ const Modify = (props: ModifyProps) => {
           <Col span={3} className={styles.editorSidebar}>
             <FlowItemPanel />
           </Col>
-          <Col span={16} className={styles.editorContent}>
+          <Col span={15} className={styles.editorContent}>
             <Flow className={styles.flow}
               graph={{ edgeDefaultShape: 'flow-polyline' }}
               // data={
@@ -163,7 +163,7 @@ const Modify = (props: ModifyProps) => {
               }}
             />
           </Col>
-          <Col span={5} className={styles.editorSidebar}>
+          <Col span={6} className={styles.editorSidebar}>
             <FlowDetailPanel roles={roles} />
             <EditorMinimap />
           </Col>

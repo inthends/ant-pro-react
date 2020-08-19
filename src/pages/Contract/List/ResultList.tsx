@@ -218,7 +218,7 @@ function ResultList(props: ResultListProps) {
     },
     {
       title: '最终单价',
-      width: 65,
+      width: 70,
       render: (text, row, index) => {
         return row.price + row.priceUnit;
         // let unit = '';

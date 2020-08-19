@@ -28,12 +28,12 @@ function ResultListView(props: ResultListViewProps) {
       dataIndex: 'feeItemName',
       key: 'feeItemName',
       width: 120,
-      render: (text, record) => {
-        if (record.isReduction)
-          return <span>{text + ' '}<span style={{ color: 'red', fontSize: '4px', verticalAlign: 'super' }}>免</span></span>;
-        else
-          return text;
-      }
+      // render: (text, record) => {
+      //   if (record.isReduction)
+      //     return <span>{text + ' '}<span style={{ color: 'red', fontSize: '4px', verticalAlign: 'super' }}>免</span></span>;
+      //   else
+      //     return text;
+      // }
     },
     {
       title: '付款日',

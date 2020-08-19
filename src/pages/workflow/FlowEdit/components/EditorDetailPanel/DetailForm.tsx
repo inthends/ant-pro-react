@@ -11,7 +11,7 @@ const { Option } = Select;
 
 const inlineFormItemLayout = {
   labelCol: {
-    sm: { span: 8 },
+    sm: { span: 6 },
   },
   wrapperCol: {
     sm: { span: 16 },
@@ -72,13 +72,13 @@ class DetailForm extends React.Component<DetailFormProps> {
         <Item label="名称" {...inlineFormItemLayout}>
           {form.getFieldDecorator('label', {
             initialValue: label,
-          })(<Input onBlur={this.handleSubmit} disabled={shape == 'flow-circle' || shape == 'flow-capsule' ? true : false} />)}
+          })(<Input onBlur={this.handleSubmit}  style={{width:'150px'}} disabled={shape == 'flow-circle' || shape == 'flow-capsule' ? true : false} />)}
         </Item>
         {shape == 'flow-circle' || shape == 'flow-capsule' ? null :
           <Item label="审批人" {...inlineFormItemLayout}  >
             {form.getFieldDecorator('user', {
               initialValue: user,
-            })(<Select onChange={this.handleSubmit} >
+            })(<Select onChange={this.handleSubmit} style={{width:'150px'}} >
               {roles.roles.map(item => (
                 <Option key={item.roleId} value={item.roleId}>
                   {item.fullName}
@@ -133,7 +133,9 @@ class DetailForm extends React.Component<DetailFormProps> {
     }
 
     return (
-      <Card type="inner" size="small" title={upperFirst(type)} bordered={false}>
+      <Card type="inner" size="small"
+      //  title={upperFirst(type)}
+       bordered={false}>
         <Form onSubmit={this.handleSubmit}>
           {type === 'node' && this.renderNodeDetail()}
           {type === 'edge' && this.renderEdgeDetail()}

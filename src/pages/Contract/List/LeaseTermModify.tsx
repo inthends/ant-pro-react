@@ -79,12 +79,16 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
     //   LeaseTerms: nextKeys,
     // });
 
-    mychargeFeeList.push({
-      rooms: [],
-      feeItems: [],
-      chargeFee: {},
-      chargeData: []
-    });
+    // mychargeFeeList.push({
+    //   rooms: [],
+    //   feeItems: [],
+    //   chargeFee: {},
+    //   chargeData: []
+    // });
+
+    //复制第一个条款的内容，减少输入
+    var newItem = mychargeFeeList[0]; 
+    mychargeFeeList.push(newItem);
 
     setMyChargeFeeList(mychargeFeeList);
     setFieldsValue({ LeaseTerms: mychargeFeeList });
