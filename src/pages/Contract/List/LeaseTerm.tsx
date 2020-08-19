@@ -98,7 +98,8 @@ function LeaseTerm(props: LeaseTermProps) {
             ['chargeData[' + index + ']']
               : res.chargeData
           });
-          chargeFeeList[index].chargeData = res.chargeData;
+          // chargeFeeList[index].chargeData = res.chargeData;
+          chargeFeeList[index] = res;
           setChargeFeeList([...chargeFeeList]);//必须展开，否则值不更新
         });
       }
@@ -117,8 +118,7 @@ function LeaseTerm(props: LeaseTermProps) {
     let data: HtLeasecontractchargefee = {};
     //如果没有选择房源，则不添加改条款
     if (values.rooms[index] != null) {
-      //添加房屋
-      charge.rooms = values.rooms[index];
+
       data.feeItemId = values.feeItemId[index];
       data.feeItemName = values.feeItemName[index];
       data.chargeStartDate = values.chargeStartDate[index] ? values.chargeStartDate[index].format('YYYY-MM-DD') : null;
@@ -149,7 +149,10 @@ function LeaseTerm(props: LeaseTermProps) {
       //条款序号
       data.indexs = values.indexs[index];
 
+      //添加房屋
+      charge.rooms = values.rooms[index];
       charge.chargeFee = data;
+      charge.feeItems = values.feeItems[index];
 
       TermJson.push(charge);
     }
@@ -195,7 +198,7 @@ function LeaseTerm(props: LeaseTermProps) {
     // });
 
     //复制第一个条款的内容，减少输入
-    var newItem = chargeFeeList[0]; 
+    var newItem = chargeFeeList[0];
     chargeFeeList.push(newItem);
 
     // setChargeFeeList([...chargeFeeList]);
@@ -369,6 +372,10 @@ function LeaseTerm(props: LeaseTermProps) {
               </Select>
             )}
             {getFieldDecorator(`feeItemName[${k}]`, {
+            })(
+              <input type='hidden' />
+            )} 
+            {getFieldDecorator(`feeItems[${k}]`, {
             })(
               <input type='hidden' />
             )}
@@ -799,6 +806,13 @@ function LeaseTerm(props: LeaseTermProps) {
               })(
                 <input type='hidden' />
               )}
+
+
+              {getFieldDecorator(`feeItems[0]`, {
+              })(
+                <input type='hidden' />
+              )}
+
             </Form.Item>
           </Col>
 
@@ -1114,6 +1128,12 @@ function LeaseTerm(props: LeaseTermProps) {
 
           items[roomIndex].rooms = list;
           //let tree: TreeEntity = { key: 'test', value: 'test', title: 'test' }; 
+
+
+          form.setFieldsValue({
+            ['feeItems[' + roomIndex + ']']
+              : feeItems
+          });
           items[roomIndex].feeItems = feeItems; //[ { key: 'test', value: 'test', title: 'test' }];  
           setChargeFeeList(items);
         }}

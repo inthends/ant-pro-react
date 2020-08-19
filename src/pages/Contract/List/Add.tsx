@@ -1063,7 +1063,7 @@ const Add = (props: AddProps) => {
                       })(
                         <Select
                           allowClear
-                          placeholder="==选择==" onChange={value => {
+                          placeholder="==请选择==" onChange={value => {
                             if (value == 1) {
                               setLateFixedDisabled(true);
                             } else {

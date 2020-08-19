@@ -38,7 +38,7 @@ function ListTable(props: ListTableProps) {
       title: '服务单号',
       dataIndex: 'billCode',
       key: 'billCode',
-      width: 260,
+      width: 230,
       sorter: true,
       fixed: 'left'
     },
@@ -46,7 +46,7 @@ function ListTable(props: ListTableProps) {
       title: '业务类型',
       dataIndex: 'billType',
       key: 'billType',
-      width: 100,
+      width: 120,
       sorter: true,
     },
     {
@@ -202,7 +202,7 @@ function ListTable(props: ListTableProps) {
         columns={columns}
         rowKey={record => record.id}
         pagination={pagination}
-        scroll={{ x: 1850 }}
+        scroll={{ x: 1850,y:600 }}
         onChange={(pag: PaginationConfig, filters, sorter) => changePage(pag, filters, sorter)}
         loading={loading}
       />

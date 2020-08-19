@@ -111,9 +111,11 @@ function Main() {
   };
 
   const loadData = (
-    searchParam: any,
+    searchParam: SearchParam,
     paginationConfig?: PaginationConfig,
     sorter?) => {
+
+    setSearch(searchParam);
 
     // setSearch(searchText);
     // setStatus(status);
@@ -240,7 +242,7 @@ function Main() {
           <Select placeholder="=单据状态="
             allowClear={true}
             style={{ width: '125px', marginRight: '5px' }}
-            onChange={status => loadData({ ...search, status })}>
+            onChange={(status:string) => loadData({ ...search, status })}>
             <Option value="1">待处理</Option>
             <Option value="2" >待完成</Option>
             <Option value="3">待回访</Option>
@@ -252,7 +254,7 @@ function Main() {
           <Select placeholder="=单据来源="
             allowClear={true}
             style={{ width: '125px', marginRight: '5px' }}
-            onChange={source => loadData({ ...search, source })}>
+            onChange={(source:string) => loadData({ ...search, source })}>
             <Option value="服务总台">服务总台</Option>
             <Option value="社区APP">社区APP</Option>
             <Option value="微信公众号">微信公众号</Option>
@@ -262,7 +264,7 @@ function Main() {
           <Select placeholder="=服务类型="
             allowClear={true}
             style={{ width: '125px', marginRight: '5px' }}
-            onChange={billType => loadData({ ...search, billType })}>
+            onChange={(billType:string) => loadData({ ...search, billType })}>
             <Option value="咨询">咨询</Option>
             <Option value="建议">建议</Option>
             <Option value="报修">报修</Option>
@@ -271,12 +273,12 @@ function Main() {
 
           <DatePicker
             placeholder='单据日期起'
-            onChange={(data,billDateBegin) => loadData({ ...search, billDateBegin })}
+            onChange={(data, billDateBegin) => loadData({ ...search, billDateBegin })}
             style={{ marginRight: '5px', width: '130px' }} />
               至
               <DatePicker
             placeholder='单据日期止'
-            onChange={(date,billDateEnd) => loadData({ ...search, billDateEnd })}
+            onChange={(date, billDateEnd) => loadData({ ...search, billDateEnd })}
             style={{ marginLeft: '5px', marginRight: '5px', width: '130px' }} />
 
           <Button type="primary" style={{ float: 'right' }} onClick={() => showDrawer()}>
