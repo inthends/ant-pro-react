@@ -273,11 +273,11 @@ const Offset = (props: OffsetProps) => {
       //setLoading(false);
       message.success('提交成功');
 
-      if (res.id != '') {
+      if (res != '') {
         //弹出打印
-        PrintByUnitId(res.id, '冲抵单', unitId).then(res => {
+        PrintByUnitId(res, '冲抵单', unitId).then(url => {
           //window.location.href = res;
-          window.open(res);
+          window.open(url);
           //setLoading(false);
         }).catch(e => {
           //message.warn(e);
