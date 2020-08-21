@@ -553,7 +553,7 @@ function Main() {
 
   //收款人
   const [userSource, setUserSource] = useState<any[]>([]);
-  const handleSearch = value => {
+  const handleSearch = value => { 
     if (value == '')
       return;
     GetUserList(value, '员工').then(res => {
@@ -561,14 +561,15 @@ function Main() {
     })
   };
   const userList = userSource.map
-    (item => <Option key={item.id} value={item.userId}>{item.name}</Option>);
+    //(item => <Option key={item.id} value={item.userId}>{item.name}</Option>);
+    (item => <Option key={item.id} value={item.id}>{item.name}</Option>);
 
   // const onReceiverNameSelect = (value, option) => {
   //   var params = Object.assign({}, chargedSearchParams, { receiverId: option.key });
   //   setChargedSearchParams(params);
   // };
 
-  const onReceiverNameChange = (value) => {
+  const onReceiverNameChange = (value) => { 
     var params = Object.assign({}, chargedSearchParams, { receiverId: value });
     setChargedSearchParams(params);
   };
