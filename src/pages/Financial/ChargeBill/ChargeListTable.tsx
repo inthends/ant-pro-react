@@ -130,12 +130,51 @@ function ChargeListTable(props: ChargeListTableProps) {
       width: 80,
       sorter: true,
     },
+
     {
-      title: '收款金额',
-      dataIndex: 'payAmount',
-      key: 'payAmount',
-      width: 80,
-    }, {
+      title: '收款方式A',
+      dataIndex: 'payTypeA',
+      key: 'payAmountA',
+      width: 100,
+    },
+
+    {
+      title: '收款金额A',
+      dataIndex: 'payAmountA',
+      key: 'payAmountA',
+      width: 100,
+    },
+
+    {
+      title: '收款方式B',
+      dataIndex: 'payTypeB',
+      key: 'payAmountB',
+      width: 100,
+    },
+
+    {
+      title: '收款金额B',
+      dataIndex: 'payAmountB',
+      key: 'payAmountB',
+      width: 100,
+    },
+
+    
+    {
+      title: '收款方式C',
+      dataIndex: 'payTypeC',
+      key: 'payAmountC',
+      width: 100,
+    },
+
+    {
+      title: '收款金额C',
+      dataIndex: 'payAmountC',
+      key: 'payAmountC',
+      width: 100,
+    }
+
+    , {
       title: '收据编号',
       dataIndex: 'payCode',
       key: 'payCode',
@@ -160,16 +199,16 @@ function ChargeListTable(props: ChargeListTableProps) {
           case 1:
             return <Tag color="#19d54e">已收</Tag>;
           case 2:
-            return <Tag color="#19d54e">冲红</Tag>;
+            return <Tag color="#DF3A01">已冲红</Tag>;
           case -1:
-            return <Tag color="#e4aa5b">作废</Tag>;
+            return <Tag color="#e4aa5b">已作废</Tag>;
           default:
             return '';
         }
       }
     },
     {
-      title: '单据状态',
+      title: '审核状态',
       dataIndex: 'ifVerify',
       key: 'ifVerify',
       align: 'center',
@@ -180,11 +219,11 @@ function ChargeListTable(props: ChargeListTableProps) {
           case 0:
             return <Tag color="#D7443A">待审核</Tag>;
           case 1:
-            return <Tag color="#19d54e">已审核</Tag>;
+            return <Tag color="#088A29">已审核</Tag>;
           case 2:
-            return <Tag color="#e4aa4b">已送审</Tag>;
+            return <Tag color="#088A85">已送审</Tag>;
           case 3:
-            return <Tag color="#19d54e">已复核</Tag>;
+            return <Tag color="#0489B1">已复核</Tag>;
           default:
             return '';
         }
@@ -305,7 +344,7 @@ function ChargeListTable(props: ChargeListTableProps) {
         columns={columns}
         rowKey={record => record.billId}
         pagination={pagination}
-        scroll={{ y: 500, x: 1900 }}
+        scroll={{ y: 500, x: 2100 }}
         rowClassName={setClassName} //表格行点击高亮
         loading={loading}
         onRow={onRow}

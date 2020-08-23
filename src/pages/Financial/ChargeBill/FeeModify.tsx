@@ -42,7 +42,6 @@ const FeeModify = (props: FeeModifyProps) => {
     if (modifyVisible) {
       setLoading(true);
       setSelectedKeys([]);
-      setUnitId(roomId);
 
       if (id) {
 
@@ -75,29 +74,42 @@ const FeeModify = (props: FeeModifyProps) => {
         //   }
         // });
 
-        //加载数据
-        GetRoomUsers(roomId).then(res => {
-          setRelationIds(res);
-          GetShowDetail(id).then(info => {
-            // let info = value.entity;
-            // info.number = value.number;  
+
+        //加载费用详情
+        GetShowDetail(id).then(info => {
+          // let info = value.entity;
+          // info.number = value.number;   
+
+          //加载收费对象
+          GetRoomUsers(info.unitId).then(res => {
+
+            setRelationIds(res);
             let customerid = '';
             for (var i = 0; i < res.length; i++) {
               if (res[i].key == info.relationId) {
                 customerid = res[i].attributeA;
               }
             }
+
+            //加载收费对象房屋
             GetUserRooms(customerid).then(urooms => {
               setUnitIds(urooms);
+
+              //赋值
+              setInfoDetail(info);
+              setLoading(false);
+
             });
-            //赋值
-            setInfoDetail(info);
-            setLoading(false);
-          })
-        });
+            
+          });
+
+        })
+
 
       } else {
 
+        //新增的时候，获取左侧树选择的房间id
+        setUnitId(roomId);
         //修改的时候不能修改费项，不加载费项
         GetReceivablesFeeItemTreeJson(roomId).then(res => {
           setFeeTreeData(res);
@@ -451,10 +463,10 @@ const FeeModify = (props: FeeModifyProps) => {
                           //需要刷新费项
                           GetReceivablesFeeItemTreeJson(key).then(res => {
                             setFeeTreeData(res);
-                            //加载加费对象，不能更改加费对象
-                            // GetRoomUsers(key).then(res => {
-                            //   setRelationIds(res);
-                            // });
+                            //加载加费对象
+                            GetRoomUsers(key).then(res => {
+                              setRelationIds(res);
+                            });
                             //清除费项树选中
                             setSelectedKeys([]);
                             setInfoDetail({});

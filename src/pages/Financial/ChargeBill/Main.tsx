@@ -1,5 +1,5 @@
 import { DefaultPagination } from '@/utils/defaultSetting';
-import { Tooltip,AutoComplete, Checkbox, Tabs, Button, Icon, Input, Layout, Select, DatePicker, message } from 'antd';
+import { Tooltip, AutoComplete, Checkbox, Tabs, Button, Icon, Input, Layout, Select, DatePicker, message } from 'antd';
 import { PaginationConfig } from 'antd/lib/table';
 import React, { useState } from 'react';
 import { NotChargeFeeData, ChargeFeePageData, ChargeCheckPageData, GetPayAmount } from './Main.service';
@@ -233,7 +233,8 @@ function Main() {
         Status: chargedSearchParams.status ? chargedSearchParams.status : '',
         StartDate: chargedSearchParams.startDate ? chargedSearchParams.startDate : '',
         EndDate: chargedSearchParams.endDate ? chargedSearchParams.endDate : '',
-        receiverId: chargedSearchParams.receiverId ? chargedSearchParams.receiverId : ''
+        receiverId: chargedSearchParams.receiverId ? chargedSearchParams.receiverId : '',
+        verify: chargedSearchParams.verify ? chargedSearchParams.verify : ''
       }
     };
     if (sorter) {
@@ -274,7 +275,8 @@ function Main() {
       Status: chargedSearchParams.status ? chargedSearchParams.status : '',
       StartDate: chargedSearchParams.startDate ? chargedSearchParams.startDate : '',
       EndDate: chargedSearchParams.endDate ? chargedSearchParams.endDate : '',
-      receiverId: chargedSearchParams.receiverId ? chargedSearchParams.receiverId : ''
+      receiverId: chargedSearchParams.receiverId ? chargedSearchParams.receiverId : '',
+      verify:chargedSearchParams.verify ? chargedSearchParams.verify : ''
     };
     const sidx = 'billDate';
     const sord = 'desc';
@@ -553,7 +555,7 @@ function Main() {
 
   //收款人
   const [userSource, setUserSource] = useState<any[]>([]);
-  const handleSearch = value => { 
+  const handleSearch = value => {
     if (value == '')
       return;
     GetUserList(value, '员工').then(res => {
@@ -569,7 +571,7 @@ function Main() {
   //   setChargedSearchParams(params);
   // };
 
-  const onReceiverNameChange = (value) => { 
+  const onReceiverNameChange = (value) => {
     var params = Object.assign({}, chargedSearchParams, { receiverId: value });
     setChargedSearchParams(params);
   };
@@ -696,8 +698,8 @@ function Main() {
             <div style={{ marginBottom: '10px' }}>
               <Search
                 className="search-input"
-                placeholder="搜索收款单号"
-                style={{ width: 180, marginRight: '5px' }}
+                placeholder="搜索收款单号、收据编号和发票编号"
+                style={{ width: 270, marginRight: '5px' }}
                 onChange={e => {
                   var params = Object.assign({}, chargedSearchParams, { search: e.target.value });
                   setChargedSearchParams(params);
@@ -712,7 +714,7 @@ function Main() {
                 onChange={onReceiverNameChange}
                 style={{ width: '120px', marginRight: '5px' }}
               />
-              <Select placeholder="收款单状态"
+              <Select placeholder="费用状态"
                 allowClear={true}
                 style={{ width: '120px', marginRight: '5px' }} onChange={(value) => {
                   var params = Object.assign({}, chargedSearchParams, { status: value });
@@ -724,11 +726,39 @@ function Main() {
                 <Option key='1' value='1'>
                   {'未审核'}
                 </Option> */}
+                <Option key='1' value='1'>
+                  {'已收'}
+                </Option>
                 <Option key='2' value='2'>
                   {'已冲红'}
                 </Option>
                 <Option key='-1' value='-1'>
                   {'已作废'}
+                </Option>
+              </Select>
+              <Select placeholder="审核状态"
+                allowClear={true}
+                style={{ width: '120px', marginRight: '5px' }} onChange={(value) => {
+                  var params = Object.assign({}, chargedSearchParams, { verify: value });
+                  setChargedSearchParams(params);
+                }} >
+                {/* <Option key='2' value='2'>
+                  {'已审核'}
+                </Option>
+                <Option key='1' value='1'>
+                  {'未审核'}
+                </Option> */}
+                <Option key='0' value='0'>
+                  {'待审核'}
+                </Option>
+                <Option key='1' value='1'>
+                  {'已审核'}
+                </Option>
+                <Option key='2' value='2'>
+                  {'已送审'}
+                </Option>
+                <Option key='3' value='3'>
+                  {'已复核'}
                 </Option>
               </Select>
               <DatePicker
