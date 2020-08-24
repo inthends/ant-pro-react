@@ -121,6 +121,8 @@ function Main() {
     // setBillDateBegin(billDateBegin);
     // setBillDateEnd(billDateEnd);
 
+    setSearch(searchParam);
+
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
       pageSize: pagination.pageSize,

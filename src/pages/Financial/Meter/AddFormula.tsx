@@ -36,6 +36,7 @@ const AddFormula = (props: AddFormulaProps) => {
   let memoRef = undefined;
 
   const InsterText = (value) => {
+
     const { textAreaRef } = inputRef;
     if (document.selection) {
       textAreaRef.focus();

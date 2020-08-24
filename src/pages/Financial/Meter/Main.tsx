@@ -45,8 +45,11 @@ function Main() {
   // const [meterTypes, setMeterTypes] = useState<any>([]); 
   const [ifVerify, setIfVerify] = useState<boolean>(false);
   const [verifyVisible, setVerifyVisible] = useState<boolean>(false);
-  const selectTree = (pid, type, info) => {
-    SetOrganize(info.node.props.dataRef);
+
+  const doSelect = (pid, type, info) => { 
+
+    var org = info.node.props.dataRef;
+    SetOrganize(org);
 
     // initMeterLoadData(info.node.props.dataRef, meterSearch, '');
     // initUnitMeterLoadData(info.node.props.dataRef, unitMeterSearch);
@@ -55,10 +58,10 @@ function Main() {
 
     //初始化页码，防止页码错乱导致数据查询出错  
     const page = new DefaultPagination();
-    loadMeterData(meterSearch, meterKind, page);
-    loadUnitMeterData(unitMeterSearch, page);
-    loadReadingMeterData(readingMeterSearch, page);
-    loadMeterFormsData(meterFormsSearch, page);
+    loadMeterData(meterSearch, meterKind,org, page);
+    loadUnitMeterData(unitMeterSearch,org,  page);
+    loadReadingMeterData(readingMeterSearch, org, page);
+    loadMeterFormsData(meterFormsSearch, org, page);
 
   };
 
@@ -94,7 +97,7 @@ function Main() {
     // })
   }, []);
 
-  const loadMeterData = (meterSearch, meterKind, paginationConfig?: PaginationConfig, sorter?) => {
+  const loadMeterData = (meterSearch, meterKind, org, paginationConfig?: PaginationConfig, sorter?) => {
     //赋值,必须，否则查询条件会不起作用 
     setMeterSearch(meterSearch);
     setMeterKind(meterKind);
@@ -110,8 +113,8 @@ function Main() {
       queryJson: {
         keyword: meterSearch,
         meterType: meterKind,
-        TreeTypeId: organize.id,
-        TreeType: organize.type,
+        TreeTypeId: org.organizeId,
+        TreeType: org.type,
       }
     };
 
@@ -123,7 +126,7 @@ function Main() {
     return meterload(searchCondition);
   };
 
-  const loadUnitMeterData = (search, paginationConfig?: PaginationConfig, sorter?) => {
+  const loadUnitMeterData = (search,org, paginationConfig?: PaginationConfig, sorter?) => {
     //赋值,必须，否则查询条件会不起作用 
     setUnitMeterSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
@@ -146,7 +149,7 @@ function Main() {
     return unitMeterload(searchCondition);
   };
 
-  const loadReadingMeterData = (search, paginationConfig?: PaginationConfig, sorter?) => {
+  const loadReadingMeterData = (search, org,paginationConfig?: PaginationConfig, sorter?) => {
     //赋值,必须，否则查询条件会不起作用 
     setReadingMeterSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
@@ -169,7 +172,7 @@ function Main() {
 
     return readingMeterload(searchCondition);
   }
-  const loadMeterFormsData = (search, paginationConfig?: PaginationConfig, sorter?) => {
+  const loadMeterFormsData = (search, org,paginationConfig?: PaginationConfig, sorter?) => {
     setMeterFormsSearch(search);
     const { current: pageIndex, pageSize, total } = paginationConfig || {
       current: 1,
@@ -491,7 +494,7 @@ function Main() {
       <AsynLeftTree
         parentid={'0'}
         selectTree={(pid, type, info) => {
-          selectTree(pid, type, info);
+          doSelect(pid, type, info);
         }}
       />
       <Content style={{ paddingLeft: '18px' }}>
@@ -509,7 +512,7 @@ function Main() {
                 onChange={value => {
                   // var params = Object.assign({}, meterSearchParams, { meterkind: value });
                   // setMeterSearchParams(params); 
-                  loadMeterData(meterSearch, value);
+                  loadMeterData(meterSearch, value,organize);
                 }}>
                 <Option value="单元表">单元表</Option>
                 <Option value="公用表" >公用表</Option>
@@ -522,7 +525,7 @@ function Main() {
                 onSearch={value => {
                   // var params = Object.assign({}, meterSearchParams, { search: e.target.value });
                   // setMeterSearchParams(params); 
-                  loadMeterData(value, meterKind);
+                  loadMeterData(value, meterKind,organize);
                 }}
               />
               {/* <Button type="primary" style={{ marginLeft: '10px' }}
@@ -565,7 +568,7 @@ function Main() {
                 className="search-input"
                 placeholder="搜索费表名和编号"
                 style={{ width: 200 }}
-                onSearch={value => loadUnitMeterData(value)}
+                onSearch={value => loadUnitMeterData(value,organize)}
               />
 
               <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
@@ -592,7 +595,7 @@ function Main() {
                 className="search-input"
                 placeholder="搜索抄表单号"
                 style={{ width: 200 }}
-                onSearch={value => loadReadingMeterData(value)}
+                onSearch={value => loadReadingMeterData(value,organize)}
               />
               {/* <Button type="primary" style={{ float: 'right', marginLeft: '10px' }}
                 onClick={() => { }} disabled={ifVerify ? false : true}
@@ -659,7 +662,7 @@ function Main() {
                 className="search-input"
                 placeholder="搜索抄表单号"
                 style={{ width: 200 }}
-                onSearch={value => loadUnitMeterData(value)}
+                onSearch={value => loadUnitMeterData(value,organize)}
               />
             </div>
 
@@ -690,7 +693,7 @@ function Main() {
         closeDrawer={closeReadingMeterModify}
         // organizeId={organize}
         id={readingMeterId}
-        reload={() => loadReadingMeterData('')}
+        reload={() => loadReadingMeterData('',organize)}
         treeData={unitTreeData}
       />
       <ReadingMeterVerify
@@ -698,7 +701,7 @@ function Main() {
         closeVerify={closeVerify}
         ifVerify={ifVerify}
         id={readingMeterId}
-        reload={() => loadReadingMeterData('')}
+        reload={() => loadReadingMeterData('',organize)}
       />
     </Layout>
   );

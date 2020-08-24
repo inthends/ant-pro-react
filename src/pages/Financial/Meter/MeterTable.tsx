@@ -39,7 +39,7 @@ function MeterTable(props: MeterTableProps) {
       title: '费表名称',
       dataIndex: 'meterName',
       key: 'meterName',
-      width: 280,
+      width: 300,
       fixed:'left',
       sorter: true,  
     },
@@ -139,7 +139,7 @@ function MeterTable(props: MeterTableProps) {
         dataSource={data}
         rowKey="meterid"
         pagination={pagination}
-        scroll={{ y: 500,x:1200 }}
+        scroll={{ y: 500,x:1100 }}
         loading={loading}
         onChange={onchange}
       />

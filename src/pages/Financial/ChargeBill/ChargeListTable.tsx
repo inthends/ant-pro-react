@@ -45,6 +45,33 @@ function ChargeListTable(props: ChargeListTableProps) {
     </Dropdown >
   );
 
+
+  //冲红
+  const doflush = (currentItem) => {
+    CheckRedFlush(currentItem.billId).then((res) => {
+      if (res.flag) {
+        Modal.confirm({
+          title: '请确认',
+          content: `您确定要冲红该收款单${currentItem.billCode}`,
+          onOk: () => {
+            RedFlush(currentItem.billId).then(() => {
+              message.success('冲红成功');
+              reload();
+            });
+          },
+        });
+      } else {
+        Modal.confirm({
+          title: '请确认',
+          content: `该收款单已经生成付款单${res.billCode}不允许冲红！`,
+          onOk: () => {
+            //to do
+          },
+        });
+      }
+    });
+  }
+
   const editAndDelete = (key: string, currentItem: any) => {
     if (key === 'modify') {
       showModify(currentItem.billId);
@@ -55,28 +82,7 @@ function ChargeListTable(props: ChargeListTableProps) {
     else if (key === 'redflush') {
       //this.showEditModal(currentItem);  
       //check
-      CheckRedFlush(currentItem.billId).then((res) => {
-        if (res.flag) {
-          Modal.confirm({
-            title: '请确认',
-            content: `您确定要冲红该收款单${currentItem.billCode}`,
-            onOk: () => {
-              RedFlush(currentItem.billId).then(() => {
-                message.success('冲红成功');
-                reload();
-              });
-            },
-          });
-        } else {
-          Modal.confirm({
-            title: '请确认',
-            content: `该收款单已经生成付款单${res.billCode}不允许冲红！`,
-            onOk: () => {
-              //to do
-            },
-          });
-        }
-      });
+      doflush(currentItem);
     }
     else if (key === 'invalid') {
       Modal.confirm({
@@ -99,7 +105,7 @@ function ChargeListTable(props: ChargeListTableProps) {
       key: 'billCode',
       width: 220,
       sorter: true,
-      fixed:'left'
+      fixed: 'left'
     },
     {
       title: '收款日期',
@@ -159,7 +165,7 @@ function ChargeListTable(props: ChargeListTableProps) {
       width: 100,
     },
 
-    
+
     {
       title: '收款方式C',
       dataIndex: 'payTypeC',
@@ -273,17 +279,33 @@ function ChargeListTable(props: ChargeListTableProps) {
               <MoreBtn key="more" item={record} />
             </span>
           ];
-        } else if (record.ifVerify == 1) {
+        } 
+        
+        else if (record.ifVerify == 1) {
           //已审核
-          return [
-            <span key='span1'>
-              <a onClick={() => showDetail(record.billId)} key="view">查看</a>
-              <Divider type="vertical" />
-              <a onClick={() => showVerify(record.billId, true)} key="unapprove">反审</a>
-              <Divider type="vertical" />
-              <MoreBtn key="more" item={record} />
-            </span>
-          ];
+          if (record.createUserId == localStorage.getItem('userid')) {
+            //只能收款人反审
+            return [
+              <span key='span1'>
+                <a onClick={() => showDetail(record.billId)} key="view">查看</a>
+                <Divider type="vertical" />
+                <a onClick={() => showVerify(record.billId, true)} key="unapprove">反审</a>
+                <Divider type="vertical" />
+                <a onClick={() => doflush(record)} key="unapprove">冲红</a>
+                {/* <MoreBtn key="more" item={record} /> */}
+              </span>
+            ];
+          } else {
+            return [
+              <span key='span1'>
+                <a onClick={() => showDetail(record.billId)} key="view">查看</a>
+                <Divider type="vertical" /> 
+                <a onClick={() => doflush(record)} key="unapprove">冲红</a>
+                {/* <MoreBtn key="more" item={record} /> */}
+              </span>
+            ];
+
+          } 
         } else {
           //已送审或已复核
           return [
