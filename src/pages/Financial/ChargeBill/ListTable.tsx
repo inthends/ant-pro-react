@@ -386,7 +386,7 @@ function ListTable(props: ListTableProps) {
           interval = null;
         }
         setMyLoading(false);
-      } 
+      }
     })
 
     // retry().then(() => {
@@ -858,7 +858,17 @@ function ListTable(props: ListTableProps) {
             冲抵金额：{sumEntity.sumoffsetAmount}，
             优惠金额：{rebateAmount.toFixed(2)}，
             抹零金额：{mlAmount.toFixed(2)}，
-            未收金额：{lastAmount.toFixed(2)}  </span> : null}
+            未收金额：{lastAmount.toFixed(2)}  </span> :
+
+                <span style={{ color: "red" }}>
+                  应收金额：0.00，
+                  减免金额：0.00，
+                  冲抵金额：0.00，
+                  优惠金额：0.00，
+                  抹零金额：0.00，
+                  未收金额：0.00</span>
+
+              }
 
               {payAmount > 0 ?
                 <Tooltip title="点击冲抵">
@@ -866,13 +876,11 @@ function ListTable(props: ListTableProps) {
                     onClick={showOffset}>
                     未付金额：{payAmount}
                   </a> </Tooltip> : null}
-
             </Row>
 
             <Row style={{ marginTop: '5px' }}>
-              <span style={{ color: "red" }}>
-                {hasSelected ? groupTotal : ''}
-              </span>
+              {hasSelected ? <span style={{ color: "red" }}>{groupTotal}</span> :
+                <span>&nbsp;</span>}
             </Row>
 
             <Table
@@ -882,7 +890,7 @@ function ListTable(props: ListTableProps) {
               columns={columns}
               rowKey={record => record.id}
               pagination={pagination}
-              scroll={{ y: 500, x: 1850 }}
+              scroll={{ y: 500, x: 1880 }}
               onChange={(pagination: PaginationConfig, filters, sorter) =>
                 changePage(pagination, filters, sorter)
               }
