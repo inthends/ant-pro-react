@@ -169,9 +169,10 @@ function NotPaymentTable(props: NotPaymentTableProps) {
     rowSelect(selectedRows);
     //应付金额
     let sumlastAmount = 0;
-    selectedRows.map(item => {
-      sumlastAmount = selectedRows.reduce((sum, row) => { return sum + row.lastAmount; }, 0);
-    });
+    // selectedRows.map(item => {
+    //   sumlastAmount = selectedRows.reduce((sum, row) => { return sum + row.lastAmount; }, 0);
+    // });
+    sumlastAmount = selectedRows.reduce((sum, row) => { return sum + row.lastAmount; }, 0);
     form.setFieldsValue({ payAmount: sumlastAmount });
     setPayAmount(sumlastAmount);
     setSumEntity(sumlastAmount);

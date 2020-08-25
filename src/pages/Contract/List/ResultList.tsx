@@ -40,19 +40,23 @@ class EditableCell extends React.Component {
     });
   };
 
-  save = e => {
+  save = (e: any, dataIndex: any) => {
+
     const { record, handleSave } = this.props;
     this.form.validateFields((error, values) => {
-      if (error && error[e.currentTarget.id]) {
+
+      if (error && error[dataIndex]) {
         return;
       }
       this.toggleEdit();
-      handleSave({ ...record, ...values }, record.totalPrice);
+      record[dataIndex] = Number(e.currentTarget.defaultValue);
+      handleSave({ ...record }, record.totalPrice);
     });
+
   };
 
   //保存日期
-  saveDate = (dateString, dataIndex) => {
+  saveDate = (dateString: any, dataIndex: any) => {
 
     const { record, handleSave } = this.props;
     this.form.validateFields((error, values) => {
@@ -72,20 +76,25 @@ class EditableCell extends React.Component {
     const { editing } = this.state;
     return editing ? (
 
-      title == '金额' ?
+      title == '应收金额' ?
         <Form.Item style={{ margin: 0 }}>
           {form.getFieldDecorator(dataIndex, {
             rules: [
               {
                 required: true,
-                message: `${title}不能为空.`,
+                message: '金额不正确.',
+                type: 'number'
               },
             ],
             initialValue: record[dataIndex],
           })(
             <InputNumber min={0}
               style={{ width: '100%' }}
-              ref={node => (this.input = node)} onPressEnter={this.save} onBlur={this.save} />
+              ref={node => (this.input = node)}
+              onPressEnter={(e) => this.save(e, dataIndex)}
+              onBlur={(e) => this.save(e, dataIndex)}
+            //onChange={(value) => this.save(value, dataIndex)}
+            />
           )}
         </Form.Item> :
 
@@ -144,7 +153,7 @@ class EditableCell extends React.Component {
 
 function ResultList(props: ResultListProps) {
 
-  const { index, form, chargeData } = props;
+  const { index, form, chargeData } = props; 
 
   //初始化
   // useEffect(() => { 
@@ -238,7 +247,7 @@ function ResultList(props: ResultListProps) {
       }
     },
     {
-      title: '金额',
+      title: '应收金额',
       dataIndex: 'totalPrice',
       key: 'totalPrice',
       align: 'center',
@@ -319,21 +328,23 @@ function ResultList(props: ResultListProps) {
     });
   };
 
-  getFieldDecorator('ChargeData', { initialValue: mychargeData });
+  getFieldDecorator('allChargeData', { initialValue: mychargeData });
 
 
   //获取金额合计 
   const getTotal = () => {
     if (mychargeData) {
+ 
 
       var totalAmount = 0;
-      var lastAmount = 0;
+      var lastAmount = 0; 
+
+      totalAmount = mychargeData.reduce((sum, row) => { return sum + row.totalPrice; }, 0);
+
       mychargeData.map(item => {
-        
-        totalAmount = mychargeData.reduce((sum, row) => { return sum + row.totalPrice; }, 0);
 
         if (!item.isReduction) {
-          lastAmount = mychargeData.reduce((sum, row) => { return sum + row.totalPrice; }, 0);
+          lastAmount += item.totalPrice; //mychargeData.reduce((sum, row) => { return sum + row.totalPrice; }, 0);
         }
 
       });

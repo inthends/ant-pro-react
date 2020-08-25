@@ -662,8 +662,7 @@ const Add = (props: AddProps) => {
       width={1050}
       onClose={closeDrawer}
       visible={visible}
-      destroyOnClose={true}
-
+      destroyOnClose={true} 
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
       <Form layout="vertical" hideRequiredMark>
         <Spin tip="数据处理中..." spinning={loading}>

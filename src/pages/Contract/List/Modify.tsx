@@ -402,7 +402,7 @@ const Modify = (props: ModifyProps) => {
           // DepositResult: JSON.stringify(depositData), 
           // PropertyFeeResult: JSON.stringify(propertyData)
           //ChargeFeeResult: JSON.stringify(chargeData),
-          //ChargeFeeResult: JSON.stringify(values.ChargeData), 
+          //ChargeFeeResult: JSON.stringify(values.allChargeData), 
         }).then(res => {
           if (res.flag) {
             setLoading(false);
@@ -475,7 +475,7 @@ const Modify = (props: ModifyProps) => {
           chargeId: chargeId,
           room: values.room,
           termJson: strTermJson,
-          ChargeFeeResult: JSON.stringify(values.ChargeData)
+          ChargeFeeResult: JSON.stringify(values.allChargeData)
 
         }).then(res => {
           message.success('保存成功');
@@ -676,6 +676,7 @@ const Modify = (props: ModifyProps) => {
       placement="right"
       width={1050}
       onClose={closeDrawer}
+      destroyOnClose={true}
       visible={visible}
       bodyStyle={{ background: '#f6f7fb', minHeight: 'calc(100% - 55px)' }}>
       <PageHeader

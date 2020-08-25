@@ -151,9 +151,10 @@ function ListTable(props: ListTableProps) {
   const [mlAmount, setMlAmount] = useState<number>(0);//抹零金额
   const [lastAmount, setLastAmount] = useState<number>(0);//剩余金额
 
-  const [groupTotal, setGroupTotal] = useState<any>('');//按照费项统计金额
+  const [groupTotal, setGroupTotal] = useState<any>();//按照费项统计金额
 
   const onSelectChange = (selectedRowKeys, selectedRows) => {
+    setMyLoading(true);
     if (selectedRowKeys.length > 0) {
       const checkdata = {
         feeId: selectedRowKeys[0],
@@ -213,12 +214,18 @@ function ListTable(props: ListTableProps) {
     //应收金额
     var _sumEntity = {};
     var sumAmount = 0, sumreductionAmount = 0, sumoffsetAmount = 0, sumlastAmount = 0;
-    selectedRows.map(item => {
-      sumAmount = selectedRows.reduce((sum, row) => { return sum + row.amount; }, 0);
-      sumreductionAmount = selectedRows.reduce((sum, row) => { return sum + row.reductionAmount; }, 0);
-      sumoffsetAmount = selectedRows.reduce((sum, row) => { return sum + row.offsetAmount; }, 0);
-      sumlastAmount = selectedRows.reduce((sum, row) => { return sum + row.lastAmount; }, 0);
-    });
+    // selectedRows.map(item => {
+    //   sumAmount = selectedRows.reduce((sum, row) => { return sum + row.amount; }, 0);
+    //   sumreductionAmount = selectedRows.reduce((sum, row) => { return sum + row.reductionAmount; }, 0);
+    //   sumoffsetAmount = selectedRows.reduce((sum, row) => { return sum + row.offsetAmount; }, 0);
+    //   sumlastAmount = selectedRows.reduce((sum, row) => { return sum + row.lastAmount; }, 0);
+    // });
+
+    sumAmount = selectedRows.reduce((sum, row) => { return sum + row.amount; }, 0);
+    sumreductionAmount = selectedRows.reduce((sum, row) => { return sum + row.reductionAmount; }, 0);
+    sumoffsetAmount = selectedRows.reduce((sum, row) => { return sum + row.offsetAmount; }, 0);
+    sumlastAmount = selectedRows.reduce((sum, row) => { return sum + row.lastAmount; }, 0);
+
     _sumEntity['sumAmount'] = sumAmount.toFixed(2);//应收金额
     _sumEntity['sumreductionAmount'] = sumreductionAmount.toFixed(2);//减免金额
     _sumEntity['sumoffsetAmount'] = sumoffsetAmount.toFixed(2);//冲抵金额
@@ -244,6 +251,9 @@ function ListTable(props: ListTableProps) {
       form.setFieldsValue({ payAmountA: res.lastAmount });
       form.setFieldsValue({ payAmountB: 0 });
       form.setFieldsValue({ payAmountC: 0 });
+
+      setMyLoading(false);
+
     });
 
     // } 
@@ -253,7 +263,7 @@ function ListTable(props: ListTableProps) {
     //   form.setFieldsValue({ payAmountB: 0 });
     //   form.setFieldsValue({ payAmountC: 0 });
     // }
-
+    
   };
 
   const rowSelection = {
@@ -878,8 +888,13 @@ function ListTable(props: ListTableProps) {
                   </a> </Tooltip> : null}
             </Row>
 
-            <Row style={{ marginTop: '5px' }}>
+            {/* <Row style={{ marginTop: '5px' }}>
               {hasSelected ? <span style={{ color: "red" }}>{groupTotal}</span> :
+                <span>&nbsp;</span>}
+            </Row> */}
+
+            <Row style={{ marginTop: '5px' }}>
+              {groupTotal ? <span style={{ color: "red" }}>{groupTotal}</span> :
                 <span>&nbsp;</span>}
             </Row>
 

@@ -64,7 +64,7 @@ function ResultListView(props: ResultListViewProps) {
       }
     },
     {
-      title: '金额',
+      title: '应收金额',
       dataIndex: 'totalPrice',
       key: 'totalPrice',
       width: 60,
@@ -84,12 +84,14 @@ function ResultListView(props: ResultListViewProps) {
       var totalAmount = 0;
       var lastAmount = 0;
 
+      totalAmount = chargeData.reduce((sum, row) => { return sum + row.totalPrice; }, 0);
+
       chargeData.map(item => {
-        totalAmount = chargeData.reduce((sum, row) => { return sum + row.totalPrice; }, 0);
+
         if (!item.isReduction) {
-          lastAmount = chargeData.reduce((sum, row) => { return sum + row.lastAmount; }, 0);
+          lastAmount += item.totalPrice; // lastAmount = chargeData.reduce((sum, row) => { return sum + row.lastAmount; }, 0);
         }
-      }); 
+      });
       return <a>{'金额合计：' + totalAmount.toFixed(2) + '，未收金额合计：' + lastAmount.toFixed(2)}</a>;
     }
     else {
