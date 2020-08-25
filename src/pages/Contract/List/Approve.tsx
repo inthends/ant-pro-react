@@ -81,6 +81,7 @@ const Approve = (props: ApproveProps) => {
             totalArea: tempInfo.totalArea,
             // totalDeposit: tempInfo.totalDeposit,
             totalAmount: tempInfo.totalAmount,
+            lastAmount: tempInfo.lastAmount
             // totalPropertyAmount: tempInfo.totalPropertyAmount
           });
 
@@ -240,7 +241,8 @@ const Approve = (props: ApproveProps) => {
       合同摘要【合同期间{String(infoDetail.startDate).substr(0, 10)}到{String(infoDetail.endDate).substr(0, 10)}，
       租赁面积<a>{totalInfo.totalArea}㎡</a>，
       {/* 付款周期{chargeFeeList.length > 0 ? chargeFeeList[0].payCycle : ''}月一付， */}
-      总金额<a>{totalInfo.totalAmount}</a>】
+      金额合计<a>{totalInfo.totalAmount}</a>，
+      未收金额合计<a>{totalInfo.lastAmount}</a>】
           {/* <Form layout='vertical'>
             <Row gutter={24}>
               <Col lg={4}>

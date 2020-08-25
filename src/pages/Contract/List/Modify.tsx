@@ -136,7 +136,8 @@ const Modify = (props: ModifyProps) => {
           //合计信息
           setTotalInfo({
             totalArea: tempInfo.totalArea,
-            totalAmount: tempInfo.totalAmount
+            totalAmount: tempInfo.totalAmount,
+            lastAmount: tempInfo.lastAmount 
           });
 
           //是否可以提交
@@ -461,7 +462,7 @@ const Modify = (props: ModifyProps) => {
         ContractCharge.lateMethod = values.lateMethod;
 
         ContractCharge.midResultScale = values.midResultScale;
-        ContractCharge.midScaleDispose = values.midScaleDispose; 
+        ContractCharge.midScaleDispose = values.midScaleDispose;
         ContractCharge.lastResultScale = values.lastResultScale;
         ContractCharge.lastScaleDispose = values.lastScaleDispose;
 
@@ -707,7 +708,8 @@ const Modify = (props: ModifyProps) => {
       {form.getFieldValue('startDate') ? moment(form.getFieldValue('startDate')).format('YYYY-MM-DD') : ''}
       到{form.getFieldValue('endDate') ? moment(form.getFieldValue('endDate')).format('YYYY-MM-DD') : ''}，
       租赁数为<a>{totalInfo.totalArea}㎡</a>，
-      总金额<a>{totalInfo.totalAmount}</a>】
+      金额合计<a>{totalInfo.totalAmount}</a>，
+      未收金额合计<a>{totalInfo.lastAmount}</a>】
       </PageHeader>
       <Divider dashed />
       <Form layout="vertical" hideRequiredMark>

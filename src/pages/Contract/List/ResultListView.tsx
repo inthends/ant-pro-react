@@ -1,5 +1,5 @@
 //计费明细表，查看 
-import {  Table } from 'antd';
+import { Table } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import React from 'react';
 import moment from 'moment';
@@ -77,14 +77,20 @@ function ResultListView(props: ResultListViewProps) {
     }
   ] as ColumnProps<any>[];
 
-   //获取金额合计 
-   const getTotal = () => {
-    if (chargeData) { 
+  //获取金额合计 
+  const getTotal = () => {
+    if (chargeData) {
+
+      var totalAmount = 0;
       var lastAmount = 0;
+
       chargeData.map(item => {
-        lastAmount = chargeData.reduce((sum, row) => { return sum + row.lastAmount; }, 0);
-      });  
-      return <a>{'未收金额合计：' + lastAmount.toFixed(2)}</a>;
+        totalAmount = chargeData.reduce((sum, row) => { return sum + row.totalPrice; }, 0);
+        if (!item.isReduction) {
+          lastAmount = chargeData.reduce((sum, row) => { return sum + row.lastAmount; }, 0);
+        }
+      }); 
+      return <a>{'金额合计：' + totalAmount.toFixed(2) + '，未收金额合计：' + lastAmount.toFixed(2)}</a>;
     }
     else {
       return '';
@@ -95,7 +101,7 @@ function ResultListView(props: ResultListViewProps) {
     // <div> 
     //   <Card title="费用" className={className} hoverable>
     <Table
-    title={getTotal}
+      title={getTotal}
       style={{ border: 'none' }}
       bordered={false}
       size="middle"

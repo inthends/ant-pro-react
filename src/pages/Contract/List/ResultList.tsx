@@ -218,7 +218,7 @@ function ResultList(props: ResultListProps) {
     },
     {
       title: '最终单价',
-      width: 70,
+      width: 90,
       render: (text, row, index) => {
         return row.price + row.priceUnit;
         // let unit = '';
@@ -326,11 +326,20 @@ function ResultList(props: ResultListProps) {
   const getTotal = () => {
     if (mychargeData) {
 
+      var totalAmount = 0;
       var lastAmount = 0;
       mychargeData.map(item => {
-        lastAmount = mychargeData.reduce((sum, row) => { return sum + row.lastAmount; }, 0);
-      });  
-      return <a>{'未收金额合计：' + lastAmount.toFixed(2)}</a>;
+        
+        totalAmount = mychargeData.reduce((sum, row) => { return sum + row.totalPrice; }, 0);
+
+        if (!item.isReduction) {
+          lastAmount = mychargeData.reduce((sum, row) => { return sum + row.totalPrice; }, 0);
+        }
+
+      });
+
+
+      return <a>{'金额合计：' + totalAmount.toFixed(2) + '，未收金额合计：' + lastAmount.toFixed(2)}</a>;
     }
     else {
       return '';
