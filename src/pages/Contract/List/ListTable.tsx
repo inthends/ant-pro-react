@@ -97,7 +97,7 @@ function ListTable(props: ListTableProps) {
       title: '租客',
       dataIndex: 'customer',
       key: 'customer',
-      width: 180,
+      width: 200,
     },
 
     {
