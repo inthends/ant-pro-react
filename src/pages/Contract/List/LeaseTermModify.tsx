@@ -124,6 +124,8 @@ function LeaseTermModify(props: LeaseTermModifyProps) {
     form.validateFields({ force: true });
     form.validateFields((errors, values) => {
       if (!errors) {
+ 
+
         let entity: HtLeasecontractcharge = {};
         //精度处理
         entity.midResultScale = values.midResultScale;
