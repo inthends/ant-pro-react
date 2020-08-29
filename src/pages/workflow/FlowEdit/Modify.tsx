@@ -101,6 +101,7 @@ const Modify = (props: ModifyProps) => {
       {...props}
       name="流程"
       save={doSave}
+      
       width={1000}>
       <Card hoverable className={styles.card}>
         <Form layout="vertical" hideRequiredMark>
