@@ -33,7 +33,7 @@ interface ApproveProps {
 
 const Approve = (props: ApproveProps) => {
   const { isView, visible, closeDrawer, code, id, instanceId, form } = props;
-  const title = isView ? '单据详情' : '合同审批';
+  const title = isView ? '合同详情' : '合同审批';
   const { getFieldDecorator } = form;
   //const [industryType, setIndustryType] = useState<any[]>([]); //行业  
   //const [feeitems, setFeeitems] = useState<TreeEntity[]>([]);
@@ -46,7 +46,7 @@ const Approve = (props: ApproveProps) => {
   // const [chargeIncre, setChargeIncre] = useState<HtLeasecontractchargeincre>({});
   // const [chargeOffer, setChargeOffer] = useState<HtLeasecontractchargefeeoffer>({});
   // const [depositData, setDepositData] = useState<any[]>([]);//保证金
-  const [chargeData, setChargeData] = useState<any[]>([]);//租金
+  //const [chargeData, setChargeData] = useState<any[]>([]);//租金
   // const [propertyData, setPropertyData] = useState<any[]>([]);//物业费
   const [totalInfo, setTotalInfo] = useState<any>({});//合计信息
   // const [houseList, setHouseList] = useState<any[]>([]);
@@ -89,7 +89,7 @@ const Approve = (props: ApproveProps) => {
           GetChargeByContractId(instanceId).then((charge: ChargeDetailDTO) => {
             setContractCharge(charge.contractCharge || {});
             setChargeFeeList(charge.chargeFeeList || []);
-            setChargeData(charge.chargeFeeResultList || []);//租金明细     
+            //setChargeData(charge.chargeFeeResultList || []);//租金明细     
           });
 
           //附件
